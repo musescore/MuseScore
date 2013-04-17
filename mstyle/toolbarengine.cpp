@@ -26,80 +26,73 @@
 
 #include "toolbarengine.h"
 
-    //____________________________________________________________
-    void ToolBarEngine::registerWidget( QWidget* widget )
-    {
+//____________________________________________________________
+void ToolBarEngine::registerWidget( QWidget* widget ) {
 
-        if( !widget ) return;
+      if ( !widget ) return;
 
-        // create new data class
-        if( !data_.contains( widget ) )
-        {
+      // create new data class
+      if ( !data_.contains( widget ) ) {
             DataMap<ToolBarData>::Value value( new ToolBarData( this, widget, duration() ) );
             value.data()->setFollowMouseDuration( followMouseDuration() );
             data_.insert( widget, value, enabled() );
-        }
+            }
 
-        // connect destruction signal
-        disconnect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
+      // connect destruction signal
+      disconnect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ) );
 
-    }
+      }
 
-    //____________________________________________________________
-    BaseEngine::WidgetList ToolBarEngine::registeredWidgets( void ) const
-    {
-        WidgetList out;
+//____________________________________________________________
+BaseEngine::WidgetList ToolBarEngine::registeredWidgets( void ) const {
+      WidgetList out;
 
-        // the typedef is needed to make Krazy happy
-        typedef DataMap<ToolBarData>::Value Value;
-        foreach( const Value& value, data_ )
-        { if( value ) out.insert( value.data()->target().data() ); }
-        return out;
-    }
+      // the typedef is needed to make Krazy happy
+      typedef DataMap<ToolBarData>::Value Value;
+      foreach( const Value & value, data_ ) {
+            if ( value ) out.insert( value.data()->target().data() );
+            }
+      return out;
+      }
 
-    //____________________________________________________________
-    bool ToolBarEngine::isAnimated( const QObject* object )
-    {
-        if( !enabled() ) return false;
+//____________________________________________________________
+bool ToolBarEngine::isAnimated( const QObject* object ) {
+      if ( !enabled() ) return false;
 
-        DataMap<ToolBarData>::Value data( data_.find( object ) );
-        if( !data ) return false;
-        if( Animation::Pointer animation = data.data()->animation() ) return animation.data()->isRunning();
-        else return false;
-    }
+      DataMap<ToolBarData>::Value data( data_.find( object ) );
+      if ( !data ) return false;
+      if ( Animation::Pointer animation = data.data()->animation() ) return animation.data()->isRunning();
+      else return false;
+      }
 
-    //____________________________________________________________
-    bool ToolBarEngine::isFollowMouseAnimated( const QObject* object )
-    {
-        if( !enabled() ) return false;
+//____________________________________________________________
+bool ToolBarEngine::isFollowMouseAnimated( const QObject* object ) {
+      if ( !enabled() ) return false;
 
-        DataMap<ToolBarData>::Value data( data_.find( object ) );
-        if( !data ) return false;
-        if( Animation::Pointer animation = data.data()->progressAnimation() ) return animation.data()->isRunning();
-        else return false;
-    }
+      DataMap<ToolBarData>::Value data( data_.find( object ) );
+      if ( !data ) return false;
+      if ( Animation::Pointer animation = data.data()->progressAnimation() ) return animation.data()->isRunning();
+      else return false;
+      }
 
-    //____________________________________________________________
-    QRect ToolBarEngine::currentRect( const QObject* object )
-    {
-        if( !enabled() ) return QRect();
-        DataMap<ToolBarData>::Value data( data_.find( object ) );
-        return data ? data.data()->currentRect():QRect();
-    }
+//____________________________________________________________
+QRect ToolBarEngine::currentRect( const QObject* object ) {
+      if ( !enabled() ) return QRect();
+      DataMap<ToolBarData>::Value data( data_.find( object ) );
+      return data ? data.data()->currentRect() : QRect();
+      }
 
-    //____________________________________________________________
-    QRect ToolBarEngine::animatedRect( const QObject* object )
-    {
-        if( !enabled() ) return QRect();
-        DataMap<ToolBarData>::Value data( data_.find( object ) );
-        return data ? data.data()->animatedRect():QRect();
-    }
+//____________________________________________________________
+QRect ToolBarEngine::animatedRect( const QObject* object ) {
+      if ( !enabled() ) return QRect();
+      DataMap<ToolBarData>::Value data( data_.find( object ) );
+      return data ? data.data()->animatedRect() : QRect();
+      }
 
-    //____________________________________________________________
-    bool ToolBarEngine::isTimerActive( const QObject* object )
-    {
-        if( !enabled() ) return false;
-        DataMap<ToolBarData>::Value data( data_.find( object ) );
-        return data ? data.data()->timer().isActive():false;
-    }
+//____________________________________________________________
+bool ToolBarEngine::isTimerActive( const QObject* object ) {
+      if ( !enabled() ) return false;
+      DataMap<ToolBarData>::Value data( data_.find( object ) );
+      return data ? data.data()->timer().isActive() : false;
+      }

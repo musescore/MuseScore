@@ -75,54 +75,6 @@ class PaletteCellProperties : public QDialog, private Ui::PaletteCellProperties 
       };
 
 //---------------------------------------------------------
-//   PaletteBoxButton
-//---------------------------------------------------------
-
-enum PaletteCommand {
-      PALETTE_DELETE,
-      PALETTE_SAVE,
-      PALETTE_LOAD,
-      PALETTE_EDIT,
-      PALETTE_UP,
-      PALETTE_DOWN,
-      PALETTE_NEW
-      };
-
-class PaletteBoxButton : public QToolButton {
-      Q_OBJECT
-
-      Palette* palette;
-      QAction* editAction;
-
-      int id;
-
-      virtual void changeEvent(QEvent*);
-      virtual void paintEvent( QPaintEvent * );
-      virtual void contextMenuEvent(QContextMenuEvent*);
-
-   private slots:
-      void deleteTriggered()     { emit paletteCmd(PALETTE_DELETE, id);  }
-      void saveTriggered()       { emit paletteCmd(PALETTE_SAVE, id);    }
-      void loadTriggered()       { emit paletteCmd(PALETTE_LOAD, id);    }
-      void propertiesTriggered() { emit paletteCmd(PALETTE_EDIT, id);    }
-      void upTriggered()         { emit paletteCmd(PALETTE_UP, id);      }
-      void downTriggered()       { emit paletteCmd(PALETTE_DOWN, id);    }
-      void newTriggered()        { emit paletteCmd(PALETTE_NEW, id);     }
-      void enableEditing(bool);
-
-   public slots:
-      void showPalette(bool);
-
-   signals:
-      void paletteCmd(int, int);
-      void closeAll();
-
-   public:
-      PaletteBoxButton(Palette*, QWidget* parent = 0);
-      void setId(int v) { id = v; }
-      };
-
-//---------------------------------------------------------
 //    PaletteScrollArea
 //---------------------------------------------------------
 
@@ -146,7 +98,6 @@ class Palette : public QWidget {
       Q_OBJECT
 
       QString _name;
-      QString _tag;
       QList<PaletteCell*> cells;
 
       int hgrid, vgrid;
@@ -194,7 +145,7 @@ class Palette : public QWidget {
 
    public:
       Palette(QWidget* parent = 0);
-      ~Palette();
+      virtual ~Palette();
 
       PaletteCell* append(Element*, const QString& name, QString tag = QString(),
          qreal mag = 1.0);
@@ -210,7 +161,7 @@ class Palette : public QWidget {
       void read(const QString& path);
       void write(const QString& path);
       void read(XmlReader&);
-      void write(Xml&, const QString& name) const;
+      void write(Xml&) const;
       bool read(QFile*);
       void clear();
       void setSelectable(bool val)   { _selectable = val;  }

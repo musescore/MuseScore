@@ -326,7 +326,7 @@ p, li { white-space: pre-wrap; }
     <Staff id="2">
       <Measure number="1">
         <Clef>
-          <concertClefType>G</concertClefType>
+          <concertClefType>F</concertClefType>
           <transposingClefType>F</transposingClefType>
           </Clef>
         <KeySig>

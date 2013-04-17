@@ -25,7 +25,6 @@ class Palette;
 class PaletteBox : public QDockWidget {
       Q_OBJECT
 
-//      bool _dirty;
       QVBoxLayout* vbox;
 
       virtual void closeEvent(QCloseEvent*);
@@ -33,7 +32,6 @@ class PaletteBox : public QDockWidget {
 
    private slots:
       void paletteCmd(int, int);
-//      void setDirty() { _dirty = true; }
       void closeAll();
       void displayMore(const QString& paletteName);
 
@@ -44,7 +42,6 @@ class PaletteBox : public QDockWidget {
    public:
       PaletteBox(QWidget* parent = 0);
       void addPalette(Palette*);
-//      bool dirty() const      { return _dirty; }
       void write(Xml&);
       bool read(XmlReader&);
       void clear();

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: pedal.cpp 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -23,6 +22,7 @@
 
 void PedalSegment::layout()
       {
+      rypos() = 0.0;
       TextLineSegment::layout1();
       if (parent())     // for palette
             rypos() += score()->styleS(ST_pedalY).val() * spatium();

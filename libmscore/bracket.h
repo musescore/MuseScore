@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: bracket.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -28,7 +27,7 @@ class QPainter;
 class Bracket : public Element {
       Q_OBJECT
 
-      BracketType _subtype;
+      BracketType _bracketType;
 
       qreal h2;
 
@@ -38,15 +37,14 @@ class Bracket : public Element {
       int _lastStaff;
 
       QPainterPath path;
-      qreal yoff;
 
    public:
       Bracket(Score*);
       virtual Bracket* clone() const   { return new Bracket(*this); }
 
-      virtual ElementType type() const { return BRACKET;  }
-      BracketType subtype() const      { return _subtype; }
-      void setSubtype(BracketType t)   { _subtype = t;    }
+      virtual ElementType type() const   { return BRACKET;  }
+      BracketType bracketType() const    { return _bracketType; }
+      void setBracketType(BracketType t) { _bracketType = t;    }
 
       int firstStaff() const           { return _firstStaff; }
       void setFirstStaff(int val)      { _firstStaff = val;  }

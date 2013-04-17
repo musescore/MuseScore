@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2009-2011 Werner Schweer
+//  Copyright (C) 2009-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -47,7 +47,7 @@ PianoItem::PianoItem(Note* n, NoteEvent* e)
    : QGraphicsRectItem(), note(n), event(e)
       {
       setFlags(flags() | QGraphicsItem::ItemIsSelectable);
-      int pitch = n->pitch();
+      int pitch = n->pitch() + e->pitch();
       int ticks = n->playTicks();
       int len   = ticks * e->len() / 1000;
       setRect(0, 0, len, keyHeight/2);
@@ -55,7 +55,8 @@ PianoItem::PianoItem(Note* n, NoteEvent* e)
       setSelected(n->selected());
       setData(0, QVariant::fromValue<void*>(n));
 
-      setPos(n->chord()->tick() + e->ontime() * ticks / 1000 + 480, pitch2y(pitch) + keyHeight / 4);
+      setPos(n->chord()->tick() + e->ontime() * ticks / 1000 + MAP_OFFSET,
+         pitch2y(pitch) + keyHeight / 4);
       }
 
 //---------------------------------------------------------
@@ -104,7 +105,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       QRectF r1;
       r1.setCoords(-1000000.0, 0.0, 480.0, 1000000.0);
       QRectF r2;
-      r2.setCoords(ticks + 480, 0.0, 1000000.0, 1000000.0);
+      r2.setCoords(ticks + MAP_OFFSET, 0.0, 1000000.0, 1000000.0);
       QColor bg(0x71, 0x8d, 0xbe);
 
       p->fillRect(r, bg);
@@ -235,7 +236,9 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 PianoView::PianoView()
    : QGraphicsView()
       {
-      setFrameShape(QFrame::NoFrame);
+      setFrameStyle(QFrame::NoFrame);
+      setLineWidth(0);
+      setMidLineWidth(0);
       setScene(new QGraphicsScene);
       setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
       setResizeAnchor(QGraphicsView::AnchorUnderMouse);
@@ -322,8 +325,9 @@ void PianoView::setStaff(Staff* s, Pos* l)
       pos.setContext(s->score()->tempomap(), s->score()->sigmap());
 
       scene()->blockSignals(true);
-
+      scene()->clearSelection();
       scene()->clear();
+
       for (int i = 0; i < 3; ++i) {
             locatorLines[i] = new QGraphicsLineItem(QLineF(0.0, 0.0, 0.0, keyHeight * 75.0 * 5));
             QPen pen(lcColors[i]);
@@ -374,7 +378,6 @@ void PianoView::setStaff(Staff* s, Pos* l)
                   boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
             }
       centerOn(boundingRect.center());
-
       horizontalScrollBar()->setValue(0);
       }
 
@@ -556,5 +559,52 @@ void PianoView::ensureVisible(int tick)
       tick += MAP_OFFSET;
       QPointF pt = mapToScene(0, height() / 2);
       QGraphicsView::ensureVisible(qreal(tick), pt.y(), 240.0, 1.0);
+      }
+
+//---------------------------------------------------------
+//   update
+//---------------------------------------------------------
+
+void PianoView::update()
+      {
+      static const QColor lcColors[3] = { Qt::red, Qt::blue, Qt::blue };
+
+      scene()->blockSignals(true);
+      scene()->clear();
+
+      for (int i = 0; i < 3; ++i) {
+            locatorLines[i] = new QGraphicsLineItem(QLineF(0.0, 0.0, 0.0, keyHeight * 75.0 * 5));
+            QPen pen(lcColors[i]);
+            pen.setWidth(2);
+            locatorLines[i]->setPen(pen);
+            locatorLines[i]->setZValue(1000+i);       // set stacking order
+            locatorLines[i]->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
+            scene()->addItem(locatorLines[i]);
+            }
+
+      int staffIdx   = staff->idx();
+      int startTrack = staffIdx * VOICES;
+      int endTrack   = startTrack + VOICES;
+
+      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      for (Segment* s = staff->score()->firstSegment(st); s; s = s->next1(st)) {
+            for (int track = startTrack; track < endTrack; ++track) {
+                  Chord* chord = static_cast<Chord*>(s->element(track));
+                  if (chord == 0 || chord->type() != Element::CHORD)
+                        continue;
+                  foreach(Note* note, chord->notes()) {
+                        if (note->tieBack())
+                              continue;
+                        int n = note->playEvents().size();
+                        for (int i = 0; i < n; ++i) {
+                              NoteEvent* e = &note->playEvents()[i];
+                              scene()->addItem(new PianoItem(note, e));
+                              }
+                        }
+                  }
+            }
+      for (int i = 0; i < 3; ++i)
+            moveLocator(i);
+      scene()->blockSignals(false);
       }
 

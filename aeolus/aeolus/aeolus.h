@@ -22,11 +22,11 @@
 #define __AEOLUS_H__
 
 struct MidiPatch;
-class Event;
+class PlayEvent;
 
-#include "stdint.h"
-#include "msynth/synti.h"
-#include "libmscore/midipatch.h"
+#include <stdint.h>
+#include "synthesizer/synthesizer.h"
+#include "synthesizer/midipatch.h"
 
 #include "asection.h"
 #include "division.h"
@@ -42,7 +42,7 @@ class M_ifc_init;
 //   Synth
 //---------------------------------------------------------
 
-class Aeolus : public Synth {
+class Aeolus : public Synthesizer {
       Model* model;
       QList<MidiPatch*> patchList;
       uint16_t _midimap [16];
@@ -62,7 +62,7 @@ class Aeolus : public Synth {
       Division*       _divisp [NDIVIS];
       Reverb          _reverb;
       unsigned char   _keymap [NNOTES];
-      SyntiParameter  _audiopar[4];
+      float           _audiopar[4];
       float           _revsize;
       float           _revtime;
 
@@ -92,7 +92,7 @@ class Aeolus : public Synth {
    public:
       Aeolus();
       virtual ~Aeolus();
-      virtual void init(int sampleRate);
+      virtual void init(float sampleRate);
 
       virtual const char* name() const { return "Aeolus"; }
 
@@ -102,21 +102,19 @@ class Aeolus : public Synth {
       virtual bool loadSoundFonts(const QStringList&) { return true; }
       virtual QStringList soundFonts() const { return QStringList(); }
 
-      virtual void process(unsigned, float*, float);
-      virtual void play(const Event&);
+      virtual void process(unsigned, float*, float*, float*);
+      virtual void play(const PlayEvent&);
 
       virtual const QList<MidiPatch*>& getPatchInfo() const;
 
-      // set/get a single parameter
-      virtual SyntiParameter parameter(int id) const;
-      virtual void setParameter(int id, double val);
-
       // get/set synthesizer state
-      virtual SyntiState state() const;
-      virtual void setState(const SyntiState&);
+      virtual SynthesizerGroup state() const;
+      virtual void setState(const SynthesizerGroup&);
 
       virtual void allSoundsOff(int);
       virtual void allNotesOff(int);
+
+      virtual SynthesizerGui* gui();
 
       friend class Model;
       };

@@ -39,7 +39,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       nNominal->setValue(nominal.denominator());
       zActual->setValue(timesig->sig().numerator());
       nActual->setValue(timesig->sig().denominator());
-      switch(timesig->subtype()) {
+      switch(timesig->timeSigType()) {
             case TSIG_NORMAL:
                   textButton->setChecked(true);
                   break;

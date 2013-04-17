@@ -31,80 +31,75 @@
 #include "datamap.h"
 #include "spinboxdata.h"
 
-    //! handle spinbox arrows hover effect
-    class SpinBoxEngine: public BaseEngine
-    {
+//! handle spinbox arrows hover effect
+class SpinBoxEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        SpinBoxEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            SpinBoxEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~SpinBoxEngine( void )
-        {}
+            //! destructor
+            virtual ~SpinBoxEngine( void )
+                  {}
 
-        //! register widget
-        virtual bool registerWidget( QWidget* );
+            //! register widget
+            virtual bool registerWidget( QWidget* );
 
-        //! state
-        virtual bool updateState( const QObject* object, QStyle::SubControl subControl, bool value )
-        {
-            if( DataMap<SpinBoxData>::Value data = data_.find( object ) )
-            {
-                return data.data()->updateState( subControl, value );
-            } else return false;
-        }
+            //! state
+            virtual bool updateState( const QObject* object, QStyle::SubControl subControl, bool value ) {
+                  if ( DataMap<SpinBoxData>::Value data = data_.find( object ) ) {
+                        return data.data()->updateState( subControl, value );
+                        }
+                  else return false;
+                  }
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QObject* object, QStyle::SubControl subControl )
-        {
-            if( DataMap<SpinBoxData>::Value data = data_.find( object ) )
-            {
-                return data.data()->isAnimated( subControl );
-            } else return false;
+            //! true if widget is animated
+            virtual bool isAnimated( const QObject* object, QStyle::SubControl subControl ) {
+                  if ( DataMap<SpinBoxData>::Value data = data_.find( object ) ) {
+                        return data.data()->isAnimated( subControl );
+                        }
+                  else return false;
 
-        }
+                  }
 
-        //! animation opacity
-        virtual qreal opacity( const QObject* object, QStyle::SubControl subControl )
-        {
-            if( DataMap<SpinBoxData>::Value data = data_.find( object ) )
-            {
-                return data.data()->opacity( subControl );
-            } else return AnimationData::OpacityInvalid;
-        }
+            //! animation opacity
+            virtual qreal opacity( const QObject* object, QStyle::SubControl subControl ) {
+                  if ( DataMap<SpinBoxData>::Value data = data_.find( object ) ) {
+                        return data.data()->opacity( subControl );
+                        }
+                  else return AnimationData::OpacityInvalid;
+                  }
 
-        //! enability
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! data map
-        DataMap<SpinBoxData> data_;
+            //! data map
+            DataMap<SpinBoxData> data_;
 
-    };
+      };
 
 #endif

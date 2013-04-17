@@ -25,7 +25,7 @@
 #include "select.h"
 #include "fraction.h"
 #include "interval.h"
-#include "sparm.h"
+#include "synthesizerstate.h"
 #include "mscoreview.h"
 #include "segment.h"
 #include "accidental.h"
@@ -56,7 +56,6 @@ class BSymbol;
 class KeySig;
 class KeySigEvent;
 class Volta;
-class MidiEvent;
 class Excerpt;
 class EventMap;
 class Harmony;
@@ -297,8 +296,6 @@ class Score : public QObject {
       Measure* startLayout;   ///< start a relayout at this measure
       LayoutFlags layoutFlags;
 
-      bool _testMode;               // prepare for regression tests
-
       bool _updateAll;
       bool _layoutAll;        ///< do a complete relayout
 
@@ -354,13 +351,12 @@ class Score : public QObject {
       bool _showOmr;
       PlayMode _playMode;
 
-      SyntiState _syntiState;
 
       //------------------
 
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false);
       ChordRest* prevMeasure(ChordRest* element);
-      void cmdSetBeamMode(int);
+      void cmdSetBeamMode(BeamMode);
       void cmdFlip();
       Note* getSelectedNote();
       Note* upAlt(Element*);
@@ -377,8 +373,6 @@ class Score : public QObject {
       void moveToNextInputPos();
 
       void padToggle(int n);
-
-//      void cmdAddPitch(int note, bool addFlag);
 
       void addTempo();
       void addMetronome();
@@ -411,6 +405,8 @@ class Score : public QObject {
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
       void reLayout(Measure*);
 
+      void hideEmptyStaves(System* system, bool isFirstSystem);
+
       void checkSlurs();
       void checkScore();
       bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&);
@@ -424,6 +420,9 @@ class Score : public QObject {
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);
       void createPlayEvents();
+
+   protected:
+      SynthesizerState _synthesizerState;
 
    public:
       void setDirty(bool val);
@@ -480,7 +479,6 @@ class Score : public QObject {
       void undoAddCR(ChordRest* element, Measure*, int tick);
       void undoRemoveElement(Element* element);
       void undoChangeElement(Element* oldElement, Element* newElement);
-      void undoChangeRepeatFlags(Measure*, int);
       void undoChangeVoltaEnding(Volta* volta, const QList<int>& l);
       void undoChangeVoltaText(Volta* volta, const QString& s);
       void undoChangeChordRestSize(ChordRest* cr, bool small);
@@ -509,6 +507,8 @@ class Score : public QObject {
       void undoChangeBarLine(Measure* m, BarLineType);
       void undoSwapCR(ChordRest* cr1, ChordRest* cr2);
       void undoChangeProperty(Element*, P_ID, const QVariant& v);
+      UndoStack* undo() const;
+      void undo(UndoCommand* cmd) const;
 
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
 
@@ -566,6 +566,7 @@ class Score : public QObject {
       void setLayoutAll(bool val);
       bool layoutAll() const           { return _layoutAll; }
       void addRefresh(const QRectF& r) { refresh |= r;     }
+      const QRectF& getRefresh() const { return refresh;     }
 
       void changeVoice(int);
 
@@ -617,7 +618,7 @@ class Score : public QObject {
       Segment* tick2segment(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll) const;
       Segment* tick2segmentEnd(int track, int tick) const;
       void fixTicks();
-      void addArticulation(Element*, Articulation* atr);
+      bool addArticulation(Element*, Articulation* atr);
 
       bool playlistDirty();
       void setPlaylistDirty(bool val) { _playlistDirty = val; }
@@ -679,7 +680,7 @@ class Score : public QObject {
 
       void pasteStaff(XmlReader&, ChordRest* dst);
       void renderMidi(EventMap* events);
-      void renderPart(EventMap* events, Part*);
+      void renderStaff(EventMap* events, Staff*);
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
 
@@ -735,8 +736,6 @@ class Score : public QObject {
       void adjustBracketsDel(int sidx, int eidx);
       void adjustBracketsIns(int sidx, int eidx);
       void renumberMeasures();
-      UndoStack* undo() const;
-      void undo(UndoCommand* cmd) const;
 
       void endUndoRedo();
       Measure* searchLabel(const QString& s);
@@ -817,8 +816,8 @@ class Score : public QObject {
       Page* getEmptyPage();
 
       void layoutChords1(Segment* segment, int staffIdx);
-      SyntiState& syntiState()                           { return _syntiState;         }
-      void setSyntiState(const SyntiState& s);
+      SynthesizerState& synthesizerState()     { return _synthesizerState; }
+      void setSynthesizerState(const SynthesizerState& s);
 
       const QList<StaffType**>& staffTypes() const { return _staffTypes; }
       void replaceStaffTypes(const QList<StaffType*>&);
@@ -851,6 +850,7 @@ class Score : public QObject {
 
       void updateNotes();
       void cmdUpdateNotes();
+      void cmdUpdateAccidentals(Measure* m, int staffIdx);
       void updateAccidentals(Measure* m, int staffIdx);
       QHash<int, LinkedElements*>& links();
       bool concertPitch() const { return styleB(ST_concertPitch); }
@@ -905,8 +905,6 @@ class Score : public QObject {
       void transposeSemitone(int semitone);
       MeasureBase* insertMeasure(Element::ElementType type, MeasureBase*,
          bool createEmptyMeasures = false);
-      bool testMode() const        { return _testMode; }
-      void setTestMode(bool val);
       Audio* audio() const         { return _audio;    }
       void setAudio(Audio* a)      { _audio = a;       }
       PlayMode playMode() const    { return _playMode; }
@@ -923,6 +921,8 @@ class Score : public QObject {
       qreal computeMinWidth(Segment* fs) const;
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
+
+      friend class ChangeSynthesizerState;
       };
 
 extern Score* gscore;

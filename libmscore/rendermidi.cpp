@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: rendermidi.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
 //  Copyright (C) 2002-2012 Werner Schweer
 //
@@ -116,9 +115,9 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
       ev.setVelo(velo);
       ev.setTuning(note->tuning());
       ev.setNote(note);
-      events->insertMulti(onTime, ev);
+      events->insert(std::pair<int, Event>(onTime, ev));
       ev.setVelo(0);
-      events->insertMulti(offTime, ev);
+      events->insert(std::pair<int, Event>(offTime, ev));
       }
 
 //---------------------------------------------------------
@@ -141,7 +140,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             else if (p > 127)
                   p = 127;
             int on  = tick1 + (ticks * e.ontime())/1000;
-                  int off = on + (ticks * e.len())/1000 - 1;
+            int off = on + (ticks * e.len())/1000 - 1;
             playNote(events, note, channel, p, velo, on, off);
             }
 #if 0
@@ -213,10 +212,10 @@ struct OttavaShiftSegment {
 //   collectMeasureEvents
 //---------------------------------------------------------
 
-static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int tickOffset)
+static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int tickOffset)
       {
-      int firstStaffIdx = m->score()->staffIdx(part);
-      int nextStaffIdx  = firstStaffIdx + part->nstaves();
+      int firstStaffIdx = staff->idx();
+      int nextStaffIdx  = firstStaffIdx + 1;
 
       Segment::SegmentTypes st = Segment::SegChordRestGrace;
       int strack = firstStaffIdx * VOICES;
@@ -270,7 +269,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                                     Event event(nel->events[i]);
                                     event.setOntime(tick);
                                     event.setChannel(channel);
-                                    events->insertMulti(tick, event);
+                                    events->insert(std::pair<int, Event>(tick, event));
                                     }
                               }
                         }
@@ -288,7 +287,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                                           event.setValue(k);
                                           event.setOntime(tick);
                                           event.setChannel(channel);
-                                          events->insertMulti(tick, event);
+                                          events->insert(std::pair<int,Event>(tick, event));
                                           }
                                     }
                               Event event(ME_CONTROLLER);
@@ -296,10 +295,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                               event.setValue(96 + i);
                               event.setOntime(tick);
                               event.setChannel(channel);
-                              events->insertMulti(tick, event);
+                              events->insert(std::pair<int,Event>(tick, event));
 
                               event.setValue(64 + i);
-                              events->insertMulti(tick, event);
+                              events->insert(std::pair<int,Event>(tick, event));
                               }
                         }
                   }
@@ -323,10 +322,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Part* part, int t
                         event.setController(CTRL_SUSTAIN);
 
                         event.setValue(127);
-                        events->insertMulti(s1->tick() + tickOffset, event);
+                        events->insert(std::pair<int,Event>(s1->tick() + tickOffset, event));
 
                         event.setValue(0);
-                        events->insertMulti(s2->tick() + tickOffset - 1, event);
+                        events->insert(std::pair<int,Event>(s2->tick() + tickOffset - 1, event));
                         }
                   }
             }
@@ -510,10 +509,10 @@ void Score::updateVelo()
       }
 
 //---------------------------------------------------------
-//   renderPart
+//   renderStaff
 //---------------------------------------------------------
 
-void Score::renderPart(EventMap* events, Part* part)
+void Score::renderStaff(EventMap* events, Staff* staff)
       {
       Measure* lastMeasure = 0;
       foreach (const RepeatSegment* rs, *repeatList()) {
@@ -521,13 +520,13 @@ void Score::renderPart(EventMap* events, Part* part)
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                  if (lastMeasure && m->isRepeatMeasure(part)) {
+                  if (lastMeasure && m->isRepeatMeasure(staff->part())) {
                         int offset = m->tick() - lastMeasure->tick();
-                        collectMeasureEvents(events, lastMeasure, part, tickOffset + offset);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset);
                         }
                   else {
                         lastMeasure = m;
-                        collectMeasureEvents(events, m, part, tickOffset);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset);
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;
@@ -635,7 +634,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             int l = 1000 / notes;
 
             int start, end, step;
-            bool up = chord->arpeggio()->subtype() != ARP_DOWN;
+            bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN;
             if (up) {
                   start = 0;
                   end   = notes;
@@ -659,7 +658,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
 
 //qDebug("Chord");
             foreach (Articulation* a, chord->articulations()) {
-                  ArticulationType type = a->subtype();
+                  ArticulationType type = a->articulationType();
                   for (int k = 0; k < notes; ++k) {
                         NoteEventList* events = &ell[k];
 
@@ -781,7 +780,7 @@ void createPlayEvents(Chord* chord)
       Segment* s = chord->segment();
       while (s->prev()) {
             s = s->prev();
-            if (s->subtype() != Segment::SegGrace)
+            if (s->segmentType() != Segment::SegGrace)
                   break;
             Element* cr = s->element(chord->track());
             if (cr && cr->type() == Element::CHORD)
@@ -851,8 +850,8 @@ void Score::renderMidi(EventMap* events)
       updateChannel();
       updateVelo();
 
-      foreach (Part* part, _parts)
-            renderPart(events, part);
+      foreach (Staff* part, _staves)
+            renderStaff(events, part);
 
       // add metronome ticks
       foreach (const RepeatSegment* rs, *repeatList()) {
@@ -867,7 +866,7 @@ void Score::renderMidi(EventMap* events)
                         int tick = m->tick() + i * tw + tickOffset;
                         Event event;
                         event.setType(i == 0 ? ME_TICK1 : ME_TICK2);
-                        events->insertMulti(tick, event);
+                        events->insert(std::pair<int,Event>(tick, event));
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;

@@ -28,33 +28,32 @@
 #include "toolboxengine.h"
 
 
-    //____________________________________________________________
-    bool ToolBoxEngine::registerWidget( QWidget* widget )
-    {
+//____________________________________________________________
+bool ToolBoxEngine::registerWidget( QWidget* widget ) {
 
-        if( !widget ) return false;
-        if( !data_.contains( widget ) ) { data_.insert( widget, new WidgetStateData( this, widget, duration() ), enabled() ); }
+      if ( !widget ) return false;
+      if ( !data_.contains( widget ) ) {
+            data_.insert( widget, new WidgetStateData( this, widget, duration() ), enabled() );
+            }
 
-        // connect destruction signal
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
-        return true;
+      // connect destruction signal
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
+      return true;
 
-    }
+      }
 
-    //____________________________________________________________
-    bool ToolBoxEngine::updateState( const QPaintDevice* object, bool value )
-    {
-        PaintDeviceDataMap<WidgetStateData>::Value data( ToolBoxEngine::data( object ) );
-        return ( data && data.data()->updateState( value ) );
-    }
+//____________________________________________________________
+bool ToolBoxEngine::updateState( const QPaintDevice* object, bool value ) {
+      PaintDeviceDataMap<WidgetStateData>::Value data( ToolBoxEngine::data( object ) );
+      return ( data && data.data()->updateState( value ) );
+      }
 
-    //____________________________________________________________
-    bool ToolBoxEngine::isAnimated( const QPaintDevice* object )
-    {
+//____________________________________________________________
+bool ToolBoxEngine::isAnimated( const QPaintDevice* object ) {
 
-        PaintDeviceDataMap<WidgetStateData>::Value data( ToolBoxEngine::data( object ) );
-        return ( data && data.data()->animation() && data.data()->animation().data()->isRunning() );
+      PaintDeviceDataMap<WidgetStateData>::Value data( ToolBoxEngine::data( object ) );
+      return ( data && data.data()->animation() && data.data()->animation().data()->isRunning() );
 
-    }
+      }
 
 

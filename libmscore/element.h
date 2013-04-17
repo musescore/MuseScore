@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: element.h 5500 2012-03-28 16:28:26Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -315,6 +314,8 @@ class Element : public QObject {
       virtual void setScore(Score* s)         { _score = s;         }
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
+//      Element* parentChordRest();
+      Element* findMeasure();
 
       qreal spatium() const;
 
@@ -385,6 +386,7 @@ class Element : public QObject {
       virtual qreal baseLine() const          { return -height();       }
 
       virtual ElementType type() const = 0;
+      virtual int subType() const             { return type(); }  // for select gui
       bool isChordRest() const;
       bool isDurationElement() const;
       bool isSLine() const;
@@ -403,7 +405,7 @@ class Element : public QObject {
       virtual QLineF dragAnchor() const       { return QLineF(); }
 
       virtual bool isEditable() const         { return !_generated; }
-      virtual void startEdit(MuseScoreView*, const QPointF&) {}
+      virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);
       virtual void editDrag(const EditData&);
       virtual void endEditDrag()                               {}
@@ -528,13 +530,14 @@ class Element : public QObject {
       virtual bool setProperty(P_ID, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
       void undoChangeProperty(P_ID, const QVariant&);
+      void undoPushProperty(P_ID);
       };
 
 //---------------------------------------------------------
 //   ElementList
 //---------------------------------------------------------
 
-class ElementList : public QList<Element*> {
+class ElementList : public std::list<Element*> {
    public:
       ElementList() {}
       bool remove(Element*);
@@ -542,9 +545,6 @@ class ElementList : public QList<Element*> {
       void write(Xml&) const;
       void write(Xml&, const char* name) const;
       };
-
-typedef ElementList::iterator iElement;
-typedef ElementList::const_iterator ciElement;
 
 //-------------------------------------------------------------------
 //   @@ StaffLines
@@ -569,7 +569,6 @@ class StaffLines : public Element {
       virtual void draw(QPainter*) const;
       virtual QPointF pagePos() const;   ///< position in page coordinates
       qreal y1() const;
-      qreal y2() const;
       };
 
 //---------------------------------------------------------

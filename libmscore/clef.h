@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: clef.h 5343 2012-02-18 19:50:35Z miwarre $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -113,7 +112,7 @@ class Clef : public Element {
 
       int tick() const;
 
-      bool showCourtesy() const        { return _showCourtesy; };
+      bool showCourtesy() const        { return _showCourtesy; }
       void setShowCourtesy(bool v)     { _showCourtesy = v; }
       void undoSetShowCourtesy(bool v);
 

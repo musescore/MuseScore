@@ -168,6 +168,7 @@ Note::Note(Score* s)
       _dots[1]           = 0;
       _dots[2]           = 0;
       _playEvents.append(NoteEvent());    // add default play event
+      _mark             = 0;
       }
 
 Note::~Note()
@@ -209,9 +210,9 @@ Note::Note(const Note& n)
       if (n._accidental)
             add(new Accidental(*(n._accidental)));
 
-      int nn = n._el.size();
-      for (int i = 0; i < nn; ++i)
-            add(n._el.at(i)->clone());
+      for (const Element* e : n._el)
+            add(e->clone());
+
       _playEvents = n._playEvents;
 
       if (n._tieFor) {
@@ -228,6 +229,7 @@ Note::Note(const Note& n)
                   add(new NoteDot(*n._dots[i]));
             }
       _lineOffset = n._lineOffset;
+      _mark      = n._mark;
       }
 
 //---------------------------------------------------------
@@ -271,7 +273,7 @@ void Note::undoSetPitch(int p)
 void Note::setTpcFromPitch()
       {
       KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-      _tpc    = pitch2tpc(_pitch, key.accidentalType());
+      _tpc    = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
 // qDebug("setTpcFromPitch pitch %d tick %d key %d tpc %d\n", pitch(), chord()->tick(), key.accidentalType(), _tpc);
       }
 
@@ -310,7 +312,7 @@ int Note::noteHead() const
             }
       else {
             hg = 1;
-            ht = 2;       // default quarter head
+            ht = HEAD_QUARTER;
             }
       if (_headType != HEAD_AUTO)
             ht = _headType;
@@ -332,10 +334,8 @@ int Note::noteHead() const
 
 qreal Note::headWidth() const
       {
-      int head = noteHead();
+      int head  = noteHead();
       qreal val = symbols[score()->symIdx()][head].width(magS());
-      if (_small)
-            val *= score()->styleD(ST_smallNoteMag);
       return val;
       }
 
@@ -350,8 +350,6 @@ qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
             QFontMetricsF fm(f);
             QString s = tab->fretString(_fret, _ghost);
             val  = fm.width(s) * mags;
-            if (_small)
-                  val *= score()->styleD(ST_smallNoteMag);
       }
       else
             val = headWidth();
@@ -470,7 +468,7 @@ void Note::add(Element* e)
             case FINGERING:
             case TEXT:
             case BEND:
-                  _el.append(e);
+                  _el.push_back(e);
                   break;
             case TIE:
                   {
@@ -578,7 +576,9 @@ void Note::draw(QPainter* painter) const
       {
       if (_hidden)
             return;
-      painter->setPen(curColor());
+
+      QColor c(curColor());
+      painter->setPen(c);
       bool tablature = staff() && staff()->isTabStaff();
 
       // tablature
@@ -587,11 +587,6 @@ void Note::draw(QPainter* painter) const
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             if (tieBack() && tab->slashStyle())
                   return;
-            qreal mag = magS();
-            qreal imag = 1.0 / mag;
-            painter->scale(mag, mag);
-            painter->setFont(tab->fretFont());
-
             QString s = tab->fretString(_fret, _ghost);
 
             // draw background, if required
@@ -611,7 +606,11 @@ void Note::draw(QPainter* painter) const
                         painter->restore();
                         }
                   }
-            painter->setPen(curColor());
+            qreal mag = magS();
+            qreal imag = 1.0 / mag;
+            painter->scale(mag, mag);
+            painter->setFont(tab->fretFont());
+            painter->setPen(c);
             painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), s);
             painter->scale(imag, imag);
             }
@@ -767,7 +766,7 @@ void Note::read(XmlReader& e)
                   }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
-                  f->setTextStyle(score()->textStyle(TEXT_STYLE_FINGERING));
+                  f->setTextStyleType(TEXT_STYLE_FINGERING);
                   f->read(e);
                   add(f);
                   }
@@ -841,7 +840,7 @@ void Note::read(XmlReader& e)
                               case 33: at = Accidental::ACC_NATURAL_ARROW_DOWN; break;
                               case 34: at = Accidental::ACC_NATURAL_ARROW_BOTH; break;
                               }
-                        _accidental->setSubtype(at);
+                        _accidental->setAccidentalType(at);
                         _accidental->setHasBracket(bracket);
                         _accidental->setRole(Accidental::ACC_USER);
                         hasAccidental = true;   // we now have an accidental
@@ -945,6 +944,8 @@ void Note::read(XmlReader& e)
 
 QRectF Note::drag(const EditData& data)
       {
+      if (staff()->isDrumStaff())
+            return QRect();
       dragMode = true;
       QRectF bb(chord()->bbox());
 
@@ -995,7 +996,7 @@ void Note::endDrag()
             int key     = staff->key(tick).accidentalType();
             // determine new pitch of dragged note
             nPitch      = line2pitch(nLine, clef, key);
-            tpc         = pitch2tpc(nPitch, key);
+            tpc         = pitch2tpc(nPitch, key, PREFER_NEAREST);
             // undefined for non-tablature staves
             nString     = -1;
             nFret       = -1;
@@ -1033,18 +1034,18 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || type == CHORD
          || type == HARMONY
          || type == DYNAMIC
-         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_ACCIACCATURA)
-         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_APPOGGIATURA)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_GRACE4)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_GRACE8B)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_GRACE16)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->subtype() == ICON_GRACE32)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_SBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_MBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_NBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_BEAM32)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_BEAM64)
-         || (type == ICON && static_cast<Icon*>(e)->subtype() == ICON_AUTOBEAM)
+         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_ACCIACCATURA)
+         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_APPOGGIATURA)
+	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE4)
+	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8B)
+	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
+	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
          || (type == SYMBOL)
          || (type == CLEF)
          || (type == BAR_LINE)
@@ -1083,7 +1084,7 @@ Element* Note::drop(const DropData& data)
                   Fingering* f = static_cast<Fingering*>(e);
                   int st = f->textStyleType();
                   if (st != TEXT_STYLE_UNKNOWN)
-                        f->setTextStyle(score()->textStyle(st));
+                        f->setTextStyleType(st);
                   }
                   return e;
 
@@ -1099,7 +1100,7 @@ Element* Note::drop(const DropData& data)
                   return e;
 
             case ACCIDENTAL:
-                  score()->changeAccidental(this, static_cast<Accidental*>(e)->subtype());
+                  score()->changeAccidental(this, static_cast<Accidental*>(e)->accidentalType());
                   if (_accidental)
                         return e;
                   break;
@@ -1150,7 +1151,7 @@ Element* Note::drop(const DropData& data)
 
             case ICON:
                   {
-                  switch(static_cast<Icon*>(e)->subtype()) {
+                  switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_ACCIACCATURA:
                               score()->setGraceNote(ch, pitch(), NOTE_ACCIACCATURA, false, MScore::division/2);
                               break;
@@ -1200,7 +1201,7 @@ Element* Note::drop(const DropData& data)
                   Segment* s = ch->segment();
                   s = s->next1();
                   while (s) {
-                        if ((s->subtype() == Segment::SegChordRest || s->subtype() == Segment::SegGrace) && s->element(track()))
+                        if ((s->segmentType() == Segment::SegChordRest || s->segmentType() == Segment::SegGrace) && s->element(track()))
                               break;
                         s = s->next1();
                         }
@@ -1219,11 +1220,10 @@ Element* Note::drop(const DropData& data)
                   e->setParent(cr1);
                   // in TAB, use straight line with no text
                   if (staff()->isTabStaff()) {
-                        (static_cast<Glissando*>(e))->setSubtype(GLISS_STRAIGHT);
+                        (static_cast<Glissando*>(e))->setGlissandoType(GlissandoType::STRAIGHT);
                         (static_cast<Glissando*>(e))->setShowText(false);
-                  }
+                        }
                   score()->undoAddElement(e);
-                  score()->setLayout(cr1->measure());
                   }
                   break;
 
@@ -1269,6 +1269,9 @@ void Note::layout()
             setbbox(symbols[score()->symIdx()][noteHead()].bbox(magS()));
             if (parent() == 0)
                   return;
+            }
+      // if not TAB or TAB with stems through
+      if (!useTablature || ((StaffTypeTablature*)staff()->staffType())->stemThrough()) {
             int dots = chord()->dots();
             for (int i = 0; i < 3; ++i) {
                   if (i < dots) {
@@ -1298,23 +1301,40 @@ void Note::layout2()
 
       int dots = chord()->dots();
       if (dots) {
-            qreal _spatium = spatium();
             qreal d  = point(score()->styleS(ST_dotNoteDistance));
             qreal dd = point(score()->styleS(ST_dotDotDistance));
             qreal y  = 0.0;
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
+            bool onLine = false;
 
-            // do not draw dots on staff line
-            if ((_line & 1) == 0) {
-                  qreal up;
-                  if (_dotPosition == MScore::AUTO)
-                        up = (voice() == 0 || voice() == 2) ? -1.0 : 1.0;
-                  else if (_dotPosition == MScore::UP)
-                        up = -1.0;
-                  else
-                        up = 1.0;
-                  y += .5 * _spatium * up;
+            // do not draw dots on staff line:
+
+            // if TAB and stems through staff
+            if (staff()->isTabStaff()) {
+                  if(static_cast<StaffTypeTablature*>( staff()->staffType())->stemThrough() ) {
+                        // if fret mark on lines, use standard processing
+                        if (static_cast<StaffTypeTablature*>(staff()->staffType())->onLines())
+                              onLine = true;
+                        else
+                        // if fret marks above lines, raise the dots by half line distance
+                              y = -staff()->lineDistance() * 0.5;
+                        }
+                  // if stems beside staff, do nothing
                   }
+            // if not TAB, look at note line
+            else onLine = (_line & 1) == 0;
+            // if on line, displace dots by half spatium up or down according to voice
+            if (onLine) {
+                  if (_dotPosition == MScore::AUTO)
+                        y = (voice() & 1) == 0 ? -0.5 : 0.5;
+                  else if (_dotPosition == MScore::UP)
+                        y = -0.5;
+                  else
+                        y = 0.5;
+                  }
+            y *= spatium();
+
+            // apply to dots
             for (int i = 0; i < dots; ++i) {
                   NoteDot* dot = _dots[i];
                   if (dot) {
@@ -1325,9 +1345,8 @@ void Note::layout2()
                   }
             }
 
-      int n = _el.size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = _el.at(i);
+      // layout elements attached to note
+      for (Element* e : _el) {
             if (!score()->tagIsValid(e->tag()))
                   continue;
             e->setMag(mag());
@@ -1376,9 +1395,11 @@ void Note::layout10(AccidentalState* as)
 
             Accidental::AccidentalType acci = Accidental::ACC_NONE;
             if (_accidental && _accidental->role() == Accidental::ACC_USER) {
-                  acci = _accidental->subtype();
+                  acci = _accidental->accidentalType();
                   if (acci == Accidental::ACC_SHARP || acci == Accidental::ACC_FLAT) {
-                        int ntpc = pitch2tpc2(_pitch, acci == Accidental::ACC_SHARP);
+                        // TODO - what about double flat and double sharp?
+                        // TODO - does this need to be key-aware?
+                        int ntpc = pitch2tpc(_pitch, KEY_C, acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
                         if (ntpc != _tpc) {
                               qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
 //                              setColor(QColor(255, 0, 0));
@@ -1405,7 +1426,7 @@ void Note::layout10(AccidentalState* as)
                         _accidental->setGenerated(true);
                         add(_accidental);
                         }
-                  _accidental->setSubtype(acci);
+                  _accidental->setAccidentalType(acci);
                   }
             else {
                   if (_accidental) {
@@ -1471,9 +1492,7 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
       // tie segments are collected from System
       //      if (_tieFor && !staff()->isTabStaff())  // no ties in tablature
       //            _tieFor->scanElements(data, func, all);
-      int n = _el.size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = _el.at(i);
+      for (Element* e : _el) {
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
@@ -1500,11 +1519,8 @@ void Note::setTrack(int val)
             foreach(SpannerSegment* seg, _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
-      int n = _el.size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = _el.at(i);
+      for (Element* e : _el)
             e->setTrack(val);
-            }
       if (_accidental)
             _accidental->setTrack(val);
       if (!chord())     // if note is dragged with shift+ctrl
@@ -1536,11 +1552,8 @@ void Note::setMag(qreal val)
       Element::setMag(val);
       if (_accidental)
             _accidental->setMag(val);
-      int n = _el.size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = _el.at(i);
+      for (Element* e : _el)
             e->setMag(val);
-            }
       }
 
 //---------------------------------------------------------
@@ -1635,79 +1648,69 @@ void Note::updateAccidental(AccidentalState* as)
       {
       _line = absStep(_tpc, _pitch);
 
+      // don't touch accidentals that don't concern tpc such as
+      // quarter tones
+      if (_accidental &&
+            _accidental->accidentalType() > Accidental::ACC_NATURAL) {
+            // calculate the real note line depending on clef
+
+            Staff* s = score()->staff(staffIdx() + chord()->staffMove());
+            int tick = chord()->tick();
+            ClefType clef = s->clef(tick);
+            _line    = relStep(_line, clef);
+            return;
+            }
+
       // calculate accidental
 
       Accidental::AccidentalType acci = Accidental::ACC_NONE;
-      if (_accidental && _accidental->role() == Accidental::ACC_USER) {
-            // check if user accidental fits tpc
-            // in case tpc was changed
 
-            Accidental::AccidentalType newUserAcc;
-            switch (_accidental->subtype()) {
-                  case Accidental::ACC_FLAT2:
-                  case Accidental::ACC_FLAT:
-                  case Accidental::ACC_NATURAL:
-                  case Accidental::ACC_SHARP:
-                  case Accidental::ACC_SHARP2:
-                        if (_tpc < 6)
-                              newUserAcc = Accidental::ACC_FLAT2;
-                        else if (_tpc < 13)
-                              newUserAcc = Accidental::ACC_FLAT;
-                        else if (_tpc < 20)
-                              newUserAcc = Accidental::ACC_NATURAL;
-                        else if (_tpc < 27)
-                              newUserAcc = Accidental::ACC_SHARP;
-                        else
-                              newUserAcc = Accidental::ACC_SHARP2;
-
-                        if (_accidental->subtype() != newUserAcc)
-                              acci = Accidental::ACC_NONE; // don't use this any more
-                        else {
-                              acci = newUserAcc; // keep it
-                              // if the key signature is changed:
-                              AccidentalVal accVal = tpc2alter(_tpc);
-                              if ((accVal != as->accidentalVal(int(_line)))
-                                  || hidden() || as->tieContext(int(_line)))
-                                    as->setAccidentalVal(int(_line),
-                                                         accVal, _tieBack != 0);
-                              }
-                        break;
-                  default:
-                        // keep it
-                        acci = _accidental->subtype();
+      AccidentalVal accVal = tpc2alter(_tpc);
+      if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
+            as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
+            if (_tieBack)
+                  acci = Accidental::ACC_NONE;
+            else {
+                  acci = Accidental::value2subtype(accVal);
+                  if (acci == Accidental::ACC_NONE)
+                        acci = Accidental::ACC_NATURAL;
                   }
             }
-      if (acci == Accidental::ACC_NONE)  {
-            AccidentalVal accVal = tpc2alter(_tpc);
-            if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
-                  as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
-                  if (_tieBack)
-                        acci = Accidental::ACC_NONE;
-                  else {
-                        acci = Accidental::value2subtype(accVal);
-                        if (acci == Accidental::ACC_NONE)
-                              acci = Accidental::ACC_NATURAL;
-                        }
-                  }
-            }
+
       if (acci != Accidental::ACC_NONE && !_tieBack && !_hidden) {
             if (_accidental == 0) {
                   Accidental* a = new Accidental(score());
                   a->setParent(this);
-                  a->setSubtype(acci);
+                  a->setAccidentalType(acci);
                   score()->undoAddElement(a);
                   }
-            else if (_accidental->subtype() != acci) {
-                  Accidental* a = new Accidental(score());
+            else if (_accidental->accidentalType() != acci) {
+                  Accidental* a = _accidental->clone();
                   a->setParent(this);
-                  a->setSubtype(acci);
+                  a->setAccidentalType(acci);
                   score()->undoChangeElement(_accidental, a);
                   }
             }
       else {
-            if (_accidental)
-                  score()->undoRemoveElement(_accidental);
+            if (_accidental) {
+                  // remove this if it was ACC_AUTO:
+                  if (_accidental->role() == Accidental::ACC_AUTO)
+                        score()->undoRemoveElement(_accidental);
+                  else {
+                        // keep it, but update type if needed
+                        acci = Accidental::value2subtype(accVal);
+                        if (acci == Accidental::ACC_NONE)
+                              acci = Accidental::ACC_NATURAL;
+                        if (_accidental->accidentalType() != acci) {
+                              Accidental* a = _accidental->clone();
+                              a->setParent(this);
+                              a->setAccidentalType(acci);
+                              score()->undoChangeElement(_accidental, a);
+                              }
+                        }
+                  }
             }
+
       //
       // calculate the real note line depending on clef
       //
@@ -1942,7 +1945,6 @@ void Note::undoSetHeadGroup(NoteHeadGroup val)
 
 void Note::setHeadType(NoteHeadType t)
       {
-      Q_ASSERT(t >= 0 && t < HEAD_TYPES);
       _headType = t;
       }
 
@@ -2047,6 +2049,10 @@ void Note::addSpannerFor(Spanner* e)
       e->setNext(_spannerFor);
       _spannerFor = e;
       }
+
+//---------------------------------------------------------
+//   removeSpannerFor
+//---------------------------------------------------------
 
 bool Note::removeSpannerFor(Spanner* e)
       {

@@ -1,7 +1,6 @@
 //=============================================================================
 //  AL
 //  Audio Utility Library
-//  $Id:$
 //
 //  Copyright (C) 2002-2009 by Werner Schweer and others
 //

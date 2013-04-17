@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -500,6 +499,9 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                                     }
                               else if (e->type() == Element::TUPLET) {
                                     writeTuplet(static_cast<Tuplet*>(e), m, m->tick() + pos.ticks());
+                                    duration -= d;
+                                    rest     -= d;
+                                    pos      += d;
                                     }
 
                               if (e->isChordRest() && firstCRinSplit) {

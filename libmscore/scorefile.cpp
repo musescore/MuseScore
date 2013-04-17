@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011-2012 Werner Schweer and others
 //
@@ -78,8 +77,8 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
       xml.tag("currentLayer", _currentLayer);
 
-      if (!_testMode)
-            _syntiState.write(xml);
+      if (!MScore::testMode)
+            _synthesizerState.write(xml);
 
       if (pageNumberOffset())
             xml.tag("page-offset", pageNumberOffset());
@@ -104,7 +103,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {
             i.next();
-            if (!_testMode  || (i.key() != "platform" && i.key() != "creationDate"))
+            if (!MScore::testMode  || (i.key() != "platform" && i.key() != "creationDate"))
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key()), i.value());
             }
 
@@ -484,7 +483,7 @@ bool Score::loadStyle(const QString& fn)
       if (f.open(QIODevice::ReadOnly)) {
             MStyle st = _style;
             if (st.load(&f)) {
-                  _undo->push(new ChangeStyle(this, st));
+                  undo(new ChangeStyle(this, st));
                   return true;
                   }
             }
@@ -534,13 +533,13 @@ extern bool enableTestMode;
 
 void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       {
-      if(!testMode())
-            setTestMode(enableTestMode);
+      if(!MScore::testMode)
+            MScore::testMode = enableTestMode;
       Xml xml(f);
       xml.writeOmr = msczFormat;
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      if (!_testMode) {
+      if (!MScore::testMode) {
             xml.tag("programVersion", VERSION);
             xml.tag("programRevision", revision);
             }
@@ -803,7 +802,7 @@ bool Score::read(XmlReader& e)
                               st  = new StaffTypePitched();
                         }
                   st->read(e);
-                  st->setBuildin(false);
+                  st->setBuiltin(false);
                   addStaffType(idx, st);
                   }
             else if (tag == "siglist")
@@ -845,10 +844,10 @@ bool Score::read(XmlReader& e)
                   }
             else if (tag == "currentLayer")
                   _currentLayer = e.readInt();
-            else if (tag == "SyntiSettings") {
-                  _syntiState.clear();
-                  _syntiState.read(e);
-                  }
+            else if (tag == "SyntiSettings")    // obsolete
+                  _synthesizerState.read(e);
+            else if (tag == "Synthesizer")
+                  _synthesizerState.read(e);
             else if (tag == "Spatium")
                   _style.setSpatium (e.readDouble() * MScore::DPMM); // obsolete, moved to Style
             else if (tag == "page-offset")            // obsolete, moved to Score
@@ -876,7 +875,7 @@ bool Score::read(XmlReader& e)
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
                   text->read(e);
-                  setMetaTag("copyright", text->getText());
+                  setMetaTag("copyright", text->text());
                   delete text;
                   }
             else if (tag == "movement-number")
@@ -978,6 +977,7 @@ bool Score::read(XmlReader& e)
                                     ChordRest* cr = static_cast<ChordRest*>(s->endElement());
                                     cr->removeSpannerBack(s);
                                     }
+                              e.removeSpanner(s);
                               delete s;
                               break;
 
@@ -1041,14 +1041,14 @@ bool Score::read(XmlReader& e)
             // 1-line staves have special bar line spans
             int maxBarLineTo        = stTo->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : stTo->lines()*2;
             int defaultBarLineTo    = stTo->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (stTo->lines() - 1) * 2;
-            if(st->barLineTo() == UNKNOWN_BARLINE_TO)
+            if (st->barLineTo() == UNKNOWN_BARLINE_TO)
                   st->setBarLineTo(defaultBarLineTo);
-            if(st->barLineTo() < MIN_BARLINE_SPAN_FROMTO)
+            if (st->barLineTo() < MIN_BARLINE_SPAN_FROMTO)
                   st->setBarLineTo(MIN_BARLINE_SPAN_FROMTO);
-            if(st->barLineTo() > maxBarLineTo)
+            if (st->barLineTo() > maxBarLineTo)
                   st->setBarLineTo(maxBarLineTo);
             // on single staff span, check spanFrom and spanTo are distant enough
-            if(st->barLineSpan() == 1) {
+            if (st->barLineSpan() == 1) {
                   if(st->barLineTo() - st->barLineFrom() < MIN_BARLINE_FROMTO_DIST) {
                         st->setBarLineFrom(0);
                         st->setBarLineTo(defaultBarLineTo);
@@ -1059,27 +1059,11 @@ bool Score::read(XmlReader& e)
       if (_omr == 0)
             _showOmr = false;
 
-      //
-      // check for soundfont,
-      // add default soundfont if none found
-      // (for compatibility with old scores)
-      //
-      bool hasSoundfont = false;
-      foreach(const SyntiParameter& sp, _syntiState) {
-            if (sp.name() == "soundfont") {
-                  QFileInfo fi(sp.sval());
-                  if(fi.exists())
-                        hasSoundfont = true;
-                  }
-            }
-      if (!hasSoundfont)
-            _syntiState.append(SyntiParameter("soundfont", MScore::soundFont));
-
       fixTicks();
       renumberMeasures();
       rebuildMidiMapping();
       updateChannel();
-      updateNotes();    // only for parts needed?
+      updateNotes();          // only for parts needed?
       createPlayEvents();
       return true;
       }
@@ -1231,7 +1215,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                   //               - part (excerpt) staff starts after
                   //                 barline element
                   bool needTick = segment->tick() != xml.curTick;
-                  if ((segment->subtype() == Segment::SegEndBarLine)
+                  if ((segment->segmentType() == Segment::SegEndBarLine)
                      && (e == 0)
                      && writeSystemElements
                      && ((track % VOICES) == 0)) {
@@ -1303,7 +1287,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         Beam* beam = cr->beam();
 #ifndef NDEBUG
-                        if (beam && beam->elements().front() == cr && (testMode() || !beam->generated())) {
+                        if (beam && beam->elements().front() == cr && (MScore::testMode || !beam->generated())) {
                               beam->setId(xml.beamId++);
                               beam->write(xml);
                               }
@@ -1331,7 +1315,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                                     }
                               }
                         }
-                  if ((segment->subtype() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
+                  if ((segment->segmentType() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
                         xml.stag("BarLine");
                         xml.tag("subtype", m->endBarLineType());
                         xml.tag("visible", m->endBarLineVisible());

@@ -60,8 +60,8 @@ TextTools::TextTools(QWidget* parent)
       tb->addWidget(textStyles);
 
       showKeyboard = getAction("show-keys");
-      tb->addAction(showKeyboard);
       showKeyboard->setCheckable(true);
+      tb->addAction(showKeyboard);
 
       typefaceBold = tb->addAction(*icons[textBold_ICON], "");
       typefaceBold->setToolTip(tr("bold"));
@@ -173,18 +173,24 @@ void TextTools::setText(Text* te)
       textStyles->blockSignals(true);
       _textElement = te;
       textStyles->clear();
-      textStyles->addItem(tr("unstyled"));
+      textStyles->addItem(tr("unstyled"), TEXT_STYLE_UNSTYLED);
 
       const QList<TextStyle>& ts = te->score()->style()->textStyles();
 
       int n = ts.size();
-      for (int i = 1; i < n; ++i)                     // skip default style
-            textStyles->addItem(ts[i].name());
-      int idx = 0;
-      if (te->styled())
-            idx = te->textStyleType();
-      textStyles->setCurrentIndex(idx);
-      styleChanged(idx);
+      for (int i = 0; i < n; ++i) {
+            if ( !(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+                  textStyles->addItem(ts.at(i).name(), i);
+            }
+      int comboIdx = 0;
+      if (te->styled()) {
+            int styleIdx = te->textStyleType();
+            comboIdx = textStyles->findData(styleIdx);
+            if (comboIdx < 0)
+                  comboIdx = 0;
+            }
+      textStyles->setCurrentIndex(comboIdx);
+      styleChanged(comboIdx);
       Align align = _textElement->align();
       if (align & ALIGN_HCENTER)
             hcenterAlign->setChecked(true);
@@ -228,25 +234,25 @@ void TextTools::blockAllSignals(bool val)
 
 void TextTools::updateTools()
       {
-      if (_textElement->styled())   // TODO
+      if (!_textElement->editMode()) {
+            qDebug("TextTools::updateTools(): not in edit mode");
+            abort();
             return;
-
+            }
       blockAllSignals(true);
-      QTextCursor* cursor      = _textElement->cursor();
-      QTextCharFormat format   = cursor->charFormat();
-      QTextBlockFormat bformat = cursor->blockFormat();
 
-      QFont f(format.font());
+      QFont f(_textElement->curFont());
       typefaceFamily->setCurrentFont(f);
       double ps = f.pointSizeF();
       if (ps == -1.0)
             ps = f.pixelSize() * PPI / MScore::DPI;
       typefaceSize->setValue(ps);
-      typefaceItalic->setChecked(format.fontItalic());
-      typefaceBold->setChecked(format.fontWeight() == QFont::Bold);
-      typefaceUnderline->setChecked(format.fontUnderline());
-      typefaceSubscript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
-      typefaceSuperscript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
+
+      typefaceItalic->setChecked(_textElement->curItalic());
+      typefaceBold->setChecked(_textElement->curBold());
+      typefaceUnderline->setChecked(_textElement->curUnderline());
+      typefaceSubscript->setChecked(_textElement->curSubscript());
+      typefaceSuperscript->setChecked(_textElement->curSuperscript());
 
       blockAllSignals(false);
       }
@@ -278,23 +284,12 @@ void TextTools::layoutText()
       }
 
 //---------------------------------------------------------
-//   cursor
-//---------------------------------------------------------
-
-QTextCursor* TextTools::cursor()
-      {
-      return _textElement->cursor();
-      }
-
-//---------------------------------------------------------
 //   sizeChanged
 //---------------------------------------------------------
 
 void TextTools::sizeChanged(double value)
       {
-      QTextCharFormat format;
-      format.setFontPointSize(value);
-      cursor()->mergeCharFormat(format);
+      _textElement->setCurFontPointSize(value);
       updateText();
       }
 
@@ -304,9 +299,7 @@ void TextTools::sizeChanged(double value)
 
 void TextTools::fontChanged(const QFont& f)
       {
-      QTextCharFormat format;
-      format.setFontFamily(f.family());
-      cursor()->mergeCharFormat(format);
+      _textElement->setCurFontFamily(f.family());
       updateText();
       }
 
@@ -316,9 +309,7 @@ void TextTools::fontChanged(const QFont& f)
 
 void TextTools::boldClicked(bool val)
       {
-      QTextCharFormat format;
-      format.setFontWeight(val ? QFont::Bold : QFont::Normal);
-      cursor()->mergeCharFormat(format);
+      _textElement->setCurBold(val);
       updateText();
       }
 
@@ -328,9 +319,7 @@ void TextTools::boldClicked(bool val)
 
 void TextTools::underlineClicked(bool val)
       {
-      QTextCharFormat format;
-      format.setFontUnderline(val);
-      cursor()->mergeCharFormat(format);
+      _textElement->setCurUnderline(val);
       updateText();
       }
 
@@ -340,9 +329,7 @@ void TextTools::underlineClicked(bool val)
 
 void TextTools::italicClicked(bool val)
       {
-      QTextCharFormat format;
-      format.setFontItalic(val);
-      cursor()->mergeCharFormat(format);
+      _textElement->setCurItalic(val);
       updateText();
       }
 
@@ -352,17 +339,7 @@ void TextTools::italicClicked(bool val)
 
 void TextTools::unorderedListClicked()
       {
-      QTextCharFormat format = cursor()->charFormat();
-      QTextListFormat listFormat;
-      QTextList* list = cursor()->currentList();
-      if (list) {
-            listFormat = list->format();
-            int indent = listFormat.indent();
-            listFormat.setIndent(indent + 1);
-            }
-      listFormat.setStyle(QTextListFormat::ListDisc);
-      cursor()->insertList(listFormat);
-      cursor()->setCharFormat(format);
+      _textElement->unorderedList();
       updateText();
       }
 
@@ -372,17 +349,7 @@ void TextTools::unorderedListClicked()
 
 void TextTools::orderedListClicked()
       {
-      QTextCharFormat format = cursor()->charFormat();
-      QTextListFormat listFormat;
-      QTextList* list = cursor()->currentList();
-      if (list) {
-            listFormat = list->format();
-            int indent = listFormat.indent();
-            listFormat.setIndent(indent + 1);
-            }
-      listFormat.setStyle(QTextListFormat::ListDecimal);
-      cursor()->insertList(listFormat);
-      cursor()->setCharFormat(format);
+      _textElement->orderedList();
       updateText();
       }
 
@@ -392,15 +359,8 @@ void TextTools::orderedListClicked()
 
 void TextTools::indentMoreClicked()
       {
-      QTextList* list = cursor()->currentList();
-      if (list == 0) {
-            QTextBlockFormat format = cursor()->blockFormat();
-            format.setIndent(format.indent() + 1);
-            cursor()->insertBlock(format);
-            updateText();
-            return;
-            }
-      unorderedListClicked();
+      _textElement->indentMore();
+      updateText();
       }
 
 //---------------------------------------------------------
@@ -409,28 +369,7 @@ void TextTools::indentMoreClicked()
 
 void TextTools::indentLessClicked()
       {
-      QTextList* list = cursor()->currentList();
-      if (list == 0) {
-            QTextBlockFormat format = cursor()->blockFormat();
-            int indent = format.indent();
-            if (indent) {
-                  indent--;
-                  format.setIndent(indent);
-                  cursor()->insertBlock(format);
-                  updateText();
-                  }
-            return;
-            }
-      QTextCharFormat format = cursor()->blockCharFormat();
-      QTextListFormat listFormat = list->format();
-      QTextBlock block = cursor()->block();
-      if (block.next().isValid())
-            block = block.next();
-      else {
-            block = QTextBlock();
-            }
-      cursor()->insertBlock(block.blockFormat());
-      cursor()->setCharFormat(block.charFormat());
+      _textElement->indentLess();
       updateText();
       }
 
@@ -440,24 +379,7 @@ void TextTools::indentLessClicked()
 
 void TextTools::setHalign(QAction* a)
       {
-      QTextBlockFormat bformat;
-
-      Qt::Alignment qa = bformat.alignment() & ~Qt::AlignHorizontal_Mask;
-      switch(a->data().toInt()) {
-            case ALIGN_HCENTER:
-                  qa  |= Qt::AlignHCenter;
-                  break;
-            case ALIGN_RIGHT:
-                  qa |= Qt::AlignRight;
-                  break;
-            case ALIGN_LEFT:
-                  qa |= Qt::AlignLeft;
-                  break;
-            }
-
-      bformat.setAlignment(qa);
-      cursor()->mergeBlockFormat(bformat);
-      _textElement->setAlign((_textElement->align() & ~ ALIGN_HMASK) | Align(a->data().toInt()));
+      _textElement->setCurHalign(a->data().toInt());
       updateTools();
       layoutText();
       }
@@ -479,13 +401,11 @@ void TextTools::setValign(QAction* a)
 
 void TextTools::subscriptClicked(bool val)
       {
+//      _textElement->setAlign((_textElement->align() & ~ALIGN_VMASK) | Align(a->data().toInt()));
+      _textElement->setCurSubscript(val);
       typefaceSuperscript->blockSignals(true);
       typefaceSuperscript->setChecked(false);
       typefaceSuperscript->blockSignals(false);
-
-      QTextCharFormat format;
-      format.setVerticalAlignment(val ? QTextCharFormat::AlignSubScript : QTextCharFormat::AlignNormal);
-      cursor()->mergeCharFormat(format);
       updateText();
       }
 
@@ -495,13 +415,10 @@ void TextTools::subscriptClicked(bool val)
 
 void TextTools::superscriptClicked(bool val)
       {
+      _textElement->setCurSuperscript(val);
       typefaceSubscript->blockSignals(true);
       typefaceSubscript->setChecked(false);
       typefaceSubscript->blockSignals(false);
-
-      QTextCharFormat format;
-      format.setVerticalAlignment(val ? QTextCharFormat::AlignSuperScript : QTextCharFormat::AlignNormal);
-      cursor()->mergeCharFormat(format);
       updateText();
       }
 
@@ -509,16 +426,18 @@ void TextTools::superscriptClicked(bool val)
 //   styleChanged
 //---------------------------------------------------------
 
-void TextTools::styleChanged(int idx)
+void TextTools::styleChanged(int comboIdx)
       {
       blockAllSignals(true);
-      bool styled = idx != 0;
+      int styleIdx = textStyles->itemData(comboIdx).toInt();
+      if (styleIdx < 0)
+            styleIdx = TEXT_STYLE_UNSTYLED;
+      bool unstyled = (styleIdx == TEXT_STYLE_UNSTYLED);
 
-      if (styled)
-            _textElement->setTextStyleType(idx);
-      else
+      if (unstyled)
             _textElement->setUnstyled();
-      bool unstyled = !styled;
+      else
+            _textElement->setTextStyleType(styleIdx);
       typefaceSize->setEnabled(unstyled);
       typefaceFamily->setEnabled(unstyled);
       typefaceBold->setEnabled(unstyled);
@@ -544,6 +463,7 @@ void TextTools::styleChanged(int idx)
 
 void TextTools::showKeyboardClicked(bool val)
       {
+printf("showKeyboardClicked %d\n", val);
       if (val) {
             if (textPalette == 0)
                   textPalette = new TextPalette(mscore);

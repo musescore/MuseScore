@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: tremolo.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -39,7 +38,7 @@ enum TremoloType {
 class Tremolo : public Element {
       Q_OBJECT
 
-      TremoloType _subtype;
+      TremoloType _tremoloType;
       Chord* _chord1;
       Chord* _chord2;
       QPainterPath path;
@@ -52,11 +51,11 @@ class Tremolo : public Element {
       virtual Tremolo* clone() const   { return new Tremolo(*this); }
       virtual ElementType type() const { return TREMOLO; }
 
-      QString subtypeName() const;
-      void setSubtype(const QString& s);
+      QString tremoloTypeName() const;
+      void setTremoloType(const QString& s);
 
-      void setSubtype(TremoloType t);
-      TremoloType subtype() const      { return _subtype; }
+      void setTremoloType(TremoloType t);
+      TremoloType tremoloType() const      { return _tremoloType; }
 
       virtual void draw(QPainter*) const;
       virtual void layout();
@@ -71,7 +70,7 @@ class Tremolo : public Element {
             _chord2 = c2;
             }
       Fraction tremoloLen() const;
-      bool twoNotes() const { return subtype() > TREMOLO_R64; } // is it a two note tremolo?
+      bool twoNotes() const { return tremoloType() > TREMOLO_R64; } // is it a two note tremolo?
       int lines() const { return _lines; }
       };
 

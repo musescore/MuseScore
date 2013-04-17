@@ -27,49 +27,46 @@
 #include "dockseparatordata.h"
 
 
-    //______________________________________________
-    DockSeparatorData::DockSeparatorData( QObject* parent, QWidget* target, int duration ):
-        AnimationData( parent, target )
-    {
+//______________________________________________
+DockSeparatorData::DockSeparatorData( QObject* parent, QWidget* target, int duration ):
+      AnimationData( parent, target ) {
 
-        // setup animation
-        horizontalData_.animation_ = new Animation( duration, this );
-        horizontalData_.animation_.data()->setStartValue( 0.0 );
-        horizontalData_.animation_.data()->setEndValue( 1.0 );
-        horizontalData_.animation_.data()->setTargetObject( this );
-        horizontalData_.animation_.data()->setPropertyName( "horizontalOpacity" );
+      // setup animation
+      horizontalData_.animation_ = new Animation( duration, this );
+      horizontalData_.animation_.data()->setStartValue( 0.0 );
+      horizontalData_.animation_.data()->setEndValue( 1.0 );
+      horizontalData_.animation_.data()->setTargetObject( this );
+      horizontalData_.animation_.data()->setPropertyName( "horizontalOpacity" );
 
-        // setup animation
-        verticalData_.animation_ = new Animation( duration, this );
-        verticalData_.animation_.data()->setStartValue( 0.0 );
-        verticalData_.animation_.data()->setEndValue( 1.0 );
-        verticalData_.animation_.data()->setTargetObject( this );
-        verticalData_.animation_.data()->setPropertyName( "verticalOpacity" );
+      // setup animation
+      verticalData_.animation_ = new Animation( duration, this );
+      verticalData_.animation_.data()->setStartValue( 0.0 );
+      verticalData_.animation_.data()->setEndValue( 1.0 );
+      verticalData_.animation_.data()->setTargetObject( this );
+      verticalData_.animation_.data()->setPropertyName( "verticalOpacity" );
 
-    }
+      }
 
-    //______________________________________________
-    void DockSeparatorData::updateRect( const QRect& r, const Qt::Orientation& orientation, bool hovered )
-    {
+//______________________________________________
+void DockSeparatorData::updateRect( const QRect& r, const Qt::Orientation& orientation, bool hovered ) {
 
-        Data& data( orientation == Qt::Vertical ? verticalData_:horizontalData_ );
+      Data& data( orientation == Qt::Vertical ? verticalData_ : horizontalData_ );
 
-        if( hovered )
-        {
+      if ( hovered ) {
             data.rect_ = r;
-            if( data.animation_.data()->direction() == Animation::Backward )
-            {
-                if( data.animation_.data()->isRunning() ) data.animation_.data()->stop();
-                data.animation_.data()->setDirection( Animation::Forward );
-                data.animation_.data()->start();
+            if ( data.animation_.data()->direction() == Animation::Backward ) {
+                  if ( data.animation_.data()->isRunning() ) data.animation_.data()->stop();
+                  data.animation_.data()->setDirection( Animation::Forward );
+                  data.animation_.data()->start();
+                  }
+
             }
+      else if ( data.animation_.data()->direction() == Animation::Forward && r == data.rect_  ) {
 
-        } else if( data.animation_.data()->direction() == Animation::Forward && r == data.rect_  ) {
-
-            if( data.animation_.data()->isRunning() ) data.animation_.data()->stop();
+            if ( data.animation_.data()->isRunning() ) data.animation_.data()->stop();
             data.animation_.data()->setDirection( Animation::Backward );
             data.animation_.data()->start();
 
-        }
+            }
 
-    }
+      }

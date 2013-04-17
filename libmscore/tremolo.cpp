@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: tremolo.cpp 5532 2012-04-12 13:27:53Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -27,7 +26,7 @@
 Tremolo::Tremolo(Score* score)
    : Element(score)
       {
-      setSubtype(TREMOLO_R8);
+      setTremoloType(TREMOLO_R8);
       _chord1  = 0;
       _chord2  = 0;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
@@ -52,13 +51,13 @@ void Tremolo::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setTremoloType
 //---------------------------------------------------------
 
-void Tremolo::setSubtype(TremoloType t)
+void Tremolo::setTremoloType(TremoloType t)
       {
-      _subtype = t;
-      switch (subtype()) {
+      _tremoloType = t;
+      switch (tremoloType()) {
             case TREMOLO_R16:
             case TREMOLO_C16:
                   _lines = 2;
@@ -236,7 +235,7 @@ void Tremolo::layout()
 void Tremolo::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("subtype", subtypeName());
+      xml.tag("subtype", tremoloTypeName());
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -249,19 +248,19 @@ void Tremolo::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             if (e.name() == "subtype")
-                  setSubtype(e.readElementText());
+                  setTremoloType(e.readElementText());
             else if (!Element::readProperties(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   subtypeName
+//   tremoloTypeName
 //---------------------------------------------------------
 
-QString Tremolo::subtypeName() const
+QString Tremolo::tremoloTypeName() const
       {
-      switch(subtype()) {
+      switch(tremoloType()) {
             case TREMOLO_R8:  return QString("r8");
             case TREMOLO_R16: return QString("r16");
             case TREMOLO_R32: return QString("r32");
@@ -277,10 +276,10 @@ QString Tremolo::subtypeName() const
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setTremoloType
 //---------------------------------------------------------
 
-void Tremolo::setSubtype(const QString& s)
+void Tremolo::setTremoloType(const QString& s)
       {
       TremoloType t;
       if (s == "r8")
@@ -301,7 +300,7 @@ void Tremolo::setSubtype(const QString& s)
             t = TREMOLO_C64;
       else
             t = TremoloType(s.toInt());    // for compatibility with old tremolo type
-      setSubtype(t);
+      setTremoloType(t);
       }
 
 //---------------------------------------------------------

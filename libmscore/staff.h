@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: staff.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -117,7 +116,8 @@ class Staff : public QObject {
       Staff(Score* = 0);
       Staff(Score*, Part*, int);
       ~Staff();
-      void init(const InstrumentTemplate*, int);
+      void init(const InstrumentTemplate*, const StaffType *staffType, int);
+      void initFromStaffType(const StaffType* staffType);
 
       bool isTop() const             { return _rstaff == 0; }
       QString partName() const;
@@ -144,8 +144,8 @@ class Staff : public QObject {
       ClefType clef(Segment*) const;
       void addClef(Clef*);
       void removeClef(Clef*);
-      void setInitialClef(const ClefTypeList& cl) { _initialClef = cl; }
-      void setInitialClef(ClefType ct)            { _initialClef = ClefTypeList(ct, ct); }
+      void setInitialClef(const ClefTypeList& cl);
+      void setInitialClef(ClefType ct);
       ClefTypeList initialClef() const            { return _initialClef; }
 
       void addTimeSig(TimeSig*);

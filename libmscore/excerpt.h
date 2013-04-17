@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: excerpt.h 5497 2012-03-26 10:59:16Z lasconic $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //

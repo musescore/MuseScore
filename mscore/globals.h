@@ -39,19 +39,25 @@ extern double converterDpi;
 
 enum ScoreState {
       STATE_INIT               = 0,
-      STATE_DISABLED           = 1,
-      STATE_NORMAL             = 2,
-      STATE_NOTE_ENTRY_PITCHED = 4,
-      STATE_NOTE_ENTRY_DRUM    = 8,
-      STATE_NOTE_ENTRY_TAB     = 16,
-      STATE_EDIT               = 32,
-      STATE_LYRICS_EDIT        = 64,
-      STATE_PLAY               = 128,
-      STATE_SEARCH             = 256,
-      STATE_FOTO               = 512,
+      STATE_DISABLED           = 1 <<  0,
+      STATE_NORMAL             = 1 <<  1,
+      STATE_NOTE_ENTRY_PITCHED = 1 <<  2,
+      STATE_NOTE_ENTRY_DRUM    = 1 <<  3,
+      STATE_NOTE_ENTRY_TAB     = 1 <<  4,
+      STATE_EDIT               = 1 <<  5,
+      STATE_TEXT_EDIT          = 1 <<  6,
+      STATE_LYRICS_EDIT        = 1 <<  7,
+      STATE_HARMONY_FIGBASS_EDIT = 1 << 8,
+      STATE_PLAY               = 1 <<  9,
+      STATE_SEARCH             = 1 << 10,
+      STATE_FOTO               = 1 << 11,
+      STATE_LOCK               = 1 << 12,
 
-      STATE_NOTE_ENTRY = STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
-      STATE_ALL        = -1
+      STATE_NEVER              = 1 << 31,
+
+      STATE_NOTE_ENTRY 		= STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
+      STATE_ALLTEXTUAL_EDIT	= STATE_TEXT_EDIT | STATE_LYRICS_EDIT | STATE_HARMONY_FIGBASS_EDIT,
+      STATE_ALL        		= -1
       };
 
 //---------------------------------------------------------

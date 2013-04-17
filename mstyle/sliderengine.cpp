@@ -27,18 +27,17 @@
 #include "sliderengine.h"
 
 
-    //____________________________________________________________
-    bool SliderEngine::registerWidget( QWidget* widget )
-    {
+//____________________________________________________________
+bool SliderEngine::registerWidget( QWidget* widget ) {
 
-        if( !widget ) return false;
+      if ( !widget ) return false;
 
-        // create new data class
-        if( !data_.contains( widget ) ) data_.insert( widget, new SliderData( this, widget, duration() ), enabled() );
+      // create new data class
+      if ( !data_.contains( widget ) ) data_.insert( widget, new SliderData( this, widget, duration() ), enabled() );
 
-        // connect destruction signal
-        connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
-        return true;
+      // connect destruction signal
+      connect( widget, SIGNAL( destroyed( QObject* ) ), this, SLOT( unregisterWidget( QObject* ) ), Qt::UniqueConnection );
+      return true;
 
-    }
+      }
 

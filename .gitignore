@@ -1,5 +1,6 @@
 .*,
 .qped
+.directory
 build.release
 build.debug
 win32build
@@ -16,5 +17,4 @@ build.qt5
 *.sfd~
 /.project
 mscore/revision.h
-thirdparty/qt-manhattan-style
-
+.DS_Store

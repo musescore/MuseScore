@@ -31,51 +31,49 @@
 #include "datamap.h"
 #include "comboboxdata.h"
 
-    //! used for simple widgets
-    class ComboBoxEngine: public BaseEngine
-    {
+//! used for simple widgets
+class ComboBoxEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        ComboBoxEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            ComboBoxEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~ComboBoxEngine( void )
-        {}
+            //! destructor
+            virtual ~ComboBoxEngine( void )
+                  {}
 
-        //! register widget
-        virtual bool registerWidget( QComboBox* );
+            //! register widget
+            virtual bool registerWidget( QComboBox* );
 
-        //! duration
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! duration
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! maps
-        DataMap<ComboBoxData> data_;
+            //! maps
+            DataMap<ComboBoxData> data_;
 
-    };
+      };
 
 #endif

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: tablature.h 5566 2012-04-22 08:26:29Z lvinken $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -34,7 +33,7 @@ public:
       Tablature(int numFrets, QList<int>& strings);
       bool        convertPitch(int pitch, int* string, int* fret) const;
       int         fret(int pitch, int string) const;
-      void        fretChord(Chord * chord) const;
+      void        fretChords(Chord * chord) const;
       int         getPitch(int string, int fret) const;
       int         strings() const         { return stringTable.size(); }
       QList<int>  stringList() const      { return stringTable; }

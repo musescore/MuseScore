@@ -24,10 +24,11 @@ class Element;
 //---------------------------------------------------------
 
 struct InspectorItem {
-      P_ID   t;
+      P_ID t;           // property id
       int sv;           // subvalue; example for T_SIZE: 0 - width 1 - height
+      int parent;       // apply to parent() element level
       QWidget* w;
-      QToolButton* r;
+      QToolButton* r;   // reset to default button (if any)
       };
 
 //---------------------------------------------------------
@@ -41,30 +42,27 @@ class InspectorBase : public QWidget {
       QSignalMapper* valueMapper;
 
       bool dirty() const;
+      void checkDifferentValues(const InspectorItem&);
 
    protected slots:
       virtual void valueChanged(int idx);
       void resetClicked(int);
 
    protected:
-      QVBoxLayout* layout;
+      std::vector<InspectorItem> iList;
+      QVBoxLayout* _layout;
       Inspector* inspector;
 
-      virtual const InspectorItem& item(int idx) const;
-      virtual void setValue(int idx, const QVariant& val);
-
-      QVariant getValue(int idx) const;
-
-      bool isDefault(int idx);
-      virtual int inspectorItems() const { return 0; }
+      virtual void setValue(const InspectorItem&, QVariant);
+      QVariant getValue(const InspectorItem&) const;
+      bool isDefault(const InspectorItem&);
       void mapSignals();
-
-   public slots:
-      virtual void apply();
 
    public:
       InspectorBase(QWidget* parent);
-      virtual void setElement(Element*);
+      virtual void setElement();
+      virtual void postInit() {} // called in setElement and valueChanged
+      QWidget* addWidget();
       };
 
 #endif

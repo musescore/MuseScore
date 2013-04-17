@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: fifo.h 4414 2011-06-22 19:25:31Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -13,6 +12,8 @@
 
 #ifndef __FIFO_H__
 #define __FIFO_H__
+
+#include <atomic>
 
 //---------------------------------------------------------
 //   FifoBase
@@ -27,9 +28,9 @@
 class FifoBase {
 
    protected:
-      int ridx;               // read index
-      int widx;               // write index
-      volatile int counter;   // objects in fifo
+      int ridx;                 // read index
+      int widx;                 // write index
+      std::atomic<int> counter; // objects in fifo
       int maxCount;
 
       void push();

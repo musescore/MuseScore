@@ -47,7 +47,7 @@ void TestDynamic::initTestCase()
 void TestDynamic::test1()
       {
       Dynamic* dynamic = new Dynamic(score);
-      dynamic->setSubtype(Dynamic::DynamicType(1));
+      dynamic->setDynamicType(Dynamic::DynamicType(1));
 
       dynamic->setPlacement(Element::ABOVE);
       Dynamic* d = static_cast<Dynamic*>(writeReadElement(dynamic));

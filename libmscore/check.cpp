@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2010-2011 Werner Schweer
 //
@@ -68,7 +67,7 @@ void Score::checkScore()
       for (Segment* s = firstMeasure()->first(); s;) {
             Segment* ns = s->next1();
 
-            if (s->subtype() & (Segment::SegChordRestGrace)) {
+            if (s->segmentType() & (Segment::SegChordRestGrace)) {
                   bool empty = true;
                   foreach(Element* e, s->elist()) {
                         if (e) {

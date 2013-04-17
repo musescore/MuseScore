@@ -3,7 +3,7 @@
 #  Linux Music Score Editor
 #  $Id:$
 #
-#  Copyright (C) 2002-2010 by Werner Schweer and others
+#  Copyright (C) 2002-2013 by Werner Schweer and others
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2.
@@ -37,31 +37,32 @@ endif (SCRIPT_INTERFACE)
 
 QT4_WRAP_UI (ui_headers
       insertmeasuresdialog.ui barline.ui chord.ui chordrest.ui editinstrument.ui editstyle.ui
-      edittempo.ui element.ui hairpin.ui instrdialog.ui measure.ui measuresdialog.ui
+      edittempo.ui element.ui instrdialog.ui measure.ui measuresdialog.ui
       note.ui page.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui
       measureproperties.ui segment.ui text.ui textpalette.ui timedialog.ui
       symboldialog.ui dynamic.ui tuplet.ui shortcutcapturedialog.ui slurtie.ui
       slur.ui editdrumset.ui editstaff.ui line.ui linesegment.ui
-      voltaproperties.ui timesigproperties.ui
-      jumpproperties.ui markerproperties.ui boxproperties.ui
+      voltaproperties.ui timesigproperties.ui boxproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
-      chordedit.ui transposedialog.ui tempoproperties.ui
-      lineproperties.ui excerptsdialog.ui lyrics.ui stafftext.ui
-      tupletdialog.ui tupletproperties.ui
+      chordedit.ui transposedialog.ui
+      lineproperties.ui excerptsdialog.ui lyrics.ui stafftext.ui tupletdialog.ui
       glissandoprop.ui articulation.ui metaedit.ui palette.ui
-      dynamicproperties.ui textline.ui slurproperties.ui debugger.ui
+      hairpin.ui textline.ui slurproperties.ui debugger.ui
       select.ui synthcontrol.ui splitstaff.ui cellproperties.ui beam.ui keyedit.ui
       harmonyedit.ui selectinstr.ui tremolo.ui fretdprops.ui stafftype.ui
-      sectionbreak.ui hairpinproperties.ui spanner.ui bend.ui tremolobar.ui
+      sectionbreak.ui spanner.ui bend.ui tremolobar.ui
       textproperties.ui editpitch.ui editstringdata.ui slursegment.ui
       accidental.ui clef.ui editraster.ui mediadialog.ui textstyle.ui
       album.ui layer.ui articulationbase.ui inspector_element.ui inspector_vbox.ui
       inspector_articulation.ui inspector_spacer.ui inspector_hbox.ui keysig.ui
-      inspector_segment.ui inspector_beam.ui inspector_note.ui
+      inspector_segment.ui inspector_beam.ui inspector_note.ui inspector_rest.ui
       rest.ui inspector_chord.ui omrpanel.ui startdialog.ui masterpalette.ui
       inspector_group_element.ui inspector_image.ui stem.ui inspector_lasso.ui
       inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
-      box.ui pluginManager.ui
+      box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui inspector_glissando.ui
+      inspector_clef.ui inspector_timesig.ui inspector_keysig.ui inspector_barline.ui
+      inspector_tuplet.ui inspector_accidental.ui inspector_tempotext.ui
+      inspector_dynamic.ui inspector_line.ui
       ${SCRIPT_UI}
       )
 
@@ -76,24 +77,25 @@ QT4_WRAP_CPP (mocs
       measureproperties.h seq.h textpalette.h textstyle.h
       timedialog.h symboldialog.h shortcutcapturedialog.h simplebutton.h
       greendotbutton.h recordbutton.h editdrumset.h editstaff.h selinstrument.h
-      voltaproperties.h timesigproperties.h
-      jumpproperties.h markerproperties.h boxproperties.h newwizard.h
-      transposedialog.h chordedit.h tempoproperties.h lineproperties.h
+      voltaproperties.h timesigproperties.h boxproperties.h newwizard.h
+      transposedialog.h chordedit.h lineproperties.h
       excerptsdialog.h stafftextproperties.h glissandoproperties.h
       articulationprop.h metaedit.h magbox.h voiceselector.h
-      textprop.h dynamicprop.h textproperties.h tupletdialog.h tupletproperties.h
+      textprop.h textproperties.h tupletdialog.h
       slurproperties.h selectdialog.h synthcontrol.h drumroll.h pianoroll.h
       piano.h ruler.h file.h
       pianoview.h drumview.h splitstaff.h scoretab.h keyedit.h keycanvas.h harmonyedit.h
       harmonycanvas.h updatechecker.h fretproperties.h fretcanvas.h editstafftype.h
-      prefsdialog.h sectionbreakprop.h hairpinprop.h bendproperties.h
+      prefsdialog.h sectionbreakprop.h bendproperties.h
       bendcanvas.h tremolobarprop.h tremolobarcanvas.h
       drumtools.h texteditor.h texttools.h edittools.h pianotools.h editpitch.h
-      editstringdata.h editraster.h mediadialog.h chordeditor.h chordview.h album.h layer.h
+      editstringdata.h editraster.h mediadialog.h chordview.h album.h layer.h
       webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
       inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
       inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
       inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
+      inspectorJump.h inspectorMarker.h inspectorGlissando.h inspectorNote.h
+      paletteBoxButton.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -135,10 +137,10 @@ if (APPLE)
 	set (MACOSX_BUNDLE_INFO_STRING MuseScore prerelease for Mac OSX)
 	set (MACOSX_BUNDLE_ICON_FILE      mscore.icns)
 	set (MACOSX_BUNDLE_GUI_IDENTIFIER net.sourceforge.mscore)
-	set (MACOSX_BUNDLE_LONG_VERSION_STRING ${Mscore_VERSION_FULL})
+	set (MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSESCORE_VERSION_FULL})
 	set (MACOSX_BUNDLE_BUNDLE_NAME MuseScore)
-	set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${Mscore_VERSION})
-	set (MACOSX_BUNDLE_BUNDLE_VERSION ${Mscore_VERSION_FULL})
+	set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
+	set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL})
 	set (MACOSX_BUNDLE_COPYRIGHT musescore.org)
 else (APPLE)
 	set (ExecutableName mscore)
@@ -173,9 +175,8 @@ add_executable ( ${ExecutableName}
       simplebutton.cpp musedata.cpp exportly.cpp
       editdrumset.cpp editstaff.cpp voltaproperties.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
-      chordedit.cpp excerptsdialog.cpp
-      metaedit.cpp magbox.cpp voiceselector.cpp capella.cpp
-      exportaudio.cpp palettebox.cpp
+      chordedit.cpp excerptsdialog.cpp metaedit.cpp magbox.cpp
+      voiceselector.cpp capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
       textproperties.cpp slurproperties.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
@@ -183,23 +184,25 @@ add_executable ( ${ExecutableName}
       importgtp.cpp fotomode.cpp drumtools.cpp
       selinstrument.cpp texteditor.cpp editstafftype.cpp texttools.cpp edittools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
-      workspace.cpp exportmp3.cpp chordeditor.cpp chordview.cpp
-      album.cpp webpage.cpp textstyle.cpp tempoproperties.cpp
+      workspace.cpp exportmp3.cpp chordview.cpp
+      album.cpp webpage.cpp textstyle.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
-      tupletdialog.cpp tupletproperties.cpp glissandoproperties.cpp
-      articulationprop.cpp textprop.cpp dynamicprop.cpp
-      fretproperties.cpp sectionbreakprop.cpp hairpinprop.cpp
+      tupletdialog.cpp glissandoproperties.cpp
+      articulationprop.cpp textprop.cpp
+      fretproperties.cpp sectionbreakprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
-      layer.cpp jumpproperties.cpp selectdialog.cpp
-      propertymenu.cpp shortcut.cpp bb.cpp
+      layer.cpp selectdialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       inspector.cpp dragelement.cpp svggenerator.cpp
       inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
       inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
       waveview.cpp helpBrowser.cpp inspectorLasso.cpp
       editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
-      inspectorHairpin.cpp qmlplugin.cpp
-      musicxmlsupport.cpp exportxml.cpp importxml.cpp
-      savePositions.cpp pluginManager.cpp
+      inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
+      musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
+      savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
+      inspectorGlissando.cpp inspectorNote.cpp paletteBoxButton.cpp
+      driver.cpp exportmidi.cpp
+
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
@@ -208,6 +211,30 @@ add_executable ( ${ExecutableName}
       )
 
 qt5_use_modules(${ExecutableName} Gui Widgets Network)
+
+target_link_libraries(mscore
+      libmscore
+      awl
+      mstyle
+      diff_match_patch
+      bww
+      rtf2html
+      ${QTSINGLEAPPLICATION_LIBRARIES}
+      synthesizer
+      midi
+      fluid
+      effects
+      vorbisfile
+      )
+if (ZERBERUS)
+      target_link_libraries(mscore zerberus synthesizer)
+endif ()
+if (AEOLUS)
+      target_link_libraries(mscore aeolus)
+endif ()
+if (SOUNDFONT3)
+      target_link_libraries(mscore vorbis ogg)
+endif ()
 
 if (APPLE)
       set_target_properties (mscore
@@ -239,44 +266,26 @@ if (MINGW)
    if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
         PROPERTIES
-           COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+           COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
            LINK_FLAGS "${PROJECT_BINARY_DIR}/resfile.o -mwindows -mconsole -L ${CROSSQT}/lib"
         )
    else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
           PROPERTIES
-             COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+             COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
              LINK_FLAGS "-Wl,-S ${PROJECT_BINARY_DIR}/resfile.o -mwindows -L ${CROSSQT}/lib"
           )
    endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
    target_link_libraries(mscore
-      libmscore
-      awl
-      mstyle
-      diff_match_patch
-      msynth
-      bww
-      rtf2html
-      ${QTSINGLEAPPLICATION_LIBRARIES}
-      fluid
       portaudio
       portmidi
       winmm
-      vorbisfile
       )
 
    if (HAS_AUDIOFILE)
       target_link_libraries(mscore sndfile-1)
    endif (HAS_AUDIOFILE)
-
-   if (OGGVORBIS)
-      target_link_libraries(mscore vorbis ogg)
-   endif (OGGVORBIS)
-
-   if (AEOLUS)
-      target_link_libraries(mscore aeolus)
-   endif (AEOLUS)
 
    if (OMR)
       target_link_libraries(mscore omr fitz freetype jbig2dec jpeg openjpeg)
@@ -290,8 +299,9 @@ if (MINGW)
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
    install_files ( /bin .dll
-      ${CROSS}/bin/mingwm10.dll
-      ${CROSS}/bin/libgcc_s_dw2-1.dll
+      ${CROSS}/bin/libgcc_s_sjlj-1.dll
+      ${CROSS}/bin/libstdc++-6.dll
+      ${CROSS}/bin/libwinpthread-1.dll
       ${CROSS}/lib/portaudio.dll
       ${CROSS}/lib/libsndfile-1.dll
       ${CROSS}/lib/libogg.dll
@@ -321,21 +331,11 @@ if (MINGW)
 
 else (MINGW)
    target_link_libraries(mscore
-      libmscore
       ${ALSA_LIB}
       ${QT_LIBRARIES}
-      diff_match_patch
-      awl
-      mstyle
-      msynth
-      bww
-      rtf2html
-      ${QTSINGLEAPPLICATION_LIBRARIES}
-      fluid
       z
       dl
       pthread
-      vorbisfile
       )
     if (USE_PORTAUDIO)
       target_link_libraries(mscore ${PORTAUDIO_LIB})
@@ -348,19 +348,12 @@ else (MINGW)
    set_target_properties (
       mscore
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
+         LINK_FLAGS "-L${QT_LIBRARY_DIR}"
       )
    if (HAS_AUDIOFILE)
        target_link_libraries(mscore sndfile)
    endif (HAS_AUDIOFILE)
-
-   if (OGGVORBIS)
-      target_link_libraries(mscore vorbis ogg)
-   endif (OGGVORBIS)
-
-   if (AEOLUS)
-      target_link_libraries(mscore aeolus)
-   endif (AEOLUS)
 
    if (OMR)
       target_link_libraries(mscore omr fitz fontconfig freetype jbig2dec jpeg openjpeg)
@@ -379,14 +372,19 @@ else (MINGW)
    endif (APPLE)
 
    # gold does not use indirect shared libraries for symbol resolution, Linux only
-   if (NOT MINGW AND NOT APPLE)
+   if (NOT APPLE)
       if(USE_JACK)
          target_link_libraries(mscore dl)
       endif(USE_JACK)
       target_link_libraries(mscore rt)
-   endif (NOT MINGW AND NOT APPLE)
+   endif (NOT APPLE)
 
    if (APPLE)
+      set_target_properties(mscore
+        PROPERTIES
+           LINK_FLAGS "-stdlib=libc++"
+        )
+     xcode_pch(mscore all)
      install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
      install (FILES data/mscore.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
      install (FILES data/musescoreDocument.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})

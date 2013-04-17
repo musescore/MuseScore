@@ -22,8 +22,6 @@
 #define __DRIVER_H__
 
 class Seq;
-struct MidiPatch;
-class Synth;
 class Event;
 
 //---------------------------------------------------------

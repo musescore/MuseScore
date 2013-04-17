@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: spacer.cpp 5658 2012-05-21 18:40:58Z wschweer $
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -22,7 +21,7 @@
 Spacer::Spacer(Score* score)
    : Element(score)
       {
-      _subtype = SPACER_UP;
+      _spacerType = SPACER_UP;
       _gap = 0.0;
       }
 
@@ -31,7 +30,7 @@ Spacer::Spacer(const Spacer& s)
       {
       _gap    = s._gap;
       path    = s.path;
-      _subtype = s._subtype;
+      _spacerType = s._spacerType;
       }
 
 //---------------------------------------------------------
@@ -62,7 +61,7 @@ void Spacer::layout0()
       qreal b = w * .5;
       qreal h = _gap;
 
-      if (subtype() == SPACER_DOWN) {
+      if (spacerType() == SPACER_DOWN) {
             path.lineTo(w, 0.0);
             path.moveTo(b, 0.0);
             path.lineTo(b, h);
@@ -70,7 +69,7 @@ void Spacer::layout0()
             path.moveTo(b, h);
             path.lineTo(w, h-b);
             }
-      else if (subtype() == SPACER_UP) {
+      else if (spacerType() == SPACER_UP) {
             path.moveTo(b, 0.0);
             path.lineTo(0.0, b);
             path.moveTo(b, 0.0);
@@ -107,25 +106,15 @@ void Spacer::spatiumChanged(qreal ov, qreal nv)
       }
 
 //---------------------------------------------------------
-//   setSubtype
-//---------------------------------------------------------
-
-void Spacer::setSubtype(SpacerType val)
-      {
-      _subtype = val;
-      layout0();
-      }
-
-//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
 void Spacer::editDrag(const EditData& ed)
       {
       qreal s = ed.delta.y();
-      if (subtype() == SPACER_DOWN)
+      if (spacerType() == SPACER_DOWN)
             _gap += s;
-      else if (subtype() == SPACER_UP)
+      else if (spacerType() == SPACER_UP)
             _gap -= s;
       if (_gap < spatium() * 2.0)
             _gap = spatium() * 2;
@@ -142,9 +131,9 @@ void Spacer::updateGrips(int* grips, QRectF* grip) const
       *grips         = 1;
       qreal _spatium = spatium();
       QPointF p;
-      if (subtype() == SPACER_DOWN)
+      if (spacerType() == SPACER_DOWN)
             p = QPointF(_spatium * .5, _gap);
-      else if (subtype() == SPACER_UP)
+      else if (spacerType() == SPACER_UP)
             p = QPointF(_spatium * .5, 0.0);
       grip[0].translate(pagePos() + p);
       }
@@ -156,7 +145,7 @@ void Spacer::updateGrips(int* grips, QRectF* grip) const
 void Spacer::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("subtype", _subtype);
+      xml.tag("subtype", _spacerType);
       Element::writeProperties(xml);
       xml.tag("space", _gap / spatium());
       xml.etag();
@@ -171,7 +160,7 @@ void Spacer::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  _subtype = SpacerType(e.readInt());
+                  _spacerType = SpacerType(e.readInt());
             else if (tag == "space")
                   _gap = e.readDouble() * spatium();
             else if (!Element::readProperties(e))

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: chordrest.cpp 5609 2012-05-07 19:54:46Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -49,9 +48,9 @@
 
 Articulation* ChordRest::hasArticulation(const Articulation* aa)
       {
-      int idx = aa->subtype();
+      ArticulationType idx = aa->articulationType();
       foreach(Articulation* a, _articulations) {
-            if (idx == a->subtype())
+            if (idx == a->articulationType())
                   return a;
             }
       return 0;
@@ -66,7 +65,7 @@ ChordRest::ChordRest(Score* s)
       {
       _beam        = 0;
       _small       = false;
-      _beamMode    = BEAM_AUTO;
+      _beamMode    = BeamMode::AUTO;
       _up          = true;
       _staffMove   = 0;
       _tabDur      = 0;
@@ -154,21 +153,21 @@ void ChordRest::writeProperties(Xml& xml) const
 
       //
       // BeamMode default:
-      //    REST  - BEAM_NO
-      //    CHORD - BEAM_AUTO
+      //    REST  - BeamMode::NONE
+      //    CHORD - BeamMode::AUTO
       //
-      if ((type() == REST && _beamMode != BEAM_NO)
-         || (type() == CHORD && _beamMode != BEAM_AUTO)) {
+      if ((type() == REST && _beamMode != BeamMode::NONE)
+         || (type() == CHORD && _beamMode != BeamMode::AUTO)) {
             QString s;
             switch(_beamMode) {
-                  case BEAM_AUTO:    s = "auto"; break;
-                  case BEAM_BEGIN:   s = "begin"; break;
-                  case BEAM_MID:     s = "mid"; break;
-                  case BEAM_END:     s = "end"; break;
-                  case BEAM_NO:      s = "no"; break;
-                  case BEAM_BEGIN32: s = "begin32"; break;
-                  case BEAM_BEGIN64: s = "begin64"; break;
-                  case BEAM_INVALID: s = "?"; break;
+                  case BeamMode::AUTO:    s = "auto"; break;
+                  case BeamMode::BEGIN:   s = "begin"; break;
+                  case BeamMode::MID:     s = "mid"; break;
+                  case BeamMode::END:     s = "end"; break;
+                  case BeamMode::NONE:      s = "no"; break;
+                  case BeamMode::BEGIN32: s = "begin32"; break;
+                  case BeamMode::BEGIN64: s = "begin64"; break;
+                  case BeamMode::INVALID: s = "?"; break;
                   }
             xml.tag("BeamMode", s);
             }
@@ -201,7 +200,7 @@ void ChordRest::writeProperties(Xml& xml) const
                   qDebug("ChordRest: spannerBack->id == -1");
             }
 #ifndef NDEBUG
-      if (_beam && (score()->testMode() || !_beam->generated()))
+      if (_beam && (MScore::testMode || !_beam->generated()))
             xml.tag("Beam", _beam->id());
 #else
       if (!xml.clipboardmode && _beam && !_beam->generated())
@@ -229,21 +228,21 @@ bool ChordRest::readProperties(XmlReader& e)
 
       if (tag == "BeamMode") {
             QString val(e.readElementText());
-            int bm = BEAM_AUTO;
+            BeamMode bm = BeamMode::AUTO;
             if (val == "auto")
-                  bm = BEAM_AUTO;
+                  bm = BeamMode::AUTO;
             else if (val == "begin")
-                  bm = BEAM_BEGIN;
+                  bm = BeamMode::BEGIN;
             else if (val == "mid")
-                  bm = BEAM_MID;
+                  bm = BeamMode::MID;
             else if (val == "end")
-                  bm = BEAM_END;
+                  bm = BeamMode::END;
             else if (val == "no")
-                  bm = BEAM_NO;
+                  bm = BeamMode::NONE;
             else if (val == "begin32")
-                  bm = BEAM_BEGIN32;
+                  bm = BeamMode::BEGIN32;
             else if (val == "begin64")
-                  bm = BEAM_BEGIN64;
+                  bm = BeamMode::BEGIN64;
             else
                   bm = BeamMode(val.toInt());
             _beamMode = BeamMode(bm);
@@ -325,7 +324,6 @@ bool ChordRest::readProperties(XmlReader& e)
             int i = e.readInt();
             if (i == 0)
                   i = mticks;
-            // if ((type() == REST) && (mticks == i || (durationType()==TDuration::V_WHOLE && mticks != 1920))) {
             if ((type() == REST) && (mticks == i)) {
                   setDurationType(TDuration::V_MEASURE);
                   setDuration(Fraction::fromTicks(i));
@@ -387,6 +385,7 @@ void ChordRest::layoutArticulations()
       if (parent() == 0 || _articulations.isEmpty())
             return;
       qreal _spatium  = spatium();
+      qreal _spStaff  = _spatium * staff()->lineDistance(); // scaled to staff line distance for vert. pos. within a staff
       if (type() == CHORD) {
             if (_articulations.size() == 1) {
                   static_cast<Chord*>(this)->layoutArticulation(_articulations[0]);
@@ -398,8 +397,8 @@ void ChordRest::layoutArticulations()
                   //
                   Articulation* a1 = _articulations[0];
                   Articulation* a2 = _articulations[1];
-                  int st1 = a1->subtype();
-                  int st2 = a2->subtype();
+                  ArticulationType st1 = a1->articulationType();
+                  ArticulationType st2 = a2->articulationType();
 
                   if ((st2 == Articulation_Tenuto || st2 == Articulation_Staccato)
                      && (st1 == Articulation_Marcato)) {
@@ -409,7 +408,7 @@ void ChordRest::layoutArticulations()
                   if ((st1 == Articulation_Tenuto || st1 == Articulation_Staccato)
                      && (st2 == Articulation_Marcato)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
-                        pt.ry() += a1->up() ? -_spatium * .5 : _spatium * .5;
+                        pt.ry() += a1->up() ? -_spStaff * .5 : _spStaff * .5;
                         a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
@@ -427,7 +426,7 @@ void ChordRest::layoutArticulations()
                   if ((st1 == Articulation_Tenuto || st1 == Articulation_Staccato)
                      && (st2 == Articulation_Sforzatoaccent)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
-                        pt.ry() += a1->up() ? -_spatium * .7 : _spatium * .7;
+                        pt.ry() += a1->up() ? -_spStaff * .7 : _spStaff * .7;
                         a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
@@ -503,8 +502,8 @@ void ChordRest::layoutArticulations()
             a->layout();
             ArticulationAnchor aa = a->anchor();
 
-            if ((a->subtype() != Articulation_Tenuto)
-               && (a->subtype() != Articulation_Staccato))
+            if ((a->articulationType() != Articulation_Tenuto)
+               && (a->articulationType() != Articulation_Staccato))
                   continue;
 
             if (aa != A_CHORD && aa != A_TOP_CHORD && aa != A_BOTTOM_CHORD)
@@ -607,16 +606,16 @@ void ChordRest::layoutArticulations()
             Articulation* a = _articulations.at(i);
             a->layout();
             ArticulationAnchor aa = a->anchor();
-            if ((a->subtype() == Articulation_Tenuto)
-               || (a->subtype() == Articulation_Staccato))
+            if ((a->articulationType() == Articulation_Tenuto)
+               || (a->articulationType() == Articulation_Staccato))
                   continue;
 
             if (aa != A_CHORD && aa != A_TOP_CHORD && aa != A_BOTTOM_CHORD)
                   continue;
 
             // for tenuto and staccate check for staff line collision
-            bool staffLineCT = a->subtype() == Articulation_Tenuto
-                               || a->subtype() == Articulation_Staccato;
+            bool staffLineCT = a->articulationType() == Articulation_Tenuto
+                               || a->articulationType() == Articulation_Staccato;
 
 //            qreal sh = a->bbox().height() * mag();
             bool bottom = (aa == A_BOTTOM_CHORD) || (aa == A_CHORD && up());
@@ -796,7 +795,7 @@ Element* ChordRest::drop(const DropData& data)
                   tt->setParent(segment());
                   int st = tt->textStyleType();
                   if (st != TEXT_STYLE_UNKNOWN)
-                        tt->setTextStyle(score()->textStyle(st));
+                        tt->setTextStyleType(st);
                   score()->undoAddElement(tt);
                   }
                   return e;
@@ -834,7 +833,7 @@ Element* ChordRest::drop(const DropData& data)
                   Text* f = static_cast<Text*>(e);
                   int st = f->textStyleType();
                   if (st != TEXT_STYLE_UNKNOWN)
-                        f->setTextStyle(score()->textStyle(st));
+                        f->setTextStyleType(st);
                   }
                   score()->undoAddElement(e);
                   return e;
@@ -862,24 +861,24 @@ Element* ChordRest::drop(const DropData& data)
 
             case ICON:
                   {
-                  switch(static_cast<Icon*>(e)->subtype()) {
+                  switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_SBEAM:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, BEAM_BEGIN);
+                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::BEGIN));
                               break;
                         case ICON_MBEAM:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, BEAM_MID);
+                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::MID));
                               break;
                         case ICON_NBEAM:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, BEAM_NO);
+                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NONE));
                               break;
                         case ICON_BEAM32:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, BEAM_BEGIN32);
+                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::BEGIN32));
                               break;
                         case ICON_BEAM64:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, BEAM_BEGIN64);
+                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::BEGIN64));
                               break;
                         case ICON_AUTOBEAM:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, BEAM_AUTO);
+                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::AUTO));
                               break;
                         }
                   }
@@ -1005,7 +1004,7 @@ void ChordRest::add(Element* e)
 
 void ChordRest::remove(Element* e)
       {
-      switch(e->type()) {
+      switch (e->type()) {
             case ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
@@ -1017,7 +1016,6 @@ void ChordRest::remove(Element* e)
                         }
                   }
                   break;
-//            case FIGURED_BASS:
             case LYRICS:
                   {
                   for (int i = 0; i < _lyricsList.size(); ++i) {
@@ -1032,8 +1030,8 @@ void ChordRest::remove(Element* e)
                   qDebug("ChordRest::remove: %s %p not found", e->name(), e);
                   break;
             default:
-                  qDebug("ChordRest::remove: unknown element %s", e->name());
-                  break;
+                  qDebug("ChordRest::remove: unknown element <%s>", e->name());
+                  abort();
             }
       }
 
@@ -1052,6 +1050,15 @@ void ChordRest::removeDeleteBeam()
                   delete b;
             Q_ASSERT(_beam == 0);
             }
+      }
+
+//---------------------------------------------------------
+//   undoSetBeamMode
+//---------------------------------------------------------
+
+void ChordRest::undoSetBeamMode(BeamMode mode)
+      {
+      undoChangeProperty(P_BEAM_MODE, int(mode));
       }
 
 //---------------------------------------------------------
@@ -1090,7 +1097,7 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_SMALL:     return false;
-            case P_BEAM_MODE: return BEAM_AUTO;
+            case P_BEAM_MODE: return int(BeamMode::AUTO);
             default:          return DurationElement::propertyDefault(propertyId);
             }
       score()->setLayoutAll(true);

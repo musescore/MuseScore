@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: fret.h 5549 2012-04-17 18:48:54Z lvinken $
 //
 //  Copyright (C) 2010-2011 Werner Schweer
 //

@@ -29,6 +29,7 @@
 class Navigator;
 class ScoreView;
 class StaffType;
+class StaffTypePercussion;
 class StaffTypeTablature;
 class Staff;
 
@@ -47,20 +48,12 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
 #else
       ScoreView* tabPreview;
 #endif
-      enum {
-            TAB_PRESET_GUITAR = 0,
-            TAB_PRESET_BASS,
-            TAB_PRESET_UKULELE,
-            TAB_PRESET_BANDURRIA,
-            TAB_PRESET_ITALIAN,
-            TAB_PRESET_FRENCH,
-            TAB_PRESET_CUSTOM,                  // custom preset has no effect
-                  TAB_PRESETS = TAB_PRESET_CUSTOM
-      };
-      const StaffTypeTablature* _tabPresets[TAB_PRESETS];
 
+      void blockPercPreviewSignals(bool block);
       void blockTabPreviewSignals(bool block);
       void saveCurrent(QListWidgetItem*);
+      void setDlgFromPerc(const StaffTypePercussion *st);
+      void setPercFromDlg(StaffTypePercussion* st);
       void setDlgFromTab(const StaffTypeTablature* stt);
       void setTabFromDlg(StaffTypeTablature* stt);
       void tabStemsCompatibility(bool checked);
@@ -72,11 +65,16 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void createNewType();
       void nameEdited(const QString&);
       void presetTablatureChanged(int idx);
+      void presetPercChanged(int idx);
+      void durFontNameChanged(int idx);
+      void fretFontNameChanged(int idx);
       void on_pushFullConfig_clicked();
       void on_pushQuickConfig_clicked();
-      void on_tabStemThroughToggled(bool checked);
-      void on_tabMinimShortToggled(bool checked);
-      void on_tabStemsToggled(bool checked);
+      void tabStemThroughToggled(bool checked);
+      void tabMinimShortToggled(bool checked);
+      void tabStemsToggled(bool checked);
+      void updatePreviews();
+      void updatePercPreview();
       void updateTabPreview();
 
 public slots:

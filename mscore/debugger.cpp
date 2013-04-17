@@ -61,6 +61,8 @@
 #include "libmscore/box.h"
 #include "libmscore/fret.h"
 #include "libmscore/harmony.h"
+#include "libmscore/stemslash.h"
+#include "libmscore/ledgerline.h"
 
 extern bool useFactorySettings;
 
@@ -301,9 +303,8 @@ void Debugger::updateList(Score* s)
                               new ElementItem(si, in);
                         }
 
-                  foreach (MeasureBase* mb, system->measures()) {
+                  for (MeasureBase* mb = system->measures().front(); mb; mb = mb->next()) {
                         ElementItem* mi = new ElementItem(si, mb);
-
                         addMeasureBaseToList(mi, mb);
 
                         if (mb->type() != Element::MEASURE)
@@ -322,8 +323,8 @@ void Debugger::updateList(Score* s)
                               foreach(Element* ls, sl->spannerSegments())
                                     new ElementItem(si, ls);
                               }
-                        if (measure->noText())
-                              new ElementItem(mi, measure->noText());
+//                        if (measure->noText())
+//                              new ElementItem(mi, measure->noText());
                         for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                               ElementItem* segItem = new ElementItem(mi, segment);
                               for (int track = 0; track < tracks; ++track) {
@@ -429,6 +430,8 @@ void Debugger::updateList(Score* s)
                                     }
 #endif
                               }
+                        if (mb == system->measures().back())
+                              break;
 #if 0 // TODOxxx
                         foreach(Tuplet* tuplet, *measure->tuplets()) {
 					ElementItem* item = new ElementItem(mi, tuplet);
@@ -582,6 +585,7 @@ void Debugger::updateElement(Element* el)
                   case Element::JUMP:
                   case Element::TEXT:
                   case Element::STAFF_TEXT:
+                  case Element::HARMONY:
                         ew = new TextView;
                         break;
                   case Element::TRILL_SEGMENT:
@@ -801,7 +805,7 @@ void SegmentView::setElement(Element* e)
 
       Segment* s = (Segment*)e;
       ShowElementBase::setElement(e);
-      int st = s->subtype();
+      int st = s->segmentType();
       int idx;
       for (idx = 0; idx < 11; ++idx) {
             if ((1 << idx) == st)
@@ -1394,7 +1398,7 @@ void TextView::setElement(Element* e)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
       ShowElementBase::setElement(e);
-      tb.text->setPlainText(te->getText());
+      tb.text->setPlainText(te->text());
       tb.xoffset->setValue(te->xoff());
       tb.yoffset->setValue(te->yoff());
       tb.rxoffset->setValue(te->reloff().x());
@@ -1482,7 +1486,7 @@ void BarLineView::setElement(Element* e)
       {
       BarLine* barline = (BarLine*)e;
       ShowElementBase::setElement(e);
-      bl.subType->setValue(barline->subtype());
+      bl.subType->setValue(barline->barLineType());
       bl.span->setValue(barline->span());
       bl.spanFrom->setValue(barline->spanFrom());
       bl.spanTo->setValue(barline->spanTo());
@@ -1517,7 +1521,7 @@ void DynamicView::setElement(Element* e)
       for (int i = 0; i < TEXT_STYLES; ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
-      tb.text->setPlainText(dynamic->getText());
+      tb.text->setPlainText(dynamic->text());
       tb.xoffset->setValue(dynamic->xoff());
       tb.yoffset->setValue(dynamic->yoff());
       tb.rxoffset->setValue(dynamic->reloff().x());
@@ -1528,7 +1532,7 @@ void DynamicView::setElement(Element* e)
       tb.layoutToParentWidth->setChecked(dynamic->layoutToParentWidth());
 
       ShowElementBase::setElement(e);
-      bl.subType->setValue(dynamic->subtype());
+      bl.subType->setValue(dynamic->dynamicType());
       }
 
 //---------------------------------------------------------
@@ -2073,7 +2077,7 @@ void VoltaSegmentView::setElement(Element* e)
       VoltaSegment* vs = (VoltaSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->subtype());
+      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
@@ -2102,7 +2106,7 @@ void LineSegmentView::setElement(Element* e)
       LineSegment* vs = (LineSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->subtype());
+      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
@@ -2680,7 +2684,7 @@ void TextLineSegmentView::setElement(Element* e)
       VoltaSegment* vs = (VoltaSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->subtype());
+      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());

@@ -23,47 +23,17 @@
 InspectorTrill::InspectorTrill(QWidget* parent)
    : InspectorBase(parent)
       {
-      iElement = new InspectorElementElement(this);
-      layout->addWidget(iElement);
-      QWidget* w = new QWidget;
-      iTrill.setupUi(w);
-      layout->addWidget(w);
-      connect(iTrill.subtype, SIGNAL(currentIndexChanged(int)), SLOT(apply()));
+      e.setupUi(addWidget());
+      t.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,       0, 0, e.color,      e.resetColor      },
+            { P_VISIBLE,     0, 0, e.visible,    e.resetVisible    },
+            { P_USER_OFF,    0, 0, e.offsetX,    e.resetX          },
+            { P_USER_OFF,    1, 0, e.offsetY,    e.resetY          },
+            { P_TRILL_TYPE,  0, 0, t.trillType,  t.resetTrillType  }
+            };
+
+      mapSignals();
       }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorTrill::setElement(Element* e)
-      {
-      TrillSegment* trillSegment = static_cast<TrillSegment*>(e);
-      iElement->setElement(trillSegment);
-      Trill* trill = trillSegment->trill();
-
-      iTrill.subtype->blockSignals(true);
-      iTrill.subtype->setCurrentIndex(int(trill->subtype()));
-      iTrill.subtype->blockSignals(false);
-      }
-
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorTrill::apply()
-      {
-      TrillSegment* trillSegment = static_cast<TrillSegment*>(inspector->element());
-
-      Trill* trill = trillSegment->trill();
-      Trill::TrillType vt = trill->subtype();
-      Trill::TrillType nt = Trill::TrillType(iTrill.subtype->currentIndex());
-      if (vt != nt) {
-            Score* score = trill->score();
-            score->startCmd();
-            score->undoChangeProperty(trill, P_TRILL_TYPE, nt);
-            score->endCmd();
-            mscore->endCmd();
-            }
-      }
-
 

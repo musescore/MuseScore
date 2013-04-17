@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: chord.h 5563 2012-04-20 13:30:27Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -19,6 +18,7 @@
  Definition of classes Chord, HelpLine and NoteList.
 */
 
+#include <functional>
 #include "chordrest.h"
 #include "noteevent.h"
 
@@ -31,58 +31,10 @@ class Glissando;
 class Stem;
 class QPainter;
 class Chord;
+class StemSlash;
+class LedgerLine;
 
 enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
-
-//---------------------------------------------------------
-//   @@ StemSlash
-///   used for grace notes of type acciaccatura
-//---------------------------------------------------------
-
-class StemSlash : public Element {
-      Q_OBJECT
-
-      QLineF line;
-
-   public:
-      StemSlash(Score*);
-      StemSlash &operator=(const Stem&);
-
-      void setLine(const QLineF& l);
-
-      virtual StemSlash* clone() const { return new StemSlash(*this); }
-      virtual ElementType type() const { return STEM_SLASH; }
-      virtual void draw(QPainter*) const;
-      virtual void layout();
-      Chord* chord() const { return (Chord*)parent(); }
-      };
-
-//---------------------------------------------------------
-//    @@ LedgerLine
-///   Graphic representation of a ledger line.
-///
-///    parent:     Chord
-///    x-origin:   Chord
-///    y-origin:   SStaff
-//---------------------------------------------------------
-
-class LedgerLine : public Line {
-      Q_OBJECT
-
-      LedgerLine* _next;
-
-   public:
-      LedgerLine(Score*);
-      LedgerLine &operator=(const LedgerLine&);
-      virtual LedgerLine* clone() const { return new LedgerLine(*this); }
-      virtual ElementType type() const  { return LEDGER_LINE; }
-      virtual QPointF pagePos() const;      ///< position in page coordinates
-      Chord* chord() const { return (Chord*)parent(); }
-      virtual void layout();
-      qreal measureXPos() const;
-      LedgerLine* next() const    { return _next; }
-      void setNext(LedgerLine* l) { _next = l;    }
-      };
 
 //---------------------------------------------------------
 //   @@ Chord
@@ -105,6 +57,7 @@ class Chord : public ChordRest {
       Stem*      _stem;
       Hook*      _hook;
       StemSlash* _stemSlash;
+
       MScore::Direction  _stemDirection;
       Arpeggio*  _arpeggio;
       Tremolo*   _tremolo;
@@ -121,6 +74,7 @@ class Chord : public ChordRest {
       virtual qreal centerX() const;
       void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible);
       void addLedgerLines(qreal x, int move);
+      void processSiblings(std::function<void(Element*)> func);
 
    public:
       Chord(Score* s = 0);
@@ -154,8 +108,8 @@ class Chord : public ChordRest {
       const QList<Note*>& notes() const      { return _notes; }
 
       // Chord has at least one Note
-      Note* upNote() const                   { return _notes.back(); }
-      Note* downNote() const                 { return _notes.front(); }
+      Note* upNote() const;
+      Note* downNote() const;
       virtual int upLine() const;
       virtual int downLine() const;
       virtual int upString() const;
@@ -218,6 +172,8 @@ class Chord : public ChordRest {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
+
       virtual void reset();
       };
 

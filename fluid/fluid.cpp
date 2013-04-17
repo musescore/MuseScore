@@ -18,14 +18,15 @@
  * 02111-1307, USA
  */
 
-#include "libmscore/event.h"
+#include "synthesizer/event.h"
+#include "synthesizer/msynthesizer.h"
+#include "mscore/preferences.h"
+
 #include "fluid.h"
 #include "sfont.h"
 #include "conv.h"
 #include "gen.h"
-#include "chorus.h"
 #include "voice.h"
-#include "libmscore/sparm_p.h"
 
 namespace FluidS {
 
@@ -62,47 +63,13 @@ static const Mod defaultMod[] = {
         12700.0 },
       };
 
-//
-// list of fluid paramters as saved in score
-//
-static SyntiParameter params[] = {
-      SyntiParameter(SParmId(FLUID_ID, REVERB_GROUP, REVERB_ROOMSIZE).val, "RevRoomsize", 0.0),
-      SyntiParameter(SParmId(FLUID_ID, REVERB_GROUP, REVERB_DAMP).val, "RevDamp",         0.0),
-      SyntiParameter(SParmId(FLUID_ID, REVERB_GROUP, REVERB_WIDTH).val, "RevWidth",       0.0),
-      SyntiParameter(SParmId(FLUID_ID, REVERB_GROUP, REVERB_GAIN).val, "RevGain",         0.0),
-
-      SyntiParameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_TYPE).val, "ChoType",         0.0),
-      SyntiParameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_SPEED).val, "ChoSpeed",       0.0),
-      SyntiParameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_DEPTH).val, "ChoDepth",       0.0),
-      SyntiParameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_BLOCKS).val, "ChoBlocks",     0.0),
-      SyntiParameter(SParmId(FLUID_ID, CHORUS_GROUP, CHORUS_GAIN).val, "ChoGain",         0.0),
-      };
-
 //---------------------------------------------------------
 //   Fluid
 //---------------------------------------------------------
 
 Fluid::Fluid()
+   : Synthesizer()
       {
-      left_buf  = new float[FLUID_MAX_BUFSIZE];
-      right_buf = new float[FLUID_MAX_BUFSIZE];
-      fx_buf[0] = new float[FLUID_MAX_BUFSIZE];
-      fx_buf[1] = new float[FLUID_MAX_BUFSIZE];
-      reverb    = 0;
-      chorus    = 0;
-      silentBlocks = 0;
-      }
-
-//---------------------------------------------------------
-//   init
-//    static initialization
-//---------------------------------------------------------
-
-void Fluid::init()
-      {
-      initialized = true;
-      fluid_conversion_config();
-      Voice::dsp_float_config();
       }
 
 //---------------------------------------------------------
@@ -110,12 +77,15 @@ void Fluid::init()
 //    instance initialization
 //---------------------------------------------------------
 
-void Fluid::init(int sr)
+void Fluid::init(float sampleRate)
       {
-      if (!initialized) // initialize all the conversion tables and other stuff
-            init();
-
-      sample_rate        = double(sr);
+      if (!initialized) {     // initialize all the conversion tables and other stuff
+            initialized = true;
+            fluid_conversion_config();
+            Voice::dsp_float_config();
+            }
+      Synthesizer::init(sampleRate);
+      sample_rate        = sampleRate;
       sfont_id           = 0;
       _gain              = .2;
 
@@ -127,10 +97,6 @@ void Fluid::init(int sr)
 
       for (int i = 0; i < 512; i++)
             freeVoices.append(new Voice(this));
-
-      reverb = new Reverb();
-      chorus = new Chorus(sample_rate);
-      reverb->setPreset(0);
       }
 
 //---------------------------------------------------------
@@ -150,14 +116,6 @@ Fluid::~Fluid()
             delete bankOffset;
       foreach(Channel* c, channel)
             delete c;
-
-      delete[] left_buf;
-      delete[] right_buf;
-      delete[] fx_buf[0];
-      delete[] fx_buf[1];
-
-      delete reverb;
-      delete chorus;
       }
 
 //---------------------------------------------------------
@@ -174,7 +132,7 @@ void Fluid::freeVoice(Voice* v)
 //   play
 //---------------------------------------------------------
 
-void Fluid::play(const Event& event)
+void Fluid::play(const PlayEvent& event)
       {
       bool err = false;
       int ch   = event.channel();
@@ -222,17 +180,17 @@ void Fluid::play(const Event& event)
                   }
             }
       else if (type == ME_CONTROLLER)  {
-            switch(event.controller()) {
+            switch(event.dataA()) {
                   case CTRL_PROGRAM:
-                        program_change(ch, event.value());
+                        program_change(ch, event.dataB());
                         break;
                   case CTRL_PITCH:
-                        cp->pitchBend(event.value());
+                        cp->pitchBend(event.dataB());
                         break;
                   case CTRL_PRESS:
                         break;
                   default:
-                        cp->setcc(event.controller(), event.value());
+                        cp->setcc(event.dataA(), event.dataB());
                         break;
                   }
             }
@@ -292,8 +250,6 @@ void Fluid::system_reset()
             v->off();
       foreach(Channel* c, channel)
             c->reset();
-      chorus->reset();
-      reverb->reset();
       }
 
 /*
@@ -483,34 +439,13 @@ void Fluid::program_reset()
 //   process
 //---------------------------------------------------------
 
-void Fluid::process(unsigned len, float* out, float gain)
+void Fluid::process(unsigned len, float* out, float* effect1, float* effect2)
       {
-      const int byte_size = len * sizeof(float) * 2;
-
-      /* clean the audio buffers */
-      memset(left_buf,  0, byte_size);
-      memset(right_buf, 0, byte_size);
-      memset(fx_buf[0], 0, byte_size);
-      memset(fx_buf[1], 0, byte_size);
-
       if (mutex.tryLock()) {
-            if (activeVoices.isEmpty())
-                  silentBlocks--;
-            else {
-                  silentBlocks = SILENT_BLOCKS;
-                  foreach (Voice* v, activeVoices)
-                        v->write(len, left_buf, right_buf, fx_buf[0], fx_buf[1]);
-                  }
-            if (silentBlocks > 0) {
-                  reverb->process(len, fx_buf[0], left_buf, right_buf);
-                  chorus->process(len, fx_buf[1], left_buf, right_buf);
-                  }
-            mutex.unlock();
+            foreach (Voice* v, activeVoices)
+                  v->write(len, out, effect1, effect2);
             }
-      for (unsigned i = 0; i < len; i++) {
-            *out++ += gain * left_buf[i];
-            *out++ += gain * right_buf[i];
-            }
+      mutex.unlock();
       }
 
 /*
@@ -680,10 +615,11 @@ void Fluid::updatePatchList()
             int bankOffset = bo ? bo->offset : 0;
             foreach (Preset* p, sf->getPresets()) {
                   MidiPatch* patch = new MidiPatch;
-                  patch->name = p->get_name();
+                  patch->drum = (p->get_banknum() == 128);
+                  patch->synti = name();
                   patch->bank = p->get_banknum() + bankOffset;
                   patch->prog = p->get_num();
-                  patch->drum = (p->get_banknum() == 128);
+                  patch->name = p->get_name();
                   patches.append(patch);
                   }
             }
@@ -697,7 +633,7 @@ QStringList Fluid::soundFonts() const
       {
       QStringList sf;
       foreach (SFont* f, sfonts)
-            sf.append(f->get_name());
+            sf.append(QFileInfo(f->get_name()).fileName());
       return sf;
       }
 
@@ -722,9 +658,31 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
             sfunload(sf->id(), true);
       bool ok = true;
 
+
+      QFileInfoList l = sfFiles();
+
       for (int i = sl.size() - 1; i >= 0; --i) {
-            if (sfload(sl[i], true) == -1)
+            QString s = sl[i];
+            if (s.isEmpty())
+                  continue;
+
+            QString path;
+            QFileInfo qfi(s);
+            if (qfi.exists())
+                  path = s;
+            if (path.isEmpty()) {
+                  foreach (const QFileInfo& fi, l) {
+                        if (fi.fileName() == s) {
+                              path = fi.absoluteFilePath();
+                              break;
+                              }
+                        }
+                  }
+
+            if (sfload(path, true) == -1) {
+                  qDebug("loading sf failed: <%s>", qPrintable(path));
                   ok = false;
+                  }
             }
       mutex.unlock();
       return ok;
@@ -862,7 +820,7 @@ SFont* Fluid::get_sfont_by_id(int id)
 SFont* Fluid::get_sfont_by_name(const QString& name)
       {
       foreach(SFont* sf, sfonts) {
-            if (sf->get_name() == name)
+            if (QFileInfo(sf->get_name()).fileName() == name)
                   return sf;
             }
       return 0;
@@ -984,45 +942,6 @@ void Fluid::remove_bank_offset(int sfont_id)
 		bank_offsets.removeAll(bank_offset);
       }
 
-//---------------------------------------------------------
-//   parameter
-//---------------------------------------------------------
-
-SyntiParameter Fluid::parameter(int id) const
-      {
-      SParmId spid(id);
-      int group = spid.subsystemId;
-      int no    = spid.paramId;
-      for (unsigned i = 0; i < sizeof(params)/sizeof(*params); ++i) {
-            SyntiParameter& p = params[i];
-            if (id == p.id()) {
-                  if (group == REVERB_GROUP)
-                        params[i].set(reverb->parameter(no));
-                  else if (group == CHORUS_GROUP)
-                        params[i].set(chorus->parameter(no));
-                  return params[i];
-                  }
-            }
-      printf("Fluid::parameter: (%d,%d,%d) not found\n",
-         spid.syntiId, group, no);
-      return SyntiParameter();
-      }
-
-//---------------------------------------------------------
-//   setParameter
-//---------------------------------------------------------
-
-void Fluid::setParameter(int id, double value)
-      {
-      SParmId spid(id);
-      if (spid.syntiId != FLUID_ID)
-            return;
-      if (spid.subsystemId == REVERB_GROUP)
-            reverb->setParameter(spid.paramId, value);
-      else if (spid.subsystemId == CHORUS_GROUP)
-            chorus->setParameter(spid.paramId, value);
-      }
-
 /**
  * Print a message to the log.
  * @param fmt Printf style format string for log message
@@ -1045,91 +964,71 @@ bool Fluid::log(const char* fmt, ...)
 //   state
 //---------------------------------------------------------
 
-SyntiState Fluid::state() const
+SynthesizerGroup Fluid::state() const
       {
-      SyntiState sp;
+      SynthesizerGroup g;
+      g.setName(name());
 
       QStringList sfl = soundFonts();
-
       foreach(QString sf, sfl)
-            sp.append(SyntiParameter(SParmId(FLUID_ID, 0, 0).val, "soundfont", sf));
+            g.push_back(IdValue(0, sf));
 
-      //
-      // fill in struct with actual values
-      //
-      for (unsigned i = 0; i < sizeof(params)/sizeof(*params); ++i) {
-            SyntiParameter& p = params[i];
-            SParmId spid(p.id());
-
-            int group = spid.subsystemId;
-            int no    = spid.paramId;
-
-            if (group == REVERB_GROUP)
-                  params[i].set(reverb->parameter(no));
-            else if (group == CHORUS_GROUP)
-                  params[i].set(chorus->parameter(no));
-            else
-                  printf("Fluid::state: unknown group %d\n", group);
-            sp.append(params[i]);
-            }
-      return sp;
+      return g;
       }
 
 //---------------------------------------------------------
 //   setState
 //---------------------------------------------------------
 
-void Fluid::setState(SyntiState& sp)
+void Fluid::setState(SynthesizerGroup& sp)
       {
-      QStringList sfs;
-      int n = sp.size();
-      for (int i = 0; i < n; ++i) {
-            SyntiParameter* p = &sp[i];
-            int id = p->id();
-            if (id == -1) {
-                  //
-                  // if id of parameter is invalid, name must be
-                  // valid; lookup name in params table
-                  //
-                  for (unsigned i = 0; i < sizeof(params)/sizeof(*params); ++i) {
-                        SyntiParameter& p2 = params[i];
-                        if (p2.name() == p->name()) {
-                              id = p2.id();
-                              p->setId(id);
-                              break;
-                              }
-                        }
-                  if (id == -1 && p->name() == "soundfont")
-                        id = SParmId(FLUID_ID, 0, 0).val;
-                  if (id == -1)     // not for this synthesizer
-                        continue;
-                  }
-            SParmId spid(id);
-            int group = spid.subsystemId;
-            if (spid.syntiId != FLUID_ID)
-                  continue;
-            if (group == FLUID_GROUP)
-                  sfs.append(p->sval());
+      QStringList sfl;
+      for (const IdValue& v : sp) {
+            if (v.id == 0)
+                  sfl.append(v.data);
             }
-      loadSoundFonts(sfs);
-      foreach(const SyntiParameter& p, sp) {
-            int id = p.id();
-            if (id == -1)
-                  continue;
-            SParmId spid(id);
-            if (spid.syntiId != FLUID_ID)
-                  continue;
-            int group = spid.subsystemId;
-            int no    = spid.paramId;
+      loadSoundFonts(sfl);
+      }
 
-            if (group == FLUID_GROUP)
-                  ;
-            else if (group == REVERB_GROUP)
-                  reverb->setParameter(no, p.fval());
-            else if (group == CHORUS_GROUP)
-                  chorus->setParameter(no, p.fval());
-            else
-                  printf("Fluid::setState: unknown group %d\n", group);
+//---------------------------------------------------------
+//   collectFiles
+//---------------------------------------------------------
+
+static void collectFiles(QFileInfoList* l, const QString& path)
+      {
+      // printf("collect files <%s>\n", qPrintable(path));
+
+      QDir dir(path);
+      foreach (const QFileInfo& s, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
+            if (path == s.absoluteFilePath())
+                  return;
+
+            if (s.isDir())
+                  collectFiles(l, s.absoluteFilePath());
+            else {
+                  QString suffix = s.suffix().toLower();
+                  if (suffix == "sf" || suffix == "sf2" || suffix == "sf3")
+                        l->append(s);
+                  }
             }
+      }
+
+//---------------------------------------------------------
+//   sfFiles
+//---------------------------------------------------------
+
+QFileInfoList Fluid::sfFiles()
+      {
+      QFileInfoList l;
+
+      QString path = preferences.sfPath;
+      QStringList pl = path.split(";");
+      foreach (const QString& s, pl) {
+            QString ss(s);
+            if (!s.isEmpty() && s[0] == '~')
+                  ss = QDir::homePath() + s.mid(1);
+            collectFiles(&l, ss);
+            }
+      return l;
       }
 }

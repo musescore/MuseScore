@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: instrtemplate.h 5377 2012-02-25 10:24:05Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -16,6 +15,7 @@
 
 #include "mscore.h"
 #include "instrument.h"
+#include "clef.h"
 
 class Xml;
 class Part;
@@ -34,6 +34,8 @@ class InstrumentTemplate {
       QString trackName;
       QList<StaffName> longNames;      ///< shown on first system
       QList<StaffName> shortNames;     ///< shown on followup systems
+      QString musicXMLid;              ///< used in MusicXML 3.0
+      QString description;             ///< a longer description of the instrument
 
       char minPitchA;         // pitch range playable by an amateur
       char maxPitchA;
@@ -42,17 +44,19 @@ class InstrumentTemplate {
 
       Interval transpose;     // for transposing instruments
 
+      StaffGroup  staffGroup;
+      int         staffTypePreset;
       bool useDrumset;
       Drumset* drumset;
 
-      bool useTablature;
+//      bool useTablature;
       Tablature* tablature;
 
       QList<NamedEventList>   midiActions;
       QList<MidiArticulation> articulation;
       QList<Channel>          channel;
 
-      ClefType clefIdx[MAX_STAVES];
+      ClefTypeList clefTypes[MAX_STAVES];
       int staffLines[MAX_STAVES];
       BracketType bracket[MAX_STAVES];            // bracket type (NO_BRACKET)
       int bracketSpan[MAX_STAVES];

@@ -53,7 +53,7 @@ void TestBenchmark::benchmark3()
       QString path = root + "/" + DIR + "goldberg.mscx";
       score = new Score(mscore->baseStyle());
       score->setName(path);
-      score->setTestMode(true);
+      MScore::testMode = true;
       QBENCHMARK {
             score->loadMsc(path, false);
             }

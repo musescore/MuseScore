@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -30,9 +29,6 @@ class ClefList : public QMultiMap<int, ClefTypeList> {
       void setClef(int tick, ClefTypeList);
       void read(XmlReader&, Score*);
       };
-
-typedef QMultiMap<int, ClefTypeList>::iterator iClefEvent;
-typedef QMultiMap<int, ClefTypeList>::const_iterator ciClefEvent;
 
 #endif
 

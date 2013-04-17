@@ -43,8 +43,10 @@ add_library(ofqf STATIC
 set_target_properties (
       ofqf
       PROPERTIES
-         COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+
+xcode_pch(ofqf all)
 
 ADD_DEPENDENCIES(ofqf mops1)
 ADD_DEPENDENCIES(ofqf mops2)

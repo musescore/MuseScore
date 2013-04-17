@@ -195,13 +195,13 @@ class EditTransition : public QMouseEventTransition
 
    protected:
       virtual bool eventTest(QEvent* event) {
-            if (!QMouseEventTransition::eventTest(event) || canvas->getOrigEditObject())
+            if (!QMouseEventTransition::eventTest(event) || canvas->getEditObject())
                   return false;
             QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(event)->event());
             QPointF p = canvas->toLogical(me->pos());
             Element* e = canvas->elementNear(p);
             if (e)
-                  canvas->setOrigEditObject(e);
+                  canvas->setEditObject(e);
             return e && e->isEditable();
             }
    public:
@@ -651,7 +651,6 @@ ScoreView::ScoreView(QWidget* parent)
       _cursor     = new TextCursor;
       shadowNote  = 0;
       grips       = 0;
-      origEditObject   = 0;
       editObject  = 0;
       addSelect   = false;
 
@@ -1172,24 +1171,10 @@ void ScoreView::updateGrips()
       if (curGrip == -1)
             curGrip = grips-1;
 
-      QPointF pt(editObject->getGrip(curGrip));
-      if (!editObject->isText())
+      if (!editObject->isText()) {
+            QPointF pt(editObject->getGrip(curGrip));
             mscore->editTools()->setEditPos(pt);
-
-#if 0
-      double x, y;
-      if (grips) {
-            x = grip[curGrip].center().x() - editObject->gripAnchor(curGrip).x();
-            y = grip[curGrip].center().y() - editObject->gripAnchor(curGrip).y();
             }
-      else {
-            x = editObject->userOff().x();
-            y = editObject->userOff().y();
-            }
-      double _spatium = score()->spatium();
-      mscore->setEditX(x / _spatium);
-      mscore->setEditY(y / _spatium);
-#endif
 
       QPointF anchor = editObject->gripAnchor(curGrip);
       if (!anchor.isNull())
@@ -1560,6 +1545,8 @@ void ScoreView::paintEvent(QPaintEvent* ev)
                   vp.setBrush(((i == curGrip) && hasFocus()) ? QBrush(Qt::blue) : Qt::NoBrush);
                   vp.drawRect(grip[i]);
                   }
+            if (editObject)      // if object is moved, it may not be covered by bsp
+                  paintElement(&vp, editObject);
             }
       }
 
@@ -1730,7 +1717,9 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   e = e->parent();
             Text* text = static_cast<Text*>(editObject);
             QRectF r = text->pageRectangle().translated(e->pos()); // abbox();
-            p.setPen(QPen(QBrush(Qt::blue), 2.0 / matrix().m11()));  // 2 pixel pen size
+            qreal w = 2.0 / matrix().m11();	// give the frame some padding, like in 1.3
+            r.adjust(-w,-w,w,w);
+            p.setPen(QPen(QBrush(Qt::lightGray), 2.0 / matrix().m11()));  // 2 pixel pen size
             p.setBrush(QBrush(Qt::NoBrush));
             p.drawRect(r);
             }
@@ -2158,8 +2147,29 @@ Element* ScoreView::elementNear(QPointF p)
 //   drawDebugInfo
 //---------------------------------------------------------
 
-static void drawDebugInfo(QPainter& p, const Element* e)
+static void drawDebugInfo(QPainter& p, const Element* _e)
       {
+      const Element* e = _e;
+      if (e->type() == Element::NOTE) {
+            e = e->parent();
+            const ChordRest* cr = static_cast<const ChordRest*>(e);
+            p.setPen(Qt::red);
+            p.setBrush(Qt::NoBrush);
+            QRectF bb = cr->bbox();
+            qreal x1, y1, x2, y2;
+            bb.getCoords(&x1, &y1, &x2, &y2);
+
+            QPointF pos(e->pagePos());
+            p.translate(pos);
+            Space sp = cr->space();
+            QRectF r;
+printf("%f %f %f %f\n", -sp.lw(), y1, sp.rw(), y2);
+            r.setCoords(-sp.lw(), y1, sp.rw(), y2);
+            p.drawRect(r);
+            p.translate(-pos);
+            return;
+            }
+
       //
       //  draw bounding box rectangle for all
       //  selected Elements
@@ -2327,9 +2337,9 @@ void ScoreView::editCopy()
             // store selection as plain text
             //
             Text* text = static_cast<Text*>(editObject);
-            QTextCursor* tcursor = text->cursor();
-            if (tcursor && tcursor->hasSelection())
-                  QApplication::clipboard()->setText(tcursor->selectedText(), QClipboard::Clipboard);
+            QString s = text->selection();
+            if (!s.isEmpty())
+                  QApplication::clipboard()->setText(s, QClipboard::Clipboard);
             }
       }
 
@@ -2761,6 +2771,83 @@ void ScoreView::cmd(const QAction* a)
             mscore->endCmd();
             }
 
+      // STATE_HARMONY_FIGBASS_EDIT actions
+
+      else if (cmd == "advance-longa") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 4);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 4);
+            }
+      else if (cmd == "advance-breve") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 3);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 3);
+            }
+      else if (cmd == "advance-1") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 2);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 2);
+            }
+      else if (cmd == "advance-2") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division << 1);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division << 1);
+            }
+      else if (cmd == "advance-4") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division);
+            }
+      else if (cmd == "advance-8") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 1);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 1);
+            }
+      else if (cmd == "advance-16") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 2);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 2);
+            }
+      else if (cmd == "advance-32") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 3);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 3);
+            }
+      else if (cmd == "advance-64") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTicksTab(MScore::division >> 4);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTicksTab(MScore::division >> 4);
+            }
+      else if (cmd == "prev-measure-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTab(true);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTab(true, true);
+            }
+      else if (cmd == "next-measure-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyTab(false);
+            else if (editObject->type() == Element::FIGURED_BASS)
+                  figuredBassTab(true,false);
+            }
+      else if (cmd == "prev-beat-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyBeatsTab(false, true);
+            }
+      else if (cmd == "next-beat-TEXT") {
+            if (editObject->type() == Element::HARMONY)
+                  harmonyBeatsTab(false,false);
+            }
+
       // STATE_NOTE_ENTRY_TAB actions
 
       else if(cmd == "string-above") {
@@ -2798,7 +2885,8 @@ void ScoreView::cmd(const QAction* a)
 
       else
             _score->cmd(a);
-      _score->processMidiInput();
+      if (_score->processMidiInput())
+            mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -2849,8 +2937,6 @@ void ScoreView::startNoteEntry()
       mscore->enableInputToolbar(enable);
 
       _score->inputState().noteEntryMode = true;
-//      _score->moveCursor();
-//      setCursorOn(true);
       _score->inputState().rest = false;
       getAction("pad-rest")->setChecked(false);
       setMouseTracking(true);
@@ -2861,13 +2947,10 @@ void ScoreView::startNoteEntry()
 
       const InputState is = _score->inputState();
       Staff* staff = _score->staff(is.track() / VOICES);
-      switch( staff->staffType()->group()) {
+      switch (staff->staffType()->group()) {
             case PITCHED_STAFF:
-                  mscore->changeState(STATE_NOTE_ENTRY_PITCHED);
                   break;
-            case TAB_STAFF:
-            {
-                  mscore->changeState(STATE_NOTE_ENTRY_TAB);
+            case TAB_STAFF: {
                   int strg = 0;                 // assume topmost string as current string
                   // if entering note entry with a note selected and the note has a string
                   // set InputState::_string to note visual string
@@ -2877,9 +2960,8 @@ void ScoreView::startNoteEntry()
                         }
                   _score->inputState().setString(strg);
                   break;
-            }
+                  }
             case PERCUSSION_STAFF:
-                  mscore->changeState(STATE_NOTE_ENTRY_DRUM);
                   break;
             }
 
@@ -3513,7 +3595,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             m = static_cast<const Segment*>(el)->measure();
       else if (el->type() == Element::LYRICS)
             m = static_cast<const Lyrics*>(el)->measure();
-      else if (el->type() == Element::HARMONY && el->parent()->type() == Element::SEGMENT)
+      else if ( (el->type() == Element::HARMONY || el->type() == Element::FIGURED_BASS)
+         && el->parent()->type() == Element::SEGMENT)
             m = static_cast<const Segment*>(el->parent())->measure();
       else if (el->type() == Element::HARMONY && el->parent()->type() == Element::FRET_DIAGRAM
          && el->parent()->parent()->type() == Element::SEGMENT)
@@ -3660,10 +3743,14 @@ ScoreState ScoreView::mscoreState() const
                   }
             }
       if (sm->configuration().contains(states[EDIT])) {
-            if (editObject && editObject->type() == Element::LYRICS)
+            if (editObject && (editObject->type() == Element::LYRICS))
                   return STATE_LYRICS_EDIT;
-            else
-                  return STATE_EDIT;
+            else if (editObject &&
+                  ( (editObject->type() == Element::HARMONY) || editObject->type() == Element::FIGURED_BASS) )
+                  return STATE_HARMONY_FIGBASS_EDIT;
+            else if (editObject && editObject->isText())
+                  return STATE_TEXT_EDIT;
+            return STATE_EDIT;
             }
       if (sm->configuration().contains(states[FOTOMODE]))
             return STATE_FOTO;
@@ -3681,6 +3768,7 @@ ScoreState ScoreView::mscoreState() const
 
 void ScoreView::enterState()
       {
+      mscore->changeState(mscoreState());
       if (MScore::debugMode)
             qDebug("%p enterState <%s>", this, qPrintable(sender()->objectName()));
       }
@@ -3911,12 +3999,12 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             //
             // start slur in edit mode if lastNote is not given
             //
-            if (origEditObject && origEditObject->isText()) {
+            if (editObject && editObject->isText()) {
                   _score->endCmd();
                   return;
                   }
             if ((lastNote == 0) && !el.isEmpty()) {
-                  origEditObject = el.front();
+                  editObject = el.front();
                   sm->postEvent(new CommandEvent("edit"));  // calls startCmd()
                   }
             else
@@ -4170,407 +4258,9 @@ void ScoreView::changeVoice(int voice)
 void ScoreView::harmonyEndEdit()
       {
       Harmony* harmony = static_cast<Harmony*>(editObject);
-      Harmony* origH   = static_cast<Harmony*>(origEditObject);
 
-      if (harmony->isEmpty() && origH->isEmpty()) {
-            Measure* measure = (Measure*)(harmony->parent());
-            measure->remove(harmony);
-            }
-      }
-
-//---------------------------------------------------------
-//   lyricsUpDown
-//---------------------------------------------------------
-
-void ScoreView::lyricsUpDown(bool up, bool end)
-      {
-      Lyrics* lyrics   = static_cast<Lyrics*>(editObject);
-      int track        = lyrics->track();
-      ChordRest* cr    = lyrics->chordRest();
-      int verse        = lyrics->no();
-      const QList<Lyrics*>* ll = &lyrics->chordRest()->lyricsList();
-
-      if (up) {
-            if (verse == 0)
-                  return;
-            --verse;
-            }
-      else {
-            ++verse;
-            if (verse >= ll->size())
-                  return;
-            }
-      endEdit();
-      _score->startCmd();
-      lyrics = ll->value(verse);
-      if (!lyrics) {
-            lyrics = new Lyrics(_score);
-            lyrics->setTrack(track);
-            lyrics->setParent(cr);
-            lyrics->setNo(verse);
-            _score->undoAddElement(lyrics);
-            }
-
-      _score->select(lyrics, SELECT_SINGLE, 0);
-      startEdit(lyrics, -1);
-      adjustCanvasPosition(lyrics, false);
-      if (end)
-            ((Lyrics*)editObject)->moveCursorToEnd();
-      else
-            ((Lyrics*)editObject)->moveCursorToStart();
-
-      _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
-      }
-
-//---------------------------------------------------------
-//   lyricsTab
-//---------------------------------------------------------
-
-void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
-      {
-      Lyrics* lyrics   = (Lyrics*)editObject;
-      int track        = lyrics->track();
-      int staffIdx     = lyrics->staffIdx();
-      Segment* segment = lyrics->segment();
-      int verse        = lyrics->no();
-
-      Segment* nextSegment = segment;
-      if (back) {
-            // search prev chord
-            while ((nextSegment = nextSegment->prev1(Segment::SegChordRest | Segment::SegGrace))) {
-                  Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == Element::CHORD)
-                        break;
-                  }
-            }
-      else {
-            // search next chord
-            while ((nextSegment = nextSegment->next1(Segment::SegChordRest | Segment::SegGrace))) {
-                  Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == Element::CHORD)
-                        break;
-                  }
-            }
-      if (nextSegment == 0)
-            return;
-
-      endEdit();
-
-      // search previous lyric
-      Lyrics* oldLyrics = 0;
-      if (!back) {
-            while (segment) {
-                  const QList<Lyrics*>* nll = segment->lyricsList(staffIdx);
-                  if (nll) {
-                        oldLyrics = nll->value(verse);
-                        if (oldLyrics)
-                              break;
-                        }
-                  segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
-                  }
-            }
-
-      const QList<Lyrics*>* ll = nextSegment->lyricsList(staffIdx);
-      if (ll == 0) {
-            qDebug("no next lyrics list: %s", nextSegment->element(track)->name());
-            return;
-            }
-      lyrics = ll->value(verse);
-
-      bool newLyrics = false;
-      if (!lyrics) {
-            lyrics = new Lyrics(_score);
-            lyrics->setTrack(track);
-            ChordRest* cr = static_cast<ChordRest*>(nextSegment->element(track));
-            lyrics->setParent(cr);
-            lyrics->setNo(verse);
-            lyrics->setSyllabic(Lyrics::SINGLE);
-            newLyrics = true;
-            }
-
-      _score->startCmd();
-
-      if (oldLyrics && !moveOnly) {
-            switch(lyrics->syllabic()) {
-                  case Lyrics::SINGLE:
-                  case Lyrics::BEGIN:
-                        break;
-                  case Lyrics::END:
-                        lyrics->setSyllabic(Lyrics::SINGLE);
-                        break;
-                  case Lyrics::MIDDLE:
-                        lyrics->setSyllabic(Lyrics::BEGIN);
-                        break;
-                  }
-            switch(oldLyrics->syllabic()) {
-                  case Lyrics::SINGLE:
-                  case Lyrics::END:
-                        break;
-                  case Lyrics::BEGIN:
-                        oldLyrics->setSyllabic(Lyrics::SINGLE);
-                        break;
-                  case Lyrics::MIDDLE:
-                        oldLyrics->setSyllabic(Lyrics::END);
-                        break;
-                  }
-            }
-
-      if (newLyrics)
-          _score->undoAddElement(lyrics);
-
-      _score->select(lyrics, SELECT_SINGLE, 0);
-      startEdit(lyrics, -1);
-      adjustCanvasPosition(lyrics, false);
-      if (end)
-            ((Lyrics*)editObject)->moveCursorToEnd();
-      else
-            ((Lyrics*)editObject)->moveCursorToStart();
-
-      _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
-      }
-
-//---------------------------------------------------------
-//   lyricsMinus
-//---------------------------------------------------------
-
-void ScoreView::lyricsMinus()
-      {
-      Lyrics* lyrics   = (Lyrics*)editObject;
-      int track        = lyrics->track();
-      int staffIdx     = lyrics->staffIdx();
-      Segment* segment = lyrics->segment();
-      int verse        = lyrics->no();
-
-      endEdit();
-
-      // search next chord
-      Segment* nextSegment = segment;
-      while ((nextSegment = nextSegment->next1(Segment::SegChordRest | Segment::SegGrace))) {
-            Element* el = nextSegment->element(track);
-            if (el &&  el->type() == Element::CHORD)
-                  break;
-            }
-      if (nextSegment == 0) {
-            return;
-            }
-
-      // search previous lyric
-      Lyrics* oldLyrics = 0;
-      while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(staffIdx);
-            if (!nll) {
-                  segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
-                  continue;
-                  }
-            oldLyrics = nll->value(verse);
-            if (oldLyrics)
-                  break;
-            segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
-            }
-
-      _score->startCmd();
-
-      const QList<Lyrics*>* ll = nextSegment->lyricsList(staffIdx);
-      lyrics         = ll->value(verse);
-      bool newLyrics = (lyrics == 0);
-      if (!lyrics) {
-            lyrics = new Lyrics(_score);
-            lyrics->setTrack(track);
-            lyrics->setParent(nextSegment->element(track));
-            lyrics->setNo(verse);
-            lyrics->setSyllabic(Lyrics::END);
-            }
-
-      if(lyrics->syllabic()==Lyrics::BEGIN) {
-            lyrics->setSyllabic(Lyrics::MIDDLE);
-            }
-      else if(lyrics->syllabic()==Lyrics::SINGLE) {
-            lyrics->setSyllabic(Lyrics::END);
-            }
-
-      if (oldLyrics) {
-            switch(oldLyrics->syllabic()) {
-                  case Lyrics::BEGIN:
-                  case Lyrics::MIDDLE:
-                        break;
-                  case Lyrics::SINGLE:
-                        oldLyrics->setSyllabic(Lyrics::BEGIN);
-                        break;
-                  case Lyrics::END:
-                        oldLyrics->setSyllabic(Lyrics::MIDDLE);
-                        break;
-                  }
-            }
-
-      if(newLyrics)
-          _score->undoAddElement(lyrics);
-
-      _score->select(lyrics, SELECT_SINGLE, 0);
-      startEdit(lyrics, -1);
-      adjustCanvasPosition(lyrics, false);
-      ((Lyrics*)editObject)->moveCursorToEnd();
-
-      _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
-      }
-
-//---------------------------------------------------------
-//   lyricsUnderscore
-//---------------------------------------------------------
-
-void ScoreView::lyricsUnderscore()
-      {
-      Lyrics* lyrics   = static_cast<Lyrics*>(editObject);
-      int track        = lyrics->track();
-      int staffIdx     = lyrics->staffIdx();
-      Segment* segment = lyrics->segment();
-      int verse        = lyrics->no();
-      int endTick      = segment->tick();
-
-      endEdit();
-
-      // search next chord
-      Segment* nextSegment = segment;
-      while ((nextSegment = nextSegment->next1(Segment::SegChordRest | Segment::SegGrace))) {
-            Element* el = nextSegment->element(track);
-            if (el &&  el->type() == Element::CHORD)
-                  break;
-            }
-
-      // search previous lyric
-      Lyrics* oldLyrics = 0;
-      while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(staffIdx);
-            if (nll) {
-                  oldLyrics = nll->value(verse);
-                  if (oldLyrics)
-                        break;
-                  }
-            segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
-            }
-
-      if (nextSegment == 0) {
-            if (oldLyrics) {
-                  switch(oldLyrics->syllabic()) {
-                        case Lyrics::SINGLE:
-                        case Lyrics::END:
-                              break;
-                        default:
-                              oldLyrics->setSyllabic(Lyrics::END);
-                              break;
-                        }
-                  if (oldLyrics->segment()->tick() < endTick)
-                        oldLyrics->setTicks(endTick - oldLyrics->segment()->tick());
-                  }
-            return;
-            }
-      _score->startCmd();
-
-      const QList<Lyrics*>* ll = nextSegment->lyricsList(staffIdx);
-      lyrics         = ll->value(verse);
-      bool newLyrics = (lyrics == 0);
-      if (!lyrics) {
-            lyrics = new Lyrics(_score);
-            lyrics->setTrack(track);
-            lyrics->setParent(nextSegment->element(track));
-            lyrics->setNo(verse);
-            }
-
-      lyrics->setSyllabic(Lyrics::SINGLE);
-
-      if (oldLyrics) {
-            switch(oldLyrics->syllabic()) {
-                  case Lyrics::SINGLE:
-                  case Lyrics::END:
-                        break;
-                  default:
-                        oldLyrics->setSyllabic(Lyrics::END);
-                        break;
-                  }
-            if (oldLyrics->segment()->tick() < endTick)
-                  oldLyrics->setTicks(endTick - oldLyrics->segment()->tick());
-            }
-      if (newLyrics)
-            _score->undoAddElement(lyrics);
-
-      _score->select(lyrics, SELECT_SINGLE, 0);
-      startEdit(lyrics, -1);
-      adjustCanvasPosition(lyrics, false);
-      ((Lyrics*)editObject)->moveCursorToEnd();
-
-      _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
-      }
-
-//---------------------------------------------------------
-//   lyricsReturn
-//---------------------------------------------------------
-
-void ScoreView::lyricsReturn()
-      {
-      Lyrics* lyrics   = (Lyrics*)editObject;
-      Segment* segment = lyrics->segment();
-
-      endEdit();
-
-      _score->startCmd();
-
-      Lyrics* oldLyrics = lyrics;
-
-      lyrics = static_cast<Lyrics*>(Element::create(lyrics->type(), _score));
-      lyrics->setTrack(oldLyrics->track());
-      lyrics->setParent(segment->element(oldLyrics->track()));
-      lyrics->setNo(oldLyrics->no() + 1);
-      _score->undoAddElement(lyrics);
-      _score->select(lyrics, SELECT_SINGLE, 0);
-      startEdit(lyrics, -1);
-      adjustCanvasPosition(lyrics, false);
-      _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
-      }
-
-//---------------------------------------------------------
-//   lyricsEndEdit
-//---------------------------------------------------------
-
-void ScoreView::lyricsEndEdit()
-      {
-      Lyrics* lyrics = (Lyrics*)editObject;
-      Lyrics* origL  = (Lyrics*)origEditObject;
-      int endTick    = lyrics->segment()->tick();
-
-      // search previous lyric:
-      int verse    = lyrics->no();
-      int staffIdx = lyrics->staffIdx();
-
-      // search previous lyric
-      Lyrics* oldLyrics = 0;
-      Segment* segment  = lyrics->segment();
-      while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(staffIdx);
-            if (nll) {
-                  oldLyrics = nll->value(verse);
-                  if (oldLyrics)
-                        break;
-                  }
-            segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
-            }
-
-      if (lyrics->isEmpty() && origL->isEmpty())
-            lyrics->parent()->remove(lyrics);
-      else {
-            if (oldLyrics && oldLyrics->syllabic() == Lyrics::END) {
-                  if (oldLyrics->endTick() >= endTick)
-                        oldLyrics->setTicks(0);
-                  }
-            }
+      if (harmony->isEmpty())
+            _score->undoRemoveElement(harmony);
       }
 
 //---------------------------------------------------------
@@ -4614,53 +4304,245 @@ void ScoreView::modifyElement(Element* el)
       }
 
 //---------------------------------------------------------
-//   chordTab
+//   harmonyTab
 //---------------------------------------------------------
 
-void ScoreView::chordTab(bool back)
+void ScoreView::harmonyTab(bool back)
       {
-      Harmony* cn = static_cast<Harmony*>(editObject);
-      if (!cn->parent() || cn->parent()->type() != Element::SEGMENT)
-            qDebug("chordTab: no segment parent");
-            return;
-      Segment* segment = static_cast<Segment*>(cn->parent());
-      int track        = cn->track();
-
-      // search next chord
-      if (back)
-            segment = segment->prev1(Segment::SegChordRest);
-      else
-            segment = segment->next1(Segment::SegChordRest);
-      if (segment == 0) {
-            qDebug("no next segment");
+      Harmony* harmony = static_cast<Harmony*>(editObject);
+      if (!harmony->parent() || harmony->parent()->type() != Element::SEGMENT){
+            qDebug("harmonyTab: no segment parent");
             return;
             }
+      int track        = harmony->track();
+      Segment* segment = static_cast<Segment*>(harmony->parent());
+      if (!segment) {
+            qDebug("harmonyTicksTab: no segment");
+            return;
+            }
+
+      // moving to next/prev measure
+
+      Measure* measure = segment->measure();
+      if (measure) {
+            if (back)
+                  measure = measure->prevMeasure();
+            else
+                  measure = measure->nextMeasure();
+            }
+      if (!measure) {
+            qDebug("harmonyTab: no prev/next measure");
+            return;
+            }
+
+      segment = measure->findSegment(Segment::SegChordRest, measure->tick());
+      if (!segment) {
+            qDebug("harmonyTab: no ChordRest segment as measure");
+            return;
+            }
+
       endEdit();
+
       _score->startCmd();
 
       // search for next chord name
-      cn = 0;
+      harmony = 0;
       foreach(Element* e, segment->annotations()) {
             if (e->type() == Element::HARMONY && e->track() == track) {
                   Harmony* h = static_cast<Harmony*>(e);
-                  cn = h;
+                  harmony = h;
                   break;
                   }
             }
 
-      if (!cn) {
-            cn = new Harmony(_score);
-            cn->setTrack(track);
-            cn->setParent(segment);
-            _score->undoAddElement(cn);
+      if (!harmony) {
+            harmony = new Harmony(_score);
+            harmony->setTrack(track);
+            harmony->setParent(segment);
+            _score->undoAddElement(harmony);
             }
 
-      _score->select(cn, SELECT_SINGLE, 0);
-      startEdit(cn, -1);
-      adjustCanvasPosition(cn, false);
+      _score->select(harmony, SELECT_SINGLE, 0);
+      startEdit(harmony, -1);
+      mscore->changeState(mscoreState());
+
+      adjustCanvasPosition(harmony, false);
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
+      _score->end2();
+      _score->end1();
+      }
+
+//---------------------------------------------------------
+//   harmonyBeatsTab
+//    manages [;:], moving forward or back to the next beat
+//    and Space/Shift-Space, to stop at next note, rest, harmony or beat.
+//---------------------------------------------------------
+
+void ScoreView::harmonyBeatsTab(bool noterest, bool back)
+      {
+      Harmony* harmony = static_cast<Harmony*>(editObject);
+      int track         = harmony->track();
+      Segment* segment = static_cast<Segment*>(harmony->parent());
+      if (!segment) {
+            qDebug("harmonyBeatsTab: no segment");
+            return;
+            }
+      Measure* measure = segment->measure();
+      int tick = segment->tick();
+
+      if (back && tick == measure->tick()) {
+            // previous bar, if any
+            measure = measure->prevMeasure();
+            if (!measure) {
+                  qDebug("harmonyBeatsTab: no previous measure");
+                  return;
+                  }
+            }
+
+      Fraction f = measure->len();
+      int ticksPerBeat = f.ticks() / ((f.numerator()>3 && (f.numerator()%3)==0 && f.denominator()>4) ? f.numerator()/3 : f.numerator());
+      int tickInBar = tick - measure->tick();
+      int newTick = measure->tick() + ((tickInBar+(back?-1:ticksPerBeat))/ticksPerBeat)*ticksPerBeat;
+
+      // look for next/prev beat, note, rest or chord
+      for (;;) {
+            segment = back ? segment->prev1(Segment::SegChordRest) : segment->next1(Segment::SegChordRest);
+
+            if (!segment || (back ? (segment->tick() < newTick) : (segment->tick() > newTick))) {
+                  // no segment or moved past the beat - create new segment
+                  if (!back && newTick >= measure->tick() + f.ticks()) {
+                        // next bar, if any
+                        measure = measure->nextMeasure();
+                        if (!measure) {
+                              qDebug("harmonyBeatsTab: no next measure");
+                              return;
+                              }
+                        }
+                  segment = new Segment(measure, Segment::SegChordRest, newTick);
+                  if (!segment) {
+                        qDebug("harmonyBeatsTab: no prev segment");
+                        return;
+                        }
+                  _score->undoAddElement(segment);
+                  break;
+                  }
+
+            if (segment->tick() == newTick)
+                  break;
+
+            if (noterest) {
+                  int minTrack = (track / VOICES ) * VOICES;
+                  int maxTrack = minTrack + (VOICES-1);
+                  if (segment->findAnnotationOrElement(Element::HARMONY, minTrack, maxTrack))
+                        break;
+                  }
+            }
+
+      endEdit();
+
+      _score->startCmd();
+
+      // search for next chord name
+      harmony = 0;
+      foreach(Element* e, segment->annotations()) {
+            if (e->type() == Element::HARMONY && e->track() == track) {
+                  Harmony* h = static_cast<Harmony*>(e);
+                  harmony = h;
+                  break;
+                  }
+            }
+
+      if (!harmony) {
+            harmony = new Harmony(_score);
+            harmony->setTrack(track);
+            harmony->setParent(segment);
+            _score->undoAddElement(harmony);
+            }
+
+      _score->select(harmony, SELECT_SINGLE, 0);
+      startEdit(harmony, -1);
+      mscore->changeState(mscoreState());
+
+      adjustCanvasPosition(harmony, false);
+      ((Harmony*)editObject)->moveCursorToEnd();
+
+      _score->setLayoutAll(true);
+      _score->end2();
+      _score->end1();
+      }
+
+//---------------------------------------------------------
+//   harmonyTicksTab
+//    manages [Ctrl] [1]-[9], moving forward the given number of ticks
+//---------------------------------------------------------
+
+void ScoreView::harmonyTicksTab(int ticks)
+      {
+      Harmony* harmony = static_cast<Harmony*>(editObject);
+      int track         = harmony->track();
+      Segment* segment = static_cast<Segment*>(harmony->parent());
+      if (!segment) {
+            qDebug("harmonyTicksTab: no segment");
+            return;
+            }
+      Measure* measure = segment->measure();
+
+      int newTick   = segment->tick() + ticks;
+
+      // find the measure containing the target tick
+      while (newTick >= measure->tick() + measure->ticks()) {
+            measure = measure->nextMeasure();
+            if (!measure) {
+                  qDebug("harmonyTicksTab: no next measure");
+                  return;
+                  }
+            }
+
+      // look for a segment at this tick; if none, create one
+      while(segment && segment->tick() < newTick)
+            segment = segment->next1(Segment::SegChordRest);
+      if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
+            segment = new Segment(measure, Segment::SegChordRest, newTick);
+            if (!segment) {
+                  qDebug("harmonyTicksTab: no next segment");
+                  return;
+                  }
+            _score->undoAddElement(segment);
+            }
+
+      endEdit();
+
+      _score->startCmd();
+
+      // search for next chord name
+      harmony = 0;
+      foreach(Element* e, segment->annotations()) {
+            if (e->type() == Element::HARMONY && e->track() == track) {
+                  Harmony* h = static_cast<Harmony*>(e);
+                  harmony = h;
+                  break;
+                  }
+            }
+
+      if (!harmony) {
+            harmony = new Harmony(_score);
+            harmony->setTrack(track);
+            harmony->setParent(segment);
+            _score->undoAddElement(harmony);
+            }
+
+      _score->select(harmony, SELECT_SINGLE, 0);
+      startEdit(harmony, -1);
+      mscore->changeState(mscoreState());
+
+      adjustCanvasPosition(harmony, false);
+      ((Harmony*)editObject)->moveCursorToEnd();
+
+      _score->setLayoutAll(true);
+      _score->end2();
+      _score->end1();
       }
 
 //---------------------------------------------------------
@@ -4807,7 +4689,7 @@ void ScoreView::cmdAddFret(int fret)
       InputState& is = _score->inputState();
       if (is.track() == -1)                     // invalid state
             return;
-      if (is.segment() == 0 || is.cr() == 0) {
+      if (is.segment() == 0 /*|| is.cr() == 0*/) {
             qDebug("cannot enter notes here (no chord rest at current position)");
             return;
             }
@@ -4845,16 +4727,18 @@ void ScoreView::cmdAddChordName()
       if (!cr)
             return;
       _score->startCmd();
-      Harmony* s = new Harmony(_score);
-      s->setTrack(cr->track());
-      s->setParent(cr->segment());
-      _score->undoAddElement(s);
+      Harmony* harmony = new Harmony(_score);
+      harmony->setTrack(cr->track());
+      harmony->setParent(cr->segment());
+      _score->undoAddElement(harmony);
+
+      _score->select(harmony, SELECT_SINGLE, 0);
+      // adjustCanvasPosition(s, false);
+      startEdit(harmony);
 
       _score->setLayoutAll(true);
-
-      _score->select(s, SELECT_SINGLE, 0);
-      // adjustCanvasPosition(s, false);
-      startEdit(s);
+      _score->end2();
+      _score->end1();
       }
 
 //---------------------------------------------------------
@@ -4878,10 +4762,10 @@ void ScoreView::cmdAddText(int type)
                         measure = _score->insertMeasure(Element::VBOX, measure);
                   s = new Text(_score);
                   switch(type) {
-                        case TEXT_TITLE:    s->setTextStyle(_score->textStyle(TEXT_STYLE_TITLE));    break;
-                        case TEXT_SUBTITLE: s->setTextStyle(_score->textStyle(TEXT_STYLE_SUBTITLE)); break;
-                        case TEXT_COMPOSER: s->setTextStyle(_score->textStyle(TEXT_STYLE_COMPOSER)); break;
-                        case TEXT_POET:     s->setTextStyle(_score->textStyle(TEXT_STYLE_POET));     break;
+                        case TEXT_TITLE:    s->setTextStyleType(TEXT_STYLE_TITLE);    break;
+                        case TEXT_SUBTITLE: s->setTextStyleType(TEXT_STYLE_SUBTITLE); break;
+                        case TEXT_COMPOSER: s->setTextStyleType(TEXT_STYLE_COMPOSER); break;
+                        case TEXT_POET:     s->setTextStyleType(TEXT_STYLE_POET);     break;
                         }
                   s->setParent(measure);
                   }
@@ -4906,7 +4790,7 @@ void ScoreView::cmdAddText(int type)
                   s = new StaffText(_score);
                   if (type == TEXT_SYSTEM) {
                         s->setTrack(0);
-                        s->setTextStyle(_score->textStyle(TEXT_STYLE_SYSTEM));
+                        s->setTextStyleType(TEXT_STYLE_SYSTEM);
                         }
                   else {
                         s->setTrack(cr->track());
@@ -4979,17 +4863,23 @@ void ScoreView::appendMeasures(int n, Element::ElementType type)
 
 MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
       {
-    if (_score->selection().state() == SEL_RANGE) {
-          MeasureBase* mb = _score->selection().startSegment()->measure();
+      MeasureBase* mb = 0;
+      if (_score->selection().state() == SEL_RANGE) {
+            mb = _score->selection().startSegment()->measure();
             return mb;
             }
+
+      mb = _score->selection().findMeasure();
+      if (mb)
+            return mb;
+
       Element* e = _score->selection().element();
       if (e) {
             if (e->type() == Element::VBOX || e->type() == Element::TBOX)
                   return static_cast<MeasureBase*>(e);
             }
-    QMessageBox::warning(0, "MuseScore",
-         tr("No Measure selected:\n" "please select a measure and try again"));
+      QMessageBox::warning(0, "MuseScore",
+            tr("No measure selected:\n" "Please select a measure and try again"));
       return 0;
       }
 
@@ -5003,9 +4893,10 @@ void ScoreView::cmdInsertMeasures(int n, Element::ElementType type)
       if (!mb)
             return;
       _score->startCmd();
-    for (int i = 0; i < n; ++i)
+      for (int i = 0; i < n; ++i)
             mb = _score->insertMeasure(type, mb);
-      _score->select(0, SELECT_SINGLE, 0);
+      if (mb)
+           _score->select(mb, SELECT_SINGLE, 0);
       _score->endCmd();
       }
 
@@ -5028,7 +4919,8 @@ void ScoreView::cmdInsertMeasure(Element::ElementType type)
             startEdit(s);
             return;
             }
-      _score->select(0, SELECT_SINGLE, 0);
+      if (mb)
+           _score->select(mb, SELECT_SINGLE, 0);
       _score->endCmd();
       }
 
@@ -5070,7 +4962,7 @@ void ScoreView::cmdRepeatSelection()
       int dStaff = selection.staffStart();
       Segment* endSegment = selection.endSegment();
 
-      if (endSegment && endSegment->subtype() != Segment::SegChordRest)
+      if (endSegment && endSegment->segmentType() != Segment::SegChordRest)
             endSegment = endSegment->next1(Segment::SegChordRest);
       if (endSegment && endSegment->element(dStaff * VOICES)) {
             Element* e = endSegment->element(dStaff * VOICES);
@@ -5137,7 +5029,7 @@ void ScoreView::search(int n)
             adjustCanvasPosition(measure, true);
             int tracks = _score->nstaves() * VOICES;
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-                  if (segment->subtype() != Segment::SegChordRest)
+                  if (segment->segmentType() != Segment::SegChordRest)
                         continue;
                   int track;
                   for (track = 0; track < tracks; ++track) {
@@ -5173,25 +5065,24 @@ void ScoreView::layoutChanged()
       }
 
 //---------------------------------------------------------
-//   ScoreView::figuredEndEdit
+//   ScoreView::figuredBassEndEdit
 //    derived from harmonyEndEdit()
 //    remove the FB if empty
 //---------------------------------------------------------
 
 void ScoreView::figuredBassEndEdit()
       {
-      FiguredBass* fb         = static_cast<FiguredBass*>(editObject);
-      FiguredBass* origFb     = static_cast<FiguredBass*>(origEditObject);
+      FiguredBass* fb = static_cast<FiguredBass*>(editObject);
 
-      if (fb->isEmpty() && origFb->isEmpty())
-            fb->parent()->remove(fb);
+      if (fb->isEmpty())
+            _score->undoRemoveElement(fb);
       }
 
 //---------------------------------------------------------
 //   ScoreView::figuredBassTab
-//    derived from chordTab() (for Harmony)
+//    derived from harmonyTab() (for Harmony)
 //    manages [Space] / [Shift][Space] keys, moving editing to FB of next/prev ChordRest
-//    and [Tab] / [Shift][Tab] keys, moving to FB of next/ptrev measure
+//    and [Tab] / [Shift][Tab] keys, moving to FB of next/prev measure
 //---------------------------------------------------------
 
 void ScoreView::figuredBassTab(bool bMeas, bool bBack)
@@ -5201,28 +5092,28 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       Segment* segm     = fb->segment();
       int track         = fb->track();
 
-      if (segm == 0) {
+      if (!segm) {
             qDebug("figuredBassTab: no segment");
             return;
             }
 
       // if moving to next/prev measure
 
-      if(bMeas) {
-            Measure * meas = segm->measure();
-            if(meas) {
-                  if(bBack)
+      if (bMeas) {
+            Measure* meas = segm->measure();
+            if (meas) {
+                  if (bBack)
                         meas = meas->prevMeasure();
                   else
                         meas = meas->nextMeasure();
                   }
-            if(!meas) {
+            if (!meas) {
                   qDebug("figuredBassTab: no prev/next measure");
                   return;
                   }
             // find initial ChordRest segment
             nextSegm = meas->findSegment(Segment::SegChordRest, meas->tick());
-            if (nextSegm == 0) {
+            if (!nextSegm) {
                   qDebug("figuredBassTab: no ChordRest segment at measure");
                   return;
                   }
@@ -5235,15 +5126,14 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
             nextSegm = bBack ? segm->prev1(Segment::SegChordRest) : segm->next1(Segment::SegChordRest);
             int minTrack = (track / VOICES ) * VOICES;
             int maxTrack = minTrack + (VOICES-1);
-            int currTrack;
-            while(nextSegm) {                   // look for a ChordRest in the compatible track range
-                  for(currTrack = minTrack; currTrack <= maxTrack; currTrack++)
-                        if(nextSegm->element(currTrack) )
-                              goto Found;
+
+            while (nextSegm) {                   // look for a ChordRest in the compatible track range
+                  if(nextSegm->findAnnotationOrElement(Element::FIGURED_BASS, minTrack, maxTrack))
+                        break;
                   nextSegm = bBack ? nextSegm->prev1(Segment::SegChordRest) : nextSegm->next1(Segment::SegChordRest);
                   }
-Found:
-            if (nextSegm == 0) {
+
+            if (!nextSegm) {
                   qDebug("figuredBassTab: no prev/next segment");
                   return;
                   }
@@ -5253,16 +5143,17 @@ Found:
 
       _score->startCmd();
       bool bNew;
-      // add a (new) FB element, using chord duration as default suration
+      // add a (new) FB element, using chord duration as default duration
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, 0, &bNew);
-      if(bNew)
+      if (bNew)
             _score->undoAddElement(fbNew);
       _score->select(fbNew, SELECT_SINGLE, 0);
       startEdit(fbNew, -1);
+      mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
       _score->setLayoutAll(true);
-//      _score->end2();                         // used by lyricsTab() but not by chordTab(): needed or not?
+//      _score->end2();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
 //      _score->end1();                         //          "           "
       }
 
@@ -5276,19 +5167,30 @@ void ScoreView::figuredBassTicksTab(int ticks)
       FiguredBass* fb   = (FiguredBass*)editObject;
       int track         = fb->track();
       Segment* segm     = fb->segment();
-      if (segm == 0) {
+      if (!segm) {
             qDebug("figuredBassTicksTab: no segment");
             return;
             }
+      Measure* measure = segm->measure();
 
       int nextSegTick   = segm->tick() + ticks;
+
+      // find the measure containing the target tick
+      while (nextSegTick >= measure->tick() + measure->ticks()) {
+            measure = measure->nextMeasure();
+            if (!measure) {
+                  qDebug("figuredBassTicksTab: no next measure");
+                  return;
+                  }
+            }
+
       // look for a segment at this tick; if none, create one
       Segment * nextSegm = segm;
-      while(nextSegm && nextSegm->tick() < nextSegTick)
+      while (nextSegm && nextSegm->tick() < nextSegTick)
             nextSegm = nextSegm->next1(Segment::SegChordRest);
-      if (nextSegm == 0 || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
-            nextSegm = new Segment(segm->measure(), Segment::SegChordRest, nextSegTick);
-            if (nextSegm == 0) {
+      if (!nextSegm || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
+            nextSegm = new Segment(measure, Segment::SegChordRest, nextSegTick);
+            if (!nextSegm) {
                   qDebug("figuredBassTicksTab: no next segment");
                   return;
                   }
@@ -5300,10 +5202,11 @@ void ScoreView::figuredBassTicksTab(int ticks)
       _score->startCmd();
       bool bNew;
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, ticks, &bNew);
-      if(bNew)
+      if (bNew)
             _score->undoAddElement(fbNew);
       _score->select(fbNew, SELECT_SINGLE, 0);
       startEdit(fbNew, -1);
+      mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
       _score->setLayoutAll(true);

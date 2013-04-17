@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: keyfinder.cpp 4874 2011-10-21 12:18:42Z wschweer $
 //
 //  Copyright (C) 2007-2011 Werner Schweer
 //
@@ -9,7 +8,9 @@
 //  it under the terms of the GNU General Public License version 2
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
-//
+//=============================================================================
+
+//=============================================================================
 //  Keyfinder.cpp uses code from the "Melisma Music Analyzer"
 //  project:
 //
@@ -48,14 +49,12 @@
   then adjusted (in generate_tpc/npc_profiles) to line-of-fifths
   order, with the tonic as 5. */
 
-#include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include "keyfinder.h"
-// #include "midifile.h"
 #include "sig.h"
 #include "pitchspelling.h"
-#include "event.h"
+#include "synthesizer/event.h"
 
 //---------------------------------------------------------
 //   SBeat
@@ -216,7 +215,7 @@ static void fill_segments()
                   if (ontime >= start && ontime < end && offtime <= end) {
                         // note begins and ends in segment
                         Event sn(ME_NOTE);
-                        sn.setPitch(n.pitch());
+                        sn.setDataA(n.dataA());
                         sn.setTpc(n.tpc());
                         sn.setDuration(n.duration());
                         segment[s].snote.append(sn);
@@ -224,7 +223,7 @@ static void fill_segments()
                   if (ontime >= start && ontime < end && offtime > end) {
                         // note begins, doesn't end in segment
                         Event sn(ME_NOTE);
-                        sn.setPitch(n.pitch());
+                        sn.setDataA(n.dataA());
                         sn.setTpc(n.tpc());
                         sn.setDuration(end - ontime);
                         segment[s].snote.append(sn);
@@ -232,7 +231,7 @@ static void fill_segments()
                   if (ontime < start && offtime > start && offtime <= end) {
                         // note ends, doesn't begin in segment
                         Event sn(ME_NOTE);
-                        sn.setPitch(n.pitch());
+                        sn.setDataA(n.dataA());
                         sn.setTpc(n.tpc());
                         sn.setDuration(offtime - start);
                         segment[s].snote.append(sn);
@@ -240,7 +239,7 @@ static void fill_segments()
                   if (ontime < start && offtime > end) {
                         // note doesn't begin or end in segment
                         Event sn(ME_NOTE);
-                        sn.setPitch(n.pitch());
+                        sn.setDataA(n.dataA());
                         sn.setTpc(n.tpc());
                         sn.setDuration(end - start);
                         segment[s].snote.append(sn);

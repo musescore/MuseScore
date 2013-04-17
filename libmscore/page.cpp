@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: page.cpp 5637 2012-05-16 14:23:09Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -838,7 +837,7 @@ MeasureBase* Page::pos2measure(const QPointF& p, int* rst, int* pitch,
                   continue;
             Segment* ns = segment->next();
             for (; ns; ns = ns->next()) {
-                  if (ns->subtype() != Segment::SegChordRest)
+                  if (ns->segmentType() != Segment::SegChordRest)
                         continue;
                   if (ns->element(track)
                      || ns->element(track+1)

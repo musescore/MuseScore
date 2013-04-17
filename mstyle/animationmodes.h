@@ -27,14 +27,13 @@
 #ifndef __ANIMATIONMODES_H__
 #define __ANIMATIONMODES_H__
 
-    //! animation mode
-    enum AnimationMode
-    {
-        AnimationNone = 0,
-        AnimationHover = 1<<0,
-        AnimationFocus = 1<<1,
-        AnimationEnable = 1<<2
-    };
+//! animation mode
+enum AnimationMode {
+      AnimationNone = 0,
+      AnimationHover = 1 << 0,
+      AnimationFocus = 1 << 1,
+      AnimationEnable = 1 << 2
+      };
 
 Q_DECLARE_FLAGS(AnimationModes, AnimationMode)
 

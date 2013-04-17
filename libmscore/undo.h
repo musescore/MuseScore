@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: undo.h 5628 2012-05-15 07:46:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -28,10 +27,11 @@
 #include "key.h"
 #include "select.h"
 #include "instrument.h"
-#include "midipatch.h"
+#include "synthesizer/midipatch.h"
 #include "pitchvalue.h"
 #include "timesig.h"
 #include "noteevent.h"
+#include "synthesizerstate.h"
 
 class ElementList;
 class Element;
@@ -121,7 +121,8 @@ class UndoStack {
       bool active() const           { return curCmd != 0; }
       void beginMacro();
       void endMacro(bool rollback);
-      void push(UndoCommand*);
+      void push(UndoCommand*);      // push & execute
+      void push1(UndoCommand*);
       void pop();
       void setClean();
       bool canUndo() const          { return curIdx > 0;           }
@@ -377,20 +378,6 @@ class ChangeElement : public UndoCommand {
    public:
       ChangeElement(Element* oldElement, Element* newElement);
       UNDO_NAME("ChangeElement");
-      };
-
-//---------------------------------------------------------
-//   ChangeRepeatFlags
-//---------------------------------------------------------
-
-class ChangeRepeatFlags : public UndoCommand {
-      Measure* measure;
-      int flags;
-      void flip();
-
-   public:
-      ChangeRepeatFlags(Measure*, int flags);
-      UNDO_NAME("ChangeRepeatFlags");
       };
 
 //---------------------------------------------------------
@@ -1263,6 +1250,21 @@ class ChangeEventList : public UndoCommand {
       ChangeEventList(Chord* c, const QList<NoteEventList> l, bool u) : chord(c), events(l), userModified(u) {}
       ~ChangeEventList();
       UNDO_NAME("ChangeEventList");
+      };
+
+//---------------------------------------------------------
+//   ChangeSynthesizerState
+//---------------------------------------------------------
+
+class ChangeSynthesizerState : public UndoCommand {
+      Score* score;
+      SynthesizerState state;
+
+      void flip();
+
+   public:
+      ChangeSynthesizerState(Score* s, const SynthesizerState& st) : score(s), state(st) {}
+      UNDO_NAME("ChangeSynthesizerState");
       };
 
 #endif

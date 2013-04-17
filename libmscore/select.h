@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: select.h 5582 2012-04-27 19:16:19Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -87,6 +86,7 @@ class Selection {
       Element* element() const;
       ChordRest* firstChordRest(int track = -1) const;
       ChordRest* lastChordRest(int track = -1) const;
+      Measure* findMeasure() const;
       void update();
       void updateState();
       void dump();

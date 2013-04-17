@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: accidental.h 5242 2012-01-23 17:25:56Z wschweer $
 //
 //  Copyright (C) 2004-2011 Werner Schweer
 //
@@ -88,13 +87,13 @@ private:
       Q_OBJECT
       Q_PROPERTY(bool               hasBracket READ hasBracket WRITE undoSetHasBracket)
       Q_PROPERTY(bool               small      READ small      WRITE undoSetSmall)
-      Q_PROPERTY(AccidentalType     accType    READ subtype)
+      Q_PROPERTY(AccidentalType     accType    READ accidentalType)
       Q_PROPERTY(AccidentalRole     role       READ role)
       Q_ENUMS(AccidentalType)
       Q_ENUMS(AccidentalRole)
 
       QList<SymElement> el;
-      AccidentalType _subtype;
+      AccidentalType _accidentalType;
       bool _hasBracket;
       bool _small;
       AccidentalRole _role;
@@ -106,8 +105,8 @@ private:
 
       const char* subtypeUserName() const;
       void setSubtype(const QString& s);
-      void setSubtype(AccidentalType t)     { _subtype = t;    }
-      AccidentalType subtype() const        { return _subtype; }
+      void setAccidentalType(AccidentalType t) { _accidentalType = t;    }
+      AccidentalType accidentalType() const    { return _accidentalType; }
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);

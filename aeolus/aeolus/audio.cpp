@@ -29,9 +29,9 @@ void Aeolus::audio_start ()
       _audio->_nasect = _nasect;
       _audio->_fsamp  = _fsamp;
       _audio->_fsize  = 0;
-      _audio->_instrpar = _audiopar;
-      for (int i = 0; i < _nasect; i++)
-            _audio->_asectpar [i] = _asectp [i]->get_apar ();
+//      _audio->_instrpar = _audiopar;
+//      for (int i = 0; i < _nasect; i++)
+//            _audio->_asectpar [i] = _asectp [i]->get_apar ();
       }
 
 //---------------------------------------------------------
@@ -42,11 +42,11 @@ void Aeolus::audio_init(int sampleRate)
       {
 	_nplay   = 2;
       _fsamp   = sampleRate;
-      _audiopar[VOLUME].set("volume", 0.32f, 0.00f, 1.00f);
-      _audiopar[REVSIZE].set("revsize", 0.075f, 0.025f, 0.150f);
+      _audiopar[VOLUME]  = 1.00f;
+      _audiopar[REVSIZE] = 0.150f;
       _revtime = 4.0f;
-      _audiopar[REVTIME].set("revtime", _revtime, 2.0f, 7.0f);
-      _audiopar[STPOSIT].set("stposit", 0.5f, -1.0f, 1.0f);
+      _audiopar[REVTIME] = 7.0f;
+      _audiopar[STPOSIT] = 1.0f;
 
       _reverb.init (_fsamp);
       _reverb.set_t60mf (_revtime);
@@ -144,8 +144,10 @@ void Aeolus::proc_queue (uint32_t k)
 //   process
 //---------------------------------------------------------
 
-void Aeolus::process(unsigned nframes, float* out, float gain)
+void Aeolus::process(unsigned nframes, float* out, float*, float*)
       {
+      float gain = 1.0;
+
       for (int n = 0; n < NNOTES; n++) {
             int m = _keymap[n];
             if (m & 128) {
@@ -158,14 +160,14 @@ void Aeolus::process(unsigned nframes, float* out, float gain)
       for (int d = 0; d < _ndivis; d++)
             _divisp[d]->update(_keymap);
 
-      if (fabsf(_revsize - _audiopar [REVSIZE].fval()) > 0.001f) {
-            _revsize = _audiopar[REVSIZE].fval();
+      if (fabsf(_revsize - _audiopar [REVSIZE]) > 0.001f) {
+            _revsize = _audiopar[REVSIZE];
             _reverb.set_delay(_revsize);
             for (int j = 0; j < _nasect; j++)
                   _asectp[j]->set_size(_revsize);
             }
-      if (fabsf(_revtime - _audiopar [REVTIME].fval()) > 0.1f) {
-            _revtime = _audiopar [REVTIME].fval();
+      if (fabsf(_revtime - _audiopar [REVTIME]) > 0.1f) {
+            _revtime = _audiopar [REVTIME];
             _reverb.set_t60mf(_revtime);
             _reverb.set_t60lo(_revtime * 1.50f, 250.0f);
             _reverb.set_t60hi(_revtime * 0.50f, 3e3f);
@@ -190,7 +192,7 @@ void Aeolus::process(unsigned nframes, float* out, float gain)
 
                   _reverb.process(PERIOD, gain, R, W, X, Y);
 
-                  float stposit = _audiopar[STPOSIT].fval();
+                  float stposit = _audiopar[STPOSIT];
                   for (int j = 0; j < PERIOD; j++) {
                         loutb[j] = W[j] + stposit * X[j] + Y[j];
                         routb[j] = W[j] + stposit * X[j] - Y[j];
@@ -198,8 +200,8 @@ void Aeolus::process(unsigned nframes, float* out, float gain)
                   nout = PERIOD;
                   k += PERIOD;
                   }
-            *out++ += gain * loutb[PERIOD - nout];
-            *out++ += gain * routb[PERIOD - nout];
+            *out++ += loutb[PERIOD - nout];
+            *out++ += routb[PERIOD - nout];
             --nout;
             --nframes;
             }

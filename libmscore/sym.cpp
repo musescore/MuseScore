@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: sym.cpp 5568 2012-04-22 10:08:43Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -303,6 +302,8 @@ QFont fontId2font(int fontId)
       QFont* f = fonts[fontId];
       if (f == 0) {
             f = fonts[fontId] = new QFont();
+            f->setWeight(QFont::Normal);  // if not set we get system default
+            f->setItalic(false);
 #ifdef USE_GLYPHS
             qreal size = 20.0;
 #else
@@ -600,8 +601,9 @@ void initSymbols(int idx)
 #endif
       QFile f(path);
       if (!f.open(QFile::ReadOnly)) {
-            qDebug("cannot open symbols file %s\n", qPrintable(path));
-            exit(-1);
+            qDebug("cannot open symbols file %s", qPrintable(path));
+            if (!MScore::debugMode)
+                  exit(-1);
             }
       XmlReader e(&f);
       int fid = idx == 0 ? 0 : 3;

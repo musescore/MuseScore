@@ -78,6 +78,8 @@ using std::cout;
 #include "libmscore/tremolo.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+#include "libmscore/marker.h"
+#include "libmscore/jump.h"
 #include "musescore.h"
 
 static  const int MAX_SLURS = 8;
@@ -491,20 +493,20 @@ void ExportLy::bracktest()
 
 void ExportLy::instructionJump(Jump* jp)
 {
-  int jtp = jp->jumpType();
+  JumpType jtp = jp->jumpType();
   QString words = "\n    \\once\\override Score.RehearsalMark #'self-alignment-X = #RIGHT \n      ";
 
-  if (jtp == JUMP_DC)
+  if (jtp == JumpType::DC)
     words += "\\mark \"Da capo\" ";
-  else if (jtp == JUMP_DC_AL_FINE)
+  else if (jtp == JumpType::DC_AL_FINE)
     words += "\\DCalfine ";
-  else if (jtp == JUMP_DC_AL_CODA)
+  else if (jtp == JumpType::DC_AL_CODA)
     words += "\\DCalcoda";
-  else if (jtp == JUMP_DS_AL_CODA)
+  else if (jtp == JumpType::DS_AL_CODA)
     words += "\\DSalcoda";
-  else if (jtp == JUMP_DS_AL_FINE)
+  else if (jtp == JumpType::DS_AL_FINE)
     words += "\\DSalfine";
-  else if (jtp == JUMP_DS)
+  else if (jtp == JumpType::DS)
     words += "\\mark \\markup{Dal segno \\raise #2 \\halign#-1 \\musicglyph #\"scripts.segno\"}";
   else
     qDebug("jump type=%d not implemented\n", jtp);
@@ -519,21 +521,21 @@ void ExportLy::instructionJump(Jump* jp)
 
 void ExportLy::instructionMarker(Marker* m)
 {
-  int mtp = m->markerType();
+  MarkerType mtp = m->markerType();
   QString words = "";
-  if (mtp == MARKER_CODA)
+  if (mtp == MarkerType::CODA)
       words = "\\theCoda ";
-  else if (mtp == MARKER_CODETTA)
+  else if (mtp == MarkerType::CODETTA)
      	words = "\\codetta";
-  else if (mtp == MARKER_SEGNO)
+  else if (mtp == MarkerType::SEGNO)
       words = "\\thesegno";
-  else if (mtp == MARKER_FINE)
+  else if (mtp == MarkerType::FINE)
 	words = "\\fine";
-  else if (mtp == MARKER_TOCODA)
+  else if (mtp == MarkerType::TOCODA)
 	words = "\\gotocoda ";
-  else if (mtp == MARKER_VARCODA)
+  else if (mtp == MarkerType::VARCODA)
 	words = "\\varcodasign ";
-  else if (mtp == MARKER_USER)
+  else if (mtp == MarkerType::USER)
 	qDebug("unknown user marker\n");
   else
     qDebug("marker type=%d not implemented\n", mtp);
@@ -551,22 +553,22 @@ void ExportLy::instructionMarker(Marker* m)
 
 QString ExportLy::primitiveJump(Jump* jp)
 {
-  int jtp = jp->jumpType();
+  JumpType jtp = jp->jumpType();
   QString words = "";
 
   cout << "primitivejump\n";
 
-  if (jtp == JUMP_DC)
+  if (jtp == JumpType::DC)
      	words = "Da capo";
-  else if (jtp == JUMP_DC_AL_FINE)
+  else if (jtp == JumpType::DC_AL_FINE)
       words = "D.C. al fine";
-  else if (jtp == JUMP_DC_AL_CODA)
+  else if (jtp == JumpType::DC_AL_CODA)
 	words = "D.C. al coda";
-  else if (jtp == JUMP_DS_AL_CODA)
+  else if (jtp == JumpType::DS_AL_CODA)
 	words = "D.S. al coda";
-  else if (jtp == JUMP_DS_AL_FINE)
+  else if (jtp == JumpType::DS_AL_FINE)
 	words = "D.S. al fine";
-  else if (jtp == JUMP_DS)
+  else if (jtp == JumpType::DS)
       words = "Dal segnoX \\musicglyph #\"scripts.segno\"";
   else
     qDebug("jump type=%d not implemented\n", jtp);
@@ -580,22 +582,22 @@ QString ExportLy::primitiveJump(Jump* jp)
 
 QString ExportLy::primitiveMarker(Marker* m)
 {
-  int mtp = m->markerType();
+  MarkerType mtp = m->markerType();
   QString words = "";
-  if (mtp == MARKER_CODA) //the coda
+  if (mtp == MarkerType::CODA) //the coda
     //    words = "\\line{\\halign #-0.75\\noBreak \\codaspace \\resumeStaff \\showClefKey \musicglyph #\"scripts.coda\" \\musicglyph #\"scripts.coda\"}";
     words = "\\line{\\halign #-0.75 \\musicglyph #\"scripts.coda\" \\musicglyph #\"scripts.coda\"}";
-  else if (mtp == MARKER_CODETTA)
+  else if (mtp == MarkerType::CODETTA)
      	words = "\\line {\\musicglyph #\"scripts.coda\" \\hspace #-1.3 \\musicglyph #\"scripts.coda\"} } \n";
-  else if (mtp == MARKER_SEGNO)
+  else if (mtp == MarkerType::SEGNO)
       words = "\\musicglyph #\"scripts.segno\"";
-  else if (mtp == MARKER_FINE)
+  else if (mtp == MarkerType::FINE)
 	words =  "{\"Fine\"} \\mark \\markup {\\musicglyph #\"scripts.ufermata\" } \\bar \"\bar \"||\" } \n";
-  else if (mtp == MARKER_TOCODA)
+  else if (mtp == MarkerType::TOCODA)
 	words = "\\musicglyph #\"scripts.coda\"";
-  else if (mtp == MARKER_VARCODA)
+  else if (mtp == MarkerType::VARCODA)
     words = "\\musicglyph#\"scripts.varcoda\"";
-  else if (mtp == MARKER_USER)
+  else if (mtp == MarkerType::USER)
 	qDebug("unknown user marker\n");
   else
     qDebug("marker type=%d not implemented\n", mtp);
@@ -944,11 +946,11 @@ void ExportLy::storeChord(struct InstructionAnchor chordanchor)
 
 void ExportLy::tempoText(TempoText* text)
       {
-	QString temptekst = text->getText();
+	QString temptekst = text->text();
 	double met = text->tempo();
 	int metronome;
 	metronome = (int) (met * 60);
-	out << "\\tempo \""  << text->getText() << "\" " <<  timedenom << " = " << metronome << "  ";
+	out << "\\tempo \""  << text->text() << "\" " <<  timedenom << " = " << metronome << "  ";
       }
 
 
@@ -964,8 +966,8 @@ void ExportLy::words(Text* text)
        findTextProperties(text,style,size);
        //todo: find exact mscore-position of text and not only anchorpoint, and position accordingly in lily.
 //TODO     if ((text->subtypeName() != "RehearsalMark"))
-       // if (text->getText() != "")
-       out << "^\\markup {" << style<< " \"" << text->getText() << "\"} ";
+       // if (text->text() != "")
+       out << "^\\markup {" << style<< " \"" << text->text() << "\"} ";
      //     qDebug("tekst %s\n", tekst.toLatin1().data());
       }
 
@@ -981,7 +983,7 @@ void ExportLy::hairpin(Hairpin* hp, int tick)
   // hairpin start and end and not only anchorpoint, and position
   // accordingly in lily.
 	int art=2;
-	art=hp->subtype();
+	art=hp->hairpinType();
 	if (hp->tick() == tick)
 	  {
 	    if (art == 0) //diminuendo
@@ -999,7 +1001,7 @@ void ExportLy::hairpin(Hairpin* hp, int tick)
 
 void ExportLy::ottava(Ottava* ot, int tick)
 {
-  int st = ot->subtype();
+  int st = ot->ottavaType();
   if (ot->tick() == tick)
     {
       switch(st) {
@@ -1046,7 +1048,7 @@ void ExportLy::pedal(Pedal* pd, int tick)
 //---------------------------------------------------------
 void ExportLy::dynamic(Dynamic* dyn, int nop)
 {
-  QString t = dyn->getText();
+  QString t = dyn->text();
   if (t == "p" || t == "pp" || t == "ppp" || t == "pppp" || t == "ppppp" || t == "pppppp"
       || t == "f" ||
       t == "ff" || t == "fff" || t == "ffff" || t == "fffff" || t == "ffffff"
@@ -1169,7 +1171,7 @@ void ExportLy::textLine(Element* instruction, int tick, bool pre)
 	    }
 	  if (tekstlinje->beginText())
 	    {
-	      QString linetext = tekstlinje->beginText()->getText();
+	      QString linetext = tekstlinje->beginText()->text();
 	      Text* tekst = (Text*) tekstlinje->beginText();
 	      QString tekststyle = "";
 	      findTextProperties(tekst, tekststyle, fontsize);
@@ -1457,7 +1459,7 @@ void ExportLy::handlePreInstruction(Element * el)
 		    bool ok = false;
 		    // int dec=0;
 		    QString c;
-		    c=tekst->getText();
+		    c=tekst->text();
 		    // dec = c.toInt(&ok, 10);
 		    if (ok) rehearsalnumbers=true;
 		    Element* elm = 0;
@@ -1536,7 +1538,7 @@ void ExportLy::handleElement(Element* el)
 			if (wholemeasurerest)
 			    {
 				Text* wmtx = (Text*) instruction;
-				wholemeasuretext = wmtx->getText();
+				wholemeasuretext = wmtx->text();
 			    }
 			else
 			    words((Text*) instruction);
@@ -1741,16 +1743,16 @@ void ExportLy::printJumpOrMarker(int mnum, bool start)
 
 void ExportLy::findMarkerAtMeasureStart(Measure* m)
 {
-   for (ciElement ci = m->el()->begin(); ci != m->el()->end(); ++ci)
+   for (auto ci = m->el()->begin(); ci != m->el()->end(); ++ci)
      {
        Element* dir = *ci;
        int tp = dir->type();
        if (tp == Element::MARKER)
   	 { //only markers, not jumps, are used at measure start.
 	   Marker* ma = (Marker*) dir;
-	   int mtp = ma->markerType();
+	   MarkerType mtp = ma->markerType();
 	   //discard markers which belong at measure end:
-	   if (!(mtp == MARKER_FINE || mtp == MARKER_TOCODA))
+	   if (!(mtp == MarkerType::FINE || mtp == MarkerType::TOCODA))
 	     {
 	       cout << "marker found at measure: " << measurenumber << "\n";
 	       //	       instructionMarker(ma);
@@ -1768,7 +1770,7 @@ void ExportLy::jumpAtMeasureStop(Measure* m)
       {
 	// loop over all measure relative elements in this measure
 	// looking for JUMPS and MARKERS
-	for (ciElement ci = m->el()->begin(); ci != m->el()->end(); ++ci)
+	for (auto ci = m->el()->begin(); ci != m->el()->end(); ++ci)
 	  {
 	    Element* dir = *ci;
 	    int tp = dir->type();
@@ -1794,9 +1796,9 @@ void ExportLy::jumpAtMeasureStop(Measure* m)
 	    else if (tp == Element::MARKER)
 	      {
 		Marker* ma = (Marker*) dir;
-		int mtp = ma->markerType();
+		MarkerType mtp = ma->markerType();
 		//only print markers which belong at measure end:
-		if (mtp == MARKER_FINE || mtp == MARKER_TOCODA)
+		if (mtp == MarkerType::FINE || mtp == MarkerType::TOCODA)
 		  {
 		    //print the marker in part one
 		    instructionMarker(ma);
@@ -1949,7 +1951,7 @@ void ExportLy::buildInstructionList(Measure* m, int strack, int etrack)
 {
 
   // loop over all measure relative elements in this measure
-  for (ciElement ci = m->el()->begin(); ci != m->el()->end(); ++ci)
+  for (auto ci = m->el()->begin(); ci != m->el()->end(); ++ci)
     {
       bool found=false;
 //      bool rehearsal=false;
@@ -2029,7 +2031,7 @@ void ExportLy::buildGlissandoList(int strack, int etrack)
 		      Element* prevel = seg->prev()->element(st); //(st);
 		      Chord* prevchord = (Chord*)prevel;
 		      glisstable[glisscount].chord = prevchord;
-		      glisstable[glisscount].type = cd->glissando()->subtype();
+		      glisstable[glisscount].type = int(cd->glissando()->glissandoType());
 		      glisstable[glisscount].glisstext = cd->glissando()->text();
 		      glisstable[glisscount].tick = prevchord->tick();
 		    }
@@ -2165,7 +2167,7 @@ void ExportLy::findStartRepNoBarline(int &i, Measure* m)
  // loop over all measure relative segments in this measure
   for (Segment* seg = m->first(); seg; seg = seg->next())
     {
-      if (seg->subtype() == Segment::SegStartRepeatBarLine)
+      if (seg->segmentType() == Segment::SegStartRepeatBarLine)
 	{
 	  i++; // insert at next slot of voltarray
 	  voltarray[i].voltart = startrepeat;
@@ -2344,10 +2346,10 @@ void ExportLy::writeClef(int clef)
 
 void ExportLy::writeTimeSig(TimeSig* sig)
 {
-  int st = sig->subtype();
+  int st     = sig->timeSigType();
   Fraction f = sig->sig();
-  timedenom = f.denominator();
-  z1        = f.numerator();
+  timedenom  = f.denominator();
+  z1         = f.numerator();
 
   //lilypond writes 4/4 as C by default, so only check for cut.
   if (st == TSIG_ALLA_BREVE)
@@ -2592,7 +2594,7 @@ void ExportLy::writeArticulation(ChordRest* c)
 {
   foreach(Articulation* a, c->articulations())
     {
-      switch(a->subtype())
+      switch(a->articulationType())
 	{
 	case Articulation_Fermata:
         if (a->up())
@@ -2681,7 +2683,7 @@ void ExportLy::writeArticulation(ChordRest* c)
 	  out << "\\downmordent ";
 	  break;
 	default:
-	  qDebug("unsupported note attribute %d\n", a->subtype());
+	  qDebug("unsupported note attribute %d\n", int(a->articulationType()));
 	  break;
 	}// end switch
     }// end foreach
@@ -2697,7 +2699,7 @@ void ExportLy::writeTremolo(Chord * chord)
   if (chord->tremolo())
     {
       Tremolo * tr = chord->tremolo();
-      int st = tr->subtype();
+      int st = tr->tremoloType();
       switch (st)
 	{
 	case TREMOLO_R8:
@@ -2732,12 +2734,12 @@ void ExportLy::findFingerAndStringno(Note* note, int &fingix, int &stringix, QSt
                   if (text->textStyleType() == TEXT_STYLE_FINGERING) {
 	                  fingix++;
       	            Text* f = (Text*)e;
-	                  fingarray[fingix] = f->getText();
+	                  fingarray[fingix] = f->text();
 	                  }
                   else if (text->textStyleType() == TEXT_STYLE_STRING_NUMBER) {
                         stringix++;
                         Text * s = (Text*)e;
-                        stringarray[stringix] = s->getText();
+                        stringarray[stringix] = s->text();
                         }
                   }
             }
@@ -2875,7 +2877,7 @@ bool ExportLy::arpeggioTest(Chord* chord)
   if (chord->arpeggio())
     {
       arp=true;
-      int subtype = chord->arpeggio()->subtype();
+      int subtype = int(chord->arpeggio()->arpeggioType());
       switch (subtype)
 	{
 	case 0:
@@ -3407,7 +3409,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
   Element*  nextelem;
   nextelem= nextseg->element(track);
 
-  while (!(nextseg->subtype() == Segment::SegEndBarLine))//  and !(nextseg->subtype() == Segment::SegEndBarLine)))
+  while (!(nextseg->segmentType() == Segment::SegEndBarLine))//  and !(nextseg->segmentType() == Segment::SegEndBarLine)))
     {
       //go to next segment, check if it is chord or end of measure.
       if (nextseg->isChordRest())	break;
@@ -3417,7 +3419,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
 
   //if it is not on this track, continue until end we find segment
   //containing element of this track, or end of measure
-  while ((nextelem==0) and (!(nextseg->subtype() == Segment::SegEndBarLine)))
+  while ((nextelem==0) and (!(nextseg->segmentType() == Segment::SegEndBarLine)))
     {
       nextseg = nextseg->next();
       nextelem = nextseg->element(track);
@@ -3425,7 +3427,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
 
   // if next segment contains element of this track, check for end of
   // measure and chordorrest.
-  if ((nextseg->subtype() != Segment::SegEndBarLine) &&  (nextseg->isChordRest()))
+  if ((nextseg->segmentType() != Segment::SegEndBarLine) &&  (nextseg->isChordRest()))
     {
       // probably superfluous as we have previously checked for
       // element on this track (!=0)
@@ -3526,7 +3528,7 @@ void ExportLy::findLyrics()
         Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
 	  for(Segment* seg = meas->first(st); seg; seg = seg->next(st))
 	    {
-	      const QList<Lyrics*>* lyrlist = seg->lyricsList(staffno);
+        const QList<Lyrics*>* lyrlist = seg->lyricsList(staffno*VOICES);
             if (!lyrlist)
                   continue;
 
@@ -3560,7 +3562,7 @@ void ExportLy::findLyrics()
 			    }
 			}
 
-		      QString lyriks = (lix)->getText();
+		      QString lyriks = (lix)->text();
 
           //  escape '"' character
           if (lyriks.contains('"'))
@@ -3952,7 +3954,7 @@ void ExportLy::writeVoiceMeasure(MeasureBase* mb, Staff* staff, int staffInd, in
 		 cout << "at tick: " << keytick << "\n";
 		 KeyList* kl = score->staff(staffInd)-> keymap();
 		 KeySigEvent key = kl->key(keytick);
-//		 ciKeyList ci = kl->find(keytick);
+//		 auto ci = kl->find(keytick);
 		 //
 		 //		 if (ci != kl->end())
 		 //     {
@@ -4642,7 +4644,7 @@ void ExportLy::writeScoreTitles()
   foreach(const Element* e, *m->el()) {
     if (e->type() != TEXT)
       continue;
-    QString s = ((Text*)e)->getText();
+    QString s = ((Text*)e)->text();
     indentF();
     switch(e->subtype()) {
     case TEXT_TITLE:

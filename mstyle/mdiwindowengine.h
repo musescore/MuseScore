@@ -31,80 +31,75 @@
 #include "datamap.h"
 #include "mdiwindowdata.h"
 
-    //! handle mdiwindow arrows hover effect
-    class MdiWindowEngine: public BaseEngine
-    {
+//! handle mdiwindow arrows hover effect
+class MdiWindowEngine: public BaseEngine {
 
-        Q_OBJECT
+            Q_OBJECT
 
-        public:
+      public:
 
-        //! constructor
-        MdiWindowEngine( QObject* parent ):
-        BaseEngine( parent )
-        {}
+            //! constructor
+            MdiWindowEngine( QObject* parent ):
+                  BaseEngine( parent )
+                  {}
 
-        //! destructor
-        virtual ~MdiWindowEngine( void )
-        {}
+            //! destructor
+            virtual ~MdiWindowEngine( void )
+                  {}
 
-        //! register widget
-        virtual bool registerWidget( QWidget* );
+            //! register widget
+            virtual bool registerWidget( QWidget* );
 
-        //! state
-        virtual bool updateState( const QObject* object, int primitive, bool value )
-        {
-            if( DataMap<MdiWindowData>::Value data = data_.find( object ) )
-            {
-                return data.data()->updateState( primitive, value );
-            } else return false;
-        }
+            //! state
+            virtual bool updateState( const QObject* object, int primitive, bool value ) {
+                  if ( DataMap<MdiWindowData>::Value data = data_.find( object ) ) {
+                        return data.data()->updateState( primitive, value );
+                        }
+                  else return false;
+                  }
 
-        //! true if widget is animated
-        virtual bool isAnimated( const QObject* object, int primitive )
-        {
-            if( DataMap<MdiWindowData>::Value data = data_.find( object ) )
-            {
-                return data.data()->isAnimated( primitive );
-            } else return false;
+            //! true if widget is animated
+            virtual bool isAnimated( const QObject* object, int primitive ) {
+                  if ( DataMap<MdiWindowData>::Value data = data_.find( object ) ) {
+                        return data.data()->isAnimated( primitive );
+                        }
+                  else return false;
 
-        }
+                  }
 
-        //! animation opacity
-        virtual qreal opacity( const QObject* object, int primitive )
-        {
-            if( DataMap<MdiWindowData>::Value data = data_.find( object ) )
-            {
-                return data.data()->opacity( primitive );
-            } else return AnimationData::OpacityInvalid;
-        }
+            //! animation opacity
+            virtual qreal opacity( const QObject* object, int primitive ) {
+                  if ( DataMap<MdiWindowData>::Value data = data_.find( object ) ) {
+                        return data.data()->opacity( primitive );
+                        }
+                  else return AnimationData::OpacityInvalid;
+                  }
 
-        //! enability
-        virtual void setEnabled( bool value )
-        {
-            BaseEngine::setEnabled( value );
-            data_.setEnabled( value );
-        }
+            //! enability
+            virtual void setEnabled( bool value ) {
+                  BaseEngine::setEnabled( value );
+                  data_.setEnabled( value );
+                  }
 
-        //! duration
-        virtual void setDuration( int value )
-        {
-            BaseEngine::setDuration( value );
-            data_.setDuration( value );
-        }
+            //! duration
+            virtual void setDuration( int value ) {
+                  BaseEngine::setDuration( value );
+                  data_.setDuration( value );
+                  }
 
 
-        public slots:
+      public slots:
 
-        //! remove widget from map
-        virtual bool unregisterWidget( QObject* object )
-        { return data_.unregisterWidget( object ); }
+            //! remove widget from map
+            virtual bool unregisterWidget( QObject* object ) {
+                  return data_.unregisterWidget( object );
+                  }
 
-        private:
+      private:
 
-        //! data map
-        DataMap<MdiWindowData> data_;
+            //! data map
+            DataMap<MdiWindowData> data_;
 
-    };
+      };
 
 #endif

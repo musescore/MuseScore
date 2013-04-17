@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -78,8 +77,6 @@ void SegmentList::check()
 
 void SegmentList::insert(Segment* e, Segment* el)
       {
-      if (e->score()->undoRedo())
-            qFatal("SegmentList:insert in undo/redo");
       if (el == 0)
             push_back(e);
       else if (el == first())
@@ -100,8 +97,6 @@ void SegmentList::insert(Segment* e, Segment* el)
 
 void SegmentList::remove(Segment* el)
       {
-      if (el->score()->undoRedo())
-            qFatal("SegmentList:remove in undo/redo");
       --_size;
       if (el == _first) {
             _first = _first->next();
@@ -220,7 +215,7 @@ Segment* SegmentList::firstCRSegment() const
 Segment* SegmentList::first(Segment::SegmentTypes types) const
       {
       for (Segment* s = _first; s; s = s->next()) {
-            if (s->subtype() & types)
+            if (s->segmentType() & types)
                   return s;
             }
       return 0;

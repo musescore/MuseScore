@@ -26,7 +26,8 @@ target_link_libraries(
       ${QT_QTTEST_LIBRARY}
       testutils
       libmscore
-      msynth
+      synthesizer
+      midi
       ${QT_LIBRARIES}
       )
 

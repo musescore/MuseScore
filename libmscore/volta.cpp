@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: volta.cpp 5610 2012-05-08 09:56:00Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -23,6 +22,7 @@
 
 void VoltaSegment::layout()
       {
+      rypos() = 0.0;
       TextLineSegment::layout1();
       if (parent())     // for palette
             rypos() += score()->styleS(ST_voltaY).val() * spatium();
@@ -36,7 +36,7 @@ void VoltaSegment::layout()
 Volta::Volta(Score* s)
    : TextLine(s)
       {
-      _subtype = VOLTA_OPEN;
+      _voltaType = VoltaType::OPEN;
       setBeginText("1.", s->textStyle(TEXT_STYLE_VOLTA));
 
       setBeginTextPlace(PLACE_BELOW);
@@ -50,17 +50,17 @@ Volta::Volta(Score* s)
       }
 
 //---------------------------------------------------------
-//   setSubtype
+//   setVoltaType
 //---------------------------------------------------------
 
-void Volta::setSubtype(VoltaType val)
+void Volta::setVoltaType(VoltaType val)
       {
-      _subtype = val;
-      switch(val) {
-            case VOLTA_OPEN:
+      _voltaType = val;
+      switch (val) {
+            case VoltaType::OPEN:
                   setEndHook(false);
                   break;
-            case VOLTA_CLOSED:
+            case VoltaType::CLOSED:
                   setEndHook(true);
                   break;
             }
@@ -96,7 +96,7 @@ void Volta::setText(const QString& s)
 
 QString Volta::text() const
       {
-      return beginText()->getText();
+      return beginText()->text();
       }
 
 //---------------------------------------------------------
@@ -112,7 +112,7 @@ void Volta::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setSubtype(VoltaType(e.readInt()));
+                  setVoltaType(VoltaType(e.readInt()));
             else if (tag == "text")            // obsolete
                   setText(e.readElementText());
             else if (tag == "endings") {
@@ -136,10 +136,10 @@ void Volta::read(XmlReader& e)
 void Volta::write(Xml& xml) const
       {
       Volta proto(score());
-      proto.setSubtype(subtype());
+      proto.setVoltaType(voltaType());
 
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
-      xml.tag("subtype", _subtype);
+      xml.tag("subtype", int(_voltaType));
       TextLine::writeProperties(xml, &proto);
       QString s;
       foreach(int i, _endings) {
@@ -181,7 +181,7 @@ QVariant Volta::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_VOLTA_TYPE:
-                  return subtype();
+                  return int(voltaType());
             default:
                   break;
             }
@@ -197,7 +197,7 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
       score()->addRefresh(pageBoundingRect());
       switch(propertyId) {
             case P_VOLTA_TYPE:
-                  setSubtype(VoltaType(val.toInt()));
+                  setVoltaType(VoltaType(val.toInt()));
                   break;
             default:
                   if (!TextLine::setProperty(propertyId, val))
@@ -225,12 +225,12 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
-//   undoSetSubtype
+//   undoSetVoltaType
 //---------------------------------------------------------
 
-void Volta::undoSetSubtype(VoltaType val)
+void Volta::undoSetVoltaType(VoltaType val)
       {
-      score()->undoChangeProperty(this, P_VOLTA_TYPE, val);
+      score()->undoChangeProperty(this, P_VOLTA_TYPE, int(val));
       }
 
 //---------------------------------------------------------

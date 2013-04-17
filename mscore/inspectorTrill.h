@@ -14,9 +14,9 @@
 #ifndef __INSPECTOR_TRILL_H__
 #define __INSPECTOR_TRILL_H__
 
-#include "inspector.h"
+#include "inspectorBase.h"
+#include "ui_inspector_element.h"
 #include "ui_inspector_trill.h"
-#include "libmscore/property.h"
 
 //---------------------------------------------------------
 //   InspectorTrill
@@ -25,16 +25,11 @@
 class InspectorTrill : public InspectorBase {
       Q_OBJECT
 
-      InspectorElementElement* iElement;
-      Ui::InspectorTrill iTrill;
-
-   public slots:
-      virtual void apply();
+      Ui::InspectorElement e;
+      Ui::InspectorTrill t;
 
    public:
       InspectorTrill(QWidget* parent);
-      virtual void setElement(Element*);
-      bool dirty() const;
       };
 
 #endif

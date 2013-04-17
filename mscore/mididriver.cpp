@@ -28,7 +28,7 @@
 #include "mididriver.h"
 #include "preferences.h"
 #include "musescore.h"
-#include "libmscore/midifile.h"
+#include "midi/midifile.h"
 #include "globals.h"
 #include "seq.h"
 #include "libmscore/utils.h"
@@ -133,7 +133,7 @@ bool AlsaMidiDriver::init()
       //-----------------------------------------
 
       snd_seq_addr_t src, dst;
-      int rv = snd_seq_create_simple_port(alsaSeq, "MusE Port 0",
+      int rv = snd_seq_create_simple_port(alsaSeq, "MuseScore Port 0",
          inCap | outCap | SND_SEQ_PORT_CAP_READ
          | SND_SEQ_PORT_CAP_WRITE
          | SND_SEQ_PORT_CAP_NO_EXPORT,

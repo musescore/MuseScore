@@ -32,13 +32,16 @@
 #include "mixer.h"
 #include "scoreview.h"
 #include "playpanel.h"
-#include "seq.h"
 #include "preferences.h"
+#include "seq.h"
+#include "synthesizer/msynthesizer.h"
 
 #ifdef OSC
 #include "ofqf/qoscserver.h"
 static int oscPort = 5282;
 #endif
+
+extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   initOsc
@@ -276,8 +279,7 @@ void MuseScore::oscColorNote(QVariantList list)
 void MuseScore::oscVolume(int val)
       {
       double v = val / 128.0;
-      if (seq)
-            seq->setGain(v);
+      synti->setGain(v);
       }
 
 //---------------------------------------------------------
@@ -298,8 +300,8 @@ void MuseScore::oscVolChannel(double val)
             int iv = lrint(val*127);
             seq->setController(channel->channel, CTRL_VOLUME, iv);
             channel->volume = iv;
-            if (iledit)
-                  iledit->partEdit(i)->volume->setValue(iv);
+            if (mixer)
+                  mixer->partEdit(i)->volume->setValue(iv);
             }
       }
 
@@ -321,8 +323,8 @@ void MuseScore::oscPanChannel(double val)
             int iv = lrint((val + 1) * 64);
             seq->setController(channel->channel, CTRL_PANPOT, iv);
             channel->volume = iv;
-            if (iledit)
-                  iledit->partEdit(i)->pan->setValue(iv);
+            if (mixer)
+                  mixer->partEdit(i)->pan->setValue(iv);
             }
       }
 
@@ -342,8 +344,8 @@ void MuseScore::oscMuteChannel(double val)
             MidiMapping mm = mms->at(i);
             Channel* channel = mm.articulation;
             channel->mute = (val==0.0f ? false : true);
-            if (iledit)
-                  iledit->partEdit(i)->mute->setCheckState(val==0.0f ? Qt::Unchecked:Qt::Checked);
+            if (mixer)
+                  mixer->partEdit(i)->mute->setCheckState(val==0.0f ? Qt::Unchecked:Qt::Checked);
             }
       }
 #endif // #ifndef OSC

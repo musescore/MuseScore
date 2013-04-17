@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: excerpt.cpp 5589 2012-04-28 13:48:19Z wschweer $
 //
 //  Copyright (C) 2009-2011 Werner Schweer
 //
@@ -140,7 +139,7 @@ Score* createExcerpt(const QList<Part*>& parts)
             measure = nmeasure;
             }
       Text* txt = new Text(score);
-      txt->setTextStyle(score->textStyle(TEXT_STYLE_INSTRUMENT_EXCERPT));
+      txt->setTextStyleType(TEXT_STYLE_INSTRUMENT_EXCERPT);
       txt->setText(parts.front()->longName().toPlainText());
       measure->add(txt);
 
@@ -240,17 +239,17 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               }
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns;
-                              if (oseg->subtype() == Segment::SegGrace) {
+                              if (oseg->segmentType() == Segment::SegGrace) {
                                     int gl = 0;
                                     for (Segment* ms = oseg->next(); ms; ms = ms->next()) {
                                           ++gl;
-                                          if (ms->subtype() != Segment::SegGrace)
+                                          if (ms->segmentType() != Segment::SegGrace)
                                                 break;
                                           }
                                     ns = nm->getGraceSegment(oseg->tick(), gl);
                                     }
                               else
-                                    ns = nm->getSegment(oseg->subtype(), oseg->tick());
+                                    ns = nm->getSegment(oseg->segmentType(), oseg->tick());
 
                               for (Spanner* spanner = oseg->spannerFor(); spanner; spanner = spanner->next()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
@@ -392,7 +391,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   }
             foreach(Element* e, *mb->el()) {
                   if (e->type() == Element::LAYOUT_BREAK) {
-                        LayoutBreakType st = static_cast<LayoutBreak*>(e)->subtype();
+                        LayoutBreakType st = static_cast<LayoutBreak*>(e)->layoutBreakType();
                         if (st == LAYOUT_BREAK_PAGE || st == LAYOUT_BREAK_LINE)
                               continue;
                         }

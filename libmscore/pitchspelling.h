@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: pitchspelling.h 5163 2011-12-30 09:57:08Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -45,14 +44,11 @@ const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (
 //    Midi pitch 60 is middle C.
 //---------------------------------------------------------
 
-inline static int pitch2tpc(int pitch)
-      {
-      return (((((pitch % 12) * 7) % 12) + 5) % 12) + 9;
-      }
+// pitch2tpc(pitch) replaced by pitch2tpc(pitch, KEY_C, PREFER_NEAREST)
 
-int pitch2tpc2(int pitch, bool preferSharp);
+enum { PREFER_FLATS=8, PREFER_NEAREST=11, PREFER_SHARPS=13 };
 
-extern int pitch2tpc(int pitch, int key);
+extern int pitch2tpc(int pitch, int key, int prefer);
 
 extern void spell(QList<Event>& notes, int);
 extern void spell(QList<Note*>& notes);

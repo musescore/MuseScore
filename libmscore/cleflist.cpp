@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -41,7 +40,7 @@ ClefTypeList ClefList::clef(int tick) const
       {
       if (empty())
             return ClefTypeList(CLEF_G, CLEF_G);
-      ciClefEvent i = upperBound(tick);
+      auto i = upperBound(tick);
       if (i == begin())
             return ClefTypeList(CLEF_G, CLEF_G);
       --i;

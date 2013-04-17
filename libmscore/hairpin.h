@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: hairpin.h 5242 2012-01-23 17:25:56Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer
 //
@@ -38,11 +37,14 @@ class HairpinSegment : public LineSegment {
       virtual ElementType type() const      { return HAIRPIN_SEGMENT; }
       virtual void draw(QPainter*) const;
       virtual void layout();
+      virtual QVariant getProperty(P_ID id) const;
+      virtual bool setProperty(P_ID id, const QVariant& v);
+      virtual QVariant propertyDefault(P_ID id) const;
       };
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//   @P subtype    enum HairpinType CRESCENDO, DECRESCENDO
+//   @P hairpinType enum HairpinType CRESCENDO, DECRESCENDO
 //   @P veloChange int
 //   @P dynRange   enum Element::DynamicRange
 //---------------------------------------------------------
@@ -55,11 +57,11 @@ class Hairpin : public SLine {
       enum HairpinType { CRESCENDO, DECRESCENDO };
 
    private:
-      Q_PROPERTY(HairpinType subtype     READ subtype     WRITE undoSetSubtype)
+      Q_PROPERTY(HairpinType hairpinType READ hairpinType WRITE undoSetHairpinType)
       Q_PROPERTY(int         veloChange  READ veloChange  WRITE undoSetVeloChange)
       Q_PROPERTY(Element::DynamicRange   dynRange READ dynRange WRITE undoSetDynRange)
 
-      HairpinType _subtype;
+      HairpinType _hairpinType;
       int _veloChange;
       DynamicRange _dynRange;
 
@@ -68,9 +70,9 @@ class Hairpin : public SLine {
       virtual Hairpin* clone() const   { return new Hairpin(*this); }
       virtual ElementType type() const { return HAIRPIN;  }
 
-      HairpinType subtype() const      { return _subtype; }
-      void setSubtype(HairpinType val) { _subtype = val;  }
-      void undoSetSubtype(HairpinType);
+      HairpinType hairpinType() const      { return _hairpinType; }
+      void setHairpinType(HairpinType val) { _hairpinType = val;  }
+      void undoSetHairpinType(HairpinType);
 
       Segment* segment() const         { return (Segment*)parent(); }
       virtual void layout();
