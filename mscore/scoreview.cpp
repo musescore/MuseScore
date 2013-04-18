@@ -5018,43 +5018,80 @@ void ScoreView::search(const QString& s)
       bool ok;
 
       int n = s.toInt(&ok);
-      if (!ok || n <= 0)
-            return;
-      search(n);
+      if (ok && n >= 0)
+            searchMeasure(n);
+      else {
+            if (s.size() >= 2 && s[0].toLower() == 'p' && s[1].isNumber()) {
+                  n = s.mid(1).toInt(&ok);
+                  if (ok && n >= 0)
+                        searchPage(n);
+                  }
+            }
       }
 
-void ScoreView::search(int n)
+//---------------------------------------------------------
+//   searchPage
+//---------------------------------------------------------
+
+void ScoreView::searchPage(int n)
+      {
+      printf("search page %d\n", n);
+      if (n >= _score->npages())
+            n = _score->npages() - 1;
+      const Page* page = _score->pages()[n];
+      foreach (System* s, *page->systems()) {
+            if (s->firstMeasure()) {
+                  gotoMeasure(s->firstMeasure());
+                  return;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   searchMeasure
+//---------------------------------------------------------
+
+void ScoreView::searchMeasure(int n)
       {
       int i = 0;
       for (Measure* measure = _score->firstMeasure(); measure; measure = measure->nextMeasure()) {
             if (++i < n)
                   continue;
-            adjustCanvasPosition(measure, true);
-            int tracks = _score->nstaves() * VOICES;
-            for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-                  if (segment->segmentType() != Segment::SegChordRest)
-                        continue;
-                  int track;
-                  for (track = 0; track < tracks; ++track) {
-                        ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
-                        if (cr) {
-                              Element* e;
-                              if(cr->type() == Element::CHORD)
-                                    e =  static_cast<Chord*>(cr)->upNote();
-                              else //REST
-                                    e = cr;
-
-                              _score->select(e, SELECT_SINGLE, 0);
-                              break;
-                              }
-                        }
-                  if (track != tracks)
-                        break;
-                  }
-            _score->setUpdateAll(true);
-            _score->end();
+            gotoMeasure(measure);
             break;
             }
+      }
+
+//---------------------------------------------------------
+//   gotoMeasure
+//---------------------------------------------------------
+
+void ScoreView::gotoMeasure(Measure* measure)
+      {
+      adjustCanvasPosition(measure, true);
+      int tracks = _score->nstaves() * VOICES;
+      for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+            if (segment->segmentType() != Segment::SegChordRest)
+                  continue;
+            int track;
+            for (track = 0; track < tracks; ++track) {
+                  ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
+                  if (cr) {
+                        Element* e;
+                        if (cr->type() == Element::CHORD)
+                              e =  static_cast<Chord*>(cr)->upNote();
+                        else //REST
+                              e = cr;
+
+                        _score->select(e, SELECT_SINGLE, 0);
+                        break;
+                        }
+                  }
+            if (track != tracks)
+                  break;
+            }
+      _score->setUpdateAll(true);
+      _score->end();
       }
 
 //---------------------------------------------------------
