@@ -334,12 +334,11 @@ bool ZInstrument::loadSfz(const QString& s)
       g.init(path);
 
       bool groupMode = false;
-      msynth()->setLoadProgress(0);
-      qint64 progress = 0;
+      emit progress(0);
+
       while (!f.atEnd()) {
             QByteArray ba = f.readLine();
-            progress += ba.size();
-            msynth()->setLoadProgress( ((qreal)progress*100) / total);
+            emit progress(((qreal)f.pos() * 100) / total);
             ba = ba.simplified();
             if (ba.isEmpty() || ba.startsWith("//"))
                   continue;
@@ -367,6 +366,7 @@ bool ZInstrument::loadSfz(const QString& s)
                         r.readOp(bb);
                   }
             }
+      emit progress(100);
       if (!groupMode && !r.isEmpty())
             addRegion(r);
       return true;
