@@ -857,11 +857,13 @@ void PreferenceDialog::updateValues()
             }
 
       QFileInfoList l = FluidS::Fluid::sfFiles();
+      defaultSf->addItem("", "");
       foreach (const QFileInfo& fi, l)
             defaultSf->addItem(fi.fileName(), fi.fileName());
       defaultSf->setCurrentIndex(defaultSf->findData(prefs.defaultSf));
 
       l = Zerberus::sfzFiles();
+      defaultSfz->addItem("", "");
       foreach (const QFileInfo& fi, l)
             defaultSfz->addItem(fi.fileName(), fi.fileName());
       defaultSfz->setCurrentIndex(defaultSfz->findData(prefs.defaultSfz));
