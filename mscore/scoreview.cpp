@@ -4617,7 +4617,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       InputState& is = _score->inputState();
       if (is.track() == -1)          // invalid state
             return;
-      if (is.segment() == 0 /*|| is.cr() == 0*/) {
+      if (is.segment() == 0) {
             qDebug("cannot enter notes here (no chord rest at current position)");
             return;
             }
@@ -4673,7 +4673,10 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
       pos.line      = relStep(octave * 7 + note, clef);
 
-      score()->putNote(pos, !addFlag);
+      if (is.repitchMode())
+            score()->repitchNote(pos, !addFlag);
+      else
+            score()->putNote(pos, !addFlag);
       _score->endCmd();
       }
 
@@ -4684,7 +4687,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
 
 void ScoreView::cmdAddFret(int fret)
       {
-      if(mscoreState() != STATE_NOTE_ENTRY_TAB) // only acceptable in TAB note entry
+      if (mscoreState() != STATE_NOTE_ENTRY_TAB) // only acceptable in TAB note entry
             return;
       InputState& is = _score->inputState();
       if (is.track() == -1)                     // invalid state
