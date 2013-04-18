@@ -42,6 +42,7 @@ Zerberus::Zerberus()
             freeVoices.push(new Voice(this));
       for (int i = 0; i < MAX_CHANNEL; ++i)
             _channel[i] = new Channel(this, i);
+      busy = true;      // no sf loaded yet
       }
 
 //---------------------------------------------------------
@@ -50,6 +51,7 @@ Zerberus::Zerberus()
 
 Zerberus::~Zerberus()
       {
+      busy = true;
       while (!instruments.empty()) {
             auto i  = instruments.front();
             auto it = instruments.begin();
@@ -57,6 +59,7 @@ Zerberus::~Zerberus()
 
             i->setRefCount(i->refCount() - 1);
             if (i->refCount() <= 0) {
+printf("delete sf <%s>\n", qPrintable(i->name()));
                   delete i;
                   auto it = find(globalInstruments.begin(), globalInstruments.end(), i);
                   if (it != globalInstruments.end())
@@ -205,8 +208,10 @@ void Zerberus::play(const PlayEvent& event)
 
 void Zerberus::process(unsigned frames, float* p, float*, float*)
       {
-      if (busy)
+      if (busy) {
+            printf("busy\n");
             return;
+            }
       Voice* v = activeVoices;
       Voice* pv = 0;
       while (v) {
@@ -336,6 +341,7 @@ bool Zerberus::removeSoundFont(const QString& s)
                         if (it == globalInstruments.end())
                               return false;
                         globalInstruments.erase(it);
+printf("delete sf <%s>\n", qPrintable(i->name()));
                         delete i;
                         }
                   return true;
@@ -393,6 +399,7 @@ ZInstrument* Zerberus::instrument(int n) const
 
 bool Zerberus::loadInstrument(const QString& s)
       {
+      printf("Zerberus::loadInstrument(%s)\n", qPrintable(s));
       if (s.isEmpty())
             return false;
       for (ZInstrument* instr : instruments) {
@@ -406,6 +413,11 @@ bool Zerberus::loadInstrument(const QString& s)
                   instruments.push_back(instr);
                   instr->setRefCount(instr->refCount() + 1);
                   printf("2: sf already loaded\n");
+                  if (instruments.size() == 1) {
+                        for (int i = 0; i < MAX_CHANNEL; ++i)
+                              _channel[i]->setInstrument(instr);
+                        }
+                  busy = false;
                   return true;
                   }
             }
