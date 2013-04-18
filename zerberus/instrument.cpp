@@ -158,10 +158,10 @@ Sample* ZInstrument::readSample(const QString& s, QZipReader* uz)
 //   ZInstrument
 //---------------------------------------------------------
 
-ZInstrument::ZInstrument(Zerberus* s)
+ZInstrument::ZInstrument()
       {
-      _msynth  = s;
-      _program = -1;
+      _program  = -1;
+      _refCount = 0;
       }
 
 //---------------------------------------------------------

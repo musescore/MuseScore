@@ -24,6 +24,8 @@
 #include <stdio.h>
 
 bool Zerberus::initialized = false;
+// instruments can be shared between several zerberus instances
+std::list<ZInstrument*> Zerberus::globalInstruments;
 
 //---------------------------------------------------------
 //   Zerberus
@@ -48,6 +50,19 @@ Zerberus::Zerberus()
 
 Zerberus::~Zerberus()
       {
+      while (!instruments.empty()) {
+            auto i  = instruments.front();
+            auto it = instruments.begin();
+            instruments.erase(it);
+
+            i->setRefCount(i->refCount() - 1);
+            if (i->refCount() <= 0) {
+                  delete i;
+                  auto it = find(globalInstruments.begin(), globalInstruments.end(), i);
+                  if (it != globalInstruments.end())
+                        globalInstruments.erase(it);
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -99,44 +114,6 @@ void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger)
                         }
                   }
             }
-      }
-
-//---------------------------------------------------------
-//   loadInstrument
-//    return true on success
-//---------------------------------------------------------
-
-bool Zerberus::loadInstrument(const QString& s)
-      {
-      if (s.isEmpty())
-            return false;
-      for (ZInstrument* instr : instruments) {
-            if (instr->path() == s)    // already loaded?
-                  return true;
-            }
-      QFileInfoList l = Zerberus::sfzFiles();
-      QString path;
-      foreach (const QFileInfo& fi, l) {
-            if (fi.fileName() == s) {
-                  path = fi.absoluteFilePath();
-                  break;
-                  }
-            }
-      busy = true;
-      ZInstrument* instr = new ZInstrument(this);
-      if (instr->load(path)) {
-            instruments.push_back(instr);
-            if (instruments.size() == 1) {
-                  for (int i = 0; i < MAX_CHANNEL; ++i)
-                        _channel[i]->setInstrument(instr);
-                  }
-            busy = false;
-            return true;
-            }
-      qDebug("Zerberus::loadInstrument failed");
-      busy = false;
-      delete instr;
-      return false;
       }
 
 //---------------------------------------------------------
@@ -353,7 +330,14 @@ bool Zerberus::removeSoundFont(const QString& s)
                                     _channel[i]->setInstrument(instruments.front());
                               }
                         }
-                  delete i;
+                  i->setRefCount(i->refCount() - 1);
+                  if (i->refCount() <= 0) {
+                        auto it = find(globalInstruments.begin(), globalInstruments.end(), i);
+                        if (it == globalInstruments.end())
+                              return false;
+                        globalInstruments.erase(it);
+                        delete i;
+                        }
                   return true;
                   }
             }
@@ -402,3 +386,58 @@ ZInstrument* Zerberus::instrument(int n) const
       return 0;
       }
 
+//---------------------------------------------------------
+//   loadInstrument
+//    return true on success
+//---------------------------------------------------------
+
+bool Zerberus::loadInstrument(const QString& s)
+      {
+      if (s.isEmpty())
+            return false;
+      for (ZInstrument* instr : instruments) {
+            if (QFileInfo(instr->path()).fileName() == s) {   // already loaded?
+                  printf("sf already loaded\n");
+                  return true;
+                  }
+            }
+      for (ZInstrument* instr : globalInstruments) {
+            if (QFileInfo(instr->path()).fileName() == s) {
+                  instruments.push_back(instr);
+                  instr->setRefCount(instr->refCount() + 1);
+                  printf("2: sf already loaded\n");
+                  return true;
+                  }
+            }
+
+      QFileInfoList l = Zerberus::sfzFiles();
+      QString path;
+      foreach (const QFileInfo& fi, l) {
+            if (fi.fileName() == s) {
+                  path = fi.absoluteFilePath();
+                  break;
+                  }
+            }
+      busy = true;
+      ZInstrument* instr = new ZInstrument();
+      connect(instr, SIGNAL(progress(int)), SLOT(setLoadProgress(int)));
+
+      if (instr->load(path)) {
+            globalInstruments.push_back(instr);
+            instruments.push_back(instr);
+            instr->setRefCount(1);
+            //
+            // set default instrument for all channels:
+            //
+            if (instruments.size() == 1) {
+                  for (int i = 0; i < MAX_CHANNEL; ++i)
+                        _channel[i]->setInstrument(instr);
+                  }
+            busy = false;
+            return true;
+            }
+      qDebug("Zerberus::loadInstrument failed");
+      busy = false;
+      delete instr;
+      return false;
+      }
