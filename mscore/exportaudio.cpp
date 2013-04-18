@@ -80,10 +80,11 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       EventMap::const_iterator endPos = events.cend();
       --endPos;
       const int et = (score->utick2utime(endPos->first) + 1) * MScore::sampleRate;
+      pBar->setRange(0, et);
+
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
             playPos = events.cbegin();
-            pBar->setRange(0, et);
 
             //
             // init instruments
@@ -148,7 +149,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
                               peak = qMax(peak, qAbs(buffer[i]));
                         }
                   playTime = endTime;
-                  pBar->setValue(playTime);
+                  pBar->setValue((pass * et + playTime) / 2);
 
                   if (playTime >= et)
                         break;
