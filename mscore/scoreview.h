@@ -387,7 +387,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       QRect toPhysical(const QRectF& r) const { return _matrix.mapRect(r).toRect(); }
 
       void search(const QString& s);
-      void search(int i);
+      void searchMeasure(int i);
+      void searchPage(int i);
+      void gotoMeasure(Measure*);
       void selectMeasure(int m);
       void postCmd(const char* cmd)   { sm->postEvent(new CommandEvent(cmd));  }
       void setFocusRect();

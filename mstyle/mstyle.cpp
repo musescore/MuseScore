@@ -174,8 +174,8 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
                         return pixelMetric(PM_DefaultTopLevelMargin, option, widget);
                         }
                   else {
-                        // return pixelMetric(PM_DefaultChildMargin, option, widget);
-                        return 0;
+                        return pixelMetric(PM_DefaultChildMargin, option, widget);
+                        // return 0;
                         }
                   }
 

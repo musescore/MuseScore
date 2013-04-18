@@ -154,7 +154,7 @@ void MuseScore::oscGoto(int m)
       qDebug("GOTO %d", m);
       if (cv == 0)
             return;
-      cv->search(m);
+      cv->searchPage(m);
       }
 
 void MuseScore::oscSelectMeasure(int m)
