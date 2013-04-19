@@ -2324,11 +2324,12 @@ void ChangePageFormat::flip()
 //   ChangeStaff
 //---------------------------------------------------------
 
-ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, StaffType* st)
+ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, qreal _userDist, StaffType* st)
       {
       staff     = _staff;
       small     = _small;
       invisible = _invisible;
+      userDist  = _userDist;
       staffType = st;
       }
 
@@ -2343,14 +2344,17 @@ void ChangeStaff::flip()
 
       int oldSmall      = staff->small();
       bool oldInvisible = staff->invisible();
+      qreal oldUserDist = staff->userDist();
       StaffType* st     = staff->staffType();
 
       staff->setSmall(small);
       staff->setInvisible(invisible);
+      staff->setUserDist(userDist);
       staff->setStaffType(staffType);
 
       small     = oldSmall;
       invisible = oldInvisible;
+      userDist  = oldUserDist;
       staffType = st;
 
       if (invisibleChanged || typeChanged) {
