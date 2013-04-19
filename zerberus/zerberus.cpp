@@ -59,7 +59,6 @@ Zerberus::~Zerberus()
 
             i->setRefCount(i->refCount() - 1);
             if (i->refCount() <= 0) {
-printf("delete sf <%s>\n", qPrintable(i->name()));
                   delete i;
                   auto it = find(globalInstruments.begin(), globalInstruments.end(), i);
                   if (it != globalInstruments.end())
@@ -74,7 +73,7 @@ printf("delete sf <%s>\n", qPrintable(i->name()));
 
 void Zerberus::programChange(int channel, int program)
       {
-      printf("Zerberus programChange %d %d\n", channel, program);
+      qDebug("Zerberus programChange %d %d", channel, program);
       }
 
 //---------------------------------------------------------
@@ -85,12 +84,10 @@ void Zerberus::programChange(int channel, int program)
 void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger)
       {
       ZInstrument* i = channel->instrument();
-// printf("trigger %d %d type %d\n", key, velo, trigger);
       for (Zone* z : i->zones()) {
             if (z->match(channel, key, velo, trigger)) {
-//                  printf("  match %d\n", z->trigger);
                   if (freeVoices.empty()) {
-                        printf("out of voices...\n");
+                        qDebug("Zerberus: out of voices...");
                         return;
                         }
                   Voice* voice = freeVoices.pop();
@@ -135,10 +132,8 @@ void Zerberus::processNoteOff(Channel* cp, int key)
                         trigger(cp, key, v->velocity(), Trigger::RELEASE);
                         }
                   else {
-                        if (v->isPlaying()) {
-                              // printf("sustain %p\n", v);
+                        if (v->isPlaying())
                               v->sustained();
-                              }
                         }
                   }
             }
@@ -172,7 +167,7 @@ void Zerberus::play(const PlayEvent& event)
             return;
       Channel* cp = _channel[int(event.channel())];
       if (cp->instrument() == 0) {
-//            printf("Zerberus::play(): no instrument for channel %d\n", event.channel());
+            // qDebug("Zerberus::play(): no instrument for channel %d", event.channel());
             return;
             }
 
@@ -196,7 +191,7 @@ void Zerberus::play(const PlayEvent& event)
                   break;
 
             default:
-                  printf("event type 0x%02x\n", event.type());
+                  qDebug("Zerberus: event type 0x%02x", event.type());
                   break;
             }
       }
@@ -208,10 +203,8 @@ void Zerberus::play(const PlayEvent& event)
 
 void Zerberus::process(unsigned frames, float* p, float*, float*)
       {
-      if (busy) {
-            printf("busy\n");
+      if (busy)
             return;
-            }
       Voice* v = activeVoices;
       Voice* pv = 0;
       while (v) {
@@ -341,7 +334,6 @@ bool Zerberus::removeSoundFont(const QString& s)
                         if (it == globalInstruments.end())
                               return false;
                         globalInstruments.erase(it);
-printf("delete sf <%s>\n", qPrintable(i->name()));
                         delete i;
                         }
                   return true;
@@ -399,12 +391,10 @@ ZInstrument* Zerberus::instrument(int n) const
 
 bool Zerberus::loadInstrument(const QString& s)
       {
-      printf("Zerberus::loadInstrument(%s)\n", qPrintable(s));
       if (s.isEmpty())
             return false;
       for (ZInstrument* instr : instruments) {
             if (QFileInfo(instr->path()).fileName() == s) {   // already loaded?
-                  printf("sf already loaded\n");
                   return true;
                   }
             }
@@ -412,7 +402,6 @@ bool Zerberus::loadInstrument(const QString& s)
             if (QFileInfo(instr->path()).fileName() == s) {
                   instruments.push_back(instr);
                   instr->setRefCount(instr->refCount() + 1);
-                  printf("2: sf already loaded\n");
                   if (instruments.size() == 1) {
                         for (int i = 0; i < MAX_CHANNEL; ++i)
                               _channel[i]->setInstrument(instr);

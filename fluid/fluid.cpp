@@ -646,7 +646,7 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
       {
       QStringList ol = soundFonts();
       if (ol == sl) {
-            // printf("Fluid:loadSoundFonts: already loaded\n");
+            qDebug("Fluid:loadSoundFonts: already loaded");
             return true;
             }
       mutex.lock();
@@ -672,6 +672,7 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
                         break;
                         }
                   }
+            qDebug("Fluid: load sf %s\n", qPrintable(path));
             if (sfload(path, true) == -1) {
                   qDebug("loading sf failed: <%s>", qPrintable(path));
                   ok = false;
@@ -963,7 +964,7 @@ SynthesizerGroup Fluid::state() const
       g.setName(name());
 
       QStringList sfl = soundFonts();
-      foreach(QString sf, sfl)
+      foreach (QString sf, sfl)
             g.push_back(IdValue(0, sf));
 
       return g;
@@ -973,12 +974,14 @@ SynthesizerGroup Fluid::state() const
 //   setState
 //---------------------------------------------------------
 
-void Fluid::setState(SynthesizerGroup& sp)
+void Fluid::setState(const SynthesizerGroup& sp)
       {
       QStringList sfl;
       for (const IdValue& v : sp) {
             if (v.id == 0)
                   sfl.append(v.data);
+            else
+                  qDebug("Fluid::setState: unknown id %d", v.id);
             }
       loadSoundFonts(sfl);
       }
@@ -989,8 +992,6 @@ void Fluid::setState(SynthesizerGroup& sp)
 
 static void collectFiles(QFileInfoList* l, const QString& path)
       {
-      // printf("collect files <%s>\n", qPrintable(path));
-
       QDir dir(path);
       foreach (const QFileInfo& s, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
             if (path == s.absoluteFilePath())

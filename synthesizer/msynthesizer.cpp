@@ -322,6 +322,7 @@ int MasterSynthesizer::indexOfEffect(int ab)
 void MasterSynthesizer::setState(const SynthesizerState& ss)
       {
       for (const SynthesizerGroup& g : ss) {
+            printf("setState: group %s\n", qPrintable(g.name()));
             if (g.name() == "master") {
                   for (const IdValue& v : g) {
                         switch (v.id) {
@@ -339,11 +340,14 @@ void MasterSynthesizer::setState(const SynthesizerState& ss)
                               case 3:
                                     setMasterTuning(v.data.toDouble());
                                     break;
+                              default:
+                                    qDebug("MasterSynthesizer::setState: unknown master id <%d>", v.id);
                               }
                         }
                   }
             else {
                   Synthesizer* s = synthesizer(g.name());
+                  printf("synti <%s> %p\n", qPrintable(g.name()), s);
                   if (s)
                         s->setState(g);
                   else {
@@ -351,6 +355,8 @@ void MasterSynthesizer::setState(const SynthesizerState& ss)
                               effect(0)->setState(g);
                         else if (effect(1) && effect(1)->name() == g.name())
                               effect(1)->setState(g);
+                        else
+                              qDebug("MasterSynthesizer::setState: unknown <%s>", qPrintable(g.name()));
                         }
                   }
             }
