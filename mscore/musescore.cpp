@@ -275,11 +275,6 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       if (playPanel)
             preferences.playPanelPos = playPanel->pos();
 
-      if (synthControl) {
-            synthControl->updatePreferences();
-            synthControl->writeSettings();
-            }
-
       writeSettings();
       if (debugger)
             debugger->writeSettings();
@@ -2166,8 +2161,6 @@ static void mscoreMessageHandler(QtMsgType type, const char *msg)
 MasterSynthesizer* synthesizerFactory()
       {
       MasterSynthesizer* ms = new MasterSynthesizer();
-      ms->setMasterTuning(preferences.tuning);
-      ms->setGain(preferences.masterGain);
 
       FluidS::Fluid* fluid = new FluidS::Fluid();
       ms->registerSynthesizer(fluid);

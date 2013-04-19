@@ -141,14 +141,6 @@ struct Preferences {
       //update
       int checkUpdateStartup;
 
-      float tuning;                 // synthesizer master tuning offset (440Hz)
-      float masterGain;             // synthesizer master gain
-      float chorusGain;
-      float reverbGain;
-      float reverbRoomSize;
-      float reverbDamp;
-      float reverbWidth;
-
       bool followSong;
       QString importCharset;
       QString importStyleFile;

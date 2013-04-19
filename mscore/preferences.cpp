@@ -187,14 +187,6 @@ void Preferences::init()
 
       checkUpdateStartup      = 0;
 
-      tuning                  = 440.0f;
-      masterGain              = 0.2;
-      chorusGain              = 0.5;
-      reverbGain              = 0.5;
-      reverbRoomSize          = 0.5;
-      reverbDamp              = 0.5;
-      reverbWidth             = 1.0;
-
       followSong              = true;
       importCharset           = "GBK";
       importStyleFile         = "";
@@ -332,13 +324,6 @@ void Preferences::write()
       s.setValue("spatium",     MScore::defaultStyle()->spatium() / MScore::DPI);
 
       s.setValue("mag", mag);
-      s.setValue("tuning", tuning);
-      s.setValue("masterGain", masterGain);
-      s.setValue("chorusGain", chorusGain);
-      s.setValue("reverbGain", reverbGain);
-      s.setValue("reverbRoomSize", reverbRoomSize);
-      s.setValue("reverbDamp", reverbDamp);
-      s.setValue("reverbWidth", reverbWidth);
 
       s.setValue("defaultPlayDuration", MScore::defaultPlayDuration);
       s.setValue("importStyleFile", importStyleFile);
@@ -477,14 +462,6 @@ void Preferences::read()
       replaceCopyrightSymbol = s.value("replaceCopyrightSymbol", replaceCopyrightSymbol).toBool();
 
       mag                    = s.value("mag", mag).toDouble();
-
-      tuning                 = s.value("tuning", tuning).toDouble();
-      masterGain             = s.value("masterGain",     masterGain).toDouble();
-      chorusGain             = s.value("chorusGain",     chorusGain).toDouble();
-      reverbGain             = s.value("reverbGain",     reverbGain).toDouble();
-      reverbRoomSize         = s.value("reverbRoomSize", reverbRoomSize).toDouble();
-      reverbDamp             = s.value("reverbDamp",     reverbDamp).toDouble();
-      reverbWidth            = s.value("reverbWidth",    reverbWidth).toDouble();
 
       MScore::defaultPlayDuration = s.value("defaultPlayDuration", MScore::defaultPlayDuration).toInt();
       importStyleFile        = s.value("importStyleFile", importStyleFile).toString();
