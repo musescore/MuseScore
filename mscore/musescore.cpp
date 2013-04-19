@@ -2171,25 +2171,12 @@ MasterSynthesizer* synthesizerFactory()
 
       FluidS::Fluid* fluid = new FluidS::Fluid();
       ms->registerSynthesizer(fluid);
-      if (!preferences.defaultSf.isEmpty()) {
-            QStringList sfl;
-            sfl.append(preferences.defaultSf);
-            fluid->loadSoundFonts(sfl);
-            fluid->gui()->synthesizerChanged();
-            }
 
 #ifdef AEOLUS
       ms->registerSynthesizer(new Aeolus());
 #endif
 #ifdef ZERBERUS
-      Zerberus* zerberus = new Zerberus();
-      ms->registerSynthesizer(zerberus);
-      if (!preferences.defaultSfz.isEmpty()) {
-            QStringList sfz;
-            sfz.append(preferences.defaultSfz);
-            zerberus->loadSoundFonts(sfz);
-            zerberus->gui()->synthesizerChanged();
-            }
+      ms->registerSynthesizer(new Zerberus);
 #endif
       ms->registerEffect(0, new NoEffect);
       ms->registerEffect(0, new ZitaReverb);
@@ -2450,6 +2437,7 @@ int main(int argc, char* av[])
                   synti              = synthesizerFactory();
                   MScore::sampleRate = driver->sampleRate();
                   synti->setSampleRate(MScore::sampleRate);
+                  synti->init();
 
                   seq->setDriver(driver);
                   seq->setMasterSynthesizer(synti);

@@ -51,7 +51,10 @@ void EffectGui::init(QUrl& url)
 
 void EffectGui::valueChanged(const QString& msg, qreal val)
       {
-      _effect->setValue(msg, val);
+      if (_effect->value(msg) != val) {
+            _effect->setValue(msg, val);
+            emit valueChanged();
+            }
       }
 
 //---------------------------------------------------------

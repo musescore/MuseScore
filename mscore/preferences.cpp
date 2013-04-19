@@ -218,9 +218,6 @@ void Preferences::init()
       sfPath          = QDir(QString("%1%2;%3/%4").arg(mscoreGlobalShare).arg("sound").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
       sfzPath         = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("sfz_files_directory",  "SfzFiles"))).absolutePath();
 
-      defaultSf = "fluid.sf3";
-      defaultSfz = "";
-
       nudgeStep10             = 1.0;      // Ctrl + cursor key (default 1.0)
       nudgeStep50             = 5.0;      // Alt  + cursor key (default 5.0)
 
@@ -268,8 +265,6 @@ void Preferences::write()
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("playNotes",          playNotes);
 
-      s.setValue("defaultSf",          defaultSf);
-      s.setValue("defaultSfz",         defaultSfz);
       s.setValue("lPort",              lPort);
       s.setValue("rPort",              rPort);
       s.setValue("showNavigator",      showNavigator);
@@ -430,8 +425,6 @@ void Preferences::read()
       lPort                   = s.value("lPort", lPort).toString();
       rPort                   = s.value("rPort", rPort).toString();
 
-      defaultSf       = s.value("defaultSf",     defaultSf).toString();
-      defaultSfz      = s.value("defaultSfz",    defaultSfz).toString();
       showNavigator   = s.value("showNavigator", showNavigator).toBool();
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
       showPlayPanel   = s.value("showPlayPanel", showPlayPanel).toBool();
@@ -855,18 +848,6 @@ void PreferenceDialog::updateValues()
             jackRPort->setEnabled(false);
             jackLPort->setEnabled(false);
             }
-
-      QFileInfoList l = FluidS::Fluid::sfFiles();
-      defaultSf->addItem("", "");
-      foreach (const QFileInfo& fi, l)
-            defaultSf->addItem(fi.fileName(), fi.fileName());
-      defaultSf->setCurrentIndex(defaultSf->findData(prefs.defaultSf));
-
-      l = Zerberus::sfzFiles();
-      defaultSfz->addItem("", "");
-      foreach (const QFileInfo& fi, l)
-            defaultSfz->addItem(fi.fileName(), fi.fileName());
-      defaultSfz->setCurrentIndex(defaultSfz->findData(prefs.defaultSfz));
 
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
@@ -1299,8 +1280,6 @@ void PreferenceDialog::apply()
             prefs.lPort = jackLPort->currentText();
             prefs.rPort = jackRPort->currentText();
             }
-      prefs.defaultSf          = defaultSf->itemData(defaultSf->currentIndex()).toString();
-      prefs.defaultSfz         = defaultSfz->itemData(defaultSfz->currentIndex()).toString();
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
       prefs.showWebPanel       = webPanelShow->isChecked();
