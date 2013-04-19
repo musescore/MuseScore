@@ -51,6 +51,8 @@ class BSymbol : public Element, public ElementLayout {
 
       const QList<Element*>& leafs() const { return _leafs; }
       QList<Element*>& leafs()             { return _leafs; }
+      virtual qreal yOffset() const;
+//      virtual void setYoff(qreal val);
       virtual QPointF pagePos() const;
       virtual QPointF canvasPos() const;
       virtual QLineF dragAnchor() const;
@@ -59,6 +61,7 @@ class BSymbol : public Element, public ElementLayout {
       void setZ(int val)                  { _z = val;  }
       bool systemFlag() const             { return _systemFlag; }
       void setSystemFlag(bool val)        { _systemFlag = val;  }
+      QVariant propertyDefault(P_ID id) const;
       };
 
 

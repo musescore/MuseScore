@@ -48,9 +48,9 @@ class TextStyle {
       TextStyle();
       TextStyle(QString _name, QString _family,
          qreal _size,
-         bool _bold, bool _italic, bool _underline,
+         bool _bold, bool _italic, bool _underline, Element::Placement _defPlac,
          Align _align,
-         const QPointF& _off = QPointF(), OffsetType _ot = OFFSET_SPATIUM,
+         qreal _offsetX = 0.0, qreal _offsetYAbove = 0.0, qreal _offsetYBelow = 0.0, OffsetType _ot = OFFSET_SPATIUM,
          const QPointF& _roff = QPointF(),
          bool sd = false,
          Spatium fw = Spatium(0.0), Spatium pw = Spatium(0.0), int fr = 25,
@@ -71,9 +71,13 @@ class TextStyle {
       bool underline() const;
       bool hasFrame() const;
       Align align() const;
+      Element::Placement defaultPlacement() const;
       OffsetType offsetType() const;
-      const QPointF& offset() const;
-      QPointF offset(qreal spatium) const;
+      QPointF offset(qreal spatium) const;      // return absolute offset values for non-staff elements
+      QPointF offset(Element::Placement plac, Staff* st) const;
+      QPointF offset(Element::Placement plac, Staff *st, qreal spatium) const;
+      qreal xOffset() const;
+      qreal yOffset(Element::Placement plac) const;
       const QPointF& reloff() const;
       void setReloff(const QPointF& p);
       bool sizeIsSpatiumDependent() const;
@@ -99,8 +103,9 @@ class TextStyle {
       void setUnderline(bool v);
       void setHasFrame(bool v);
       void setAlign(Align v);
+      void setDefaultPlacement(Element::Placement v);
       void setXoff(qreal v);
-      void setYoff(qreal v);
+      void setYoff(qreal v, Element::Placement pl);
       void setOffsetType(OffsetType v);
       void setRxoff(qreal v);
       void setRyoff(qreal v);

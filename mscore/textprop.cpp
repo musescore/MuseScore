@@ -88,7 +88,8 @@ void TextProp::mmToggled(bool val)
       {
       QString unit(val ? tr("mm", "millimeter unit") : tr("sp", "spatium unit"));
       xOffset->setSuffix(unit);
-      yOffset->setSuffix(unit);
+      yOffsetAbove->setSuffix(unit);
+      yOffsetBelow->setSuffix(unit);
       }
 
 //---------------------------------------------------------
@@ -164,15 +165,19 @@ void TextProp::setTextStyle(const TextStyle& s)
             alignTop->setChecked(true);
 
 //      QString str;
+      radioAboveStaff->setChecked(s.defaultPlacement() == Element::ABOVE);
+      radioBelowStaff->setChecked(s.defaultPlacement() == Element::BELOW);
       if (s.offsetType() == OFFSET_ABS) {
-            xOffset->setValue(s.offset().x() * INCH);
-            yOffset->setValue(s.offset().y() * INCH);
+            xOffset->setValue(s.xOffset() * INCH);
+            yOffsetAbove->setValue(s.yOffset(Element::ABOVE) * INCH);
+            yOffsetBelow->setValue(s.yOffset(Element::BELOW) * INCH);
             mmUnit->setChecked(true);
             curUnit = 0;
             }
       else if (s.offsetType() == OFFSET_SPATIUM) {
-            xOffset->setValue(s.offset().x());
-            yOffset->setValue(s.offset().y());
+            xOffset->setValue(s.xOffset());
+            yOffsetAbove->setValue(s.yOffset(Element::ABOVE));
+            yOffsetBelow->setValue(s.yOffset(Element::BELOW));
             spatiumUnit->setChecked(true);
             curUnit = 1;
             }
@@ -214,8 +219,10 @@ TextStyle TextProp::textStyle() const
       s.setSize(fontSize->value());
       QFont f = fontSelect->currentFont();
       s.setFamily(f.family());
+      s.setDefaultPlacement(radioAboveStaff->isChecked() ? Element::ABOVE : Element::BELOW);
       s.setXoff(xOffset->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0));
-      s.setYoff(yOffset->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0));
+      s.setYoff(yOffsetAbove->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0), Element::ABOVE);
+      s.setYoff(yOffsetBelow->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0), Element::BELOW);
       s.setRxoff(rxOffset->value());
       s.setRyoff(ryOffset->value());
       s.setFrameColor(frameColor->color());

@@ -20,8 +20,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 BSymbol::BSymbol(Score* s)
-   : Element(s)
+      : Element(s), ElementLayout()
       {
+      setPlacement(Element::ABOVE);
       _z = SYMBOL * 100;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       _systemFlag = false;
@@ -187,6 +188,17 @@ QRectF BSymbol::drag(const EditData& data)
       return r;
       }
 
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant BSymbol::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_PLACEMENT:  return Element::ABOVE;
+            default:           return Element::propertyDefault(id);
+            }
+      }
 
 }
 

@@ -85,7 +85,7 @@ class SimpleText : public Element {
 
       SimpleText &operator=(const SimpleText&);
 
-      void setTextStyle(const TextStyle& st)  { _textStyle = st;   }
+      void setTextStyle(const TextStyle& st)  { _textStyle = st; setPlacement(st.defaultPlacement());  }
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
 
@@ -135,6 +135,7 @@ class SimpleText : public Element {
 
       void insertText(const QString&);
       void selectAll();
+      QVariant propertyDefault(P_ID id) const;
       };
 
 

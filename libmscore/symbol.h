@@ -50,7 +50,7 @@ class Symbol : public BSymbol {
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       virtual void layout();
-      void setAbove(bool);
+//      void setAbove(bool);
 
       virtual qreal baseLine() const { return 0.0; }
       Segment* segment() const       { return (Segment*)parent(); }

@@ -36,6 +36,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
    protected:
       qreal frameWidthMM;           // for compatibility with old scores
       qreal paddingWidthMM;
+      Element::Placement defaultPlacement;
 
       QString name;                 // style name
       QString family;               // font face
@@ -59,8 +60,9 @@ class TextStyleData : public QSharedData, public ElementLayout {
    public:
       TextStyleData(QString _name, QString _family, qreal _size,
          bool _bold, bool _italic, bool _underline,
+         Element::Placement _defPlac,
          Align _align,
-         const QPointF& _off, OffsetType _ot, const QPointF& _roff,
+         qreal offsetX, qreal offsetYAbove, qreal offsetYBelow, OffsetType _ot, const QPointF& _roff,
          bool sizeSpatiumDependent,
          Spatium fw, Spatium pw, int fr,
          QColor co, bool circle, bool systemFlag,
@@ -72,6 +74,8 @@ class TextStyleData : public QSharedData, public ElementLayout {
       void read(XmlReader&);
       bool readProperties(XmlReader& v);
 
+      virtual qreal yOffset() const  { return (defaultPlacement == Element::ABOVE ? _offsetYAbove : _offsetYBelow); }
+      qreal yOffset(Element::Placement plac) const  { return (plac == Element::ABOVE ? _offsetYAbove : _offsetYBelow); }
       QFont font(qreal space) const;
       QFont fontPx(qreal spatium) const;
       QRectF bbox(qreal space, const QString& s) const { return fontMetrics(space).boundingRect(s); }

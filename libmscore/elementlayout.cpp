@@ -10,11 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "elementlayout.h"
-#include "xml.h"
 #include "element.h"
-#include "text.h"
+#include "elementlayout.h"
 #include "mscore.h"
+#include "staff.h"
+#include "text.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -26,17 +27,24 @@ ElementLayout::ElementLayout()
       {
       _align      = ALIGN_LEFT | ALIGN_BASELINE;
       _offsetType = OFFSET_SPATIUM;
+      _offsetX    = _offsetYAbove = _offsetYBelow = 0.0;
       }
 
 //---------------------------------------------------------
 //   offset
 //---------------------------------------------------------
 
-QPointF ElementLayout::offset(qreal spatium) const
+QPointF ElementLayout::offset(Element::Placement plac, Staff *st) const
       {
-      QPointF o(_offset);
+      return QPointF(_offsetX, plac == Element::ABOVE ? _offsetYAbove
+                  : _offsetYBelow + (st ? (st->lines()-1)*st->lineDistance() : 0.0) );
+      }
+
+QPointF ElementLayout::offset(Element::Placement plac, Staff *st, qreal sp) const
+      {
+      QPointF o = offset(plac, st);
       if (_offsetType == OFFSET_SPATIUM)
-            o *= spatium;
+            o *= sp;
       else
             o *= MScore::DPI;
       return o;
@@ -50,7 +58,7 @@ QPointF ElementLayout::offset(qreal spatium) const
 
 void ElementLayout::layout(Element* e) const
       {
-      QPointF o(offset(e->spatium()));
+      QPointF o(offset(e->placement(), e->staff(), e->spatium()));
       qreal w = 0.0;
       qreal h = 0.0;
       if (e->parent()) {
@@ -108,13 +116,12 @@ void ElementLayout::writeProperties(Xml& xml) const
       else
             xml.tag("valign", "top");
 
-      if (!_offset.isNull()) {
-            QPointF pt(_offset);
-            if (offsetType() == OFFSET_ABS)
-                  pt *= INCH;
-            xml.tag("xoffset", pt.x());         // save in spatium or metric mm
-            xml.tag("yoffset", pt.y());
-            }
+      if (_offsetX != 0.0)
+            xml.tag("xoffset", offsetType() == OFFSET_ABS ? _offsetX * INCH : _offsetX);
+      if (_offsetYAbove != 0.0)
+            xml.tag("yoffsetAbove", offsetType() == OFFSET_ABS ? _offsetYAbove * INCH : _offsetYAbove);
+      if (_offsetYBelow != 0.0)
+            xml.tag("yoffsetBelow", offsetType() == OFFSET_ABS ? _offsetYBelow * INCH : _offsetYBelow);
       if (_reloff.x() != 0.0)
             xml.tag("rxoffset", _reloff.x());
       if (_reloff.y() != 0.0)
@@ -168,11 +175,17 @@ bool ElementLayout::readProperties(XmlReader& e)
                   xo /= INCH;
             setXoff(xo);
             }
-      else if (tag == "yoffset") {
+      else if (tag == "yoffset" || tag == "yoffsetAbove") {
             qreal yo = e.readDouble();
             if (offsetType() == OFFSET_ABS)
                   yo /= INCH;
-            setYoff(yo);
+            setYoff(yo, Element::ABOVE);
+            }
+      else if (tag == "yoffsetBelow") {
+            qreal yo = e.readDouble();
+            if (offsetType() == OFFSET_ABS)
+                  yo /= INCH;
+            setYoff(yo, Element::BELOW);
             }
       else if (tag == "rxoffset")
             setRxoff(e.readDouble());
@@ -185,10 +198,16 @@ bool ElementLayout::readProperties(XmlReader& e)
                   ot = OFFSET_SPATIUM;
             if (ot != offsetType()) {
                   setOffsetType(ot);
-                  if (ot == OFFSET_ABS)
-                        _offset /= INCH;  // convert spatium -> inch
-                  else
-                        _offset *= INCH;  // convert inch -> spatium
+                  if (ot == OFFSET_ABS) {
+                        _offsetX /= INCH; // convert spatium -> inch
+                        _offsetYAbove /= INCH;
+                        _offsetYBelow /= INCH;
+                        }
+                  else {
+                        _offsetX *= INCH; // convert inch -> spatium
+                        _offsetYAbove *= INCH;
+                        _offsetYBelow *= INCH;
+                        }
                   }
             }
       else

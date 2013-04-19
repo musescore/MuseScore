@@ -6,14 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>557</width>
-    <height>494</height>
+    <width>558</width>
+    <height>552</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
+   <property name="bottomMargin">
+    <number>3</number>
+   </property>
    <item>
     <widget class="QGroupBox" name="styledGroup">
      <property name="title">
@@ -51,9 +54,12 @@
       <bool>true</bool>
      </property>
      <property name="checked">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="bottomMargin">
+       <number>3</number>
+      </property>
       <item>
        <widget class="QGroupBox" name="textGroup">
         <property name="minimumSize">
@@ -472,6 +478,12 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Color:</string>
           </property>
@@ -541,6 +553,50 @@
        </layout>
       </item>
       <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Default position:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioAboveStaff">
+          <property name="text">
+           <string>Above staff</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioBelowStaff">
+          <property name="text">
+           <string>Below staff</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
          <string>Offset</string>
@@ -548,169 +604,12 @@
         <property name="flat">
          <bool>false</bool>
         </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <property name="topMargin">
-          <number>4</number>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <property name="verticalSpacing">
+          <number>3</number>
          </property>
-         <item row="0" column="0" rowspan="2">
-          <layout class="QFormLayout" name="formLayout_3">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_18">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string extracomment="coordinate">X:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="indent">
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="xOffset">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip">
-              <string>horizontal offset to reference point</string>
-             </property>
-             <property name="suffix">
-              <string/>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>999.990000000000009</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_19">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>relX:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="indent">
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="rxOffset">
-             <property name="toolTip">
-              <string>reference point offset in percent of parent width</string>
-             </property>
-             <property name="suffix">
-              <string>%</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>999.990000000000009</double>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="0" column="1" rowspan="2">
-          <layout class="QFormLayout" name="formLayout_4">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_20">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string extracomment="coordinate">Y:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="indent">
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="yOffset">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip">
-              <string>vertical offset to reference point</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>999.990000000000009</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_21">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>relY:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="indent">
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="ryOffset">
-             <property name="toolTip">
-              <string>reference point offset in percent of parent height</string>
-             </property>
-             <property name="suffix">
-              <string>%</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>999.990000000000009</double>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_22">
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_28">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -718,11 +617,131 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Unit:</string>
+            <string extracomment="coordinate">Y (below staff):</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="indent">
+            <number>5</number>
            </property>
           </widget>
          </item>
-         <item row="0" column="3">
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_20">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string extracomment="coordinate">Y (above staff):</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="indent">
+            <number>5</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="label_21">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>relY:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="indent">
+            <number>5</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QDoubleSpinBox" name="yOffsetAbove">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>vertical offset to reference point</string>
+           </property>
+           <property name="minimum">
+            <double>-1000.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999.990000000000009</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="xOffset">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>horizontal offset to reference point</string>
+           </property>
+           <property name="suffix">
+            <string/>
+           </property>
+           <property name="minimum">
+            <double>-1000.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999.990000000000009</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_18">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string extracomment="coordinate">X:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="indent">
+            <number>5</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QDoubleSpinBox" name="rxOffset">
+           <property name="toolTip">
+            <string>reference point offset in percent of parent width</string>
+           </property>
+           <property name="suffix">
+            <string>%</string>
+           </property>
+           <property name="minimum">
+            <double>-1000.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999.990000000000009</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="5">
           <widget class="QRadioButton" name="mmUnit">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -738,7 +757,74 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="3">
+         <item row="1" column="4">
+          <widget class="QLabel" name="label_22">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Unit:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="3">
+          <widget class="QDoubleSpinBox" name="ryOffset">
+           <property name="toolTip">
+            <string>reference point offset in percent of parent height</string>
+           </property>
+           <property name="suffix">
+            <string>%</string>
+           </property>
+           <property name="minimum">
+            <double>-1000.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999.990000000000009</double>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_19">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>relX:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="indent">
+            <number>5</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3">
+          <widget class="QDoubleSpinBox" name="yOffsetBelow">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>vertical offset to reference point</string>
+           </property>
+           <property name="minimum">
+            <double>-1000.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999.990000000000009</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="5">
           <widget class="QRadioButton" name="spatiumUnit">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -774,6 +860,9 @@
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <property name="topMargin">
           <number>4</number>
+         </property>
+         <property name="bottomMargin">
+          <number>3</number>
          </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -992,6 +1081,38 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>styledGroup</tabstop>
+  <tabstop>unstyledGroup</tabstop>
+  <tabstop>styles</tabstop>
+  <tabstop>fontSelect</tabstop>
+  <tabstop>fontSize</tabstop>
+  <tabstop>fontBold</tabstop>
+  <tabstop>fontItalic</tabstop>
+  <tabstop>fontUnderline</tabstop>
+  <tabstop>alignLeft</tabstop>
+  <tabstop>alignHCenter</tabstop>
+  <tabstop>alignRight</tabstop>
+  <tabstop>alignTop</tabstop>
+  <tabstop>alignVCenter</tabstop>
+  <tabstop>alignBaseline</tabstop>
+  <tabstop>alignBottom</tabstop>
+  <tabstop>sizeIsSpatiumDependent</tabstop>
+  <tabstop>systemFlag</tabstop>
+  <tabstop>xOffset</tabstop>
+  <tabstop>yOffsetAbove</tabstop>
+  <tabstop>yOffsetBelow</tabstop>
+  <tabstop>mmUnit</tabstop>
+  <tabstop>spatiumUnit</tabstop>
+  <tabstop>rxOffset</tabstop>
+  <tabstop>ryOffset</tabstop>
+  <tabstop>frame</tabstop>
+  <tabstop>circleButton</tabstop>
+  <tabstop>boxButton</tabstop>
+  <tabstop>frameWidth</tabstop>
+  <tabstop>paddingWidth</tabstop>
+  <tabstop>frameRound</tabstop>
+ </tabstops>
  <resources>
   <include location="musescore.qrc"/>
  </resources>

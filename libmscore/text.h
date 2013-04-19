@@ -112,7 +112,7 @@ class Text : public SimpleText {
 
       virtual QLineF dragAnchor() const;
 
-      void setAbove(bool val);
+//      void setAbove(bool val);
       virtual qreal baseLine() const;
       virtual void paste();
 
