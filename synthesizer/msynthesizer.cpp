@@ -18,6 +18,31 @@
 #include "libmscore/xml.h"
 #include "midipatch.h"
 
+extern QString dataPath;
+
+//---------------------------------------------------------
+//   default buildin SynthesizerState
+//    used if synthesizer.xml does not exist or is not
+//    readable
+//---------------------------------------------------------
+
+static SynthesizerState defaultState = {
+      { "master", {
+            { 0, "Zita1" },
+            { 2, "1.0"   },
+            { 3, "440"   }
+            },
+            },
+      { "Fluid", {
+            { 0, "FluidR3.SF2" },
+            },
+            },
+//      { "Zerberus", {
+//            { 0, "SalamanderGrandPiano.sfz" },
+//            },
+//            },
+      };
+
 //---------------------------------------------------------
 //   MasterSynthesizer
 //---------------------------------------------------------
@@ -29,8 +54,33 @@ MasterSynthesizer::MasterSynthesizer()
       lock2 = true;
       _synthesizer.reserve(4);
       _gain = 1.0;
+      _masterTuning = 440.0;
       for (int i = 0; i < MAX_EFFECTS; ++i)
             _effect[i] = 0;
+      }
+
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void MasterSynthesizer::init()
+      {
+      SynthesizerState state;
+      QString s(dataPath + "/synthesizer.xml");
+      QFile f(s);
+      if (!f.open(QIODevice::ReadOnly)) {
+            qDebug("cannot read synthesizer settings <%s>", qPrintable(s));
+//            setState(defaultState);
+            return;
+            }
+      XmlReader e(&f);
+      while (e.readNextStartElement()) {
+            if (e.name() == "Synthesizer")
+                  state.read(e);
+            else
+                  e.unknown();
+            }
+      setState(state);
       }
 
 //---------------------------------------------------------
@@ -286,6 +336,9 @@ void MasterSynthesizer::setState(const SynthesizerState& ss)
                                     setGain(f);
                                     }
                                     break;
+                              case 3:
+                                    setMasterTuning(v.data.toDouble());
+                                    break;
                               }
                         }
                   }
@@ -313,9 +366,10 @@ SynthesizerState MasterSynthesizer::state() const
       SynthesizerState ss;
       SynthesizerGroup g;
       g.setName("master");
-      g.push_back(IdValue(0, QString("%1").arg(_effect[0] ? _effect[0]->name() : "none")));
-      g.push_back(IdValue(1, QString("%1").arg(_effect[1] ? _effect[1]->name() : "none")));
+      g.push_back(IdValue(0, QString("%1").arg(_effect[0] ? _effect[0]->name() : "NoEffect")));
+      g.push_back(IdValue(1, QString("%1").arg(_effect[1] ? _effect[1]->name() : "NoEffect")));
       g.push_back(IdValue(2, QString("%1").arg(gain())));
+      g.push_back(IdValue(3, QString("%1").arg(masterTuning())));
       ss.push_back(g);
       for (Synthesizer* s : _synthesizer)
             ss.push_back(s->state());
@@ -336,5 +390,16 @@ void MasterSynthesizer::setGain(float f)
             _gain = f;
             emit gainChanged(_gain);
             }
+      }
+
+//---------------------------------------------------------
+//   setMasterTuning
+//---------------------------------------------------------
+
+void MasterSynthesizer::setMasterTuning(double val)
+      {
+      _masterTuning = val;
+      for (Synthesizer* s : _synthesizer)
+            s->setMasterTuning(_masterTuning);
       }
 

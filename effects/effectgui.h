@@ -23,6 +23,9 @@ class EffectGui : public QDeclarativeView {
       Q_OBJECT
       Effect* _effect;
 
+   signals:
+      void valueChanged();
+
    public slots:
       void valueChanged(const QString& name, qreal);
 

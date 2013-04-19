@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
-//  $Id: select.cpp 2054 2009-08-28 16:15:01Z wschweer $
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-2010 Werner Schweer and others
+//  Copyright (C) 2002-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "synthcontrol.h"
@@ -31,6 +23,7 @@
 #include "icons.h"
 #include "libmscore/score.h"
 #include "libmscore/mscore.h"
+#include "libmscore/xml.h"
 #include "libmscore/undo.h"
 #include "effects/effectgui.h"
 
@@ -52,8 +45,10 @@ SynthControl::SynthControl(QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       int idx = 0;
-      for (Synthesizer* s : synti->synthesizer())
+      for (Synthesizer* s : synti->synthesizer()) {
             tabWidget->insertTab(idx++, s->gui(), tr(s->name()));
+            connect(s->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
+            }
 
       // effectA        combo box
       // effectStackA   widget stack
@@ -62,12 +57,14 @@ SynthControl::SynthControl(QWidget* parent)
       for (Effect* e : synti->effectList(0)) {
             effectA->addItem(tr(e->name()));
             effectStackA->addWidget(e->gui());
+            connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
             }
 
       effectB->clear();
       for (Effect* e : synti->effectList(1)) {
             effectB->addItem(tr(e->name()));
             effectStackB->addWidget(e->gui());
+            connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
             }
 
       if (!useFactorySettings) {
@@ -81,13 +78,20 @@ SynthControl::SynthControl(QWidget* parent)
       updateSyntiValues();
 
       tabWidget->setCurrentIndex(0);
+      storeButton->setEnabled(false);
+      recallButton->setEnabled(false);
+      changeTuningButton->setEnabled(false);
 
       connect(effectA,      SIGNAL(currentIndexChanged(int)), SLOT(effectAChanged(int)));
       connect(effectB,      SIGNAL(currentIndexChanged(int)), SLOT(effectBChanged(int)));
       connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(gainChanged(double,int)));
       connect(masterTuning, SIGNAL(valueChanged(double)),     SLOT(masterTuningChanged(double)));
+      connect(changeTuningButton, SIGNAL(clicked()),          SLOT(changeMasterTuning()));
       connect(loadButton,   SIGNAL(clicked()),                SLOT(loadButtonClicked()));
       connect(saveButton,   SIGNAL(clicked()),                SLOT(saveButtonClicked()));
+      connect(storeButton,  SIGNAL(clicked()),                SLOT(storeButtonClicked()));
+      connect(recallButton, SIGNAL(clicked()),                SLOT(recallButtonClicked()));
+      connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(setDirty()));
       }
 
 //---------------------------------------------------------
@@ -175,7 +179,18 @@ void SynthControl::gainChanged(double val, int)
 
 void SynthControl::masterTuningChanged(double val)
       {
-      synti->setMasterTuning(val);
+      changeTuningButton->setEnabled(true);
+      }
+
+//---------------------------------------------------------
+//   changeMasterTuning
+//---------------------------------------------------------
+
+void SynthControl::changeMasterTuning()
+      {
+      synti->setMasterTuning(masterTuning->value());
+      changeTuningButton->setEnabled(false);
+      setDirty();
       }
 
 //---------------------------------------------------------
@@ -225,8 +240,15 @@ void SynthControl::effectBChanged(int idx)
 
 void SynthControl::loadButtonClicked()
       {
+      if (!_score)
+            return;
       synti->setState(_score->synthesizerState());
       updateSyntiValues();
+      loadButton->setEnabled(false);
+      saveButton->setEnabled(false);
+      storeButton->setEnabled(true);
+      recallButton->setEnabled(true);
+      changeTuningButton->setEnabled(false);
       }
 
 //---------------------------------------------------------
@@ -236,12 +258,79 @@ void SynthControl::loadButtonClicked()
 
 void SynthControl::saveButtonClicked()
       {
-      if (_score && synti) {
-            _score->startCmd();
-            _score->undo()->push(new ChangeSynthesizerState(_score, synti->state()));
-            _score->endCmd();
-            mscore->endCmd();
+      if (!_score)
+            return;
+      _score->startCmd();
+      _score->undo()->push(new ChangeSynthesizerState(_score, synti->state()));
+      _score->endCmd();
+      mscore->endCmd();
+
+      loadButton->setEnabled(false);
+      saveButton->setEnabled(false);
+      storeButton->setEnabled(true);
+      recallButton->setEnabled(true);
+      }
+
+//---------------------------------------------------------
+//   recallButtonClicked
+//    load stored synthesizer settings
+//---------------------------------------------------------
+
+void SynthControl::recallButtonClicked()
+      {
+      if (!_score) {
+            qDebug("no score");
+            return;
             }
+
+      SynthesizerState state;
+      QString s(dataPath + "/synthesizer.xml");
+      QFile f(s);
+      if (!f.open(QIODevice::ReadOnly)) {
+            qDebug("cannot read synthesizer settings <%s>", qPrintable(s));
+            return;
+            }
+      XmlReader e(&f);
+      while (e.readNextStartElement()) {
+            if (e.name() == "Synthesizer")
+                  state.read(e);
+            else
+                  e.unknown();
+            }
+      synti->setState(state);
+      updateSyntiValues();
+
+      storeButton->setEnabled(false);
+      recallButton->setEnabled(false);
+
+      loadButton->setEnabled(true);
+      saveButton->setEnabled(true);
+      changeTuningButton->setEnabled(false);
+      }
+
+//---------------------------------------------------------
+//   storeButtonClicked
+//    save synthesizer settings
+//---------------------------------------------------------
+
+void SynthControl::storeButtonClicked()
+      {
+      if (!_score) {
+            qDebug("no score");
+            return;
+            }
+      QString s(dataPath + "/synthesizer.xml");
+      QFile f(s);
+      if (!f.open(QIODevice::WriteOnly)) {
+            qDebug("cannot write synthesizer settings <%s>", qPrintable(s));
+            return;
+            }
+      Xml xml(&f);
+      xml.header();
+      synti->state().write(xml);
+
+      storeButton->setEnabled(false);
+      recallButton->setEnabled(false);
       }
 
 //---------------------------------------------------------
@@ -262,5 +351,17 @@ void SynthControl::updateSyntiValues()
       idx = synti->indexOfEffect(1);
       effectB->setCurrentIndex(idx);
       effectStackB->setCurrentIndex(idx);
+      }
+
+//---------------------------------------------------------
+//   setDirty
+//---------------------------------------------------------
+
+void SynthControl::setDirty()
+      {
+      loadButton->setEnabled(true);
+      saveButton->setEnabled(true);
+      storeButton->setEnabled(true);
+      recallButton->setEnabled(true);
       }
 

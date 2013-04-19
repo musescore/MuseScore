@@ -40,10 +40,14 @@ class SynthControl : public QWidget, Ui::SynthControl {
    private slots:
       void gainChanged(double, int);
       void masterTuningChanged(double);
+      void changeMasterTuning();
       void effectAChanged(int);
       void effectBChanged(int);
       void loadButtonClicked();
       void saveButtonClicked();
+      void storeButtonClicked();
+      void recallButtonClicked();
+      void setDirty();
 
    signals:
       void closed(bool);
