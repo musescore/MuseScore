@@ -199,6 +199,7 @@ void FluidGui::soundFontAddClicked()
             else {
                   soundFonts->insertItem(0, sfName);
                   emit sfChanged();
+                  emit valueChanged();
                   }
             }
       updateUpDownButtons();

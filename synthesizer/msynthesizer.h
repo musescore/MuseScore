@@ -32,6 +32,7 @@ class MasterSynthesizer : public QObject {
       Q_OBJECT
 
       float _gain;
+      double _masterTuning;
 
    public:
       static const int MAX_BUFFERSIZE = 4096;
@@ -48,7 +49,6 @@ class MasterSynthesizer : public QObject {
 
       float effect1Buffer[MAX_BUFFERSIZE];
       float effect2Buffer[MAX_BUFFERSIZE];
-      void init();
       int indexOfEffect(int ab, const QString& name);
 
    public slots:
@@ -64,14 +64,16 @@ class MasterSynthesizer : public QObject {
       ~MasterSynthesizer();
       void registerSynthesizer(Synthesizer*);
 
+      void init();
+
       float sampleRate()            { return _sampleRate; }
       void setSampleRate(float val);
 
       void process(unsigned, float*);
       void play(const Event&, unsigned);
 
-      void setMasterTuning(double) {}
-      double masterTuning() const { return 440.0; }
+      void setMasterTuning(double val);
+      double masterTuning() const      { return _masterTuning; }
 
       int index(const QString&) const;
       QString name(unsigned) const;

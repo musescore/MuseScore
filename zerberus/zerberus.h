@@ -70,6 +70,7 @@ class Zerberus : public QObject, public Synthesizer {
       static bool initialized;
       static std::list<ZInstrument*> globalInstruments;
 
+      double _masterTuning = 440.0;
       std::atomic<bool> busy;
 
       std::list<ZInstrument*> instruments;
@@ -102,7 +103,10 @@ class Zerberus : public QObject, public Synthesizer {
       Channel* channel(int n)       { return _channel[n]; }
       int loadProgress()            { return _loadProgress; }
 
-      static double ct2hz(float c)  { return 8.176 * pow(2.0, (double)c / 1200.0); }
+      virtual void setMasterTuning(double val) { _masterTuning = val;  }
+      virtual double masterTuning() const      { return _masterTuning; }
+
+      double ct2hz(double c) { return pow(2.0, (c-6900.0) / 1200.0) * _masterTuning; }
 
       virtual const char* name() const;
       virtual const QList<MidiPatch*>& getPatchInfo() const;

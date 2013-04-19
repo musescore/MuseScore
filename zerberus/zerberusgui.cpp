@@ -188,6 +188,7 @@ void ZerberusGui::onSoundFontLoaded()
       else {
             files->insertItem(0, _loadedSfName);
             }
+      emit valueChanged();
       }
 
 //---------------------------------------------------------
@@ -201,6 +202,7 @@ void ZerberusGui::removeClicked()
             QString s(files->item(row)->text());
             zerberus()->removeSoundFont(s);
             delete files->takeItem(row);
+            emit valueChanged();
             }
       }
 
