@@ -17,7 +17,6 @@
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/synthesizergui.h"
 #include "aeolus/aeolus/aeolus.h"
-#include "preferences.h"
 #include "mixer.h"
 #include "file.h"
 #include "icons.h"
@@ -47,6 +46,7 @@ SynthControl::SynthControl(QWidget* parent)
       int idx = 0;
       for (Synthesizer* s : synti->synthesizer()) {
             tabWidget->insertTab(idx++, s->gui(), tr(s->name()));
+            s->gui()->synthesizerChanged();
             connect(s->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
             }
 
@@ -75,7 +75,7 @@ SynthControl::SynthControl(QWidget* parent)
             settings.endGroup();
             }
 
-      updateSyntiValues();
+      updateGui();
 
       tabWidget->setCurrentIndex(0);
       storeButton->setEnabled(false);
@@ -134,34 +134,6 @@ void MuseScore::showSynthControl()
                   }
             }
       synthControl->setVisible(a->isChecked());
-      }
-
-//---------------------------------------------------------
-//   updatePreferences
-//---------------------------------------------------------
-
-void SynthControl::updatePreferences()
-      {
-      if ((preferences.tuning != masterTuning->value())
-         || (preferences.masterGain != gain->value())
-         ) {
-            preferences.dirty  = true;
-            }
-      preferences.tuning     = masterTuning->value();
-      preferences.masterGain = gain->value();
-      }
-
-//---------------------------------------------------------
-//   writeSettings
-//---------------------------------------------------------
-
-void SynthControl::writeSettings() const
-      {
-      QSettings settings;
-      settings.beginGroup("SynthControl");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
-      settings.endGroup();
       }
 
 //---------------------------------------------------------
@@ -243,7 +215,7 @@ void SynthControl::loadButtonClicked()
       if (!_score)
             return;
       synti->setState(_score->synthesizerState());
-      updateSyntiValues();
+      updateGui();
       loadButton->setEnabled(false);
       saveButton->setEnabled(false);
       storeButton->setEnabled(true);
@@ -298,7 +270,7 @@ void SynthControl::recallButtonClicked()
                   e.unknown();
             }
       synti->setState(state);
-      updateSyntiValues();
+      updateGui();
 
       storeButton->setEnabled(false);
       recallButton->setEnabled(false);
@@ -334,10 +306,10 @@ void SynthControl::storeButtonClicked()
       }
 
 //---------------------------------------------------------
-//   updateSyntiValues
+//   Gui
 //---------------------------------------------------------
 
-void SynthControl::updateSyntiValues()
+void SynthControl::updateGui()
       {
       masterTuning->setValue(synti->masterTuning());
       setGain(synti->gain());

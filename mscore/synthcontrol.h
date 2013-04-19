@@ -34,7 +34,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
 
       Score* _score;
       virtual void closeEvent(QCloseEvent*);
-      void updateSyntiValues();
+      void updateGui();
       void updateUpDownButtons();
 
    private slots:
@@ -59,11 +59,9 @@ class SynthControl : public QWidget, Ui::SynthControl {
 
    public:
       SynthControl(QWidget* parent);
-      void updatePreferences();
       void setMeter(float, float, float, float);
       void stop();
       void setScore(Score* s) { _score = s; }
-      void writeSettings() const;
       };
 
 #endif
