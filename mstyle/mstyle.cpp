@@ -1773,31 +1773,33 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
             QRect r( option->rect );
 
             // adjust rect depending on shape
-            const QTabBar* tabBar( static_cast<const QTabBar*>( widget->parent() ) );
-            switch ( tabBar->shape() ) {
-                  case QTabBar::RoundedNorth:
-                  case QTabBar::TriangularNorth:
-                        r.setBottom( r.bottom() - 6 );
-                        break;
+            if (qobject_cast<const QTabBar*>( widget->parent())) {
+                  const QTabBar* tabBar( static_cast<const QTabBar*>( widget->parent() ) );
+                  switch ( tabBar->shape() ) {
+                        case QTabBar::RoundedNorth:
+                        case QTabBar::TriangularNorth:
+                              r.setBottom( r.bottom() - 6 );
+                              break;
 
-                  case QTabBar::RoundedSouth:
-                  case QTabBar::TriangularSouth:
-                        r.setTop( r.top() + 6 );
-                        break;
+                        case QTabBar::RoundedSouth:
+                        case QTabBar::TriangularSouth:
+                              r.setTop( r.top() + 6 );
+                              break;
 
-                  case QTabBar::RoundedWest:
-                  case QTabBar::TriangularWest:
-                        r.setRight( r.right() - 6 );
-                        break;
+                        case QTabBar::RoundedWest:
+                        case QTabBar::TriangularWest:
+                              r.setRight( r.right() - 6 );
+                              break;
 
-                  case QTabBar::RoundedEast:
-                  case QTabBar::TriangularEast:
-                        r.setLeft( r.left() + 6 );
-                        break;
+                        case QTabBar::RoundedEast:
+                        case QTabBar::TriangularEast:
+                              r.setLeft( r.left() + 6 );
+                              break;
 
-                  default:
-                        break;
+                        default:
+                              break;
 
+                        }
                   }
 
             const QPalette local(widget->parentWidget() ? widget->parentWidget()->palette() : palette);
