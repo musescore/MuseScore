@@ -157,7 +157,7 @@ void MTrack::quantize(int startTick, int endTick, std::multimap<int,MidiChord>& 
 //---------------------------------------------------------
 
 void MTrack::cleanup(int lastTick, TimeSigMap* sigmap)
-	{
+    {
       std::multimap<int, MidiChord> dl;
 
       //
@@ -358,11 +358,11 @@ void MTrack::processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, 
             int len  = t - tick;
             if (len <= 0)
                   break;
-      	foreach (const MidiChord& c, notes) {
-            	if ((c.duration < len) && (c.duration != 0))
+        foreach (const MidiChord& c, notes) {
+                if ((c.duration < len) && (c.duration != 0))
                         len = c.duration;
                   }
-      	Measure* measure = score->tick2measure(tick);
+        Measure* measure = score->tick2measure(tick);
             // split notes on measure boundary
             if ((tick + len) > measure->tick() + measure->ticks())
                   len = measure->tick() + measure->ticks() - tick;
@@ -387,7 +387,7 @@ void MTrack::processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, 
                   const QList<MidiNote>& nl = n.notes;
                   for (int i = 0; i < nl.size(); ++i) {
                         const MidiNote& mn = nl[i];
-            		Note* note = new Note(score);
+                    Note* note = new Note(score);
 
                         // TODO - does this need to be key-aware?
                         note->setPitch(mn.pitch, pitch2tpc(mn.pitch, KEY_C, PREFER_NEAREST));
@@ -423,9 +423,9 @@ void MTrack::processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, 
                   for (int i = 0; i < nl.size(); ++i) {
                         const MidiNote& mn = nl[i];
                         Note* note = chord->findNote(mn.pitch);
-      		      n.notes[i].tie = new Tie(score);
+                  n.notes[i].tie = new Tie(score);
                         n.notes[i].tie->setStartNote(note);
-                  	note->setTieFor(n.notes[i].tie);
+                    note->setTieFor(n.notes[i].tie);
                         }
 
                   n.onTime   = n.onTime + len;
@@ -442,7 +442,7 @@ void MTrack::processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, 
       if (voice == 0) {
             while (restLen > 0) {
                   int len = restLen;
-      		Measure* measure = score->tick2measure(ctick);
+            Measure* measure = score->tick2measure(ctick);
                   if (ctick >= measure->tick() + measure->ticks()) {
                         qDebug("tick2measure: %d end of score?", ctick);
                         ctick += restLen;
@@ -489,7 +489,7 @@ void MTrack::processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, 
 //---------------------------------------------------------
 
 void MTrack::convertTrack(int lastTick)
-	{
+    {
       Score* score     = staff->score();
       int key          = 0;  // TODO-LIB findKey(mtrack, score->sigmap());
       int track        = staff->idx() * VOICES;
@@ -513,12 +513,12 @@ void MTrack::convertTrack(int lastTick)
                   //
                   ctick = i->first;       // debug
                   for (;i != chords.end(); ++i) {
-                  	const MidiChord& e = i->second;
+                    const MidiChord& e = i->second;
                         if (i->first != ctick)
                               break;
                         if (e.voice != voice)
                               continue;
-            	      notes.append(e);
+                      notes.append(e);
                         }
                   if (notes.isEmpty())
                         break;
@@ -614,6 +614,89 @@ static Fraction metaTimeSignature(const MidiEvent& e)
       return Fraction(z, n);
       }
 
+
+//---------------------------------------------------
+//  heuristic to handle a one track piano:
+//    split into left hand/right hand
+//---------------------------------------------------
+
+void splitIntoLeftRightHands(QList<MTrack> &tracks)
+{
+    if (!(tracks.size() == 1 && tracks[0].program == 0))
+        return;
+
+    MTrack& srcTrack = tracks[0];
+    // assume this is a piano track
+    // split into left hand / right hand
+    MTrack leftHandTrack;
+    MTrack rightHandTrack;
+    leftHandTrack.mtrack = srcTrack.mtrack;
+    rightHandTrack.mtrack = srcTrack.mtrack;
+
+    typedef std::multimap<int, MidiChord>::iterator tIter;
+    std::vector<tIter> chordGroup;
+    int currentTime = 0;
+    const int OCTAVE = 12;
+
+    // durationTol < smallest note duration: not very accurate but mostly works
+    int durationTol = srcTrack.chords.begin()->second.notes[0].len;
+    for (const auto &chord: srcTrack.chords)
+    {
+        if (chord.second.notes[0].len < durationTol)
+            durationTol = chord.second.notes[0].len;
+    }
+
+    // chords after MIDI import are sorted by onTime values
+    for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ++i) {
+        // find chords with equal onTime values and put then into chordGroup
+        if (chordGroup.empty())
+            currentTime = i->second.onTime;
+        chordGroup.push_back(i);
+        tIter next = i; ++next;
+        if ((next != srcTrack.chords.end() && (next->second.onTime - currentTime) > durationTol)
+                || (next == srcTrack.chords.end())) {
+            // *i is the last element in group - process current group
+            struct {
+                bool operator()(const tIter &iter1, const tIter &iter2)
+                {
+                    return iter1->second.notes[0].pitch < iter2->second.notes[0].pitch;
+                }
+            } lessThan;
+            std::sort(chordGroup.begin(), chordGroup.end(), lessThan);
+
+            int minPitch = chordGroup.front()->second.notes[0].pitch;
+            int maxPitch = chordGroup.back()->second.notes[0].pitch;
+            if (maxPitch - minPitch > OCTAVE) {
+                // need both hands
+                // assign all chords in range [minPitch .. minPitch + OCTAVE] to left hand
+                // and assign all other chords to right hand
+                for (const auto &chordIter: chordGroup) {
+                    if (chordIter->second.notes[0].pitch <= minPitch + OCTAVE)
+                        leftHandTrack.chords.insert({chordIter->first, chordIter->second});
+                    else
+                        rightHandTrack.chords.insert({chordIter->first, chordIter->second});
+                }
+                // maybe todo later: if range of right-hand chords > OCTAVE => assign all bottom right-hand
+                // chords to another, third track
+            }
+            else { // check - use two hands or one hand will be enough (right or left?)
+                // assign top chord for right hand, all the rest - to left hand
+                rightHandTrack.chords.insert({chordGroup.back()->first, chordGroup.back()->second});
+                for (auto p = chordGroup.begin(); p != chordGroup.end() - 1; ++p)
+                    leftHandTrack.chords.insert({(*p)->first, (*p)->second});
+            }
+            // reset group for next iteration
+            chordGroup.clear();
+        }
+    }
+    tracks.clear();
+
+    if (!rightHandTrack.chords.empty())
+        tracks.push_back(rightHandTrack);
+    if (!leftHandTrack.chords.empty())
+        tracks.push_back(leftHandTrack);
+}
+
 //---------------------------------------------------------
 //   convertMidi
 //---------------------------------------------------------
@@ -638,7 +721,7 @@ void convertMidi(Score* score, MidiFile* mf)
 
             MTrack track;
             track.mtrack = t;
-		int events = 0;
+        int events = 0;
 
             //  - create time signature list from meta events
             //  - create MidiChord list
@@ -688,28 +771,7 @@ void convertMidi(Score* score, MidiFile* mf)
                   }
             }
 
-      //---------------------------------------------------
-      //  heuristic to handle a one track piano:
-      //    split into left hand/right hand
-      //---------------------------------------------------
-
-      if (tracks.size() == 1 && tracks[0].program == 0 && tracks[0].minPitch < 64) {
-            MTrack& srcTrack = tracks[0];
-            // assume this is a piano track
-            // split into left hand / right hand
-            MTrack dstTrack;
-            dstTrack.mtrack = tracks[0].mtrack;
-            for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end();) {
-                  if (i->second.notes[0].pitch < 64) {
-                        dstTrack.chords.insert(std::pair<int,MidiChord>(i->first, i->second));
-                        i = srcTrack.chords.erase(i);
-                        continue;
-                        }
-                  ++i;
-                  }
-            if (dstTrack.chords.size() > 0)
-                  tracks.push_back(dstTrack);
-            }
+      splitIntoLeftRightHands(tracks);
 
       //---------------------------------------------------
       //  create instruments
@@ -769,7 +831,7 @@ void convertMidi(Score* score, MidiFile* mf)
             measure->setTimesig(ts);
             measure->setLen(ts);
 
-      	score->add(measure);
+        score->add(measure);
             }
       score->fixTicks();
       lastTick = score->lastMeasure()->endTick();
@@ -836,6 +898,7 @@ void convertMidi(Score* score, MidiFile* mf)
 
       score->connectTies();
       }
+
 
 //---------------------------------------------------------
 //   importMidi
