@@ -621,81 +621,80 @@ static Fraction metaTimeSignature(const MidiEvent& e)
 //---------------------------------------------------
 
 void splitIntoLeftRightHands(QList<MTrack> &tracks)
-{
-    if (!(tracks.size() == 1 && tracks[0].program == 0))
-        return;
+      {
+      if (!(tracks.size() == 1 && tracks[0].program == 0))
+            return;
 
-    MTrack& srcTrack = tracks[0];
-    // assume this is a piano track
-    // split into left hand / right hand
-    MTrack leftHandTrack;
-    MTrack rightHandTrack;
-    leftHandTrack.mtrack = srcTrack.mtrack;
-    rightHandTrack.mtrack = srcTrack.mtrack;
+      MTrack& srcTrack = tracks[0];
+      // assume this is a piano track
+      // split into left hand / right hand
+      MTrack leftHandTrack;
+      MTrack rightHandTrack;
+      leftHandTrack.mtrack = srcTrack.mtrack;
+      rightHandTrack.mtrack = srcTrack.mtrack;
 
-    typedef std::multimap<int, MidiChord>::iterator tIter;
-    std::vector<tIter> chordGroup;
-    int currentTime = 0;
-    const int OCTAVE = 12;
+      typedef std::multimap<int, MidiChord>::iterator tIter;
+      std::vector<tIter> chordGroup;
+      int currentTime = 0;
+      const int OCTAVE = 12;
 
-    // durationTol < smallest note duration: not very accurate but mostly works
-    int durationTol = srcTrack.chords.begin()->second.notes[0].len;
-    for (const auto &chord: srcTrack.chords)
-    {
-        if (chord.second.notes[0].len < durationTol)
-            durationTol = chord.second.notes[0].len;
-    }
-
-    // chords after MIDI import are sorted by onTime values
-    for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ++i) {
-        // find chords with equal onTime values and put then into chordGroup
-        if (chordGroup.empty())
-            currentTime = i->second.onTime;
-        chordGroup.push_back(i);
-        tIter next = i; ++next;
-        if ((next != srcTrack.chords.end() && (next->second.onTime - currentTime) > durationTol)
-                || (next == srcTrack.chords.end())) {
-            // *i is the last element in group - process current group
-            struct {
-                bool operator()(const tIter &iter1, const tIter &iter2)
-                {
-                    return iter1->second.notes[0].pitch < iter2->second.notes[0].pitch;
-                }
-            } lessThan;
-            std::sort(chordGroup.begin(), chordGroup.end(), lessThan);
-
-            int minPitch = chordGroup.front()->second.notes[0].pitch;
-            int maxPitch = chordGroup.back()->second.notes[0].pitch;
-            if (maxPitch - minPitch > OCTAVE) {
-                // need both hands
-                // assign all chords in range [minPitch .. minPitch + OCTAVE] to left hand
-                // and assign all other chords to right hand
-                for (const auto &chordIter: chordGroup) {
-                    if (chordIter->second.notes[0].pitch <= minPitch + OCTAVE)
-                        leftHandTrack.chords.insert({chordIter->first, chordIter->second});
-                    else
-                        rightHandTrack.chords.insert({chordIter->first, chordIter->second});
-                }
-                // maybe todo later: if range of right-hand chords > OCTAVE => assign all bottom right-hand
-                // chords to another, third track
+      // durationTol < smallest note duration: not very accurate but mostly works
+      int durationTol = srcTrack.chords.begin()->second.notes[0].len;
+      for (const auto &chord: srcTrack.chords) {
+            if (chord.second.notes[0].len < durationTol)
+                  durationTol = chord.second.notes[0].len;
             }
-            else { // check - use two hands or one hand will be enough (right or left?)
-                // assign top chord for right hand, all the rest - to left hand
-                rightHandTrack.chords.insert({chordGroup.back()->first, chordGroup.back()->second});
-                for (auto p = chordGroup.begin(); p != chordGroup.end() - 1; ++p)
-                    leftHandTrack.chords.insert({(*p)->first, (*p)->second});
-            }
-            // reset group for next iteration
-            chordGroup.clear();
-        }
-    }
-    tracks.clear();
 
-    if (!rightHandTrack.chords.empty())
-        tracks.push_back(rightHandTrack);
-    if (!leftHandTrack.chords.empty())
-        tracks.push_back(leftHandTrack);
-}
+      // chords after MIDI import are sorted by onTime values
+      for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ++i) {
+            // find chords with equal onTime values and put then into chordGroup
+            if (chordGroup.empty())
+                  currentTime = i->second.onTime;
+            chordGroup.push_back(i);
+            tIter next = i; ++next;
+            if ((next != srcTrack.chords.end() && (next->second.onTime - currentTime) > durationTol)
+                        || (next == srcTrack.chords.end())) {
+                  // *i is the last element in group - process current group
+                  struct {
+                        bool operator()(const tIter &iter1, const tIter &iter2)
+                              {
+                              return iter1->second.notes[0].pitch < iter2->second.notes[0].pitch;
+                              }
+                        } lessThan;
+                  std::sort(chordGroup.begin(), chordGroup.end(), lessThan);
+
+                  int minPitch = chordGroup.front()->second.notes[0].pitch;
+                  int maxPitch = chordGroup.back()->second.notes[0].pitch;
+                  if (maxPitch - minPitch > OCTAVE) {
+                        // need both hands
+                        // assign all chords in range [minPitch .. minPitch + OCTAVE] to left hand
+                        // and assign all other chords to right hand
+                        for (const auto &chordIter: chordGroup) {
+                              if (chordIter->second.notes[0].pitch <= minPitch + OCTAVE)
+                                    leftHandTrack.chords.insert({chordIter->first, chordIter->second});
+                              else
+                                    rightHandTrack.chords.insert({chordIter->first, chordIter->second});
+                              }
+                        // maybe todo later: if range of right-hand chords > OCTAVE => assign all bottom right-hand
+                        // chords to another, third track
+                        }
+                  else { // check - use two hands or one hand will be enough (right or left?)
+                        // assign top chord for right hand, all the rest - to left hand
+                        rightHandTrack.chords.insert({chordGroup.back()->first, chordGroup.back()->second});
+                        for (auto p = chordGroup.begin(); p != chordGroup.end() - 1; ++p)
+                              leftHandTrack.chords.insert({(*p)->first, (*p)->second});
+                        }
+                  // reset group for next iteration
+                  chordGroup.clear();
+                  }
+            }
+      tracks.clear();
+
+      if (!rightHandTrack.chords.empty())
+            tracks.push_back(rightHandTrack);
+      if (!leftHandTrack.chords.empty())
+            tracks.push_back(leftHandTrack);
+      }
 
 //---------------------------------------------------------
 //   convertMidi
