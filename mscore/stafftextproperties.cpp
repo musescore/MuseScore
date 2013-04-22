@@ -341,6 +341,7 @@ void StaffTextProperties::saveValues()
       if (pitem)
             saveChannel(pitem->data(0, Qt::UserRole).toInt());
 
+      staffText->setSetAeolusStops(changeStops->isChecked());
       if (changeStops->isChecked()) {
             for (int i = 0; i < 4; ++i) {
                   for (int k = 0; k < 16; ++k) {

@@ -17,8 +17,8 @@
 */
 
 
-#ifndef __REVERB_H__
-#define __REVERB_H__
+#ifndef __REVERB_H
+#define __REVERB_H
 
 //---------------------------------------------------------
 //   Delelm

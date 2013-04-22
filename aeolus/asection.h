@@ -23,6 +23,7 @@
 
 #include "global.h"
 
+
 #define PERIOD 64
 #define MIXLEN 64
 #define NCHANN 4
@@ -70,14 +71,14 @@ class Asection {
       Diffuser _dif1;
       Diffuser _dif2;
       Diffuser _dif3;
-      float _apar[5];
+      SyntiParameter _apar [5];
 
    public:
       Asection (float fsam);
       ~Asection ();
 
       float *get_wptr () { return _base + _offs0; }
-//      SyntiParameter *get_apar () { return _apar; }
+      SyntiParameter *get_apar () { return _apar; }
       void set_size (float size);
       void process (float vol, float *W, float *X, float *Y, float *R);
 

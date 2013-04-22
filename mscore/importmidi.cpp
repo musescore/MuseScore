@@ -620,7 +620,7 @@ static Fraction metaTimeSignature(const MidiEvent& e)
 //    split into left hand/right hand
 //---------------------------------------------------
 
-void splitIntoLeftRightHands(QList<MTrack> &tracks)
+static void splitIntoLeftRightHands(QList<MTrack> &tracks)
       {
       if (!(tracks.size() == 1 && tracks[0].program == 0))
             return;
@@ -651,13 +651,13 @@ void splitIntoLeftRightHands(QList<MTrack> &tracks)
             if (chordGroup.empty())
                   currentTime = i->second.onTime;
             chordGroup.push_back(i);
-            tIter next = i; ++next;
+            tIter next = i;
+            ++next;
             if ((next != srcTrack.chords.end() && (next->second.onTime - currentTime) > durationTol)
                         || (next == srcTrack.chords.end())) {
                   // *i is the last element in group - process current group
                   struct {
-                        bool operator()(const tIter &iter1, const tIter &iter2)
-                              {
+                        bool operator()(const tIter &iter1, const tIter &iter2) {
                               return iter1->second.notes[0].pitch < iter2->second.notes[0].pitch;
                               }
                         } lessThan;
