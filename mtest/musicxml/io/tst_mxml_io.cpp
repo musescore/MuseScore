@@ -91,6 +91,7 @@ private slots:
       void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }
       void noteAttributes1() { mxmlIoTest("testNoteAttributes1"); }
       void noteAttributes2() { mxmlIoTestRef("testNoteAttributes2"); }
+      void noteAttributes3() { mxmlIoTest("testNoteAttributes3"); }
       void noteheads() { mxmlIoTest("testNoteheads"); }
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
