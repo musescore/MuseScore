@@ -517,7 +517,7 @@ MuseScore::MuseScore()
       showNavigator(preferences.showNavigator);
 
       QList<int> sizes;
-      sizes << 500 << 500;
+      sizes << 500 << 50;     // initial size of score canvas relativ to navigator
       mainWindow->setSizes(sizes);
 
       splitter = new QSplitter;
