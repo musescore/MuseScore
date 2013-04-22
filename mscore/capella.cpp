@@ -53,7 +53,7 @@
 
 const char* Capella::errmsg[] = {
       "no error",
-      "bad file signature, no capella file?",
+      "bad file signature, no Capella file or not from version 2000 (3.0) or later?",
       "unexpected end of file",
       "bad voice signature",
       "bad staff signature",
