@@ -34,7 +34,7 @@ static SynthesizerState defaultState = {
             },
             },
       { "Fluid", {
-            { 0, "FluidR3.SF2" },
+            { 0, "fluid.sf3" },
             },
             },
 //      { "Zerberus", {
@@ -70,7 +70,7 @@ void MasterSynthesizer::init()
       QFile f(s);
       if (!f.open(QIODevice::ReadOnly)) {
             qDebug("cannot read synthesizer settings <%s>", qPrintable(s));
-//            setState(defaultState);
+            setState(defaultState);
             return;
             }
       XmlReader e(&f);
@@ -264,10 +264,8 @@ void MasterSynthesizer::process(unsigned n, float* p)
 //      memset(effect1Buffer, 0, n * sizeof(float) * 2);
 //      memset(effect2Buffer, 0, n * sizeof(float) * 2);
 
-      if (lock2) {
-            printf("lock2\n");
+      if (lock2)
             return;
-            }
       lock1 = true;
       if (lock2) {
             lock1 = false;
@@ -322,7 +320,6 @@ int MasterSynthesizer::indexOfEffect(int ab)
 void MasterSynthesizer::setState(const SynthesizerState& ss)
       {
       for (const SynthesizerGroup& g : ss) {
-            printf("setState: group %s\n", qPrintable(g.name()));
             if (g.name() == "master") {
                   for (const IdValue& v : g) {
                         switch (v.id) {
@@ -347,7 +344,6 @@ void MasterSynthesizer::setState(const SynthesizerState& ss)
                   }
             else {
                   Synthesizer* s = synthesizer(g.name());
-                  printf("synti <%s> %p\n", qPrintable(g.name()), s);
                   if (s)
                         s->setState(g);
                   else {

@@ -911,7 +911,7 @@ void Score::setInputState(const InputState& st)
 void Score::setInputTrack(int v)
       {
       if (v < 0) {
-            qDebug("setInputTrack: bad value: %d\n", v);
+            qDebug("setInputTrack: bad value: %d", v);
             return;
             }
       _is.setTrack(v);
