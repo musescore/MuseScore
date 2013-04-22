@@ -93,6 +93,8 @@ enum // GLOBAL LIMITS
 
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/midipatch.h"
+#include "effects/effect.h"
+#include "sparm.h"
 
 #endif
 

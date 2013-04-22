@@ -208,6 +208,30 @@ struct OttavaShiftSegment {
       int shift;
       };
 
+
+//---------------------------------------------------------
+//   aeolusSetStop
+//---------------------------------------------------------
+
+static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMap* events)
+      {
+      Event event(ME_CONTROLLER);
+      event.setController(98);
+      if (val)
+            event.setValue(0x40 + 0x20  + i);
+      else
+            event.setValue(0x40 + 0x10  + i);
+
+      event.setOntime(tick);
+      event.setChannel(channel);
+      events->insert(std::pair<int,Event>(tick, event));
+
+      event.setValue(k);
+      events->insert(std::pair<int,Event>(tick, event));
+//      event.setValue(0x40 + i);
+//      events->insert(std::pair<int,Event>(tick, event));
+      }
+
 //---------------------------------------------------------
 //   collectMeasureEvents
 //---------------------------------------------------------
@@ -279,26 +303,9 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         int channel = staff->channel(tick, voice);
 
                         for (int i = 0; i < 4; ++i) {
-                              for (int k = 0; k < 16; ++k) {
-                                    if (st->getAeolusStop(i, k)) {
-                                          Event event;
-                                          event.setType(ME_CONTROLLER);
-                                          event.setController(98);
-                                          event.setValue(k);
-                                          event.setOntime(tick);
-                                          event.setChannel(channel);
-                                          events->insert(std::pair<int,Event>(tick, event));
-                                          }
-                                    }
-                              Event event(ME_CONTROLLER);
-                              event.setController(98);
-                              event.setValue(96 + i);
-                              event.setOntime(tick);
-                              event.setChannel(channel);
-                              events->insert(std::pair<int,Event>(tick, event));
-
-                              event.setValue(64 + i);
-                              events->insert(std::pair<int,Event>(tick, event));
+                              static int num[4] = { 12, 13, 16, 16 };
+                              for (int k = 0; k < num[i]; ++k)
+                                    aeolusSetStop(tick, channel, i, k, st->getAeolusStop(i, k), events);
                               }
                         }
                   }

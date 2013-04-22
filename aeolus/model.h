@@ -63,7 +63,7 @@ class Divis
       int         _nrank;
       int         _asect;
       int         _keybd;
-      float       _param [NPARAM];
+      SyntiParameter _param [NPARAM];
       Rank        _ranks [NRANK];
       };
 
@@ -166,12 +166,10 @@ class Model
       Chconf          _chconf [8];
       Preset*         _preset [NBANK][NPRES];
 
-      void proc_mesg(ITC_mesg *M);
       void init_audio();
       void init_iface();
       void init_ranks(int comm);
       void proc_rank(int g, int i, int comm);
-      void set_aupar(int s, int a, int p, float v);
       void set_dipar(int s, int d, int p, float v);
       void set_mconf(int i, uint16_t *d);
       void get_state(uint32_t *bits);

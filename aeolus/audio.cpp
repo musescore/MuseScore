@@ -26,12 +26,9 @@
 
 void Aeolus::audio_start ()
       {
-      _audio->_nasect = _nasect;
-      _audio->_fsamp  = _fsamp;
-      _audio->_fsize  = 0;
-//      _audio->_instrpar = _audiopar;
-//      for (int i = 0; i < _nasect; i++)
-//            _audio->_asectpar [i] = _asectp [i]->get_apar ();
+      _fsize  = 0;
+      for (int i = 0; i < _nasect; i++)
+            _asectpar [i] = _asectp [i]->get_apar ();
       }
 
 //---------------------------------------------------------
@@ -42,11 +39,11 @@ void Aeolus::audio_init(int sampleRate)
       {
 	_nplay   = 2;
       _fsamp   = sampleRate;
-      _audiopar[VOLUME]  = 1.00f;
-      _audiopar[REVSIZE] = 0.150f;
+      _audiopar[VOLUME] = 0.32f;
+      _audiopar[REVSIZE] = 0.075f;
       _revtime = 4.0f;
-      _audiopar[REVTIME] = 7.0f;
-      _audiopar[STPOSIT] = 1.0f;
+      _audiopar[REVTIME] = _revtime;
+      _audiopar[STPOSIT] = 0.5f;
 
       _reverb.init (_fsamp);
       _reverb.set_t60mf (_revtime);
@@ -124,6 +121,7 @@ void Aeolus::proc_queue (uint32_t k)
                   break;
 
             case 17:    // Per-division performance controllers.
+                  qDebug("Aeolus: not impl.");
 #if 0
                   if (n < 2)
                         return;
@@ -200,8 +198,8 @@ void Aeolus::process(unsigned nframes, float* out, float*, float*)
                   nout = PERIOD;
                   k += PERIOD;
                   }
-            *out++ += loutb[PERIOD - nout];
-            *out++ += routb[PERIOD - nout];
+            *out++ += gain * loutb[PERIOD - nout];
+            *out++ += gain * routb[PERIOD - nout];
             --nout;
             --nframes;
             }
