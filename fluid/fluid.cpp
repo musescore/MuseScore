@@ -672,10 +672,15 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
                         break;
                         }
                   }
-            qDebug("Fluid: load sf %s\n", qPrintable(path));
-            if (sfload(path, true) == -1) {
-                  qDebug("loading sf failed: <%s>", qPrintable(path));
+            if (path.isEmpty()) {
+                  qDebug("Fluid: sf <%s> not found", qPrintable(s));
                   ok = false;
+                  }
+            else {
+                  if (sfload(path, true) == -1) {
+                        qDebug("loading sf failed: <%s>", qPrintable(path));
+                        ok = false;
+                        }
                   }
             }
       mutex.unlock();
@@ -749,7 +754,7 @@ bool Fluid::sfunload(int id, bool reset_presets)
       SFont* sf = get_sfont_by_id(id);
 
       if (!sf) {
-            printf("No SoundFont with id = %d", id);
+            qDebug("No SoundFont with id = %d", id);
             return false;
             }
 
