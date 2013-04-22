@@ -31,12 +31,9 @@
 Divis::Divis() : _flags(0), _dmask(0), _nrank(0)
       {
       *_label = 0;
-//      _param[SWELL].set("swell", SWELL_DEF, SWELL_MIN, SWELL_MAX);
-//      _param[TFREQ].set("tfreq", TFREQ_DEF, TFREQ_MIN, TFREQ_MAX);
-//      _param[TMODD].set("tmodd", TMODD_DEF, TMODD_MIN, TMODD_MAX);
-      _param[SWELL] = SWELL_DEF;
-      _param[TFREQ] = TFREQ_DEF;
-      _param[TMODD] = TMODD_DEF;
+      _param[SWELL].set("swell", SWELL_DEF, SWELL_MIN, SWELL_MAX);
+      _param[TFREQ].set("tfreq", TFREQ_DEF, TFREQ_MIN, TFREQ_MAX);
+      _param[TMODD].set("tmodd", TMODD_DEF, TMODD_MIN, TMODD_MAX);
       }
 
 Keybd::Keybd() : _flags(0)
@@ -94,36 +91,22 @@ void Model::init()
       read_instr ();
       read_presets ();
 
-      init_audio();
-      init_iface();
-      init_ranks(MT_LOAD_RANK);
-      init_ranks(MT_SAVE_RANK);
-      }
-
-//---------------------------------------------------------
-//   proc_mesg
-//---------------------------------------------------------
-
-void Model::proc_mesg (ITC_mesg* /*M*/)
-      {
-      }
-
-
-void Model::init_audio()
-      {
-      Divis *D;
-      int d;
-
-      for (d = 0, D = _divis; d < _ndivis; d++, D++) {
+      // init audio
+      Divis* D = _divis;
+      for (int d = 0; d < _ndivis; d++, D++) {
             M_new_divis* M = new M_new_divis ();
             M->_flags = D->_flags;
             M->_dmask = D->_dmask;
             M->_asect = D->_asect;
-            M->_swell = D->_param [Divis::SWELL];
-            M->_tfreq = D->_param [Divis::TFREQ];
-            M->_tmodd = D->_param [Divis::TMODD];
+            M->_swell = D->_param [Divis::SWELL].fval();
+            M->_tfreq = D->_param [Divis::TFREQ].fval();
+            M->_tmodd = D->_param [Divis::TMODD].fval();
             _aeolus->newDivis(M);
             }
+
+      init_iface();
+      init_ranks(MT_LOAD_RANK);
+      init_ranks(MT_SAVE_RANK);
       }
 
 //---------------------------------------------------------
@@ -239,8 +222,8 @@ void Model::set_ifelm (int g, int i, int m)
       {
       Group* G = _group + g;
 
-      if ((!_ready) || (g >= _ngroup) || (i >= G->_nifelm)) {
-            printf("Aeolus::Model::set_ifelm failed\n");
+      if (!_ready || (g >= _ngroup) || (i >= G->_nifelm)) {
+            printf("Aeolus::Model::set_ifelm failed, ready %d %d>=%d %d>=%d\n", _ready, g, _ngroup, i, G->_nifelm);
             return;
             }
       Ifelm* I = G->_ifelms + i;
@@ -322,23 +305,8 @@ void Model::set_state(int bank, int pres)
       }
 
 
-void Model::set_aupar (int /*s*/, int /*a*/, int /*p*/, float /*v*/)
-      {
-#if 0
-      SyntiParameter* P = ((a < 0) ? _aeolus->_audio->_instrpar : _aeolus->_audio->_asectpar [a]) + p;
-      if (v < P->min())
-            v = P->min();
-      if (v > P->max())
-            v = P->max();
-      P->set(v);
-//WS    send_event (TO_IFACE, new M_ifc_aupar (s, a, p, v));
-#endif
-      }
-
-
-void Model::set_dipar (int /*s*/, int /*d*/, int /*p*/, float /*v*/)
+void Model::set_dipar (int /*s*/, int d, int p, float v)
 {
-#if 0
     SyntiParameter  *P;
 //    union { uint32_t i; float f; } u;
 
@@ -348,7 +316,6 @@ void Model::set_dipar (int /*s*/, int /*d*/, int /*p*/, float /*v*/)
     if (v > P->max())
             v = P->max();
     P->set(v);
-#endif
 printf("Model::set_dipar\n");
 #if 0
     if (_qcomm->write_avail () >= 2)
@@ -638,10 +605,10 @@ int Model::read_instr ()
 		if (sscanf (q, "%f%f%n", &val1, &val2, &n) != 2)
                stat = ARGS;
             else {
-//WS                D->_param[Divis::TFREQ].set(val1);
-//WS                D->_param[Divis::TMODD].set(val2);
+                D->_param[Divis::TFREQ].set(val1);
+                D->_param[Divis::TMODD].set(val2);
 		    q += n;
-//WS		    D->_flags |= Divis::HAS_TREM;
+		    D->_flags |= Divis::HAS_TREM;
 		}
 	    }
 	    else if (G)
@@ -795,7 +762,6 @@ int Model::read_instr ()
 
 int Model::write_instr()
       {
-#if 0
       FILE          *F;
       int           d, g, i, k, r;
       char          buff [1024];
@@ -839,10 +805,8 @@ int Model::write_instr()
 	    A = R->_sdef;
             fprintf (F, "/rank         %c %3d  %s\n", A->_pan, A->_del, A->_filename);
 	}
-        if (D->_flags & Divis::HAS_SWELL)
-                        fprintf (F, "/swell\n");
-        if (D->_flags & Divis::HAS_TREM)
-                        fprintf (F, "/tremul       %3.1f  %3.1f\n",
+        if (D->_flags & Divis::HAS_SWELL) fprintf (F, "/swell\n");
+        if (D->_flags & Divis::HAS_TREM) fprintf (F, "/tremul       %3.1f  %3.1f\n",
                                                   D->_param [Divis::TFREQ].fval(), D->_param [Divis::TMODD].fval());
         fprintf (F, "/divis/end\n\n");
     }
@@ -883,7 +847,7 @@ int Model::write_instr()
 
     fprintf (F, "\n/instr/end\n");
     fclose (F);
-#endif
+
     return 0;
 }
 

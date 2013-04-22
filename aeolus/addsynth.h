@@ -20,8 +20,6 @@
 #ifndef __ADDSYNTH_H
 #define __ADDSYNTH_H
 
-#include <stdint.h>
-
 #define N_NOTE 11
 #define N_HARM 64
 #define NOTE_MIN 36

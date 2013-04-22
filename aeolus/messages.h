@@ -94,21 +94,6 @@ enum
 #define SRC_GUI_DONE  101
 #define SRC_MIDI_PAR  200
 
-
-class M_audio_info : public ITC_mesg
-{
-public:
-
-    M_audio_info (void) : ITC_mesg (MT_AUDIO_INFO) {}
-
-    float           _fsamp;
-    int             _fsize;
-    int             _nasect;
-//    SyntiParameter  *_instrpar;
-//    SyntiParameter  *_asectpar [NASECT];
-};
-
-
 class M_midi_info : public ITC_mesg
 {
 public:

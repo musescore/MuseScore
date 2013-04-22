@@ -22,9 +22,9 @@
 #define __AEOLUS_H__
 
 struct MidiPatch;
-class PlayEvent;
+class Event;
 
-#include <stdint.h>
+#include "stdint.h"
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/midipatch.h"
 
@@ -34,7 +34,7 @@ class PlayEvent;
 #include "global.h"
 
 class Model;
-class M_audio_info;
+// class M_audio_info;
 class M_new_divis;
 class M_ifc_init;
 
@@ -54,10 +54,9 @@ class Aeolus : public Synthesizer {
       volatile bool   _running;
       int             _hold;
       int             _nplay;
-      unsigned int    _fsamp;
       int             _nasect;
       int             _ndivis;
-      Asection       *_asectp [NASECT];
+      Asection*       _asectp [NASECT];
 
       Division*       _divisp [NDIVIS];
       Reverb          _reverb;
@@ -70,7 +69,13 @@ class Aeolus : public Synthesizer {
       float routb[PERIOD];
       float loutb[PERIOD];
 
-      M_audio_info* _audio;
+      float           _fsamp;
+      int             _fsize;
+//      SyntiParameter  *_instrpar;
+      SyntiParameter  *_asectpar [NASECT];
+
+//      M_audio_info* _audio;
+
       M_ifc_init*   _ifc_init;
       uint32_t      _ifelms [NGROUP];
       char          _tempstr[64];
@@ -86,8 +91,9 @@ class Aeolus : public Synthesizer {
       void key_on (int n, int b);
       void newDivis(M_new_divis* X);
       void proc_queue(uint32_t);
-      void printGui();
-      void rewrite_label(const char*);
+
+      void setValue(int idx, double value);
+      double value(int idx) const;
 
    public:
       Aeolus();
@@ -111,8 +117,8 @@ class Aeolus : public Synthesizer {
       virtual SynthesizerGroup state() const;
       virtual void setState(const SynthesizerGroup&);
 
-      virtual void allSoundsOff(int);
-      virtual void allNotesOff(int);
+      virtual void allSoundsOff(int channel) { allNotesOff(channel); }
+      virtual void allNotesOff(int /*channel*/);
 
       virtual SynthesizerGui* gui();
 
@@ -120,9 +126,6 @@ class Aeolus : public Synthesizer {
       };
 
 
-enum {
-      AEOLUS_VOLUME, AEOLUS_REVSIZE, AEOLUS_REVTIME, AEOLUS_STPOSIT
-      };
 #endif
 
 

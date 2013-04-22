@@ -95,7 +95,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "fluid/fluid.h"
 #ifdef AEOLUS
-#include "aeolus/aeolus/aeolus.h"
+#include "aeolus/aeolus.h"
 #endif
 #ifdef ZERBERUS
 #include "zerberus/zerberus.h"
