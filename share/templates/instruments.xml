@@ -3619,7 +3619,7 @@
 		<Instrument id="tuba">
 			<longName>Tuba</longName>
 			<shortName>Tu.</shortName>
-			<description>E♭ Tuba (Generic)</description>
+			<description>E♭ Tuba (generic)</description>
 			<musicXMLid>brass.tuba</musicXMLid>
 			<clef>F</clef>
 			<barlineSpan>1</barlineSpan>
@@ -4077,7 +4077,7 @@
 		<Instrument id="steel-drums">
 			<longName>Steel Drums</longName>
 			<shortName>St. Dr.</shortName>
-			<description>Steel Drums (Generic)</description>
+			<description>Steel Drums (generic)</description>
 			<musicXMLid>metal.steel-drums</musicXMLid>
 			<extended>1</extended>
 			<staves>2</staves>
@@ -5936,7 +5936,7 @@
 				<program value="105"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="bouzouki-(3-course)">
+		<Instrument id="bouzouki-3-course">
 			<longName>Bouzouki</longName>
 			<shortName>Bou.</shortName>
 			<description>Bouzouki (3-course)</description>
@@ -5950,7 +5950,7 @@
 				<program value="24"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="bouzouki-(4-course)">
+		<Instrument id="bouzouki-4-course">
 			<longName>Bouzouki</longName>
 			<shortName>Bou.</shortName>
 			<description>Bouzouki (4-course)</description>
@@ -6036,8 +6036,8 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>            
-		<Instrument id="guitar-(tablature)">
-			<init>guitar</init>
+		<Instrument id="guitar-tablature">
+			<init>guitar-nylon-strung</init>
 			<description>Guitar (Tablature)</description>
                   <musicXMLid>pluck.guitar</musicXMLid> 
 			<stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
@@ -6151,14 +6151,14 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="lute-(tablature)">
+		<Instrument id="lute-tablature">
 			<init>lute</init>
 			<description>Lute (Tablature)</description>
                   <musicXMLid>pluck.lute</musicXMLid> 
 			<stafftype staffTypePreset="tab6StrItalian">tablature</stafftype>
 			<clef>TAB</clef>
 		</Instrument>
-		<Instrument id="ren.-tenor-lute-(5-course)">
+		<Instrument id="ren.-tenor-lute-5-course">
 			<longName>Lute</longName>
 			<shortName>Lute</shortName>
 			<description>Ren. Tenor Lute (5 course)</description>
@@ -6180,7 +6180,7 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="ren.-tenor-lute-(6-course)">
+		<Instrument id="ren.-tenor-lute-6-course">
 			<longName>Lute</longName>
 			<shortName>Lute</shortName>
 			<description>Ren. Tenor Lute (6 course)</description>
@@ -6203,7 +6203,7 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="ren.-tenor-lute-(7-course)">
+		<Instrument id="ren.-tenor-lute-7-course">
 			<longName>Lute</longName>
 			<shortName>Lute</shortName>
 			<description>Ren. Tenor Lute (7 course)</description>
@@ -6217,7 +6217,7 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="ren.-tenor-lute-(8-course)">
+		<Instrument id="ren.-tenor-lute-8-course">
 			<longName>Lute</longName>
 			<shortName>Lute.</shortName>
 			<description>Ren. Tenor Lute (8 course)</description>
@@ -6240,7 +6240,7 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="ren.-tenor-lute-(9-course)">
+		<Instrument id="ren.-tenor-lute-9-course">
 			<longName>Lute</longName>
 			<shortName>Lute</shortName>
 			<description>Ren. Tenor Lute (9 course)</description>
@@ -6263,7 +6263,7 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="ren.-tenor-lute-(10-course)">
+		<Instrument id="ren.-tenor-lute-10-course">
 			<longName>Lute</longName>
 			<shortName>Lute</shortName>
 			<description>Ren. Tenor Lute (10 course)</description>
@@ -6286,7 +6286,7 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="baroque-lute-(13-course)">
+		<Instrument id="baroque-lute-13-course">
 			<longName>Lute</longName>
 			<shortName>Lute</shortName>
 			<description>Baroque Lute (13 course)</description>
@@ -6309,7 +6309,7 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="archlute-(14-course)">
+		<Instrument id="archlute-14-course">
 			<longName>Archlute</longName>
 			<shortName>A. Lute</shortName>
 			<description>Archlute (14 course)</description>
@@ -6332,7 +6332,7 @@
 				<program value="25"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="theorbo-(15-course)">
+		<Instrument id="theorbo-15-course">
 			<longName>Theorbo</longName>
 			<shortName>Thb.</shortName>
 			<description>Theorbo (15 course)</description>
@@ -6525,7 +6525,7 @@
 				<program value="24"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="ukulele-(4-str.-tab)">
+		<Instrument id="ukulele-4-str-tab">
 			<init>ukulele</init>
 			<description>Ukulele (4-str. TAB)</description>
                   <musicXMLid>pluck.ukulele</musicXMLid> 
@@ -6619,7 +6619,7 @@
 				<program value="33"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="electric-bass-(4-str.-tab)">
+		<Instrument id="electric-bass-4-str-tab)">
 			<init>electric-bass</init>
 			<description>Electric Bass (4-str. TAB)</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
@@ -7662,13 +7662,13 @@
 				<program value="42"/>
 			</Channel>
 		</Instrument>
-		<Instrument id="viola-da-gamba-(tablature)">
+		<Instrument id="viola-da-gamba-tablature">
 			<init>viola-da-gamba</init>
 			<description>Viola da gamba (Tablature)</description>
 			<stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
 			<clef>TAB</clef>
 		</Instrument>
-		<Instrument id="viola-da-gamba-(6-strings)">
+		<Instrument id="viola-da-gamba-6-strings">
 			<init>viola-da-gamba</init>
 			<description>Viola da gamba (6 strings)</description>
 			<aPitchRange>38-74</aPitchRange>
