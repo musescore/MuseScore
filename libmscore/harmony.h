@@ -70,6 +70,9 @@ class Harmony : public Text {
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
                                           // or notation of base note in chord
       int _id;
+
+      bool _leftParen, _rightParen;       // include opening and/or closing parenthesis
+
       QString _userName;
 
       QList<HDegree> _degreeList;
@@ -79,6 +82,7 @@ class Harmony : public Text {
       mutable QRectF _tbbox;
 
       virtual void draw(QPainter*) const;
+      void render(const QString&, qreal&, qreal&);
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc);
 
    public:
@@ -90,6 +94,9 @@ class Harmony : public Text {
 
       void setId(int d)                        { _id = d; }
       int id() const                           { return _id;           }
+
+      bool leftParen() const                   { return _leftParen;    }
+      bool rightParen() const                  { return _rightParen;   }
 
       const ChordDescription* descr() const;
 

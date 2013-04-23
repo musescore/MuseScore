@@ -1429,6 +1429,8 @@ HarmonyView::HarmonyView()
       layout->addWidget(hw);
 
       layout->addStretch(10);
+      connect(hb.leftParen, SIGNAL(clicked(bool)), SLOT(on_leftParen_clicked(bool)));
+      connect(hb.rightParen, SIGNAL(clicked(bool)), SLOT(on_rightParen_clicked(bool)));
       }
 
 //---------------------------------------------------------
@@ -1459,6 +1461,8 @@ void HarmonyView::setElement(Element* e)
       hb.tbboxy->setValue(harmony->bboxtight().y());
       hb.tbboxw->setValue(harmony->bboxtight().width());
       hb.tbboxh->setValue(harmony->bboxtight().height());
+      hb.leftParen->setChecked(harmony->leftParen());
+      hb.rightParen->setChecked(harmony->rightParen());
       hb.rootTpc->setValue(harmony->rootTpc());
       if (harmony->rootTpc() == INVALID_TPC)
             hb.rootName->setText("");
@@ -1490,6 +1494,16 @@ void HarmonyView::setElement(Element* e)
             hb.degreeTab->setItem(i, 1, new QTableWidgetItem(QVariant(d.value()).toString()));
             hb.degreeTab->setItem(i, 2, new QTableWidgetItem(QVariant(d.alter()).toString()));
             }
+      }
+
+void HarmonyView::on_leftParen_clicked(bool checked)
+      {
+      hb.leftParen->setChecked(!checked); // simulate read-only checkbox
+      }
+
+void HarmonyView::on_rightParen_clicked(bool checked)
+      {
+      hb.rightParen->setChecked(!checked); // simulate read-only checkbox
       }
 
 //---------------------------------------------------------

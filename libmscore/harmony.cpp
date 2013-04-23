@@ -31,6 +31,9 @@ QString Harmony::harmonyName() const
       HChord hc = descr() ? descr()->chord : HChord();
       QString s;
 
+      if (_leftParen)
+            s += "(";
+
       if (!_degreeList.isEmpty()) {
             hc.add(_degreeList);
             // try to find the chord in chordList
@@ -44,14 +47,14 @@ QString Harmony::harmonyName() const
                   }
             // now determine the chord name
             if (newExtension)
-                  s = tpc2name(_rootTpc, germanNames) + newExtension->names.front();
+                  s += tpc2name(_rootTpc, germanNames) + newExtension->names.front();
             else
                   // not in table, fallback to using HChord.name()
-                  s = hc.name(_rootTpc);
+                  s += hc.name(_rootTpc);
             //s += " ";
             } // end if (degreeList ...
       else {
-            s = tpc2name(_rootTpc, germanNames);
+            s += tpc2name(_rootTpc, germanNames);
             if (descr()) {
                   //s += " ";
                   s += descr()->names.front();
@@ -61,6 +64,10 @@ QString Harmony::harmonyName() const
             s += "/";
             s += tpc2name(_baseTpc, germanNames);
             }
+
+      if (_rightParen)
+            s += ")";
+
       return s;
       }
 
@@ -108,6 +115,8 @@ Harmony::Harmony(Score* s)
       _rootTpc   = INVALID_TPC;
       _baseTpc   = INVALID_TPC;
       _id        = -1;
+      _leftParen = false;
+      _rightParen = false;
       }
 
 Harmony::Harmony(const Harmony& h)
@@ -116,6 +125,8 @@ Harmony::Harmony(const Harmony& h)
       _rootTpc    = h._rootTpc;
       _baseTpc    = h._baseTpc;
       _id         = h._id;
+      _leftParen  = h._leftParen;
+      _rightParen  = h._rightParen;
       _degreeList = h._degreeList;
       }
 
@@ -318,6 +329,16 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       _id = -1;
       QString s = ss.simplified();
       _userName = s;
+
+      if ((_leftParen = s.startsWith('(')))
+            s.remove(0,1);
+
+      if ((_rightParen = (s.endsWith(')') && s.count('(') < s.count(')'))))
+            s.remove(s.size()-1,1);
+
+      if (_leftParen || _rightParen)
+            s = s.simplified();     // in case of spaces inside parentheses
+
       int n = s.size();
       if (n < 1)
             return false;
@@ -655,6 +676,18 @@ void TextSegment::set(const QString& s, const QFont& f, qreal _x, qreal _y)
 //   render
 //---------------------------------------------------------
 
+void Harmony::render(const QString& s, qreal& x, qreal& y)
+      {
+      int fontIdx = 0;
+      TextSegment* ts = new TextSegment(s, fontList[fontIdx], x, y);
+      textList.append(ts);
+      x += ts->width();
+      }
+
+//---------------------------------------------------------
+//   render
+//---------------------------------------------------------
+
 void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, int tpc)
       {
       ChordList* chordList = score()->style()->chordList();
@@ -766,6 +799,10 @@ void Harmony::render(const TextStyle* st)
       textList.clear();
 
       qreal x = 0.0, y = 0.0;
+
+      if (_leftParen)
+            render("( ", x, y);
+
       render(chordList->renderListRoot, x, y, _rootTpc);
       ChordDescription* cd = chordList->value(_id);
       if (cd) {
@@ -773,6 +810,9 @@ void Harmony::render(const TextStyle* st)
             }
       if (_baseTpc != INVALID_TPC)
             render(chordList->renderListBase, x, y, _baseTpc);
+
+      if (_rightParen)
+            render(" )", x, y);
       }
 
 //---------------------------------------------------------
