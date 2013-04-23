@@ -758,7 +758,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
-            | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
+            | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY | STATE_FOTO,
          0,
          "escape",
          QT_TRANSLATE_NOOP("action","Escape")
@@ -1713,7 +1713,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Backspace")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_SEARCH,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "find",
          QT_TRANSLATE_NOOP("action","Find")
@@ -1962,7 +1962,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Previous Score")
          ),
       Shortcut(
-         STATE_INIT | STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
+         STATE_INIT | STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_FOTO,
          0,
          "musescore-connect",
          Qt::ApplicationShortcut,

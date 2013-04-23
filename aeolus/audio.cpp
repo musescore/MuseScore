@@ -45,11 +45,6 @@ void Aeolus::audio_init(int sampleRate)
       _audiopar[REVTIME] = _revtime;
       _audiopar[STPOSIT] = 0.5f;
 
-      _reverb.init (_fsamp);
-      _reverb.set_t60mf (_revtime);
-      _reverb.set_t60lo (_revtime * 1.50f, 250.0f);
-      _reverb.set_t60hi (_revtime * 0.50f, 3e3f);
-
       _nasect = NASECT;
       for (int i = 0; i < NASECT; i++) {
             _asectp [i] = new Asection ((float) _fsamp);
@@ -160,17 +155,9 @@ void Aeolus::process(unsigned nframes, float* out, float*, float*)
 
       if (fabsf(_revsize - _audiopar [REVSIZE]) > 0.001f) {
             _revsize = _audiopar[REVSIZE];
-            _reverb.set_delay(_revsize);
             for (int j = 0; j < _nasect; j++)
                   _asectp[j]->set_size(_revsize);
             }
-      if (fabsf(_revtime - _audiopar [REVTIME]) > 0.1f) {
-            _revtime = _audiopar [REVTIME];
-            _reverb.set_t60mf(_revtime);
-            _reverb.set_t60lo(_revtime * 1.50f, 250.0f);
-            _reverb.set_t60hi(_revtime * 0.50f, 3e3f);
-            }
-
       int k = nout;
       while (nframes > 0) {
             if (nout == 0) {
@@ -188,15 +175,13 @@ void Aeolus::process(unsigned nframes, float* out, float*, float*)
                   for (int j = 0; j < _nasect; j++)
                         _asectp[j]->process(gain, W, X, Y, R);
 
-                  _reverb.process(PERIOD, gain, R, W, X, Y);
-
                   float stposit = _audiopar[STPOSIT];
                   for (int j = 0; j < PERIOD; j++) {
                         loutb[j] = W[j] + stposit * X[j] + Y[j];
                         routb[j] = W[j] + stposit * X[j] - Y[j];
                         }
                   nout = PERIOD;
-                  k += PERIOD;
+                  k   += PERIOD;
                   }
             *out++ += gain * loutb[PERIOD - nout];
             *out++ += gain * routb[PERIOD - nout];

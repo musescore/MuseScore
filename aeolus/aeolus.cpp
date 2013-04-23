@@ -30,11 +30,7 @@ extern QString mscoreGlobalShare;
 #include "libmscore/xml.h"
 #include "sparm_p.h"
 
-enum {
-      A_VOLUME, A_REVSIZE, A_REVTIME, A_STPOSIT
-      };
-
-static const std::vector<ParDescr> pd = {
+const std::vector<ParDescr> Aeolus::pd = {
       { A_VOLUME,  "volume",  true, 0.32f,   0.00f,  1.00f },
       { A_REVSIZE, "revsize", true, 0.075f,  0.025f, 0.15f },
       { A_REVTIME, "revtime", true, 4.0f,    2.0f,   7.00f },
@@ -52,7 +48,6 @@ Aeolus::Aeolus()
 
       _sc_cmode = 0;
       _sc_group = 0;
-//      _audio = new M_audio_info;
       _running = false;
       _nplay = 0;
       _fsamp = 0;
@@ -72,7 +67,6 @@ Aeolus::~Aeolus()
             delete _asectp [i];
       for (int i = 0; i < _ndivis; i++)
             delete _divisp [i];
-      _reverb.fini ();
       }
 
 //---------------------------------------------------------
@@ -188,13 +182,22 @@ const QList<MidiPatch*>& Aeolus::getPatchInfo() const
 //   setValue
 //---------------------------------------------------------
 
-void Aeolus::setValue(int idx, double value)
+void Aeolus::setValue(int id, double value)
       {
-      switch (idx) {
-            case A_VOLUME:   _audiopar[VOLUME]  = value; break;
-            case A_REVSIZE:  _audiopar[REVSIZE] = value; break;
-            case A_REVTIME:  _audiopar[REVTIME] = value; break;
-            case A_STPOSIT:  _audiopar[STPOSIT] = value; break;
+      const ParDescr* p = parameter(id);
+      if (p == 0)
+            return;
+      double v;
+      if (p->log)
+            v = exp(p->min + value * (p->max - p->min));
+      else
+            v = p->min + value * (p->max - p->min);
+
+      switch (id) {
+            case A_VOLUME:   _audiopar[VOLUME]  = v; break;
+            case A_REVSIZE:  _audiopar[REVSIZE] = v; break;
+            case A_REVTIME:  _audiopar[REVTIME] = v; break;
+            case A_STPOSIT:  _audiopar[STPOSIT] = v; break;
             }
       }
 
@@ -211,6 +214,11 @@ double Aeolus::value(int idx) const
             case A_REVTIME:  v = _audiopar[REVTIME]; break;
             case A_STPOSIT:  v = _audiopar[STPOSIT]; break;
             }
+      const ParDescr* p = parameter(idx);
+      if (p->log)
+            v = (log(v) - p->min)/(p->max - p->min);
+      else
+            v = (v - p->min)/(p->max - p->min);
       return v;
       }
 
@@ -236,5 +244,14 @@ void Aeolus::setState(const SynthesizerGroup& g)
       {
       for (const IdValue& v : g)
             setValue(v.id, v.data.toDouble());
+      }
+
+//---------------------------------------------------------
+//   parameter
+//---------------------------------------------------------
+
+const ParDescr* Aeolus::parameter(int idx) const
+      {
+      return &pd[idx];
       }
 

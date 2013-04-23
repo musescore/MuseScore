@@ -33,6 +33,14 @@ AeolusGui::AeolusGui(Synthesizer* s)
    : SynthesizerGui(s)
       {
       setupUi(this);
+
+      reverbDelay->setId(A_REVSIZE);
+      reverbTime->setId(A_REVTIME);
+      position->setId(A_STPOSIT);
+
+      connect (reverbDelay, SIGNAL(valueChanged(double,int)), SLOT(valueHasChanged(double,int)));
+      connect (reverbTime,  SIGNAL(valueChanged(double,int)), SLOT(valueHasChanged(double,int)));
+      connect (position,    SIGNAL(valueChanged(double,int)), SLOT(valueHasChanged(double,int)));
       }
 
 //---------------------------------------------------------
@@ -41,6 +49,18 @@ AeolusGui::AeolusGui(Synthesizer* s)
 
 void AeolusGui::synthesizerChanged()
       {
+      reverbDelay->setValue(synthesizer()->value(A_REVSIZE));
+      reverbTime->setValue(synthesizer()->value(A_REVTIME));
+      position->setValue(synthesizer()->value(A_STPOSIT));
       }
 
+//---------------------------------------------------------
+//   valueHasChanged
+//---------------------------------------------------------
+
+void AeolusGui::valueHasChanged(double val, int id)
+      {
+      synthesizer()->setValue(id, val);
+      emit valueChanged();
+      }
 
