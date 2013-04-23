@@ -284,7 +284,7 @@ void initStyle(MStyle* s)
       AS(TextStyle(
          TR( "Dynamics"), ff, 12, false,
          false,                                 // italic?
-         false, Element::ABOVE,
+         false, Element::BELOW,
          ALIGN_LEFT | ALIGN_BASELINE, 0.0, -4.0, 4.0, OS, QPointF(), true));
 
 #if 0
@@ -875,7 +875,7 @@ void TextStyleData::writeProperties(Xml& xml) const
       if (underline)
             xml.tag("underline", underline);
       if (defaultPlacement != DEFAULT_STYLE_PLACEMENT)
-            xml.tag("placement", defaultPlacement);
+            xml.tag("defaultPlacement", defaultPlacement);
       if (sizeIsSpatiumDependent)
             xml.tag("sizeIsSpatiumDependent", sizeIsSpatiumDependent);
       if (foregroundColor != Qt::black)
@@ -937,7 +937,7 @@ bool TextStyleData::readProperties(XmlReader& e)
             italic = e.readInt();
       else if (tag == "underline")
             underline = e.readInt();
-      else if (tag == "placement")
+      else if (tag == "defaultPlacement")
             defaultPlacement = static_cast<Element::Placement>(e.readInt());
       else if (tag == "align")
             setAlign(Align(e.readInt()));

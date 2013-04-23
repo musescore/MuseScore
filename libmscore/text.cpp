@@ -394,11 +394,13 @@ void Text::read(XmlReader& e)
 
 void Text::writeProperties(Xml& xml, bool writeText) const
       {
-      Element::writeProperties(xml);
       if (xml.clipboardmode || styled())
             xml.tag("style", textStyle().name());
       if (xml.clipboardmode || !styled())
             _textStyle.writeProperties(xml);
+      // write Element props after text style props, otherwise stype props may overwrite custom Element props
+      // (in particular, placement)
+      Element::writeProperties(xml);
       if (writeText) {
             if (styled())
                   xml.tag("text", text());

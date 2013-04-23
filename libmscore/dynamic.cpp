@@ -129,6 +129,9 @@ void Dynamic::write(Xml& xml) const
 
 void Dynamic::read(XmlReader& e)
       {
+      // set defaults
+      setTextStyleType(TEXT_STYLE_DYNAMICS);
+      // after setting defaults, read element specific settings
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
             if (tag == "subtype") {
@@ -141,7 +144,6 @@ void Dynamic::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      setTextStyleType(TEXT_STYLE_DYNAMICS);
       }
 
 //---------------------------------------------------------
