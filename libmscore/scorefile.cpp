@@ -825,6 +825,8 @@ bool Score::read(XmlReader& e)
 #ifdef OMR
                   _omr = new Omr(this);
                   _omr->read(e);
+#else
+                  e.skipCurrentElement();
 #endif
                   }
             else if (tag == "Audio") {

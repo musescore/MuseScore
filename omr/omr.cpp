@@ -84,7 +84,7 @@ void Omr::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Omr::read(QDomElement e)
+void Omr::read(XmlReader& e)
       {
       _doc = 0;
 #ifdef OCR
@@ -92,24 +92,22 @@ void Omr::read(QDomElement e)
             _ocr = new Ocr;
       _ocr->init();
 #endif
-      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
-            QString val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
-            if (tag == "path") {
-                  _path = val;
-                  }
+            if (tag == "path")
+                  _path = e.readElementText();
             else if (tag == "OmrPage") {
                   OmrPage* page = new OmrPage(this);
                   page->read(e);
                   _pages.append(page);
                   }
             else if (tag == "spatium")
-                  _spatium = val.toDouble();
+                  _spatium = e.readDouble();
             else if (tag == "dpmm")
-                  _dpmm = val.toDouble();
+                  _dpmm = e.readDouble();
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

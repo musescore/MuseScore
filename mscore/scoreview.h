@@ -129,7 +129,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       Q_OBJECT
 
       enum States { NORMAL, DRAG, DRAG_OBJECT, EDIT, DRAG_EDIT, LASSO,
-            NOTE_ENTRY, MAG, PLAY, SEARCH, ENTRY_PLAY, FOTOMODE,
+            NOTE_ENTRY, MAG, PLAY, ENTRY_PLAY, FOTOMODE,
             STATES
             };
       static const int MAX_GRIPS = 8;

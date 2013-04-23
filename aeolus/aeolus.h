@@ -30,19 +30,21 @@ class Event;
 
 #include "asection.h"
 #include "division.h"
-#include "reverb.h"
 #include "global.h"
 
 class Model;
 // class M_audio_info;
 class M_new_divis;
 class M_ifc_init;
+class ParDescr;
 
 //---------------------------------------------------------
 //   Synth
 //---------------------------------------------------------
 
 class Aeolus : public Synthesizer {
+      static const std::vector<ParDescr> pd;
+
       Model* model;
       QList<MidiPatch*> patchList;
       uint16_t _midimap [16];
@@ -59,7 +61,6 @@ class Aeolus : public Synthesizer {
       Asection*       _asectp [NASECT];
 
       Division*       _divisp [NDIVIS];
-      Reverb          _reverb;
       unsigned char   _keymap [NNOTES];
       float           _audiopar[4];
       float           _revsize;
@@ -71,10 +72,7 @@ class Aeolus : public Synthesizer {
 
       float           _fsamp;
       int             _fsize;
-//      SyntiParameter  *_instrpar;
       SyntiParameter  *_asectpar [NASECT];
-
-//      M_audio_info* _audio;
 
       M_ifc_init*   _ifc_init;
       uint32_t      _ifelms [NGROUP];
@@ -92,8 +90,9 @@ class Aeolus : public Synthesizer {
       void newDivis(M_new_divis* X);
       void proc_queue(uint32_t);
 
-      void setValue(int idx, double value);
-      double value(int idx) const;
+      virtual void setValue(int idx, double value);
+      virtual double value(int idx) const;
+      const ParDescr* parameter(int idx) const;
 
    public:
       Aeolus();
@@ -125,6 +124,9 @@ class Aeolus : public Synthesizer {
       friend class Model;
       };
 
+enum {
+      A_VOLUME, A_REVSIZE, A_REVTIME, A_STPOSIT
+      };
 
 #endif
 
