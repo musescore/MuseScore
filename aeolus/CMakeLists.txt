@@ -34,7 +34,7 @@ add_library (aeolus STATIC
       ${aeolusMocs}
       ${aeolusUi}
       aeolus.cpp audio.cpp model.cpp addsynth.cpp scales.cpp
-	reverb.cpp asection.cpp division.cpp rankwave.cpp
+	asection.cpp division.cpp rankwave.cpp
       rngen.cpp exp2ap.cpp
       aeolusgui.cpp sparm.cpp
       ${PROJECT_BINARY_DIR}/all.h

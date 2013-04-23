@@ -45,6 +45,8 @@ SynthControl::SynthControl(QWidget* parent)
 
       int idx = 0;
       for (Synthesizer* s : synti->synthesizer()) {
+            if (strcmp(s->name(), "Aeolus") == 0)    // no gui for aeolus
+                  continue;
             tabWidget->insertTab(idx++, s->gui(), tr(s->name()));
             s->gui()->synthesizerChanged();
             connect(s->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));

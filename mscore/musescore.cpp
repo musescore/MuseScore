@@ -2755,8 +2755,6 @@ void MuseScore::changeState(ScoreState val)
                   a->setEnabled(enable);
                   }
             }
-      if (val != STATE_SEARCH && searchDialog)
-            searchDialog->hide();
 
       bool enable = (val != STATE_DISABLED) && (val != STATE_LOCK);
 
@@ -2795,8 +2793,6 @@ void MuseScore::changeState(ScoreState val)
                   break;
             case STATE_NORMAL:
                   _modeText->hide();
-                  if (searchDialog)
-                        searchDialog->hide();
                   break;
             case STATE_NOTE_ENTRY_PITCHED:
                   showModeText(tr("NOTE entry mode"));
@@ -2832,38 +2828,6 @@ void MuseScore::changeState(ScoreState val)
                   break;
             case STATE_LOCK:
                   showModeText(tr("Score Locked"));
-                  break;
-            case STATE_SEARCH:
-                  if (searchDialog == 0) {
-                        searchDialog = new QWidget;
-                        searchDialog->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-                        QHBoxLayout* searchDialogLayout = new QHBoxLayout;
-                        searchDialog->setLayout(searchDialogLayout);
-                        layout->insertWidget(2, searchDialog);
-
-                        QToolButton* searchExit = new QToolButton;
-                        searchExit->setIcon(QIcon(":/data/cancel.png"));
-                        connect(searchExit, SIGNAL(clicked()), SLOT(endSearch()));
-                        searchDialogLayout->addWidget(searchExit);
-
-                        searchDialogLayout->addWidget(new QLabel(tr("Go To: ")));
-
-                        searchCombo = new QComboBox;
-                        searchCombo->setEditable(true);
-                        searchCombo->setInsertPolicy(QComboBox::InsertAtTop);
-                        searchDialogLayout->addWidget(searchCombo);
-
-                        searchDialogLayout->addStretch(10);
-                        searchDialog->hide();
-
-                        connect(searchCombo, SIGNAL(editTextChanged(const QString&)),
-                           SLOT(searchTextChanged(const QString&)));
-                        }
-
-                  searchCombo->clearEditText();
-                  searchCombo->setFocus();
-                  searchDialog->show();
-                  showModeText(tr("Find"));
                   break;
             default:
                   qFatal("MuseScore::changeState: illegal state %d", val);
@@ -3310,8 +3274,9 @@ void MuseScore::searchTextChanged(const QString& s)
 
 void MuseScore::endSearch()
       {
+      searchDialog->hide();
       if (cv)
-            cv->postCmd("escape");
+            cv->setFocus();
       }
 
 //---------------------------------------------------------
@@ -3683,7 +3648,6 @@ const char* stateName(ScoreState s)
             case STATE_LYRICS_EDIT:        return "STATE_LYRICS_EDIT";
             case STATE_HARMONY_FIGBASS_EDIT: return "STATE_HARMONY_FIGBASS_EDIT";
             case STATE_PLAY:               return "STATE_PLAY";
-            case STATE_SEARCH:             return "STATE_SEARCH";
             case STATE_FOTO:               return "STATE_FOTO";
             default:                       return "??";
             }
@@ -4536,6 +4500,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             else
                   changeState(STATE_LOCK);
             }
+      else if (cmd == "find")
+            showSearchDialog();
       else {
             if (cv) {
                   cv->setFocus();
@@ -4788,6 +4754,48 @@ void MuseScore::updateDrumTools()
       {
       if (_drumTools)
             _drumTools->updateDrumset();
+      }
+
+//---------------------------------------------------------
+//   showSearchDialog
+//---------------------------------------------------------
+
+void MuseScore::showSearchDialog()
+      {
+      if (searchDialog == 0) {
+            searchDialog = new QWidget;
+            searchDialog->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+            QHBoxLayout* searchDialogLayout = new QHBoxLayout;
+            searchDialog->setLayout(searchDialogLayout);
+            layout->insertWidget(2, searchDialog);
+
+            QToolButton* searchExit = new QToolButton;
+            searchExit->setIcon(QIcon(":/data/cancel.png"));
+            connect(searchExit, SIGNAL(clicked()), SLOT(endSearch()));
+            searchDialogLayout->addWidget(searchExit);
+
+            searchDialogLayout->addWidget(new QLabel(tr("Go To: ")));
+
+            searchCombo = new QComboBox;
+            searchCombo->setEditable(true);
+            searchCombo->setInsertPolicy(QComboBox::InsertAtTop);
+            searchDialogLayout->addWidget(searchCombo);
+
+            searchDialogLayout->addStretch(10);
+            searchDialog->hide();
+
+            printf("line edit %p\n", searchCombo->lineEdit());
+
+            // does not work: connect(searchCombo->lineEdit(), SIGNAL(returnPressed()), SLOT(endSearch()));
+            connect(searchCombo->lineEdit(), SIGNAL(editingFinished()), SLOT(endSearch()));
+
+            connect(searchCombo, SIGNAL(editTextChanged(const QString&)),
+               SLOT(searchTextChanged(const QString&)));
+            }
+
+      searchCombo->clearEditText();
+      searchCombo->setFocus();
+      searchDialog->show();
       }
 
 #ifndef SCRIPT_INTERFACE

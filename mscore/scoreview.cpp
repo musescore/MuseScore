@@ -700,7 +700,6 @@ ScoreView::ScoreView(QWidget* parent)
       s->addTransition(ct);
       s->addTransition(new CommandTransition("mag", states[MAG]));            // ->mag
       s->addTransition(new CommandTransition("play", states[PLAY]));          // ->play
-      s->addTransition(new CommandTransition("find", states[SEARCH]));        // ->search
       s->addTransition(new CommandTransition("fotomode", states[FOTOMODE]));  // ->fotomode
       ct = new CommandTransition("paste", 0);                                 // paste
       connect(ct, SIGNAL(triggered()), SLOT(normalPaste()));
@@ -849,13 +848,6 @@ ScoreView::ScoreView(QWidget* parent)
 
       s->setInitialState(s1);
       s->addTransition(new ScoreViewDragTransition(this, s2));
-
-      //----------------------setup search state
-      s = states[SEARCH];
-      s->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-      s->addTransition(new CommandTransition("escape", states[NORMAL]));
-      s->addTransition(new CommandTransition("find", states[NORMAL]));
-      connect(s, SIGNAL(entered()), mscore, SLOT(setSearchState()));
 
       // setup editPlay state
       s = states[ENTRY_PLAY];
@@ -3756,8 +3748,6 @@ ScoreState ScoreView::mscoreState() const
             return STATE_FOTO;
       if (sm->configuration().contains(states[PLAY]))
             return STATE_PLAY;
-      if (sm->configuration().contains(states[SEARCH]))
-            return STATE_SEARCH;
       return STATE_NORMAL;
       }
 

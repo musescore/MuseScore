@@ -21,7 +21,7 @@
 #include "pdf.h"
 extern "C" {
 #include <fitz.h>
-#include <mupdf.h>
+// #include <mupdf.h>
       }
 
 int Pdf::references;

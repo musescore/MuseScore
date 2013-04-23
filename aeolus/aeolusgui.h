@@ -27,6 +27,7 @@ class AeolusGui : public SynthesizerGui, Ui::AeolusGui {
       Aeolus* aeolus() { return static_cast<Aeolus*>(synthesizer()); }
 
    private slots:
+      void valueHasChanged(double, int);
 
    public slots:
       virtual void synthesizerChanged();
