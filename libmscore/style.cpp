@@ -114,6 +114,7 @@ StyleType styleTypes[] = {
       StyleType("harmonyY",                ST_SPATIUM),
       StyleType("harmonyFretDist",         ST_SPATIUM),
       StyleType("minHarmonyDistance",      ST_SPATIUM),
+      StyleType("capoPosition",            ST_INT),
 
       StyleType("showPageNumber",          ST_BOOL),
       StyleType("showPageNumberOne",       ST_BOOL),
@@ -503,6 +504,7 @@ StyleData::StyleData()
             StyleVal(ST_harmonyY, Spatium(-2.5)),
             StyleVal(ST_harmonyFretDist, Spatium(-1.5)),
             StyleVal(ST_minHarmonyDistance, Spatium(0.5)),
+            StyleVal(ST_capoPosition, 0),
 
             StyleVal(ST_showPageNumber, true),
             StyleVal(ST_showPageNumberOne, false),
