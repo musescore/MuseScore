@@ -16,6 +16,10 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#ifdef Q_WS_MAC
+#include <locale.h>
+#endif
+
 #include "aeolus.h"
 #include "model.h"
 
