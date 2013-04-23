@@ -855,7 +855,7 @@ void OmrPage::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void OmrPage::read(QDomElement e)
+void OmrPage::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

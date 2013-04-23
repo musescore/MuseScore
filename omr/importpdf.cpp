@@ -133,7 +133,7 @@ static int importPdfSystem(Score* score, int tick, const OmrSystem* omrSystem)
             tick += MScore::division * 4;
             }
       LayoutBreak* b = new LayoutBreak(score);
-      b->setSubtype(LAYOUT_BREAK_LINE);
+      b->setLayoutBreakType(LayoutBreakType::LAYOUT_BREAK_LINE);
       score->lastMeasure()->add(b);
       return tick;
       }
@@ -180,7 +180,7 @@ static void importPdfPage(Score* score, const OmrPage* omrPage)
                         }
                   if (k < (nsystems-1)) {
                         LayoutBreak* b = new LayoutBreak(score);
-                        b->setSubtype(LAYOUT_BREAK_LINE);
+                        b->setLayoutBreakType(LAYOUT_BREAK_LINE);
                         measure->add(b);
                         }
                   }
@@ -188,7 +188,7 @@ static void importPdfPage(Score* score, const OmrPage* omrPage)
       Measure* measure = score->lastMeasure();
       if (measure) {
             LayoutBreak* b = new LayoutBreak(score);
-            b->setSubtype(LAYOUT_BREAK_PAGE);
+            b->setLayoutBreakType(LAYOUT_BREAK_PAGE);
             measure->add(b);
             }
       }

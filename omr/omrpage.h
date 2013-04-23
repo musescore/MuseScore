@@ -24,6 +24,7 @@
 class Omr;
 class Score;
 class Xml;
+class XmlReader;
 class Pattern;
 
 #include "libmscore/durationtype.h"
