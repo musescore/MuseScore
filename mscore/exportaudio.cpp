@@ -49,6 +49,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
             return false;
             }
       MasterSynthesizer* synti = synthesizerFactory();
+      synti->init();
       int sampleRate = preferences.exportAudioSampleRate;
       synti->setSampleRate(sampleRate);
       synti->setState(score->synthesizerState());
