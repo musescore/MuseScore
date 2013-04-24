@@ -75,7 +75,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <property name="accessibleName">
@@ -1511,13 +1511,6 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_48">
-            <property name="text">
-             <string>Scale</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="scale">
             <property name="toolTip">
@@ -1536,6 +1529,26 @@
              <double>1.000000000000000</double>
             </property>
            </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_48">
+            <property name="text">
+             <string>Default zoom</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_17">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
