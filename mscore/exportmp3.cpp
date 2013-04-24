@@ -678,8 +678,11 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       int bufferSize   = exporter.getOutBufferSize();
       uchar* bufferOut = new uchar[bufferSize];
       MasterSynthesizer* synti = synthesizerFactory();
+      synti->init();
       synti->setSampleRate(sampleRate);
       synti->setState(score->synthesizerState());
+
+      MScore::sampleRate = sampleRate;
 
       EventMap events;
       score->renderMidi(&events);
@@ -693,15 +696,14 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       float  peak = 0.0;
       double gain = 1.0;
+      EventMap::const_iterator endPos = events.cend();
+      --endPos;
+      const int et = (score->utick2utime(endPos->first) + 1) * MScore::sampleRate;
+      pBar->setRange(0, et);
+
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
             playPos = events.cbegin();
-            EventMap::const_iterator endPos = events.cend();
-            --endPos;
-            double et = score->utick2utime(endPos->first);
-            et += 1.0;   // add trailer (sec)
-            pBar->setRange(0, int(et));
-
             //
             // init instruments
             //
@@ -718,7 +720,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         }
                   }
 
-            double playTime = 0.0;
+            int playTime = 0.0;
 
             for (;;) {
                   unsigned frames = FRAMES;
@@ -727,16 +729,16 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                   //
                   memset(bufferL, 0, sizeof(float) * FRAMES);
                   memset(bufferR, 0, sizeof(float) * FRAMES);
-                  double endTime = playTime + double(frames)/double(sampleRate);
+                  double endTime = playTime + frames;
 
                   float* l = bufferL;
                   float* r = bufferR;
 
                   for (; playPos != events.cend(); ++playPos) {
-                        double f = score->utick2utime(playPos->first);
+                        double f = score->utick2utime(playPos->first) * MScore::sampleRate;
                         if (f >= endTime)
                               break;
-                        int n = lrint((f - playTime) * sampleRate);
+                        int n = f - playTime;
                         if (n) {
                               float bu[n * 2];
                               memset(bu, 0, sizeof(float) * 2 * n);
@@ -747,7 +749,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                                     *l++ = *sp++;
                                     *r++ = *sp++;
                                     }
-                              playTime += double(n)/double(sampleRate);
+                              playTime  += n;
                               frames    -= n;
                               }
                         const Event& e = playPos->second;
@@ -768,13 +770,14 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               *l++ = *sp++;
                               *r++ = *sp++;
                               }
-                        playTime += double(frames)/double(sampleRate);
+                        playTime += frames;
                         }
-                  for (int i = 0; i < FRAMES; ++i) {
-                        bufferL[i] *= gain;
-                        bufferR[i] *= gain;
-                        }
+
                   if (pass == 1) {
+                        for (int i = 0; i < FRAMES; ++i) {
+                              bufferL[i] *= gain;
+                              bufferR[i] *= gain;
+                              }
                         long bytes;
                         if (FRAMES < inSamples)
                               bytes = exporter.encodeRemainder(bufferL, bufferR,  FRAMES , bufferOut);
@@ -801,9 +804,13 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               }
                         }
                   playTime = endTime;
-                  pBar->setValue(int(playTime));
-                  if (playTime > et)
+                  pBar->setValue((pass * et + playTime) / 2);
+                  if (playTime >= et)
                         break;
+                  }
+            if (pass == 0 && peak == 0.0) {
+                  qDebug("song is empty");
+                  break;
                   }
             gain = 0.99 / peak;
             }
