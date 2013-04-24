@@ -15,6 +15,7 @@
 #include "chord.h"
 #include "note.h"
 #include "xml.h"
+#include "staff.h"
 #include "style.h"
 #include "text.h"
 #include "element.h"
@@ -107,6 +108,10 @@ void Tuplet::layout()
             qDebug("Tuplet::layout(): tuplet is empty");
             return;
             }
+      // is in a TAB without stems, skip any format: tuplets are not shown
+      if (staff() && staff()->isTabStaff() && staff()->staffType()->slashStyle())
+            return;
+
       qreal _spatium = spatium();
       if (_numberType != NO_TEXT) {
             if (_number == 0) {
@@ -467,6 +472,10 @@ void Tuplet::layout()
 
 void Tuplet::draw(QPainter* painter) const
       {
+      // if in a TAB without stems, tuplets are not shown
+      if (staff() && staff()->isTabStaff() && staff()->staffType()->slashStyle())
+            return;
+
       QColor color(curColor());
       if (_number) {
             painter->setPen(color);
