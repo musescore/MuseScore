@@ -147,6 +147,8 @@ Harmony::~Harmony()
 void Harmony::write(Xml& xml) const
       {
       xml.stag("Harmony");
+      if (_leftParen)
+            xml.tagE("leftParen");
       if (_rootTpc != INVALID_TPC) {
             xml.tag("root", _rootTpc);
             if (_id != -1)
@@ -179,6 +181,8 @@ void Harmony::write(Xml& xml) const
             }
       else
             Text::writeProperties(xml);
+      if (_rightParen)
+            xml.tagE("rightParen");
       xml.etag();
       }
 
@@ -238,6 +242,14 @@ void Harmony::read(XmlReader& e)
                         else if (degreeType == "subtract")
                               addDegree(HDegree(degreeValue, degreeAlter, SUBTRACT));
                         }
+                  }
+            else if (tag == "leftParen") {
+                  _leftParen = true;
+                  e.readNext();
+                  }
+            else if (tag == "rightParen") {
+                  _rightParen = true;
+                  e.readNext();
                   }
             else if (!Text::readProperties(e))
                   e.unknown();
