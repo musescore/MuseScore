@@ -50,7 +50,6 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void setDirty();
 
    signals:
-      void closed(bool);
       void gainChanged(float);
       void soundFontChanged();
 

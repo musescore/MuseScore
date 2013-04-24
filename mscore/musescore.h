@@ -373,7 +373,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showPlayPanel(bool);
       void showNavigator(bool);
       void showMixer(bool);
-      void showSynthControl();
+      void showSynthControl(bool);
       void showSearchDialog();
       void helpBrowser() const;
       void helpBrowser(const QUrl&) const;
