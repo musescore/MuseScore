@@ -4339,7 +4339,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "toggle-mixer")
             showMixer(a->isChecked());
       else if (cmd == "synth-control")
-            showSynthControl();
+            showSynthControl(a->isChecked());
       else if (cmd == "show-keys")
             ;
       else if (cmd == "toggle-transport")

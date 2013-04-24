@@ -1779,6 +1779,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "synth-control",
+         Qt::ApplicationShortcut,
          QT_TRANSLATE_NOOP("action","Synthesizer")
          ),
       Shortcut(

@@ -27,38 +27,37 @@ Rngen   Pipewave::_rgen;
 float  *Pipewave::_arg = 0;
 float  *Pipewave::_att = 0;
 
+void Pipewave::initstatic(float fsamp)
+      {
+      if (_arg)
+            return;
+      int k = (int)(fsamp);
+      _arg  = new float [k];
+      k     = (int)(0.5f * fsamp);
+      _att  = new float [k];
+      }
 
-void Pipewave::initstatic (float fsamp)
-{
-    int k;
+//---------------------------------------------------------
+//   play
+//---------------------------------------------------------
 
-    if (_arg) return;
-    k = (int)(fsamp);
-    _arg = new float [k];
-    k = (int)(0.5f * fsamp);
-    _att = new float [k];
-}
+void Pipewave::play()
+      {
+      int     i, d, k1, k2;
+      float   g, dg, y, dy, t;
+      float   *q;
 
+      float* p = _p_p;
+      float* r = _p_r;
 
-void Pipewave::play (void)
-{
-    int     i, d, k1, k2;
-    float   g, dg, y, dy, t;
-    float   *p, *q, *r;
-
-    p = _p_p;
-    r = _p_r;
-
-    if (_sdel & 1)
-    {
-	if (! p)
-	{
-	    p = _p0;
-            _y_p = 0.0f;
-            _z_p = 0.0f;
-        }
-    }
-    else
+      if (_sdel & 1) {
+            if (!p) {
+                  p    = _p0;
+                  _y_p = 0.0f;
+                  _z_p = 0.0f;
+                  }
+            }
+      else
     {
         if (! r)
 	{
