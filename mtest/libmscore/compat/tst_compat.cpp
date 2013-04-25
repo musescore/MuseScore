@@ -59,6 +59,7 @@ void TestCompat::compat_data()
       QTest::newRow("articulations") << "articulations";
       QTest::newRow("textstyles") << "textstyles";
       QTest::newRow("title") << "title";
+      QTest::newRow("notes_useroffset") << "notes_useroffset";
       }
 
 //---------------------------------------------------------

@@ -8,4 +8,5 @@ cp $P/hairpin-test.mscx hairpin-ref.mscx
 cp $P/notes-test.mscx notes-ref.mscx
 cp $P/textstyles-test.mscx textstyles-ref.mscx
 cp $P/title-test.mscx title-ref.mscx
+cp $P/notes_useroffset.mscx notes_useroffset-ref.mscx
 

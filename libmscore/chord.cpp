@@ -890,6 +890,23 @@ void Chord::read(XmlReader& e)
             else if (!ChordRest::readProperties(e))
                   e.unknown();
             }
+      if (score()->mscVersion() <= 114) { // #19988
+            Note * n = upNote();
+            if (n) {
+                  if (notes().size() == 1) {
+                        setUserOff(n->userOff() + userOff());
+                        n->setUserOff(QPoint());
+                        n->setReadPos(QPoint());
+                        }
+                  else if(!n->userOff().isNull()) {
+                        if(!_stem) {
+                              _stem = new Stem(score());
+                              add(_stem);
+                              }
+                         _stem->setUserOff(n->userOff() + _stem->userOff());
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
