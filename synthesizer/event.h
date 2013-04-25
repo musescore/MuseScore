@@ -130,10 +130,10 @@ enum {
 
 class MidiCoreEvent {
    protected:
-      uchar _type;
-      uchar _channel;
-      uchar _a;
-      uchar _b;
+      uchar _type    = 0;
+      uchar _channel = 0;
+      uchar _a       = 0;
+      uchar _b       = 0;
 
    public:
       MidiCoreEvent() {}
@@ -172,7 +172,10 @@ class MidiCoreEvent {
       void setData(int t, int a, int b) { _type = t; _a = a; _b = b; }
 
       bool isChannelEvent() const;
-      void write(Xml&, int ontime) const;
+      void write(Xml&) const;
+      bool operator==(const MidiCoreEvent& e) const {
+            return e._type == _type && e._channel == _channel && e._a == _a && e._b == _b;
+            }
       };
 
 //---------------------------------------------------------

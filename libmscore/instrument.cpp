@@ -33,7 +33,7 @@ void NamedEventList::write(Xml& xml, const QString& n) const
       if (!descr.isEmpty())
             xml.tag("descr", descr);
       foreach(const MidiCoreEvent& e, events)
-            e.write(xml, 0);
+            e.write(xml);
       xml.etag();
       }
 
@@ -374,7 +374,7 @@ void Channel::write(Xml& xml) const
                         continue;
                   }
 
-            e.write(xml, 0);
+            e.write(xml);
             }
       if (!MScore::testMode)
             // xml.tag("synti", ::synti->name(synti));
@@ -621,7 +621,7 @@ bool InstrumentData::operator==(const InstrumentData& i) const
          &&  i._minPitchP == _minPitchP
          &&  i._maxPitchP == _maxPitchP
          &&  i._useDrumset == _useDrumset
-//TODO         &&  i._midiActions == _midiActions
+         &&  i._midiActions == _midiActions
          &&  i._channel == _channel
          &&  i._articulation == _articulation
          &&  i._transpose.diatonic == _transpose.diatonic
