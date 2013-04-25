@@ -49,7 +49,6 @@ class InstrumentTemplate {
       bool useDrumset;
       Drumset* drumset;
 
-//      bool useTablature;
       Tablature* tablature;
 
       QList<NamedEventList>   midiActions;

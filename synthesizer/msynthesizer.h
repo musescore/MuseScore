@@ -18,7 +18,7 @@
 #include "libmscore/synthesizerstate.h"
 
 struct MidiPatch;
-class Event;
+class NPlayEvent;
 class Synthesizer;
 class Effect;
 class Xml;
@@ -70,7 +70,7 @@ class MasterSynthesizer : public QObject {
       void setSampleRate(float val);
 
       void process(unsigned, float*);
-      void play(const Event&, unsigned);
+      void play(const NPlayEvent&, unsigned);
 
       void setMasterTuning(double val);
       double masterTuning() const      { return _masterTuning; }

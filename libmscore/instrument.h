@@ -54,11 +54,11 @@ struct StaffNameDoc {
 struct NamedEventList {
       QString name;
       QString descr;
-      EventList events;
+      std::vector<MidiCoreEvent> events;
 
       void write(Xml&, const QString& name) const;
       void read(XmlReader&);
-      bool operator==(const NamedEventList& i) const { return i.name == name && i.events == events; }
+//      bool operator==(const NamedEventList& i) const { return i.name == name && i.events == events; }
       };
 
 //---------------------------------------------------------
@@ -92,7 +92,7 @@ struct Channel {
       QString name;
       QString descr;
       int channel;      // mscore channel number, mapped to midi port/channel
-      mutable EventList init;
+      mutable std::vector<MidiCoreEvent> init;
 
       QString synti;
       int program;     // current values as shown in mixer

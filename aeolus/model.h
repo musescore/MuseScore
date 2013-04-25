@@ -170,7 +170,6 @@ class Model
       void init_iface();
       void init_ranks(int comm);
       void proc_rank(int g, int i, int comm);
-      void set_dipar(int s, int d, int p, float v);
       void set_mconf(int i, uint16_t *d);
       void get_state(uint32_t *bits);
       void set_state(int bank, int pres);

@@ -150,6 +150,7 @@ void Aeolus::process(unsigned nframes, float* out, float*, float*)
                         _divisp[d]->update (n, m);
 	            }
             }
+
       for (int d = 0; d < _ndivis; d++)
             _divisp[d]->update(_keymap);
 
@@ -212,7 +213,7 @@ void Aeolus::cond_key_off (int m, int b)
       for (int i = 0; i < NNOTES; i++, p++) {
             if (*p & m) {
                   *p &= ~b;
-                  *p |= 128;
+                  *p |= 0x80;
                   }
             }
       }
@@ -223,19 +224,19 @@ void Aeolus::cond_key_on (int m, int b)
 
       for (int i = 0; i < NNOTES; i++, p++) {
             if (*p & m)
-                  *p |= b | 128;
+                  *p |= b | 0x80;
             }
       }
 
 void Aeolus::key_off (int n, int b)
       {
       _keymap[n] &= ~b;
-      _keymap[n] |= 128;
+      _keymap[n] |= 0x80;
       }
 
 void Aeolus::key_on (int n, int b)
       {
-      _keymap[n] |= b | 128;
+      _keymap[n] |= b | 0x80;
       }
 
 

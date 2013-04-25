@@ -134,6 +134,13 @@ void Aeolus::play(const PlayEvent& event)
                         key_on(n, m);
                   }
             }
+      else if (type == ME_NOTEOFF) {
+            int n = event.dataA();
+            if ((n >= 36) && (n <= 96)) {
+                  n -= 36;
+                  key_off(n, m);
+                  }
+            }
       else if (type == ME_CONTROLLER) {
             int p = event.dataA();
             int v = event.dataB();
@@ -143,9 +150,8 @@ void Aeolus::play(const PlayEvent& event)
                               // Set mode or clear group.
                               _sc_cmode = (v >> 4) & 3;
                               _sc_group = v & 7;
-                              if (_sc_cmode == 0) {
+                              if (_sc_cmode == 0)
                                     model->clr_group(_sc_group);
-                                    }
                               }
                         else if (_sc_cmode) {
                               // Set, reset or toggle stop.

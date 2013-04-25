@@ -2258,7 +2258,8 @@ void ChangePatch::flip()
             return;
             }
 
-      Event event(ME_CONTROLLER);
+      NPlayEvent event;
+      event.setType(ME_CONTROLLER);
       event.setChannel(channel->channel);
 
       int hbank = (channel->bank >> 7) & 0x7f;

@@ -172,6 +172,7 @@ class MidiCoreEvent {
       void setData(int t, int a, int b) { _type = t; _a = a; _b = b; }
 
       bool isChannelEvent() const;
+      void write(Xml&, int ontime) const;
       };
 
 //---------------------------------------------------------
@@ -200,6 +201,7 @@ class MidiEvent : public MidiCoreEvent {
 
 //---------------------------------------------------------
 //   PlayEvent
+//    interface to Synthesizer
 //---------------------------------------------------------
 
 class PlayEvent : public MidiCoreEvent {
@@ -208,8 +210,29 @@ class PlayEvent : public MidiCoreEvent {
       float _tuning = .0f;
 
    public:
+      PlayEvent() : MidiCoreEvent() {}
+      PlayEvent(const MidiCoreEvent& e) : MidiCoreEvent(e) {}
+      PlayEvent(uchar t, uchar c, uchar a, uchar b)
+         : MidiCoreEvent(t, c, a, b) {};
       float tuning() const           { return _tuning;  }
       void setTuning(float v)        { _tuning = v;     }
+      };
+
+//---------------------------------------------------------
+//   NPlayEvent
+//    used for Sequencer interface
+//---------------------------------------------------------
+
+class NPlayEvent : public PlayEvent {
+      const Note* _note = 0;
+
+   public:
+      NPlayEvent() : PlayEvent() {}
+      NPlayEvent(uchar t, uchar c, uchar a, uchar b)
+         : PlayEvent(t, c, a, b) {};
+      NPlayEvent(const MidiCoreEvent& e) : PlayEvent(e) {}
+      const Note* note() const       { return _note; }
+      void setNote(const Note* v)    { _note = v; }
       };
 
 //---------------------------------------------------------
@@ -277,7 +300,7 @@ class EventList : public QList<Event> {
       void insertNote(int channel, Note*);
       };
 
-class EventMap : public std::multimap<int, Event> {};
+class EventMap : public std::multimap<int, NPlayEvent> {};
 
 typedef EventList::iterator iEvent;
 typedef EventList::const_iterator ciEvent;
