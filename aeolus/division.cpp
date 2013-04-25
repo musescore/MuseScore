@@ -109,53 +109,51 @@ void Division::set_rank (int ind, Rankwave *W, int pan, int del)
 }
 
 
+//---------------------------------------------------------
+//   update
+//---------------------------------------------------------
+
 void Division::update (int note, int mask)
-{
-    int             r;
-    Rankwave       *W;
-
-    for (r = 0; r < _nrank; r++)
-    {
-	W = _ranks [r];
-        if (W->_cmask & 127)
-	{
-	    if (mask & W->_cmask) W->note_on (note + 36);
-	    else                  W->note_off (note + 36);
-	}
-    }
-}
-
+      {
+      for (int r = 0; r < _nrank; r++) {
+            Rankwave* W = _ranks [r];
+            if (W->_cmask & 0x7f) {
+                  if (mask & W->_cmask)
+                        W->note_on (note + 36);
+                  else
+                        W->note_off (note + 36);
+                  }
+            }
+      }
 
 void Division::update (unsigned char *keys)
-{
-    int            d, r, m, n, n0, n1;
-    unsigned char  *k;
-    Rankwave       *W;
+      {
+      for (int r = 0; r < _nrank; r++) {
+            Rankwave* W = _ranks [r];
 
-    for (r = 0; r < _nrank; r++)
-    {
-	W = _ranks [r];
-        if ((W->_cmask ^ W->_nmask) & 127)
-	{
-            m = W->_nmask & 127;
-            if (m)
-	    {
-		n0 = W->n0 ();
-		n1 = W->n1 ();
-                k = keys;
-                d = n0 - 36;
-                if (d > 0) k += d;
-                for (n = n0; n <= n1; n++)
-	        {
-                    if (*k++ & m) W->note_on (n);
-		    else          W->note_off (n);
-		}
-	    }
-            else W->all_off ();
-	}
-        W->_cmask = W->_nmask;
-    }
-}
+            if ((W->_cmask ^ W->_nmask) & 0x7f) {
+                  int m = W->_nmask & 127;
+                  if (m) {
+                        int n0 = W->n0 ();
+                        int n1 = W->n1 ();
+                        uchar* k = keys;
+                        int d = n0 - 36;
+                        if (d > 0)
+                              k += d;
+                        for (int n = n0; n <= n1; n++) {
+                              if (*k++ & m)
+                                    W->note_on (n);
+                              else
+                                    W->note_off (n);
+                              }
+                        }
+                  else {
+                        W->all_off ();
+                        }
+                  }
+            W->_cmask = W->_nmask;
+            }
+      }
 
 
 void Division::set_div_mask (int bits)
@@ -189,18 +187,21 @@ void Division::clr_div_mask (int bits)
 
 
 void Division::set_rank_mask (int ind, int bits)
-{
-    Rankwave *W = _ranks [ind];
+      {
+      Rankwave *W = _ranks [ind];
 
-    if (bits == 128) bits |= _dmask;
-    W->_nmask |= bits;
-}
+      if (bits == 128)
+            bits |= _dmask;
+      W->_nmask |= bits;
+      }
 
 
 void Division::clr_rank_mask (int ind, int bits)
-{
-    Rankwave *W = _ranks [ind];
+      {
+      Rankwave *W = _ranks [ind];
 
-    if (bits == 128) bits |= _dmask;
-    W->_nmask &= ~bits;
-}
+      if (bits == 128)
+            bits |= _dmask;
+      W->_nmask &= ~bits;
+      }
+

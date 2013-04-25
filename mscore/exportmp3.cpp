@@ -710,7 +710,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             foreach(const Part* part, score->parts()) {
                   foreach(const Channel& a, part->instr()->channel()) {
                         a.updateInitList();
-                        foreach(Event e, a.init) {
+                        foreach(MidiCoreEvent e, a.init) {
                               if (e.type() == ME_INVALID)
                                     continue;
                               e.setChannel(a.channel);
@@ -752,7 +752,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               playTime  += n;
                               frames    -= n;
                               }
-                        const Event& e = playPos->second;
+                        const NPlayEvent& e = playPos->second;
                         if (e.isChannelEvent()) {
                               int channelIdx = e.channel();
                               Channel* c = score->midiMapping(channelIdx)->articulation;

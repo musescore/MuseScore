@@ -450,10 +450,8 @@ void Seq::stopTransport()
             return;
       stopNotes();
       // send sustain off
-      Event e;
-      e.setType(ME_CONTROLLER);
-      e.setController(CTRL_SUSTAIN);
-      e.setValue(0);
+      // TODO: channel?
+      NPlayEvent e(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0);
       putEvent(e);
       emit toGui('0');
       }
@@ -475,7 +473,7 @@ void Seq::startTransport()
 //    send one event to the synthesizer
 //---------------------------------------------------------
 
-void Seq::playEvent(const Event& event)
+void Seq::playEvent(const NPlayEvent& event)
       {
       int type = event.type();
       if (type == ME_NOTEON) {
@@ -630,7 +628,7 @@ void Seq::process(unsigned n, float* buffer)
                                     }
                               }
                         }
-                  const Event& event = playPos->second;
+                  const NPlayEvent& event = playPos->second;
                   playEvent(event);
                   if (event.type() == ME_TICK1)
                         tickRest = tickLength;
@@ -708,11 +706,11 @@ void Seq::initInstruments()
       {
       foreach(const MidiMapping& mm, *cs->midiMapping()) {
             Channel* channel = mm.articulation;
-            foreach(Event e, channel->init) {
+            foreach(const MidiCoreEvent& e, channel->init) {
                   if (e.type() == ME_INVALID)
                         continue;
-                  e.setChannel(channel->channel);
-                  sendEvent(e);
+                  NPlayEvent event(e.type(), channel->channel, e.dataA(), e.dataB());
+                  sendEvent(event);
                   }
             }
       }
@@ -847,11 +845,8 @@ void Seq::startNote(int channel, int pitch, int velo, double nt)
       {
       if (state != TRANSPORT_STOP)
             return;
-      Event ev(ME_NOTEON);
-      ev.setChannel(channel);
-      ev.setPitch(pitch);
+      NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
       ev.setTuning(nt);
-      ev.setVelo(velo);
       sendEvent(ev);
       }
 
@@ -901,10 +896,7 @@ void Seq::stopNotes(int channel)
 
 void Seq::setController(int channel, int ctrl, int data)
       {
-      Event event(ME_CONTROLLER);
-      event.setChannel(channel);
-      event.setController(ctrl);
-      event.setValue(data);
+      NPlayEvent event(ME_CONTROLLER, channel, ctrl, data);
       sendEvent(event);
       }
 
@@ -914,7 +906,7 @@ void Seq::setController(int channel, int ctrl, int data)
 //    midi out or synthesizer
 //---------------------------------------------------------
 
-void Seq::sendEvent(const Event& ev)
+void Seq::sendEvent(const NPlayEvent& ev)
       {
       guiToSeq(SeqMsg(SEQ_PLAY, ev));
       }
@@ -977,7 +969,7 @@ void Seq::prevChord()
       EventMap::const_iterator i = events.upper_bound(cs->playPos());
       for (;;) {
             if (i->second.type() == ME_NOTEON) {
-                  const Event& n = i->second;
+                  const NPlayEvent& n = i->second;
                   if (i->first < tick && n.velo()) {
                         tick = i->first;
                         break;
@@ -992,7 +984,7 @@ void Seq::prevChord()
             i = playPos;
             for (;;) {
                   if (i->second.type() == ME_NOTEON) {
-                        const Event& n = i->second;
+                        const NPlayEvent& n = i->second;
                         if (i->first < tick && n.velo()) {
                               seek(i->first);
                               break;
@@ -1029,7 +1021,7 @@ void Seq::guiToSeq(const SeqMsg& msg)
 //   eventToGui
 //---------------------------------------------------------
 
-void Seq::eventToGui(Event e)
+void Seq::eventToGui(NPlayEvent e)
       {
       fromSeq.enqueue(SeqMsg(SEQ_MIDI_INPUT_EVENT, e));
       }
@@ -1094,7 +1086,7 @@ SeqMsg SeqMsgFifo::dequeue()
 //   putEvent
 //---------------------------------------------------------
 
-void Seq::putEvent(const Event& event)
+void Seq::putEvent(const NPlayEvent& event)
       {
       if (!cs)
             return;
@@ -1152,7 +1144,7 @@ void Seq::heartBeat()
       for (;guiPos != events.cend(); ++guiPos) {
             if (guiPos->first > ppos->first)
                   break;
-            const Event& n = guiPos->second;
+            const NPlayEvent& n = guiPos->second;
             if (n.type() == ME_NOTEON) {
                   const Note* note1 = n.note();
                   if (n.velo()) {

@@ -259,7 +259,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
             cs->renderStaff(&events, staff);
 
             for (auto i = events.begin(); i != events.end(); ++i) {
-                  Event event(i->second);
+                  NPlayEvent event(i->second);
                   if (event.channel() != channel)
                         continue;
                   if (event.type() == ME_NOTEON) {
