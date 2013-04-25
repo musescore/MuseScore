@@ -22,7 +22,6 @@
 //    Capella 2000 import filter
 //
 #include <assert.h>
-#include "musescore.h"
 #include "libmscore/mscore.h"
 #include "capella.h"
 #include "libmscore/score.h"
