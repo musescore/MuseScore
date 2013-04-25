@@ -149,21 +149,21 @@ Shortcut Shortcut::sc[] = {
           redo_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT,
          0,
          "cut",
          QT_TRANSLATE_NOOP("action","Cut"),
           cut_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_FOTO,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT |STATE_LYRICS_EDIT | STATE_FOTO,
          0,
          "copy",
          QT_TRANSLATE_NOOP("action","Copy"),
           copy_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT |STATE_LYRICS_EDIT,
          0,
          "paste",
          Qt::ApplicationShortcut,
