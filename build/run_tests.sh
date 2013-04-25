@@ -2,7 +2,7 @@
 xvfb-run ctest
 PROC_RET=$?
 
-if [$PROC_RET -ne 0]; then
+if [ "$PROC_RET" -ne 0 ]; then
 xvfb-run mtest
 fi
 
