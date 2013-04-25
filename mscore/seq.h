@@ -131,6 +131,7 @@ class Seq : public QObject, public Sequencer {
       void metronome(unsigned n, float* l);
       void seek(int utick, Segment* seg);
       void unmarkNotes();
+      void updateSynthesizerState(int tick1, int tick2);
 
    private slots:
       void seqMessage(int msg);

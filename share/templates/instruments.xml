@@ -7133,7 +7133,7 @@
 					<controller ctrl="98" value="3"/>
 				</MidiAction>
 				<MidiAction name="rofl4">
-					<descr>set stop Rohrflöte 4</descr>
+					<descr>set stop Rohrflöte 8</descr>
 					<controller ctrl="98" value="96"/>
 					<controller ctrl="98" value="4"/>
 				</MidiAction>

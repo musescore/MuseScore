@@ -2971,23 +2971,25 @@ void MuseScore::readSettings()
 
 void MuseScore::play(Element* e) const
       {
-      if (mscore->playEnabled()) {
-            if (e->type() == Element::NOTE) {
-                  Note* note = static_cast<Note*>(e);
-                  play(e, note->ppitch());
+      if (!mscore->playEnabled())
+            return;
+
+      if (e->type() == Element::NOTE) {
+            Note* note = static_cast<Note*>(e);
+            play(e, note->ppitch());
+            }
+      else if (e->type() == Element::CHORD) {
+            seq->stopNotes();
+            Chord* c = static_cast<Chord*>(e);
+            Part* part = c->staff()->part();
+            int tick = c->segment() ? c->segment()->tick() : 0;
+            seq->seek(tick);
+            Instrument* instr = part->instr(tick);
+            foreach(Note* n, c->notes()) {
+                  const Channel& channel = instr->channel(n->subchannel());
+                  seq->startNote(channel.channel, n->ppitch(), 80, n->tuning());
                   }
-            else if (e->type() == Element::CHORD) {
-                  seq->stopNotes();
-                  Chord* c = static_cast<Chord*>(e);
-                  Part* part = c->staff()->part();
-                  int tick = c->segment() ? c->segment()->tick() : 0;
-                  Instrument* instr = part->instr(tick);
-                  foreach(Note* n, c->notes()) {
-                        const Channel& channel = instr->channel(n->subchannel());
-                        seq->startNote(channel.channel, n->ppitch(), 80, n->tuning());
-                        }
-                  seq->startNoteTimer(MScore::defaultPlayDuration);
-                  }
+            seq->startNoteTimer(MScore::defaultPlayDuration);
             }
       }
 
@@ -2995,8 +2997,11 @@ void MuseScore::play(Element* e, int pitch) const
       {
       if (mscore->playEnabled() && e->type() == Element::NOTE) {
             Note* note = static_cast<Note*>(e);
+            int tick = note->chord()->tick();
+            if (tick < 0)
+                  tick = 0;
+            seq->seek(tick);
             Part* part = note->staff()->part();
-            int tick = note->chord()->segment() ? note->chord()->segment()->tick() : 0;
             Instrument* instr = part->instr(tick);
             const Channel& channel = instr->channel(note->subchannel());
             seq->startNote(channel.channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
@@ -3006,6 +3011,7 @@ void MuseScore::play(Element* e, int pitch) const
 //---------------------------------------------------------
 //   reportBug
 //---------------------------------------------------------
+
 void MuseScore::reportBug()
       {
       QString url("http://musescore.org/en/node/add/project-issue/musescore?sha=");
