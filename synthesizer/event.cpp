@@ -19,37 +19,37 @@
 //   MidiCoreEvent::write
 //---------------------------------------------------------
 
-void MidiCoreEvent::write(Xml& xml, int ontime) const
+void MidiCoreEvent::write(Xml& xml) const
       {
       switch(_type) {
             case ME_NOTEON:
-                  xml.tagE(QString("note-on  tick=\"%1\" channel=\"%2\" pitch=\"%3\" velo=\"%4\"")
-                     .arg(ontime).arg(_channel).arg(_a).arg(_b));
+                  xml.tagE(QString("note-on  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
+                     .arg(_channel).arg(_a).arg(_b));
                   break;
 
             case ME_NOTEOFF:
-                  xml.tagE(QString("note-off  tick=\"%1\" channel=\"%2\" pitch=\"%3\" velo=\"%4\"")
-                     .arg(ontime).arg(_channel).arg(_a).arg(_b));
+                  xml.tagE(QString("note-off  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
+                     .arg(_channel).arg(_a).arg(_b));
                   break;
 
             case ME_CONTROLLER:
                   if (_a == CTRL_PROGRAM) {
-                        if ((ontime == -1) && (_channel == 0)) {
+                        if (_channel == 0) {
                               xml.tagE(QString("program value=\"%1\"").arg(_b));
                               }
                         else {
-                              xml.tagE(QString("program tick=\"%1\" channel=\"%2\" value=\"%3\"")
-                                 .arg(ontime).arg(channel()).arg(_b));
+                              xml.tagE(QString("program channel=\"%1\" value=\"%2\"")
+                                 .arg(channel()).arg(_b));
                               }
                         }
                   else {
-                        if ((ontime == -1) && (channel() == 0)) {
+                        if (channel() == 0) {
                               xml.tagE(QString("controller ctrl=\"%1\" value=\"%2\"")
                                  .arg(_a).arg(_b));
                               }
                         else {
-                              xml.tagE(QString("controller tick=\"%1\" channel=\"%2\" ctrl=\"%3\" value=\"%4\"")
-                                 .arg(ontime).arg(channel()).arg(_a).arg(_b));
+                              xml.tagE(QString("controller channel=\"%1\" ctrl=\"%2\" value=\"%3\"")
+                                 .arg(channel()).arg(_a).arg(_b));
                               }
                         }
                   break;
