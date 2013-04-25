@@ -42,6 +42,7 @@
 #include "bend.h"
 #include "tremolo.h"
 #include "noteevent.h"
+#include "synthesizer/event.h"
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
@@ -109,15 +110,12 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
    int velo, int onTime, int offTime)
       {
       velo = note->customizeVelocity(velo);
-      Event ev(ME_NOTEON);
-      ev.setChannel(channel);
-      ev.setPitch(pitch);
-      ev.setVelo(velo);
+      NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
       ev.setTuning(note->tuning());
       ev.setNote(note);
-      events->insert(std::pair<int, Event>(onTime, ev));
+      events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       ev.setVelo(0);
-      events->insert(std::pair<int, Event>(offTime, ev));
+      events->insert(std::pair<int, NPlayEvent>(offTime, ev));
       }
 
 //---------------------------------------------------------
@@ -215,21 +213,21 @@ struct OttavaShiftSegment {
 
 static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMap* events)
       {
-      Event event(ME_CONTROLLER);
+      NPlayEvent event;
+      event.setType(ME_CONTROLLER);
       event.setController(98);
       if (val)
             event.setValue(0x40 + 0x20  + i);
       else
             event.setValue(0x40 + 0x10  + i);
 
-      event.setOntime(tick);
       event.setChannel(channel);
-      events->insert(std::pair<int,Event>(tick, event));
+      events->insert(std::pair<int,NPlayEvent>(tick, event));
 
       event.setValue(k);
-      events->insert(std::pair<int,Event>(tick, event));
+      events->insert(std::pair<int,NPlayEvent>(tick, event));
 //      event.setValue(0x40 + i);
-//      events->insert(std::pair<int,Event>(tick, event));
+//      events->insert(std::pair<int,NPlayEvent>(tick, event));
       }
 
 //---------------------------------------------------------
@@ -288,12 +286,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               NamedEventList* nel = instr->midiAction(ma, channel);
                               if (!nel)
                                     continue;
-                              int n = nel->events.size();
-                              for (int i = n-1; i >= 0; --i) {
-                                    Event event(nel->events[i]);
-                                    event.setOntime(tick);
+                              for (MidiCoreEvent event : nel->events) {
                                     event.setChannel(channel);
-                                    events->insert(std::pair<int, Event>(tick, event));
+                                    NPlayEvent e(event);
+                                    events->insert(std::pair<int, NPlayEvent>(tick, e));
                                     }
                               }
                         }
@@ -324,15 +320,11 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                         int channel = staff->channel(s1->tick(), 0);
 
-                        Event event(ME_CONTROLLER);
-                        event.setChannel(channel);
-                        event.setController(CTRL_SUSTAIN);
-
-                        event.setValue(127);
-                        events->insert(std::pair<int,Event>(s1->tick() + tickOffset, event));
+                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
+                        events->insert(std::pair<int,NPlayEvent>(s1->tick() + tickOffset, event));
 
                         event.setValue(0);
-                        events->insert(std::pair<int,Event>(s2->tick() + tickOffset - 1, event));
+                        events->insert(std::pair<int,NPlayEvent>(s2->tick() + tickOffset - 1, event));
                         }
                   }
             }
@@ -871,9 +863,9 @@ void Score::renderMidi(EventMap* events)
                   int tw = MScore::division * 4 / ts.denominator();
                   for (int i = 0; i < ts.numerator(); i++) {
                         int tick = m->tick() + i * tw + tickOffset;
-                        Event event;
+                        NPlayEvent event;
                         event.setType(i == 0 ? ME_TICK1 : ME_TICK2);
-                        events->insert(std::pair<int,Event>(tick, event));
+                        events->insert(std::pair<int,NPlayEvent>(tick, event));
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;

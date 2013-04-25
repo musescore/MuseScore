@@ -297,37 +297,8 @@ void Model::set_state(int bank, int pres)
                         s >>= 1;
                         }
                   }
-//WS        send_event (TO_IFACE, new M_ifc_preset (MT_IFC_PRRCL, bank, pres, _ngroup, d));
-            }
-      else  {
-//WS        send_event (TO_IFACE, new M_ifc_preset (MT_IFC_PRRCL, bank, pres, 0, 0));
             }
       }
-
-
-void Model::set_dipar (int /*s*/, int d, int p, float v)
-{
-    SyntiParameter  *P;
-//    union { uint32_t i; float f; } u;
-
-    P = _divis [d]._param + p;
-    if (v < P->min())
-            v = P->min();
-    if (v > P->max())
-            v = P->max();
-    P->set(v);
-printf("Model::set_dipar\n");
-#if 0
-    if (_qcomm->write_avail () >= 2)
-    {
-	u.f = v;
-	_qcomm->write (0, (17 << 24) | (d << 16) | (p << 8));
-	_qcomm->write (1, u.i);
-        _qcomm->write_commit (2);
-//WS        send_event (TO_IFACE, new M_ifc_dipar (s, d, p, v));
-    }
-#endif
-}
 
 
 void Model::set_mconf (int /*i*/, uint16_t *d)
@@ -339,7 +310,6 @@ void Model::set_mconf (int /*i*/, uint16_t *d)
             b |= a & 0x7700;
             _midimap [j] = b;
             }
-//WS    send_event (TO_IFACE, new M_ifc_chconf (MT_IFC_MCSET, i, d));
       }
 
 
@@ -370,6 +340,7 @@ void Model::recalc (int g, int i)
       proc_rank (g, i, MT_CALC_RANK);
       }
 
+#if 0
 void Model::save ()
       {
       write_instr ();
@@ -381,6 +352,7 @@ void Model::save ()
                   proc_rank (g, i, MT_SAVE_RANK);
             }
       }
+#endif
 
 Rank *Model::find_rank (int g, int i)
       {
@@ -946,10 +918,13 @@ int Model::read_presets()
             f.close();
             return 1;
             }
+// printf("==read_presets: chconf\n");
       uchar* p = data;
       for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 16; j++) {
-                  _chconf [i]._bits [j] = RD2 (p);
+                  int val = RD2(p);
+//                  printf("   %d %d = %d\n", i, j, val);
+                  _chconf [i]._bits [j] = val;
                   p += 2;
                   }
             }

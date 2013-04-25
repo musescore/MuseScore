@@ -32,8 +32,8 @@ void NamedEventList::write(Xml& xml, const QString& n) const
       xml.stag(QString("%1 name=\"%2\"").arg(n).arg(name));
       if (!descr.isEmpty())
             xml.tag("descr", descr);
-      foreach(const Event& e, events)
-            e.write(xml);
+      foreach(const MidiCoreEvent& e, events)
+            e.write(xml, 0);
       xml.etag();
       }
 
@@ -47,17 +47,16 @@ void NamedEventList::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "program") {
-                  Event ev(ME_CONTROLLER);
-                  ev.setDataA(CTRL_PROGRAM);
-                  ev.setDataB(e.intAttribute("value", 0));
-                  events.append(ev);
+                  MidiCoreEvent ev(ME_CONTROLLER, 0, CTRL_PROGRAM, e.intAttribute("value", 0));
+                  events.push_back(ev);
                   e.skipCurrentElement();
                   }
             else if (tag == "controller") {
-                  Event ev(ME_CONTROLLER);
+                  MidiCoreEvent ev;
+                  ev.setType(ME_CONTROLLER);
                   ev.setDataA(e.intAttribute("ctrl", 0));
                   ev.setDataB(e.intAttribute("value", 0));
-                  events.append(ev);
+                  events.push_back(ev);
                   e.skipCurrentElement();
                   }
             else if (tag == "descr")
@@ -329,7 +328,7 @@ NamedEventList* InstrumentData::midiAction(const QString& s, int channelIdx) con
 Channel::Channel()
       {
       for(int i = 0; i < A_INIT_COUNT; ++i)
-            init.append(0);
+            init.push_back(MidiCoreEvent());
       synti    = "Fluid";     // default synthesizer
       channel  = -1;
       program  = -1;
@@ -357,7 +356,7 @@ void Channel::write(Xml& xml) const
       if (!descr.isEmpty())
             xml.tag("descr", descr);
       updateInitList();
-      foreach(const Event& e, init) {
+      foreach(const MidiCoreEvent& e, init) {
             if (e.type() == ME_INVALID)
                   continue;
             if (e.type() == ME_CONTROLLER) {
@@ -375,7 +374,7 @@ void Channel::write(Xml& xml) const
                         continue;
                   }
 
-            e.write(xml);
+            e.write(xml, 0);
             }
       if (!MScore::testMode)
             // xml.tag("synti", ::synti->name(synti));
@@ -437,7 +436,7 @@ void Channel::read(XmlReader& e)
                               e.setChannel(0);
                               e.setDataA(ctrl);
                               e.setDataB(value);
-                              init.append(e);
+                              init.push_back(e);
                               }
                               break;
                         }
@@ -453,10 +452,8 @@ void Channel::read(XmlReader& e)
                   a.read(e);
                   midiActions.append(a);
                   }
-            else if (tag == "synti") {
-                  QString s = e.readElementText();
-                  synti = s;
-                  }
+            else if (tag == "synti")
+                  synti = e.readElementText();
             else if (tag == "descr")
                   descr = e.readElementText();
             else if (tag == "mute")
@@ -475,11 +472,7 @@ void Channel::read(XmlReader& e)
 
 void Channel::updateInitList() const
       {
-      for (int i = 0; i < A_INIT_COUNT; ++i) {
-            // delete init[i];      memory leak
-            init[i] = 0;
-            }
-      Event e;
+      MidiCoreEvent e;
       if (program != -1) {
             e.setType(ME_CONTROLLER);
             e.setDataA(CTRL_PROGRAM);
@@ -628,7 +621,7 @@ bool InstrumentData::operator==(const InstrumentData& i) const
          &&  i._minPitchP == _minPitchP
          &&  i._maxPitchP == _maxPitchP
          &&  i._useDrumset == _useDrumset
-         &&  i._midiActions == _midiActions
+//TODO         &&  i._midiActions == _midiActions
          &&  i._channel == _channel
          &&  i._articulation == _articulation
          &&  i._transpose.diatonic == _transpose.diatonic

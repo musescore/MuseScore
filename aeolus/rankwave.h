@@ -81,26 +81,40 @@ private:
     static   float  *_att;
 };
 
+//---------------------------------------------------------
+//   Rankwave
+//---------------------------------------------------------
 
 class Rankwave
-{
+      {
+      Rankwave (const Rankwave&);
+      Rankwave& operator=(const Rankwave&);
+
+      int         _n0;
+      int         _n1;
+      uint32_t    _sbit;
+      Pipewave   *_list;
+      Pipewave   *_pipes;
+      bool        _modif;
+
 public:
 
-    Rankwave (int n0, int n1);
-    ~Rankwave (void);
+      Rankwave (int n0, int n1);
+      ~Rankwave ();
 
-    void note_on (int n)
-    {
-        if ((n < _n0) || (n > _n1)) return;
-        Pipewave *P = _pipes + (n - _n0);
-        P->_sbit = _sbit;
-        if (! (P->_sdel || P->_p_p || P->_p_r))
-        {
-	    P->_sdel |= _sbit;
-            P->_link = _list;
-            _list = P;
-	}
-    }
+      void note_on (int n) {
+            if ((n < _n0) || (n > _n1)) {
+                  qDebug("Rankwave: bad key");
+                  return;
+                  }
+            Pipewave *P = _pipes + (n - _n0);
+            P->_sbit = _sbit;
+            if (! (P->_sdel || P->_p_p || P->_p_r)) {
+                  P->_sdel |= _sbit;
+                  P->_link = _list;
+                  _list = P;
+                  }
+            }
 
     void note_off (int n)
     {
@@ -128,17 +142,6 @@ public:
     int  _cmask;  // used by division logic
     int  _nmask;  // used by division logic
 
-private:
-
-    Rankwave (const Rankwave&);
-    Rankwave& operator=(const Rankwave&);
-
-    int         _n0;
-    int         _n1;
-    uint32_t    _sbit;
-    Pipewave   *_list;
-    Pipewave   *_pipes;
-    bool        _modif;
 };
 
 

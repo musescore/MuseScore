@@ -109,7 +109,7 @@ void MasterSynthesizer::reset()
 //   play
 //---------------------------------------------------------
 
-void MasterSynthesizer::play(const Event& event, unsigned syntiIdx)
+void MasterSynthesizer::play(const NPlayEvent& event, unsigned syntiIdx)
       {
       if (syntiIdx >= _synthesizer.size())
             return;
