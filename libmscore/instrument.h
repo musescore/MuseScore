@@ -58,7 +58,7 @@ struct NamedEventList {
 
       void write(Xml&, const QString& name) const;
       void read(XmlReader&);
-//      bool operator==(const NamedEventList& i) const { return i.name == name && i.events == events; }
+      bool operator==(const NamedEventList& i) const { return i.name == name && i.events == events; }
       };
 
 //---------------------------------------------------------
