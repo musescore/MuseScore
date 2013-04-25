@@ -794,6 +794,11 @@ void Seq::seek(int utick)
       {
       if (cs == 0)
             return;
+      if (events.empty() || cs->playlistDirty() || playlistChanged)
+            collectEvents();
+      int ucur = cs->repeatList()->utick2tick(playPos->first);
+      if (utick != ucur)
+            updateSynthesizerState(ucur, utick);
       int tick = cs->repeatList()->utick2tick(utick);
       Segment* seg = cs->tick2segment(tick);
       if (seg)
@@ -1179,3 +1184,21 @@ void Seq::heartBeat()
       cs->update();
       }
 
+//---------------------------------------------------------
+//   updateSynthesizerState
+//    collect all controller events between tick1 and tick2
+//    and send them to the synthesizer
+//---------------------------------------------------------
+
+void Seq::updateSynthesizerState(int tick1, int tick2)
+      {
+      if (tick1 > tick2)
+            tick1 = 0;
+      EventMap::const_iterator i1 = events.lower_bound(tick1);
+      EventMap::const_iterator i2 = events.upper_bound(tick2);
+
+      for (; i1 != i2; ++i1) {
+            if (i1->second.type() == ME_CONTROLLER)
+                  playEvent(i1->second);
+            }
+      }
