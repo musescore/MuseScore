@@ -3,6 +3,7 @@ xvfb-run ctest
 PROC_RET=$?
 
 if [ "$PROC_RET" -ne 0 ]; then
+killall Xvfb
 xvfb-run mtest
 fi
 
