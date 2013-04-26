@@ -1755,6 +1755,8 @@ Element* Chord::drop(const DropData& data)
             case ARPEGGIO:
                   {
                   Arpeggio* a = static_cast<Arpeggio*>(e);
+                  if (arpeggio())
+                        score()->undoRemoveElement(arpeggio());
                   a->setTrack(track());
                   a->setParent(this);
                   a->setHeight(spatium() * 5);   //DEBUG
