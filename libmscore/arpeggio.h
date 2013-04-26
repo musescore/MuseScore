@@ -48,6 +48,8 @@ class Arpeggio : public Element {
       void setArpeggioType(ArpeggioType v) { _arpeggioType = v;    }
 
       Chord* chord() const                 { return (Chord*)parent(); }
+      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual Element* drop(const DropData&);
       virtual void layout();
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const { return true; }
