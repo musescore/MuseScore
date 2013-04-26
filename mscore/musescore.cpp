@@ -491,7 +491,8 @@ MuseScore::MuseScore()
       ag->setExclusive(false);
       foreach(const Shortcut* s, Shortcut::shortcuts()) {
             QAction* a = s->action();
-            ag->addAction(a);
+            if (a)
+                  ag->addAction(a);
             }
       addActions(ag->actions());
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
