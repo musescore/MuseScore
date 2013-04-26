@@ -630,8 +630,9 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             }
       else if (chord->arpeggio()) {
             gateEvents = false;     // dont apply gateTime to arpeggio events
-            int l = 1000 / notes;
-
+            int l = 64;
+            while (l * notes > chord->upNote()->playTicks())
+                  l = 2*l / 3 ;
             int start, end, step;
             bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN;
             if (up) {
@@ -647,7 +648,8 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             for (int i = start; i != end; i += step) {
                   NoteEventList* events = &(ell)[i];
                   events->clear();
-                  events->append(NoteEvent(0, l * i, 1000 - l * i));
+                  int ot = (l * i * 1000) / chord->upNote()->playTicks();
+                  events->append(NoteEvent(0, ot, 1000 - ot));
                   }
             }
 
