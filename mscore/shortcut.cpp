@@ -235,6 +235,9 @@ QAction* Shortcut::action() const
       if (_action)
             return _action;
 
+      if (_state == STATE_NEVER)
+            return 0;
+
       _action = new QAction(_text, 0);
       _action->setData(_key);
 

@@ -14,6 +14,54 @@
 #ifndef __SHORTCUT_H__
 #define __SHORTCUT_H__
 
+/*---------------------------------------------------------
+NOTE ON ARCHITECTURE
+
+The Shortcut class describes the basic configurable shortcut element.
+'Real' data are contained in 2 static member variables:
+
+1) sc[], an array of Shortcut: contains the default, built-in data for each shortcut
+      except the key sequences; it is initialized at startup (code at the begining of
+      mscore/actions.cpp)
+2) _shortcuts, a QMap using the shortcut xml tag name as hash value: is initialized from
+      data in sc via a call to Shortcut::init() in program main() (mscore/musescore.cpp).
+      This also load actual key sequences either from an external, hard-coded, file with
+      user customizations or from a resource (<= mscore/data/shortcuts.xml), if there are
+      no customizations.
+      Later during startup, QAction's are derived from each of its elements and pooled
+      in a single QActionGroup during MuseScore::MuseScore() costructor (mscore/musescore.cpp)
+
+ShortcutFlags:
+      To be documented
+
+State flags:
+
+Defined in mscore/global.h (ScoreState enum): each shortcut is ignored if its _flags mask
+does not include the current score state. This is different from (and additional to)
+QAction processing performed by the Qt framework and happens only after the action has
+been forwarded to the application (the action must be enabled).
+
+The STATE_NEVER requires an explanation. It has been introduced to mark shortcuts
+which need to be recorded (and possibly customized) but are never used directly.
+Currently, this applies to a number of shortcuts which:
+- have been split between a common and a TAB-specific variant AND
+- are linked to tool bar buttons or menu items
+If QAction's are created for both, Qt blocks either as duplicate; in addition, the button
+or menu item may become disabled on state change. The currently implemented solution is
+to create a QAction only for one of them (the common one) and swap the key sequences when
+entering or leaving the relevant state.
+Swapping is implemented in MuseScore::changeState() (mscore/musescore.cpp).
+QAction creation for the 'other' shortcut is blocked in Shortcut::action() (mscore/shortcut.cpp).
+
+This means that Shortcut::action() may return 0. When scanning the whole
+shortcuts[] array, this has to be taken into account; currently it happens in two
+cases:
+- in MuseScore::MuseScore() constructor (mscore/musescore.cpp)
+- in MuseScore::changeState() method (mscore/musescore.cpp)
+
+Shortcuts marked with the STATE_NEVER state should NEVER used directly as shortcuts!
+---------------------------------------------------------*/
+
 class Xml;
 class XmlReader;
 
