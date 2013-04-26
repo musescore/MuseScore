@@ -1532,7 +1532,7 @@ void Chord::layout()
             _arpeggio->layout();
             lll += _arpeggio->width() + _spatium * .5;
             qreal y = upNote()->pos().y() - headHeight * .5;
-            qreal h = downNote()->pos().y() - y;
+            qreal h = downNote()->pos().y() + downNote()->headHeight() - y;
             _arpeggio->setHeight(h);
             _arpeggio->setPos(-lll, y);
 
@@ -1630,7 +1630,7 @@ void Chord::layoutArpeggio2()
 
       if (bchord && bchord->type() == CHORD)
             dnote = static_cast<Chord*>(bchord)->downNote();
-      qreal h = dnote->pagePos().y() - y;
+      qreal h = dnote->pagePos().y() + downNote()->headHeight() - y;
       _arpeggio->setHeight(h);
 
       QList<Note*> notes;
