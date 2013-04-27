@@ -1101,8 +1101,6 @@ Element* Note::drop(const DropData& data)
 
             case ACCIDENTAL:
                   score()->changeAccidental(this, static_cast<Accidental*>(e)->accidentalType());
-                  if (_accidental)
-                        return e;
                   break;
 
             case BEND:
