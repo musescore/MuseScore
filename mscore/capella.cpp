@@ -542,22 +542,25 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         {
                         CapExplicitBarline* o = static_cast<CapExplicitBarline*>(no);
                         qDebug("     <Barline>");
-                        Measure* m = score->getCreateMeasure(tick-1);
-                        int ticks = tick - m->tick();
-                        if (ticks > 0 && ticks != m->ticks()) {
-                              // this is a measure with different actual duration
-                              Fraction f = Fraction::fromTicks(ticks);
-                              m->setLen(f);
+                        Measure* pm = 0; // the previous measure (the one terminated by this barline)
+                        if (tick > 0)
+                              pm = score->getCreateMeasure(tick-1);
+                        if (pm) {
+                              int ticks = tick - pm->tick();
+                              if (ticks > 0 && ticks != pm->ticks()) {
+                                    // this is a measure with different actual duration
+                                    Fraction f = Fraction::fromTicks(ticks);
+                                    pm->setLen(f);
 #if 0
-                              AL::SigEvent ne(f);
-                              ne.setNominal(m->timesig());
-                              score->sigmap()->add(m->tick(), ne);
-                              AL::SigEvent ne2(m->timesig());
-                              score->sigmap()->add(m->tick() + m->ticks(), ne2);
+                                    AL::SigEvent ne(f);
+                                    ne.setNominal(m->timesig());
+                                    score->sigmap()->add(m->tick(), ne);
+                                    AL::SigEvent ne2(m->timesig());
+                                    score->sigmap()->add(m->tick() + m->ticks(), ne2);
 #endif
+                                    }
                               }
-                        if (m == 0)
-                              break;
+                        qDebug("pm %p", pm);
 
                         BarLineType st = NORMAL_BAR;
                         switch (o->type()) {
@@ -572,17 +575,19 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               break;
 
                         if (st == START_REPEAT || st == END_START_REPEAT) {
-                              Measure* nm = m->nextMeasure();
+                              Measure* nm = 0; // the next measure (the one started by this barline)
+                              nm = score->getCreateMeasure(tick);
+                              qDebug("nm %p", nm);
                               if (nm)
                                     nm->setRepeatFlags(nm->repeatFlags() | RepeatStart);
                               }
-                        // if (st != START_REPEAT)
-                        //       m->setEndBarLineType(st, false, true, Qt::black);
-                        if (st == END_REPEAT || st == END_START_REPEAT)
-                              m->setRepeatFlags(m->repeatFlags() | RepeatEnd);
 
-                        }
+                        if (st == END_REPEAT || st == END_START_REPEAT) {
+                              if (pm)
+                                    pm->setRepeatFlags(pm->repeatFlags() | RepeatEnd);
+                              }
                         break;
+                        }
                   case T_PAGE_BKGR:
                         qDebug("     <PageBreak>");
                         break;
