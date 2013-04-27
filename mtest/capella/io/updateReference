@@ -1,6 +1,8 @@
 #!/bin/bash
 
-MSCORE=../../../build.release/mscore/mscore
+# note that the debug build must be used with the -t option to get the beams right in the .mscx files
+
+MSCORE=../../../build.debug/mscore/mscore
 capfiles=`cat tst_capella_io.cpp | grep "{ capReadTest" | awk -F\" '{print $2}' | sort`
 capxfiles=`cat tst_capella_io.cpp | grep "{ capxReadTest" | awk -F\" '{print $2}' | sort`
 
