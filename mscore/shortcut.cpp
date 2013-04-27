@@ -290,13 +290,11 @@ void Shortcut::addShortcut(const QKeySequence& ks)
 
 QString Shortcut::keysToString() const
       {
-      QAction* a = action();
-      QList<QKeySequence> kl = a->shortcuts();
       QString s;
-      for (int i = 0; i < kl.size(); ++i) {
+      for (int i = 0; i < _keys.size(); ++i) {
             if (i)
                   s += "; ";
-            s += kl[i].toString(QKeySequence::NativeText);
+            s += _keys[i].toString(QKeySequence::NativeText);
             }
       return s;
       }
