@@ -574,6 +574,9 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (st == NORMAL_BAR)
                               break;
 
+                        if (pm && (st == DOUBLE_BAR || st == END_BAR))
+                              pm->setEndBarLineType(st, false, true);
+
                         if (st == START_REPEAT || st == END_START_REPEAT) {
                               Measure* nm = 0; // the next measure (the one started by this barline)
                               nm = score->getCreateMeasure(tick);
