@@ -133,7 +133,6 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newFingeringPalette());
       addPalette(MuseScore::newNoteHeadsPalette());
       addPalette(MuseScore::newTremoloPalette());
-      addPalette(MuseScore::newFallDoitPalette());
       addPalette(MuseScore::newRepeatsPalette());
       addPalette(MuseScore::newTextPalette());
       addPalette(MuseScore::newBreaksPalette());
