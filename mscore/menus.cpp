@@ -416,41 +416,6 @@ Palette* MuseScore::newFingeringPalette()
       return sp;
       }
 
-//--------------------------------------------------------
-//   newFallDoitPalett
-//--------------------------------------------------------
-
-Palette* MuseScore::newFallDoitPalette()
-      {
-      Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Fall/Doit"));
-      sp->setGrid(27, 40);
-      sp->setDrawGrid(true);
-      const char* scorelineNames[] = {
-            QT_TR_NOOP("fall"),
-            QT_TR_NOOP("doit"),
-            QT_TR_NOOP("plop"),
-            QT_TR_NOOP("scoop"),
-            };
-
-      ChordLine* cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_FALL);
-      sp->append(cl, tr(scorelineNames[0]));
-
-      cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_DOIT);
-      sp->append(cl, tr(scorelineNames[1]));
-
-      cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_PLOP);
-      sp->append(cl, tr(scorelineNames[2]));
-
-      cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_SCOOP);
-      sp->append(cl, tr(scorelineNames[3]));
-      return sp;
-      }
-
 //---------------------------------------------------------
 //   newTremoloPalette
 //---------------------------------------------------------
@@ -600,6 +565,31 @@ Palette* MuseScore::newArpeggioPalette()
             a->setGlissandoType(GlissandoType(i));
             sp->append(a, tr("Glissando"));
             }
+
+      //fall and doits
+      const char* scorelineNames[] = {
+            QT_TR_NOOP("fall"),
+            QT_TR_NOOP("doit"),
+            QT_TR_NOOP("plop"),
+            QT_TR_NOOP("scoop"),
+            };
+
+      ChordLine* cl = new ChordLine(gscore);
+      cl->setChordLineType(CHORDLINE_FALL);
+      sp->append(cl, tr(scorelineNames[0]));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(CHORDLINE_DOIT);
+      sp->append(cl, tr(scorelineNames[1]));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(CHORDLINE_PLOP);
+      sp->append(cl, tr(scorelineNames[2]));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(CHORDLINE_SCOOP);
+      sp->append(cl, tr(scorelineNames[3]));
+
       return sp;
       }
 
@@ -946,7 +936,6 @@ void MuseScore::populatePalette()
       paletteBox->addPalette(newFingeringPalette());
       paletteBox->addPalette(newNoteHeadsPalette());
       paletteBox->addPalette(newTremoloPalette());
-      paletteBox->addPalette(newFallDoitPalette());
       paletteBox->addPalette(newRepeatsPalette());
       paletteBox->addPalette(newTextPalette());
       paletteBox->addPalette(newBreaksPalette());
