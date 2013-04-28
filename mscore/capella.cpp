@@ -400,17 +400,26 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         int key  = score->staff(staffIdx)->key(tick).accidentalType();
                         int off;
                         switch (clef) {
-                              case CLEF_F:    off = -14; break;
-                              case CLEF_F_B:  off = -14; break;
-                              case CLEF_F_C:  off = -14; break;
-                              case CLEF_C1:   off = -7; break;
-                              case CLEF_C2:   off = -7; break;
-                              case CLEF_C3:   off = -7; break;
-                              case CLEF_C4:   off = -7; break;
-                              case CLEF_C5:   off = -7; break;
-                              default:
-                                    off = 0;
+                              case CLEF_G:      off = 0; break;
+                              case CLEF_G1:     off = 7; break;
+                              case CLEF_G2:     off = 14; break;
+                              case CLEF_G3:     off = -7; break;
+                              case CLEF_F:      off = -14; break;
+                              case CLEF_F8:     off = -21; break;
+                              case CLEF_F15:    off = -28; break;
+                              case CLEF_F_B:    off = -14; break;
+                              case CLEF_F_C:    off = -14; break;
+                              case CLEF_C1:     off = -7; break;
+                              case CLEF_C2:     off = -7; break;
+                              case CLEF_C3:     off = -7; break;
+                              case CLEF_C4:     off = -7; break;
+                              case CLEF_C5:     off = -7; break;
+                              case CLEF_G4:     off = 0; break;
+                              case CLEF_F_8VA:  off = -7; break;
+                              case CLEF_F_15MA: off = 0; break;
+                              default:          off = 0; qDebug("clefType %d not implemented", clef);
                               }
+                        // qDebug("clef %d off %d", clef, off);
 
                         static int keyOffsets[15] = {
                               /*   -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7 */
@@ -487,8 +496,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         {
                         qDebug("     <Clef>");
                         CapClef* o = static_cast<CapClef*>(no);
-                        qDebug("%d:%d <Clef> %s line %d oct %d", tick, staffIdx, o->name(), o->line, o->oct);
                         ClefType nclef = o->clef();
+                        qDebug("%d:%d <Clef> %s line %d oct %d clef %d", tick, staffIdx, o->name(), o->line, o->oct, o->clef());
                         if (nclef == CLEF_INVALID)
                               break;
                         // staff(staffIdx)->setClef(tick, nclef);
@@ -542,22 +551,25 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         {
                         CapExplicitBarline* o = static_cast<CapExplicitBarline*>(no);
                         qDebug("     <Barline>");
-                        Measure* m = score->getCreateMeasure(tick-1);
-                        int ticks = tick - m->tick();
-                        if (ticks > 0 && ticks != m->ticks()) {
-                              // this is a measure with different actual duration
-                              Fraction f = Fraction::fromTicks(ticks);
-                              m->setLen(f);
+                        Measure* pm = 0; // the previous measure (the one terminated by this barline)
+                        if (tick > 0)
+                              pm = score->getCreateMeasure(tick-1);
+                        if (pm) {
+                              int ticks = tick - pm->tick();
+                              if (ticks > 0 && ticks != pm->ticks()) {
+                                    // this is a measure with different actual duration
+                                    Fraction f = Fraction::fromTicks(ticks);
+                                    pm->setLen(f);
 #if 0
-                              AL::SigEvent ne(f);
-                              ne.setNominal(m->timesig());
-                              score->sigmap()->add(m->tick(), ne);
-                              AL::SigEvent ne2(m->timesig());
-                              score->sigmap()->add(m->tick() + m->ticks(), ne2);
+                                    AL::SigEvent ne(f);
+                                    ne.setNominal(m->timesig());
+                                    score->sigmap()->add(m->tick(), ne);
+                                    AL::SigEvent ne2(m->timesig());
+                                    score->sigmap()->add(m->tick() + m->ticks(), ne2);
 #endif
+                                    }
                               }
-                        if (m == 0)
-                              break;
+                        // qDebug("pm %p", pm);
 
                         BarLineType st = NORMAL_BAR;
                         switch (o->type()) {
@@ -571,16 +583,21 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (st == NORMAL_BAR)
                               break;
 
+                        if (pm && (st == DOUBLE_BAR || st == END_BAR))
+                              pm->setEndBarLineType(st, false, true);
+
                         if (st == START_REPEAT || st == END_START_REPEAT) {
-                              Measure* nm = m->nextMeasure();
+                              Measure* nm = 0; // the next measure (the one started by this barline)
+                              nm = score->getCreateMeasure(tick);
+                              // qDebug("nm %p", nm);
                               if (nm)
                                     nm->setRepeatFlags(nm->repeatFlags() | RepeatStart);
                               }
-                        // if (st != START_REPEAT)
-                        //       m->setEndBarLineType(st, false, true, Qt::black);
-                        if (st == END_REPEAT || st == END_START_REPEAT)
-                              m->setRepeatFlags(m->repeatFlags() | RepeatEnd);
 
+                        if (st == END_REPEAT || st == END_START_REPEAT) {
+                              if (pm)
+                                    pm->setRepeatFlags(pm->repeatFlags() | RepeatEnd);
+                              }
                         }
                         break;
                   case T_PAGE_BKGR:
@@ -614,36 +631,38 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               {
                               SlurObj* so = static_cast<SlurObj*>(o);
                               // qDebug("slur tick %d  %d-%d-%d-%d   %d-%d", tick, so->nEnd, so->nMid,
-                              //   so->nDotDist, so->nDotWidth, so->nRefNote, so->nNotes);
-                              Segment* seg = score->tick2segment(tick);
-                              int tick2 = -1;
-                              if (seg) {
-                                    int n = so->nNotes;
-                                    for (seg = seg->next1(); seg; seg = seg->next1()) {
-                                          if (seg->segmentType() != Segment::SegChordRest)
-                                                continue;
-                                          if (seg->element(track))
-                                                --n;
-                                          else
-                                                qDebug("  %d empty seg", n);
-                                          if (n == 0) {
-                                                tick2 = seg->tick();
-                                                break;
-                                                }
+                              //        so->nDotDist, so->nDotWidth, so->nRefNote, so->nNotes);
+                              ChordRest* cr1 = 0; // ChordRest where slur begins
+                              ChordRest* cr2 = 0; // ChordRest where slur ends
+
+                              // find the ChordRests where the slur begins and ends
+                              int n = so->nNotes + 1;       // # notes in slur (nNotes is # notes following the first note)
+                              for (Segment* seg = score->tick2segment(tick); seg; seg = seg->next1()) {
+                                    if (seg->segmentType() != Segment::SegChordRest)
+                                          continue;
+                                    ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+                                    if (cr) {
+                                          --n;                      // found a ChordRest, count down
+                                          if (!cr1) cr1 = cr;       // found first ChordRest
+                                          }
+                                    else
+                                          qDebug("  %d empty seg", n);
+                                    if (n == 0) {
+                                          cr2 = cr;       // cr should be the second ChordRest
+                                          break;
                                           }
                                     }
-                              else
-                                    qDebug("  segment at %d not found", tick);
-                              if (tick2 >= 0) {
+                              // qDebug("cr1 %p cr2 %p", cr1, cr2);
+
+                              if (cr1 && cr2) {
                                     Slur* slur = new Slur(score);
-                                    // TODO1 slur->setTick(tick);
-                                    slur->setTrack(track);
-                                    // TODO1 slur->setTick2(tick2);
-                                    slur->setTrack2(track);
-                                    score->add(slur);
+                                    cr1->addSlurFor(slur);
+                                    slur->setStartElement(cr1);
+                                    cr2->addSlurBack(slur);
+                                    slur->setEndElement(cr2);
                                     }
                               else
-                                    qDebug("second anchor for slur not found");
+                                    qDebug("first or second anchor for slur not found (first %p second %p)", cr1, cr2);
                               }
                               break;
                         case CAP_TEXT: {
@@ -931,6 +950,8 @@ void SlurObj::read()
       nMid      = cap->readByte();
       nDotDist  = cap->readByte();
       nDotWidth = cap->readByte();
+      // qDebug("SlurObj nEnd %d nMid %d nDotDist %d nDotWidth %d",
+      //        nEnd, nMid, nDotDist, nDotWidth);
       }
 
 //---------------------------------------------------------
