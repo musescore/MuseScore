@@ -400,17 +400,26 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         int key  = score->staff(staffIdx)->key(tick).accidentalType();
                         int off;
                         switch (clef) {
-                              case CLEF_F:    off = -14; break;
-                              case CLEF_F_B:  off = -14; break;
-                              case CLEF_F_C:  off = -14; break;
-                              case CLEF_C1:   off = -7; break;
-                              case CLEF_C2:   off = -7; break;
-                              case CLEF_C3:   off = -7; break;
-                              case CLEF_C4:   off = -7; break;
-                              case CLEF_C5:   off = -7; break;
-                              default:
-                                    off = 0;
+                              case CLEF_G:      off = 0; break;
+                              case CLEF_G1:     off = 7; break;
+                              case CLEF_G2:     off = 14; break;
+                              case CLEF_G3:     off = -7; break;
+                              case CLEF_F:      off = -14; break;
+                              case CLEF_F8:     off = -21; break;
+                              case CLEF_F15:    off = -28; break;
+                              case CLEF_F_B:    off = -14; break;
+                              case CLEF_F_C:    off = -14; break;
+                              case CLEF_C1:     off = -7; break;
+                              case CLEF_C2:     off = -7; break;
+                              case CLEF_C3:     off = -7; break;
+                              case CLEF_C4:     off = -7; break;
+                              case CLEF_C5:     off = -7; break;
+                              case CLEF_G4:     off = 0; break;
+                              case CLEF_F_8VA:  off = -7; break;
+                              case CLEF_F_15MA: off = 0; break;
+                              default:          off = 0; qDebug("clefType %d not implemented", clef);
                               }
+                        // qDebug("clef %d off %d", clef, off);
 
                         static int keyOffsets[15] = {
                               /*   -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7 */
@@ -487,8 +496,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         {
                         qDebug("     <Clef>");
                         CapClef* o = static_cast<CapClef*>(no);
-                        qDebug("%d:%d <Clef> %s line %d oct %d", tick, staffIdx, o->name(), o->line, o->oct);
                         ClefType nclef = o->clef();
+                        qDebug("%d:%d <Clef> %s line %d oct %d clef %d", tick, staffIdx, o->name(), o->line, o->oct, o->clef());
                         if (nclef == CLEF_INVALID)
                               break;
                         // staff(staffIdx)->setClef(tick, nclef);
