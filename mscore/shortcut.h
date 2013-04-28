@@ -69,6 +69,8 @@ enum ShortcutFlags {
       A_SCORE = 0x1, A_CMD = 0x2
       };
 
+static const int KEYSEQ_SIZE = 4;
+
 //---------------------------------------------------------
 //   Shortcut
 //    hold the basic values for configurable shortcuts
@@ -159,6 +161,9 @@ class Shortcut {
       static bool dirty;
       static Shortcut* getShortcut(const char* key);
       static const QMap<QString, Shortcut*>& shortcuts() { return _shortcuts; }
+
+      static QString keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt);
+      static QKeySequence keySeqFromString(const QString& str, QKeySequence::SequenceFormat fmt);
       };
 
 #endif
