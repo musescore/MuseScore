@@ -85,8 +85,11 @@ p, li { white-space: pre-wrap; }
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Slur id="2">
+          </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" number="2"/>
           <Note>
             <pitch>48</pitch>
             <tpc>14</tpc>
@@ -94,13 +97,17 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" number="2"/>
           <Note>
             <pitch>50</pitch>
             <tpc>16</tpc>
             </Note>
           </Chord>
+        <Slur id="3">
+          </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" number="3"/>
           <Note>
             <pitch>52</pitch>
             <tpc>18</tpc>
@@ -117,13 +124,17 @@ p, li { white-space: pre-wrap; }
       <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" number="3"/>
           <Note>
             <pitch>55</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <Slur id="4">
+          </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" number="4"/>
           <Note>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -151,6 +162,7 @@ p, li { white-space: pre-wrap; }
           </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" number="4"/>
           <Note>
             <pitch>62</pitch>
             <tpc>16</tpc>
