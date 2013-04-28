@@ -358,8 +358,8 @@ void MTrack::processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, 
             int len  = t - tick;
             if (len <= 0)
                   break;
-        foreach (const MidiChord& c, notes) {
-                if ((c.duration < len) && (c.duration != 0))
+            foreach (const MidiChord& c, notes) {
+                  if ((c.duration < len) && (c.duration != 0))
                         len = c.duration;
                   }
         Measure* measure = score->tick2measure(tick);
@@ -387,7 +387,7 @@ void MTrack::processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, 
                   const QList<MidiNote>& nl = n.notes;
                   for (int i = 0; i < nl.size(); ++i) {
                         const MidiNote& mn = nl[i];
-                    Note* note = new Note(score);
+                        Note* note = new Note(score);
 
                         // TODO - does this need to be key-aware?
                         note->setPitch(mn.pitch, pitch2tpc(mn.pitch, KEY_C, PREFER_NEAREST));
