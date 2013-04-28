@@ -38,24 +38,23 @@ private slots:
       // cat tst_capella_io.cpp | grep "{ <test>" | awk -F\" '{print $2}'
       // where <test> is capReadTest or capxReadTest
 
-      // disabled most tests to see if initTestCase works w/o problems
       void capTest1() { capReadTest("test1"); }
-      //void capTest2() { capReadTest("test2"); }
+      void capTest2() { capReadTest("test2"); }
       // void capTest3() { capReadTest("test3"); } generates spurious natural accidental
       // void capTest4() { capReadTest("test4"); } generates spurious natural accidental
       // void capTest5() { capReadTest("test5"); } generates spurious natural accidental
       // void capTest6() { capReadTest("test6"); } generates spurious natural accidental
-      //void capTest7() { capReadTest("test7"); }
-      //void capTest8() { capReadTest("test8"); }
+      // void capTest7() { capReadTest("test7"); } generates different (incorrect ?) l1 and l2 values in beams
+      void capTest8() { capReadTest("test8"); }
       void capxTest1() { capxReadTest("test1"); }
-      //void capxTest2() { capxReadTest("test2"); }
+      void capxTest2() { capxReadTest("test2"); }
       // void capxTest3() { capxReadTest("test3"); } generates spurious natural accidental
       // void capxTest4() { capxReadTest("test4"); } generates spurious natural accidental
       // void capxTest5() { capxReadTest("test5"); } generates spurious natural accidental
       // void capxTest6() { capxReadTest("test6"); } generates spurious natural accidental
-      //void capxTest7() { capxReadTest("test7"); }
-      //void capxTestPianoG4G5() { capxReadTest("testPianoG4G5"); }
-      //void capxTestScaleC4C5() { capxReadTest("testScaleC4C5"); }
+      // void capxTest7() { capxReadTest("test7"); } generates different (incorrect ?) l1 and l2 values in beams
+      void capxTestPianoG4G5() { capxReadTest("testPianoG4G5"); }
+      void capxTestScaleC4C5() { capxReadTest("testScaleC4C5"); }
       };
 
 //---------------------------------------------------------

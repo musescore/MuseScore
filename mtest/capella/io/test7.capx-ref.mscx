@@ -104,8 +104,13 @@ p, li { white-space: pre-wrap; }
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Beam id="1">
+          <l1>8</l1>
+          <l2>7</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>61</pitch>
             <tpc>21</tpc>
@@ -113,6 +118,7 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>62</pitch>
             <tpc>16</tpc>
