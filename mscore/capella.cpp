@@ -560,7 +560,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 #endif
                                     }
                               }
-                        qDebug("pm %p", pm);
+                        // qDebug("pm %p", pm);
 
                         BarLineType st = NORMAL_BAR;
                         switch (o->type()) {
@@ -580,7 +580,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (st == START_REPEAT || st == END_START_REPEAT) {
                               Measure* nm = 0; // the next measure (the one started by this barline)
                               nm = score->getCreateMeasure(tick);
-                              qDebug("nm %p", nm);
+                              // qDebug("nm %p", nm);
                               if (nm)
                                     nm->setRepeatFlags(nm->repeatFlags() | RepeatStart);
                               }
@@ -589,8 +589,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               if (pm)
                                     pm->setRepeatFlags(pm->repeatFlags() | RepeatEnd);
                               }
-                        break;
                         }
+                        break;
                   case T_PAGE_BKGR:
                         qDebug("     <PageBreak>");
                         break;
@@ -622,36 +622,38 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               {
                               SlurObj* so = static_cast<SlurObj*>(o);
                               // qDebug("slur tick %d  %d-%d-%d-%d   %d-%d", tick, so->nEnd, so->nMid,
-                              //   so->nDotDist, so->nDotWidth, so->nRefNote, so->nNotes);
-                              Segment* seg = score->tick2segment(tick);
-                              int tick2 = -1;
-                              if (seg) {
-                                    int n = so->nNotes;
-                                    for (seg = seg->next1(); seg; seg = seg->next1()) {
-                                          if (seg->segmentType() != Segment::SegChordRest)
-                                                continue;
-                                          if (seg->element(track))
-                                                --n;
-                                          else
-                                                qDebug("  %d empty seg", n);
-                                          if (n == 0) {
-                                                tick2 = seg->tick();
-                                                break;
-                                                }
+                              //        so->nDotDist, so->nDotWidth, so->nRefNote, so->nNotes);
+                              ChordRest* cr1 = 0; // ChordRest where slur begins
+                              ChordRest* cr2 = 0; // ChordRest where slur ends
+
+                              // find the ChordRests where the slur begins and ends
+                              int n = so->nNotes + 1;       // # notes in slur (nNotes is # notes following the first note)
+                              for (Segment* seg = score->tick2segment(tick); seg; seg = seg->next1()) {
+                                    if (seg->segmentType() != Segment::SegChordRest)
+                                          continue;
+                                    ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+                                    if (cr) {
+                                          --n;                      // found a ChordRest, count down
+                                          if (!cr1) cr1 = cr;       // found first ChordRest
+                                          }
+                                    else
+                                          qDebug("  %d empty seg", n);
+                                    if (n == 0) {
+                                          cr2 = cr;       // cr should be the second ChordRest
+                                          break;
                                           }
                                     }
-                              else
-                                    qDebug("  segment at %d not found", tick);
-                              if (tick2 >= 0) {
+                              // qDebug("cr1 %p cr2 %p", cr1, cr2);
+
+                              if (cr1 && cr2) {
                                     Slur* slur = new Slur(score);
-                                    // TODO1 slur->setTick(tick);
-                                    slur->setTrack(track);
-                                    // TODO1 slur->setTick2(tick2);
-                                    slur->setTrack2(track);
-                                    score->add(slur);
+                                    cr1->addSlurFor(slur);
+                                    slur->setStartElement(cr1);
+                                    cr2->addSlurBack(slur);
+                                    slur->setEndElement(cr2);
                                     }
                               else
-                                    qDebug("second anchor for slur not found");
+                                    qDebug("first or second anchor for slur not found (first %p second %p)", cr1, cr2);
                               }
                               break;
                         case CAP_TEXT: {
@@ -939,6 +941,8 @@ void SlurObj::read()
       nMid      = cap->readByte();
       nDotDist  = cap->readByte();
       nDotWidth = cap->readByte();
+      // qDebug("SlurObj nEnd %d nMid %d nDotDist %d nDotWidth %d",
+      //        nEnd, nMid, nDotDist, nDotWidth);
       }
 
 //---------------------------------------------------------
