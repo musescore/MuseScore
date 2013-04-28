@@ -31,6 +31,7 @@
 #include "singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
 #include "musescoreCore.h"
+#include "mscore/importmidi_operations.h"
 
 class Shortcut;
 class ScoreView;
@@ -84,6 +85,7 @@ class PluginManager;
 class MasterSynthesizer;
 class Driver;
 class Seq;
+class ImportMidiPanel;
 
 struct PluginDescription;
 
@@ -217,6 +219,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* tab1;
       ScoreTab* tab2;
       NScrollArea* _navigator;
+      ImportMidiPanel* importmidi_panel;
       QSplitter* mainWindow;
 
       QMenu* menuDisplay;
@@ -300,6 +303,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString rev;
 
       int _midiRecordId;
+      MidiImportOperations _midiImportOperations;
 
       bool _fullscreen;
       QList<LanguageItem> _languages;
@@ -372,6 +376,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showOmrPanel(bool);
       void showPlayPanel(bool);
       void showNavigator(bool);
+      void showMidiImportPanel(bool);
       void showMixer(bool);
       void showSynthControl(bool);
       void showSearchDialog();
@@ -537,6 +542,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static bool unstable();
       bool eventFilter(QObject *, QEvent *);
       void setMidiRecordId(int id) { _midiRecordId = id; }
+      MidiImportOperations& midiImportOperations() { return _midiImportOperations; }
       int midiRecordId() const { return _midiRecordId; }
       void populatePalette();
       void excerptsChanged(Score*);
@@ -637,7 +643,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QDeclarativeEngine* qml();
       PluginCreator* getPluginCreator()   { return pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
-      };
+};
 
 extern MuseScore* mscore;
 extern MuseScoreCore* mscoreCore;

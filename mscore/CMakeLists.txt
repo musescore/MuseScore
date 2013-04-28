@@ -63,7 +63,7 @@ QT4_WRAP_UI (ui_headers
       inspector_clef.ui inspector_timesig.ui inspector_keysig.ui inspector_barline.ui
       inspector_tuplet.ui inspector_accidental.ui inspector_tempotext.ui
       inspector_dynamic.ui inspector_line.ui harmony.ui pathlistdialog.ui inspector_textline.ui
-      note_groups.ui
+      note_groups.ui importmidi_panel.ui
       ${SCRIPT_UI}
       )
 
@@ -97,6 +97,7 @@ QT4_WRAP_CPP (mocs
       inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
       inspectorJump.h inspectorMarker.h inspectorGlissando.h inspectorNote.h
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspectorTextLine.h
+      importmidi_panel.h importmidi_operations.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -134,17 +135,17 @@ if (USE_JACK)
 endif (USE_JACK)
 
 if (APPLE)
-	set (ExecutableName mscore MACOSX_BUNDLE)
-	set (MACOSX_BUNDLE_INFO_STRING MuseScore prerelease for Mac OSX)
-	set (MACOSX_BUNDLE_ICON_FILE      mscore.icns)
-	set (MACOSX_BUNDLE_GUI_IDENTIFIER net.sourceforge.mscore)
-	set (MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSESCORE_VERSION_FULL})
-	set (MACOSX_BUNDLE_BUNDLE_NAME MuseScore)
-	set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
-	set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL})
-	set (MACOSX_BUNDLE_COPYRIGHT musescore.org)
+        set (ExecutableName mscore MACOSX_BUNDLE)
+        set (MACOSX_BUNDLE_INFO_STRING MuseScore prerelease for Mac OSX)
+        set (MACOSX_BUNDLE_ICON_FILE      mscore.icns)
+        set (MACOSX_BUNDLE_GUI_IDENTIFIER net.sourceforge.mscore)
+        set (MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSESCORE_VERSION_FULL})
+        set (MACOSX_BUNDLE_BUNDLE_NAME MuseScore)
+        set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
+        set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL})
+        set (MACOSX_BUNDLE_COPYRIGHT musescore.org)
 else (APPLE)
-	set (ExecutableName mscore)
+        set (ExecutableName mscore)
 endif (APPLE)
 
 if (OMR)
@@ -152,9 +153,9 @@ if (OMR)
 endif (OMR)
 
 if (APPLE)
-	file(GLOB_RECURSE INCS "*.h")
+        file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
-	set(INCS "")
+        set(INCS "")
 endif (APPLE)
 
 add_executable ( ${ExecutableName}
@@ -204,6 +205,7 @@ add_executable ( ${ExecutableName}
       inspectorGlissando.cpp inspectorNote.cpp paletteBoxButton.cpp
       driver.cpp exportmidi.cpp noteGroups.cpp
       pathlistdialog.cpp exampleview.cpp inspectorTextLine.cpp
+      importmidi_panel.cpp importmidi_operations.cpp
 
       ${OMR_FILES}
       ${AUDIO}

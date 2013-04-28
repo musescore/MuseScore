@@ -53,6 +53,7 @@
 #include "keyedit.h"
 #include "harmonyedit.h"
 #include "navigator.h"
+#include "importmidi_panel.h"
 #include "libmscore/chord.h"
 #include "mstyle/mstyle.h"
 #include "libmscore/segment.h"
@@ -173,10 +174,10 @@ InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
 
 void InsertMeasuresDialog::accept()
       {
-	int n = insmeasures->value();
-	if (mscore->currentScore())
+      int n = insmeasures->value();
+      if (mscore->currentScore())
             mscore->currentScoreView()->cmdInsertMeasures(n, Element::MEASURE);
-	done(1);
+      done(1);
       }
 
 //---------------------------------------------------------
@@ -436,6 +437,7 @@ MuseScore::MuseScore()
       lastCmd               = 0;
       lastShortcut          = 0;
       editTempo             = 0;
+      importmidi_panel      = 0;
 
       if (!preferences.styleName.isEmpty()) {
             QFile f(preferences.styleName);
@@ -516,6 +518,10 @@ MuseScore::MuseScore()
       _navigator = new NScrollArea;
       mainWindow->addWidget(_navigator);
       showNavigator(preferences.showNavigator);
+
+      importmidi_panel = new ImportMidiPanel(this);
+      mainWindow->addWidget(importmidi_panel);
+      showMidiImportPanel(preferences.showMidiImportPanel);
 
       QList<int> sizes;
       sizes << 500 << 50;     // initial size of score canvas relativ to navigator
@@ -919,6 +925,11 @@ MuseScore::MuseScore()
       a->setChecked(preferences.showNavigator);
       menuDisplay->addAction(a);
 
+      a = getAction("toggle-midiimportpanel");
+      a->setCheckable(true);
+      a->setChecked(preferences.showMidiImportPanel);
+      menuDisplay->addAction(a);
+
       a = getAction("toggle-mixer");
       a->setCheckable(true);
       menuDisplay->addAction(a);
@@ -1203,6 +1214,11 @@ void MuseScore::selectScore(QAction* action)
       {
       QString a = action->data().toString();
       if (!a.isEmpty()) {
+            if (ImportMidiPanel::isMidiFile(a)) {
+                  importmidi_panel->setMidiFile(a);
+                  if (!importmidi_panel->isVisible())
+                        showMidiImportPanel(true);
+                  }
             Score* score = readScore(a);
             if (score) {
                   setCurrentScoreView(appendScore(score));
@@ -1524,7 +1540,12 @@ void MuseScore::dropEvent(QDropEvent* event)
             int view = -1;
             foreach(const QUrl& u, event->mimeData()->urls()) {
                   if (u.scheme() == "file") {
-                        Score* score = readScore(u.toLocalFile());
+                        QString file = u.toLocalFile();
+                        if (ImportMidiPanel::isMidiFile(file)) {
+                              if (!importmidi_panel->isVisible())
+                                    showMidiImportPanel(true);
+                              }
+                        Score* score = readScore(file);
                         if (score) {
                               view = appendScore(score);
                               updateRecentScores(score);
@@ -1626,7 +1647,7 @@ void MuseScore::closePlayPanel()
 void MuseScore::cmdAppendMeasures()
       {
       if (cs) {
-		if (measuresDialog == 0)
+            if (measuresDialog == 0)
                   measuresDialog = new MeasuresDialog;
             measuresDialog->show();
             }
@@ -1648,12 +1669,12 @@ MeasuresDialog::MeasuresDialog(QWidget* parent)
 //---------------------------------------------------------
 
 void MeasuresDialog::accept()
-	{
-	int n = measures->value();
+      {
+      int n = measures->value();
       if (mscore->currentScore())
             mscore->currentScoreView()->cmdAppendMeasures(n, Element::MEASURE);
       done(1);
-	}
+      }
 
 //---------------------------------------------------------
 //   midiinToggled
@@ -4345,6 +4366,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showPlayPanel(a->isChecked());
       else if (cmd == "toggle-navigator")
             showNavigator(a->isChecked());
+      else if (cmd == "toggle-midiimportpanel")
+            showMidiImportPanel(a->isChecked());
       else if (cmd == "toggle-mixer")
             showMixer(a->isChecked());
       else if (cmd == "synth-control")
