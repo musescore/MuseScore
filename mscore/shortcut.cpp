@@ -410,7 +410,6 @@ void Shortcut::load()
 
       XmlReader e(&f);
 
-      QString key;
       while (e.readNextStartElement()) {
             if (e.name() == "Shortcuts") {
                   while (e.readNextStartElement()) {
@@ -432,8 +431,6 @@ void Shortcut::load()
                                     else if (tag == "seq")
 //                                          sc->_keys.append(QKeySequence::fromString(e.readElementText(), QKeySequence::PortableText));
                                           sc->_keys.append(Shortcut::keySeqFromString(e.readElementText(), QKeySequence::PortableText));
-                                    else if (tag == "code")
-                                          sc->_keys.append(QKeySequence(e.readInt()));
                                     else
                                           e.unknown();
                                     }
