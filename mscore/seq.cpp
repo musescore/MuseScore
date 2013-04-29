@@ -417,7 +417,7 @@ void Seq::guiStop()
 void Seq::seqMessage(int msg)
       {
       switch(msg) {
-            case '0':         // STOP
+            case '2':
                   guiStop();
 //                  heartBeatTimer->stop();
                   if (_driver && mscore->getSynthControl()) {
@@ -430,6 +430,19 @@ void Seq::seqMessage(int msg)
                         mscore->getSynthControl()->setMeter(0.0, 0.0, 0.0, 0.0);
                         }
                   seek(0);
+                  break;
+            case '0':         // STOP
+                  guiStop();
+//                  heartBeatTimer->stop();
+                  if (_driver && mscore->getSynthControl()) {
+                        meterValue[0]     = .0f;
+                        meterValue[1]     = .0f;
+                        meterPeakValue[0] = .0f;
+                        meterPeakValue[1] = .0f;
+                        peakTimer[0]       = 0;
+                        peakTimer[1]       = 0;
+                        mscore->getSynthControl()->setMeter(0.0, 0.0, 0.0, 0.0);
+                        }
                   break;
 
             case '1':         // PLAY
@@ -559,7 +572,10 @@ void Seq::process(unsigned n, float* buffer)
                   // send sustain off
                   // TODO: channel?
                   putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
-                  emit toGui('0');
+                  if (playPos == events.cend())
+                        emit toGui('2');
+                  else
+                        emit toGui('0');
                   }
             else if (state != driverState)
                   qDebug("Seq: state transition %d -> %d ?\n",
@@ -783,9 +799,6 @@ void Seq::seek(int utick)
 
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
-//      int ucur = cs->repeatList()->utick2tick(playPos->first);
-//      if (utick != ucur)
-//            updateSynthesizerState(ucur, utick);
       int tick = cs->repeatList()->utick2tick(utick);
       Segment* seg = cs->tick2segment(tick);
       if (seg)
