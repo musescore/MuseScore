@@ -787,7 +787,7 @@
   <SC>
     <key>pad-note-32-TAB</key>
     <seq>Shift+2</seq>
-    <seq>NumPad+1</seq>
+    <seq>NumPad+2</seq>
     </SC>
   <SC>
     <key>pad-note-64-TAB</key>
