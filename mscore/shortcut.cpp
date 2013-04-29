@@ -474,7 +474,6 @@ static QList<Shortcut1*> loadDefaultShortcuts()
             return list;
             }
       XmlReader e(&f);
-      QString key;
       while (e.readNextStartElement()) {
             if (e.name() == "Shortcuts") {
                   while (e.readNextStartElement()) {
@@ -493,6 +492,7 @@ static QList<Shortcut1*> loadDefaultShortcuts()
                                     else
                                           e.unknown();
                                     }
+                              list.append(sc);
                               }
                         else
                               e.unknown();
