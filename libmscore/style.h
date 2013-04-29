@@ -325,6 +325,8 @@ enum StyleIdx {
       ST_tremoloStrokeWidth,
       ST_tremoloDistance,
 
+      ST_crossMeasureValues,
+
       ST_STYLES
       };
 
