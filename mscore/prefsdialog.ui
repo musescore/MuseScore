@@ -34,7 +34,7 @@
      <item>
       <widget class="QPushButton" name="resetToDefault">
        <property name="text">
-        <string>Reset to Default</string>
+        <string>Reset All Preferences to Default</string>
        </property>
       </widget>
      </item>
@@ -2661,7 +2661,7 @@
          <item>
           <widget class="QPushButton" name="resetShortcut">
            <property name="text">
-            <string>Reset to Default</string>
+            <string>Reset Shortcut to Default</string>
            </property>
           </widget>
          </item>
