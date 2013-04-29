@@ -43,13 +43,13 @@ Keybd::Keybd() : _flags(0)
 
 Ifelm::Ifelm() : _state(0)
       {
-      *_label = 0;
-      *_mnemo = 0;
+      _label[0] = 0;
+      _mnemo[0] = 0;
       }
 
 Group::Group() : _nifelm(0)
       {
-      *_label = 0;
+      _label[0] = 0;
       }
 
 //---------------------------------------------------------

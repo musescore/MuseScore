@@ -276,12 +276,27 @@ Fraction Staff::timeStretch(int tick) const
 TimeSig* Staff::timeSig(int tick) const
       {
       TimeSig* timesig = 0;
-      foreach(TimeSig* ts, timesigs) {
+      foreach (TimeSig* ts, timesigs) {
             if (ts->segment()->tick() > tick)
                   break;
             timesig = ts;
             }
       return timesig;
+      }
+
+//---------------------------------------------------------
+//   group
+//---------------------------------------------------------
+
+const Groups& Staff::group(int tick) const
+      {
+      TimeSig* ts = timeSig(tick);
+      if (ts) {
+            if (!ts->groups().empty())
+                  return ts->groups();
+            }
+      Measure* m = score()->tick2measure(tick);
+      return Groups::endings(m->timesig());
       }
 
 //---------------------------------------------------------

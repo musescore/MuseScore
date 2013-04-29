@@ -44,6 +44,7 @@ void Aeolus::audio_init(int sampleRate)
       _revtime = 4.0f;
       _audiopar[REVTIME] = _revtime;
       _audiopar[STPOSIT] = 0.5f;
+      _revsize = 0.075;
 
       _nasect = NASECT;
       for (int i = 0; i < NASECT; i++) {

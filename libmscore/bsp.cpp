@@ -23,9 +23,9 @@
 class InsertItemBspTreeVisitor : public BspTreeVisitor
       {
    public:
-      const Element* item;
+      Element* item;
 
-      inline void visit(QList<const Element*> *items) { items->prepend(item); }
+      inline void visit(QList<Element*> *items) { items->prepend(item); }
       };
 
 //---------------------------------------------------------
@@ -35,9 +35,9 @@ class InsertItemBspTreeVisitor : public BspTreeVisitor
 class RemoveItemBspTreeVisitor : public BspTreeVisitor
       {
    public:
-      const Element* item;
+      Element* item;
 
-      inline void visit(QList<const Element*> *items) { items->removeAll(item); }
+      inline void visit(QList<Element*> *items) { items->removeAll(item); }
       };
 
 //---------------------------------------------------------
@@ -47,11 +47,11 @@ class RemoveItemBspTreeVisitor : public BspTreeVisitor
 class FindItemBspTreeVisitor : public BspTreeVisitor
       {
    public:
-      QList<const Element*>* foundItems;
+      QList<Element*>* foundItems;
 
-      void visit(QList<const Element*>* items) {
+      void visit(QList<Element*>* items) {
             for (int i = 0; i < items->size(); ++i) {
-                  const Element* item = items->at(i);
+                  Element* item = items->at(i);
                   if (!item->itemDiscovered) {
                         item->itemDiscovered = 1;
                         foundItems->prepend(item);
@@ -101,7 +101,7 @@ void BspTree::initialize(const QRectF& rect, int n)
 
       nodes.resize((1 << (depth+1)) - 1);
       leaves.resize(1 << depth);
-      leaves.fill(QList<const Element*>());
+      leaves.fill(QList<Element*>());
       initialize(rect, depth, 0);
       }
 
@@ -120,7 +120,7 @@ void BspTree::clear()
 //   insert
 //---------------------------------------------------------
 
-void BspTree::insert(const Element* element)
+void BspTree::insert(Element* element)
       {
       insertVisitor->item = element;
       climbTree(insertVisitor, element->pageBoundingRect());
@@ -130,7 +130,7 @@ void BspTree::insert(const Element* element)
 //   remove
 //---------------------------------------------------------
 
-void BspTree::remove(const Element* element)
+void BspTree::remove(Element* element)
       {
       removeVisitor->item = element;
       climbTree(removeVisitor, element->pageBoundingRect());
@@ -140,9 +140,9 @@ void BspTree::remove(const Element* element)
 //   items
 //---------------------------------------------------------
 
-QList<const Element*> BspTree::items(const QRectF& rect)
+QList<Element*> BspTree::items(const QRectF& rect)
       {
-      QList<const Element*> tmp;
+      QList<Element*> tmp;
       findVisitor->foundItems = &tmp;
       climbTree(findVisitor, rect);
       return tmp;
@@ -152,15 +152,15 @@ QList<const Element*> BspTree::items(const QRectF& rect)
 //   items
 //---------------------------------------------------------
 
-QList<const Element*> BspTree::items(const QPointF& pos)
+QList<Element*> BspTree::items(const QPointF& pos)
       {
-      QList<const Element*> tmp;
+      QList<Element*> tmp;
       findVisitor->foundItems = &tmp;
       climbTree(findVisitor, pos);
 
-      QList<const Element*> l;
+      QList<Element*> l;
       for (int i = 0; i < tmp.size(); ++i) {
-            const Element* e = tmp.at(i);
+            Element* e = tmp.at(i);
             e->itemDiscovered = 0;
             if (e->contains(pos))
                   l.append(e);

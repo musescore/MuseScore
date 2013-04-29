@@ -138,25 +138,25 @@ Page::~Page()
 //   items
 //---------------------------------------------------------
 
-QList<const Element*> Page::items(const QRectF& r)
+QList<Element*> Page::items(const QRectF& r)
       {
 #ifdef USE_BSP
       if (!bspTreeValid)
             doRebuildBspTree();
       return bspTree.items(r);
 #else
-      return QList<const Element*>();
+      return QList<Element*>();
 #endif
       }
 
-QList<const Element*> Page::items(const QPointF& p)
+QList<Element*> Page::items(const QPointF& p)
       {
 #ifdef USE_BSP
       if (!bspTreeValid)
             doRebuildBspTree();
       return bspTree.items(p);
 #else
-      return QList<const Element*>();
+      return QList<Element*>();
 #endif
       }
 

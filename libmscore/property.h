@@ -138,6 +138,7 @@ enum P_ID {
       P_GLISS_SHOW_TEXT,
 
       P_DIAGONAL,
+      P_GROUPS,
 
       P_END
       };
@@ -161,7 +162,8 @@ enum P_TYPE {
       T_VALUE_TYPE,
       T_BEAM_MODE,
       T_PLACEMENT,
-      T_TEMPO
+      T_TEMPO,
+      T_GROUPS
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);

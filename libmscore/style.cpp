@@ -208,6 +208,8 @@ StyleType styleTypes[] = {
       StyleType("tremoloBoxHeight",        ST_SPATIUM),
       StyleType("tremoloLineWidth",        ST_SPATIUM),
       StyleType("tremoloDistance",         ST_SPATIUM),
+
+      StyleType("linearStretch",           ST_DOUBLE),
       };
 
 static const QString ff("FreeSerifMscore");
@@ -595,7 +597,8 @@ StyleData::StyleData()
             StyleVal(ST_tremoloWidth, Spatium(1.2)),  // tremolo stroke width: note head width
             StyleVal(ST_tremoloBoxHeight, Spatium(0.65)),
             StyleVal(ST_tremoloStrokeWidth, Spatium(0.35)),
-            StyleVal(ST_tremoloDistance, Spatium(0.8))
+            StyleVal(ST_tremoloDistance, Spatium(0.8)),
+            StyleVal(ST_linearStretch, qreal(1.5)),
             };
 
       for (int idx = 0; idx < ST_STYLES; ++idx)

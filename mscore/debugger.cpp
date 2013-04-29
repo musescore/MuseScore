@@ -910,6 +910,7 @@ ShowChordWidget::ShowChordWidget()
       crb.beamMode->addItem("beam end");
       crb.beamMode->addItem("no beam");
       crb.beamMode->addItem("begin 1/32");
+      crb.beamMode->addItem("begin 1/64");
 
       cb.stemDirection->addItem("Auto", 0);
       cb.stemDirection->addItem("Up",   1);

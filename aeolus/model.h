@@ -86,7 +86,7 @@ public:
 
     enum { DIVRANK, KBDRANK, COUPLER, TREMUL };
 
-    Ifelm (void);
+    Ifelm ();
 
     char      _label [32];
     char      _mnemo [8];
