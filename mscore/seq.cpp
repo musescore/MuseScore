@@ -797,6 +797,8 @@ void Seq::seek(int utick)
             return;
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
+      bool playing = isPlaying();
+      stopWait();
       int ucur = cs->repeatList()->utick2tick(playPos->first);
       if (utick != ucur)
             updateSynthesizerState(ucur, utick);
@@ -817,6 +819,8 @@ void Seq::seek(int utick)
       mscore->setPos(utick);
       unmarkNotes();
       cs->update();
+      if (playing)
+            _driver->startTransport();
       }
 
 //---------------------------------------------------------
