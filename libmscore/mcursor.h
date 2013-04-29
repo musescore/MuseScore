@@ -20,6 +20,8 @@ class Fraction;
 class TimeSig;
 class Chord;
 
+#include "fraction.h"
+
 //---------------------------------------------------------
 //   MCursor
 //---------------------------------------------------------
@@ -28,6 +30,7 @@ class MCursor {
       Score* _score;
       int _tick;
       int _track;
+      Fraction _sig;
 
       void createMeasures();
 
@@ -44,6 +47,7 @@ class MCursor {
       void move(int track, int tick);
       Score* score() const    { return _score; }
       void setScore(Score* s) { _score = s;    }
+      void setTimesig(Fraction f) { _sig = f; }
       };
 
 #endif
