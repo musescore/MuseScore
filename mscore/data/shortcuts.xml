@@ -738,7 +738,7 @@
     </SC>
   <SC>
     <key>prev-lyric</key>
-    <seq>Ctrl+Space</seq>
+    <seq>Shift+Space</seq>
     </SC>
   <SC>
     <key>toggle-visible</key>

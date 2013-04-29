@@ -120,12 +120,10 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
                         return false;
                   break;
 	      case Qt::Key_Underscore:
-                  if (modifiers & CONTROL_MODIFIER) {
-                        modifiers &= ~CONTROL_MODIFIER;
-                        s = "_";
-                        }
-                  else
+                  if (!(modifiers & CONTROL_MODIFIER))
                         lyricsUnderscore();
+                  else
+                        return false;
                   break;
             default:
                   return false;
