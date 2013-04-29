@@ -20,7 +20,7 @@
 //   noteGroups
 //---------------------------------------------------------
 
-static const std::vector<NoteGroup> noteGroups {
+static std::vector<NoteGroup> noteGroups {
       { Fraction(4,4),
             Groups( { { 4, 768}, { 8, 272}, {12, 768}, {16, 273}, {20, 768}, {24, 272}, {28, 768} })
             },
@@ -96,8 +96,26 @@ const Groups& Groups::endings(const Fraction& f)
                   return g.endings;
                   }
             }
-      // TODO: construct default list
-      return noteGroups[0].endings;
+      NoteGroup g;
+      g.timeSig = f;
+      noteGroups.push_back(g);
+
+      int pos = 0;
+      switch(f.denominator()) {
+            case 2:     pos = 16; break;
+            case 4:     pos = 8; break;
+            case 8:     pos = 4; break;
+            case 16:    pos = 2; break;
+            case 32:    pos = 1; break;
+                  break;
+            }
+      for (int i = 1; i < f.numerator(); ++i) {
+            GroupNode n;
+            n.pos    = pos * i;
+            n.action = 0x111;
+            g.endings.push_back(n);
+            }
+      return noteGroups.back().endings;
       }
 
 //---------------------------------------------------------
