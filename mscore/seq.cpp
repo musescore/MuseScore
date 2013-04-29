@@ -133,6 +133,8 @@ Seq::Seq()
       playlistChanged = false;
       cs              = 0;
       cv              = 0;
+      tackRest        = 0;
+      tickRest        = 0;
 
       endTick  = 0;
       state    = TRANSPORT_STOP;
@@ -212,8 +214,6 @@ void Seq::setScoreView(ScoreView* v)
             initInstruments();
             seek(cs->playPos());
             }
-      tackRest = 0;
-      tickRest = 0;
       }
 
 //---------------------------------------------------------
@@ -540,6 +540,7 @@ void Seq::metronome(unsigned n, float* p)
             return;
             }
       if (tickRest) {
+            tackRest = 0;
             int idx = tickLength - tickRest;
             int nn = n < tickRest ? n : tickRest;
             for (int i = 0; i < nn; ++i) {
@@ -887,7 +888,6 @@ void Seq::stopNoteTimer()
 
 //---------------------------------------------------------
 //   stopNotes
-//    called from GUI context
 //---------------------------------------------------------
 
 void Seq::stopNotes(int channel)
