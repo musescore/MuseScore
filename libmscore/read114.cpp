@@ -495,6 +495,8 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   KeySigEvent ke = i->second;
                   Measure* m = tick2measure(tick);
+                  if(!m) //empty score
+                        break;
                   Segment* seg = m->getSegment(Segment::SegKeySig, tick);
                   if (seg->element(track))
                         static_cast<KeySig*>(seg->element(track))->setGenerated(false);
