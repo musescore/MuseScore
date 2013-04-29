@@ -23,7 +23,7 @@
 #include "libmscore/keysig.h"
 #include "mscore/exportmidi.h"
 
-#include "mtest/mcursor.h"
+#include "libmscore/mcursor.h"
 #include "mtest/testutils.h"
 
 extern Score::FileError importMidi(Score*, const QString&);

@@ -28,6 +28,15 @@ bool Zerberus::initialized = false;
 std::list<ZInstrument*> Zerberus::globalInstruments;
 
 //---------------------------------------------------------
+//   createZerberus
+//---------------------------------------------------------
+
+Synthesizer* createZerberus()
+      {
+      return new Zerberus();
+      }
+
+//---------------------------------------------------------
 //   Zerberus
 //---------------------------------------------------------
 
@@ -442,3 +451,4 @@ bool Zerberus::loadInstrument(const QString& s)
       delete instr;
       return false;
       }
+

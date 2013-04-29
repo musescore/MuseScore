@@ -133,6 +133,8 @@ void TimeSig::write(Xml& xml) const
             xml.tag("textN", _numeratorString);
             xml.tag("textD", _denominatorString);
             }
+      if (!_groups.empty())
+            _groups.write(xml);
       xml.tag("showCourtesySig", _showCourtesySig);
       xml.etag();
       }
@@ -197,6 +199,8 @@ void TimeSig::read(XmlReader& e)
                   setNumeratorString(e.readElementText());
             else if (tag == "textD")
                   setDenominatorString(e.readElementText());
+            else if (tag == "Groups")
+                  _groups.read(e);
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -402,15 +406,25 @@ void TimeSig::undoSetDenominatorString(const QString& s)
       }
 
 //---------------------------------------------------------
+//   undoSetGroups
+//---------------------------------------------------------
+
+void TimeSig::undoSetGroups(const Groups& g)
+      {
+      score()->undoChangeProperty(this, P_GROUPS, QVariant::fromValue(g));
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant TimeSig::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: return int(showCourtesySig());
-            case P_NUMERATOR_STRING:  return numeratorString();
+            case P_SHOW_COURTESY:      return int(showCourtesySig());
+            case P_NUMERATOR_STRING:   return numeratorString();
             case P_DENOMINATOR_STRING: return denominatorString();
+            case P_GROUPS:             return QVariant::fromValue(groups());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -431,6 +445,9 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_DENOMINATOR_STRING:
                   setDenominatorString(v.toString());
+                  break;
+            case P_GROUPS:
+                  setGroups(v.value<Groups>());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))

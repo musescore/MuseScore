@@ -1674,7 +1674,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       QRegion r1(r);
       if (_score->layoutMode() == LayoutLine) {
             Page* page = _score->pages().front();
-            QList<const Element*> ell = page->items(fr);
+            QList<Element*> ell = page->items(fr);
             qStableSort(ell.begin(), ell.end(), elementLessThan);
             drawElements(p, ell);
             }
@@ -1687,7 +1687,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         continue;
                   if (pr.left() > fr.right())
                         break;
-                  QList<const Element*> ell = page->items(fr.translated(-page->pos()));
+                  QList<Element*> ell = page->items(fr.translated(-page->pos()));
                   qStableSort(ell.begin(), ell.end(), elementLessThan);
                   QPointF pos(page->pos());
                   p.translate(pos);
@@ -2023,119 +2023,6 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
       }
 
 //---------------------------------------------------------
-//   elementLower
-//---------------------------------------------------------
-
-static bool elementLower(const Element* e1, const Element* e2)
-      {
-      if (!e1->selectable())
-            return false;
-      return e1->z() < e2->z();
-      }
-
-//---------------------------------------------------------
-//   point2page
-//---------------------------------------------------------
-
-Page* ScoreView::point2page(const QPointF& p)
-      {
-      if (score()->layoutMode() == LayoutLine)
-            return score()->pages().front();
-      foreach(Page* page, score()->pages()) {
-            if (page->bbox().translated(page->pos()).contains(p))
-                  return page;
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
-//   elementsAt
-//    p is in canvas coordinates
-//---------------------------------------------------------
-
-const QList<const Element*> ScoreView::elementsAt(const QPointF& p)
-      {
-      QList<const Element*> el;
-
-      Page* page = point2page(p);
-      if (page) {
-            el = page->items(p - page->pos());
-            qSort(el.begin(), el.end(), elementLower);
-            }
-      return el;
-      }
-
-//---------------------------------------------------------
-//   elementAt
-//---------------------------------------------------------
-
-Element* ScoreView::elementAt(const QPointF& p)
-      {
-      QList<const Element*> el = elementsAt(p);
-#if 0
-      qDebug("elementAt");
-      foreach(const Element* e, el)
-            qDebug("  %s %d", e->name(), e->selected());
-#endif
-      const Element* e = el.value(0);
-      if (e && (e->type() == Element::PAGE))
-            e = el.value(1);
-      return const_cast<Element*>(e);
-      }
-
-//---------------------------------------------------------
-//   elementNear
-//---------------------------------------------------------
-
-Element* ScoreView::elementNear(QPointF p)
-      {
-      Page* page = point2page(p);
-      if (!page) {
-            // qDebug("  no page");
-            return 0;
-            }
-
-      p -= page->pos();
-      double w  = (preferences.proximity * .5) / matrix().m11();
-      QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
-
-      QList<const Element*> el = page->items(r);
-      QList<const Element*> ll;
-      foreach(const Element* e, el) {
-            e->itemDiscovered = 0;
-            if (!e->selectable() || e->type() == Element::PAGE)
-                  continue;
-            if (e->contains(p))
-                  ll.append(e);
-            }
-      int n = ll.size();
-      if ((n == 0) || ((n == 1) && (ll[0]->type() == Element::MEASURE))) {
-            //
-            // if no relevant element hit, look nearby
-            //
-            foreach(const Element* e, el) {
-                  if (e->type() == Element::PAGE || !e->selectable())
-                        continue;
-                  if (e->intersects(r))
-                        ll.append(e);
-                  }
-            }
-      if (ll.empty()) {
-            // qDebug("  nothing found");
-            return 0;
-            }
-      qSort(ll.begin(), ll.end(), elementLower);
-
-#if 0
-      qDebug("elementNear");
-      foreach(const Element* e, ll)
-            qDebug("  %s selected %d z %d", e->name(), e->selected(), e->z());
-#endif
-      Element* e = const_cast<Element*>(ll.at(0));
-      return e;
-      }
-
-//---------------------------------------------------------
 //   drawDebugInfo
 //---------------------------------------------------------
 
@@ -2209,7 +2096,7 @@ printf("%f %f %f %f\n", -sp.lw(), y1, sp.rw(), y2);
 //   drawElements
 //---------------------------------------------------------
 
-void ScoreView::drawElements(QPainter& painter, const QList<const Element*>& el)
+void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
       {
       foreach(const Element* e, el) {
             e->itemDiscovered = 0;
@@ -5241,3 +5128,68 @@ void ScoreView::figuredBassTicksTab(int ticks)
       ((FiguredBass*)editObject)->moveCursorToEnd();
       _score->setLayoutAll(true);
       }
+
+//---------------------------------------------------------
+//   elementLower
+//---------------------------------------------------------
+
+static bool elementLower(const Element* e1, const Element* e2)
+      {
+      if (!e1->selectable())
+            return false;
+      return e1->z() < e2->z();
+      }
+
+//---------------------------------------------------------
+//   elementNear
+//---------------------------------------------------------
+
+Element* ScoreView::elementNear(QPointF p)
+      {
+      Page* page = point2page(p);
+      if (!page) {
+            // qDebug("  no page");
+            return 0;
+            }
+
+      p -= page->pos();
+      double w  = (preferences.proximity * .5) / matrix().m11();
+      QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
+
+      QList<Element*> el = page->items(r);
+      QList<Element*> ll;
+      foreach (Element* e, el) {
+            e->itemDiscovered = 0;
+            if (!e->selectable() || e->type() == Element::PAGE)
+                  continue;
+            if (e->contains(p))
+                  ll.append(e);
+            }
+      int n = ll.size();
+      if ((n == 0) || ((n == 1) && (ll[0]->type() == Element::MEASURE))) {
+            //
+            // if no relevant element hit, look nearby
+            //
+            foreach (Element* e, el) {
+                  if (e->type() == Element::PAGE || !e->selectable())
+                        continue;
+                  if (e->intersects(r))
+                        ll.append(e);
+                  }
+            }
+      if (ll.empty()) {
+            // qDebug("  nothing found");
+            return 0;
+            }
+      qSort(ll.begin(), ll.end(), elementLower);
+
+#if 0
+      qDebug("elementNear");
+      foreach(const Element* e, ll)
+            qDebug("  %s selected %d z %d", e->name(), e->selected(), e->z());
+#endif
+      Element* e = const_cast<Element*>(ll.at(0));
+      return e;
+      }
+
+

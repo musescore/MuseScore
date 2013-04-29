@@ -839,6 +839,7 @@ void Score::repitchNote(const Position& p, bool replace)
             undoRemoveElement(_is.cr());
             chord = new Chord(this);
             chord->setParent(s);
+            chord->setTrack(_is.cr()->track());
             undoAddElement(chord);
             }
       else {

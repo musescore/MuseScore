@@ -135,6 +135,7 @@ class ChordRest : public DurationElement {
 
       virtual void setTrack(int val);
       virtual int tick() const;
+      virtual int rtick() const;
       virtual Space space() const               { return _space; }
 
       const QList<Lyrics*>& lyricsList() const { return _lyricsList; }

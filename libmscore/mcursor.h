@@ -17,6 +17,8 @@
 class Score;
 class TDuration;
 class Fraction;
+class TimeSig;
+class Chord;
 
 //---------------------------------------------------------
 //   MCursor
@@ -35,9 +37,9 @@ class MCursor {
       void saveScore();
 
       void addPart(const QString& instrument);
-      void addChord(int pitch, const TDuration& duration);
+      Chord* addChord(int pitch, const TDuration& duration);
       void addKeySig(int);
-      void addTimeSig(const Fraction&);
+      TimeSig* addTimeSig(const Fraction&);
 
       void move(int track, int tick);
       Score* score() const    { return _score; }

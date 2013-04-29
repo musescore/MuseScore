@@ -325,6 +325,8 @@ enum StyleIdx {
       ST_tremoloStrokeWidth,
       ST_tremoloDistance,
 
+      ST_linearStretch,
+
       ST_STYLES
       };
 
@@ -353,12 +355,13 @@ class StyleVal {
       StyleVal(StyleIdx t, int val);
       StyleVal(StyleIdx t, MScore::Direction val);
       StyleVal(StyleIdx t, const QString& val);
+      StyleVal(StyleIdx t, const QColor& val);
 
       Spatium toSpatium() const       { return Spatium(v.dbl); }
       qreal toDouble() const          { return v.dbl;  }
       bool toBool() const             { return v.b;  }
       int toInt() const               { return v.i;  }
-      QString toString() const        { return s;    }
+      QString toString() const        { return s;       }
       MScore::Direction toDirection() const   { return v.d;  }
       StyleIdx getIdx() const         { return idx;  }
       StyleVal(const QString& name, const QString& val);
