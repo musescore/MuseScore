@@ -115,7 +115,6 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       addPalette(MuseScore::newGraceNotePalette());
       addPalette(MuseScore::newClefsPalette());
-//      addPalette(MuseScore::newKeySigPalette());
       stack->addWidget(new KeyEditor);
 
       stack->addWidget(new TimeDialog);

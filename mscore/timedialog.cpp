@@ -39,16 +39,18 @@ TimeDialog::TimeDialog(QWidget* parent)
       frame->setLayout(l);
       sp = MuseScore::newTimePalette();
       sp->setReadOnly(false);
+      sp->setSelectable(true);
+      sp->setSelected(2);
 
       connect(zNominal, SIGNAL(valueChanged(int)), SLOT(zChanged(int)));
       connect(nNominal, SIGNAL(valueChanged(int)), SLOT(nChanged(int)));
+      connect(sp, SIGNAL(boxClicked(int)), SLOT(paletteChanged(int)));
 
       PaletteScrollArea* timePalette = new PaletteScrollArea(sp);
       QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       timePalette->setSizePolicy(policy);
 
       l->addWidget(timePalette);
-//      sp->setGrid(60, 60);
 
       _dirty = false;
       connect(addButton, SIGNAL(clicked()), SLOT(addClicked()));
@@ -108,5 +110,14 @@ void TimeDialog::zChanged(int val)
 void TimeDialog::nChanged(int val)
       {
       nText->setText(QString("%1").arg(val));
+      }
+
+//---------------------------------------------------------
+//   paletteChanged
+//---------------------------------------------------------
+
+void TimeDialog::paletteChanged(int idx)
+      {
+      printf("palette %d\n", idx);
       }
 
