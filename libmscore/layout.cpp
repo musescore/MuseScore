@@ -346,6 +346,8 @@ void Score::layoutStage2()
                   if (cr == 0)
                         continue;
                   bm = cr->beamMode();
+                  if (bm == BeamMode::AUTO)
+                        bm = Groups::endBeam(cr);
                   if (cr->measure() != measure) {
                         if (measure && !beamModeMid(bm)) {
                               if (beam) {
@@ -424,8 +426,6 @@ void Score::layoutStage2()
                               beamEnd = true;
                               }
                         else if (!beamModeMid(bm)) {
-                              if (endBeam(measure->timesig(), cr, le))
-                                    beamEnd = true;
                               if (le->tick() + le->actualTicks() < cr->tick())
                                     beamEnd = true;
                               }
@@ -477,8 +477,7 @@ void Score::layoutStage2()
                         else {
                               if (!beamModeMid(bm)
                                    &&
-                                   (endBeam(measure->timesig(), cr, a1)
-                                   || bm == BeamMode::BEGIN
+                                   (bm == BeamMode::BEGIN
                                    || (a1->segment()->segmentType() != cr->segment()->segmentType())
                                    || (a1->tick() + a1->actualTicks() < cr->tick())
                                    )
@@ -2052,7 +2051,7 @@ void Score::layoutLinear()
             if (mb->type() == Element::MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
                   m->createEndBarLines();       // TODO: not set here
-                  w = m->minWidth1() * 1.5;
+                  w = m->minWidth1() * styleD(ST_linearStretch);
                   m->layout(w);
                   }
             else

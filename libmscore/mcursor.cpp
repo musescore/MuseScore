@@ -68,7 +68,7 @@ void MCursor::createMeasures()
 //   addChord
 //---------------------------------------------------------
 
-void MCursor::addChord(int pitch, const TDuration& duration)
+Chord* MCursor::addChord(int pitch, const TDuration& duration)
       {
       createMeasures();
       Measure* measure = _score->tick2measure(_tick);
@@ -86,6 +86,7 @@ void MCursor::addChord(int pitch, const TDuration& duration)
       note->setPitch(pitch);
       note->setTpcFromPitch();
       _tick += duration.ticks();
+      return chord;
       }
 
 //---------------------------------------------------------
@@ -110,19 +111,20 @@ void MCursor::addKeySig(int sig)
 //   addTimeSig
 //---------------------------------------------------------
 
-void MCursor::addTimeSig(const Fraction& f)
+TimeSig* MCursor::addTimeSig(const Fraction& f)
       {
       createMeasures();
       Measure* measure = _score->tick2measure(_tick);
       Segment* segment = measure->getSegment(Segment::SegTimeSig, _tick);
-      int n = _score->nstaves();
-      for (int i = 0; i < n; ++i) {
-            TimeSig* ts = new TimeSig(_score);
+      TimeSig* ts = 0;
+      for (int i = 0; i < _score->nstaves(); ++i) {
+            ts = new TimeSig(_score);
             ts->setSig(f, TSIG_NORMAL);
             ts->setTrack(i * VOICES);
             segment->add(ts);
             }
       _score->sigmap()->add(_tick, SigEvent(f));
+      return ts;
       }
 
 //---------------------------------------------------------

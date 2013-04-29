@@ -134,7 +134,6 @@ class ScoreView : public QWidget, public MuseScoreView {
             };
       static const int MAX_GRIPS = 8;
 
-      Score* _score;
       OmrView* _omrView;
 
       // the next elements are used during dragMove to give some visual
@@ -218,12 +217,11 @@ class ScoreView : public QWidget, public MuseScoreView {
       Note* searchTieNote(Note* note);
 
       void setShadowNote(const QPointF&);
-      void drawElements(QPainter& p,const QList<const Element*>& el);
+      void drawElements(QPainter& p,const QList<Element*>& el);
       bool dragTimeAnchorElement(const QPointF& pos);
       void dragSymbol(const QPointF& pos);
       bool dragMeasureAnchorElement(const QPointF& pos);
       void updateGrips();
-      const QList<const Element*> elementsAt(const QPointF&);
       void lyricsTab(bool back, bool end, bool moveOnly);
       void lyricsReturn();
       void lyricsEndEdit();
@@ -249,7 +247,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdRepeatSelection();
       void cmdChangeEnharmonic(bool);
 
-      Page* point2page(const QPointF&);
       void setupFotoMode();
 
       MeasureBase* insertMeasure(Element::ElementType, MeasureBase*);
@@ -330,8 +327,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void removeScore()  { _score = 0; }
 
       void setMag(qreal m);
-      Element* elementAt(const QPointF& pp);
-      virtual Element* elementNear(QPointF pp);
       bool navigatorVisible() const;
       void cmd(const QAction* a);
 
@@ -366,7 +361,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void editInputTransition(QInputMethodEvent* ie);
       void onEditPasteTransition(QMouseEvent* ev);
 
-      Score* score() const                      { return _score; }
       virtual void setDropRectangle(const QRectF&);
       void setDropTarget(const Element*);
       void setDropAnchor(const QLineF&);
@@ -431,6 +425,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       Lasso* fotoLasso() const    { return _foto;    }
       Element* getEditObject()    { return editObject; }
       void setEditObject(Element* e) { editObject = e; }
+      virtual Element* elementNear(QPointF);
       };
 
 //---------------------------------------------------------

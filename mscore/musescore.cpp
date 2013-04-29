@@ -94,13 +94,6 @@
 #include "synthesizer/synthesizergui.h"
 #include "synthesizer/msynthesizer.h"
 #include "fluid/fluid.h"
-#ifdef AEOLUS
-#include "aeolus/aeolus.h"
-#endif
-#ifdef ZERBERUS
-#include "zerberus/zerberus.h"
-#endif
-
 MuseScore* mscore;
 MuseScoreCore* mscoreCore;
 MasterSynthesizer* synti;
@@ -137,6 +130,13 @@ extern TextPalette* textPalette;
 #ifdef Q_WS_MAC
 extern void qt_mac_set_menubar_icons(bool b);
 #endif
+#ifdef AEOLUS
+extern Synthesizer* createAeolus();
+#endif
+#ifdef ZERBERUS
+extern Synthesizer* createZerberus();
+#endif
+
 
 //---------------------------------------------------------
 // cmdInsertMeasure
@@ -2166,10 +2166,10 @@ MasterSynthesizer* synthesizerFactory()
       ms->registerSynthesizer(fluid);
 
 #ifdef AEOLUS
-      ms->registerSynthesizer(new Aeolus());
+      ms->registerSynthesizer(createAeolus());
 #endif
 #ifdef ZERBERUS
-      ms->registerSynthesizer(new Zerberus);
+      ms->registerSynthesizer(createZerberus());
 #endif
       ms->registerEffect(0, new NoEffect);
       ms->registerEffect(0, new ZitaReverb);

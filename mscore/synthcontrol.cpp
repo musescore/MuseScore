@@ -16,7 +16,6 @@
 #include "synthesizer/msynthesizer.h"
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/synthesizergui.h"
-// #include "aeolus/aeolus/aeolus.h"
 #include "mixer.h"
 #include "file.h"
 #include "icons.h"

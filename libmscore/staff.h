@@ -24,6 +24,7 @@
 #include "pitch.h"
 #include "cleflist.h"
 #include "stafftype.h"
+#include "groups.h"
 
 class Instrument;
 class InstrumentTemplate;
@@ -152,6 +153,7 @@ class Staff : public QObject {
       void removeTimeSig(TimeSig*);
       Fraction timeStretch(int tick) const;
       TimeSig* timeSig(int tick) const;
+      const Groups& group(int tick) const;
 
       KeyList* keymap() const        { return _keymap;      }
       KeySigEvent key(int tick) const;

@@ -182,7 +182,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
 
 void ScoreView::dragSymbol(const QPointF& pos)
       {
-      const QList<const Element*> el = elementsAt(pos);
+      const QList<Element*> el = elementsAt(pos);
       const Element* e = el.isEmpty() ? 0 : el[0];
       if (e && (e->type() == Element::NOTE || e->type() == Element::SYMBOL || e->type() == Element::IMAGE)) {
             if (e->acceptDrop(this, pos, dragElement)) {
@@ -263,7 +263,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case Element::ACCIDENTAL_BRACKET:
                   case Element::HARMONY:
                         {
-                        QList<const Element*> el = elementsAt(pos);
+                        QList<Element*> el = elementsAt(pos);
                         bool found = false;
                         foreach(const Element* e, el) {
                               if (e->acceptDrop(this, pos, dragElement)) {
