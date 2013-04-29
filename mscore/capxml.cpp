@@ -93,6 +93,15 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
       }
 
 //---------------------------------------------------------
+//   BasicDurationalObj::readCapxObjectArray
+//---------------------------------------------------------
+
+void BasicDurationalObj::readCapxObjectArray(XmlReader& e)
+      {
+      objects = cap->readCapxDrawObjectArray(e);
+      }
+
+//---------------------------------------------------------
 //   CapExplicitBarline::readCapx -- capx equivalent of CapExplicitBarline::read
 //---------------------------------------------------------
 
@@ -222,12 +231,10 @@ void ChordObj::readCapx(XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "lyric") {
-                  qDebug("ChordObj::readCapx: found lyric (skipping)");
-                  e.skipCurrentElement();
+                  readCapxLyrics(e);
                   }
             else if (tag == "drawObjects") {
-                  qDebug("ChordObj::readCapx: found drawObjects (skipping)");
-                  e.skipCurrentElement();
+                  readCapxObjectArray(e);
                   }
             else if (tag == "heads") {
                   readCapxNotes(e);
@@ -268,6 +275,28 @@ static signed char pitchStr2Char(QString& strPitch)
       qDebug("pitchStr2Char: '%s' -> %d", qPrintable(strPitch), pitch);
 
       return static_cast<signed char>(pitch);
+      }
+
+//---------------------------------------------------------
+//   ChordObj::readCapxLyrics -- read the lyrics in a capx chord
+//---------------------------------------------------------
+
+void ChordObj::readCapxLyrics(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (e.name() == "verse") {
+                  Verse v;
+                  v.leftAlign = true;        // TODO
+                  v.extender  = false;       // TODO
+                  v.hyphen    = false;       // TODO
+                  v.num       = e.intAttribute("i", 0);
+                  v.verseNumber = e.attribute("verseNumber");
+                  v.text = e.readElementText();
+                  verse.append(v);
+                  }
+            else
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------
@@ -341,6 +370,121 @@ void RestObj::readCapx(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   SimpleTextObj::readCapx -- capx equivalent of SimpleTextObj::read
+//---------------------------------------------------------
+
+void SimpleTextObj::readCapx(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "font") {
+                  qDebug("SimpleTextObj::readCapx: found font (skipping)");
+                  e.skipCurrentElement();
+                  }
+            else if (tag == "content") {
+                  _text = e.readElementText();
+                  // qDebug("SimpleTextObj::readCapx: found content '%s'", qPrintable(_text));
+                  }
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readCapxDrawObjectArray -- capx equivalent of readDrawObjectArray()
+//---------------------------------------------------------
+
+QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
+      {
+      QList<BasicDrawObj*> ol;
+      while (e.readNextStartElement()) {
+            if (e.name() == "drawObj") {
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "basic") {
+                              qDebug("readCapxDrawObjectArray: found basic (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "line") {
+                              qDebug("readCapxDrawObjectArray: found line (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "rectangle") {
+                              qDebug("readCapxDrawObjectArray: found rectangle (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "ellipse") {
+                              qDebug("readCapxDrawObjectArray: found ellipse (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "polygon") {
+                              qDebug("readCapxDrawObjectArray: found polygon (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "metafile") {
+                              qDebug("readCapxDrawObjectArray: found metafile (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "text") {
+                              SimpleTextObj* o = new SimpleTextObj(this);
+                              o->readCapx(e);
+                              ol.append(o);
+                              }
+                        else if (tag == "richText") {
+                              qDebug("readCapxDrawObjectArray: found richText (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "guitar") {
+                              qDebug("readCapxDrawObjectArray: found guitar (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "slur") {
+                              qDebug("readCapxDrawObjectArray: found slur (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "wavyLine") {
+                              qDebug("readCapxDrawObjectArray: found wavyLine (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "bracket") {
+                              qDebug("readCapxDrawObjectArray: found bracket (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "wedge") {
+                              qDebug("readCapxDrawObjectArray: found wedge (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "notelines") {
+                              qDebug("readCapxDrawObjectArray: found notelines (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "volta") {
+                              qDebug("readCapxDrawObjectArray: found volta (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "trill") {
+                              qDebug("readCapxDrawObjectArray: found trill (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "transposable") {
+                              qDebug("readCapxDrawObjectArray: found transposable (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else if (tag == "group") {
+                              qDebug("readCapxDrawObjectArray: found group (skipping)");
+                              e.skipCurrentElement();
+                              }
+                        else
+                              e.unknown();
+                        }
+                  }
+            else
+                  e.unknown();
+            }
+      return ol;
+      }
+
+//---------------------------------------------------------
 //   readCapxVoice -- capx equivalent of readVoice(CapStaff* cs, int idx)
 //---------------------------------------------------------
 
@@ -382,7 +526,6 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
                               v->objects.append(bl);
                               }
                         else if (tag == "chord") {
-                              qDebug("readCapxVoice: found chord (skipping)");
                               ChordObj* chord = new ChordObj(this);
                               chord->readCapx(e);
                               v->objects.append(chord);
@@ -716,8 +859,7 @@ void Capella::readCapx(XmlReader& e)
       beamRelMax0 = 0;
       beamRelMax1 = 0;
 
-      backgroundChord = new ChordObj(this);
-      // TODO backgroundChord->read();              // contains graphic objects on the page background
+      backgroundChord = new ChordObj(this);         // contains graphic objects on the page background
       bShowBarCount    = 0;
       barNumberFrame   = 0;
       nBarDistX        = 0;
@@ -754,8 +896,7 @@ void Capella::readCapx(XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "pageObjects") {
-                  qDebug("capxLayout: found pageObjects (skipping)");
-                  e.skipCurrentElement();
+                  backgroundChord->readCapxObjectArray(e);
                   }
             else if (tag == "barCount") {
                   qDebug("importCapXml: found barCount (skipping)");
