@@ -39,11 +39,12 @@ static Score* createScore(TimeSig* ts, int n, TDuration::DurationType t, std::ve
       {
       Fraction sig(ts->sig());
       MCursor c;
+      c.setTimesig(ts->sig());
       c.createScore("score8");
       c.addPart("voice");
       c.move(0, 0);
       c.addKeySig(0);
-      TimeSig* nts = c.addTimeSig(Fraction(4,4));
+      TimeSig* nts = c.addTimeSig(ts->sig());
       GroupNode node {0, 0};
       Groups ng;
       ng.push_back(node);

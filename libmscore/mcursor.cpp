@@ -45,21 +45,17 @@ void MCursor::createMeasures()
       {
       Measure* measure;
       for (;;) {
+            int tick = 0;
             measure = _score->lastMeasure();
             if (measure) {
-                  int t = measure->tick() + measure->ticks();
-                  if (t > _tick)
+                  tick = measure->tick() + measure->ticks();
+                  if (tick > _tick)
                         break;
                   }
             measure = new Measure(_score);
-            int t = 0;
-            Measure* lm = _score->lastMeasure();
-            if (lm) {
-                  t = lm->tick() + lm->ticks();
-                  }
-            measure->setTick(t);
-            measure->setTimesig(Fraction(4,4));
-            measure->setLen(Fraction(4,4));
+            measure->setTick(tick);
+            measure->setTimesig(_sig);
+            measure->setLen(_sig);
             _score->measures()->add(measure);
             }
       }

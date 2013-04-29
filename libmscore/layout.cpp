@@ -2018,6 +2018,7 @@ void Score::layoutSystems2()
 void Score::layoutLinear()
       {
       curMeasure     = first();
+      curSystem      = 0;
       System* system = getNextSystem(true, false);
       system->setInstrumentNames(true);
       qreal xo;
