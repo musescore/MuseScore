@@ -123,8 +123,6 @@ class Seq : public QObject, public Sequencer {
 
       void collectMeasureEvents(Measure*, int staffIdx);
 
-      void stopTransport();
-      void startTransport();
       void setPos(int);
       void playEvent(const NPlayEvent&);
       void guiToSeq(const SeqMsg& msg);

@@ -40,6 +40,7 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase {
       void addClicked();
       void zChanged(int);
       void nChanged(int);
+      void paletteChanged(int idx);
 
    public:
       TimeDialog(QWidget* parent = 0);

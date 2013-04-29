@@ -173,21 +173,6 @@ Seq::~Seq()
       }
 
 //---------------------------------------------------------
-//   stopWait
-//---------------------------------------------------------
-
-void Seq::stopWait()
-      {
-      stop();
-      QWaitCondition sleep;
-      while (state != TRANSPORT_STOP) {
-            mutex.lock();
-            sleep.wait(&mutex, 100);
-            mutex.unlock();
-            }
-      }
-
-//---------------------------------------------------------
 //   setScoreView
 //---------------------------------------------------------
 
@@ -350,6 +335,26 @@ void Seq::stop()
       }
 
 //---------------------------------------------------------
+//   stopWait
+//---------------------------------------------------------
+
+void Seq::stopWait()
+      {
+      stop();
+      QWaitCondition sleep;
+      int idx = 0;
+      while (state != TRANSPORT_STOP) {
+            printf("state %d\n", state);
+            mutex.lock();
+            sleep.wait(&mutex, 100);
+            mutex.unlock();
+            ++idx;
+            if (idx > 10)
+                  abort();
+            }
+      }
+
+//---------------------------------------------------------
 //   seqStarted
 //---------------------------------------------------------
 
@@ -424,6 +429,7 @@ void Seq::seqMessage(int msg)
                         peakTimer[1]       = 0;
                         mscore->getSynthControl()->setMeter(0.0, 0.0, 0.0, 0.0);
                         }
+                  seek(0);
                   break;
 
             case '1':         // PLAY
@@ -435,37 +441,6 @@ void Seq::seqMessage(int msg)
                   qDebug("MScore::Seq:: unknown seq msg %d\n", msg);
                   break;
             }
-      }
-
-//---------------------------------------------------------
-//   stopTransport
-//    JACK has stopped
-//    executed in realtime environment
-//---------------------------------------------------------
-
-void Seq::stopTransport()
-      {
-      state = TRANSPORT_STOP;
-      if (cs == 0)
-            return;
-      stopNotes();
-      // send sustain off
-      // TODO: channel?
-      NPlayEvent e(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0);
-      putEvent(e);
-      emit toGui('0');
-      }
-
-//---------------------------------------------------------
-//   startTransport
-//    JACK has started
-//    executed in realtime environment
-//---------------------------------------------------------
-
-void Seq::startTransport()
-      {
-      emit toGui('1');
-      state = TRANSPORT_PLAY;
       }
 
 //---------------------------------------------------------
@@ -574,10 +549,18 @@ void Seq::process(unsigned n, float* buffer)
       int driverState = _driver->getState();
 
       if (driverState != state) {
-            if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY)
-                  startTransport();
-            else if (state == TRANSPORT_PLAY && driverState == TRANSPORT_STOP)
-                  stopTransport();
+            if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY) {
+                  state = TRANSPORT_PLAY;
+                  emit toGui('1');
+                  }
+            else if (state == TRANSPORT_PLAY && driverState == TRANSPORT_STOP) {
+                  state = TRANSPORT_STOP;
+                  stopNotes();
+                  // send sustain off
+                  // TODO: channel?
+                  putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
+                  emit toGui('0');
+                  }
             else if (state != driverState)
                   qDebug("Seq: state transition %d -> %d ?\n",
                      state, driverState);
@@ -664,10 +647,8 @@ void Seq::process(unsigned n, float* buffer)
                               }
                         }
                   }
-            if (playPos == events.cend()) {
+            if (playPos == events.cend())
                   _driver->stopTransport();
-                  rewindStart();
-                  }
             }
       else {
             _synti->process(frames, p);
@@ -780,6 +761,10 @@ void Seq::setPos(int utick)
             return;
       stopNotes();
 
+      int ucur = cs->repeatList()->utick2tick(playPos->first);
+      if (utick != ucur)
+            updateSynthesizerState(ucur, utick);
+
       playTime  = cs->utick2utime(utick) * MScore::sampleRate;
       mutex.lock();
       playPos   = events.lower_bound(utick);
@@ -795,13 +780,12 @@ void Seq::seek(int utick)
       {
       if (cs == 0)
             return;
+
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
-      bool playing = isPlaying();
-      stopWait();
-      int ucur = cs->repeatList()->utick2tick(playPos->first);
-      if (utick != ucur)
-            updateSynthesizerState(ucur, utick);
+//      int ucur = cs->repeatList()->utick2tick(playPos->first);
+//      if (utick != ucur)
+//            updateSynthesizerState(ucur, utick);
       int tick = cs->repeatList()->utick2tick(utick);
       Segment* seg = cs->tick2segment(tick);
       if (seg)
@@ -815,12 +799,11 @@ void Seq::seek(int utick)
             ov_pcm_seek(&vf, sp);
             }
       guiToSeq(SeqMsg(SEQ_SEEK, utick));
+
       guiPos = events.upper_bound(utick);
       mscore->setPos(utick);
       unmarkNotes();
       cs->update();
-      if (playing)
-            _driver->startTransport();
       }
 
 //---------------------------------------------------------
