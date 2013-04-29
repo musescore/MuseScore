@@ -672,8 +672,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               Text* s = new Text(score);
                               QString ss = rtf2html(QString(to->text));
 
-                              //qDebug("string %f:%f w %d ratio %d <%s>",
-                              //   to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
+                              // qDebug("string %f:%f w %d ratio %d <%s>",
+                              //    to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
                               s->setHtml(ss);
                               MeasureBase* measure = score->measures()->first();
                               if (measure->type() != Element::VBOX) {
@@ -826,6 +826,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         measure->setTick(0);
                         score->addMeasure(measure, score->measures()->first());
                         measure->add(s);
+                        // qDebug("page background object type %d (CAP_SIMPLE_TEXT) text %s", o->type, qPrintable(ss));
                         }
                         break;
                   default:
@@ -979,9 +980,13 @@ void SimpleTextObj::read()
       relPos = cap->readPoint();
       align  = cap->readByte();
       _font  = cap->readFont();
-      _text  = cap->readString();
-      // qDebug("read SimpletextObj(%f,%f) len %zd <%s> char0: %02x",
-      //       relPos.x(), relPos.y(), strlen(_text), _text, _text[0]);
+      char* t = cap->readString();
+      if (t) {
+            _text = QString::fromLatin1(t);
+            delete t;
+            }
+      // qDebug("read SimpletextObj(%f,%f) len %zd <%s>",
+      //        relPos.x(), relPos.y(), _text.length(), qPrintable(_text));
       }
 
 //---------------------------------------------------------
@@ -1817,6 +1822,7 @@ void Capella::readLayout()
             // qDebug("Bracket%d %d-%d curly %d", i, b.from, b.to, b.curly);
             brackets.append(b);
             }
+      // qDebug("Capella::readLayout(): done");
       }
 
 //---------------------------------------------------------
@@ -2169,19 +2175,21 @@ void Capella::read(QFile* fp)
 
       readExtra();
 
-      readDrawObjectArray();
+      readDrawObjectArray();                // Galerie (gesammelte Grafikobjekte)
 
       unsigned n = readUnsigned();
       if (n) {
             qDebug("Gallery objects");
             }
       for (unsigned int i = 0; i < n; ++i) {
-            /*char* s =*/ readString();       // names of galerie objects
+            /*char* s =*/ readString();     // Namen der Galerie-Objekte
             // qDebug("Galerie: <%s>", s);
             }
 
+      // qDebug("read backgroundChord");
       backgroundChord = new ChordObj(this);
       backgroundChord->read();              // contains graphic objects on the page background
+      // qDebug("read backgroundChord done");
       bShowBarCount    = readByte();        // Taktnumerierung zeigen
       barNumberFrame   = readByte();        // 0=kein, 1=Rechteck, 2=Ellipse
       nBarDistX        = readByte();
