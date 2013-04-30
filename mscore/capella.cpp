@@ -283,13 +283,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     else
                                           qDebug("Capella: unknown tuplet");
                                     tuplet->setRatio(f);
-                                    tuplet->setBaseLen(d);
+                                    tuplet->setBaseLen(d); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
-                                    // tuplet->setParent(m);
+                                    tuplet->setParent(m);
                                     int nn = ((tupletCount * ticks) * f.denominator()) / f.numerator();
-                                    tuplet->setDuration(Fraction::fromTicks(nn));
-                                    m->add(tuplet);
+                                    tuplet->setDuration(Fraction::fromTicks(nn)); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     }
                               }
 
@@ -311,6 +310,10 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (!o->invisible || voice == 0) {
                               Segment* s = m->getSegment(Segment::SegChordRest, tick);
                               Rest* rest = new Rest(score);
+                              if (tuplet) {
+                                    rest->setTuplet(tuplet);
+                                    tuplet->add(rest);
+                                    }
                               TDuration d;
                               if (o->fullMeasures) {
                                     d.setType(TDuration::V_MEASURE);
@@ -326,7 +329,18 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               s->add(rest);
                               processBasicDrawObj(o->objects, s, track);
                               }
-                        tick += ticks;
+
+                        if (tuplet) {
+                              if (++nTuplet >= tupletCount) {
+                                    tick = tupletTick + tuplet->actualTicks();
+                                    tuplet = 0;
+                                    }
+                              else {
+                                    tick += (ticks * tuplet->ratio().denominator()) / tuplet->ratio().numerator();
+                                    }
+                              }
+                        else
+                              tick += ticks;
                         }
                         break;
                   case T_CHORD:
@@ -357,13 +371,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     else
                                           qDebug("Capella: unknown tuplet");
                                     tuplet->setRatio(f);
-                                    tuplet->setBaseLen(d);
+                                    tuplet->setBaseLen(d); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
-                                    // tuplet->setParent(m);
+                                    tuplet->setParent(m);
                                     int nn = ((tupletCount * ticks) * f.denominator()) / f.numerator();
-                                    tuplet->setDuration(Fraction::fromTicks(nn));
-                                    m->add(tuplet);
+                                    tuplet->setDuration(Fraction::fromTicks(nn)); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     }
                               qDebug("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %d",
                                      tick, o->count, o->tripartite, o->isProlonging, ticks,
@@ -371,7 +384,10 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
 
                         Chord* chord = new Chord(score);
-                        chord->setTuplet(tuplet);
+                        if (tuplet) {
+                              chord->setTuplet(tuplet);
+                              tuplet->add(chord);
+                              }
                         if (isgracenote) { // grace notes
                               SetCapGraceDuration(chord,o);
                               chord->setDuration(chord->durationType().fraction());
