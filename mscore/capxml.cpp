@@ -29,6 +29,34 @@
 #include "capella.h"
 
 //---------------------------------------------------------
+//   capxReadFont
+//---------------------------------------------------------
+
+static QFont capxReadFont(XmlReader& e)
+{
+      QFont f;
+      QString family = e.attribute("face");
+      if (family != "")
+            f.setFamily(family);
+      qreal pointSize = e.doubleAttribute("height", 0);
+      if (pointSize > 0.5)
+            f.setPointSizeF(pointSize);
+      int weight = e.intAttribute("weight");
+      if (weight < 200)
+            f.setWeight(QFont::Light);
+      else if (weight < 550)
+            f.setWeight(QFont::Normal);
+      else
+            f.setWeight(QFont::Bold);
+      QString italic = e.attribute("italic");
+      if (italic == "true")
+            f.setItalic(true);
+      // qDebug("capxReadFont family '%s' ps %g w %d it '%s'", qPrintable(family), pointSize, weight, qPrintable(italic));
+      e.readNext();
+      return f;
+}
+
+//---------------------------------------------------------
 //   qstring2timestep -- convert string to TIMESTEP
 //---------------------------------------------------------
 
@@ -361,8 +389,7 @@ void RestObj::readCapx(XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "drawObjects") {
-                  qDebug("RestObj::readCapx: found drawObjects (skipping)");
-                  e.skipCurrentElement();
+                  readCapxObjectArray(e);
                   }
             else
                   e.unknown();
@@ -375,11 +402,16 @@ void RestObj::readCapx(XmlReader& e)
 
 void SimpleTextObj::readCapx(XmlReader& e)
       {
+      double x = e.doubleAttribute("x");
+      double y = e.doubleAttribute("y");
+      QString align = e.attribute("align", "left");
+      relPos = QPointF(x, y);
+      relPos *= 32.0;
+      // qDebug("x %g y %g align %s", x, y, qPrintable(align));
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "font") {
-                  qDebug("SimpleTextObj::readCapx: found font (skipping)");
-                  e.skipCurrentElement();
+                  _font = capxReadFont(e);
                   }
             else if (tag == "content") {
                   _text = e.readElementText();
