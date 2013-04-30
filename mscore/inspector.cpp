@@ -53,12 +53,12 @@
 void MuseScore::showInspector(bool visible)
       {
       QAction* a = getAction("inspector");
+      if (!inspector) {
+            inspector = new Inspector();
+            connect(inspector, SIGNAL(inspectorVisible(bool)), a, SLOT(setChecked(bool)));
+            addDockWidget(Qt::RightDockWidgetArea, inspector);
+            }
       if (visible) {
-            if (!inspector) {
-                  inspector = new Inspector();
-                  connect(inspector, SIGNAL(inspectorVisible(bool)), a, SLOT(setChecked(bool)));
-                  addDockWidget(Qt::RightDockWidgetArea, inspector);
-                  }
             updateInspector();
             }
       if (inspector)
