@@ -595,11 +595,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               case CapExplicitBarline::BAR_REPEND:      st = END_REPEAT; break;
                               case CapExplicitBarline::BAR_REPSTART:    st = START_REPEAT; break;
                               case CapExplicitBarline::BAR_REPENDSTART: st = END_START_REPEAT; break;
+                              case CapExplicitBarline::BAR_DASHED:      st = BROKEN_BAR; break;
                               }
                         if (st == NORMAL_BAR)
                               break;
 
-                        if (pm && (st == DOUBLE_BAR || st == END_BAR))
+                        if (pm && (st == DOUBLE_BAR || st == END_BAR || st == BROKEN_BAR))
                               pm->setEndBarLineType(st, false, true);
 
                         if (st == START_REPEAT || st == END_START_REPEAT) {
