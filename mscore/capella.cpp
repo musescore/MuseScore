@@ -283,13 +283,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     else
                                           qDebug("Capella: unknown tuplet");
                                     tuplet->setRatio(f);
-                                    tuplet->setBaseLen(d);
+                                    tuplet->setBaseLen(d); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
-                                    // tuplet->setParent(m);
+                                    tuplet->setParent(m);
                                     int nn = ((tupletCount * ticks) * f.denominator()) / f.numerator();
-                                    tuplet->setDuration(Fraction::fromTicks(nn));
-                                    m->add(tuplet);
+                                    tuplet->setDuration(Fraction::fromTicks(nn)); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     }
                               }
 
@@ -311,6 +310,10 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (!o->invisible || voice == 0) {
                               Segment* s = m->getSegment(Segment::SegChordRest, tick);
                               Rest* rest = new Rest(score);
+                              if (tuplet) {
+                                    rest->setTuplet(tuplet);
+                                    tuplet->add(rest);
+                                    }
                               TDuration d;
                               if (o->fullMeasures) {
                                     d.setType(TDuration::V_MEASURE);
@@ -326,7 +329,18 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               s->add(rest);
                               processBasicDrawObj(o->objects, s, track);
                               }
-                        tick += ticks;
+
+                        if (tuplet) {
+                              if (++nTuplet >= tupletCount) {
+                                    tick = tupletTick + tuplet->actualTicks();
+                                    tuplet = 0;
+                                    }
+                              else {
+                                    tick += (ticks * tuplet->ratio().denominator()) / tuplet->ratio().numerator();
+                                    }
+                              }
+                        else
+                              tick += ticks;
                         }
                         break;
                   case T_CHORD:
@@ -357,13 +371,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     else
                                           qDebug("Capella: unknown tuplet");
                                     tuplet->setRatio(f);
-                                    tuplet->setBaseLen(d);
+                                    tuplet->setBaseLen(d); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
-                                    // tuplet->setParent(m);
+                                    tuplet->setParent(m);
                                     int nn = ((tupletCount * ticks) * f.denominator()) / f.numerator();
-                                    tuplet->setDuration(Fraction::fromTicks(nn));
-                                    m->add(tuplet);
+                                    tuplet->setDuration(Fraction::fromTicks(nn)); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     }
                               qDebug("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %d",
                                      tick, o->count, o->tripartite, o->isProlonging, ticks,
@@ -371,7 +384,10 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
 
                         Chord* chord = new Chord(score);
-                        chord->setTuplet(tuplet);
+                        if (tuplet) {
+                              chord->setTuplet(tuplet);
+                              tuplet->add(chord);
+                              }
                         if (isgracenote) { // grace notes
                               SetCapGraceDuration(chord,o);
                               chord->setDuration(chord->durationType().fraction());
@@ -579,11 +595,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               case CapExplicitBarline::BAR_REPEND:      st = END_REPEAT; break;
                               case CapExplicitBarline::BAR_REPSTART:    st = START_REPEAT; break;
                               case CapExplicitBarline::BAR_REPENDSTART: st = END_START_REPEAT; break;
+                              case CapExplicitBarline::BAR_DASHED:      st = BROKEN_BAR; break;
                               }
                         if (st == NORMAL_BAR)
                               break;
 
-                        if (pm && (st == DOUBLE_BAR || st == END_BAR))
+                        if (pm && (st == DOUBLE_BAR || st == END_BAR || st == BROKEN_BAR))
                               pm->setEndBarLineType(st, false, true);
 
                         if (st == START_REPEAT || st == END_START_REPEAT) {
@@ -672,8 +689,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               Text* s = new Text(score);
                               QString ss = rtf2html(QString(to->text));
 
-                              //qDebug("string %f:%f w %d ratio %d <%s>",
-                              //   to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
+                              // qDebug("string %f:%f w %d ratio %d <%s>",
+                              //    to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
                               s->setHtml(ss);
                               MeasureBase* measure = score->measures()->first();
                               if (measure->type() != Element::VBOX) {
@@ -826,6 +843,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         measure->setTick(0);
                         score->addMeasure(measure, score->measures()->first());
                         measure->add(s);
+                        // qDebug("page background object type %d (CAP_SIMPLE_TEXT) text %s", o->type, qPrintable(ss));
                         }
                         break;
                   default:
@@ -979,9 +997,13 @@ void SimpleTextObj::read()
       relPos = cap->readPoint();
       align  = cap->readByte();
       _font  = cap->readFont();
-      _text  = cap->readString();
-      // qDebug("read SimpletextObj(%f,%f) len %zd <%s> char0: %02x",
-      //       relPos.x(), relPos.y(), strlen(_text), _text, _text[0]);
+      char* t = cap->readString();
+      if (t) {
+            _text = QString::fromLatin1(t);
+            delete t;
+            }
+      // qDebug("read SimpletextObj(%f,%f) len %zd <%s>",
+      //        relPos.x(), relPos.y(), _text.length(), qPrintable(_text));
       }
 
 //---------------------------------------------------------
@@ -1817,6 +1839,7 @@ void Capella::readLayout()
             // qDebug("Bracket%d %d-%d curly %d", i, b.from, b.to, b.curly);
             brackets.append(b);
             }
+      // qDebug("Capella::readLayout(): done");
       }
 
 //---------------------------------------------------------
@@ -2169,19 +2192,21 @@ void Capella::read(QFile* fp)
 
       readExtra();
 
-      readDrawObjectArray();
+      readDrawObjectArray();                // Galerie (gesammelte Grafikobjekte)
 
       unsigned n = readUnsigned();
       if (n) {
             qDebug("Gallery objects");
             }
       for (unsigned int i = 0; i < n; ++i) {
-            /*char* s =*/ readString();       // names of galerie objects
+            /*char* s =*/ readString();     // Namen der Galerie-Objekte
             // qDebug("Galerie: <%s>", s);
             }
 
+      // qDebug("read backgroundChord");
       backgroundChord = new ChordObj(this);
       backgroundChord->read();              // contains graphic objects on the page background
+      // qDebug("read backgroundChord done");
       bShowBarCount    = readByte();        // Taktnumerierung zeigen
       barNumberFrame   = readByte();        // 0=kein, 1=Rechteck, 2=Ellipse
       nBarDistX        = readByte();
