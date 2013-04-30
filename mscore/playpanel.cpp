@@ -217,6 +217,8 @@ void PlayPanel::updatePosLabel(int utick)
       if (cs) {
             tick = cs->repeatList()->utick2tick(utick);
             cs->sigmap()->tickValues(tick, &bar, &beat, &t);
+            double tpo = cs->tempomap()->tempo(tick) * cs->tempomap()->relTempo();
+            setTempo(tpo);
             }
       char buffer[32];
       sprintf(buffer, "%03d.%02d", bar+1, beat+1);
