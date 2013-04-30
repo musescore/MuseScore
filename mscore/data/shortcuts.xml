@@ -222,7 +222,7 @@
     </SC>
   <SC>
     <key>add-tenuto</key>
-    <seq>_</seq>
+    <seq>Ctrl+Alt+N</seq>
     </SC>
   <SC>
     <key>add-marcato</key>
@@ -483,10 +483,6 @@
   <SC>
     <key>tie</key>
     <seq>+</seq>
-    </SC>
-  <SC>
-    <key>flat</key>
-    <seq>-</seq>
     </SC>
   <SC>
     <key>acciaccatura</key>
