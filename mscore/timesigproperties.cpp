@@ -39,7 +39,7 @@ static Score* createScore(TimeSig* ts, int n, TDuration::DurationType t, std::ve
       {
       Fraction sig(ts->sig());
       MCursor c;
-      c.setTimesig(ts->sig());
+      c.setTimeSig(ts->sig());
       c.createScore("score8");
       c.addPart("voice");
       c.move(0, 0);
