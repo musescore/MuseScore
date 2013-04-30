@@ -143,7 +143,8 @@ class CapExplicitBarline : public NoteObj, public CapellaObj {
       int barMode() const { return _barMode; }
 
       enum { BAR_SINGLE, BAR_DOUBLE, BAR_END,
-            BAR_REPEND, BAR_REPSTART, BAR_REPENDSTART};
+             BAR_REPEND, BAR_REPSTART, BAR_REPENDSTART,
+             BAR_DASHED};
       };
 
 //---------------------------------------------------------

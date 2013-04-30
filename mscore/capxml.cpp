@@ -33,7 +33,7 @@
 //---------------------------------------------------------
 
 static QFont capxReadFont(XmlReader& e)
-{
+      {
       QFont f;
       QString family = e.attribute("face");
       if (family != "")
@@ -54,7 +54,7 @@ static QFont capxReadFont(XmlReader& e)
       // qDebug("capxReadFont family '%s' ps %g w %d it '%s'", qPrintable(family), pointSize, weight, qPrintable(italic));
       e.readNext();
       return f;
-}
+      }
 
 //---------------------------------------------------------
 //   qstring2timestep -- convert string to TIMESTEP
@@ -135,7 +135,15 @@ void BasicDurationalObj::readCapxObjectArray(XmlReader& e)
 
 void CapExplicitBarline::readCapx(XmlReader& e)
       {
-      _type = BAR_SINGLE; // TODO
+      QString type = e.attribute("type", "single");
+      if (type == "single") _type = BAR_SINGLE;
+      else if (type == "double") _type = BAR_DOUBLE;
+      else if (type == "end") _type = BAR_END;
+      else if (type == "repEnd") _type = BAR_REPEND;
+      else if (type == "repBegin") _type = BAR_REPSTART;
+      else if (type == "repEndBegin") _type = BAR_REPENDSTART;
+      else if (type == "dashed") _type = BAR_DASHED;
+      else _type = BAR_SINGLE; // default
       _barMode = 0;
       e.readNext();
       }
