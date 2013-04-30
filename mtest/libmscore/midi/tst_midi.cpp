@@ -171,6 +171,7 @@ bool compareScores(Score* score1, Score* score2)
 void TestMidi::midi01()
       {
       MCursor c;
+      c.setTimeSig(Fraction(4,4));
       c.createScore("test1a");
       c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
@@ -211,6 +212,7 @@ void TestMidi::midi01()
 void TestMidi::midi02()
       {
       MCursor c;
+      c.setTimeSig(Fraction(3,4));
       c.createScore("test2a");
       c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
@@ -251,6 +253,7 @@ void TestMidi::midi02()
 void TestMidi::midi03()
       {
       MCursor c;
+      c.setTimeSig(Fraction(4,4));
       c.createScore("test3a");
       c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
