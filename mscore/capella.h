@@ -143,7 +143,8 @@ class CapExplicitBarline : public NoteObj, public CapellaObj {
       int barMode() const { return _barMode; }
 
       enum { BAR_SINGLE, BAR_DOUBLE, BAR_END,
-            BAR_REPEND, BAR_REPSTART, BAR_REPENDSTART};
+             BAR_REPEND, BAR_REPSTART, BAR_REPENDSTART,
+             BAR_DASHED};
       };
 
 //---------------------------------------------------------
@@ -246,7 +247,9 @@ class BasicDrawObj : public CapellaObj {
       int pageRange;
       int type;
 
-      BasicDrawObj(int t, Capella* c) : CapellaObj(c) { type = t; }
+      BasicDrawObj(int t, Capella* c)
+         : CapellaObj(c), modeX(0), modeY(0), distY(0), flags(0),
+           nRefNote(0), nNotes(0), background(0), pageRange(0), type(t) {}
       void read();
       };
 
@@ -455,16 +458,17 @@ class TextObj : public BasicRectObj {
 //---------------------------------------------------------
 
 class SimpleTextObj : public BasicDrawObj {
-      char* _text;
+      QString _text;
       QPointF relPos;
       unsigned char align;
       QFont _font;
 
    public:
-      SimpleTextObj(Capella* c) : BasicDrawObj(CAP_SIMPLE_TEXT, c) { _text = 0;}
-      ~SimpleTextObj() { if (_text) delete _text; }
+      SimpleTextObj(Capella* c)
+         : BasicDrawObj(CAP_SIMPLE_TEXT, c), relPos(0, 0), align(0) {}
       void read();
-      QString text() const { return QString(_text); }
+      void readCapx(XmlReader& e);
+      QString text() const { return _text; }
       QFont font() const { return _font; }
       QPointF pos() const { return relPos; }
       };
@@ -518,6 +522,7 @@ class BasicDurationalObj : public CapellaObj {
       BasicDurationalObj(Capella* c) : CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e, unsigned int& fullm);
+      void readCapxObjectArray(XmlReader& e);
       int ticks() const;
       bool invisible;
       QList<BasicDrawObj*> objects;
@@ -564,6 +569,7 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
       ChordObj(Capella*);
       void read();
       void readCapx(XmlReader& e);
+      void readCapxLyrics(XmlReader& e);
       void readCapxNotes(XmlReader& e);
       QList<Verse> verse;
       QList<CNote> notes;
@@ -704,6 +710,7 @@ class Capella {
       void initCapxLayout();
    public:
       void readCapx(XmlReader& e);
+      QList<BasicDrawObj*> readCapxDrawObjectArray(XmlReader& e);
       };
 
 #endif
