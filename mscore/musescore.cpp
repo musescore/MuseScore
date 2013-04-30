@@ -2881,6 +2881,7 @@ void MuseScore::writeSettings()
       settings.setValue("pos", pos());
       settings.setValue("maximized", isMaximized());
       settings.setValue("showPanel", paletteBox && paletteBox->isVisible());
+      settings.setValue("showInspector", inspector && inspector->isVisible());
       settings.setValue("state", saveState());
       settings.setValue("splitScreen", _splitScreen);
       settings.setValue("debuggerSplitter", mainWindow->saveState());
@@ -2947,6 +2948,7 @@ void MuseScore::readSettings()
       if (settings.value("maximized", false).toBool())
             showMaximized();
       mscore->showPalette(settings.value("showPanel", "1").toBool());
+      mscore->showInspector(settings.value("showInspector", "0").toBool());
 
       restoreState(settings.value("state").toByteArray());
       _horizontalSplit = settings.value("split", true).toBool();
