@@ -612,9 +612,24 @@ void Measure::layout2()
             QString s;
             if (smn)
                   s = QString("%1").arg(_no + 1);
-
-            int nn = (score()->styleB(ST_measureNumberAllStaffs)) ? n : 1;
-            for (int staffIdx = 0; staffIdx < nn; ++staffIdx) {
+            int sn = 0;
+            int nn = 1;
+            if (score()->styleB(ST_measureNumberAllStaffs))
+                  nn = n;
+            else {
+                  //find first non invisible staff
+                  for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+                        MStaff* ms = staves.at(staffIdx);
+                        SysStaff* s  = system()->staff(staffIdx);
+                        Staff* staff = score()->staff(staffIdx);
+                        if (ms->visible() && staff->show() && s->show()) {
+                              sn = staffIdx;
+                              nn = staffIdx + 1;
+                              break;
+                              }
+                        }
+                  }
+            for (int staffIdx = sn; staffIdx < nn; ++staffIdx) {
                   MStaff* ms = staves.at(staffIdx);
                   Text* t = ms->noText();
                   if (smn) {
