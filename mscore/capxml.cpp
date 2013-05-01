@@ -75,6 +75,17 @@ static bool qstring2timestep(QString& str, TIMESTEP& tstp)
       }
 
 //---------------------------------------------------------
+//   BasicDrawObj::readCapx -- capx equivalent of BasicDrawObj::read
+//---------------------------------------------------------
+
+void BasicDrawObj::readCapx(XmlReader& e)
+      {
+      nNotes = e.intAttribute("noteRange", 0);
+      qDebug("nNotes %d", nNotes);
+      e.readNext();
+      }
+
+//---------------------------------------------------------
 //   BasicDurationalObj::readCapx -- capx equivalent of BasicDurationalObj::read
 //---------------------------------------------------------
 
@@ -367,8 +378,8 @@ void ChordObj::readCapxNotes(XmlReader& e)
                               e.readNext();
                               }
                         else if (tag == "tie") {
-                              qDebug("ChordObj::readCapxNotes: found tie (skipping)");
-                              e.skipCurrentElement();
+                              rightTie = (e.attribute("begin") == "true");
+                              e.readNext();
                               }
                         else
                               e.unknown();
@@ -446,6 +457,16 @@ void SimpleTextObj::readCapx(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   SlurObj::readCapx -- capx equivalent of SlurObj::read
+//---------------------------------------------------------
+
+void SlurObj::readCapx(XmlReader& e)
+      {
+      // nothing to be done yet
+      e.skipCurrentElement();
+      }
+
+//---------------------------------------------------------
 //   readCapxDrawObjectArray -- capx equivalent of readDrawObjectArray()
 //---------------------------------------------------------
 
@@ -454,11 +475,14 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
       QList<BasicDrawObj*> ol;
       while (e.readNextStartElement()) {
             if (e.name() == "drawObj") {
+                  BasicDrawObj* bdo = 0;
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "basic") {
-                              qDebug("readCapxDrawObjectArray: found basic (skipping)");
-                              e.skipCurrentElement();
+                              if (bdo)
+                                    bdo->readCapx(e);
+                              else
+                                    e.skipCurrentElement();
                               }
                         else if (tag == "line") {
                               qDebug("readCapxDrawObjectArray: found line (skipping)");
@@ -482,6 +506,7 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                               }
                         else if (tag == "text") {
                               SimpleTextObj* o = new SimpleTextObj(this);
+                              bdo = o; // save o to handle the "basic" tag (which sometimes follows)
                               o->readCapx(e);
                               ol.append(o);
                               }
@@ -494,8 +519,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                               e.skipCurrentElement();
                               }
                         else if (tag == "slur") {
-                              qDebug("readCapxDrawObjectArray: found slur (skipping)");
-                              e.skipCurrentElement();
+                              SlurObj* o = new SlurObj(this);
+                              bdo = o; // save o to handle the "basic" tag (which sometimes follows)
+                              o->readCapx(e);
+                              ol.append(o);
                               }
                         else if (tag == "wavyLine") {
                               qDebug("readCapxDrawObjectArray: found wavyLine (skipping)");
