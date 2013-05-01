@@ -251,6 +251,7 @@ class BasicDrawObj : public CapellaObj {
          : CapellaObj(c), modeX(0), modeY(0), distY(0), flags(0),
            nRefNote(0), nNotes(0), background(0), pageRange(0), type(t) {}
       void read();
+      void readCapx(XmlReader& e);
       };
 
 //---------------------------------------------------------
@@ -430,12 +431,14 @@ class TrillObj : public BasicDrawObj {
 //---------------------------------------------------------
 
 class SlurObj : public BasicDrawObj {
-      QPointF bezierPoint[4];
-      QColor color;
+      QPointF bezierPoint[4]; // note default constructor inits to (0, 0)
+      QColor color;           // note default constructor inits to invalid
 
    public:
-      SlurObj(Capella* c) : BasicDrawObj(CAP_SLUR, c) {}
+      SlurObj(Capella* c)
+         : BasicDrawObj(CAP_SLUR, c), color(Qt::black), nEnd(0), nMid(0), nDotDist(0), nDotWidth(0) {}
       void read();
+      void readCapx(XmlReader& e);
       unsigned char nEnd, nMid, nDotDist, nDotWidth;
       };
 
