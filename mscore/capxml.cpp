@@ -175,12 +175,13 @@ void CapKey::readCapx(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   CapMeter::readCapx -- capx equivalent of CapMeter::read
+//   qstring2timesig -- convert string to timesig
+//   return true on success
 //---------------------------------------------------------
 
-void CapMeter::readCapx(XmlReader& e)
+static void qstring2timesig(QString& time, uchar& numerator, int& log2Denom, bool& allaBreve)
       {
-      QString time = e.attribute("time");
+      bool res = true;
       numerator = 4; log2Denom = 2; allaBreve = false; // set default
       if (time == "allaBreve") { numerator = 2; log2Denom = 1; allaBreve = true; }
       else if (time == "longAllaBreve") { numerator = 4; log2Denom = 1; allaBreve = true; }
@@ -199,9 +200,23 @@ void CapMeter::readCapx(XmlReader& e)
                   else if (denom == "32") log2Denom = 5;
                   else if (denom == "64") log2Denom = 6;
                   else if (denom == "128") log2Denom = 7;
+                  else res = false;
                   }
+            else res = false;
             }
-      qDebug("Meter %d/%d allaBreve %d", numerator, log2Denom, allaBreve);
+      // TODO: recovery required if decoding the timesig failed ?
+      qDebug("Meter '%s' res %d %d/%d allaBreve %d", qPrintable(time), res, numerator, log2Denom, allaBreve);
+      }
+
+//---------------------------------------------------------
+//   CapMeter::readCapx -- capx equivalent of CapMeter::read
+//---------------------------------------------------------
+
+void CapMeter::readCapx(XmlReader& e)
+      {
+      qDebug("CapMeter::readCapx");
+      QString time = e.attribute("time");
+      qstring2timesig(time, numerator, log2Denom, allaBreve);
       e.readNext();
       }
 
@@ -592,11 +607,11 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
 
 void Capella::readCapxStaff(XmlReader& e, CapSystem* system, int iStave)
       {
+      qDebug("Capella::readCapxStaff");
       CapStaff* staff = new CapStaff;
       //Meter
-      staff->numerator = 3; // TODO (required !)
-      staff->log2Denom = 2; // TODO (required !)
-      staff->allaBreve = 0;
+      QString time = e.attribute("defaultTime");
+      qstring2timesig(time, staff->numerator, staff->log2Denom, staff->allaBreve);
 
       staff->iLayout   = iStave;
       staff->topDistX  = 0;
