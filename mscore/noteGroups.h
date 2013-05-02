@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2009 Werner Schweer and others
+//  Copyright (C) 2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -10,42 +10,39 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __TIMEDIALOG_H__
-#define __TIMEDIALOG_H__
+#ifndef __NOTE_GROUPS_H__
+#define __NOTE_GROUPS_H__
 
-#include "ui_timedialog.h"
+#include "ui_note_groups.h"
 #include "libmscore/fraction.h"
+#include "libmscore/groups.h"
 
-class Palette;
-class PaletteScrollArea;
-class TimeSig;
-class Score;
 class Chord;
+class Score;
 
 //---------------------------------------------------------
-//   TimeDialog
+//   NoteGroups
 //---------------------------------------------------------
 
-class TimeDialog : public QWidget, Ui::TimeDialogBase {
+class NoteGroups : public QGroupBox, Ui::NoteGroups {
       Q_OBJECT
 
-      Palette* sp;
-      bool _dirty;
-      TimeSig* timesig;
+      std::vector<Chord*> chords8;
+      std::vector<Chord*> chords16;
+      std::vector<Chord*> chords32;
+      Groups _groups;
+      Fraction _sig;
 
-      int denominator() const;
-      int denominator2Idx(int) const;
+      Score* createScore(int n, TDuration::DurationType t, std::vector<Chord*>* chords);
 
    private slots:
-      void addClicked();
-      void zChanged(int);
-      void nChanged(int);
-      void paletteChanged(int idx);
+      void resetClicked();
 
    public:
-      TimeDialog(QWidget* parent = 0);
-      bool dirty() const  { return _dirty; }
-      void save();
+      NoteGroups(QWidget* parent);
+      void setSig(Fraction sig, const Groups&);
+      Groups groups();
       };
 
 #endif
+
