@@ -2489,6 +2489,14 @@ ChangeStyle::ChangeStyle(Score* s, const MStyle& st)
       {
       }
 
+static void updateTimeSigs(void*, Element* e)
+      {
+      if (e->type() == Element::TIMESIG) {
+            TimeSig* ts = static_cast<TimeSig*>(e);
+            ts->setNeedLayout(true);
+            }
+      }
+
 static void updateTextStyle2(void*, Element* e)
       {
       if (!e->isText())
@@ -2527,6 +2535,8 @@ void ChangeStyle::flip()
 
       if (score->styleB(ST_concertPitch) != style.valueB(ST_concertPitch))
             score->cmdConcertPitchChanged(style.valueB(ST_concertPitch), true);
+      if (score->styleSt(ST_MusicalSymbolFont) != style.valueSt(ST_MusicalSymbolFont))
+            score->scanElements(0, updateTimeSigs);
 
       score->setStyle(style);
       score->scanElements(0, updateTextStyle2);

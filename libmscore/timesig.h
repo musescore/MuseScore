@@ -60,7 +60,7 @@ class TimeSig : public Element {
       Fraction _stretch;      // localSig / globalSig
       bool	_showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from actualSig()
-      bool needLayout;
+      bool _needLayout;
       Groups _groups;
 
       void layout1();
@@ -116,6 +116,8 @@ class TimeSig : public Element {
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+
+      void setNeedLayout(bool nl) { _needLayout = nl; }
 
       const Groups& groups() const    { return _groups; }
       void setGroups(const Groups& e) { _groups = e; }
