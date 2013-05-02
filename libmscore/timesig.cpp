@@ -37,7 +37,7 @@ TimeSig::TimeSig(Score* s)
       _sig.set(0, 1);               // initialize to invalid
       _timeSigType   = TSIG_NORMAL;
       customText = false;
-      needLayout = true;
+      _needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -54,7 +54,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
             customText = false;
       _timeSigType = st;
 //      layout1();
-      needLayout = true;
+      _needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -95,7 +95,7 @@ void TimeSig::setNumeratorString(const QString& a)
       customText = _numeratorString.isEmpty() != _denominatorString.isEmpty()
             || ( !_numeratorString.isEmpty() && _numeratorString != QString::number(_sig.numerator()) )
             || ( !_denominatorString.isEmpty() && _denominatorString != QString::number(_sig.denominator()) );
-      needLayout = true;
+      _needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -109,7 +109,7 @@ void TimeSig::setDenominatorString(const QString& a)
       customText = _numeratorString.isEmpty() != _denominatorString.isEmpty()
             || ( !_numeratorString.isEmpty() && _numeratorString != QString::number(_sig.numerator()) )
             || ( !_denominatorString.isEmpty() && _denominatorString != QString::number(_sig.denominator()) );
-      needLayout = true;
+      _needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -214,7 +214,7 @@ void TimeSig::read(XmlReader& e)
             else
                   _timeSigType = TSIG_NORMAL;
             }
-      needLayout = true;
+      _needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -307,7 +307,7 @@ void TimeSig::layout1()
 
       pz *= im;                           // convert positions to raster units
       pn *= im;
-      needLayout = false;
+      _needLayout = false;
       // adjustReadPos();
       }
 
@@ -479,7 +479,7 @@ QVariant TimeSig::propertyDefault(P_ID id) const
 
 void TimeSig::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
       {
-      needLayout = true;
+      _needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -488,7 +488,7 @@ void TimeSig::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
 
 void TimeSig::layout()
       {
-      if (needLayout)
+      if (_needLayout)
             layout1();
       }
 
