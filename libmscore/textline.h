@@ -46,6 +46,10 @@ class TextLineSegment : public LineSegment {
       void clearText();
 
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+
+      virtual QVariant getProperty(P_ID id) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID id) const;
       };
 
 enum HookType { HOOK_90, HOOK_45 };
@@ -136,6 +140,10 @@ class TextLine : public SLine {
       void setContinueSymbolOffset(QPointF v) { _continueSymbolOffset = v;    }
       void setEndSymbolOffset(QPointF v)      { _endSymbolOffset = v;         }
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+
+      virtual QVariant getProperty(P_ID id) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID id) const;
       };
 
 #endif

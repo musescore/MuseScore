@@ -16,6 +16,7 @@
 
 #include "inspectorBase.h"
 #include "ui_inspector_element.h"
+#include "ui_inspector_line.h"
 #include "ui_inspector_trill.h"
 
 //---------------------------------------------------------
@@ -26,6 +27,7 @@ class InspectorTrill : public InspectorBase {
       Q_OBJECT
 
       Ui::InspectorElement e;
+      Ui::InspectorLine l;
       Ui::InspectorTrill t;
 
    public:

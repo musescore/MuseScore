@@ -20,6 +20,7 @@
 #include "inspectorOttava.h"
 #include "inspectorTrill.h"
 #include "inspectorHairpin.h"
+#include "inspectorTextLine.h"
 #include "inspectorMarker.h"
 #include "inspectorJump.h"
 #include "inspectorGlissando.h"
@@ -200,6 +201,10 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case Element::HAIRPIN_SEGMENT:
                               ie = new InspectorHairpin(this);
+                              break;
+                        case Element::TEXTLINE_SEGMENT:
+                        case Element::PEDAL_SEGMENT:
+                              ie = new InspectorTextLine(this);
                               break;
                         case Element::BAR_LINE:
                               ie = new InspectorBarLine(this);

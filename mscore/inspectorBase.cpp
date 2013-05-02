@@ -175,7 +175,6 @@ void InspectorBase::setElement()
             Element* e = inspector->element();
             for (int k = 0; k < ii.parent; ++k)
                   e = e->parent();
-
             QVariant val = e->getProperty(id);
             if (pt == T_SIZE || pt == T_SCALE) {
                   QSizeF sz = val.toSizeF();

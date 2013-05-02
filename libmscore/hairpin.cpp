@@ -89,7 +89,14 @@ void HairpinSegment::layout()
 
 void HairpinSegment::draw(QPainter* painter) const
       {
-      QPen pen(curColor(), point(score()->styleS(ST_hairpinWidth)));
+      QColor color;
+      if (selected() && !(score() && score()->printing()))
+            color = MScore::selectColor[0];
+      else if (!visible())
+            color = Qt::gray;
+      else
+            color = hairpin()->curColor();
+      QPen pen(color, point(score()->styleS(ST_hairpinWidth)));
       painter->setPen(pen);
       painter->drawLine(l1);
       painter->drawLine(l2);
@@ -101,7 +108,15 @@ void HairpinSegment::draw(QPainter* painter) const
 
 QVariant HairpinSegment::getProperty(P_ID id) const
       {
-      return hairpin()->getProperty(id);
+      switch (id) {
+            case P_HAIRPIN_TYPE:
+            case P_VELO_CHANGE:
+            case P_DYNAMIC_RANGE:
+            case P_DIAGONAL:
+                  return hairpin()->getProperty(id);
+            default:
+                  return LineSegment::getProperty(id);
+            }
       }
 
 //---------------------------------------------------------
@@ -110,7 +125,15 @@ QVariant HairpinSegment::getProperty(P_ID id) const
 
 bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
       {
-      return hairpin()->setProperty(id, v);
+      switch (id) {
+            case P_HAIRPIN_TYPE:
+            case P_VELO_CHANGE:
+            case P_DYNAMIC_RANGE:
+            case P_DIAGONAL:
+                  return hairpin()->setProperty(id, v);
+            default:
+                  return LineSegment::setProperty(id, v);
+            }
       }
 
 //---------------------------------------------------------
@@ -119,7 +142,15 @@ bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
 
 QVariant HairpinSegment::propertyDefault(P_ID id) const
       {
-      return hairpin()->propertyDefault(id);
+      switch (id) {
+            case P_HAIRPIN_TYPE:
+            case P_VELO_CHANGE:
+            case P_DYNAMIC_RANGE:
+            case P_DIAGONAL:
+                  return hairpin()->propertyDefault(id);
+            default:
+                  return LineSegment::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------
@@ -226,7 +257,7 @@ void Hairpin::undoSetDynRange(DynamicRange val)
 
 QVariant Hairpin::getProperty(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_HAIRPIN_TYPE:
                   return _hairpinType;
             case P_VELO_CHANGE:
@@ -244,7 +275,7 @@ QVariant Hairpin::getProperty(P_ID id) const
 
 bool Hairpin::setProperty(P_ID id, const QVariant& v)
       {
-      switch(id) {
+      switch (id) {
             case P_HAIRPIN_TYPE:
                   _hairpinType = HairpinType(v.toInt());
                   setGenerated(false);
@@ -267,7 +298,7 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
 
 QVariant Hairpin::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_HAIRPIN_TYPE:  return HairpinType::CRESCENDO;
             case P_VELO_CHANGE:   return 10;
             case P_DYNAMIC_RANGE: return DYNAMIC_PART;
