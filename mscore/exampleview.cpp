@@ -28,7 +28,7 @@ ExampleView::ExampleView(QWidget* parent)
       setAcceptDrops(true);
       setFocusPolicy(Qt::StrongFocus);
       double mag = preferences.mag;
-      _matrix    = QTransform(mag, 0.0, 0.0, mag, 10.0, -30.0);
+      _matrix    = QTransform(mag, 0.0, 0.0, mag, 10.0, -45.0);
       imatrix    = _matrix.inverted();
       }
 
@@ -59,11 +59,13 @@ void ExampleView::adjustCanvasPosition(const Element* el, bool playBack)
 
 void ExampleView::setScore(Score* s)
       {
+      delete _score;
       _score = s;
       _score->addViewer(this);
       _score->setLayoutMode(LayoutLine);
       _score->updateNotes();
       _score->doLayout();
+      update();
       }
 
 void ExampleView::removeScore()
