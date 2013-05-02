@@ -2882,6 +2882,7 @@ void MuseScore::writeSettings()
       settings.setValue("maximized", isMaximized());
       settings.setValue("showPanel", paletteBox && paletteBox->isVisible());
       settings.setValue("showInspector", inspector && inspector->isVisible());
+      settings.setValue("showPianoKeyboard", _pianoTools && _pianoTools->isVisible());
       settings.setValue("state", saveState());
       settings.setValue("splitScreen", _splitScreen);
       settings.setValue("debuggerSplitter", mainWindow->saveState());
@@ -2949,6 +2950,7 @@ void MuseScore::readSettings()
             showMaximized();
       mscore->showPalette(settings.value("showPanel", "1").toBool());
       mscore->showInspector(settings.value("showInspector", "0").toBool());
+      mscore->showPianoKeyboard(settings.value("showPianoKeyboard", "0").toBool());
 
       restoreState(settings.value("state").toByteArray());
       _horizontalSplit = settings.value("split", true).toBool();
@@ -3706,14 +3708,14 @@ void MuseScore::editRaster()
 
 void MuseScore::showPianoKeyboard(bool on)
       {
+      if (_pianoTools == 0) {
+            QAction* a = getAction("toogle-piano");
+            _pianoTools = new PianoTools(this);
+            addDockWidget(Qt::BottomDockWidgetArea, _pianoTools);
+            connect(_pianoTools, SIGNAL(keyPressed(int, bool)), SLOT(midiNoteReceived(int, bool)));
+            connect(_pianoTools, SIGNAL(pianoVisible(bool)), a, SLOT(setChecked(bool)));
+            }
       if (on) {
-            if (_pianoTools == 0) {
-                  QAction* a = getAction("toogle-piano");
-                  _pianoTools = new PianoTools(this);
-                  addDockWidget(Qt::BottomDockWidgetArea, _pianoTools);
-                  connect(_pianoTools, SIGNAL(keyPressed(int, bool)), SLOT(midiNoteReceived(int, bool)));
-                  connect(_pianoTools, SIGNAL(pianoVisible(bool)), a, SLOT(setChecked(bool)));
-                  }
             _pianoTools->show();
             }
       else {
