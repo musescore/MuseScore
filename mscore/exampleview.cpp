@@ -25,6 +25,7 @@
 ExampleView::ExampleView(QWidget* parent)
    : QFrame(parent)
       {
+      _score = 0;
       setAcceptDrops(true);
       setFocusPolicy(Qt::StrongFocus);
       double mag = preferences.mag;
