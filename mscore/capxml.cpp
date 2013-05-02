@@ -48,9 +48,7 @@ static QFont capxReadFont(XmlReader& e)
             f.setWeight(QFont::Normal);
       else
             f.setWeight(QFont::Bold);
-      QString italic = e.attribute("italic");
-      if (italic == "true")
-            f.setItalic(true);
+      f.setItalic(e.attribute("italic", "false") == "true");
       // qDebug("capxReadFont family '%s' ps %g w %d it '%s'", qPrintable(family), pointSize, weight, qPrintable(italic));
       e.readNext();
       return f;
@@ -826,12 +824,34 @@ void Capella::capxLayoutStaves(XmlReader& e)
       {
       int iStave = 0;
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "staffLayout") {
+            if (e.name() == "staffLayout") {
                   CapStaffLayout* sl = new CapStaffLayout;
                   readCapxStaveLayout(e, sl, iStave);
                   _staffLayouts.append(sl);
                   ++iStave;
+                  }
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   capxLayoutBrackets -- read the capx <brackets> element (when child of <layout)
+//---------------------------------------------------------
+
+static void capxLayoutBrackets(XmlReader& e, QList<CapBracket>& bracketList)
+      {
+      int i = 0; // bracket count
+      while (e.readNextStartElement()) {
+            if (e.name() == "bracket") {
+                  CapBracket b;
+                  b.from  = e.intAttribute("from");
+                  b.to    = e.intAttribute("to");
+                  b.curly = e.attribute("curly", "false") == "true";
+                  // qDebug("Bracket%d %d-%d curly %d", i, b.from, b.to, b.curly);
+                  bracketList.append(b);
+                  e.readNext();
+                  ++i;
                   }
             else
                   e.unknown();
@@ -867,8 +887,7 @@ void Capella::capxLayout(XmlReader& e)
                   capxLayoutStaves(e);
                   }
             else if (tag == "brackets") {
-                  qDebug("capxLayout: found brackets (skipping)");
-                  e.skipCurrentElement();
+                  capxLayoutBrackets(e, brackets);
                   }
             else if (tag == "spacing") {
                   qDebug("capxLayout: found spacing (skipping)");
