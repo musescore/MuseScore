@@ -272,8 +272,8 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       settings.setValue("lastSaveCopyDirectory", lastSaveCopyDirectory);
       settings.setValue("lastSaveDirectory", lastSaveDirectory);
 
-      if (playPanel)
-            preferences.playPanelPos = playPanel->pos();
+//      if (playPanel)
+//            preferences.playPanelPos = playPanel->pos();
 
       writeSettings();
       if (debugger)
@@ -1604,7 +1604,7 @@ void MuseScore::showPlayPanel(bool visible)
 
             playPanel->setGain(synti->gain());
             playPanel->setScore(cs);
-            playPanel->move(preferences.playPanelPos);
+//            playPanel->move(preferences.playPanelPos);
             }
       playPanel->setVisible(visible);
       playId->setChecked(visible);
