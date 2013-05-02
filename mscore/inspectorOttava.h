@@ -16,6 +16,7 @@
 
 #include "inspectorBase.h"
 #include "ui_inspector_element.h"
+#include "ui_inspector_textline.h"
 #include "ui_inspector_ottava.h"
 
 //---------------------------------------------------------
@@ -25,8 +26,9 @@
 class InspectorOttava : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
-      Ui::InspectorOttava  o;
+      Ui::InspectorElement  e;
+      Ui::InspectorTextLine l;
+      Ui::InspectorOttava   o;
 
    public:
       InspectorOttava(QWidget* parent);

@@ -30,6 +30,48 @@ void VoltaSegment::layout()
       }
 
 //---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant VoltaSegment::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_VOLTA_TYPE:
+                  return volta()->getProperty(id);
+            default:
+                  return TextLineSegment::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool VoltaSegment::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_VOLTA_TYPE:
+                  return volta()->setProperty(id, v);
+            default:
+                  return TextLineSegment::setProperty(id, v);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant VoltaSegment::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_VOLTA_TYPE:
+                  return volta()->propertyDefault(id);
+            default:
+                  return TextLineSegment::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
 //   Volta
 //---------------------------------------------------------
 

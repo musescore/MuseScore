@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
-//  Copyright (C) 2012 Werner Schweer and others
+//  Copyright (C) 2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -11,27 +10,25 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_VOLTA_H__
-#define __INSPECTOR_VOLTA_H__
+#ifndef __INSPECTOR_TEXTLINE_H__
+#define __INSPECTOR_TEXTLINE_H__
 
 #include "inspectorBase.h"
 #include "ui_inspector_element.h"
 #include "ui_inspector_textline.h"
-#include "ui_inspector_volta.h"
 
 //---------------------------------------------------------
-//   InspectorVolta
+//   InspectorHairpin
 //---------------------------------------------------------
 
-class InspectorVolta : public InspectorBase {
+class InspectorTextLine : public InspectorBase {
       Q_OBJECT
 
       Ui::InspectorElement e;
       Ui::InspectorTextLine l;
-      Ui::InspectorVolta v;
 
    public:
-      InspectorVolta(QWidget* parent);
+      InspectorTextLine(QWidget* parent);
       };
 
 #endif

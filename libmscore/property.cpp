@@ -147,6 +147,7 @@ static const PropertyData propertyList[] = {
 
       { P_DIAGONAL,            false, 0,               T_BOOL   },
       { P_GROUPS,              false, 0,               T_GROUPS },
+      { P_LINE_COLOR,          false, 0,               T_COLOR  },
 
       { P_END,                 false, "",              T_INT    }
       };
