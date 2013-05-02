@@ -24,7 +24,6 @@
 #include "ui_timesigproperties.h"
 
 class TimeSig;
-class Chord;
 
 //---------------------------------------------------------
 //   TimeSigProperties
@@ -34,12 +33,6 @@ class TimeSigProperties : public QDialog, public Ui::TimeSigProperties {
       Q_OBJECT
 
       TimeSig* timesig;
-      std::vector<Chord*> chords8;
-      std::vector<Chord*> chords16;
-      std::vector<Chord*> chords32;
-      Score* score8;
-      Score* score16;
-      Score* score32;
 
    public slots:
       virtual void accept();

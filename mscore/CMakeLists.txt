@@ -63,6 +63,7 @@ QT4_WRAP_UI (ui_headers
       inspector_clef.ui inspector_timesig.ui inspector_keysig.ui inspector_barline.ui
       inspector_tuplet.ui inspector_accidental.ui inspector_tempotext.ui
       inspector_dynamic.ui inspector_line.ui harmony.ui pathlistdialog.ui
+      note_groups.ui
       ${SCRIPT_UI}
       )
 
@@ -95,7 +96,7 @@ QT4_WRAP_CPP (mocs
       inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
       inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
       inspectorJump.h inspectorMarker.h inspectorGlissando.h inspectorNote.h
-      paletteBoxButton.h pathlistdialog.h exampleview.h
+      paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -201,7 +202,7 @@ add_executable ( ${ExecutableName}
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
       inspectorGlissando.cpp inspectorNote.cpp paletteBoxButton.cpp
-      driver.cpp exportmidi.cpp
+      driver.cpp exportmidi.cpp noteGroups.cpp
       pathlistdialog.cpp exampleview.cpp
 
       ${OMR_FILES}

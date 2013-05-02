@@ -32,41 +32,6 @@
 extern void populateIconPalette(Palette* p, const IconAction* a);
 
 //---------------------------------------------------------
-//   createScore
-//---------------------------------------------------------
-
-static Score* createScore(TimeSig* ts, int n, TDuration::DurationType t, std::vector<Chord*>* chords)
-      {
-      Fraction sig(ts->sig());
-      MCursor c;
-      c.setTimeSig(ts->sig());
-      c.createScore("score8");
-      c.addPart("voice");
-      c.move(0, 0);
-      c.addKeySig(0);
-      TimeSig* nts = c.addTimeSig(ts->sig());
-      GroupNode node {0, 0};
-      Groups ng;
-      ng.push_back(node);
-
-      nts->setGroups(ng);
-      Groups g = ts->groups();
-      if (g.empty())
-            g = Groups::endings(ts->sig());     // initialize with default
-
-      for (int i = 0; i < n; ++i) {
-            Chord* chord = c.addChord(67, t);
-            int tick = chord->rtick();
-            chord->setBeamMode(g.beamMode(tick, t));
-            chords->push_back(chord);
-            }
-
-      c.score()->parts().front()->setLongName("");
-      c.score()->style()->set(ST_linearStretch, 1.1);
-      return c.score();
-      }
-
-//---------------------------------------------------------
 //    TimeSigProperties
 //---------------------------------------------------------
 
@@ -95,34 +60,11 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
                   allaBreveButton->setChecked(true);
                   break;
             }
-      //
-      // TODO: xx/yy were yy >= 16
-      //
 
-      int n = nominal.numerator() * (8 / nominal.denominator());
-
-      score8  = createScore(t, n, TDuration::V_EIGHT, &chords8);
-      n <<= 1;
-      score16 = createScore(t, n, TDuration::V_16TH, &chords16);
-      n <<= 1;
-      score32 = createScore(t, n, TDuration::V_32ND, &chords32);
-
-      view8->setScore(score8);
-      view16->setScore(score16);
-      view32->setScore(score32);
-      static const IconAction bpa[] = {
-            { ICON_SBEAM,    "beam-start" },
-            { ICON_MBEAM,    "beam-mid" },
-            { ICON_BEAM32,   "beam32" },
-            { ICON_BEAM64,   "beam64" },
-            { -1, ""}
-            };
-
-      iconPalette->setName(QT_TRANSLATE_NOOP("Palette", "Beam Properties"));
-      iconPalette->setGrid(27, 40);
-      iconPalette->setMag(.5);
-      iconPalette->setDrawGrid(true);
-      populateIconPalette(iconPalette, bpa);
+      Groups g = t->groups();
+      if (g.empty())
+            g = Groups::endings(nominal);     // initialize with default
+      groups->setSig(nominal, g);
       }
 
 //---------------------------------------------------------
@@ -149,14 +91,8 @@ void TimeSigProperties::accept()
       timesig->setSig(actual, ts);
       timesig->setStretch(nominal / actual);
 
-      Groups groups;
-      for (Chord* chord : chords8)
-            groups.addStop(chord->rtick(), chord->durationType().type(), chord->beamMode());
-      for (Chord* chord : chords16)
-            groups.addStop(chord->rtick(), chord->durationType().type(), chord->beamMode());
-      for (Chord* chord : chords32)
-            groups.addStop(chord->rtick(), chord->durationType().type(), chord->beamMode());
-      timesig->setGroups(groups);
+      Groups g = groups->groups();
+      timesig->setGroups(g);
       QDialog::accept();
       }
 
