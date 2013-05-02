@@ -672,14 +672,19 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               // qDebug("cr1 %p cr2 %p", cr1, cr2);
 
                               if (cr1 && cr2) {
-                                    Slur* slur = new Slur(score);
-                                    cr1->addSlurFor(slur);
-                                    slur->setStartElement(cr1);
-                                    cr2->addSlurBack(slur);
-                                    slur->setEndElement(cr2);
+                                    if (cr1 == cr2)
+                                          qDebug("first and second anchor for slur identical (tick %d track %d first %p second %p)", tick, track, cr1, cr2);
+                                    else {
+                                          Slur* slur = new Slur(score);
+                                          qDebug("tick %d track %d cr1 %p cr2 %p -> slur %p", tick, track, cr1, cr2, slur);
+                                          cr1->addSlurFor(slur);
+                                          slur->setStartElement(cr1);
+                                          cr2->addSlurBack(slur);
+                                          slur->setEndElement(cr2);
+                                          }
                                     }
                               else
-                                    qDebug("first or second anchor for slur not found (first %p second %p)", cr1, cr2);
+                                    qDebug("first or second anchor for slur not found (tick %d track %d first %p second %p)", tick, track, cr1, cr2);
                               }
                               break;
                         case CAP_TEXT: {
