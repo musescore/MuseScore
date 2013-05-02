@@ -723,6 +723,37 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
       }
 
 //---------------------------------------------------------
+//   needPart -- determine if a staff needs its own part
+//---------------------------------------------------------
+
+// As Capella does not define parts (it only knows about staves,
+// MIDI instruments numbers, brackets and braces), the following
+// algorithm is used:
+// - every staff is a separate part
+// - unless:
+//   - it is in a brace
+//   - it is not the first staff in the brace
+//   - it has the same MIDI instrument as the previous staff
+// Common cases:
+// - Keyboards: two or three staves with the same MIDI instrument and a brace
+//   -> create one part
+// - SATB: two or four staves with the same MIDI instrument and a bracket
+//   -> create two or four parts
+
+static bool needPart(const int prevInst, const int currInst, const int staffIdx, QList<CapBracket> const& bracketList)
+      {
+      // qDebug("needPart(prevInst %d, currInst %d, staffIdx %d)", prevInst, currInst, staffIdx);
+      foreach(CapBracket cb, bracketList) {
+            // qDebug("needPart bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
+            if (prevInst == currInst && cb.from < staffIdx && staffIdx <= cb.to && cb.curly) {
+                  // qDebug("needPart found brace, continue part");
+                  return false;
+                  }
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   convertCapella
 //---------------------------------------------------------
 
@@ -769,22 +800,27 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             staves = qMax(staves, cap->staffLayouts().size());
             }
 
+      // set the initial time signature
       CapStaff* cs = cap->systems[0]->staves[0];
       if (cs->log2Denom <= 7)
             score->sigmap()->add(0, Fraction(cs->numerator, 1 << cs->log2Denom));
 
+      // create parts and staves
       Staff* bstaff = 0;
       int span = 1;
-      int midiPatch = -1;
+      int midiPatch = -1; // the previous MIDI patch (instrument)
       Part* part = 0;
       for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
             CapStaffLayout* cl = cap->staffLayout(staffIdx);
             // qDebug("Midi staff %d program %d", staffIdx, cl->sound);
-            if (midiPatch != cl->sound || part == 0) {
+
+            // create a new part if necessary
+            if (needPart(midiPatch, cl->sound, staffIdx, cap->brackets)) {
                   part = new Part(score);
-                  midiPatch = cl->sound;
                   score->appendPart(part);
                   }
+            midiPatch = cl->sound;
+
             Staff* s = new Staff(score, part, staffIdx);
             if (cl->bPercussion)
                   part->setMidiProgram(0, 128);
@@ -815,6 +851,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             bstaff->setBarLineSpan(span);
 
       foreach(CapBracket cb, cap->brackets) {
+            qDebug("Bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
             Staff* staff = score->staves().value(cb.from);
             if (staff == 0) {
                   qDebug("bad bracket 'from' value");
