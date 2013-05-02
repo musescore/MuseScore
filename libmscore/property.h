@@ -139,6 +139,7 @@ enum P_ID {
 
       P_DIAGONAL,
       P_GROUPS,
+      P_LINE_COLOR,
 
       P_END
       };

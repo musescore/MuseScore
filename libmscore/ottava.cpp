@@ -35,6 +35,48 @@ void OttavaSegment::layout()
       }
 
 //---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant OttavaSegment::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_OTTAVA_TYPE:
+                  return ottava()->getProperty(id);
+            default:
+                  return TextLineSegment::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool OttavaSegment::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_OTTAVA_TYPE:
+                  return ottava()->setProperty(id, v);
+            default:
+                  return TextLineSegment::setProperty(id, v);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant OttavaSegment::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_OTTAVA_TYPE:
+                  return ottava()->propertyDefault(id);
+            default:
+                  return TextLineSegment::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
 //   Ottava
 //---------------------------------------------------------
 

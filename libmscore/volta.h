@@ -44,6 +44,9 @@ class VoltaSegment : public TextLineSegment {
       virtual VoltaSegment* clone() const  { return new VoltaSegment(*this); }
       Volta* volta() const                 { return (Volta*)spanner(); }
       virtual void layout();
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
       };
 
 //---------------------------------------------------------

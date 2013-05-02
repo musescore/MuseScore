@@ -50,6 +50,10 @@ class SpannerSegment : public Element {
       virtual void endEdit();
       virtual bool isEditable() const { return true; }
       virtual bool isEdited(SpannerSegment*) const = 0;
+
+      virtual QVariant getProperty(P_ID id) const;
+      virtual bool setProperty(P_ID id, const QVariant& v);
+      virtual QVariant propertyDefault(P_ID id) const;
       };
 
 //----------------------------------------------------------------------------------

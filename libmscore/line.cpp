@@ -61,15 +61,6 @@ bool LineSegment::readProperties(XmlReader& e)
             else
                   e.readNext();
             }
-#if 0
-      else if (tag == "pos") {
-            QPointF rp = e.readPoint() * spatium();
-            if ((score()->mscVersion() <= 114) && (type() == VOLTA_SEGMENT)) {
-                  rp.ry() -= spatium();
-                  }
-            setReadPos(rp);
-            }
-#endif
       else if (!Element::readProperties(e)) {
             e.unknown();
             return false;
