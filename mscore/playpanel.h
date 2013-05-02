@@ -36,6 +36,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
+      virtual void hideEvent (QHideEvent* event);
 
    private slots:
       void volumeChanged(double,int);
@@ -54,6 +55,9 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
    public:
       PlayPanel(QWidget* parent = 0);
+      ~PlayPanel();
+      void heartBeat(int rpos, int apos);
+      void heartBeat2(int sec);
 
       void setTempo(double);
       void setRelTempo(qreal);
