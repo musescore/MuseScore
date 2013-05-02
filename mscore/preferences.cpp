@@ -27,7 +27,7 @@
 // #include "msynth/synti.h"
 #include "seq.h"
 #include "libmscore/note.h"
-#include "playpanel.h"
+//#include "playpanel.h"
 #include "icons.h"
 #include "shortcutcapturedialog.h"
 #include "scoreview.h"
@@ -126,7 +126,7 @@ void Preferences::init()
       showPlayPanel      = false;
       showWebPanel       = true;
       showStatusBar      = true;
-      playPanelPos       = QPoint(100, 300);
+//      playPanelPos       = QPoint(100, 300);
 
 #if defined(Q_WS_MAC) || defined(__MINGW32__)
       useAlsaAudio       = false;
@@ -370,9 +370,9 @@ void Preferences::write()
                   }
             }
 
-      s.beginGroup("PlayPanel");
-      s.setValue("pos", playPanelPos);
-      s.endGroup();
+//      s.beginGroup("PlayPanel");
+//      s.setValue("pos", playPanelPos);
+//      s.endGroup();
 
       writePluginList();
       if (Shortcut::dirty)
@@ -548,9 +548,9 @@ void Preferences::read()
                   }
             }
 
-      s.beginGroup("PlayPanel");
-      playPanelPos = s.value("pos", playPanelPos).toPoint();
-      s.endGroup();
+//      s.beginGroup("PlayPanel");
+//      playPanelPos = s.value("pos", playPanelPos).toPoint();
+//      s.endGroup();
 
       readPluginList();
       }
