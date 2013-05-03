@@ -2006,6 +2006,14 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","toggle metronome"),
          metronome_ICON
          ),
+       Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         0,
+         "loop",
+         QT_TRANSLATE_NOOP("action","Loop"),
+         QT_TRANSLATE_NOOP("action","toggle looping"),
+         loop_ICON
+         ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,

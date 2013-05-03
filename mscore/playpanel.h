@@ -22,6 +22,7 @@
 #define __PLAYPANEL_H__
 
 #include "ui_playpanel.h"
+#include "libmscore/mscore.h"
 
 class Score;
 
@@ -33,6 +34,10 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       Q_OBJECT
       int cachedTickPosition;
       int cachedTimePosition;
+
+      int currentIteration;
+      int currentTransposition;
+      QSize cachedSize;
 
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
@@ -51,6 +56,14 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void setGain(float);
       void setPos(int);
 
+      void cancelRepetition();
+      void loopingSetup(bool start = true);
+      void setLoopingVisible(bool visible);
+      void updateIncrementBy(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox);
+      void updateTempoIncrementBy();
+      void updateTransposeIncrementBy();
+      void undoTransposition();
+
    public:
       PlayPanel(QWidget* parent = 0);
       void heartBeat(int rpos, int apos);
@@ -61,9 +74,16 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
       void setEndpos(int);
       void setScore(Score* s);
+
+      void nextIteration();
+
    private:
       void updateTimeLabel(int sec);
       void updatePosLabel(int utick);
+
+      TransposeDirection getTransposeDirection(bool flip = false);
+      qreal nextValue(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox);
+      void transposeSelectionBySemitone(int times, bool flip = false);
       };
 
 #endif

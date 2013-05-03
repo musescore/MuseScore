@@ -913,5 +913,8 @@
     <key>next-beat-TEXT</key>
     <seq>;</seq>
     </SC>
+    <key>loop</key>
+    <seq>L</seq>
+    </SC>
   </Shortcuts>
 

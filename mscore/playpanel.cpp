@@ -25,6 +25,7 @@
 #include "seq.h"
 #include "musescore.h"
 #include "libmscore/measure.h"
+#include "libmscore/undo.h"
 
 const int MIN_VOL = -60;
 const int MAX_VOL = 10;
@@ -46,10 +47,23 @@ PlayPanel::PlayPanel(QWidget* parent)
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
       metronomeButton->setDefaultAction(getAction("metronome"));
+      loopButton->setDefaultAction(getAction("loop"));
 
-      connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
-      connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
-      connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
+      connect(volumeSlider,         SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
+      connect(posSlider,            SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
+      connect(tempoSlider,          SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
+      connect(loopButton,           SIGNAL(toggled(bool)),            SLOT(loopingSetup(bool)));
+      connect(loopButton,           SIGNAL(toggled(bool)),            SLOT(setLoopingVisible(bool)));
+      connect(tempoFrom,            SIGNAL(valueChanged(double)),     SLOT(cancelRepetition()));
+      connect(tempoTo,              SIGNAL(valueChanged(double)),     SLOT(cancelRepetition()));
+      connect(tempoIncrementBy,     SIGNAL(valueChanged(double)),     SLOT(cancelRepetition()));
+      connect(transposeFrom,        SIGNAL(valueChanged(double)),     SLOT(cancelRepetition()));
+      connect(transposeTo,          SIGNAL(valueChanged(double)),     SLOT(cancelRepetition()));
+      connect(transposeIncrementBy, SIGNAL(valueChanged(double)),     SLOT(cancelRepetition()));
+      connect(tempoFrom,            SIGNAL(valueChanged(double)),     SLOT(updateTempoIncrementBy()));
+      connect(tempoTo,              SIGNAL(valueChanged(double)),     SLOT(updateTempoIncrementBy()));
+      connect(transposeFrom,        SIGNAL(valueChanged(double)),     SLOT(updateTransposeIncrementBy()));
+      connect(transposeTo,          SIGNAL(valueChanged(double)),     SLOT(updateTransposeIncrementBy()));
       }
 
 //---------------------------------------------------------
@@ -223,4 +237,170 @@ void PlayPanel::updatePosLabel(int utick)
       char buffer[32];
       sprintf(buffer, "%03d.%02d", bar+1, beat+1);
       posLabel->setText(QString(buffer));
+      }
+
+//---------------------------------------------------------
+//   setLoopingVisible
+//---------------------------------------------------------
+
+void PlayPanel::setLoopingVisible(bool visible)
+      {
+      if (visible) {
+           cachedSize = size();
+           groupBox->show();
+           adjustSize();
+           }
+      else {
+           groupBox->hide();
+           resize(cachedSize);
+           adjustSize();
+           }
+      }
+
+//---------------------------------------------------------
+//   nextValue
+//---------------------------------------------------------
+
+qreal PlayPanel::nextValue(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox)
+      {
+      qreal from = fromBox->value();
+      qreal to = toBox->value();
+      qreal inc = incrementByBox->value();
+      qreal next = from + currentIteration * inc;
+      if (from < to)
+            return next > to ? to : next;
+      else if (from > to)
+            return next < to ? to : next;
+      else
+            return to;
+      }
+
+//---------------------------------------------------------
+//   getTransposeDirection
+//---------------------------------------------------------
+
+TransposeDirection PlayPanel::getTransposeDirection(bool flip)
+      {
+      int from = transposeFrom->value();
+      int to = transposeTo->value();
+      if (!flip)
+            return from < to ? TRANSPOSE_UP : TRANSPOSE_DOWN;
+      else
+            return to < from ? TRANSPOSE_UP : TRANSPOSE_DOWN;
+      }
+
+//---------------------------------------------------------
+//   nextIteration
+//---------------------------------------------------------
+
+void PlayPanel::nextIteration()
+      {
+      qDebug() << currentIteration << currentTransposition;
+      qreal relTempo = nextValue(tempoFrom, tempoTo, tempoIncrementBy) * .01;
+      cs->tempomap()->setRelTempo(relTempo);
+      emit relTempoChanged(relTempo);
+      int transpose = (int) nextValue(transposeFrom, transposeTo, transposeIncrementBy);
+      int times = abs(transpose != currentTransposition ? (int) transposeIncrementBy->value() : 0);
+      transposeSelectionBySemitone(times);
+      currentTransposition = transpose;
+      currentIteration++;
+      }
+
+//---------------------------------------------------------
+//   loopingSetup
+//---------------------------------------------------------
+
+void PlayPanel::loopingSetup(bool start)
+      {
+      if (start) {
+            currentIteration = 0;
+            currentTransposition = 0;
+            }
+      else {
+            if (playButton->isChecked()) {
+                  undoTransposition();
+                  getAction("play")->trigger();
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   undoTransposition
+//---------------------------------------------------------
+
+void PlayPanel::undoTransposition()
+      {
+      for (int i = 0; i < currentIteration; i++)
+            cs->undo()->undo();
+      cs->endUndoRedo();
+      }
+
+//---------------------------------------------------------
+//   transposeBySemitone
+//---------------------------------------------------------
+
+void PlayPanel::transposeSelectionBySemitone(int times, bool flip)
+      {
+      Selection selection = cs->selection();
+      if (selection.state() == SEL_NONE)
+            cs->cmdSelectAll();
+      cs->startCmd();
+      for (int i = 0; i < times; i++) {
+            cs->transpose(TRANSPOSE_BY_INTERVAL, getTransposeDirection(flip), 0, 1, false, true, false);
+            }
+      cs->endCmd();
+      cs->setSelection(selection);
+      }
+
+//---------------------------------------------------------
+//   updateIncrementBy
+//---------------------------------------------------------
+
+void PlayPanel::updateIncrementBy(QDoubleSpinBox* fromBox, QDoubleSpinBox* toBox, QDoubleSpinBox* incrementByBox)
+      {
+      qreal from = fromBox->value();
+      qreal to = toBox->value();
+      qreal incrementBy = incrementByBox->value();
+      if (from < to) {
+            incrementByBox->setRange(1, to - from);
+            if (incrementBy < 0)
+                  incrementByBox->setValue(incrementBy * -1);
+      }
+      else if (from > to) {
+            incrementByBox->setRange(to - from, -1);
+            if (incrementBy > 0)
+                  incrementByBox->setValue(incrementBy * -1);
+            }
+      else {
+            incrementByBox->setRange(0, 0);
+            incrementByBox->setValue(0);
+            }
+      }
+
+//---------------------------------------------------------
+//   updateTempoIncrementBy
+//---------------------------------------------------------
+
+void PlayPanel::updateTempoIncrementBy()
+      {
+      updateIncrementBy(tempoFrom, tempoTo, tempoIncrementBy);
+      }
+
+//---------------------------------------------------------
+//   updateTransposeIncrementBy
+//---------------------------------------------------------
+
+void PlayPanel::updateTransposeIncrementBy()
+      {
+      updateIncrementBy(transposeFrom, transposeTo, transposeIncrementBy);
+      }
+
+//---------------------------------------------------------
+//   cancelRepetition
+//---------------------------------------------------------
+
+void PlayPanel::cancelRepetition()
+      {
+            loopingSetup(false);
+            loopingSetup(true);
       }

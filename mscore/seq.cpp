@@ -305,7 +305,16 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      seek(cs->playPos());
+      if (mscore->loop()) {
+            mscore->getPlayPanel()->nextIteration();
+            Selection selection = cs->selection();
+            int tick = 0;
+            if (selection.state() != SEL_NONE)
+                  tick = selection.tickStart();
+            seek(tick);
+      } else {
+            seek(cs->playPos());
+            }
       _driver->startTransport();
       }
 
@@ -316,6 +325,10 @@ void Seq::start()
 
 void Seq::stop()
       {
+      if (mscore->loop()) {
+            getAction("play")->trigger();
+            return;
+            }
       if (state == TRANSPORT_STOP)
             return;
       if (oggInit) {
@@ -1173,6 +1186,26 @@ void Seq::heartBeat()
             }
       int utick = ppos->first;
       int tick = cs->repeatList()->utick2tick(utick);
+      if (mscore->loop()) {
+            Selection selection = cs->selection();
+            int lastTick = cs->last()->tick() + cs->last()->ticks();
+            if (selection.state() == SEL_NONE) {
+                  selection.setState(SEL_RANGE);
+                  selection.setStartSegment(cs->tick2segment(0));
+                  selection.setEndSegment(
+                     cs->tick2segment(lastTick)
+                     );
+                  selection.setStaffStart(0);
+                  selection.setStaffEnd(cs->nstaves());
+                  }
+            bool isLast = tick == lastTick - 1;
+            if (tick == selection.tickEnd() || isLast) {
+                  if (isLast)
+                        mscore->currentScoreView()->moveCursor(selection.tickStart());
+                  start();
+                  return;
+                  }
+            }
       mscore->currentScoreView()->moveCursor(tick);
       mscore->setPos(tick);
       if (pp)
