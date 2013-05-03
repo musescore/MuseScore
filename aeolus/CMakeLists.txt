@@ -48,6 +48,12 @@ set_target_properties (
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
 
+install(DIRECTORY
+      stops
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound/aeolus
+         PATTERN .svn EXCLUDE
+      )
+
 xcode_pch(aeolus all)
 
 ADD_DEPENDENCIES(aeolus mops1)
