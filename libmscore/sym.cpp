@@ -639,8 +639,8 @@ void initSymbols(int idx)
                               if (idx1 != noSym)
                                     symbols[idx][idx1] = Sym(code, fid, p, b);
                               else {
-                                    qDebug("symbol <%s> for symbol set %d not found in %s",
-                                       qPrintable(name), idx, qPrintable(path));
+                                    qDebug("symbol <%s> declared in %s for symbol set %d not used",
+                                       qPrintable(name), qPrintable(path), idx);
                                     }
                               }
                         else
@@ -652,8 +652,14 @@ void initSymbols(int idx)
             }
       for (int i = 0; i < lastSym; ++i) {
             Sym* sym = &symbols[idx][i];
-            if (sym->code() == -1)
+            if (sym->code() == -1) {
                   qDebug("no code for symbol %s", Sym::id2name(SymId(i)));
+                  if (idx > 0) {
+                        //fallback to default font
+                        symbols[idx][i] = symbols[0][i];
+                        }
+                  }
+
             }
       }
 
