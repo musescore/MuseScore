@@ -43,8 +43,6 @@
           </System>
         <System>
           </System>
-        <System>
-          </System>
         </Page>
       </PageList>
     <Part>
@@ -75,67 +73,95 @@ p, li { white-space: pre-wrap; }
       <VBox>
         <height>14</height>
         </VBox>
-      <Measure number="1">
+      <Measure number="1" len="1/2">
         <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Text>
+          <pos x="14.2045" y="-8.52273"/>
+          <style></style>
+          <text>Test text 1</text>
+          </Text>
+        <Text>
+          <pos x="14.2045" y="-5.68182"/>
+          <style></style>
+          <text>This is the subtitle</text>
+          </Text>
         <Chord>
           <durationType>quarter</durationType>
+          <Lyrics>
+            <style>Lyrics odd lines</style>
+            <text>Lyrics</text>
+            </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics even lines</style>
+            <text>Lyrics</text>
+            </Lyrics>
           <Note>
-            <pitch>24</pitch>
-            <tpc>14</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
+          <Lyrics>
+            <style>Lyrics odd lines</style>
+            <text>first</text>
+            </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics even lines</style>
+            <text>second</text>
+            </Lyrics>
           <Note>
-            <pitch>26</pitch>
-            <tpc>16</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>28</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>29</pitch>
-            <tpc>13</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         </Measure>
       <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
+          <Lyrics>
+            <style>Lyrics odd lines</style>
+            <text>line</text>
+            </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics even lines</style>
+            <text>line</text>
+            </Lyrics>
           <Note>
-            <pitch>31</pitch>
+            <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>33</pitch>
-            <tpc>17</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>35</pitch>
-            <tpc>19</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>36</pitch>
-            <tpc>14</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         </Measure>
@@ -143,28 +169,28 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>38</pitch>
-            <tpc>16</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>40</pitch>
-            <tpc>18</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>41</pitch>
-            <tpc>13</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>43</pitch>
+            <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
@@ -177,76 +203,35 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>45</pitch>
-            <tpc>17</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
+        <Text>
+          <pos x="2.84091" y="-3.40909"/>
+          <style></style>
+          <text>MuseScore testfile
+Leon Vinken</text>
+          </Text>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>47</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>48</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>50</pitch>
-            <tpc>16</tpc>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="5">
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>52</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>53</pitch>
-            <tpc>13</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>55</pitch>
+            <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
-        </Measure>
-      <Measure number="6">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          <pause>3</pause>
-          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>59</pitch>
-            <tpc>19</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         </Measure>
