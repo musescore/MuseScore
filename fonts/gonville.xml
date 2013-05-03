@@ -157,13 +157,13 @@
     <bbox x="-2.49909" y="-8.19523" w="4.99818" h="8.19523"/>
     </Glyph>
   <Glyph>
-    <name>brackettips.down</name>
+    <name>brackettips.dright</name>
     <code>0xe10c</code>
     <attach x="8.23558" y="0"/>
     <bbox x="0" y="-1.8543" w="8.23558" h="4.81397"/>
     </Glyph>
   <Glyph>
-    <name>brackettips.up</name>
+    <name>brackettips.uright</name>
     <code>0xe10d</code>
     <attach x="8.23278" y="0"/>
     <bbox x="0" y="-2.95286" w="8.23278" h="4.80419"/>
