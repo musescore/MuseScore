@@ -195,7 +195,6 @@ void Seq::setScoreView(ScoreView* v)
       playlistChanged = true;
       _synti->reset();
       if (cs) {
-            // _synti->setState(cs->synthesizerState());
             initInstruments();
             seek(cs->playPos());
             }
@@ -724,6 +723,7 @@ void Seq::collectEvents()
             return;
       events.clear();
 
+      mutex.lock();
       cs->renderMidi(&events);
       endTick = 0;
 
@@ -732,6 +732,8 @@ void Seq::collectEvents()
             --e;
             endTick = e->first;
             }
+      playPos  = events.cbegin();
+      mutex.unlock();
 
       playlistChanged = false;
       cs->setPlaylistDirty(false);
@@ -794,24 +796,9 @@ void Seq::seek(int utick)
 
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
-      int tick = cs->repeatList()->utick2tick(utick);
+      int tick     = cs->repeatList()->utick2tick(utick);
       Segment* seg = cs->tick2segment(tick);
-      if (seg)
-            mscore->currentScoreView()->moveCursor(seg, -1);
-      cs->setPlayPos(utick);
-      cs->setLayoutAll(false);
-      cs->end();
-
-      if (cs->playMode() == PLAYMODE_AUDIO) {
-            ogg_int64_t sp = cs->utick2utime(utick) * MScore::sampleRate;
-            ov_pcm_seek(&vf, sp);
-            }
-      guiToSeq(SeqMsg(SEQ_SEEK, utick));
-
-      guiPos = events.upper_bound(utick);
-      mscore->setPos(utick);
-      unmarkNotes();
-      cs->update();
+      seek(utick, seg);
       }
 
 //---------------------------------------------------------
@@ -821,7 +808,9 @@ void Seq::seek(int utick)
 
 void Seq::seek(int utick, Segment* seg)
       {
-      mscore->currentScoreView()->moveCursor(seg, -1);
+      if (seg)
+            mscore->currentScoreView()->moveCursor(seg, -1);
+
       cs->setPlayPos(utick);
       cs->setLayoutAll(false);
       cs->end();
