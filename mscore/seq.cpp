@@ -768,7 +768,11 @@ void Seq::setPos(int utick)
             return;
       stopNotes();
 
-      int ucur = cs->repeatList()->utick2tick(playPos->first);
+      int ucur;
+      if (playPos != events.end())
+            ucur = cs->repeatList()->utick2tick(playPos->first);
+      else
+            ucur = utick - 1;
       if (utick != ucur)
             updateSynthesizerState(ucur, utick);
 
