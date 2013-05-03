@@ -50,6 +50,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
+      connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));
       }
 
 //---------------------------------------------------------
@@ -58,7 +59,11 @@ PlayPanel::PlayPanel(QWidget* parent)
 
 void PlayPanel::relTempoChanged(double d, int)
       {
-      emit relTempoChanged(d * .01);
+      double relTempo = d * .01;
+      emit relTempoChanged(relTempo);
+
+      setTempo(seq->curTempo() * relTempo);
+      setRelTempo(relTempo);
       }
 
 //---------------------------------------------------------
@@ -89,13 +94,13 @@ void PlayPanel::setScore(Score* s)
             setRelTempo(cs->tempomap()->relTempo());
             setEndpos(cs->repeatList()->ticks());
             int tick = cs->playPos();
-            heartBeat(tick, tick);
+            heartBeat(tick, tick, 0);
             }
       else {
             setTempo(120.0);
             setRelTempo(1.0);
             setEndpos(0);
-            heartBeat(0, 0);
+            heartBeat(0, 0, 0);
             updatePosLabel(0);
             }
       update();
@@ -167,20 +172,12 @@ void PlayPanel::setPos(int utick)
 //   heartBeat
 //---------------------------------------------------------
 
-void PlayPanel::heartBeat(int tick, int utick)
+void PlayPanel::heartBeat(int tick, int utick, int samples)
       {
-      if (cachedTickPosition == utick)
-            return;
-      updatePosLabel(utick);
-      posSlider->setValue(utick);
-      }
-
-//---------------------------------------------------------
-//   heartBeat2
-//---------------------------------------------------------
-
-void PlayPanel::heartBeat2(int samples)
-      {
+      if (cachedTickPosition != utick) {
+            updatePosLabel(utick);
+            posSlider->setValue(utick);
+            }
       int sec = samples/MScore::sampleRate;
       if (sec == cachedTimePosition)
             return;
@@ -206,8 +203,8 @@ void PlayPanel::updateTimeLabel(int sec)
 //---------------------------------------------------------
 //   updatePos
 //---------------------------------------------------------
-      
-void PlayPanel::updatePosLabel(int utick)      
+
+void PlayPanel::updatePosLabel(int utick)
       {
       cachedTickPosition = utick;
       int bar = 0;

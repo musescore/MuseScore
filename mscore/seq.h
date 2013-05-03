@@ -133,7 +133,7 @@ class Seq : public QObject, public Sequencer {
 
    private slots:
       void seqMessage(int msg);
-      void heartBeat();
+      void heartBeatTimeout();
       void selectionChanged(int);
       void midiInputReady();
 
@@ -148,6 +148,7 @@ class Seq : public QObject, public Sequencer {
       void started();
       void stopped();
       int toGui(int);
+      void heartBeat(int, int, int);
 
    public:
       // this are also the jack audio transport states:
@@ -194,6 +195,7 @@ class Seq : public QObject, public Sequencer {
       void setMasterSynthesizer(MasterSynthesizer* ms) { _synti = ms;    }
 
       int getCurTick();
+      double curTempo() const;
 
       void putEvent(const NPlayEvent&);
       void startNoteTimer(int duration);
