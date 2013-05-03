@@ -37,6 +37,7 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups {
 
    private slots:
       void resetClicked();
+      void noteClicked(Note*);
 
    public:
       NoteGroups(QWidget* parent);

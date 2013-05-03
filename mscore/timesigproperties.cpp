@@ -44,7 +44,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       zText->setText(timesig->numeratorString());
       nText->setText(timesig->denominatorString());
       Fraction nominal = timesig->sig() * timesig->stretch();
-      nominal.reduce();
+      // nominal.reduce();
       zNominal->setValue(nominal.numerator());
       nNominal->setValue(nominal.denominator());
       zActual->setValue(timesig->sig().numerator());

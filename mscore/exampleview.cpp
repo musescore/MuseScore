@@ -313,3 +313,20 @@ void ExampleView::dropEvent(QDropEvent* event)
       dragElement = 0;
       setDropTarget(0);
       }
+
+//---------------------------------------------------------
+//   mousePressEvent
+//---------------------------------------------------------
+
+void ExampleView::mousePressEvent(QMouseEvent* event)
+      {
+      QPointF pos(imatrix.map(QPointF(event->pos())));
+      foreach (Element* e, elementsAt(pos)) {
+            if (e->type() == Element::NOTE) {
+                  emit noteClicked(static_cast<Note*>(e));
+                  break;
+                  }
+            }
+      }
+
+

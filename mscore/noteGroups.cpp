@@ -71,7 +71,12 @@ NoteGroups::NoteGroups(QWidget* parent)
       iconPalette->setMag(.5);
       iconPalette->setDrawGrid(true);
       populateIconPalette(iconPalette, bpa);
+      iconPalette->setReadOnly(true);
+
       connect(resetGroups, SIGNAL(clicked()), SLOT(resetClicked()));
+      connect(view8,  SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
+      connect(view16, SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
+      connect(view32, SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
       }
 
 //---------------------------------------------------------
@@ -116,5 +121,22 @@ Groups NoteGroups::groups()
 void NoteGroups::resetClicked()
       {
       setSig(_sig, _groups);
+      }
+
+//---------------------------------------------------------
+//   note8Clicked
+//---------------------------------------------------------
+
+void NoteGroups::noteClicked(Note* note)
+      {
+      Chord* chord = note->chord();
+      if (chord->beamMode() == BeamMode::AUTO)
+            chord->setBeamMode(BeamMode::BEGIN);
+      else if (chord->beamMode() == BeamMode::BEGIN)
+            chord->setBeamMode(BeamMode::AUTO);
+      chord->score()->doLayout();
+      view8->update();
+      view16->update();
+      view32->update();
       }
 
