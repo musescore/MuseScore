@@ -3,6 +3,7 @@
 #include "musescore.h"
 #include "importmidi_operations.h"
 #include "libmscore/score.h"
+#include "preferences.h"
 
 #include <QTimer>
 #include <QFileDialog>
@@ -15,6 +16,7 @@
 extern Score::FileError importMidi(Score*, const QString&);
 extern QList<QString> extractMidiInstruments(const QString&);
 extern MuseScore* mscore;
+extern Preferences preferences;
 
 struct TrackInfo
       {
@@ -78,6 +80,11 @@ class TracksModel : public QAbstractTableModel
                               default:
                                     break;
                               }
+                        break;
+                  case Qt::TextAlignmentRole:
+                        if (index.column() == 1
+                                    && tracks_[index.row()].instrumentName == "-")
+                              return Qt::AlignHCenter;
                         break;
                   default:
                         break;
@@ -265,14 +272,14 @@ void ImportMidiPanel::importMidi()
       {
       if (!canImportMidi())
             return;
-      mscore->midiImportOperations().clear();
+      preferences.midiImportOperations.clear();
       int trackCount = tracksModel->trackCount();
       for (int i = 0; i != trackCount; ++i) {
             TrackInfo info(tracksModel->trackInfo(i));
-            mscore->midiImportOperations().addTrackOperations({info.doImport, info.doLHRHSeparation});
+            preferences.midiImportOperations.addTrackOperations({info.doImport, info.doLHRHSeparation});
             }
       mscore->openScore(midiFile);
-      mscore->midiImportOperations().clear();
+      preferences.midiImportOperations.clear();
       }
 
 bool ImportMidiPanel::isMidiFile(const QString &file)
