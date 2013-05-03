@@ -4261,7 +4261,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "rewind") {
             seq->rewindStart();
             if (playPanel)
-                  playPanel->heartBeat(0, 0);
+                  playPanel->heartBeat(0, 0, 0);
             }
       else if (cmd == "play-next-measure")
             seq->nextMeasure();
