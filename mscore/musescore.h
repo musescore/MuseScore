@@ -31,7 +31,6 @@
 #include "singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
 #include "musescoreCore.h"
-#include "mscore/importmidi_operations.h"
 
 class Shortcut;
 class ScoreView;
@@ -303,7 +302,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString rev;
 
       int _midiRecordId;
-      MidiImportOperations _midiImportOperations;
 
       bool _fullscreen;
       QList<LanguageItem> _languages;
@@ -542,7 +540,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static bool unstable();
       bool eventFilter(QObject *, QEvent *);
       void setMidiRecordId(int id) { _midiRecordId = id; }
-      MidiImportOperations& midiImportOperations() { return _midiImportOperations; }
       int midiRecordId() const { return _midiRecordId; }
       void populatePalette();
       void excerptsChanged(Score*);
