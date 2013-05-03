@@ -39,9 +39,8 @@
 #include "libmscore/keysig.h"
 #include "libmscore/pitchspelling.h"
 #include "preferences.h"
-#include "musescore.h"
 
-extern MuseScore* mscore;
+extern Preferences preferences;
 
 //---------------------------------------------------------
 //   MidiNote
@@ -771,7 +770,7 @@ void createMTrackList(int& lastTick, Score* score, QList<MTrack>& tracks, MidiFi
             if (events != 0) {
                   ++trackIndex;
                   const tMidiImportOperations& operations
-                              = mscore->midiImportOperations().allOperations();
+                              = preferences.midiImportOperations.allOperations();
                   // if operations not defined (empty etc.) - import all tracks without questions
                   // otherwise check doImport bool value
                   if (trackIndex >= operations.size() || operations[trackIndex].doImport) {
@@ -913,7 +912,7 @@ void convertMidi(Score* score, MidiFile* mf)
       mf->separateChannel();
       createMTrackList(lastTick, score, tracks, mf);
       // make a copy of operations - track count may change
-      tMidiImportOperations operations = mscore->midiImportOperations().allOperations();
+      tMidiImportOperations operations = preferences.midiImportOperations.allOperations();
       splitIntoLeftRightHands(tracks, operations);
       // maybe operations will need later for other actions on midi imput
       createInstruments(score, tracks);
@@ -946,7 +945,7 @@ QList<QString> getInstrumentNames(int lastTick, Score* score, QList<MTrack>& tra
                         }
                   QString t(MidiInstrument::instrName(mf->midiType(), hbank, lbank, program));
                   if (t.isEmpty())
-                        t = "Unknown";
+                        t = "-";
                   instrumentNames.push_back(t);
                   }
             else

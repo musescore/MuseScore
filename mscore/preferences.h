@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "shortcut.h"
+#include "mscore/importmidi_operations.h"
 
 enum SessionStart {
       EMPTY_SESSION, LAST_SESSION, NEW_SESSION, SCORE_SESSION
@@ -146,6 +147,8 @@ struct Preferences {
       QString importCharset;
       QString importStyleFile;
       int shortestNote;             // for midi input
+      MidiImportOperations midiImportOperations;
+
 
       bool useOsc;
       int oscPort;
