@@ -1542,6 +1542,7 @@ void MuseScore::dropEvent(QDropEvent* event)
                   if (u.scheme() == "file") {
                         QString file = u.toLocalFile();
                         if (ImportMidiPanel::isMidiFile(file)) {
+                              importmidi_panel->setMidiFile(file);
                               if (!importmidi_panel->isVisible())
                                     showMidiImportPanel(true);
                               }
