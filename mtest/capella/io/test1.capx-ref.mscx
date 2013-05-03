@@ -101,8 +101,6 @@ p, li { white-space: pre-wrap; }
             <tpc>18</tpc>
             </Note>
           </Chord>
-        </Measure>
-      <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -110,6 +108,8 @@ p, li { white-space: pre-wrap; }
             <tpc>13</tpc>
             </Note>
           </Chord>
+        </Measure>
+      <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -124,8 +124,6 @@ p, li { white-space: pre-wrap; }
             <tpc>17</tpc>
             </Note>
           </Chord>
-        </Measure>
-      <Measure number="3">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -140,6 +138,12 @@ p, li { white-space: pre-wrap; }
             <tpc>14</tpc>
             </Note>
           </Chord>
+        </Measure>
+      <Measure number="3">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          <pause>3</pause>
+          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -147,12 +151,6 @@ p, li { white-space: pre-wrap; }
             <tpc>16</tpc>
             </Note>
           </Chord>
-        </Measure>
-      <Measure number="4">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          <pause>3</pause>
-          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -175,7 +173,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         </Measure>
-      <Measure number="5">
+      <Measure number="4">
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
@@ -201,8 +199,6 @@ p, li { white-space: pre-wrap; }
             <tpc>14</tpc>
             </Note>
           </Chord>
-        </Measure>
-      <Measure number="6">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -210,6 +206,8 @@ p, li { white-space: pre-wrap; }
             <tpc>16</tpc>
             </Note>
           </Chord>
+        </Measure>
+      <Measure number="5">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -224,12 +222,6 @@ p, li { white-space: pre-wrap; }
             <tpc>13</tpc>
             </Note>
           </Chord>
-        </Measure>
-      <Measure number="7">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          <pause>3</pause>
-          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -244,6 +236,12 @@ p, li { white-space: pre-wrap; }
             <tpc>17</tpc>
             </Note>
           </Chord>
+        </Measure>
+      <Measure number="6">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          <pause>3</pause>
+          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>

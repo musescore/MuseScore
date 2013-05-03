@@ -55,6 +55,8 @@ private slots:
       // void capxTest7() { capxReadTest("test7"); } // generates different (incorrect ?) l1 and l2 values in beams
       void capxTestPianoG4G5() { capxReadTest("testPianoG4G5"); }
       void capxTestScaleC4C5() { capxReadTest("testScaleC4C5"); }
+      void capxTestSlurTie() { capxReadTest("testSlurTie"); }
+      void capxTestText1() { capxReadTest("testText1"); }
       // void capxTestTuplet1() { capxReadTest("testTuplet1"); } // generates different (incorrect ?) l1 and l2 values in beams
       };
 
