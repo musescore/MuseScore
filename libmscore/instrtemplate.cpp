@@ -29,7 +29,7 @@ QList<MidiArticulation> articulation;                // global articulations
 //   searchInstrumentGroup
 //---------------------------------------------------------
 
-static InstrumentGroup* searchInstrumentGroup(const QString& name)
+InstrumentGroup* searchInstrumentGroup(const QString& name)
       {
       foreach(InstrumentGroup* g, instrumentGroups) {
             if (g->id == name)
@@ -53,10 +53,29 @@ static int readStaffIdx(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   readInstrumentGroup
+//   searchGenre
 //---------------------------------------------------------
 
-void InstrumentGroup::read(XmlReader& e)
+static int searchGenre(const QString& genre)
+      {
+      int i = 0;
+      foreach(InstrumentGroup * iG, instrumentGroups) {
+            foreach(InstrumentGenre* ig, instrumentGenres) {
+                  if (ig->id == genre) {
+                        return i;
+                  } else {
+                        i++;
+                        }
+                  }
+            }
+      return -1;
+      }
+
+//---------------------------------------------------------
+//   readInstrumentType
+//---------------------------------------------------------
+
+void InstrumentType::read(XmlReader& e)
       {
       id       = e.attribute("id");
       name     = e.attribute("name");
@@ -73,6 +92,59 @@ void InstrumentGroup::read(XmlReader& e)
                         instrumentTemplates.append(t);
                         }
                   t->read(e);
+                  }
+            else if (tag == "ref") {
+                  InstrumentTemplate* ttt = searchTemplate(e.readElementText());
+                  if (ttt) {
+                        InstrumentTemplate* t = new InstrumentTemplate(*ttt);
+                        instrumentTemplates.append(t);
+                        }
+                  else
+                        qDebug("instrument reference not found <%s>", e.text().toUtf8().data());
+                  }
+            else if (tag == "name")
+                  name = e.readElementText();
+            else if (tag == "extended")
+                  extended = e.readInt();
+            else
+                  e.unknown();
+            }
+      if (id.isEmpty())
+            id = name.toLower().replace(" ", "-");
+      }
+
+//---------------------------------------------------------
+//   readInstrumentGroup
+//---------------------------------------------------------
+
+void InstrumentGroup::read(XmlReader& e)
+      {
+      id       = e.attribute("id");
+      name     = e.attribute("name");
+      extended = e.intAttribute("extended", 0);
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "InstrumentType") {
+                  QString id(e.attribute("id"));
+                  InstrumentType* type = searchInstrumentType(id);
+                  if (type == 0) {
+                        type = new InstrumentType;
+                        instrumentTypes.append(type);
+                        }
+                  type->read(e);
+                  type->groupId = id;
+                  }
+            else if (tag == "instrument" || tag == "Instrument") {
+                  QString id = e.attribute("id");
+                  InstrumentTemplate* t = searchTemplate(id);
+                  if (t == 0) {
+                        t = new InstrumentTemplate;
+                        t->articulation.append(articulation);     // init with global articulation
+                        instrumentTemplates.append(t);
+                        }
+                  t->read(e);
+                  t->groupId = id;
                   }
             else if (tag == "ref") {
                   InstrumentTemplate* ttt = searchTemplate(e.readElementText());
@@ -477,8 +549,13 @@ void InstrumentTemplate::read(XmlReader& e)
                   else
                         qDebug("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
                   }
-            else if (tag == "musicXMLid") {
+
+            else if (tag == "musicXMLid")
                   musicXMLid = e.readElementText();
+
+            else if (tag == "genre") {
+                  QString val(e.readElementText());
+                  linkGenre(val);
                   }
             else
                   e.unknown();
@@ -669,3 +746,47 @@ InstrumentTemplate* searchTemplate(const QString& name)
 
 }
 
+//---------------------------------------------------------
+// addGenre
+//      Add this template to the end of the supplied genre lists it belongs to
+//      THIS ISN'T RIGHT
+//---------------------------------------------------------
+
+//void InstrumentTemplate::addGenre(QList<InstrumentGenre *> genre)
+void addGenre(QList<InstrumentGenre *> genre)
+      {
+
+      }
+
+//---------------------------------------------------------
+//   linkGenre
+//      link the current instrument template to the genre list specified by "genre"
+//      Each genre is a linked list of instrument templates
+//      The head of the list is in the instrument group to which this instrument template belongs
+//---------------------------------------------------------
+
+
+//void InstrumentTemplate::linkGenre(const QString& genre)
+void linkGenre(const QString& genre)
+      {
+      InstrumentTemplate *tt;
+      int ig                = searchGenre(genre);
+      InstrumentGroup *igp  = searchInstrumentGroup(instrumentGroups.at(ig));
+
+      if (ig < 0) {
+            InstrumentGenre *g = new InstrumentGenre;
+            g.id = genre;
+            instrumentGroups.genre.append(genre);
+            ig = instrumentGroups.genre.size();
+            }
+      else {
+            InstrumentGenre g = instrumentGenres.at(ig);
+            }
+
+            // Follow the links to the last instrument template in the genre
+      for(tt = g.instrumentTemplate; ; !is_null(tt)) {
+            tt = g.instrumentTemplate.genre.at(ig).instrumentTemplate;
+            }
+
+      tt.instrumentTemplate = this;
+      }
