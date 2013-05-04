@@ -398,16 +398,16 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         chord->setTrack(track);
                         switch (o->stemDir) {
-                              case -1:    // down
+                              case ChordObj::DOWN:
                                     chord->setStemDirection(MScore::DOWN);
                                     break;
-                              case 1:     // up
+                              case ChordObj::UP:
                                     chord->setStemDirection(MScore::UP);
                                     break;
-                              case 3:     // no stem
+                              case ChordObj::NONE:
                                     chord->setNoStem(true);
                                     break;
-                              case 0:     // auto
+                              case ChordObj::AUTO:
                               default:
                                     break;
                               }
@@ -672,14 +672,19 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               // qDebug("cr1 %p cr2 %p", cr1, cr2);
 
                               if (cr1 && cr2) {
-                                    Slur* slur = new Slur(score);
-                                    cr1->addSlurFor(slur);
-                                    slur->setStartElement(cr1);
-                                    cr2->addSlurBack(slur);
-                                    slur->setEndElement(cr2);
+                                    if (cr1 == cr2)
+                                          qDebug("first and second anchor for slur identical (tick %d track %d first %p second %p)", tick, track, cr1, cr2);
+                                    else {
+                                          Slur* slur = new Slur(score);
+                                          qDebug("tick %d track %d cr1 %p cr2 %p -> slur %p", tick, track, cr1, cr2, slur);
+                                          cr1->addSlurFor(slur);
+                                          slur->setStartElement(cr1);
+                                          cr2->addSlurBack(slur);
+                                          slur->setEndElement(cr2);
+                                          }
                                     }
                               else
-                                    qDebug("first or second anchor for slur not found (first %p second %p)", cr1, cr2);
+                                    qDebug("first or second anchor for slur not found (tick %d track %d first %p second %p)", tick, track, cr1, cr2);
                               }
                               break;
                         case CAP_TEXT: {
@@ -723,6 +728,37 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
       }
 
 //---------------------------------------------------------
+//   needPart -- determine if a staff needs its own part
+//---------------------------------------------------------
+
+// As Capella does not define parts (it only knows about staves,
+// MIDI instruments numbers, brackets and braces), the following
+// algorithm is used:
+// - every staff is a separate part
+// - unless:
+//   - it is in a brace
+//   - it is not the first staff in the brace
+//   - it has the same MIDI instrument as the previous staff
+// Common cases:
+// - Keyboards: two or three staves with the same MIDI instrument and a brace
+//   -> create one part
+// - SATB: two or four staves with the same MIDI instrument and a bracket
+//   -> create two or four parts
+
+static bool needPart(const int prevInst, const int currInst, const int staffIdx, QList<CapBracket> const& bracketList)
+      {
+      // qDebug("needPart(prevInst %d, currInst %d, staffIdx %d)", prevInst, currInst, staffIdx);
+      foreach(CapBracket cb, bracketList) {
+            // qDebug("needPart bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
+            if (prevInst == currInst && cb.from < staffIdx && staffIdx <= cb.to && cb.curly) {
+                  // qDebug("needPart found brace, continue part");
+                  return false;
+                  }
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   convertCapella
 //---------------------------------------------------------
 
@@ -745,8 +781,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             foreach(CapStaff* cstaff, csys->staves) {
                   CapStaffLayout* cl = cap->staffLayout(cstaff->iLayout);
                   qDebug("  Staff layout <%s><%s><%s><%s><%s> %d  barline %d-%d mode %d",
-                         cl->descr, cl->name, cl->abbrev, cl->intermediateName,
-                         cl->intermediateAbbrev,
+                         qPrintable(cl->descr), qPrintable(cl->name), qPrintable(cl->abbrev),
+                         qPrintable(cl->intermediateName), qPrintable(cl->intermediateAbbrev),
                          cstaff->iLayout, cl->barlineFrom, cl->barlineTo, cl->barlineMode);
                   }
             }
@@ -769,30 +805,35 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             staves = qMax(staves, cap->staffLayouts().size());
             }
 
+      // set the initial time signature
       CapStaff* cs = cap->systems[0]->staves[0];
       if (cs->log2Denom <= 7)
             score->sigmap()->add(0, Fraction(cs->numerator, 1 << cs->log2Denom));
 
+      // create parts and staves
       Staff* bstaff = 0;
       int span = 1;
-      int midiPatch = -1;
+      int midiPatch = -1; // the previous MIDI patch (instrument)
       Part* part = 0;
       for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
             CapStaffLayout* cl = cap->staffLayout(staffIdx);
             // qDebug("Midi staff %d program %d", staffIdx, cl->sound);
-            if (midiPatch != cl->sound || part == 0) {
+
+            // create a new part if necessary
+            if (needPart(midiPatch, cl->sound, staffIdx, cap->brackets)) {
                   part = new Part(score);
-                  midiPatch = cl->sound;
                   score->appendPart(part);
                   }
+            midiPatch = cl->sound;
+
             Staff* s = new Staff(score, part, staffIdx);
             if (cl->bPercussion)
                   part->setMidiProgram(0, 128);
             else
                   part->setMidiProgram(cl->sound, 0);
-            part->setPartName(QString::fromLatin1(cl->descr));
-            part->setLongName(QString::fromLatin1(cl->name));
-            part->setShortName(QString::fromLatin1(cl->abbrev));
+            part->setPartName(cl->descr);
+            part->setLongName(cl->name);
+            part->setShortName(cl->abbrev);
 
             // ClefType clefType = CapClef::clefType(cl->form, cl->line, cl->oct);
             // s->setClef(0, clefType);
@@ -815,6 +856,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             bstaff->setBarLineSpan(span);
 
       foreach(CapBracket cb, cap->brackets) {
+            qDebug("Bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
             Staff* staff = score->staves().value(cb.from);
             if (staff == 0) {
                   qDebug("bad bracket 'from' value");
@@ -997,11 +1039,7 @@ void SimpleTextObj::read()
       relPos = cap->readPoint();
       align  = cap->readByte();
       _font  = cap->readFont();
-      char* t = cap->readString();
-      if (t) {
-            _text = QString::fromLatin1(t);
-            delete t;
-            }
+      _text  = cap->readQString();
       // qDebug("read SimpletextObj(%f,%f) len %zd <%s>",
       //        relPos.x(), relPos.y(), _text.length(), qPrintable(_text));
       }
@@ -1476,9 +1514,9 @@ void ChordObj::read()
                         v.hyphen    = b & 4;
                         v.num       = i;
                         if (b & 8)
-                              v.verseNumber = cap->readString();
+                              v.verseNumber = cap->readQString();
                         if (b & 16)
-                              v.text = cap->readString();
+                              v.text = cap->readQString();
                         verse.append(v);
                         }
                   }
@@ -1622,7 +1660,8 @@ int Capella::readInt()
       }
 
 //---------------------------------------------------------
-//   readString
+//   readString -- read Capella string into newly allocated char buffer
+//   note that no carriage return / newline interpretation is done
 //---------------------------------------------------------
 
 char* Capella::readString()
@@ -1632,6 +1671,20 @@ char* Capella::readString()
       read(buffer, len);
       buffer[len] = 0;
       return buffer;
+      }
+
+//---------------------------------------------------------
+//   readQString -- read Capella string into QString
+//   strings in Capella files may contain \r\n, must remove the \r
+//---------------------------------------------------------
+
+QString Capella::readQString()
+      {
+      char* buffer = readString();   // read Capella string
+      QString res(buffer);           // and copy into QString
+      res = res.remove(QChar('\r')); // remove the \r
+      delete [] buffer;              // delete memory allocated by readString
+      return res;
       }
 
 //---------------------------------------------------------
@@ -1739,7 +1792,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
                   }
                   break;
             }
-      qDebug("StaffLayout %d: noteLines %d", idx, sl->noteLines);
+      qDebug("StaffLayout %d: barlineMode %d noteLines %d", idx, sl->barlineMode, sl->noteLines);
 
       sl->bSmall      = readByte();
       qDebug("staff size small %d", sl->bSmall);
@@ -1749,6 +1802,8 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
       sl->groupDist    = readInt();
       sl->barlineFrom = readByte();
       sl->barlineTo   = readByte();
+      // qDebug("topDist %d btmDist %d groupDist %d barlineFrom %d barlineTo %d",
+      //        sl->topDist, sl->btmDist, sl->groupDist, sl->barlineFrom, sl->barlineTo);
 
       unsigned char clef = readByte();
       sl->form = FORM(clef & 7);
@@ -1782,13 +1837,14 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
       sl->transp = readInt();
       qDebug("   sound %d vol %d transp %d", sl->sound, sl->volume, sl->transp);
 
-      sl->descr              = readString();
-      sl->name               = readString();
-      sl->abbrev             = readString();
-      sl->intermediateName   = readString();
-      sl->intermediateAbbrev = readString();
+      sl->descr              = readQString();
+      sl->name               = readQString();
+      sl->abbrev             = readQString();
+      sl->intermediateName   = readQString();
+      sl->intermediateAbbrev = readQString();
       qDebug("   descr <%s> name <%s>  abbrev <%s> iname <%s> iabrev <%s>",
-             sl->descr, sl->name, sl->abbrev, sl->intermediateName, sl->intermediateAbbrev);
+             qPrintable(sl->descr), qPrintable(sl->name), qPrintable(sl->abbrev),
+             qPrintable(sl->intermediateName), qPrintable(sl->intermediateAbbrev));
       }
 
 //---------------------------------------------------------
