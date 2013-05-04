@@ -203,11 +203,11 @@ struct CapStaffLayout {
 
       int sound, volume, transp;
 
-      char* descr;
-      char* name;
-      char* abbrev;
-      char* intermediateName;
-      char* intermediateAbbrev;
+      QString descr;
+      QString name;
+      QString abbrev;
+      QString intermediateName;
+      QString intermediateAbbrev;
       };
 
 //---------------------------------------------------------
@@ -525,6 +525,7 @@ class BasicDurationalObj : public CapellaObj {
       BasicDurationalObj(Capella* c) : CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e, unsigned int& fullm);
+      void readCapxDisplay(XmlReader& e);
       void readCapxObjectArray(XmlReader& e);
       int ticks() const;
       bool invisible;
@@ -558,6 +559,7 @@ struct CNote {
 
 class ChordObj : public BasicDurationalObj, public NoteObj {
    public:
+      enum StemDir { DOWN = -1, AUTO = 0, UP = 1, NONE = 3 };
       unsigned char beamMode;
       char notationStave;
       char dStemLength;
@@ -574,6 +576,7 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
       void readCapx(XmlReader& e);
       void readCapxLyrics(XmlReader& e);
       void readCapxNotes(XmlReader& e);
+      void readCapxStem(XmlReader& e);
       QList<Verse> verse;
       QList<CNote> notes;
       char stemDir;           // -1 down, 0 auto, 1 up, 3 no stem
@@ -686,6 +689,7 @@ class Capella {
       int readDWord();
       unsigned readUnsigned();
       char* readString();
+      QString readQString();
       void readExtra();
       QList<BasicDrawObj*> readDrawObjectArray();
       void read(void* p, qint64 len);
