@@ -398,16 +398,16 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         chord->setTrack(track);
                         switch (o->stemDir) {
-                              case -1:    // down
+                              case ChordObj::DOWN:
                                     chord->setStemDirection(MScore::DOWN);
                                     break;
-                              case 1:     // up
+                              case ChordObj::UP:
                                     chord->setStemDirection(MScore::UP);
                                     break;
-                              case 3:     // no stem
+                              case ChordObj::NONE:
                                     chord->setNoStem(true);
                                     break;
-                              case 0:     // auto
+                              case ChordObj::AUTO:
                               default:
                                     break;
                               }
@@ -781,8 +781,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             foreach(CapStaff* cstaff, csys->staves) {
                   CapStaffLayout* cl = cap->staffLayout(cstaff->iLayout);
                   qDebug("  Staff layout <%s><%s><%s><%s><%s> %d  barline %d-%d mode %d",
-                         cl->descr, cl->name, cl->abbrev, cl->intermediateName,
-                         cl->intermediateAbbrev,
+                         qPrintable(cl->descr), qPrintable(cl->name), qPrintable(cl->abbrev),
+                         qPrintable(cl->intermediateName), qPrintable(cl->intermediateAbbrev),
                          cstaff->iLayout, cl->barlineFrom, cl->barlineTo, cl->barlineMode);
                   }
             }
@@ -831,9 +831,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   part->setMidiProgram(0, 128);
             else
                   part->setMidiProgram(cl->sound, 0);
-            part->setPartName(QString::fromLatin1(cl->descr));
-            part->setLongName(QString::fromLatin1(cl->name));
-            part->setShortName(QString::fromLatin1(cl->abbrev));
+            part->setPartName(cl->descr);
+            part->setLongName(cl->name);
+            part->setShortName(cl->abbrev);
 
             // ClefType clefType = CapClef::clefType(cl->form, cl->line, cl->oct);
             // s->setClef(0, clefType);
@@ -1039,11 +1039,7 @@ void SimpleTextObj::read()
       relPos = cap->readPoint();
       align  = cap->readByte();
       _font  = cap->readFont();
-      char* t = cap->readString();
-      if (t) {
-            _text = QString::fromLatin1(t);
-            delete t;
-            }
+      _text  = cap->readQString();
       // qDebug("read SimpletextObj(%f,%f) len %zd <%s>",
       //        relPos.x(), relPos.y(), _text.length(), qPrintable(_text));
       }
@@ -1518,9 +1514,9 @@ void ChordObj::read()
                         v.hyphen    = b & 4;
                         v.num       = i;
                         if (b & 8)
-                              v.verseNumber = cap->readString();
+                              v.verseNumber = cap->readQString();
                         if (b & 16)
-                              v.text = cap->readString();
+                              v.text = cap->readQString();
                         verse.append(v);
                         }
                   }
@@ -1664,7 +1660,8 @@ int Capella::readInt()
       }
 
 //---------------------------------------------------------
-//   readString
+//   readString -- read Capella string into newly allocated char buffer
+//   note that no carriage return / newline interpretation is done
 //---------------------------------------------------------
 
 char* Capella::readString()
@@ -1674,6 +1671,20 @@ char* Capella::readString()
       read(buffer, len);
       buffer[len] = 0;
       return buffer;
+      }
+
+//---------------------------------------------------------
+//   readQString -- read Capella string into QString
+//   strings in Capella files may contain \r\n, must remove the \r
+//---------------------------------------------------------
+
+QString Capella::readQString()
+      {
+      char* buffer = readString();   // read Capella string
+      QString res(buffer);           // and copy into QString
+      res = res.remove(QChar('\r')); // remove the \r
+      delete [] buffer;              // delete memory allocated by readString
+      return res;
       }
 
 //---------------------------------------------------------
@@ -1781,7 +1792,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
                   }
                   break;
             }
-      qDebug("StaffLayout %d: noteLines %d", idx, sl->noteLines);
+      qDebug("StaffLayout %d: barlineMode %d noteLines %d", idx, sl->barlineMode, sl->noteLines);
 
       sl->bSmall      = readByte();
       qDebug("staff size small %d", sl->bSmall);
@@ -1791,6 +1802,8 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
       sl->groupDist    = readInt();
       sl->barlineFrom = readByte();
       sl->barlineTo   = readByte();
+      // qDebug("topDist %d btmDist %d groupDist %d barlineFrom %d barlineTo %d",
+      //        sl->topDist, sl->btmDist, sl->groupDist, sl->barlineFrom, sl->barlineTo);
 
       unsigned char clef = readByte();
       sl->form = FORM(clef & 7);
@@ -1824,13 +1837,14 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
       sl->transp = readInt();
       qDebug("   sound %d vol %d transp %d", sl->sound, sl->volume, sl->transp);
 
-      sl->descr              = readString();
-      sl->name               = readString();
-      sl->abbrev             = readString();
-      sl->intermediateName   = readString();
-      sl->intermediateAbbrev = readString();
+      sl->descr              = readQString();
+      sl->name               = readQString();
+      sl->abbrev             = readQString();
+      sl->intermediateName   = readQString();
+      sl->intermediateAbbrev = readQString();
       qDebug("   descr <%s> name <%s>  abbrev <%s> iname <%s> iabrev <%s>",
-             sl->descr, sl->name, sl->abbrev, sl->intermediateName, sl->intermediateAbbrev);
+             qPrintable(sl->descr), qPrintable(sl->name), qPrintable(sl->abbrev),
+             qPrintable(sl->intermediateName), qPrintable(sl->intermediateAbbrev));
       }
 
 //---------------------------------------------------------

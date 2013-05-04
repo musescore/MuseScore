@@ -84,6 +84,17 @@ void BasicDrawObj::readCapx(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   BasicDurationalObj::readCapxDisplay -- capx equivalent of BasicDurationalObj::read
+//   reads the <display> element only
+//---------------------------------------------------------
+
+void BasicDurationalObj::readCapxDisplay(XmlReader& e)
+      {
+      invisible = e.attribute("invisible") == "true";
+      e.readNext();
+      }
+
+//---------------------------------------------------------
 //   BasicDurationalObj::readCapx -- capx equivalent of BasicDurationalObj::read
 //---------------------------------------------------------
 
@@ -230,12 +241,25 @@ void CapMeter::readCapx(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   ChordObj::readCapxStem -- read <stem> element
+//---------------------------------------------------------
+
+void ChordObj::readCapxStem(XmlReader& e)
+      {
+      QString dir = e.attribute("dir");
+      if (dir == "up") stemDir = UP;
+      else if (dir == "down") stemDir = DOWN;
+      else if (dir == "none") stemDir = NONE;
+      e.readNext();
+      }
+
+//---------------------------------------------------------
 //   ChordObj::readCapx -- capx equivalent of ChordObj::read
 //---------------------------------------------------------
 
 void ChordObj::readCapx(XmlReader& e)
       {
-      stemDir      = 0;
+      stemDir      = AUTO;
       dStemLength  = 0;
       nTremoloBars = 0;
       articulation = 0;
@@ -246,28 +270,6 @@ void ChordObj::readCapx(XmlReader& e)
       beamMode      = AUTO_BEAM;
       notationStave = 0;
 
-      /*
-      if (flags & 0x40) {
-            unsigned nVerses = cap->readUnsigned();
-            for (unsigned int i = 0; i < nVerses; ++i) {
-                  bool bVerse = cap->readByte();
-                  if (bVerse) {
-                        Verse v;
-                        unsigned char b = cap->readByte();
-                        v.leftAlign = b & 1;
-                        v.extender  = b & 2;
-                        v.hyphen    = b & 4;
-                        v.num       = i;
-                        if (b & 8)
-                              v.verseNumber = cap->readString();
-                        if (b & 16)
-                              v.text = cap->readString();
-                        verse.append(v);
-                        }
-                  }
-            }
-            }
-      */
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "duration") {
@@ -275,12 +277,10 @@ void ChordObj::readCapx(XmlReader& e)
                   BasicDurationalObj::readCapx(e, dummy);
                   }
             else if (tag == "display") {
-                  qDebug("ChordObj::readCapx: found display (skipping)");
-                  e.skipCurrentElement();
+                  BasicDurationalObj::readCapxDisplay(e);
                   }
             else if (tag == "stem") {
-                  qDebug("ChordObj::readCapx: found stem (skipping)");
-                  e.skipCurrentElement();
+                  readCapxStem(e);
                   }
             else if (tag == "beam") {
                   qDebug("ChordObj::readCapx: found beam (skipping)");
@@ -346,11 +346,11 @@ void ChordObj::readCapxLyrics(XmlReader& e)
       while (e.readNextStartElement()) {
             if (e.name() == "verse") {
                   Verse v;
-                  v.leftAlign = true;        // TODO
-                  v.extender  = false;       // TODO
-                  v.hyphen    = false;       // TODO
+                  v.leftAlign = true;        // not used by capella.cpp
+                  v.extender  = false;       // not used by capella.cpp
+                  v.hyphen    = e.attribute("hyphen") == "true";
                   v.num       = e.intAttribute("i", 0);
-                  v.verseNumber = e.attribute("verseNumber");
+                  v.verseNumber = e.attribute("verseNumber"); // not used by capella.cpp
                   v.text = e.readElementText();
                   verse.append(v);
                   }
@@ -376,7 +376,7 @@ void ChordObj::readCapxNotes(XmlReader& e)
                               e.readNext();
                               }
                         else if (tag == "tie") {
-                              rightTie = (e.attribute("begin") == "true");
+                              rightTie = e.attribute("begin") == "true";
                               e.readNext();
                               }
                         else
@@ -413,8 +413,7 @@ void RestObj::readCapx(XmlReader& e)
                   BasicDurationalObj::readCapx(e, fullMeasures);
                   }
             else if (tag == "display") {
-                  qDebug("RestObj::readCapx: found display (skipping)");
-                  e.skipCurrentElement();
+                  BasicDurationalObj::readCapxDisplay(e);
                   }
             else if (tag == "verticalPos") {
                   qDebug("RestObj::readCapx: found verticalPos (skipping)");
@@ -728,6 +727,29 @@ void Capella::capxSystems(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   capxNotation -- read the capx <notation> element
+//---------------------------------------------------------
+
+static void capxNotation(XmlReader& e, uchar& barlineMode, uchar& barlineFrom, uchar& barlineTo)
+      {
+      while (e.readNextStartElement()) {
+            if (e.name() == "barlines") {
+                  QString mode = e.attribute("mode", "full");
+                  if (mode == "full") barlineMode = 3;
+                  else if (mode == "none") barlineMode = 2;     // correct ? not handled by capella.cpp anyway
+                  else if (mode == "internal") barlineMode = 1;
+                  else if (mode == "external") barlineMode = 0; // correct ? not handled by capella.cpp anyway
+                  else barlineMode = 1;
+                  barlineFrom = e.intAttribute("from");
+                  barlineTo   = e.intAttribute("to");
+                  e.readNext();
+                  }
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readCapxStaveLayout -- capx equivalent of readStaveLayout(CapStaffLayout*, int)
 //   read the staffLayout element
 //---------------------------------------------------------
@@ -736,10 +758,10 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
       {
       // initialize same variables as readStaveLayout(CapStaffLayout*, int)
 
-      sl->barlineMode = 0; // TODO
+      sl->barlineMode = 0;
       sl->noteLines   = 0;
 
-      sl->bSmall      = 0; // TODO
+      sl->bSmall      = 0; // TODO (unclear where this is in the capx file)
 
       sl->topDist      = 0;
       sl->btmDist      = 0;
@@ -775,34 +797,25 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
             curPos += n;
             }
       */
-      sl->sound  = 0; // TODO
+      sl->sound  = 0;
       sl->volume = 0;
       sl->transp = 0;
-      // qDebug("   sound %d vol %d transp %d", sl->sound, sl->volume, sl->transp);
 
-      sl->descr              = 0; // TODO
-      sl->name               = 0; // TODO
-      sl->abbrev             = 0; // TODO
-      sl->intermediateName   = 0;
-      sl->intermediateAbbrev = 0;
-      // qDebug("   descr <%s> name <%s>  abbrev <%s> iname <%s> iabrev <%s>",
-      // sl->descr, sl->name, sl->abbrev, sl->intermediateName, sl->intermediateAbbrev);
-
-      qDebug("readCapxStaveLayout: descr '%s'", qPrintable(e.attribute("description")));
-      // TODO: convert descr to char* and store in sl->descr
+      qDebug("readCapxStaveLayout");
+      sl->descr = e.attribute("description");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "notation") {
-                  qDebug("readCapxStaveLayout: found notation (skipping)");
-                  e.skipCurrentElement();
+                  capxNotation(e, sl->barlineMode, sl->barlineFrom, sl->barlineTo);
                   }
             else if (tag == "distances") {
                   qDebug("readCapxStaveLayout: found distances (skipping)");
                   e.skipCurrentElement();
                   }
             else if (tag == "instrument") {
-                  qDebug("readCapxStaveLayout: found instrument (skipping)");
-                  e.skipCurrentElement();
+                  sl->name = e.attribute("name");
+                  sl->abbrev = e.attribute("abbrev");
+                  e.readNext();
                   }
             else if (tag == "sound") {
                   sl->sound = e.intAttribute("instr", 0);
@@ -812,8 +825,55 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
             else
                   e.unknown();
             }
+      qDebug("   descr '%s' name '%s' abbrev '%s'",
+             qPrintable(sl->descr), qPrintable(sl->name), qPrintable(sl->abbrev));
       qDebug("   sound %d vol %d transp %d", sl->sound, sl->volume, sl->transp);
       qDebug("readCapxStaveLayout done");
+      }
+
+//---------------------------------------------------------
+//   capxLayoutBrackets -- read the capx <brackets> element (when child of <layout)
+//---------------------------------------------------------
+
+static void capxLayoutBrackets(XmlReader& e, QList<CapBracket>& bracketList)
+      {
+      int i = 0; // bracket count
+      while (e.readNextStartElement()) {
+            if (e.name() == "bracket") {
+                  CapBracket b;
+                  b.from  = e.intAttribute("from");
+                  b.to    = e.intAttribute("to");
+                  b.curly = e.attribute("curly") == "true";
+                  // qDebug("Bracket%d %d-%d curly %d", i, b.from, b.to, b.curly);
+                  bracketList.append(b);
+                  e.readNext();
+                  ++i;
+                  }
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   capxLayoutDistances -- read the capx <Distances> element (when child of <layout)
+//---------------------------------------------------------
+
+static void capxLayoutDistances(XmlReader& e, double& smallLineDist, double& normalLineDist, int& topDist)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "staffLines") {
+                  smallLineDist = e.doubleAttribute("small");
+                  normalLineDist = e.doubleAttribute("normal");
+                  e.readNext();
+                  }
+            else if (tag == "systems") {
+                  topDist = e.intAttribute("top");
+                  e.readNext();
+                  }
+            else
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------
@@ -836,29 +896,6 @@ void Capella::capxLayoutStaves(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   capxLayoutBrackets -- read the capx <brackets> element (when child of <layout)
-//---------------------------------------------------------
-
-static void capxLayoutBrackets(XmlReader& e, QList<CapBracket>& bracketList)
-      {
-      int i = 0; // bracket count
-      while (e.readNextStartElement()) {
-            if (e.name() == "bracket") {
-                  CapBracket b;
-                  b.from  = e.intAttribute("from");
-                  b.to    = e.intAttribute("to");
-                  b.curly = e.attribute("curly", "false") == "true";
-                  // qDebug("Bracket%d %d-%d curly %d", i, b.from, b.to, b.curly);
-                  bracketList.append(b);
-                  e.readNext();
-                  ++i;
-                  }
-            else
-                  e.unknown();
-            }
-      }
-
-//---------------------------------------------------------
 //   capxLayout -- read the capx <layout> element
 //   rough equivalent of readLayout() read part
 //---------------------------------------------------------
@@ -872,8 +909,9 @@ void Capella::capxLayout(XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "distances") {
-                  qDebug("capxLayout: found distances (skipping)");
-                  e.skipCurrentElement();
+                  capxLayoutDistances(e, smallLineDist, normalLineDist, topDist);
+                  // qDebug("Capella::capxLayout(): smallLineDist %g normalLineDist %g topDist %d",
+                  //        smallLineDist, normalLineDist, topDist);
                   }
             else if (tag == "instrumentNames") {
                   qDebug("capxLayout: found instrumentNames (skipping)");
@@ -910,11 +948,11 @@ void Capella::initCapxLayout()
       {
       // initialize same variables as readLayout()
 
-      smallLineDist  = 1.2; // TODO verify default
+      smallLineDist  = 1.2;  // TODO verify default
       normalLineDist = 1.76; // TODO verify default
 
-      topDist        = 14; // TODO verify default
-      interDist      = 0;
+      topDist        = 14;   // TODO verify default
+      interDist      = 0;    // TODO verify default
 
       txtAlign   = 0;
       adjustVert = 0;
