@@ -382,11 +382,17 @@ bool ParsedChord::parse (QString s)
       while (i < len) {
             QString tok1, tok2;
             // get first token - up to first digit
-            // ignore leading open paren
-            // break on comma or close paren and skip past
+            // ignore leading open parens
+            // skip past comma, close paren, or non-leading open paren and break
             for (j = 0, tok1 = ""; i < len; ++i) {
-                  if (s[i] == '(')
-                        continue;
+                  if (s[i] == '(') {
+                        if (j == 0)
+                              continue;
+                        else {
+                              ++i;
+                              break;
+                              }
+                        }
                   else if (s[i] == ',' || s[i] == ')') {
                         ++i;
                         break;
@@ -414,6 +420,14 @@ bool ParsedChord::parse (QString s)
 //            qDebug("flexibleChordParse: tok2 = <%s>, i = %d", qPrintable(tok2), i);
             if (tok1 == "m" || tok1 == "ma" || tok1 == "maj")
                   tok1 = "major";
+            else if (tok1 == "omit")
+                  tok1 = "no";
+            else if (tok1 == "sus" && tok2 == "")
+                  tok2 = "4";
+            else if (tok1 == "susb" || tok1 == "sus#") {
+                  modifierList += "<sus4>";
+                  tok1 = tok1[3];
+                  }
             elem = "<" + tok1 + tok2 + ">";
             modifierList += elem;
             }
@@ -424,15 +438,17 @@ bool ParsedChord::parse (QString s)
 
       // special cases
       if (quality == "<>") {
-            if (extension != "<>")
+            if (extension == "<7>" || extension == "<9>" || extension == "<11>" || extension == "<13>")
                   quality = "<dominant>";
             else
                   quality = "<major>";
             }
-      // more special cases TODO: mMaj, madd, augadd, no/omit, ...?
+      // more special cases TODO: mMaj, madd, augadd, ...?
 
       // TODO - make attempt to "understand" the chord
+
       handle = quality + extension + modifiers;
+//      qDebug("flexibleChordParse: %s", qPrintable(handle);
       return true;
       }
 
@@ -447,11 +463,11 @@ void ChordDescription::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "name") {
                   QString n = e.readElementText();
-                  names.append(n);
+                  names.insert(0,n);
                   ParsedChord pc;
                   pc.parse(n);
                   if (parsedChords.indexOf(pc) < 0)
-                        parsedChords.append(pc);
+                        parsedChords.insert(0,pc);
                   }
             else if (tag == "xml")
                   xmlKind = e.readElementText();
