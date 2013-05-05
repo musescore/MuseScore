@@ -341,6 +341,102 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
       }
 
 //---------------------------------------------------------
+//  parse
+//---------------------------------------------------------
+
+bool ParsedChord::parse (QString s)
+      {
+      QString sp, elem, elemLower, quality, extension, modifiers;
+      QStringList modifierList;
+      int len = s.size();
+      int i, j;
+
+//      qDebug("flexibleChordParse: s = %s", qPrintable(s));
+
+      // get quality
+      for (i = 0; i < len && !s[i].isDigit(); ++i) {
+            if (s[i] == '(')
+                  break;
+            elem[i] = s[i];
+            }
+      elemLower = elem.toLower();
+      if (elem == "M" || elemLower == "ma" || elemLower == "maj")
+            quality = "<major>";
+      else if (elem == "m" || elemLower == "mi" || elemLower == "min" || elemLower == "-")
+            quality = "<minor>";
+      else if (elemLower == "aug" || elemLower == "+")
+            quality = "<augmented>";
+      else if (elemLower == "dim" || elemLower == "o")
+            quality = "<diminished>";
+      else
+            quality = "<" + elemLower + ">";
+//      qDebug("flexibleChordParse: quality = %s, i = %d", qPrintable(quality), i);
+
+      // get extension
+      for (j = 0; i < len && s[i].isDigit(); ++i, ++j)
+            extension[j] = s[i];
+      extension = "<" + extension + ">";
+//      qDebug("flexibleChordParse: extension = %s, i = %d", qPrintable(extension), i);
+
+      // get modifiers
+      while (i < len) {
+            QString tok1, tok2;
+            // get first token - up to first digit
+            // ignore leading open paren
+            // break on comma or close paren and skip past
+            for (j = 0, tok1 = ""; i < len; ++i) {
+                  if (s[i] == '(')
+                        continue;
+                  else if (s[i] == ',' || s[i] == ')') {
+                        ++i;
+                        break;
+                        }
+                  else if (s[i].isDigit())
+                        break;
+                  else
+                        tok1[j++] = s[i];
+                  }
+            tok1 = tok1.toLower();
+//            qDebug("flexibleChordParse: tok1 = <%s>, i = %d", qPrintable(tok1), i);
+            // get second token - up to first non-digit
+            // again skip past comma or close paren
+            for (j = 0, tok2 = ""; i < len; ++i) {
+                  if (s[i] == ',' || s[i] == ')') {
+                        ++i;
+                        break;
+                        }
+                  else if (!s[i].isDigit())
+                        break;
+                  else
+                        tok2[j++] = s[i];
+                  }
+            tok2 = tok2.toLower();
+//            qDebug("flexibleChordParse: tok2 = <%s>, i = %d", qPrintable(tok2), i);
+            if (tok1 == "m" || tok1 == "ma" || tok1 == "maj")
+                  tok1 = "major";
+            elem = "<" + tok1 + tok2 + ">";
+            modifierList += elem;
+            }
+      if (!modifierList.isEmpty()) {
+            modifierList.sort();
+            modifiers = modifierList.join("");
+            }
+
+      // special cases
+      if (quality == "<>") {
+            if (extension != "<>")
+                  quality = "<dominant>";
+            else
+                  quality = "<major>";
+            }
+      // more special cases TODO: mMaj, madd, augadd, no/omit, ...?
+
+      // TODO - make attempt to "understand" the chord
+      handle = quality + extension + modifiers;
+      return true;
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -349,8 +445,14 @@ void ChordDescription::read(XmlReader& e)
       id = e.attribute("id").toInt();
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "name")
-                  names.append(e.readElementText());
+            if (tag == "name") {
+                  QString n = e.readElementText();
+                  names.append(n);
+                  ParsedChord pc;
+                  pc.parse(n);
+                  if (parsedChords.indexOf(pc) < 0)
+                        parsedChords.append(pc);
+                  }
             else if (tag == "xml")
                   xmlKind = e.readElementText();
             else if (tag == "degree")
@@ -476,7 +578,7 @@ void ChordList::write(Xml& xml)
 
 bool ChordList::read(const QString& name)
       {
-// qDebug("ChordList::read <%s>", qPrintable(name));
+      qDebug("ChordList::read <%s>", qPrintable(name));
       QString path;
       QFileInfo ftest(name);
       if (ftest.isAbsolute())
