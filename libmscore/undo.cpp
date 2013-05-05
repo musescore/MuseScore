@@ -407,6 +407,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                   qDebug("measure for tick %d not found!", tick);
                   continue;
                   }
+            KeySigEvent oldKey = staff->key(tick-1);
             Segment* s   = measure->undoGetSegment(Segment::SegKeySig, tick);
             int staffIdx = score->staffIdx(staff);
             int track    = staffIdx * VOICES;
@@ -415,6 +416,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
             KeySig* nks  = new KeySig(score);
             nks->setTrack(track);
             nks->changeKeySigEvent(st);
+            nks->setOldSig(oldKey.accidentalType());
             nks->setParent(s);
             if (links == 0)
                   links = new LinkedElements(score);
