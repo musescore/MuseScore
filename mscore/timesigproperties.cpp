@@ -44,7 +44,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       zText->setText(timesig->numeratorString());
       nText->setText(timesig->denominatorString());
       Fraction nominal = timesig->sig() * timesig->stretch();
-      // nominal.reduce();
+      nominal.reduce();
       zNominal->setValue(nominal.numerator());
       nNominal->setValue(nominal.denominator());
       zActual->setValue(timesig->sig().numerator());
@@ -63,8 +63,8 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
 
       Groups g = t->groups();
       if (g.empty())
-            g = Groups::endings(nominal);     // initialize with default
-      groups->setSig(nominal, g);
+            g = Groups::endings(timesig->sig());     // initialize with default
+      groups->setSig(timesig->sig(), g);
       }
 
 //---------------------------------------------------------
