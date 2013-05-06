@@ -89,11 +89,11 @@ class Staff : public QObject {
       int _rstaff;                  ///< Index in Part.
 
       ClefTypeList _initialClef;    // used by new score wizard
-      QList<Clef*> clefs;
 
-      QList<TimeSig*> timesigs;
-
+      std::map<int,Clef*> clefs;
+      std::map<int,TimeSig*> timesigs;
       KeyList* _keymap;
+
       QList <BracketItem> _brackets;
       int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
       int _barLineFrom;       ///< line of start staff to draw the barline from (0 = staff top line, ...)
