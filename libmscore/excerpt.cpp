@@ -117,6 +117,7 @@ Score* createExcerpt(const QList<Part*>& parts)
             int idx = 0;
             foreach(Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score, p, idx);
+                  s->setStaffType(staff->staffType());
                   s->setUpdateKeymap(true);
                   s->linkTo(staff);
                   p->staves()->append(s);
