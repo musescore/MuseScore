@@ -147,18 +147,20 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
 
       xml.trackDiff = -staffStart * VOICES;
-      for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
-            xml.stag(QString("Staff id=\"%1\"").arg(staffIdx + 1));
-            xml.curTick  = measureStart->tick();
-            xml.tickDiff = xml.curTick;
-            xml.curTrack = staffIdx * VOICES;
-            for (MeasureBase* m = measureStart; m != measureEnd; m = m->next()) {
-                  if (m->type() == Element::MEASURE || staffIdx == 0)
-                        m->write(xml, staffIdx, staffIdx == staffStart);
-                  if (m->type() == Element::MEASURE)
-                        xml.curTick = m->tick() + m->ticks();
+      if (measureStart) {
+            for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
+                  xml.stag(QString("Staff id=\"%1\"").arg(staffIdx + 1));
+                  xml.curTick  = measureStart->tick();
+                  xml.tickDiff = xml.curTick;
+                  xml.curTrack = staffIdx * VOICES;
+                  for (MeasureBase* m = measureStart; m != measureEnd; m = m->next()) {
+                        if (m->type() == Element::MEASURE || staffIdx == 0)
+                              m->write(xml, staffIdx, staffIdx == staffStart);
+                        if (m->type() == Element::MEASURE)
+                              xml.curTick = m->tick() + m->ticks();
+                        }
+                  xml.etag();
                   }
-            xml.etag();
             }
       xml.curTrack = -1;
       if (!selectionOnly) {
