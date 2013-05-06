@@ -317,6 +317,9 @@ static int convertRoot(const QString& s, bool germanNames)
 bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       {
       _id = -1;
+      bool useLiteral = false;
+      if (ss.endsWith(' '))
+            useLiteral = true;
       QString s = ss.simplified();
       _userName = s;
       int n = s.size();
@@ -352,7 +355,7 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
                         return true;
                         }
                   }
-            if (parsedID < 0) {
+            if (parsedID < 0 && !useLiteral) {
                   foreach (ParsedChord ssParsed, cd->parsedChords) {
                         if (sParsed == ssParsed) {
                               qDebug("flexible chordmatch succeeded <%s> (%s)", qPrintable(s), qPrintable(sParsed));
