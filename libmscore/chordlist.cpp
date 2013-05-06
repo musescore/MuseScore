@@ -458,16 +458,17 @@ bool ParsedChord::parse (QString s)
 
 void ChordDescription::read(XmlReader& e)
       {
+      int ni = 0, pci = 0;
       id = e.attribute("id").toInt();
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name") {
                   QString n = e.readElementText();
-                  names.insert(0,n);
+                  names.insert(ni++,n);
                   ParsedChord pc;
                   pc.parse(n);
                   if (parsedChords.indexOf(pc) < 0)
-                        parsedChords.insert(0,pc);
+                        parsedChords.insert(pci++,pc);
                   }
             else if (tag == "xml")
                   xmlKind = e.readElementText();
