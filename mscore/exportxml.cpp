@@ -978,18 +978,20 @@ void ExportMusicXml::credits(Xml& xml)
       // debug
       qDebug("credits:");
       const MeasureBase* measure = score->measures()->first();
-      foreach(const Element* element, *measure->el()) {
-            if (element->type() == Element::TEXT) {
-                  const Text* text = (const Text*)element;
-                  bool mustPrint = true;
-                  if (mustPrint) qDebug("text styled %d style %d(%s) '%s' at %f,%f",
-                                        text->styled(),
-                                        text->textStyleType(),
-                                        qPrintable(text->textStyle().name()),
-                                        qPrintable(text->text()),
-                                        text->pagePos().x(),
-                                        text->pagePos().y()
-                                        );
+      if (measure) {
+            foreach(const Element* element, *measure->el()) {
+                  if (element->type() == Element::TEXT) {
+                        const Text* text = (const Text*)element;
+                        bool mustPrint = true;
+                        if (mustPrint) qDebug("text styled %d style %d(%s) '%s' at %f,%f",
+                                              text->styled(),
+                                              text->textStyleType(),
+                                              qPrintable(text->textStyle().name()),
+                                              qPrintable(text->text()),
+                                              text->pagePos().x(),
+                                              text->pagePos().y()
+                                              );
+                        }
                   }
             }
       QString rights = score->metaTag("copyright");
@@ -1011,31 +1013,33 @@ void ExportMusicXml::credits(Xml& xml)
 
       // write the credits
       // TODO add real font size
-      foreach(const Element* element, *measure->el()) {
-            if (element->type() == Element::TEXT) {
-                  const Text* text = (const Text*)element;
-                  qDebug("x=%g, y=%g fs=%d",
-                         text->pagePos().x(),
-                         h - text->pagePos().y(),
-                         text->font().pointSize()
-                         );
-                  const double ty = h - getTenthsFromDots(text->pagePos().y());
-                  const int fs = text->font().pointSize();
-                  // MusicXML credit-words are untyped and simple list position and font info.
-                  // TODO: these parameters should be extracted from text layout and style
-                  //       instead of relying on the style name
-                  if (text->styled()) {
-                        QString styleName = text->textStyle().name();
-                        if (styleName == "Title")
-                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
-                        else if (styleName == "Subtitle")
-                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
-                        else if (styleName == "Composer")
-                              creditWords(xml, w - rm, ty, fs, "right", "top", text->text());
-                        else if (styleName == "Lyricist")
-                              creditWords(xml, lm, ty, fs, "left", "top", text->text());
-                        else
-                              qDebug("credits: text style %s not supported", qPrintable(styleName));
+      if (measure) {
+            foreach(const Element* element, *measure->el()) {
+                  if (element->type() == Element::TEXT) {
+                        const Text* text = (const Text*)element;
+                        qDebug("x=%g, y=%g fs=%d",
+                               text->pagePos().x(),
+                               h - text->pagePos().y(),
+                               text->font().pointSize()
+                               );
+                        const double ty = h - getTenthsFromDots(text->pagePos().y());
+                        const int fs = text->font().pointSize();
+                        // MusicXML credit-words are untyped and simple list position and font info.
+                        // TODO: these parameters should be extracted from text layout and style
+                        //       instead of relying on the style name
+                        if (text->styled()) {
+                              QString styleName = text->textStyle().name();
+                              if (styleName == "Title")
+                                    creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
+                              else if (styleName == "Subtitle")
+                                    creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
+                              else if (styleName == "Composer")
+                                    creditWords(xml, w - rm, ty, fs, "right", "top", text->text());
+                              else if (styleName == "Lyricist")
+                                    creditWords(xml, lm, ty, fs, "left", "top", text->text());
+                              else
+                                    qDebug("credits: text style %s not supported", qPrintable(styleName));
+                              }
                         }
                   }
             }

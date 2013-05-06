@@ -48,6 +48,12 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
             qDebug("unknown audio file type <%s>\n", qPrintable(ext));
             return false;
             }
+
+      EventMap events;
+      score->renderMidi(&events);
+      if(events.size() == 0)
+            return false;
+
       MasterSynthesizer* synti = synthesizerFactory();
       synti->init();
       int sampleRate = preferences.exportAudioSampleRate;
@@ -56,9 +62,6 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
 
       int oldSampleRate  = MScore::sampleRate;
       MScore::sampleRate = sampleRate;
-
-      EventMap events;
-      score->renderMidi(&events);
 
       SF_INFO info;
       memset(&info, 0, sizeof(info));
