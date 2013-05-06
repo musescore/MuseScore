@@ -46,18 +46,19 @@ BeamMode Groups::endBeam(ChordRest* cr)
       {
       Q_ASSERT(cr->staff());
 
-      TDuration d = cr->durationType();
       if (cr->tuplet() && !cr->tuplet()->elements().isEmpty()) {
             if (cr->tuplet()->elements().front() == cr)     // end beam at tuplet
                   return BeamMode::BEGIN;
             return BeamMode::AUTO;
             }
 
-      int type  = int(d.type()) - int(TDuration::DurationType::V_EIGHT);
+      TDuration d = cr->durationType();
+/*      int type    = int(d.type()) - int(TDuration::DurationType::V_EIGHT);
       if (type < 0 || type > 3)
             return BeamMode::AUTO;
-
-      return cr->staff()->group(cr->tick()).beamMode(cr->rtick(), d.type());
+  */
+      const Groups& g = cr->staff()->group(cr->tick());
+      return g.beamMode(cr->rtick(), d.type());
       }
 
 //---------------------------------------------------------

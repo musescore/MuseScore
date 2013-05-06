@@ -3061,7 +3061,7 @@ void Measure::layoutX(qreal stretch)
       int minTick    = 100000;
       int hMinTick   = 100000;
       int hLastIdx   = -1;
-      int ntick      = tick() + ticks();   // position of next measure
+      int ntick      = ticks();   // position of next measure
 
       if (system()->firstMeasure() == this && system()->barLine())
             x += BarLine::layoutWidth(score(), system()->barLine()->barLineType(), system()->barLine()->magS());
@@ -3159,10 +3159,10 @@ void Measure::layoutX(qreal stretch)
                               }
 
                         // add spacing for chord symbols
-                        foreach (Element* e, s->annotations()) {
+                        foreach (const Element* e, s->annotations()) {
                               if (e->type() != Element::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
-                              Harmony* h = static_cast<Harmony*>(e);
+                              const Harmony* h = static_cast<const Harmony*>(e);
                               QRectF b(h->bboxtight().translated(h->pos()));
                               if (hFound)
                                     hBbox |= b;
@@ -3259,7 +3259,7 @@ void Measure::layoutX(qreal stretch)
                         if (nseg == 0 || nseg->segmentType() == Segment::SegChordRest)
                               break;
                         }
-                  int nticks = (nseg ? nseg->tick() : ntick) - s->tick();
+                  int nticks = (nseg ? nseg->rtick() : ntick) - s->rtick();
                   if (nticks == 0) {
                         // this happens for tremolo notes
                         qDebug("layoutX: empty segment(%p)%s: measure: tick %d ticks %d",
