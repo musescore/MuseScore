@@ -89,7 +89,7 @@ void KeySig::layout()
       qreal _spatium = spatium();
       setbbox(QRectF());
 
-      if(staff() && staff()->isTabStaff()) {     // no key sigs on TAB staves
+      if (staff() && staff()->isTabStaff()) {     // no key sigs on TAB staves
             foreach(KeySym* ks, keySymbols)
                   delete ks;
             keySymbols.clear();
@@ -117,7 +117,7 @@ void KeySig::layout()
       qreal xo = 0.0;
 
       int accidentals = 0, naturals = 0;
-      switch(qAbs(t1)) {
+      switch (qAbs(t1)) {
             case 7: accidentals = 0x7f; break;
             case 6: accidentals = 0x3f; break;
             case 5: accidentals = 0x1f; break;
@@ -130,7 +130,7 @@ void KeySig::layout()
                   qDebug("illegal t1 key %d (t2=%d)\n", t1, t2);
                   break;
             }
-      switch(qAbs(t2)) {
+      switch (qAbs(t2)) {
             case 7: naturals = 0x7f; break;
             case 6: naturals = 0x3f; break;
             case 5: naturals = 0x1f; break;
