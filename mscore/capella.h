@@ -383,8 +383,12 @@ class NotelinesObj : public BasicDrawObj {
 
 class VoltaObj : public BasicDrawObj {
    public:
-      VoltaObj(Capella* c) : BasicDrawObj(CAP_VOLTA, c) {}
+      VoltaObj(Capella* c)
+         : BasicDrawObj(CAP_VOLTA, c), x0(0), x1(0), y(0),
+           bLeft(false), bRight(false), bDotted(false),
+           allNumbers(false), from(0), to(0) {}
       void read();
+      void readCapx(XmlReader& e);
 
       int x0, x1, y;
       QColor color;
