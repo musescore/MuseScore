@@ -608,6 +608,11 @@ QString MP3Exporter::getLibraryTypeString()
 
 bool MuseScore::saveMp3(Score* score, const QString& name)
       {
+      EventMap events;
+      score->renderMidi(&events);
+      if(events.size() == 0)
+            return false;
+
       MP3Exporter exporter;
       if (!exporter.loadLibrary(MP3Exporter::Maybe)) {
             QSettings settings;
@@ -683,9 +688,6 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       synti->setState(score->synthesizerState());
 
       MScore::sampleRate = sampleRate;
-
-      EventMap events;
-      score->renderMidi(&events);
 
       QProgressBar* pBar = showProgressBar();
       pBar->reset();

@@ -2101,13 +2101,13 @@ struct SystemRow {
             return h;
             }
       bool isVbox() const {
-            return systems.back()->isVbox();
+            return (systems.size() > 0) ? systems.back()->isVbox() : false;
             }
       VBox* vbox() const {
-            return systems.back()->vbox();
+            return (systems.size() > 0) ? systems.back()->vbox() : 0;
             }
       bool pageBreak() const {
-            return systems.back()->pageBreak();
+            return (systems.size() > 0) ? systems.back()->pageBreak() : false;
             }
       qreal tm() const {
             qreal v = 0.0;
