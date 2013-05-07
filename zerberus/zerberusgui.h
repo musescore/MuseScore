@@ -54,6 +54,7 @@ class ZerberusGui : public SynthesizerGui, Ui::ZerberusGui {
       void removeClicked();
       void onSoundFontLoaded();
       void updateProgress();
+      void updateButtons();
 
    public slots:
       virtual void synthesizerChanged();
