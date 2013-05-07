@@ -56,8 +56,6 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
    public:
       PlayPanel(QWidget* parent = 0);
       ~PlayPanel();
-      void heartBeat(int rpos, int apos);
-      void heartBeat2(int sec);
 
       void setTempo(double);
       void setRelTempo(qreal);
