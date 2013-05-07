@@ -44,13 +44,14 @@ class FluidGui : public SynthesizerGui, Ui::FluidGui {
       Q_OBJECT
 
       FluidS::Fluid* fluid() { return static_cast<FluidS::Fluid*>(synthesizer()); }
-      void updateUpDownButtons();
+
 
    private slots:
       void soundFontUpClicked();
       void soundFontDownClicked();
       void soundFontAddClicked();
       void soundFontDeleteClicked();
+      void updateUpDownButtons();
 
    public slots:
       virtual void synthesizerChanged();
