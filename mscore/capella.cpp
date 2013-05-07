@@ -2346,10 +2346,12 @@ Score::FileError importCapella(Score* score, const QString& name)
             cf.read(&fp);
             }
       catch (Capella::CapellaError errNo) {
-            QMessageBox::warning(0,
-                                 QWidget::tr("MuseScore: Import Capella"),
-                                 QString("Load failed: ") + cf.error(errNo),
-                                 QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+            if (!noGui) {
+                  QMessageBox::warning(0,
+                     QWidget::tr("MuseScore: Import Capella"),
+                     QString("Load failed: ") + cf.error(errNo),
+                     QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                  }
             fp.close();
             // avoid another error message box
             return Score::FILE_NO_ERROR;
