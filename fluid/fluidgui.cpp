@@ -81,6 +81,8 @@ FluidGui::FluidGui(Synthesizer* s)
       connect(soundFontDown,   SIGNAL(clicked()), SLOT(soundFontDownClicked()));
       connect(soundFontAdd,    SIGNAL(clicked()), SLOT(soundFontAddClicked()));
       connect(soundFontDelete, SIGNAL(clicked()), SLOT(soundFontDeleteClicked()));
+      connect(soundFonts,      SIGNAL(itemSelectionChanged ()),  SLOT(updateUpDownButtons()));
+      updateUpDownButtons();
       }
 
 //---------------------------------------------------------
