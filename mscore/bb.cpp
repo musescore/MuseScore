@@ -11,8 +11,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "libmscore/mscore.h"
 #include "bb.h"
-#include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
@@ -190,7 +190,7 @@ bool BBFile::read(const QString& name)
             else {
                   BBChord c;
                   c.extension = val;
-                  c.beat      = beat + timesigZ() * 4 / timesigN();
+                  c.beat      = beat * (timesigZ() / timesigN());
                   ++beat;
                   _chords.append(c);
                   }
@@ -211,7 +211,7 @@ bool BBFile::read(const QString& name)
                   int bass = (root - 1 + val / 18) % 12 + 1;
                   if (root == bass)
                         bass = 0;
-                  int ibeat = beat + timesigZ() * 4 / timesigN();
+                  int ibeat = beat * (timesigZ() / timesigN());
                   if (ibeat != _chords[roots].beat) {
                         qDebug("import bb: inconsistent chord type and root beat\n");
                         return false;
@@ -531,6 +531,7 @@ Score::FileError importBB(Score* score, const QString& name)
             Segment* sks = mks->getSegment(keysig, tick);
             sks->add(keysig);
             }
+      score->fixTicks();
       return Score::FILE_NO_ERROR;
       }
 
