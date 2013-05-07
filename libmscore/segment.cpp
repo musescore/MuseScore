@@ -985,8 +985,10 @@ bool Segment::findAnnotationOrElement(ElementType type, int minTrack, int maxTra
 void Segment::removeAnnotation(Element* e)
       {
       for (auto i = _annotations.begin(); i != _annotations.end(); ++i) {
-            if (*i == e)
+            if (*i == e) {
                   _annotations.erase(i);
+                  break;
+                  }
             }
       }
 
