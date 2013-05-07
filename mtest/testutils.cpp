@@ -28,6 +28,7 @@
 extern Score::FileError importPdf(Score*, const QString&);
 #endif
 
+extern Score::FileError importBB(Score*, const QString&);
 extern Score::FileError importCapella(Score*, const QString&);
 extern Score::FileError importCapXml(Score*, const QString&);
 extern Score::FileError importCompressedMusicXml(Score*, const QString&);
@@ -120,6 +121,8 @@ Score* MTest::readCreatedScore(const QString& name)
             rv = importCapella(score, name);
       else if (csl == "capx")
             rv = importCapXml(score, name);
+      else if (csl == "sgu")
+            rv = importBB(score, name);
       else if (csl == "mscz" || csl == "mscx")
             rv = score->loadMsc(name, false);
       else if (csl == "mxl")

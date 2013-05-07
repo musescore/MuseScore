@@ -32,6 +32,7 @@ add_library(
       ${mtestMocs}
       testutils.cpp
       ${PROJECT_SOURCE_DIR}/libmscore/mcursor.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/bb.cpp
       ${PROJECT_SOURCE_DIR}/mscore/capella.cpp
       ${PROJECT_SOURCE_DIR}/mscore/capxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
@@ -76,7 +77,7 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore musicxml importmidi capella)
+subdirs (libmscore musicxml importmidi capella biab)
 
 if (OMR)
 subdirs(omr)
