@@ -382,6 +382,8 @@ void EditStyle::getValues()
       lstyle.set(ST_harmonyFretDist,         Spatium(harmonyFretDist->value()));
       lstyle.set(ST_minHarmonyDistance,      Spatium(minHarmonyDistance->value()));
 
+      lstyle.set(ST_capoPosition,            capoPosition->value());
+
       lstyle.set(ST_tabClef, clefTab1->isChecked() ? CLEF_TAB : CLEF_TAB2);
       }
 
@@ -598,6 +600,7 @@ void EditStyle::setValues()
       harmonyY->setValue(lstyle.valueS(ST_harmonyY).val());
       harmonyFretDist->setValue(lstyle.valueS(ST_harmonyFretDist).val());
       minHarmonyDistance->setValue(lstyle.valueS(ST_minHarmonyDistance).val());
+      capoPosition->setValue(lstyle.valueI(ST_capoPosition));
       pedalY->setValue(lstyle.valueS(ST_pedalY).val());
 
       clefTab1->setChecked(lstyle.valueI(ST_tabClef) == CLEF_TAB);
