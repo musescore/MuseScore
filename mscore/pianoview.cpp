@@ -44,7 +44,7 @@ static int pitch2y(int pitch)
 //---------------------------------------------------------
 
 PianoItem::PianoItem(Note* n, NoteEvent* e)
-   : QGraphicsRectItem(), note(n), event(e)
+   : QGraphicsRectItem(0), _note(n), event(e)
       {
       setFlags(flags() | QGraphicsItem::ItemIsSelectable);
       int pitch = n->pitch() + e->pitch();
@@ -52,10 +52,9 @@ PianoItem::PianoItem(Note* n, NoteEvent* e)
       int len   = ticks * e->len() / 1000;
       setRect(0, 0, len, keyHeight/2);
       setBrush(QBrush());
-      setSelected(n->selected());
-      setData(0, QVariant::fromValue<void*>(n));
+      setSelected(_note->selected());
 
-      setPos(n->chord()->tick() + e->ontime() * ticks / 1000 + MAP_OFFSET,
+      setPos(_note->chord()->tick() + e->ontime() * ticks / 1000 + MAP_OFFSET,
          pitch2y(pitch) + keyHeight / 4);
       }
 
@@ -252,22 +251,12 @@ PianoView::PianoView()
       }
 
 //---------------------------------------------------------
-//   setChord
+//   createLocators
 //---------------------------------------------------------
 
-void PianoView::setChord(Chord* c, Pos* l)
+void PianoView::createLocators()
       {
       static const QColor lcColors[3] = { Qt::red, Qt::blue, Qt::blue };
-
-      chord    = c;
-      staff    = chord->staff();
-      _locator = l;
-      Score* score = chord->score();
-      pos.setContext(score->tempomap(), score->sigmap());
-
-      scene()->blockSignals(true);
-
-      scene()->clear();
       for (int i = 0; i < 3; ++i) {
             locatorLines[i] = new QGraphicsLineItem(QLineF(0.0, 0.0, 0.0, keyHeight * 75.0 * 5));
             QPen pen(lcColors[i]);
@@ -277,108 +266,6 @@ void PianoView::setChord(Chord* c, Pos* l)
             locatorLines[i]->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
             scene()->addItem(locatorLines[i]);
             }
-
-      foreach(Note* note, c->notes()) {
-            if (!note->playEvents().isEmpty()) {
-//                  int ticks = note->playTicks();
-                  int n = note->playEvents().size();
-                  for (int i = 0; i < n; ++i) {
-                        NoteEvent* e = &note->playEvents()[i];
-                        scene()->addItem(new PianoItem(note, e));
-                        }
-                  }
-            else
-                  scene()->addItem(new PianoItem(note, new NoteEvent));
-            }
-
-      scene()->blockSignals(false);
-
-//      Measure* lm = staff->score()->lastMeasure();
-      ticks       = chord->tick() + chord->actualTicks();
-      scene()->setSceneRect(0.0, 0.0, double(ticks + 960), keyHeight * 75);
-
-      for (int i = 0; i < 3; ++i)
-            moveLocator(i);
-      //
-      // move to something interesting
-      //
-      QList<QGraphicsItem*> items = scene()->selectedItems();
-      QRectF boundingRect;
-      foreach(QGraphicsItem* item, items) {
-            Note* note = static_cast<Note*>(item->data(0).value<void*>());
-            if (note)
-                  boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
-            }
-      centerOn(boundingRect.center());
-      }
-
-//---------------------------------------------------------
-//   setStaff
-//---------------------------------------------------------
-
-void PianoView::setStaff(Staff* s, Pos* l)
-      {
-      static const QColor lcColors[3] = { Qt::red, Qt::blue, Qt::blue };
-
-      staff    = s;
-      _locator = l;
-      pos.setContext(s->score()->tempomap(), s->score()->sigmap());
-
-      scene()->blockSignals(true);
-      scene()->clearSelection();
-      scene()->clear();
-
-      for (int i = 0; i < 3; ++i) {
-            locatorLines[i] = new QGraphicsLineItem(QLineF(0.0, 0.0, 0.0, keyHeight * 75.0 * 5));
-            QPen pen(lcColors[i]);
-            pen.setWidth(2);
-            locatorLines[i]->setPen(pen);
-            locatorLines[i]->setZValue(1000+i);       // set stacking order
-            locatorLines[i]->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
-            scene()->addItem(locatorLines[i]);
-            }
-
-      int staffIdx   = staff->idx();
-      int startTrack = staffIdx * VOICES;
-      int endTrack   = startTrack + VOICES;
-
-      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
-      for (Segment* s = staff->score()->firstSegment(st); s; s = s->next1(st)) {
-            for (int track = startTrack; track < endTrack; ++track) {
-                  Chord* chord = static_cast<Chord*>(s->element(track));
-                  if (chord == 0 || chord->type() != Element::CHORD)
-                        continue;
-                  foreach(Note* note, chord->notes()) {
-                        if (note->tieBack())
-                              continue;
-                        int n = note->playEvents().size();
-                        for (int i = 0; i < n; ++i) {
-                              NoteEvent* e = &note->playEvents()[i];
-                              scene()->addItem(new PianoItem(note, e));
-                              }
-                        }
-                  }
-            }
-      scene()->blockSignals(false);
-
-      Measure* lm = staff->score()->lastMeasure();
-      ticks       = lm->tick() + lm->ticks();
-      scene()->setSceneRect(0.0, 0.0, double(ticks + 960), keyHeight * 75);
-
-      for (int i = 0; i < 3; ++i)
-            moveLocator(i);
-      //
-      // move to something interesting
-      //
-      QList<QGraphicsItem*> items = scene()->selectedItems();
-      QRectF boundingRect;
-      foreach(QGraphicsItem* item, items) {
-            Note* note = static_cast<Note*>(item->data(0).value<void*>());
-            if (note)
-                  boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
-            }
-      centerOn(boundingRect.center());
-      horizontalScrollBar()->setValue(0);
       }
 
 //---------------------------------------------------------
@@ -562,25 +449,44 @@ void PianoView::ensureVisible(int tick)
       }
 
 //---------------------------------------------------------
-//   update
+//   setStaff
 //---------------------------------------------------------
 
-void PianoView::update()
+void PianoView::setStaff(Staff* s, Pos* l)
       {
-      static const QColor lcColors[3] = { Qt::red, Qt::blue, Qt::blue };
+      staff    = s;
+      _locator = l;
+      pos.setContext(s->score()->tempomap(), s->score()->sigmap());
 
-      scene()->blockSignals(true);
+      updateNotes();
+
+      Measure* lm = staff->score()->lastMeasure();
+      ticks       = lm->tick() + lm->ticks();
+      scene()->setSceneRect(0.0, 0.0, double(ticks + 960), keyHeight * 75);
+
+      //
+      // move to something interesting
+      //
+      QList<QGraphicsItem*> items = scene()->selectedItems();
+      QRectF boundingRect;
+      foreach (QGraphicsItem* item, items) {
+            if (item->type() == PianoItemType)
+                  boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
+            }
+      centerOn(boundingRect.center());
+      horizontalScrollBar()->setValue(0);
+      }
+
+//---------------------------------------------------------
+//   updateNotes
+//---------------------------------------------------------
+
+void PianoView::updateNotes()
+      {
       scene()->clear();
 
-      for (int i = 0; i < 3; ++i) {
-            locatorLines[i] = new QGraphicsLineItem(QLineF(0.0, 0.0, 0.0, keyHeight * 75.0 * 5));
-            QPen pen(lcColors[i]);
-            pen.setWidth(2);
-            locatorLines[i]->setPen(pen);
-            locatorLines[i]->setZValue(1000+i);       // set stacking order
-            locatorLines[i]->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
-            scene()->addItem(locatorLines[i]);
-            }
+      scene()->blockSignals(true);  // block changeSelection()
+      createLocators();
 
       int staffIdx   = staff->idx();
       int startTrack = staffIdx * VOICES;
