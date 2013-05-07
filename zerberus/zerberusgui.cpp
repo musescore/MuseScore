@@ -88,6 +88,8 @@ ZerberusGui::ZerberusGui(Synthesizer* s)
       _progressDialog->setCancelButton(0);
       _progressTimer = new QTimer(this);
       connect(_progressTimer, SIGNAL(timeout()), this, SLOT(updateProgress()));
+      connect(files, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtons()));
+      updateButtons();
       }
 
 //---------------------------------------------------------
@@ -175,6 +177,12 @@ void ZerberusGui::updateProgress()
       _progressDialog->setValue(zerberus()->loadProgress());
       }
 
+void ZerberusGui::updateButtons()
+      {
+      int row = files->currentRow();
+      remove->setEnabled(row != -1);
+      }
+
 void ZerberusGui::onSoundFontLoaded()
       {
       bool loaded = _futureWatcher.result();
@@ -203,6 +211,7 @@ void ZerberusGui::removeClicked()
             zerberus()->removeSoundFont(s);
             delete files->takeItem(row);
             emit valueChanged();
+            updateButtons();
             }
       }
 
