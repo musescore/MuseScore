@@ -464,6 +464,34 @@ void SlurObj::readCapx(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   VoltaObj::readCapx -- capx equivalent of VoltaObj::read
+//---------------------------------------------------------
+
+void VoltaObj::readCapx(XmlReader& e)
+      {
+      bLeft           = e.attribute("leftBent", "true") == "true";
+      bRight          = e.attribute("rightBent", "true") == "true";
+      bDotted         = e.attribute("dotted", "false") == "true";
+      allNumbers      = e.attribute("allNumbers", "false") == "true";
+      int firstNumber = e.intAttribute("firstNumber", 0);
+      int lastNumber  = e.intAttribute("lastNumber", 0);
+      if (firstNumber == 0) {
+            // don't know what this means (spec: no number)
+            // cap status equivalent to no first or last number
+            from = 1;
+            to   = 0;
+            }
+      else {
+            from = firstNumber;
+            to   = (lastNumber == 0) ? firstNumber : lastNumber;
+            }
+      qDebug("VoltaObj::read firstNumber %d lastNumber %d", firstNumber, lastNumber);
+      qDebug("VoltaObj::read x0 %d x1 %d y %d bLeft %d bRight %d bDotted %d allNumbers %d from %d to %d",
+             x0, x1, y, bLeft, bRight, bDotted, allNumbers, from, to);
+      e.readNext();
+      }
+
+//---------------------------------------------------------
 //   readCapxDrawObjectArray -- capx equivalent of readDrawObjectArray()
 //---------------------------------------------------------
 
@@ -476,6 +504,7 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "basic") {
+                              // note: the <basic> element always follows the DrawObject it applies to
                               if (bdo)
                                     bdo->readCapx(e);
                               else
@@ -538,8 +567,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                               e.skipCurrentElement();
                               }
                         else if (tag == "volta") {
-                              qDebug("readCapxDrawObjectArray: found volta (skipping)");
-                              e.skipCurrentElement();
+                              VoltaObj* o = new VoltaObj(this);
+                              bdo = o; // save o to handle the "basic" tag (which sometimes follows)
+                              o->readCapx(e);
+                              ol.append(o);
                               }
                         else if (tag == "trill") {
                               qDebug("readCapxDrawObjectArray: found trill (skipping)");
