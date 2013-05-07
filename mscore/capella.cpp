@@ -45,6 +45,7 @@
 #include "libmscore/layoutbreak.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/barline.h"
+#include "libmscore/volta.h"
 
 //---------------------------------------------------------
 //   errmsg
@@ -235,6 +236,44 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         break;
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   findChordRests -- find begin and end ChordRest for BasicDrawObj o
+//   return true on success (both begin and end found)
+//---------------------------------------------------------
+
+static bool findChordRests(BasicDrawObj const* const o, Score const* const score, const int track, const int tick,
+                           ChordRest*& cr1, ChordRest*& cr2)
+      {
+      cr1 = 0;                         // ChordRest where BasicDrawObj o begins
+      cr2 = 0;                         // ChordRest where BasicDrawObj o ends
+
+      // find the ChordRests where o begins and ends
+      int n = o->nNotes + 1;                                // # notes in BasicDrawObj (nNotes is # notes following the first note)
+      for (Segment* seg = score->tick2segment(tick); seg; seg = seg->next1()) {
+            if (seg->segmentType() != Segment::SegChordRest)
+                  continue;
+            ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+            if (cr) {
+                  --n;                                              // found a ChordRest, count down
+                  if (!cr1) cr1 = cr;                               // found first ChordRest
+                  }
+            else
+                  qDebug("  %d empty seg", n);
+            if (n == 0) {
+                  cr2 = cr;                               // cr should be the second ChordRest
+                  break;
+                  }
+            }
+      qDebug("findChordRests o %p nNotes %d score %p track %d tick %d cr1 %p cr2 %p", o, o->nNotes, score, track, tick, cr1, cr2);
+
+      if (!(cr1 && cr2)) {
+            qDebug("first or second anchor for BasicDrawObj not found (tick %d type %d track %d first %p second %p)",
+                   tick, o->type, track, cr1, cr2);
+            return false;
+            }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -646,34 +685,17 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               break;
                         case CAP_SLUR:
                               {
-                              SlurObj* so = static_cast<SlurObj*>(o);
+                              // SlurObj* so = static_cast<SlurObj*>(o);
                               // qDebug("slur tick %d  %d-%d-%d-%d   %d-%d", tick, so->nEnd, so->nMid,
                               //        so->nDotDist, so->nDotWidth, so->nRefNote, so->nNotes);
                               ChordRest* cr1 = 0; // ChordRest where slur begins
                               ChordRest* cr2 = 0; // ChordRest where slur ends
+                              bool res = findChordRests(o, score, track, tick, cr1, cr2);
 
-                              // find the ChordRests where the slur begins and ends
-                              int n = so->nNotes + 1;       // # notes in slur (nNotes is # notes following the first note)
-                              for (Segment* seg = score->tick2segment(tick); seg; seg = seg->next1()) {
-                                    if (seg->segmentType() != Segment::SegChordRest)
-                                          continue;
-                                    ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-                                    if (cr) {
-                                          --n;                      // found a ChordRest, count down
-                                          if (!cr1) cr1 = cr;       // found first ChordRest
-                                          }
-                                    else
-                                          qDebug("  %d empty seg", n);
-                                    if (n == 0) {
-                                          cr2 = cr;       // cr should be the second ChordRest
-                                          break;
-                                          }
-                                    }
-                              // qDebug("cr1 %p cr2 %p", cr1, cr2);
-
-                              if (cr1 && cr2) {
+                              if (res) {
                                     if (cr1 == cr2)
-                                          qDebug("first and second anchor for slur identical (tick %d track %d first %p second %p)", tick, track, cr1, cr2);
+                                          qDebug("first and second anchor for slur identical (tick %d track %d first %p second %p)",
+                                                 tick, track, cr1, cr2);
                                     else {
                                           Slur* slur = new Slur(score);
                                           qDebug("tick %d track %d cr1 %p cr2 %p -> slur %p", tick, track, cr1, cr2, slur);
@@ -683,8 +705,6 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                           slur->setEndElement(cr2);
                                           }
                                     }
-                              else
-                                    qDebug("first or second anchor for slur not found (tick %d track %d first %p second %p)", tick, track, cr1, cr2);
                               }
                               break;
                         case CAP_TEXT: {
@@ -705,6 +725,30 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     }
                               s->setTextStyleType(TEXT_STYLE_TITLE);
                               measure->add(s);
+                              }
+                              break;
+                        case CAP_VOLTA:
+                              {
+                              VoltaObj* vo = static_cast<VoltaObj*>(o);
+                              ChordRest* cr1 = 0; // ChordRest where volta begins
+                              ChordRest* cr2 = 0; // ChordRest where volta ends
+                              bool res = findChordRests(o, score, track, tick, cr1, cr2);
+
+                              if (res) {
+                                    Volta* volta = new Volta(score);
+                                    volta->setTrack(track);
+                                    // TODO also support endings such as "1 - 3"
+                                    volta->setText(QString("%1.").arg(vo->to));
+                                    volta->endings().append(vo->to);
+                                    if (vo->bRight)
+                                          volta->setVoltaType(VoltaType::CLOSED);
+                                    else
+                                          volta->setVoltaType(VoltaType::OPEN);
+                                    volta->setStartElement(cr1->measure());
+                                    cr1->measure()->add(volta);
+                                    volta->setEndElement(cr2->measure());
+                                    cr2->measure()->addSpannerBack(volta);
+                                    }
                               }
                               break;
                         default:
@@ -1200,6 +1244,8 @@ void VoltaObj::read()
       unsigned char numbers = cap->readByte();
       from = numbers & 0x0F;
       to = (numbers >> 4) & 0x0F;
+      qDebug("VoltaObj::read x0 %d x1 %d y %d bLeft %d bRight %d bDotted %d allNumbers %d from %d to %d",
+             x0, x1, y, bLeft, bRight, bDotted, allNumbers, from, to);
       }
 
 //---------------------------------------------------------
@@ -1364,6 +1410,8 @@ void BasicDrawObj::read()
       nNotes      = range & 0x0fff;
       background  = range & 0x1000;
       pageRange   = (range >> 13) & 0x7;
+      qDebug("BasicDrawObj::read modeX %d modeY %d distY %d flags %d nRefNote %d nNotes %d background %d pageRange %d",
+             modeX, modeY, distY, flags, nRefNote, nNotes, background, pageRange);
       }
 
 //---------------------------------------------------------
