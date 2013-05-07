@@ -2444,5 +2444,5 @@ Score::FileError importOve(Score* score, const QString& name) {
                   }
 	}
 
-      return result ? Score::FILE_ERROR : Score::FILE_NO_ERROR;
+      return result ? Score::FILE_NO_ERROR : Score::FILE_ERROR;
 }
