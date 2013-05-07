@@ -44,8 +44,7 @@
 //---------------------------------------------------------
 
 MgStyle::MgStyle()
-   : QCommonStyle()
-      {
+      : QCommonStyle() {
       _addLineButtons = DoubleButton;
       _subLineButtons = SingleButton;
       _singleButtonHeight = 14;
@@ -137,8 +136,7 @@ bool MgStyle::drawMenuBarItem(const QStyleOption* option, QPainter* painter,
 //   pixelMetric
 //---------------------------------------------------------
 
-int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget ) const
-      {
+int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget ) const {
       switch (metric) {
                   // rely on QCommonStyle here
             case PM_SmallIconSize:
@@ -350,8 +348,7 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
 //    expand size based on margins
 //---------------------------------------------------------
 
-QSize MgStyle::expandSize(const QSize& size, int main, int left, int top, int right, int bottom) const
-      {
+QSize MgStyle::expandSize(const QSize& size, int main, int left, int top, int right, int bottom) const {
       return size + QSize(2 * main + left + right, 2 * main + top + bottom);
       }
 
@@ -360,8 +357,7 @@ QSize MgStyle::expandSize(const QSize& size, int main, int left, int top, int ri
 //---------------------------------------------------------
 
 QSize MgStyle::sizeFromContents(ContentsType element, const QStyleOption* option,
-   const QSize& size, const QWidget* widget) const
-      {
+                                const QSize& size, const QWidget* widget) const {
       switch (element) {
             case CT_CheckBox:
                   return checkBoxSizeFromContents(option, size, widget);
@@ -416,8 +412,7 @@ QSize MgStyle::checkBoxSizeFromContents(const QStyleOption*, const QSize& conten
 //---------------------------------------------------------
 
 QSize MgStyle::comboBoxSizeFromContents( const QStyleOption* option, const QSize& contentsSize,
-   const QWidget*) const
-      {
+            const QWidget*) const {
       QSize size = expandSize( contentsSize,
                                ComboBox_ContentsMargin,
                                ComboBox_ContentsMargin_Left,
@@ -668,8 +663,7 @@ bool MgStyle::isVerticalTab( const QTabBar::Shape& shape ) const {
 //   polish
 //---------------------------------------------------------
 
-void MgStyle::polish(QWidget* widget)
-      {
+void MgStyle::polish(QWidget* widget) {
       if (!widget)
             return;
 
@@ -813,6 +807,7 @@ void MgStyle::polish(QWidget* widget)
             widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
 //WS            widget->setContentsMargins(3, 3, 3, 3);
+            widget->setContentsMargins(3, 3, 3, 3);
             widget->installEventFilter(this);
             }
       else if ( qobject_cast<QMdiSubWindow*>(widget) ) {
@@ -1158,8 +1153,7 @@ bool MgStyle::drawPanelTipLabelPrimitive(const QStyleOption* option, QPainter* p
 //   drawFramePrimitive
 //---------------------------------------------------------
 
-bool MgStyle::drawFramePrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
-      {
+bool MgStyle::drawFramePrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const {
       const State& flags( option->state );
       const QRect& r( option->rect );
       const QPalette& palette( option->palette );
@@ -1755,8 +1749,7 @@ bool MgStyle::drawPanelButtonCommandPrimitive( const QStyleOption* option, QPain
 //   drawPanelButtonToolPrimitive
 //---------------------------------------------------------
 
-bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const
-      {
+bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
       /*
       For toolbutton in TabBars, corresponding to expanding arrows, no frame is drawn
       However one needs to draw the window background, because the button rect might
@@ -3320,8 +3313,7 @@ void MgStyle::renderDialSlab( QPainter* painter, const QRect& r, const QColor& c
 //---------------------------------------------------------
 
 void MgStyle::renderButtonSlab(QPainter* painter, QRect r, const QColor& color, StyleOptions options,
-   qreal opacity, AnimationMode mode, TileSet::Tiles tiles) const
-      {
+                               qreal opacity, AnimationMode mode, TileSet::Tiles tiles) const {
       if ( (r.width() <= 0) || (r.height() <= 0))
             return;
 
@@ -3745,8 +3737,7 @@ bool MgStyle::eventFilter(QObject* object, QEvent* event) {
       return QCommonStyle::eventFilter(object, event);
       }
 
-bool MgStyle::drawComboBoxComplexControl(const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const
-      {
+bool MgStyle::drawComboBoxComplexControl(const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const {
       // cast option and check
       const QStyleOptionComboBox* cb( qstyleoption_cast<const QStyleOptionComboBox*>(option) );
       if ( !cb )
@@ -4047,8 +4038,7 @@ bool MgStyle::drawSliderComplexControl( const QStyleOptionComplex* option, QPain
       return true;
       }
 
-bool MgStyle::drawSpinBoxComplexControl(const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const
-      {
+bool MgStyle::drawSpinBoxComplexControl(const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const {
       const QStyleOptionSpinBox* sb = qstyleoption_cast<const QStyleOptionSpinBox*>( option );
       if (!sb)
             return true;
@@ -4177,8 +4167,7 @@ bool MgStyle::drawTitleBarComplexControl( const QStyleOptionComplex* option, QPa
 //   drawToolButtonComplexControl
 //---------------------------------------------------------
 
-bool MgStyle::drawToolButtonComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const
-      {
+bool MgStyle::drawToolButtonComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const {
       // check autoRaise state
       const State flags( option->state );
       const bool isInToolBar( widget && qobject_cast<QToolBar*>(widget->parent()) );
@@ -7453,8 +7442,7 @@ QRect MgStyle::scrollBarSubControlRect( const QStyleOptionComplex* option, SubCo
             }
       }
 
-QRect MgStyle::spinBoxSubControlRect(const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget) const
-      {
+QRect MgStyle::spinBoxSubControlRect(const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget) const {
       const QRect& r(option->rect);
       const QStyleOptionSpinBox* sb = qstyleoption_cast<const QStyleOptionSpinBox*>(option);
       if (!sb)
@@ -7977,8 +7965,7 @@ int MgStyle::styleHint(StyleHint hint, const QStyleOption* option, const QWidget
 
       }
 
-QRect MgStyle::subElementRect(SubElement element, const QStyleOption* option, const QWidget* widget) const
-      {
+QRect MgStyle::subElementRect(SubElement element, const QStyleOption* option, const QWidget* widget) const {
       switch ( element ) {
 
                   // push buttons
@@ -8398,8 +8385,7 @@ void MgStyle::configurationChanged() {
 //---------------------------------------------------------
 
 QIcon MgStyle::standardIconImplementation(StandardPixmap standardIcon,
-            const QStyleOption* option, const QWidget* widget) const
-      {
+            const QStyleOption* option, const QWidget* widget) const {
       // MDI windows buttons
       // get button color ( unfortunately option and widget might not be set )
       QColor buttonColor;

@@ -114,9 +114,11 @@ void MuseScore::createNewWorkspace()
             else
                   break;
             }
-      Workspace::currentWorkspace->save();
+      if (Workspace::currentWorkspace->dirty())
+            Workspace::currentWorkspace->save();
       Workspace::currentWorkspace = Workspace::createNewWorkspace(s);
       preferences.workspace = Workspace::currentWorkspace->name();
+      preferences.dirty     = true;
       }
 
 //---------------------------------------------------------
