@@ -469,11 +469,14 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                      || r.denominatorString() != ts->denominatorString()
                      || r.sig() != ts->sig()
                      || stretchChanged
+                     || !(r.groups() == ts->groups())
                      || r.timeSigType() != ts->timeSigType()) {
                         score()->undo(new ChangeTimesig(ts, r.showCourtesySig(), r.sig(), r.stretch(),
                            r.numeratorString(), r.denominatorString(), r.timeSigType()));
                         if (stretchChanged)
                               score()->timesigStretchChanged(ts, ts->measure(), ts->staffIdx());
+                        if (!(r.groups() == ts->groups()))
+                              ts->undoSetGroups(r.groups());
                         }
                   }
             }

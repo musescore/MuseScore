@@ -129,7 +129,7 @@ class MgStyle : public QCommonStyle {
                   CheckBox_BoxTextSpace = 4,
 
                   // combobox
-                  ComboBox_FrameWidth = 2,      // 3,
+                  ComboBox_FrameWidth = 3,
                   ComboBox_ButtonWidth = 19,
                   ComboBox_ButtonMargin = 2,
                   ComboBox_ButtonMargin_Left = 0,
@@ -194,7 +194,7 @@ class MgStyle : public QCommonStyle {
                   ScrollBar_MinimumSliderHeight = 21,
 
                   // spin boxes
-                  SpinBox_FrameWidth = 2,       // 3
+                  SpinBox_FrameWidth = 3,
                   SpinBox_ButtonWidth = 19,
                   SpinBox_ButtonMargin = 0,
                   SpinBox_ButtonMargin_Left = 2,

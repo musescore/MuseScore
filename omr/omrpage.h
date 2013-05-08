@@ -24,6 +24,7 @@
 class Omr;
 class Score;
 class Xml;
+class XmlReader;
 class Pattern;
 
 #include "libmscore/durationtype.h"
@@ -144,7 +145,7 @@ class OmrPage {
 
 
       void write(Xml&) const;
-      void read(QDomElement e);
+      void read(XmlReader&);
       bool dot(int x, int y) const;
       };
 

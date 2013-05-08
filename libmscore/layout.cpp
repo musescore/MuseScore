@@ -333,6 +333,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 void Score::layoutStage2()
       {
       int tracks = nstaves() * VOICES;
+      bool crossMeasure = styleB(ST_crossMeasureValues);
 
       for (int track = 0; track < tracks; ++track) {
             ChordRest* a1    = 0;      // start of (potential) beam
@@ -345,7 +346,19 @@ void Score::layoutStage2()
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
                         continue;
+                  // set up for cross-measure values as soon as possible
+                  // to have all computations (stems, hooks, ...) consistent with it
+                  if(cr->type() == Element::CHORD && segment->segmentType() == Segment::SegChordRest)
+                        ((Chord*)cr)->crossMeasureSetup(crossMeasure);
                   bm = cr->beamMode();
+                  if (bm == BeamMode::AUTO)
+                        bm = Groups::endBeam(cr);
+
+                  // if chord has hooks and is 2nd element of a cross-measure value
+                  // set beam mode to NONE (do not combine with following chord beam/hook, if any)
+
+                  if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CROSSMEASURE_SECOND)
+                        bm = BeamMode::NONE;
                   if (cr->measure() != measure) {
                         if (measure && !beamModeMid(bm)) {
                               if (beam) {
@@ -424,8 +437,6 @@ void Score::layoutStage2()
                               beamEnd = true;
                               }
                         else if (!beamModeMid(bm)) {
-                              if (endBeam(measure->timesig(), cr, le))
-                                    beamEnd = true;
                               if (le->tick() + le->actualTicks() < cr->tick())
                                     beamEnd = true;
                               }
@@ -477,8 +488,7 @@ void Score::layoutStage2()
                         else {
                               if (!beamModeMid(bm)
                                    &&
-                                   (endBeam(measure->timesig(), cr, a1)
-                                   || bm == BeamMode::BEGIN
+                                   (bm == BeamMode::BEGIN
                                    || (a1->segment()->segmentType() != cr->segment()->segmentType())
                                    || (a1->tick() + a1->actualTicks() < cr->tick())
                                    )
@@ -2019,6 +2029,7 @@ void Score::layoutSystems2()
 void Score::layoutLinear()
       {
       curMeasure     = first();
+      curSystem      = 0;
       System* system = getNextSystem(true, false);
       system->setInstrumentNames(true);
       qreal xo;
@@ -2052,7 +2063,7 @@ void Score::layoutLinear()
             if (mb->type() == Element::MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
                   m->createEndBarLines();       // TODO: not set here
-                  w = m->minWidth1() * 1.5;
+                  w = m->minWidth1() * styleD(ST_linearStretch);
                   m->layout(w);
                   }
             else
@@ -2101,13 +2112,13 @@ struct SystemRow {
             return h;
             }
       bool isVbox() const {
-            return systems.back()->isVbox();
+            return (systems.size() > 0) ? systems.back()->isVbox() : false;
             }
       VBox* vbox() const {
-            return systems.back()->vbox();
+            return (systems.size() > 0) ? systems.back()->vbox() : 0;
             }
       bool pageBreak() const {
-            return systems.back()->pageBreak();
+            return (systems.size() > 0) ? systems.back()->pageBreak() : false;
             }
       qreal tm() const {
             qreal v = 0.0;

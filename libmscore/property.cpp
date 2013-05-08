@@ -13,6 +13,7 @@
 #include "property.h"
 #include "mscore.h"
 #include "layoutbreak.h"
+#include "groups.h"
 
 //---------------------------------------------------------
 //   PropertyData
@@ -145,6 +146,8 @@ static const PropertyData propertyList[] = {
       { P_GLISS_SHOW_TEXT,     false, 0,               T_BOOL   },
 
       { P_DIAGONAL,            false, 0,               T_BOOL   },
+      { P_GROUPS,              false, 0,               T_GROUPS },
+      { P_LINE_COLOR,          false, 0,               T_COLOR  },
 
       { P_END,                 false, "",              T_INT    }
       };
@@ -255,6 +258,13 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   break;
             case T_BEAM_MODE:             // TODO
                   return QVariant(int(0));
+
+            case T_GROUPS:
+                  {
+                  Groups g;
+                  g.read(e);
+                  return QVariant::fromValue(g);
+                  }
             }
       return QVariant();
       }

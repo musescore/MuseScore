@@ -30,6 +30,7 @@ class OmrPage;
 class Ocr;
 class Score;
 class ScoreView;
+class XmlReader;
 
 #ifdef OMR
 
@@ -66,7 +67,7 @@ class Omr {
       Ocr* ocr() const                     { return _ocr; }
 #endif
       void write(Xml&) const;
-      void read(QDomElement e);
+      void read(XmlReader&);
 
       double spatiumMM() const;           // spatium in millimeter
       double spatium() const               { return _spatium;   }
@@ -102,7 +103,7 @@ class Omr {
       Ocr* ocr() const                     { return 0; }
 #endif
       void write(Xml&) const               {}
-      void read(QDomElement)               {}
+      void read(XmlReader&)                {}
 
       double spatiumMM() const             { return 0; }
       double spatium() const               { return 0; }

@@ -160,6 +160,7 @@ Chord::Chord(Score* s)
       _stemSlash        = 0;
       _noStem           = false;
       _userPlayEvents   = false;
+      _crossMeasure     = CROSSMEASURE_UNKNOWN;
       setFlags(ELEMENT_MOVABLE | ELEMENT_ON_STAFF);
       }
 
@@ -194,6 +195,7 @@ Chord::Chord(const Chord& c)
       _tremoloChordType = TremoloSingle;
       _tremolo          = 0;
       _noteType         = c._noteType;
+      _crossMeasure     = CROSSMEASURE_UNKNOWN;
       }
 
 //---------------------------------------------------------
@@ -890,6 +892,23 @@ void Chord::read(XmlReader& e)
             else if (!ChordRest::readProperties(e))
                   e.unknown();
             }
+      if (score()->mscVersion() <= 114) { // #19988
+            Note * n = upNote();
+            if (n) {
+                  if (notes().size() == 1) {
+                        setUserOff(n->userOff() + userOff());
+                        n->setUserOff(QPoint());
+                        n->setReadPos(QPoint());
+                        }
+                  else if(!n->userOff().isNull()) {
+                        if(!_stem) {
+                              _stem = new Stem(score());
+                              add(_stem);
+                              }
+                         _stem->setUserOff(n->userOff() + _stem->userOff());
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -1491,7 +1510,7 @@ void Chord::layout()
                   if (accidental) {
                         // qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
                         // x = accidental->x() + x - minNoteDistance;
-                        x = accidental->x();
+                        x = accidental->x() + note->x();
                         }
                   if (x < lx)
                         lx = x;
@@ -1515,7 +1534,7 @@ void Chord::layout()
             _arpeggio->layout();
             lll += _arpeggio->width() + _spatium * .5;
             qreal y = upNote()->pos().y() - headHeight * .5;
-            qreal h = downNote()->pos().y() - y;
+            qreal h = downNote()->pos().y() + downNote()->headHeight() - y;
             _arpeggio->setHeight(h);
             _arpeggio->setPos(-lll, y);
 
@@ -1595,6 +1614,41 @@ void Chord::layout()
       }
 
 //---------------------------------------------------------
+//   crossMeasureSetup
+//---------------------------------------------------------
+
+void Chord::crossMeasureSetup(bool on)
+      {
+      if(!on) {
+            _crossMeasure = CROSSMEASURE_UNKNOWN;
+            return;
+            }
+      if(_crossMeasure == CROSSMEASURE_UNKNOWN) {
+            int tempCross = CROSSMEASURE_NONE;  // assume no cross-measure modification
+            // if chord has only one note and note is tied forward
+            if(notes().size() == 1 && _notes[0]->tieFor()) {
+                  Chord* tiedChord = _notes[0]->tieFor()->endNote()->chord();
+                  // if tied note belongs to another measure and to a single-note chord
+                  if(tiedChord->measure() != measure() && tiedChord->notes().size() == 1) {
+                        // get total duration
+                        QList<TDuration> durList = toDurationList(
+                                    actualDurationType().fraction() +
+                                    tiedChord->actualDurationType().fraction(), true);
+                        // if duration can be expressed as a single duration
+                        // apply cross-measure modification
+                        if(durList.size() == 1) {
+                              tempCross = CROSSMEASURE_FIRST;
+                              _crossMeasureTDur = durList[0];
+                              }
+                        }
+                  _crossMeasure = tempCross;
+                  tiedChord->setCrossMeasure(tempCross == CROSSMEASURE_FIRST ?
+                              CROSSMEASURE_SECOND : CROSSMEASURE_NONE);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   layoutArpeggio2
 //    called after layout of page
 //---------------------------------------------------------
@@ -1613,7 +1667,7 @@ void Chord::layoutArpeggio2()
 
       if (bchord && bchord->type() == CHORD)
             dnote = static_cast<Chord*>(bchord)->downNote();
-      qreal h = dnote->pagePos().y() - y;
+      qreal h = dnote->pagePos().y() + downNote()->headHeight() - y;
       _arpeggio->setHeight(h);
 
       QList<Note*> notes;
@@ -1738,6 +1792,8 @@ Element* Chord::drop(const DropData& data)
             case ARPEGGIO:
                   {
                   Arpeggio* a = static_cast<Arpeggio*>(e);
+                  if (arpeggio())
+                        score()->undoRemoveElement(arpeggio());
                   a->setTrack(track());
                   a->setParent(this);
                   a->setHeight(spatium() * 5);   //DEBUG

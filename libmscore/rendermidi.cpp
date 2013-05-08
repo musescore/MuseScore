@@ -42,6 +42,7 @@
 #include "bend.h"
 #include "tremolo.h"
 #include "noteevent.h"
+#include "synthesizer/event.h"
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
@@ -98,8 +99,8 @@ void Score::updateChannel()
                               }
                         }
                   }
-            }
       }
+}
 
 //---------------------------------------------------------
 //   playNote
@@ -109,15 +110,12 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
    int velo, int onTime, int offTime)
       {
       velo = note->customizeVelocity(velo);
-      Event ev(ME_NOTEON);
-      ev.setChannel(channel);
-      ev.setPitch(pitch);
-      ev.setVelo(velo);
+      NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
       ev.setTuning(note->tuning());
       ev.setNote(note);
-      events->insert(std::pair<int, Event>(onTime, ev));
+      events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       ev.setVelo(0);
-      events->insert(std::pair<int, Event>(offTime, ev));
+      events->insert(std::pair<int, NPlayEvent>(offTime, ev));
       }
 
 //---------------------------------------------------------
@@ -208,6 +206,30 @@ struct OttavaShiftSegment {
       int shift;
       };
 
+
+//---------------------------------------------------------
+//   aeolusSetStop
+//---------------------------------------------------------
+
+static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMap* events)
+      {
+      NPlayEvent event;
+      event.setType(ME_CONTROLLER);
+      event.setController(98);
+      if (val)
+            event.setValue(0x40 + 0x20  + i);
+      else
+            event.setValue(0x40 + 0x10  + i);
+
+      event.setChannel(channel);
+      events->insert(std::pair<int,NPlayEvent>(tick, event));
+
+      event.setValue(k);
+      events->insert(std::pair<int,NPlayEvent>(tick, event));
+//      event.setValue(0x40 + i);
+//      events->insert(std::pair<int,NPlayEvent>(tick, event));
+      }
+
 //---------------------------------------------------------
 //   collectMeasureEvents
 //---------------------------------------------------------
@@ -264,12 +286,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               NamedEventList* nel = instr->midiAction(ma, channel);
                               if (!nel)
                                     continue;
-                              int n = nel->events.size();
-                              for (int i = n-1; i >= 0; --i) {
-                                    Event event(nel->events[i]);
-                                    event.setOntime(tick);
+                              for (MidiCoreEvent event : nel->events) {
                                     event.setChannel(channel);
-                                    events->insert(std::pair<int, Event>(tick, event));
+                                    NPlayEvent e(event);
+                                    events->insert(std::pair<int, NPlayEvent>(tick, e));
                                     }
                               }
                         }
@@ -279,26 +299,9 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         int channel = staff->channel(tick, voice);
 
                         for (int i = 0; i < 4; ++i) {
-                              for (int k = 0; k < 16; ++k) {
-                                    if (st->getAeolusStop(i, k)) {
-                                          Event event;
-                                          event.setType(ME_CONTROLLER);
-                                          event.setController(98);
-                                          event.setValue(k);
-                                          event.setOntime(tick);
-                                          event.setChannel(channel);
-                                          events->insert(std::pair<int,Event>(tick, event));
-                                          }
-                                    }
-                              Event event(ME_CONTROLLER);
-                              event.setController(98);
-                              event.setValue(96 + i);
-                              event.setOntime(tick);
-                              event.setChannel(channel);
-                              events->insert(std::pair<int,Event>(tick, event));
-
-                              event.setValue(64 + i);
-                              events->insert(std::pair<int,Event>(tick, event));
+                              static int num[4] = { 12, 13, 16, 16 };
+                              for (int k = 0; k < num[i]; ++k)
+                                    aeolusSetStop(tick, channel, i, k, st->getAeolusStop(i, k), events);
                               }
                         }
                   }
@@ -317,15 +320,11 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                         int channel = staff->channel(s1->tick(), 0);
 
-                        Event event(ME_CONTROLLER);
-                        event.setChannel(channel);
-                        event.setController(CTRL_SUSTAIN);
-
-                        event.setValue(127);
-                        events->insert(std::pair<int,Event>(s1->tick() + tickOffset, event));
+                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
+                        events->insert(std::pair<int,NPlayEvent>(s1->tick() + tickOffset, event));
 
                         event.setValue(0);
-                        events->insert(std::pair<int,Event>(s2->tick() + tickOffset - 1, event));
+                        events->insert(std::pair<int,NPlayEvent>(s2->tick() + tickOffset - 1, event));
                         }
                   }
             }
@@ -631,8 +630,9 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             }
       else if (chord->arpeggio()) {
             gateEvents = false;     // dont apply gateTime to arpeggio events
-            int l = 1000 / notes;
-
+            int l = 64;
+            while (l * notes > chord->upNote()->playTicks())
+                  l = 2*l / 3 ;
             int start, end, step;
             bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN;
             if (up) {
@@ -648,7 +648,8 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             for (int i = start; i != end; i += step) {
                   NoteEventList* events = &(ell)[i];
                   events->clear();
-                  events->append(NoteEvent(0, l * i, 1000 - l * i));
+                  int ot = (l * i * 1000) / chord->upNote()->playTicks();
+                  events->append(NoteEvent(0, ot, 1000 - ot));
                   }
             }
 
@@ -864,9 +865,9 @@ void Score::renderMidi(EventMap* events)
                   int tw = MScore::division * 4 / ts.denominator();
                   for (int i = 0; i < ts.numerator(); i++) {
                         int tick = m->tick() + i * tw + tickOffset;
-                        Event event;
+                        NPlayEvent event;
                         event.setType(i == 0 ? ME_TICK1 : ME_TICK2);
-                        events->insert(std::pair<int,Event>(tick, event));
+                        events->insert(std::pair<int,NPlayEvent>(tick, event));
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;

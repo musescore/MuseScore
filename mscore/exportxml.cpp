@@ -421,7 +421,7 @@ int SlurHandler::findSlur(const Slur* s) const
 void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) starting at this chord
-      for(Spanner* sp = chord->spannerFor(); sp; sp = sp->next()) {
+      for (Spanner* sp = chord->spannerFor(); sp; sp = sp->next()) {
             if (sp->type() != Element::SLUR)
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
@@ -477,7 +477,7 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
 void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) stopping at this chord but not on slur list yet
-      for(Spanner* sp = chord->spannerBack(); sp; sp = sp->next()) {
+      for (Spanner* sp = chord->spannerBack(); sp; sp = sp->next()) {
             if (sp->type() != Element::SLUR)
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
@@ -712,7 +712,7 @@ static void findTrills(Measure* measure, int strack, int etrack, TrillHash& tril
       // loop over all segments in this measure
       for (Segment* seg = measure->first(); seg; seg = seg->next()) {
             // loop over all spanners in this segment
-            for(Spanner* e = seg->spannerFor(); e; e = e->next()) {
+            for (Spanner* e = seg->spannerFor(); e; e = e->next()) {
 
                   if (e->type() == Element::TRILL && strack <= e->track() && e->track() < etrack) {
 
@@ -978,18 +978,20 @@ void ExportMusicXml::credits(Xml& xml)
       // debug
       qDebug("credits:");
       const MeasureBase* measure = score->measures()->first();
-      foreach(const Element* element, *measure->el()) {
-            if (element->type() == Element::TEXT) {
-                  const Text* text = (const Text*)element;
-                  bool mustPrint = true;
-                  if (mustPrint) qDebug("text styled %d style %d(%s) '%s' at %f,%f",
-                                        text->styled(),
-                                        text->textStyleType(),
-                                        qPrintable(text->textStyle().name()),
-                                        qPrintable(text->text()),
-                                        text->pagePos().x(),
-                                        text->pagePos().y()
-                                        );
+      if (measure) {
+            foreach(const Element* element, *measure->el()) {
+                  if (element->type() == Element::TEXT) {
+                        const Text* text = (const Text*)element;
+                        bool mustPrint = true;
+                        if (mustPrint) qDebug("text styled %d style %d(%s) '%s' at %f,%f",
+                                              text->styled(),
+                                              text->textStyleType(),
+                                              qPrintable(text->textStyle().name()),
+                                              qPrintable(text->text()),
+                                              text->pagePos().x(),
+                                              text->pagePos().y()
+                                              );
+                        }
                   }
             }
       QString rights = score->metaTag("copyright");
@@ -1011,31 +1013,33 @@ void ExportMusicXml::credits(Xml& xml)
 
       // write the credits
       // TODO add real font size
-      foreach(const Element* element, *measure->el()) {
-            if (element->type() == Element::TEXT) {
-                  const Text* text = (const Text*)element;
-                  qDebug("x=%g, y=%g fs=%d",
-                         text->pagePos().x(),
-                         h - text->pagePos().y(),
-                         text->font().pointSize()
-                         );
-                  const double ty = h - getTenthsFromDots(text->pagePos().y());
-                  const int fs = text->font().pointSize();
-                  // MusicXML credit-words are untyped and simple list position and font info.
-                  // TODO: these parameters should be extracted from text layout and style
-                  //       instead of relying on the style name
-                  if (text->styled()) {
-                        QString styleName = text->textStyle().name();
-                        if (styleName == "Title")
-                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
-                        else if (styleName == "Subtitle")
-                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
-                        else if (styleName == "Composer")
-                              creditWords(xml, w - rm, ty, fs, "right", "top", text->text());
-                        else if (styleName == "Lyricist")
-                              creditWords(xml, lm, ty, fs, "left", "top", text->text());
-                        else
-                              qDebug("credits: text style %s not supported", qPrintable(styleName));
+      if (measure) {
+            foreach(const Element* element, *measure->el()) {
+                  if (element->type() == Element::TEXT) {
+                        const Text* text = (const Text*)element;
+                        qDebug("x=%g, y=%g fs=%d",
+                               text->pagePos().x(),
+                               h - text->pagePos().y(),
+                               text->font().pointSize()
+                               );
+                        const double ty = h - getTenthsFromDots(text->pagePos().y());
+                        const int fs = text->font().pointSize();
+                        // MusicXML credit-words are untyped and simple list position and font info.
+                        // TODO: these parameters should be extracted from text layout and style
+                        //       instead of relying on the style name
+                        if (text->styled()) {
+                              QString styleName = text->textStyle().name();
+                              if (styleName == "Title")
+                                    creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
+                              else if (styleName == "Subtitle")
+                                    creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
+                              else if (styleName == "Composer")
+                                    creditWords(xml, w - rm, ty, fs, "right", "top", text->text());
+                              else if (styleName == "Lyricist")
+                                    creditWords(xml, lm, ty, fs, "left", "top", text->text());
+                              else
+                                    qDebug("credits: text style %s not supported", qPrintable(styleName));
+                              }
                         }
                   }
             }
@@ -1217,7 +1221,7 @@ static QString tick2xml(const int ticks, int* dots)
 
 static Volta* findVolta(Measure* m, bool /*left*/)
       {
-      for(Spanner* el = m->spannerFor(); el; el = el->next()) {
+      for (Spanner* el = m->spannerFor(); el; el = el->next()) {
             if (el->type() != Element::VOLTA)
                   continue;
             return (Volta*) el;
@@ -1640,6 +1644,15 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                   case Articulation_Trill:
                   case Articulation_Prall:
                   case Articulation_Mordent:
+                  case Articulation_PrallPrall:
+                  case Articulation_PrallMordent:
+                  case Articulation_UpPrall:
+                  case Articulation_DownPrall:
+                  case Articulation_UpMordent:
+                  case Articulation_DownMordent:
+                  case Articulation_PrallDown:
+                  case Articulation_PrallUp:
+                  case Articulation_LinePrall:
                         // ignore, handled with ornaments
                         break;
                   case Articulation_Plusstop:
@@ -1745,6 +1758,70 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("mordent");
+                        }
+                        break;
+                  case Articulation_PrallPrall:
+                        {
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("inverted-mordent long=\"yes\"");
+                        }
+                        break;
+                  case Articulation_PrallMordent:
+                        {
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("mordent long=\"yes\"");
+                        }
+                        break;
+                  case Articulation_UpPrall:
+                        {
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("inverted-mordent long=\"yes\" approach=\"below\"");
+                        }
+                        break;
+                  case Articulation_DownPrall:
+                        {
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("inverted-mordent long=\"yes\" approach=\"above\"");
+                        }
+                        break;
+                  case Articulation_UpMordent:
+                        {
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("mordent long=\"yes\" approach=\"below\"");
+                        }
+                        break;
+                  case Articulation_DownMordent:
+                        {
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("mordent long=\"yes\" approach=\"above\"");
+                        }
+                        break;
+                  case Articulation_PrallDown:
+                        {
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("inverted-mordent long=\"yes\" departure=\"below\"");
+                        }
+                        break;
+                  case Articulation_PrallUp:
+                        {
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("inverted-mordent long=\"yes\" departure=\"above\"");
+                        }
+                        break;
+                  case Articulation_LinePrall:
+                        {
+                        // MusicXML 3.0 does not distinguish between downprall and lineprall
+                        notations.tag(xml);
+                        ornaments.tag(xml);
+                        xml.tagE("inverted-mordent long=\"yes\" approach=\"above\"");
                         }
                         break;
                   case Articulation_Schleifer:
@@ -2984,7 +3061,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
 
       directionTag(xml, attr, dyn);
       xml.stag("direction-type");
-      if (   st == Dynamic::DYNAMIC_p
+      if (st == Dynamic::DYNAMIC_p
           || st == Dynamic::DYNAMIC_pp
           || st == Dynamic::DYNAMIC_ppp
           || st == Dynamic::DYNAMIC_pppp
@@ -3605,7 +3682,7 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
 static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
       if (seg->segmentType() == Segment::SegChordRest) {
-            for(Spanner* e = seg->spannerFor(); e; e = e->next()) {
+            for (Spanner* e = seg->spannerFor(); e; e = e->next()) {
 
                   int wtrack = -1; // track to write spanner
 
@@ -3648,7 +3725,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 static void spannerStop(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
       if (seg->segmentType() == Segment::SegChordRest) {
-            for(Spanner* e = seg->spannerBack(); e; e = e->next()) {
+            for (Spanner* e = seg->spannerBack(); e; e = e->next()) {
 
                   int wtrack = -1; // track to write spanner
 

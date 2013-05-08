@@ -56,7 +56,9 @@ class Synthesizer {
 
       // get/set synthesizer state
       virtual SynthesizerGroup state() const = 0;
-      virtual void setState(const SynthesizerGroup&) {}
+      virtual void setState(const SynthesizerGroup&) = 0;
+      virtual void setValue(int, double) {}
+      virtual double value(int) const { return 0.0; }
 
       void reset()                    { _active = false; }
       bool active() const             { return _active; }

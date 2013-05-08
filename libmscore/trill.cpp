@@ -34,7 +34,14 @@ void TrillSegment::draw(QPainter* painter) const
 
       qreal x2   = pos2().x();
 
-      painter->setPen(curColor());
+      QColor color;
+      if (selected() && !(score() && score()->printing()))
+            color = MScore::selectColor[0];
+      else if (!visible())
+            color = Qt::gray;
+      else
+            color = trill()->curColor();
+      painter->setPen(color);
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
             int sym = 0;
             qreal x0 = 0.0, x1 = 0.0, y = 0.0;
@@ -141,6 +148,48 @@ Element* TrillSegment::drop(const DropData& data)
                   break;
             }
       return e;
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant TrillSegment::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_TRILL_TYPE:
+                  return trill()->getProperty(id);
+            default:
+                  return LineSegment::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool TrillSegment::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_TRILL_TYPE:
+                  return trill()->setProperty(id, v);
+            default:
+                  return LineSegment::setProperty(id, v);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant TrillSegment::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_TRILL_TYPE:
+                  return trill()->propertyDefault(id);
+            default:
+                  return LineSegment::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------

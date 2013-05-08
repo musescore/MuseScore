@@ -2258,7 +2258,8 @@ void ChangePatch::flip()
             return;
             }
 
-      Event event(ME_CONTROLLER);
+      NPlayEvent event;
+      event.setType(ME_CONTROLLER);
       event.setChannel(channel->channel);
 
       int hbank = (channel->bank >> 7) & 0x7f;
@@ -2324,11 +2325,12 @@ void ChangePageFormat::flip()
 //   ChangeStaff
 //---------------------------------------------------------
 
-ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, StaffType* st)
+ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, qreal _userDist, StaffType* st)
       {
       staff     = _staff;
       small     = _small;
       invisible = _invisible;
+      userDist  = _userDist;
       staffType = st;
       }
 
@@ -2343,14 +2345,17 @@ void ChangeStaff::flip()
 
       int oldSmall      = staff->small();
       bool oldInvisible = staff->invisible();
+      qreal oldUserDist = staff->userDist();
       StaffType* st     = staff->staffType();
 
       staff->setSmall(small);
       staff->setInvisible(invisible);
+      staff->setUserDist(userDist);
       staff->setStaffType(staffType);
 
       small     = oldSmall;
       invisible = oldInvisible;
+      userDist  = oldUserDist;
       staffType = st;
 
       if (invisibleChanged || typeChanged) {
@@ -2484,6 +2489,14 @@ ChangeStyle::ChangeStyle(Score* s, const MStyle& st)
       {
       }
 
+static void updateTimeSigs(void*, Element* e)
+      {
+      if (e->type() == Element::TIMESIG) {
+            TimeSig* ts = static_cast<TimeSig*>(e);
+            ts->setNeedLayout(true);
+            }
+      }
+
 static void updateTextStyle2(void*, Element* e)
       {
       if (!e->isText())
@@ -2522,6 +2535,8 @@ void ChangeStyle::flip()
 
       if (score->styleB(ST_concertPitch) != style.valueB(ST_concertPitch))
             score->cmdConcertPitchChanged(style.valueB(ST_concertPitch), true);
+      if (score->styleSt(ST_MusicalSymbolFont) != style.valueSt(ST_MusicalSymbolFont))
+            score->scanElements(0, updateTimeSigs);
 
       score->setStyle(style);
       score->scanElements(0, updateTextStyle2);

@@ -11,10 +11,10 @@
 //=============================================================================
 
 #include "fluidgui.h"
-#include "fluid.h"
+
 #include "mscore/preferences.h"
 
-ListDialog::ListDialog()
+SfListDialog::SfListDialog()
    : QDialog(0)
       {
       setWindowTitle(tr("Soundfont files"));
@@ -26,7 +26,7 @@ ListDialog::ListDialog()
       connect(list, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
       }
 
-void ListDialog::add(const QString& name, const QString& path)
+void SfListDialog::add(const QString& name, const QString& path)
       {
       QListWidgetItem* item = new QListWidgetItem;
       item->setText(name);
@@ -38,20 +38,20 @@ void ListDialog::add(const QString& name, const QString& path)
 //   itemSelected
 //---------------------------------------------------------
 
-void ListDialog::itemSelected(QListWidgetItem* item)
+void SfListDialog::itemSelected(QListWidgetItem* item)
       {
       _idx = list->row(item);
       accept();
       }
 
-QString ListDialog::name()
+QString SfListDialog::name()
       {
       if (_idx == -1)
             return QString();
       return list->item(_idx)->text();
       }
 
-QString ListDialog::path()
+QString SfListDialog::path()
       {
       if (_idx == -1)
             return QString();
@@ -81,6 +81,8 @@ FluidGui::FluidGui(Synthesizer* s)
       connect(soundFontDown,   SIGNAL(clicked()), SLOT(soundFontDownClicked()));
       connect(soundFontAdd,    SIGNAL(clicked()), SLOT(soundFontAddClicked()));
       connect(soundFontDelete, SIGNAL(clicked()), SLOT(soundFontDeleteClicked()));
+      connect(soundFonts,      SIGNAL(itemSelectionChanged ()),  SLOT(updateUpDownButtons()));
+      updateUpDownButtons();
       }
 
 //---------------------------------------------------------
@@ -166,9 +168,9 @@ void FluidGui::updateUpDownButtons()
 
 void FluidGui::soundFontAddClicked()
       {
-      QFileInfoList l = fluid()->sfFiles();
+      QFileInfoList l = FluidS::Fluid::sfFiles();
 
-      ListDialog ld;
+      SfListDialog ld;
       foreach (const QFileInfo& fi, l)
             ld.add(fi.fileName(), fi.absoluteFilePath());
       if (!ld.exec())
@@ -199,6 +201,7 @@ void FluidGui::soundFontAddClicked()
             else {
                   soundFonts->insertItem(0, sfName);
                   emit sfChanged();
+                  emit valueChanged();
                   }
             }
       updateUpDownButtons();

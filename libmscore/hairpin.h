@@ -91,7 +91,7 @@ class Hairpin : public SLine {
 
       virtual QVariant getProperty(P_ID id) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
-      QVariant propertyDefault(P_ID id) const;
+      virtual QVariant propertyDefault(P_ID id) const;
 
       virtual void setYoff(qreal);
       };

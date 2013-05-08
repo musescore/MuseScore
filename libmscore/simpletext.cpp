@@ -422,13 +422,19 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
                   break;
 
             case Qt::Key_Backspace:
-                  if (!deletePreviousChar())
+                  if(_cursor.hasSelection()) {
+                        deleteSelectedText();
+                        }
+                  else if (!deletePreviousChar())
                         return false;
                   s.clear();
                   break;
 
             case Qt::Key_Delete:
-                  if (!deleteChar())
+                  if(_cursor.hasSelection()) {
+                        deleteSelectedText();
+                        }
+                  else if (!deleteChar())
                         return false;
                   s.clear();
                   break;
@@ -496,6 +502,9 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
             case Qt::Key_R:
                   if (modifiers & Qt::ControlModifier)
                         s = QString::fromUtf8(u8"\U0001d18c");
+            case Qt::Key_A:
+                  if (modifiers & Qt::ControlModifier)
+                        selectAll();
                   break;
             default:
                   break;
@@ -534,6 +543,18 @@ void SimpleText::insertText(const QString& s)
             _cursor.column += s.size();
             _cursor.selectColumn = _cursor.column;
             }
+      }
+
+ //---------------------------------------------------------
+//   selectAll
+//---------------------------------------------------------
+
+void SimpleText::selectAll()
+      {
+      _cursor.selectLine = 0;
+      _cursor.selectColumn = 0;
+      _cursor.line = _layout.size() - 1;
+      _cursor.column = curLine().size();
       }
 
 //---------------------------------------------------------
@@ -731,3 +752,54 @@ QString SimpleText::selectedText() const
       return s;
       }
 
+//---------------------------------------------------------
+//   deleteSelectedText
+//---------------------------------------------------------
+
+void SimpleText::deleteSelectedText()
+      {
+      int r1 = _cursor.selectLine;
+      int r2 = _cursor.line;
+      int c1 = _cursor.selectColumn;
+      int c2 = _cursor.column;
+
+      if (r1 > r2) {
+            qSwap(r1, r2);
+            qSwap(c1, c2);
+            }
+      else if (r1 == r2) {
+            if (c1 > c2)
+                  qSwap(c1, c2);
+            }
+      int rows = _layout.size();
+      QList<TLine> toDelete;
+      for (int row = 0; row < rows; ++row) {
+            TLine& t = _layout[row];
+            if (row >= r1 && row <= r2) {
+                  if (row == r1 && r1 == r2)
+                        t.text.remove(c1, c2 - c1);
+                  else if (row == r1)
+                        t.text.remove(c1, t.text.size() - c1);
+                  else if (row == r2)
+                        t.text.remove(0, c2);
+                  else {
+                        toDelete.append(t);
+                        }
+                  }
+            }
+      if (r1 != r2) {
+            TLine& tleft = _layout[r1];
+            TLine& tright = _layout[r2];
+            tleft.text.append(tright.text);
+            _layout.removeAt(r2);
+            QMutableListIterator<TLine> i(_layout);
+            while (i.hasNext()) {
+                  if (toDelete.contains(i.next()))
+                        i.remove();
+                  }
+            }
+      _cursor.selectLine   = r1;
+      _cursor.line   = r1;
+      _cursor.selectColumn = c1;
+      _cursor.column = c1;
+      }

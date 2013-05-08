@@ -227,18 +227,13 @@ void Score::cmdTransposeStaff(int staffIdx, Interval interval, bool useDoubleSha
                   foreach(Note* n, nl)
                       transpose(n, interval, useDoubleSharpsFlats);
                   }
-            }
-
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            foreach (Element* e, *m->el()) {
-                  if (e->type() != Element::HARMONY)
+            foreach (Element* e, segment->annotations()) {
+                  if ((e->type() != Element::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                         continue;
-                  if (e->track() >= startTrack && e->track() < endTrack) {
-                        Harmony* h  = static_cast<Harmony*>(e);
-                        int rootTpc = transposeTpc(h->rootTpc(), interval, false);
-                        int baseTpc = transposeTpc(h->baseTpc(), interval, false);
-                        undoTransposeHarmony(h, rootTpc, baseTpc);
-                        }
+                  Harmony* h  = static_cast<Harmony*>(e);
+                  int rootTpc = transposeTpc(h->rootTpc(), interval, false);
+                  int baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                  undoTransposeHarmony(h, rootTpc, baseTpc);
                   }
             }
       }

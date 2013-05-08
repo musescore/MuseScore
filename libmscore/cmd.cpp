@@ -374,7 +374,7 @@ void Score::expandVoice()
 
 Note* Score::addPitch(int pitch, bool addFlag)
       {
-qDebug("add pitch %d %d", pitch, addFlag);
+printf("add pitch %d add %d repitch %d\n", pitch, addFlag, _is.repitchMode());
 
       if (addFlag) {
             moveToPrevInputPos();
@@ -408,15 +408,30 @@ qDebug("add pitch %d %d", pitch, addFlag);
       nval.pitch     = pitch;
       nval.headGroup = headGroup;
       Fraction duration;
-      if (_is.repitchMode())
+      if (_is.repitchMode()) {
             duration = _is.cr()->duration();
-      else
+            }
+      else {
             duration = _is.duration().fraction();
-      Segment* seg   = setNoteRest(_is.segment(), track, nval, duration, stemDirection);
-      Note* note     = 0;
-      if (seg) {
-            note = static_cast<Chord*>(seg->element(track))->upNote();
-            setLayout(note->chord()->measure());
+            }
+      Note* note = 0;
+      if (_is.repitchMode() && _is.cr()->type() == Element::CHORD) {
+            Chord* chord = static_cast<Chord*>(_is.cr());
+            note = new Note(this);
+            note->setNval(nval);
+            note->setParent(chord);
+            if (!addFlag) {
+                  while (!chord->notes().isEmpty())
+                        undoRemoveElement(chord->notes().first());
+                  }
+            undoAddElement(note);
+            }
+      else {
+            Segment* seg = setNoteRest(_is.segment(), track, nval, duration, stemDirection);
+            if (seg) {
+                  note = static_cast<Chord*>(seg->element(track))->upNote();
+                  setLayout(note->chord()->measure());
+                  }
             }
 
       if (_is.slur) {

@@ -896,6 +896,7 @@ KeySigEvent NewWizardPage5::keysig() const
 NewWizard::NewWizard(QWidget* parent)
    : QWizard(parent)
       {
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWizardStyle(QWizard::ClassicStyle);
       setPixmap(QWizard::LogoPixmap, QPixmap(":/data/mscore.png"));
       setPixmap(QWizard::WatermarkPixmap, QPixmap());
@@ -921,7 +922,7 @@ NewWizard::NewWizard(QWidget* parent)
       p3->setFinalPage(true);
       p4->setFinalPage(true);
       p5->setFinalPage(true);
-      resize(700, 500);
+      resize(840, 560);
       }
 
 //---------------------------------------------------------

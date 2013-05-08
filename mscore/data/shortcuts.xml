@@ -222,7 +222,7 @@
     </SC>
   <SC>
     <key>add-tenuto</key>
-    <seq>_</seq>
+    <seq>Ctrl+Alt+N</seq>
     </SC>
   <SC>
     <key>add-marcato</key>
@@ -485,10 +485,6 @@
     <seq>+</seq>
     </SC>
   <SC>
-    <key>flat</key>
-    <seq>-</seq>
-    </SC>
-  <SC>
     <key>acciaccatura</key>
     <seq>/</seq>
     </SC>
@@ -738,7 +734,7 @@
     </SC>
   <SC>
     <key>prev-lyric</key>
-    <seq>Ctrl+Space</seq>
+    <seq>Shift+Space</seq>
     </SC>
   <SC>
     <key>toggle-visible</key>
@@ -752,52 +748,52 @@
   <SC>
     <key>note-longa-TAB</key>
     <seq>Shift+9</seq>
-    <code>536870969</code>
+    <seq>NumPad+9</seq>
     </SC>
   <SC>
     <key>note-breve-TAB</key>
     <seq>Shift+8</seq>
-    <code>536870968</code>
+    <seq>NumPad+8</seq>
     </SC>
   <SC>
     <key>pad-note-1-TAB</key>
     <seq>Shift+7</seq>
-    <code>536870967</code>
+    <seq>NumPad+7</seq>
     </SC>
   <SC>
     <key>pad-note-2-TAB</key>
     <seq>Shift+6</seq>
-    <code>536870966</code>
+    <seq>NumPad+6</seq>
     </SC>
   <SC>
     <key>pad-note-4-TAB</key>
     <seq>Shift+5</seq>
-    <code>536870965</code>
+    <seq>NumPad+5</seq>
     </SC>
   <SC>
     <key>pad-note-8-TAB</key>
     <seq>Shift+4</seq>
-    <code>536870964</code>
+    <seq>NumPad+4</seq>
     </SC>
   <SC>
     <key>pad-note-16-TAB</key>
     <seq>Shift+3</seq>
-    <code>536870963</code>
+    <seq>NumPad+3</seq>
     </SC>
   <SC>
     <key>pad-note-32-TAB</key>
     <seq>Shift+2</seq>
-    <code>536870962</code>
+    <seq>NumPad+2</seq>
     </SC>
   <SC>
     <key>pad-note-64-TAB</key>
     <seq>Shift+1</seq>
-    <code>536870961</code>
+    <seq>NumPad+1</seq>
     </SC>
   <SC>
     <key>pad-note-128-TAB</key>
     <seq>Shift+0</seq>
-    <code>536870960</code>
+    <seq>NumPad+0</seq>
     </SC>
   <SC>
     <key>pad-note-increase-TAB</key>

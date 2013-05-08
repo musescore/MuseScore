@@ -351,7 +351,6 @@ class Score : public QObject {
       bool _showOmr;
       PlayMode _playMode;
 
-
       //------------------
 
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false);
@@ -550,6 +549,7 @@ class Score : public QObject {
 
       void putNote(const QPointF& pos, bool replace);
       void putNote(const Position& pos, bool replace);
+      void repitchNote(const Position& pos, bool replace);
       void setInputState(Element* obj);
 
       void startCmd();        // start undoable command

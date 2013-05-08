@@ -33,7 +33,7 @@ class TDuration {
       TDuration() : _val(V_INVALID), _dots(0) {}
       TDuration(const Fraction&);
       TDuration(const QString&);
-      TDuration(DurationType t) : _val(t), _dots(0) {};
+      TDuration(DurationType t) : _val(t), _dots(0) {}
       DurationType type() const             { return _val; }
       bool isValid() const                  { return _val != V_INVALID; }
       bool isZero() const                   { return _val == V_ZERO; }

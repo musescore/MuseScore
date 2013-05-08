@@ -700,7 +700,6 @@ ScoreView::ScoreView(QWidget* parent)
       s->addTransition(ct);
       s->addTransition(new CommandTransition("mag", states[MAG]));            // ->mag
       s->addTransition(new CommandTransition("play", states[PLAY]));          // ->play
-      s->addTransition(new CommandTransition("find", states[SEARCH]));        // ->search
       s->addTransition(new CommandTransition("fotomode", states[FOTOMODE]));  // ->fotomode
       ct = new CommandTransition("paste", 0);                                 // paste
       connect(ct, SIGNAL(triggered()), SLOT(normalPaste()));
@@ -849,13 +848,6 @@ ScoreView::ScoreView(QWidget* parent)
 
       s->setInitialState(s1);
       s->addTransition(new ScoreViewDragTransition(this, s2));
-
-      //----------------------setup search state
-      s = states[SEARCH];
-      s->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-      s->addTransition(new CommandTransition("escape", states[NORMAL]));
-      s->addTransition(new CommandTransition("find", states[NORMAL]));
-      connect(s, SIGNAL(entered()), mscore, SLOT(setSearchState()));
 
       // setup editPlay state
       s = states[ENTRY_PLAY];
@@ -1682,7 +1674,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       QRegion r1(r);
       if (_score->layoutMode() == LayoutLine) {
             Page* page = _score->pages().front();
-            QList<const Element*> ell = page->items(fr);
+            QList<Element*> ell = page->items(fr);
             qStableSort(ell.begin(), ell.end(), elementLessThan);
             drawElements(p, ell);
             }
@@ -1695,7 +1687,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         continue;
                   if (pr.left() > fr.right())
                         break;
-                  QList<const Element*> ell = page->items(fr.translated(-page->pos()));
+                  QList<Element*> ell = page->items(fr.translated(-page->pos()));
                   qStableSort(ell.begin(), ell.end(), elementLessThan);
                   QPointF pos(page->pos());
                   p.translate(pos);
@@ -2031,119 +2023,6 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
       }
 
 //---------------------------------------------------------
-//   elementLower
-//---------------------------------------------------------
-
-static bool elementLower(const Element* e1, const Element* e2)
-      {
-      if (!e1->selectable())
-            return false;
-      return e1->z() < e2->z();
-      }
-
-//---------------------------------------------------------
-//   point2page
-//---------------------------------------------------------
-
-Page* ScoreView::point2page(const QPointF& p)
-      {
-      if (score()->layoutMode() == LayoutLine)
-            return score()->pages().front();
-      foreach(Page* page, score()->pages()) {
-            if (page->bbox().translated(page->pos()).contains(p))
-                  return page;
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
-//   elementsAt
-//    p is in canvas coordinates
-//---------------------------------------------------------
-
-const QList<const Element*> ScoreView::elementsAt(const QPointF& p)
-      {
-      QList<const Element*> el;
-
-      Page* page = point2page(p);
-      if (page) {
-            el = page->items(p - page->pos());
-            qSort(el.begin(), el.end(), elementLower);
-            }
-      return el;
-      }
-
-//---------------------------------------------------------
-//   elementAt
-//---------------------------------------------------------
-
-Element* ScoreView::elementAt(const QPointF& p)
-      {
-      QList<const Element*> el = elementsAt(p);
-#if 0
-      qDebug("elementAt");
-      foreach(const Element* e, el)
-            qDebug("  %s %d", e->name(), e->selected());
-#endif
-      const Element* e = el.value(0);
-      if (e && (e->type() == Element::PAGE))
-            e = el.value(1);
-      return const_cast<Element*>(e);
-      }
-
-//---------------------------------------------------------
-//   elementNear
-//---------------------------------------------------------
-
-Element* ScoreView::elementNear(QPointF p)
-      {
-      Page* page = point2page(p);
-      if (!page) {
-            // qDebug("  no page");
-            return 0;
-            }
-
-      p -= page->pos();
-      double w  = (preferences.proximity * .5) / matrix().m11();
-      QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
-
-      QList<const Element*> el = page->items(r);
-      QList<const Element*> ll;
-      foreach(const Element* e, el) {
-            e->itemDiscovered = 0;
-            if (!e->selectable() || e->type() == Element::PAGE)
-                  continue;
-            if (e->contains(p))
-                  ll.append(e);
-            }
-      int n = ll.size();
-      if ((n == 0) || ((n == 1) && (ll[0]->type() == Element::MEASURE))) {
-            //
-            // if no relevant element hit, look nearby
-            //
-            foreach(const Element* e, el) {
-                  if (e->type() == Element::PAGE || !e->selectable())
-                        continue;
-                  if (e->intersects(r))
-                        ll.append(e);
-                  }
-            }
-      if (ll.empty()) {
-            // qDebug("  nothing found");
-            return 0;
-            }
-      qSort(ll.begin(), ll.end(), elementLower);
-
-#if 0
-      qDebug("elementNear");
-      foreach(const Element* e, ll)
-            qDebug("  %s selected %d z %d", e->name(), e->selected(), e->z());
-#endif
-      Element* e = const_cast<Element*>(ll.at(0));
-      return e;
-      }
-
-//---------------------------------------------------------
 //   drawDebugInfo
 //---------------------------------------------------------
 
@@ -2217,7 +2096,7 @@ printf("%f %f %f %f\n", -sp.lw(), y1, sp.rw(), y2);
 //   drawElements
 //---------------------------------------------------------
 
-void ScoreView::drawElements(QPainter& painter, const QList<const Element*>& el)
+void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
       {
       foreach(const Element* e, el) {
             e->itemDiscovered = 0;
@@ -3756,8 +3635,6 @@ ScoreState ScoreView::mscoreState() const
             return STATE_FOTO;
       if (sm->configuration().contains(states[PLAY]))
             return STATE_PLAY;
-      if (sm->configuration().contains(states[SEARCH]))
-            return STATE_SEARCH;
       return STATE_NORMAL;
       }
 
@@ -4617,7 +4494,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       InputState& is = _score->inputState();
       if (is.track() == -1)          // invalid state
             return;
-      if (is.segment() == 0 /*|| is.cr() == 0*/) {
+      if (is.segment() == 0) {
             qDebug("cannot enter notes here (no chord rest at current position)");
             return;
             }
@@ -4673,7 +4550,10 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
       pos.line      = relStep(octave * 7 + note, clef);
 
-      score()->putNote(pos, !addFlag);
+      if (is.repitchMode())
+            score()->repitchNote(pos, !addFlag);
+      else
+            score()->putNote(pos, !addFlag);
       _score->endCmd();
       }
 
@@ -4684,7 +4564,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
 
 void ScoreView::cmdAddFret(int fret)
       {
-      if(mscoreState() != STATE_NOTE_ENTRY_TAB) // only acceptable in TAB note entry
+      if (mscoreState() != STATE_NOTE_ENTRY_TAB) // only acceptable in TAB note entry
             return;
       InputState& is = _score->inputState();
       if (is.track() == -1)                     // invalid state
@@ -5015,43 +4895,80 @@ void ScoreView::search(const QString& s)
       bool ok;
 
       int n = s.toInt(&ok);
-      if (!ok || n <= 0)
-            return;
-      search(n);
+      if (ok && n >= 0)
+            searchMeasure(n);
+      else {
+            if (s.size() >= 2 && s[0].toLower() == 'p' && s[1].isNumber()) {
+                  n = s.mid(1).toInt(&ok);
+                  if (ok && n >= 0)
+                        searchPage(n);
+                  }
+            }
       }
 
-void ScoreView::search(int n)
+//---------------------------------------------------------
+//   searchPage
+//---------------------------------------------------------
+
+void ScoreView::searchPage(int n)
+      {
+      printf("search page %d\n", n);
+      if (n >= _score->npages())
+            n = _score->npages() - 1;
+      const Page* page = _score->pages()[n];
+      foreach (System* s, *page->systems()) {
+            if (s->firstMeasure()) {
+                  gotoMeasure(s->firstMeasure());
+                  return;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   searchMeasure
+//---------------------------------------------------------
+
+void ScoreView::searchMeasure(int n)
       {
       int i = 0;
       for (Measure* measure = _score->firstMeasure(); measure; measure = measure->nextMeasure()) {
             if (++i < n)
                   continue;
-            adjustCanvasPosition(measure, true);
-            int tracks = _score->nstaves() * VOICES;
-            for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-                  if (segment->segmentType() != Segment::SegChordRest)
-                        continue;
-                  int track;
-                  for (track = 0; track < tracks; ++track) {
-                        ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
-                        if (cr) {
-                              Element* e;
-                              if(cr->type() == Element::CHORD)
-                                    e =  static_cast<Chord*>(cr)->upNote();
-                              else //REST
-                                    e = cr;
-
-                              _score->select(e, SELECT_SINGLE, 0);
-                              break;
-                              }
-                        }
-                  if (track != tracks)
-                        break;
-                  }
-            _score->setUpdateAll(true);
-            _score->end();
+            gotoMeasure(measure);
             break;
             }
+      }
+
+//---------------------------------------------------------
+//   gotoMeasure
+//---------------------------------------------------------
+
+void ScoreView::gotoMeasure(Measure* measure)
+      {
+      adjustCanvasPosition(measure, true);
+      int tracks = _score->nstaves() * VOICES;
+      for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+            if (segment->segmentType() != Segment::SegChordRest)
+                  continue;
+            int track;
+            for (track = 0; track < tracks; ++track) {
+                  ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
+                  if (cr) {
+                        Element* e;
+                        if (cr->type() == Element::CHORD)
+                              e =  static_cast<Chord*>(cr)->upNote();
+                        else //REST
+                              e = cr;
+
+                        _score->select(e, SELECT_SINGLE, 0);
+                        break;
+                        }
+                  }
+            if (track != tracks)
+                  break;
+            }
+      _score->setUpdateAll(true);
+      _score->end();
       }
 
 //---------------------------------------------------------
@@ -5211,3 +5128,68 @@ void ScoreView::figuredBassTicksTab(int ticks)
       ((FiguredBass*)editObject)->moveCursorToEnd();
       _score->setLayoutAll(true);
       }
+
+//---------------------------------------------------------
+//   elementLower
+//---------------------------------------------------------
+
+static bool elementLower(const Element* e1, const Element* e2)
+      {
+      if (!e1->selectable())
+            return false;
+      return e1->z() < e2->z();
+      }
+
+//---------------------------------------------------------
+//   elementNear
+//---------------------------------------------------------
+
+Element* ScoreView::elementNear(QPointF p)
+      {
+      Page* page = point2page(p);
+      if (!page) {
+            // qDebug("  no page");
+            return 0;
+            }
+
+      p -= page->pos();
+      double w  = (preferences.proximity * .5) / matrix().m11();
+      QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
+
+      QList<Element*> el = page->items(r);
+      QList<Element*> ll;
+      foreach (Element* e, el) {
+            e->itemDiscovered = 0;
+            if (!e->selectable() || e->type() == Element::PAGE)
+                  continue;
+            if (e->contains(p))
+                  ll.append(e);
+            }
+      int n = ll.size();
+      if ((n == 0) || ((n == 1) && (ll[0]->type() == Element::MEASURE))) {
+            //
+            // if no relevant element hit, look nearby
+            //
+            foreach (Element* e, el) {
+                  if (e->type() == Element::PAGE || !e->selectable())
+                        continue;
+                  if (e->intersects(r))
+                        ll.append(e);
+                  }
+            }
+      if (ll.empty()) {
+            // qDebug("  nothing found");
+            return 0;
+            }
+      qSort(ll.begin(), ll.end(), elementLower);
+
+#if 0
+      qDebug("elementNear");
+      foreach(const Element* e, ll)
+            qDebug("  %s selected %d z %d", e->name(), e->selected(), e->z());
+#endif
+      Element* e = const_cast<Element*>(ll.at(0));
+      return e;
+      }
+
+

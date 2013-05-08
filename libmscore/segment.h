@@ -90,7 +90,7 @@ class Segment : public Element {
       Spanner* _spannerFor;
       Spanner* _spannerBack;
 
-      QList<Element*> _annotations;
+      std::vector<Element*> _annotations;
 
       QList<Element*> _elist;      ///< Element storage, size = staves * VOICES.
 
@@ -171,8 +171,8 @@ class Segment : public Element {
       void addSpannerFor(Spanner* e);
       bool removeSpannerFor(Spanner* e);
 
-      const QList<Element*>& annotations() const { return _annotations;        }
-      void removeAnnotation(Element* e)          { _annotations.removeOne(e);  }
+      const std::vector<Element*>& annotations() const { return _annotations;        }
+      void removeAnnotation(Element* e);
       bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
 
 

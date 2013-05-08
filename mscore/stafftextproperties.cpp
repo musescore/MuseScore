@@ -257,8 +257,6 @@ void StaffTextProperties::voiceButtonClicked(int val)
 
 void StaffTextProperties::saveChannel(int channel)
       {
-      QList<QTreeWidgetItem*> items = actionList->selectedItems();
-
       QList<ChannelActions>* ca = staffText->channelActions();
       int n = ca->size();
       for (int i = 0; i < n; ++i) {
@@ -272,8 +270,12 @@ void StaffTextProperties::saveChannel(int channel)
       ChannelActions a;
       a.channel = channel;
 
-      foreach(QTreeWidgetItem* item, items)
-            a.midiActionNames.append(item->text(0));
+//      QList<QTreeWidgetItem*> items = actionList->selectedItems();
+      for (int i = 0; i < actionList->topLevelItemCount(); ++i) {
+            QTreeWidgetItem* item = actionList->topLevelItem(i);
+            if (item->isSelected())
+                  a.midiActionNames.append(item->text(0));
+            }
       ca->append(a);
       }
 
@@ -341,6 +343,10 @@ void StaffTextProperties::saveValues()
       if (pitem)
             saveChannel(pitem->data(0, Qt::UserRole).toInt());
 
+      //
+      // save Aeolus stops
+      //
+      staffText->setSetAeolusStops(changeStops->isChecked());
       if (changeStops->isChecked()) {
             for (int i = 0; i < 4; ++i) {
                   for (int k = 0; k < 16; ++k) {

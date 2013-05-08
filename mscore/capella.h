@@ -143,7 +143,8 @@ class CapExplicitBarline : public NoteObj, public CapellaObj {
       int barMode() const { return _barMode; }
 
       enum { BAR_SINGLE, BAR_DOUBLE, BAR_END,
-            BAR_REPEND, BAR_REPSTART, BAR_REPENDSTART};
+             BAR_REPEND, BAR_REPSTART, BAR_REPENDSTART,
+             BAR_DASHED};
       };
 
 //---------------------------------------------------------
@@ -202,11 +203,11 @@ struct CapStaffLayout {
 
       int sound, volume, transp;
 
-      char* descr;
-      char* name;
-      char* abbrev;
-      char* intermediateName;
-      char* intermediateAbbrev;
+      QString descr;
+      QString name;
+      QString abbrev;
+      QString intermediateName;
+      QString intermediateAbbrev;
       };
 
 //---------------------------------------------------------
@@ -246,8 +247,11 @@ class BasicDrawObj : public CapellaObj {
       int pageRange;
       int type;
 
-      BasicDrawObj(int t, Capella* c) : CapellaObj(c) { type = t; }
+      BasicDrawObj(int t, Capella* c)
+         : CapellaObj(c), modeX(0), modeY(0), distY(0), flags(0),
+           nRefNote(0), nNotes(0), background(0), pageRange(0), type(t) {}
       void read();
+      void readCapx(XmlReader& e);
       };
 
 //---------------------------------------------------------
@@ -379,8 +383,12 @@ class NotelinesObj : public BasicDrawObj {
 
 class VoltaObj : public BasicDrawObj {
    public:
-      VoltaObj(Capella* c) : BasicDrawObj(CAP_VOLTA, c) {}
+      VoltaObj(Capella* c)
+         : BasicDrawObj(CAP_VOLTA, c), x0(0), x1(0), y(0),
+           bLeft(false), bRight(false), bDotted(false),
+           allNumbers(false), from(0), to(0) {}
       void read();
+      void readCapx(XmlReader& e);
 
       int x0, x1, y;
       QColor color;
@@ -427,12 +435,14 @@ class TrillObj : public BasicDrawObj {
 //---------------------------------------------------------
 
 class SlurObj : public BasicDrawObj {
-      QPointF bezierPoint[4];
-      QColor color;
+      QPointF bezierPoint[4]; // note default constructor inits to (0, 0)
+      QColor color;           // note default constructor inits to invalid
 
    public:
-      SlurObj(Capella* c) : BasicDrawObj(CAP_SLUR, c) {}
+      SlurObj(Capella* c)
+         : BasicDrawObj(CAP_SLUR, c), color(Qt::black), nEnd(0), nMid(0), nDotDist(0), nDotWidth(0) {}
       void read();
+      void readCapx(XmlReader& e);
       unsigned char nEnd, nMid, nDotDist, nDotWidth;
       };
 
@@ -455,16 +465,17 @@ class TextObj : public BasicRectObj {
 //---------------------------------------------------------
 
 class SimpleTextObj : public BasicDrawObj {
-      char* _text;
+      QString _text;
       QPointF relPos;
       unsigned char align;
       QFont _font;
 
    public:
-      SimpleTextObj(Capella* c) : BasicDrawObj(CAP_SIMPLE_TEXT, c) { _text = 0;}
-      ~SimpleTextObj() { if (_text) delete _text; }
+      SimpleTextObj(Capella* c)
+         : BasicDrawObj(CAP_SIMPLE_TEXT, c), relPos(0, 0), align(0) {}
       void read();
-      QString text() const { return QString(_text); }
+      void readCapx(XmlReader& e);
+      QString text() const { return _text; }
       QFont font() const { return _font; }
       QPointF pos() const { return relPos; }
       };
@@ -518,6 +529,8 @@ class BasicDurationalObj : public CapellaObj {
       BasicDurationalObj(Capella* c) : CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e, unsigned int& fullm);
+      void readCapxDisplay(XmlReader& e);
+      void readCapxObjectArray(XmlReader& e);
       int ticks() const;
       bool invisible;
       QList<BasicDrawObj*> objects;
@@ -550,6 +563,7 @@ struct CNote {
 
 class ChordObj : public BasicDurationalObj, public NoteObj {
    public:
+      enum StemDir { DOWN = -1, AUTO = 0, UP = 1, NONE = 3 };
       unsigned char beamMode;
       char notationStave;
       char dStemLength;
@@ -564,7 +578,9 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
       ChordObj(Capella*);
       void read();
       void readCapx(XmlReader& e);
+      void readCapxLyrics(XmlReader& e);
       void readCapxNotes(XmlReader& e);
+      void readCapxStem(XmlReader& e);
       QList<Verse> verse;
       QList<CNote> notes;
       char stemDir;           // -1 down, 0 auto, 1 up, 3 no stem
@@ -677,6 +693,7 @@ class Capella {
       int readDWord();
       unsigned readUnsigned();
       char* readString();
+      QString readQString();
       void readExtra();
       QList<BasicDrawObj*> readDrawObjectArray();
       void read(void* p, qint64 len);
@@ -704,6 +721,7 @@ class Capella {
       void initCapxLayout();
    public:
       void readCapx(XmlReader& e);
+      QList<BasicDrawObj*> readCapxDrawObjectArray(XmlReader& e);
       };
 
 #endif
