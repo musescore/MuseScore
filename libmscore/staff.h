@@ -157,6 +157,7 @@ class Staff : public QObject {
 
       KeyList* keymap() const        { return _keymap;      }
       KeySigEvent key(int tick) const;
+      int nextKeyTick(int tick) const;
       void setKey(int tick, int st);
       void setKey(int tick, const KeySigEvent& st);
       void removeKey(int tick);
