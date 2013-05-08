@@ -1757,6 +1757,7 @@ void ChangeElement::flip()
             KeySig* ks = static_cast<KeySig*>(newElement);
             if (!ks->generated()) {
                   ks->staff()->setKey(ks->tick(),ks->keySigEvent());
+                  ks->insertIntoKeySigChain();
                   ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
                   // newElement->staff()->setUpdateKeymap(true);
                   }
