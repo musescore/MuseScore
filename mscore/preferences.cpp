@@ -27,7 +27,7 @@
 // #include "msynth/synti.h"
 #include "seq.h"
 #include "libmscore/note.h"
-#include "playpanel.h"
+//#include "playpanel.h"
 #include "icons.h"
 #include "shortcutcapturedialog.h"
 #include "scoreview.h"
@@ -123,10 +123,11 @@ void Preferences::init()
       rPort              = "";
 
       showNavigator      = true;
+      showMidiImportPanel = false;
       showPlayPanel      = false;
       showWebPanel       = true;
       showStatusBar      = true;
-      playPanelPos       = QPoint(100, 300);
+//      playPanelPos       = QPoint(100, 300);
 
 #if defined(Q_WS_MAC) || defined(__MINGW32__)
       useAlsaAudio       = false;
@@ -260,6 +261,7 @@ void Preferences::write()
       s.setValue("lPort",              lPort);
       s.setValue("rPort",              rPort);
       s.setValue("showNavigator",      showNavigator);
+      s.setValue("showMidiImportPanel",      showMidiImportPanel);
       s.setValue("showPlayPanel",      showPlayPanel);
       s.setValue("showWebPanel",       showWebPanel);
       s.setValue("showStatusBar",      showStatusBar);
@@ -370,9 +372,9 @@ void Preferences::write()
                   }
             }
 
-      s.beginGroup("PlayPanel");
-      s.setValue("pos", playPanelPos);
-      s.endGroup();
+//      s.beginGroup("PlayPanel");
+//      s.setValue("pos", playPanelPos);
+//      s.endGroup();
 
       writePluginList();
       if (Shortcut::dirty)
@@ -411,6 +413,7 @@ void Preferences::read()
       rPort                   = s.value("rPort", rPort).toString();
 
       showNavigator   = s.value("showNavigator", showNavigator).toBool();
+      showMidiImportPanel   = s.value("showMidiImportPanel", showMidiImportPanel).toBool();
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
       showPlayPanel   = s.value("showPlayPanel", showPlayPanel).toBool();
       showWebPanel    = s.value("showWebPanel", showWebPanel).toBool();
@@ -548,9 +551,9 @@ void Preferences::read()
                   }
             }
 
-      s.beginGroup("PlayPanel");
-      playPanelPos = s.value("pos", playPanelPos).toPoint();
-      s.endGroup();
+//      s.beginGroup("PlayPanel");
+//      playPanelPos = s.value("pos", playPanelPos).toPoint();
+//      s.endGroup();
 
       readPluginList();
       }
@@ -827,6 +830,7 @@ void PreferenceDialog::updateValues()
             }
 
       navigatorShow->setChecked(prefs.showNavigator);
+      midiImportShow->setChecked(prefs.showMidiImportPanel);
       playPanelShow->setChecked(prefs.showPlayPanel);
       webPanelShow->setChecked(prefs.showWebPanel);
 
@@ -1258,6 +1262,7 @@ void PreferenceDialog::apply()
             prefs.rPort = jackRPort->currentText();
             }
       prefs.showNavigator      = navigatorShow->isChecked();
+      prefs.showMidiImportPanel      = midiImportShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
       prefs.showWebPanel       = webPanelShow->isChecked();
       prefs.antialiasedDrawing = drawAntialiased->isChecked();

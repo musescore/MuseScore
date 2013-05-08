@@ -351,7 +351,6 @@ class Score : public QObject {
       bool _showOmr;
       PlayMode _playMode;
 
-
       //------------------
 
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false);
