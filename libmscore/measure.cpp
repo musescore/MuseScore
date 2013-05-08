@@ -612,9 +612,24 @@ void Measure::layout2()
             QString s;
             if (smn)
                   s = QString("%1").arg(_no + 1);
-
-            int nn = (score()->styleB(ST_measureNumberAllStaffs)) ? n : 1;
-            for (int staffIdx = 0; staffIdx < nn; ++staffIdx) {
+            int sn = 0;
+            int nn = 1;
+            if (score()->styleB(ST_measureNumberAllStaffs))
+                  nn = n;
+            else {
+                  //find first non invisible staff
+                  for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+                        MStaff* ms = staves.at(staffIdx);
+                        SysStaff* s  = system()->staff(staffIdx);
+                        Staff* staff = score()->staff(staffIdx);
+                        if (ms->visible() && staff->show() && s->show()) {
+                              sn = staffIdx;
+                              nn = staffIdx + 1;
+                              break;
+                              }
+                        }
+                  }
+            for (int staffIdx = sn; staffIdx < nn; ++staffIdx) {
                   MStaff* ms = staves.at(staffIdx);
                   Text* t = ms->noText();
                   if (smn) {
@@ -3046,7 +3061,7 @@ void Measure::layoutX(qreal stretch)
       int minTick    = 100000;
       int hMinTick   = 100000;
       int hLastIdx   = -1;
-      int ntick      = tick() + ticks();   // position of next measure
+      int ntick      = ticks();   // position of next measure
 
       if (system()->firstMeasure() == this && system()->barLine())
             x += BarLine::layoutWidth(score(), system()->barLine()->barLineType(), system()->barLine()->magS());
@@ -3144,10 +3159,10 @@ void Measure::layoutX(qreal stretch)
                               }
 
                         // add spacing for chord symbols
-                        foreach (Element* e, s->annotations()) {
+                        foreach (const Element* e, s->annotations()) {
                               if (e->type() != Element::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
-                              Harmony* h = static_cast<Harmony*>(e);
+                              const Harmony* h = static_cast<const Harmony*>(e);
                               QRectF b(h->bboxtight().translated(h->pos()));
                               if (hFound)
                                     hBbox |= b;
@@ -3244,7 +3259,7 @@ void Measure::layoutX(qreal stretch)
                         if (nseg == 0 || nseg->segmentType() == Segment::SegChordRest)
                               break;
                         }
-                  int nticks = (nseg ? nseg->tick() : ntick) - s->tick();
+                  int nticks = (nseg ? nseg->rtick() : ntick) - s->rtick();
                   if (nticks == 0) {
                         // this happens for tremolo notes
                         qDebug("layoutX: empty segment(%p)%s: measure: tick %d ticks %d",

@@ -51,6 +51,7 @@
 #include "ui_rest.h"
 #include "ui_stem.h"
 #include "ui_box.h"
+#include "ui_harmony.h"
 
 #include "globals.h"
 #include "libmscore/element.h"
@@ -313,6 +314,21 @@ class TextView : public ShowElementBase {
 
    public:
       TextView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
+//   HarmonyView
+//---------------------------------------------------------
+
+class HarmonyView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::TextBase tb;
+      Ui::HarmonyBase hb;
+
+   public:
+      HarmonyView();
       virtual void setElement(Element*);
       };
 

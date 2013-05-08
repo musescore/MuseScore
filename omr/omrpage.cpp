@@ -855,26 +855,25 @@ void OmrPage::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void OmrPage::read(QDomElement e)
+void OmrPage::read(XmlReader& e)
       {
-      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            QString tag(e.tagName());
-            QString val(e.text());
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
 
             if (tag == "cropL")
-                  cropL = val.toInt();
+                  cropL = e.readInt();
             else if (tag == "cropR")
-                  cropR = val.toInt();
+                  cropR = e.readInt();
             else if (tag == "cropT")
-                  cropT = val.toInt();
+                  cropT = e.readInt();
             else if (tag == "cropB")
-                  cropB = val.toInt();
+                  cropB = e.readInt();
             else if (tag == "staff") {
-                  OmrStaff r(readRectF(e).toRect());
+                  OmrStaff r(e.readRect().toRect());
                   staves.append(r);
                   }
             else
-                  domError(e);
+                  e.unknown();
             }
       }
 

@@ -265,10 +265,12 @@ void Text::layout1()
                   o.rx() -= size.width();
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
-
-            bbox().setRect(o.x(), o.y(), size.width(), size.height());
+            setPos(o);
+//            bbox().setRect(o.x(), o.y(), size.width(), size.height());
+            bbox().setRect(0.0, 0.0, size.width(), size.height());
             _doc->setModified(false);
             }
+
       if (parent()) {
             Element* e = parent();
             qreal w, h, xo, yo;

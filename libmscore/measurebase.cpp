@@ -128,6 +128,8 @@ void MeasureBase::add(Element* e)
                   case LAYOUT_BREAK_SECTION:
                         _sectionBreak = b;
 //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
+                        if(b->startWithMeasureOne())
+                              score()->renumberMeasures();
                         break;
                   }
             }
@@ -156,6 +158,8 @@ void MeasureBase::remove(Element* el)
                   case LAYOUT_BREAK_SECTION:
                         _sectionBreak = 0;
                         score()->tempomap()->setPause(endTick(), 0);
+                        if(lb->startWithMeasureOne())
+                              score()->renumberMeasures();
                         break;
                   }
             }

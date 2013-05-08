@@ -165,17 +165,9 @@ enum OffsetType {
 //---------------------------------------------------------
 
 enum class BeamMode {
-      AUTO    = 0,
-      BEGIN   = 0x01,
-      MID     = 0x02,
-      END     = 0x04,
-      NONE    = 0x08,
-      BEGIN32 = 0x10,
-      BEGIN64 = 0x20,
-      INVALID = -1
+      AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
       };
 
-// #define beamModeMid(a) (a & (BeamMode::MID | BeamMode::BEGIN32 | BeamMode::BEGIN64))
 #define beamModeMid(a) (a == BeamMode::MID || a == BeamMode::BEGIN32 || a == BeamMode::BEGIN64)
 
 //---------------------------------------------------------

@@ -120,12 +120,10 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
                         return false;
                   break;
 	      case Qt::Key_Underscore:
-                  if (modifiers & CONTROL_MODIFIER) {
-                        modifiers &= ~CONTROL_MODIFIER;
-                        s = "_";
-                        }
-                  else
+                  if (!(modifiers & CONTROL_MODIFIER))
                         lyricsUnderscore();
+                  else
+                        return false;
                   break;
             default:
                   return false;
@@ -276,6 +274,8 @@ void ScoreView::editKey(QKeyEvent* ev)
       ed.curGrip = curGrip;
       ed.delta   = delta;
       ed.view    = this;
+      ed.hRaster = mscore->hRaster();
+      ed.vRaster = mscore->vRaster();
       if (curGrip >= 0)
             ed.pos = grip[curGrip].center() + delta;
       editObject->editDrag(ed);

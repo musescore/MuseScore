@@ -3,7 +3,7 @@
 #  Music Composition & Notation
 #  $Id:$
 #
-#  Copyright (C) 2011 Werner Schweer
+#  Copyright (C) 2011-2013 Werner Schweer
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2
@@ -31,7 +31,10 @@ add_library(
       testutils STATIC
       ${mtestMocs}
       testutils.cpp
-      mcursor.cpp
+      ${PROJECT_SOURCE_DIR}/libmscore/mcursor.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/bb.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/capella.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/capxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
@@ -40,6 +43,10 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
       ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/fmt_opts.cpp    # required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf2html.cpp    # required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_keyword.cpp # required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_table.cpp   # required by capella.cpp and capxml.cpp
       ${OMR_SRC}
       omr
       )
@@ -77,9 +84,8 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore musicxml importmidi)
+subdirs (libmscore musicxml importmidi capella biab)
 
 if (OMR)
 subdirs(omr)
 endif (OMR)
-

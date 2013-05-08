@@ -64,9 +64,13 @@ class VoiceFifo {
 //   Zerberus
 //---------------------------------------------------------
 
-class Zerberus : public Synthesizer {
-      static bool initialized;
+class Zerberus : public QObject, public Synthesizer {
+      Q_OBJECT
 
+      static bool initialized;
+      static std::list<ZInstrument*> globalInstruments;
+
+      double _masterTuning = 440.0;
       std::atomic<bool> busy;
 
       std::list<ZInstrument*> instruments;
@@ -82,6 +86,9 @@ class Zerberus : public Synthesizer {
       void processNoteOff(Channel*, int pitch);
       void processNoteOn(Channel* cp, int key, int velo);
 
+   public slots:
+      void setLoadProgress(int val) { _loadProgress = val; }
+
    public:
       Zerberus();
       ~Zerberus();
@@ -92,13 +99,14 @@ class Zerberus : public Synthesizer {
       bool loadInstrument(const QString&);
 
       ZInstrument* instrument(int program) const;
-      Voice* getActiveVoices() { return activeVoices; }
-      Channel* channel(int n)  { return _channel[n]; }
+      Voice* getActiveVoices()      { return activeVoices; }
+      Channel* channel(int n)       { return _channel[n]; }
+      int loadProgress()            { return _loadProgress; }
 
-      int loadProgress() { return _loadProgress; }
-      void setLoadProgress(int loadProgress) { _loadProgress = loadProgress; }
+      virtual void setMasterTuning(double val) { _masterTuning = val;  }
+      virtual double masterTuning() const      { return _masterTuning; }
 
-      static double ct2hz(float c) { return 8.176 * pow(2.0, (double)c / 1200.0); }
+      double ct2hz(double c) { return pow(2.0, (c-6900.0) / 1200.0) * _masterTuning; }
 
       virtual const char* name() const;
       virtual const QList<MidiPatch*>& getPatchInfo() const;
@@ -115,7 +123,7 @@ class Zerberus : public Synthesizer {
       virtual QStringList soundFonts() const;
 
       virtual SynthesizerGui* gui();
-      QFileInfoList sfzFiles();
+      static QFileInfoList sfzFiles();
       };
 
 #endif

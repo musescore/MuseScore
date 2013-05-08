@@ -147,12 +147,12 @@ void ChordLine::read(XmlReader& e)
                                                 }
                                           break;
                                     }
+                              e.skipCurrentElement(); //needed to go to next Element in Path
                               }
                         else
                               e.unknown();
                         }
                   modified = true;
-                  setChordLineType(ChordLineType(0));
                   }
             else if (tag == "subtype")
                   setChordLineType(ChordLineType(e.readInt()));
@@ -247,7 +247,6 @@ void ChordLine::editDrag(const EditData& ed)
             }
       path = p;
       modified = true;
-      setChordLineType(ChordLineType(0));
       }
 
 //---------------------------------------------------------

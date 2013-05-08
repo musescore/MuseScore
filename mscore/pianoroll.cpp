@@ -131,8 +131,6 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       split = new QSplitter(Qt::Vertical);
       split->setFrameShape(QFrame::NoFrame);
-//      split->setLineWidth(0);
-//      split->setMidLineWidth(0);
 
       QWidget* split1 = new QWidget;      // piano - pianoview
       split1->setLayout(hbox);
@@ -162,7 +160,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(ruler,       SIGNAL(posChanged(const Pos&)),     pos,   SLOT(setValue(const Pos&)));
 
       connect(hsb,         SIGNAL(valueChanged(int)),  SLOT(setXpos(int)));
-      connect(gv,          SIGNAL(xposChanged(int)),   SLOT(setXPos(int)));
+      connect(gv,          SIGNAL(xposChanged(int)),   SLOT(setXpos(int)));
       connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(setXpos(int)));
 
       connect(ruler,       SIGNAL(locatorMoved(int)),  SLOT(moveLocator(int)));
@@ -249,13 +247,15 @@ void PianorollEditor::updateSelection()
       {
       QList<QGraphicsItem*> items = gv->scene()->selectedItems();
       if (items.size() == 1) {
-            QGraphicsItem* item = items[0];
-            Note* note = static_cast<Note*>(item->data(0).value<void*>());
-            pitch->setEnabled(true);
-            pitch->setValue(note->pitch());
-            veloType->setEnabled(true);
-            velocity->setEnabled(true);
-            updateVelocity(note);
+            PianoItem* item = static_cast<PianoItem*>(items[0]);
+            if (item->type() == PianoItemType) {
+                  Note* note = item->note();
+                  pitch->setEnabled(true);
+                  pitch->setValue(note->pitch());
+                  veloType->setEnabled(true);
+                  velocity->setEnabled(true);
+                  updateVelocity(note);
+                  }
             }
       else if (items.size() == 0) {
             velocity->setValue(0);
@@ -287,9 +287,10 @@ void PianorollEditor::selectionChanged()
       QList<QGraphicsItem*> items = gv->scene()->selectedItems();
       if (items.size() == 1) {
             QGraphicsItem* item = items[0];
-            Note* note = static_cast<Note*>(item->data(0).value<void*>());
-            if (note)
+            if (item->type() == PianoItemType) {
+                  Note* note = static_cast<PianoItem*>(item)->note();
                   _score->select(note, SELECT_SINGLE, 0);
+                  }
             }
       else if (items.size() == 0) {
             _score->select(0, SELECT_SINGLE, 0);
@@ -297,9 +298,10 @@ void PianorollEditor::selectionChanged()
       else {
             _score->deselectAll();
             foreach(QGraphicsItem* item, items) {
-                  Note* note = static_cast<Note*>(item->data(0).value<void*>());
-                  if (note)
+                  if (item->type() == PianoItemType) {
+                        Note* note = static_cast<PianoItem*>(item)->note();
                         _score->select(note, SELECT_ADD, 0);
+                        }
                   }
             }
       _score->setUpdateAll();
@@ -316,9 +318,10 @@ void PianorollEditor::changeSelection(int)
       gv->scene()->clearSelection();
       QList<QGraphicsItem*> il = gv->scene()->items();
       foreach(QGraphicsItem* item, il) {
-            Note* note = static_cast<Note*>(item->data(0).value<void*>());
-            if (note)
+            if (item->type() == PianoItemType) {
+                  Note* note = static_cast<PianoItem*>(item)->note();
                   item->setSelected(note->selected());
+                  }
             }
       gv->scene()->blockSignals(false);
       }
@@ -333,8 +336,10 @@ void PianorollEditor::veloTypeChanged(int val)
       if (items.size() != 1)
             return;
       QGraphicsItem* item = items[0];
-      Note* note = (Note*)item->data(0).value<void*>();
-      if ((note == 0) || (MScore::ValueType(val) == note->veloType()))
+      if (item->type() != PianoItemType)
+            return;
+      Note* note = static_cast<PianoItem*>(item)->note();
+      if (MScore::ValueType(val) == note->veloType())
             return;
 
       _score->undo()->beginMacro();
@@ -385,9 +390,9 @@ void PianorollEditor::velocityChanged(int val)
       if (items.size() != 1)
             return;
       QGraphicsItem* item = items[0];
-      Note* note = (Note*)item->data(0).value<void*>();
-      if (note == 0)
+      if (item->type() != PianoItemType)
             return;
+      Note* note = static_cast<PianoItem*>(item)->note();
       MScore::ValueType vt = note->veloType();
 
       if (vt == MScore::OFFSET_VAL)
@@ -458,8 +463,8 @@ void PianorollEditor::cmd(QAction* a)
       if (a->data() == "delete") {
             QList<QGraphicsItem*> items = gv->items();
             foreach(QGraphicsItem* item, items) {
-                  Note* note = static_cast<Note*>(item->data(0).value<void*>());
-                  if (note) {
+                  if (item->type() == PianoItemType) {
+                        Note* note = static_cast<PianoItem*>(item)->note();
                         score()->deleteItem(note);
                         }
                   }

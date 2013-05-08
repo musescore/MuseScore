@@ -16,6 +16,7 @@
 #include "element.h"
 #include "sig.h"
 #include "mscore.h"
+#include "groups.h"
 
 class MuseScoreView;
 class Segment;
@@ -49,6 +50,7 @@ class TimeSig : public Element {
       Q_PROPERTY(int denominator           READ denominator)
       Q_PROPERTY(int numeratorStretch      READ numeratorStretch)
       Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
+      Q_PROPERTY(Groups groups             READ groups            WRITE undoSetGroups)
 
       TimeSigType _timeSigType;
       QString _numeratorString;     // calculated from actualSig() if !customText
@@ -58,7 +60,8 @@ class TimeSig : public Element {
       Fraction _stretch;      // localSig / globalSig
       bool	_showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from actualSig()
-      bool needLayout;
+      bool _needLayout;
+      Groups _groups;
 
       void layout1();
 
@@ -113,6 +116,12 @@ class TimeSig : public Element {
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+
+      void setNeedLayout(bool nl) { _needLayout = nl; }
+
+      const Groups& groups() const    { return _groups; }
+      void setGroups(const Groups& e) { _groups = e; }
+      void undoSetGroups(const Groups& e);
       };
 
 #endif

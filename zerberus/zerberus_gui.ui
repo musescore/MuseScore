@@ -7,27 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>348</width>
-    <height>131</height>
+    <height>134</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QListWidget" name="files">
-     <property name="spacing">
-      <number>4</number>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Sound Files</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1" rowspan="2">
     <layout class="QVBoxLayout" name="verticalLayout_6">
      <item>
@@ -58,6 +44,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="0" column="0" rowspan="2">
+    <widget class="QListWidget" name="files">
+     <property name="spacing">
+      <number>4</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -231,15 +231,13 @@ ClefTypeList Staff::clefTypeList(int tick) const
 
 ClefType Staff::clef(int tick) const
       {
-      Clef* clef = 0;
-      foreach(Clef* c, clefs) {
-            if (c->segment()->tick() > tick)
-                  break;
-            clef = c;
-            }
-      if (clef == 0)
+      auto i = clefs.upper_bound(tick);
+      if (i != clefs.begin())
+            --i;
+      if (i == clefs.end())
             return score()->concertPitch() ? _initialClef._concertClef : _initialClef._transposingClef;
-      return clef->clefType();
+      else
+            return i->second->clefType();
       }
 
 ClefType Staff::clef(Segment* segment) const
@@ -275,13 +273,26 @@ Fraction Staff::timeStretch(int tick) const
 
 TimeSig* Staff::timeSig(int tick) const
       {
-      TimeSig* timesig = 0;
-      foreach(TimeSig* ts, timesigs) {
-            if (ts->segment()->tick() > tick)
-                  break;
-            timesig = ts;
+      auto i = timesigs.upper_bound(tick);
+      if (i != timesigs.begin())
+            --i;
+      return (i == timesigs.end()) ? 0 : i->second;
+      }
+
+//---------------------------------------------------------
+//   group
+//---------------------------------------------------------
+
+const Groups& Staff::group(int tick) const
+      {
+      TimeSig* ts = timeSig(tick);
+      if (ts) {
+            if (!ts->groups().empty())
+                  return ts->groups();
+            return Groups::endings(ts->sig());
             }
-      return timesig;
+      Measure* m = score()->tick2measure(tick);
+      return Groups::endings(m->timesig());
       }
 
 //---------------------------------------------------------
@@ -306,12 +317,8 @@ void Staff::addClef(Clef* clef)
             }
       if (clef->segment()->measure() == 0)
             abort();
-      int tick = 0;
-      if (!clefs.isEmpty())
-            tick = clefs.back()->segment()->tick();
-      clefs.append(clef);
-      if (clef->segment()->tick() < tick)
-            qSort(clefs.begin(), clefs.end(), clefsGreater);
+      int tick = clef->segment()->tick();
+      clefs[tick] = clef;
       }
 
 //---------------------------------------------------------
@@ -329,12 +336,7 @@ static bool timesigsGreater(const TimeSig* a, const TimeSig* b)
 
 void Staff::addTimeSig(TimeSig* timesig)
       {
-      int tick = 0;
-      if (!timesigs.isEmpty())
-            tick = timesigs.back()->segment()->tick();
-      timesigs.append(timesig);
-      if (timesig->segment()->tick() < tick)
-            qSort(timesigs.begin(), timesigs.end(), timesigsGreater);
+      timesigs[timesig->segment()->tick()] = timesig;
       }
 
 //---------------------------------------------------------
@@ -343,7 +345,8 @@ void Staff::addTimeSig(TimeSig* timesig)
 
 void Staff::removeClef(Clef* clef)
       {
-      clefs.removeOne(clef);
+      int tick = clef->segment()->tick();
+      clefs.erase(tick);
       }
 
 //---------------------------------------------------------
@@ -352,7 +355,8 @@ void Staff::removeClef(Clef* clef)
 
 void Staff::removeTimeSig(TimeSig* timesig)
       {
-      timesigs.removeOne(timesig);
+      int tick = timesig->segment()->tick();
+      timesigs.erase(tick);
       }
 
 //---------------------------------------------------------
@@ -730,7 +734,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 
       // determine staff type and set number of lines accordingly
       // set lines AFTER setting the staff type, so if lines are different, the right staff type is cloned
-      StaffType* st;
+      StaffType* st = 0;
       // get staff type if given or from instrument staff type, if not given
       // (if none, get default for staff group)
       const StaffType* presetStaffType = (staffType ? staffType : StaffType::preset(t->staffTypePreset) );

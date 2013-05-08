@@ -29,6 +29,9 @@
 const int MIN_VOL = -60;
 const int MAX_VOL = 10;
 
+static const int DEFAULT_POS_X  = 300;
+static const int DEFAULT_POS_Y  = 100;
+
 //---------------------------------------------------------
 //   PlayPanel
 //---------------------------------------------------------
@@ -42,6 +45,10 @@ PlayPanel::PlayPanel(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+      QSettings settings;
+      restoreGeometry(settings.value("playPanel/geometry").toByteArray());
+      move(settings.value("playPanel/pos", QPoint(DEFAULT_POS_X, DEFAULT_POS_Y)).toPoint());
+
       setScore(0);
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
@@ -50,7 +57,20 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
+      connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));
       }
+
+PlayPanel::~PlayPanel()
+{
+      QSettings settings;
+      // if widget is visible, store geometry and pos into settings
+      // if widget is not visible/closed, pos is not reliable (and anyway
+      // has been stored into settings when the widget has been hidden)
+      if (isVisible()) {
+            settings.setValue("playPanel/pos", pos());
+            settings.setValue("playPanel/geometry", saveGeometry());
+            }
+}
 
 //---------------------------------------------------------
 //   relTempoChanged
@@ -58,17 +78,41 @@ PlayPanel::PlayPanel(QWidget* parent)
 
 void PlayPanel::relTempoChanged(double d, int)
       {
-      emit relTempoChanged(d * .01);
+      double relTempo = d * .01;
+      emit relTempoChanged(relTempo);
+
+      setTempo(seq->curTempo() * relTempo);
+      setRelTempo(relTempo);
       }
 
 //---------------------------------------------------------
 //   closeEvent
+//
+//    Called when the PlyPanel is colsed with its own button
+//    but not when it is hidden with the main menu command
 //---------------------------------------------------------
 
 void PlayPanel::closeEvent(QCloseEvent* ev)
       {
       emit closed();
       QWidget::closeEvent(ev);
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//
+//    Called both when the PlayPanel is closed with its own button and
+//    when it is hidden via the main menu command
+//
+//    Stores widget geometry and position into settings.
+//---------------------------------------------------------
+
+void PlayPanel::hideEvent(QHideEvent* ev)
+      {
+      QSettings settings;
+      settings.setValue("playPanel/pos", pos());
+      settings.setValue("playPanel/geometry", saveGeometry());
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------
@@ -89,13 +133,13 @@ void PlayPanel::setScore(Score* s)
             setRelTempo(cs->tempomap()->relTempo());
             setEndpos(cs->repeatList()->ticks());
             int tick = cs->playPos();
-            heartBeat(tick, tick);
+            heartBeat(tick, tick, 0);
             }
       else {
             setTempo(120.0);
             setRelTempo(1.0);
             setEndpos(0);
-            heartBeat(0, 0);
+            heartBeat(0, 0, 0);
             updatePosLabel(0);
             }
       update();
@@ -167,20 +211,12 @@ void PlayPanel::setPos(int utick)
 //   heartBeat
 //---------------------------------------------------------
 
-void PlayPanel::heartBeat(int tick, int utick)
+void PlayPanel::heartBeat(int tick, int utick, int samples)
       {
-      if (cachedTickPosition == utick)
-            return;
-      updatePosLabel(utick);
-      posSlider->setValue(utick);
-      }
-
-//---------------------------------------------------------
-//   heartBeat2
-//---------------------------------------------------------
-
-void PlayPanel::heartBeat2(int samples)
-      {
+      if (cachedTickPosition != utick) {
+            updatePosLabel(utick);
+            posSlider->setValue(utick);
+            }
       int sec = samples/MScore::sampleRate;
       if (sec == cachedTimePosition)
             return;
@@ -206,8 +242,8 @@ void PlayPanel::updateTimeLabel(int sec)
 //---------------------------------------------------------
 //   updatePos
 //---------------------------------------------------------
-      
-void PlayPanel::updatePosLabel(int utick)      
+
+void PlayPanel::updatePosLabel(int utick)
       {
       cachedTickPosition = utick;
       int bar = 0;
@@ -217,6 +253,8 @@ void PlayPanel::updatePosLabel(int utick)
       if (cs) {
             tick = cs->repeatList()->utick2tick(utick);
             cs->sigmap()->tickValues(tick, &bar, &beat, &t);
+            double tpo = cs->tempomap()->tempo(tick) * cs->tempomap()->relTempo();
+            setTempo(tpo);
             }
       char buffer[32];
       sprintf(buffer, "%03d.%02d", bar+1, beat+1);

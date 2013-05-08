@@ -65,6 +65,7 @@ printf("  %d <%s>\n", idx, qPrintable(st->name()));
 
       small->setChecked(staff->small());
       invisible->setChecked(staff->invisible());
+      spinExtraDistance->setValue(s->userDist() / score->spatium());
       partName->setText(part->partName());
 
       updateInstrument();
@@ -197,9 +198,11 @@ void EditStaff::apply()
       instrument.setShortName(QTextDocumentFragment(shortName->document()));
       instrument.setLongName(QTextDocumentFragment(longName->document()));
 
-      bool s   = small->isChecked();
-      bool inv = invisible->isChecked();
-      StaffType* st = score->staffType(staffType->currentIndex());
+      bool s            = small->isChecked();
+      bool inv          = invisible->isChecked();
+      qreal userDist    = spinExtraDistance->value();
+      StaffType* st     = score->staffType(staffType->currentIndex());
+
 
       // before changing instrument, check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another
@@ -217,8 +220,8 @@ void EditStaff::apply()
             emit instrumentChanged();
             }
 
-      if (s != staff->small() || inv != staff->invisible() || st  != staff->staffType())
-            score->undo(new ChangeStaff(staff, s, inv, st));
+      if (s != staff->small() || inv != staff->invisible() || userDist != staff->userDist() || st  != staff->staffType())
+            score->undo(new ChangeStaff(staff, s, inv, userDist * score->spatium(), st));
 
       if (updateNeeded)
             score->cmdUpdateNotes();

@@ -76,7 +76,7 @@ void TextLineSegment::draw(QPainter* painter) const
       else if (!visible())
             color = Qt::gray;
       else {
-            color = curColor();
+            color = textLine()->curColor();
             normalColor = true;
             }
 
@@ -253,6 +253,48 @@ void TextLineSegment::clearText()
       {
       delete _text;
       _text = 0;
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant TextLineSegment::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_LINE_COLOR:
+                  return textLine()->getProperty(id);
+            default:
+                  return LineSegment::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool TextLineSegment::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_LINE_COLOR:
+                  return textLine()->setProperty(id, v);
+            default:
+                  return LineSegment::setProperty(id, v);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant TextLineSegment::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_LINE_COLOR:
+                  return textLine()->propertyDefault(id);
+            default:
+                  return LineSegment::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------
@@ -561,5 +603,49 @@ void TextLine::spatiumChanged(qreal ov, qreal nv)
             _beginText->spatiumChanged(ov, nv);
       if (_continueText)
             _continueText->spatiumChanged(ov, nv);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant TextLine::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_LINE_COLOR:
+                  return _lineColor;
+            default:
+                  return SLine::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool TextLine::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_LINE_COLOR:
+                  _lineColor = v.value<QColor>();
+                  break;
+            default:
+                  return SLine::setProperty(id, v);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant TextLine::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_LINE_COLOR:
+                  return MScore::defaultColor;
+            default:
+                  return SLine::propertyDefault(id);
+            }
       }
 

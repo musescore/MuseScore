@@ -20,6 +20,16 @@
 
 #include "timesigproperties.h"
 #include "libmscore/timesig.h"
+#include "libmscore/mcursor.h"
+#include "libmscore/durationtype.h"
+#include "libmscore/score.h"
+#include "libmscore/chord.h"
+#include "libmscore/measure.h"
+#include "libmscore/part.h"
+#include "exampleview.h"
+#include "musescore.h"
+
+extern void populateIconPalette(Palette* p, const IconAction* a);
 
 //---------------------------------------------------------
 //    TimeSigProperties
@@ -39,7 +49,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       nNominal->setValue(nominal.denominator());
       zActual->setValue(timesig->sig().numerator());
       nActual->setValue(timesig->sig().denominator());
-      switch(timesig->timeSigType()) {
+      switch (timesig->timeSigType()) {
             case TSIG_NORMAL:
                   textButton->setChecked(true);
                   break;
@@ -50,6 +60,11 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
                   allaBreveButton->setChecked(true);
                   break;
             }
+
+      Groups g = t->groups();
+      if (g.empty())
+            g = Groups::endings(timesig->sig());     // initialize with default
+      groups->setSig(timesig->sig(), g);
       }
 
 //---------------------------------------------------------
@@ -75,6 +90,9 @@ void TimeSigProperties::accept()
       Fraction nominal(zNominal->value(), nNominal->value());
       timesig->setSig(actual, ts);
       timesig->setStretch(nominal / actual);
+
+      Groups g = groups->groups();
+      timesig->setGroups(g);
       QDialog::accept();
       }
 

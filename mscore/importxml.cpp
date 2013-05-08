@@ -2769,7 +2769,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else {
                         hairpin = new Hairpin(score);
                         hairpin->setHairpinType(type == "crescendo"
-                                            ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
+                                                ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
                         hairpin->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
 
                         if (hasYoffset)
@@ -3816,6 +3816,41 @@ static void addArticulationToChord(ChordRest* cr, ArticulationType articSym, QSt
       }
 
 //---------------------------------------------------------
+//   addMordentToChord
+//---------------------------------------------------------
+
+/**
+ Add Mordent to Chord.
+ */
+
+static void addMordentToChord(ChordRest* cr, QString name, QString attrLong, QString attrAppr, QString attrDep)
+      {
+      ArticulationType articSym = ARTICULATIONS; // legal but impossible ArticulationType value here indicating "not found"
+      if (name == "inverted-mordent") {
+            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = Articulation_Prall;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = Articulation_PrallPrall;
+            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = Articulation_UpPrall;
+            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = Articulation_DownPrall;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "below") articSym = Articulation_PrallDown;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "above") articSym = Articulation_PrallUp;
+            }
+      else if (name == "mordent") {
+            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = Articulation_Mordent;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = Articulation_PrallMordent;
+            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = Articulation_UpMordent;
+            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = Articulation_DownMordent;
+            }
+      if (articSym != ARTICULATIONS) {
+            Articulation* na = new Articulation(cr->score());
+            na->setArticulationType(articSym);
+            cr->add(na);
+            }
+      else
+            qDebug("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
+                   qPrintable(name), qPrintable(attrLong), qPrintable(attrAppr), qPrintable(attrDep));
+      }
+
+//---------------------------------------------------------
 //   readArticulations
 //---------------------------------------------------------
 
@@ -3838,8 +3873,6 @@ static bool readArticulations(ChordRest* cr, QString mxmlName)
       map["staccato"]         = Articulation_Staccato;
       map["tenuto"]           = Articulation_Tenuto;
       map["turn"]             = Articulation_Turn;
-      map["mordent"]          = Articulation_Mordent;
-      map["inverted-mordent"] = Articulation_Prall;
       map["inverted-turn"]    = Articulation_Reverseturn;
       map["stopped"]          = Articulation_Plusstop;
       map["up-bow"]           = Articulation_Upbow;
@@ -4191,6 +4224,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         else if (eee.tagName() == "delayed-turn")
                               // TODO: actually this should be offset a bit to the right
                               addArticulationToChord(cr, Articulation_Turn, "");
+                        else if (eee.tagName() == "inverted-mordent"
+                                 || eee.tagName() == "mordent")
+                              addMordentToChord(cr, eee.tagName(), eee.attribute("long"), eee.attribute("approach"), eee.attribute("departure"));
                         else
                               domError(eee);
                         }
@@ -4826,7 +4862,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   // get pitch from instrument definition in drumset instead
                   int pitch = drumsets[partId][instrId].pitch;
                   note->setPitch(pitch);
-		  // TODO - does this need to be key-aware?
+                  // TODO - does this need to be key-aware?
                   note->setTpc(pitch2tpc(pitch, KEY_C, PREFER_NEAREST)); // TODO: necessary ?
                   }
             else

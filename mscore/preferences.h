@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "shortcut.h"
+#include "mscore/importmidi_operations.h"
 
 enum SessionStart {
       EMPTY_SESSION, LAST_SESSION, NEW_SESSION, SCORE_SESSION
@@ -89,10 +90,11 @@ struct Preferences {
       QString lPort;          // audio port left
       QString rPort;          // audio port right
       bool showNavigator;
+      bool showMidiImportPanel;
       bool showPlayPanel;
       bool showWebPanel;
       bool showStatusBar;
-      QPoint playPanelPos;
+//      QPoint playPanelPos;
 
       bool useAlsaAudio;
       bool useJackAudio;
@@ -141,18 +143,12 @@ struct Preferences {
       //update
       int checkUpdateStartup;
 
-      float tuning;                 // synthesizer master tuning offset (440Hz)
-      float masterGain;             // synthesizer master gain
-      float chorusGain;
-      float reverbGain;
-      float reverbRoomSize;
-      float reverbDamp;
-      float reverbWidth;
-
       bool followSong;
       QString importCharset;
       QString importStyleFile;
       int shortestNote;             // for midi input
+      MidiImportOperations midiImportOperations;
+
 
       bool useOsc;
       int oscPort;
@@ -168,8 +164,6 @@ struct Preferences {
 
       QString sfPath;
       QString sfzPath;
-      QString defaultSf;
-      QString defaultSfz;
 
       double nudgeStep10;     // Ctrl + cursor key (default 1.0)
       double nudgeStep50;     // Alt  + cursor key (default 5.0)

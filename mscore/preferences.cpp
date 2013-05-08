@@ -27,7 +27,7 @@
 // #include "msynth/synti.h"
 #include "seq.h"
 #include "libmscore/note.h"
-#include "playpanel.h"
+//#include "playpanel.h"
 #include "icons.h"
 #include "shortcutcapturedialog.h"
 #include "scoreview.h"
@@ -40,6 +40,9 @@
 #include "libmscore/mscore.h"
 #include "shortcut.h"
 #include "plugins.h"
+#include "zerberus/zerberus.h"
+#include "fluid/fluid.h"
+#include "pathlistdialog.h"
 
 bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = false;
 
@@ -120,10 +123,11 @@ void Preferences::init()
       rPort              = "";
 
       showNavigator      = true;
+      showMidiImportPanel = false;
       showPlayPanel      = false;
       showWebPanel       = true;
       showStatusBar      = true;
-      playPanelPos       = QPoint(100, 300);
+//      playPanelPos       = QPoint(100, 300);
 
 #if defined(Q_WS_MAC) || defined(__MINGW32__)
       useAlsaAudio       = false;
@@ -184,14 +188,6 @@ void Preferences::init()
 
       checkUpdateStartup      = 0;
 
-      tuning                  = 440.0f;
-      masterGain              = 0.2;
-      chorusGain              = 0.5;
-      reverbGain              = 0.5;
-      reverbRoomSize          = 0.5;
-      reverbDamp              = 0.5;
-      reverbWidth             = 1.0;
-
       followSong              = true;
       importCharset           = "GBK";
       importStyleFile         = "";
@@ -212,11 +208,8 @@ void Preferences::init()
       myImagesPath    = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory",     "Images"))).absolutePath();
       myTemplatesPath = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absolutePath();
       myPluginsPath   = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absolutePath();
-      sfPath          = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
+      sfPath          = QDir(QString("%1%2;%3/%4").arg(mscoreGlobalShare).arg("sound").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
       sfzPath         = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("sfz_files_directory",  "SfzFiles"))).absolutePath();
-
-      defaultSf = mscoreGlobalShare + "sound/fluid.sf3";
-      defaultSfz = "";
 
       nudgeStep10             = 1.0;      // Ctrl + cursor key (default 1.0)
       nudgeStep50             = 5.0;      // Alt  + cursor key (default 5.0)
@@ -265,11 +258,10 @@ void Preferences::write()
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("playNotes",          playNotes);
 
-      s.setValue("defaultSf",          defaultSf);
-      s.setValue("defaultSfz",         defaultSfz);
       s.setValue("lPort",              lPort);
       s.setValue("rPort",              rPort);
       s.setValue("showNavigator",      showNavigator);
+      s.setValue("showMidiImportPanel",      showMidiImportPanel);
       s.setValue("showPlayPanel",      showPlayPanel);
       s.setValue("showWebPanel",       showWebPanel);
       s.setValue("showStatusBar",      showStatusBar);
@@ -334,13 +326,6 @@ void Preferences::write()
       s.setValue("spatium",     MScore::defaultStyle()->spatium() / MScore::DPI);
 
       s.setValue("mag", mag);
-      s.setValue("tuning", tuning);
-      s.setValue("masterGain", masterGain);
-      s.setValue("chorusGain", chorusGain);
-      s.setValue("reverbGain", reverbGain);
-      s.setValue("reverbRoomSize", reverbRoomSize);
-      s.setValue("reverbDamp", reverbDamp);
-      s.setValue("reverbWidth", reverbWidth);
 
       s.setValue("defaultPlayDuration", MScore::defaultPlayDuration);
       s.setValue("importStyleFile", importStyleFile);
@@ -387,9 +372,9 @@ void Preferences::write()
                   }
             }
 
-      s.beginGroup("PlayPanel");
-      s.setValue("pos", playPanelPos);
-      s.endGroup();
+//      s.beginGroup("PlayPanel");
+//      s.setValue("pos", playPanelPos);
+//      s.endGroup();
 
       writePluginList();
       if (Shortcut::dirty)
@@ -427,9 +412,8 @@ void Preferences::read()
       lPort                   = s.value("lPort", lPort).toString();
       rPort                   = s.value("rPort", rPort).toString();
 
-      defaultSf       = s.value("defaultSf",     defaultSf).toString();
-      defaultSfz      = s.value("defaultSfz",    defaultSfz).toString();
       showNavigator   = s.value("showNavigator", showNavigator).toBool();
+      showMidiImportPanel   = s.value("showMidiImportPanel", showMidiImportPanel).toBool();
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
       showPlayPanel   = s.value("showPlayPanel", showPlayPanel).toBool();
       showWebPanel    = s.value("showWebPanel", showWebPanel).toBool();
@@ -481,14 +465,6 @@ void Preferences::read()
       replaceCopyrightSymbol = s.value("replaceCopyrightSymbol", replaceCopyrightSymbol).toBool();
 
       mag                    = s.value("mag", mag).toDouble();
-
-      tuning                 = s.value("tuning", tuning).toDouble();
-      masterGain             = s.value("masterGain",     masterGain).toDouble();
-      chorusGain             = s.value("chorusGain",     chorusGain).toDouble();
-      reverbGain             = s.value("reverbGain",     reverbGain).toDouble();
-      reverbRoomSize         = s.value("reverbRoomSize", reverbRoomSize).toDouble();
-      reverbDamp             = s.value("reverbDamp",     reverbDamp).toDouble();
-      reverbWidth            = s.value("reverbWidth",    reverbWidth).toDouble();
 
       MScore::defaultPlayDuration = s.value("defaultPlayDuration", MScore::defaultPlayDuration).toInt();
       importStyleFile        = s.value("importStyleFile", importStyleFile).toString();
@@ -575,9 +551,9 @@ void Preferences::read()
                   }
             }
 
-      s.beginGroup("PlayPanel");
-      playPanelPos = s.value("pos", playPanelPos).toPoint();
-      s.endGroup();
+//      s.beginGroup("PlayPanel");
+//      playPanelPos = s.value("pos", playPanelPos).toPoint();
+//      s.endGroup();
 
       readPluginList();
       }
@@ -659,6 +635,11 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myTemplatesButton, SIGNAL(clicked()), SLOT(selectTemplatesDirectory()));
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
+
+      connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
+      connect(mySfzButton, SIGNAL(clicked()), SLOT(changeSfzPaths()));
+
+
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
       connect(partStyleButton,        SIGNAL(clicked()), SLOT(selectPartStyle()));
@@ -848,9 +829,8 @@ void PreferenceDialog::updateValues()
             jackLPort->setEnabled(false);
             }
 
-      defaultSf->setText(prefs.defaultSf);
-      defaultSfz->setText(prefs.defaultSfz);
       navigatorShow->setChecked(prefs.showNavigator);
+      midiImportShow->setChecked(prefs.showMidiImportPanel);
       playPanelShow->setChecked(prefs.showPlayPanel);
       webPanelShow->setChecked(prefs.showWebPanel);
 
@@ -1281,9 +1261,8 @@ void PreferenceDialog::apply()
             prefs.lPort = jackLPort->currentText();
             prefs.rPort = jackRPort->currentText();
             }
-      prefs.defaultSf          = defaultSf->text();
-      prefs.defaultSfz         = defaultSfz->text();
       prefs.showNavigator      = navigatorShow->isChecked();
+      prefs.showMidiImportPanel      = midiImportShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
       prefs.showWebPanel       = webPanelShow->isChecked();
       prefs.antialiasedDrawing = drawAntialiased->isChecked();
@@ -1606,6 +1585,32 @@ void PreferenceDialog::selectImagesDirectory()
          );
       if (!s.isNull())
             myImages->setText(s);
+      }
+
+//---------------------------------------------------------
+//   changeSoundfontPaths
+//---------------------------------------------------------
+
+void PreferenceDialog::changeSoundfontPaths()
+      {
+      PathListDialog pld(this);
+      pld.setWindowTitle(tr("Soundfont folders"));
+      pld.setPath(sfPath->text());
+      if(pld.exec())
+            sfPath->setText(pld.path());
+      }
+
+//---------------------------------------------------------
+//   changeSfzPaths
+//---------------------------------------------------------
+
+void PreferenceDialog::changeSfzPaths()
+      {
+      PathListDialog pld(this);
+      pld.setWindowTitle(tr("SFZ folders"));
+      pld.setPath(sfzPath->text());
+      if(pld.exec())
+            sfzPath->setText(pld.path());
       }
 
 //---------------------------------------------------------

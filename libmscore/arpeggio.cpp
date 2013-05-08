@@ -305,6 +305,40 @@ void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
       }
 
 //---------------------------------------------------------
+//   acceptDrop
+//---------------------------------------------------------
+
+bool Arpeggio::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+      {
+      return e->type() == ARPEGGIO;
+      }
+
+//---------------------------------------------------------
+//   drop
+//---------------------------------------------------------
+
+Element* Arpeggio::drop(const DropData& data)
+      {
+      Element* e = data.element;
+      switch(e->type()) {
+            case ARPEGGIO:
+                  {
+                  Arpeggio* a = static_cast<Arpeggio*>(e);
+                  if (parent())
+                        score()->undoRemoveElement(this);
+                  a->setTrack(track());
+                  a->setParent(parent());
+                  score()->undoAddElement(a);
+                  }
+                  return e;
+            default:
+                  delete e;
+                  break;
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

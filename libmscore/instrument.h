@@ -54,7 +54,7 @@ struct StaffNameDoc {
 struct NamedEventList {
       QString name;
       QString descr;
-      EventList events;
+      std::vector<MidiCoreEvent> events;
 
       void write(Xml&, const QString& name) const;
       void read(XmlReader&);
@@ -81,19 +81,18 @@ struct MidiArticulation {
 //   Channel
 //---------------------------------------------------------
 
-// this are the indexes of controllers which are always present in
-// Channel init EventList (maybe zero)
-
-enum {
-      A_HBANK, A_LBANK, A_PROGRAM, A_VOLUME, A_PAN, A_CHORUS, A_REVERB,
-      A_INIT_COUNT
-      };
-
 struct Channel {
+      // this are the indexes of controllers which are always present in
+      // Channel init EventList (maybe zero)
+
+      enum {
+            A_HBANK, A_LBANK, A_PROGRAM, A_VOLUME, A_PAN, A_CHORUS, A_REVERB,
+            A_INIT_COUNT
+            };
       QString name;
       QString descr;
       int channel;      // mscore channel number, mapped to midi port/channel
-      mutable EventList init;
+      mutable std::vector<MidiCoreEvent> init;
 
       QString synti;
       int program;     // current values as shown in mixer

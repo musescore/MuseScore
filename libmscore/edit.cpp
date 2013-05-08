@@ -815,6 +815,49 @@ void Score::putNote(const Position& p, bool replace)
       }
 
 //---------------------------------------------------------
+//   repitchNote
+//---------------------------------------------------------
+
+void Score::repitchNote(const Position& p, bool replace)
+      {
+      Segment* s      = p.segment;
+      int tick        = s->tick();
+      Staff* st       = staff(p.staffIdx);
+      ClefType clef   = st->clef(tick);
+
+      NoteVal nval;
+      AccidentalVal acci = s->measure()->findAccidental(s, p.staffIdx, p.line);
+      int step   = absStep(p.line, clef);
+      int octave = step / 7;
+      nval.pitch = step2pitch(step) + octave * 12 + acci;
+      nval.tpc   = step2tpc(step % 7, acci);
+
+      _is.pitch = nval.pitch;
+
+      Chord* chord;
+      if (_is.cr()->type() == Element::REST) {
+            undoRemoveElement(_is.cr());
+            chord = new Chord(this);
+            chord->setParent(s);
+            chord->setTrack(_is.cr()->track());
+            undoAddElement(chord);
+            }
+      else {
+            chord = static_cast<Chord*>(_is.cr());
+            }
+      Note* note = new Note(this);
+      note->setNval(nval);
+      note->setParent(chord);
+
+      if (replace) {
+            while (!chord->notes().isEmpty())
+                  undoRemoveElement(chord->notes().first());
+            }
+      undoAddElement(note);
+      moveToNextInputPos();
+      }
+
+//---------------------------------------------------------
 //   cmdAddTie
 //---------------------------------------------------------
 

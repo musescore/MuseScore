@@ -138,25 +138,25 @@ Page::~Page()
 //   items
 //---------------------------------------------------------
 
-QList<const Element*> Page::items(const QRectF& r)
+QList<Element*> Page::items(const QRectF& r)
       {
 #ifdef USE_BSP
       if (!bspTreeValid)
             doRebuildBspTree();
       return bspTree.items(r);
 #else
-      return QList<const Element*>();
+      return QList<Element*>();
 #endif
       }
 
-QList<const Element*> Page::items(const QPointF& p)
+QList<Element*> Page::items(const QPointF& p)
       {
 #ifdef USE_BSP
       if (!bspTreeValid)
             doRebuildBspTree();
       return bspTree.items(p);
 #else
-      return QList<const Element*>();
+      return QList<Element*>();
 #endif
       }
 
@@ -355,19 +355,20 @@ void Page::drawStyledHeaderFooter(QPainter* p, int area, const QPointF& pt,
       QString s = replaceTextMacros(ss);
       if (s.isEmpty())
             return;
-      TextStyle ts = score()->textStyle(TEXT_STYLE_FOOTER);
-      p->setFont(ts.fontPx(spatium()));
-
+      int textStyle = TEXT_STYLE_FOOTER;
       int flags = Qt::TextDontClip;
       switch(area) {
             case 0:
                   flags |= Qt::AlignLeft | Qt::AlignTop;
+                  textStyle = TEXT_STYLE_HEADER;
                   break;
             case 1:
                   flags |= Qt::AlignHCenter | Qt::AlignTop;
+                  textStyle = TEXT_STYLE_HEADER;
                   break;
             case 2:
                   flags |= Qt::AlignRight | Qt::AlignTop;
+                  textStyle = TEXT_STYLE_HEADER;
                   break;
             case 3:
                   flags |= Qt::AlignLeft | Qt::AlignBottom;
@@ -379,6 +380,8 @@ void Page::drawStyledHeaderFooter(QPainter* p, int area, const QPointF& pt,
                   flags |= Qt::AlignRight | Qt::AlignBottom;
                   break;
             }
+      TextStyle ts = score()->textStyle(textStyle);
+      p->setFont(ts.fontPx(spatium()));
       QRectF r(pt.x(), pt.y(), width() - lm() - rm(), height() - tm() - bm());
       p->drawText(r, flags, s);
       }

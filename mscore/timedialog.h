@@ -1,30 +1,26 @@
 //=============================================================================
-//  MusE Score
-//  Linux Music Score Editor
-//  $Id: timedialog.h 4196 2011-04-14 16:11:07Z wschweer $
+//  MuseScore
+//  Music Composition & Notation
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENSE.GPL
 //=============================================================================
 
 #ifndef __TIMEDIALOG_H__
 #define __TIMEDIALOG_H__
 
 #include "ui_timedialog.h"
+#include "libmscore/fraction.h"
 
 class Palette;
 class PaletteScrollArea;
+class TimeSig;
+class Score;
+class Chord;
 
 //---------------------------------------------------------
 //   TimeDialog
@@ -35,11 +31,16 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase {
 
       Palette* sp;
       bool _dirty;
+      TimeSig* timesig;
+
+      int denominator() const;
+      int denominator2Idx(int) const;
 
    private slots:
       void addClicked();
       void zChanged(int);
       void nChanged(int);
+      void paletteChanged(int idx);
 
    public:
       TimeDialog(QWidget* parent = 0);

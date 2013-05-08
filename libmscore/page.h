@@ -156,8 +156,8 @@ class Page : public Element {
       virtual void draw(QPainter*) const;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      QList<const Element*> items(const QRectF& r);
-      QList<const Element*> items(const QPointF& p);
+      QList<Element*> items(const QRectF& r);
+      QList<Element*> items(const QPointF& p);
       void rebuildBspTree()   { bspTreeValid = false; }
       QPointF pagePos() const { return QPointF(); }     ///< position in page coordinates
       QList<System*> searchSystem(const QPointF& pos) const;

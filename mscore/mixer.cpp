@@ -174,10 +174,8 @@ void MuseScore::showMixer(bool val)
       {
       if (mixer == 0) {
             mixer = new Mixer(this);
-            if (synthControl) {
-                  connect(synthControl, SIGNAL(soundFontChanged()), mixer,
-                     SLOT(patchListChanged()));
-                  }
+            if (synthControl)
+                  connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             }
       mixer->updateAll(cs);

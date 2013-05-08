@@ -34,19 +34,22 @@ class SynthControl : public QWidget, Ui::SynthControl {
 
       Score* _score;
       virtual void closeEvent(QCloseEvent*);
-      void updateSyntiValues();
+      void updateGui();
       void updateUpDownButtons();
 
    private slots:
       void gainChanged(double, int);
       void masterTuningChanged(double);
+      void changeMasterTuning();
       void effectAChanged(int);
       void effectBChanged(int);
       void loadButtonClicked();
       void saveButtonClicked();
+      void storeButtonClicked();
+      void recallButtonClicked();
+      void setDirty();
 
    signals:
-      void closed(bool);
       void gainChanged(float);
       void soundFontChanged();
 
@@ -55,11 +58,9 @@ class SynthControl : public QWidget, Ui::SynthControl {
 
    public:
       SynthControl(QWidget* parent);
-      void updatePreferences();
       void setMeter(float, float, float, float);
       void stop();
       void setScore(Score* s) { _score = s; }
-      void writeSettings() const;
       };
 
 #endif

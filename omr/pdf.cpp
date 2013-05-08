@@ -21,7 +21,7 @@
 #include "pdf.h"
 extern "C" {
 #include <fitz.h>
-#include <mupdf.h>
+// #include <mupdf.h>
       }
 
 int Pdf::references;
@@ -95,15 +95,21 @@ QImage Pdf::page(int i)
             }
       static const float resolution = 300.0;
       const float zoom = resolution / 72.0;
+      fz_rect bounds;
 
-      fz_rect bounds = fz_bound_page(doc, page);
-      fz_matrix ctm  = fz_scale(zoom, zoom);
-      fz_bbox bbox   = fz_round_rect(fz_transform_rect(ctm, bounds));
-      fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_gray, bbox);
+      fz_bound_page(doc, page, &bounds);
+      fz_matrix ctm;
+
+      fz_pre_scale(fz_rotate(&ctm, 0.0), zoom, zoom);
+
+      fz_irect ibounds;
+      fz_rect tbounds;
+      fz_round_rect(&ibounds, fz_transform_rect(&tbounds, &ctm));
+      fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_gray, &ibounds);
 
       fz_clear_pixmap_with_value(ctx, pix, 255);
       fz_device* dev = fz_new_draw_device(ctx, pix);
-      fz_run_page(doc, page, dev, ctm, NULL);
+      fz_run_page(doc, page, dev, &ctm, NULL);
       fz_free_device(dev);
       dev = NULL;
 
