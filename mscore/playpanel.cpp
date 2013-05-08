@@ -29,6 +29,9 @@
 const int MIN_VOL = -60;
 const int MAX_VOL = 10;
 
+static const int DEFAULT_POS_X  = 300;
+static const int DEFAULT_POS_Y  = 100;
+
 //---------------------------------------------------------
 //   PlayPanel
 //---------------------------------------------------------
@@ -42,6 +45,10 @@ PlayPanel::PlayPanel(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+      QSettings settings;
+      restoreGeometry(settings.value("playPanel/geometry").toByteArray());
+      move(settings.value("playPanel/pos", QPoint(DEFAULT_POS_X, DEFAULT_POS_Y)).toPoint());
+
       setScore(0);
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
@@ -52,6 +59,18 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
       connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));
       }
+
+PlayPanel::~PlayPanel()
+{
+      QSettings settings;
+      // if widget is visible, store geometry and pos into settings
+      // if widget is not visible/closed, pos is not reliable (and anyway
+      // has been stored into settings when the widget has been hidden)
+      if (isVisible()) {
+            settings.setValue("playPanel/pos", pos());
+            settings.setValue("playPanel/geometry", saveGeometry());
+            }
+}
 
 //---------------------------------------------------------
 //   relTempoChanged
@@ -68,12 +87,32 @@ void PlayPanel::relTempoChanged(double d, int)
 
 //---------------------------------------------------------
 //   closeEvent
+//
+//    Called when the PlyPanel is colsed with its own button
+//    but not when it is hidden with the main menu command
 //---------------------------------------------------------
 
 void PlayPanel::closeEvent(QCloseEvent* ev)
       {
       emit closed();
       QWidget::closeEvent(ev);
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//
+//    Called both when the PlayPanel is closed with its own button and
+//    when it is hidden via the main menu command
+//
+//    Stores widget geometry and position into settings.
+//---------------------------------------------------------
+
+void PlayPanel::hideEvent(QHideEvent* ev)
+      {
+      QSettings settings;
+      settings.setValue("playPanel/pos", pos());
+      settings.setValue("playPanel/geometry", saveGeometry());
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------
