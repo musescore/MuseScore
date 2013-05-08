@@ -1829,7 +1829,6 @@ void ScoreView::zoom(int step, const QPoint& pos)
 
 void ScoreView::zoom(qreal _mag, const QPointF& pos)
       {
-
       QPointF p1 = imatrix.map(pos);
 
       if (_mag > 16.0)
