@@ -97,6 +97,20 @@ struct RenderAction {
       };
 
 //---------------------------------------------------------
+//   ParsedChord
+//---------------------------------------------------------
+
+class ParsedChord {
+   public:
+      bool parse(QString);
+      bool operator==(const ParsedChord& c) { return (this->handle == c.handle); }
+      bool operator!=(const ParsedChord& c) { return !(*this == c); }
+      operator QString() { return handle; }
+   private:
+      QString handle;
+      };
+
+//---------------------------------------------------------
 //   ChordDescription
 //---------------------------------------------------------
 
@@ -104,6 +118,8 @@ struct ChordDescription {
       int id;                 // Chord id number (Band In A Box Chord Number)
       QStringList names;      // list of alternative chord names
                               // that will by recognized from keyboard entry (without root/base)
+      QList<ParsedChord> parsedChords;
+                              // parsed forms of names
       QString xmlKind;        // MusicXml description: kind
       QStringList xmlDegrees; // MusicXml description: list of degrees (if any)
       HChord chord;           // C based chord
