@@ -333,6 +333,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 void Score::layoutStage2()
       {
       int tracks = nstaves() * VOICES;
+      bool crossMeasure = styleB(ST_crossMeasureValues);
 
       for (int track = 0; track < tracks; ++track) {
             ChordRest* a1    = 0;      // start of (potential) beam
@@ -345,9 +346,19 @@ void Score::layoutStage2()
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
                         continue;
+                  // set up for cross-measure values as soon as possible
+                  // to have all computations (stems, hooks, ...) consistent with it
+                  if(cr->type() == Element::CHORD && segment->segmentType() == Segment::SegChordRest)
+                        ((Chord*)cr)->crossMeasureSetup(crossMeasure);
                   bm = cr->beamMode();
                   if (bm == BeamMode::AUTO)
                         bm = Groups::endBeam(cr);
+
+                  // if chord has hooks and is 2nd element of a cross-measure value
+                  // set beam mode to NONE (do not combine with following chord beam/hook, if any)
+
+                  if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CROSSMEASURE_SECOND)
+                        bm = BeamMode::NONE;
                   if (cr->measure() != measure) {
                         if (measure && !beamModeMid(bm)) {
                               if (beam) {
