@@ -464,7 +464,7 @@ void ChordDescription::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "name") {
                   QString n = e.readElementText();
-                  names.insert(ni++,n);
+                  names.insert(ni++,n); // stack name for this file on top of the list
                   ParsedChord pc;
                   pc.parse(n);
                   if (parsedChords.indexOf(pc) < 0)

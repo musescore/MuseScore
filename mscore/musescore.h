@@ -84,6 +84,7 @@ class PluginManager;
 class MasterSynthesizer;
 class Driver;
 class Seq;
+class ImportMidiPanel;
 
 struct PluginDescription;
 
@@ -217,6 +218,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* tab1;
       ScoreTab* tab2;
       NScrollArea* _navigator;
+      ImportMidiPanel* importmidi_panel;
       QSplitter* mainWindow;
 
       QMenu* menuDisplay;
@@ -372,6 +374,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showOmrPanel(bool);
       void showPlayPanel(bool);
       void showNavigator(bool);
+      void showMidiImportPanel(bool);
       void showMixer(bool);
       void showSynthControl(bool);
       void showSearchDialog();
@@ -637,7 +640,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QDeclarativeEngine* qml();
       PluginCreator* getPluginCreator()   { return pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
-      };
+};
 
 extern MuseScore* mscore;
 extern MuseScoreCore* mscoreCore;
