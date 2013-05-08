@@ -227,7 +227,7 @@ void Text::layout1()
       if (styled())
             SimpleText::layout();
       else {
-            QPointF o(textStyle().offset(spatium()));
+            QPointF o;
 
             _doc->setDefaultFont(textStyle().font(spatium()));
             qreal w = -1.0;
@@ -265,9 +265,8 @@ void Text::layout1()
                   o.rx() -= size.width();
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
-            setPos(o);
-//            bbox().setRect(o.x(), o.y(), size.width(), size.height());
-            bbox().setRect(0.0, 0.0, size.width(), size.height());
+            setPos(textStyle().offset(spatium()));
+            bbox().setRect(o.x(), o.y(), size.width(), size.height());
             _doc->setModified(false);
             }
 
@@ -866,7 +865,7 @@ QPainterPath Text::shape() const
             int n = tl->lineCount();
             for (int i = 0; i < n; ++i) {
                   QTextLine l = tl->lineAt(i);
-                  QRectF r(l.naturalTextRect().translated(tl->position()));
+                  QRectF r(l.naturalTextRect().translated(tl->position()+bbox().topLeft()));
                   r.adjust(-l.position().x(), 0.0, 0.0, 0.0);
                   pp.addRect(r);
                   }
