@@ -102,11 +102,6 @@
      </item>
      <item>
       <property name="text">
-       <string>Fall/Doit</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string>Repeats</string>
       </property>
      </item>
