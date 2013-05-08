@@ -13,9 +13,7 @@
 #ifndef __MINSTRUMENT_H__
 #define __MINSTRUMENT_H__
 
-// #include <stdio.h>
 #include <list>
-
 #include <QString>
 
 class Zerberus;
@@ -29,9 +27,10 @@ class Sample;
 //   ZInstrument
 //---------------------------------------------------------
 
-class ZInstrument {
-      Zerberus* _msynth;
+class ZInstrument : public QObject {
+      Q_OBJECT
 
+      int _refCount;
       QString _name;
       int _program;
       QString instrumentPath;
@@ -42,10 +41,15 @@ class ZInstrument {
       bool loadFromDir(const QString&);
       bool read(const QByteArray&, QZipReader*, const QString& path);
 
+   signals:
+      void progress(int);
+
    public:
-      ZInstrument(Zerberus*);
+      ZInstrument();
       ~ZInstrument();
 
+      int refCount() const                  { return _refCount; }
+      void setRefCount(int val)             { _refCount = val;  }
       bool load(const QString&);
       int program() const                   { return _program; }
       QString name() const                  { return _name;   }
@@ -55,7 +59,6 @@ class ZInstrument {
       Sample* readSample(const QString& s, QZipReader* uz);
       void addZone(Zone* z)                 { _zones.push_back(z); }
       void addRegion(SfzRegion&);
-      Zerberus* msynth()                    { return _msynth;}
 
       static QByteArray buf;  // used during read of Sample
       static int idx;

@@ -444,11 +444,11 @@ void Segment::add(Element* el)
             case TEXT:
             case TAB_DURATION_SYMBOL:
             case FIGURED_BASS:
-                  _annotations.append(el);
+                  _annotations.push_back(el);
                   break;
             case JUMP:
                   measure()->setRepeatFlags(measure()->repeatFlags() | RepeatJump);
-                  _annotations.append(el);
+                  _annotations.push_back(el);
                   break;
 
             case STAFF_STATE:
@@ -457,14 +457,14 @@ void Segment::add(Element* el)
                         Part* part = el->staff()->part();
                         part->setInstrument(ss->instrument(), tick());
                         }
-                  _annotations.append(el);
+                  _annotations.push_back(el);
                   break;
 
             case INSTRUMENT_CHANGE: {
                   InstrumentChange* is = static_cast<InstrumentChange*>(el);
                   Part* part = is->staff()->part();
                   part->setInstrument(is->instrument(), tick());
-                  _annotations.append(el);
+                  _annotations.push_back(el);
                   break;
                   }
 
@@ -574,12 +574,12 @@ void Segment::remove(Element* el)
             case TEXT:
             case TAB_DURATION_SYMBOL:
             case FIGURED_BASS:
-                  _annotations.removeOne(el);
+                  removeAnnotation(el);
                   break;
 
             case JUMP:
                   measure()->setRepeatFlags(measure()->repeatFlags() & ~RepeatJump);
-                  _annotations.removeOne(el);
+                  removeAnnotation(el);
                   break;
 
             case STAFF_STATE:
@@ -587,7 +587,7 @@ void Segment::remove(Element* el)
                         Part* part = el->staff()->part();
                         part->removeInstrument(tick());
                         }
-                  _annotations.removeOne(el);
+                  removeAnnotation(el);
                   break;
 
             case INSTRUMENT_CHANGE:
@@ -596,7 +596,7 @@ void Segment::remove(Element* el)
                   Part* part = is->staff()->part();
                   part->removeInstrument(tick());
                   }
-                  _annotations.removeOne(el);
+                  removeAnnotation(el);
                   break;
 
             case CLEF:
@@ -969,12 +969,26 @@ bool Segment::removeSpannerFor(Spanner* e)
 
 bool Segment::findAnnotationOrElement(ElementType type, int minTrack, int maxTrack)
       {
-      foreach (const Element* e, annotations())
+      for (const Element* e : _annotations)
             if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack)
                   return true;
       for (int curTrack = minTrack; curTrack <= maxTrack; curTrack++)
             if (element(curTrack))
                   return true;
       return false;
+      }
+
+//---------------------------------------------------------
+//   removeAnnotation
+//---------------------------------------------------------
+
+void Segment::removeAnnotation(Element* e)
+      {
+      for (auto i = _annotations.begin(); i != _annotations.end(); ++i) {
+            if (*i == e) {
+                  _annotations.erase(i);
+                  break;
+                  }
+            }
       }
 

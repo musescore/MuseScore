@@ -123,6 +123,5 @@ class Beam : public Element {
       QVariant propertyDefault(P_ID id) const;
       };
 
-extern bool endBeam(const Fraction&, ChordRest* cr, ChordRest* prevCr);
 #endif
 

@@ -66,6 +66,51 @@ void SpannerSegment::setSystem(System* s)
       }
 
 //---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant SpannerSegment::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_COLOR:
+            case P_VISIBLE:
+                  return spanner()->getProperty(id);
+            default:
+                  return Element::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool SpannerSegment::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_COLOR:
+            case P_VISIBLE:
+                 return spanner()->setProperty(id, v);
+            default:
+                  return Element::setProperty(id, v);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant SpannerSegment::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_COLOR:
+            case P_VISIBLE:
+                  return spanner()->propertyDefault(id);
+            default:
+                  return Element::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
 

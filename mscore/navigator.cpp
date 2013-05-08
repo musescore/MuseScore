@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
-//  $Id: navigator.cpp 5630 2012-05-15 15:07:54Z lasconic $
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "navigator.h"
@@ -38,7 +30,6 @@ void MuseScore::showNavigator(bool visible)
       if (n == 0 && visible) {
             n = new Navigator(_navigator, this);
             n->setScoreView(cv);
-            n->updateViewRect();
             }
       _navigator->setVisible(visible);
       getAction("toggle-navigator")->setChecked(visible);
@@ -51,11 +42,12 @@ void MuseScore::showNavigator(bool visible)
 NScrollArea::NScrollArea(QWidget* w)
    : QScrollArea(w)
       {
-      setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+      setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
       setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
       setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       setMinimumHeight(40);
+      setMaximumHeight(140);
       setLineWidth(0);
       }
 
@@ -65,9 +57,8 @@ NScrollArea::NScrollArea(QWidget* w)
 
 void NScrollArea::resizeEvent(QResizeEvent* ev)
       {
-      if (widget() && (ev->size().height() != ev->oldSize().height())) {
+      if (widget() && (ev->size().height() != ev->oldSize().height()))
             widget()->resize(widget()->width(), ev->size().height());
-            }
       QScrollArea::resizeEvent(ev);
       }
 
@@ -103,6 +94,7 @@ Navigator::Navigator(NScrollArea* sa, QWidget* parent)
       setAttribute(Qt::WA_NoBackground);
       _score         = 0;
       scrollArea     = sa;
+      scrollArea->setWidgetResizable(true);
       _cv            = 0;
       viewRect       = new ViewRect(this);
       setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -119,7 +111,6 @@ void Navigator::resizeEvent(QResizeEvent* ev)
       if (_score) {
             rescale();
             updateViewRect();
-            layoutChanged();
             }
       }
 
@@ -139,9 +130,8 @@ void Navigator::setScoreView(ScoreView* v)
             rescale();
             connect(this, SIGNAL(viewRectMoved(const QRectF&)), v, SLOT(setViewRect(const QRectF&)));
             connect(_cv,  SIGNAL(viewRectChanged()), this, SLOT(updateViewRect()));
-            updateViewRect();
-            layoutChanged();
             rescale();
+            updateViewRect();
             }
       else {
             _score = 0;
@@ -155,40 +145,32 @@ void Navigator::setScoreView(ScoreView* v)
 
 void Navigator::setScore(Score* v)
       {
-      _cv = 0;
+      _cv    = 0;
       _score = v;
       rescale();
-      setViewRect(QRect());
+      updateViewRect();
       update();
       }
 
 //---------------------------------------------------------
 //   rescale
+//    recompute scale of score view
 //---------------------------------------------------------
 
 void Navigator::rescale()
       {
-      if (!_score) {
+      if (!_score || _score->pages().isEmpty()) {
             setFixedWidth(0);
             return;
             }
-      if (_score->pages().isEmpty())
-            return;
-      int h       = height();
-      Page* lp    = _score->pages().back();
+      Page* lp          = _score->pages().back();
       qreal scoreWidth  = lp->x() + lp->width();
       qreal scoreHeight = lp->height();
 
-      qreal m;
-      qreal m1    = h / scoreHeight;
-      int w1      = int (scoreWidth * m1);
+      qreal m  = height() / scoreHeight;
 
-      setFixedWidth(w1);
-      m = m1;
-
-      matrix.setMatrix(m, matrix.m12(), matrix.m13(), matrix.m21(), m,
-         matrix.m23(), matrix.m31(), matrix.m32(), matrix.m33());
-      update();
+      setFixedWidth(int(scoreWidth * m));
+      matrix = QTransform(m, 0, 0, m, 0, 0);
       }
 
 //---------------------------------------------------------
@@ -197,14 +179,10 @@ void Navigator::rescale()
 
 void Navigator::updateViewRect()
       {
-      if (_score == 0) {
-            setViewRect(QRect());
-            return;
-            }
-      if (_cv) {
-            QRectF r(0.0, 0.0, _cv->width(), _cv->height());
-            setViewRect(_cv->toLogical(r));
-            }
+      QRect r;
+      if (_cv)
+            r = _cv->toLogical(QRect(0.0, 0.0, _cv->width(), _cv->height())).toRect();
+      setViewRect(r);
       }
 
 //---------------------------------------------------------

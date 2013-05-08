@@ -149,21 +149,21 @@ Shortcut Shortcut::sc[] = {
           redo_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT,
          0,
          "cut",
          QT_TRANSLATE_NOOP("action","Cut"),
           cut_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_FOTO,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT |STATE_LYRICS_EDIT | STATE_FOTO,
          0,
          "copy",
          QT_TRANSLATE_NOOP("action","Copy"),
           copy_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT |STATE_LYRICS_EDIT,
          0,
          "paste",
          Qt::ApplicationShortcut,
@@ -758,7 +758,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
-            | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
+            | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY | STATE_FOTO,
          0,
          "escape",
          QT_TRANSLATE_NOOP("action","Escape")
@@ -1119,7 +1119,7 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
-	 /* no stroke: 4th*/
+       /* no stroke: 4th*/
         "grace4",
         QT_TRANSLATE_NOOP("action","Grace: quarter"),
         QT_TRANSLATE_NOOP("action","Grace: quarter"),
@@ -1287,11 +1287,18 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Navigator")
          ),
       Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         0,
+         "toggle-midiimportpanel",
+         Qt::ApplicationShortcut,
+         QT_TRANSLATE_NOOP("action","MIDI Import Panel")
+         ),
+      Shortcut(
 #ifdef Q_WS_MAC
          //Avoid conflict with M in text
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
 #else
-	   STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
 #endif
          0,
          "toggle-mixer",
@@ -1713,7 +1720,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Backspace")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_SEARCH,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "find",
          QT_TRANSLATE_NOOP("action","Find")
@@ -1779,6 +1786,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "synth-control",
+         Qt::ApplicationShortcut,
          QT_TRANSLATE_NOOP("action","Synthesizer")
          ),
       Shortcut(
@@ -1962,7 +1970,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Previous Score")
          ),
       Shortcut(
-         STATE_INIT | STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_SEARCH | STATE_FOTO,
+         STATE_INIT | STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_FOTO,
          0,
          "musescore-connect",
          Qt::ApplicationShortcut,

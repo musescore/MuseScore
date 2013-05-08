@@ -16,6 +16,7 @@
 
 #include "inspectorBase.h"
 #include "ui_inspector_element.h"
+#include "ui_inspector_textline.h"
 #include "ui_inspector_volta.h"
 
 //---------------------------------------------------------
@@ -26,6 +27,7 @@ class InspectorVolta : public InspectorBase {
       Q_OBJECT
 
       Ui::InspectorElement e;
+      Ui::InspectorTextLine l;
       Ui::InspectorVolta v;
 
    public:

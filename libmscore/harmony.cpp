@@ -310,12 +310,16 @@ static int convertRoot(const QString& s, bool germanNames)
 
 //---------------------------------------------------------
 //   parseHarmony
-//    return ChordDescription
+//    compare typed chordname against chord list
+//    return true if chord recognized
 //---------------------------------------------------------
 
 bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       {
       _id = -1;
+      bool useLiteral = false;
+      if (ss.endsWith(' '))
+            useLiteral = true;
       QString s = ss.simplified();
       _userName = s;
       int n = s.size();
@@ -333,22 +337,48 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       int slash = s.indexOf('/');
       if (slash != -1) {
             QString bs = s.mid(slash+1);
-            s     = s.mid(idx, slash - idx);
+            s = s.mid(idx, slash - idx);
             *base = convertRoot(bs, germanNames);
             }
       else
             s = s.mid(idx).simplified();
-      s = s.toLower();
-      foreach(const ChordDescription* cd, *score()->style()->chordList()) {
-            foreach(QString ss, cd->names) {
-                  if (s == ss.toLower()) {
+      ParsedChord sParsed;
+      sParsed.parse(s);
+      int parsedID = -1;
+      // attempt to match chord using exact string match
+      // but also match using parsed forms as fallback
+      foreach (const ChordDescription* cd, *score()->style()->chordList()) {
+            foreach (QString ss, cd->names) {
+                  if (s == ss) {
                         _id = cd->id;
+                        qDebug("exact chord match succeeded <%s>",qPrintable(s));
                         return true;
                         }
                   }
+            if (parsedID < 0 && !useLiteral) {
+                  foreach (ParsedChord ssParsed, cd->parsedChords) {
+                        if (sParsed == ssParsed) {
+                              qDebug("flexible chordmatch succeeded <%s> (%s)", qPrintable(s), qPrintable(sParsed));
+                              parsedID = cd->id;
+                              break;
+                              }
+                        }
+                  }
             }
+      // exact match failed, so fall back on parsed match if one was found
+      // TODO - even if parsed match fails (no matching ID in chordList),
+      // we could construct a ChordDescription from the parsed form
+      // this could be output to MusicXML as in the same manner as chords
+      // that were input via MusicXML or the Harmony Properties windows
+      // ultimately, a set of display rules could handle rendering as well
+      if (parsedID >= 0) {
+            _id = parsedID;
+            return true;
+            }
+
+      // no match found
       _userName = s;
-      qDebug("2:parseHarmony failed <%s><%s>", qPrintable(ss), qPrintable(s));
+      qDebug("2:parseHarmony failed <%s><%s> (%s)", qPrintable(ss), qPrintable(s), qPrintable(sParsed));
       return false;
       }
 

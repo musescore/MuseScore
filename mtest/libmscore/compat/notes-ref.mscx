@@ -320,8 +320,8 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         <Beam id="5">
-          <l1>1</l1>
-          <l2>-3</l2>
+          <l1>-7</l1>
+          <l2>-11</l2>
           </Beam>
         <Chord>
           <durationType>32nd</durationType>
@@ -355,13 +355,9 @@ p, li { white-space: pre-wrap; }
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <Beam id="6">
-          <l1>-7</l1>
-          <l2>-11</l2>
-          </Beam>
         <Chord>
           <durationType>32nd</durationType>
-          <Beam>6</Beam>
+          <Beam>5</Beam>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -369,7 +365,7 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
-          <Beam>6</Beam>
+          <Beam>5</Beam>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -377,7 +373,7 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
-          <Beam>6</Beam>
+          <Beam>5</Beam>
           <Note>
             <pitch>71</pitch>
             <tpc>19</tpc>
@@ -385,7 +381,7 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>32nd</durationType>
-          <Beam>6</Beam>
+          <Beam>5</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>

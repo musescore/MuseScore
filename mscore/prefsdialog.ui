@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>845</width>
-    <height>591</height>
+    <width>873</width>
+    <height>641</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,7 +34,7 @@
      <item>
       <widget class="QPushButton" name="resetToDefault">
        <property name="text">
-        <string>Reset to Default</string>
+        <string>Reset All Preferences to Default</string>
        </property>
       </widget>
      </item>
@@ -326,6 +326,13 @@
             </property>
            </widget>
           </item>
+          <item row="3" column="1">
+           <widget class="QCheckBox" name="midiImportShow">
+            <property name="text">
+             <string>Show Midi Import Panel</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -545,14 +552,14 @@
           <item row="3" column="2">
            <widget class="QToolButton" name="myPluginsButton">
             <property name="text">
-             <string>...</string>
+             <string/>
             </property>
            </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>SoundFonts Path:</string>
+             <string>SoundFonts Folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -568,17 +575,10 @@
           <item row="6" column="1">
            <widget class="QLineEdit" name="myImages"/>
           </item>
-          <item row="6" column="2">
-           <widget class="QToolButton" name="myImagesButton">
-            <property name="text">
-             <string>...</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="2">
            <widget class="QToolButton" name="myTemplatesButton">
             <property name="text">
-             <string>...</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -588,13 +588,34 @@
           <item row="5" column="0">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>Sfz Files Path:</string>
+             <string>Sfz Files Folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
             <property name="indent">
              <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QToolButton" name="myImagesButton">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QToolButton" name="mySoundfontsButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="QToolButton" name="mySfzButton">
+            <property name="text">
+             <string>...</string>
             </property>
            </widget>
           </item>
@@ -1497,13 +1518,6 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_48">
-            <property name="text">
-             <string>Scale</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="scale">
             <property name="toolTip">
@@ -1522,6 +1536,26 @@
              <double>1.000000000000000</double>
             </property>
            </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_48">
+            <property name="text">
+             <string>Default zoom</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_17">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -2069,35 +2103,6 @@
              </item>
             </layout>
            </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_14">
-         <property name="title">
-          <string>Default SoundFont</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_11">
-          <item>
-           <widget class="QLabel" name="label_23">
-            <property name="text">
-             <string>sf2:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="defaultSf"/>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_29">
-            <property name="text">
-             <string>sfz:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="defaultSfz"/>
           </item>
          </layout>
         </widget>
@@ -2663,7 +2668,7 @@
          <item>
           <widget class="QPushButton" name="resetShortcut">
            <property name="text">
-            <string>Reset to Default</string>
+            <string>Reset Shortcut to Default</string>
            </property>
           </widget>
          </item>
@@ -2790,8 +2795,6 @@
    <header>recordbutton.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

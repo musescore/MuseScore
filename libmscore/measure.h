@@ -142,8 +142,8 @@ class Measure : public MeasureBase {
       void push_back(Segment* e);
       void push_front(Segment* e);
 
-      void* pTimesig()  { return &_timesig; }
-      void* pLen()      { return &_len;     }
+//      void* pTimesig()  { return &_timesig; }
+//      void* pLen()      { return &_len;     }
 
    public:
       Measure(Score* = 0);

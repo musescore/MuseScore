@@ -29,6 +29,7 @@
 #include "mscore.h"
 #include "icon.h"
 #include "stemslash.h"
+#include "groups.h"
 
 //---------------------------------------------------------
 //   BeamFragment
@@ -41,165 +42,6 @@ struct BeamFragment {
       qreal py1[2];
       qreal py2[2];
       };
-
-//---------------------------------------------------------
-//   BeamHint
-//    beam hint for autobeamer
-//---------------------------------------------------------
-
-struct BeamHint {
-      Fraction noteLen;
-      Fraction prevNoteLen; // zero = all notes
-      Fraction timeSig;     // valid for this timesig; zero = valid for all
-      Fraction pos;
-
-      BeamHint(Fraction sig, Fraction p, Fraction len, Fraction prevLen)
-         : noteLen(len), prevNoteLen(prevLen), timeSig(sig), pos(p) {}
-      };
-
-//---------------------------------------------------------
-//   endBeam
-//---------------------------------------------------------
-
-static BeamHint endBeamList[] = {
-      // in 2 2 time
-      //  end beams each 1 2 note
-
-      BeamHint(Fraction(2,2), Fraction(1,2), Fraction(0,0), Fraction(0,0)),
-
-      // in 3 2 time:
-      //   end beams each 1 2 note
-      //   end beams with 16th notes each 1 4 note
-      //   end beams with 32th notes each 1 8 note
-
-      //       noteLen   timesig  position
-
-      BeamHint(Fraction(3,2), Fraction(1,2), Fraction(0,0), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(2,2), Fraction(0,0), Fraction(0,0)),
-
-      BeamHint(Fraction(3,2), Fraction(1,4), Fraction(1,16), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(1,2), Fraction(1,16), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(3,4), Fraction(1,16), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(1,1), Fraction(1,16), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(5,4), Fraction(1,16), Fraction(0,0)),
-
-      BeamHint(Fraction(3,2), Fraction(1,8), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(1,4), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(3,8), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(1,2), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(5,8), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(3,4), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(7,8), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(1,1), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(9,8), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(5,4), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(3,2), Fraction(11,8),Fraction(1,32), Fraction(0,0)),
-
-      BeamHint(Fraction(2,4), Fraction(0,0), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(2,4), Fraction(1,4), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(2,4), Fraction(1,9), Fraction(1,32), Fraction(0,0)),
-      BeamHint(Fraction(2,4), Fraction(3,8), Fraction(1,32), Fraction(0,0)),
-
-      BeamHint(Fraction(3,4), Fraction(1,4), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(3,4), Fraction(1,2), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(3,4), Fraction(1,4), Fraction(1,16),  Fraction(0,0)),
-      BeamHint(Fraction(3,4), Fraction(1,2), Fraction(1,16),  Fraction(0,0)),
-      BeamHint(Fraction(3,4), Fraction(1,8), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(3,4), Fraction(1,4), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(3,4), Fraction(3,8), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(3,4), Fraction(1,2), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(3,4), Fraction(5,8), Fraction(1,32),  Fraction(0,0)),
-
-      BeamHint(Fraction(12,16), Fraction(3,8),  Fraction(0, 0), Fraction(0,0)),
-      BeamHint(Fraction(12,16), Fraction(3,16), Fraction(1,16), Fraction(0,0)),
-      BeamHint(Fraction(12,16), Fraction(6,16), Fraction(1,8),  Fraction(0,0)),
-      BeamHint(Fraction(12,16), Fraction(9,16), Fraction(1,8),  Fraction(0,0)),
-      BeamHint(Fraction(12,16), Fraction(9,16), Fraction(1,16), Fraction(0,0)),
-
-      BeamHint(Fraction(4,4), Fraction(1,2), Fraction(0,0),   Fraction(0,0)),
-      BeamHint(Fraction(4,4), Fraction(1,4), Fraction(1,12),  Fraction(0,0)),
-      BeamHint(Fraction(4,4), Fraction(3,4), Fraction(1,12),  Fraction(0,0)),
-
-      BeamHint(Fraction(4,4), Fraction(1,4), Fraction(1,8),  Fraction(1,16)),  // ws
-      BeamHint(Fraction(4,4), Fraction(2,4), Fraction(1,8),  Fraction(1,16)),  // ws
-      BeamHint(Fraction(4,4), Fraction(3,4), Fraction(1,8),  Fraction(1,16)),  // ws
-
-      BeamHint(Fraction(4,4), Fraction(1,4), Fraction(1,16),  Fraction(0,0)),
-      BeamHint(Fraction(4,4), Fraction(3,4), Fraction(1,16),  Fraction(0,0)),
-      BeamHint(Fraction(4,4), Fraction(1,8), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(4,4), Fraction(1,4), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(4,4), Fraction(3,8), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(4,4), Fraction(5,8), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(4,4), Fraction(3,4), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(4,4), Fraction(7,8), Fraction(1,32),  Fraction(0,0)),
-
-      BeamHint(Fraction(5,4), Fraction(3,4), Fraction(0,0),  Fraction(0,0)),
-
-      BeamHint(Fraction(6,4), Fraction(3,4), Fraction(0,0),  Fraction(0,0)),
-
-      BeamHint(Fraction(3,8), Fraction(3,8), Fraction(0,0),  Fraction(0,0)),
-
-      BeamHint(Fraction(4,8), Fraction(0,0), Fraction(0,0),   Fraction(0,0)),
-      BeamHint(Fraction(4,8), Fraction(1,4), Fraction(0,0),   Fraction(0,0)),
-      BeamHint(Fraction(4,8), Fraction(1,8), Fraction(1,32),  Fraction(0,0)),
-      BeamHint(Fraction(4,8), Fraction(3,8), Fraction(1,32),  Fraction(0,0)),
-
-      BeamHint(Fraction(6,8), Fraction(3,8), Fraction(0,0),  Fraction(0,0)),
-
-      BeamHint(Fraction(9,8), Fraction(3,8), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(9,8), Fraction(3,4), Fraction(0,0),  Fraction(0,0)),
-
-      BeamHint(Fraction(12,8), Fraction(3,8), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(12,8), Fraction(3,4), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(12,8), Fraction(9,8), Fraction(0,0),  Fraction(0,0)),
-
-      BeamHint(Fraction(15,8), Fraction(3,8), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(15,8), Fraction(3,4), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(15,8), Fraction(9,8), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(15,8), Fraction(6,8), Fraction(0,0),  Fraction(0,0)),
-
-      BeamHint(Fraction(4,16), Fraction(0,0), Fraction(0,0),  Fraction(0,0)),
-      BeamHint(Fraction(4,16), Fraction(1,8), Fraction(0,0),  Fraction(0,0))
-      };
-
-//---------------------------------------------------------
-//   endBeam
-//    return true if beam should be ended
-//---------------------------------------------------------
-
-bool endBeam(const Fraction& ts, ChordRest* cr, ChordRest* prevCr)
-      {
-      int p = cr->tick() - cr->measure()->tick();
-      if (cr->tuplet() && !cr->tuplet()->elements().isEmpty()) {
-            if (cr->tuplet()->elements().front() == cr)     // end beam at tuplet
-                  return true;
-            return false;
-            }
-      Fraction l  = cr->duration();
-      Fraction pl = prevCr ? prevCr->duration() : Fraction(0,1);
-      for (unsigned i = 0; i < sizeof(endBeamList)/sizeof(*endBeamList); ++i) {
-            const BeamHint& h = endBeamList[i];
-            if (!h.timeSig.isZero() && (!h.timeSig.identical(ts)))
-                  continue;
-            if (!h.noteLen.isZero() && (h.noteLen != l))
-                  continue;
-            if (!h.prevNoteLen.isZero() && (h.prevNoteLen != pl))
-                  continue;
-            if (!h.pos.isZero()) {
-                  int pos = h.pos.ticks();
-                  if (pos != p)
-                        continue;
-                  }
-            else {            // if (h.pos.numerator() == 0) {   // stop on every beat
-                  int len = (4 * MScore::division) / h.timeSig.denominator();
-                  if (p % len) {
-                        continue;
-                        }
-                  }
-            return true;
-            }
-      return false;
-      }
 
 //---------------------------------------------------------
 //   Beam
@@ -1656,13 +1498,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         for (; i < n; ++i) {
                               ChordRest* c = crl[i];
                               int l = c->durationType().hooks() - 1;
-                              bool b32 = (beamLevel >= 1) && (c->beamMode() == BeamMode::BEGIN32);
-                              bool b64 = (beamLevel >= 2) && (c->beamMode() == BeamMode::BEGIN64);
-                              if (l >= beamLevel && (b32 || b64)) {
-                                    ++i;
-                                    break;
-                                    }
-                              if (l < beamLevel)
+
+                              BeamMode bm = c->beamMode();
+                              if (bm == BeamMode::AUTO)
+                                    bm = Groups::endBeam(c);
+                              bool b32 = (beamLevel >= 1) && (bm == BeamMode::BEGIN32);
+                              bool b64 = (beamLevel >= 2) && (bm == BeamMode::BEGIN64);
+                              if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel))
                                     break;
                               }
 

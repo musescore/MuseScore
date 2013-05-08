@@ -59,7 +59,7 @@
 -->
 
   <renderRoot>:n m:0:-1 :a m:.5:1</renderRoot>
-  <renderBase>m:0:2 / :n :a</renderBase>
+  <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
 
   <chord id="1">
     <render></render>

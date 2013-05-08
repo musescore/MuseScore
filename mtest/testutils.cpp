@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2012 Werner Schweer
+//  Copyright (C) 2012-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -28,6 +28,9 @@
 extern Score::FileError importPdf(Score*, const QString&);
 #endif
 
+extern Score::FileError importBB(Score*, const QString&);
+extern Score::FileError importCapella(Score*, const QString&);
+extern Score::FileError importCapXml(Score*, const QString&);
 extern Score::FileError importCompressedMusicXml(Score*, const QString&);
 extern Score::FileError importMusicXml(Score*, const QString&);
 extern bool saveXml(Score*, const QString&);
@@ -114,7 +117,13 @@ Score* MTest::readCreatedScore(const QString& name)
       QString csl  = score->fileInfo()->suffix().toLower();
 
       Score::FileError rv;
-      if (csl == "mscz" || csl == "mscx")
+      if (csl == "cap")
+            rv = importCapella(score, name);
+      else if (csl == "capx")
+            rv = importCapXml(score, name);
+      else if (csl == "sgu")
+            rv = importBB(score, name);
+      else if (csl == "mscz" || csl == "mscx")
             rv = score->loadMsc(name, false);
       else if (csl == "mxl")
             rv = importCompressedMusicXml(score, name);

@@ -45,6 +45,7 @@ struct TLine {
 
       TLine() {}
       TLine(const QString& s) { text = s; }
+      bool operator ==(const TLine& x) { return std::tie(x.text, x.pos) == std::tie(text, pos); }
       };
 
 //---------------------------------------------------------
@@ -116,18 +117,22 @@ class SimpleText : public Element {
       void startEdit(MuseScoreView*, const QPointF&);
       void endEdit();
       bool edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QString&);
+
       bool deletePreviousChar();
       bool deleteChar();
+      void deleteSelectedText();
+
       bool movePosition(QTextCursor::MoveOperation op,
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       bool setCursor(const QPointF& p,
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
-      void moveCursorToEnd()   { movePosition(QTextCursor::Start); };
-      void moveCursorToStart() { movePosition(QTextCursor::End); };
+      void moveCursorToEnd()   { movePosition(QTextCursor::Start); }
+      void moveCursorToStart() { movePosition(QTextCursor::End); }
 
       QString selectedText() const;
 
       void insertText(const QString&);
+      void selectAll();
       };
 
 #endif

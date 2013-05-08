@@ -618,6 +618,9 @@ void Note::draw(QPainter* painter) const
       // NOT tablature
 
       else {
+            // skip drawing, if second note of a cross-measure value
+            if(chord()->crossMeasure() == CROSSMEASURE_SECOND)
+                  return;
             //
             // warn if pitch extends usable range of instrument
             // by coloring the note head
@@ -1101,8 +1104,6 @@ Element* Note::drop(const DropData& data)
 
             case ACCIDENTAL:
                   score()->changeAccidental(this, static_cast<Accidental*>(e)->accidentalType());
-                  if (_accidental)
-                        return e;
                   break;
 
             case BEND:

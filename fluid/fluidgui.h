@@ -21,7 +21,7 @@
 //   ListDialog
 //---------------------------------------------------------
 
-class ListDialog : public QDialog {
+class SfListDialog : public QDialog {
       Q_OBJECT
       int _idx = -1;
       QListWidget* list;
@@ -30,7 +30,7 @@ class ListDialog : public QDialog {
       void itemSelected(QListWidgetItem*);
 
    public:
-      ListDialog();
+      SfListDialog();
       QString name();
       QString path();
       void add(const QString& name, const QString& path);
@@ -44,13 +44,14 @@ class FluidGui : public SynthesizerGui, Ui::FluidGui {
       Q_OBJECT
 
       FluidS::Fluid* fluid() { return static_cast<FluidS::Fluid*>(synthesizer()); }
-      void updateUpDownButtons();
+
 
    private slots:
       void soundFontUpClicked();
       void soundFontDownClicked();
       void soundFontAddClicked();
       void soundFontDeleteClicked();
+      void updateUpDownButtons();
 
    public slots:
       virtual void synthesizerChanged();

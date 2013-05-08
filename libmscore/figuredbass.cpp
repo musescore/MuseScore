@@ -1257,12 +1257,9 @@ FiguredBass* FiguredBass::nextFiguredBass() const
             return 0;
 
       // scan segment annotations for an existing FB element in the this' staff
-      const QList<Element*>& annot = nextSegm->annotations();
-      int i;
-      int count = annot.size();
-      for(i = 0; i < count; i++)
-            if(annot.at(i)->type() == FIGURED_BASS && annot.at(i)->track() == track())
-                  return static_cast<FiguredBass*>(annot.at(i));
+      for (Element* e : nextSegm->annotations())
+            if (e->type() == FIGURED_BASS && e->track() == track())
+                  return static_cast<FiguredBass*>(e);
 
       return 0;
       }
@@ -1359,20 +1356,17 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
       track = staff * VOICES;                   // first track for this staff
 
       // scan segment annotations for an existing FB element in the same staff
-      const QList<Element*>& annot = seg->annotations();
-      int i;
-      int count = annot.size();
-      FiguredBass* fb;
-      for(i = 0; i < count; i++) {
-            if(annot.at(i)->type() == FIGURED_BASS && (annot.at(i)->track() / VOICES) == staff) {
+      FiguredBass* fb = 0;
+      for (Element* e : seg->annotations()) {
+            if (e->type() == FIGURED_BASS && (e->track() / VOICES) == staff) {
                   // an FB already exists in segment: re-use it
-                  fb = static_cast<FiguredBass*>(annot.at(i));
+                  fb = static_cast<FiguredBass*>(e);
                   *pNew = false;
                   endTick = seg->tick() + fb->ticks();
                   break;
                   }
             }
-      if(i >= count) {                          // no FB at segment: create new
+      if (fb == 0) {                          // no FB at segment: create new
             fb = new FiguredBass(seg->score());
             fb->setTrack(track);
             fb->setParent(seg);
@@ -1393,8 +1387,8 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
 
             // set onNote status
             fb->setOnNote(false);               // assume not onNote
-            for(i = track; i < track + VOICES; i++)         // if segment has chord in staff, set onNote
-                  if(seg->element(i) && seg->element(i)->type() == CHORD) {
+            for (int i = track; i < track + VOICES; i++)         // if segment has chord in staff, set onNote
+                  if (seg->element(i) && seg->element(i)->type() == CHORD) {
                         fb->setOnNote(true);
                         break;
                   }
@@ -1407,11 +1401,9 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             Segment *         prevSegm;
             FiguredBass*      prevFB = 0;
             for(prevSegm = seg->prev1(Segment::SegChordRest); prevSegm; prevSegm = prevSegm->prev1(Segment::SegChordRest)) {
-                  const QList<Element*>& annot = prevSegm->annotations();
-                  count = annot.size();
-                  for(i = 0; i < count; i++) {
-                        if(annot.at(i)->type() == FIGURED_BASS && (annot.at(i)->track() ) == track) {
-                              prevFB = static_cast<FiguredBass*>(annot[i]);   // previous FB found
+                  for (Element* e : prevSegm->annotations()) {
+                        if (e->type() == FIGURED_BASS && (e->track() ) == track) {
+                              prevFB = static_cast<FiguredBass*>(e);   // previous FB found
                               break;
                               }
                         }

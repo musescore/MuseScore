@@ -48,86 +48,6 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="title">
-      <string>Staff Properties</string>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QCheckBox" name="small">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Small</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="invisible">
-        <property name="text">
-         <string>Invisible</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>79</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>Type:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="staffType"/>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>79</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="1" column="1">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="sizePolicy">
@@ -155,13 +75,6 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_13">
-          <property name="text">
-           <string>Instrument:</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="2">
          <widget class="QToolButton" name="changeInstrument">
           <property name="text">
@@ -173,6 +86,13 @@
          <widget class="QLabel" name="label_14">
           <property name="text">
            <string>Part Name:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_13">
+          <property name="text">
+           <string>Instrument:</string>
           </property>
          </widget>
         </item>
@@ -625,8 +545,139 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Staff Properties</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="1" column="2">
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>79</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="invisible">
+        <property name="text">
+         <string>Invisible</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QComboBox" name="staffType"/>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>Type:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="small">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Small</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>79</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>Extra distance:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="QDoubleSpinBox" name="spinExtraDistance">
+        <property name="suffix">
+         <string>sp</string>
+        </property>
+        <property name="minimum">
+         <double>-50.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>50.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.250000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>invisible</tabstop>
+  <tabstop>small</tabstop>
+  <tabstop>staffType</tabstop>
+  <tabstop>spinExtraDistance</tabstop>
+  <tabstop>partName</tabstop>
+  <tabstop>instrumentName</tabstop>
+  <tabstop>changeInstrument</tabstop>
+  <tabstop>longName</tabstop>
+  <tabstop>editLongName</tabstop>
+  <tabstop>shortName</tabstop>
+  <tabstop>editShortName</tabstop>
+  <tabstop>minPitchA</tabstop>
+  <tabstop>minPitchASelect</tabstop>
+  <tabstop>maxPitchA</tabstop>
+  <tabstop>maxPitchASelect</tabstop>
+  <tabstop>minPitchP</tabstop>
+  <tabstop>minPitchPSelect</tabstop>
+  <tabstop>maxPitchP</tabstop>
+  <tabstop>maxPitchPSelect</tabstop>
+  <tabstop>iList</tabstop>
+  <tabstop>octave</tabstop>
+  <tabstop>up</tabstop>
+  <tabstop>down</tabstop>
+  <tabstop>numOfStrings</tabstop>
+  <tabstop>editStringData</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources>
   <include location="musescore.qrc"/>
  </resources>

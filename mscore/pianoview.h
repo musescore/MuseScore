@@ -20,18 +20,22 @@ class Chord;
 class Note;
 class NoteEvent;
 
+enum { PianoItemType = QGraphicsItem::UserType + 1 };
+
 //---------------------------------------------------------
 //   PianoItem
 //---------------------------------------------------------
 
 class PianoItem : public QGraphicsRectItem {
-      Note*      note;
+      Note*      _note;
       NoteEvent* event;
       virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
    public:
       PianoItem(Note*, NoteEvent*);
       virtual ~PianoItem() {}
+      virtual int type() const { return PianoItemType; }
+      Note* note() { return _note; }
       };
 
 //---------------------------------------------------------
@@ -55,6 +59,7 @@ class PianoView : public QGraphicsView {
       int y2pitch(int y) const;
       Pos pix2pos(int x) const;
       int pos2pix(const Pos& p) const;
+      void createLocators();
 
    protected:
       virtual void wheelEvent(QWheelEvent* event);
@@ -69,12 +74,11 @@ class PianoView : public QGraphicsView {
 
    public slots:
       void moveLocator(int);
-      void update();
+      void updateNotes();
 
    public:
       PianoView();
       void setStaff(Staff*, Pos* locator);
-      void setChord(Chord*, Pos* locator);
       void ensureVisible(int tick);
       QList<QGraphicsItem*> items() { return scene()->selectedItems(); }
       };

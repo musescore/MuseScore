@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>692</width>
+    <width>878</width>
     <height>407</height>
    </rect>
   </property>
@@ -98,11 +98,6 @@
      <item>
       <property name="text">
        <string>Tremolo</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Fall/Doit</string>
       </property>
      </item>
      <item>

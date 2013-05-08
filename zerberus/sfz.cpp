@@ -155,7 +155,7 @@ int SfzRegion::readKey(const QByteArray& s) const
             case 'a': i = 9; break;
             case 'b': i = 11; break;
             default:
-                  printf("Not a note: %s\n", qPrintable(s));
+                  qDebug("SfzRegion: Not a note: %s", qPrintable(s));
                   return 0;
             }
       int idx = 1;
@@ -169,13 +169,11 @@ int SfzRegion::readKey(const QByteArray& s) const
             }
       int octave = s.mid(idx).toInt(&ok);
       if (!ok) {
-            printf("Not a note: %s\n", qPrintable(s));
+            qDebug("SfzRegion: Not a note: %s", qPrintable(s));
             return 0;
             }
       i += (octave + 1) * 12;
-//      printf("key <%s> %d\n", s.data(), i);
       return i;
-//      return i + note_offset + 12 * octave_offset;
       }
 
 //---------------------------------------------------------
@@ -245,7 +243,7 @@ void SfzRegion::readOp(const QByteArray& bb)
             else if (data == "legato")
                   trigger = Trigger::LEGATO;
             else
-                  printf("bad trigger value: %s\n", qPrintable(data));
+                  qDebug("SfzRegion: bad trigger value: %s", qPrintable(data));
             }
       else if (b == "loop_mode") {
             if (data == "no_loop")
@@ -257,7 +255,7 @@ void SfzRegion::readOp(const QByteArray& bb)
             else if (data == "loop_sustain")
                   loop_mode = LoopMode::SUSTAIN;
             if (loop_mode != LoopMode::ONE_SHOT)
-                  printf("loop_mode <%s>\n", qPrintable(data));
+                  qDebug("SfzRegion: loop_mode <%s>", qPrintable(data));
             }
       else if (b.startsWith("on_locc")) {
             int idx = b.mid(7).toInt();
@@ -305,7 +303,7 @@ void SfzRegion::readOp(const QByteArray& bb)
       else if (b == "seq_position")    seq_position = i;
       else if (b == "transpose")       transpose = i;
       else
-            printf("unknown opcode <%s>\n", qPrintable(b));
+            qDebug("SfzRegion: unknown opcode <%s>", qPrintable(b));
       }
 
 //---------------------------------------------------------
@@ -314,12 +312,10 @@ void SfzRegion::readOp(const QByteArray& bb)
 
 bool ZInstrument::loadSfz(const QString& s)
       {
-      printf("load sfz <%s>\n", qPrintable(s));
-
       _program = 0;
       QFile f(s);
       if (!f.open(QIODevice::ReadOnly)) {
-            printf("cannot load %s\n", qPrintable(s));
+            qDebug("ZInstrument: cannot load %s", qPrintable(s));
             return false;
             }
       QFileInfo fi(f);
@@ -334,12 +330,11 @@ bool ZInstrument::loadSfz(const QString& s)
       g.init(path);
 
       bool groupMode = false;
-      msynth()->setLoadProgress(0);
-      qint64 progress = 0;
+      emit progress(0);
+
       while (!f.atEnd()) {
             QByteArray ba = f.readLine();
-            progress += ba.size();
-            msynth()->setLoadProgress( ((qreal)progress*100) / total);
+            emit progress(((qreal)f.pos() * 100) / total);
             ba = ba.simplified();
             if (ba.isEmpty() || ba.startsWith("//"))
                   continue;
@@ -367,6 +362,7 @@ bool ZInstrument::loadSfz(const QString& s)
                         r.readOp(bb);
                   }
             }
+      emit progress(100);
       if (!groupMode && !r.isEmpty())
             addRegion(r);
       return true;

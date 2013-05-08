@@ -104,6 +104,7 @@ class Harmony : public Text {
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);
       virtual void endEdit();
 
+      QString hUserName() const                { return _userName;     }
       int baseTpc() const                      { return _baseTpc;      }
       void setBaseTpc(int val)                 { _baseTpc = val;       }
       int rootTpc() const                      { return _rootTpc;      }

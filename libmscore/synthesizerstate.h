@@ -40,7 +40,9 @@ class SynthesizerGroup : public std::list<IdValue> {
    public:
       const QString& name() const { return _name; }
       void setName(const QString& s) { _name = s; }
+
       SynthesizerGroup() : std::list<IdValue>() {}
+      SynthesizerGroup(const char* n, std::list<IdValue> l) : std::list<IdValue>(l), _name(n) {}
       };
 
 //---------------------------------------------------------
@@ -50,7 +52,11 @@ class SynthesizerGroup : public std::list<IdValue> {
 class SynthesizerState : public std::list<SynthesizerGroup> {
 
    public:
+      SynthesizerState(std::initializer_list<SynthesizerGroup> l) {
+            insert(end(), l.begin(), l.end());
+            }
       SynthesizerState() : std::list<SynthesizerGroup>() {}
+
       void write(Xml&) const;
       void read(XmlReader&);
       };

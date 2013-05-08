@@ -75,7 +75,7 @@ add_library (
       qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp
       cursor.cpp read114.cpp paste.cpp
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
-      synthesizerstate.cpp
+      synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (

@@ -25,6 +25,7 @@ class SynthesizerGui : public QWidget {
 
    signals:
       void sfChanged();
+      void valueChanged();
 
    public slots:
       virtual void synthesizerChanged() {}

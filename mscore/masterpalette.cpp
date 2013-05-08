@@ -115,7 +115,6 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       addPalette(MuseScore::newGraceNotePalette());
       addPalette(MuseScore::newClefsPalette());
-//      addPalette(MuseScore::newKeySigPalette());
       stack->addWidget(new KeyEditor);
 
       stack->addWidget(new TimeDialog);
@@ -133,7 +132,6 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newFingeringPalette());
       addPalette(MuseScore::newNoteHeadsPalette());
       addPalette(MuseScore::newTremoloPalette());
-      addPalette(MuseScore::newFallDoitPalette());
       addPalette(MuseScore::newRepeatsPalette());
       addPalette(MuseScore::newTextPalette());
       addPalette(MuseScore::newBreaksPalette());

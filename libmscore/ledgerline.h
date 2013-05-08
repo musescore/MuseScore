@@ -39,6 +39,7 @@ class LedgerLine : public Line {
       virtual QPointF pagePos() const;      ///< position in page coordinates
       Chord* chord() const { return (Chord*)parent(); }
       virtual void layout();
+      virtual void draw(QPainter*) const;
       qreal measureXPos() const;
       LedgerLine* next() const    { return _next; }
       void setNext(LedgerLine* l) { _next = l;    }

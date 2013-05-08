@@ -333,6 +333,8 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
 
 int Palette::idx(const QPoint& p) const
       {
+      if (columns() == 0)
+            return -1;
       int rightBorder = width() % hgrid;
       int hhgrid      = hgrid + (rightBorder / columns());
 
@@ -360,7 +362,7 @@ QRect Palette::idxRect(int i)
       {
       if (i == -1)
             return QRect();
-      if (columns() == 0)
+     if (columns() == 0)
             return QRect();
 
       int rightBorder = width() % hgrid;
@@ -529,6 +531,8 @@ void Palette::paintEvent(QPaintEvent* event)
       //
       // draw grid
       //
+      if (columns() == 0)
+            return;
       int rightBorder = width() % hgrid;
       int hhgrid = hgrid + (rightBorder / columns());
 

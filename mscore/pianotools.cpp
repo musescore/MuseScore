@@ -41,7 +41,7 @@ HPiano::HPiano(QWidget* parent)
       setMouseTracking(true);
       setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
       setDragMode(QGraphicsView::RubberBandDrag);
-      setScale(1.0);
+      setScale(1.5);
 
       scene()->setSceneRect(0.0, 0.0, KEY_WIDTH * 52, KEY_HEIGHT);
 
@@ -109,13 +109,13 @@ HPiano::HPiano(QWidget* parent)
 
 void HPiano::setScale(qreal s)
       {
-      scaleVal = s;
+       scaleVal = s;
       setMaximumSize(QSize((KEY_WIDTH * 52) * scaleVal + 8, KEY_HEIGHT * scaleVal + 8 + 80));
       setMinimumSize(QSize(100, KEY_HEIGHT * scaleVal + 8));
       QTransform t;
       t.scale(scaleVal, scaleVal);
       setTransform(t, false);
-      };
+      }
 
 //---------------------------------------------------------
 //   sizeHint
@@ -334,8 +334,8 @@ void HPiano::wheelEvent(QWheelEvent* event)
                         scaleVal /= 1.1;
                         }
                   }
-            if (scaleVal > 2.0)
-                  scaleVal = 2.0;
+            if (scaleVal > 4.0)
+                  scaleVal = 4.0;
             else if (scaleVal < .5)
                   scaleVal = .5;
             setScale(scaleVal);

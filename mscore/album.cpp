@@ -98,7 +98,7 @@ void Album::print()
                   Page* page = pl.at(n);
 
                   QRectF fr = page->abbox();
-                  QList<const Element*> ell = page->items(fr);
+                  QList<Element*> ell = page->items(fr);
                   qStableSort(ell.begin(), ell.end(), elementLessThan);
                   foreach(const Element* e, ell) {
                         e->itemDiscovered = 0;
