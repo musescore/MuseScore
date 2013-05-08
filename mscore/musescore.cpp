@@ -498,7 +498,9 @@ MuseScore::MuseScore()
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
 
       mainWindow = new QSplitter;
+      mainWindow->setChildrenCollapsible(false);
       mainWindow->setOrientation(Qt::Vertical);
+
       QLayout* mlayout = new QVBoxLayout;
       mlayout->setMargin(0);
       mlayout->setSpacing(0);
@@ -1438,7 +1440,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             changeState(STATE_DISABLED);
             setWindowTitle("MuseScore");
             if (_navigator && _navigator->widget())
-                  static_cast<Navigator*>(_navigator->widget())->setScore(0);
+                  navigator()->setScore(0);
             if (inspector)
                   inspector->setElement(0);
             viewModeCombo->setEnabled(false);
@@ -1489,7 +1491,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       setPos(cs->inputPos());
       _statusBar->showMessage(cs->filePath(), 2000);
       if (_navigator && _navigator->widget())
-            static_cast<Navigator*>(_navigator->widget())->setScoreView(view);
+            navigator()->setScoreView(view);
       }
 
 //---------------------------------------------------------
@@ -2945,6 +2947,8 @@ void MuseScore::readSettings()
       settings.beginGroup("MainWindow");
       resize(settings.value("size", QSize(1024, 768)).toSize());
       mainWindow->restoreState(settings.value("debuggerSplitter").toByteArray());
+      mainWindow->setOpaqueResize(false);
+
       move(settings.value("pos", QPoint(10, 10)).toPoint());
       if (settings.value("maximized", false).toBool())
             showMaximized();
