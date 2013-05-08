@@ -1451,8 +1451,10 @@ void Score::addElement(Element* element)
                   KeySig* ks = static_cast<KeySig*>(element);
                   Staff*  staff = element->staff();
                   KeySigEvent keySigEvent = ks->keySigEvent();
-                  if (!ks->generated())
+                  if (!ks->generated()) {
                         staff->setKey(ks->segment()->tick(), keySigEvent);
+                        ks->insertIntoKeySigChain();
+                        }
                   }
                   break;
             case Element::TEMPO_TEXT:
@@ -1609,8 +1611,10 @@ void Score::removeElement(Element* element)
                   {
                   KeySig* ks    = static_cast<KeySig*>(element);
                   Staff*  staff = element->staff();
-                  if (!ks->generated())
+                  if (!ks->generated()) {
+                        ks->removeFromKeySigChain();
                         staff->removeKey(ks->segment()->tick());
+                        }
                   }
                   break;
             case Element::TEMPO_TEXT:
