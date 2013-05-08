@@ -1119,7 +1119,7 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
-	 /* no stroke: 4th*/
+       /* no stroke: 4th*/
         "grace4",
         QT_TRANSLATE_NOOP("action","Grace: quarter"),
         QT_TRANSLATE_NOOP("action","Grace: quarter"),
@@ -1287,11 +1287,18 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Navigator")
          ),
       Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         0,
+         "toggle-midiimportpanel",
+         Qt::ApplicationShortcut,
+         QT_TRANSLATE_NOOP("action","MIDI Import Panel")
+         ),
+      Shortcut(
 #ifdef Q_WS_MAC
          //Avoid conflict with M in text
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
 #else
-	   STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
 #endif
          0,
          "toggle-mixer",
