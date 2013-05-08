@@ -1,7 +1,6 @@
 #=============================================================================
 #  MuseScore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2013 by Werner Schweer and others
 #
@@ -72,7 +71,7 @@ if (OMR)
 endif (OMR)
 
 
-QT4_WRAP_CPP (mocs
+QT5_WRAP_CPP (mocs
       scoreview.h editinstrument.h editstyle.h edittempo.h instrdialog.h debugger.h
       musescore.h navigator.h pagesettings.h palette.h mixer.h playpanel.h
       measureproperties.h seq.h textpalette.h textstyle.h
@@ -105,7 +104,7 @@ QT4_WRAP_CPP (mocs
 if (APPLE)
       QT4_ADD_RESOURCES (qrc_files musescore-apple.qrc)
 else (APPLE)
-      QT4_ADD_RESOURCES (qrc_files musescore.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc)
 endif (APPLE)
 
 
@@ -159,6 +158,8 @@ else (APPLE)
 endif (APPLE)
 
 add_executable ( ${ExecutableName}
+      mops.cpp                            # HACK! first file disappears during linking as CMake generates
+                                          # something like:    gcc ... -L mops.o ...
       ${qrc_files}
       ${ui_headers}
       ${mocs}

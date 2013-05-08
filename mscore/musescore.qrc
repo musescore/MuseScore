@@ -1,5 +1,6 @@
-<RCC>
-    <qresource prefix="/">
+<!DOCTYPE RCC>
+<RCC version="1.0">
+      <qresource>
         <file>data/shortcuts.xml</file>
         <file>data/paper1.png</file>
         <file>data/paper2.png</file>
@@ -12,7 +13,7 @@
         <file>data/home.png</file>
         <file>data/help.png</file>
         <file>data/table.svg</file>
-        <file alias="fonts/mscore20.xml">../fonts/mscore20.xml</file>
+        <file alias="/fonts/mscore20.xml">../fonts/mscore20.xml</file>
         <file alias="fonts/gonville.xml">../fonts/gonville.xml</file>
         <file alias="fonts/gonville-20.otf">../fonts/gonville-20.otf</file>
         <file alias="fonts/mscore-20.otf">../fonts/mscore-20.otf</file>

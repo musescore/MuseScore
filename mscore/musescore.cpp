@@ -2231,16 +2231,25 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
+
       Q_INIT_RESOURCE(zita);
       Q_INIT_RESOURCE(noeffect);
       Q_INIT_RESOURCE(freeverb);
-//      Q_INIT_RESOURCE(musescore);
+//      Q_INIT_RESOURCE(musescore); // not in a static lib
 
-/*      QDir dd(":/");
+/*
+      // dump resource list
+      QDir dd(":");
       QStringList ddl = dd.entryList();
-      foreach(const QString& s, ddl)
+      foreach(const QString& s, ddl) {
             printf("   --<%s>\n", qPrintable(s));
-      */
+            QDir ddd(":/" + s);
+            QStringList ddll = ddd.entryList();
+            foreach(const QString& s, ddll) {
+                  printf("      --<%s>\n", qPrintable(s));
+                  }
+            }
+*/
 
 #ifndef Q_WS_MAC
       // Save the preferences in QSettings::NativeFormat
