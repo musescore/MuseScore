@@ -227,8 +227,6 @@ void Text::layout1()
       if (styled())
             SimpleText::layout();
       else {
-            QPointF o;
-
             _doc->setDefaultFont(textStyle().font(spatium()));
             qreal w = -1.0;
 
@@ -250,8 +248,8 @@ void Text::layout1()
                   w = _doc->idealWidth();
             _doc->setTextWidth(w);
 
+            QPointF o;
             QSizeF size(_doc->size());
-
             if (align() & ALIGN_BOTTOM) {
                   o.ry() += 3;
                   o.ry() -= size.height();
@@ -265,8 +263,10 @@ void Text::layout1()
                   o.rx() -= size.width();
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
-            setPos(textStyle().offset(spatium()));
             bbox().setRect(o.x(), o.y(), size.width(), size.height());
+
+            setPos(textStyle().offset(spatium()));
+
             _doc->setModified(false);
             }
 
