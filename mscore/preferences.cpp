@@ -812,7 +812,7 @@ void PreferenceDialog::updateValues()
             }
       checkUpdateStartup->setCurrentIndex(curPeriodIdx);
 
-      if (seq->isRunning()) {
+      if (seq && seq->isRunning()) {
             QList<QString> sl = seq->inputPorts();
             int idx = 0;
             for (QList<QString>::iterator i = sl.begin(); i != sl.end(); ++i, ++idx) {
@@ -1278,7 +1278,8 @@ void PreferenceDialog::apply()
          || (prefs.alsaPeriodSize != alsaPeriodSize->currentText().toInt())
          || (prefs.alsaFragments != alsaFragments->value())
             ) {
-            seq->exit();
+            if (seq)
+                  seq->exit();
             prefs.useAlsaAudio       = alsaDriver->isChecked();
             prefs.useJackAudio       = jackDriver->isChecked();
             prefs.usePortaudioAudio  = portaudioDriver->isChecked();
@@ -1290,9 +1291,11 @@ void PreferenceDialog::apply()
             prefs.alsaFragments      = alsaFragments->value();
             preferences = prefs;
             Driver* driver = driverFactory(seq, "");
-            seq->setDriver(driver);
-            if (!seq->init()) {
-                  qDebug("sequencer init failed\n");
+            if (seq) {
+                  seq->setDriver(driver);
+                  if (!seq->init()) {
+                        qDebug("sequencer init failed\n");
+                        }
                   }
             }
 
