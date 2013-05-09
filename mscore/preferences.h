@@ -90,7 +90,6 @@ struct Preferences {
       QString lPort;          // audio port left
       QString rPort;          // audio port right
       bool showNavigator;
-      bool showMidiImportPanel;
       bool showPlayPanel;
       bool showWebPanel;
       bool showStatusBar;
