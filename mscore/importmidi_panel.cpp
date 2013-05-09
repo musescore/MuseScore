@@ -18,20 +18,29 @@ extern QList<QString> extractMidiInstruments(const QString&);
 extern MuseScore* mscore;
 extern Preferences preferences;
 
+
 struct TrackInfo
       {
       bool doImport;
       QString instrumentName;
+      // operations
       bool doLHRHSeparation;
       };
 
+enum {
+      TRACK_NUMBER_COL,
+      DO_IMPORT_COL,
+      INSTRUMENT_COL,
+      OPERATIONS_COL,
+      COL_COUNT
+      };
 
 class TracksModel : public QAbstractTableModel
       {
    public:
       TracksModel()
             : rowCount_(0)
-            , colCount_(3)
+            , colCount_(COL_COUNT)
             {
             }
 
@@ -39,7 +48,6 @@ class TracksModel : public QAbstractTableModel
             {
             beginResetModel();
             rowCount_ = instrumentNames.size();
-            colCount_ = 3;
             tracks_.clear();
             for (const auto &name: instrumentNames)
                   tracks_.push_back({true, name, false});
@@ -63,18 +71,19 @@ class TracksModel : public QAbstractTableModel
             switch (role) {
                   case Qt::DisplayRole:
                         switch (index.column()) {
-                              case 1:
+                              case TRACK_NUMBER_COL:
+                                    return index.row() + 1;
+                              case INSTRUMENT_COL:
                                     return tracks_[index.row()].instrumentName;
-                              case 2:
-                                    if (tracks_[index.row()].doLHRHSeparation)
-                                          return "LH/RH separation";
+                              case OPERATIONS_COL:
+                                    return trackOperations(index.row(), "; ");
                               default:
                                     break;
                               }
                         break;
                   case Qt::CheckStateRole:
                         switch (index.column()) {
-                              case 0:
+                              case DO_IMPORT_COL:
                                     return (tracks_[index.row()].doImport)
                                                 ? Qt::Checked : Qt::Unchecked;
                               default:
@@ -82,9 +91,13 @@ class TracksModel : public QAbstractTableModel
                               }
                         break;
                   case Qt::TextAlignmentRole:
-                        if (index.column() == 1
+                        if (index.column() == INSTRUMENT_COL
                                     && tracks_[index.row()].instrumentName == "-")
                               return Qt::AlignHCenter;
+                        break;
+                  case Qt::ToolTipRole:
+                        if (index.column() == OPERATIONS_COL)
+                              return trackOperations(index.row(), "\n");
                         break;
                   default:
                         break;
@@ -97,7 +110,7 @@ class TracksModel : public QAbstractTableModel
             if (!index.isValid())
                   return 0;
             Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-            if (index.column() == 0)
+            if (index.column() == DO_IMPORT_COL)
                   flags |= Qt::ItemIsUserCheckable;
             return flags;
             }
@@ -109,13 +122,13 @@ class TracksModel : public QAbstractTableModel
                   return false;
             bool result = false;
             switch (index.column()) {
-                  case 0:
+                  case DO_IMPORT_COL:
                         if (role != Qt::CheckStateRole)
                               break;
                         tracks_[index.row()].doImport = value.toBool();
                         result = true;
                         break;
-                  case 2:
+                  case OPERATIONS_COL:
                         if (role != Qt::EditRole)
                               break;
                         tracks_[index.row()].doLHRHSeparation = value.toBool();
@@ -132,12 +145,18 @@ class TracksModel : public QAbstractTableModel
       QVariant headerData(int section, Qt::Orientation orientation, int role) const
             {
             if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-                  if (section == 0)
-                        return "Import?";
-                  else if (section == 1)
-                        return "Instrument";
-                  else if (section == 2)
-                        return "Operations";
+                  switch (section) {
+                        case TRACK_NUMBER_COL:
+                              return "Track";
+                        case DO_IMPORT_COL:
+                              return "Import?";
+                        case INSTRUMENT_COL:
+                              return "Instrument";
+                        case OPERATIONS_COL:
+                              return "Operations";
+                        default:
+                              break;
+                        }
                   }
             return QVariant();
             }
@@ -169,6 +188,25 @@ class TracksModel : public QAbstractTableModel
                   return nullptr;
                   }
             }
+
+      QString trackOperations(int trackIndex, const QString& splitter) const
+            {
+            QString operations;
+            if (trackIndex >= trackCount())
+                  return operations;
+            if (tracks_[trackIndex].doLHRHSeparation)
+                  appendOperation(operations, "LH/RH separation", splitter);
+            return operations;
+            }
+
+      void appendOperation(QString& operations, const QString& operation,
+                           const QString& splitter) const
+            {
+            if (!operations.isEmpty())
+                  operations += splitter;
+            operations += operation;
+            }
+
       }; // TracksModel
 
 
@@ -189,14 +227,6 @@ ImportMidiPanel::~ImportMidiPanel()
       delete ui;
       }
 
-void ImportMidiPanel::openMidiFile()
-      {
-      QString path(QFileDialog::getOpenFileName(this, tr("Select file"),
-                                                "", tr("Files (*.mid *.midi)")));
-      if (!path.isEmpty())
-            setMidiFile(path);
-      }
-
 void ImportMidiPanel::updateUiOnTimer()
       {
       bool change = false;
@@ -211,21 +241,21 @@ void ImportMidiPanel::updateUiOnTimer()
 void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
       {
       if (currentIndex.isValid())
-            ui->checkBoxLHRH->setChecked(tracksModel->trackInfo(currentIndex.row()).doLHRHSeparation);
+            ui->checkBoxLHRH->setChecked(
+                              tracksModel->trackInfo(currentIndex.row()).doLHRHSeparation);
       }
 
 void ImportMidiPanel::onLHRHchanged(bool doLHRH)
       {
       const QModelIndex& currentIndex = ui->tableViewTracks->currentIndex();
-      tracksModel->setData(tracksModel->index(currentIndex.row(), 2), doLHRH);
+      tracksModel->setData(tracksModel->index(currentIndex.row(), OPERATIONS_COL), doLHRH);
       }
 
 void ImportMidiPanel::tweakUi()
       {
       connect(updateUiTimer, SIGNAL(timeout()), this, SLOT(updateUiOnTimer()));
-      connect(ui->pushButtonBrowseMidi, SIGNAL(clicked()), SLOT(openMidiFile()));
       connect(ui->pushButtonImport, SIGNAL(clicked()), SLOT(importMidi()));
-      connect(ui->pushButtonHideMidiImportPanel, SIGNAL(clicked()), SLOT(hidePanel()));
+      connect(ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
 
       QItemSelectionModel *sm = ui->tableViewTracks->selectionModel();
       connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
@@ -237,9 +267,14 @@ void ImportMidiPanel::tweakUi()
       updateUi();
 
       ui->tableViewTracks->verticalHeader()->setDefaultSectionSize(22);
-      ui->tableViewTracks->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-      ui->tableViewTracks->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-      ui->tableViewTracks->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+      ui->tableViewTracks->horizontalHeader()->setResizeMode(TRACK_NUMBER_COL,
+                                                             QHeaderView::ResizeToContents);
+      ui->tableViewTracks->horizontalHeader()->setResizeMode(DO_IMPORT_COL,
+                                                             QHeaderView::ResizeToContents);
+      ui->tableViewTracks->horizontalHeader()->setResizeMode(INSTRUMENT_COL,
+                                                             QHeaderView::Stretch);
+      ui->tableViewTracks->horizontalHeader()->setResizeMode(OPERATIONS_COL,
+                                                             QHeaderView::Stretch);
       }
 
 bool ImportMidiPanel::canImportMidi() const
@@ -258,12 +293,12 @@ void ImportMidiPanel::hidePanel()
 void ImportMidiPanel::updateUi()
       {
       if (isMidiFileExists) {
-            ui->plainTextEditFile->setStyleSheet("QPlainTextEdit{color: black;}");
-            ui->plainTextEditFile->setToolTip(midiFile);
+            ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: black;}");
+            ui->lineEditMidiFile->setToolTip(midiFile);
             }
       else {  // midi file not exists
-            ui->plainTextEditFile->setStyleSheet("QPlainTextEdit{color: red;}");
-            ui->plainTextEditFile->setToolTip(tr("MIDI file not found"));
+            ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: red;}");
+            ui->lineEditMidiFile->setToolTip(tr("MIDI file not found"));
             }
       ui->pushButtonImport->setEnabled(canImportMidi());
       }
@@ -276,7 +311,8 @@ void ImportMidiPanel::importMidi()
       int trackCount = tracksModel->trackCount();
       for (int i = 0; i != trackCount; ++i) {
             TrackInfo info(tracksModel->trackInfo(i));
-            preferences.midiImportOperations.addTrackOperations({info.doImport, info.doLHRHSeparation});
+            preferences.midiImportOperations.addTrackOperations({info.doImport,
+                                                                 info.doLHRHSeparation});
             }
       mscore->openScore(midiFile);
       preferences.midiImportOperations.clear();
@@ -291,7 +327,7 @@ bool ImportMidiPanel::isMidiFile(const QString &file)
 void ImportMidiPanel::setMidiFile(const QString &file)
       {
       midiFile = file;
-      ui->plainTextEditFile->setPlainText(QFileInfo(file).fileName());
+      ui->lineEditMidiFile->setText(QFileInfo(file).fileName());
       updateUiOnTimer();
       if (isMidiFileExists) {
             QList<QString> instruments(extractMidiInstruments(file));

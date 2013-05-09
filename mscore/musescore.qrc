@@ -27,6 +27,7 @@
         <file>data/mscore.png</file>
         <file>data/bg1.jpg</file>
         <file>data/cancel.png</file>
+        <file>data/close.png</file>
         <file>revision.h</file>
         <file>data/musescore_logo_full1.png</file>
         <file alias="data/appstyle-dark.css">../share/styles/appstyle-dark.css</file>
@@ -65,7 +66,6 @@
         <file>schema/musicxml.xsd</file>
         <file>schema/xlink.xsd</file>
         <file>schema/xml.xsd</file>
-        <file>data/close_icon_small.png</file>
         <file>data/icons-dark/align-vertical-bottom.svg</file>
         <file>data/icons-dark/align-vertical-middle.svg</file>
         <file>data/icons-dark/align-vertical-top.svg</file>
