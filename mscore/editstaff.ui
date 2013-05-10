@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>680</width>
-    <height>340</height>
+    <width>751</width>
+    <height>456</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -582,7 +582,7 @@
       <item row="0" column="0">
        <widget class="QCheckBox" name="invisible">
         <property name="text">
-         <string>Invisible</string>
+         <string>Invisible staff lines</string>
         </property>
        </widget>
       </item>
@@ -605,7 +605,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Small</string>
+         <string>Small staff</string>
         </property>
        </widget>
       </item>
