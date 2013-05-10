@@ -514,7 +514,7 @@ class Score : public QObject {
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);
 
-      Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*);
+      Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*, bool keepChord = false);
       bool makeGap1(int tick, int staffIdx, Fraction len);
 
       Rest* addRest(int tick, int track, TDuration, Tuplet*);
