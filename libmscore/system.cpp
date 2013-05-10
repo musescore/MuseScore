@@ -220,8 +220,11 @@ void System::layout(qreal xo1)
       _leftMargin = xoff2;
 
       qreal bd = point(score()->styleS(ST_bracketDistance));
-      for (int i = 0; i < bracketLevels; ++i)
-            _leftMargin += bracketWidth[i] + bd;
+      if ( _brackets.size() > 0) {
+            for (int i = 0; i < bracketLevels; ++i)
+                  _leftMargin += bracketWidth[i] + bd;
+            }
+
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             SysStaff* s  = _staves[staffIdx];
@@ -271,8 +274,7 @@ void System::layout(qreal xo1)
             int nstaves = p->nstaves();
             if (s->show() && p->show()) {
                   foreach(InstrumentName* t, s->instrumentNames) {
-                        qreal d  = point(instrumentNameOffset) + t->bbox().width();
-                        t->rxpos() = xoff2 - d + xo1;
+                        t->rxpos() = xoff2 - point(instrumentNameOffset) + xo1;
                         }
                   }
             idx += nstaves;
@@ -438,7 +440,7 @@ void System::layout2()
                               y2 = staff(staffIdx + 2)->bbox().bottom();
                               break;
                         }
-                  qreal y  = y1 + (y2 - y1) * .5 - t->bbox().height() * .5;
+                  qreal y  = y1 + (y2 - y1) * .5;
                   t->rypos() = y;
                   }
             staffIdx += nstaves;
