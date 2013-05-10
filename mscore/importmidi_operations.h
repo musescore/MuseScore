@@ -1,8 +1,15 @@
 #ifndef IMPORTMIDI_OPERATIONS_H
 #define IMPORTMIDI_OPERATIONS_H
 
+#include <QString>
 #include <QList>
 
+
+struct TrackMeta
+      {
+      QString trackName;
+      QString instrumentName;
+      };
 
 struct MidiTrackOperations
       {
