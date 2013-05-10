@@ -123,7 +123,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEditMidiFile"/>
+      <widget class="QLineEdit" name="lineEditMidiFile">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

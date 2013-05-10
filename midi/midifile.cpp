@@ -446,7 +446,7 @@ MidiTrack::~MidiTrack()
 
 void MidiTrack::insert(int tick, const MidiEvent& event)
       {
-      _events.insert(std::pair<int,MidiEvent>(tick, event));
+      _events.insert({tick, event});
       }
 
 //---------------------------------------------------------

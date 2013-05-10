@@ -761,10 +761,10 @@ void createMTrackList(int& lastTick, Score* score, QList<MTrack>& tracks, MidiFi
                         c.duration = len;
                         c.notes.push_back(n);
 
-                        track.chords.insert(std::pair<int,MidiChord>(tick, c));
+                        track.chords.insert({tick, c});
                         }
                   else if (e.type() == ME_PROGRAM)
-                        track.program = e.dataA();
+                        track.program = e.dataB();
                   lastTick = qMax(lastTick, tick);
                   }
             if (events != 0) {
@@ -920,9 +920,9 @@ void convertMidi(Score* score, MidiFile* mf)
       createNotes(lastTick, score, tracks, mf);
       }
 
-QList<QString> getInstrumentNames(int lastTick, Score* score, QList<MTrack>& tracks, MidiFile* mf)
+QList<TrackMeta> getTracksMeta(int lastTick, Score* score, QList<MTrack>& tracks, MidiFile* mf)
 {
-      QList<QString> instrumentNames;
+      QList<TrackMeta> tracksMeta;
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack& mt = tracks[i];
             MidiTrack* track = mt.mtrack;
@@ -930,44 +930,43 @@ QList<QString> getInstrumentNames(int lastTick, Score* score, QList<MTrack>& tra
             mt.cleanup(lastTick, score->sigmap());   // quantize
             for (auto ie : track->events()) {
                   const MidiEvent& e = ie.second;
-                  if ((e.type() == ME_META) && (e.metaType() != META_LYRIC))
-                        mt.processMeta(ie.first, e);
+                  if ((e.type() == ME_META) && (e.metaType() == META_TRACK_NAME))
+                        mt.name = (const char*)e.edata();
                   }
+            int hbank = -1, lbank = -1;
             int program = mt.program;
-            if (mt.name.isEmpty()) {
-                  int hbank = -1, lbank = -1;
-                  if (program == -1)
-                        program = 0;
-                  else {
-                        hbank = (program >> 16);
-                        lbank = (program >> 8) & 0xff;
-                        program = program & 0xff;
-                        }
-                  QString t(MidiInstrument::instrName(mf->midiType(), hbank, lbank, program));
-                  if (t.isEmpty())
-                        t = "-";
-                  instrumentNames.push_back(t);
+            if (program == -1)
+                  program = 0;
+            else {
+                  hbank = (program >> 16);
+                  lbank = (program >> 8) & 0xff;
+                  program = program & 0xff;
                   }
-            else
-                  instrumentNames.push_back(mt.name);
+
+            MidiType midiType = mf->midiType();
+            if (midiType == MT_UNKNOWN)
+                  midiType = MT_GM;
+            QString instrumentName = MidiInstrument::instrName(midiType, hbank,
+                                                               lbank, program);
+            tracksMeta.push_back({mt.name, instrumentName});
             }
-      return instrumentNames;
+      return tracksMeta;
       }
 
-QList<QString> extractMidiInstruments(const QString& fileName)
+QList<TrackMeta> extractMidiTracksMeta(const QString& fileName)
       {
       if (fileName.isEmpty())
-            return QList<QString>();
+            return QList<TrackMeta>();
       QFile fp(fileName);
       if (!fp.open(QIODevice::ReadOnly))
-            return QList<QString>();
+            return QList<TrackMeta>();
       MidiFile mf;
       try {
             mf.read(&fp);
             }
       catch(...) {
             fp.close();
-            return QList<QString>();
+            return QList<TrackMeta>();
             }
       fp.close();
 
@@ -977,7 +976,7 @@ QList<QString> extractMidiInstruments(const QString& fileName)
 
       mf.separateChannel();
       createMTrackList(lastTick, &mockScore, tracks, &mf);
-      return getInstrumentNames(lastTick, &mockScore, tracks, &mf);
+      return getTracksMeta(lastTick, &mockScore, tracks, &mf);
       }
 
 //---------------------------------------------------------
