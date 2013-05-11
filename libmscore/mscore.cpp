@@ -126,7 +126,7 @@ void MScore::init()
 
       lastError           = "";
 
-      layoutBreakColor    = Qt::green;
+      layoutBreakColor    = Qt::gray;
       bgColor.setRgb(0x76, 0x76, 0x6e);
 
       _defaultStyle         = new MStyle();
