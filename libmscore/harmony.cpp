@@ -58,6 +58,8 @@ QString Harmony::harmonyName() const
                   //s += " ";
                   s += descr()->names.front();
                   }
+            else
+                  s += _userName;
             }
       if (_baseTpc != INVALID_TPC) {
             s += "/";
@@ -110,6 +112,7 @@ Harmony::Harmony(Score* s)
       _rootTpc   = INVALID_TPC;
       _baseTpc   = INVALID_TPC;
       _id        = -1;
+      _parsedForm = nullptr;
       }
 
 Harmony::Harmony(const Harmony& h)
@@ -119,6 +122,7 @@ Harmony::Harmony(const Harmony& h)
       _baseTpc    = h._baseTpc;
       _id         = h._id;
       _degreeList = h._degreeList;
+      _parsedForm = nullptr;
       }
 
 //---------------------------------------------------------
@@ -129,6 +133,8 @@ Harmony::~Harmony()
       {
       foreach(const TextSegment* ts, textList)
             delete ts;
+      if (_parsedForm)
+            delete _parsedForm;
       }
 
 //---------------------------------------------------------
@@ -140,8 +146,14 @@ void Harmony::write(Xml& xml) const
       xml.stag("Harmony");
       if (_rootTpc != INVALID_TPC) {
             xml.tag("root", _rootTpc);
-            if (_id != -1)
+            QString name = _userName;
+            if (_id != -1) {
                   xml.tag("extension", _id);
+                  ChordDescription* cd = score()->style()->chordList()->value(_id);
+                  if (cd)
+                        name = cd->names.front();
+                  }
+            xml.tag("name", name);
             if (_baseTpc != INVALID_TPC)
                   xml.tag("base", _baseTpc);
             foreach(const HDegree& hd, _degreeList) {
@@ -194,6 +206,8 @@ void Harmony::read(XmlReader& e)
                   }
             else if (tag == "extension")
                   setId(e.readInt());
+            else if (tag == "name")
+                  _userName = e.readElementText();
             else if (tag == "root") {
                   if (score()->mscVersion() >= 106)
                         setRootTpc(e.readInt());
@@ -232,6 +246,15 @@ void Harmony::read(XmlReader& e)
                   }
             else if (!Text::readProperties(e))
                   e.unknown();
+            }
+      if (_userName == "" && _id != -1) {
+            ChordDescription* cd = score()->style()->chordList()->value(_id);
+            if (cd)
+                  _userName = cd->names.front();
+            }
+      if (_userName != "") {
+            _parsedForm = new ParsedChord;
+            _parsedForm->parse(_userName);
             }
       render();
       }
@@ -312,8 +335,9 @@ static int convertRoot(const QString& s, bool germanNames)
 
 //---------------------------------------------------------
 //   parseHarmony
-//    compare typed chordname against chord list
-//    return true if chord recognized
+//    determined root and bass tpc
+//    compare body of chordname against chord list
+//    return true if chord is recognized
 //---------------------------------------------------------
 
 bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
@@ -323,7 +347,6 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       if (ss.endsWith(' '))
             useLiteral = true;
       QString s = ss.simplified();
-      _userName = s;
       int n = s.size();
       if (n < 1)
             return false;
@@ -344,9 +367,13 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
             }
       else
             s = s.mid(idx).simplified();
-      ParsedChord sParsed;
-      sParsed.parse(s);
+      _userName = s;
+      if (_parsedForm)
+            delete _parsedForm;
+      _parsedForm = new ParsedChord;
+      bool parseable = _parsedForm->parse(s);
       int parsedID = -1;
+      QString parsedName;
       // attempt to match chord using exact string match
       // but also match using parsed forms as fallback
       foreach (const ChordDescription* cd, *score()->style()->chordList()) {
@@ -357,11 +384,12 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
                         return true;
                         }
                   }
-            if (parsedID < 0 && !useLiteral) {
+            if (parseable && parsedID < 0 && !useLiteral) {
                   foreach (ParsedChord ssParsed, cd->parsedChords) {
-                        if (sParsed == ssParsed) {
-                              qDebug("flexible chordmatch succeeded <%s> (%s)", qPrintable(s), qPrintable(sParsed));
+                        if (*_parsedForm== ssParsed) {
+                              qDebug("flexible chordmatch succeeded <%s> (%s)", qPrintable(s), qPrintable(*_parsedForm));
                               parsedID = cd->id;
+                              parsedName = cd->names.front();
                               break;
                               }
                         }
@@ -375,13 +403,13 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       // ultimately, a set of display rules could handle rendering as well
       if (parsedID >= 0) {
             _id = parsedID;
+            _userName = parsedName;
             return true;
             }
 
       // no match found
-      _userName = s;
-      qDebug("2:parseHarmony failed <%s><%s> (%s)", qPrintable(ss), qPrintable(s), qPrintable(sParsed));
-      return false;
+      qDebug("2:parseHarmony failed <%s><%s> (%s)", qPrintable(ss), qPrintable(s), qPrintable(*_parsedForm));
+      return parseable;
       }
 
 //---------------------------------------------------------
@@ -433,7 +461,7 @@ void Harmony::setHarmony(const QString& s)
       {
       int r, b;
       parseHarmony(s, &r, &b);
-      if (_id != -1) {
+      if (_id != -1 || (_parsedForm && _parsedForm->renderable())) {
             setRootTpc(r);
             setBaseTpc(b);
             render();
@@ -803,8 +831,14 @@ void Harmony::render(const TextStyle* st)
       render(chordList->renderListRoot, x, y, _rootTpc);
       ChordDescription* cd = chordList->value(_id);
       if (cd) {
-            render(cd->renderList, x, y, 0);
+            ParsedChord cdpc = cd->parsedChords.front();
+            if (!cd->renderList.isEmpty())
+                  render(cd->renderList, x, y, 0);
+            else if (cdpc.renderable())
+                  render(cdpc.renderList(), x, y, 0);
             }
+      else if (_parsedForm->renderable())
+            render(_parsedForm->renderList(), x, y, 0);
       if (_baseTpc != INVALID_TPC)
             render(chordList->renderListBase, x, y, _baseTpc);
       }
