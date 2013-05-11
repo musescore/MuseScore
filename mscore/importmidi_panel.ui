@@ -89,7 +89,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/next.png</normaloff>:/data/next.png</iconset>
+         <normaloff>:/data/icons-dark/checkmark.svg</normaloff>:/data/icons-dark/checkmark.svg</iconset>
        </property>
       </widget>
      </item>
@@ -188,6 +188,13 @@
          <widget class="QCheckBox" name="checkBoxLHRH">
           <property name="text">
            <string>LH/RH separation</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBoxDots">
+          <property name="text">
+           <string>Use dots</string>
           </property>
          </widget>
         </item>

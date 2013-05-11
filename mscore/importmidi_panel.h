@@ -28,6 +28,7 @@ class ImportMidiPanel : public QWidget
       void updateUiOnTimer();
       void onCurrentTrackChanged(const QModelIndex &currentIndex);
       void onLHRHchanged(bool doLHRH);
+      void onUseDotschanged(bool useDots);
       void importMidi();
       void hidePanel();
 

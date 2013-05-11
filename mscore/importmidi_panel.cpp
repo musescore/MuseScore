@@ -19,13 +19,29 @@ extern MuseScore* mscore;
 extern Preferences preferences;
 
 
+struct Operation
+      {
+      enum class OperationType
+            {
+            DO_IMPORT,
+            DO_LHRH_SEPARATION,
+            USE_DOTS
+            } type;
+
+      union OperationValue
+            {
+            bool doImport;
+            bool doLHRHSeparation;
+            bool useDots;
+            } value;
+      };
+
+Q_DECLARE_METATYPE(Operation) // to pass value as QVariant
+
 struct TrackData
       {
-      bool doImport;
-      QString trackName;
-      QString instrumentName;
-      // operations
-      bool doLHRHSeparation;
+      TrackMeta meta;
+      TrackOperations opers;
       };
 
 enum {
@@ -36,6 +52,7 @@ enum {
       OPERATIONS_COL,
       COL_COUNT
       };
+
 
 class TracksModel : public QAbstractTableModel
       {
@@ -50,14 +67,16 @@ class TracksModel : public QAbstractTableModel
             {
             beginResetModel();
             rowCount_ = tracksMeta.size();
-            tracks_.clear();
+            tracks_data_.clear();
             for (const auto &meta: tracksMeta) {
-                  auto trackName = meta.trackName.isEmpty()
+                  QString trackName = meta.trackName.isEmpty()
                               ? "-" : meta.trackName;
-                  auto instrumentName = meta.instrumentName.isEmpty()
+                  QString instrumentName = meta.instrumentName.isEmpty()
                               ? "-" : meta.instrumentName;
-                  tracks_.push_back({true, trackName, instrumentName,
-                                     false});
+                  tracks_data_.push_back({
+                        {trackName, instrumentName},
+                        TrackOperations() // initialized by default values - see ctor
+                        });
                   }
             endResetModel();
             }
@@ -82,9 +101,9 @@ class TracksModel : public QAbstractTableModel
                               case TRACK_NUMBER_COL:
                                     return index.row() + 1;
                               case TRACK_NAME_COL:
-                                    return tracks_[index.row()].trackName;
+                                    return tracks_data_[index.row()].meta.trackName;
                               case INSTRUMENT_COL:
-                                    return tracks_[index.row()].instrumentName;
+                                    return tracks_data_[index.row()].meta.instrumentName;
                               case OPERATIONS_COL:
                                     return trackOperations(index.row(), "; ");
                               default:
@@ -94,7 +113,7 @@ class TracksModel : public QAbstractTableModel
                   case Qt::CheckStateRole:
                         switch (index.column()) {
                               case DO_IMPORT_COL:
-                                    return (tracks_[index.row()].doImport)
+                                    return (tracks_data_[index.row()].opers.doImport)
                                                 ? Qt::Checked : Qt::Unchecked;
                               default:
                                     break;
@@ -103,10 +122,10 @@ class TracksModel : public QAbstractTableModel
                   case Qt::TextAlignmentRole:
                         switch (index.column()) {
                               case TRACK_NAME_COL:
-                                    if (tracks_[index.row()].trackName == "-")
+                                    if (tracks_data_[index.row()].meta.trackName == "-")
                                           return Qt::AlignHCenter;
                               case INSTRUMENT_COL:
-                                    if (tracks_[index.row()].instrumentName == "-")
+                                    if (tracks_data_[index.row()].meta.instrumentName == "-")
                                           return Qt::AlignHCenter;
                               default:
                                     break;
@@ -134,22 +153,35 @@ class TracksModel : public QAbstractTableModel
 
       bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole)
             {
-            TrackData *info = itemFromIndex(index);
-            if (!info)
+            TrackData *trackData = itemFromIndex(index);
+            if (!trackData)
                   return false;
             bool result = false;
             switch (index.column()) {
                   case DO_IMPORT_COL:
                         if (role != Qt::CheckStateRole)
                               break;
-                        tracks_[index.row()].doImport = value.toBool();
+                        trackData->opers.doImport = value.toBool();
                         result = true;
                         break;
                   case OPERATIONS_COL:
                         if (role != Qt::EditRole)
                               break;
-                        tracks_[index.row()].doLHRHSeparation = value.toBool();
-                        result = true;
+                        {
+                        Operation op = value.value<Operation>();
+                        switch (op.type) {
+                              case Operation::OperationType::DO_LHRH_SEPARATION:
+                                    trackData->opers.doLHRHSeparation = op.value.doLHRHSeparation;
+                                    result = true;
+                                    break;
+                              case Operation::OperationType::USE_DOTS:
+                                    trackData->opers.useDots = op.value.useDots;
+                                    result = true;
+                                    break;
+                              default:
+                                    break;
+                              }
+                        }
                         break;
                   default:
                         break;
@@ -182,16 +214,16 @@ class TracksModel : public QAbstractTableModel
 
       TrackData trackData(int row) const
             {
-            return tracks_[row];
+            return tracks_data_[row];
             }
 
       int trackCount() const
             {
-            return tracks_.size();
+            return tracks_data_.size();
             }
 
    private:
-      std::vector<TrackData> tracks_;
+      std::vector<TrackData> tracks_data_;
       int rowCount_;
       int colCount_;
 
@@ -201,7 +233,7 @@ class TracksModel : public QAbstractTableModel
                   if (index.row() < 0 || index.row() >= rowCount_
                               || index.column() < 0 || index.column() >= colCount_)
                         return nullptr;
-                  return &tracks_[index.row()];
+                  return &tracks_data_[index.row()];
                   }
             else {
                   return nullptr;
@@ -213,8 +245,11 @@ class TracksModel : public QAbstractTableModel
             QString operations;
             if (trackIndex >= trackCount())
                   return operations;
-            if (tracks_[trackIndex].doLHRHSeparation)
+            // all operations without doImport
+            if (tracks_data_[trackIndex].opers.doLHRHSeparation)
                   appendOperation(operations, "LH/RH separation", splitter);
+            if (tracks_data_[trackIndex].opers.useDots)
+                  appendOperation(operations, "Use dots", splitter);
             return operations;
             }
 
@@ -259,15 +294,37 @@ void ImportMidiPanel::updateUiOnTimer()
 
 void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
       {
-      if (currentIndex.isValid())
+      if (currentIndex.isValid()) {
+            int row = currentIndex.row();
             ui->checkBoxLHRH->setChecked(
-                              tracksModel->trackData(currentIndex.row()).doLHRHSeparation);
+                  tracksModel->trackData(row).opers.doLHRHSeparation);
+            ui->checkBoxDots->setChecked(
+                  tracksModel->trackData(row).opers.useDots);
+            }
       }
 
 void ImportMidiPanel::onLHRHchanged(bool doLHRH)
       {
       const QModelIndex& currentIndex = ui->tableViewTracks->currentIndex();
-      tracksModel->setData(tracksModel->index(currentIndex.row(), OPERATIONS_COL), doLHRH);
+      Operation op;
+      op.type = Operation::OperationType::DO_LHRH_SEPARATION;
+      op.value.doLHRHSeparation = doLHRH;
+      QVariant value;
+      value.setValue(op);
+      tracksModel->setData(
+            tracksModel->index(currentIndex.row(), OPERATIONS_COL), value);
+      }
+
+void ImportMidiPanel::onUseDotschanged(bool useDots)
+      {
+      const QModelIndex& currentIndex = ui->tableViewTracks->currentIndex();
+      Operation op;
+      op.type = Operation::OperationType::USE_DOTS;
+      op.value.useDots = useDots;
+      QVariant value;
+      value.setValue(op);
+      tracksModel->setData(
+            tracksModel->index(currentIndex.row(), OPERATIONS_COL), value);
       }
 
 // Сlass to add an extra width to specific columns
@@ -300,6 +357,8 @@ void ImportMidiPanel::tweakUi()
               SLOT(onCurrentTrackChanged(QModelIndex)));
       connect(ui->checkBoxLHRH, SIGNAL(toggled(bool)),
               SLOT(onLHRHchanged(bool)));
+      connect(ui->checkBoxDots, SIGNAL(toggled(bool)),
+              SLOT(onUseDotschanged(bool)));
 
       updateUiTimer->start(100);
       updateUi();
@@ -352,8 +411,7 @@ void ImportMidiPanel::importMidi()
       int trackCount = tracksModel->trackCount();
       for (int i = 0; i != trackCount; ++i) {
             TrackData data(tracksModel->trackData(i));
-            preferences.midiImportOperations.addTrackOperations({data.doImport,
-                                                                 data.doLHRHSeparation});
+            preferences.midiImportOperations.appendTrackOperations(data.opers);
             }
       mscore->openScore(midiFile);
       preferences.midiImportOperations.clear();
