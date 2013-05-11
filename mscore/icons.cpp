@@ -99,6 +99,7 @@ static const char* iconNames[] = {
       "align-vertical-top.svg",
       "align-vertical-bottom.svg",
       "align-vertical-middle.svg",
+      "align-vertical-baseline.svg",
       "format-text-superscript.svg",
       "format-text-subscript.svg",
       "mode-photo.svg",
