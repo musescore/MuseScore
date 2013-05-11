@@ -9,11 +9,6 @@
       <file>data/paper4.png</file>
       <file>data/paper5.png</file>
 
-      <file>data/previous.png</file>
-      <file>data/next.png</file>
-      <file>data/reload.png</file>
-      <file>data/home.png</file>
-      <file>data/help.png</file>
       <file>data/table.svg</file>
 
       <file alias="fonts/mscore20.xml">../fonts/mscore20.xml</file>
