@@ -117,7 +117,12 @@ static const char* iconNames[] = {
       "tframe.svg",
       "fframe.svg",
       "measure.svg",
-      "checkmark.svg"
+      "checkmark.svg",
+      "help-contents.svg",
+      "go-home.svg",
+      "go-previous.svg",
+      "go-next.svg",
+      "view-refresh.svg"
       };
 
 void genIcons()

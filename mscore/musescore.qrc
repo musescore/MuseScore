@@ -6,11 +6,6 @@
         <file>data/paper3.png</file>
         <file>data/paper4.png</file>
         <file>data/paper5.png</file>
-        <file>data/previous.png</file>
-        <file>data/next.png</file>
-        <file>data/reload.png</file>
-        <file>data/home.png</file>
-        <file>data/help.png</file>
         <file>data/table.svg</file>
         <file alias="fonts/mscore20.xml">../fonts/mscore20.xml</file>
         <file alias="fonts/gonville.xml">../fonts/gonville.xml</file>
@@ -130,5 +125,10 @@
         <file>data/icons-dark/format-indent-more.svg</file>
         <file>data/icons-dark/toggle-metronome.svg</file>
         <file>data/icons-dark/align-vertical-baseline.svg</file>
+        <file>data/icons-dark/go-home.svg</file>
+        <file>data/icons-dark/go-next.svg</file>
+        <file>data/icons-dark/go-previous.svg</file>
+        <file>data/icons-dark/help-contents.svg</file>
+        <file>data/icons-dark/view-refresh.svg</file>
     </qresource>
 </RCC>

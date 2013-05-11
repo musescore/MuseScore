@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "helpBrowser.h"
+#include "icons.h"
 
 //---------------------------------------------------------
 //   HelpBrowser
@@ -30,7 +31,7 @@ HelpBrowser::HelpBrowser(QWidget* parent)
       QHBoxLayout* bl = new QHBoxLayout;
 
       QToolButton* home = new QToolButton;
-      home->setIcon(QIcon(":/data/home.png"));
+      home->setIcon(QIcon(*icons[goHome_ICON]));
       bl->addWidget(home);
       connect(home, SIGNAL(clicked()), SLOT(homeClicked()));
 
@@ -38,16 +39,21 @@ HelpBrowser::HelpBrowser(QWidget* parent)
 
       QToolButton* previous = new QToolButton;
       previous->setDefaultAction(view->pageAction(QWebPage::Back));
+      previous->setIcon(QIcon(*icons[goPrevious_ICON]));
       bl->addWidget(previous);
 
       QToolButton* next = new QToolButton;
-      bl->addWidget(next);
       next->setDefaultAction(view->pageAction(QWebPage::Forward));
+      next->setIcon(QIcon(*icons[goNext_ICON]));
+      bl->addWidget(next);
 
       bl->addStretch(10);
 
       QToolButton* reload = new QToolButton;
-      reload->setDefaultAction(view->pageAction(QWebPage::Reload));
+      QAction * reloadAction = view->pageAction(QWebPage::Reload);
+      //for an unknown reason setting icon on the QToolButton doesn't work here...
+      reloadAction->setIcon(QIcon(*icons[viewRefresh_ICON]));
+      reload->setDefaultAction(reloadAction);
       bl->addWidget(reload);
 
       toolbar->setLayout(bl);
