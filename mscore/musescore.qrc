@@ -129,5 +129,6 @@
         <file>data/icons-dark/format-indent-less.svg</file>
         <file>data/icons-dark/format-indent-more.svg</file>
         <file>data/icons-dark/toggle-metronome.svg</file>
+        <file>data/icons-dark/align-vertical-baseline.svg</file>
     </qresource>
 </RCC>
