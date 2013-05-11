@@ -897,8 +897,8 @@ MuseScore::MuseScore()
       //    Menu Display
       //---------------------
 
-      menuDisplay = mb->addMenu(tr("&Display"));
-      menuDisplay->setObjectName("Display");
+      menuDisplay = mb->addMenu(tr("&View"));
+      menuDisplay->setObjectName("View");
 
       a = getAction("toggle-palette");
       a->setCheckable(true);
