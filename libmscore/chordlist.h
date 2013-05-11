@@ -104,12 +104,24 @@ struct RenderAction {
 
 class ParsedChord {
    public:
+      QList<RenderAction> renderList();
       bool parse(QString);
+      bool renderable() { return _parseable; }
+      bool transposable() { return _parseable; }
+      bool understandable () { return _understandable; }
       bool operator==(const ParsedChord& c) { return (this->handle == c.handle); }
       bool operator!=(const ParsedChord& c) { return !(*this == c); }
       operator QString() { return handle; }
+      ParsedChord() { _parseable = false; _understandable = false; }
    private:
+      QString _renderName;
       QString handle;
+      QString quality;
+      QString extension;
+      QStringList modifierList;
+      QList<RenderAction> _renderList;
+      bool _parseable;
+      bool _understandable;
       };
 
 //---------------------------------------------------------

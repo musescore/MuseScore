@@ -18,6 +18,7 @@
 namespace Ms {
 
 struct ChordDescription;
+class ParsedChord;
 
 //---------------------------------------------------------
 //   TextSegment
@@ -46,7 +47,7 @@ struct TextSegment {
 //   @P rootTpc int     root note as "tonal pitch class"
 //   @P baseTpc int     bass note as "tonal pitch class"
 //
-///    root note and bass note are notatated as
+///    root note and bass note are notated as
 ///    "tonal pitch class":
 ///
 ///           bb   b   -   #  ##
@@ -71,8 +72,9 @@ class Harmony : public Text {
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
                                           // or notation of base note in chord
-      int _id;
-      QString _userName;
+      int _id;                            // matched chord from chord list
+      QString _userName;                  // name as typed by user if applicable
+      ParsedChord *_parsedForm;            // parsed form of chord
 
       QList<HDegree> _degreeList;
       QList<QFont> fontList;              // temp values used in render()

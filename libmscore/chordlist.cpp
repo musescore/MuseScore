@@ -12,6 +12,7 @@
 
 #include "config.h"
 #include "chordlist.h"
+#include "score.h"
 #include "xml.h"
 #include "pitchspelling.h"
 #include "mscore.h"
@@ -344,16 +345,17 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
 
 //---------------------------------------------------------
 //  parse
+//    return true if chord was parseable
 //---------------------------------------------------------
 
 bool ParsedChord::parse (QString s)
       {
-      QString sp, elem, elemLower, quality, extension, modifiers;
-      QStringList modifierList;
+      QString sp, elem, elemLower, modifiers;
       int len = s.size();
       int i, j;
 
 //      qDebug("flexibleChordParse: s = %s", qPrintable(s));
+      _parseable = true;
 
       // get quality
       for (i = 0; i < len && !s[i].isDigit(); ++i) {
@@ -361,24 +363,25 @@ bool ParsedChord::parse (QString s)
                   break;
             elem[i] = s[i];
             }
+      _renderName = elem;
       elemLower = elem.toLower();
       if (elem == "M" || elemLower == "ma" || elemLower == "maj")
-            quality = "<major>";
+            quality = "major";
       else if (elem == "m" || elemLower == "mi" || elemLower == "min" || elemLower == "-")
-            quality = "<minor>";
+            quality = "minor";
       else if (elemLower == "aug" || elemLower == "+")
-            quality = "<augmented>";
+            quality = "augmented";
       else if (elemLower == "dim" || elemLower == "o")
-            quality = "<diminished>";
+            quality = "diminished";
       else
-            quality = "<" + elemLower + ">";
-//      qDebug("flexibleChordParse: quality = %s, i = %d", qPrintable(quality), i);
+            quality = elemLower;
+//      qDebug("flexibleChordParse: quality = <%s>, i = %d", qPrintable(quality), i);
 
       // get extension
       for (j = 0; i < len && s[i].isDigit(); ++i, ++j)
             extension[j] = s[i];
-      extension = "<" + extension + ">";
-//      qDebug("flexibleChordParse: extension = %s, i = %d", qPrintable(extension), i);
+      _renderName += extension;
+//      qDebug("flexibleChordParse: extension = <%s>, i = %d", qPrintable(extension), i);
 
       // get modifiers
       while (i < len) {
@@ -404,8 +407,8 @@ bool ParsedChord::parse (QString s)
                   else
                         tok1[j++] = s[i];
                   }
-            tok1 = tok1.toLower();
-//            qDebug("flexibleChordParse: tok1 = <%s>, i = %d", qPrintable(tok1), i);
+            QString tok1L = tok1.toLower();
+//            qDebug("flexibleChordParse: tok1L = <%s>, i = %d", qPrintable(tok1L), i);
             // get second token - up to first non-digit
             // again skip past comma or close paren
             for (j = 0, tok2 = ""; i < len; ++i) {
@@ -418,40 +421,64 @@ bool ParsedChord::parse (QString s)
                   else
                         tok2[j++] = s[i];
                   }
-            tok2 = tok2.toLower();
-//            qDebug("flexibleChordParse: tok2 = <%s>, i = %d", qPrintable(tok2), i);
-            if (tok1 == "m" || tok1 == "ma" || tok1 == "maj")
-                  tok1 = "major";
-            else if (tok1 == "omit")
-                  tok1 = "no";
-            else if (tok1 == "sus" && tok2 == "")
-                  tok2 = "4";
-            else if (tok1 == "susb" || tok1 == "sus#") {
-                  modifierList += "<sus4>";
+            QString tok2L = tok2.toLower();
+//            qDebug("flexibleChordParse: tok2L = <%s>, i = %d", qPrintable(tok2L), i);
+            // special cases
+            if (tok1L == "susb" || tok1L == "sus#") {
+                  modifierList += "sus4";
+                  _renderName += "sus";
                   tok1 = tok1[3];
+                  tok1L = tok1L[3];
                   }
-            elem = "<" + tok1 + tok2 + ">";
+            else if (tok1 == "M" || tok1L == "ma" || tok1L == "maj")
+                  tok1L = "major";
+            else if (tok1L == "omit")
+                  tok1L = "no";
+            else if (tok1L == "sus" && tok2L == "")
+                  tok2L = "4";
+            if (tok1 == "b")
+                  _renderName += QChar(0x266d);
+            else if (tok1 == "#")
+                  _renderName += QChar(0x266f);
+            else
+                  _renderName += tok1;
+            _renderName += tok2;
+            elem = tok1L + tok2L;
             modifierList += elem;
             }
       if (!modifierList.isEmpty()) {
             modifierList.sort();
-            modifiers = modifierList.join("");
+            modifiers = "<" + modifierList.join("><") + ">";
             }
 
       // special cases
-      if (quality == "<>") {
-            if (extension == "<7>" || extension == "<9>" || extension == "<11>" || extension == "<13>")
-                  quality = "<dominant>";
+      if (quality == "") {
+            if (extension == "7" || extension == "9" || extension == "11" || extension == "13")
+                  quality = "dominant";
             else
-                  quality = "<major>";
+                  quality = "major";
             }
       // more special cases TODO: mMaj, madd, augadd, ...?
 
       // TODO - make attempt to "understand" the chord
 
-      handle = quality + extension + modifiers;
+      handle = "<" + quality + "><" + extension + ">" + modifiers;
 //      qDebug("flexibleChordParse: %s", qPrintable(handle);
-      return true;
+      _understandable = false;
+      return _parseable;
+      }
+
+//---------------------------------------------------------
+//   renderList
+//---------------------------------------------------------
+QList<RenderAction> ParsedChord::renderList()
+      {
+      if (_renderList.isEmpty()) {
+            RenderAction a(RenderAction::RENDER_SET);
+            a.text = _renderName;
+            _renderList.append(a);
+            }
+      return _renderList;
       }
 
 //---------------------------------------------------------
