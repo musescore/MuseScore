@@ -129,5 +129,6 @@
         <file>schema/xlink.xsd</file>
         <file>schema/xml.xsd</file>
         <file>data/close_icon_small.png</file>
+        <file>data/icons-dark/text_vbaseline.svg</file>
     </qresource>
 </RCC>
