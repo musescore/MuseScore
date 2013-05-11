@@ -103,7 +103,7 @@ TextTools::TextTools(QWidget* parent)
       bottomAlign->setCheckable(true);
       bottomAlign->setData(ALIGN_BOTTOM);
 
-      baselineAlign  = new QAction(*icons[textVCenter_ICON],  "", va);
+      baselineAlign  = new QAction(*icons[textBaseline_ICON],  "", va);
       baselineAlign->setToolTip(tr("align vertical baseline"));
       baselineAlign->setCheckable(true);
       baselineAlign->setData(ALIGN_BASELINE);
