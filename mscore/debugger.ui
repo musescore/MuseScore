@@ -27,7 +27,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/previous.png</normaloff>:/data/previous.png</iconset>
+         <normaloff>:/data/icons-dark/go-previous.svg</normaloff>:/data/icons-dark/go-previous.svg</iconset>
        </property>
       </widget>
      </item>
@@ -35,7 +35,7 @@
       <widget class="QToolButton" name="forward">
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/next.png</normaloff>:/data/next.png</iconset>
+         <normaloff>:/data/icons-dark/go-next.svg</normaloff>:/data/icons-dark/go-next.svg</iconset>
        </property>
       </widget>
      </item>
@@ -46,7 +46,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/reload.png</normaloff>:/data/reload.png</iconset>
+         <normaloff>:/data/icons-dark/view-refresh.svg</normaloff>:/data/icons-dark/view-refresh.svg</iconset>
        </property>
       </widget>
      </item>
