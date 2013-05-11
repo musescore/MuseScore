@@ -25,7 +25,7 @@ LayoutBreak::LayoutBreak(Score* score)
       _pause               = score->styleD(ST_SectionPause);
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
-      lw                   = spatium() * 0.3;
+      lw                   = spatium() * 0.2;
       setFlag(ELEMENT_HAS_TAG, true);
       }
 
