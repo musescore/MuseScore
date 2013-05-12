@@ -160,6 +160,7 @@ Chord::Chord(Score* s)
       _stemSlash        = 0;
       _noStem           = false;
       _userPlayEvents   = false;
+      _crossMeasure     = CROSSMEASURE_UNKNOWN;
       setFlags(ELEMENT_MOVABLE | ELEMENT_ON_STAFF);
       }
 
@@ -194,6 +195,7 @@ Chord::Chord(const Chord& c)
       _tremoloChordType = TremoloSingle;
       _tremolo          = 0;
       _noteType         = c._noteType;
+      _crossMeasure     = CROSSMEASURE_UNKNOWN;
       }
 
 //---------------------------------------------------------
@@ -1609,6 +1611,41 @@ void Chord::layout()
       if (staff() && staff()->isTabStaff() && _tabDur)
             bb |= _tabDur->bbox().translated(_tabDur->pos());
       setbbox(bb);
+      }
+
+//---------------------------------------------------------
+//   crossMeasureSetup
+//---------------------------------------------------------
+
+void Chord::crossMeasureSetup(bool on)
+      {
+      if(!on) {
+            _crossMeasure = CROSSMEASURE_UNKNOWN;
+            return;
+            }
+      if(_crossMeasure == CROSSMEASURE_UNKNOWN) {
+            int tempCross = CROSSMEASURE_NONE;  // assume no cross-measure modification
+            // if chord has only one note and note is tied forward
+            if(notes().size() == 1 && _notes[0]->tieFor()) {
+                  Chord* tiedChord = _notes[0]->tieFor()->endNote()->chord();
+                  // if tied note belongs to another measure and to a single-note chord
+                  if(tiedChord->measure() != measure() && tiedChord->notes().size() == 1) {
+                        // get total duration
+                        QList<TDuration> durList = toDurationList(
+                                    actualDurationType().fraction() +
+                                    tiedChord->actualDurationType().fraction(), true);
+                        // if duration can be expressed as a single duration
+                        // apply cross-measure modification
+                        if(durList.size() == 1) {
+                              tempCross = CROSSMEASURE_FIRST;
+                              _crossMeasureTDur = durList[0];
+                              }
+                        }
+                  _crossMeasure = tempCross;
+                  tiedChord->setCrossMeasure(tempCross == CROSSMEASURE_FIRST ?
+                              CROSSMEASURE_SECOND : CROSSMEASURE_NONE);
+                  }
+            }
       }
 
 //---------------------------------------------------------
