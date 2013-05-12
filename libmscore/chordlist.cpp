@@ -277,6 +277,7 @@ void HChord::add(const QList<HDegree>& degreeList)
 
 static void readRenderList(QString val, QList<RenderAction>& renderList)
       {
+      renderList.clear();
       QStringList sl = val.split(" ", QString::SkipEmptyParts);
       foreach(const QString& s, sl) {
             if (s.startsWith("m:")) {
@@ -348,13 +349,13 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
 //    return true if chord was parseable
 //---------------------------------------------------------
 
-bool ParsedChord::parse (QString s)
+bool ParsedChord::parse(QString s)
       {
       QString sp, elem, elemLower, modifiers;
       int len = s.size();
       int i, j;
 
-//      qDebug("flexibleChordParse: s = %s", qPrintable(s));
+//      qDebug("parse: s = %s", qPrintable(s));
       _parseable = true;
 
       // get quality
@@ -363,7 +364,8 @@ bool ParsedChord::parse (QString s)
                   break;
             elem[i] = s[i];
             }
-      _renderName = elem;
+      if (elem != "")
+            _tokenList += elem;
       elemLower = elem.toLower();
       if (elem == "M" || elemLower == "ma" || elemLower == "maj")
             quality = "major";
@@ -375,13 +377,14 @@ bool ParsedChord::parse (QString s)
             quality = "diminished";
       else
             quality = elemLower;
-//      qDebug("flexibleChordParse: quality = <%s>, i = %d", qPrintable(quality), i);
+//      qDebug("parse: quality = <%s>, i = %d", qPrintable(quality), i);
 
       // get extension
       for (j = 0; i < len && s[i].isDigit(); ++i, ++j)
             extension[j] = s[i];
-      _renderName += extension;
-//      qDebug("flexibleChordParse: extension = <%s>, i = %d", qPrintable(extension), i);
+      if (extension != "")
+            _tokenList += extension;
+//      qDebug("parse: extension = <%s>, i = %d", qPrintable(extension), i);
 
       // get modifiers
       while (i < len) {
@@ -408,7 +411,7 @@ bool ParsedChord::parse (QString s)
                         tok1[j++] = s[i];
                   }
             QString tok1L = tok1.toLower();
-//            qDebug("flexibleChordParse: tok1L = <%s>, i = %d", qPrintable(tok1L), i);
+//            qDebug("parse: tok1L = <%s>, i = %d", qPrintable(tok1L), i);
             // get second token - up to first non-digit
             // again skip past comma or close paren
             for (j = 0, tok2 = ""; i < len; ++i) {
@@ -422,11 +425,11 @@ bool ParsedChord::parse (QString s)
                         tok2[j++] = s[i];
                   }
             QString tok2L = tok2.toLower();
-//            qDebug("flexibleChordParse: tok2L = <%s>, i = %d", qPrintable(tok2L), i);
+//            qDebug("parse: tok2L = <%s>, i = %d", qPrintable(tok2L), i);
             // special cases
             if (tok1L == "susb" || tok1L == "sus#") {
                   modifierList += "sus4";
-                  _renderName += "sus";
+                  _tokenList += "sus";
                   tok1 = tok1[3];
                   tok1L = tok1L[3];
                   }
@@ -436,13 +439,10 @@ bool ParsedChord::parse (QString s)
                   tok1L = "no";
             else if (tok1L == "sus" && tok2L == "")
                   tok2L = "4";
-            if (tok1 == "b")
-                  _renderName += QChar(0x266d);
-            else if (tok1 == "#")
-                  _renderName += QChar(0x266f);
-            else
-                  _renderName += tok1;
-            _renderName += tok2;
+            if (tok1 != "")
+                  _tokenList += tok1;
+            if (tok2 != "")
+                  _tokenList += tok2;
             elem = tok1L + tok2L;
             modifierList += elem;
             }
@@ -460,10 +460,8 @@ bool ParsedChord::parse (QString s)
             }
       // more special cases TODO: mMaj, madd, augadd, ...?
 
-      // TODO - make attempt to "understand" the chord
-
       handle = "<" + quality + "><" + extension + ">" + modifiers;
-//      qDebug("flexibleChordParse: %s", qPrintable(handle);
+//      qDebug("parse: %s", qPrintable(handle);
       _understandable = false;
       return _parseable;
       }
@@ -471,12 +469,20 @@ bool ParsedChord::parse (QString s)
 //---------------------------------------------------------
 //   renderList
 //---------------------------------------------------------
-QList<RenderAction> ParsedChord::renderList()
+
+const QList<RenderAction>& ParsedChord::renderList()
       {
       if (_renderList.isEmpty()) {
-            RenderAction a(RenderAction::RENDER_SET);
-            a.text = _renderName;
-            _renderList.append(a);
+            foreach (QString tok, _tokenList) {
+                  RenderAction a(RenderAction::RENDER_SET);
+//                  if (tok == "b")
+//                        a.text = QChar(0x266d);
+//                  else if (tok == "#")
+//                        a.text = QChar(0x266f);
+//                  else
+                        a.text = tok;
+                  _renderList.append(a);
+                  }
             }
       return _renderList;
       }
@@ -488,6 +494,7 @@ QList<RenderAction> ParsedChord::renderList()
 void ChordDescription::read(XmlReader& e)
       {
       int ni = 0, pci = 0;
+      bool renderFound = false;
       id = e.attribute("id").toInt();
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -505,10 +512,17 @@ void ChordDescription::read(XmlReader& e)
                   xmlDegrees.append(e.readElementText());
             else if (tag == "voicing")
                   chord = HChord(e.readElementText());
-            else if (tag == "render")
+            else if (tag == "render") {
                   readRenderList(e.readElementText(), renderList);
+                  renderFound = true;
+                  }
             else
                   e.unknown();
+            }
+      if (!renderFound) {
+            ParsedChord pc = parsedChords.front();
+            if (pc.renderable())
+                  renderList = pc.renderList();
             }
       }
 
@@ -550,6 +564,7 @@ ChordList::~ChordList()
 
 void ChordList::read(XmlReader& e)
       {
+      static int privateID = 10000;
       int fontIdx = 0;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -576,6 +591,8 @@ void ChordList::read(XmlReader& e)
                   }
             else if (tag == "chord") {
                   int id = e.intAttribute("id");
+                  if (id == 0)
+                        id = privateID++;
                   ChordDescription* cd = take(id);
                   if (cd == 0)
                         cd = new ChordDescription();
