@@ -229,7 +229,7 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
                   return;
                   }
             }
-      emit closed();
+      emit closed(false);
       QWidget::closeEvent(ev);
       }
 

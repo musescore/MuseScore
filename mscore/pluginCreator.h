@@ -54,7 +54,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void qmlWarnings(const QList<QDeclarativeError>&);
 
    signals:
-      void closed();
+      void closed(bool);
 
    public:
       PluginCreator(QWidget* parent = 0);

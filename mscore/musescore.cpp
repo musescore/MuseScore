@@ -1623,7 +1623,7 @@ void MuseScore::showPlayPanel(bool visible)
             connect(playPanel, SIGNAL(gainChange(float)),     synti, SLOT(setGain(float)));
             connect(playPanel, SIGNAL(relTempoChanged(double)),seq, SLOT(setRelTempo(double)));
             connect(playPanel, SIGNAL(posChange(int)),         seq, SLOT(seek(int)));
-            connect(playPanel, SIGNAL(closed()),                 SLOT(closePlayPanel()));
+            connect(playPanel, SIGNAL(closed(bool)),          playId,   SLOT(setChecked(bool)));
             connect(synti,     SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
 
             playPanel->setGain(synti->gain());
@@ -1632,15 +1632,6 @@ void MuseScore::showPlayPanel(bool visible)
             }
       playPanel->setVisible(visible);
       playId->setChecked(visible);
-      }
-
-//---------------------------------------------------------
-//   closePlayPanel
-//---------------------------------------------------------
-
-void MuseScore::closePlayPanel()
-      {
-      playId->setChecked(false);
       }
 
 //---------------------------------------------------------
@@ -3739,7 +3730,7 @@ void MuseScore::showPianoKeyboard(bool on)
             _pianoTools = new PianoTools(this);
             addDockWidget(Qt::BottomDockWidgetArea, _pianoTools);
             connect(_pianoTools, SIGNAL(keyPressed(int, bool)), SLOT(midiNoteReceived(int, bool)));
-            connect(_pianoTools, SIGNAL(pianoVisible(bool)), a, SLOT(setChecked(bool)));
+            connect(_pianoTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
             }
       if (on) {
             _pianoTools->show();
@@ -3782,7 +3773,7 @@ void MuseScore::showPluginCreator(QAction* a)
       if (on) {
             if (pluginCreator == 0) {
                   pluginCreator = new PluginCreator(0);
-                  connect(pluginCreator, SIGNAL(closed()), SLOT(closePluginCreator()));
+                  connect(pluginCreator, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
                   }
             pluginCreator->show();
             }
@@ -3791,15 +3782,6 @@ void MuseScore::showPluginCreator(QAction* a)
                   pluginCreator->hide();
             }
 #endif
-      }
-
-//---------------------------------------------------------
-//   closePluginCreator
-//---------------------------------------------------------
-
-void MuseScore::closePluginCreator()
-      {
-      getAction("plugin-creator")->setChecked(false);
       }
 
 //---------------------------------------------------------
@@ -3823,7 +3805,7 @@ PaletteBox* MuseScore::getPaletteBox()
       if (paletteBox == 0) {
             paletteBox = new PaletteBox(this);
             QAction* a = getAction("toggle-palette");
-            connect(paletteBox, SIGNAL(paletteVisible(bool)), a, SLOT(setChecked(bool)));
+            connect(paletteBox, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
             addDockWidget(Qt::LeftDockWidgetArea, paletteBox);
 
 #if 0

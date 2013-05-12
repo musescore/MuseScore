@@ -411,7 +411,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void preferencesChanged();
       void seqStarted();
       void seqStopped();
-      void closePlayPanel();
       void cmdAppendMeasures();
       void cmdInsertMeasures();
       void magChanged(int);
@@ -449,7 +448,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void switchPlayMode(int);
       void networkFinished(QNetworkReply*);
       void switchLayoutMode(int);
-      void closePluginCreator();
 
    public slots:
       virtual void cmd(QAction* a);

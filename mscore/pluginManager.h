@@ -39,7 +39,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       void pluginLoadToggled(bool);
 
    signals:
-      void closed();
+      void closed(bool);
 
    public:
       PluginManager(QWidget* parent = 0);
