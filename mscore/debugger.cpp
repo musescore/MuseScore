@@ -1473,7 +1473,7 @@ void HarmonyView::setElement(Element* e)
       else
             hb.bassName->setText(tpc2name(harmony->baseTpc(),germanNames));
       hb.chordId->setValue(harmony->id());
-      hb.chordName->setText(harmony->extensionName());
+      hb.chordName->setText(harmony->hTextName());
       hb.userName->setText(harmony->hUserName());
 
       // need to set header row

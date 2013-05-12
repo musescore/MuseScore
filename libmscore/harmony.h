@@ -72,9 +72,14 @@ class Harmony : public Text {
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
                                           // or notation of base note in chord
-      int _id;                            // matched chord from chord list
+      int _id;                            // >0 = matched chord from chord list
+                                          // -1 = no match
+                                          // 0 = matched a chord with no id - use info, but don't record id in score file
       QString _userName;                  // name as typed by user if applicable
-      ParsedChord *_parsedForm;            // parsed form of chord
+      QString _textName;                  // name recognized from chord list, read from score file, or constructed by degrees
+      ParsedChord* _parsedForm;           // parsed form of chord
+      const ChordDescription* _description;
+                                          // matched chord description from list, if applicable
 
       QList<HDegree> _degreeList;
       QList<QFont> fontList;              // temp values used in render()
@@ -109,6 +114,7 @@ class Harmony : public Text {
       virtual void endEdit();
 
       QString hUserName() const                { return _userName;     }
+      QString hTextName() const                { return _textName;     }
       int baseTpc() const                      { return _baseTpc;      }
       void setBaseTpc(int val)                 { _baseTpc = val;       }
       int rootTpc() const                      { return _rootTpc;      }
