@@ -240,6 +240,7 @@ QAction* Shortcut::action() const
 
       _action = new QAction(_text, 0);
       _action->setData(_key);
+      _action->setIconVisibleInMenu (false);
 
       if (_keys.isEmpty())
             _action->setShortcuts(_standardKey);
