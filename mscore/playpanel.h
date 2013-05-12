@@ -46,7 +46,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void relTempoChanged(double);
       void posChange(int);
       void gainChange(float);
-      void closed();
+      void closed(bool);
 
    public slots:
       void setGain(float);

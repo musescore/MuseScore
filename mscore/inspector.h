@@ -251,12 +251,6 @@ class Inspector : public QDockWidget {
       Element* _element;      // currently displayed element
       bool _inspectorEdit;    // set to true when an edit originates from
                               // within the inspector itself
-
-      virtual void closeEvent(QCloseEvent*);
-
-   signals:
-      void inspectorVisible(bool);
-
    public slots:
       void reset();
 

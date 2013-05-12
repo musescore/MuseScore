@@ -80,7 +80,7 @@ void PluginManager::accept()
 
 void PluginManager::closeEvent(QCloseEvent* ev)
       {
-      emit closed();
+      emit closed(false);
       QWidget::closeEvent(ev);
       }
 
