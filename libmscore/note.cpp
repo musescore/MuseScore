@@ -386,24 +386,18 @@ QPointF Note::attach() const
 
 //---------------------------------------------------------
 //   playTicks
+///   Return total tick len of tied notes
 //---------------------------------------------------------
-
-/**
- Return total tick len of tied notes
-*/
 
 int Note::playTicks() const
       {
       const Note* note = this;
       while (note->tieBack())
             note = note->tieBack()->startNote();
-      int len = 0;
-      while (note->tieFor() && note->tieFor()->endNote()) {
-            len += note->chord()->actualTicks();
+      int stick = note->chord()->tick();
+      while (note->tieFor() && note->tieFor()->endNote())
             note = note->tieFor()->endNote();
-            }
-      len += note->chord()->actualTicks();
-      return len;
+      return note->chord()->tick() + note->chord()->actualTicks() - stick;
       }
 
 //---------------------------------------------------------
