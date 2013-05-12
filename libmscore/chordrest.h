@@ -16,6 +16,11 @@
 #include "symbol.h"
 #include "duration.h"
 
+#define CROSSMEASURE_UNKNOWN  -1
+#define CROSSMEASURE_NONE     0
+#define CROSSMEASURE_FIRST    1
+#define CROSSMEASURE_SECOND   2
+
 class Score;
 class Measure;
 class Beam;
@@ -56,6 +61,10 @@ class ChordRest : public DurationElement {
       Space _space;                       // cached value from layout
       QList<Lyrics*> _lyricsList;
       TabDurationSymbol* _tabDur;         // stores a duration symbol in tablature staves
+
+      // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
+      int _crossMeasure;            ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
+      TDuration _crossMeasureTDur;  ///< the total Duration type of the combined notes
 
    public:
       ChordRest(Score*);
@@ -124,14 +133,19 @@ class ChordRest : public DurationElement {
 
       void layoutArticulations();
 
-      const TDuration& durationType() const      { return _durationType;        }
+      const TDuration& durationType() const     { return _crossMeasure == CROSSMEASURE_FIRST ?
+                                                      _crossMeasureTDur : _durationType;        }
+      const TDuration& actualDurationType() const   { return _durationType; }
       void setDurationType(TDuration::DurationType t);
       void setDurationType(const QString& s);
       void setDurationType(int ticks);
       void setDurationType(const TDuration& v);
       void setDots(int n)                       { _durationType.setDots(n); }
-      int dots() const                          { return _durationType.dots(); }
-      int durationTypeTicks()                   { return _durationType.ticks(); }
+      int dots() const        { return _crossMeasure == CROSSMEASURE_FIRST ? _crossMeasureTDur.dots()
+                                    : (_crossMeasure == CROSSMEASURE_SECOND ? 0 : _durationType.dots()); }
+      int actualDots() const  { return _durationType.dots(); }
+      int durationTypeTicks() { return _crossMeasure == CROSSMEASURE_FIRST ? _crossMeasureTDur.ticks()
+                                    : _durationType.ticks(); }
 
       virtual void setTrack(int val);
       virtual int tick() const;
@@ -144,6 +158,10 @@ class ChordRest : public DurationElement {
       virtual void add(Element*);
       virtual void remove(Element*);
       void removeDeleteBeam();
+
+      int crossMeasure() const            { return _crossMeasure; }
+      void setCrossMeasure(int val)       { _crossMeasure = val;  }
+      virtual void crossMeasureSetup(bool /*on*/)   { }
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
