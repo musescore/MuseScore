@@ -4853,7 +4853,7 @@ bool MgStyle::drawMenuItemControl(const QStyleOption* option, QPainter* painter,
             return true;
 
       //First, figure out the left column width.
-      const int iconColW   = qMax( menuItemOption->maxIconWidth, (int)MenuItem_IconWidth );
+      const int iconColW   = (int)MenuItem_IconWidth; //qMax( menuItemOption->maxIconWidth, (int)MenuItem_IconWidth );
       const int checkColW  = MenuItem_CheckWidth;
       const int checkSpace = MenuItem_CheckSpace;
 
@@ -4862,7 +4862,7 @@ bool MgStyle::drawMenuItemControl(const QStyleOption* option, QPainter* painter,
       // only use the additional check row if the menu has checkable menuItems.
       bool hasCheckableItems = menuItemOption->menuHasCheckableItems;
       if (hasCheckableItems)
-            leftColW += checkColW + checkSpace;
+            leftColW = checkColW + checkSpace; //leftColW += checkColW + checkSpace;
 
       // right arrow column...
       int rightColW = MenuItem_ArrowSpace + MenuItem_ArrowWidth;
