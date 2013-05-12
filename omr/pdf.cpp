@@ -104,6 +104,7 @@ QImage Pdf::page(int i)
 
       fz_irect ibounds;
       fz_rect tbounds;
+      tbounds = bounds;
       fz_round_rect(&ibounds, fz_transform_rect(&tbounds, &ctm));
       fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_gray, &ibounds);
 
@@ -120,6 +121,7 @@ QImage Pdf::page(int i)
             return QImage();
             }
 
+      printf("page %d  %d x %d\n", i, w, h);
       QImage image(w, h, QImage::Format_MonoLSB);
       QVector<QRgb> ct(2);
       ct[0] = qRgb(255, 255, 255);

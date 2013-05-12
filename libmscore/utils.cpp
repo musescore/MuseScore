@@ -582,11 +582,13 @@ Note* searchTieNote(Note* note)
       int etrack   = strack + part->staves()->size() * VOICES;
       int tick     = seg->tick() + chord->globalDuration().ticks();
 
+      printf("searchTieNote %d-%d  %d - %d\n", strack, etrack, seg->tick(), tick);
+
       while ((seg = seg->next1(Segment::SegChordRest))) {
             if (seg->tick() < tick)
                   continue;
-            if (seg->tick() > tick)
-                  break;
+            // if (seg->tick() > tick)
+            //      break;
             for (int track = strack; track < etrack; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
                   if (cr == 0 || cr->type() != Element::CHORD)
