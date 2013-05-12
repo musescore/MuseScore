@@ -441,9 +441,9 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
                   QString path = QString("OmrPages/page%1.png").arg(i+1);
                   QBuffer cbuf;
                   OmrPage* page = _omr->page(i);
-                  QImage image = page->image();
+                  const QImage& image = page->image();
                   if (!image.save(&cbuf, "PNG"))
-                        throw(QString("cannot create image"));
+                        throw(QString("save file: cannot save image (%1x%2)").arg(image.width()).arg(image.height()));
                   uz.addFile(path, cbuf.data());
                   cbuf.close();
                   }
