@@ -98,8 +98,7 @@ Mixer::Mixer(QWidget* parent)
 
 void Mixer::closeEvent(QCloseEvent* ev)
       {
-      QAction* a = getAction("toggle-mixer");
-      a->setChecked(false);
+      emit closed(false);
       QWidget::closeEvent(ev);
       }
 
@@ -172,11 +171,13 @@ void Mixer::patchListChanged()
 
 void MuseScore::showMixer(bool val)
       {
+      QAction* a = getAction("toggle-mixer");
       if (mixer == 0) {
             mixer = new Mixer(this);
             if (synthControl)
                   connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
+            connect(mixer, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
       mixer->updateAll(cs);
       mixer->setVisible(val);

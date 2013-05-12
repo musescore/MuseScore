@@ -110,9 +110,7 @@ void SynthControl::setGain(float val)
 
 void SynthControl::closeEvent(QCloseEvent* ev)
       {
-//      QAction* a = getAction("toggle-mixer");
-//      a->setChecked(false);
-      emit synthVisible(false);
+      emit closed(false);
       QWidget::closeEvent(ev);
       }
 
@@ -128,7 +126,7 @@ void MuseScore::showSynthControl(bool val)
             synthControl->setScore(cs);
             connect(synti, SIGNAL(gainChanged(float)), synthControl, SLOT(setGain(float)));
             connect(synthControl, SIGNAL(gainChanged(float)), synti, SLOT(setGain(float)));
-            connect(synthControl, SIGNAL(synthVisible(bool)), a,     SLOT(setChecked(bool)));
+            connect(synthControl, SIGNAL(closed(bool)), a,     SLOT(setChecked(bool)));
             if (mixer)
                   connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             }

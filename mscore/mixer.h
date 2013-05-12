@@ -78,6 +78,7 @@ class Mixer : public QScrollArea
       void patchListChanged();
 
    signals:
+      void closed(bool);
 
    public:
       Mixer(QWidget* parent);

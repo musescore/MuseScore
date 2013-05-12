@@ -26,8 +26,6 @@ class PaletteBox : public QDockWidget {
       Q_OBJECT
 
       QVBoxLayout* vbox;
-
-      virtual void closeEvent(QCloseEvent*);
       Palette* newPalette(const QString& name, int slot);
 
    private slots:
@@ -36,7 +34,6 @@ class PaletteBox : public QDockWidget {
       void displayMore(const QString& paletteName);
 
    signals:
-      void paletteVisible(bool);
       void changed();
 
    public:

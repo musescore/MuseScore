@@ -303,16 +303,6 @@ PianoTools::PianoTools(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   closeEvent
-//---------------------------------------------------------
-
-void PianoTools::closeEvent(QCloseEvent* ev)
-      {
-      emit pianoVisible(false);
-      QDockWidget::closeEvent(ev);
-      }
-
-//---------------------------------------------------------
 //   wheelEvent
 //---------------------------------------------------------
 

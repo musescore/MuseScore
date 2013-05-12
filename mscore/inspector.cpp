@@ -56,7 +56,7 @@ void MuseScore::showInspector(bool visible)
       QAction* a = getAction("inspector");
       if (!inspector) {
             inspector = new Inspector();
-            connect(inspector, SIGNAL(inspectorVisible(bool)), a, SLOT(setChecked(bool)));
+            connect(inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
             addDockWidget(Qt::RightDockWidgetArea, inspector);
             }
       if (visible) {
@@ -83,16 +83,6 @@ Inspector::Inspector(QWidget* parent)
       _inspectorEdit = false;
       ie             = 0;
       _element       = 0;
-      }
-
-//---------------------------------------------------------
-//   closeEvent
-//---------------------------------------------------------
-
-void Inspector::closeEvent(QCloseEvent* ev)
-      {
-      emit inspectorVisible(false);
-      QWidget::closeEvent(ev);
       }
 
 //---------------------------------------------------------

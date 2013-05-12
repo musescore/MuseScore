@@ -197,16 +197,6 @@ void PaletteBox::paletteCmd(int cmd, int slot)
       }
 
 //---------------------------------------------------------
-//   closeEvent
-//---------------------------------------------------------
-
-void PaletteBox::closeEvent(QCloseEvent* ev)
-      {
-      emit paletteVisible(false);
-      QWidget::closeEvent(ev);
-      }
-
-//---------------------------------------------------------
 //   closeAll
 //---------------------------------------------------------
 
