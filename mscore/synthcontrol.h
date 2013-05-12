@@ -52,6 +52,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
    signals:
       void gainChanged(float);
       void soundFontChanged();
+      void synthVisible(bool);
 
    public slots:
       void setGain(float);
