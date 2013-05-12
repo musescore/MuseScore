@@ -712,7 +712,7 @@ MuseScore::MuseScore()
 
       _fileMenu->addAction(getAction("file-new"));
       _fileMenu->addAction(getAction("file-open"));
-      openRecent = _fileMenu->addMenu(*icons[fileOpen_ICON], tr("Open &Recent"));
+      openRecent = _fileMenu->addMenu(tr("Open &Recent"));
       connect(openRecent, SIGNAL(aboutToShow()), SLOT(openRecentMenu()));
       connect(openRecent, SIGNAL(triggered(QAction*)), SLOT(selectScore(QAction*)));
       _fileMenu->addSeparator();
