@@ -58,6 +58,8 @@ QString Harmony::harmonyName() const
                   //s += " ";
                   s += descr()->names.front();
                   }
+            else if (_textName != "")
+                  s += _textName;
             else
                   s += _userName;
             }
@@ -112,7 +114,8 @@ Harmony::Harmony(Score* s)
       _rootTpc   = INVALID_TPC;
       _baseTpc   = INVALID_TPC;
       _id        = -1;
-      _parsedForm = nullptr;
+      _parsedForm = NULL;
+      _description = NULL;
       }
 
 Harmony::Harmony(const Harmony& h)
@@ -122,7 +125,8 @@ Harmony::Harmony(const Harmony& h)
       _baseTpc    = h._baseTpc;
       _id         = h._id;
       _degreeList = h._degreeList;
-      _parsedForm = nullptr;
+      _parsedForm = NULL;
+      _description = NULL;
       }
 
 //---------------------------------------------------------
@@ -146,14 +150,9 @@ void Harmony::write(Xml& xml) const
       xml.stag("Harmony");
       if (_rootTpc != INVALID_TPC) {
             xml.tag("root", _rootTpc);
-            QString name = _userName;
-            if (_id != -1) {
+            if (_id > 0)
                   xml.tag("extension", _id);
-                  ChordDescription* cd = score()->style()->chordList()->value(_id);
-                  if (cd)
-                        name = cd->names.front();
-                  }
-            xml.tag("name", name);
+            xml.tag("name", _textName);
             if (_baseTpc != INVALID_TPC)
                   xml.tag("base", _baseTpc);
             foreach(const HDegree& hd, _degreeList) {
@@ -207,7 +206,7 @@ void Harmony::read(XmlReader& e)
             else if (tag == "extension")
                   setId(e.readInt());
             else if (tag == "name")
-                  _userName = e.readElementText();
+                  _textName = e.readElementText();
             else if (tag == "root") {
                   if (score()->mscVersion() >= 106)
                         setRootTpc(e.readInt());
@@ -247,14 +246,14 @@ void Harmony::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      if (_userName == "" && _id != -1) {
-            ChordDescription* cd = score()->style()->chordList()->value(_id);
+      if (_textName == "" && _id > 0) {
+            const ChordDescription* cd = descr();
             if (cd)
-                  _userName = cd->names.front();
+                  _textName = cd->names.front();
             }
-      if (_userName != "") {
+      if (_textName != "") {
             _parsedForm = new ParsedChord;
-            _parsedForm->parse(_userName);
+            _parsedForm->parse(_textName);
             }
       render();
       }
@@ -372,42 +371,38 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
             delete _parsedForm;
       _parsedForm = new ParsedChord;
       bool parseable = _parsedForm->parse(s);
-      int parsedID = -1;
-      QString parsedName;
+      _textName = "";
+      _description = NULL;
       // attempt to match chord using exact string match
       // but also match using parsed forms as fallback
       foreach (const ChordDescription* cd, *score()->style()->chordList()) {
             foreach (QString ss, cd->names) {
                   if (s == ss) {
                         _id = cd->id;
-                        qDebug("exact chord match succeeded <%s>",qPrintable(s));
+                        _textName = ss;
+                        _description = cd;
+                        qDebug("exact chord match succeeded <%s>",qPrintable(ss));
                         return true;
                         }
                   }
-            if (parseable && parsedID < 0 && !useLiteral) {
+            if (parseable && _description == NULL && !useLiteral) {
                   foreach (ParsedChord ssParsed, cd->parsedChords) {
-                        if (*_parsedForm== ssParsed) {
-                              qDebug("flexible chordmatch succeeded <%s> (%s)", qPrintable(s), qPrintable(*_parsedForm));
-                              parsedID = cd->id;
-                              parsedName = cd->names.front();
+                        if (*_parsedForm == ssParsed) {
+                              _id = cd->id;
+                              _textName = cd->names.front();
+                              _description = cd;
+                              qDebug("flexible chordmatch succeeded <%s> %s", qPrintable(s), qPrintable(ssParsed));
                               break;
                               }
                         }
                   }
             }
       // exact match failed, so fall back on parsed match if one was found
-      // TODO - even if parsed match fails (no matching ID in chordList),
-      // we could construct a ChordDescription from the parsed form
-      // this could be output to MusicXML as in the same manner as chords
-      // that were input via MusicXML or the Harmony Properties windows
-      // ultimately, a set of display rules could handle rendering as well
-      if (parsedID >= 0) {
-            _id = parsedID;
-            _userName = parsedName;
+      if (_description != NULL)
             return true;
-            }
 
       // no match found
+      _textName = _userName;
       qDebug("2:parseHarmony failed <%s><%s> (%s)", qPrintable(ss), qPrintable(s), qPrintable(*_parsedForm));
       return parseable;
       }
@@ -565,7 +560,11 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
 
 const ChordDescription* Harmony::descr() const
       {
-      return score()->style()->chordDescription(_id);
+      if (_description != NULL)
+            return _description;
+      else if (_id > 0)
+            return score()->style()->chordDescription(_id);
+      return NULL;
       }
 
 //---------------------------------------------------------
@@ -826,19 +825,26 @@ void Harmony::render(const TextStyle* st)
       foreach(const TextSegment* s, textList)
             delete s;
       textList.clear();
-
       qreal x = 0.0, y = 0.0;
+
+      // render root
       render(chordList->renderListRoot, x, y, _rootTpc);
-      ChordDescription* cd = chordList->value(_id);
-      if (cd) {
-            ParsedChord cdpc = cd->parsedChords.front();
-            if (!cd->renderList.isEmpty())
+
+      // render extension
+      // try description already recorded
+      if (_description)
+            render(_description->renderList, x, y, 0);
+      // otherwise lookup description by id if valid
+      else if (_id > 0) {
+            ChordDescription* cd = chordList->value(_id);
+            if (cd)
                   render(cd->renderList, x, y, 0);
-            else if (cdpc.renderable())
-                  render(cdpc.renderList(), x, y, 0);
             }
-      else if (_parsedForm->renderable())
+      // otherwise render from parsed form
+      else if (_parsedForm && _parsedForm->renderable())
             render(_parsedForm->renderList(), x, y, 0);
+
+      // render bass
       if (_baseTpc != INVALID_TPC)
             render(chordList->renderListBase, x, y, _baseTpc);
       }
@@ -877,7 +883,7 @@ QLineF Harmony::dragAnchor() const
 
 QString Harmony::extensionName() const
       {
-      return _id != -1 ? descr()->names.front() : _userName;
+      return _id != 1 ? descr()->names.front() : _userName;
       }
 
 //---------------------------------------------------------

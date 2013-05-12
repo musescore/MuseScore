@@ -104,7 +104,7 @@ struct RenderAction {
 
 class ParsedChord {
    public:
-      QList<RenderAction> renderList();
+      const QList<RenderAction>& renderList();
       bool parse(QString);
       bool renderable() { return _parseable; }
       bool transposable() { return _parseable; }
@@ -114,11 +114,11 @@ class ParsedChord {
       operator QString() { return handle; }
       ParsedChord() { _parseable = false; _understandable = false; }
    private:
-      QString _renderName;
       QString handle;
       QString quality;
       QString extension;
       QStringList modifierList;
+      QStringList _tokenList;
       QList<RenderAction> _renderList;
       bool _parseable;
       bool _understandable;
@@ -130,6 +130,7 @@ class ParsedChord {
 
 struct ChordDescription {
       int id;                 // Chord id number (Band In A Box Chord Number)
+                              // 0 = no id specified (valid to allow chords to match without recording id in score file)
       QStringList names;      // list of alternative chord names
                               // that will by recognized from keyboard entry (without root/base)
       QList<ParsedChord> parsedChords;
