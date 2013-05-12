@@ -134,6 +134,10 @@ void Stem::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Stem::draw(QPainter* painter) const
       {
+      // hide if second chord of a cross-measure pair
+      if(chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
+            return;
+
       Staff* st = staff();
       bool useTab = st && st->isTabStaff();
 

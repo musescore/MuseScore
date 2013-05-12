@@ -383,6 +383,8 @@ void EditStyle::getValues()
       lstyle.set(ST_minHarmonyDistance,      Spatium(minHarmonyDistance->value()));
 
       lstyle.set(ST_tabClef, clefTab1->isChecked() ? CLEF_TAB : CLEF_TAB2);
+
+      lstyle.set(ST_crossMeasureValues,         crossMeasureValues->isChecked());
       }
 
 //---------------------------------------------------------
@@ -602,6 +604,8 @@ void EditStyle::setValues()
 
       clefTab1->setChecked(lstyle.valueI(ST_tabClef) == CLEF_TAB);
       clefTab2->setChecked(lstyle.valueI(ST_tabClef) == CLEF_TAB2);
+
+      crossMeasureValues->setChecked(lstyle.valueB(ST_crossMeasureValues));
       }
 
 //---------------------------------------------------------

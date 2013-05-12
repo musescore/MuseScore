@@ -288,6 +288,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="crossMeasureValues">
+            <property name="text">
+             <string>Display note values across measure bar (EXPERIMENTAL, early music ony!)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -4230,7 +4237,6 @@ p, li { white-space: pre-wrap; }
  </widget>
  <tabstops>
   <tabstop>pageList</tabstop>
-  <tabstop>buttonBox</tabstop>
   <tabstop>musicalSymbolFont</tabstop>
   <tabstop>concertPitch</tabstop>
   <tabstop>multiMeasureRests</tabstop>
@@ -4238,6 +4244,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>minMeasureWidth</tabstop>
   <tabstop>hideEmptyStaves</tabstop>
   <tabstop>dontHideStavesInFirstSystem</tabstop>
+  <tabstop>crossMeasureValues</tabstop>
   <tabstop>staffUpperBorder</tabstop>
   <tabstop>staffLowerBorder</tabstop>
   <tabstop>staffDistance</tabstop>
@@ -4251,10 +4258,10 @@ p, li { white-space: pre-wrap; }
   <tabstop>frameSystemDistance</tabstop>
   <tabstop>lastSystemFillThreshold</tabstop>
   <tabstop>genClef</tabstop>
-  <tabstop>genTimesig</tabstop>
-  <tabstop>genKeysig</tabstop>
   <tabstop>genCourtesyClef</tabstop>
+  <tabstop>genTimesig</tabstop>
   <tabstop>genCourtesyTimesig</tabstop>
+  <tabstop>genKeysig</tabstop>
   <tabstop>genCourtesyKeysig</tabstop>
   <tabstop>showHeader</tabstop>
   <tabstop>showHeaderFirstPage</tabstop>
@@ -4292,8 +4299,8 @@ p, li { white-space: pre-wrap; }
   <tabstop>showFirstMeasureNumber</tabstop>
   <tabstop>showEverySystemMeasureNumber</tabstop>
   <tabstop>showIntervalMeasureNumber</tabstop>
-  <tabstop>showAllStaffsMeasureNumber</tabstop>
   <tabstop>intervalMeasureNumber</tabstop>
+  <tabstop>showAllStaffsMeasureNumber</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>bracketDistance</tabstop>
   <tabstop>akkoladeWidth</tabstop>
@@ -4383,6 +4390,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>voice2Down</tabstop>
   <tabstop>voice3Down</tabstop>
   <tabstop>voice4Down</tabstop>
+  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>
