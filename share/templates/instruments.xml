@@ -194,20 +194,6 @@
                         <program value="76"/>
                   </Channel>
             </Instrument>
-            <Instrument id="c-dizi">
-                  <longName>C Dizi</longName>
-                  <shortName>C Di.</shortName>
-                  <description>C Dizi</description>
-                  <musicXMLid>wind.flutes.di-zi</musicXMLid>
-                  <extended>1</extended>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>67-98</aPitchRange>
-                  <pPitchRange>67-98</pPitchRange>
-                  <Channel>
-                        <program value="67"/>
-                  </Channel>
-            </Instrument>
             <Instrument id="a-dizi">
                   <longName>A Dizi</longName>
                   <shortName>A Di.</shortName>
@@ -351,7 +337,7 @@
             <Instrument id="irish-flute">
                   <longName>Irish Flute</longName>
                   <shortName>Ir. Fl.</shortName>
-                  <description>6 hole tranverse flute</description>
+                  <description>6 hole traverse flute</description>
                   <musicXMLid>wind.flutes.flute</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
