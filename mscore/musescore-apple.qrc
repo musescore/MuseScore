@@ -64,9 +64,8 @@
       <file>data/close_icon_small.png</file>
 
       <file>data/icons-dark/align-vertical-bottom.svg</file>
-      <file>data/icons-dark/align-vertical-middle.svg</file>
+      <file>data/icons-dark/align-vertical-center.svg</file>
       <file>data/icons-dark/align-vertical-top.svg</file>
-      <file>data/icons-dark/application-exit.svg</file>
       <file>data/icons-dark/document-new.svg</file>
       <file>data/icons-dark/document-open.svg</file>
       <file>data/icons-dark/document-print.svg</file>
@@ -106,10 +105,10 @@
       <file>data/icons-dark/panel-community.svg</file>
       <file>data/icons-dark/rest.svg</file>
       <file>data/icons-dark/stem-flip.svg</file>
-      <file>data/icons-dark/toggle-midi.svg</file>
-      <file>data/icons-dark/toggle-panning.svg</file>
-      <file>data/icons-dark/toggle-play-repeats.svg</file>
-      <file>data/icons-dark/toggle-volume.svg</file>
+      <file>data/icons-dark/midi-input.svg</file>
+      <file>data/icons-dark/media-playback-pan.svg</file>
+      <file>data/icons-dark/media-playback-repeats.svg</file>
+      <file>data/icons-dark/sound-while-editing.svg</file>
       <file>data/icons-dark/insert-symbol.svg</file>
       <file>data/icons-dark/format-text-bold.svg</file>
       <file>data/icons-dark/format-text-italic.svg</file>
@@ -120,7 +119,7 @@
       <file>data/icons-dark/list-unordered.svg</file>
       <file>data/icons-dark/format-indent-less.svg</file>
       <file>data/icons-dark/format-indent-more.svg</file>
-      <file>data/icons-dark/toggle-metronome.svg</file>
+      <file>data/icons-dark/media-playback-metronome.svg</file>
       <file>data/icons-dark/align-vertical-baseline.svg</file>
       <file>data/icons-dark/go-home.svg</file>
       <file>data/icons-dark/go-next.svg</file>
