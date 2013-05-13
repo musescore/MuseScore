@@ -103,6 +103,11 @@ extern Ms::Synthesizer* createAeolus();
 extern Ms::Synthesizer* createZerberus();
 #endif
 
+// Mac-Applications don't have menubar icons:
+#ifdef Q_WS_MAC
+extern void qt_mac_set_menubar_icons(bool b);
+#endif
+
 namespace Ms {
 
 
@@ -137,11 +142,6 @@ QString revision;
 extern void initStaffTypes();
 extern bool savePositions(Score*, const QString& name);
 extern TextPalette* textPalette;
-
-// Mac-Applications don't have menubar icons:
-#ifdef Q_WS_MAC
-extern void qt_mac_set_menubar_icons(bool b);
-#endif
 
 //---------------------------------------------------------
 // cmdInsertMeasure
