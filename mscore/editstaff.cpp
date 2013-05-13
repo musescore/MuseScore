@@ -79,15 +79,18 @@ void EditStaff::fillStaffTypeCombo()
       Score* score   = staff->score();
       int curIdx     = 0;
       int n          = score->staffTypes().size();
-      // can this instrument accept tabs?
-      bool acceptTab = instrument.tablature() && instrument.tablature()->strings() != 0;
+      // can this instrument accept tabs or drum set?
+      bool canUseTabs = instrument.tablature() && instrument.tablature()->strings() > 0;
+      bool canUsePerc = instrument.useDrumset();
       staffType->clear();
       for (int idx = 0; idx < n; ++idx) {
             StaffType* st = score->staffType(idx);
-            if (acceptTab || st->group() != TAB_STAFF) {
+            if ( (canUseTabs && st->group() == TAB_STAFF)
+                        || ( canUsePerc && st->group() == PERCUSSION_STAFF)
+                        || (!canUsePerc && st->group() == PITCHED_STAFF) ) {
                   staffType->addItem(st->name(), idx);
                   if (st == staff->staffType())
-                        curIdx = idx;
+                        curIdx = staffType->count() - 1;
                   }
             }
       staffType->setCurrentIndex(curIdx);
@@ -213,7 +216,8 @@ void EditStaff::apply()
       bool s            = small->isChecked();
       bool inv          = invisible->isChecked();
       qreal userDist    = spinExtraDistance->value();
-      StaffType* st     = score->staffType(staffType->currentIndex());
+      int staffIdx      = staffType->itemData(staffType->currentIndex()).toInt();
+      StaffType* st     = score->staffType(staffIdx);
 
 
       // before changing instrument, check if notes need to be updated

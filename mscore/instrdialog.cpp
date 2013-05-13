@@ -40,6 +40,7 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/style.h"
 #include "libmscore/system.h"
+#include "libmscore/tablature.h"
 #include "libmscore/undo.h"
 
 void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
@@ -87,10 +88,20 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // Call initStaffTypeCombo(true) ONLY if the item has been repositioned
       // or a memory leak may result
 
+      bool canUseTabs = true;                   // assume all staff type are applicable
+      bool canUsePerc = true;
+      PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
+      if (part) {
+            canUseTabs = part->it->tablature && part->it->tablature->strings() > 0;
+            canUsePerc = part->it->useDrumset;
+      }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
       foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList)
-            _staffTypeCombo->addItem(staffTypeData.displayName, staffTypeData.idx);
+            if ( (canUseTabs && staffTypeData.staffType->group() == TAB_STAFF)
+                        || ( canUsePerc && staffTypeData.staffType->group() == PERCUSSION_STAFF)
+                        || (!canUsePerc && staffTypeData.staffType->group() == PITCHED_STAFF) )
+                  _staffTypeCombo->addItem(staffTypeData.displayName, staffTypeData.idx);
       treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
       connect(_staffTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(staffTypeChanged(int)) );
       }
