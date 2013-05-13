@@ -115,7 +115,7 @@ void Preferences::init()
       fgWallpaper        = ":/data/paper5.png";
       fgColor.setRgb(255, 255, 255);
       iconHeight         = 24;
-      iconWidth          = 24;
+      iconWidth          = 30;
 
       enableMidiInput    = true;
       playNotes          = true;
