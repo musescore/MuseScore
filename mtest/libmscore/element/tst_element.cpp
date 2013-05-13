@@ -17,6 +17,8 @@
 #include "libmscore/element.h"
 #include "mtest/testutils.h"
 
+using namespace Ms;
+
 //---------------------------------------------------------
 //   TestElement
 //---------------------------------------------------------

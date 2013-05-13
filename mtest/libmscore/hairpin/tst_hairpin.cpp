@@ -17,6 +17,8 @@
 #include "libmscore/hairpin.h"
 #include "mtest/testutils.h"
 
+using namespace Ms;
+
 //---------------------------------------------------------
 //   TestHairpin
 //---------------------------------------------------------

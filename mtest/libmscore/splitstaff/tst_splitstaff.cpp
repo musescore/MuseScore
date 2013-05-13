@@ -20,6 +20,8 @@
 
 #define DIR QString("libmscore/splitstaff/")
 
+using namespace Ms;
+
 //---------------------------------------------------------
 //   TestSplitStaff
 //---------------------------------------------------------
