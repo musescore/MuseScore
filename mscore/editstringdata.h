@@ -21,13 +21,8 @@
 #ifndef EDITSTRINGDATA_H
 #define EDITSTRINGDATA_H
 
-//#include <QDialog>
 #include "ui_editstringdata.h"
-/*
-namespace Ui {
-    class EditStringData;
-}
-*/
+
 class EditStringData : public QDialog, private Ui::EditStringDataBase {
       Q_OBJECT
 
@@ -41,11 +36,7 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase {
       ~EditStringData();
 
    protected:
-//      void changeEvent(QEvent *e);
       QString midiCodeToStr(int midiCode);
-
-//private:
-//    Ui::EditStringData *ui;
 
 private slots:
       void accept();

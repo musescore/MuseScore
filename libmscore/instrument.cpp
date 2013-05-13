@@ -133,7 +133,7 @@ InstrumentData::~InstrumentData()
 
 Tablature* InstrumentData::tablature() const
       {
-      return _tablature ? _tablature : &guitarTablature;
+      return _tablature ? _tablature : &emptyStringData;
       }
 
 //---------------------------------------------------------
