@@ -16,15 +16,21 @@
 #include "score.h"
 #include "undo.h"
 
-static int guitarStrings[6] = { 40, 45, 50, 55, 59, 64 };
+//static int guitarStrings[6] = { 40, 45, 50, 55, 59, 64 };
 
-Tablature guitarTablature(23, 6, guitarStrings);
+Tablature emptyStringData(0, 0, 0);
 
 //---------------------------------------------------------
 //   Tablature
 //---------------------------------------------------------
 
 bool Tablature::bFretting = false;
+
+Tablature::Tablature()
+      {
+      _frets = 0;
+      stringTable = QList<int>();
+      }
 
 Tablature::Tablature(int numFrets, int numStrings, int strings[])
       {
