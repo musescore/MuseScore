@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg xmlns:cc='http://creativecommons.org/ns#' xmlns:dc='http://purl.org/dc/elements/1.1/' sodipodi:docname='midi-input.svg' height='24' id='svg7384' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:svg='http://www.w3.org/2000/svg' inkscape:version='0.48.4 r9939' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'>
+  <metadata id='metadata90'>
+    <rdf:RDF>
+      <cc:Work rdf:about=''>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage'/>
+        <dc:title>MuseScore Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview inkscape:bbox-nodes='false' inkscape:bbox-paths='true' bordercolor='#666666' borderopacity='1' inkscape:current-layer='actions' inkscape:cx='-315.34552' inkscape:cy='-68.06727' fit-margin-bottom='6' fit-margin-left='6' fit-margin-right='6' fit-margin-top='6' gridtolerance='10' inkscape:guide-bbox='true' guidetolerance='10' id='namedview88' inkscape:object-nodes='false' inkscape:object-paths='false' objecttolerance='10' pagecolor='#333333' inkscape:pageopacity='1' inkscape:pageshadow='2' showborder='false' showgrid='false' showguides='true' inkscape:snap-bbox='true' inkscape:snap-bbox-midpoints='false' inkscape:snap-global='false' inkscape:snap-grids='true' inkscape:snap-nodes='false' inkscape:snap-others='false' inkscape:snap-to-guides='true' inkscape:window-height='1021' inkscape:window-maximized='1' inkscape:window-width='1920' inkscape:window-x='0' inkscape:window-y='27' inkscape:zoom='1'>
+    <inkscape:grid empspacing='2' enabled='true' id='grid4866' originx='-65.81007px' originy='43.99994px' snapvisiblegridlinesonly='true' spacingx='1px' spacingy='1px' type='xygrid' visible='true'/>
+  </sodipodi:namedview>
+  <title id='title9167'>MuseScore Icon Theme</title>
+  <defs id='defs7386'/>
+  <g inkscape:groupmode='layer' id='actions' inkscape:label='actions' style='display:inline' transform='translate(-509.00038,-123)'>
+    
+    
+    <path inkscape:connector-curvature='0' d='m 520.99997,124 c -6.06329,0 -11,4.93672 -11,11 0,6.06329 4.93671,11 11,11 6.06329,0 11,-4.93672 11,-11 0,-6.06329 -4.93671,-11 -11,-11 z m 0,2 c 4.98241,0 9,4.01759 9,9 0,3.53596 -2.0458,6.55994 -5,8.03125 l 0,-3.03125 -8,0 0,3.03125 c -2.9542,-1.47131 -5,-4.49529 -5,-8.03125 0,-4.98242 4.01759,-9 9,-9 z m -2,16 4,0 0,1.75 c -0.64542,0.14616 -1.30916,0.25 -2,0.25 -0.69084,0 -1.35458,-0.10384 -2,-0.25 l 0,-1.75 z' id='path2768' style='font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans'/>
+    <path sodipodi:cx='429.61157' sodipodi:cy='43.793491' d='m 430.62804,43.793491 a 1.016466,1.016466 0 1 1 -2.03293,0 1.016466,1.016466 0 1 1 2.03293,0 z' id='path4340' sodipodi:rx='1.016466' sodipodi:ry='1.016466' style='fill:#ffffff;stroke:none' transform='matrix(1.4757011,0,0,1.4757011,-119.47809,70.373895)' sodipodi:type='arc'/>
+    <path sodipodi:cx='429.61157' sodipodi:cy='43.793491' d='m 430.62804,43.793491 a 1.016466,1.016466 0 1 1 -2.03293,0 1.016466,1.016466 0 1 1 2.03293,0 z' id='path13787' sodipodi:rx='1.016466' sodipodi:ry='1.016466' style='fill:#ffffff;stroke:none' transform='matrix(1.4757011,0,0,1.4757011,-112.97789,63.8739)' sodipodi:type='arc'/>
+    <path sodipodi:cx='429.61157' sodipodi:cy='43.793491' d='m 430.62804,43.793491 a 1.016466,1.016466 0 1 1 -2.03293,0 1.016466,1.016466 0 1 1 2.03293,0 z' id='path13789' sodipodi:rx='1.016466' sodipodi:ry='1.016466' style='fill:#ffffff;stroke:none' transform='matrix(-1.4757011,0,0,1.4757011,1161.4785,70.373895)' sodipodi:type='arc'/>
+    <path sodipodi:cx='429.61157' sodipodi:cy='43.793491' d='m 430.62804,43.793491 a 1.016466,1.016466 0 1 1 -2.03293,0 1.016466,1.016466 0 1 1 2.03293,0 z' id='path27671' sodipodi:rx='1.016466' sodipodi:ry='1.016466' style='fill:#ffffff;stroke:none' transform='matrix(1.4757011,0,0,1.4757011,-117.97788,65.873895)' sodipodi:type='arc'/>
+    <path sodipodi:cx='429.61157' sodipodi:cy='43.793491' d='m 430.62804,43.793491 a 1.016466,1.016466 0 1 1 -2.03293,0 1.016466,1.016466 0 1 1 2.03293,0 z' id='path27675' sodipodi:rx='1.016466' sodipodi:ry='1.016466' style='fill:#ffffff;stroke:none' transform='matrix(1.4757011,0,0,1.4757011,-107.97789,65.873895)' sodipodi:type='arc'/>
+  </g>
+</svg>

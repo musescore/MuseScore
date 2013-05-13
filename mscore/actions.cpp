@@ -1330,8 +1330,7 @@ Shortcut Shortcut::sc[] = {
          STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_FOTO,
          0,
          "quit",
-         QT_TRANSLATE_NOOP("action","Quit"),
-          exit_ICON
+         QT_TRANSLATE_NOOP("action","Quit")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
