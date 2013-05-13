@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "arpeggio.h"
 #include "glissando.h"
 #include "chord.h"
 #include "note.h"
@@ -92,6 +93,14 @@ void Glissando::layout()
                   y2 += yOff;                               // move ending point to base of note
             else                                      // ascending glissando:
                   y1 += yOff;                               // move starting point to base of note
+            }
+
+      // shorten line so it doesn't go through accidential or arpeggio
+      if (Accidental* a = anchor2->accidental()) {
+            x2 = a->pos().x() + a->userOff().x();
+            }
+      if (Arpeggio* a = chord->arpeggio()) {
+            x2 = a->pos().x() + a->userOff().x();
             }
 
       QLineF fullLine(x1, y1, x2, y2);
