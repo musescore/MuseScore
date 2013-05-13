@@ -19,6 +19,8 @@
 #include "ui_inspector_chord.h"
 #include "ui_inspector_segment.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorNote
 //---------------------------------------------------------
@@ -53,5 +55,7 @@ class InspectorNote : public InspectorBase {
       virtual void setElement();
       };
 
+
+} // namespace Ms
 #endif
 

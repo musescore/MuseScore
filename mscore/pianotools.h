@@ -21,6 +21,8 @@
 #ifndef __PIANOTOOLS_H__
 #define __PIANOTOOLS_H__
 
+namespace Ms {
+
 class HPiano;
 
 //---------------------------------------------------------
@@ -79,5 +81,7 @@ class PianoTools : public QDockWidget {
       PianoTools(QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

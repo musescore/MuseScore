@@ -15,6 +15,8 @@
 
 #include "element.h"
 
+namespace Ms {
+
 class Tablature;
 class Chord;
 class Harmony;
@@ -88,4 +90,6 @@ class FretDiagram : public Element {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       };
 
+
+}     // namespace Ms
 #endif

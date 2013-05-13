@@ -34,6 +34,8 @@
 #include "libmscore/utils.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Port
 //---------------------------------------------------------
@@ -93,11 +95,13 @@ bool Port::operator<(const Port& p) const
             }
       return false;
       }
+}
 
 #ifdef USE_ALSA
 #include "alsa.h"
 #include "alsamidi.h"
 
+namespace Ms {
 static const unsigned int inCap  = SND_SEQ_PORT_CAP_SUBS_READ;
 static const unsigned int outCap = SND_SEQ_PORT_CAP_SUBS_WRITE;
 
@@ -532,4 +536,5 @@ bool AlsaMidiDriver::putEvent(snd_seq_event_t* event)
       }
 
 #endif /* USE_ALSA */
+}
 

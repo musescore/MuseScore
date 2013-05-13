@@ -21,6 +21,8 @@
 #include "utils.h"
 #include "omr.h"
 
+namespace Ms {
+
 char Omr::bitsSetTable[256];
 
 //---------------------------------------------------------
@@ -81,4 +83,5 @@ double covariance(const double data1[], const double data2[], int n)
 
       return covariance(data1, data2, n, mean1, mean2);
       }
+}
 

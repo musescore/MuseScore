@@ -17,10 +17,13 @@
 #include "durationtype.h"
 #include "spanner.h"
 
+class QPainter;
+
+namespace Ms {
+
 class ChordRest;
 class MuseScoreView;
 class Chord;
-class QPainter;
 
 struct BeamFragment;
 
@@ -123,5 +126,7 @@ class Beam : public Element {
       QVariant propertyDefault(P_ID id) const;
       };
 
+
+}     // namespace Ms
 #endif
 

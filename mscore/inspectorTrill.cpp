@@ -16,6 +16,8 @@
 #include "libmscore/trill.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorTrill
 //---------------------------------------------------------
@@ -38,4 +40,5 @@ InspectorTrill::InspectorTrill(QWidget* parent)
 
       mapSignals();
       }
+}
 

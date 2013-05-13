@@ -24,6 +24,8 @@
 #include "ui_prefsdialog.h"
 #include "preferences.h"
 
+namespace Ms {
+
 class Shortcut;
 
 //---------------------------------------------------------
@@ -84,5 +86,6 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void updateRemote();
       };
 
+} // namespace Ms
 #endif
 

@@ -13,6 +13,8 @@
 #include "marker.h"
 #include "score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Marker
 //---------------------------------------------------------
@@ -261,4 +263,6 @@ QVariant Marker::propertyDefault(P_ID propertyId) const
       }
 
 
+
+}
 

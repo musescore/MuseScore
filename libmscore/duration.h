@@ -16,6 +16,8 @@
 #include "element.h"
 #include "durationtype.h"
 
+namespace Ms {
+
 class Tuplet;
 class Beam;
 class Spanner;
@@ -58,5 +60,7 @@ class DurationElement : public Element {
       int durationTicks() const           { return _duration.ticks(); }
       };
 
+
+}     // namespace Ms
 #endif
 

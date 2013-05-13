@@ -16,10 +16,13 @@
 #include "spanner.h"
 #include "mscore.h"
 
+class QPainter;
+
+namespace Ms {
+
 class SLine;
 class System;
 class MuseScoreView;
-class QPainter;
 
 //---------------------------------------------------------
 //   @@ LineSegment
@@ -112,5 +115,7 @@ class SLine : public Spanner {
       virtual QVariant propertyDefault(P_ID id) const;
       };
 
+
+}     // namespace Ms
 #endif
 

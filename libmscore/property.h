@@ -13,6 +13,8 @@
 #ifndef __PROPERTY_H__
 #define __PROPERTY_H__
 
+namespace Ms {
+
 class XmlReader;
 
 //------------------------------------------------------------------------
@@ -172,5 +174,7 @@ extern P_TYPE propertyType(P_ID);
 extern const char* propertyName(P_ID);
 extern bool propertyLink(P_ID id);
 
+
+}     // namespace Ms
 #endif
 

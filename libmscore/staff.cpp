@@ -29,6 +29,8 @@
 #include "instrtemplate.h"
 #include "barline.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   idx
 //---------------------------------------------------------
@@ -822,4 +824,6 @@ void Staff::setInitialClef(ClefType ct)
       {
       _initialClef = ClefTypeList(ct, ct);
       }
+
+}
 

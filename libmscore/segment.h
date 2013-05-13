@@ -20,11 +20,14 @@
 
 #include "element.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Measure;
 class Segment;
 class ChordRest;
 class Lyrics;
-class QPainter;
 class Spanner;
 class System;
 
@@ -197,7 +200,10 @@ class Segment : public Element {
       };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Segment::SegmentTypes)
-Q_DECLARE_METATYPE(Segment::SegmentType)
+
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Segment::SegmentType)
 
 #endif
 

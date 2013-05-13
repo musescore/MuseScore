@@ -19,30 +19,37 @@
 
 #ifndef UPDATECHECKER_H
 #define UPDATECHECKER_H
- 
-class UpdateChecker : public QObject{
-    Q_OBJECT
-    
-    QNetworkAccessManager* manager;
-    QString os;
-    QString release;
-    QString revision;
-    bool manual;
- 
-public:
-    void check(QString,bool);
-    static int defaultPeriod();
-    static bool hasToCheck();
- 
-public slots:
-    void onRequestFinished(QNetworkReply*);
 
-private:
-  QString parseText(QXmlStreamReader&);
- 
-public:
-     UpdateChecker();
-     ~UpdateChecker();
-     
-};
+namespace Ms {
+
+//---------------------------------------------------------
+//   UpdateChecker
+//---------------------------------------------------------
+
+class UpdateChecker : public QObject{
+      Q_OBJECT
+
+      QNetworkAccessManager* manager;
+      QString os;
+      QString release;
+      QString revision;
+      bool manual;
+
+   public:
+      void check(QString,bool);
+      static int defaultPeriod();
+      static bool hasToCheck();
+
+   public slots:
+      void onRequestFinished(QNetworkReply*);
+
+   private:
+      QString parseText(QXmlStreamReader&);
+
+   public:
+      UpdateChecker();
+      ~UpdateChecker();
+      };
+
+}
 #endif // UPDATECHECKER_H

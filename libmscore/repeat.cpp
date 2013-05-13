@@ -17,6 +17,8 @@
 #include "measure.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   RepeatMeasure
 //---------------------------------------------------------
@@ -74,3 +76,6 @@ Fraction RepeatMeasure::duration() const
             return measure()->len();
       return Fraction(0, 1);
       }
+
+}
+

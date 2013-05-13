@@ -54,6 +54,8 @@
 #include "spanner.h"
 #include "glissando.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   noteHeads
 //    note head groups
@@ -730,15 +732,15 @@ void Note::read(XmlReader& e)
             else if (tag == "small")
                   setSmall(e.readInt());
             else if (tag == "mirror")
-                  setProperty(P_MIRROR_HEAD, ::getProperty(P_MIRROR_HEAD, e));
+                  setProperty(P_MIRROR_HEAD, Ms::getProperty(P_MIRROR_HEAD, e));
             else if (tag == "dotPosition")
-                  setProperty(P_DOT_POSITION, ::getProperty(P_DOT_POSITION, e));
+                  setProperty(P_DOT_POSITION, Ms::getProperty(P_DOT_POSITION, e));
             else if (tag == "onTimeOffset")
                   e.skipCurrentElement(); // TODO setOnTimeUserOffset(val.toInt());
             else if (tag == "offTimeOffset")
                   e.skipCurrentElement(); // TODO setOffTimeUserOffset(val.toInt());
             else if (tag == "head")
-                  setProperty(P_HEAD_GROUP, ::getProperty(P_HEAD_GROUP, e));
+                  setProperty(P_HEAD_GROUP, Ms::getProperty(P_HEAD_GROUP, e));
             else if (tag == "velocity")
                   setVeloOffset(e.readInt());
             else if (tag == "tuning")
@@ -750,9 +752,9 @@ void Note::read(XmlReader& e)
             else if (tag == "ghost")
                   setGhost(e.readInt());
             else if (tag == "headType")
-                  setProperty(P_HEAD_TYPE, ::getProperty(P_HEAD_TYPE, e));
+                  setProperty(P_HEAD_TYPE, Ms::getProperty(P_HEAD_TYPE, e));
             else if (tag == "veloType")
-                  setProperty(P_VELO_TYPE, ::getProperty(P_VELO_TYPE, e));
+                  setProperty(P_VELO_TYPE, Ms::getProperty(P_VELO_TYPE, e));
             else if (tag == "line")
                   _line = e.readInt();
             else if (tag == "Tie") {
@@ -2066,4 +2068,6 @@ bool Note::removeSpannerFor(Spanner* e)
             }
       return false;
       }
+
+}
 

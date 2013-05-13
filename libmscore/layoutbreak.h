@@ -17,6 +17,8 @@
 
 class QPainter;
 
+namespace Ms {
+
 // layout break subtypes:
 
 enum LayoutBreakType {
@@ -69,4 +71,6 @@ class LayoutBreak : public Element {
       virtual QVariant propertyDefault(P_ID) const;
       };
 
+
+}     // namespace Ms
 #endif

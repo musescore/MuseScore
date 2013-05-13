@@ -18,6 +18,8 @@
 #include "undo.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InstrumentChange
 //---------------------------------------------------------
@@ -54,4 +56,6 @@ void InstrumentChange::read(XmlReader& e)
                   e.unknown();
             }
       }
+
+}
 

@@ -16,6 +16,8 @@
 #include "stem.h"
 #include "score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Hook
 //---------------------------------------------------------
@@ -66,9 +68,12 @@ void Hook::layout()
 //---------------------------------------------------------
 
 void Hook::draw(QPainter* painter) const
-{
+      {
       // hide if belonging to the second chord of a cross-measure pair
       if(chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
             return;
       Symbol::draw(painter);
+      }
+
 }
+

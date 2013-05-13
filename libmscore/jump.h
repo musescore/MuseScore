@@ -15,6 +15,8 @@
 
 #include "text.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   JumpType
 //---------------------------------------------------------
@@ -78,7 +80,9 @@ class Jump : public Text {
       virtual QVariant propertyDefault(P_ID) const;
       };
 
-Q_DECLARE_METATYPE(JumpType)
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::JumpType)
 
 #endif
 

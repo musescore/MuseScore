@@ -13,6 +13,8 @@
 #ifndef __SPATIUM_H__
 #define __SPATIUM_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Spatium
 //    - a unit of measure
@@ -102,5 +104,7 @@ inline Spatium operator*(qreal a, const Spatium& b)
       return r;
       }
 
+
+}     // namespace Ms
 #endif
 

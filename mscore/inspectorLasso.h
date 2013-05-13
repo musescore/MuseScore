@@ -18,6 +18,8 @@
 #include "ui_inspector_lasso.h"
 #include "libmscore/property.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorLasso
 //---------------------------------------------------------
@@ -36,5 +38,7 @@ class InspectorLasso : public InspectorBase {
       virtual void setElement(Element*);
       };
 
+
+} // namespace Ms
 #endif
 

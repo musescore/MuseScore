@@ -19,6 +19,8 @@
 #include "ui_inspector_line.h"
 #include "ui_inspector_trill.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorTrill
 //---------------------------------------------------------
@@ -34,5 +36,7 @@ class InspectorTrill : public InspectorBase {
       InspectorTrill(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif
 

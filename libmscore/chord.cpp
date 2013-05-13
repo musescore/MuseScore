@@ -47,6 +47,8 @@
 #include "stemslash.h"
 #include "ledgerline.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   upNote / downNote
 //---------------------------------------------------------
@@ -2082,4 +2084,6 @@ void Chord::setStemSlash(StemSlash* s)
       delete _stemSlash;
       _stemSlash = s;
       }
+
+}
 

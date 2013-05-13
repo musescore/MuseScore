@@ -29,6 +29,7 @@
 #include "voice.h"
 
 namespace FluidS {
+using namespace Ms;
 
 /***************************************************************
  *

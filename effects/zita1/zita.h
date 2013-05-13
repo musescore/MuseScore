@@ -21,6 +21,8 @@
 
 #include "effects/effect.h"
 
+namespace Ms {
+
 class EffectGui;
 
 //---------------------------------------------------------
@@ -280,6 +282,7 @@ class ZitaReverb : public Effect
       virtual SynthesizerGroup state() const;
       virtual void setState(const SynthesizerGroup&);
       };
+}
 
 #endif
 

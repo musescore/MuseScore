@@ -19,11 +19,13 @@
 */
 
 #include "measurebase.h"
+class QPainter;
+
+namespace Ms {
 
 class BarLine;
 class MuseScoreView;
 class Text;
-class QPainter;
 
 //---------------------------------------------------------
 //   @@ Box
@@ -143,5 +145,7 @@ class FBox : public VBox {
       void add(Element*);
       };
 
+
+}     // namespace Ms
 #endif
 

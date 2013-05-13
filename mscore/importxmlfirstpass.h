@@ -17,6 +17,8 @@
 #include "libmscore/score.h"
 #include "musicxmlsupport.h"
 
+namespace Ms {
+
 typedef QMap<int, VoiceDesc> VoiceList;
 
 class MusicXmlPart {
@@ -53,4 +55,6 @@ private:
       QList<MusicXmlPart> parts;
       };
 
+
+} // namespace Ms
 #endif

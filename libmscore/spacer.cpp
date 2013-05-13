@@ -14,6 +14,8 @@
 #include "score.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   LayoutBreak
 //---------------------------------------------------------
@@ -216,4 +218,6 @@ QVariant Spacer::propertyDefault(P_ID id) const
             }
       }
 
+
+}
 

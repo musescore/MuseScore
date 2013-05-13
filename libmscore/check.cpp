@@ -19,6 +19,8 @@
 #include "segment.h"
 #include "staff.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   checkSlurs
 //    helper routine to check for sanity slurs
@@ -157,4 +159,6 @@ qDebug("    -   Rest %d/%d\n", d.fraction().numerator(), d.fraction().denominato
                   }
             }
       }
+
+}
 

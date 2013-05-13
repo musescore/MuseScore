@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE
 //  Linux Music Editor
-//  $Id: simplebutton.h 1840 2009-05-20 11:57:51Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -21,6 +20,8 @@
 #ifndef __SIMPLE_BUTTON_H__
 #define __SIMPLE_BUTTON_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SimpleButton
 //---------------------------------------------------------
@@ -36,6 +37,7 @@ class SimpleButton : public QToolButton {
       SimpleButton(const QString& on, const QString& off, QWidget* parent = 0);
       SimpleButton(const QString& s, QWidget* parent = 0);
       };
+}
 
 #endif
 

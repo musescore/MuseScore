@@ -15,9 +15,12 @@
 
 #include "element.h"
 
+class QPainter;
+
+namespace Ms {
+
 class MuseScoreView;
 class Segment;
-class QPainter;
 
 static const int DEFAULT_BARLINE_TO      = 4 * 2;
 static const int MIN_BARLINE_FROMTO_DIST = 2;
@@ -110,5 +113,7 @@ class BarLine : public Element {
       static qreal layoutWidth(Score*, BarLineType, qreal mag);
       };
 
+
+}     // namespace Ms
 #endif
 

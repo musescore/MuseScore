@@ -33,6 +33,8 @@
 #include "libmscore/stem.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   DrumTools
 //---------------------------------------------------------
@@ -44,7 +46,7 @@ DrumTools::DrumTools(QWidget* parent)
       _score  = 0;
       setObjectName("drum-tools");
       setWindowTitle(tr("Drum Tools"));
-      setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
 
       QWidget* w = new QWidget(this);
       w->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
@@ -181,4 +183,5 @@ void DrumTools::drumNoteSelected(int val)
             getAction("voice-4")->setChecked(element->voice() == 3);
             }
       }
+}
 

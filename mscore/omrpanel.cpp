@@ -18,6 +18,8 @@
 #include "omr/omr.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   showOmrPanel
 //---------------------------------------------------------
@@ -51,7 +53,7 @@ OmrPanel::OmrPanel(QWidget* parent)
    : QDockWidget(tr("Omr Panel"), parent)
       {
       setObjectName("omrpanel");
-      setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
       QWidget* mainWidget = new QWidget;
       mainWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       setWidget(mainWidget);
@@ -193,4 +195,5 @@ void OmrPanel::processClicked()
             setOmrView(omrView);    // update values
             }
       }
+}
 

@@ -13,6 +13,8 @@
 #include "audio.h"
 #include "xml.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Audio
 //---------------------------------------------------------
@@ -45,4 +47,6 @@ void Audio::write(Xml& xml) const
       xml.tag("path", _path);
       xml.etag();
       }
+
+}
 

@@ -40,6 +40,8 @@
 #include "iname.h"
 #include "spanner.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SysStaff
 //---------------------------------------------------------
@@ -1020,4 +1022,6 @@ void System::read(XmlReader& e)
                   e.unknown();
             }
       }
+
+}
 

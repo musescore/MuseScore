@@ -53,6 +53,8 @@
 #include "dynamic.h"
 #include "repeat.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   getSelectedNote
 //---------------------------------------------------------
@@ -1887,4 +1889,6 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
             }
       return omb;
       }
+
+}
 

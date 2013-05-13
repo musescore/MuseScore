@@ -44,6 +44,8 @@
 #include "fluid/fluid.h"
 #include "pathlistdialog.h"
 
+namespace Ms {
+
 bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = false;
 
 extern bool useFactorySettings;
@@ -1762,7 +1764,7 @@ void Preferences::updatePluginList()
       pluginPathList.append(myPluginsPath);
 
       foreach(QString pluginPath, pluginPathList) {
-            ::updatePluginList(pluginPathList, pluginPath, pluginList);
+            Ms::updatePluginList(pluginPathList, pluginPath, pluginList);
             }
       }
 
@@ -1835,4 +1837,5 @@ void PreferenceDialog::printShortcutsClicked()
             }
       p.end();
       }
+}
 

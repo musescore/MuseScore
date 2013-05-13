@@ -21,6 +21,8 @@
 #include "sectionbreakprop.h"
 #include "libmscore/layoutbreak.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SectionBreakProperties
 //---------------------------------------------------------
@@ -62,4 +64,5 @@ bool SectionBreakProperties::startWithMeasureOne() const
       return _startWithMeasureOne->isChecked();
       }
 
+}
 

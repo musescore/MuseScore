@@ -13,6 +13,8 @@
 #ifndef __PITCH_H__
 #define __PITCH_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 ///  PitchList
 ///  List of note pitch offsets
@@ -25,5 +27,7 @@ class PitchList : public QMap<int, int> {
       void setPitchOffset(int tick, int offset) { insert(tick, offset); }
       };
 
+
+}     // namespace Ms
 #endif
 

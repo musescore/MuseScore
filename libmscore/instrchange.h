@@ -16,6 +16,8 @@
 #include "text.h"
 #include "instrument.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ InstrumentChange
 //---------------------------------------------------------
@@ -37,4 +39,6 @@ class InstrumentChange : public Text  {
       Segment* segment()                      { return (Segment*)parent(); }
       };
 
+
+}     // namespace Ms
 #endif

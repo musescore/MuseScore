@@ -105,6 +105,8 @@
 #include "libmscore/marker.h"
 #include "importxmlfirstpass.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   local defines for debug output
 //---------------------------------------------------------
@@ -5304,3 +5306,5 @@ int MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
       s->add(clefs);
       return res;
       }
+}
+

@@ -18,6 +18,8 @@
 #include "fraction.h"
 #include "property.h"
 
+namespace Ms {
+
 class Spanner;
 class Beam;
 class Tuplet;
@@ -150,5 +152,7 @@ class Xml : public QTextStream {
 
 extern PlaceText readPlacement(XmlReader&);
 extern QString docName;
+
+}     // namespace Ms
 #endif
 

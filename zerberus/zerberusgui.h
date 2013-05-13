@@ -40,7 +40,7 @@ class SfzListDialog : public QDialog {
 //   ZerberusGui
 //---------------------------------------------------------
 
-class ZerberusGui : public SynthesizerGui, Ui::ZerberusGui {
+class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
       Q_OBJECT
 
       QFutureWatcher<bool> _futureWatcher;
@@ -60,7 +60,7 @@ class ZerberusGui : public SynthesizerGui, Ui::ZerberusGui {
       virtual void synthesizerChanged();
 
    public:
-      ZerberusGui(Synthesizer*);
+      ZerberusGui(Ms::Synthesizer*);
       Zerberus* zerberus() { return (Zerberus*)synthesizer(); }
       };
 

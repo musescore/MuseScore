@@ -25,6 +25,8 @@
 #include "libmscore/style.h"
 #include "musescore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   codeIcon
 //---------------------------------------------------------
@@ -195,3 +197,5 @@ void TextPalette::closeEvent(QCloseEvent* ev)
       QWidget::closeEvent(ev);
       getAction("show-keys")->setChecked(false);
       }
+}
+

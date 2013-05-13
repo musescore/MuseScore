@@ -41,6 +41,8 @@
 #include "libmscore/timesig.h"
 #include "libmscore/segment.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   musicalAttribute
 //---------------------------------------------------------
@@ -743,4 +745,5 @@ Score::FileError importMuseData(Score* score, const QString& name)
       md.convert();
       return Score::FILE_NO_ERROR;
       }
+}
 

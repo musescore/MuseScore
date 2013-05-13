@@ -15,6 +15,8 @@
 #include "chordrest.h"
 #include "segment.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SpannerSegment
 //---------------------------------------------------------
@@ -289,4 +291,6 @@ void Spanner::addSpannerBack()
       else
             qDebug("Spanner:: unknown spanner end %s\n", endElement()->name());
       }
+
+}
 

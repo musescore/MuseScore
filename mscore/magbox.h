@@ -21,6 +21,8 @@
 #ifndef __MAGBOX_H__
 #define __MAGBOX_H__
 
+namespace Ms {
+
 class ScoreView;
 
 //---------------------------------------------------------
@@ -71,6 +73,8 @@ class MagBox : public QComboBox {
 
 
 
+
+} // namespace Ms
 #endif
 
 

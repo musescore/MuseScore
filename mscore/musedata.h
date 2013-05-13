@@ -21,6 +21,8 @@
 #ifndef __MUSEDATA_H__
 #define __MUSEDATA_H__
 
+namespace Ms {
+
 class Staff;
 class Part;
 class Score;
@@ -62,5 +64,7 @@ class MuseData {
       void convert();
       };
 
+
+} // namespace Ms
 #endif
 

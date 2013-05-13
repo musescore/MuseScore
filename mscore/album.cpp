@@ -27,6 +27,8 @@
 #include "icons.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Album
 //---------------------------------------------------------
@@ -421,7 +423,7 @@ void AlbumManager::addClicked()
 
                   QListWidgetItem* li = new QListWidgetItem(fi.completeBaseName(), scoreList);
                   li->setToolTip(fn);
-                  li->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
+                  li->setFlags(Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled));
                   }
             }
       }
@@ -527,7 +529,7 @@ void AlbumManager::setAlbum(Album* a)
       foreach(AlbumItem* a, album->scores()) {
             QListWidgetItem* li = new QListWidgetItem(a->name, scoreList);
             li->setToolTip(a->path);
-            li->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
+            li->setFlags(Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled));
             }
       albumName->setEnabled(true);
       add->setEnabled(true);
@@ -619,4 +621,5 @@ void MuseScore::showAlbumManager()
             albumManager = new AlbumManager(this);
       albumManager->show();
       }
+}
 

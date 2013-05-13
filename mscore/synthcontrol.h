@@ -23,6 +23,8 @@
 
 #include "ui_synthcontrol.h"
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -63,6 +65,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void stop();
       void setScore(Score* s) { _score = s; }
       };
+}
 
 #endif
 

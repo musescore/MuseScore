@@ -21,15 +21,17 @@
 #ifndef __PALETTE_H__
 #define __PALETTE_H__
 
+#include "ui_palette.h"
+#include "ui_cellproperties.h"
+#include "libmscore/sym.h"
+
+namespace Ms {
+
 class Element;
 class Sym;
 class Xml;
 class XmlReader;
 class Palette;
-
-#include "ui_palette.h"
-#include "ui_cellproperties.h"
-#include "libmscore/sym.h"
 
 //---------------------------------------------------------
 //   PaletteCell
@@ -193,4 +195,6 @@ class Palette : public QWidget {
       virtual QSize sizeHint() const;
       };
 
+
+} // namespace Ms
 #endif

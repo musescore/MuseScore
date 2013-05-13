@@ -25,6 +25,8 @@
 #include "libmscore/style.h"
 #include "ui_lineproperties.h"
 
+namespace Ms {
+
 class TextLine;
 class Text;
 
@@ -52,5 +54,7 @@ class LineProperties : public QDialog, public Ui::LinePropertiesDialog {
       LineProperties(TextLine*, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

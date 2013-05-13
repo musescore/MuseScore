@@ -13,6 +13,8 @@
 #include "tempo.h"
 #include "xml.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TEvent
 //---------------------------------------------------------
@@ -268,4 +270,6 @@ int TempoMap::time2tick(qreal time, int* sn) const
             *sn = _tempoSN;
       return tick;
       }
+
+}
 

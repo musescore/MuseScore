@@ -18,6 +18,8 @@
 #include "score.h"
 #include "undo.h"
 
+namespace Ms {
+
 const char* keyNames[15] = {
       QT_TRANSLATE_NOOP("MuseScore", "G major, E minor"),
       QT_TRANSLATE_NOOP("MuseScore", "Cb major, Ab minor"),
@@ -455,6 +457,8 @@ QVariant KeySig::propertyDefault(P_ID id) const
             default:                   return Element::propertyDefault(id);
             }
       }
+
+}
 
 
 

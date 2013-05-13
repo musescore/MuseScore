@@ -81,6 +81,8 @@
 #include "navigator.h"
 #include "inspector.h"
 
+namespace Ms {
+
 #if 0
 // a useful enum for scale steps (could be moved to libmscore/pitchspelling.h)
 enum {
@@ -5192,4 +5194,5 @@ Element* ScoreView::elementNear(QPointF p)
       return e;
       }
 
+}
 

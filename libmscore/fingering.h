@@ -15,6 +15,8 @@
 
 #include "text.h"
 
+namespace Ms {
+
 class Note;
 
 //---------------------------------------------------------
@@ -37,5 +39,7 @@ class Fingering : public Text {
       virtual void reset();
       };
 
+
+}     // namespace Ms
 #endif
 

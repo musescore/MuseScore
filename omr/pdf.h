@@ -23,6 +23,8 @@
 
 typedef struct fz_document_s fz_document;
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Pdf
 //---------------------------------------------------------
@@ -39,6 +41,7 @@ class Pdf {
       int numPages() const;
       QImage page(int);
       };
+}
 
 #endif
 

@@ -23,6 +23,8 @@
 
 #include "ui_sectionbreak.h"
 
+namespace Ms {
+
 class LayoutBreak;
 
 //---------------------------------------------------------
@@ -39,4 +41,6 @@ class SectionBreakProperties : public QDialog, public Ui::SectionBreakProperties
       bool startWithMeasureOne() const;
       };
 
+
+} // namespace Ms
 #endif

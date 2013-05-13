@@ -14,6 +14,8 @@
 #include "score.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   LayoutBreak
 //---------------------------------------------------------
@@ -57,7 +59,7 @@ void LayoutBreak::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setProperty(P_LAYOUT_BREAK, ::getProperty(P_LAYOUT_BREAK, e));
+                  setProperty(P_LAYOUT_BREAK, Ms::getProperty(P_LAYOUT_BREAK, e));
             else if (tag == "pause")
                   _pause = e.readDouble();
             else if (tag == "startWithLongNames")
@@ -234,4 +236,6 @@ QVariant LayoutBreak::propertyDefault(P_ID id) const
                   return Element::propertyDefault(id);
             }
       }
+
+}
 

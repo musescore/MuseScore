@@ -62,6 +62,8 @@ cases:
 Shortcuts marked with the STATE_NEVER state should NEVER used directly as shortcuts!
 ---------------------------------------------------------*/
 
+namespace Ms {
+
 class Xml;
 class XmlReader;
 
@@ -151,8 +153,8 @@ class Shortcut {
 
       bool compareKeys(const Shortcut&) const;
       QString keysToString() const;
-      void write(Xml&) const;
-      void read(XmlReader&);
+      void write(Ms::Xml&) const;
+      void read(Ms::XmlReader&);
 
       static void init();
       static void load();
@@ -166,5 +168,6 @@ class Shortcut {
       static QKeySequence keySeqFromString(const QString& str, QKeySequence::SequenceFormat fmt);
       };
 
+} // namespace Ms
 #endif
 

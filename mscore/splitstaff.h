@@ -25,6 +25,8 @@
 
 class Staff;
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SplitStaff
 //    edit staff and part properties
@@ -39,6 +41,7 @@ class SplitStaff : public QDialog, private Ui::SplitStaff {
       SplitStaff(QWidget* parent = 0);
       int getSplitPoint() const { return splitPoint->value(); }
       };
+}
 
 #endif
 

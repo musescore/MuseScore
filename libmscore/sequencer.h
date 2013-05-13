@@ -13,6 +13,8 @@
 #ifndef __SEQUENCER_H__
 #define __SEQUENCER_H__
 
+namespace Ms {
+
 class NPlayEvent;
 
 //---------------------------------------------------------
@@ -27,5 +29,7 @@ class Sequencer {
       virtual void sendEvent(const NPlayEvent&) = 0;
       virtual void startNote(int channel, int, int, int, double nt) = 0;
       };
+
+}     // namespace Ms
 #endif
 

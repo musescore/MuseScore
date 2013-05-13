@@ -16,6 +16,9 @@
 #include "config.h"
 
 class QPainter;
+
+namespace Ms {
+
 class TextStyle;
 
 extern void initSymbols(int);
@@ -350,5 +353,7 @@ extern QVector<Sym> symbols[2];
 
 extern QString symToHtml(const Sym&, int leftMargin=0, const TextStyle* ts = 0, qreal sp=10.0);
 extern QString symToHtml(const Sym&, const Sym&, int leftMargin=0);
+
+}     // namespace Ms
 #endif
 

@@ -20,6 +20,8 @@
 #include "utils.h"
 #include "xml.h"
 
+namespace Ms {
+
 QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                // global articulations
 
@@ -274,7 +276,7 @@ void InstrumentTemplate::write(Xml& xml) const
             a.write(xml);
       foreach(const MidiArticulation& ma, articulation) {
             bool isGlobal = false;
-            foreach(const MidiArticulation& ga, ::articulation) {
+            foreach(const MidiArticulation& ga, Ms::articulation) {
                   if (ma == ga) {
                         isGlobal = true;
                         break;
@@ -664,4 +666,6 @@ InstrumentTemplate* searchTemplate(const QString& name)
             }
       return 0;
       }
+
+}
 

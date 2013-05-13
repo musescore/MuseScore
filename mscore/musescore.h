@@ -32,6 +32,8 @@
 #include "updatechecker.h"
 #include "musescoreCore.h"
 
+namespace Ms {
+
 class Shortcut;
 class ScoreView;
 class Element;
@@ -129,6 +131,7 @@ class AboutBoxDialog : public QDialog, Ui::AboutBox {
 
    public:
       AboutBoxDialog();
+
    private slots:
       void copyRevisionToClipboard();
       };
@@ -653,5 +656,7 @@ extern void convertMidi(Score*, MidiFile* mf);
 
 extern bool saveMxl(Score*, const QString& name);
 extern bool saveXml(Score*, const QString& name);
+
+} // namespace Ms
 #endif
 

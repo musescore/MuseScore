@@ -24,6 +24,8 @@
 #include "libmscore/style.h"
 #include "ui_textstyle.h"
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -50,6 +52,7 @@ class TextStyleDialog : public QDialog, Ui::TextStyleDialog {
       TextStyleDialog(QWidget* parent, Score*);
       ~TextStyleDialog();
       };
+}
 
 #endif
 

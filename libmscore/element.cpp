@@ -81,6 +81,8 @@
 #include "marker.h"
 #include "jump.h"
 
+namespace Ms {
+
 // extern bool showInvisible;
 
 //
@@ -721,7 +723,7 @@ bool Element::readProperties(XmlReader& e)
                   }
             }
       else if (tag == "placement")
-            _placement = Placement(::getProperty(P_PLACEMENT, e).toInt());
+            _placement = Placement(Ms::getProperty(P_PLACEMENT, e).toInt());
       else
             return false;
       return true;
@@ -1625,3 +1627,6 @@ void Element::scriptSetUserOff(const QPointF& o)
       {
       score()->undoChangeProperty(this, P_USER_OFF, o * spatium());
       }
+
+}
+

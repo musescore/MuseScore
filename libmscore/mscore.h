@@ -13,6 +13,8 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
+namespace Ms {
+
 #define MSC_VERSION     "1.24"
 static const int MSCVERSION = 124;
 
@@ -147,9 +149,6 @@ enum AlignmentFlags {
       ALIGN_HMASK = ALIGN_LEFT | ALIGN_RIGHT | ALIGN_HCENTER,
       ALIGN_VMASK = ALIGN_TOP | ALIGN_BOTTOM | ALIGN_VCENTER | ALIGN_BASELINE
       };
-
-Q_DECLARE_FLAGS(Align, AlignmentFlags);
-Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 
 //---------------------------------------------------------
 //   OffsetType
@@ -398,13 +397,6 @@ class MScore : public QObject {
       static bool testMode;
       };
 
-Q_DECLARE_METATYPE(MScore::ValueType)
-Q_DECLARE_METATYPE(MScore::Direction)
-Q_DECLARE_METATYPE(MScore::DirectionH)
-
-Q_ENUMS(DirectionH)
-Q_DECLARE_METATYPE(BeamMode)
-
 static const int HEAD_TYPES = 4;
 
 //---------------------------------------------------------
@@ -426,6 +418,18 @@ inline static int restrict(int val, int min, int max) {
             return min;
       return val;
       }
+
+Q_DECLARE_FLAGS(Align, AlignmentFlags);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
+Q_ENUMS(DirectionH)
+
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::BeamMode)
+Q_DECLARE_METATYPE(Ms::MScore::ValueType)
+Q_DECLARE_METATYPE(Ms::MScore::Direction)
+Q_DECLARE_METATYPE(Ms::MScore::DirectionH)
+
 
 #endif
 

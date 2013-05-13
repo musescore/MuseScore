@@ -13,6 +13,8 @@
 #include "fraction.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   gcd
 //    greatest common divisor
@@ -179,4 +181,6 @@ int Fraction::ticks() const
       return (_numerator * MScore::division * 4 + (_denominator/2)) / _denominator;
       }
 
+
+}
 

@@ -21,6 +21,8 @@
 #ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
+namespace Ms {
+
 extern bool enableExperimental;
 extern bool enableTestMode;
 extern bool noSeq;            ///< Dont use sequencer; cmd line option.
@@ -83,4 +85,6 @@ static const qreal DPMM_DISPLAY    = 4;   // 100 DPI
 static const qreal PALETTE_SPATIUM = 1.9 * DPMM_DISPLAY;
 
 extern QPaintDevice* pdev;
+
+} // namespace Ms
 #endif

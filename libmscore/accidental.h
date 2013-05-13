@@ -21,8 +21,11 @@
 #include "element.h"
 #include "mscore.h"
 
-class Note;
 class QPainter;
+
+namespace Ms {
+
+class Note;
 
 //---------------------------------------------------------
 //   SymElement
@@ -141,9 +144,6 @@ private:
       static AccidentalType name2subtype(const QString&);
       };
 
-Q_DECLARE_METATYPE(Accidental::AccidentalRole)
-Q_DECLARE_METATYPE(Accidental::AccidentalType)
-
 //---------------------------------------------------------
 //   @@ AccidentalBracket
 ///    used as icon in palette
@@ -157,6 +157,12 @@ class AccidentalBracket : public Compound {
       virtual AccidentalBracket* clone() const { return new AccidentalBracket(*this); }
       virtual ElementType type() const         { return ACCIDENTAL_BRACKET; }
       };
+
+
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Accidental::AccidentalRole)
+Q_DECLARE_METATYPE(Ms::Accidental::AccidentalType)
 
 #endif
 

@@ -17,6 +17,8 @@
 
 class QPainter;
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Lasso
 //---------------------------------------------------------
@@ -42,5 +44,7 @@ class Lasso : public Element {
       virtual void endEdit();
       };
 
+
+}     // namespace Ms
 #endif
 

@@ -17,6 +17,8 @@
 #include "icons.h"
 #include "libmscore/xml.h"
 
+namespace Ms {
+
 bool Shortcut::dirty = false;
 QMap<QString, Shortcut*> Shortcut::_shortcuts;
 extern QString dataPath;
@@ -590,3 +592,5 @@ QKeySequence Shortcut::keySeqFromString(const QString& str, QKeySequence::Sequen
       QKeySequence keySeq(code[0], code[1], code[2], code[3]);
       return keySeq;
       }
+}
+

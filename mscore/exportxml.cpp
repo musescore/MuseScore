@@ -96,6 +96,8 @@
 #include "libmscore/qzipwriter_p.h"
 #include "libmscore/fret.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   local defines for debug output
 //---------------------------------------------------------
@@ -4592,4 +4594,5 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 #endif
       }
 
+}
 

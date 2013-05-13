@@ -15,6 +15,8 @@
 #include "libmscore/note.h"
 #include "event.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   MidiCoreEvent::write
 //---------------------------------------------------------
@@ -338,3 +340,5 @@ void EventList::insert(const Event& e)
             }
       append(e);
       }
+}
+

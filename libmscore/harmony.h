@@ -15,6 +15,8 @@
 
 #include "text.h"
 
+namespace Ms {
+
 struct ChordDescription;
 
 //---------------------------------------------------------
@@ -141,5 +143,7 @@ class Harmony : public Text {
       virtual QPainterPath shape() const;
       };
 
+
+}     // namespace Ms
 #endif
 

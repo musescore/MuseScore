@@ -17,6 +17,8 @@
 
 class QPainter;
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ Breath
 ///    brathT() is index in symList
@@ -47,5 +49,7 @@ class Breath : public Element {
       virtual QPointF pagePos() const;      ///< position in page coordinates
       };
 
+
+}     // namespace Ms
 #endif
 

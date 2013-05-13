@@ -14,6 +14,8 @@
 #include "pluginManager.h"
 #include "shortcutcapturedialog.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PluginManager
 //---------------------------------------------------------
@@ -142,3 +144,5 @@ void PluginManager::definePluginShortcutClicked()
       pluginShortcut->setText(s->keysToString());
       prefs.dirty = true;
       }
+}
+

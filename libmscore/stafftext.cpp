@@ -15,6 +15,8 @@
 #include "system.h"
 #include "staff.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   StaffText
 //---------------------------------------------------------
@@ -138,4 +140,6 @@ bool StaffText::getAeolusStop(int group, int idx) const
       {
       return aeolusStops[group] & (1 << idx);
       }
+
+}
 

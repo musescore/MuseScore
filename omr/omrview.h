@@ -21,6 +21,8 @@
 #ifndef __SCAN_VIEW_H__
 #define __SCAN_VIEW_H__
 
+namespace Ms {
+
 class Omr;
 class Page;
 class ScoreView;
@@ -107,6 +109,7 @@ class OmrView : public QWidget {
       void setShowStaves(bool val);
       };
 
+}
 
 #endif
 

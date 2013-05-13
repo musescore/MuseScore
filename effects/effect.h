@@ -16,6 +16,8 @@
 #include <vector>
 #include "libmscore/synthesizerstate.h"
 
+namespace Ms {
+
 class EffectGui;
 
 //---------------------------------------------------------
@@ -67,6 +69,6 @@ class Effect : public QObject {
 
       virtual EffectGui* gui() { return _gui; }
       };
-
+}
 #endif
 

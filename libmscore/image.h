@@ -15,6 +15,8 @@
 
 #include "bsymbol.h"
 
+namespace Ms {
+
 class ImageStoreItem;
 
 enum ImageType { IMAGE_NONE, IMAGE_RASTER, IMAGE_SVG };
@@ -85,5 +87,7 @@ class Image : public BSymbol {
       void setImageType(ImageType);
       };
 
+
+}     // namespace Ms
 #endif
 

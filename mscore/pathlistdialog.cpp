@@ -19,6 +19,8 @@
 
 #include "pathlistdialog.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PathListDialog
 //---------------------------------------------------------
@@ -83,4 +85,5 @@ void PathListDialog::setPath(QString path)
       files->addItems(pl);
       }
 
+}
 

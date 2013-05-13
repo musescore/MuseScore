@@ -13,6 +13,8 @@
 #ifndef __PALETTE_BOX_BUTTON_H__
 #define __PALETTE_BOX_BUTTON_H__
 
+namespace Ms {
+
 class Palette;
 
 enum PaletteCommand {
@@ -64,5 +66,7 @@ class PaletteBoxButton : public QToolButton {
       void setId(int v) { id = v; }
       };
 
+
+} // namespace Ms
 #endif
 

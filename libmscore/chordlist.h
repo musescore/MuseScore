@@ -13,6 +13,8 @@
 #ifndef __CHORDLIST_H__
 #define __CHORDLIST_H__
 
+namespace Ms {
+
 class Xml;
 class XmlReader;
 
@@ -174,5 +176,7 @@ class ChordList : public QMap<int, ChordDescription*> {
       ChordSymbol symbol(const QString& s) const { return symbols.value(s); }
       };
 
+
+}     // namespace Ms
 #endif
 

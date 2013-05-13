@@ -24,6 +24,8 @@
 #include "libmscore/duration.h"
 #include "ui_tupletdialog.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TupletDialog
 //---------------------------------------------------------
@@ -36,6 +38,7 @@ class TupletDialog : public QDialog, Ui::TupletDialog {
       void setupTuplet(Tuplet* tuplet);
       int getNormalNotes() const { return normalNotes->value(); }
       };
+}
 
 #endif
 

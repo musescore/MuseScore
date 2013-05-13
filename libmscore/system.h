@@ -21,6 +21,8 @@
 #include "element.h"
 #include "spatium.h"
 
+namespace Ms {
+
 class Staff;
 class StaffLines;
 class Clef;
@@ -182,5 +184,7 @@ class System : public Element {
 typedef QList<System*>::iterator iSystem;
 typedef QList<System*>::const_iterator ciSystem;
 
+
+}     // namespace Ms
 #endif
 

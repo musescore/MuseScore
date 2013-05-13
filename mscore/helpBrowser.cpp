@@ -13,6 +13,8 @@
 #include "helpBrowser.h"
 #include "icons.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   HelpBrowser
 //---------------------------------------------------------
@@ -22,7 +24,7 @@ HelpBrowser::HelpBrowser(QWidget* parent)
       {
       view    = new WebView;
       toolbar = new QWidget;
-      toolbar->setSizePolicy(QSizePolicy::Expanding, 
+      toolbar->setSizePolicy(QSizePolicy::Expanding,
       QSizePolicy::Fixed);
       QVBoxLayout* l = new QVBoxLayout;
       l->addWidget(toolbar);
@@ -114,4 +116,5 @@ void WebView::wheelEvent(QWheelEvent* event)
             event->ignore();
       QWebView::wheelEvent(event);
       }
+}
 

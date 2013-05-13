@@ -16,6 +16,8 @@
 #include "chordrest.h"
 #include "range.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   cmdSplitMeasure
 //---------------------------------------------------------
@@ -48,4 +50,6 @@ void Score::cmdSplitMeasure(ChordRest* cr)
 
       endCmd();
       }
+
+}
 

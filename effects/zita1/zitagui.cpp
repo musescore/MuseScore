@@ -13,6 +13,8 @@
 #include "zita.h"
 #include "effects/effectgui.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   gui
 //---------------------------------------------------------
@@ -27,3 +29,6 @@ EffectGui* ZitaReverb::gui()
       _gui->init(url);
       return _gui;
       }
+
+}
+

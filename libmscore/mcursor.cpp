@@ -25,6 +25,8 @@
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
 
+namespace Ms {
+
 extern MScore* mscore;
 
 //---------------------------------------------------------
@@ -178,4 +180,6 @@ void MCursor::saveScore()
       fp.close();
       }
 
+
+}
 

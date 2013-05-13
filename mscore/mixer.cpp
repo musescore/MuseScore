@@ -27,6 +27,8 @@
 #include "synthcontrol.h"
 #include "synthesizer/msynthesizer.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PartEdit
 //---------------------------------------------------------
@@ -333,4 +335,5 @@ void Mixer::updateSolo(bool val)
             pe->mute->setEnabled(!val);
             }
       }
+}
 

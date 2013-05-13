@@ -71,7 +71,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QmlEdit" name="textEdit"/>
+      <widget class="Ms::QmlEdit" name="textEdit"/>
       <widget class="QPlainTextEdit" name="log"/>
      </widget>
     </item>
@@ -152,7 +152,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QmlEdit</class>
+   <class>Ms::QmlEdit</class>
    <extends>QPlainTextEdit</extends>
    <header>qmledit.h</header>
   </customwidget>

@@ -18,6 +18,8 @@
 #include "ui_inspector_element.h"
 #include "ui_inspector_jump.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorJump
 //---------------------------------------------------------
@@ -32,6 +34,8 @@ class InspectorJump : public InspectorBase {
       InspectorJump(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif
 
 

@@ -23,6 +23,8 @@
 
 #include "ui_symboldialog.h"
 
+namespace Ms {
+
 class Palette;
 class Element;
 
@@ -42,5 +44,6 @@ class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
    public:
       SymbolDialog(QWidget* parent = 0);
       };
+}
 
 #endif

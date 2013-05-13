@@ -70,6 +70,8 @@
 #include "libmscore/jump.h"
 #include "libmscore/marker.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   genPropertyMenu1
 //---------------------------------------------------------
@@ -658,4 +660,5 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             e->setTag(mask);
             }
       }
+}
 

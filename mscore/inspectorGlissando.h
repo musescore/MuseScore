@@ -19,6 +19,8 @@
 #include "ui_inspector_glissando.h"
 #include "libmscore/property.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorGlissando
 //---------------------------------------------------------
@@ -33,4 +35,6 @@ class InspectorGlissando : public InspectorBase {
       InspectorGlissando(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif

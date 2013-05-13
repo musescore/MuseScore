@@ -32,6 +32,8 @@
 #include "seq.h"
 #include "waveview.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PianorollEditor
 //---------------------------------------------------------
@@ -647,4 +649,5 @@ void PianorollEditor::showWaveView(bool val)
                   waveView->setVisible(false);
             }
       }
+}
 

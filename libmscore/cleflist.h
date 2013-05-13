@@ -16,6 +16,8 @@
 #include "mscore.h"
 #include "clef.h"
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -30,5 +32,7 @@ class ClefList : public QMultiMap<int, ClefTypeList> {
       void read(XmlReader&, Score*);
       };
 
+
+}     // namespace Ms
 #endif
 

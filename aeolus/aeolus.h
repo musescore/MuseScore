@@ -21,9 +21,6 @@
 #ifndef __AEOLUS_H__
 #define __AEOLUS_H__
 
-struct MidiPatch;
-class Event;
-
 #include "stdint.h"
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/midipatch.h"
@@ -32,11 +29,19 @@ class Event;
 #include "division.h"
 #include "global.h"
 
+
+namespace Ms {
+      struct MidiPatch;
+      class Event;
+      class ParDescr;
+      }
+
+using namespace Ms;
+
 class Model;
 // class M_audio_info;
 class M_new_divis;
 class M_ifc_init;
-class ParDescr;
 
 //---------------------------------------------------------
 //   Synth

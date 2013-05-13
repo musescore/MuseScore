@@ -28,6 +28,8 @@
 
 #include "ui_shortcutcapturedialog.h"
 
+namespace Ms {
+
 class Shortcut;
 
 //---------------------------------------------------------
@@ -54,4 +56,6 @@ class ShortcutCaptureDialog : public QDialog, public Ui::ShortcutCaptureDialogBa
       ~ShortcutCaptureDialog();
       QKeySequence getKey() const { return key; }
       };
+
+} // namespace Ms
 

@@ -31,6 +31,8 @@
 #include "stemslash.h"
 #include "groups.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
@@ -1753,7 +1755,7 @@ void Beam::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "StemDirection") {
-                  setProperty(P_STEM_DIRECTION, ::getProperty(P_STEM_DIRECTION, e));
+                  setProperty(P_STEM_DIRECTION, Ms::getProperty(P_STEM_DIRECTION, e));
                   e.readNext();
                   }
             else if (tag == "distribute")
@@ -2068,4 +2070,6 @@ QVariant Beam::propertyDefault(P_ID id) const
             default:               return Element::propertyDefault(id);
             }
       }
+
+}
 

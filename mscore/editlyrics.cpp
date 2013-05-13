@@ -16,6 +16,8 @@
 #include "libmscore/segment.h"
 #include "libmscore/lyrics.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   lyricsUpDown
 //---------------------------------------------------------
@@ -417,4 +419,5 @@ void ScoreView::lyricsEndEdit()
             }
       }
 
+}
 

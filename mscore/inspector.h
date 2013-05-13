@@ -34,6 +34,8 @@
 #include "ui_inspector_tempotext.h"
 #include "ui_inspector_dynamic.h"
 
+namespace Ms {
+
 class Element;
 class Note;
 class Inspector;
@@ -263,5 +265,7 @@ class Inspector : public QDockWidget {
       void setInspectorEdit(bool val)     { _inspectorEdit = val;  }
       };
 
+
+} // namespace Ms
 #endif
 
