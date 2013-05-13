@@ -51,6 +51,8 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       instrument = *part->instr();
       Score* score = part->score();
 
+      // hide string data controls if instrument has no strings
+      stringDataFrame->setVisible(instrument.tablature() && instrument.tablature()->strings() > 0);
       fillStaffTypeCombo();
       small->setChecked(staff->small());
       invisible->setChecked(staff->invisible());
