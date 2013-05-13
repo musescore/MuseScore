@@ -86,6 +86,15 @@ void Glissando::layout()
       qreal x2 = anchor2->pos().x();
       qreal y2 = anchor2->pos().y();
 
+      // angle glissando between notes with the same pitch letter
+      if (anchor1->line() == anchor2->line()) {
+            int upDown = anchor2->pitch() - anchor1->pitch();
+            if (upDown != 0)
+                  upDown /= abs(upDown);
+            y1 += spatium() * 0.25 * upDown;
+            y2 -= spatium() * 0.25 * upDown;
+            }
+
       // on TAB's, adjust lower end point from string line height to base of note height (= ca. half line spacing)
       if (chord->staff()->isTabStaff()) {
             qreal yOff = chord->staff()->lineDistance() * 0.5 * spatium();
