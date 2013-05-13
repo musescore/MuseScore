@@ -20,6 +20,8 @@
 
 #include "piano.h"
 
+namespace Ms {
+
 QPixmap* Piano::octave;
 QPixmap* Piano::mk1;
 QPixmap* Piano::mk2;
@@ -465,4 +467,5 @@ void Piano::setOrientation(PianoOrientation o)
       _orientation = o;
       update();
       }
+}
 

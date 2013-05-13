@@ -25,6 +25,8 @@
 #include "libmscore/score.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 static unsigned int startMag = MAG_100;
 
 //---------------------------------------------------------
@@ -190,4 +192,5 @@ void MagBox::setMagIdx(int idx)
       setCurrentIndex(idx);
       blockSignals(false);
       }
+}
 

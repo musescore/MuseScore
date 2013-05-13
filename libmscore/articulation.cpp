@@ -21,6 +21,8 @@
 #include "page.h"
 #include "barline.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Articulation::articulationList
 //---------------------------------------------------------
@@ -488,4 +490,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       score()->setLayoutAll(false);       //DEBUG
       return true;
       }
+
+}
+
 

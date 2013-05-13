@@ -19,6 +19,8 @@
 #include "ui_inspector_element.h"
 #include "libmscore/property.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorBeam
 //---------------------------------------------------------
@@ -39,5 +41,7 @@ class InspectorBeam : public InspectorBase {
       InspectorBeam(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif
 

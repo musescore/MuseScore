@@ -17,6 +17,8 @@
 #include "instrument.h"
 #include "text.h"
 
+namespace Ms {
+
 class Xml;
 class Staff;
 class Score;
@@ -103,5 +105,7 @@ class Part : public QObject {
       void setProperty(int id, const QVariant& property);
       };
 
+
+}     // namespace Ms
 #endif
 

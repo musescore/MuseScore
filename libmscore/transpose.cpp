@@ -25,6 +25,8 @@
 #include "measure.h"
 #include "fret.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   keydiff2Interval
 //    keysig -   -7(Cb) - +7(C#)
@@ -511,9 +513,10 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
       if(!useDoubleAccidentals) {
             if(newTpc >= TPC_F_SS)  newTpc   -= TPC_DELTA_ENHARMONIC;
             if(newTpc <= TPC_B_BB)  newTpc   += TPC_DELTA_ENHARMONIC;
-      }
+            }
 
       // store new data
       score()->undoChangePitch(this, newPitch, newTpc, line()+interval);
+      }
 }
 

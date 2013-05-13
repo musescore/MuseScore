@@ -23,6 +23,8 @@
 
 #include "ui_slurproperties.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SlurProperties
 //---------------------------------------------------------
@@ -35,5 +37,6 @@ class SlurProperties : public QDialog, public Ui::SlurPropertyBase {
       int getLineType() const;
       void setLineType(int val);
       };
+}
 
 #endif

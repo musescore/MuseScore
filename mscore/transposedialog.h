@@ -24,6 +24,8 @@
 #include "ui_transposedialog.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TransposeDialog
 //---------------------------------------------------------
@@ -54,5 +56,7 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase {
       void setKey(int k)                  { keyList->setCurrentIndex(k + 7); }
       bool useDoubleSharpsFlats() const   { return accidentalOptions->currentIndex() == 1; }
       };
+}
+
 #endif
 

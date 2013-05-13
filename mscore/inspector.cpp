@@ -47,6 +47,8 @@
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   showInspector
 //---------------------------------------------------------
@@ -75,7 +77,7 @@ Inspector::Inspector(QWidget* parent)
    : QDockWidget(tr("Inspector"), parent)
       {
       setObjectName("inspector");
-      setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
       sa = new QScrollArea;
       sa->setWidgetResizable(true);
       setWidget(sa);
@@ -665,4 +667,5 @@ void InspectorBarLine::apply()
       mscore->endCmd();
       }
 #endif
+}
 

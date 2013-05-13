@@ -13,6 +13,8 @@
 #ifndef __EFFECTGUI_H__
 #define __EFFECTGUI_H__
 
+namespace Ms {
+
 class Effect;
 
 //---------------------------------------------------------
@@ -36,5 +38,6 @@ class EffectGui : public QDeclarativeView {
       virtual void updateValues();
       };
 
+}
 #endif
 

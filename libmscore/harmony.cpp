@@ -20,6 +20,8 @@
 #include "mscore.h"
 #include "fret.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   harmonyName
 //---------------------------------------------------------
@@ -904,4 +906,6 @@ const QList<HDegree>& Harmony::degreeList() const
       {
       return _degreeList;
       }
+
+}
 

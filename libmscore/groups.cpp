@@ -16,6 +16,8 @@
 #include "staff.h"
 #include "tuplet.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   noteGroups
 //---------------------------------------------------------
@@ -211,4 +213,6 @@ void Groups::dump(const char* m) const
             printf("  group tick %d action 0x%02x\n", n.pos * 60, n.action);
             }
       }
+
+}
 

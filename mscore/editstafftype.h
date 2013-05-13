@@ -23,6 +23,8 @@
 
 #include "ui_stafftype.h"
 
+namespace Ms {
+
 // uncomment to use Navigator for tabulature preview; comment to use ScoreView
 //#define _USE_NAVIGATOR_PREVIEW_
 
@@ -87,5 +89,7 @@ public slots:
       QList<StaffType*> getStaffTypes() const { return staffTypes; }
       };
 
+
+} // namespace Ms
 #endif
 

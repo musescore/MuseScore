@@ -23,6 +23,8 @@
 
 #include "libmscore/pitchvalue.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   BendCanvas
 //---------------------------------------------------------
@@ -41,5 +43,7 @@ class BendCanvas : public QFrame {
       void setPoints(const QList<PitchValue>& p) { _points = p; }
       };
 
+
+} // namespace Ms
 #endif
 

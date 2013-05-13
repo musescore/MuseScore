@@ -49,6 +49,8 @@
 #include <stdio.h>
 #endif
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -94,7 +96,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       if (!parentScore()) {
             int idx = 0;
             foreach(StaffType** st, _staffTypes) {
-                  if ((idx >= STAFF_TYPES) || !(*st)->isEqual(*::staffTypes[idx]))
+                  if ((idx >= STAFF_TYPES) || !(*st)->isEqual(*Ms::staffTypes[idx]))
                         (*st)->write(xml, idx);
                   ++idx;
                   }
@@ -1381,4 +1383,6 @@ Tuplet* Score::searchTuplet(XmlReader& /*e*/, int /*id*/)
 #endif
       return 0;
       }
+
+}
 

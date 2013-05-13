@@ -17,6 +17,8 @@
 #include "inspectorBase.h"
 #include "ui_inspector_group_element.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorGroupElement
 //---------------------------------------------------------
@@ -35,6 +37,8 @@ class InspectorGroupElement : public InspectorBase {
       InspectorGroupElement(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif
 
 

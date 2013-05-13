@@ -21,6 +21,8 @@
 #ifndef __ICONS_H__
 #define __ICONS_H__
 
+namespace Ms {
+
 extern void genIcons();
 
 enum { longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON, note16_ICON,
@@ -52,5 +54,7 @@ enum { longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON,
 extern QIcon* icons[ICONS];
 
 class Sym;
+
+} // namespace Ms
 #endif
 

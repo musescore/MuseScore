@@ -28,6 +28,8 @@
 #include "libmscore/element.h"
 #include "libmscore/system.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SelectDialog
 //---------------------------------------------------------
@@ -64,4 +66,5 @@ void SelectDialog::setPattern(ElementPattern* p)
                   } while (e);
             }
       }
+}
 

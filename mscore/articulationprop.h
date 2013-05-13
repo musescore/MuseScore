@@ -25,6 +25,8 @@
 
 class Articulation;
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ArticulationProperties
 //    Dialog
@@ -42,5 +44,7 @@ class ArticulationProperties : public QDialog, public Ui::ArticulationProperties
       ArticulationProperties(Articulation*, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

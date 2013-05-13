@@ -25,6 +25,8 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/undo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ExcerptItem
 //---------------------------------------------------------
@@ -43,7 +45,7 @@ ExcerptItem::ExcerptItem(Excerpt* e, QListWidget* parent)
 PartItem::PartItem(Part* p, QListWidget* parent)
    : QListWidgetItem(parent)
       {
-      setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+      setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable));
       setCheckState(Qt::Unchecked);
       _part = p;
       setText(p->partName());
@@ -283,7 +285,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       Excerpt* e = static_cast<ExcerptItem*>(cur)->excerpt();
       if (e->score())
             return;
-      Score* nscore = ::createExcerpt(e->parts());
+      Score* nscore = Ms::createExcerpt(e->parts());
       if (nscore == 0)
             return;
       nscore->setParentScore(score);
@@ -332,4 +334,5 @@ void ExcerptsDialog::accept()
             }
       QDialog::accept();
       }
+}
 

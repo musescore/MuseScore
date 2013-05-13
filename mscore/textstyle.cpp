@@ -27,6 +27,8 @@
 #include "musescore.h"
 #include "libmscore/undo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TextStyleDialog
 //---------------------------------------------------------
@@ -189,4 +191,5 @@ void TextStyleDialog::newClicked()
       cs->setDirty(true);
       mscore->endCmd();
       }
+}
 

@@ -25,6 +25,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/note.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   NoteList
 //---------------------------------------------------------
@@ -183,4 +185,6 @@ private:
 extern void domError(const QDomElement&);
 extern void domNotImplemented(const QDomElement&);
 
+
+} // namespace Ms
 #endif

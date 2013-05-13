@@ -19,9 +19,6 @@
 //=============================================================================
 
 #include "config.h"
-
-#ifdef HAS_AUDIOFILE
-
 #include <sndfile.h>
 #include "libmscore/score.h"
 #include "libmscore/note.h"
@@ -30,6 +27,10 @@
 #include "synthesizer/msynthesizer.h"
 #include "musescore.h"
 #include "preferences.h"
+
+namespace Ms {
+
+#ifdef HAS_AUDIOFILE
 
 //---------------------------------------------------------
 //   saveAudio
@@ -178,4 +179,5 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
       }
 
 #endif // HAS_AUDIOFILE
+}
 

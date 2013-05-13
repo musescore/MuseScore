@@ -46,6 +46,8 @@
 #include "lyrics.h"
 #include "harmony.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   rebuildBspTree
 //---------------------------------------------------------
@@ -2776,3 +2778,6 @@ void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
                   }
             }
       }
+
+}
+

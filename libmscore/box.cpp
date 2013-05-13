@@ -25,6 +25,8 @@
 #include "stafftext.h"
 #include "icon.h"
 
+namespace Ms {
+
 static const qreal BOX_MARGIN = 0.0;
 
 //---------------------------------------------------------
@@ -621,4 +623,6 @@ void FBox::add(Element* e)
             }
       _el.push_back(e);
       }
+
+}
 

@@ -22,6 +22,8 @@
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   MetaEditDialog
 //---------------------------------------------------------
@@ -92,4 +94,5 @@ void MetaEditDialog::accept()
             }
       QDialog::accept();
       }
+}
 

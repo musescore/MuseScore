@@ -13,6 +13,8 @@
 #ifndef __LAYOUT_H__
 #define __LAYOUT_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Spring
 //---------------------------------------------------------
@@ -29,5 +31,7 @@ typedef SpringMap::const_iterator iSpring;
 
 extern qreal sff(qreal x, qreal xMin, const SpringMap& springs);
 
+
+}     // namespace Ms
 #endif
 

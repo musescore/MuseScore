@@ -25,6 +25,8 @@
 #include "note.h"
 #include "chord.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   handleRect
 //---------------------------------------------------------
@@ -582,7 +584,7 @@ Note* searchTieNote(Note* note)
       int etrack   = strack + part->staves()->size() * VOICES;
       int tick     = seg->tick() + chord->globalDuration().ticks();
 
-      printf("searchTieNote %d-%d  %d - %d\n", strack, etrack, seg->tick(), tick);
+//      printf("searchTieNote %d-%d  %d - %d\n", strack, etrack, seg->tick(), tick);
 
       while ((seg = seg->next1(Segment::SegChordRest))) {
             if (seg->tick() < tick)
@@ -677,4 +679,6 @@ int step2pitch(int step)
       static const char tab[7] = { 0, 2, 4, 5, 7, 9, 11 };
       return tab[step % 7];
       }
+
+}
 

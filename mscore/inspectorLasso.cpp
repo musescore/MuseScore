@@ -15,6 +15,8 @@
 #include "musescore.h"
 #include "libmscore/lasso.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorLasso
 //---------------------------------------------------------
@@ -43,4 +45,5 @@ void InspectorLasso::setElement(Element* e)
 
       InspectorBase::setElement();
       }
+}
 

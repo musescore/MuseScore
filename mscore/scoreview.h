@@ -27,6 +27,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/mscoreview.h"
 
+namespace Ms {
+
 class ChordRest;
 class Rest;
 class Element;
@@ -214,7 +216,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void contextItem(Element*);
 
       void lassoSelect();
-      Note* searchTieNote(Note* note);
 
       void setShadowNote(const QPointF&);
       void drawElements(QPainter& p,const QList<Element*>& el);
@@ -446,5 +447,7 @@ class DragTransition : public QEventTransition
 
 extern int searchStaff(const Element* element);
 
+
+} // namespace Ms
 #endif
 

@@ -153,7 +153,7 @@
     </widget>
    </item>
    <item row="1" column="1" rowspan="8">
-    <widget class="TremoloBarCanvas" name="bendCanvas">
+    <widget class="Ms::TremoloBarCanvas" name="bendCanvas">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -204,7 +204,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TremoloBarCanvas</class>
+   <class>Ms::TremoloBarCanvas</class>
    <extends>QFrame</extends>
    <header>tremolobarcanvas.h</header>
    <container>1</container>

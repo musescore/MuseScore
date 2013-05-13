@@ -15,6 +15,8 @@
 #include "sig.h"
 #include "tempo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Pos
 //---------------------------------------------------------
@@ -598,4 +600,6 @@ Pos Pos::downSnaped(int raster) const
       {
       return Pos(tempo, sig, sig->raster1(tick(), raster));
       }
+
+}
 

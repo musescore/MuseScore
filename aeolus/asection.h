@@ -20,9 +20,9 @@
 #ifndef __ASECTION_H
 #define __ASECTION_H
 
-
 #include "global.h"
 
+using namespace Ms;
 
 #define PERIOD 64
 #define MIXLEN 64

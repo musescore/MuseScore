@@ -40,6 +40,8 @@
 #include "libmscore/pitchspelling.h"
 #include "preferences.h"
 
+namespace Ms {
+
 extern Preferences preferences;
 
 //---------------------------------------------------------
@@ -1014,4 +1016,5 @@ Score::FileError importMidi(Score* score, const QString& name)
       convertMidi(score, &mf);
       return Score::FILE_NO_ERROR;
       }
+}
 

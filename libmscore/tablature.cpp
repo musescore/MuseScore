@@ -16,7 +16,9 @@
 #include "score.h"
 #include "undo.h"
 
-//static int guitarStrings[6] = { 40, 45, 50, 55, 59, 64 };
+namespace Ms {
+
+// static int guitarStrings[6] = { 40, 45, 50, 55, 59, 64 };
 
 Tablature emptyStringData(0, 0, 0);
 
@@ -351,3 +353,6 @@ void Tablature::readMusicXML(XmlReader& e)
 void Tablature::writeMusicXML(Xml& /*xml*/) const
       {
       }
+
+}
+

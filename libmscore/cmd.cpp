@@ -71,6 +71,8 @@
 #include "accidental.h"
 #include "sequencer.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   startCmd
 ///   Start a GUI command by clearing the redraw area
@@ -2391,4 +2393,6 @@ void Score::cmd(const QAction* a)
       else
             qDebug("1unknown cmd <%s>", qPrintable(cmd));
       }
+
+}
 

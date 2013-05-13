@@ -24,6 +24,7 @@
 #include "libmscore/pos.h"
 
 namespace Awl {
+using namespace Ms;
 
 //---------------------------------------------------------
 //   PosLabel
@@ -40,7 +41,7 @@ class PosLabel : public QLabel {
       QSize sizeHint() const;
 
    public slots:
-      void setValue(const Pos&);
+      void setValue(const Ms::Pos&);
 
    public:
       PosLabel(QWidget* parent = 0);

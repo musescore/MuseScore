@@ -18,6 +18,8 @@
 #include "staff.h"
 #include "undo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Acc
 //---------------------------------------------------------
@@ -480,4 +482,6 @@ AccidentalBracket::AccidentalBracket(Score* s)
       addElement(s1, -s1->bbox().x(), 0.0);
       addElement(s2, s2->bbox().width() - s2->bbox().x(), 0.0);
       }
+
+}
 

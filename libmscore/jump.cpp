@@ -13,6 +13,8 @@
 #include "jump.h"
 #include "score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   JumpTypeTable
 //---------------------------------------------------------
@@ -198,4 +200,6 @@ QVariant Jump::propertyDefault(P_ID propertyId) const
       return Text::propertyDefault(propertyId);
       }
 
+
+}
 

@@ -18,6 +18,8 @@
 #include "libmscore/xml.h"
 #include "paletteBoxButton.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PaletteBox
 //---------------------------------------------------------
@@ -26,7 +28,7 @@ PaletteBox::PaletteBox(QWidget* parent)
    : QDockWidget(tr("Palettes"), parent)
       {
       setObjectName("palette-box");
-      setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
       QScrollArea* sa = new QScrollArea;
       sa->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -266,4 +268,5 @@ void PaletteBox::displayMore(const QString& s)
       {
       mscore->showMasterPalette(s);
       }
+}
 

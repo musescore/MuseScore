@@ -22,6 +22,10 @@
 #include "chordrest.h"
 #include "noteevent.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Note;
 class Hook;
 class Arpeggio;
@@ -29,7 +33,6 @@ class Tremolo;
 class Chord;
 class Glissando;
 class Stem;
-class QPainter;
 class Chord;
 class StemSlash;
 class LedgerLine;
@@ -179,5 +182,7 @@ class Chord : public ChordRest {
       virtual void reset();
       };
 
+
+}     // namespace Ms
 #endif
 

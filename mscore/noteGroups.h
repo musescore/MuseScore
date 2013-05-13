@@ -17,6 +17,8 @@
 #include "libmscore/fraction.h"
 #include "libmscore/groups.h"
 
+namespace Ms {
+
 class Chord;
 class Score;
 
@@ -45,5 +47,7 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups {
       Groups groups();
       };
 
+
+} // namespace Ms
 #endif
 

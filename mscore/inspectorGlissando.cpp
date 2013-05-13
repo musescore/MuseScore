@@ -16,6 +16,8 @@
 #include "libmscore/glissando.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorGlissando
 //---------------------------------------------------------
@@ -38,4 +40,5 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
 
       mapSignals();
       }
+}
 

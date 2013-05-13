@@ -64,6 +64,8 @@
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
 
+using namespace Ms;
+
 class MeasureToTick {
 public:
 	MeasureToTick();

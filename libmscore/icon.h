@@ -15,6 +15,8 @@
 
 #include "element.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Icon
 //    dummy element, used for drag&drop
@@ -40,5 +42,7 @@ class Icon : public Element {
       virtual void read(XmlReader&);
       };
 
+
+}     // namespace Ms
 #endif
 

@@ -21,6 +21,8 @@
 #ifndef __FILE_H__
 #define __FILE_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   WallpaperPreview
 //---------------------------------------------------------
@@ -41,5 +43,7 @@ class WallpaperPreview : public QFrame {
 
 
 extern QStringList getSoundFont(const QString&);
+
+} // namespace Ms
 #endif
 

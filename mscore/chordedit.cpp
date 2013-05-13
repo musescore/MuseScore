@@ -26,6 +26,8 @@
 #include "libmscore/score.h"
 #include "libmscore/chordlist.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ChordEdit
 //---------------------------------------------------------
@@ -547,6 +549,8 @@ void DegreeTabDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 void DegreeTabDelegate::updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
-{
-    editor->setGeometry(option.rect);
+      {
+      editor->setGeometry(option.rect);
+      }
 }
+

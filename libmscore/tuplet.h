@@ -15,9 +15,12 @@
 
 #include "duration.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Text;
 class Spanner;
-class QPainter;
 
 //------------------------------------------------------------------------
 //   @@ Tuplet
@@ -120,5 +123,7 @@ class Tuplet : public DurationElement {
       QVariant propertyDefault(P_ID id) const;
       };
 
+
+}     // namespace Ms
 #endif
 

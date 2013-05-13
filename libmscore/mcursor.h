@@ -14,13 +14,16 @@
 #ifndef __MCURSOR_H__
 #define __MCURSOR_H__
 
+#include "fraction.h"
+
+namespace Ms {
+
 class Score;
 class TDuration;
 class Fraction;
 class TimeSig;
 class Chord;
 
-#include "fraction.h"
 
 //---------------------------------------------------------
 //   MCursor
@@ -50,5 +53,7 @@ class MCursor {
       void setTimeSig(Fraction f) { _sig = f; }
       };
 
+
+}     // namespace Ms
 #endif
 

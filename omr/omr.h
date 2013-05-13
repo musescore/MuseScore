@@ -23,6 +23,8 @@
 
 #include "config.h"
 
+namespace Ms {
+
 class OmrView;
 class Xml;
 class Pdf;
@@ -115,4 +117,5 @@ class Omr {
       };
 
 #endif
+}
 #endif

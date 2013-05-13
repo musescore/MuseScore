@@ -21,6 +21,8 @@
 #include "libmscore/glissando.h"
 #include "glissandoproperties.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   GlissandoProperties
 //---------------------------------------------------------
@@ -46,4 +48,5 @@ void GlissandoProperties::accept()
       QDialog::accept();
       }
 
+}
 

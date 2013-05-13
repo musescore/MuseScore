@@ -88,13 +88,24 @@
 #include "textpalette.h"
 #include "driver.h"
 
-#include "effects/freeverb/freeverb.h"
+// #include "effects/freeverb/freeverb.h"
 #include "effects/zita1/zita.h"
 #include "effects/noeffect/noeffect.h"
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/synthesizergui.h"
 #include "synthesizer/msynthesizer.h"
 #include "fluid/fluid.h"
+
+#ifdef AEOLUS
+extern Ms::Synthesizer* createAeolus();
+#endif
+#ifdef ZERBERUS
+extern Ms::Synthesizer* createZerberus();
+#endif
+
+namespace Ms {
+
+
 MuseScore* mscore;
 MuseScoreCore* mscoreCore;
 MasterSynthesizer* synti;
@@ -131,13 +142,6 @@ extern TextPalette* textPalette;
 #ifdef Q_WS_MAC
 extern void qt_mac_set_menubar_icons(bool b);
 #endif
-#ifdef AEOLUS
-extern Synthesizer* createAeolus();
-#endif
-#ifdef ZERBERUS
-extern Synthesizer* createZerberus();
-#endif
-
 
 //---------------------------------------------------------
 // cmdInsertMeasure
@@ -2182,396 +2186,20 @@ MasterSynthesizer* synthesizerFactory()
       ms->registerSynthesizer(fluid);
 
 #ifdef AEOLUS
-      ms->registerSynthesizer(createAeolus());
+      ms->registerSynthesizer(::createAeolus());
 #endif
 #ifdef ZERBERUS
       ms->registerSynthesizer(createZerberus());
 #endif
       ms->registerEffect(0, new NoEffect);
       ms->registerEffect(0, new ZitaReverb);
-      ms->registerEffect(0, new Freeverb);
+      // ms->registerEffect(0, new Freeverb);
       ms->registerEffect(1, new NoEffect);
       ms->registerEffect(1, new ZitaReverb);
-      ms->registerEffect(1, new Freeverb);
+      // ms->registerEffect(1, new Freeverb);
       ms->setEffect(0, 1);
       ms->setEffect(1, 0);
       return ms;
-      }
-
-//---------------------------------------------------------
-//   main
-//---------------------------------------------------------
-
-int main(int argc, char* av[])
-      {
-#if defined(QT_DEBUG) && defined(Q_WS_WIN)
-      qInstallMsgHandler(mscoreMessageHandler);
-#endif
-
-      QFile f(":/revision.h");
-      f.open(QIODevice::ReadOnly);
-      revision = QString(f.readAll()).trimmed();
-      f.close();
-
-#ifdef Q_WS_MAC
-      MuseScoreApplication* app = new MuseScoreApplication("mscore-dev", argc, av);
-#else
-      QtSingleApplication* app = new QtSingleApplication("mscore-dev", argc, av);
-#endif
-
-      QCoreApplication::setOrganizationName("MuseScore");
-      QCoreApplication::setOrganizationDomain("musescore.org");
-      QCoreApplication::setApplicationName("MuseScoreDevelopment");
-      Q_INIT_RESOURCE(zita);
-      Q_INIT_RESOURCE(noeffect);
-      Q_INIT_RESOURCE(freeverb);
-
-#ifndef Q_WS_MAC
-      // Save the preferences in QSettings::NativeFormat
-      QSettings::setDefaultFormat(QSettings::IniFormat);
-#endif
-
-      if (!QFontDatabase::supportsThreadedFontRendering()) {
-            qDebug("Your computer does not support threaded font rendering!");
-            exit(-1);
-            }
-
-      QStringList argv =  QCoreApplication::arguments();
-      argv.removeFirst();
-
-      bool writeWorkspaceFile = false;
-
-      for (int i = 0; i < argv.size();) {
-            QString s = argv[i];
-            if (s[0] != '-') {
-                  ++i;
-                  continue;
-                  }
-            switch (s[1].toLatin1()) {
-                  case 'v':
-                        printVersion("MuseScore");
-                        return 0;
-                  case 'd':
-                        MScore::debugMode = true;
-                        break;
-                  case 'L':
-                        MScore::layoutDebug = true;
-                        break;
-                  case 's':
-                        noSeq = true;
-                        break;
-                  case 'm':
-                        noMidi = true;
-                        break;
-                  case 'a':
-                        if (argv.size() - i < 2)
-                              usage();
-                        audioDriver = argv.takeAt(i + 1);
-                        break;
-                  case 'n':
-                        startWithNewScore = true;
-                        break;
-                  case 'i':
-                        externalIcons = true;
-                        break;
-                  case 'I':
-                        midiInputTrace = true;
-                        break;
-                  case 'O':
-                        midiOutputTrace = true;
-                        break;
-                  case 'o':
-                        converterMode = true;
-                        noGui = true;
-                        if (argv.size() - i < 2)
-                              usage();
-                        outFileName = argv.takeAt(i + 1);
-                        break;
-                  case 'p':
-                        pluginMode = true;
-                        noGui = true;
-                        if (argv.size() - i < 2)
-                              usage();
-                        pluginName = argv.takeAt(i + 1);
-                        break;
-                  case 'r':
-                        if (argv.size() - i < 2)
-                              usage();
-                        converterDpi = argv.takeAt(i + 1).toDouble();
-                        break;
-                  case 'S':
-                        if (argv.size() - i < 2)
-                              usage();
-                        styleFile = argv.takeAt(i + 1);
-                        break;
-                  case 'w':
-                        writeWorkspaceFile = true;
-                        converterMode = true;
-                        break;
-                  case 'F':
-                        useFactorySettings = true;
-                        break;
-                  case 'e':
-                        enableExperimental = true;
-                        break;
-                  case 'c':
-                        {
-                        if (argv.size() - i < 2)
-                              usage();
-                        QString path = argv.takeAt(i + 1);
-                        QDir dir;
-                        if (dir.exists(path)) {
-                              QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, path);
-                              QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, path);
-                              dataPath = path;
-                              }
-                        }
-                        break;
-                  case 't':
-                        {
-                        enableTestMode = true;
-                        }
-                        break;
-                  default:
-                        usage();
-                  }
-            argv.removeAt(i);
-            }
-      mscoreGlobalShare = getSharePath();
-      iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/");
-      iconGroup = "icons-dark/";
-
-      if (!converterMode) {
-            if (!argv.isEmpty()) {
-                  int ok = true;
-                  foreach(QString message, argv) {
-                        QFileInfo fi(message);
-                        if (!app->sendMessage(fi.absoluteFilePath())) {
-                              ok = false;
-                              break;
-                              }
-                        }
-                  if (ok)
-                        return 0;
-                  }
-            else
-                  if (app->sendMessage(QString(""))) {
-                      return 0;
-                      }
-            }
-
-/**/
-      if (dataPath.isEmpty())
-            dataPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-
-      // create local plugin directory
-      // if not already there:
-      QDir dir;
-      dir.mkpath(dataPath + "/plugins");
-
-      if (MScore::debugMode)
-            qDebug("global share: <%s>", qPrintable(mscoreGlobalShare));
-
-      // set translator before preferences are read to get
-      //    translations for all shortcuts
-      //
-      if (useFactorySettings)
-            localeName = "system";
-      else {
-            QSettings s;
-            localeName = s.value("language", "system").toString();
-            }
-
-      setMscoreLocale(localeName);
-
-      Shortcut::init();
-      preferences.init();
-
-      QWidget wi(0);
-      MScore::PDPI = wi.logicalDpiX();         // physical resolution
-      MScore::DPI  = MScore::PDPI;             // logical drawing resolution
-      MScore::init();                          // initialize libmscore
-
-      if (MScore::debugMode)
-            qDebug("DPI %f", MScore::DPI);
-
-      preferences.readDefaultStyle();
-
-      if (!useFactorySettings)
-            preferences.read();
-
-      if (converterDpi == 0)
-            converterDpi = preferences.pngResolution;
-
-      QSplashScreen* sc = 0;
-      if (!noGui && preferences.showSplashScreen) {
-            QPixmap pm(":/data/splash.jpg");
-            sc = new QSplashScreen(pm);
-            sc->setWindowTitle(QString("MuseScore Startup"));
-            sc->setWindowFlags(Qt::FramelessWindowHint);
-            sc->show();
-            qApp->processEvents();
-            }
-
-      if (!converterMode) {
-            switch(preferences.globalStyle) {
-                  case STYLE_DARK: {
-                        MgStyle* st = new MgStyle;
-                        QApplication::setStyle(st);
-                        qApp->setStyleSheet(appStyleSheet());
-                        QPalette p(QApplication::palette());
-                        p.setColor(QPalette::Window,        QColor(0x52, 0x52, 0x52));
-                        p.setColor(QPalette::WindowText,    Qt::white);
-                        p.setColor(QPalette::Base,          QColor(0x42, 0x42, 0x42));
-                        p.setColor(QPalette::AlternateBase, QColor(0x62, 0x62, 0x62));
-                        p.setColor(QPalette::Text,          Qt::white);
-                        p.setColor(QPalette::Button,        QColor(0x52, 0x52, 0x52));
-                        p.setColor(QPalette::ButtonText,    Qt::white);
-                        p.setColor(QPalette::BrightText,    Qt::black);
-                        QApplication::setPalette(p);
-
-                        QPalette palette = QToolTip::palette();
-                        palette.setBrush(QPalette::ToolTipBase, QBrush(Qt::darkGray));
-                        QToolTip::setPalette(palette);
-
-                        break;
-                        }
-                  case STYLE_NATIVE:
-                        break;
-                  }
-            seq            = new Seq();
-            MScore::seq    = seq;
-            Driver* driver = driverFactory(seq, audioDriver);
-            if (driver) {
-                  synti              = synthesizerFactory();
-                  MScore::sampleRate = driver->sampleRate();
-                  synti->setSampleRate(MScore::sampleRate);
-                  synti->init();
-
-                  seq->setDriver(driver);
-                  seq->setMasterSynthesizer(synti);
-                  }
-            else {
-                  delete seq;
-                  MScore::seq = 0;
-                  seq         = 0;
-                  noSeq       = true;
-                  }
-            }
-      else
-            noSeq = true;
-
-      //
-      // avoid font problems by overriding the environment
-      //    fall back to "C" locale
-      //
-
-#ifndef __MINGW32__
-      setenv("LANG", "C", 1);
-#endif
-      QLocale::setDefault(QLocale(QLocale::C));
-
-      if (MScore::debugMode) {
-            QStringList sl(QCoreApplication::libraryPaths());
-            foreach(const QString& s, sl)
-                  qDebug("LibraryPath: <%s>", qPrintable(s));
-            }
-
-      // rastral size of font is 20pt = 20/72 inch = 20*DPI/72 dots
-      //   staff has 5 lines = 4 * _spatium
-      //   _spatium    = SPATIUM20  * DPI;     // 20.0 / 72.0 * DPI / 4.0;
-
-      genIcons();
-
-      if (!converterMode)
-            qApp->setWindowIcon(*icons[window_ICON]);
-      Workspace::initWorkspace();
-      mscore = new MuseScore();
-      mscoreCore = mscore;
-      gscore = new Score(MScore::defaultStyle());
-
-      if (writeWorkspaceFile) {
-            Workspace::writeBuiltinWorkspace();
-            return 0;
-            }
-
-      if (!noSeq) {
-            if (!seq->init()) {
-                  qDebug("sequencer init failed");
-                  noSeq = true;
-                  }
-            }
-
-      //read languages list
-      mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
-
-#ifdef Q_WS_MAC
-      QApplication::instance()->installEventFilter(mscore);
-
-      // Mac-Applications don't have menubar icons
-      qt_mac_set_menubar_icons(false);
-#endif
-      mscore->setRevision(revision);
-
-      int files = 0;
-      if (noGui) {
-            loadScores(argv);
-            exit(processNonGui() ? 0 : -1);
-            }
-      else {
-            mscore->readSettings();
-            QObject::connect(qApp, SIGNAL(messageReceived(const QString&)),
-               mscore, SLOT(handleMessage(const QString&)));
-
-            mscore->showWebPanel(preferences.showWebPanel);
-            static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
-            foreach(const QString& name, argv) {
-                  if (!name.isEmpty())
-                        ++files;
-                  }
-#ifdef Q_WS_MAC
-            if (!mscore->restoreSession(preferences.sessionStart == LAST_SESSION)) {
-                  MuseScoreApplication* mApp = static_cast<MuseScoreApplication*>(qApp);
-                  loadScores(mApp->paths);
-                  files = mApp->paths.size();
-                  }
-#else
-            //
-            // TODO: delete old session backups
-            //
-            if (!mscore->restoreSession((preferences.sessionStart == LAST_SESSION) && (files == 0)) || files)
-                  loadScores(argv);
-#endif
-            }
-      mscore->loadPlugins();
-      mscore->writeSessionFile(false);
-
-#ifdef Q_WS_MAC
-      // there's a bug in Qt showing the toolbar unified after switching showFullScreen(), showMaximized(),
-      // showNormal()...
-      mscore->setUnifiedTitleAndToolBarOnMac(false);
-#endif
-
-      mscore->changeState(mscore->noScore() ? STATE_DISABLED : STATE_NORMAL);
-      mscore->show();
-
-      if (sc)
-            sc->finish(mscore);
-      if (mscore->hasToCheckForUpdate())
-            mscore->checkForUpdate();
-
-      if (preferences.sessionStart == EMPTY_SESSION && files == 0) {
-            QDialog* start = new StartDialog(0);
-            switch(start->exec()) {
-                  case 1:
-                        mscore->newFile();
-                        break;
-                  case 2:
-                        mscore->loadFiles();
-                        break;
-                  }
-            }
-      return qApp->exec();
       }
 
 //---------------------------------------------------------
@@ -4826,4 +4454,384 @@ bool MuseScore::loadPlugin(const QString&) { return false;}
 void MuseScore::unloadPlugins() {}
 QDeclarativeEngine* MuseScore::qml() { return 0; }
 #endif
+}
+
+using namespace Ms;
+
+//---------------------------------------------------------
+//   main
+//---------------------------------------------------------
+
+int main(int argc, char* av[])
+      {
+#if defined(QT_DEBUG) && defined(Q_WS_WIN)
+      qInstallMsgHandler(mscoreMessageHandler);
+#endif
+
+      QFile f(":/revision.h");
+      f.open(QIODevice::ReadOnly);
+      revision = QString(f.readAll()).trimmed();
+      f.close();
+
+#ifdef Q_WS_MAC
+      MuseScoreApplication* app = new MuseScoreApplication("mscore-dev", argc, av);
+#else
+      QtSingleApplication* app = new QtSingleApplication("mscore-dev", argc, av);
+#endif
+
+      QCoreApplication::setOrganizationName("MuseScore");
+      QCoreApplication::setOrganizationDomain("musescore.org");
+      QCoreApplication::setApplicationName("MuseScoreDevelopment");
+      Q_INIT_RESOURCE(zita);
+      Q_INIT_RESOURCE(noeffect);
+//      Q_INIT_RESOURCE(freeverb);
+
+#ifndef Q_WS_MAC
+      // Save the preferences in QSettings::NativeFormat
+      QSettings::setDefaultFormat(QSettings::IniFormat);
+#endif
+
+      if (!QFontDatabase::supportsThreadedFontRendering()) {
+            qDebug("Your computer does not support threaded font rendering!");
+            exit(-1);
+            }
+
+      QStringList argv =  QCoreApplication::arguments();
+      argv.removeFirst();
+
+      bool writeWorkspaceFile = false;
+
+      for (int i = 0; i < argv.size();) {
+            QString s = argv[i];
+            if (s[0] != '-') {
+                  ++i;
+                  continue;
+                  }
+            switch (s[1].toLatin1()) {
+                  case 'v':
+                        printVersion("MuseScore");
+                        return 0;
+                  case 'd':
+                        MScore::debugMode = true;
+                        break;
+                  case 'L':
+                        MScore::layoutDebug = true;
+                        break;
+                  case 's':
+                        noSeq = true;
+                        break;
+                  case 'm':
+                        noMidi = true;
+                        break;
+                  case 'a':
+                        if (argv.size() - i < 2)
+                              usage();
+                        audioDriver = argv.takeAt(i + 1);
+                        break;
+                  case 'n':
+                        startWithNewScore = true;
+                        break;
+                  case 'i':
+                        externalIcons = true;
+                        break;
+                  case 'I':
+                        midiInputTrace = true;
+                        break;
+                  case 'O':
+                        midiOutputTrace = true;
+                        break;
+                  case 'o':
+                        converterMode = true;
+                        noGui = true;
+                        if (argv.size() - i < 2)
+                              usage();
+                        outFileName = argv.takeAt(i + 1);
+                        break;
+                  case 'p':
+                        pluginMode = true;
+                        noGui = true;
+                        if (argv.size() - i < 2)
+                              usage();
+                        pluginName = argv.takeAt(i + 1);
+                        break;
+                  case 'r':
+                        if (argv.size() - i < 2)
+                              usage();
+                        converterDpi = argv.takeAt(i + 1).toDouble();
+                        break;
+                  case 'S':
+                        if (argv.size() - i < 2)
+                              usage();
+                        styleFile = argv.takeAt(i + 1);
+                        break;
+                  case 'w':
+                        writeWorkspaceFile = true;
+                        converterMode = true;
+                        break;
+                  case 'F':
+                        useFactorySettings = true;
+                        break;
+                  case 'e':
+                        enableExperimental = true;
+                        break;
+                  case 'c':
+                        {
+                        if (argv.size() - i < 2)
+                              usage();
+                        QString path = argv.takeAt(i + 1);
+                        QDir dir;
+                        if (dir.exists(path)) {
+                              QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, path);
+                              QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, path);
+                              dataPath = path;
+                              }
+                        }
+                        break;
+                  case 't':
+                        {
+                        enableTestMode = true;
+                        }
+                        break;
+                  default:
+                        usage();
+                  }
+            argv.removeAt(i);
+            }
+      mscoreGlobalShare = getSharePath();
+      iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/");
+      iconGroup = "icons-dark/";
+
+      if (!converterMode) {
+            if (!argv.isEmpty()) {
+                  int ok = true;
+                  foreach(QString message, argv) {
+                        QFileInfo fi(message);
+                        if (!app->sendMessage(fi.absoluteFilePath())) {
+                              ok = false;
+                              break;
+                              }
+                        }
+                  if (ok)
+                        return 0;
+                  }
+            else
+                  if (app->sendMessage(QString(""))) {
+                      return 0;
+                      }
+            }
+
+/**/
+      if (dataPath.isEmpty())
+            dataPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+
+      // create local plugin directory
+      // if not already there:
+      QDir dir;
+      dir.mkpath(dataPath + "/plugins");
+
+      if (MScore::debugMode)
+            qDebug("global share: <%s>", qPrintable(mscoreGlobalShare));
+
+      // set translator before preferences are read to get
+      //    translations for all shortcuts
+      //
+      if (useFactorySettings)
+            localeName = "system";
+      else {
+            QSettings s;
+            localeName = s.value("language", "system").toString();
+            }
+
+      setMscoreLocale(localeName);
+
+      Shortcut::init();
+      preferences.init();
+
+      QWidget wi(0);
+      MScore::PDPI = wi.logicalDpiX();         // physical resolution
+      MScore::DPI  = MScore::PDPI;             // logical drawing resolution
+      MScore::init();                          // initialize libmscore
+
+      if (MScore::debugMode)
+            qDebug("DPI %f", MScore::DPI);
+
+      preferences.readDefaultStyle();
+
+      if (!useFactorySettings)
+            preferences.read();
+
+      if (converterDpi == 0)
+            converterDpi = preferences.pngResolution;
+
+      QSplashScreen* sc = 0;
+      if (!noGui && preferences.showSplashScreen) {
+            QPixmap pm(":/data/splash.jpg");
+            sc = new QSplashScreen(pm);
+            sc->setWindowTitle(QString("MuseScore Startup"));
+            sc->setWindowFlags(Qt::FramelessWindowHint);
+            sc->show();
+            qApp->processEvents();
+            }
+
+      if (!converterMode) {
+            switch(preferences.globalStyle) {
+                  case STYLE_DARK: {
+                        MgStyle* st = new MgStyle;
+                        QApplication::setStyle(st);
+                        qApp->setStyleSheet(appStyleSheet());
+                        QPalette p(QApplication::palette());
+                        p.setColor(QPalette::Window,        QColor(0x52, 0x52, 0x52));
+                        p.setColor(QPalette::WindowText,    Qt::white);
+                        p.setColor(QPalette::Base,          QColor(0x42, 0x42, 0x42));
+                        p.setColor(QPalette::AlternateBase, QColor(0x62, 0x62, 0x62));
+                        p.setColor(QPalette::Text,          Qt::white);
+                        p.setColor(QPalette::Button,        QColor(0x52, 0x52, 0x52));
+                        p.setColor(QPalette::ButtonText,    Qt::white);
+                        p.setColor(QPalette::BrightText,    Qt::black);
+                        QApplication::setPalette(p);
+
+                        QPalette palette = QToolTip::palette();
+                        palette.setBrush(QPalette::ToolTipBase, QBrush(Qt::darkGray));
+                        QToolTip::setPalette(palette);
+
+                        break;
+                        }
+                  case STYLE_NATIVE:
+                        break;
+                  }
+            seq            = new Seq();
+            MScore::seq    = seq;
+            Driver* driver = driverFactory(seq, audioDriver);
+            if (driver) {
+                  synti              = synthesizerFactory();
+                  MScore::sampleRate = driver->sampleRate();
+                  synti->setSampleRate(MScore::sampleRate);
+                  synti->init();
+
+                  seq->setDriver(driver);
+                  seq->setMasterSynthesizer(synti);
+                  }
+            else {
+                  delete seq;
+                  MScore::seq = 0;
+                  seq         = 0;
+                  noSeq       = true;
+                  }
+            }
+      else
+            noSeq = true;
+
+      //
+      // avoid font problems by overriding the environment
+      //    fall back to "C" locale
+      //
+
+#ifndef __MINGW32__
+      setenv("LANG", "C", 1);
+#endif
+      QLocale::setDefault(QLocale(QLocale::C));
+
+      if (MScore::debugMode) {
+            QStringList sl(QCoreApplication::libraryPaths());
+            foreach(const QString& s, sl)
+                  qDebug("LibraryPath: <%s>", qPrintable(s));
+            }
+
+      // rastral size of font is 20pt = 20/72 inch = 20*DPI/72 dots
+      //   staff has 5 lines = 4 * _spatium
+      //   _spatium    = SPATIUM20  * DPI;     // 20.0 / 72.0 * DPI / 4.0;
+
+      genIcons();
+
+      if (!converterMode)
+            qApp->setWindowIcon(*icons[window_ICON]);
+      Workspace::initWorkspace();
+      mscore = new MuseScore();
+      mscoreCore = mscore;
+      gscore = new Score(MScore::defaultStyle());
+
+      if (writeWorkspaceFile) {
+            Workspace::writeBuiltinWorkspace();
+            return 0;
+            }
+
+      if (!noSeq) {
+            if (!seq->init()) {
+                  qDebug("sequencer init failed");
+                  noSeq = true;
+                  }
+            }
+
+      //read languages list
+      mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
+
+#ifdef Q_WS_MAC
+      QApplication::instance()->installEventFilter(mscore);
+
+      // Mac-Applications don't have menubar icons
+      qt_mac_set_menubar_icons(false);
+#endif
+      mscore->setRevision(revision);
+
+      int files = 0;
+      if (noGui) {
+            loadScores(argv);
+            exit(processNonGui() ? 0 : -1);
+            }
+      else {
+            mscore->readSettings();
+            QObject::connect(qApp, SIGNAL(messageReceived(const QString&)),
+               mscore, SLOT(handleMessage(const QString&)));
+
+            mscore->showWebPanel(preferences.showWebPanel);
+            static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
+            foreach(const QString& name, argv) {
+                  if (!name.isEmpty())
+                        ++files;
+                  }
+#ifdef Q_WS_MAC
+            if (!mscore->restoreSession(preferences.sessionStart == LAST_SESSION)) {
+                  MuseScoreApplication* mApp = static_cast<MuseScoreApplication*>(qApp);
+                  loadScores(mApp->paths);
+                  files = mApp->paths.size();
+                  }
+#else
+            //
+            // TODO: delete old session backups
+            //
+            if (!mscore->restoreSession((preferences.sessionStart == LAST_SESSION) && (files == 0)) || files)
+                  loadScores(argv);
+#endif
+            }
+      mscore->loadPlugins();
+      mscore->writeSessionFile(false);
+
+#ifdef Q_WS_MAC
+      // there's a bug in Qt showing the toolbar unified after switching showFullScreen(), showMaximized(),
+      // showNormal()...
+      mscore->setUnifiedTitleAndToolBarOnMac(false);
+#endif
+
+      mscore->changeState(mscore->noScore() ? STATE_DISABLED : STATE_NORMAL);
+      mscore->show();
+
+      if (sc)
+            sc->finish(mscore);
+      if (mscore->hasToCheckForUpdate())
+            mscore->checkForUpdate();
+
+      if (preferences.sessionStart == EMPTY_SESSION && files == 0) {
+            QDialog* start = new StartDialog(0);
+            switch(start->exec()) {
+                  case 1:
+                        mscore->newFile();
+                        break;
+                  case 2:
+                        mscore->loadFiles();
+                        break;
+                  }
+            }
+      return qApp->exec();
+      }
+
 

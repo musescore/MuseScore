@@ -26,6 +26,8 @@
 #include "libmscore/sym.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 extern QString iconPath, iconGroup;
 QIcon* icons[ICONS];
 
@@ -159,4 +161,5 @@ void genIcons()
             icons[voice1_ICON + i]->addPixmap(image, QIcon::Normal, QIcon::On);
             }
       }
+}
 

@@ -49,6 +49,8 @@
 #include "libmscore/segment.h"
 #include "libmscore/rehearsalmark.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   errmsg
 //---------------------------------------------------------
@@ -2830,4 +2832,5 @@ Score::FileError importGTP(Score* score, const QString& name)
       score->rebuildMidiMapping();
       return Score::FILE_NO_ERROR;
       }
+}
 

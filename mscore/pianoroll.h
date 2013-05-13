@@ -13,14 +13,6 @@
 #ifndef __PIANOROLL_H__
 #define __PIANOROLL_H__
 
-class Score;
-class Staff;
-class PianoView;
-class Note;
-class Ruler;
-class Seq;
-class WaveView;
-
 #include "libmscore/mscoreview.h"
 #include "libmscore/pos.h"
 
@@ -28,6 +20,16 @@ namespace Awl {
       class PitchEdit;
       class PosLabel;
       };
+
+namespace Ms {
+
+class Score;
+class Staff;
+class PianoView;
+class Note;
+class Ruler;
+class Seq;
+class WaveView;
 
 //---------------------------------------------------------
 //   PianorollEditor
@@ -96,6 +98,8 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual void drawBackground(QPainter* /*p*/, const QRectF& /*r*/) const {}
       };
 
+
+} // namespace Ms
 #endif
 
 

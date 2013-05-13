@@ -16,6 +16,8 @@
 #include "qmledit.h"
 #include "musescore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   JSHighlighter
 //---------------------------------------------------------
@@ -654,3 +656,5 @@ void QmlEdit::tab()
             c.insertText(" ");
       setTextCursor(c);
       }
+}
+

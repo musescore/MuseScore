@@ -32,6 +32,8 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/figuredbass.h"
 
+namespace Ms {
+
 extern QString iconPath, iconGroup;
 
 //---------------------------------------------------------
@@ -660,4 +662,5 @@ void EditStyle::setPage(int row)
       {
       pageList->setCurrentRow(row);
       }
+}
 

@@ -21,6 +21,8 @@
 #include "page.h"
 #include "mscore.h"
 
+namespace Ms {
+
 MStyle* style;
 
 //  20 points        font design size
@@ -1693,4 +1695,6 @@ void MStyle::setArticulationAnchor(int id, ArticulationAnchor val)
       {
       return d->setArticulationAnchor(id, val);
       }
+
+}
 

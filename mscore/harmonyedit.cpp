@@ -30,6 +30,8 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 extern bool useFactorySettings;
 
 //---------------------------------------------------------
@@ -605,3 +607,5 @@ void HarmonyCanvas::updateChordDescription()
             y = ts->y;
             }
       }
+}
+

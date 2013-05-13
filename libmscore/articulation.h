@@ -18,6 +18,9 @@
 #include "sym.h"
 
 class QPainter;
+
+namespace Ms {
+
 class ChordRest;
 
 //---------------------------------------------------------
@@ -111,5 +114,7 @@ class Articulation : public Element {
       static QString idx2name(int idx);
       };
 
+
+}     // namespace Ms
 #endif
 

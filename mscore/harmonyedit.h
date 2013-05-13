@@ -23,6 +23,8 @@
 
 #include "ui_harmonyedit.h"
 
+namespace Ms {
+
 class Palette;
 class ChordList;
 
@@ -57,5 +59,7 @@ class ChordStyleEditor : public QDialog, Ui::ChordStyleEditor {
       void restore();
       };
 
+
+} // namespace Ms
 #endif
 

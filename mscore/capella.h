@@ -24,6 +24,8 @@
 #include "globals.h"
 #include "libmscore/xml.h"
 
+namespace Ms {
+
 enum TIMESTEP { D1, D2, D4, D8, D16, D32, D64, D128, D256, D_BREVE };
 
 #if 0
@@ -724,5 +726,7 @@ class Capella {
       QList<BasicDrawObj*> readCapxDrawObjectArray(XmlReader& e);
       };
 
+
+} // namespace Ms
 #endif
 

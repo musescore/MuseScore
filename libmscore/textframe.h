@@ -15,6 +15,8 @@
 
 #include "box.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ TBox
 ///   Text frame.
@@ -34,5 +36,7 @@ class TBox : public VBox {
       Text* getText();
       };
 
+
+}     // namespace Ms
 #endif
 

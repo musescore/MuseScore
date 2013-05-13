@@ -30,6 +30,8 @@
 #include "preferences.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 static const char* staticUrl = "http://connect.musescore.com";
 
 //---------------------------------------------------------
@@ -536,4 +538,5 @@ void WebScoreView::networkFinished(QNetworkReply* reply)
       }
 
 #endif
+}
 

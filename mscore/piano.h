@@ -21,6 +21,8 @@
 #ifndef __PIANO_H__
 #define __PIANO_H__
 
+namespace Ms {
+
 static const int pianoWidth = 40;
 static const int keyHeight = 13;
 
@@ -71,5 +73,7 @@ class Piano : public QWidget {
       void setOrientation(PianoOrientation);
       };
 
+
+} // namespace Ms
 #endif
 

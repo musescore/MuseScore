@@ -16,6 +16,8 @@
 #include "inspector.h"
 #include "inspectorGroupElement.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorGroupElement
 //---------------------------------------------------------
@@ -83,4 +85,5 @@ void InspectorGroupElement::setInvisible()
       score->endCmd();
       }
 
+}
 

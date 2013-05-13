@@ -32,6 +32,8 @@
 #include "libmscore/segment.h"
 #include "libmscore/keysig.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   BBTrack
 //---------------------------------------------------------
@@ -970,4 +972,5 @@ int BBTrack::separateVoices(int /*maxVoices*/)
       {
       return 1;
       }
+}
 

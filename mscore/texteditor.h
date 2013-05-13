@@ -21,6 +21,8 @@
 #ifndef __TEXTEDITOR_H__
 #define __TEXTEDITOR_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TextEditor
 //---------------------------------------------------------
@@ -63,5 +65,6 @@ class TextEditor : public QDialog {
 
 extern QString editPlainText(const QString& s, const QString& title);
 extern QString editHtml(const QString& s, const QString& title);
+}
 
 #endif

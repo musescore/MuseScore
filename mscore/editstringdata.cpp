@@ -21,6 +21,8 @@
 #include "editstringdata.h"
 #include "editpitch.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditStringData
 //    To edit the string data (tuning and number of frets) for an instrument
@@ -35,6 +37,17 @@ EditStringData::EditStringData(QWidget *parent, QList<int> * strings, int * fret
       // if any string, insert into string list control and select the first one
       if(_strings->size()) {
             int   i, j;
+            // insert into local working copy sorting by decreasing MIDI code value
+/*            foreach(i, *_strings) {
+                  for(j=_stringsLoc.size()-1; j >= 0 && i > _stringsLoc[j]; j--)
+                        ;
+                  _stringsLoc.insert(j+1, i);
+                  }
+            // add to string list dlg control
+            foreach(i, _stringsLoc)
+                  stringList->addItem(midiCodeToStr(i));
+            stringList->setCurrentRow(0);
+*/
             // insert into local working copy and into string list dlg control
             // IN REVERSED ORDER
             for(i=_strings->size()-1; i >= 0; i--) {
@@ -62,8 +75,21 @@ EditStringData::EditStringData(QWidget *parent, QList<int> * strings, int * fret
 
 EditStringData::~EditStringData()
 {
+//    delete ui;
 }
-
+/*
+void EditStringData::changeEvent(QEvent *e)
+{
+      QDialog::changeEvent(e);
+      switch (e->type()) {
+            case QEvent::LanguageChange:
+                  retranslateUi(this);
+                  break;
+            default:
+                  break;
+      }
+}
+*/
 //---------------------------------------------------------
 //   deleteStringClicked
 //---------------------------------------------------------
@@ -112,6 +138,15 @@ void EditStringData::newStringClicked()
 
       EditPitch* ep = new EditPitch(this);
       if ( (newCode=ep->exec()) != -1) {
+            // find sorted postion for new string tuning value
+/*            for(i=_stringsLoc.size()-1; i >= 0 && newCode > _stringsLoc[i]; i--)
+                  ;
+            // insert in local string list and in dlg list control
+            _stringsLoc.insert(i+1, newCode);
+            stringList->insertItem(i+1, midiCodeToStr(newCode));
+            // select last added item and ensure buttons are active
+            stringList->setCurrentRow(i+1);
+*/
             // add below selected string o at the end if no selected string
             i = stringList->currentRow();
             if(i < 0)
@@ -163,3 +198,4 @@ QString EditStringData::midiCodeToStr(int midiCode)
       {
       return QString("%1 %2").arg(g_cNoteName[midiCode % 12]).arg(midiCode / 12 - 1);
       }
+}

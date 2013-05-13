@@ -15,6 +15,8 @@
 
 #include "segment.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SegmentList
 //---------------------------------------------------------
@@ -47,5 +49,7 @@ class SegmentList {
       void insert(Segment* e, Segment* el);
       };
 
+
+}     // namespace Ms
 #endif
 

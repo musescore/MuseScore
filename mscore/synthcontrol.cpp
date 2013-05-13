@@ -25,6 +25,8 @@
 #include "libmscore/undo.h"
 #include "effects/effectgui.h"
 
+namespace Ms {
+
 extern MasterSynthesizer* synti;
 extern bool useFactorySettings;
 
@@ -333,4 +335,5 @@ void SynthControl::setDirty()
       storeButton->setEnabled(true);
       recallButton->setEnabled(true);
       }
+}
 

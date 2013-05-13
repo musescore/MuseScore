@@ -24,6 +24,8 @@ extern "C" {
 // #include <mupdf.h>
       }
 
+namespace Ms {
+
 int Pdf::references;
 static fz_context* ctx;
 
@@ -157,4 +159,5 @@ QImage Pdf::page(int i)
       fz_drop_pixmap(ctx, pix);
       return image;
       }
+}
 

@@ -36,6 +36,8 @@
 #include "editstringdata.h"
 #include "libmscore/tablature.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditStaff
 //---------------------------------------------------------
@@ -372,3 +374,5 @@ QString EditStaff::midiCodeToStr(int midiCode)
       {
       return QString("%1 %2").arg(g_cNoteName[midiCode % 12]).arg(midiCode / 12 - 1);
       }
+}
+

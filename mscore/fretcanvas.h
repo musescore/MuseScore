@@ -21,6 +21,8 @@
 #ifndef __FRETCANVAS_H__
 #define __FRETCANVAS_H__
 
+namespace Ms {
+
 class Accidental;
 class Clef;
 class FretDiagram;
@@ -52,5 +54,7 @@ class FretCanvas : public QFrame {
       void setFretDiagram(FretDiagram* fd);
       };
 
+
+} // namespace Ms
 #endif
 

@@ -25,8 +25,11 @@
 #ifndef __MIDIDRIVER_H__
 #define __MIDIDRIVER_H__
 
+#include <poll.h>
 #include "config.h"
 #include "driver.h"
+
+namespace Ms {
 
 class Event;
 class Seq;
@@ -87,6 +90,9 @@ struct AlsaPort {
       };
 
 #endif
+
+
+} // namespace Ms
 
 #endif
 

@@ -17,6 +17,8 @@
 #include "ui_inspector_element.h"
 #include "ui_inspector_textline.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorHairpin
 //---------------------------------------------------------
@@ -31,5 +33,7 @@ class InspectorTextLine : public InspectorBase {
       InspectorTextLine(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif
 

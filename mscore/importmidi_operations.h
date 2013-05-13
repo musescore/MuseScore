@@ -1,8 +1,7 @@
 #ifndef IMPORTMIDI_OPERATIONS_H
 #define IMPORTMIDI_OPERATIONS_H
 
-#include <QList>
-
+namespace Ms {
 
 struct MidiTrackOperations
       {
@@ -24,4 +23,6 @@ class MidiImportOperations
       };
 
 
+
+} // namespace Ms
 #endif // IMPORTMIDI_OPERATIONS_H

@@ -15,6 +15,9 @@
 
 #include "mscore.h"
 #include "note.h"
+
+namespace Ms {
+
 class Xml;
 
 //---------------------------------------------------------
@@ -66,5 +69,7 @@ class Drumset {
 extern Drumset* smDrumset;
 extern void initDrumset();
 
+
+}     // namespace Ms
 #endif
 

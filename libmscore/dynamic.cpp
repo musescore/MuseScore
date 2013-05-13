@@ -20,6 +20,8 @@
 #include "style.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //-----------------------------------------------------------------------------
 //   Dyn
 //    see: http://en.wikipedia.org/wiki/File:Dynamic's_Note_Velocity.svg
@@ -280,4 +282,6 @@ QVariant Dynamic::propertyDefault(P_ID id) const
             default:              return Text::propertyDefault(id);
             }
       }
+
+}
 

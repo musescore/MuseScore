@@ -23,6 +23,8 @@
 
 #include "ui_playpanel.h"
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -67,5 +69,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void updatePosLabel(int utick);
       };
 
+
+} // namespace Ms
 #endif
 

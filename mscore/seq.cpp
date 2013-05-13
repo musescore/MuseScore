@@ -46,6 +46,8 @@
 
 #include <vorbis/vorbisfile.h>
 
+namespace Ms {
+
 Seq* seq;
 
 static const int guiRefresh   = 10;       // Hz
@@ -1192,4 +1194,5 @@ double Seq::curTempo() const
       {
       return cs->tempomap()->tempo(playPos->first);
       }
+}
 

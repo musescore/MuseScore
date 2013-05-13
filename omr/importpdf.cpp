@@ -36,6 +36,8 @@
 #include "libmscore/note.h"
 #include "libmscore/utils.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   noteCompare
 //---------------------------------------------------------
@@ -266,4 +268,5 @@ Score::FileError importPdf(Score* score, const QString& path)
       score->rebuildMidiMapping();
       return Score::FILE_NO_ERROR;
       }
+}
 

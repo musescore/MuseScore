@@ -23,6 +23,8 @@
 #include "mscore.h"
 #include "textframe.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TBox
 //---------------------------------------------------------
@@ -91,4 +93,6 @@ Text* TBox::getText()
             return static_cast<Text*>(*_el.begin());
       return 0;
       }
+
+}
 

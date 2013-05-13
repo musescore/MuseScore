@@ -18,6 +18,8 @@
 #include "part.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   StaffState
 //---------------------------------------------------------
@@ -185,4 +187,6 @@ Element* StaffState::drop(const DropData& data)
       score()->undoChangeElement(this, e);
       return e;
       }
+
+}
 

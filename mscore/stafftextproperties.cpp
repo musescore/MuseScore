@@ -24,6 +24,8 @@
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 // initChannelCombo
 //---------------------------------------------------------
@@ -359,3 +361,5 @@ void StaffTextProperties::saveValues()
       staffText->score()->updateChannel();
       staffText->score()->setPlaylistDirty(true);
       }
+}
+

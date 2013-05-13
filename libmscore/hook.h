@@ -15,6 +15,8 @@
 
 #include "symbol.h"
 
+namespace Ms {
+
 class Chord;
 
 //---------------------------------------------------------
@@ -37,5 +39,7 @@ class Hook : public Symbol {
       Chord* chord() const            { return (Chord*)parent(); }
       };
 
+
+}     // namespace Ms
 #endif
 

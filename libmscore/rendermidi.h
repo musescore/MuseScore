@@ -12,8 +12,12 @@
 
 #ifndef __RENDERMIDI_H__
 
+namespace Ms {
+
 class Chord;
 extern void createPlayEvents(Chord* chord);
 
+
+}     // namespace Ms
 #endif
 

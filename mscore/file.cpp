@@ -91,6 +91,10 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/mscore.h"
 
+extern Ms::Score::FileError importOve(Ms::Score*, const QString& name);
+
+namespace Ms {
+
 extern Score::FileError importMidi(Score*, const QString& name);
 extern Score::FileError importGTP(Score*, const QString& name);
 extern Score::FileError importBww(Score*, const QString& path);
@@ -101,7 +105,6 @@ extern Score::FileError importLilypond(Score*, const QString& name);
 extern Score::FileError importBB(Score*, const QString& name);
 extern Score::FileError importCapella(Score*, const QString& name);
 extern Score::FileError importCapXml(Score*, const QString& name);
-extern Score::FileError importOve(Score*, const QString& name);
 
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
@@ -303,10 +306,10 @@ Score* MuseScore::readScore(const QString& name)
       if (name.isEmpty())
             return 0;
       Score* score = new Score(MScore::defaultStyle());
-      Score::FileError rv = ::readScore(score, name, false);
+      Score::FileError rv = Ms::readScore(score, name, false);
       if (rv == Score::FILE_TOO_OLD || rv == Score::FILE_TOO_NEW) {
             if (readScoreError(name, rv, true))
-                  rv = ::readScore(score, name, true);
+                  rv = Ms::readScore(score, name, true);
             else {
                   delete score;
                   return 0;
@@ -445,7 +448,7 @@ void MuseScore::newFile()
       //  create score from template
       //
       if (newWizard->useTemplate()) {
-            Score::FileError rv = ::readScore(score, newWizard->templatePath(), false);
+            Score::FileError rv = Ms::readScore(score, newWizard->templatePath(), false);
             if (rv != Score::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
                   delete score;
@@ -2130,4 +2133,5 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       return true;
       }
 
+}
 

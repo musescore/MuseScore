@@ -24,6 +24,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/fraction.h"
 
+namespace Ms {
+
 class Score;
 class Chord;
 class Note;
@@ -193,4 +195,6 @@ class GuitarPro5 : public GuitarPro {
       virtual void read(QFile*);
       };
 
+
+} // namespace Ms
 #endif

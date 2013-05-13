@@ -16,6 +16,8 @@
 #include "undo.h"
 #include "staff.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   DurationElement
 //---------------------------------------------------------
@@ -127,4 +129,6 @@ void DurationElement::writeTuplet(Xml& xml)
             tuplet()->write(xml);
             }
       }
+
+}
 

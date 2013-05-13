@@ -30,6 +30,8 @@
 #endif
 #include "libmscore/excerpt.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ScoreTab
 //---------------------------------------------------------
@@ -381,4 +383,5 @@ void ScoreTab::initScoreView(int idx, double mag, int magIdx, double xoffset, do
       v->setMag(magIdx, mag);
       v->setOffset(xoffset, yoffset);
       }
+}
 

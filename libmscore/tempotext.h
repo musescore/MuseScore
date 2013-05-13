@@ -15,6 +15,8 @@
 
 #include "text.h"
 
+namespace Ms {
+
 //-------------------------------------------------------------------
 //   @@ TempoText
 ///   Tempo marker which determines the midi tempo.
@@ -56,4 +58,7 @@ class TempoText : public Text  {
       QVariant propertyDefault(P_ID id) const;
       };
 
+
+
+}     // namespace Ms
 #endif

@@ -26,6 +26,8 @@
 #include "mscore.h"
 #include "textframe.h"
 
+namespace Ms {
+
 enum SymbolType {
       SYMBOL_UNKNOWN,
       SYMBOL_COPYRIGHT,
@@ -1827,4 +1829,6 @@ void Text::orderedList()
       _cursor->insertList(listFormat);
       _cursor->setCharFormat(format);
       }
+
+}
 

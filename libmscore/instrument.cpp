@@ -20,6 +20,8 @@
 #include "synthesizer/msynthesizer.h"
 #include "mscore.h"
 
+namespace Ms {
+
 Instrument InstrumentList::defaultInstrument;
 extern MasterSynthesizer* synti;
 
@@ -1203,4 +1205,6 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setTablature(t->tablature ? new Tablature(*t->tablature) : 0);
       return instr;
       }
+
+}
 

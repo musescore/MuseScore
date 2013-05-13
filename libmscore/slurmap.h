@@ -13,6 +13,8 @@
 #ifndef __SLURMAP_H__
 #define __SLURMAP_H__
 
+namespace Ms {
+
 class Slur;
 
 //---------------------------------------------------------
@@ -39,5 +41,7 @@ class SlurMap {
       void check();
       };
 
+
+}     // namespace Ms
 #endif
 

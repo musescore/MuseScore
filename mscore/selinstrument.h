@@ -23,6 +23,8 @@
 
 #include "ui_selectinstr.h"
 
+namespace Ms {
+
 class Instrument;
 class InstrumentTemplate;
 
@@ -43,5 +45,7 @@ class SelectInstrument : public QDialog, private Ui::SelectInstrument {
       const InstrumentTemplate* instrTemplate() const;
       };
 
+
+} // namespace Ms
 #endif
 

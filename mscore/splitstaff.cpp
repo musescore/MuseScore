@@ -20,6 +20,8 @@
 
 #include "splitstaff.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SplitStaff
 //---------------------------------------------------------
@@ -31,3 +33,5 @@ SplitStaff::SplitStaff(QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       splitPoint->setValue(60);
       }
+}
+

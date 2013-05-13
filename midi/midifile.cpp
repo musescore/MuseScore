@@ -17,6 +17,8 @@
 #include "libmscore/drumset.h"
 #include "libmscore/utils.h"
 
+namespace Ms {
+
 static const uchar gmOnMsg[] = {
       0x7e,       // Non-Real Time header
       0x7f,       // ID of target device (7f = all devices)
@@ -859,4 +861,5 @@ void MidiFile::separateChannel()
             i += nn - 1;
             }
       }
+}
 

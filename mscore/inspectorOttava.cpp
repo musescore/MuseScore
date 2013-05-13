@@ -16,6 +16,8 @@
 #include "libmscore/ottava.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorOttava
 //---------------------------------------------------------
@@ -38,4 +40,5 @@ InspectorOttava::InspectorOttava(QWidget* parent)
 
       mapSignals();
       }
+}
 

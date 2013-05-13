@@ -23,6 +23,8 @@
 
 #include "ui_textpalette.h"
 
+namespace Ms {
+
 class Text;
 
 //---------------------------------------------------------
@@ -48,6 +50,7 @@ class TextPalette : public QWidget, public Ui::TextPaletteBase {
       void setText(Text* te);
       Text* text() { return _textElement; }
       };
+}
 
 #endif
 
