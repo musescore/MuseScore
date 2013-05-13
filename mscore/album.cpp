@@ -127,14 +127,12 @@ void Album::createScore()
       {
       if (_scores.isEmpty())
             return;
-      QString selectedFilter;
       QString filter = QWidget::tr("Compressed MuseScore File (*.mscz);;");
       QString fname  = QString("%1.mscz").arg(_name);
       QString fn     = mscore->getSaveScoreName(
          QWidget::tr("MuseScore: Save Album into Score"),
          fname,
-         filter,
-         &selectedFilter
+         filter
          );
       if (fn.isEmpty())
             return;
@@ -150,7 +148,7 @@ void Album::createScore()
       if (!firstScore)
             return;
       Score* score = firstScore->clone();
-      foreach(AlbumItem* item, _scores) {
+      foreach (AlbumItem* item, _scores) {
             if (item->score == 0 || item->score == firstScore)
                   continue;
             if (!score->appendScore(item->score)) {
@@ -281,12 +279,10 @@ void Album::write()
       {
       if (_path.isEmpty()) {
             QString home = preferences.myScoresPath;
-            QString selectedFilter;
             QString fn = mscore->getSaveScoreName(
                QWidget::tr("MuseScore: Save Album"),
                _name,
-               QWidget::tr("MuseScore Files (*.album);;"),
-               &selectedFilter
+               QWidget::tr("MuseScore Files (*.album);;")
                );
             if (fn.isEmpty()) {
                   _dirty = false;
