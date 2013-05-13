@@ -27,6 +27,8 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   BendProperties
 //---------------------------------------------------------
@@ -232,4 +234,5 @@ void BendCanvas::mousePressEvent(QMouseEvent* ev)
       update();
       }
 
+}
 

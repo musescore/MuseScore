@@ -20,6 +20,8 @@
 
 #include "element.h"
 
+namespace Ms {
+
 class Score;
 class System;
 class Measure;
@@ -102,5 +104,7 @@ class MeasureBase : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       };
 
+
+}     // namespace Ms
 #endif
 

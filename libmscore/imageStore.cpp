@@ -15,6 +15,8 @@
 #include "score.h"
 #include "image.h"
 
+namespace Ms {
+
 ImageStore imageStore;  // the global image store
 
 //---------------------------------------------------------
@@ -186,4 +188,6 @@ ImageStoreItem* ImageStore::add(const QString& path, const QByteArray& ba)
       append(item);
       return item;
       }
+
+}
 

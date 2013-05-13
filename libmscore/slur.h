@@ -16,13 +16,16 @@
 #include "mscore.h"
 #include "spanner.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Note;
 class Chord;
 class System;
 class SlurTie;
 class Score;
 class MuseScoreView;
-class QPainter;
 class ChordRest;
 struct SlurPos;
 
@@ -105,7 +108,7 @@ class SlurSegment : public SpannerSegment {
 class SlurTie : public Spanner {
       Q_OBJECT
       Q_PROPERTY(int lineType            READ lineType WRITE undoSetLineType)
-      Q_PROPERTY(MScore::Direction slurDirection READ slurDirection WRITE undoSetSlurDirection)
+      Q_PROPERTY(Ms::MScore::Direction slurDirection READ slurDirection WRITE undoSetSlurDirection)
 
       int _lineType;          // 0 = solid, 1 = dotted, 2 = dashed
 
@@ -208,5 +211,7 @@ class Tie : public SlurTie {
       virtual void computeBezier(SlurSegment*, QPointF so = QPointF());
       };
 
+
+}     // namespace Ms
 #endif
 

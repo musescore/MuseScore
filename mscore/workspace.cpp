@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -28,6 +27,8 @@
 #include "preferences.h"
 #include "palette.h"
 #include "palettebox.h"
+
+namespace Ms {
 
 bool Workspace::workspacesRead = false;
 QList<Workspace*> Workspace::_workspaces;
@@ -480,4 +481,5 @@ void Workspace::writeBuiltinWorkspace()
       ws.setPath("advanced.workspace");
       ws.write();
       }
+}
 

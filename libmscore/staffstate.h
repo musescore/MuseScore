@@ -19,6 +19,8 @@
 
 class QPainter;
 
+namespace Ms {
+
 enum StaffStateType {
       STAFF_STATE_INSTRUMENT, STAFF_STATE_TYPE,
       STAFF_STATE_VISIBLE, STAFF_STATE_INVISIBLE
@@ -59,4 +61,6 @@ class StaffState : public Element {
       Segment* segment()                      { return (Segment*)parent(); }
       };
 
+
+}     // namespace Ms
 #endif

@@ -17,6 +17,8 @@
 #include "mscore.h"
 #include "imageStore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   propertyList
 //---------------------------------------------------------
@@ -363,13 +365,13 @@ void Image::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "autoScale")
-                  setProperty(P_AUTOSCALE, ::getProperty(P_AUTOSCALE, e));
+                  setProperty(P_AUTOSCALE, Ms::getProperty(P_AUTOSCALE, e));
             else if (tag == "size")
-                  setProperty(P_SIZE, ::getProperty(P_SIZE, e));
+                  setProperty(P_SIZE, Ms::getProperty(P_SIZE, e));
             else if (tag == "lockAspectRatio")
-                  setProperty(P_LOCK_ASPECT_RATIO, ::getProperty(P_LOCK_ASPECT_RATIO, e));
+                  setProperty(P_LOCK_ASPECT_RATIO, Ms::getProperty(P_LOCK_ASPECT_RATIO, e));
             else if (tag == "sizeIsSpatium")
-                  setProperty(P_SIZE_IS_SPATIUM, ::getProperty(P_SIZE_IS_SPATIUM, e));
+                  setProperty(P_SIZE_IS_SPATIUM, Ms::getProperty(P_SIZE_IS_SPATIUM, e));
             else if (tag == "path")
                   _storePath = e.readElementText();
             else if (tag == "linkPath")
@@ -543,4 +545,6 @@ void Image::layout()
       adjustReadPos();
       bbox().setRect(0.0, 0.0, _size.width() * f, _size.height() * f);
       }
+
+}
 

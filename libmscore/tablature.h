@@ -15,6 +15,8 @@
 
 #include "xml.h"
 
+namespace Ms {
+
 class Chord;
 
 //---------------------------------------------------------
@@ -47,5 +49,8 @@ public:
       };
 
 extern Tablature emptyStringData;
+extern Tablature guitarTablature;
+
+}     // namespace Ms
 #endif
 

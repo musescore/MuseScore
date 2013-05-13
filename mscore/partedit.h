@@ -23,6 +23,8 @@
 
 #include "ui_partedit.h"
 
+namespace Ms {
+
 class Score;
 struct Channel;
 class Part;
@@ -85,5 +87,7 @@ class InstrumentListEditor : public QScrollArea
       void updateAll(Score*);
       };
 
+
+} // namespace Ms
 #endif
 

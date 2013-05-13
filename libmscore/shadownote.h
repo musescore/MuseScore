@@ -17,6 +17,8 @@
 
 class QPainter;
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ShadowNote
 //---------------------------------------------------------
@@ -43,5 +45,7 @@ class ShadowNote : public Element {
       void setSym(Sym* s)               { sym = s;     }
       };
 
+
+}     // namespace Ms
 #endif
 

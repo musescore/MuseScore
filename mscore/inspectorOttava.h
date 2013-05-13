@@ -19,6 +19,8 @@
 #include "ui_inspector_textline.h"
 #include "ui_inspector_ottava.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorOttava
 //---------------------------------------------------------
@@ -34,5 +36,7 @@ class InspectorOttava : public InspectorBase {
       InspectorOttava(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif
 

@@ -1757,7 +1757,7 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
       */
       bool isInTabBar(widget && qobject_cast<const QTabBar*>( widget->parent()));
 
-      if (qobject_cast<const PaletteBoxButton*>(widget))
+      if (qobject_cast<const Ms::PaletteBoxButton*>(widget))
             isInTabBar = true;
 
       if ( isInTabBar ) {

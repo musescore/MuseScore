@@ -31,7 +31,7 @@ Channel::Channel(Zerberus* ms, int i)
       _panLeftGain  = cosf(M_PI_2 * 64.0/126.0);
       _panRightGain = sinf(M_PI_2 * 64.0/126.0);
       memset(ctrl, 0, 128 * sizeof(char));
-      ctrl[CTRL_EXPRESSION] = 127;
+      ctrl[Ms::CTRL_EXPRESSION] = 127;
       }
 
 //---------------------------------------------------------
@@ -50,7 +50,7 @@ void Channel::pitchBend(int)
 void Channel::controller(int c, int val)
       {
       ctrl[c] = val;
-      if (c == CTRL_SUSTAIN) {
+      if (c == Ms::CTRL_SUSTAIN) {
             if (val < 0x40) {
                   for (Voice* v = _msynth->getActiveVoices(); v; v = v->next()) {
                         if (v->isSustained()) {
@@ -60,23 +60,23 @@ void Channel::controller(int c, int val)
                         }
                   }
             }
-      else if (c == CTRL_PANPOT) {
+      else if (c == Ms::CTRL_PANPOT) {
             val -= 1;
             if (val < 0)
                   val = 0;
             _panLeftGain  = cosf(M_PI_2 * float(val)/126.0);
             _panRightGain = sinf(M_PI_2 * float(val)/126.0);
             }
-      else if (c == CTRL_VOLUME) {
-            _midiVolume = (float(val) * float(ctrl[CTRL_EXPRESSION])) / (127.0 * 127.0);
+      else if (c == Ms::CTRL_VOLUME) {
+            _midiVolume = (float(val) * float(ctrl[Ms::CTRL_EXPRESSION])) / (127.0 * 127.0);
             }
-      else if (c == CTRL_ALL_NOTES_OFF) {
+      else if (c == Ms::CTRL_ALL_NOTES_OFF) {
             for (Voice* v = _msynth->getActiveVoices(); v; v = v->next()) {
                   if (!v->isOff())
                         v->stop();
                   }
             }
-      else if (c == CTRL_PROGRAM) {
+      else if (c == Ms::CTRL_PROGRAM) {
             printf("Zerberus: program %d\n", val);
             ZInstrument* zi = _msynth->instrument(val);
             if (zi == 0)
@@ -97,6 +97,6 @@ void Channel::controller(int c, int val)
 
 int Channel::sustain() const
       {
-      return ctrl[CTRL_SUSTAIN];
+      return ctrl[Ms::CTRL_SUSTAIN];
       }
 

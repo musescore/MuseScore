@@ -23,6 +23,8 @@
 
 #include "ui_fretdprops.h"
 
+namespace Ms {
+
 class FretDiagram;
 
 //---------------------------------------------------------
@@ -42,4 +44,6 @@ class FretDiagramProperties : public QDialog, public Ui::FretDiagramProperties {
       FretDiagramProperties(FretDiagram*, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif

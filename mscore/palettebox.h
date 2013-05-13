@@ -14,6 +14,8 @@
 #ifndef __PALETTE_BOX__
 #define __PALETTE_BOX__
 
+namespace Ms {
+
 class Xml;
 class XmlReader;
 class Palette;
@@ -46,5 +48,7 @@ class PaletteBox : public QDockWidget {
       };
 
 
+
+} // namespace Ms
 #endif
 

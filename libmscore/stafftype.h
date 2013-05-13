@@ -18,6 +18,10 @@
 #include "mscore.h"
 #include "durationtype.h"
 
+class QPainter;
+
+namespace Ms {
+
 // all in spatium units
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_UP   3.0
 #define STAFFTYPE_TAB_DEFAULTSTEMDIST_UP  1.0
@@ -53,7 +57,6 @@
 
 class Chord;
 class ChordRest;
-class QPainter;
 class Staff;
 class Xml;
 
@@ -439,4 +442,6 @@ class TabDurationSymbol : public Element {
                                                 }
       };
 
+
+}     // namespace Ms
 #endif

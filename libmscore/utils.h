@@ -16,6 +16,8 @@
 #include "mscore.h"
 #include "interval.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   cycles
 //---------------------------------------------------------
@@ -74,5 +76,7 @@ extern int relStep(int pitch, int tpc, ClefType clef);
 extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 
+
+}     // namespace Ms
 #endif
 

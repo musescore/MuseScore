@@ -17,6 +17,8 @@
 #include "simpletext.h"
 #include "mscore.h"
 
+namespace Ms {
+
 class MuseScoreView;
 class TextProp;
 
@@ -165,5 +167,7 @@ class Text : public SimpleText {
       bool setProperty(P_ID propertyId, const QVariant& v);
       };
 
+
+}     // namespace Ms
 #endif
 

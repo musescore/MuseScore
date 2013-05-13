@@ -15,6 +15,8 @@
 
 #include "elementmap.h"
 
+namespace Ms {
+
 class Tie;
 
 //---------------------------------------------------------
@@ -29,5 +31,7 @@ class TieMap : public ElementMap {
       void add(Tie* _o, Tie* _n) { ElementMap::add((Element*)_o, (Element*)_n); }
       };
 
+
+}     // namespace Ms
 #endif
 

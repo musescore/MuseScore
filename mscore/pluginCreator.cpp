@@ -17,6 +17,8 @@
 #include "icons.h"
 #include "helpBrowser.h"
 
+namespace Ms {
+
 extern bool useFactorySettings;
 
 //static const char* states[] = {
@@ -487,4 +489,5 @@ void PluginCreator::showManual()
             }
       manualDock->setVisible(!manualDock->isVisible());
       }
+}
 

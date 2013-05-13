@@ -19,6 +19,8 @@
 #include "marker.h"
 #include "jump.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   searchVolta
 //    return volta at tick
@@ -413,4 +415,6 @@ Measure* RepeatList::jumpToStartRepeat(Measure* m)
       rs->tick  = nm->tick();
       return nm;
       }
+
+}
 

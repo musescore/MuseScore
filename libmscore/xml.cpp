@@ -16,6 +16,8 @@
 #include "beam.h"
 #include "tuplet.h"
 
+namespace Ms {
+
 QString docName;
 
 //---------------------------------------------------------
@@ -767,4 +769,6 @@ void Xml::writeHtml(const QString& s)
             *this << sl[i] << "\n";
       }
 
+
+}
 

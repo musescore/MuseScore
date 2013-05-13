@@ -23,6 +23,8 @@
 
 #include "ui_editinstrument.h"
 
+namespace Ms {
+
 class InstrumentTemplate;
 
 //---------------------------------------------------------
@@ -47,5 +49,7 @@ class EditInstrument : public QDialog, private Ui::EditInstrumentBase
       void setInstrument(InstrumentTemplate* instr);
       };
 
+
+} // namespace Ms
 #endif
 

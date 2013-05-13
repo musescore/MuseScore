@@ -33,6 +33,8 @@
 #include "mididriver.h"
 #include "pm.h"
 
+namespace Ms {
+
 static PaStream* stream;
 
 //---------------------------------------------------------
@@ -342,4 +344,5 @@ int Portaudio::currentDevice() const
       qDebug("Portaudio: no current ApiDevice found for device %d", idx);
       return -1;
       }
+}
 

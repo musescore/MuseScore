@@ -70,7 +70,7 @@ class SyntiParameterData : public QSharedData {
       SyntiParameterData(int id, const QString& name, const QString& val);
       SyntiParameterData(const SyntiParameterData& pd);
 
-      virtual void write(Xml&) const;
+      virtual void write(Ms::Xml&) const;
       virtual bool operator==(const SyntiParameterData&) const;
       virtual void print() const;
 

@@ -77,6 +77,8 @@
 #include "layout.h"
 #include "icon.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   MStaff
 //---------------------------------------------------------
@@ -3922,4 +3924,6 @@ bool Measure::removeSpannerFor(Spanner* e)
             }
       return false;
       }
+
+}
 

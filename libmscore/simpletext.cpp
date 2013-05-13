@@ -18,6 +18,8 @@
 #include "box.h"
 #include "textframe.h"
 
+namespace Ms {
+
 TCursor SimpleText::_cursor;
 
 //---------------------------------------------------------
@@ -803,3 +805,6 @@ void SimpleText::deleteSelectedText()
       _cursor.selectColumn = c1;
       _cursor.column = c1;
       }
+
+}
+

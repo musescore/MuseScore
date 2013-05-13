@@ -15,6 +15,8 @@
 
 #include "element.h"
 
+namespace Ms {
+
 class Segment;
 class Spanner;
 class System;
@@ -139,6 +141,10 @@ class Spanner : public Element {
       void setNext(Spanner* sp) { _next = sp; }
       };
 
-Q_DECLARE_METATYPE(Spanner::Anchor)
+
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Spanner::Anchor)
+
 #endif
 

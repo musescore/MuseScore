@@ -17,6 +17,8 @@
 #include "ui_pluginManager.h"
 #include "preferences.h"
 
+namespace Ms {
+
 class Shortcut;
 
 //---------------------------------------------------------
@@ -45,5 +47,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       PluginManager(QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

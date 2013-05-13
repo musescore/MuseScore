@@ -23,8 +23,10 @@
 #include "aeolus.h"
 #include "model.h"
 
-extern QString dataPath;
-extern QString mscoreGlobalShare;
+namespace Ms {
+      extern QString dataPath;
+      extern QString mscoreGlobalShare;
+      };
 
 #include "synthesizer/event.h"
 #include "libmscore/xml.h"
@@ -45,7 +47,6 @@ Synthesizer* createAeolus()
       {
       return new Aeolus();
       }
-
 
 //---------------------------------------------------------
 //   Aeolus

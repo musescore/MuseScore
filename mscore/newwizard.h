@@ -29,6 +29,8 @@
 #include "libmscore/key.h"
 #include "libmscore/fraction.h"
 
+namespace Ms {
+
 class Score;
 class Palette;
 
@@ -230,5 +232,7 @@ class NewWizard : public QWizard {
       bool createTempo() const            { return p5->createTempo(); }
       };
 
+
+} // namespace Ms
 #endif
 

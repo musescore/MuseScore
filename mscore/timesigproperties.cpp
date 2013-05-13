@@ -29,6 +29,8 @@
 #include "exampleview.h"
 #include "musescore.h"
 
+namespace Ms {
+
 extern void populateIconPalette(Palette* p, const IconAction* a);
 
 //---------------------------------------------------------
@@ -95,4 +97,5 @@ void TimeSigProperties::accept()
       timesig->setGroups(g);
       QDialog::accept();
       }
+}
 

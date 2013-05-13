@@ -15,6 +15,8 @@
 #include "libmscore/marker.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   inspectorMarker
 //---------------------------------------------------------
@@ -36,4 +38,5 @@ InspectorMarker::InspectorMarker(QWidget* parent)
 
       mapSignals();
       }
+}
 

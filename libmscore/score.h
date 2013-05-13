@@ -31,6 +31,10 @@
 #include "accidental.h"
 #include "note.h"
 
+class QPainter;
+
+namespace Ms {
+
 class TempoMap;
 struct TEvent;
 class SigEvent;
@@ -84,7 +88,6 @@ class Spanner;
 class MuseScoreView;
 class LinkedElements;
 class Fingering;
-class QPainter;
 class FiguredBass;
 class UndoCommand;
 class Cursor;
@@ -190,7 +193,6 @@ enum LayoutFlag {
       };
 
 typedef QFlags<LayoutFlag> LayoutFlags;
-Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
 
 //---------------------------------------------------------
 //   PlayMode
@@ -927,6 +929,11 @@ class Score : public QObject {
 
 extern Score* gscore;
 extern void fixTicks();
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
+
+}     // namespace Ms
+
 
 #endif
 

@@ -13,6 +13,8 @@
 #include "sig.h"
 #include "xml.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ticks_beat
 //---------------------------------------------------------
@@ -370,4 +372,6 @@ void TimeSigMap::dump() const
                i->first, qPrintable(i->second.timesig().print()), i->second.bar());
       }
 
+
+}
 

@@ -15,8 +15,11 @@
 
 #include "element.h"
 
-class Chord;
 class QPainter;
+
+namespace Ms {
+
+class Chord;
 
 enum class ArpeggioType {
       NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
@@ -72,5 +75,7 @@ class Arpeggio : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       };
 
+
+}     // namespace Ms
 #endif
 

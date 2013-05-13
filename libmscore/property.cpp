@@ -15,6 +15,8 @@
 #include "layoutbreak.h"
 #include "groups.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PropertyData
 //---------------------------------------------------------
@@ -268,4 +270,6 @@ QVariant getProperty(P_ID id, XmlReader& e)
             }
       return QVariant();
       }
+
+}
 

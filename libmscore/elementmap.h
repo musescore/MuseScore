@@ -13,6 +13,8 @@
 #ifndef __ELEMENTMAP_H__
 #define __ELEMENTMAP_H__
 
+namespace Ms {
+
 class Element;
 
 //---------------------------------------------------------
@@ -27,5 +29,7 @@ class ElementMap : QHash<Element*, Element*> {
       void add(Element* o, Element* n)   { insert(o, n); }
       };
 
+
+}     // namespace Ms
 #endif
 

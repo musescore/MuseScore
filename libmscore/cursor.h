@@ -13,6 +13,8 @@
 #ifndef __CURSOR_H__
 #define __CURSOR_H__
 
+namespace Ms {
+
 class Element;
 class Score;
 class Chord;
@@ -100,5 +102,7 @@ class Cursor : public QObject {
       Q_INVOKABLE void setDuration(int z, int n);
       };
 
+
+}     // namespace Ms
 #endif
 

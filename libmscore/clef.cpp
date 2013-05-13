@@ -24,6 +24,8 @@
 #include "segment.h"
 #include "stafftype.h"
 
+namespace Ms {
+
 #define TR(a)  QT_TRANSLATE_NOOP("clefTable", a)
 
 // table must be in sync with enum ClefType
@@ -598,3 +600,6 @@ QVariant Clef::propertyDefault(P_ID id) const
             default:              return Element::propertyDefault(id);
             }
       }
+
+}
+

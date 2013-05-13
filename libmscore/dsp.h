@@ -19,6 +19,8 @@
 #ifndef __DSP_H__
 #define __DSP_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   f_max
 //---------------------------------------------------------
@@ -73,5 +75,7 @@ class Dsp {
 extern void initDsp();
 extern Dsp* dsp;
 
+
+}     // namespace Ms
 #endif
 

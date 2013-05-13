@@ -14,6 +14,8 @@
 #include "segment.h"
 #include "score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   clone
 //---------------------------------------------------------
@@ -221,4 +223,5 @@ Segment* SegmentList::first(Segment::SegmentTypes types) const
       return 0;
       }
 
+}
 

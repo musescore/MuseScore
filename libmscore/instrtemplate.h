@@ -17,6 +17,8 @@
 #include "instrument.h"
 #include "clef.h"
 
+namespace Ms {
+
 class Xml;
 class Part;
 class Staff;
@@ -95,5 +97,7 @@ extern QList<InstrumentGroup*> instrumentGroups;
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
+
+}     // namespace Ms
 #endif
 

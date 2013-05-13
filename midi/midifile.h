@@ -16,6 +16,8 @@
 #include "libmscore/sig.h"
 #include "synthesizer/event.h"
 
+namespace Ms {
+
 const int MIDI_CHANNEL = 16;
 
 //---------------------------------------------------------
@@ -122,6 +124,6 @@ class MidiFile {
       void setDivision(int val)     { _division = val;  }
       void separateChannel();
       };
-
+}
 #endif
 

@@ -23,6 +23,8 @@
 
 #include "ui_mediadialog.h"
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -46,4 +48,6 @@ class MediaDialog : public QDialog, Ui::MediaDialog {
       void setScore(Score*);
       };
 
+
+} // namespace Ms
 #endif

@@ -20,6 +20,8 @@
 
 #include "editpitch.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditPitch
 //    To select a MIDI pitch code using human-readable note names
@@ -71,3 +73,5 @@ void EditPitch::on_tableWidget_cellDoubleClicked(int row, int col)
       {
       done( (9 - row)*12 + col);
       }
+}
+

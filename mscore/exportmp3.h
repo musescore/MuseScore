@@ -27,6 +27,8 @@
 #include "windows.h"
 #endif
 
+namespace Ms {
+
 //----------------------------------------------------------------------------
 // ExportMP3Options
 //----------------------------------------------------------------------------
@@ -251,4 +253,6 @@ class MP3Exporter {
       size_t mInfoTagLen;
       };
 
+
+} // namespace Ms
 #endif //__EXPORTMP3_H__

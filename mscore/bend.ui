@@ -153,7 +153,7 @@
     </widget>
    </item>
    <item row="1" column="1" rowspan="6">
-    <widget class="BendCanvas" name="bendCanvas">
+    <widget class="Ms::BendCanvas" name="bendCanvas">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -172,7 +172,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BendCanvas</class>
+   <class>Ms::BendCanvas</class>
    <extends>QFrame</extends>
    <header>bendcanvas.h</header>
    <container>1</container>

@@ -30,6 +30,8 @@
 #include "musescore.h"
 #include "seq.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Port
 //---------------------------------------------------------
@@ -268,4 +270,5 @@ int PortMidiDriver::getDeviceIn(const QString& name)
             }
       return -1;
       }
+}
 

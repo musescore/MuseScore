@@ -17,6 +17,8 @@
 #include "chord.h"
 #include "note.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TremoloBar
 //---------------------------------------------------------
@@ -138,4 +140,6 @@ void TremoloBar::read(XmlReader& e)
                   e.unknown();
             }
       }
+
+}
 

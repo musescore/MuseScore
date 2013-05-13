@@ -21,6 +21,8 @@
 #ifndef __MIDIPATCH_H__
 #define __MIDIPATCH_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   MidiPatch
 //---------------------------------------------------------
@@ -32,5 +34,6 @@ struct MidiPatch {
       QString name;
       };
 
+}
 #endif
 

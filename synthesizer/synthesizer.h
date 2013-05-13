@@ -13,12 +13,13 @@
 #ifndef __SYNTHESIZER_H__
 #define __SYNTHESIZER_H__
 
+#include "libmscore/synthesizerstate.h"
+
+namespace Ms {
+
 struct MidiPatch;
 class PlayEvent;
 class Synth;
-
-#include "libmscore/synthesizerstate.h"
-
 class SynthesizerGui;
 
 //---------------------------------------------------------
@@ -70,5 +71,6 @@ class Synthesizer {
       virtual SynthesizerGui* gui()  { return _gui; }
       };
 
+}
 #endif
 

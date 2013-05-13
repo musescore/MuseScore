@@ -16,9 +16,12 @@
 #include "key.h"
 #include "element.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Sym;
 class Segment;
-class QPainter;
 
 //---------------------------------------------------------
 //   KeySym
@@ -94,5 +97,7 @@ class KeySig : public Element {
 
 extern const char* keyNames[15];
 
+
+}     // namespace Ms
 #endif
 

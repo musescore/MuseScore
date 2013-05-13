@@ -16,6 +16,8 @@
 
 #include "midi/midifile.h"
 
+namespace Ms {
+
 const int MAX_BARS = 255;
 
 class BBFile;
@@ -155,5 +157,7 @@ class BBFile {
       void convertTrack(Score* score, BBTrack* track, int staffIdx);
       };
 
+
+} // namespace Ms
 #endif
 

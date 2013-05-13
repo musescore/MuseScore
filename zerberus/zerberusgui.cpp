@@ -66,7 +66,7 @@ QString SfzListDialog::path()
 //   gui
 //---------------------------------------------------------
 
-SynthesizerGui* Zerberus::gui()
+Ms::SynthesizerGui* Zerberus::gui()
       {
       if (_gui == 0)
             _gui = new ZerberusGui(this);
@@ -77,7 +77,7 @@ SynthesizerGui* Zerberus::gui()
 //   Zerberusgui
 //---------------------------------------------------------
 
-ZerberusGui::ZerberusGui(Synthesizer* s)
+ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
    : SynthesizerGui(s)
       {
       setupUi(this);
@@ -122,7 +122,7 @@ QFileInfoList Zerberus::sfzFiles()
       {
       QFileInfoList l;
 
-      QString path = preferences.sfzPath;
+      QString path = Ms::preferences.sfzPath;
       QStringList pl = path.split(";");
       foreach (const QString& s, pl) {
             QString ss(s);

@@ -26,6 +26,8 @@
 #include "musescore.h"
 #include "libmscore/measure.h"
 
+namespace Ms {
+
 const int MIN_VOL = -60;
 const int MAX_VOL = 10;
 
@@ -260,3 +262,5 @@ void PlayPanel::updatePosLabel(int utick)
       sprintf(buffer, "%03d.%02d", bar+1, beat+1);
       posLabel->setText(QString(buffer));
       }
+}
+

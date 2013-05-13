@@ -21,6 +21,8 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Image
 //---------------------------------------------------------
@@ -30,6 +32,8 @@ class Image : public QImage {
       };
 
 extern double imageSkew(const QImage& image);
+
+}
 
 #endif
 

@@ -13,6 +13,8 @@
 #include "score.h"
 #include "iname.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InstrumentName
 //---------------------------------------------------------
@@ -57,4 +59,6 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       else
             setTextStyleType(TEXT_STYLE_INSTRUMENT_LONG);
       }
+
+}
 

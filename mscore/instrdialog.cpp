@@ -43,6 +43,8 @@
 #include "libmscore/tablature.h"
 #include "libmscore/undo.h"
 
+namespace Ms {
+
 void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
 
 //---------------------------------------------------------
@@ -1174,3 +1176,5 @@ void InstrumentsDialog::on_clearSearch_clicked()
       search->clear();
       filterInstruments (instrumentList);
       }
+}
+

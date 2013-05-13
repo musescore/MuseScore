@@ -64,6 +64,8 @@
 #include "accidental.h"
 #include "sequencer.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   cmdPaste
 //---------------------------------------------------------
@@ -538,4 +540,6 @@ void Score::pasteChordRest(ChordRest* cr, int tick)
             undoAddCR(cr, measure, tick);
             }
       }
+
+}
 

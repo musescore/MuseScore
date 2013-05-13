@@ -39,6 +39,8 @@
 #include "libmscore/slur.h"
 #include "paletteBoxButton.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   needsStaff
 //    should a staff been drawn if e is used as icon in
@@ -400,7 +402,8 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
                         drag->start(Qt::CopyAction);
                         }
                   else {
-                        /*Qt::DropAction action = */drag->start(Qt::CopyAction | Qt::MoveAction);
+                        /*Qt::DropAction action = */
+                        drag->start(Qt::DropActions(Qt::CopyAction | Qt::MoveAction));
                         }
                   }
             }
@@ -1330,5 +1333,6 @@ void PaletteScrollArea::resizeEvent(QResizeEvent* re)
                         setMaximumHeight(h+6);
                         }
             }
+}
 
 

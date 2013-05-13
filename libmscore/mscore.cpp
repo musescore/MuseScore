@@ -26,6 +26,8 @@
 #include "jump.h"
 #include "marker.h"
 
+namespace Ms {
+
 qreal MScore::PDPI = 1200;
 qreal MScore::DPI  = 1200;
 qreal MScore::DPMM;
@@ -130,7 +132,7 @@ void MScore::init()
       bgColor.setRgb(0x76, 0x76, 0x6e);
 
       _defaultStyle         = new MStyle();
-      ::initStyle(_defaultStyle);
+      Ms::initStyle(_defaultStyle);
       _baseStyle            = new MStyle(*_defaultStyle);
 
       //
@@ -195,4 +197,6 @@ void MScore::setDefaultStyle(MStyle* s)
       delete _defaultStyle;
       _defaultStyle = s;
       }
+
+}
 

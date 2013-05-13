@@ -53,7 +53,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="HarmonyCanvas" name="canvas" native="true">
+      <widget class="Ms::HarmonyCanvas" name="canvas" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -130,7 +130,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>HarmonyCanvas</class>
+   <class>Ms::HarmonyCanvas</class>
    <extends>QWidget</extends>
    <header>harmonycanvas.h</header>
    <container>1</container>

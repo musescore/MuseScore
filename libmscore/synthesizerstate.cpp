@@ -13,6 +13,8 @@
 #include "synthesizerstate.h"
 #include "xml.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -53,4 +55,6 @@ void SynthesizerState::read(XmlReader& e)
             }
       }
 
+
+}
 

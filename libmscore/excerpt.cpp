@@ -36,6 +36,8 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
@@ -152,7 +154,7 @@ Score* createExcerpt(const QList<Part*>& parts)
       score->updateChannel();
 
       score->setLayoutAll(true);
-      score->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
+      score->addLayoutFlags(LayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO));
       score->doLayout();
       return score;
       }
@@ -537,4 +539,6 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                   }
             }
       }
+
+}
 

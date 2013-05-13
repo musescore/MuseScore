@@ -23,6 +23,8 @@
 
 #include "ui_excerptsdialog.h"
 
+namespace Ms {
+
 class Score;
 class Excerpt;
 class Part;
@@ -78,5 +80,7 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       ExcerptsDialog(Score*, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

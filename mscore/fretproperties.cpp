@@ -30,6 +30,8 @@
 #include "libmscore/note.h"
 #include "libmscore/segment.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   FretDiagramProperties
 //---------------------------------------------------------
@@ -310,4 +312,5 @@ void FretCanvas::setFretDiagram(FretDiagram* fd)
       diagram = fd;
       update();
       }
+}
 

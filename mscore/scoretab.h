@@ -21,6 +21,8 @@
 #ifndef __SCORETAB_H__
 #define __SCORETAB_H__
 
+namespace Ms {
+
 class ScoreView;
 class Score;
 
@@ -75,5 +77,7 @@ class ScoreTab : public QWidget {
       void initScoreView(int idx, double mag, int magIdx, double xoffset, double yoffset);
       };
 
+
+} // namespace Ms
 #endif
 

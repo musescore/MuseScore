@@ -15,6 +15,8 @@
 
 #include "elementmap.h"
 
+namespace Ms {
+
 class Spanner;
 class Element;
 
@@ -29,5 +31,7 @@ class SpannerMap : public ElementMap {
       void add(Spanner* _o, Spanner* _n) { ElementMap::add((Element*)_o, (Element*)_n); }
       };
 
+
+}     // namespace Ms
 #endif
 

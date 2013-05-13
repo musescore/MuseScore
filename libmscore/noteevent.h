@@ -13,6 +13,8 @@
 #ifndef __NOTEEVENT_H__
 #define __NOTEEVENT_H__
 
+namespace Ms {
+
 class Xml;
 class XmlReader;
 
@@ -51,4 +53,6 @@ class NoteEventList : public QList<NoteEvent> {
       NoteEventList();
       };
 
+
+}     // namespace Ms
 #endif

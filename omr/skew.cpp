@@ -23,6 +23,8 @@
 #include "omr.h"
 #include "omrpage.h"
 
+namespace Ms {
+
 //=============================================================================
 //  inspired by ImageMagick (http://www.imagemagick.org)
 //=============================================================================
@@ -180,4 +182,5 @@ double OmrPage::skew(const QRect& r)
       delete[] projection;
       return RadiansToDegrees(-atan((double) skew/width/8));
       }
+}
 

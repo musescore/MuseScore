@@ -24,6 +24,8 @@
 #include "ui_textproperties.h"
 #include "libmscore/style.h"
 
+namespace Ms {
+
 class Text;
 class Score;
 
@@ -52,6 +54,7 @@ class TextProp : public QWidget, public Ui::TextProperties {
       void setTextStyleType(int);
       int textStyleType() const;
       };
+}
 
 #endif
 

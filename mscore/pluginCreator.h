@@ -15,6 +15,8 @@
 
 #include "ui_pluginCreator.h"
 
+namespace Ms {
+
 class QmlPlugin;
 class HelpBrowser;
 
@@ -62,4 +64,6 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void msg(const QString&);
       };
 
+
+} // namespace Ms
 #endif

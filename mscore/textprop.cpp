@@ -22,6 +22,8 @@
 #include "libmscore/text.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TextProp
 //---------------------------------------------------------
@@ -260,4 +262,5 @@ void TextProp::unstyledToggled(bool val)
       {
       styledGroup->setChecked(!val);
       }
+}
 

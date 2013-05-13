@@ -18,15 +18,18 @@
 #include "jackaudio.h"
 #endif
 
-#ifdef USE_PULSEAUDIO
-extern Driver* getPulseAudioDriver(Seq*);
-#endif
 
 #ifdef USE_ALSA
 #include "alsa.h"
 #endif
 #ifdef USE_PORTAUDIO
 #include "pa.h"
+#endif
+
+namespace Ms {
+
+#ifdef USE_PULSEAUDIO
+extern Driver* getPulseAudioDriver(Seq*);
 #endif
 
 //---------------------------------------------------------
@@ -121,4 +124,5 @@ Driver* driverFactory(Seq* seq, QString driverName)
       return driver;
       }
 
+}
 

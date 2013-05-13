@@ -312,7 +312,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="Palette" name="drumNote" native="true">
+        <widget class="Ms::Palette" name="drumNote" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -348,7 +348,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Palette</class>
+   <class>Ms::Palette</class>
    <extends>QWidget</extends>
    <header>palette.h</header>
    <container>1</container>

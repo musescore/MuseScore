@@ -15,6 +15,8 @@
 
 #include "midi/midifile.h"
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -34,5 +36,7 @@ class ExportMidi {
       bool write(const QString& name, bool midiExpandRepeats);
       };
 
+
+} // namespace Ms
 #endif
 

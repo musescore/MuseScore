@@ -18,6 +18,8 @@
 #include "ui_inspector_image.h"
 #include "libmscore/property.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorImage
 //---------------------------------------------------------
@@ -38,5 +40,7 @@ class InspectorImage : public InspectorBase {
       virtual void setElement(Element*);
       };
 
+
+} // namespace Ms
 #endif
 

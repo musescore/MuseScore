@@ -15,6 +15,8 @@
 
 #include "element.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ Ossia
 ///   not implemented yet
@@ -31,5 +33,7 @@ class Ossia : public Element {
       virtual ElementType type() const { return OSSIA; }
       };
 
+
+}     // namespace Ms
 #endif
 

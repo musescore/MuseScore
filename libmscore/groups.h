@@ -17,6 +17,8 @@
 #include "mscore.h"
 #include "durationtype.h"
 
+namespace Ms {
+
 class ChordRest;
 class Xml;
 class XmlReader;
@@ -68,7 +70,6 @@ class Groups : public std::vector<GroupNode> {
       static BeamMode endBeam(ChordRest* cr);
       };
 
-Q_DECLARE_METATYPE(Groups)
 
 //---------------------------------------------------------
 //   NoteGroup
@@ -78,6 +79,11 @@ struct NoteGroup {
       Fraction timeSig;
       Groups endings;
       };
+
+
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Groups)
 
 #endif
 

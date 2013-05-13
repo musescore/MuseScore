@@ -24,6 +24,8 @@
 #include "libmscore/harmony.h"
 #include "ui_chordedit.h"
 
+namespace Ms {
+
 class DegreeTabDelegate;
 
 //---------------------------------------------------------
@@ -93,5 +95,7 @@ class DegreeTabDelegate : public QItemDelegate
          const QStyleOptionViewItem& option, const QModelIndex& index) const;
       };
 
+
+} // namespace Ms
 #endif
 

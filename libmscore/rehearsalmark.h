@@ -15,6 +15,8 @@
 
 #include "text.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ RehearsalMark
 //---------------------------------------------------------
@@ -29,5 +31,7 @@ class RehearsalMark : public Text  {
       Segment* segment() const { return (Segment*)parent(); }
       };
 
+
+}     // namespace Ms
 #endif
 

@@ -24,6 +24,8 @@
 #include "ui_editdrumset.h"
 #include "libmscore/drumset.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditDrumset
 //---------------------------------------------------------
@@ -53,5 +55,7 @@ class EditDrumset : public QDialog, private Ui::EditDrumsetBase {
       };
 
 
+
+} // namespace Ms
 #endif
 

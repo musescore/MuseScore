@@ -20,6 +20,8 @@
 #include "libmscore/system.h"
 #include "libmscore/measurebase.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   showNavigator
 //---------------------------------------------------------
@@ -325,4 +327,5 @@ void Navigator::paintEvent(QPaintEvent* ev)
             p.translate(-pos);
             }
       }
+}
 

@@ -242,7 +242,7 @@ bool ZInstrument::loadFromFile(const QString& path)
 
 bool ZInstrument::read(const QByteArray& buf, QZipReader* /*uz*/, const QString& /*path*/)
       {
-      XmlReader e(buf);
+      Ms::XmlReader e(buf);
       while (e.readNextStartElement()) {
             if (e.name() == "MuseSynth") {
                   while (e.readNextStartElement()) {

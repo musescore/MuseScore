@@ -14,6 +14,8 @@
 #include "clef.h"
 #include "score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ClefTypeList::operator==
 //---------------------------------------------------------
@@ -74,4 +76,6 @@ void ClefList::read(XmlReader& e, Score* cs)
                   e.unknown();
             }
       }
+
+}
 

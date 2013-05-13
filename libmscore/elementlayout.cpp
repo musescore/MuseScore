@@ -16,6 +16,8 @@
 #include "text.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ElementLayout
 //---------------------------------------------------------
@@ -194,4 +196,6 @@ bool ElementLayout::readProperties(XmlReader& e)
       return true;
       }
 
+
+}
 

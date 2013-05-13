@@ -40,7 +40,7 @@ class SfListDialog : public QDialog {
 //   FluidGui
 //---------------------------------------------------------
 
-class FluidGui : public SynthesizerGui, Ui::FluidGui {
+class FluidGui : public Ms::SynthesizerGui, Ui::FluidGui {
       Q_OBJECT
 
       FluidS::Fluid* fluid() { return static_cast<FluidS::Fluid*>(synthesizer()); }
@@ -57,7 +57,7 @@ class FluidGui : public SynthesizerGui, Ui::FluidGui {
       virtual void synthesizerChanged();
 
    public:
-      FluidGui(Synthesizer*);
+      FluidGui(Ms::Synthesizer*);
       };
 
 #endif

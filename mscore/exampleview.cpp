@@ -18,6 +18,8 @@
 #include "libmscore/icon.h"
 #include "libmscore/chord.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ExampleView
 //---------------------------------------------------------
@@ -329,4 +331,5 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
             }
       }
 
+}
 

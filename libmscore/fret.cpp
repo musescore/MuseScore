@@ -21,6 +21,8 @@
 #include "mscore.h"
 #include "harmony.h"
 
+namespace Ms {
+
 static const int DEFAULT_STRINGS = 6;
 static const int DEFAULT_FRETS = 5;
 
@@ -576,3 +578,6 @@ void FretDiagram::writeMusicXML(Xml& xml) const
             */
             xml.etag();
       }
+
+}
+

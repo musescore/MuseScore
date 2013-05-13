@@ -24,6 +24,8 @@
 #include "icons.h"
 #include "shortcut.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //    initial list of shortcuts
 //---------------------------------------------------------
@@ -2384,3 +2386,5 @@ Shortcut Shortcut::sc[] = {
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)
       };
+}
+

@@ -21,6 +21,8 @@
 #include "ruler.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 static const int MAP_OFFSET = 480;
 
 QPixmap* Ruler::markIcon[3];
@@ -397,4 +399,5 @@ void Ruler::setPos(const Pos& pos)
             _cursor = pos;
             }
       }
+}
 

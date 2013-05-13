@@ -17,6 +17,8 @@
 #include "effects/effect.h"
 #include "libmscore/synthesizerstate.h"
 
+namespace Ms {
+
 struct MidiPatch;
 class NPlayEvent;
 class Synthesizer;
@@ -99,5 +101,6 @@ class MasterSynthesizer : public QObject {
       float gain() const    { return _gain; }
       };
 
+}
 #endif
 

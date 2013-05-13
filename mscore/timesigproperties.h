@@ -23,6 +23,8 @@
 
 #include "ui_timesigproperties.h"
 
+namespace Ms {
+
 class TimeSig;
 
 //---------------------------------------------------------
@@ -40,5 +42,6 @@ class TimeSigProperties : public QDialog, public Ui::TimeSigProperties {
    public:
       TimeSigProperties(TimeSig*, QWidget* parent = 0);
       };
+}
 
 #endif

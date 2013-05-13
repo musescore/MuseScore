@@ -26,6 +26,8 @@
 
 #include "portmidi/pm_common/portmidi.h"
 
+namespace Ms {
+
 class Seq;
 
 //---------------------------------------------------------
@@ -52,6 +54,8 @@ class PortMidiDriver : public MidiDriver {
       int getDeviceIn(const QString& name);
       };
 
+
+} // namespace Ms
 #endif
 
 

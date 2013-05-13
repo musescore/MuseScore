@@ -15,8 +15,11 @@
 
 #include "element.h"
 
-class Chord;
 class QPainter;
+
+namespace Ms {
+
+class Chord;
 
 // subtypes:
 enum ChordLineType {
@@ -56,5 +59,7 @@ class ChordLine : public Element {
       virtual void updateGrips(int*, QRectF*) const;
       };
 
+
+}     // namespace Ms
 #endif
 

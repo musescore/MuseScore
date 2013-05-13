@@ -23,6 +23,8 @@
 #include "sym.h"
 // END OF HACK
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Stem
 //    Notenhals
@@ -340,4 +342,6 @@ QPointF Stem::hookPos() const
 
       return p;
       }
+
+}
 

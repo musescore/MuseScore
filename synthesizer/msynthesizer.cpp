@@ -18,6 +18,8 @@
 #include "libmscore/xml.h"
 #include "midipatch.h"
 
+namespace Ms {
+
 extern QString dataPath;
 
 //---------------------------------------------------------
@@ -404,4 +406,5 @@ void MasterSynthesizer::setMasterTuning(double val)
       for (Synthesizer* s : _synthesizer)
             s->setMasterTuning(_masterTuning);
       }
+}
 
