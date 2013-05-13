@@ -17,6 +17,8 @@
 #include "libmscore/dynamic.h"
 #include "mtest/testutils.h"
 
+using namespace Ms;
+
 //---------------------------------------------------------
 //   TestDynamic
 //---------------------------------------------------------
