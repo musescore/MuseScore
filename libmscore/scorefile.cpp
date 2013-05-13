@@ -253,20 +253,6 @@ void Score::readStaff(XmlReader& e)
 bool Score::saveFile()
       {
       QString suffix = info.suffix();
-      if ((suffix != "mscx") && (suffix != "mscz")) {
-            QString s = info.filePath();
-            if (!suffix.isEmpty())
-                  s = s.left(s.size() - suffix.size());
-            else
-                  s += ".";
-            if (suffix == "msc")
-                  suffix = "mscx";        // silently change to mscx
-            else
-                  suffix = "mscz";
-            s += suffix;
-            info.setFile(s);
-            }
-
       if (info.exists() && !info.isWritable()) {
             QString s = QT_TRANSLATE_NOOP("file", "The following file is locked: \n%1 \n\nTry saving to a different location.");
             MScore::lastError = s.arg(info.filePath());
@@ -278,7 +264,7 @@ bool Score::saveFile()
 
       if (saved()) {
             try {
-                  if (suffix == "msc" || suffix == "mscx")
+                  if (suffix == "mscx")
                         saveFile(info);
                   else
                         saveCompressedFile(info, false);
@@ -305,7 +291,7 @@ bool Score::saveFile()
             return false;
             }
       try {
-            if (suffix == "msc" || suffix == "mscx")
+            if (suffix == "mscx")
                   saveFile(&temp, false);
             else
                   saveCompressedFile(&temp, info, false);
@@ -379,9 +365,6 @@ bool Score::saveFile()
 
 void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
       {
-      if (info.suffix().isEmpty())
-            info.setFile(info.filePath() + ".mscz");
-
       QFile fp(info.filePath());
       if (!fp.open(QIODevice::WriteOnly)) {
             QString s = QString("Open File\n") + info.filePath() + QString("\nfailed: ")
