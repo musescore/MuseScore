@@ -90,12 +90,16 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // Call initStaffTypeCombo(true) ONLY if the item has been repositioned
       // or a memory leak may result
 
-      bool canUseTabs = true;                   // assume all staff type are applicable
-      bool canUsePerc = true;
+      bool canUseTabs = false;                   // assume only normal staves are applicable
+      bool canUsePerc = false;
       PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
+      // PartListItem has different members filled out if used in New Score Wizard or in Instruments Wizard
       if (part) {
-            canUseTabs = part->it->tablature && part->it->tablature->strings() > 0;
-            canUsePerc = part->it->useDrumset;
+            Tablature* tab = part->it ? part->it->tablature :
+                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->tablature() : 0);
+            canUseTabs = tab && tab->strings() > 0;
+            canUsePerc = part->it ? part->it->useDrumset :
+                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->useDrumset() : false);
       }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
