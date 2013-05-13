@@ -138,6 +138,7 @@ StyleType styleTypes[] = {
       StyleType("genCourtesyKeysig",       ST_BOOL),
       StyleType("genCourtesyClef",         ST_BOOL),
       StyleType("useGermanNoteNames",      ST_BOOL),
+      StyleType("chordsXmlFile",           ST_BOOL),
       StyleType("chordDescriptionFile",    ST_STRING),
       StyleType("concertPitch",            ST_BOOL),            // display transposing instruments in concert pitch
       StyleType("createMultiMeasureRests", ST_BOOL),
@@ -531,6 +532,7 @@ StyleData::StyleData()
             StyleVal(ST_genCourtesyClef, true),
 
             StyleVal(ST_useGermanNoteNames, false),
+            StyleVal(ST_chordsXmlFile, true),
             StyleVal(ST_chordDescriptionFile, QString("stdchords.xml")),
             StyleVal(ST_concertPitch, false),
             StyleVal(ST_createMultiMeasureRests, false),
@@ -1146,7 +1148,8 @@ ChordList* StyleData::chordList()  const
       {
       if (_chordList == 0) {
             _chordList = new ChordList();
-            _chordList->read("chords.xml");
+            if (value(ST_chordsXmlFile).toBool())
+                  _chordList->read("chords.xml");
             _chordList->read(value(ST_chordDescriptionFile).toString());
             }
       return _chordList;

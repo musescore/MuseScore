@@ -555,8 +555,8 @@ ChordList::~ChordList()
 
 void ChordList::read(XmlReader& e)
       {
-      static int privateID = 10000;
       int fontIdx = 0;
+      static int privateID = 10000;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "font") {
@@ -582,6 +582,9 @@ void ChordList::read(XmlReader& e)
                   }
             else if (tag == "chord") {
                   int id = e.intAttribute("id");
+                  // if no id attribute (id == 0), then assign it a private id for just QMap purposes
+                  // user chords that match these ChordDescriptions will be treated as normal recognized chords
+                  // except that the id will not be written to the score file
                   if (id == 0)
                         id = privateID++;
                   ChordDescription* cd = take(id);
