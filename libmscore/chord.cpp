@@ -439,17 +439,10 @@ void Chord::remove(Element* e)
       }
 
 //---------------------------------------------------------
-//   addLedgerLine
-///   Add a ledger line to a chord.
-///   \arg x          note head position
-///   \arg staffIdx   determines the y origin
-///   \arg line       vertical position of line
-///   \arg lr         extend to left and/or right
+//   maxHeadWidth
 //---------------------------------------------------------
-
-void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible)
+qreal Chord::maxHeadWidth()
       {
-      qreal _spatium = spatium();
       // determine max head width in chord
       qreal hw       = 0;
       for (int i = 0; i < _notes.size(); i++) {
@@ -457,6 +450,23 @@ void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible)
             if (t > hw)
                   hw = t;
             }
+      return hw;
+      }
+
+//---------------------------------------------------------
+//   addLedgerLine
+///   Add a ledger line to a chord.
+///   \arg x          note head position
+///   \arg staffIdx   determines the y origin
+///   \arg line       vertical position of line
+///   \arg lr         extend to left and/or right
+///   \arg hw         max head width in chord
+//---------------------------------------------------------
+
+void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible, qreal hw)
+      {
+      qreal _spatium = spatium();
+
       qreal hw2      = hw * .5;
 
       LedgerLine* h = new LedgerLine(score());
@@ -522,18 +532,21 @@ void Chord::addLedgerLines(qreal x, int move)
                   break;
                   }
             }
+
+      qreal hw = maxHeadWidth();
+
       for (int ni = n - 1; ni >= 0; --ni) {
             const Note* note = _notes[ni];
             int l = note->line();
             if (l >= 0)
                   break;
             for (int i = (uppos+1) & ~1; i < l; i += 2)
-                  addLedgerLine(x, idx, i, ulr, visible);
+                  addLedgerLine(x, idx, i, ulr, visible, hw);
             ulr |= (up() ^ note->mirror()) ? 0x1 : 0x2;
             uppos = l;
             }
       for (int i = (uppos+1) & ~1; i <= -2; i += 2)
-            addLedgerLine(x, idx, i, ulr, visible);
+            addLedgerLine(x, idx, i, ulr, visible, hw);
 
       int downpos = -1000;
       int dlr = 0;
@@ -544,12 +557,12 @@ void Chord::addLedgerLines(qreal x, int move)
             if (l <= 8)
                   break;
             for (int i = downpos & ~1; i > l; i -= 2)
-                  addLedgerLine(x, idx, i, dlr, visible);
+                  addLedgerLine(x, idx, i, dlr, visible, hw);
             dlr |= (up() ^ note->mirror()) ? 0x1 : 0x2;
             downpos = l;
             }
       for (int i = downpos & ~1; i >= 10; i -= 2)
-            addLedgerLine(x, idx, i, dlr, visible);
+            addLedgerLine(x, idx, i, dlr, visible, hw);
       }
 
 //-----------------------------------------------------------------------------

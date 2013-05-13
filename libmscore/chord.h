@@ -75,7 +75,7 @@ class Chord : public ChordRest {
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
       virtual qreal centerX() const;
-      void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible);
+      void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible, qreal hw);
       void addLedgerLines(qreal x, int move);
       void processSiblings(std::function<void(Element*)> func);
 
@@ -117,6 +117,8 @@ class Chord : public ChordRest {
       virtual int downLine() const;
       virtual int upString() const;
       virtual int downString() const;
+
+      qreal maxHeadWidth();
 
       Note* findNote(int pitch) const;
 
