@@ -450,7 +450,13 @@ void Chord::remove(Element* e)
 void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible)
       {
       qreal _spatium = spatium();
-      qreal hw       = upNote()->headWidth();
+      // determine max head width in chord
+      qreal hw       = 0;
+      for (int i = 0; i < _notes.size(); i++) {
+            qreal t = _notes.at(i)->headWidth();
+            if (t > hw)
+                  hw = t;
+            }
       qreal hw2      = hw * .5;
 
       LedgerLine* h = new LedgerLine(score());
