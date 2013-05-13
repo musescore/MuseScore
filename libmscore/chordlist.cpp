@@ -351,81 +351,76 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
 
 bool ParsedChord::parse(QString s)
       {
-      QString sp, elem, elemLower, modifiers;
+      QString tok1, tok1L, tok2, tok2L, specialChars, modifiers;
       int len = s.size();
       int i, j;
 
-//      qDebug("parse: s = %s", qPrintable(s));
       _parseable = true;
+      i = 0;
+      specialChars = "(),";
 
+      // eat leading parens and commas
+      while (i < len && specialChars.contains(s[i]))
+           _tokenList += QString(s[i++]);
       // get quality
-      for (i = 0; i < len && !s[i].isDigit(); ++i) {
-            if (s[i] == '(')
+      for (tok1 = ""; i < len; ++i) {
+            // up to first digit, paren, or comma
+            if (s[i].isDigit() || specialChars.contains(s[i]))
                   break;
-            elem[i] = s[i];
+            tok1[i] = s[i];
             }
-      if (elem != "")
-            _tokenList += elem;
-      elemLower = elem.toLower();
-      if (elem == "M" || elemLower == "ma" || elemLower == "maj")
+      // TODO: special cases for mMaj, augadd, etc.
+      if (tok1 != "")
+            _tokenList += tok1;
+      tok1L = tok1.toLower();
+      if (tok1 == "M" || tok1L == "ma" || tok1L == "maj")
             quality = "major";
-      else if (elem == "m" || elemLower == "mi" || elemLower == "min" || elemLower == "-")
+      else if (tok1L == "m" || tok1L == "mi" || tok1L == "min" || tok1L == "-")
             quality = "minor";
-      else if (elemLower == "aug" || elemLower == "+")
+      else if (tok1L == "aug" || tok1L == "+")
             quality = "augmented";
-      else if (elemLower == "dim" || elemLower == "o")
+      else if (tok1L == "dim" || tok1L == "o")
             quality = "diminished";
       else
-            quality = elemLower;
-//      qDebug("parse: quality = <%s>, i = %d", qPrintable(quality), i);
+            quality = tok1L;
 
-      // get extension
-      for (j = 0; i < len && s[i].isDigit(); ++i, ++j)
-            extension[j] = s[i];
-      if (extension != "")
-            _tokenList += extension;
-//      qDebug("parse: extension = <%s>, i = %d", qPrintable(extension), i);
+      // eat leading parens and commas
+      while (i < len && specialChars.contains(s[i]))
+            _tokenList += QString(s[i++]);
+      // get extension - up to first non-digit
+      for (j = 0, tok1 = ""; i < len; ++i, ++j) {
+            if (!s[i].isDigit())
+                  break;
+            tok1[j] = s[i];
+            }
+      if (tok1 != "")
+            _tokenList += tok1;
+      extension = tok1;
+
 
       // get modifiers
       while (i < len) {
-            QString tok1, tok2;
-            // get first token - up to first digit
-            // ignore leading open parens
-            // skip past comma, close paren, or non-leading open paren and break
+            // eat leading parens and commas
+            while (i < len && specialChars.contains(s[i]))
+                  _tokenList += QString(s[i++]);
+            // get first token - up to first digit, paren, or comma
             for (j = 0, tok1 = ""; i < len; ++i) {
-                  if (s[i] == '(') {
-                        if (j == 0)
-                              continue;
-                        else {
-                              ++i;
-                              break;
-                              }
-                        }
-                  else if (s[i] == ',' || s[i] == ')') {
-                        ++i;
+                  if (s[i].isDigit() || specialChars.contains(s[i]))
                         break;
-                        }
-                  else if (s[i].isDigit())
-                        break;
-                  else
-                        tok1[j++] = s[i];
+                  tok1[j++] = s[i];
                   }
-            QString tok1L = tok1.toLower();
-//            qDebug("parse: tok1L = <%s>, i = %d", qPrintable(tok1L), i);
+            tok1L = tok1.toLower();
+            // if we reached the end of the string and never got a token,
+            // then nothing to do, and no sense in looking for a second token
+            if (i == len && tok1 == "")
+                  break;
             // get second token - up to first non-digit
-            // again skip past comma or close paren
             for (j = 0, tok2 = ""; i < len; ++i) {
-                  if (s[i] == ',' || s[i] == ')') {
-                        ++i;
+                  if (!s[i].isDigit())
                         break;
-                        }
-                  else if (!s[i].isDigit())
-                        break;
-                  else
-                        tok2[j++] = s[i];
+                  tok2[j++] = s[i];
                   }
-            QString tok2L = tok2.toLower();
-//            qDebug("parse: tok2L = <%s>, i = %d", qPrintable(tok2L), i);
+            tok2L = tok2.toLower();
             // special cases
             if (tok1L == "susb" || tok1L == "sus#") {
                   modifierList += "sus4";
@@ -443,8 +438,9 @@ bool ParsedChord::parse(QString s)
                   _tokenList += tok1;
             if (tok2 != "")
                   _tokenList += tok2;
-            elem = tok1L + tok2L;
-            modifierList += elem;
+            QString mod = tok1L + tok2L;
+            if (mod != "")
+                  modifierList += mod;
             }
       if (!modifierList.isEmpty()) {
             modifierList.sort();
@@ -461,7 +457,7 @@ bool ParsedChord::parse(QString s)
       // more special cases TODO: mMaj, madd, augadd, ...?
 
       handle = "<" + quality + "><" + extension + ">" + modifiers;
-//      qDebug("parse: %s", qPrintable(handle);
+//      qDebug("parse: %s -> %s", qPrintable(s), qPrintable(handle);
       _understandable = false;
       return _parseable;
       }
@@ -475,12 +471,7 @@ const QList<RenderAction>& ParsedChord::renderList()
       if (_renderList.isEmpty()) {
             foreach (QString tok, _tokenList) {
                   RenderAction a(RenderAction::RENDER_SET);
-//                  if (tok == "b")
-//                        a.text = QChar(0x266d);
-//                  else if (tok == "#")
-//                        a.text = QChar(0x266f);
-//                  else
-                        a.text = tok;
+                  a.text = tok;
                   _renderList.append(a);
                   }
             }
