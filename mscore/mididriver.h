@@ -25,7 +25,10 @@
 #ifndef __MIDIDRIVER_H__
 #define __MIDIDRIVER_H__
 
+#if not defined(__MINGW32__)
 #include <poll.h>
+#endif
+
 #include "config.h"
 #include "driver.h"
 
