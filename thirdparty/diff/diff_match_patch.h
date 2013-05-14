@@ -68,6 +68,9 @@
 *  Diff(Operation.EQUAL, " world.")}
 * which means: delete "Hello", add "Goodbye" and keep " world."
 */
+#undef DELETE
+#undef INSERT
+#undef EQUAL
 enum Operation {
   DELETE, INSERT, EQUAL
 };

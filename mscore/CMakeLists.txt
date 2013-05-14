@@ -215,7 +215,7 @@ add_executable ( ${ExecutableName}
       driver.h
       )
 
-qt5_use_modules(${ExecutableName} Gui Widgets Network)
+#qt5_use_modules(${ExecutableName} Gui Widgets Network)
 
 target_link_libraries(mscore
       libmscore
@@ -312,26 +312,29 @@ if (MINGW)
       ${CROSS}/lib/libogg.dll
       ${CROSS}/lib/libvorbis.dll
       ${CROSS}/lib/libvorbisfile.dll
-      ${CROSSQT}/bin/QtCore4.dll
-      ${CROSSQT}/bin/QtGui4.dll
-      ${CROSSQT}/bin/QtXml4.dll
-      ${CROSSQT}/bin/QtSvg4.dll
-      ${CROSSQT}/bin/QtNetwork4.dll
-      ${CROSSQT}/bin/QtWebKit4.dll
-      ${CROSSQT}/bin/phonon4.dll
-      ${CROSSQT}/bin/QtXmlPatterns4.dll
-      ${CROSSQT}/bin/QtDeclarative4.dll
-      ${CROSSQT}/bin/QtScript4.dll
-      ${CROSSQT}/bin/QtSql4.dll
+      ${CROSSQT}/bin/Qt5Core.dll
+      ${CROSSQT}/bin/Qt5Widgets.dll
+      ${CROSSQT}/bin/Qt5Gui.dll
+      ${CROSSQT}/bin/Qt5Xml.dll
+      ${CROSSQT}/bin/Qt5Svg.dll
+      ${CROSSQT}/bin/Qt5Network.dll
+      ${CROSSQT}/bin/Qt5WebKit.dll
+      ${CROSSQT}/bin/Qt5WebKitWidgets.dll
+      ${CROSSQT}/bin/Qt5XmlPatterns.dll
+      ${CROSSQT}/bin/Qt5Declarative.dll
+      ${CROSSQT}/bin/Qt5Script.dll
+      ${CROSSQT}/bin/Qt5Sql.dll
+      ${CROSSQT}/bin/Qt5V8.dll
+      ${CROSSQT}/bin/Qt5PrintSupport.dll
       )
    install_files ( /bin/iconengines .dll
-      ${CROSSQT}/plugins/iconengines/qsvgicon4.dll
+      ${CROSSQT}/plugins/iconengines/qsvgicon.dll
       )
    install_files ( /bin/imageformats .dll
-      ${CROSSQT}/plugins/imageformats/qjpeg4.dll
-      ${CROSSQT}/plugins/imageformats/qmng4.dll
-      ${CROSSQT}/plugins/imageformats/qsvg4.dll
-      ${CROSSQT}/plugins/imageformats/qtiff4.dll
+      ${CROSSQT}/plugins/imageformats/qjpeg.dll
+      ${CROSSQT}/plugins/imageformats/qmng.dll
+      ${CROSSQT}/plugins/imageformats/qsvg.dll
+      ${CROSSQT}/plugins/imageformats/qtiff.dll
       )
 
 else (MINGW)
