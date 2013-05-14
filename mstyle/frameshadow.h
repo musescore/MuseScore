@@ -35,7 +35,7 @@
 
 //! shadow area
 enum ShadowArea {
-      Unknown,
+      UnknownArea,
       Left,
       Top,
       Right,

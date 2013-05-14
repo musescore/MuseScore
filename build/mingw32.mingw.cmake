@@ -4,8 +4,8 @@
 
 set (CMAKE_SYSTEM_NAME "Windows")
 
-set (CROSS C:/MinGW)
-set (CROSSQT C:/Qt/4.8.4)
+set (CROSS C:/Qt/Qt5.0.2/Tools/MinGW)
+set (CROSSQT C:/Qt/Qt5.0.2/5.0.2/mingw47_32)
 
 set (CMAKE_C_COMPILER     ${CROSS}/bin/gcc.exe)
 set (CMAKE_CXX_COMPILER   ${CROSS}/bin/g++.exe)
@@ -26,6 +26,8 @@ set (QT_LIBRARY_DIR           ${CROSSQT}/lib)
 
 set (QT_MOC_EXECUTABLE        "${CROSSQT}/bin/moc.exe")
 set (QT_UIC_EXECUTABLE        "${CROSSQT}/bin/uic.exe")
+set (QT_LRELEASE_EXECUTABLE   "${CROSSQT}/bin/lrelease.exe")
+set (QT_LUPDATE_EXECUTABLE    "${CROSSQT}/bin/lupdate.exe")
 set (QT_RCC_EXECUTABLE        "${CROSSQT}/bin/rcc")
 set (QT_QTCORE_LIBRARY        "mops")
 
@@ -39,14 +41,18 @@ set (QT_INCLUDES ${QT_INCLUDE_DIR} ${QT_QT_INCLUDE_DIR}
      ${QT_QTXMLPATTERNS_INCLUDE_DIR}
      )
 set (QT_mingw_LIBRARIES
-    QtSvg4
-    QtGui4
-    QtCore4
-    QtXml4
-    QtNetwork4
-    QtWebKit4
-    QtXmlPatterns4
-    QtDeclarative4
+    Qt5Svg
+    Qt5Gui
+    Qt5Core
+    Qt5Widgets
+    Qt5Xml
+    Qt5Network
+    Qt5WebKitWidgets
+    Qt5WebKit
+    Qt5V8
+    Qt5XmlPatterns
+    Qt5Declarative
+    Qt5PrintSupport
     )
 
 #    Qt3Support4
