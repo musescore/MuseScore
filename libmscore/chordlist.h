@@ -99,12 +99,27 @@ struct RenderAction {
       };
 
 //---------------------------------------------------------
+//   ChordToken
+//---------------------------------------------------------
+
+enum ChordTokenClass {
+      ALL, QUALITY, EXTENSION, MODIFIER, ALTERATION, ADJUST, MODE, SUSPENSION, ADDITION, SUBTRACTION
+      };
+
+class ChordToken {
+   public:
+      ChordTokenClass tokenClass;
+      QString name;
+      QList<RenderAction> renderList;
+      };
+
+//---------------------------------------------------------
 //   ParsedChord
 //---------------------------------------------------------
 
 class ParsedChord {
    public:
-      const QList<RenderAction>& renderList();
+      const QList<RenderAction>& renderList(QHash<QString, ChordToken>&);
       bool parse(QString);
       bool renderable() { return _parseable; }
       bool transposable() { return _parseable; }
@@ -141,7 +156,7 @@ struct ChordDescription {
       QList<RenderAction> renderList;
 
    public:
-      void read(XmlReader&);
+      void read(XmlReader&, QHash<QString, ChordToken>&);
       void write(Xml&);
       };
 
@@ -178,6 +193,7 @@ class ChordList : public QMap<int, ChordDescription*> {
       QList<ChordFont> fonts;
       QList<RenderAction> renderListRoot;
       QList<RenderAction> renderListBase;
+      QHash<QString, ChordToken> chordTokenList;
 
       ChordList() {}
 
