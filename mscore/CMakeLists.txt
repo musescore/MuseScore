@@ -206,7 +206,7 @@ add_executable ( ${ExecutableName}
       inspectorGlissando.cpp inspectorNote.cpp paletteBoxButton.cpp
       driver.cpp exportmidi.cpp noteGroups.cpp
       pathlistdialog.cpp exampleview.cpp inspectorTextLine.cpp
-      importmidi_panel.cpp importmidi_operations.cpp
+      importmidi_panel.cpp importmidi_operations.cpp miconengine.cpp
 
       ${OMR_FILES}
       ${AUDIO}
