@@ -2,7 +2,7 @@
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<!-- qtsingleapplication-2.6-opensource/examples/console/console.qdoc -->
+<!-- console.qdoc -->
 <head>
   <title>A non-GUI example</title>
   <link href="classic.css" rel="stylesheet" type="text/css" />
@@ -28,47 +28,38 @@
 <p>main.cpp:</p>
 <pre><span class="comment"> /****************************************************************************
  **
- ** This file is part of a Qt Solutions component.
+ ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+ ** Contact: http://www.qt-project.org/legal
  **
- ** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ ** This file is part of the Qt Solutions component.
  **
- ** Contact:  Qt Software Information (qt-info@nokia.com)
+ ** You may use this file under the terms of the BSD license as follows:
  **
- ** Commercial Usage
- ** Licensees holding valid Qt Commercial licenses may use this file in
- ** accordance with the Qt Solutions Commercial License Agreement provided
- ** with the Software or, alternatively, in accordance with the terms
- ** contained in a written agreement between you and Nokia.
+ ** &quot;Redistribution and use in source and binary forms, with or without
+ ** modification, are permitted provided that the following conditions are
+ ** met:
+ **   * Redistributions of source code must retain the above copyright
+ **     notice, this list of conditions and the following disclaimer.
+ **   * Redistributions in binary form must reproduce the above copyright
+ **     notice, this list of conditions and the following disclaimer in
+ **     the documentation and/or other materials provided with the
+ **     distribution.
+ **   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+ **     the names of its contributors may be used to endorse or promote
+ **     products derived from this software without specific prior written
+ **     permission.
  **
- ** GNU Lesser General Public License Usage
- ** Alternatively, this file may be used under the terms of the GNU Lesser
- ** General Public License version 2.1 as published by the Free Software
- ** Foundation and appearing in the file LICENSE.LGPL included in the
- ** packaging of this file.  Please review the following information to
- ** ensure the GNU Lesser General Public License version 2.1 requirements
- ** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
- **
- ** In addition, as a special exception, Nokia gives you certain
- ** additional rights. These rights are described in the Nokia Qt LGPL
- ** Exception version 1.0, included in the file LGPL_EXCEPTION.txt in this
- ** package.
- **
- ** GNU General Public License Usage
- ** Alternatively, this file may be used under the terms of the GNU
- ** General Public License version 3.0 as published by the Free Software
- ** Foundation and appearing in the file LICENSE.GPL included in the
- ** packaging of this file.  Please review the following information to
- ** ensure the GNU General Public License version 3.0 requirements will be
- ** met: http://www.gnu.org/copyleft/gpl.html.
- **
- ** Please note Third Party Software included with Qt Solutions may impose
- ** additional restrictions and it is the user's responsibility to ensure
- ** that they have met the licensing requirements of the GPL, LGPL, or Qt
- ** Solutions Commercial license and the relevant license of the Third
- ** Party Software they are using.
- **
- ** If you are unsure which license is appropriate for your use, please
- ** contact the sales department at qt-sales@nokia.com.
+ ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ ** &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ ** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ ** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ ** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ ** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ ** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ ** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ ** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.&quot;
  **
  ****************************************************************************/</span>
 
@@ -103,9 +94,9 @@
 
      if (app.isRunning()) {
          QString msg(QString(&quot;Hi master, I am %1.&quot;).arg(QCoreApplication::applicationPid()));
-         bool sentok = app.sendMessage(msg);
+         bool sentok = app.sendMessage(msg, 2000);
          QString rep(&quot;Another instance is running, so I will exit.&quot;);
-         rep += sentok ? &quot; Message sent ok.&quot; : &quot; Message sending failed.&quot;;
+         rep += sentok ? &quot; Message sent ok.&quot; : &quot; Message sending failed; the other instance may be frozen.&quot;;
          report(rep);
          return 0;
      } else {
@@ -120,8 +111,8 @@
  #include &quot;main.moc&quot;</pre>
 <p /><address><hr /><div align="center">
 <table width="100%" cellspacing="0" border="0"><tr class="address">
-<td width="30%" align="left">Copyright &copy; 2009 Nokia</td>
-<td width="40%" align="center"><a href="http://doc.trolltech.com/trademarks.html">Trademarks</a></td>
+<td width="30%" align="left">Copyright &copy; 2010 Nokia Corporation and/or its subsidiary(-ies)</td>
+<td width="40%" align="center"><a href="http://qt.nokia.com/doc/trademarks.html">Trademarks</a></td>
 <td width="30%" align="right"><div align="right">Qt Solutions</div></td>
 </tr></table></div></address></body>
 </html>
