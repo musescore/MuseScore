@@ -451,17 +451,22 @@ void Staff::read(XmlReader& e)
                   e.readNext();
                   }
             else if (tag == "barLineSpan") {
-                  _barLineSpan = e.readInt();
+// WARNING: following statement assumes number of staff lines to be correctly set
+                  // must read attributes before reading the main value
                   int defaultSpan = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
                   _barLineFrom = e.attribute("from", QString::number(defaultSpan)).toInt();
-// WARNING: following statement assume staff type is correctly set
-                  // if no bar line or single staff span, set _barLineTo to this staff height
-                  // if span to another staff (yet to be read), set to unknown
-                  // (Score::read() will retrieve the correct height of the target staff)
-                  defaultSpan = _barLineSpan <= 1 ?
-                              (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines() - 1) * 2)
-                              : UNKNOWN_BARLINE_TO;
+                  // the proper default SpanTo depends upon the barLineSpan
+                  // as we do not know it yet, set a generic (UNKNOWN) default
+                  defaultSpan = UNKNOWN_BARLINE_TO;
                   _barLineTo = e.intAttribute("to", defaultSpan);
+                  // ready to read the main value...
+                  _barLineSpan = e.readInt();
+                  //...and to adjust the SpanTo value if the source did not provide an explicit value
+                  // if no bar line or single staff span, set _barLineTo to this staff height
+                  // if span to another staff (yet to be read), leave as unknown
+                  // (Score::read() will retrieve the correct height of the target staff)
+                  if (_barLineTo == UNKNOWN_BARLINE_TO && _barLineSpan <= 1)
+                        _barLineTo = lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines() - 1) * 2;
                   }
             else if (tag == "distOffset")
                   _userDist = e.readDouble() * spatium();
