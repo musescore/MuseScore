@@ -15,6 +15,8 @@
 
 #include "libmscore/mscoreview.h"
 
+namespace Ms {
+
 class Element;
 class Score;
 class Note;
@@ -73,5 +75,7 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual void drawBackground(QPainter*, const QRectF&) const;
       };
 
+
+} // namespace Ms
 #endif
 

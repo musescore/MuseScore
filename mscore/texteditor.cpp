@@ -21,6 +21,8 @@
 #include "texteditor.h"
 #include "icons.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TextEditor
 //---------------------------------------------------------
@@ -353,4 +355,5 @@ void TextEditor::cursorPositionChanged()
             }
       }
 
+}
 

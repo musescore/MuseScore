@@ -11,14 +11,18 @@
 //=============================================================================
 
 #ifndef __HAIRPIN_H__
+#define __HAIRPIN_H__
 
 #include "element.h"
 #include "line.h"
 #include "mscore.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Score;
 class Hairpin;
-class QPainter;
 
 //---------------------------------------------------------
 //   @@ HairpinSegment
@@ -59,7 +63,7 @@ class Hairpin : public SLine {
    private:
       Q_PROPERTY(HairpinType hairpinType READ hairpinType WRITE undoSetHairpinType)
       Q_PROPERTY(int         veloChange  READ veloChange  WRITE undoSetVeloChange)
-      Q_PROPERTY(Element::DynamicRange   dynRange READ dynRange WRITE undoSetDynRange)
+      Q_PROPERTY(Ms::Element::DynamicRange   dynRange READ dynRange WRITE undoSetDynRange)
 
       HairpinType _hairpinType;
       int _veloChange;
@@ -96,7 +100,6 @@ class Hairpin : public SLine {
       virtual void setYoff(qreal);
       };
 
-#define __HAIRPIN_H__
-
+}     // namespace Ms
 #endif
 

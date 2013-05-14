@@ -22,6 +22,8 @@
 
 #include "ui_pathlistdialog.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PathListDialog
 //---------------------------------------------------------
@@ -39,5 +41,7 @@ class PathListDialog : public QDialog, public Ui::PathListDialog {
       void setPath(QString s);
    };
 
+
+} // namespace Ms
 #endif
 

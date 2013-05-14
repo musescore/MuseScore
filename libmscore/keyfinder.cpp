@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+
 //=============================================================================
 //  Keyfinder.cpp uses code from the "Melisma Music Analyzer"
 //  project:
@@ -55,6 +56,8 @@
 #include "sig.h"
 #include "pitchspelling.h"
 #include "synthesizer/event.h"
+
+namespace Ms {
 
 //---------------------------------------------------------
 //   SBeat
@@ -926,4 +929,6 @@ int findKey(MidiTrack* mt, TimeSigMap* sigmap)
       return xkey;
       }
 #endif
+
+}
 

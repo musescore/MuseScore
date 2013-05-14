@@ -20,6 +20,8 @@
 
 #include "edittempo.h"
 
+namespace Ms {
+
 struct TempoVal {
       QString name;
       double bpm;
@@ -152,4 +154,5 @@ void EditTempo::bpmChanged(double v)
       tempoL[idx]->bpm = v;
       tempoListChanged = true;
       }
+}
 

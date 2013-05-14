@@ -23,6 +23,8 @@
 
 #include "ui_keyedit.h"
 
+namespace Ms {
+
 class Palette;
 
 //---------------------------------------------------------
@@ -48,5 +50,7 @@ class KeyEditor : public QWidget, Ui::KeyEdit {
       void save();
       };
 
+
+} // namespace Ms
 #endif
 

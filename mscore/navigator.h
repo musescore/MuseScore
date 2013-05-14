@@ -21,6 +21,8 @@
 #ifndef __NAVIGATOR_H__
 #define __NAVIGATOR_H__
 
+namespace Ms {
+
 class Score;
 class ScoreView;
 class Page;
@@ -91,5 +93,7 @@ class Navigator : public QWidget {
       void setViewRect(const QRectF& r);
       };
 
+
+} // namespace Ms
 #endif
 

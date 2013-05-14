@@ -21,6 +21,8 @@
 #ifndef __KEYCANVAS_H__
 #define __KEYCANVAS_H__
 
+namespace Ms {
+
 class Accidental;
 class Clef;
 
@@ -59,5 +61,7 @@ class KeyCanvas : public QFrame {
       const QList<Accidental*> getAccidentals() const { return accidentals; }
       };
 
+
+} // namespace Ms
 #endif
 

@@ -22,6 +22,8 @@
 #include "libmscore/segment.h"
 #include "libmscore/noteevent.h"
 
+namespace Ms {
+
 static const int MAP_OFFSET = 480;
 
 //---------------------------------------------------------
@@ -513,4 +515,5 @@ void PianoView::updateNotes()
             moveLocator(i);
       scene()->blockSignals(false);
       }
+}
 

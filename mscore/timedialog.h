@@ -16,6 +16,8 @@
 #include "ui_timedialog.h"
 #include "libmscore/fraction.h"
 
+namespace Ms {
+
 class Palette;
 class PaletteScrollArea;
 class TimeSig;
@@ -47,5 +49,6 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase {
       bool dirty() const  { return _dirty; }
       void save();
       };
+}
 
 #endif

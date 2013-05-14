@@ -15,6 +15,8 @@
 
 #include "textline.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ PedalSegment
 //---------------------------------------------------------
@@ -46,5 +48,7 @@ class Pedal : public TextLine {
       LineSegment* createLineSegment();
       virtual void setYoff(qreal);
       };
+
+}     // namespace Ms
 #endif
 

@@ -21,6 +21,8 @@
 #ifndef __TEXTPROPERTIES_H__
 #define __TEXTPROPERTIES_H__
 
+namespace Ms {
+
 class TextProp;
 class Text;
 
@@ -41,5 +43,6 @@ class TextProperties : public QDialog {
       TextProperties(Text*, QWidget* parent = 0);
       bool applyToAll() const { return cb->isChecked(); }
       };
+}
 
 #endif

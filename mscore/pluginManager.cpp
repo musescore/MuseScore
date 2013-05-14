@@ -14,6 +14,8 @@
 #include "pluginManager.h"
 #include "shortcutcapturedialog.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PluginManager
 //---------------------------------------------------------
@@ -80,7 +82,7 @@ void PluginManager::accept()
 
 void PluginManager::closeEvent(QCloseEvent* ev)
       {
-      emit closed();
+      emit closed(false);
       QWidget::closeEvent(ev);
       }
 
@@ -142,3 +144,5 @@ void PluginManager::definePluginShortcutClicked()
       pluginShortcut->setText(s->keysToString());
       prefs.dirty = true;
       }
+}
+

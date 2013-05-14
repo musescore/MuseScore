@@ -16,6 +16,8 @@
 #include "musescoreCore.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 extern MuseScoreCore* mscoreCore;
 
 //---------------------------------------------------------
@@ -127,4 +129,5 @@ MsProcess* QmlPlugin::newQProcess()
       {
       return 0; // TODO: new MsProcess(this);
       }
+}
 

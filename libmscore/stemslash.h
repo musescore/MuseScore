@@ -16,6 +16,8 @@
 #include "element.h"
 #include "stem.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ StemSlash
 ///   used for grace notes of type acciaccatura
@@ -39,5 +41,7 @@ class StemSlash : public Element {
       Chord* chord() const { return (Chord*)parent(); }
       };
 
+
+}     // namespace Ms
 #endif
 

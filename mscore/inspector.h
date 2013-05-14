@@ -34,6 +34,8 @@
 #include "ui_inspector_tempotext.h"
 #include "ui_inspector_dynamic.h"
 
+namespace Ms {
+
 class Element;
 class Note;
 class Inspector;
@@ -251,12 +253,6 @@ class Inspector : public QDockWidget {
       Element* _element;      // currently displayed element
       bool _inspectorEdit;    // set to true when an edit originates from
                               // within the inspector itself
-
-      virtual void closeEvent(QCloseEvent*);
-
-   signals:
-      void inspectorVisible(bool);
-
    public slots:
       void reset();
 
@@ -269,5 +265,7 @@ class Inspector : public QDockWidget {
       void setInspectorEdit(bool val)     { _inspectorEdit = val;  }
       };
 
+
+} // namespace Ms
 #endif
 

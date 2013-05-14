@@ -14,6 +14,8 @@
 #include "score.h"
 #include "staff.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   NoteDot
 //---------------------------------------------------------
@@ -71,3 +73,6 @@ void NoteDot::read(XmlReader& e)
                   e.unknown();
             }
       }
+
+}
+

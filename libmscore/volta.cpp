@@ -16,6 +16,8 @@
 #include "score.h"
 #include "text.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -283,4 +285,6 @@ void Volta::setYoff(qreal val)
       {
       rUserYoffset() += (val - score()->styleS(ST_voltaY).val()) * spatium();
       }
+
+}
 

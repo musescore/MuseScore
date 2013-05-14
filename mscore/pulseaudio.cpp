@@ -15,6 +15,8 @@
 #include <pulse/pulseaudio.h>
 #include "driver.h"
 
+namespace Ms {
+
 #define FRAMES 2048
 
 //---------------------------------------------------------
@@ -224,4 +226,5 @@ Driver* getPulseAudioDriver(Seq* seq)
       {
       return new PulseAudio(seq);
       }
+}
 

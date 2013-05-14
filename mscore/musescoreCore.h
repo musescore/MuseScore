@@ -13,6 +13,8 @@
 #ifndef __MUSESCORECORE_H__
 #define __MUSESCORECORE_H__
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -40,5 +42,7 @@ class MuseScoreCore
       QList<Score*>& scores() { return scoreList; }
       };
 
+
+} // namespace Ms
 #endif
 

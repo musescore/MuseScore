@@ -25,6 +25,8 @@
 #include "libmscore/undo.h"
 #include "effects/effectgui.h"
 
+namespace Ms {
+
 extern MasterSynthesizer* synti;
 extern bool useFactorySettings;
 
@@ -110,8 +112,7 @@ void SynthControl::setGain(float val)
 
 void SynthControl::closeEvent(QCloseEvent* ev)
       {
-      QAction* a = getAction("toggle-mixer");
-      a->setChecked(false);
+      emit closed(false);
       QWidget::closeEvent(ev);
       }
 
@@ -121,11 +122,13 @@ void SynthControl::closeEvent(QCloseEvent* ev)
 
 void MuseScore::showSynthControl(bool val)
       {
+      QAction* a = getAction("synth-control");
       if (synthControl == 0) {
             synthControl = new SynthControl(this);
             synthControl->setScore(cs);
             connect(synti, SIGNAL(gainChanged(float)), synthControl, SLOT(setGain(float)));
             connect(synthControl, SIGNAL(gainChanged(float)), synti, SLOT(setGain(float)));
+            connect(synthControl, SIGNAL(closed(bool)), a,     SLOT(setChecked(bool)));
             if (mixer)
                   connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             }
@@ -332,4 +335,5 @@ void SynthControl::setDirty()
       storeButton->setEnabled(true);
       recallButton->setEnabled(true);
       }
+}
 

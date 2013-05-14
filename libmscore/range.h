@@ -15,6 +15,8 @@
 
 #include "fraction.h"
 
+namespace Ms {
+
 class Element;
 class Measure;
 class Tuplet;
@@ -73,5 +75,7 @@ class ScoreRange {
 //      void check() const;
       };
 
+
+}     // namespace Ms
 #endif
 

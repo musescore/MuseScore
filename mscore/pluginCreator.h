@@ -15,6 +15,8 @@
 
 #include "ui_pluginCreator.h"
 
+namespace Ms {
+
 class QmlPlugin;
 class HelpBrowser;
 
@@ -54,7 +56,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void qmlWarnings(const QList<QDeclarativeError>&);
 
    signals:
-      void closed();
+      void closed(bool);
 
    public:
       PluginCreator(QWidget* parent = 0);
@@ -62,4 +64,6 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void msg(const QString&);
       };
 
+
+} // namespace Ms
 #endif

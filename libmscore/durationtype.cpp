@@ -14,6 +14,8 @@
 #include "mscore.h"
 #include "note.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   dots
 //---------------------------------------------------------
@@ -507,4 +509,6 @@ void TDuration::print() const
             };
       qDebug("   %s,dots=%d)", s, _dots);
       }
+
+}
 

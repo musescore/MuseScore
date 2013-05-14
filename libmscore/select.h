@@ -13,6 +13,8 @@
 #ifndef __SELECT_H__
 #define __SELECT_H__
 
+namespace Ms {
+
 class Score;
 class Page;
 class System;
@@ -117,5 +119,7 @@ class Selection {
       bool measureRange(Measure** m1, Measure** m2) const;
       };
 
+
+}     // namespace Ms
 #endif
 

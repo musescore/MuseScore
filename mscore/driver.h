@@ -21,6 +21,8 @@
 #ifndef __DRIVER_H__
 #define __DRIVER_H__
 
+namespace Ms {
+
 class Seq;
 class Event;
 
@@ -50,5 +52,7 @@ class Driver {
       virtual void midiRead() {}
       };
 
+
+} // namespace Ms
 #endif
 

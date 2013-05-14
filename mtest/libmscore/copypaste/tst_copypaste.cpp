@@ -20,6 +20,8 @@
 
 #define DIR QString("libmscore/copypaste/")
 
+using namespace Ms;
+
 //---------------------------------------------------------
 //   TestCopyPaste
 //---------------------------------------------------------

@@ -25,16 +25,21 @@
 #ifndef __ALSA_H__
 #define __ALSA_H
 
+#include <alsa/asoundlib.h>
+#include <poll.h>
+
+#include "config.h"
 #include "driver.h"
 #include "mididriver.h"
-#include "config.h"
+
+typedef struct pollfd PollFd;
 
 #define ALSA_PCM_NEW_HW_PARAMS_API
 #define ALSA_PCM_NEW_SW_PARAMS_API
 
-class MidiDriver;
+namespace Ms {
 
-#include <alsa/asoundlib.h>
+class MidiDriver;
 
 //---------------------------------------------------------
 //   AlsaDriver
@@ -61,7 +66,7 @@ class AlsaDriver {
       snd_pcm_sw_params_t*   _play_swpar;
       unsigned int           _play_nchan;
       int                    _play_npfd;
-      struct pollfd          _pfd [MAXPFD];
+      PollFd                 _pfd [MAXPFD];
       snd_pcm_uframes_t      _capt_offs;
       snd_pcm_uframes_t      _play_offs;
       int                    _play_step;
@@ -138,5 +143,6 @@ class AlsaAudio : public Driver {
       virtual void unregisterPort(int);
       };
 
+}
 #endif
 

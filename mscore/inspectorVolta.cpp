@@ -16,6 +16,8 @@
 #include "libmscore/volta.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorVolta
 //---------------------------------------------------------
@@ -38,3 +40,5 @@ InspectorVolta::InspectorVolta(QWidget* parent)
 
       mapSignals();
       }
+}
+

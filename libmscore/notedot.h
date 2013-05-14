@@ -15,6 +15,8 @@
 
 #include "element.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ NoteDot
 //---------------------------------------------------------
@@ -37,5 +39,7 @@ class NoteDot : public Element {
       virtual void layout();
       };
 
+
+}     // namespace Ms
 #endif
 

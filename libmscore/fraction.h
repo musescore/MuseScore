@@ -15,6 +15,8 @@
 
 #include "config.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Fraction
 //---------------------------------------------------------
@@ -73,7 +75,8 @@ class Fraction {
       QString print() const { return QString("%1/%2").arg(_numerator).arg(_denominator); }
       };
 
-Q_DECLARE_METATYPE(Fraction)
+}     // namespace Ms
 
+Q_DECLARE_METATYPE(Ms::Fraction)
 #endif
 

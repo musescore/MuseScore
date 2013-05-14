@@ -17,6 +17,8 @@
 #include "element.h"
 #include "bsp.h"
 
+namespace Ms {
+
 class System;
 class Text;
 class Measure;
@@ -169,4 +171,6 @@ class Page : public Element {
 
 extern const PaperSize paperSizes[];
 
+
+}     // namespace Ms
 #endif

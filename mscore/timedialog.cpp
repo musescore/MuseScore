@@ -27,6 +27,8 @@
 #include "libmscore/chord.h"
 #include "libmscore/part.h"
 
+namespace Ms {
+
 extern bool useFactorySettings;
 
 //---------------------------------------------------------
@@ -34,7 +36,7 @@ extern bool useFactorySettings;
 //---------------------------------------------------------
 
 TimeDialog::TimeDialog(QWidget* parent)
-   : QWidget(parent, Qt::Dialog | Qt::Window)
+   : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
       {
       setupUi(this);
       setWindowTitle(tr("MuseScore: Time Signatures"));
@@ -182,4 +184,5 @@ void TimeDialog::paletteChanged(int idx)
       zText->setText(e->numeratorString());
       nText->setText(e->denominatorString());
       }
+}
 

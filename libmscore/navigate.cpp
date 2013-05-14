@@ -26,6 +26,8 @@
 #include "measure.h"
 #include "page.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   nextChordRest
 //    return next Chord or Rest
@@ -326,4 +328,6 @@ ChordRest* Score::prevMeasure(ChordRest* element)
             }
       return 0;
       }
+
+}
 

@@ -18,6 +18,8 @@
 #include "libmscore/part.h"
 #include "musescore.h"
 
+namespace Ms {
+
 extern void populateIconPalette(Palette* p, const IconAction* a);
 
 //---------------------------------------------------------
@@ -139,4 +141,5 @@ void NoteGroups::noteClicked(Note* note)
       view16->update();
       view32->update();
       }
+}
 

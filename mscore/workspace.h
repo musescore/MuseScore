@@ -21,6 +21,8 @@
 #ifndef __WORKSPACE_H__
 #define __WORKSPACE_H__
 
+namespace Ms {
+
 class XmlReader;
 
 //---------------------------------------------------------
@@ -62,6 +64,6 @@ class Workspace : public QObject {
       static bool workspacesRead;
       static void writeBuiltinWorkspace();
       };
-
+}
 #endif
 

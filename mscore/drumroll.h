@@ -21,19 +21,21 @@
 #ifndef __DRUMROLL_H__
 #define __DRUMROLL_H__
 
+namespace Awl {
+      class PitchEdit;
+      class PosLabel;
+      };
+
+#include "libmscore/pos.h"
+
+namespace Ms {
+
 class Score;
 class Staff;
 class DrumView;
 class Note;
 class Ruler;
 class Seq;
-
-#include "libmscore/pos.h"
-
-namespace Awl {
-      class PitchEdit;
-      class PosLabel;
-      };
 
 //---------------------------------------------------------
 //   DrumrollEditor
@@ -75,5 +77,7 @@ class DrumrollEditor : public QMainWindow {
       };
 
 
+
+} // namespace Ms
 #endif
 

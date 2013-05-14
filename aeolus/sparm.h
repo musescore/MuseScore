@@ -21,8 +21,11 @@
 #ifndef __SPARM_H__
 #define __SPARM_H__
 
-class Xml;
-class Synth;
+namespace Ms {
+      class Xml;
+      class Synth;
+      }
+
 class SyntiParameterData;
 
 //---------------------------------------------------------
@@ -52,7 +55,7 @@ class SyntiParameter {
 
       SyntiParameterType type() const;
 
-      void write(Xml&) const;
+      void write(Ms::Xml&) const;
 
       const QString& name() const;
       void setName(const QString& s);

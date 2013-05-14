@@ -22,6 +22,8 @@
 #include "staff.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -315,4 +317,6 @@ void Hairpin::setYoff(qreal val)
       rUserYoffset() += (val - score()->styleS(ST_hairpinY).val()) * spatium();
       }
 
+
+}
 

@@ -17,6 +17,8 @@
 #include "text.h"
 #include "libmscore/figuredbass.h"
 
+namespace Ms {
+
 /*---------------------------------------------------------
 NOTE ON ARCHITECTURE
 
@@ -218,9 +220,6 @@ class FiguredBassItem : public Element {
       virtual QVariant  propertyDefault(P_ID) const;
 };
 
-Q_DECLARE_METATYPE(FiguredBassItem::Modifier);
-Q_DECLARE_METATYPE(FiguredBassItem::Parenthesis);
-
 //---------------------------------------------------------
 //   FiguredBassFont
 //---------------------------------------------------------
@@ -324,6 +323,12 @@ Q_INVOKABLE FiguredBassItem* addItem();
 
       void appendItem(const FiguredBassItem& item) {  items.append(item); }
       };
+
+
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::FiguredBassItem::Modifier);
+Q_DECLARE_METATYPE(Ms::FiguredBassItem::Parenthesis);
 
 #endif
 

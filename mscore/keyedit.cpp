@@ -28,6 +28,8 @@
 #include "libmscore/clef.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 extern bool useFactorySettings;
 extern Palette* newAccidentalsPalette();
 extern Palette* newKeySigPalette();
@@ -263,7 +265,7 @@ void KeyCanvas::snap(Accidental* a)
 //---------------------------------------------------------
 
 KeyEditor::KeyEditor(QWidget* parent)
-   : QWidget(parent, Qt::Dialog | Qt::Window)
+   : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
       {
       setupUi(this);
       setWindowTitle(tr("MuseScore: Key Signatures"));
@@ -380,4 +382,5 @@ void MuseScore::showKeyEditor()
       keyEditor->show();
       keyEditor->raise();
       }
+}
 

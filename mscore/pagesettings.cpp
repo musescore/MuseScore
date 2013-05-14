@@ -27,6 +27,8 @@
 #include "libmscore/mscore.h"
 #include "musescore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PageSettings
 //---------------------------------------------------------
@@ -534,4 +536,5 @@ void PageSettings::updatePreview(int val)
             }
       preview->layoutChanged();
       }
+}
 

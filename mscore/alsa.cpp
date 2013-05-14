@@ -34,6 +34,9 @@
 #include "alsamidi.h"
 #include "libmscore/utils.h"
 
+namespace Ms {
+
+
 //---------------------------------------------------------
 //   AlsaDriver
 //---------------------------------------------------------
@@ -700,7 +703,7 @@ bool AlsaAudio::start()
       {
       pthread_attr_t* attributes = (pthread_attr_t*) malloc(sizeof(pthread_attr_t));
       pthread_attr_init(attributes);
-      if (pthread_create(&thread, attributes, ::alsaLoop, this))
+      if (pthread_create(&thread, attributes, Ms::alsaLoop, this))
             perror("creating thread failed:");
       pthread_attr_destroy(attributes);
       return true;
@@ -795,6 +798,7 @@ void AlsaAudio::midiRead()
       {
       midiDriver->read();
       }
+}
 
 #endif
 

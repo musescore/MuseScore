@@ -19,6 +19,8 @@
 #include "staff.h"
 #include "stafftype.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TimeSig
 //    Constructs an invalid time signature element.
@@ -491,4 +493,6 @@ void TimeSig::layout()
       if (_needLayout)
             layout1();
       }
+
+}
 

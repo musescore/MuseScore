@@ -21,6 +21,8 @@
 #include "page.h"
 #include "mscore.h"
 
+namespace Ms {
+
 MStyle* style;
 
 //  20 points        font design size
@@ -599,6 +601,7 @@ StyleData::StyleData()
             StyleVal(ST_tremoloBoxHeight, Spatium(0.65)),
             StyleVal(ST_tremoloStrokeWidth, Spatium(0.35)),
             StyleVal(ST_tremoloDistance, Spatium(0.8)),
+
             StyleVal(ST_linearStretch, qreal(1.5)),
             StyleVal(ST_crossMeasureValues, false)
             };
@@ -1692,4 +1695,6 @@ void MStyle::setArticulationAnchor(int id, ArticulationAnchor val)
       {
       return d->setArticulationAnchor(id, val);
       }
+
+}
 

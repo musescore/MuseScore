@@ -28,6 +28,8 @@
 #endif
 #include "utils.h"
 
+namespace Ms {
+
 #ifdef OMR
 
 class ScoreView;
@@ -141,6 +143,7 @@ bool Omr::readPdf()
             }
 
       int n = _doc->numPages();
+      printf("readPdf: %d pages\n", n);
       for (int i = 0; i < n; ++i) {
             OmrPage* page = new OmrPage(this);
             QImage image = _doc->page(i);
@@ -204,4 +207,5 @@ double Omr::systemDistance() const
       return _pages[0]->systemDistance();
       }
 #endif
+}
 

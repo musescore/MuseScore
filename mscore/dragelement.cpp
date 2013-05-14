@@ -19,6 +19,8 @@
 #include "libmscore/undo.h"
 #include "libmscore/part.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   testElementDragTransition
 //---------------------------------------------------------
@@ -138,3 +140,5 @@ void ScoreView::endDrag()
       _score->endCmd();
       mscore->endCmd();
       }
+}
+

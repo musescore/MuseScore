@@ -21,6 +21,8 @@
 #include "barline.h"
 #include "chord.h"
 
+namespace Ms {
+
 enum { GRIP_LINE_START, GRIP_LINE_END, GRIP_LINE_MIDDLE };
 
 //---------------------------------------------------------
@@ -841,4 +843,6 @@ QVariant SLine::propertyDefault(P_ID id) const
       }
 
 
+
+}
 

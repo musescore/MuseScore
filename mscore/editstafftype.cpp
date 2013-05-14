@@ -26,6 +26,8 @@
 #include "navigator.h"
 #include "scoreview.h"
 
+namespace Ms {
+
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
 //---------------------------------------------------------
@@ -816,4 +818,5 @@ void EditStaffType::accept()
             saveCurrent(item);
       QDialog::accept();
       }
+}
 

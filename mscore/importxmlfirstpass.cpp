@@ -13,6 +13,12 @@
 #include "importxmlfirstpass.h"
 #include "musicxmlsupport.h"
 
+#include "libmscore/fraction.h"
+#include "libmscore/mscore.h"
+#include "libmscore/timesig.h"
+
+namespace Ms {
+
 /****************************************************************************
 **
 ** begin code copied and adapted from MuseScores xml.cpp
@@ -73,10 +79,6 @@ static void aaadomError(const QDomElement e)
 ** begin code copied and adapted from MuseScores importxml.cpp
 **
 ****************************************************************************/
-
-#include "libmscore/fraction.h"
-#include "libmscore/mscore.h"
-#include "libmscore/timesig.h"
 
 //---------------------------------------------------------
 //   local defines for debug output
@@ -807,3 +809,5 @@ void MxmlReaderFirstPass::parseFile()
       qDebug("Parsing time elapsed: %d ms", t.elapsed());
       qDebug("MxmlReaderFirstPass::parseFile() end");
       }
+}
+

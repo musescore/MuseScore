@@ -31,6 +31,8 @@
 #include "mscore.h"
 #include "segment.h"
 
+namespace Ms {
+
 #define MM(x) ((x)/INCH)
 
 const PaperSize paperSizes[] = {
@@ -919,3 +921,6 @@ qreal Page::rm() const
       const PageFormat* pf = _score->pageFormat();
       return ((!pf->twosided() || isOdd()) ? pf->oddRightMargin() : pf->evenRightMargin()) * MScore::DPI;
       }
+
+}
+

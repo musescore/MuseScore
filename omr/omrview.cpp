@@ -28,6 +28,8 @@
 #include "libmscore/sym.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   OmrView
 //---------------------------------------------------------
@@ -446,5 +448,6 @@ void OmrView::setShowStaves(bool val)
       update();
       }
 
+}
 
 

@@ -13,6 +13,8 @@
 #include "synthesizergui.h"
 #include "synthesizer.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SynthesizerGui
 //---------------------------------------------------------
@@ -22,4 +24,5 @@ SynthesizerGui::SynthesizerGui(Synthesizer* s)
       {
       _synthesizer = s;
       }
+}
 

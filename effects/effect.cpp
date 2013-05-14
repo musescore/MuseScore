@@ -12,6 +12,8 @@
 
 #include "effect.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   parameter
 //---------------------------------------------------------
@@ -75,4 +77,5 @@ double Effect::value(int idx) const
             v = (v - p->min)/(p->max - p->min);
       return v;
       }
+}
 

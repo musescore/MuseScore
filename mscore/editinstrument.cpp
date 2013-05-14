@@ -21,6 +21,8 @@
 #include "editinstrument.h"
 #include "libmscore/instrtemplate.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditInstrument
 //---------------------------------------------------------
@@ -96,4 +98,5 @@ void EditInstrument::valueChanged()
 //      lt->midiProgram = midiProgram->value();
       lt->setStaves(staves->value());
       }
+}
 

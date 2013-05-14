@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg xmlns:cc='http://creativecommons.org/ns#' xmlns:dc='http://purl.org/dc/elements/1.1/' sodipodi:docname='list-ordered.svg' height='24' id='svg7384' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:svg='http://www.w3.org/2000/svg' inkscape:version='0.48.4 r9939' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'>
+  <metadata id='metadata90'>
+    <rdf:RDF>
+      <cc:Work rdf:about=''>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage'/>
+        <dc:title>MuseScore Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview inkscape:bbox-nodes='false' inkscape:bbox-paths='true' bordercolor='#666666' borderopacity='1' inkscape:current-layer='actions' inkscape:cx='-160.14903' inkscape:cy='-125.63665' fit-margin-bottom='6' fit-margin-left='6' fit-margin-right='6' fit-margin-top='6' gridtolerance='10' inkscape:guide-bbox='true' guidetolerance='10' id='namedview88' inkscape:object-nodes='false' inkscape:object-paths='false' objecttolerance='10' pagecolor='#333333' inkscape:pageopacity='1' inkscape:pageshadow='2' showborder='false' showgrid='false' showguides='true' inkscape:snap-bbox='true' inkscape:snap-bbox-midpoints='false' inkscape:snap-global='false' inkscape:snap-grids='true' inkscape:snap-nodes='false' inkscape:snap-others='false' inkscape:snap-to-guides='true' inkscape:window-height='1021' inkscape:window-maximized='1' inkscape:window-width='1920' inkscape:window-x='0' inkscape:window-y='27' inkscape:zoom='1'>
+    <inkscape:grid empspacing='2' enabled='true' id='grid4866' originx='-65.81007px' originy='115.99995px' snapvisiblegridlinesonly='true' spacingx='1px' spacingy='1px' type='xygrid' visible='true'/>
+  </sodipodi:namedview>
+  <title id='title9167'>MuseScore Icon Theme</title>
+  <defs id='defs7386'/>
+  <g inkscape:groupmode='layer' id='actions' inkscape:label='actions' style='display:inline' transform='translate(-509.00038,-195.00001)'>
+    <rect height='1.9999388' id='rect17549' inkscape:label='a' style='fill:#ffffff;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible' inkscape:transform-center-x='-0.062499358' inkscape:transform-center-y='-0.99997956' width='13.999998' x='517.00037' y='208.00006'/>
+    <rect height='1.9998676' id='rect17557' inkscape:label='a' style='fill:#ffffff;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible' width='14.00001' x='517.00037' y='199.00012'/>
+    <path inkscape:connector-curvature='0' d='m 511.00038,208 0,2 0.99982,0 0,-1 1,0 2.3e-4,0.99999 -2,2.00002 0,1.99999 3,-1e-5 1,0 0,-1.99999 -2,0 2,-2.00001 0,-1.00001 c 0,-0.55228 -0.44772,-0.99999 -1,-0.99999 z' id='path17571' sodipodi:nodetypes='ccccccccccccccsc' style='fill:#ffffff;stroke:none;display:inline'/>
+    <path inkscape:connector-curvature='0' d='m 515.00038,199 0,2 0,2 0,1.99999 c -1.33333,0 -0.66667,1e-5 -2,1e-5 l 0,-1.99999 0,-2.00001 -1,2e-5 0,-1.00003 c 0,-0.55228 0.44772,-0.99999 1,-0.99999 l 1,0 z' id='path17598' sodipodi:nodetypes='cccccccccscc' style='fill:#ffffff;stroke:none;display:inline'/>
+    
+    <rect height='1.9998676' id='rect5421' inkscape:label='a' style='fill:#ffffff;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible' width='8' x='517.00037' y='203.00012'/>
+    <rect height='1.9999388' id='rect5423' inkscape:label='a' style='fill:#ffffff;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible' inkscape:transform-center-x='-0.017857019' inkscape:transform-center-y='-0.99997956' width='4.0000086' x='517.00037' y='212.00006'/>
+  </g>
+</svg>

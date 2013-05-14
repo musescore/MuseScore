@@ -23,6 +23,8 @@
 
 #include "libmscore/pitchvalue.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TremoloBarCanvas
 //---------------------------------------------------------
@@ -40,6 +42,7 @@ class TremoloBarCanvas : public QFrame {
       QList<PitchValue>& points()             { return _points; }
       void setPoints(const QList<PitchValue>& p) { _points = p; }
       };
+}
 
 #endif
 

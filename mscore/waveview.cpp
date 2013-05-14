@@ -16,6 +16,10 @@
 #include "libmscore/score.h"
 
 #include <vorbis/vorbisfile.h>
+
+namespace Ms {
+
+
 //---------------------------------------------------------
 //   VorbisData
 //---------------------------------------------------------
@@ -288,4 +292,5 @@ void WaveView::paintEvent(QPaintEvent* event)
             p.drawLine(xp, 0, xp, height());
             }
       }
+}
 

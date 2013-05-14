@@ -21,6 +21,8 @@
 #include "staff.h"
 #include "segment.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -272,3 +274,6 @@ void Ottava::setYoff(qreal val)
       {
       rUserYoffset() += (val - score()->styleS(ST_ottavaY).val()) * spatium();
       }
+
+}
+

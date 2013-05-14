@@ -16,6 +16,8 @@
 #include "element.h"
 #include "elementlayout.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ BSymbol
 ///    base class for Symbol and Image
@@ -59,5 +61,7 @@ class BSymbol : public Element, public ElementLayout {
       void setSystemFlag(bool val)        { _systemFlag = val;  }
       };
 
+
+}     // namespace Ms
 #endif
 

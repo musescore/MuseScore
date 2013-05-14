@@ -30,6 +30,8 @@
 #include "svggenerator.h"
 #include "inspector.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   FotoScoreViewDragTransition
 //---------------------------------------------------------
@@ -234,7 +236,7 @@ class FotoDragDropTransition : public QMouseEventTransition
       FotoDragDropTransition(ScoreView* c)
          : QMouseEventTransition(c, QEvent::MouseButtonPress, Qt::LeftButton), canvas(c)
             {
-            setModifierMask(Qt::ShiftModifier | Qt::ControlModifier);
+            setModifierMask(Qt::KeyboardModifiers(Qt::ShiftModifier | Qt::ControlModifier));
             }
       };
 
@@ -814,3 +816,5 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
       drag->setMimeData(mimeData);
       drag->start(Qt::CopyAction);
       }
+}
+

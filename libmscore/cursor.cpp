@@ -23,6 +23,8 @@
 #include "libmscore/segment.h"
 #include "cursor.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Cursor
 //---------------------------------------------------------
@@ -244,4 +246,6 @@ inline void Cursor::firstChordRestInTrack()
       while (_segment && _segment->element(_track) == 0)
             _segment = _segment->next1(Segment::SegChordRestGrace);
       }
+
+}
 

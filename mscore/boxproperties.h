@@ -23,6 +23,8 @@
 
 #include "ui_boxproperties.h"
 
+namespace Ms {
+
 class Box;
 
 //---------------------------------------------------------
@@ -40,5 +42,7 @@ class BoxProperties : public QDialog, private Ui::BoxPropertiesBase {
       BoxProperties(Box*, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

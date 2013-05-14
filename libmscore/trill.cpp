@@ -21,6 +21,8 @@
 #include "accidental.h"
 #include "segment.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -440,4 +442,6 @@ void Trill::setYoff(qreal val)
       rUserYoffset() += (val - score()->styleS(ST_trillY).val()) * spatium();
       }
 
+
+}
 

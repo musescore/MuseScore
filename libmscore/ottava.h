@@ -15,6 +15,8 @@
 
 #include "textline.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   OttavaE
 //---------------------------------------------------------
@@ -97,6 +99,10 @@ class Ottava : public TextLine {
       virtual void setYoff(qreal);
       };
 
-Q_DECLARE_METATYPE(Ottava::OttavaType)
+
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Ottava::OttavaType)
+
 #endif
 

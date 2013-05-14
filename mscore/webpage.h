@@ -24,6 +24,8 @@
 #include "musescore.h"
 #include "scoreview.h"
 
+namespace Ms {
+
 class MuseScore;
 
 //---------------------------------------------------------
@@ -118,7 +120,7 @@ class WebPageDockWidget : public QDockWidget
       Q_INVOKABLE bool saveCurrentScoreOnline(QString action, QVariantMap parameters, QString fileFieldName);
       Q_INVOKABLE bool setCurrentScoreSource(QString source);
       Q_INVOKABLE QObject* currentScore();
-      
+
       QUrl webUrl();
       };
 
@@ -155,6 +157,6 @@ class WebScoreView : public ScoreView
 
 Q_DECLARE_METATYPE(WebScoreView)
 #endif
-
+}
 #endif
 

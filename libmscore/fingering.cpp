@@ -14,6 +14,8 @@
 #include "score.h"
 #include "undo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Fingering
 //---------------------------------------------------------
@@ -70,4 +72,6 @@ void Fingering::reset()
       setUserOff(o);
       score()->undoChangeProperty(this, P_USER_OFF, no);
       }
+
+}
 

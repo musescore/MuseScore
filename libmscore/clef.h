@@ -21,10 +21,13 @@
 #include "element.h"
 #include "mscore.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Xml;
 class MuseScoreView;
 class Segment;
-class QPainter;
 
 static const int NO_CLEF = -1000;
 
@@ -135,5 +138,7 @@ class Clef : public Element {
       QVariant propertyDefault(P_ID id) const;
       };
 
+
+}     // namespace Ms
 #endif
 

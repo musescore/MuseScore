@@ -15,6 +15,8 @@
 #include "undo.h"
 #include "range.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   cmdJoinMeasure
 //    join measures from m1 upto (including) m2
@@ -45,4 +47,6 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       endCmd();
       }
 
+
+}
 

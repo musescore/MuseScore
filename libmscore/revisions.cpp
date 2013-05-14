@@ -13,6 +13,8 @@
 #include "revisions.h"
 #include "xml.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Revision
 //---------------------------------------------------------
@@ -103,4 +105,6 @@ QString Revisions::getRevision(QString /*id*/)
       {
       return QString();
       }
+
+}
 

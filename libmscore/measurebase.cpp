@@ -22,6 +22,8 @@
 #include "segment.h"
 #include "tempo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   MeasureBase
 //---------------------------------------------------------
@@ -307,4 +309,6 @@ bool MeasureBase::setProperty(P_ID id, const QVariant& property)
       return true;
       }
 
+
+}
 

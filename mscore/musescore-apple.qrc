@@ -9,11 +9,6 @@
       <file>data/paper4.png</file>
       <file>data/paper5.png</file>
 
-      <file>data/previous.png</file>
-      <file>data/next.png</file>
-      <file>data/reload.png</file>
-      <file>data/home.png</file>
-      <file>data/help.png</file>
       <file>data/table.svg</file>
 
       <file alias="fonts/mscore20.xml">../fonts/mscore20.xml</file>
@@ -41,13 +36,6 @@
 
       <file>data/webview.css</file>
 
-      <file>data/icons-dark/flip.svg</file>
-      <file>data/icons-dark/undo.svg</file>
-      <file>data/icons-dark/redo.svg</file>
-      <file>data/icons-dark/midiin.svg</file>
-      <file>data/icons-dark/speaker.svg</file>
-      <file>data/icons-dark/start.svg</file>
-      <file>data/icons-dark/play.svg</file>
       <file>data/icons-dark/sbeam.svg</file>
       <file>data/icons-dark/mbeam.svg</file>
       <file>data/icons-dark/nbeam.svg</file>
@@ -56,67 +44,16 @@
       <file>data/icons-dark/abeam.svg</file>
       <file>data/icons-dark/fbeam1.svg</file>
       <file>data/icons-dark/fbeam2.svg</file>
-      <file>data/icons-dark/fileopen.svg</file>
-      <file>data/icons-dark/filenew.svg</file>
-      <file>data/icons-dark/filesave.svg</file>
-      <file>data/icons-dark/filesaveas.svg</file>
-      <file>data/icons-dark/exit.svg</file>
-      <file>data/icons-dark/repeat.svg</file>
-      <file>data/icons-dark/pan.svg</file>
-      <file>data/icons-dark/noteentry.svg</file>
       <file>data/icons-dark/grace4.svg</file>
       <file>data/icons-dark/grace8b.svg</file>
       <file>data/icons-dark/grace16.svg</file>
       <file>data/icons-dark/grace32.svg</file>
-      <file>data/icons-dark/keyboard.svg</file>
-      <file>data/icons-dark/tie.svg</file>
       <file>data/icons-dark/acciaccatura.svg</file>
       <file>data/icons-dark/appoggiatura.svg</file>
-      <file>data/icons-dark/brevis.svg</file>
       <file>data/icons-dark/clef.svg</file>
-      <file>data/icons-dark/dotdot.svg</file>
-      <file>data/icons-dark/dot.svg</file>
-      <file>data/icons-dark/flatflat.svg</file>
-      <file>data/icons-dark/flat.svg</file>
-      <file>data/icons-dark/longaUp.svg</file>
-      <file>data/icons-dark/natural.svg</file>
-      <file>data/icons-dark/note16.svg</file>
-      <file>data/icons-dark/note2.svg</file>
-      <file>data/icons-dark/note32.svg</file>
-      <file>data/icons-dark/note4.svg</file>
-      <file>data/icons-dark/note64.svg</file>
-      <file>data/icons-dark/note128.svg</file>
-      <file>data/icons-dark/note8.svg</file>
-      <file>data/icons-dark/note.svg</file>
-      <file>data/icons-dark/quartrest.svg</file>
-      <file>data/icons-dark/sharp.svg</file>
-      <file>data/icons-dark/sharpsharp.svg</file>
-      <file>data/icons-dark/editcut.svg</file>
-      <file>data/icons-dark/editcopy.svg</file>
-      <file>data/icons-dark/editpaste.svg</file>
-      <file>data/icons-dark/fileprint.svg</file>
-      <file>data/icons-dark/format_text_bold.svgz</file>
-      <file>data/icons-dark/format_text_italic.svgz</file>
-      <file>data/icons-dark/format_text_underline.svgz</file>
-      <file>data/icons-dark/text_left.svg</file>
-      <file>data/icons-dark/text_center.svg</file>
-      <file>data/icons-dark/text_right.svg</file>
-      <file>data/icons-dark/format_text_subscript.svgz</file>
-      <file>data/icons-dark/format_text_superscript.svgz</file>
-      <file>data/icons-dark/fotomode.svg</file>
-      <file>data/icons-dark/text_top.svg</file>
-      <file>data/icons-dark/text_bottom.svg</file>
-      <file>data/icons-dark/text_vcenter.svg</file>
       <file>data/icons-dark/mscore.png</file>
       <file>data/icons-dark/hraster.svg</file>
       <file>data/icons-dark/vraster.svg</file>
-      <file>data/icons-dark/repitch.svg</file>
-      <file>data/icons-dark/format_list_unordered.svgz</file>
-      <file>data/icons-dark/format_list_ordered.svgz</file>
-      <file>data/icons-dark/format_indent_more.svgz</file>
-      <file>data/icons-dark/format_indent_less.svgz</file>
-      <file>data/icons-dark/community.svg</file>
-      <file>data/icons-dark/metronome.svg</file>
       <file>data/icons-dark/resetproperty.png</file>
       <file>data/icons-dark/vframe.svg</file>
       <file>data/icons-dark/hframe.svg</file>
@@ -124,6 +61,71 @@
       <file>data/icons-dark/fframe.svg</file>
       <file>data/icons-dark/measure.svg</file>
       <file>data/icons-dark/checkmark.svg</file>
+      <file>data/close_icon_small.png</file>
+
+      <file>data/icons-dark/align-vertical-bottom.svg</file>
+      <file>data/icons-dark/align-vertical-center.svg</file>
+      <file>data/icons-dark/align-vertical-top.svg</file>
+      <file>data/icons-dark/document-new.svg</file>
+      <file>data/icons-dark/document-open.svg</file>
+      <file>data/icons-dark/document-print.svg</file>
+      <file>data/icons-dark/document-save.svg</file>
+      <file>data/icons-dark/document-save-as.svg</file>
+      <file>data/icons-dark/edit-copy.svg</file>
+      <file>data/icons-dark/edit-cut.svg</file>
+      <file>data/icons-dark/edit-paste.svg</file>
+      <file>data/icons-dark/edit-redo.svg</file>
+      <file>data/icons-dark/edit-undo.svg</file>
+      <file>data/icons-dark/format-justify-center.svg</file>
+      <file>data/icons-dark/format-justify-left.svg</file>
+      <file>data/icons-dark/format-justify-right.svg</file>
+      <file>data/icons-dark/media-playback-start.svg</file>
+      <file>data/icons-dark/media-skip-backward.svg</file>
+      <file>data/icons-dark/mode-notes.svg</file>
+      <file>data/icons-dark/mode-photo.svg</file>
+      <file>data/icons-dark/mode-repitch.svg</file>
+      <file>data/icons-dark/note-1.svg</file>
+      <file>data/icons-dark/note-2.svg</file>
+      <file>data/icons-dark/note-4.svg</file>
+      <file>data/icons-dark/note-8.svg</file>
+      <file>data/icons-dark/note-16.svg</file>
+      <file>data/icons-dark/note-32.svg</file>
+      <file>data/icons-dark/note-64.svg</file>
+      <file>data/icons-dark/note-128.svg</file>
+      <file>data/icons-dark/note-breve.svg</file>
+      <file>data/icons-dark/note-dot.svg</file>
+      <file>data/icons-dark/note-double-dot.svg</file>
+      <file>data/icons-dark/note-double-flat.svg</file>
+      <file>data/icons-dark/note-double-sharp.svg</file>
+      <file>data/icons-dark/note-flat.svg</file>
+      <file>data/icons-dark/note-longa.svg</file>
+      <file>data/icons-dark/note-natural.svg</file>
+      <file>data/icons-dark/note-sharp.svg</file>
+      <file>data/icons-dark/note-tie.svg</file>
+      <file>data/icons-dark/panel-community.svg</file>
+      <file>data/icons-dark/rest.svg</file>
+      <file>data/icons-dark/stem-flip.svg</file>
+      <file>data/icons-dark/midi-input.svg</file>
+      <file>data/icons-dark/media-playback-pan.svg</file>
+      <file>data/icons-dark/media-playback-repeats.svg</file>
+      <file>data/icons-dark/sound-while-editing.svg</file>
+      <file>data/icons-dark/insert-symbol.svg</file>
+      <file>data/icons-dark/format-text-bold.svg</file>
+      <file>data/icons-dark/format-text-italic.svg</file>
+      <file>data/icons-dark/format-text-subscript.svg</file>
+      <file>data/icons-dark/format-text-superscript.svg</file>
+      <file>data/icons-dark/format-text-underline.svg</file>
+      <file>data/icons-dark/list-ordered.svg</file>
+      <file>data/icons-dark/list-unordered.svg</file>
+      <file>data/icons-dark/format-indent-less.svg</file>
+      <file>data/icons-dark/format-indent-more.svg</file>
+      <file>data/icons-dark/media-playback-metronome.svg</file>
+      <file>data/icons-dark/align-vertical-baseline.svg</file>
+      <file>data/icons-dark/go-home.svg</file>
+      <file>data/icons-dark/go-next.svg</file>
+      <file>data/icons-dark/go-previous.svg</file>
+      <file>data/icons-dark/help-contents.svg</file>
+      <file>data/icons-dark/view-refresh.svg</file>
 
       <file>schema/license.html</file>
       <file>schema/musicxml.xsd</file>

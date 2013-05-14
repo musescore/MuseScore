@@ -14,6 +14,8 @@
 #ifndef __EDITTOOLS_H__
 #define __EDITTOOLS_H__
 
+namespace Ms {
+
 class Element;
 
 //---------------------------------------------------------
@@ -41,5 +43,7 @@ class EditTools : public QDockWidget {
       void setEditPos(const QPointF&);
       };
 
+
+} // namespace Ms
 #endif
 

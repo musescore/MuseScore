@@ -21,6 +21,8 @@
 #include "articulation.h"
 #include "page.h"
 
+namespace Ms {
+
 class Xml;
 struct ChordDescription;
 class ChordList;
@@ -124,5 +126,6 @@ class StyleData : public QSharedData {
       friend class TextStyle;
       };
 
+}     // namespace Ms
 #endif
 

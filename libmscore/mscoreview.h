@@ -13,6 +13,8 @@
 #ifndef __MSCOREVIEW_H__
 #define __MSCOREVIEW_H__
 
+namespace Ms {
+
 class Element;
 class Score;
 class Note;
@@ -55,7 +57,8 @@ class MuseScoreView {
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
       };
 
+
+}     // namespace Ms
+
 #endif
-
-
 

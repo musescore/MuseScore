@@ -27,8 +27,11 @@
 #include "libmscore/fifo.h"
 #include "libmscore/tempo.h"
 
-class Note;
 class QTimer;
+
+namespace Ms {
+
+class Note;
 class Score;
 class Painter;
 class Measure;
@@ -207,5 +210,7 @@ class Seq : public QObject, public Sequencer {
 extern Seq* seq;
 extern void initSequencer();
 extern bool initMidi();
+
+} // namespace Ms
 #endif
 

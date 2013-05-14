@@ -15,6 +15,8 @@
 
 #include "libmscore/pos.h"
 
+namespace Ms {
+
 class Audio;
 class Score;
 
@@ -51,5 +53,7 @@ class WaveView : public QWidget
       void setXpos(int);
       void setScore(Score* s, Pos* lc);
       };
+}
+
 #endif
 

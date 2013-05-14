@@ -21,6 +21,8 @@
 #include "text.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TextLineSegment
 //---------------------------------------------------------
@@ -648,4 +650,6 @@ QVariant TextLine::propertyDefault(P_ID id) const
                   return SLine::propertyDefault(id);
             }
       }
+
+}
 

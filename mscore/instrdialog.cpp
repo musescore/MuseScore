@@ -40,7 +40,10 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/style.h"
 #include "libmscore/system.h"
+#include "libmscore/tablature.h"
 #include "libmscore/undo.h"
+
+namespace Ms {
 
 void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
 
@@ -87,10 +90,24 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // Call initStaffTypeCombo(true) ONLY if the item has been repositioned
       // or a memory leak may result
 
+      bool canUseTabs = false;                   // assume only normal staves are applicable
+      bool canUsePerc = false;
+      PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
+      // PartListItem has different members filled out if used in New Score Wizard or in Instruments Wizard
+      if (part) {
+            Tablature* tab = part->it ? part->it->tablature :
+                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->tablature() : 0);
+            canUseTabs = tab && tab->strings() > 0;
+            canUsePerc = part->it ? part->it->useDrumset :
+                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->useDrumset() : false);
+      }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
       foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList)
-            _staffTypeCombo->addItem(staffTypeData.displayName, staffTypeData.idx);
+            if ( (canUseTabs && staffTypeData.staffType->group() == TAB_STAFF)
+                        || ( canUsePerc && staffTypeData.staffType->group() == PERCUSSION_STAFF)
+                        || (!canUsePerc && staffTypeData.staffType->group() == PITCHED_STAFF) )
+                  _staffTypeCombo->addItem(staffTypeData.displayName, staffTypeData.idx);
       treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
       connect(_staffTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(staffTypeChanged(int)) );
       }
@@ -1163,3 +1180,5 @@ void InstrumentsDialog::on_clearSearch_clicked()
       search->clear();
       filterInstruments (instrumentList);
       }
+}
+

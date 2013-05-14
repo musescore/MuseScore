@@ -23,6 +23,8 @@
 
 #include "ui_glissandoprop.h"
 
+namespace Ms {
+
 class Glissando;
 
 //---------------------------------------------------------
@@ -40,5 +42,7 @@ class GlissandoProperties : public QDialog, public Ui::GlissandoProperties {
       GlissandoProperties(Glissando* tuplet, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

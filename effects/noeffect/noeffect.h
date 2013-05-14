@@ -15,6 +15,8 @@
 
 #include "effects/effect.h"
 
+namespace Ms {
+
 class EffectGui;
 
 //---------------------------------------------------------
@@ -40,6 +42,7 @@ class NoEffect : public Effect
       virtual EffectGui* gui();
       virtual const std::vector<ParDescr>& parDescr() const;
       };
+}
 
 #endif
 

@@ -1037,7 +1037,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="GreendotButton" name="rewindActive">
+           <widget class="Ms::GreendotButton" name="rewindActive">
             <property name="toolTip">
              <string>is active</string>
             </property>
@@ -1047,7 +1047,7 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="RecordButton" name="recordRewind">
+           <widget class="Ms::RecordButton" name="recordRewind">
             <property name="toolTip">
              <string>record</string>
             </property>
@@ -1067,7 +1067,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="GreendotButton" name="togglePlayActive">
+           <widget class="Ms::GreendotButton" name="togglePlayActive">
             <property name="toolTip">
              <string>is active</string>
             </property>
@@ -1077,7 +1077,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="RecordButton" name="recordTogglePlay">
+           <widget class="Ms::RecordButton" name="recordTogglePlay">
             <property name="toolTip">
              <string>record</string>
             </property>
@@ -1120,28 +1120,28 @@
            </widget>
           </item>
           <item row="0" column="5">
-           <widget class="GreendotButton" name="rca2">
+           <widget class="Ms::GreendotButton" name="rca2">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="1" column="5">
-           <widget class="GreendotButton" name="rca3">
+           <widget class="Ms::GreendotButton" name="rca3">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="0" column="6">
-           <widget class="RecordButton" name="rcr2">
+           <widget class="Ms::RecordButton" name="rcr2">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="1" column="6">
-           <widget class="RecordButton" name="rcr3">
+           <widget class="Ms::RecordButton" name="rcr3">
             <property name="text">
              <string>...</string>
             </property>
@@ -1178,35 +1178,35 @@
            </widget>
           </item>
           <item row="3" column="9">
-           <widget class="GreendotButton" name="rca9">
+           <widget class="Ms::GreendotButton" name="rca9">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="2" column="5">
-           <widget class="GreendotButton" name="rca4">
+           <widget class="Ms::GreendotButton" name="rca4">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="2" column="6">
-           <widget class="RecordButton" name="rcr4">
+           <widget class="Ms::RecordButton" name="rcr4">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="3" column="5">
-           <widget class="GreendotButton" name="rca5">
+           <widget class="Ms::GreendotButton" name="rca5">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="3" column="6">
-           <widget class="RecordButton" name="rcr5">
+           <widget class="Ms::RecordButton" name="rcr5">
             <property name="text">
              <string>...</string>
             </property>
@@ -1240,49 +1240,49 @@
            </widget>
           </item>
           <item row="0" column="13">
-           <widget class="GreendotButton" name="rca10">
+           <widget class="Ms::GreendotButton" name="rca10">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="0" column="14">
-           <widget class="RecordButton" name="rcr10">
+           <widget class="Ms::RecordButton" name="rcr10">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="1" column="13">
-           <widget class="GreendotButton" name="rca11">
+           <widget class="Ms::GreendotButton" name="rca11">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="1" column="14">
-           <widget class="RecordButton" name="rcr11">
+           <widget class="Ms::RecordButton" name="rcr11">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="2" column="13">
-           <widget class="GreendotButton" name="rca12">
+           <widget class="Ms::GreendotButton" name="rca12">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="2" column="14">
-           <widget class="RecordButton" name="rcr12">
+           <widget class="Ms::RecordButton" name="rcr12">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="3" column="10">
-           <widget class="RecordButton" name="rcr9">
+           <widget class="Ms::RecordButton" name="rcr9">
             <property name="text">
              <string>...</string>
             </property>
@@ -1348,7 +1348,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="GreendotButton" name="playActive">
+           <widget class="Ms::GreendotButton" name="playActive">
             <property name="toolTip">
              <string>is active</string>
             </property>
@@ -1358,7 +1358,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="GreendotButton" name="stopActive">
+           <widget class="Ms::GreendotButton" name="stopActive">
             <property name="toolTip">
              <string>is active</string>
             </property>
@@ -1368,7 +1368,7 @@
            </widget>
           </item>
           <item row="2" column="2">
-           <widget class="RecordButton" name="recordPlay">
+           <widget class="Ms::RecordButton" name="recordPlay">
             <property name="toolTip">
              <string>record</string>
             </property>
@@ -1378,7 +1378,7 @@
            </widget>
           </item>
           <item row="3" column="2">
-           <widget class="RecordButton" name="recordStop">
+           <widget class="Ms::RecordButton" name="recordStop">
             <property name="toolTip">
              <string>record</string>
             </property>
@@ -1398,7 +1398,7 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="GreendotButton" name="editModeActive">
+           <widget class="Ms::GreendotButton" name="editModeActive">
             <property name="toolTip">
              <string>is active</string>
             </property>
@@ -1408,7 +1408,7 @@
            </widget>
           </item>
           <item row="4" column="2">
-           <widget class="RecordButton" name="recordEditMode">
+           <widget class="Ms::RecordButton" name="recordEditMode">
             <property name="toolTip">
              <string>record</string>
             </property>
@@ -1428,28 +1428,28 @@
            </widget>
           </item>
           <item row="4" column="5">
-           <widget class="GreendotButton" name="rca6">
+           <widget class="Ms::GreendotButton" name="rca6">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="4" column="6">
-           <widget class="RecordButton" name="rcr6">
+           <widget class="Ms::RecordButton" name="rcr6">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="0" column="9">
-           <widget class="GreendotButton" name="rca7">
+           <widget class="Ms::GreendotButton" name="rca7">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="0" column="10">
-           <widget class="RecordButton" name="rcr7">
+           <widget class="Ms::RecordButton" name="rcr7">
             <property name="text">
              <string>...</string>
             </property>
@@ -1476,14 +1476,14 @@
            </widget>
           </item>
           <item row="1" column="9">
-           <widget class="GreendotButton" name="rca8">
+           <widget class="Ms::GreendotButton" name="rca8">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="1" column="10">
-           <widget class="RecordButton" name="rcr8">
+           <widget class="Ms::RecordButton" name="rcr8">
             <property name="text">
              <string>...</string>
             </property>
@@ -2785,12 +2785,12 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>GreendotButton</class>
+   <class>Ms::GreendotButton</class>
    <extends>QToolButton</extends>
    <header>greendotbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>RecordButton</class>
+   <class>Ms::RecordButton</class>
    <extends>QToolButton</extends>
    <header>recordbutton.h</header>
   </customwidget>

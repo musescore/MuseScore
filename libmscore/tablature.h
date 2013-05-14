@@ -15,6 +15,8 @@
 
 #include "xml.h"
 
+namespace Ms {
+
 class Chord;
 
 //---------------------------------------------------------
@@ -28,7 +30,7 @@ class Tablature {
       static bool bFretting;
 
 public:
-      Tablature() {}
+      Tablature();
       Tablature(int numFrets, int numStrings, int strings[]);
       Tablature(int numFrets, QList<int>& strings);
       bool        convertPitch(int pitch, int* string, int* fret) const;
@@ -46,6 +48,9 @@ public:
       void        writeMusicXML(Xml& xml) const;
       };
 
+extern Tablature emptyStringData;
 extern Tablature guitarTablature;
+
+}     // namespace Ms
 #endif
 

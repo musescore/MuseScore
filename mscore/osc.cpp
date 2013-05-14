@@ -41,6 +41,8 @@
 static int oscPort = 5282;
 #endif
 
+namespace Ms {
+
 extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
@@ -349,3 +351,5 @@ void MuseScore::oscMuteChannel(double val)
             }
       }
 #endif // #ifndef OSC
+}
+

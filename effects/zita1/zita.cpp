@@ -19,6 +19,8 @@
 #include <math.h>
 #include "zita.h"
 
+namespace Ms {
+
 enum {
       R_DELAY, R_XOVER, R_RTLOW, R_RTMID, R_FDAMP,
       R_EQ1FR, R_EQ1GN,
@@ -552,4 +554,5 @@ void ZitaReverb::setState(const SynthesizerGroup& g)
       for (const IdValue& v : g)
             setValue(v.id, v.data.toDouble());
       }
+}
 

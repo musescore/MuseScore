@@ -20,6 +20,8 @@
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ FileIO
 //   @P source QString
@@ -133,6 +135,8 @@ class PluginDescription;
 extern void collectPluginMetaInformation(PluginDescription*);
 
 #endif
+
+} // namespace Ms
 #endif
 
 

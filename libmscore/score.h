@@ -31,6 +31,10 @@
 #include "accidental.h"
 #include "note.h"
 
+class QPainter;
+
+namespace Ms {
+
 class TempoMap;
 struct TEvent;
 class SigEvent;
@@ -84,7 +88,6 @@ class Spanner;
 class MuseScoreView;
 class LinkedElements;
 class Fingering;
-class QPainter;
 class FiguredBass;
 class UndoCommand;
 class Cursor;
@@ -190,7 +193,6 @@ enum LayoutFlag {
       };
 
 typedef QFlags<LayoutFlag> LayoutFlags;
-Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
 
 //---------------------------------------------------------
 //   PlayMode
@@ -514,7 +516,7 @@ class Score : public QObject {
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);
 
-      Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*);
+      Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*, bool keepChord = false);
       bool makeGap1(int tick, int staffIdx, Fraction len);
 
       Rest* addRest(int tick, int track, TDuration, Tuplet*);
@@ -927,6 +929,11 @@ class Score : public QObject {
 
 extern Score* gscore;
 extern void fixTicks();
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
+
+}     // namespace Ms
+
 
 #endif
 

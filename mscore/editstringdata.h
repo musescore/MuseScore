@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: editstringdata.h 3775 2010-12-17 23:55:35Z miwarre $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -21,17 +20,18 @@
 #ifndef EDITSTRINGDATA_H
 #define EDITSTRINGDATA_H
 
-//#include <QDialog>
 #include "ui_editstringdata.h"
-/*
-namespace Ui {
-    class EditStringData;
-}
-*/
+
+namespace Ms {
+
+//---------------------------------------------------------
+//   EditStringData
+//---------------------------------------------------------
+
 class EditStringData : public QDialog, private Ui::EditStringDataBase {
       Q_OBJECT
 
-      int *             _frets;
+      int*              _frets;
       bool              _modified;
       QList<int> *      _strings;         // pointer to original string list
       QList<int>        _stringsLoc;      // local working copy of string list
@@ -41,17 +41,15 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase {
       ~EditStringData();
 
    protected:
-//      void changeEvent(QEvent *e);
       QString midiCodeToStr(int midiCode);
 
-//private:
-//    Ui::EditStringData *ui;
-
-private slots:
+   private slots:
       void accept();
       void deleteStringClicked();
       void editStringClicked();
       void newStringClicked();
-};
+      };
+
+}
 
 #endif // EDITSTRINGDATA_H

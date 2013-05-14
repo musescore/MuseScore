@@ -27,6 +27,8 @@
 #include "libmscore/note.h"
 #include "libmscore/stem.h"
 
+namespace Ms {
+
 enum { COL_PITCH, COL_NOTE, COL_SHORTCUT, COL_NAME };
 
 //---------------------------------------------------------
@@ -378,4 +380,5 @@ void EditDrumset::save()
             QMessageBox::critical(this, tr("MuseScore: Write Drumset"), s);
             }
       }
+}
 

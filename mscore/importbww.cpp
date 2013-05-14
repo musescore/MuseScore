@@ -52,14 +52,14 @@
 //   TODO: remove duplicate code
 //---------------------------------------------------------
 
-static void addText(VBox*& vbx, Score* s, QString strTxt, int stl)
+static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, int stl)
       {
       if (!strTxt.isEmpty()) {
-            Text* text = new Text(s);
+            Ms::Text* text = new Ms::Text(s);
             text->setTextStyleType(stl);
             text->setText(strTxt);
             if (vbx == 0)
-                  vbx = new VBox(s);
+                  vbx = new Ms::VBox(s);
             vbx->add(text);
             }
       }
@@ -75,7 +75,7 @@ static void addText(VBox*& vbx, Score* s, QString strTxt, int stl)
  set pitch and tpc.
  */
 
-static void xmlSetPitch(Note* n, char step, int alter, int octave)
+static void xmlSetPitch(Ms::Note* n, char step, int alter, int octave)
       {
       int istep = step - 'A';
       //                       a  b   c  d  e  f  g
@@ -95,7 +95,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave)
 
       //                        a  b  c  d  e  f  g
       static int table1[7]  = { 5, 6, 0, 1, 2, 3, 4 };
-      int tpc  = step2tpc(table1[istep], AccidentalVal(alter));
+      int tpc  = step2tpc(table1[istep], Ms::AccidentalVal(alter));
       n->setTpc(tpc);
       }
 
@@ -122,21 +122,21 @@ static void addSymbolToText(const SymCode& s, QTextCursor* cur)
       }
 #endif
 
-static void setTempo(Score* score, int tempo)
+static void setTempo(Ms::Score* score, int tempo)
       {
-      TempoText* tt = new TempoText(score);
+      Ms::TempoText* tt = new Ms::TempoText(score);
       tt->setTempo(double(tempo)/60.0);
       tt->setTrack(0);
 #if 0 // TODO WS
-      QTextCursor* c = tt->startCursorEdit();
+      Ms::QTextCursor* c = tt->startCursorEdit();
       c->movePosition(QTextCursor::EndOfLine);
       addSymbolToText(SymCode(0xe105, 1), c);
       c->insertText(" = ");
       c->insertText(QString("%1").arg(tempo));
       tt->endEdit();
 #endif
-      Measure* measure = score->firstMeasure();
-      Segment* segment = measure->getSegment(Segment::SegChordRest, 0);
+      Ms::Measure* measure = score->firstMeasure();
+      Ms::Segment* segment = measure->getSegment(Ms::Segment::SegChordRest, 0);
       segment->add(tt);
       }
 
@@ -160,11 +160,11 @@ public:
                 bool tieStart = false, bool tieStop = false,
                 StartStop triplet = ST_NONE,
                 bool grace = false);
-      void setScore(Score* s) { score = s; }
+      void setScore(Ms::Score* s) { score = s; }
       void tsig(const int beats, const int beat);
       void trailer();
 private:
-      void doTriplet(Chord* cr, StartStop triplet = ST_NONE);
+      void doTriplet(Ms::Chord* cr, StartStop triplet = ST_NONE);
       static const int WHOLE_DUR = 64;                  ///< Whole note duration
       struct StepAlterOct {                             ///< MusicXML step/alter/oct values
             QChar s;
@@ -173,16 +173,16 @@ private:
             StepAlterOct(QChar step = QChar('C'), int alter = 0, int oct = 1)
                   : s(step), a(alter), o(oct) {};
             };
-      Score* score;                                     ///< The score
+      Ms::Score* score;                                     ///< The score
       int beats;                                        ///< Number of beats
       int beat;                                         ///< Beat type
       QMap<QString, StepAlterOct> stepAlterOctMap;      ///< Map bww pitch to step/alter/oct
       QMap<QString, QString> typeMap;                   ///< Map bww note types to MusicXML
       unsigned int measureNumber;                       ///< Current measure number
       unsigned int tick;                                ///< Current tick
-      Measure* currentMeasure;                          ///< Current measure
-      Tuplet* tuplet;                                   ///< Current tuplet
-      Volta* lastVolta;                                 ///< Current volta
+      Ms::Measure* currentMeasure;                          ///< Current measure
+      Ms::Tuplet* tuplet;                                   ///< Current tuplet
+      Ms::Volta* lastVolta;                                 ///< Current volta
       unsigned int tempo;                               ///< Tempo (0 = not specified)
       unsigned int ending;                              ///< Current ending
       };
@@ -232,20 +232,20 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
       ++measureNumber;
 
       // create a new measure
-      currentMeasure  = new Measure(score);
+      currentMeasure  = new Ms::Measure(score);
       currentMeasure->setTick(tick);
-      currentMeasure->setTimesig(Fraction(beats, beat));
+      currentMeasure->setTimesig(Ms::Fraction(beats, beat));
       currentMeasure->setNo(measureNumber);
       score->measures()->add(currentMeasure);
 
       if (mbf.repeatBegin)
-            currentMeasure->setRepeatFlags(RepeatStart);
+            currentMeasure->setRepeatFlags(Ms::RepeatStart);
 
       if (mbf.irregular)
             currentMeasure->setIrregular(true);
 
       if (mbf.endingFirst || mbf.endingSecond) {
-            Volta* volta = new Volta(score);
+            Ms::Volta* volta = new Ms::Volta(score);
             volta->setTrack(0);
             volta->endings().clear();
             if (mbf.endingFirst) {
@@ -266,22 +266,22 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
       // set clef, key and time signature in the first measure
       if (measureNumber == 1) {
             // clef
-            Clef* clef = new Clef(score);
-            clef->setClefType(CLEF_G);
+            Ms::Clef* clef = new Ms::Clef(score);
+            clef->setClefType(Ms::CLEF_G);
             clef->setTrack(0);
-            Segment* s = currentMeasure->getSegment(clef, tick);
+            Ms::Segment* s = currentMeasure->getSegment(clef, tick);
             s->add(clef);
             // keysig
-            KeySigEvent key;
+            Ms::KeySigEvent key;
             key.setAccidentalType(2);
-            KeySig* keysig = new KeySig(score);
+            Ms::KeySig* keysig = new Ms::KeySig(score);
             keysig->setKeySigEvent(key);
             keysig->setTrack(0);
             s = currentMeasure->getSegment(keysig, tick);
             s->add(keysig);
             // timesig
-            TimeSig* timesig = new TimeSig(score);
-            timesig->setSig(Fraction(beats, beat));
+            Ms::TimeSig* timesig = new Ms::TimeSig(score);
+            timesig->setSig(Ms::Fraction(beats, beat));
             timesig->setTrack(0);
             s = currentMeasure->getSegment(timesig, tick);
             s->add(timesig);
@@ -296,15 +296,15 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
       {
       qDebug() << "MsScWriter::endMeasure()";
       if (mef.repeatEnd)
-            currentMeasure->setRepeatFlags(RepeatEnd);
+            currentMeasure->setRepeatFlags(Ms::RepeatEnd);
 
       if (mef.endingEnd) {
             if (lastVolta) {
                   qDebug("adding volta\n");
                   if (ending == 1)
-                        lastVolta->setVoltaType(VoltaType::CLOSED);
+                        lastVolta->setVoltaType(Ms::VoltaType::CLOSED);
                   else
-                        lastVolta->setVoltaType(VoltaType::OPEN);
+                        lastVolta->setVoltaType(Ms::VoltaType::OPEN);
                   lastVolta->setEndElement(currentMeasure);
                   currentMeasure->addSpannerBack(lastVolta);
                   lastVolta = 0;
@@ -315,17 +315,17 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
             }
 
       if (mef.lastOfSystem) {
-            LayoutBreak* lb = new LayoutBreak(score);
+            Ms::LayoutBreak* lb = new Ms::LayoutBreak(score);
             lb->setTrack(0);
-            lb->setLayoutBreakType(LAYOUT_BREAK_LINE);
+            lb->setLayoutBreakType(Ms::LAYOUT_BREAK_LINE);
             currentMeasure->add(lb);
             }
 
       if (mef.lastOfPart && !mef.repeatEnd) {
-            currentMeasure->setEndBarLineType(END_BAR, false, true);
+            currentMeasure->setEndBarLineType(Ms::END_BAR, false, true);
             }
       else if (mef.doubleBarLine) {
-            currentMeasure->setEndBarLineType(DOUBLE_BAR, false, true);
+            currentMeasure->setEndBarLineType(Ms::DOUBLE_BAR, false, true);
             }
       // BarLine* barLine = new BarLine(score);
       // bool visible = true;
@@ -357,55 +357,55 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
             }
       StepAlterOct sao = stepAlterOctMap.value(pitch);
 
-      int ticks = 4 * MScore::division / type.toInt();
+      int ticks = 4 * Ms::MScore::division / type.toInt();
       if (dots) ticks = 3 * ticks / 2;
       qDebug() << "ticks:" << ticks;
-      TDuration durationType(TDuration::V_INVALID);
+      Ms::TDuration durationType(Ms::TDuration::V_INVALID);
       durationType.setVal(ticks);
       qDebug() << "duration:" << durationType.name();
       if (triplet != ST_NONE) ticks = 2 * ticks / 3;
 
-      BeamMode bm  = (beamList.at(0) == Bww::BM_BEGIN) ? BeamMode::BEGIN : BeamMode::AUTO;
-      MScore::Direction sd = MScore::AUTO;
+      Ms::BeamMode bm  = (beamList.at(0) == Bww::BM_BEGIN) ? Ms::BeamMode::BEGIN : Ms::BeamMode::AUTO;
+      Ms::MScore::Direction sd = Ms::MScore::AUTO;
 
       // create chord
-      Chord* cr = new Chord(score);
+      Ms::Chord* cr = new Ms::Chord(score);
       //ws cr->setTick(tick);
       cr->setBeamMode(bm);
       cr->setTrack(0);
       if (grace) {
-            cr->setNoteType(NOTE_GRACE32);
-            cr->setDurationType(TDuration::V_32ND);
-            sd = MScore::UP;
+            cr->setNoteType(Ms::NOTE_GRACE32);
+            cr->setDurationType(Ms::TDuration::V_32ND);
+            sd = Ms::MScore::UP;
             }
       else {
-            if (durationType.type() == TDuration::V_INVALID)
-                  durationType.setType(TDuration::V_QUARTER);
+            if (durationType.type() == Ms::TDuration::V_INVALID)
+                  durationType.setType(Ms::TDuration::V_QUARTER);
             cr->setDurationType(durationType);
-            sd = MScore::DOWN;
+            sd = Ms::MScore::DOWN;
             }
       cr->setDuration(durationType.fraction());
       cr->setDots(dots);
       cr->setStemDirection(sd);
       // add note to chord
-      Note* note = new Note(score);
+      Ms::Note* note = new Ms::Note(score);
       note->setTrack(0);
       xmlSetPitch(note, sao.s.toLatin1(), sao.a, sao.o);
       if (tieStart) {
-            Tie* tie = new Tie(score);
+            Ms::Tie* tie = new Ms::Tie(score);
             note->setTieFor(tie);
             tie->setStartNote(note);
             tie->setTrack(0);
             }
       cr->add(note);
       // add chord to measure
-      Segment* s = currentMeasure->getSegment(cr, tick);
+      Ms::Segment* s = currentMeasure->getSegment(cr, tick);
       s->add(cr);
       if (!grace) {
             doTriplet(cr, triplet);
             int tickBefore = tick;
             tick += ticks;
-            Fraction nl(Fraction::fromTicks(tick - currentMeasure->tick()));
+            Ms::Fraction nl(Ms::Fraction::fromTicks(tick - currentMeasure->tick()));
             currentMeasure->setLen(nl);
             qDebug() << "MsScWriter::note()"
                      << "tickBefore:" << tickBefore
@@ -440,24 +440,24 @@ void MsScWriter::header(const QString title, const QString type,
       // if (!type.isEmpty()) score->setMetaTag("workNumber", type);
       QString strType = "composer";
       QString strComposer = composer; // TODO: const parameters ctor MusicXmlCreator
-      score->addCreator(new MusicXmlCreator(strType, strComposer));
+      score->addCreator(new Ms::MusicXmlCreator(strType, strComposer));
       if (!footer.isEmpty()) score->setMetaTag("copyright", footer);
 
       //  score->setWorkTitle(title);
-      VBox* vbox  = 0;
-      addText(vbox, score, title, TEXT_STYLE_TITLE);
-      addText(vbox, score, type, TEXT_STYLE_SUBTITLE);
-      addText(vbox, score, composer, TEXT_STYLE_COMPOSER);
-      // addText(vbox, score, strPoet, TEXT_STYLE_POET);
-      // addText(vbox, score, strTranslator, TEXT_STYLE_TRANSLATOR);
+      Ms::VBox* vbox  = 0;
+      addText(vbox, score, title, Ms::TEXT_STYLE_TITLE);
+      addText(vbox, score, type, Ms::TEXT_STYLE_SUBTITLE);
+      addText(vbox, score, composer, Ms::TEXT_STYLE_COMPOSER);
+      // addText(vbox, score, strPoet, Ms::TEXT_STYLE_POET);
+      // addText(vbox, score, strTranslator, Ms::TEXT_STYLE_TRANSLATOR);
       if (vbox) {
             vbox->setTick(0);
             score->measures()->add(vbox);
             }
       if (!footer.isEmpty())
-            score->style()->set(ST_oddFooterC, footer);
+            score->style()->set(Ms::ST_oddFooterC, footer);
 
-      Part* part = score->staff(0)->part();
+      Ms::Part* part = score->staff(0)->part();
       part->setLongName(instrumentName());
       part->setMidiProgram(midiProgram() - 1);
       }
@@ -493,15 +493,15 @@ void MsScWriter::trailer()
  Handle the triplet.
  */
 
-void MsScWriter::doTriplet(Chord* cr, StartStop triplet)
+void MsScWriter::doTriplet(Ms::Chord* cr, StartStop triplet)
       {
       qDebug() << "MsScWriter::doTriplet(" << triplet << ")"
       ;
 
       if (triplet == ST_START) {
-            tuplet = new Tuplet(score);
+            tuplet = new Ms::Tuplet(score);
             tuplet->setTrack(0);
-            tuplet->setRatio(Fraction(3, 2));
+            tuplet->setRatio(Ms::Fraction(3, 2));
             tuplet->setTick(tick);
             currentMeasure->add(tuplet);
             }
@@ -532,6 +532,8 @@ void MsScWriter::doTriplet(Chord* cr, StartStop triplet)
 
 
 } // namespace Bww
+
+namespace Ms {
 
 //---------------------------------------------------------
 //   importBww
@@ -565,3 +567,6 @@ Score::FileError importBww(Score* score, const QString& path)
       qDebug("Score::importBww() done\n");
       return Score::FILE_NO_ERROR;      // OK
       }
+
+} // namespace Ms
+

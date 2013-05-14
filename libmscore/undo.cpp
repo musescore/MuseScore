@@ -71,6 +71,8 @@
 #include "chordline.h"
 #include "tremolo.h"
 
+namespace Ms {
+
 extern Measure* tick2measure(int tick);
 
 //---------------------------------------------------------
@@ -3217,4 +3219,6 @@ void ChangeSynthesizerState::flip()
       {
       std::swap(state, score->_synthesizerState);
       }
+
+}
 

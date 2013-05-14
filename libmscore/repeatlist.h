@@ -13,6 +13,8 @@
 #ifndef __REPEATLIST_H__
 #define __REPEATLIST_H__
 
+namespace Ms {
+
 class Score;
 class Measure;
 
@@ -56,5 +58,7 @@ class RepeatList: public QList<RepeatSegment*>
       int ticks();
       };
 
+
+}     // namespace Ms
 #endif
 

@@ -21,6 +21,8 @@
 #include "editstringdata.h"
 #include "editpitch.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditStringData
 //    To edit the string data (tuning and number of frets) for an instrument
@@ -196,3 +198,4 @@ QString EditStringData::midiCodeToStr(int midiCode)
       {
       return QString("%1 %2").arg(g_cNoteName[midiCode % 12]).arg(midiCode / 12 - 1);
       }
+}

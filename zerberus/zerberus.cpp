@@ -31,7 +31,7 @@ std::list<ZInstrument*> Zerberus::globalInstruments;
 //   createZerberus
 //---------------------------------------------------------
 
-Synthesizer* createZerberus()
+Ms::Synthesizer* createZerberus()
       {
       return new Zerberus();
       }
@@ -170,7 +170,7 @@ void Zerberus::processNoteOn(Channel* cp, int key, int velo)
 //   process
 //---------------------------------------------------------
 
-void Zerberus::play(const PlayEvent& event)
+void Zerberus::play(const Ms::PlayEvent& event)
       {
       if (busy)
             return;
@@ -181,11 +181,11 @@ void Zerberus::play(const PlayEvent& event)
             }
 
       switch(event.type()) {
-            case ME_NOTEOFF:
+            case Ms::ME_NOTEOFF:
                   processNoteOff(cp, event.dataA());
                   break;
 
-            case ME_NOTEON: {
+            case Ms::ME_NOTEON: {
                   int key = event.dataA();
                   int vel = event.dataB();
                   if (vel)
@@ -195,7 +195,7 @@ void Zerberus::play(const PlayEvent& event)
                   }
                   break;
 
-            case ME_CONTROLLER:
+            case Ms::ME_CONTROLLER:
                   cp->controller(event.dataA(), event.dataB());
                   break;
 
@@ -244,14 +244,14 @@ const char* Zerberus::name() const
 //   getPatchInfo
 //---------------------------------------------------------
 
-const QList<MidiPatch*>& Zerberus::getPatchInfo() const
+const QList<Ms::MidiPatch*>& Zerberus::getPatchInfo() const
       {
-      static QList<MidiPatch*> pl;
+      static QList<Ms::MidiPatch*> pl;
       qDeleteAll(pl);
       pl.clear();
       int idx = 0;
       for (ZInstrument* i : instruments) {
-            MidiPatch* p = new MidiPatch { false, name(), 0, idx, i->name() };
+            Ms::MidiPatch* p = new Ms::MidiPatch { false, name(), 0, idx, i->name() };
             pl.append(p);
             ++idx;
             }
@@ -355,14 +355,14 @@ bool Zerberus::removeSoundFont(const QString& s)
 //   state
 //---------------------------------------------------------
 
-SynthesizerGroup Zerberus::state() const
+Ms::SynthesizerGroup Zerberus::state() const
       {
-      SynthesizerGroup g;
+      Ms::SynthesizerGroup g;
       g.setName(name());
 
       QStringList sfl = soundFonts();
       foreach(QString sf, sfl)
-            g.push_back(IdValue(0, sf));
+            g.push_back(Ms::IdValue(0, sf));
       return g;
       }
 
@@ -370,10 +370,10 @@ SynthesizerGroup Zerberus::state() const
 //   setState
 //---------------------------------------------------------
 
-void Zerberus::setState(const SynthesizerGroup& sp)
+void Zerberus::setState(const Ms::SynthesizerGroup& sp)
       {
       QStringList sfs;
-      for (const IdValue& v : sp)
+      for (const Ms::IdValue& v : sp)
             sfs.append(v.data);
       loadSoundFonts(sfs);
       }

@@ -15,6 +15,8 @@
 
 #include "mscore.h"
 
+namespace Ms {
+
 class Element;
 class Xml;
 class XmlReader;
@@ -59,5 +61,7 @@ class ElementLayout {
       qreal ryoff() const                 { return _reloff.y(); }
       };
 
+
+}     // namespace Ms
 #endif
 

@@ -29,6 +29,8 @@
 #include "libmscore/measure.h"
 #include "libmscore/textframe.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
@@ -263,4 +265,5 @@ void ScoreView::endDragEdit()
       _score->end();
       }
 
+}
 

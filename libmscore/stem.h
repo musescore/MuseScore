@@ -15,8 +15,11 @@
 
 #include "element.h"
 
-class Chord;
 class QPainter;
+
+namespace Ms {
+
+class Chord;
 
 //---------------------------------------------------------
 //   @@ Stem
@@ -67,5 +70,7 @@ class Stem : public Element {
       QPointF p2() const              { return line.p2(); }
       };
 
+
+}     // namespace Ms
 #endif
 

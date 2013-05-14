@@ -42,6 +42,8 @@
 #include "figuredbass.h"
 #include "icon.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   hasArticulation
 //---------------------------------------------------------
@@ -1115,4 +1117,6 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
             }
       score()->setLayoutAll(true);
       }
+
+}
 

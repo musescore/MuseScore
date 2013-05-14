@@ -14,10 +14,11 @@
 #ifndef __TESTUTILS_H__
 #define __TESTUTILS_H__
 
-class Element;
 
-class MScore;
-class Score;
+namespace Ms {
+      class MScore;
+      class Score;
+      class Element;
 
 //---------------------------------------------------------
 //   MTest
@@ -25,22 +26,23 @@ class Score;
 
 class MTest {
    protected:
-      MScore* mscore;
+      Ms::MScore* mscore;
       QString root;     // root path of test source
-      Score* score;
+      Ms::Score* score;
 
       MTest();
-      Score* readScore(const QString& name);
-      Score* readCreatedScore(const QString& name);
-      bool saveScore(Score*, const QString& name);
-      bool savePdf(Score*, const QString& name);
-      bool saveMusicXml(Score*, const QString& name);
+      Ms::Score* readScore(const QString& name);
+      Ms::Score* readCreatedScore(const QString& name);
+      bool saveScore(Ms::Score*, const QString& name);
+      bool savePdf(Ms::Score*, const QString& name);
+      bool saveMusicXml(Ms::Score*, const QString& name);
       bool compareFiles(const QString& saveName, const QString& compareWith);
-      bool saveCompareScore(Score*, const QString& saveName, const QString& compareWith);
-      bool saveCompareMusicXmlScore(Score*, const QString& saveName, const QString& compareWith);
-      Element* writeReadElement(Element* element);
+      bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith);
+      bool saveCompareMusicXmlScore(Ms::Score*, const QString& saveName, const QString& compareWith);
+      Ms::Element* writeReadElement(Ms::Element* element);
       void initMTest();
       };
+}
 
 #endif
 

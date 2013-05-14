@@ -17,6 +17,8 @@
 #include "style.h"
 #include "elementlayout.h"
 
+namespace Ms {
+
 class MuseScoreView;
 struct SymCode;
 
@@ -135,4 +137,6 @@ class SimpleText : public Element {
       void selectAll();
       };
 
+
+}     // namespace Ms
 #endif

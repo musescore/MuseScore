@@ -17,6 +17,8 @@
 #include "line.h"
 #include "style.h"
 
+namespace Ms {
+
 class TextLine;
 class Element;
 class Text;
@@ -146,5 +148,7 @@ class TextLine : public SLine {
       virtual QVariant propertyDefault(P_ID id) const;
       };
 
+
+}     // namespace Ms
 #endif
 

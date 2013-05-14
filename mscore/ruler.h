@@ -23,6 +23,8 @@
 
 #include "libmscore/pos.h"
 
+namespace Ms {
+
 class Score;
 
 static const int rulerHeight = 28;
@@ -71,5 +73,7 @@ class Ruler : public QWidget {
       int xpos() const { return _xpos; }
       };
 
+
+} // namespace Ms
 #endif
 

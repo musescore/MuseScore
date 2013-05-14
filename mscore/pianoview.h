@@ -15,6 +15,8 @@
 
 #include "libmscore/pos.h"
 
+namespace Ms {
+
 class Staff;
 class Chord;
 class Note;
@@ -84,5 +86,7 @@ class PianoView : public QGraphicsView {
       };
 
 
+
+} // namespace Ms
 #endif
 

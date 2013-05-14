@@ -17,6 +17,8 @@
 #include "measure.h"
 #include "score.h"
 
+namespace Ms {
+
 int Breath::symList[Breath::breathSymbols] = {
       rcommaSym,
       lcommaSym,
@@ -103,4 +105,6 @@ QPointF Breath::pagePos() const
             yp += system->staff(staffIdx())->y() + system->y();
       return QPointF(pageX(), yp);
       }
+
+}
 

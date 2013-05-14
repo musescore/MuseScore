@@ -44,6 +44,8 @@
 #include "fluid/fluid.h"
 #include "pathlistdialog.h"
 
+namespace Ms {
+
 bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = false;
 
 extern bool useFactorySettings;
@@ -114,8 +116,8 @@ void Preferences::init()
       bgWallpaper        = QString();
       fgWallpaper        = ":/data/paper5.png";
       fgColor.setRgb(255, 255, 255);
-      iconHeight         = 25;
-      iconWidth          = 20;
+      iconHeight         = 24;
+      iconWidth          = 30;
 
       enableMidiInput    = true;
       playNotes          = true;
@@ -1762,7 +1764,7 @@ void Preferences::updatePluginList()
       pluginPathList.append(myPluginsPath);
 
       foreach(QString pluginPath, pluginPathList) {
-            ::updatePluginList(pluginPathList, pluginPath, pluginList);
+            Ms::updatePluginList(pluginPathList, pluginPath, pluginList);
             }
       }
 
@@ -1835,4 +1837,5 @@ void PreferenceDialog::printShortcutsClicked()
             }
       p.end();
       }
+}
 

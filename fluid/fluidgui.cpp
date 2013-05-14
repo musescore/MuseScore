@@ -11,8 +11,9 @@
 //=============================================================================
 
 #include "fluidgui.h"
-
 #include "mscore/preferences.h"
+
+using namespace Ms;
 
 SfListDialog::SfListDialog()
    : QDialog(0)

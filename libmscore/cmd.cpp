@@ -71,6 +71,8 @@
 #include "accidental.h"
 #include "sequencer.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   startCmd
 ///   Start a GUI command by clearing the redraw area
@@ -667,12 +669,14 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 //    make time gap at tick by removing/shortening
 //    chord/rest
 //
+//    if keepChord, the chord at tick is not removed
+//
 //    gap does not exceed measure or scope of tuplet
 //
 //    return size of actual gap
 //---------------------------------------------------------
 
-Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet* tuplet)
+Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
       {
 qDebug("makeGap %s at %d track %d", qPrintable(_sd.print()), segment->tick(), track);
       assert(_sd.numerator());
@@ -758,7 +762,8 @@ qDebug("remove %s %s at tick %d track %d",
                   }
             else {
 qDebug("  makeGap: remove %d/%d at %d", td.numerator(), td.denominator(), cr->tick());
-                  undoRemoveElement(cr);
+                  if(seg != firstSegment || !keepChord)
+                        undoRemoveElement(cr);
                   if (seg->isEmpty() && seg != firstSegment)
                         undoRemoveElement(seg);
                   else if (seg != firstSegment) {     // keep _all_ annotations on first segment?
@@ -928,8 +933,9 @@ QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
 
       Tuplet* tuplet = cr->tuplet();
       if (tuplet) {
-            Fraction rest(tuplet->duration());
-
+            if(tuplet->tuplet())
+                  return flist; // do no deal with nested tuplets
+            Fraction rest = Fraction::fromTicks(tuplet->tick() + tuplet->duration().ticks() - cr->segment()->tick()) * tuplet->ratio();
             if (rest < gap)
                   qDebug("does not fit in tuplet");
             else
@@ -961,7 +967,6 @@ QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
 
 void Score::changeCRlen(ChordRest* cr, const TDuration& d)
       {
-      deselectAll();
       Fraction srcF(cr->duration());
       Fraction dstF;
       if (d.type() == TDuration::V_MEASURE)
@@ -980,6 +985,7 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
             //
             // make shorter and fill with rest
             //
+            deselectAll();
             if (cr->type() == Element::CHORD) {
                   //
                   // remove ties
@@ -1004,6 +1010,7 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
       if (flist.isEmpty())
             return;
 
+      deselectAll();
 qDebug("ChangeCRLen::List:");
       foreach (Fraction f, flist)
             qDebug("  %d/%d", f.numerator(), f.denominator());
@@ -1016,7 +1023,7 @@ qDebug("ChangeCRLen::List:");
       bool first = true;
       foreach (Fraction f2, flist) {
             f  -= f2;
-            makeGap(cr1->segment(), cr1->track(), f2, tuplet);
+            makeGap(cr1->segment(), cr1->track(), f2, tuplet, first);
 
             if (cr->type() == Element::REST) {
 qDebug("  +ChangeCRLen::setRest %d/%d", f2.numerator(), f2.denominator());
@@ -1036,18 +1043,20 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
 //                  if (measure->tick() != tick)
 //                        etick += measure->ticks();
                   if (((tick - etick) % dList[0].ticks()) == 0) {
-                        foreach(TDuration d, dList) {
+                        foreach(TDuration du, dList) {
                               bool genTie;
                               Chord* cc;
                               if (oc) {
                                     genTie = true;
                                     cc = oc;
+                                    oc = addChord(tick, du, cc, genTie, tuplet);
                                     }
                               else {
                                     genTie = false;
                                     cc = static_cast<Chord*>(cr);
+                                    undoChangeChordRestLen(cr, du);
+                                    oc = cc;
                                     }
-                              oc = addChord(tick, d, cc, genTie, tuplet);
                               if (oc && first) {
                                     select(oc, SELECT_SINGLE, 0);
                                     first = false;
@@ -1063,12 +1072,14 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
                               if (oc) {
                                     genTie = true;
                                     cc = oc;
+                                    oc = addChord(tick, dList[i], cc, genTie, tuplet);
                                     }
                               else {
                                     genTie = false;
                                     cc = static_cast<Chord*>(cr);
+                                    undoChangeChordRestLen(cr, dList[i]);
+                                    oc = cc;
                                     }
-                              oc = addChord(tick, dList[i], cc, genTie, tuplet);
                               if (first) {
                                     select(oc, SELECT_SINGLE, 0);
                                     first = false;
@@ -2382,4 +2393,6 @@ void Score::cmd(const QAction* a)
       else
             qDebug("1unknown cmd <%s>", qPrintable(cmd));
       }
+
+}
 

@@ -24,6 +24,8 @@
 #include "ui_mixer.h"
 #include "libmscore/instrument.h"
 
+namespace Ms {
+
 class Score;
 struct Channel;
 class Part;
@@ -78,6 +80,7 @@ class Mixer : public QScrollArea
       void patchListChanged();
 
    signals:
+      void closed(bool);
 
    public:
       Mixer(QWidget* parent);
@@ -85,5 +88,7 @@ class Mixer : public QScrollArea
       PartEdit* partEdit(int index);
       };
 
+
+} // namespace Ms
 #endif
 

@@ -12,6 +12,8 @@
 
 #include "pitch.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PitchList
 //    return pitch offset at tick position (ottava)
@@ -27,3 +29,6 @@ int PitchList::pitchOffset(int tick) const
       --i;
       return i.value();
       }
+
+}
+

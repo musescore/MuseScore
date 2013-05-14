@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE
 //  Linux Music Editor
-//  $Id: greendotbutton.h 1840 2009-05-20 11:57:51Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -23,6 +22,8 @@
 
 #include "simplebutton.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   GreendotButton
 //---------------------------------------------------------
@@ -34,5 +35,7 @@ class GreendotButton : public SimpleButton {
       GreendotButton(QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

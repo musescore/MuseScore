@@ -18,9 +18,12 @@
 #include "mscore.h"
 #include "groups.h"
 
+class QPainter;
+
+namespace Ms {
+
 class MuseScoreView;
 class Segment;
-class QPainter;
 
 enum TimeSigType {
       TSIG_NORMAL,            // use sz/sn text
@@ -124,5 +127,7 @@ class TimeSig : public Element {
       void undoSetGroups(const Groups& e);
       };
 
+
+}     // namespace Ms
 #endif
 

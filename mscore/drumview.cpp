@@ -28,6 +28,8 @@
 #include "libmscore/slur.h"
 #include "libmscore/segment.h"
 
+namespace Ms {
+
 static const int MAP_OFFSET = 480;
 
 //---------------------------------------------------------
@@ -494,4 +496,5 @@ void DrumView::ensureVisible(int tick)
       QPointF pt = mapToScene(0, height() / 2);
       QGraphicsView::ensureVisible(qreal(tick), pt.y(), 240.0, 1.0);
       }
+}
 

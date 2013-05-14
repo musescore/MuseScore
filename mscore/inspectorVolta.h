@@ -19,6 +19,8 @@
 #include "ui_inspector_textline.h"
 #include "ui_inspector_volta.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorVolta
 //---------------------------------------------------------
@@ -34,5 +36,7 @@ class InspectorVolta : public InspectorBase {
       InspectorVolta(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif
 
