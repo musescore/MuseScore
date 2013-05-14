@@ -309,7 +309,7 @@
             <Instrument id="french-flageolet">
                   <longName>French Flageolet</longName>
                   <shortName>Fr. Fla.</shortName>
-                  <description>3 hole Flageolet</description>
+                  <description>4 hole Flageolet</description>
                   <musicXMLid>wind.flutes.flageolet</musicXMLid>
                   <extended>1</extended>
                   <clef>G8va</clef>
@@ -2056,7 +2056,7 @@
             <Instrument id="aulochrome">
                   <longName>Aulochrome</longName>
                   <shortName>Aul.</shortName>
-                  <description>2 soprano saxes joinetogether</description>
+                  <description>2 soprano saxes joined together</description>
                   <musicXMLid>wind.reed.saxophone.aulochrome</musicXMLid>
                   <extended>1</extended>
                   <clef>G</clef>
