@@ -23,6 +23,8 @@
 
 #include "libmscore/pos.h"
 
+namespace Ms {
+
 class Staff;
 class Score;
 class Note;
@@ -83,4 +85,6 @@ class DrumView : public QGraphicsView {
       };
 
 
+
+} // namespace Ms
 #endif

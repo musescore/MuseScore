@@ -13,6 +13,8 @@
 #include "interval.h"
 #include "utils.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Interval
 //---------------------------------------------------------
@@ -51,3 +53,6 @@ bool Interval::isZero() const
       {
       return diatonic == 0 && chromatic == 0;
       }
+
+}
+

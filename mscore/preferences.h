@@ -25,6 +25,8 @@
 #include "shortcut.h"
 #include "mscore/importmidi_operations.h"
 
+namespace Ms {
+
 enum SessionStart {
       EMPTY_SESSION, LAST_SESSION, NEW_SESSION, SCORE_SESSION
       };
@@ -206,4 +208,6 @@ class ShortcutItem : public QTreeWidgetItem {
 extern Preferences preferences;
 extern QString appStyleSheet();
 extern bool useALSA, useJACK, usePortaudio, usePulseAudio;
+
+} // namespace Ms
 #endif

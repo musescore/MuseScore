@@ -16,6 +16,8 @@
 #include "text.h"
 #include "mscore.h"
 
+namespace Ms {
+
 class Measure;
 class Segment;
 
@@ -104,4 +106,6 @@ class Dynamic : public Text {
       QVariant propertyDefault(P_ID id) const;
       };
 
+
+}     // namespace Ms
 #endif

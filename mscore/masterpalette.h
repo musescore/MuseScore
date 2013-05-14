@@ -17,6 +17,8 @@
 #include "ui_masterpalette.h"
 #include "timedialog.h"
 
+namespace Ms {
+
 class Palette;
 
 //---------------------------------------------------------
@@ -39,5 +41,6 @@ class MasterPalette : public QWidget, Ui::MasterPalette
       void selectItem(const QString& s);
       };
 
+} // namespace Ms
 #endif
 

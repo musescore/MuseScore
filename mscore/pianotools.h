@@ -21,6 +21,8 @@
 #ifndef __PIANOTOOLS_H__
 #define __PIANOTOOLS_H__
 
+namespace Ms {
+
 class HPiano;
 
 //---------------------------------------------------------
@@ -72,11 +74,6 @@ class HPiano : public QGraphicsView {
 class PianoTools : public QDockWidget {
       Q_OBJECT
 
-      virtual void closeEvent(QCloseEvent*);
-
-   signals:
-      void pianoVisible(bool);
-
    signals:
       void keyPressed(int pitch, bool ctrl);
 
@@ -84,5 +81,7 @@ class PianoTools : public QDockWidget {
       PianoTools(QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

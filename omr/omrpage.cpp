@@ -32,6 +32,8 @@
 #include "libmscore/sym.h"
 #include "pattern.h"
 
+namespace Ms {
+
 #define SEARCH_NOTES
 
 //---------------------------------------------------------
@@ -876,4 +878,5 @@ void OmrPage::read(XmlReader& e)
                   e.unknown();
             }
       }
+}
 

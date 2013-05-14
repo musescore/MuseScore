@@ -23,6 +23,8 @@
 
 #include "libmscore/harmony.h"
 
+namespace Ms {
+
 struct TextSegment;
 struct ChordDescription;
 class ChordList;
@@ -65,5 +67,7 @@ class HarmonyCanvas : public QFrame {
       void updateChordDescription();
       };
 
+
+} // namespace Ms
 #endif
 

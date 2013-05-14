@@ -15,6 +15,8 @@
 
 #include "text.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   MarkerType
 //---------------------------------------------------------
@@ -77,7 +79,9 @@ class Marker : public Text {
       virtual QVariant propertyDefault(P_ID) const;
       };
 
-Q_DECLARE_METATYPE(MarkerType)
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::MarkerType)
 
 #endif
 

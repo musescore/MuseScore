@@ -23,6 +23,8 @@
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   BoxProperties
 //---------------------------------------------------------
@@ -73,4 +75,7 @@ void BoxProperties::ok()
                   }
             }
       }
+}
+
+
 

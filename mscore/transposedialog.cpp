@@ -36,6 +36,8 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/clef.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TransposeDialog
 //---------------------------------------------------------
@@ -119,3 +121,5 @@ void TransposeDialog::on_diatonicBox_toggled(bool val)
 {
     chromaticBox->setChecked(!val);
 }
+}
+

@@ -6148,7 +6148,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>PDF File (*.pdf)</source>
-        <translation type="unfinished">Fichier PDF  (*.pdf)</translation>
+        <translation type="unfinished">Fichier PDF (*.pdf)</translation>
     </message>
     <message>
         <source>PostScript File (*.ps)</source>

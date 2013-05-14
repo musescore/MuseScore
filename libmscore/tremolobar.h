@@ -18,6 +18,8 @@
 
 class QPainter;
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ TremoloBar
 //---------------------------------------------------------
@@ -43,5 +45,7 @@ class TremoloBar : public Element {
       void setPoints(const QList<PitchValue>& p) { _points = p;    }
       };
 
+
+}     // namespace Ms
 #endif
 

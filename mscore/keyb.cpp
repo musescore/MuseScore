@@ -42,6 +42,8 @@
 #include "libmscore/stafftype.h"
 #include "texttools.h"
 
+namespace Ms {
+
 #ifdef Q_WS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
 #else
@@ -342,4 +344,5 @@ void MuseScore::updateInputState(Score* score)
       getAction("auto-beam")->setChecked(is.beamMode  == BeamMode::AUTO);
       getAction("repitch")->setChecked(is.repitchMode());
       }
+}
 

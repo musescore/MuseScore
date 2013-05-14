@@ -36,6 +36,8 @@
 #include "editstringdata.h"
 #include "libmscore/tablature.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditStaff
 //---------------------------------------------------------
@@ -49,20 +51,11 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
 
       Part* part = staff->part();
       instrument = *part->instr();
-
       Score* score = part->score();
-      int curIdx   = 0;
-      int n = score->staffTypes().size();
-printf("staff types %d\n", n);
-      for (int idx = 0; idx < n; ++idx) {
-            StaffType* st = score->staffType(idx);
-printf("  %d <%s>\n", idx, qPrintable(st->name()));
-            staffType->addItem(st->name(), idx);
-            if (st == s->staffType())
-                  curIdx = idx;
-            }
-      staffType->setCurrentIndex(curIdx);
 
+      // hide string data controls if instrument has no strings
+      stringDataFrame->setVisible(instrument.tablature() && instrument.tablature()->strings() > 0);
+      fillStaffTypeCombo();
       small->setChecked(staff->small());
       invisible->setChecked(staff->invisible());
       spinExtraDistance->setValue(s->userDist() / score->spatium());
@@ -79,6 +72,32 @@ printf("  %d <%s>\n", idx, qPrintable(st->name()));
       connect(minPitchPSelect,  SIGNAL(clicked()), SLOT(minPitchPClicked()));
       connect(maxPitchPSelect,  SIGNAL(clicked()), SLOT(maxPitchPClicked()));
       connect(editStringData,   SIGNAL(clicked()), SLOT(editStringDataClicked()));
+      }
+
+//---------------------------------------------------------
+//   fillStaffTypecombo
+//---------------------------------------------------------
+
+void EditStaff::fillStaffTypeCombo()
+      {
+      Score* score   = staff->score();
+      int curIdx     = 0;
+      int n          = score->staffTypes().size();
+      // can this instrument accept tabs or drum set?
+      bool canUseTabs = instrument.tablature() && instrument.tablature()->strings() > 0;
+      bool canUsePerc = instrument.useDrumset();
+      staffType->clear();
+      for (int idx = 0; idx < n; ++idx) {
+            StaffType* st = score->staffType(idx);
+            if ( (canUseTabs && st->group() == TAB_STAFF)
+                        || ( canUsePerc && st->group() == PERCUSSION_STAFF)
+                        || (!canUsePerc && st->group() == PITCHED_STAFF) ) {
+                  staffType->addItem(st->name(), idx);
+                  if (st == staff->staffType())
+                        curIdx = staffType->count() - 1;
+                  }
+            }
+      staffType->setCurrentIndex(curIdx);
       }
 
 //---------------------------------------------------------
@@ -201,7 +220,8 @@ void EditStaff::apply()
       bool s            = small->isChecked();
       bool inv          = invisible->isChecked();
       qreal userDist    = spinExtraDistance->value();
-      StaffType* st     = score->staffType(staffType->currentIndex());
+      int staffIdx      = staffType->itemData(staffType->currentIndex()).toInt();
+      StaffType* st     = score->staffType(staffIdx);
 
 
       // before changing instrument, check if notes need to be updated
@@ -333,9 +353,14 @@ void EditStaff::editStringDataClicked()
       EditStringData* esd = new EditStringData(this, &stringList, &frets);
       if (esd->exec()) {
             Tablature * tab = new Tablature(frets, stringList);
+            // detect number of strings going from 0 to !0 or vice versa
+            bool redoStaffTypeCombo =
+                  (stringList.size() != 0) != (instrument.tablature()->strings() != 0);
             instrument.setTablature(tab);
             int numStr = tab ? tab->strings() : 0;
             numOfStrings->setText(QString::number(numStr));
+            if (redoStaffTypeCombo)
+                  fillStaffTypeCombo();
             }
       }
 
@@ -351,3 +376,5 @@ QString EditStaff::midiCodeToStr(int midiCode)
       {
       return QString("%1 %2").arg(g_cNoteName[midiCode % 12]).arg(midiCode / 12 - 1);
       }
+}
+

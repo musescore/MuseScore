@@ -23,6 +23,8 @@
 #include "musescore.h"
 #include "shortcut.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ShortcutCaptureDialog
 //---------------------------------------------------------
@@ -169,4 +171,5 @@ void ShortcutCaptureDialog::clearClicked()
       nshrtLabel->setText(tr("Undefined"));
       key = 0;
       }
+}
 

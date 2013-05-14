@@ -26,6 +26,9 @@ namespace tesseract {
       class TessBaseAPI;
       };
 
+namespace Ms {
+
+
 //---------------------------------------------------------
 //   OcrImage
 //---------------------------------------------------------
@@ -55,6 +58,7 @@ class Ocr {
       void init();
       QString readLine(const OcrImage&);
       };
+}
 
 #endif
 

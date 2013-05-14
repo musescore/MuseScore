@@ -27,6 +27,8 @@
 
 #include <jack/midiport.h>
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   JackAudio
 //---------------------------------------------------------
@@ -592,4 +594,5 @@ void JackAudio::midiRead()
       {
 //      midiDriver->read();
       }
+}
 

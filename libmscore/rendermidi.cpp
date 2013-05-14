@@ -48,6 +48,8 @@
 #include "utils.h"
 #include "rendermidi.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   updateChannel
 //---------------------------------------------------------
@@ -833,7 +835,7 @@ void Score::createPlayEvents()
       int etrack = nstaves() * VOICES;
       for (int track = 0; track < etrack; ++track) {
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
-                  ::createPlayEvents(m, track, &slurs);
+                  Ms::createPlayEvents(m, track, &slurs);
             }
       }
 
@@ -874,4 +876,6 @@ void Score::renderMidi(EventMap* events)
                   }
             }
       }
+
+}
 

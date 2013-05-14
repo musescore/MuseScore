@@ -21,13 +21,16 @@
 #ifndef __OMRPAGE_H__
 #define __OMRPAGE_H__
 
+#include "libmscore/durationtype.h"
+
+namespace Ms {
+
 class Omr;
 class Score;
 class Xml;
 class XmlReader;
 class Pattern;
 
-#include "libmscore/durationtype.h"
 
 //---------------------------------------------------------
 //   HLine
@@ -148,6 +151,8 @@ class OmrPage {
       void read(XmlReader&);
       bool dot(int x, int y) const;
       };
+
+}
 
 #endif
 

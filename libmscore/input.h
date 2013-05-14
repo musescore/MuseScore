@@ -16,6 +16,8 @@
 #include "mscore.h"
 #include "durationtype.h"
 
+namespace Ms {
+
 class Slur;
 class ChordRest;
 class Drumset;
@@ -72,5 +74,7 @@ class InputState {
       StaffGroup staffGroup() const;
       };
 
+
+}     // namespace Ms
 #endif
 

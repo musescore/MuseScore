@@ -305,7 +305,7 @@
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons-dark/text_left.svg</normaloff>:/data/icons-dark/text_left.svg</iconset>
+               <normaloff>:/data/icons-dark/format-justify-left.svg</normaloff>:/data/icons-dark/format-justify-left.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -328,7 +328,7 @@
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons-dark/text_center.svg</normaloff>:/data/icons-dark/text_center.svg</iconset>
+               <normaloff>:/data/icons-dark/format-justify-center.svg</normaloff>:/data/icons-dark/format-justify-center.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -351,7 +351,7 @@
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons-dark/text_right.svg</normaloff>:/data/icons-dark/text_right.svg</iconset>
+               <normaloff>:/data/icons-dark/format-justify-right.svg</normaloff>:/data/icons-dark/format-justify-right.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -374,7 +374,7 @@
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons-dark/text_top.svg</normaloff>:/data/icons-dark/text_top.svg</iconset>
+               <normaloff>:/data/icons-dark/align-vertical-top.svg</normaloff>:/data/icons-dark/align-vertical-top.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -397,7 +397,7 @@
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons-dark/text_vcenter.svg</normaloff>:/data/icons-dark/text_vcenter.svg</iconset>
+               <normaloff>:/data/icons-dark/align-vertical-middle.svg</normaloff>:/data/icons-dark/align-vertical-middle.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -420,7 +420,7 @@
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons-dark/text_vcenter.svg</normaloff>:/data/icons-dark/text_vcenter.svg</iconset>
+               <normaloff>:/data/icons-dark/align-vertical-baseline.svg</normaloff>:/data/icons-dark/align-vertical-baseline.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -443,7 +443,7 @@
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons-dark/text_bottom.svg</normaloff>:/data/icons-dark/text_bottom.svg</iconset>
+               <normaloff>:/data/icons-dark/align-vertical-bottom.svg</normaloff>:/data/icons-dark/align-vertical-bottom.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>

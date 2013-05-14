@@ -13,6 +13,8 @@
 #ifndef __IMAGE_CACHE_H__
 #define __IMAGE_CACHE_H__
 
+namespace Ms {
+
 class Image;
 class Score;
 
@@ -55,5 +57,7 @@ class ImageStore : public QList<ImageStoreItem*>  {
       };
 
 extern ImageStore imageStore;       // this is the global imageStore
+
+}     // namespace Ms
 #endif
 

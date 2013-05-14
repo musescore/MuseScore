@@ -12,6 +12,7 @@
 
 #include <vector>
 
+namespace Ms {
 
 extern Score::FileError importMidi(Score*, const QString&);
 extern QList<QString> extractMidiInstruments(const QString&);
@@ -96,7 +97,7 @@ class TracksModel : public QAbstractTableModel
             {
             if (!index.isValid())
                   return 0;
-            Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+            Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
             if (index.column() == 0)
                   flags |= Qt::ItemIsUserCheckable;
             return flags;
@@ -314,5 +315,7 @@ void MuseScore::showMidiImportPanel(bool visible)
             importmidi_panel->setVisible(visible);
       getAction("toggle-midiimportpanel")->setChecked(visible);
       }
+
+}
 
 

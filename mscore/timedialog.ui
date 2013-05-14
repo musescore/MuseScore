@@ -230,7 +230,7 @@
         </layout>
        </item>
        <item>
-        <widget class="NoteGroups" name="groups">
+        <widget class="Ms::NoteGroups" name="groups">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -280,7 +280,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NoteGroups</class>
+   <class>Ms::NoteGroups</class>
    <extends>QGroupBox</extends>
    <header>noteGroups.h</header>
    <container>1</container>

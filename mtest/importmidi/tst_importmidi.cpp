@@ -25,7 +25,12 @@
 #include "libmscore/mcursor.h"
 #include "mtest/testutils.h"
 
-extern Score::FileError importMidi(Score*, const QString&);
+namespace Ms {
+      extern Score::FileError importMidi(Score*, const QString&);
+      }
+
+using namespace Ms;
+
 #define DIR QString("importmidi/")
 
 //---------------------------------------------------------

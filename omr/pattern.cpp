@@ -23,6 +23,8 @@
 #include "libmscore/sym.h"
 #include "omr.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Pattern
 //---------------------------------------------------------
@@ -145,3 +147,5 @@ bool Pattern::dot(int x, int y) const
       const uint* p = (const uint*)_image.scanLine(y) + (x / 32);
       return (*p) & (0x1 << (x % 32));
       }
+}
+

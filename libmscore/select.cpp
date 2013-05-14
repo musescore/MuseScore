@@ -38,6 +38,8 @@
 #include "beam.h"
 #include "textline.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Selection
 //---------------------------------------------------------
@@ -641,4 +643,6 @@ bool Selection::measureRange(Measure** m1, Measure** m2) const
       return true;
       }
 
+
+}
 

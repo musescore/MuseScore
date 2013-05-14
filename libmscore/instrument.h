@@ -17,6 +17,8 @@
 #include "synthesizer/event.h"
 #include "interval.h"
 
+namespace Ms {
+
 class InstrumentTemplate;
 class Xml;
 class XmlReader;
@@ -200,5 +202,7 @@ class InstrumentList : public std::map<const int, Instrument> {
       void setInstrument(const Instrument&, int tick);
       };
 
+
+}     // namespace Ms
 #endif
 

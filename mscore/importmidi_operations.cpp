@@ -1,5 +1,7 @@
 #include "importmidi_operations.h"
 
+namespace Ms {
+
 
 void MidiImportOperations::addTrackOperations(const MidiTrackOperations &operations)
       {
@@ -10,3 +12,5 @@ void MidiImportOperations::clear()
       {
       operations_.clear();
       }
+}
+

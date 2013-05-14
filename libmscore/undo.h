@@ -33,6 +33,8 @@
 #include "noteevent.h"
 #include "synthesizerstate.h"
 
+namespace Ms {
+
 class ElementList;
 class Element;
 class Instrument;
@@ -1268,5 +1270,7 @@ class ChangeSynthesizerState : public UndoCommand {
       UNDO_NAME("ChangeSynthesizerState");
       };
 
+
+}     // namespace Ms
 #endif
 

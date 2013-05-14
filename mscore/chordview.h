@@ -15,6 +15,8 @@
 
 #include "libmscore/pos.h"
 
+namespace Ms {
+
 class Staff;
 class Chord;
 class Note;
@@ -129,4 +131,6 @@ class ChordView : public QGraphicsView {
       static int pitch2y(int pitch);
       };
 
+
+} // namespace Ms
 #endif

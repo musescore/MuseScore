@@ -16,6 +16,8 @@
 #include "bsp.h"
 #include "element.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InsertItemBspTreeVisitor
 //---------------------------------------------------------
@@ -349,4 +351,6 @@ QRectF BspTree::rectForIndex(int index) const
             }
       return rect;
       }
+
+}
 

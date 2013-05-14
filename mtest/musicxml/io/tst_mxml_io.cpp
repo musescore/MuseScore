@@ -20,9 +20,14 @@
 #include "libmscore/staff.h"
 #include "libmscore/keysig.h"
 // end includes required for fixupScore()
-extern bool saveMxl(Score*, const QString&);
+
+namespace Ms {
+      extern bool saveMxl(Score*, const QString&);
+      }
 
 #define DIR QString("musicxml/io/")
+
+using namespace Ms;
 
 //---------------------------------------------------------
 //   TestMxmlIO

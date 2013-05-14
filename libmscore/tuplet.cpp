@@ -22,6 +22,8 @@
 #include "undo.h"
 #include "stem.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Tuplet
 //---------------------------------------------------------
@@ -838,4 +840,6 @@ QVariant Tuplet::propertyDefault(P_ID id) const
                   return DurationElement::propertyDefault(id);
             }
       }
+
+}
 

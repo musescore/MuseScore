@@ -14,6 +14,8 @@
 #include "effects/effectgui.h"
 #include "noeffect.h"
 
+namespace Ms {
+
 static const std::vector<ParDescr> noeffectPd;
 
 //---------------------------------------------------------
@@ -42,4 +44,5 @@ void NoEffect::process(int n, float* src, float* dst)
       memcpy(dst, src, n * 2 * sizeof(float));
       }
 
+}
 

@@ -27,6 +27,8 @@
 #include "musescore.h"
 #include "scoreview.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   moveElement
 //---------------------------------------------------------
@@ -623,4 +625,5 @@ bool ScoreView::dropCanvas(Element* e)
       return false;
       }
 
+}
 

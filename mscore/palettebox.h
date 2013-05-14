@@ -14,6 +14,8 @@
 #ifndef __PALETTE_BOX__
 #define __PALETTE_BOX__
 
+namespace Ms {
+
 class Xml;
 class XmlReader;
 class Palette;
@@ -26,8 +28,6 @@ class PaletteBox : public QDockWidget {
       Q_OBJECT
 
       QVBoxLayout* vbox;
-
-      virtual void closeEvent(QCloseEvent*);
       Palette* newPalette(const QString& name, int slot);
 
    private slots:
@@ -36,7 +36,6 @@ class PaletteBox : public QDockWidget {
       void displayMore(const QString& paletteName);
 
    signals:
-      void paletteVisible(bool);
       void changed();
 
    public:
@@ -49,5 +48,7 @@ class PaletteBox : public QDockWidget {
       };
 
 
+
+} // namespace Ms
 #endif
 

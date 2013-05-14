@@ -13,10 +13,13 @@
 #ifndef __SYNTHESIZERSTATE_H__
 #define __SYNTHESIZERSTATE_H__
 
+#include <list>
+
+namespace Ms {
+
 class Xml;
 class XmlReader;
 
-#include <list>
 
 //---------------------------------------------------------
 //   IdValue
@@ -61,5 +64,7 @@ class SynthesizerState : public std::list<SynthesizerGroup> {
       void read(XmlReader&);
       };
 
+
+}     // namespace Ms
 #endif
 

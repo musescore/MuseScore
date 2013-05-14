@@ -27,6 +27,8 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TremoloBarProperties
 //---------------------------------------------------------
@@ -232,4 +234,5 @@ void TremoloBarCanvas::mousePressEvent(QMouseEvent* ev)
       update();
       }
 
+}
 

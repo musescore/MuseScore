@@ -14,6 +14,8 @@
 #ifndef __TEXTTOOLS_H__
 #define __TEXTTOOLS_H__
 
+namespace Ms {
+
 class Text;
 
 //---------------------------------------------------------
@@ -73,6 +75,7 @@ class TextTools : public QDockWidget {
       void updateTools();
       QAction* kbAction() const { return showKeyboard; }
       };
+}
 
 #endif
 

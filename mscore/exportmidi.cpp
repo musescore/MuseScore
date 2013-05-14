@@ -23,6 +23,8 @@
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   writeHeader
 //---------------------------------------------------------
@@ -278,4 +280,5 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
             }
       return !mf.write(&f);
       }
+}
 

@@ -20,6 +20,8 @@
 
 #include "voltaproperties.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   VoltaProperties
 //---------------------------------------------------------
@@ -61,4 +63,5 @@ void VoltaProperties::setEndings(const QList<int>& l)
             }
       repeat->setText(s);
       }
+}
 

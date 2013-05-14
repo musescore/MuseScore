@@ -81,6 +81,8 @@
 #include "navigator.h"
 #include "inspector.h"
 
+namespace Ms {
+
 #if 0
 // a useful enum for scale steps (could be moved to libmscore/pitchspelling.h)
 enum {
@@ -4005,7 +4007,7 @@ void ScoreView::setCursorVisible(bool v)
 
 void ScoreView::cmdTuplet(int n, ChordRest* cr)
       {
-      if (cr->durationType() < TDuration(TDuration::V_128TH)) {
+      if (cr->durationType() < TDuration(TDuration::V_128TH) && cr->durationType() != TDuration(TDuration::V_MEASURE)) {
             mscore->noteTooShortForTupletDialog();
             return;
             }
@@ -5191,4 +5193,5 @@ Element* ScoreView::elementNear(QPointF p)
       return e;
       }
 
+}
 

@@ -13,6 +13,8 @@
 #ifndef __HELP_BROWSER_H
 #define __HELP_BROWSER_H
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   WebView
 //---------------------------------------------------------
@@ -44,5 +46,7 @@ class HelpBrowser : public QWidget {
       void setContent(const QUrl& url);
       };
 
+
+} // namespace Ms
 #endif
 

@@ -66,6 +66,8 @@
 #include "libmscore/pitchspelling.h"
 #include "libmscore/chordlist.h"
 
+namespace Ms {
+
 extern bool useFactorySettings;
 
 //---------------------------------------------------------
@@ -2775,4 +2777,5 @@ void TextLineSegmentView::setElement(Element* e)
       lb.offset2y->setValue(vs->userOff2().y());
       }
 
+}
 

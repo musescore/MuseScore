@@ -15,6 +15,8 @@
 #include "libmscore/textline.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorTextLine
 //---------------------------------------------------------
@@ -34,4 +36,5 @@ InspectorTextLine::InspectorTextLine(QWidget* parent)
             };
       mapSignals();
       }
+}
 

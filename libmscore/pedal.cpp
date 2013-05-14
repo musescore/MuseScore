@@ -16,6 +16,8 @@
 
 #include "score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -74,4 +76,6 @@ void Pedal::setYoff(qreal val)
       {
       rUserYoffset() += (val - score()->styleS(ST_pedalY).val()) * spatium();
       }
+
+}
 

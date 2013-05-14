@@ -17,6 +17,8 @@
 
 class QPainter;
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SpacerType
 //---------------------------------------------------------
@@ -63,4 +65,6 @@ class Spacer : public Element {
       QVariant propertyDefault(P_ID id) const;
       };
 
+
+}     // namespace Ms
 #endif

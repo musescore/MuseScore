@@ -18,6 +18,8 @@
 #include "sym.h"
 #include "segment.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Lyrics
 //---------------------------------------------------------
@@ -350,4 +352,6 @@ QVariant Lyrics::propertyDefault(P_ID id) const
             }
       }
 
+
+}
 

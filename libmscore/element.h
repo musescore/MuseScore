@@ -16,13 +16,17 @@
 #include "xml.h"
 #include "mscore.h"
 #include "property.h"
+#include "spatium.h"
+
+class QPainter;
+
+namespace Ms {
 
 /**
  \file
  Definition of classes Element, ElementList, StaffLines.
 */
 
-#include "spatium.h"
 
 class Xml;
 class Measure;
@@ -33,7 +37,6 @@ class MuseScoreView;
 class Segment;
 class TextStyle;
 class Element;
-class QPainter;
 
 //---------------------------------------------------------
 //   ElementFlag
@@ -657,9 +660,12 @@ class RubberBand : public Element {
 extern bool elementLessThan(const Element* const, const Element* const);
 extern void collectElements(void* data, Element* e);
 
-Q_DECLARE_METATYPE(Element::ElementType)
-Q_DECLARE_METATYPE(Element::DynamicRange)
-Q_DECLARE_METATYPE(Element::Placement)
+
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Element::ElementType)
+Q_DECLARE_METATYPE(Ms::Element::DynamicRange)
+Q_DECLARE_METATYPE(Ms::Element::Placement)
 
 #endif
 

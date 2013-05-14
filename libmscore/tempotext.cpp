@@ -16,6 +16,8 @@
 #include "system.h"
 #include "measure.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TempoText
 //---------------------------------------------------------
@@ -198,4 +200,6 @@ void TempoText::layout()
             // text height ?
             }
       }
+
+}
 

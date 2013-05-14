@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg xmlns:cc='http://creativecommons.org/ns#' xmlns:dc='http://purl.org/dc/elements/1.1/' sodipodi:docname='document-save-as.svg' height='24' id='svg7384' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:svg='http://www.w3.org/2000/svg' inkscape:version='0.48.4 r9939' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'>
+  <metadata id='metadata90'>
+    <rdf:RDF>
+      <cc:Work rdf:about=''>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage'/>
+        <dc:title>MuseScore Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview inkscape:bbox-nodes='false' inkscape:bbox-paths='true' bordercolor='#666666' borderopacity='1' inkscape:current-layer='actions' inkscape:cx='199.85097' inkscape:cy='-197.63669' fit-margin-bottom='6' fit-margin-left='6' fit-margin-right='6' fit-margin-top='6' gridtolerance='10' inkscape:guide-bbox='true' guidetolerance='10' id='namedview88' inkscape:object-nodes='false' inkscape:object-paths='false' objecttolerance='10' pagecolor='#333333' inkscape:pageopacity='1' inkscape:pageshadow='2' showborder='false' showgrid='false' showguides='true' inkscape:snap-bbox='true' inkscape:snap-bbox-midpoints='false' inkscape:snap-global='false' inkscape:snap-grids='true' inkscape:snap-nodes='false' inkscape:snap-others='false' inkscape:snap-to-guides='true' inkscape:window-height='1021' inkscape:window-maximized='1' inkscape:window-width='1920' inkscape:window-x='0' inkscape:window-y='27' inkscape:zoom='1'>
+    <inkscape:grid empspacing='2' enabled='true' id='grid4866' originx='294.18993px' originy='43.999914px' snapvisiblegridlinesonly='true' spacingx='1px' spacingy='1px' type='xygrid' visible='true'/>
+  </sodipodi:namedview>
+  <title id='title9167'>MuseScore Icon Theme</title>
+  <defs id='defs7386'/>
+  <g inkscape:groupmode='layer' id='actions' inkscape:label='actions' style='display:inline' transform='translate(-149.00038,-122.99997)'>
+    <path inkscape:connector-curvature='0' d='m 153.75,123.99995 c -0.89488,1.5e-4 -1.75,0.70135 -1.75,1.65625 l 0,2.65625 c 0,0.9549 0.85512,1.6875 1.75,1.6875 l 2.1875,0 10.15625,0 2.1875,0 c 0.89488,0 1.71875,-0.7326 1.71875,-1.6875 l 0,-2.65625 c 0,-0.9549 -0.82387,-1.6561 -1.71875,-1.65625 l -14.53125,0 z m 0.28125,2.03125 13.96875,0 0,1.96875 -13.96875,0 0,-1.96875 z m 2.8125,4.96875 4.1875,4.5 4.125,-4.5 -8.3125,0 z' id='path7991' style='color:#000000;fill:#ffffff;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate'/>
+    <path inkscape:connector-curvature='0' d='m 167.46875,133.99995 0,1.5 2.15625,2.5 -17.28125,0 1.65625,-2 0,-1.5 -1.5,0 c 0,0 -1.56014,2.22125 -2.5,3.5 l 0,8 22,0 0,-8 -0.0312,0 -2.5625,-3.53125 c -0.1182,-0.1671 -0.22466,-0.4689 -0.4375,-0.46875 l -1.5,0 z M 156.125,140.1562 c -0.68691,-3e-4 0.0783,0 0.59375,0 0.50917,-0.084 0.79041,0.39945 0.78125,0.84375 l 6,0 c -0.007,-0.39615 0.19394,-0.84375 0.65625,-0.84375 0.007,0 0.52373,-1.5e-4 0.53125,0 0.45299,0.015 0.85019,0.36045 0.84375,0.75 l 0,0.0937 c 0,0.97275 -1.07682,2 -2.03125,2 l -6,0 c -0.95438,0 -1.96875,-1.1819 -1.96875,-2 l 0,-0.0937 c -0.0189,-0.3255 0.23234,-0.64845 0.59375,-0.75 z' id='path7993' style='font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans'/>
+    
+  </g>
+</svg>

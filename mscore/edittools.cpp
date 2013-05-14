@@ -15,6 +15,8 @@
 #include "musescore.h"
 #include "scoreview.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   editTools
 //---------------------------------------------------------
@@ -23,7 +25,7 @@ EditTools* MuseScore::editTools()
       {
       if (!_editTools) {
             _editTools = new EditTools(this);
-            addDockWidget(Qt::BottomDockWidgetArea, _editTools);
+            addDockWidget(Qt::DockWidgetArea(Qt::BottomDockWidgetArea), _editTools);
             }
       setFocusPolicy(Qt::NoFocus);
       return _editTools;
@@ -38,7 +40,7 @@ EditTools::EditTools(QWidget* parent)
       {
       setObjectName("edit-tools");
       setWindowTitle(tr("Edit Mode Tools"));
-      setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
 
       QToolBar* tb = new QToolBar(tr("Edit Mode Tools"));
 
@@ -145,4 +147,5 @@ void EditTools::setEditPos(const QPointF& pt)
       _editY->blockSignals(false);
       }
 
+}
 

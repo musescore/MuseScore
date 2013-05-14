@@ -30,6 +30,8 @@
 #include "libmscore/sym.h"
 #include "libmscore/text.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   populateLineSymbolComboBox
 //---------------------------------------------------------
@@ -342,4 +344,5 @@ void LineProperties::continueTextProperties()
                   }
             }
       }
+}
 

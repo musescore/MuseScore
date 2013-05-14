@@ -20,6 +20,8 @@
 
 #include "slurproperties.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SlurProperties
 //---------------------------------------------------------
@@ -58,7 +60,9 @@ void SlurProperties::setLineType(int val)
             case 2:
                   dashed->setChecked(true);
                   break;
-            default:    
+            default:
                   solid->setChecked(true);
-            }            
+            }
       }
+}
+

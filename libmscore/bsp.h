@@ -16,6 +16,8 @@
 #ifndef __BSP_H__
 #define __BSP_H__
 
+namespace Ms {
+
 class BspTreeVisitor;
 class InsertItemBspTreeVisitor;
 class RemoveItemBspTreeVisitor;
@@ -93,4 +95,6 @@ class BspTreeVisitor
       virtual void visit(QList<Element*>* items) = 0;
       };
 
+
+}     // namespace Ms
 #endif

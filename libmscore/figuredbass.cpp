@@ -16,6 +16,11 @@
 #include "measure.h"
 #include "system.h"
 #include "segment.h"
+#include "chord.h"
+#include "rest.h"
+#include "score.h"
+
+namespace Ms {
 
 // the array of configured fonts
 static QList<FiguredBassFont> g_FBFonts;
@@ -893,9 +898,6 @@ bool FiguredBassItem::startsWithParenthesis() const
 //   F I G U R E D   B A S S
 //---------------------------------------------------------
 
-#include "chord.h"
-#include "rest.h"
-
 FiguredBass::FiguredBass(Score* s)
    : Text(s)
       {
@@ -1700,7 +1702,6 @@ void FiguredBass::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const
 //    called from Keyboard Accelerator & menus
 //---------------------------------------------------------
 
-#include "score.h"
 
 FiguredBass* Score::addFiguredBass()
       {
@@ -1736,4 +1737,6 @@ FiguredBass* Score::addFiguredBass()
       select(fb, SELECT_SINGLE, 0);
       return fb;
       }
+
+}
 

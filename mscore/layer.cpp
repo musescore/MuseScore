@@ -22,6 +22,8 @@
 #include "libmscore/score.h"
 #include "musescore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   LayerManager
 //---------------------------------------------------------
@@ -212,4 +214,5 @@ void LayerManager:: accept()
       QDialog::accept();
       }
 
+}
 

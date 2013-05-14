@@ -17,6 +17,8 @@
 #include "icons.h"
 #include "helpBrowser.h"
 
+namespace Ms {
+
 extern bool useFactorySettings;
 
 //static const char* states[] = {
@@ -57,7 +59,7 @@ PluginCreator::PluginCreator(QWidget* parent)
 
       actionQuit->setShortcut(QKeySequence(QKeySequence::Quit));
 
-      actionManual->setIcon(QIcon(":/data/help.png"));
+      actionManual->setIcon(QIcon(*icons[helpContents_ICON]));
       actionManual->setShortcut(QKeySequence(QKeySequence::HelpContents));
       fileTools->addAction(actionManual);
 
@@ -229,7 +231,7 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
                   return;
                   }
             }
-      emit closed();
+      emit closed(false);
       QWidget::closeEvent(ev);
       }
 
@@ -487,4 +489,5 @@ void PluginCreator::showManual()
             }
       manualDock->setVisible(!manualDock->isVisible());
       }
+}
 

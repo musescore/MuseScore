@@ -16,9 +16,12 @@
 #include "text.h"
 #include "chord.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Segment;
 class Chord;
-class QPainter;
 
 //---------------------------------------------------------
 //   @@ Lyrics
@@ -86,5 +89,7 @@ class Lyrics : public Text {
       QVariant propertyDefault(P_ID id) const;
       };
 
+
+}     // namespace Ms
 #endif
 

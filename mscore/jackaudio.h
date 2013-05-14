@@ -25,6 +25,8 @@
 #include "driver.h"
 #include <jack/jack.h>
 
+namespace Ms {
+
 class Synth;
 class Seq;
 class MidiDriver;
@@ -67,5 +69,7 @@ class JackAudio : public Driver {
       virtual void unregisterPort(int);
       };
 
+
+} // namespace Ms
 #endif
 

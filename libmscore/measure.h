@@ -22,6 +22,8 @@
 #include "fraction.h"
 #include "segmentlist.h"
 
+namespace Ms {
+
 class Xml;
 class Beam;
 class Tuplet;
@@ -307,5 +309,7 @@ class Measure : public MeasureBase {
       virtual QVariant propertyDefault(P_ID) const;
       };
 
+
+}     // namespace Ms
 #endif
 

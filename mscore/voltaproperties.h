@@ -23,6 +23,8 @@
 
 #include "ui_voltaproperties.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   VoltaProperties
 //---------------------------------------------------------
@@ -37,5 +39,6 @@ class VoltaProperties : public QDialog, public Ui::VoltaPropertyBase {
       QList<int> getEndings() const;
       void setEndings(const QList<int>& l);
       };
+}
 
 #endif

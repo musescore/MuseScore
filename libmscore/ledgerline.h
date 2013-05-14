@@ -15,6 +15,8 @@
 
 #include "element.h"
 
+namespace Ms {
+
 class Chord;
 
 //---------------------------------------------------------
@@ -45,5 +47,7 @@ class LedgerLine : public Line {
       void setNext(LedgerLine* l) { _next = l;    }
       };
 
+
+}     // namespace Ms
 #endif
 

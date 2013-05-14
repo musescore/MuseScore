@@ -17,6 +17,8 @@
 #include "libmscore/repeatlist.h"
 #include "libmscore/system.h"
 
+namespace Ms {
+
 static QHash<void*, int> segs;
 
 //---------------------------------------------------------
@@ -109,4 +111,5 @@ bool savePositions(Score* score, const QString& name)
       xml.etag(); // score
       return true;
       }
+}
 

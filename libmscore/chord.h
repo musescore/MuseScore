@@ -22,6 +22,10 @@
 #include "chordrest.h"
 #include "noteevent.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Note;
 class Hook;
 class Arpeggio;
@@ -29,7 +33,6 @@ class Tremolo;
 class Chord;
 class Glissando;
 class Stem;
-class QPainter;
 class Chord;
 class StemSlash;
 class LedgerLine;
@@ -72,7 +75,7 @@ class Chord : public ChordRest {
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
       virtual qreal centerX() const;
-      void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible);
+      void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible, qreal hw);
       void addLedgerLines(qreal x, int move);
       void processSiblings(std::function<void(Element*)> func);
 
@@ -114,6 +117,8 @@ class Chord : public ChordRest {
       virtual int downLine() const;
       virtual int upString() const;
       virtual int downString() const;
+
+      qreal maxHeadWidth();
 
       Note* findNote(int pitch) const;
 
@@ -179,5 +184,7 @@ class Chord : public ChordRest {
       virtual void reset();
       };
 
+
+}     // namespace Ms
 #endif
 

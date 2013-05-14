@@ -23,6 +23,8 @@
 
 #include "ui_metaedit.h"
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -44,5 +46,7 @@ class MetaEditDialog : public QDialog, public Ui::MetaEditDialog {
       MetaEditDialog(Score*, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

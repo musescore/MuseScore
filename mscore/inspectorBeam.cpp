@@ -16,6 +16,8 @@
 #include "libmscore/beam.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorBeam
 //---------------------------------------------------------
@@ -65,4 +67,5 @@ void InspectorBeam::setValue(const InspectorItem& ii, const QVariant& val)
             }
       InspectorBase::setValue(ii, val);
       }
+}
 

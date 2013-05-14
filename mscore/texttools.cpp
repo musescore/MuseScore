@@ -26,6 +26,8 @@
 #include "textpalette.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 TextPalette* textPalette;
 
 //---------------------------------------------------------
@@ -36,7 +38,7 @@ TextTools* MuseScore::textTools()
       {
       if (!_textTools) {
             _textTools = new TextTools(this);
-            addDockWidget(Qt::BottomDockWidgetArea, _textTools);
+            addDockWidget(Qt::DockWidgetArea(Qt::BottomDockWidgetArea), _textTools);
             }
       setFocusPolicy(Qt::NoFocus);
       return _textTools;
@@ -52,7 +54,7 @@ TextTools::TextTools(QWidget* parent)
       _textElement = 0;
       setObjectName("text-tools");
       setWindowTitle(tr("Text Tools"));
-      setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
 
       QToolBar* tb = new QToolBar(tr("Text Edit"));
 
@@ -103,7 +105,7 @@ TextTools::TextTools(QWidget* parent)
       bottomAlign->setCheckable(true);
       bottomAlign->setData(ALIGN_BOTTOM);
 
-      baselineAlign  = new QAction(*icons[textVCenter_ICON],  "", va);
+      baselineAlign  = new QAction(*icons[textBaseline_ICON],  "", va);
       baselineAlign->setToolTip(tr("align vertical baseline"));
       baselineAlign->setCheckable(true);
       baselineAlign->setData(ALIGN_BASELINE);
@@ -475,4 +477,5 @@ printf("showKeyboardClicked %d\n", val);
                   textPalette->hide();
             }
       }
+}
 

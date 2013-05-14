@@ -23,6 +23,8 @@
 #include "tablature.h"
 #include "stafftype.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Part
 //---------------------------------------------------------
@@ -374,4 +376,6 @@ void Part::setProperty(int id, const QVariant& property)
       score()->setLayoutAll(true);
       }
 
+
+}
 

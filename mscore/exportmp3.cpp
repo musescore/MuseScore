@@ -26,6 +26,8 @@
 #include "preferences.h"
 #include "exportmp3.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   MP3Exporter
 //---------------------------------------------------------
@@ -828,4 +830,5 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       MScore::sampleRate = oldSampleRate;
       return true;
       }
+}
 

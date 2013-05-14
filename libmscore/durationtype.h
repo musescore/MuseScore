@@ -15,6 +15,8 @@
 
 #include "fraction.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TDuration
 //---------------------------------------------------------
@@ -66,5 +68,7 @@ class TDuration {
       };
 
 extern QList<TDuration> toDurationList(Fraction, bool useDottedValues);
+
+}     // namespace Ms
 #endif
 

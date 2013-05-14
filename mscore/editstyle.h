@@ -25,6 +25,8 @@
 #include "globals.h"
 #include "libmscore/style.h"
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -50,13 +52,15 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void editTextClicked(int id);
 
       void on_comboFBFont_currentIndexChanged(int index);
-      
+
 public:
       enum { PAGE_NOTE = 6 };
       EditStyle(Score*, QWidget*);
       void setPage(int no);
       };
 
+
+} // namespace Ms
 #endif
 
 

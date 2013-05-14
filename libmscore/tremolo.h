@@ -15,8 +15,11 @@
 
 #include "symbol.h"
 
-class Chord;
 class QPainter;
+
+namespace Ms {
+
+class Chord;
 
 // Tremolo subtypes:
 enum TremoloType {
@@ -74,5 +77,7 @@ class Tremolo : public Element {
       int lines() const { return _lines; }
       };
 
+
+}     // namespace Ms
 #endif
 

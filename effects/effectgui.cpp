@@ -14,6 +14,8 @@
 #include "effect.h"
 #include <QDeclarativeContext>
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EffectGui
 //---------------------------------------------------------
@@ -70,4 +72,5 @@ void EffectGui::updateValues()
                   }
             }
       }
+}
 

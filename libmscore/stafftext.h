@@ -16,6 +16,8 @@
 #include "text.h"
 #include "part.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ChannelActions
 //---------------------------------------------------------
@@ -55,4 +57,6 @@ class StaffText : public Text  {
       bool setAeolusStops() const      { return _setAeolusStops; }
       };
 
+
+}     // namespace Ms
 #endif

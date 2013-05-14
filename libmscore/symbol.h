@@ -16,8 +16,11 @@
 #include "bsymbol.h"
 #include "sym.h"
 
-class Segment;
 class QPainter;
+
+namespace Ms {
+
+class Segment;
 
 //---------------------------------------------------------
 //   @@ Symbol
@@ -84,5 +87,6 @@ class FSymbol : public BSymbol {
       void setCode(int val)          { _code = val; }
       };
 
+}     // namespace Ms
 #endif
 

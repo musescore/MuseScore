@@ -21,6 +21,8 @@
 #include "tuplet.h"
 #include "utils.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   cleanupTuplet
 //---------------------------------------------------------
@@ -697,4 +699,6 @@ Fraction ScoreRange::duration() const
       {
       return tracks.isEmpty() ? Fraction() : tracks[0]->duration();
       }
+
+}
 

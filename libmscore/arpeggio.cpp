@@ -20,6 +20,8 @@
 #include "segment.h"
 #include "property.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Arpeggio
 //---------------------------------------------------------
@@ -377,4 +379,6 @@ bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
       return true;
       }
 
+
+}
 

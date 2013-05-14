@@ -16,6 +16,8 @@
 
 #include "libmscore/property.h"
 
+namespace Ms {
+
 class Inspector;
 class Element;
 
@@ -65,5 +67,7 @@ class InspectorBase : public QWidget {
       QWidget* addWidget();
       };
 
+
+} // namespace Ms
 #endif
 

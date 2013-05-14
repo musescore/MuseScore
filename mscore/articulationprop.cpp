@@ -31,6 +31,8 @@
 #include "libmscore/segment.h"
 #include "libmscore/undo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ArticulationProperties
 //---------------------------------------------------------
@@ -116,4 +118,5 @@ void ArticulationProperties::saveValues()
             articulation->score()->undo(new ChangeProperty(articulation,
                P_ARTICULATION_ANCHOR, anchor->currentIndex()));
       }
+}
 

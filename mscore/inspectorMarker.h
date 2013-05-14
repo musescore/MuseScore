@@ -19,6 +19,8 @@
 #include "ui_inspector_marker.h"
 #include "libmscore/property.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorMarker
 //---------------------------------------------------------
@@ -33,6 +35,8 @@ class InspectorMarker : public InspectorBase {
       InspectorMarker(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif
 
 

@@ -27,6 +27,8 @@
 
 namespace FluidS {
 
+using namespace Ms;
+
 class Voice;
 class SFont;
 class Preset;

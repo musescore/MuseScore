@@ -17,6 +17,8 @@
 
 #include "velo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   velo
 //    return velocity at tick position
@@ -63,4 +65,6 @@ void VeloList::setVelo(int tick, int velo)
       {
       insert(tick, VeloEvent(VELO_FIX, velo));
       }
+
+}
 

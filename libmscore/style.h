@@ -17,6 +17,8 @@
 #include "spatium.h"
 #include "articulation.h"
 
+namespace Ms {
+
 class Xml;
 struct ChordDescription;
 class PageFormat;
@@ -426,4 +428,6 @@ extern const TextStyle defaultTextStyleArray[];
 
 extern void initStyle(MStyle*);
 
+
+}     // namespace Ms
 #endif

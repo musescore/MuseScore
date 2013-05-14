@@ -14,6 +14,8 @@
 #include "xml.h"
 #include "note.h"
 
+namespace Ms {
+
 Drumset* smDrumset;           // standard midi drumset
 
 //---------------------------------------------------------
@@ -179,4 +181,6 @@ void initDrumset()
       smDrumset->drum(63) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "open high conga"),    Note::HEAD_CROSS,    4, MScore::UP);
       smDrumset->drum(64) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "low conga"),          Note::HEAD_CROSS,    6, MScore::UP);
       }
+
+}
 

@@ -28,6 +28,8 @@
 #include "mscore.h"
 #include "page.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SlurPos
 //---------------------------------------------------------
@@ -90,7 +92,9 @@ void SlurSegment::move(const QPointF& s)
 void SlurSegment::draw(QPainter* painter) const
       {
       // hide tie toward the second chord of a cross-measure value
-      if(slurTie()->type() == TIE && ((Tie*)slurTie())->endNote()->chord()->crossMeasure() == CROSSMEASURE_SECOND)
+      if ((slurTie()->type() == TIE)
+         && (static_cast<Tie*>(slurTie())->endNote())
+         && (static_cast<Tie*>(slurTie())->endNote()->chord()->crossMeasure() == CROSSMEASURE_SECOND))
             return;
 
       QPen pen(curColor());
@@ -1531,4 +1535,6 @@ void Tie::layout()
             ++i;
             }
       }
+
+}
 

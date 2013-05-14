@@ -37,6 +37,8 @@
 #include "libmscore/timesig.h"
 #include "libmscore/sym.h"
 
+namespace Ms {
+
 extern Palette* newKeySigPalette();
 extern void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
 
@@ -973,3 +975,5 @@ void InstrumentWizard::on_clearSearch_clicked()
       search->clear();
       filterInstruments (instrumentList);
       }
+}
+

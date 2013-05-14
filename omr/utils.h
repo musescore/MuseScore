@@ -21,6 +21,8 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+namespace Ms {
+
 extern double curTime();
 
 //---------------------------------------------------------
@@ -44,6 +46,8 @@ class Benchmark {
       };
 
 extern double covariance(const double data1[], const double data2[], int n);
+
+}
 
 #endif
 

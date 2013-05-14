@@ -57,6 +57,8 @@
 #include "libmscore/element.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 class ShowElementBase;
 class Element;
 class Page;
@@ -724,5 +726,7 @@ class BoxView : public ShowElementBase {
       virtual void setElement(Element*);
       };
 
+
+} // namespace Ms
 #endif
 

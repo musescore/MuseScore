@@ -15,6 +15,8 @@
 
 #include "textline.h"
 
+namespace Ms {
+
 class Score;
 class Xml;
 class Volta;
@@ -96,7 +98,9 @@ class Volta : public TextLine {
       virtual void setYoff(qreal);
       };
 
-Q_DECLARE_METATYPE(VoltaType)
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::VoltaType)
 
 #endif
 

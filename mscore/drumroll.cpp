@@ -40,6 +40,8 @@
 #include "seq.h"
 #include "preferences.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   DrumrollEditor
 //---------------------------------------------------------
@@ -394,4 +396,5 @@ void DrumrollEditor::cmd(QAction* a)
       gv->setStaff(staff, locator);
       score()->endCmd();
       }
+}
 

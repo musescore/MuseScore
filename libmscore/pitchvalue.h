@@ -13,6 +13,8 @@
 #ifndef __PITCHVALUE_H__
 #define __PITCHVALUE_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PitchValue
 //    used in class Bend, BendCanvas
@@ -30,5 +32,7 @@ struct PitchValue {
       PitchValue(int a, int b, bool c = false) : time(a), pitch(b), vibrato(c) {}
       };
 
+
+}     // namespace Ms
 #endif
 

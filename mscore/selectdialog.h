@@ -23,6 +23,8 @@
 
 #include "ui_select.h"
 
+namespace Ms {
+
 class Element;
 struct ElementPattern;
 
@@ -43,5 +45,7 @@ class SelectDialog : public QDialog, Ui::SelectDialog {
       bool doFromSelection() const { return fromSelection->isChecked(); }
       };
 
+
+} // namespace Ms
 #endif
 

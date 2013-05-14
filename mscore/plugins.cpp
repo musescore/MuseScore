@@ -48,6 +48,8 @@
 #include "libmscore/lyrics.h"
 #include "qmlplugin.h"
 
+namespace Ms {
+
 extern QString localeName;
 
 //---------------------------------------------------------
@@ -577,4 +579,5 @@ void collectPluginMetaInformation(PluginDescription* d)
             }
       delete obj;
       }
+}
 

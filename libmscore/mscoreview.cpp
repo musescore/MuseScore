@@ -14,6 +14,8 @@
 #include "score.h"
 #include "page.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   elementLower
 //---------------------------------------------------------
@@ -75,4 +77,6 @@ const QList<Element*> MuseScoreView::elementsAt(const QPointF& p)
       return el;
       }
 
+
+}
 

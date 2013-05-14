@@ -19,6 +19,8 @@
 #include "style.h"
 #include "sym.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Glissando
 //---------------------------------------------------------
@@ -294,4 +296,6 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
             }
       return Element::propertyDefault(propertyId);
       }
+
+}
 

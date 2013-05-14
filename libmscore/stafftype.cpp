@@ -20,6 +20,8 @@
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   StaffType
 //---------------------------------------------------------
@@ -1204,4 +1206,6 @@ void initStaffTypes()
       staffTypes.append(st1);
       staffTypes.append(st2);
       }
+
+}
 

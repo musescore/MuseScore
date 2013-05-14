@@ -23,6 +23,8 @@
 
 #include "simplebutton.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   RecordButton
 //---------------------------------------------------------
@@ -34,5 +36,7 @@ class RecordButton : public SimpleButton {
       RecordButton(QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

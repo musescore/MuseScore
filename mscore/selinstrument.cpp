@@ -24,6 +24,8 @@
 #include "libmscore/instrument.h"
 #include "libmscore/instrtemplate.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SelectInstrument
 //---------------------------------------------------------
@@ -82,4 +84,5 @@ const InstrumentTemplate* SelectInstrument::instrTemplate() const
       InstrumentTemplateListItem* item = (InstrumentTemplateListItem*)wi.front();
       return item->instrumentTemplate();
       }
+}
 

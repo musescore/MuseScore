@@ -17,6 +17,8 @@
 #include "system.h"
 #include "note.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ChordLine
 //---------------------------------------------------------
@@ -262,4 +264,6 @@ void ChordLine::updateGrips(int* grips, QRectF* grip) const
       for (int i = 0; i < n; ++i)
             grip[i].translate(cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp));
       }
+
+}
 

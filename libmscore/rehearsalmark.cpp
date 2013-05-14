@@ -13,6 +13,8 @@
 #include "score.h"
 #include "rehearsalmark.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   RehearsalMark
 //---------------------------------------------------------
@@ -22,4 +24,6 @@ RehearsalMark::RehearsalMark(Score* s)
       {
       setTextStyleType(TEXT_STYLE_REHEARSAL_MARK);
       }
+
+}
 
