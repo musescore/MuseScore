@@ -842,7 +842,7 @@ void Harmony::render(const TextStyle* st)
             }
       // otherwise render from parsed form
       else if (_parsedForm && _parsedForm->renderable())
-            render(_parsedForm->renderList(), x, y, 0);
+            render(_parsedForm->renderList(chordList->chordTokenList), x, y, 0);
 
       // render bass
       if (_baseTpc != INVALID_TPC)

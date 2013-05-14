@@ -373,7 +373,7 @@ bool ParsedChord::parse(QString s)
       if (tok1 != "")
             _tokenList += tok1;
       tok1L = tok1.toLower();
-      if (tok1 == "M" || tok1L == "ma" || tok1L == "maj")
+      if (tok1 == "M" || tok1L == "ma" || tok1L == "maj" || tok1L == "t" || tok1L == "^")
             quality = "major";
       else if (tok1L == "m" || tok1L == "mi" || tok1L == "min" || tok1L == "-")
             quality = "minor";
@@ -381,6 +381,8 @@ bool ParsedChord::parse(QString s)
             quality = "augmented";
       else if (tok1L == "dim" || tok1L == "o")
             quality = "diminished";
+      else if (tok1L == "0")
+            quality = "half-diminished";
       else
             quality = tok1L;
 
@@ -428,7 +430,7 @@ bool ParsedChord::parse(QString s)
                   tok1 = tok1[3];
                   tok1L = tok1L[3];
                   }
-            else if (tok1 == "M" || tok1L == "ma" || tok1L == "maj")
+            else if (tok1 == "M" || tok1L == "ma" || tok1L == "maj" || tok1L == "t" || tok1L == "^")
                   tok1L = "major";
             else if (tok1L == "omit")
                   tok1L = "no";
@@ -466,13 +468,19 @@ bool ParsedChord::parse(QString s)
 //   renderList
 //---------------------------------------------------------
 
-const QList<RenderAction>& ParsedChord::renderList()
+const QList<RenderAction>& ParsedChord::renderList(QHash<QString, ChordToken>& tokenDefinitionList)
       {
       if (_renderList.isEmpty()) {
             foreach (QString tok, _tokenList) {
-                  RenderAction a(RenderAction::RENDER_SET);
-                  a.text = tok;
-                  _renderList.append(a);
+                  if (tokenDefinitionList.contains(tok)) {
+                        ChordToken definedToken = tokenDefinitionList.value(tok);
+                        _renderList.append(definedToken.renderList);
+                        }
+                  else {
+                        RenderAction a(RenderAction::RENDER_SET);
+                        a.text = tok;
+                        _renderList.append(a);
+                        }
                   }
             }
       return _renderList;
@@ -482,7 +490,7 @@ const QList<RenderAction>& ParsedChord::renderList()
 //   read
 //---------------------------------------------------------
 
-void ChordDescription::read(XmlReader& e)
+void ChordDescription::read(XmlReader& e, QHash<QString, ChordToken>& tokenList)
       {
       int ni = 0, pci = 0;
       bool renderFound = false;
@@ -513,7 +521,7 @@ void ChordDescription::read(XmlReader& e)
       if (!renderFound) {
             ParsedChord pc = parsedChords.front();
             if (pc.renderable())
-                  renderList = pc.renderList();
+                  renderList = pc.renderList(tokenList);
             }
       }
 
@@ -580,6 +588,26 @@ void ChordList::read(XmlReader& e)
                   fonts.append(f);
                   ++fontIdx;
                   }
+            else if (tag == "token") {
+                  ChordToken t;
+                  QString c = e.attribute("class");
+                  if (c == "quality")
+                        t.tokenClass = QUALITY;
+                  else if (c == "extension")
+                        t.tokenClass = EXTENSION;
+                  else if (c == "modifier")
+                        t.tokenClass = MODIFIER;
+                  else
+                        t.tokenClass = ALL;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "name")
+                              t.name = e.readElementText();
+                        else if (tag == "render")
+                              readRenderList(e.readElementText(), t.renderList);
+                        }
+                  chordTokenList.insert(t.name, t);
+                  }
             else if (tag == "chord") {
                   int id = e.intAttribute("id");
                   // if no id attribute (id == 0), then assign it a private id for just QMap purposes
@@ -590,7 +618,7 @@ void ChordList::read(XmlReader& e)
                   ChordDescription* cd = take(id);
                   if (cd == 0)
                         cd = new ChordDescription();
-                  cd->read(e);
+                  cd->read(e,chordTokenList);
                   insert(id, cd);
                   }
             else if (tag == "renderRoot")
