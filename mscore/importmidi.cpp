@@ -158,30 +158,37 @@ void MTrack::quantize(int startTick, int endTick, std::multimap<int,MidiChord>& 
 //   cleanup
 //    - quantize
 //    - remove overlaps
+//    - replace old chords by quantized ones
+//
+//   Note that chords here consist of a single note
+//     because notes are not united into chords yet
 //---------------------------------------------------------
 
 void MTrack::cleanup(int lastTick, TimeSigMap* sigmap)
-    {
-      std::multimap<int, MidiChord> dl;
+      {
+      std::multimap<int, MidiChord> dl; // duration list
 
+      //    quantize every measure
+      //    and fill the duration list with quantized chords
       //
-      //	quantize every measure
-      //
-      int startTick = 0;
-      for (int i = 1;; ++i) {
-            int endTick = sigmap->bar2tick(i, 0);
-            quantize(startTick, endTick, dl);
-            if (endTick > lastTick)
+      int startBarTick = 0;
+      for (int i = 1;; ++i) { // iterate over all measures by indexes
+            int endBarTick = sigmap->bar2tick(i, 0);
+            quantize(startBarTick, endBarTick, dl);
+            if (endBarTick > lastTick)
                   break;
-            startTick = endTick;
+            startBarTick = endBarTick;
             }
 
+      // remove overlapping notes with the same pitch
+      //
       for (auto i = dl.begin(); i != dl.end(); ++i) {
             const MidiChord& e = i->second;
             auto ii = i;
             ++ii;
             for (; ii != dl.end(); ++ii) {
                   const MidiChord& ee = ii->second;
+                  // check the first and the only note in chord
                   if (ee.notes[0].pitch != e.notes[0].pitch)
                         continue;
                   if (ee.onTime >= (e.onTime + e.duration))
@@ -202,6 +209,7 @@ void MTrack::cleanup(int lastTick, TimeSigMap* sigmap)
 
 //---------------------------------------------------------
 //   findChords
+//     with some tolerance
 //---------------------------------------------------------
 
 void MTrack::findChords()
@@ -634,25 +642,16 @@ static void splitIntoLeftRightHands(QList<MTrack>& tracks)
             if (!operations.trackOperations(i).doLHRHSeparation)
                   continue;
 
-            MTrack& srcTrack = tracks[i];
-            // assume this is a piano track
-            // split into left hand / right hand
-            MTrack leftHandTrack;
-            MTrack rightHandTrack;
-            leftHandTrack.mtrack = srcTrack.mtrack;
-            rightHandTrack.mtrack = srcTrack.mtrack;
-
+            typedef std::multimap<int, MidiChord> tChords;
             typedef std::multimap<int, MidiChord>::iterator tIter;
-            std::vector<tIter> chordGroup;
-            int currentTime = 0;
-            const int OCTAVE = 12;
 
-            // durationTol < smallest note duration: not very accurate but mostly works
-            int durationTol = srcTrack.chords.begin()->second.notes[0].len;
-            for (const auto &chord: srcTrack.chords) {
-                  if (chord.second.notes[0].len < durationTol)
-                        durationTol = chord.second.notes[0].len;
-                  }
+            MTrack& srcTrack = tracks[i];
+            tChords leftHandChords;
+            tChords rightHandChords;
+            std::vector<tIter> chordGroup;
+
+            const int OCTAVE = 12;
+            int currentTime = 0;
 
             // chords after MIDI import are sorted by onTime values
             for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ++i) {
@@ -662,7 +661,7 @@ static void splitIntoLeftRightHands(QList<MTrack>& tracks)
                   chordGroup.push_back(i);
                   tIter next = i;
                   ++next;
-                  if ((next != srcTrack.chords.end() && (next->second.onTime - currentTime) > durationTol)
+                  if ((next != srcTrack.chords.end() && next->second.onTime != currentTime)
                               || (next == srcTrack.chords.end())) {
                         // *i is the last element in group - process current group
                         struct {
@@ -680,26 +679,28 @@ static void splitIntoLeftRightHands(QList<MTrack>& tracks)
                               // and assign all other chords to right hand
                               for (const auto &chordIter: chordGroup) {
                                     if (chordIter->second.notes[0].pitch <= minPitch + OCTAVE)
-                                          leftHandTrack.chords.insert({chordIter->first, chordIter->second});
+                                          leftHandChords.insert({chordIter->first, chordIter->second});
                                     else
-                                          rightHandTrack.chords.insert({chordIter->first, chordIter->second});
+                                          rightHandChords.insert({chordIter->first, chordIter->second});
                                     }
                               // maybe todo later: if range of right-hand chords > OCTAVE => assign all bottom right-hand
                               // chords to another, third track
                               }
                         else { // check - use two hands or one hand will be enough (right or left?)
                               // assign top chord for right hand, all the rest - to left hand
-                              rightHandTrack.chords.insert({chordGroup.back()->first, chordGroup.back()->second});
+                              rightHandChords.insert({chordGroup.back()->first, chordGroup.back()->second});
                               for (auto p = chordGroup.begin(); p != chordGroup.end() - 1; ++p)
-                                    leftHandTrack.chords.insert({(*p)->first, (*p)->second});
+                                    leftHandChords.insert({(*p)->first, (*p)->second});
                               }
                         // reset group for next iteration
                         chordGroup.clear();
                         }
                   }
-            if (!rightHandTrack.chords.empty())
-                  srcTrack = rightHandTrack;
-            if (!leftHandTrack.chords.empty()) {
+            if (!rightHandChords.empty())
+                  srcTrack.chords = rightHandChords;
+            if (!leftHandChords.empty()) {
+                  MTrack leftHandTrack = srcTrack;
+                  leftHandTrack.chords = leftHandChords;
                   tracks.insert(i + 1, leftHandTrack);
                   // synchronize operations length and tracks list length
                   operations.duplicateTrackOperations(i);
@@ -709,12 +710,11 @@ static void splitIntoLeftRightHands(QList<MTrack>& tracks)
       }
 
 //---------------------------------------------------------
-//   convertMidi
+//   createMTrackList
 //---------------------------------------------------------
 
-void createMTrackList(int& lastTick, Score* score, QList<MTrack>& tracks, MidiFile* mf)
+void createMTrackList(int& lastTick, TimeSigMap* sigmap, QList<MTrack>& tracks, MidiFile* mf)
       {
-      TimeSigMap* sigmap = score->sigmap();
       sigmap->clear();
       sigmap->add(0, Fraction(4, 4));   // default time signature
 
@@ -781,6 +781,13 @@ void createMTrackList(int& lastTick, Score* score, QList<MTrack>& tracks, MidiFi
             }
       }
 
+//---------------------------------------------------------
+// createInstruments
+//   for drum track, if any, set percussion clef
+//   for piano 2 tracks, if any, set G and F clefs
+//   for other track types set G or F clef
+//---------------------------------------------------------
+
 void createInstruments(Score* score, QList<MTrack>& tracks)
       {
       int ntracks = tracks.size();
@@ -793,11 +800,13 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
             track.staff = s;
 
             if (track.mtrack->drumTrack()) {
+                  // drum track
                   s->setInitialClef(CLEF_PERC);
                   part->instr()->setDrumset(smDrumset);
                   }
             else {
-                  if ((idx < (ntracks-1)) && (tracks.at(idx+1).mtrack->outChannel() == track.mtrack->outChannel())
+                  if ((idx < (ntracks-1))
+                              && (tracks.at(idx+1).mtrack->outChannel() == track.mtrack->outChannel())
                               && (track.program == 0)) {
                         // assume that the current track and the next track
                         // form a piano part
@@ -813,6 +822,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
                         tracks[idx].staff = ss;
                         }
                   else {
+                        // other track type
                         ClefType ct = track.medPitch < 58 ? CLEF_F : CLEF_G;
                         s->setInitialClef(ct);
                         }
@@ -826,7 +836,7 @@ void createMeasures(int& lastTick, Score* score)
       int bars, beat, tick;
       score->sigmap()->tickValues(lastTick, &bars, &beat, &tick);
       if (beat > 0 || tick > 0)
-            ++bars;
+            ++bars; // convert bar index to number of bars
 
       for (int i = 0; i < bars; ++i) {
             Measure* measure  = new Measure(score);
@@ -842,54 +852,40 @@ void createMeasures(int& lastTick, Score* score)
       lastTick = score->lastMeasure()->endTick();
       }
 
-void createNotes(int lastTick, Score* score, QList<MTrack>& tracks, MidiFile* mf)
-{
-      for (int i = 0; i < tracks.size(); ++i) {
-            MTrack& mt = tracks[i];
-            MidiTrack* track = mt.mtrack;
-
-            mt.cleanup(lastTick, score->sigmap());   // quantize
-            for (auto ie : track->events()) {
-                  const MidiEvent& e = ie.second;
-                  if ((e.type() == ME_META) && (e.metaType() != META_LYRIC))
-                        mt.processMeta(ie.first, e);
-                  }
-            if (mt.staff->isTop()) {
-                  Part* part  = mt.staff->part();
-                  int program = mt.program;
-                  if (mt.name.isEmpty()) {
-                        int hbank = -1, lbank = -1;
-                        if (program == -1)
-                              program = 0;
-                        else {
-                              hbank = (program >> 16);
-                              lbank = (program >> 8) & 0xff;
-                              program = program & 0xff;
-                              }
-                        QString t(MidiInstrument::instrName(mf->midiType(), hbank, lbank, program));
-                        if (!t.isEmpty())
-                              part->setLongName(t);
-                        }
-                  else
-                        part->setLongName(mt.name);
-                  part->setPartName(part->longName().toPlainText());
-                  part->setMidiChannel(track->outChannel());
-                  part->setMidiProgram(mt.program & 0x7f);  // only GM
-                  }
-            mt.findChords();
-            // pass current track index to the convertTrack function
-            preferences.midiImportOperations.setCurrentTrack(i);
-            mt.convertTrack(lastTick);
-
-            for (auto ie : track->events()) {
-                  const MidiEvent& e = ie.second;
-                  if ((e.type() == ME_META) && (e.metaType() == META_LYRIC))
-                        mt.processMeta(ie.first, e);
-                  }
+QString instrumentName(int type, int program)
+      {
+      int hbank = -1, lbank = -1;
+      if (program == -1)
+            program = 0;
+      else {
+            hbank = (program >> 16);
+            lbank = (program >> 8) & 0xff;
+            program = program & 0xff;
             }
+      return MidiInstrument::instrName(type, hbank, lbank, program);
+      }
 
+void setTrackInfo(MidiFile* mf, MTrack& mt)
+      {
+      if (mt.staff->isTop()) {
+            Part* part  = mt.staff->part();
+            if (mt.name.isEmpty()) {
+                  QString name = instrumentName(mf->midiType(), mt.program);
+                  if (!name.isEmpty())
+                        part->setLongName(name);
+                  }
+            else
+                  part->setLongName(mt.name);
+            part->setPartName(part->longName().toPlainText());
+            part->setMidiChannel(mt.mtrack->outChannel());
+            part->setMidiProgram(mt.program & 0x7f);  // only GM
+            }
+      }
+
+void createTimeSignatures(Score* score)
+      {
       for (auto is = score->sigmap()->begin(); is != score->sigmap()->end(); ++is) {
-            SigEvent se = is->second;
+            const SigEvent& se = is->second;
             int tick    = is->first;
             Measure* m  = score->tick2measure(tick);
             if (!m)
@@ -902,53 +898,76 @@ void createNotes(int lastTick, Score* score, QList<MTrack>& tracks, MidiFile* mf
                   seg->add(ts);
                   }
             }
+      }
 
-      score->connectTies();
-}
+void createNotes(int lastTick, QList<MTrack>& tracks, MidiFile* mf)
+      {
+      for (int i = 0; i < tracks.size(); ++i) {
+            MTrack& mt = tracks[i];
+
+            for (auto ie : mt.mtrack->events()) {
+                  const MidiEvent& e = ie.second;
+                  if ((e.type() == ME_META) && (e.metaType() != META_LYRIC))
+                        mt.processMeta(ie.first, e);
+                  }
+
+            setTrackInfo(mf, mt);
+            mt.findChords();
+
+            // pass current track index to the convertTrack function
+            //   through MidiImportOperations
+            preferences.midiImportOperations.setCurrentTrack(i);
+            mt.convertTrack(lastTick);
+
+            for (auto ie : mt.mtrack->events()) {
+                  const MidiEvent& e = ie.second;
+                  if ((e.type() == ME_META) && (e.metaType() == META_LYRIC))
+                        mt.processMeta(ie.first, e);
+                  }
+            }
+      }
+
+void quantizeAndCleanup(int lastTick, TimeSigMap* sigmap, QList<MTrack>& tracks)
+      {
+      for (int i = 0; i < tracks.size(); ++i) {
+            tracks[i].cleanup(lastTick, sigmap);   // quantize
+            }
+      }
 
 void convertMidi(Score* score, MidiFile* mf)
       {
       QList<MTrack> tracks;
       int lastTick = 0;
+      auto sigmap = score->sigmap();
 
       mf->separateChannel();
-      createMTrackList(lastTick, score, tracks, mf);
+      createMTrackList(lastTick, sigmap, tracks, mf);
+      quantizeAndCleanup(lastTick, sigmap, tracks);
       splitIntoLeftRightHands(tracks);
       createInstruments(score, tracks);
       createMeasures(lastTick, score);
-      createNotes(lastTick, score, tracks, mf);
-      // maybe put split LH/RH here?
+      createNotes(lastTick, tracks, mf);
+      createTimeSignatures(score);
+      score->connectTies();
       }
 
-QList<TrackMeta> getTracksMeta(int lastTick, Score* score, QList<MTrack>& tracks, MidiFile* mf)
+QList<TrackMeta> getTracksMeta(QList<MTrack>& tracks, MidiFile* mf)
 {
       QList<TrackMeta> tracksMeta;
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack& mt = tracks[i];
             MidiTrack* track = mt.mtrack;
 
-            mt.cleanup(lastTick, score->sigmap());   // quantize
             for (auto ie : track->events()) {
                   const MidiEvent& e = ie.second;
                   if ((e.type() == ME_META) && (e.metaType() == META_TRACK_NAME))
                         mt.name = (const char*)e.edata();
                   }
-            int hbank = -1, lbank = -1;
-            int program = mt.program;
-            if (program == -1)
-                  program = 0;
-            else {
-                  hbank = (program >> 16);
-                  lbank = (program >> 8) & 0xff;
-                  program = program & 0xff;
-                  }
-
             MidiType midiType = mf->midiType();
             if (midiType == MT_UNKNOWN)
                   midiType = MT_GM;
-            QString instrumentName = MidiInstrument::instrName(midiType, hbank,
-                                                               lbank, program);
-            tracksMeta.push_back({mt.name, instrumentName});
+            QString name = instrumentName(midiType, mt.program);
+            tracksMeta.push_back({mt.name, name});
             }
       return tracksMeta;
       }
@@ -975,8 +994,9 @@ QList<TrackMeta> extractMidiTracksMeta(const QString& fileName)
       int lastTick = 0;
 
       mf.separateChannel();
-      createMTrackList(lastTick, &mockScore, tracks, &mf);
-      return getTracksMeta(lastTick, &mockScore, tracks, &mf);
+      createMTrackList(lastTick, mockScore.sigmap(), tracks, &mf);
+      quantizeAndCleanup(lastTick, mockScore.sigmap(), tracks);
+      return getTracksMeta(tracks, &mf);
       }
 
 //---------------------------------------------------------
