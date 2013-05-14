@@ -54,6 +54,8 @@
 #include "spanner.h"
 #include "glissando.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   noteHeads
 //    note head groups
@@ -386,24 +388,18 @@ QPointF Note::attach() const
 
 //---------------------------------------------------------
 //   playTicks
+///   Return total tick len of tied notes
 //---------------------------------------------------------
-
-/**
- Return total tick len of tied notes
-*/
 
 int Note::playTicks() const
       {
       const Note* note = this;
       while (note->tieBack())
             note = note->tieBack()->startNote();
-      int len = 0;
-      while (note->tieFor() && note->tieFor()->endNote()) {
-            len += note->chord()->actualTicks();
+      int stick = note->chord()->tick();
+      while (note->tieFor() && note->tieFor()->endNote())
             note = note->tieFor()->endNote();
-            }
-      len += note->chord()->actualTicks();
-      return len;
+      return note->chord()->tick() + note->chord()->actualTicks() - stick;
       }
 
 //---------------------------------------------------------
@@ -736,15 +732,15 @@ void Note::read(XmlReader& e)
             else if (tag == "small")
                   setSmall(e.readInt());
             else if (tag == "mirror")
-                  setProperty(P_MIRROR_HEAD, ::getProperty(P_MIRROR_HEAD, e));
+                  setProperty(P_MIRROR_HEAD, Ms::getProperty(P_MIRROR_HEAD, e));
             else if (tag == "dotPosition")
-                  setProperty(P_DOT_POSITION, ::getProperty(P_DOT_POSITION, e));
+                  setProperty(P_DOT_POSITION, Ms::getProperty(P_DOT_POSITION, e));
             else if (tag == "onTimeOffset")
                   e.skipCurrentElement(); // TODO setOnTimeUserOffset(val.toInt());
             else if (tag == "offTimeOffset")
                   e.skipCurrentElement(); // TODO setOffTimeUserOffset(val.toInt());
             else if (tag == "head")
-                  setProperty(P_HEAD_GROUP, ::getProperty(P_HEAD_GROUP, e));
+                  setProperty(P_HEAD_GROUP, Ms::getProperty(P_HEAD_GROUP, e));
             else if (tag == "velocity")
                   setVeloOffset(e.readInt());
             else if (tag == "tuning")
@@ -756,9 +752,9 @@ void Note::read(XmlReader& e)
             else if (tag == "ghost")
                   setGhost(e.readInt());
             else if (tag == "headType")
-                  setProperty(P_HEAD_TYPE, ::getProperty(P_HEAD_TYPE, e));
+                  setProperty(P_HEAD_TYPE, Ms::getProperty(P_HEAD_TYPE, e));
             else if (tag == "veloType")
-                  setProperty(P_VELO_TYPE, ::getProperty(P_VELO_TYPE, e));
+                  setProperty(P_VELO_TYPE, Ms::getProperty(P_VELO_TYPE, e));
             else if (tag == "line")
                   _line = e.readInt();
             else if (tag == "Tie") {
@@ -2072,4 +2068,6 @@ bool Note::removeSpannerFor(Spanner* e)
             }
       return false;
       }
+
+}
 

@@ -1,17 +1,16 @@
 #ifndef IMPORTMIDI_PANEL_H
 #define IMPORTMIDI_PANEL_H
 
-#include <QWidget>
-#include <QString>
-
-
 namespace Ui {
-class ImportMidiPanel;
-}
+      class ImportMidiPanel;
+      }
 
 class QTimer;
-class TracksModel;
 class QModelIndex;
+
+namespace Ms {
+
+class TracksModel;
 class Score;
 class MuseScore;
 
@@ -45,4 +44,6 @@ class ImportMidiPanel : public QWidget
       };
 
 
+
+} // namespace Ms
 #endif // IMPORTMIDI_PANEL_H

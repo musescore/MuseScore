@@ -23,6 +23,8 @@
 
 #include "ui_pagesettings.h"
 
+namespace Ms {
+
 class Score;
 class Navigator;
 
@@ -68,5 +70,7 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       void setScore(Score*);
       };
 
+
+} // namespace Ms
 #endif
 

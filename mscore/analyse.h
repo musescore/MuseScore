@@ -21,6 +21,8 @@
 #ifndef __ANALYSE_H__
 #define __ANALYSE_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SNote
 //---------------------------------------------------------
@@ -33,5 +35,7 @@ struct SNote {
       int tpc;          // tonal pitch class
       };
 
+
+}
 #endif
 

@@ -24,6 +24,8 @@
 #include "mscore/musescoreCore.h"
 #include "mscore/shortcut.h"
 
+namespace Ms {
+
 #ifdef OMR
 extern Score::FileError importPdf(Score*, const QString&);
 #endif
@@ -273,4 +275,5 @@ void MTest::initMTest()
       loadInstrumentTemplates(":/instruments.xml");
       score = readScore("/test.mscx");
       }
+}
 

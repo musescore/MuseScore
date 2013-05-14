@@ -17,6 +17,8 @@
 #include "xml.h"
 #include "mscore.h"
 
+namespace Ms {
+
 QVector<Sym> symbols[2];
 static bool symbolsInitialized[2] = { false, false };
 
@@ -663,4 +665,6 @@ void initSymbols(int idx)
 
             }
       }
+
+}
 

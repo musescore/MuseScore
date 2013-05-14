@@ -21,6 +21,8 @@
 #include "musescore.h"
 #include "preferences.h"
 
+namespace Ms {
+
 UpdateChecker::UpdateChecker()
 {
     manager = new QNetworkAccessManager(this);
@@ -162,5 +164,6 @@ bool UpdateChecker::hasToCheck(){
     }
     s.endGroup();
     return QDateTime::currentDateTime() > lastUpdate.addSecs(3600 * preferences.checkUpdateStartup);
+}
 }
 

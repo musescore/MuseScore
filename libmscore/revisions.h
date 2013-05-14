@@ -13,6 +13,8 @@
 #ifndef __REVISIONS_H__
 #define __REVISIONS_H__
 
+namespace Ms {
+
 class Xml;
 class XmlReader;
 
@@ -59,5 +61,7 @@ class Revisions {
       void write(Xml&) const;
       };
 
+
+}     // namespace Ms
 #endif
 

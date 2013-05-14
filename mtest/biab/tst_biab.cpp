@@ -17,6 +17,7 @@
 
 #define DIR QString("biab/")
 
+using namespace Ms;
 
 //---------------------------------------------------------
 //   TestBiab

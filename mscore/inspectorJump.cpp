@@ -15,6 +15,8 @@
 #include "libmscore/jump.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorJump
 //---------------------------------------------------------
@@ -37,4 +39,5 @@ InspectorJump::InspectorJump(QWidget* parent)
 
       mapSignals();
       }
+}
 

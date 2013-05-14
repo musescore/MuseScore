@@ -26,6 +26,8 @@
 #include "mscore.h"
 #include "textframe.h"
 
+namespace Ms {
+
 enum SymbolType {
       SYMBOL_UNKNOWN,
       SYMBOL_COPYRIGHT,
@@ -227,8 +229,6 @@ void Text::layout1()
       if (styled())
             SimpleText::layout();
       else {
-            QPointF o(textStyle().offset(spatium()));
-
             _doc->setDefaultFont(textStyle().font(spatium()));
             qreal w = -1.0;
 
@@ -250,8 +250,8 @@ void Text::layout1()
                   w = _doc->idealWidth();
             _doc->setTextWidth(w);
 
+            QPointF o;
             QSizeF size(_doc->size());
-
             if (align() & ALIGN_BOTTOM) {
                   o.ry() += 3;
                   o.ry() -= size.height();
@@ -265,9 +265,10 @@ void Text::layout1()
                   o.rx() -= size.width();
             else if (align() & ALIGN_HCENTER)
                   o.rx() -= (size.width() * .5);
-            setPos(o);
-//            bbox().setRect(o.x(), o.y(), size.width(), size.height());
-            bbox().setRect(0.0, 0.0, size.width(), size.height());
+            bbox().setRect(o.x(), o.y(), size.width(), size.height());
+
+            setPos(textStyle().offset(spatium()));
+
             _doc->setModified(false);
             }
 
@@ -866,7 +867,7 @@ QPainterPath Text::shape() const
             int n = tl->lineCount();
             for (int i = 0; i < n; ++i) {
                   QTextLine l = tl->lineAt(i);
-                  QRectF r(l.naturalTextRect().translated(tl->position()));
+                  QRectF r(l.naturalTextRect().translated(tl->position()+bbox().topLeft()));
                   r.adjust(-l.position().x(), 0.0, 0.0, 0.0);
                   pp.addRect(r);
                   }
@@ -1828,4 +1829,6 @@ void Text::orderedList()
       _cursor->insertList(listFormat);
       _cursor->setCharFormat(format);
       }
+
+}
 

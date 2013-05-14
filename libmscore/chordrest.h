@@ -16,6 +16,8 @@
 #include "symbol.h"
 #include "duration.h"
 
+namespace Ms {
+
 #define CROSSMEASURE_UNKNOWN  -1
 #define CROSSMEASURE_NONE     0
 #define CROSSMEASURE_FIRST    1
@@ -168,5 +170,7 @@ class ChordRest : public DurationElement {
       virtual QVariant propertyDefault(P_ID) const;
       };
 
+
+}     // namespace Ms
 #endif
 

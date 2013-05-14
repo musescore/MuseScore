@@ -15,6 +15,8 @@
 
 #include "instrument.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Instrument
 //---------------------------------------------------------
@@ -86,5 +88,7 @@ class InstrumentData : public QSharedData {
       friend class Instrument;
       };
 
+
+}     // namespace Ms
 #endif
 

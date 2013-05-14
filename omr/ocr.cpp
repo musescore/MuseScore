@@ -23,6 +23,8 @@
 #include <tesseract/baseapi.h>
 #include <locale.h>
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Ocr
 //---------------------------------------------------------
@@ -74,4 +76,5 @@ QString Ocr::readLine(const OcrImage& img)
       char* txt = tess->TesseractRect(d, 0, bw, 0, 0, w, h);
       return QString(txt);
       }
+}
 

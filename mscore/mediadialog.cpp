@@ -26,6 +26,8 @@
 #include "scoreview.h"
 #include "omr/omr.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   MediaDialog
 //---------------------------------------------------------
@@ -172,4 +174,5 @@ void MediaDialog::audioFileButtonPressed()
       if (!s.isNull())
             audioFile->setText(s);
       }
+}
 

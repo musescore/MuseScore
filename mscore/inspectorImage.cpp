@@ -16,6 +16,8 @@
 #include "libmscore/image.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 enum {
       AUTOSCALE, SIZE_W, SIZE_H, SCALE_W, SCALE_H,
       LOCK_RATIO, SIZE_IS_SPATIUM
@@ -203,4 +205,5 @@ void InspectorImage::setElement(Element* e)
 
       InspectorBase::setElement();
       }
+}
 

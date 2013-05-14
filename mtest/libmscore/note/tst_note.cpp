@@ -19,6 +19,8 @@
 #include "libmscore/chord.h"
 #include "mtest/testutils.h"
 
+using namespace Ms;
+
 //---------------------------------------------------------
 //   TestNote
 //---------------------------------------------------------

@@ -26,6 +26,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/clef.h"
 
+namespace Ms {
+
 class EditInstrument;
 class InstrumentTemplate;
 class Instrument;
@@ -152,5 +154,7 @@ class InstrumentTemplateListItem : public QTreeWidgetItem {
       };
 
 extern void populateInstrumentList(QTreeWidget* instrumentList, bool extended);
+
+} // namespace Ms
 #endif
 

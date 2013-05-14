@@ -21,6 +21,8 @@
 #ifndef __PATTERN_H__
 #define __PATTERN_H__
 
+namespace Ms {
+
 class Sym;
 
 //---------------------------------------------------------
@@ -45,6 +47,8 @@ class Pattern {
       int h() const { return _image.height(); }
       bool dot(int x, int y) const;
       };
+
+}
 
 #endif
 

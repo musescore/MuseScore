@@ -19,6 +19,8 @@
 #include "ui_inspector_hairpin.h"
 #include "ui_inspector_line.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorHairpin
 //---------------------------------------------------------
@@ -34,5 +36,7 @@ class InspectorHairpin : public InspectorBase {
       InspectorHairpin(QWidget* parent);
       };
 
+
+} // namespace Ms
 #endif
 

@@ -21,6 +21,8 @@
 #ifndef __ICONS_H__
 #define __ICONS_H__
 
+namespace Ms {
+
 extern void genIcons();
 
 enum { longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON, note16_ICON,
@@ -31,12 +33,12 @@ enum { longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON,
       undo_ICON, redo_ICON, cut_ICON, copy_ICON, paste_ICON, print_ICON, clef_ICON,
       midiin_ICON, speaker_ICON, start_ICON, play_ICON, repeat_ICON, pan_ICON,
       sbeam_ICON, mbeam_ICON, nbeam_ICON, beam32_ICON, beam64_ICON, abeam_ICON, fbeam1_ICON, fbeam2_ICON,
-      fileOpen_ICON, fileNew_ICON, fileSave_ICON, fileSaveAs_ICON, exit_ICON,
+      fileOpen_ICON, fileNew_ICON, fileSave_ICON, fileSaveAs_ICON,
       window_ICON, acciaccatura_ICON, appoggiatura_ICON,
       grace4_ICON, grace8b_ICON, grace16_ICON, grace32_ICON, noteEntry_ICON,
       keys_ICON, tie_ICON,
       textBold_ICON, textItalic_ICON, textUnderline_ICON,
-      textLeft_ICON, textCenter_ICON, textRight_ICON, textTop_ICON, textBottom_ICON, textVCenter_ICON,
+      textLeft_ICON, textCenter_ICON, textRight_ICON, textTop_ICON, textBottom_ICON, textVCenter_ICON, textBaseline_ICON,
       textSuper_ICON, textSub_ICON,
       fotomode_ICON,
       hraster_ICON, vraster_ICON, repitch_ICON,
@@ -44,6 +46,7 @@ enum { longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON,
       formatIndentMore_ICON, formatIndentLess_ICON, community_ICON,
       metronome_ICON,
       vframe_ICON, hframe_ICON, tframe_ICON, fframe_ICON, measure_ICON, checkmark_ICON,
+      helpContents_ICON, goHome_ICON, goPrevious_ICON, goNext_ICON, viewRefresh_ICON,
       voice1_ICON, voice2_ICON, voice3_ICON, voice4_ICON,
       ICONS
       };
@@ -51,5 +54,7 @@ enum { longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON,
 extern QIcon* icons[ICONS];
 
 class Sym;
+
+} // namespace Ms
 #endif
 

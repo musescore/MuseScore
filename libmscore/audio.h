@@ -13,6 +13,8 @@
 #ifndef __AUDIO_H__
 #define __AUDIO_H__
 
+namespace Ms {
+
 class Xml;
 class XmlReader;
 
@@ -36,5 +38,7 @@ class Audio {
       void write(Xml&) const;
       };
 
+
+}     // namespace Ms
 #endif
 

@@ -23,6 +23,8 @@
 
 #include "ui_stafftext.h"
 
+namespace Ms {
+
 class StaffText;
 
 //---------------------------------------------------------
@@ -50,5 +52,6 @@ class StaffTextProperties : public QDialog, public Ui::StaffTextProperties {
    public:
       StaffTextProperties(StaffText*, QWidget* parent = 0);
       };
+}
 
 #endif

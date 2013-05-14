@@ -18,6 +18,8 @@
  Definition of classes VeloList.
 */
 
+namespace Ms {
+
 //---------------------------------------------------------
 ///   VeloEvent
 ///   item in VeloList
@@ -47,5 +49,7 @@ class VeloList : public QMap<int, VeloEvent> {
       void setVelo(int tick, int velocity);
       };
 
+
+}     // namespace Ms
 #endif
 

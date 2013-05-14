@@ -21,6 +21,8 @@
 #include "editraster.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditRaster
 //---------------------------------------------------------
@@ -45,4 +47,5 @@ void EditRaster::accept()
       QDialog::accept();
       }
 
+}
 

@@ -23,6 +23,8 @@
 
 #include "ui_editraster.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditRaster
 //---------------------------------------------------------
@@ -37,5 +39,7 @@ class EditRaster : public QDialog, public Ui::EditRaster {
       EditRaster(QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

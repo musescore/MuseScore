@@ -16,6 +16,8 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorHairpin
 //---------------------------------------------------------
@@ -39,4 +41,5 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             };
       mapSignals();
       }
+}
 

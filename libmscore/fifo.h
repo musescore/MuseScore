@@ -15,6 +15,8 @@
 
 #include <atomic>
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   FifoBase
 //    - works only for one reader/writer
@@ -45,5 +47,7 @@ class FifoBase {
       bool isFull() const     { return maxCount == counter; }
       };
 
+
+}     // namespace Ms
 #endif
 

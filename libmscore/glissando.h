@@ -15,6 +15,8 @@
 
 #include "element.h"
 
+namespace Ms {
+
 class Note;
 
 //---------------------------------------------------------
@@ -72,5 +74,7 @@ class Glissando : public Element {
       virtual QVariant propertyDefault(P_ID) const;
       };
 
+
+}     // namespace Ms
 #endif
 

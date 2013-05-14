@@ -27,6 +27,8 @@
 #include "libmscore/symbol.h"
 #include "preferences.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   createSymbolPalette
 //---------------------------------------------------------
@@ -43,7 +45,7 @@ void SymbolDialog::createSymbolPalette()
 //---------------------------------------------------------
 
 SymbolDialog::SymbolDialog(QWidget* parent)
-   : QWidget(parent, Qt::Dialog | Qt::Window)
+   : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
       {
       setupUi(this);
       setWindowTitle(tr("MuseScore: Symbols"));
@@ -78,4 +80,5 @@ void SymbolDialog::systemFlagChanged(int state)
 //            }
       }
 
+}
 

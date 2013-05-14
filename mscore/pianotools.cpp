@@ -20,6 +20,8 @@
 
 #include "pianotools.h"
 
+namespace Ms {
+
 static const qreal KEY_WIDTH   = 13.0;
 static const qreal BKEY_WIDTH  = 8.0;
 static const qreal KEY_HEIGHT  = 40.0;
@@ -303,16 +305,6 @@ PianoTools::PianoTools(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   closeEvent
-//---------------------------------------------------------
-
-void PianoTools::closeEvent(QCloseEvent* ev)
-      {
-      emit pianoVisible(false);
-      QDockWidget::closeEvent(ev);
-      }
-
-//---------------------------------------------------------
 //   wheelEvent
 //---------------------------------------------------------
 
@@ -341,4 +333,5 @@ void HPiano::wheelEvent(QWheelEvent* event)
             setScale(scaleVal);
             }
       }
+}
 

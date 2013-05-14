@@ -13,10 +13,12 @@
 #ifndef __EVENT_H__
 #define __EVENT_H__
 
+#include <map>
+
+namespace Ms {
+
 class Note;
 class Xml;
-
-#include <map>
 
 //---------------------------------------------------------
 //   Event types
@@ -310,5 +312,6 @@ typedef EventList::const_iterator ciEvent;
 
 extern QString midiMetaName(int meta);
 
+}
 #endif
 

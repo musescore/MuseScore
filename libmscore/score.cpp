@@ -71,6 +71,8 @@
 #include "cursor.h"
 #include "rendermidi.h"
 
+namespace Ms {
+
 Score* gscore;                 ///< system score, used for palettes etc.
 QPoint scorePos(0,0);
 QSize  scoreSize(950, 500);
@@ -297,7 +299,7 @@ void Score::init()
       startLayout     = 0;
       _undo           = new UndoStack();
       _repeatList     = new RepeatList(this);
-      foreach (StaffType* st, ::staffTypes)
+      foreach (StaffType* st, Ms::staffTypes)
              addStaffType(st);
 
       _mscVersion     = MSCVERSION;
@@ -881,8 +883,8 @@ void Score::spell(Note* note)
       nn = prevNote(nn);
       notes.prepend(nn);
 
-      int opt = ::computeWindow(notes, 0, 7);
-      note->setTpc(::tpc(3, note->pitch(), opt));
+      int opt = Ms::computeWindow(notes, 0, 7);
+      note->setTpc(Ms::tpc(3, note->pitch(), opt));
       }
 
 //---------------------------------------------------------
@@ -1467,7 +1469,7 @@ void Score::addElement(Element* element)
                   break;
 
             case Element::CHORD:
-                  ::createPlayEvents(static_cast<Chord*>(element));
+                  Ms::createPlayEvents(static_cast<Chord*>(element));
                   break;
 
             case Element::NOTE: {
@@ -1482,7 +1484,7 @@ void Score::addElement(Element* element)
                   {
                   Element* cr = element->parent();
                   if (cr->type() == Element::CHORD)
-                         ::createPlayEvents(static_cast<Chord*>(cr));
+                         Ms::createPlayEvents(static_cast<Chord*>(cr));
                   }
                   break;
             default:
@@ -1631,7 +1633,7 @@ void Score::removeElement(Element* element)
                   {
                   Element* cr = element->parent();
                   if (cr->type() == Element::CHORD)
-                         ::createPlayEvents(static_cast<Chord*>(cr));
+                         Ms::createPlayEvents(static_cast<Chord*>(cr));
                   }
                   break;
 
@@ -3436,4 +3438,6 @@ Cursor* Score::newCursor()
       return new Cursor(this);
       }
 
+
+}
 

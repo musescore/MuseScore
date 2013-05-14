@@ -23,6 +23,10 @@
 
 #include "libmscore/score.h"
 
-extern Score::FileError importPdf(Score*, const QString&);
+namespace Ms {
+
+      extern Score::FileError importPdf(Score*, const QString&);
+      }
+
 #endif
 

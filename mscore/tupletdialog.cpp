@@ -34,6 +34,8 @@
 #include "libmscore/stem.h"
 #include "musescore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TupletDialog
 //---------------------------------------------------------
@@ -109,4 +111,5 @@ void MuseScore::tupletDialog()
       cs->cmdCreateTuplet(cr, tuplet);
       }
 
+}
 

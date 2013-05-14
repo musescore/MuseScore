@@ -15,6 +15,8 @@
 
 #include "fraction.h"
 
+namespace Ms {
+
 class Xml;
 class XmlReader;
 
@@ -81,4 +83,6 @@ class TimeSigMap : public std::map<int, SigEvent > {
       int rasterStep(unsigned tick, int raster) const;
       };
 
+
+}     // namespace Ms
 #endif

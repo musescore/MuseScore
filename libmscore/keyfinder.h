@@ -13,12 +13,14 @@
 #ifndef __KEYFINDER_H__
 #define __KEYFINDER_H__
 
-class MidiTrack;
+namespace Ms {
+      class MidiTrack;
+      }
 
 namespace AL {
       class TimeSigMap;
       };
 
-// extern int findKey(MidiTrack*, AL::TimeSigMap*);
+
 #endif
 

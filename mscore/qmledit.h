@@ -15,6 +15,8 @@
 
 #include "globals.h"
 
+namespace Ms {
+
 class JSHighlighter;
 
 //---------------------------------------------------------
@@ -116,5 +118,7 @@ class JSHighlighter : public QSyntaxHighlighter {
       void setKeywords(const QStringList &keywords);
       };
 
+
+} // namespace Ms
 #endif
 

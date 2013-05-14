@@ -16,6 +16,8 @@
 
 #include "ui_omrpanel.h"
 
+namespace Ms {
+
 class OmrView;
 
 //---------------------------------------------------------
@@ -51,5 +53,7 @@ class OmrPanel : public QDockWidget {
       void setOmrView(OmrView*);
       };
 
+
+} // namespace Ms
 #endif
 

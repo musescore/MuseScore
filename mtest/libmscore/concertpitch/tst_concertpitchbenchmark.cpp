@@ -17,6 +17,8 @@
 
 #define DIR QString("libmscore/concertpitch/")
 
+using namespace Ms;
+
 //---------------------------------------------------------
 //   TestConcertPitchBenchmark
 //---------------------------------------------------------
@@ -50,7 +52,7 @@ void TestConcertPitchBenchmark::benchmark()
             // switch to concert pitch
             score->cmdConcertPitchChanged(true,true);
             score->doLayout();
-            // switch back 
+            // switch back
             // TODO: this should be UNDO, but UNDO doesn't work with transpose!
             score->cmdConcertPitchChanged(false,true);
             score->doLayout();

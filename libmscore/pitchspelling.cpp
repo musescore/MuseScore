@@ -22,6 +22,8 @@
 #include "chord.h"
 #include "score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   tpcIsValid
 //---------------------------------------------------------
@@ -802,3 +804,6 @@ int absStep2pitchByKey(int step, int key)
       int deltaPitch = step2deltaPitchByKey(step % STEP_DELTA_OCTAVE, key);
       return octave * PITCH_DELTA_OCTAVE + deltaPitch;
       }
+
+}
+

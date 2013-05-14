@@ -15,6 +15,8 @@
 
 #include "text.h"
 
+namespace Ms {
+
 enum InstrumentNameType {
       INSTRUMENT_NAME_LONG, INSTRUMENT_NAME_SHORT
       };
@@ -40,5 +42,7 @@ class InstrumentName : public Text  {
       void setInstrumentNameType(const QString& s);
       };
 
+
+}     // namespace Ms
 #endif
 

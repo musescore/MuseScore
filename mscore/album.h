@@ -23,6 +23,8 @@
 
 #include "ui_album.h"
 
+namespace Ms {
+
 class Score;
 class Xml;
 class XmlReader;
@@ -98,6 +100,7 @@ class AlbumManager : public QDialog, public Ui::AlbumManager {
    public:
       AlbumManager(QWidget* parent = 0);
       };
+}
 
 #endif
 

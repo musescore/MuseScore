@@ -64,7 +64,7 @@ class VoiceFifo {
 //   Zerberus
 //---------------------------------------------------------
 
-class Zerberus : public QObject, public Synthesizer {
+class Zerberus : public QObject, public Ms::Synthesizer {
       Q_OBJECT
 
       static bool initialized;
@@ -94,7 +94,7 @@ class Zerberus : public QObject, public Synthesizer {
       ~Zerberus();
 
       virtual void process(unsigned frames, float*, float*, float*);
-      virtual void play(const PlayEvent& event);
+      virtual void play(const Ms::PlayEvent& event);
 
       bool loadInstrument(const QString&);
 
@@ -109,10 +109,10 @@ class Zerberus : public QObject, public Synthesizer {
       double ct2hz(double c) { return pow(2.0, (c-6900.0) / 1200.0) * _masterTuning; }
 
       virtual const char* name() const;
-      virtual const QList<MidiPatch*>& getPatchInfo() const;
+      virtual const QList<Ms::MidiPatch*>& getPatchInfo() const;
 
-      virtual SynthesizerGroup state() const;
-      virtual void setState(const SynthesizerGroup&);
+      virtual Ms::SynthesizerGroup state() const;
+      virtual void setState(const Ms::SynthesizerGroup&);
 
       virtual void allSoundsOff(int channel);
       virtual void allNotesOff(int channel);
@@ -122,7 +122,7 @@ class Zerberus : public QObject, public Synthesizer {
       virtual bool loadSoundFonts(const QStringList&);
       virtual QStringList soundFonts() const;
 
-      virtual SynthesizerGui* gui();
+      virtual Ms::SynthesizerGui* gui();
       static QFileInfoList sfzFiles();
       };
 

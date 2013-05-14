@@ -21,6 +21,8 @@
 #ifndef __DRUMTOOLS_H__
 #define __DRUMTOOLS_H__
 
+namespace Ms {
+
 class Score;
 class Drumset;
 class Palette;
@@ -49,5 +51,7 @@ class DrumTools : public QDockWidget {
       };
 
 
+
+} // namespace Ms
 #endif
 

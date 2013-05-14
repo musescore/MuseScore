@@ -23,6 +23,8 @@
 
 #include "config.h"
 
+namespace Ms {
+
 class Synth;
 class Seq;
 class MidiDriver;
@@ -72,6 +74,8 @@ class Portaudio : public Driver {
       MidiDriver* mididriver() {return midiDriver;}
       };
 
+
+} // namespace Ms
 #endif
 
 

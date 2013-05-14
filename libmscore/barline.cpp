@@ -20,6 +20,8 @@
 #include "articulation.h"
 #include "stafftype.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   static members init
 //---------------------------------------------------------
@@ -1027,3 +1029,6 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
             }
       return Element::propertyDefault(propertyId);
       }
+
+}
+

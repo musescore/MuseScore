@@ -19,6 +19,8 @@
 #include "segment.h"
 #include "stem.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Tremolo
 //---------------------------------------------------------
@@ -318,4 +320,6 @@ Fraction Tremolo::tremoloLen() const
             }
       return f;
       }
+
+}
 

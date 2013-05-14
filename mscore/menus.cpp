@@ -75,6 +75,8 @@
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
 
+namespace Ms {
+
 extern bool useFactorySettings;
 
 //---------------------------------------------------------
@@ -612,7 +614,7 @@ Palette* MuseScore::newClefsPalette()
             };
       for (int i = 0; i < 20; ++i) {
             ClefType j = clefs[i];
-            Clef* k = new ::Clef(gscore);
+            Clef* k = new Ms::Clef(gscore);
             k->setClefType(ClefTypeList(j, j));
             sp->append(k, qApp->translate("clefTable", clefTable[j].name));
             }
@@ -1078,4 +1080,5 @@ void MuseScore::addTempo()
             cs->addRefresh(tt->abbox());  // ??
             }
       }
+}
 

@@ -20,6 +20,8 @@
 #include "sym.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Bracket
 //---------------------------------------------------------
@@ -351,4 +353,6 @@ bool Bracket::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers
             }
       return false;
       }
+
+}
 

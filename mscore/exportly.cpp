@@ -82,6 +82,8 @@ using std::cout;
 #include "libmscore/jump.h"
 #include "musescore.h"
 
+namespace Ms {
+
 static  const int MAX_SLURS = 8;
 static  const int BRACKSTAVES=64;
 static  const int MAXPARTGROUPS = 8;
@@ -4924,4 +4926,5 @@ bool ExportLy::write(const QString& name)
      from bug to "issue", probably will be never, and I will not correct
      for it here. (olav)
  */
+}
 

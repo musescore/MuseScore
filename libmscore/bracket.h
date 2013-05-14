@@ -16,9 +16,12 @@
 #include "element.h"
 #include "mscore.h"
 
+class QPainter;
+
+namespace Ms {
+
 class MuseScoreView;
 class System;
-class QPainter;
 
 //---------------------------------------------------------
 //   @@ Bracket
@@ -79,5 +82,7 @@ class Bracket : public Element {
       virtual Element* drop(const DropData&);
       };
 
+
+}     // namespace Ms
 #endif
 

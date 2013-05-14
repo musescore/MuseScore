@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>748</width>
-    <height>512</height>
+    <height>565</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -157,7 +157,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>6</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -1684,38 +1684,6 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_89">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>minimum Measure width</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="indent">
-               <number>5</number>
-              </property>
-              <property name="buddy">
-               <cstring>minMeasureWidth_2</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="minMeasureWidth_2">
-              <property name="suffix">
-               <string extracomment="spatium unit">sp</string>
-              </property>
-              <property name="minimum">
-               <double>2.000000000000000</double>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_11">
               <property name="sizePolicy">
@@ -1744,63 +1712,35 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QDoubleSpinBox" name="measureSpacing">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_89">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="minimum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_12">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Barline-note margin</string>
+               <string>Minimum measure width</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
               </property>
               <property name="indent">
                <number>5</number>
               </property>
               <property name="buddy">
-               <cstring>barNoteDistance</cstring>
+               <cstring>minMeasureWidth_2</cstring>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="barNoteDistance">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="minMeasureWidth_2">
               <property name="suffix">
-               <string>sp</string>
+               <string extracomment="spatium unit">sp</string>
               </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
+              <property name="minimum">
+               <double>2.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -1813,7 +1753,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Note-barline margin</string>
+               <string>Note to barline distance</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1826,6 +1766,31 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="buddy">
                <cstring>noteBarDistance</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Barline to note distance</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+              <property name="indent">
+               <number>5</number>
+              </property>
+              <property name="buddy">
+               <cstring>barNoteDistance</cstring>
               </property>
              </widget>
             </item>
@@ -1845,33 +1810,27 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_14">
+            <item row="1" column="1">
+             <widget class="QDoubleSpinBox" name="measureSpacing">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="text">
-               <string>Min. note distance</string>
+              <property name="decimals">
+               <number>3</number>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <property name="minimum">
+               <double>1.000000000000000</double>
               </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
-              <property name="indent">
-               <number>5</number>
-              </property>
-              <property name="buddy">
-               <cstring>minNoteDistance</cstring>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
-             <widget class="QDoubleSpinBox" name="minNoteDistance">
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="barNoteDistance">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1911,8 +1870,49 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_14">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Minimum note distance</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+              <property name="indent">
+               <number>5</number>
+              </property>
+              <property name="buddy">
+               <cstring>minNoteDistance</cstring>
+              </property>
+             </widget>
+            </item>
             <item row="5" column="1">
              <widget class="QDoubleSpinBox" name="clefLeftMargin">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="suffix">
+               <string>sp</string>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QDoubleSpinBox" name="minNoteDistance">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1936,7 +1936,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Key sig. left margin</string>
+               <string>Key signature left margin</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1977,7 +1977,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Time sig. left margin</string>
+               <string>Time signature left margin</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2043,7 +2043,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Clef-barline distance</string>
+               <string>Clef to barline distance</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2070,19 +2070,6 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item row="10" column="0">
-             <spacer name="verticalSpacer_11">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="11" column="0">
              <widget class="QLabel" name="label">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -2104,7 +2091,7 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="11" column="1">
+            <item row="10" column="1">
              <widget class="QDoubleSpinBox" name="staffLineWidth">
               <property name="suffix">
                <string extracomment="spatium unit">sp</string>
@@ -2125,6 +2112,19 @@ p, li { white-space: pre-wrap; }
              <size>
               <width>40</width>
               <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0">
+           <spacer name="verticalSpacer_11">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
              </size>
             </property>
            </spacer>
@@ -4317,7 +4317,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>timesigLeftMargin</tabstop>
   <tabstop>clefKeyRightMargin</tabstop>
   <tabstop>clefBarlineDistance</tabstop>
-  <tabstop>staffLineWidth</tabstop>
   <tabstop>showRepeatBarTips</tabstop>
   <tabstop>showStartBarlineSingle</tabstop>
   <tabstop>showStartBarlineMultiple</tabstop>

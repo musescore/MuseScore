@@ -30,6 +30,8 @@
 #include "stafftype.h"
 #include "icon.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //    Rest
 //--------------------------------------------------------
@@ -522,4 +524,6 @@ void Rest::reset()
       score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NONE));
       ChordRest::reset();
       }
+
+}
 

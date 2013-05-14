@@ -13,6 +13,8 @@
 #ifndef __AL_TEMPO_H__
 #define __AL_TEMPO_H__
 
+namespace Ms {
+
 class Xml;
 
 enum TempoType { TEMPO_INVALID, TEMPO_FIX, TEMPO_RAMP };
@@ -68,4 +70,5 @@ class TempoMap : public std::map<int, TEvent> {
       qreal relTempo() const { return _relTempo; }
       };
 
+}     // namespace Ms
 #endif

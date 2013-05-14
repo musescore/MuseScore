@@ -14,6 +14,8 @@
 #include "palette.h"
 #include "preferences.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   PaletteBoxButton
 //---------------------------------------------------------
@@ -143,4 +145,5 @@ void PaletteBoxButton::paintEvent(QPaintEvent*)
       opt.features &= (~QStyleOptionToolButton::HasMenu);
       p.drawComplexControl(QStyle::CC_ToolButton, opt);
       }
+}
 

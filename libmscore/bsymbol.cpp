@@ -13,6 +13,8 @@
 #include "score.h"
 #include "image.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   BSymbol
 //---------------------------------------------------------
@@ -185,4 +187,6 @@ QRectF BSymbol::drag(const EditData& data)
       return r;
       }
 
+
+}
 

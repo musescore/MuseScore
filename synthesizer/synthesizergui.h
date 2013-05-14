@@ -13,6 +13,8 @@
 #ifndef __SYNTHESIZERGUI_H__
 #define __SYNTHESIZERGUI_H__
 
+namespace Ms {
+
 class Synthesizer;
 
 //---------------------------------------------------------
@@ -35,5 +37,6 @@ class SynthesizerGui : public QWidget {
       Synthesizer* synthesizer() { return _synthesizer; }
       };
 
+}
 #endif
 

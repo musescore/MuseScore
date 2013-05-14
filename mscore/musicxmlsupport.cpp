@@ -25,6 +25,8 @@
 #include "globals.h"
 #include "musicxmlsupport.h"
 
+namespace Ms {
+
 NoteList::NoteList()
       {
       for (int i = 0; i < MAX_STAVES; ++i)
@@ -358,3 +360,5 @@ Fraction MxmlSupport::calculateFraction(QString type, int dots, int normalNotes,
             }
       return f;
       }
+}
+

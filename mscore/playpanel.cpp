@@ -26,6 +26,8 @@
 #include "musescore.h"
 #include "libmscore/measure.h"
 
+namespace Ms {
+
 const int MIN_VOL = -60;
 const int MAX_VOL = 10;
 
@@ -88,13 +90,13 @@ void PlayPanel::relTempoChanged(double d, int)
 //---------------------------------------------------------
 //   closeEvent
 //
-//    Called when the PlyPanel is colsed with its own button
+//    Called when the PlayPanel is closed with its own button
 //    but not when it is hidden with the main menu command
 //---------------------------------------------------------
 
 void PlayPanel::closeEvent(QCloseEvent* ev)
       {
-      emit closed();
+      emit closed(false);
       QWidget::closeEvent(ev);
       }
 
@@ -260,3 +262,5 @@ void PlayPanel::updatePosLabel(int utick)
       sprintf(buffer, "%03d.%02d", bar+1, beat+1);
       posLabel->setText(QString(buffer));
       }
+}
+

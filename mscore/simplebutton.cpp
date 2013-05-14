@@ -21,6 +21,8 @@
 #include "simplebutton.h"
 #include "preferences.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   SimpleButton
 //---------------------------------------------------------
@@ -63,4 +65,5 @@ SimpleButton::SimpleButton(const QString& s, QWidget* parent)
       setAutoRaise(false);
       setText(s);
       }
+}
 

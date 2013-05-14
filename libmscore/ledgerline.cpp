@@ -16,6 +16,8 @@
 #include "system.h"
 #include "score.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   LedgerLine
 //---------------------------------------------------------
@@ -72,3 +74,4 @@ void LedgerLine::draw(QPainter* painter) const
       Line::draw(painter);
       }
 
+}

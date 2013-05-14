@@ -46,6 +46,8 @@
 #include "lyrics.h"
 #include "harmony.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   rebuildBspTree
 //---------------------------------------------------------
@@ -353,11 +355,9 @@ void Score::layoutStage2()
                   bm = cr->beamMode();
                   if (bm == BeamMode::AUTO)
                         bm = Groups::endBeam(cr);
-
                   // if chord has hooks and is 2nd element of a cross-measure value
                   // set beam mode to NONE (do not combine with following chord beam/hook, if any)
-
-                  if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CROSSMEASURE_SECOND)
+                  if(cr->durationType().hooks() > 0 && cr->crossMeasure() == CROSSMEASURE_SECOND)
                         bm = BeamMode::NONE;
                   if (cr->measure() != measure) {
                         if (measure && !beamModeMid(bm)) {
@@ -2778,3 +2778,6 @@ void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
                   }
             }
       }
+
+}
+

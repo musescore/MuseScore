@@ -23,6 +23,8 @@
 
 #include "ui_edittempo.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   EditTempo
 //---------------------------------------------------------
@@ -44,5 +46,7 @@ class EditTempo : public QDialog, private Ui::EditTempoBase {
       QString text() const { return _text; }
       };
 
+
+} // namespace Ms
 #endif
 

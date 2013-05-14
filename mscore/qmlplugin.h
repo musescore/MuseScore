@@ -18,6 +18,8 @@
 #ifdef SCRIPT_INTERFACE
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 class MsProcess;
 class Score;
 class Element;
@@ -92,7 +94,7 @@ class QmlPlugin : public QDeclarativeItem {
       void runPlugin()                     { emit run();       }
 
       int division() const                { return MScore::division; }
-      int mscoreVersion() const           { return ::version();      }
+      int mscoreVersion() const           { return Ms::version();      }
       int mscoreMajorVersion() const      { return majorVersion();  }
       int mscoreMinorVersion() const      { return minorVersion();  }
       int mscoreUpdateVersion() const     { return updateVersion(); }
@@ -110,5 +112,7 @@ class QmlPlugin : public QDeclarativeItem {
       };
 
 #endif
+
+} // namespace Ms
 #endif
 

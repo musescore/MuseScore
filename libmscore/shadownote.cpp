@@ -16,6 +16,8 @@
 #include "sym.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   ShadowNote
 //---------------------------------------------------------
@@ -97,4 +99,6 @@ void ShadowNote::layout()
       setbbox(b);
       }
 
+
+}
 

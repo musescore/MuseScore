@@ -20,6 +20,8 @@
 #include "score.h"
 #include "image.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Symbol
 //---------------------------------------------------------
@@ -306,4 +308,6 @@ void FSymbol::setFont(const QFont& f)
       _font = f;
       _font.setStyleStrategy(QFont::NoFontMerging);
       }
+
+}
 

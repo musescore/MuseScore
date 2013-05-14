@@ -25,6 +25,8 @@
 #include "ui_selectinstr.h"
 #include "libmscore/instrument.h"
 
+namespace Ms {
+
 class Staff;
 class InstrumentTemplate;
 
@@ -41,6 +43,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       int         _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
 
       void apply();
+      void fillStaffTypeCombo();
       void setInterval(const Interval&);
       void updateInstrument();
 
@@ -66,5 +69,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       EditStaff(Staff*, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

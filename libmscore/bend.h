@@ -18,6 +18,8 @@
 
 class QPainter;
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   @@ Bend
 //---------------------------------------------------------
@@ -43,5 +45,7 @@ class Bend : public Element {
       void setPoints(const QList<PitchValue>& p) { _points = p;    }
       };
 
+
+}     // namespace Ms
 #endif
 

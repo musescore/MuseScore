@@ -20,6 +20,8 @@
 #include "inspector.h"
 #include "inspectorNote.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorNote
 //---------------------------------------------------------
@@ -257,4 +259,5 @@ void InspectorNote::beamClicked()
             }
       }
 
+}
 

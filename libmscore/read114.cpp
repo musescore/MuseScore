@@ -32,6 +32,8 @@
 #include "drumset.h"
 #include "style.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   style114
 //---------------------------------------------------------
@@ -676,7 +678,7 @@ Score::FileError Score::read114(XmlReader& e)
 
       // create excerpts
       foreach(Excerpt* excerpt, _excerpts) {
-            Score* nscore = ::createExcerpt(excerpt->parts());
+            Score* nscore = Ms::createExcerpt(excerpt->parts());
             if (nscore) {
                   nscore->setParentScore(this);
                   nscore->setName(excerpt->title());
@@ -712,3 +714,6 @@ Score::FileError Score::read114(XmlReader& e)
 
       return FILE_NO_ERROR;
       }
+
+}
+

@@ -15,9 +15,12 @@
 
 #include "line.h"
 
+class QPainter;
+
+namespace Ms {
+
 class Trill;
 class Accidental;
-class QPainter;
 
 //---------------------------------------------------------
 //   @@ TrillSegment
@@ -87,6 +90,10 @@ class Trill : public SLine {
       virtual void setYoff(qreal);
       };
 
-Q_DECLARE_METATYPE(Trill::TrillType)
+
+}     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Trill::TrillType)
+
 #endif
 

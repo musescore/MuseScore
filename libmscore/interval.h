@@ -13,6 +13,8 @@
 #ifndef __INTERVAL_H__
 #define __INTERVAL_H__
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   Interval
 //---------------------------------------------------------
@@ -28,5 +30,7 @@ struct Interval {
       bool isZero() const;
       };
 
+
+}     // namespace Ms
 #endif
 

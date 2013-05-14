@@ -13,6 +13,8 @@
 #ifndef __EXCERPT_H__
 #define __EXCERPT_H__
 
+namespace Ms {
+
 class Score;
 class Part;
 class Xml;
@@ -45,5 +47,7 @@ extern Score* createExcerpt(const QList<Part*>&);
 extern void cloneStaves(Score* oscore, Score* score, const QList<int>& map);
 extern void cloneStaff(Staff* ostaff, Staff* nstaff);
 
+
+}     // namespace Ms
 #endif
 

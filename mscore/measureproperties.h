@@ -24,6 +24,8 @@
 #include "ui_measureproperties.h"
 #include "libmscore/sig.h"
 
+namespace Ms {
+
 class Measure;
 
 //---------------------------------------------------------
@@ -51,5 +53,7 @@ class MeasureProperties : public QDialog, private Ui::MeasurePropertiesBase {
       MeasureProperties(Measure*, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

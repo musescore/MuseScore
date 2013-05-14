@@ -36,6 +36,8 @@
 #include "timesig.h"
 #include "system.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   subTypeName
 //---------------------------------------------------------
@@ -991,4 +993,6 @@ void Segment::removeAnnotation(Element* e)
                   }
             }
       }
+
+}
 

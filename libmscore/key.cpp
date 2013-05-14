@@ -16,6 +16,8 @@
 #include "score.h"
 #include "pitchspelling.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   KeySigEvent
 //---------------------------------------------------------
@@ -258,4 +260,6 @@ void KeySigEvent::initFromSubtype(int st)
       _invalid        = a._invalid;
       enforceLimits();
       }
+
+}
 

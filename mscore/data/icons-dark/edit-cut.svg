@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg xmlns:cc='http://creativecommons.org/ns#' xmlns:dc='http://purl.org/dc/elements/1.1/' sodipodi:docname='edit-cut.svg' height='24' id='svg7384' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:svg='http://www.w3.org/2000/svg' inkscape:version='0.48.4 r9939' version='1.1' width='23.999985' xmlns='http://www.w3.org/2000/svg'>
+  <metadata id='metadata90'>
+    <rdf:RDF>
+      <cc:Work rdf:about=''>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage'/>
+        <dc:title>MuseScore Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview inkscape:bbox-nodes='false' inkscape:bbox-paths='true' bordercolor='#666666' borderopacity='1' inkscape:current-layer='actions' inkscape:cx='307.85095' inkscape:cy='-161.63667' fit-margin-bottom='6' fit-margin-left='6' fit-margin-right='6' fit-margin-top='6' gridtolerance='10' inkscape:guide-bbox='true' guidetolerance='10' id='namedview88' inkscape:object-nodes='false' inkscape:object-paths='false' objecttolerance='10' pagecolor='#333333' inkscape:pageopacity='1' inkscape:pageshadow='2' showborder='false' showgrid='false' showguides='true' inkscape:snap-bbox='true' inkscape:snap-bbox-midpoints='false' inkscape:snap-global='false' inkscape:snap-grids='true' inkscape:snap-nodes='false' inkscape:snap-others='false' inkscape:snap-to-guides='true' inkscape:window-height='1021' inkscape:window-maximized='1' inkscape:window-width='1920' inkscape:window-x='0' inkscape:window-y='27' inkscape:zoom='1'>
+    <inkscape:grid empspacing='2' enabled='true' id='grid4866' originx='402.18991px' originy='79.999931px' snapvisiblegridlinesonly='true' spacingx='1px' spacingy='1px' type='xygrid' visible='true'/>
+  </sodipodi:namedview>
+  <title id='title9167'>MuseScore Icon Theme</title>
+  <defs id='defs7386'/>
+  <g inkscape:groupmode='layer' id='actions' inkscape:label='actions' style='display:inline' transform='translate(-41.000402,-158.99999)'>
+    
+    <path inkscape:connector-curvature='0' d='m 45.000407,160.96742 c -1.194843,0.037 -1.999999,0.79583 -1.999999,1.99918 l 0,16.9931 c 0,1.2268 0.7727,1.99917 1.999999,1.99917 5.823578,0.0925 10.944266,3e-5 16.000001,3e-5 1.227299,0 1.999999,-0.77238 1.999999,-1.99917 l 0,-16.99311 c 0,-1.22682 -0.772702,-1.99915 -1.999999,-1.99917 l -2.000002,-3e-5 0,1.99918 2.000002,3e-5 0,16.9931 -16.000001,-3e-5 0,-16.9931 2,0 0,-1.99918 c -0.763888,2e-5 -1.236112,3e-5 -2,0 z' id='path15024' sodipodi:nodetypes='csscssssccccccccc' style='font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;stroke:none;stroke-width:2.00000143;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans'/>
+    <path inkscape:connector-curvature='0' d='m 49.000407,160.02086 c -0.615081,0.024 -1,0.38242 -1,0.99477 l 0,1.98958 c 0,0.61235 0.384432,0.99629 1,0.99479 l 8,-0.0194 c 0.615536,-0.001 1,-0.38241 1,-0.99478 l 0,-1.98957 c 0,-0.61236 -0.384921,-0.97075 -1,-0.99477 -2.333369,-0.006 -5.666674,0.007 -8,0.0193 z' id='path15026' sodipodi:nodetypes='csssssscc' style='fill:#ffffff;stroke:none;display:inline'/>
+    <path inkscape:connector-curvature='0' d='M 53.78125,170.96875 A 1.0003037,0.99989641 0 0 0 53.6875,171 L 53,171 l 0,0.65625 a 1.0003037,0.99989641 0 0 0 0,0.59375 l 0,4.75 c 0,0 0.670819,-0.003 1,0 0.53428,1e-4 1,-0.51037 1,-1 l 0,-1.59375 2.78125,2.78125 a 1.0003037,0.99989641 0 1 0 1.40625,-1.40625 L 56.375,173 58,173 c 0.522621,-0.004 0.99595,-0.47758 1,-1 l 0,-1 -4.8125,0 A 1.0003037,0.99989641 0 0 0 54,170.96875 a 1.0003037,0.99989641 0 0 0 -0.21875,0 z' id='path12113' style='font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;stroke:none;stroke-width:1.33360577;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:new;font-family:Sans;-inkscape-font-specification:Sans'/>
+  </g>
+</svg>

@@ -27,6 +27,8 @@
 
 #include "mididriver.h"
 
+namespace Ms {
+
 struct PortName {
       Port port;
       QString name;
@@ -56,5 +58,6 @@ class AlsaMidiDriver : public MidiDriver {
       virtual void write(const Event&);
       };
 
+}
 #endif
 

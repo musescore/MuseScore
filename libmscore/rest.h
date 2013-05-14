@@ -15,6 +15,8 @@
 
 #include "chordrest.h"
 
+namespace Ms {
+
 class TDuration;
 
 //---------------------------------------------------------
@@ -61,5 +63,7 @@ class Rest : public ChordRest {
       int sym() const        { return _sym;    }
       };
 
+
+}     // namespace Ms
 #endif
 

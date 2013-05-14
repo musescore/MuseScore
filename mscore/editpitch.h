@@ -21,31 +21,31 @@
 #ifndef EDITPITCH_H
 #define EDITPITCH_H
 
-//#include <QDialog>
 #include "ui_editpitch.h"
-/*
-namespace Ui {
-    class EditPitch;
-}
-*/
-class EditPitch : public QDialog, private Ui::EditPitchBase {
-    Q_OBJECT
 
-   public:
-      EditPitch(QWidget *parent);
-      EditPitch(QWidget * parent, int midiCode);
-      ~EditPitch();
+namespace Ms {
+
+//---------------------------------------------------------
+//   EditPitch
+//---------------------------------------------------------
+
+class EditPitch : public QDialog, private Ui::EditPitchBase {
+      Q_OBJECT
 
    protected:
       void changeEvent(QEvent *e);
-
-//   private:
-//      Ui::EditPitch *ui;
 
    private slots:
       void on_tableWidget_cellDoubleClicked(int row, int column);
       void accept();
       void reject() { done(-1); }                             // return an invalid pitch MIDI code
-};
+
+   public:
+      EditPitch(QWidget *parent);
+      EditPitch(QWidget * parent, int midiCode);
+      ~EditPitch();
+      };
+
+}
 
 #endif // EDITPITCH_H

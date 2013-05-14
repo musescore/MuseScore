@@ -31,6 +31,8 @@
 #include "importxmlfirstpass.h"
 #include "musicxmlsupport.h"
 
+namespace Ms {
+
 class Instrument;
 class Measure;
 class Tuplet;
@@ -253,4 +255,6 @@ enum {
 
 extern const XmlChordExtension chordExtensions[];
 
+
+} // namespace Ms
 #endif

@@ -16,6 +16,8 @@
 #include "pitchspelling.h"
 #include "mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   HChord
 //---------------------------------------------------------
@@ -679,6 +681,8 @@ bool ChordList::write(const QString& name)
       return true;
       }
 
+
+}
 
 
 

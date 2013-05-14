@@ -62,7 +62,7 @@
       </layout>
      </item>
      <item row="0" column="0">
-      <widget class="FretCanvas" name="diagram">
+      <widget class="Ms::FretCanvas" name="diagram">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -90,7 +90,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>FretCanvas</class>
+   <class>Ms::FretCanvas</class>
    <extends>QFrame</extends>
    <header>fretcanvas.h</header>
    <container>1</container>

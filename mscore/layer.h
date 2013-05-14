@@ -23,6 +23,8 @@
 
 #include "ui_layer.h"
 
+namespace Ms {
+
 class Score;
 
 //---------------------------------------------------------
@@ -45,5 +47,7 @@ class LayerManager : public QDialog, public Ui::LayerManager {
       LayerManager(Score*, QWidget* parent = 0);
       };
 
+
+} // namespace Ms
 #endif
 

@@ -24,6 +24,8 @@
 #include "ui_bend.h"
 #include "libmscore/pitchvalue.h"
 
+namespace Ms {
+
 class Bend;
 
 //---------------------------------------------------------
@@ -43,5 +45,7 @@ class BendProperties : public QDialog, public Ui::BendDialog {
       const QList<PitchValue>& points() const;
       };
 
+
+} // namespace Ms
 #endif
 

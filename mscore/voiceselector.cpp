@@ -23,6 +23,8 @@
 #include "voiceselector.h"
 #include "libmscore/mscore.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   VoiceButton
 //---------------------------------------------------------
@@ -84,4 +86,5 @@ VoiceSelector::VoiceSelector(QWidget* parent)
       setLayout(vwl);
       connect(vag, SIGNAL(triggered(QAction*)), this, SIGNAL(triggered(QAction*)));
       }
+}
 

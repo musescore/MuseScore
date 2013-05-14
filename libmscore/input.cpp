@@ -17,6 +17,8 @@
 #include "score.h"
 #include "chordrest.h"
 
+namespace Ms {
+
 class DrumSet;
 
 //---------------------------------------------------------
@@ -88,4 +90,6 @@ void InputState::setTrack(int v)
       {
       _track = v;
       }
+
+}
 

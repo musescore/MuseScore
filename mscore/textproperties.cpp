@@ -40,6 +40,8 @@
 #include "libmscore/segment.h"
 #include "texttools.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   TextProperties
 //---------------------------------------------------------
@@ -98,4 +100,5 @@ void TextProperties::accept()
 
       QDialog::accept();
       }
+}
 

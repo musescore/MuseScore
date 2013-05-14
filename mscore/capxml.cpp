@@ -28,6 +28,8 @@
 #include "libmscore/qzipreader_p.h"
 #include "capella.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   capxReadFont
 //---------------------------------------------------------
@@ -1114,3 +1116,5 @@ Score::FileError importCapXml(Score* score, const QString& name)
       convertCapella(score, &cf, true);
       return Score::FILE_NO_ERROR;
       }
+}
+

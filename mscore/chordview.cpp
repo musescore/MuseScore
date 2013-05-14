@@ -20,6 +20,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
 
+namespace Ms {
+
 static const int CHORD_MAP_OFFSET = 50;
 static const int grip = 7;
 
@@ -602,4 +604,5 @@ void ChordView::setCurItem(ChordItem* item)
                   }
             }
       }
+}
 

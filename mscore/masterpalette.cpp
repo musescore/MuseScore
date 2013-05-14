@@ -37,6 +37,8 @@
 #include "libmscore/tremolo.h"
 #include "libmscore/chordline.h"
 
+namespace Ms {
+
 extern void populateIconPalette(Palette* p, const IconAction* a);
 extern Palette* newKeySigPalette();
 extern Palette* newBarLinePalette();
@@ -151,4 +153,5 @@ void MasterPalette::closeEvent(QCloseEvent* ev)
       QWidget::closeEvent(ev);
       }
 
+}
 

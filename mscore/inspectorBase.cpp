@@ -18,6 +18,8 @@
 #include "inspectorBase.h"
 #include "inspector.h"
 
+namespace Ms {
+
 //---------------------------------------------------------
 //   InspectorBase
 //---------------------------------------------------------
@@ -375,3 +377,5 @@ QWidget* InspectorBase::addWidget()
       _layout->insertSpacing(_layout->count()-1, 20);
       return w;
       }
+}
+

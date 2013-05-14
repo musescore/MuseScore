@@ -25,6 +25,8 @@
 #include "ui_tremolobar.h"
 #include "libmscore/pitchvalue.h"
 
+namespace Ms {
+
 class Painter;
 class TremoloBar;
 
@@ -44,6 +46,7 @@ class TremoloBarProperties : public QDialog, public Ui::TremoloBarDialog {
       TremoloBarProperties(TremoloBar*, QWidget* parent = 0);
       const QList<PitchValue>& points() const;
       };
+}
 
 #endif
 

@@ -16,6 +16,8 @@
 #include "text.h"
 #include "rest.h"
 
+namespace Ms {
+
 class Score;
 class Segment;
 
@@ -38,5 +40,7 @@ class RepeatMeasure : public Rest {
       virtual Fraction duration() const;
       };
 
+
+}     // namespace Ms
 #endif
 

@@ -17,6 +17,7 @@
 
 #define DIR QString("libmscore/compat/")
 
+using namespace Ms;
 
 //---------------------------------------------------------
 //   TestCompat
