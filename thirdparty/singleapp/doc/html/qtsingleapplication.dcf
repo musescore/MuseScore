@@ -1,19 +1,6 @@
 <!DOCTYPE DCF>
 <DCF ref="index.html" icon="qtsingleapplication.png" imagedir="../../gif" title="Qt Solutions: Single Application Documentation">
 <section ref="classes.html" title="Classes">
-    <section ref="qtlockedfile.html" title="QtLockedFile Class Reference">
-        <keyword ref="qtlockedfile.html">QtLockedFile</keyword>
-        <keyword ref="qtlockedfile.html#LockMode-enum">LockMode</keyword>
-        <keyword ref="qtlockedfile.html#LockMode-enum">QtLockedFile::WriteLock</keyword>
-        <keyword ref="qtlockedfile.html#LockMode-enum">QtLockedFile::NoLock</keyword>
-        <keyword ref="qtlockedfile.html#LockMode-enum">QtLockedFile::ReadLock</keyword>
-        <keyword ref="qtlockedfile.html#isLocked">isLocked</keyword>
-        <keyword ref="qtlockedfile.html#lock">lock</keyword>
-        <keyword ref="qtlockedfile.html#lockMode">lockMode</keyword>
-        <keyword ref="qtlockedfile.html#open">open</keyword>
-        <keyword ref="qtlockedfile.html#unlock">unlock</keyword>
-        <section ref="qtlockedfile-members.html" title="List of all members"/>
-    </section>
     <section ref="qtsingleapplication.html" title="QtSingleApplication Class Reference">
         <keyword ref="qtsingleapplication.html">QtSingleApplication</keyword>
         <keyword ref="qtsingleapplication.html#activateWindow">activateWindow</keyword>
