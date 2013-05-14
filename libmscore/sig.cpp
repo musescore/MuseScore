@@ -122,6 +122,12 @@ const SigEvent& TimeSigMap::timesig(int tick) const
 
 //---------------------------------------------------------
 //   tickValues
+//    t - some time moment on timeline (in ticks)
+//
+//    Result - values computed for this time moment:
+//    bar - index of bar containing time moment t
+//    beat - index of beat in bar containing t
+//    tick - position of t in beat (in ticks)
 //---------------------------------------------------------
 
 void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
@@ -139,8 +145,8 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
             }
       --e;
       int delta  = t - e->first;
-      int ticksB = ticks_beat(e->second.timesig().denominator());
-      int ticksM = ticksB * e->second.timesig().numerator();
+      int ticksB = ticks_beat(e->second.timesig().denominator()); // ticks in beat
+      int ticksM = ticksB * e->second.timesig().numerator();      // ticks in measure (bar)
       if (ticksM == 0) {
             qDebug("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().print()));
             *bar  = 0;
@@ -173,10 +179,14 @@ const char* TimeSigMap::pos(int t) const
 
 //---------------------------------------------------------
 //   bar2tick
+//    Returns the absolute start time (in ticks)
+//    of beat in bar
 //---------------------------------------------------------
 
 int TimeSigMap::bar2tick(int bar, int beat) const
       {
+      // bar - index of current bar (terminology: bar == measure)
+      // beat - index of beat in current bar
       auto e = begin();
 
       for (; e != end(); ++e) {
@@ -189,9 +199,9 @@ int TimeSigMap::bar2tick(int bar, int beat) const
                   qDebug("   list is empty");
             return 0;
             }
-      --e;
-      int ticksB = ticks_beat(e->second.timesig().denominator());
-      int ticksM = ticksB * e->second.timesig().numerator();
+      --e; // current TimeSigMap value
+      int ticksB = ticks_beat(e->second.timesig().denominator()); // ticks per beat
+      int ticksM = ticksB * e->second.timesig().numerator();      // bar length in ticks
       return e->first + (bar - e->second.bar()) * ticksM + ticksB * beat;
       }
 
@@ -286,6 +296,31 @@ int SigEvent::read(XmlReader& e, int fileDivision)
       }
 
 //---------------------------------------------------------
+//   ticksPerMeasure
+//---------------------------------------------------------
+
+int ticksPerMeasure(int numerator, int denominator)
+      {
+      return ticks_beat(denominator) * numerator;
+      }
+
+//---------------------------------------------------------
+//   rasterEval
+//---------------------------------------------------------
+
+unsigned rasterEval(unsigned t, int raster, int startTick,
+         int numerator, int denominator, int addition)
+      {
+      int delta  = t - startTick;
+      int ticksM = ticksPerMeasure(numerator, denominator);
+      if (raster == 0)
+            raster = ticksM;
+      int rest   = delta % ticksM;
+      int bb     = (delta / ticksM) * ticksM;
+      return startTick + bb + ((rest + addition) / raster) * raster;
+      }
+
+//---------------------------------------------------------
 //   raster
 //---------------------------------------------------------
 
@@ -298,13 +333,9 @@ unsigned TimeSigMap::raster(unsigned t, int raster) const
             qDebug("TimeSigMap::raster(%x,)", t);
             return t;
             }
-      int delta  = t - e->first;
-      int ticksM = ticks_beat(e->second.timesig().denominator()) * e->second.timesig().numerator();
-      if (raster == 0)
-            raster = ticksM;
-      int rest   = delta % ticksM;
-      int bb     = (delta/ticksM)*ticksM;
-      return  e->first + bb + ((rest + raster/2)/raster)*raster;
+      auto timesig = e->second.timesig();
+      return rasterEval(t, raster, e->first, timesig.numerator(),
+                        timesig.denominator(), raster / 2);
       }
 
 //---------------------------------------------------------
@@ -317,14 +348,9 @@ unsigned TimeSigMap::raster1(unsigned t, int raster) const
       if (raster == 1)
             return t;
       auto e = upper_bound(t);
-
-      int delta  = t - e->first;
-      int ticksM = ticks_beat(e->second.timesig().denominator()) * e->second.timesig().numerator();
-      if (raster == 0)
-            raster = ticksM;
-      int rest   = delta % ticksM;
-      int bb     = (delta/ticksM)*ticksM;
-      return  e->first + bb + (rest/raster)*raster;
+      auto timesig = e->second.timesig();
+      return rasterEval(t, raster, e->first, timesig.numerator(),
+                        timesig.denominator(), 0);
       }
 
 //---------------------------------------------------------
@@ -337,14 +363,9 @@ unsigned TimeSigMap::raster2(unsigned t, int raster) const
       if (raster == 1)
             return t;
       auto e = upper_bound(t);
-
-      int delta  = t - e->first;
-      int ticksM = ticks_beat(e->second.timesig().denominator()) * e->second.timesig().numerator();
-      if (raster == 0)
-            raster = ticksM;
-      int rest   = delta % ticksM;
-      int bb     = (delta/ticksM)*ticksM;
-      return  e->first + bb + ((rest+raster-1)/raster)*raster;
+      auto timesig = e->second.timesig();
+      return rasterEval(t, raster, e->first, timesig.numerator(),
+                        timesig.denominator(), raster - 1);
       }
 
 //---------------------------------------------------------
@@ -354,8 +375,8 @@ unsigned TimeSigMap::raster2(unsigned t, int raster) const
 int TimeSigMap::rasterStep(unsigned t, int raster) const
       {
       if (raster == 0) {
-            auto e = upper_bound(t);
-            return ticks_beat(e->second.timesig().denominator()) * e->second.timesig().numerator();
+            auto timesig = upper_bound(t)->second.timesig();
+            return ticksPerMeasure(timesig.denominator(), timesig.numerator());
             }
       return raster;
       }
