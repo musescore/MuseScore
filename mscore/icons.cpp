@@ -25,6 +25,7 @@
 #include "preferences.h"
 #include "libmscore/sym.h"
 #include "libmscore/mscore.h"
+#include "miconengine.h"
 
 namespace Ms {
 
@@ -130,7 +131,9 @@ void genIcons()
       {
 // qDebug("genIcons <%s>\n", qPrintable(iconPath + iconGroup));
       for (int i = 0; i < voice1_ICON; ++i) {
-            icons[i] = new QIcon(iconPath + iconGroup + iconNames[i]);
+            QIcon* icon = new QIcon(new MIconEngine);
+            icon->addFile(iconPath + iconGroup + iconNames[i]);
+            icons[i] = icon;
             if (icons[i]->isNull() || icons[i]->pixmap(12).isNull()) {
                   qDebug("cannot load Icon <%s>\n", qPrintable(iconPath + iconGroup + iconNames[i]));
                   }
