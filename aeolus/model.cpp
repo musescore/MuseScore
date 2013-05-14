@@ -382,6 +382,7 @@ int Model::read_instr ()
       Ifelm         *I;
       Addsynth      *A;
 
+      #undef ERROR
       enum { CONT, DONE, ERROR, COMM, ARGS, MORE, NO_INSTR, IN_INSTR,
            BAD_SCOPE, BAD_ASECT, BAD_RANK, BAD_DIVIS, BAD_KEYBD, BAD_IFACE,
            BAD_STR1, BAD_STR2 };

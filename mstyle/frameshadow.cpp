@@ -343,7 +343,7 @@ void SunkenFrameShadow::updateGeometry() {
                   cr.setLeft(cr.right() - SHADOW_SIZE_RIGHT + 1);
                   cr.adjust(0, SHADOW_SIZE_TOP, 1, -SHADOW_SIZE_BOTTOM);
                   break;
-            case Unknown:
+            case UnknownArea:
             default:
                   return;
             }
@@ -459,7 +459,7 @@ void FlatFrameShadow::updateGeometry() {
                   cr.setTop(cr.bottom() - SHADOW_SIZE_BOTTOM + 4);
                   break;
 
-            case Unknown:
+            case UnknownArea:
             default:
                   return;
             }

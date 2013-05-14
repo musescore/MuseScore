@@ -1419,23 +1419,23 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 			if (cr == 0) {
 				// Segment::SegmentType st = Segment::SegChordRest;
 
-				cr = new Chord(score_);
+				cr = new Ms::Chord(score_);
 				cr->setTrack(noteTrack);
 
 				// grace
 				if (container->getIsGrace()) {
 					TDuration duration = OveNoteType_To_Duration(container->getGraceNoteType());
 					duration.setDots(container->getDot());
-					((Chord*) cr)->setNoteType(NOTE_APPOGGIATURA);
+					((Ms::Chord*) cr)->setNoteType(NOTE_APPOGGIATURA);
 
 					if (duration.type() == TDuration::V_QUARTER) {
-						((Chord*) cr)->setNoteType(NOTE_GRACE4);
+						((Ms::Chord*) cr)->setNoteType(NOTE_GRACE4);
 						cr->setDurationType(TDuration::V_QUARTER);
 					} else if (duration.type() == TDuration::V_16TH) {
-						((Chord*) cr)->setNoteType(NOTE_GRACE16);
+						((Ms::Chord*) cr)->setNoteType(NOTE_GRACE16);
 						cr->setDurationType(TDuration::V_16TH);
 					} else if (duration.type() == TDuration::V_32ND) {
-						((Chord*) cr)->setNoteType(NOTE_GRACE32);
+						((Ms::Chord*) cr)->setNoteType(NOTE_GRACE32);
 						cr->setDurationType(TDuration::V_32ND);
 					} else {
 						cr->setDurationType(TDuration::V_EIGHT);
@@ -1480,7 +1480,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 							int line = drumset->line(pitch);
 							note->setLine(line);
 							note->setTpcFromPitch();
-							((Chord*) cr)->setStemDirection(drumset->stemDirection(pitch));
+							((Ms::Chord*) cr)->setStemDirection(drumset->stemDirection(pitch));
 							setDirection = true;
 						}
 					}
@@ -1510,9 +1510,9 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				cr->add(note);
 
 				cr->setVisible(oveNote->getShow());
-				((Chord*) cr)->setNoStem((int) container->getNoteType() <= OVE::Note_Whole);
+				((Ms::Chord*) cr)->setNoStem((int) container->getNoteType() <= OVE::Note_Whole);
 				if(!setDirection)
-					((Chord*) cr)->setStemDirection(container->getStemUp() ? MScore::UP : MScore::DOWN);
+					((Ms::Chord*) cr)->setStemDirection(container->getStemUp() ? MScore::UP : MScore::DOWN);
 
 				// cross staff
 				int staffMove = 0;
@@ -1806,7 +1806,7 @@ void OveToMScore::convertArticulation(
 	}
 	case OVE::Articulation_Arpeggio :{
         // there can be only one
-        if (!(static_cast<Chord*>(cr))->arpeggio()) {
+        if (!(static_cast<Ms::Chord*>(cr))->arpeggio()) {
         	Arpeggio* a = new Arpeggio(score_);
         	a->setArpeggioType(ArpeggioType::NORMAL);
 /*      	if (art->getPlacementAbove()){
