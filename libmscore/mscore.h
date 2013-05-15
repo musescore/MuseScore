@@ -122,7 +122,7 @@ enum ArticulationType {
 //---------------------------------------------------------
 
 enum BracketType {
-      BRACKET_NORMAL, BRACKET_AKKOLADE, NO_BRACKET = -1
+      BRACKET_NORMAL, BRACKET_AKKOLADE, BRACKET_SIMPLE, NO_BRACKET = -1
       };
 
 //---------------------------------------------------------
