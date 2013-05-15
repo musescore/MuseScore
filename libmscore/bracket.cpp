@@ -158,8 +158,8 @@ void Bracket::draw(QPainter* painter) const
             QPen pen(curColor(), w, Qt::SolidLine, Qt::SquareCap);
             painter->setPen(pen);
             painter->drawLine(QLineF(0.0, 0.0, 0.0, h));
-            painter->drawLine(QLineF(0.0, 0.0, w + spatium() , 0.0));
-            painter->drawLine(QLineF(0.0, h , w + spatium(), h));
+            painter->drawLine(QLineF(0.0, 0.0, w + _spatium, 0.0));
+            painter->drawLine(QLineF(0.0, h , w + _spatium, h));
             }
       }
 
