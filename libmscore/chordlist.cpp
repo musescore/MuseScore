@@ -349,29 +349,41 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
 //    return true if chord was parseable
 //---------------------------------------------------------
 
-bool ParsedChord::parse(QString s)
+bool ParsedChord::parse(QString s, bool syntaxOnly)
       {
-      QString tok1, tok1L, tok2, tok2L, specialChars, modifiers;
+      QString tok1, tok1L, tok2, tok2L, modifiers;
+      QString special = "(),";
+      QString leading = "(";
+      QString trailing = "),";
+      int firstLeadingToken, lastLeadingToken;
       int len = s.size();
       int i, j;
 
       _parseable = true;
       i = 0;
-      specialChars = "(),";
 
-      // eat leading parens and commas
-      while (i < len && specialChars.contains(s[i]))
-           _tokenList += QString(s[i++]);
+// TODO: leadTokens have to be changed *in place* within tokenlist
+
+      // eat leading parens
+      firstLeadingToken = _tokenList.size();
+      while (i < len && leading.contains(s[i]))
+           addToken(QString(s[i++]),QUALITY);
+      lastLeadingToken = _tokenList.size();
       // get quality
       for (tok1 = ""; i < len; ++i) {
             // up to first digit, paren, or comma
-            if (s[i].isDigit() || specialChars.contains(s[i]))
+            if (s[i].isDigit() || special.contains(s[i]))
                   break;
             tok1[i] = s[i];
             }
       // TODO: special cases for mMaj, augadd, etc.
       if (tok1 != "")
-            _tokenList += tok1;
+            addToken(tok1,QUALITY);
+      else {
+            // leading tokens were not really QUALITY
+            for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
+                  _tokenList[t].tokenClass = EXTENSION;
+            }
       tok1L = tok1.toLower();
       if (tok1 == "M" || tok1L == "ma" || tok1L == "maj" || tok1L == "t" || tok1L == "^")
             quality = "major";
@@ -385,10 +397,16 @@ bool ParsedChord::parse(QString s)
             quality = "half-diminished";
       else
             quality = tok1L;
+      // eat trailing parens and commas
+      while (i < len && trailing.contains(s[i]))
+           addToken(QString(s[i++]),QUALITY);
 
-      // eat leading parens and commas
-      while (i < len && specialChars.contains(s[i]))
-            _tokenList += QString(s[i++]);
+      // eat leading parens
+      firstLeadingToken = _tokenList.size();
+      while (i < len && leading.contains(s[i])) {
+            addToken(QString(s[i++]),EXTENSION);
+            }
+      lastLeadingToken = _tokenList.size();
       // get extension - up to first non-digit
       for (j = 0, tok1 = ""; i < len; ++i, ++j) {
             if (!s[i].isDigit())
@@ -396,18 +414,25 @@ bool ParsedChord::parse(QString s)
             tok1[j] = s[i];
             }
       if (tok1 != "")
-            _tokenList += tok1;
+            addToken(tok1,EXTENSION);
+      else {
+            // leading tokens were not really EXTENSION
+            for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
+                  _tokenList[t].tokenClass = MODIFIER;
+            }
       extension = tok1;
-
+      // eat trailing parens and commas
+      while (i < len && trailing.contains(s[i]))
+           addToken(QString(s[i++]),EXTENSION);
 
       // get modifiers
       while (i < len) {
-            // eat leading parens and commas
-            while (i < len && specialChars.contains(s[i]))
-                  _tokenList += QString(s[i++]);
+            // eat leading parens
+            while (i < len && leading.contains(s[i]))
+                  addToken(QString(s[i++]),MODIFIER);
             // get first token - up to first digit, paren, or comma
             for (j = 0, tok1 = ""; i < len; ++i) {
-                  if (s[i].isDigit() || specialChars.contains(s[i]))
+                  if (s[i].isDigit() || special.contains(s[i]))
                         break;
                   tok1[j++] = s[i];
                   }
@@ -426,7 +451,7 @@ bool ParsedChord::parse(QString s)
             // special cases
             if (tok1L == "susb" || tok1L == "sus#") {
                   modifierList += "sus4";
-                  _tokenList += "sus";
+                  addToken("sus",MODIFIER);
                   tok1 = tok1[3];
                   tok1L = tok1L[3];
                   }
@@ -437,12 +462,15 @@ bool ParsedChord::parse(QString s)
             else if (tok1L == "sus" && tok2L == "")
                   tok2L = "4";
             if (tok1 != "")
-                  _tokenList += tok1;
+                  addToken(tok1,MODIFIER);
             if (tok2 != "")
-                  _tokenList += tok2;
+                  addToken(tok2,MODIFIER);
             QString mod = tok1L + tok2L;
             if (mod != "")
                   modifierList += mod;
+            // eat trailing parens and commas
+            while (i < len && trailing.contains(s[i]))
+                  addToken(QString(s[i++]),MODIFIER);
             }
       if (!modifierList.isEmpty()) {
             modifierList.sort();
@@ -468,17 +496,32 @@ bool ParsedChord::parse(QString s)
 //   renderList
 //---------------------------------------------------------
 
-const QList<RenderAction>& ParsedChord::renderList(QHash<QString, ChordToken>& tokenDefinitionList)
+const QList<RenderAction>& ParsedChord::renderList(const QHash<QString, ChordToken>& tokenDefinitionList)
       {
       if (_renderList.isEmpty()) {
-            foreach (QString tok, _tokenList) {
-                  if (tokenDefinitionList.contains(tok)) {
-                        ChordToken definedToken = tokenDefinitionList.value(tok);
-                        _renderList.append(definedToken.renderList);
+            foreach (ChordToken tok, _tokenList) {
+                  QList<RenderAction> rl;
+                  bool found = false;
+                  // potential definitions for token
+                  QList<ChordToken> definedTokens = tokenDefinitionList.values(tok.names.first());
+                  // find matching class, fallback on ALL
+                  foreach (ChordToken matchingTok, definedTokens) {
+                        if (tok.tokenClass == matchingTok.tokenClass) {
+                              rl = matchingTok.renderList;
+                              found = true;
+                              break;
+                              }
+                        else if (matchingTok.tokenClass == ALL) {
+                              rl = matchingTok.renderList;
+                              found = true;
+                              }
                         }
+                  if (found)
+                        _renderList.append(rl);
                   else {
+                        // no definition for token, so render as literal
                         RenderAction a(RenderAction::RENDER_SET);
-                        a.text = tok;
+                        a.text = tok.names.first();
                         _renderList.append(a);
                         }
                   }
@@ -487,10 +530,31 @@ const QList<RenderAction>& ParsedChord::renderList(QHash<QString, ChordToken>& t
       }
 
 //---------------------------------------------------------
+//   addToken
+//---------------------------------------------------------
+
+ void ParsedChord::addToken(QString s, ChordTokenClass tc)
+      {
+      ChordToken tok;
+      tok.names += s;
+      tok.tokenClass = tc;
+      _tokenList += tok;
+      }
+
+//---------------------------------------------------------
+//   ~ParsedChord
+//---------------------------------------------------------
+
+ParsedChord::~ParsedChord ()
+      {
+      // TODO: deconstruct
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
-void ChordDescription::read(XmlReader& e, QHash<QString, ChordToken>& tokenList)
+void ChordDescription::read(XmlReader& e, const QHash<QString, ChordToken>& tokenList)
       {
       int ni = 0, pci = 0;
       bool renderFound = false;
@@ -519,7 +583,7 @@ void ChordDescription::read(XmlReader& e, QHash<QString, ChordToken>& tokenList)
                   e.unknown();
             }
       if (!renderFound) {
-            ParsedChord pc = parsedChords.front();
+            ParsedChord pc = parsedChords.first();
             if (pc.renderable())
                   renderList = pc.renderList(tokenList);
             }
@@ -602,11 +666,12 @@ void ChordList::read(XmlReader& e)
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "name")
-                              t.name = e.readElementText();
+                              t.names += e.readElementText();
                         else if (tag == "render")
                               readRenderList(e.readElementText(), t.renderList);
                         }
-                  chordTokenList.insert(t.name, t);
+                  foreach (QString tn, t.names)
+                        chordTokenList.insertMulti(tn, t);
                   }
             else if (tag == "chord") {
                   int id = e.intAttribute("id");
