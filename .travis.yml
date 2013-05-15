@@ -12,6 +12,7 @@ before_install:
   - "wget --no-check-certificate -O qt5.zip https://qt5-build-linux64.googlecode.com/files/qt502.zip"
   - "unzip qt5.zip -d qt5"
   - "export PATH=`pwd`/qt5/bin:$PATH"
+  - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
 before_script: 
   - "make revision"
   - "make debug CPUS=16"
