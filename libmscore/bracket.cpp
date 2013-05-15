@@ -112,6 +112,14 @@ void Bracket::layout()
             qreal h = (-y + h2) * 2;
             bbox().setRect(x, y, w, h);
             }
+      else if (bracketType() == BRACKET_SIMPLE) {
+            qreal _spatium = spatium();
+            qreal w = score()->styleS(ST_bracketWidth).val() * _spatium * .5;
+            qreal x = -w;
+            w      += 1 * spatium();
+            qreal h = h2 * 2;
+            bbox().setRect(x, 0.0, w, h);
+            }
       }
 
 //---------------------------------------------------------
@@ -143,6 +151,16 @@ void Bracket::draw(QPainter* painter) const
             symbols[idx][brackettipsRightUp].draw(painter,   mags, QPointF(x, y1));
             symbols[idx][brackettipsRightDown].draw(painter, mags, QPointF(x, y2));
             }
+      else if (bracketType() == BRACKET_SIMPLE) {
+            qreal h = 2 * h2;
+            qreal _spatium = spatium();
+            qreal w = score()->styleS(ST_staffLineWidth).val() * _spatium;
+            QPen pen(curColor(), w, Qt::SolidLine, Qt::SquareCap);
+            painter->setPen(pen);
+            painter->drawLine(QLineF(0.0, 0.0, 0.0, h));
+            painter->drawLine(QLineF(0.0, 0.0, w + spatium() , 0.0));
+            painter->drawLine(QLineF(0.0, h , w + spatium(), h));
+            }
       }
 
 //---------------------------------------------------------
@@ -157,6 +175,9 @@ void Bracket::write(Xml& xml) const
                   break;
             case BRACKET_NORMAL:
                   xml.stag("Bracket");
+                  break;
+            case BRACKET_SIMPLE:
+                  xml.stag("Bracket type=\"Simple\"");
                   break;
             case NO_BRACKET:
                   break;
@@ -179,6 +200,8 @@ void Bracket::read(XmlReader& e)
             setBracketType(BRACKET_NORMAL);
       else if (t == "Akkolade")
             setBracketType(BRACKET_AKKOLADE);
+      else if (t == "Simple")
+            setBracketType(BRACKET_SIMPLE);
       else
             qDebug("unknown brace type <%s>", qPrintable(t));
 
