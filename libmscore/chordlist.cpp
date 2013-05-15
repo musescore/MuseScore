@@ -345,6 +345,57 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
       }
 
 //---------------------------------------------------------
+//  read
+//---------------------------------------------------------
+
+void ChordToken::read(XmlReader& e)
+      {
+      QString c = e.attribute("class");
+      if (c == "quality")
+            tokenClass = QUALITY;
+      else if (c == "extension")
+            tokenClass = EXTENSION;
+      else if (c == "modifier")
+            tokenClass = MODIFIER;
+      else
+            tokenClass = ALL;
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "name")
+                  names += e.readElementText();
+            else if (tag == "render")
+                  readRenderList(e.readElementText(), renderList);
+            }
+      }
+
+//---------------------------------------------------------
+//  write
+//---------------------------------------------------------
+
+void ChordToken::write(Xml& xml)
+      {
+      QString t = "token";
+      switch (tokenClass) {
+            case QUALITY:
+                  t += " class=\"quality\"";
+                  break;
+            case EXTENSION:
+                  t += " class=\"extension\"";
+                  break;
+            case MODIFIER:
+                  t += " class=\"modifier\"";
+                  break;
+            default:
+                  break;
+      }
+      xml.stag(t);
+      foreach(const QString& s, names)
+            xml.tag("name", s);
+      writeRenderList(xml, &renderList, "render");
+      xml.etag();
+      }
+
+//---------------------------------------------------------
 //  parse
 //    return true if chord was parseable
 //---------------------------------------------------------
@@ -361,8 +412,6 @@ bool ParsedChord::parse(QString s, bool syntaxOnly)
 
       _parseable = true;
       i = 0;
-
-// TODO: leadTokens have to be changed *in place* within tokenlist
 
       // eat leading parens
       firstLeadingToken = _tokenList.size();
@@ -496,14 +545,23 @@ bool ParsedChord::parse(QString s, bool syntaxOnly)
 //   renderList
 //---------------------------------------------------------
 
-const QList<RenderAction>& ParsedChord::renderList(const QHash<QString, ChordToken>& tokenDefinitionList)
+const QList<RenderAction>& ParsedChord::renderList(const QList<ChordToken>& tokenDefinitionList, bool regenerate)
       {
+      if (regenerate)
+            _renderList.clear();
       if (_renderList.isEmpty()) {
             foreach (ChordToken tok, _tokenList) {
+                  QString n = tok.names.first();
                   QList<RenderAction> rl;
+                  QList<ChordToken> definedTokens;
                   bool found = false;
                   // potential definitions for token
-                  QList<ChordToken> definedTokens = tokenDefinitionList.values(tok.names.first());
+                  foreach (ChordToken dt, tokenDefinitionList) {
+                        foreach (QString dtn, dt.names) {
+                              if (dtn == n)
+                                    definedTokens += dt;
+                              }
+                        }
                   // find matching class, fallback on ALL
                   foreach (ChordToken matchingTok, definedTokens) {
                         if (tok.tokenClass == matchingTok.tokenClass) {
@@ -542,19 +600,10 @@ const QList<RenderAction>& ParsedChord::renderList(const QHash<QString, ChordTok
       }
 
 //---------------------------------------------------------
-//   ~ParsedChord
-//---------------------------------------------------------
-
-ParsedChord::~ParsedChord ()
-      {
-      // TODO: deconstruct
-      }
-
-//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
-void ChordDescription::read(XmlReader& e, const QHash<QString, ChordToken>& tokenList)
+void ChordDescription::read(XmlReader& e, const QList<ChordToken>& tokenList)
       {
       int ni = 0, pci = 0;
       bool renderFound = false;
@@ -654,24 +703,8 @@ void ChordList::read(XmlReader& e)
                   }
             else if (tag == "token") {
                   ChordToken t;
-                  QString c = e.attribute("class");
-                  if (c == "quality")
-                        t.tokenClass = QUALITY;
-                  else if (c == "extension")
-                        t.tokenClass = EXTENSION;
-                  else if (c == "modifier")
-                        t.tokenClass = MODIFIER;
-                  else
-                        t.tokenClass = ALL;
-                  while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "name")
-                              t.names += e.readElementText();
-                        else if (tag == "render")
-                              readRenderList(e.readElementText(), t.renderList);
-                        }
-                  foreach (QString tn, t.names)
-                        chordTokenList.insertMulti(tn, t);
+                  t.read(e);
+                  chordTokenList.append(t);
                   }
             else if (tag == "chord") {
                   int id = e.intAttribute("id");
@@ -713,6 +746,8 @@ void ChordList::write(Xml& xml)
             xml.etag();
             ++fontIdx;
             }
+      foreach (ChordToken t, chordTokenList)
+            t.write(xml);
       if (!renderListRoot.isEmpty())
             writeRenderList(xml, &renderListRoot, "renderRoot");
       if (!renderListBase.isEmpty())
