@@ -96,7 +96,6 @@ struct Preferences {
       bool showPlayPanel;
       bool showWebPanel;
       bool showStatusBar;
-//      QPoint playPanelPos;
 
       bool useAlsaAudio;
       bool useJackAudio;
