@@ -397,7 +397,7 @@
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons-dark/align-vertical-middle.svg</normaloff>:/data/icons-dark/align-vertical-middle.svg</iconset>
+               <normaloff>:/data/icons-dark/align-vertical-center.svg</normaloff>:/data/icons-dark/align-vertical-center.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
