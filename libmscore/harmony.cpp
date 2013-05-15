@@ -555,8 +555,10 @@ bool Harmony::isEmpty() const
 
 void Harmony::layout()
       {
-      if (editMode() || textList.isEmpty())
+      if (editMode() || textList.isEmpty()) {
             Text::layout1();
+            setbboxtight(bbox());
+            }
       else {
             // textStyle().layout(this);
             QRectF bb, tbb;
