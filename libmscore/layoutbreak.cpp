@@ -80,10 +80,26 @@ void LayoutBreak::draw(QPainter* painter) const
       {
       if (score()->printing() || !score()->showUnprintable())
             return;
+
+      QPainterPathStroker stroker;
+      stroker.setWidth(lw/2);
+      stroker.setJoinStyle(Qt::MiterJoin);
+      stroker.setCapStyle(Qt::SquareCap);
+
+      QVector<qreal> dashes ;
+      dashes.append(1);
+      dashes.append(3);
+      stroker.setDashPattern(dashes);
+      QPainterPath stroke = stroker.createStroke(path);
+
+      painter->fillPath(stroke, selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
+
+
       painter->setPen(QPen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-         lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+         lw, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
       painter->setBrush(Qt::NoBrush);
-      painter->drawPath(path);
+      painter->drawPath(path2);
+
       }
 
 //---------------------------------------------------------
@@ -94,43 +110,45 @@ void LayoutBreak::layout0()
       {
       qreal _spatium = spatium();
       path      = QPainterPath();
-      qreal h  = _spatium * 4;
-      qreal w  = _spatium * 2.5;
-      qreal w1 = w * .6;
+      path2      = QPainterPath();
+      qreal h  = _spatium * 2.0;
+      qreal w  = _spatium * 2.0;
+
+      QRectF rect(0.0, 0.0, w, h);
+      path.addRect(rect);
 
       switch(layoutBreakType()) {
             case LAYOUT_BREAK_LINE:
-                  path.lineTo(w, 0.0);
-                  path.lineTo(w, h);
-                  path.lineTo(0.0, h);
-                  path.lineTo(0.0, 0.0);
+                  path2.moveTo(w * .8, h * .3);
+                  path2.lineTo(w * .8, h * .6);
+                  path2.lineTo(w * .3, h * .6);
 
-                  path.moveTo(w * .8, w * .7);
-                  path.lineTo(w * .8, w);
-                  path.lineTo(w * .2, w);
-
-                  path.moveTo(w * .4, w * .8);
-                  path.lineTo(w * .2, w);
-                  path.lineTo(w * .4, w * 1.2);
+                  path2.moveTo(w * .4, h * .5);
+                  path2.lineTo(w * .25, h * .6);
+                  path2.lineTo(w * .4, h * .7);
+                  path2.lineTo(w * .4, h * .5);
                   break;
 
             case LAYOUT_BREAK_PAGE:
-                  path.lineTo(w, 0.0);
-                  path.lineTo(w, h-w1);
-                  path.lineTo(w1, h-w1);
-                  path.lineTo(w1, h);
-                  path.lineTo(0.0, h);
-                  path.lineTo(0.0, 0.0);
-                  path.moveTo(w, h-w1);
-                  path.lineTo(w1, h);
+                  path2.moveTo(w*.25, h*.2);
+                  path2.lineTo(w*.60, h*.2);
+                  path2.lineTo(w*.75, h*.35);
+                  path2.lineTo(w*.75, h*.8);
+                  path2.lineTo(w*.25, h*.8);
+                  path2.lineTo(w*.25, h*.2);
+
+                  path2.moveTo(w*.55, h*.2);
+                  path2.lineTo(w*.55, h*.40);
+                  path2.lineTo(w*.75, h*.40);
                   break;
 
             case LAYOUT_BREAK_SECTION:
-                  path.lineTo(w, 0.0);
-                  path.lineTo(w,  h);
-                  path.lineTo(0.0,  h);
-                  path.moveTo(w-_spatium * .8,  0.0);
-                  path.lineTo(w-_spatium * .8,  h);
+                  path2.moveTo(w*.25, h*.2);
+                  path2.lineTo(w*.75, h*.2);
+                  path2.lineTo(w*.75, h*.8);
+                  path2.lineTo(w*.25, h*.8);
+                  path2.moveTo(w*.55, h*.2);
+                  path2.lineTo(w*.55, h*.8);
                   break;
 
             default:
