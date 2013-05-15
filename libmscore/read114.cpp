@@ -473,6 +473,8 @@ Score::FileError Score::read114(XmlReader& e)
                   int tick = i.key();
                   ClefType clefId = i.value()._concertClef;
                   Measure* m = tick2measure(tick);
+                  if (!m)
+                        continue;
                   if ((tick == m->tick()) && m->prevMeasure())
                         m = m->prevMeasure();
                   Segment* seg = m->getSegment(Segment::SegClef, tick);
