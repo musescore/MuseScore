@@ -521,9 +521,12 @@ Palette* MuseScore::newBracketsPalette()
       b1->setBracketType(BRACKET_NORMAL);
       Bracket* b2 = new Bracket(gscore);
       b2->setBracketType(BRACKET_AKKOLADE);
+      Bracket* b3 = new Bracket(gscore);
+      b3->setBracketType(BRACKET_SIMPLE);
 
       sp->append(b1, tr("Square bracket"));
       sp->append(b2, tr("Curly bracket"));
+      sp->append(b3, tr("Simple bracket"));
 
       return sp;
       }
