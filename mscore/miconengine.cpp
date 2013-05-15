@@ -1,4 +1,19 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2011 Werner Schweer and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENSE.GPL
+//=============================================================================
+
+// this is a modified version of qt QSvgIconEngine
+
 #include "miconengine.h"
+
 
 //---------------------------------------------------------
 //   MIconEnginePrivate
@@ -29,10 +44,18 @@ class MIconEnginePrivate : public QSharedData
 
 QAtomicInt MIconEnginePrivate::lastSerialNum;
 
+//---------------------------------------------------------
+//   pmKey
+//---------------------------------------------------------
+
 static inline int pmKey(const QSize &size, QIcon::Mode mode, QIcon::State state)
       {
       return ((((((size.width()<<11)|size.height())<<11)|mode)<<4)|state);
       }
+
+//---------------------------------------------------------
+//   MIconEngine
+//---------------------------------------------------------
 
 MIconEngine::MIconEngine()
     : d(new MIconEnginePrivate)
@@ -52,6 +75,10 @@ MIconEngine::MIconEngine(const MIconEngine &other)
 MIconEngine::~MIconEngine()
       {
       }
+
+//---------------------------------------------------------
+//   actualSize
+//---------------------------------------------------------
 
 QSize MIconEngine::actualSize(const QSize &size, QIcon::Mode mode, QIcon::State state)
       {
@@ -125,19 +152,23 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       renderer.render(&p);
       p.end();
 
-#if 0 // test:
-      if (state == QIcon::On) {
+      if (mode == QIcon::Disabled) {
             int ww = img.width();
             for (int y = 0; y < img.height(); ++y) {
                   quint32* p = (quint32*)img.scanLine(y);
                   for (int x = 0; x < ww; ++x) {
-                        if (*p & 0xff000000)
-                              *p = (*p & 0xff000000) + 0xff;       // blue
+                        if (*p & 0xff000000) {
+                              QColor color(QColor::fromRgba(*p));
+                              int alpha = color.alpha() - 64;
+                              if (alpha < 0)
+                                    alpha = 0;
+                              color.setAlpha(alpha);
+                              *p = color.rgba();
+                              }
                         ++p;
                         }
                   }
             }
-#endif
 
       pm = QPixmap::fromImage(img);
       if (qobject_cast<QApplication *>(QCoreApplication::instance())) {
@@ -154,6 +185,10 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       return pm;
       }
 
+//---------------------------------------------------------
+//   addPixmap
+//---------------------------------------------------------
+
 void MIconEngine::addPixmap(const QPixmap &pixmap, QIcon::Mode mode, QIcon::State state)
       {
       if (!d->addedPixmaps)
@@ -162,38 +197,55 @@ void MIconEngine::addPixmap(const QPixmap &pixmap, QIcon::Mode mode, QIcon::Stat
       d->addedPixmaps->insert(d->hashKey(mode, state), pixmap);
       }
 
+//---------------------------------------------------------
+//   addFile
+//---------------------------------------------------------
+
 void MIconEngine::addFile(const QString &fileName, const QSize &, QIcon::Mode mode, QIcon::State state)
-{
-    if (!fileName.isEmpty()) {
-        QString abs = fileName;
-        if (fileName.at(0) != QLatin1Char(':'))
-            abs = QFileInfo(fileName).absoluteFilePath();
-        if (abs.endsWith(QLatin1String(".svg"), Qt::CaseInsensitive)
+      {
+      if (!fileName.isEmpty()) {
+            QString abs = fileName;
+            if (fileName.at(0) != QLatin1Char(':'))
+                  abs = QFileInfo(fileName).absoluteFilePath();
+            if (abs.endsWith(QLatin1String(".svg"), Qt::CaseInsensitive)
                 || abs.endsWith(QLatin1String(".svgz"), Qt::CaseInsensitive)
                 || abs.endsWith(QLatin1String(".svg.gz"), Qt::CaseInsensitive))
-        {
-            QSvgRenderer renderer(abs);
-            if (renderer.isValid()) {
-                d->stepSerialNum();
-                d->svgFiles.insert(d->hashKey(mode, state), abs);
+                  {
+                  QSvgRenderer renderer(abs);
+                  if (renderer.isValid()) {
+                        d->stepSerialNum();
+                        d->svgFiles.insert(d->hashKey(mode, state), abs);
+                        }
+                  }
+            else {
+                  QPixmap pm(abs);
+                  if (!pm.isNull())
+                        addPixmap(pm, mode, state);
+                  }
             }
-        } else {
-            QPixmap pm(abs);
-            if (!pm.isNull())
-                addPixmap(pm, mode, state);
-        }
-    }
-}
+      }
+
+//---------------------------------------------------------
+//   paint
+//---------------------------------------------------------
 
 void MIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state)
       {
       painter->drawPixmap(rect, pixmap(rect.size(), mode, state));
       }
 
+//---------------------------------------------------------
+//   key
+//---------------------------------------------------------
+
 QString MIconEngine::key() const
       {
       return QLatin1String("svg");
       }
+
+//---------------------------------------------------------
+//   clone
+//---------------------------------------------------------
 
 QIconEngine *MIconEngine::clone() const
       {
