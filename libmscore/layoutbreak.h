@@ -36,6 +36,7 @@ class LayoutBreak : public Element {
       LayoutBreakType _layoutBreakType;
       qreal lw;
       QPainterPath path;
+      QPainterPath path2;
       qreal _pause;
       bool _startWithLongNames;
       bool _startWithMeasureOne;
