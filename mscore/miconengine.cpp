@@ -14,7 +14,6 @@
 
 #include "miconengine.h"
 
-
 //---------------------------------------------------------
 //   MIconEnginePrivate
 //---------------------------------------------------------
@@ -164,6 +163,31 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
                                     alpha = 0;
                               color.setAlpha(alpha);
                               *p = color.rgba();
+                              }
+                        ++p;
+                        }
+                  }
+            }
+      else if (state == QIcon::On) {
+            int ww = img.width();
+            for (int y = 0; y < img.height(); ++y) {
+                  quint32* p = (quint32*)img.scanLine(y);
+                  for (int x = 0; x < ww; ++x) {
+                        if (*p & 0xff000000) {
+                              int d = 0xff - (*p & 0xff);
+                              int dd = 50;
+                              QColor color(QColor::fromRgba(*p));
+                              int r = 70 - d + dd;
+                              if (r < 0)
+                                    r = 0;
+                              int g = 130 - d + dd;
+                              if (g < 0)
+                                    g = 0;
+                              int b = 180 - d + dd;
+                              if (b < 0)
+                                    b = 0;
+                              QColor nc = QColor(r, g, b, color.alpha());
+                              *p = nc.rgba();
                               }
                         ++p;
                         }
