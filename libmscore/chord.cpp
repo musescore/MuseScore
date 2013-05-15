@@ -1529,9 +1529,8 @@ void Chord::layout()
 
                   Accidental* accidental = note->accidental();
                   if (accidental) {
-                        // qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
-                        // x = accidental->x() + x - minNoteDistance;
-                        x = accidental->x() + note->x();
+                        qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
+                        x = accidental->x() + note->x() - minNoteDistance;
                         }
                   if (x < lx)
                         lx = x;
