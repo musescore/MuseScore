@@ -119,6 +119,16 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
       }
 
 //---------------------------------------------------------
+//   qt_intensity
+//---------------------------------------------------------
+
+static inline uint qt_intensity(uint r, uint g, uint b)
+      {
+      // 30% red, 59% green, 11% blue
+      return (77 * r + 150 * g + 28 * b) / 255;
+      }
+
+//---------------------------------------------------------
 //   pixmap
 //---------------------------------------------------------
 
@@ -145,31 +155,14 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       if (!actualSize.isNull())
             actualSize.scale(size, Qt::KeepAspectRatio);
 
-      QImage img(actualSize, QImage::Format_ARGB32_Premultiplied);
+      QImage img(actualSize, QImage::Format_ARGB32);
       img.fill(0x00000000);
       QPainter p(&img);
       renderer.render(&p);
       p.end();
 
-      if (mode == QIcon::Disabled) {
-            int ww = img.width();
-            for (int y = 0; y < img.height(); ++y) {
-                  quint32* p = (quint32*)img.scanLine(y);
-                  for (int x = 0; x < ww; ++x) {
-                        if (*p & 0xff000000) {
-                              QColor color(QColor::fromRgba(*p));
-                              int alpha = color.alpha() - 64;
-                              if (alpha < 0)
-                                    alpha = 0;
-                              color.setAlpha(alpha);
-                              *p = color.rgba();
-                              }
-                        ++p;
-                        }
-                  }
-            }
-      else if (state == QIcon::On) {
-            int ww = img.width();
+      int ww = img.width();
+      if (state == QIcon::On) {
             for (int y = 0; y < img.height(); ++y) {
                   quint32* p = (quint32*)img.scanLine(y);
                   for (int x = 0; x < ww; ++x) {
@@ -193,19 +186,28 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
                         }
                   }
             }
-
-      pm = QPixmap::fromImage(img);
-      if (qobject_cast<QApplication *>(QCoreApplication::instance())) {
-            QStyleOption opt(0);
-            opt.palette = QApplication::palette();  //  opt.palette = QGuiApplication::palette();
-            QPixmap generated = QApplication::style()->generatedIconPixmap(mode, pm, &opt);
-            if (!generated.isNull())
-                  pm = generated;
+      else {
+            // change alpha channel
+            for (int y = 0; y < img.height(); ++y) {
+                  QRgb *scanLine = (QRgb*)img.scanLine(y);
+                  for (int x = 0; x < img.width(); ++x) {
+                        QRgb pixel = *scanLine;
+                        int alpha = qAlpha(pixel);
+                        if (mode == QIcon::Disabled)
+                              alpha -= 178;
+                        else
+                              alpha -= 51;
+                        if (alpha < 0)
+                              alpha = 0;
+                        *scanLine = qRgba(qRed(pixel), qGreen(pixel), qBlue(pixel), alpha);
+                        ++scanLine;
+                        }
+                  }
             }
 
+      pm = QPixmap::fromImage(img);
       if (!pm.isNull())
             QPixmapCache::insert(pmckey, pm);
-
       return pm;
       }
 
