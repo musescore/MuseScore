@@ -360,31 +360,36 @@ Palette* MuseScore::newBreaksPalette()
       qreal _spatium = gscore->spatium();
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaks && Spacer"));
-      sp->setMag(.7);
+      sp->setMag(1.0);
       sp->setGrid(42, 36);
       sp->setDrawGrid(true);
 
       LayoutBreak* lb = new LayoutBreak(gscore);
       lb->setLayoutBreakType(LAYOUT_BREAK_LINE);
-      sp->append(lb, tr("Line break"));
+      PaletteCell* cell = sp->append(lb, tr("Line break"));
+      cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
       lb->setLayoutBreakType(LAYOUT_BREAK_PAGE);
-      sp->append(lb, tr("Page break"));
+      cell = sp->append(lb, tr("Page break"));
+      cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
       lb->setLayoutBreakType(LAYOUT_BREAK_SECTION);
-      sp->append(lb, tr("Section break"));
+      cell = sp->append(lb, tr("Section break"));
+      cell->mag = 1.2;
 
       Spacer* spacer = new Spacer(gscore);
-      spacer->setGap(3 * _spatium);
       spacer->setSpacerType(SPACER_DOWN);
-      sp->append(spacer, tr("Staff spacer down"));
+      spacer->setGap(3 * _spatium);
+      cell = sp->append(spacer, tr("Staff spacer down"));
+      cell->mag = .7;
 
       spacer = new Spacer(gscore);
-      spacer->setGap(3 * _spatium);
       spacer->setSpacerType(SPACER_UP);
-      sp->append(spacer, tr("Staff spacer up"));
+      spacer->setGap(3 * _spatium);
+      cell = sp->append(spacer, tr("Staff spacer up"));
+      cell->mag = .7;
       return sp;
       }
 
