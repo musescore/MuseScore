@@ -111,8 +111,8 @@ void LayoutBreak::layout0()
       qreal _spatium = spatium();
       path      = QPainterPath();
       path2      = QPainterPath();
-      qreal h  = _spatium * 3.0;
-      qreal w  = _spatium * 3.0;
+      qreal h  = _spatium * 2.5;
+      qreal w  = _spatium * 2.5;
 
       QRectF rect(0.0, 0.0, w, h);
       path.addRect(rect);
@@ -137,9 +137,9 @@ void LayoutBreak::layout0()
                   path2.lineTo(w*.25, h*.8);
                   path2.lineTo(w*.25, h*.2);
 
-                  path2.moveTo(w*.55, h*.2);
+                  path2.moveTo(w*.55, h*.21); // 0.01 to avoid overlap
                   path2.lineTo(w*.55, h*.40);
-                  path2.lineTo(w*.75, h*.40);
+                  path2.lineTo(w*.74, h*.40);
                   break;
 
             case LAYOUT_BREAK_SECTION:
@@ -147,8 +147,9 @@ void LayoutBreak::layout0()
                   path2.lineTo(w*.75, h*.2);
                   path2.lineTo(w*.75, h*.8);
                   path2.lineTo(w*.25, h*.8);
-                  path2.moveTo(w*.55, h*.2);
-                  path2.lineTo(w*.55, h*.8);
+
+                  path2.moveTo(w*.55, h*.21); // 0.01 to avoid overlap
+                  path2.lineTo(w*.55, h*.79);
                   break;
 
             default:
