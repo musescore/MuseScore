@@ -1780,6 +1780,8 @@ void Text::indentLess()
 
 void Text::indentMore()
       {
+      if (styled())
+            return;
       QTextList* list = _cursor->currentList();
       if (list == 0) {
             QTextBlockFormat format = _cursor->blockFormat();
@@ -1817,6 +1819,8 @@ void Text::unorderedList()
 
 void Text::orderedList()
       {
+      if (styled())
+            return;
       QTextCharFormat format = _cursor->charFormat();
       QTextListFormat listFormat;
       QTextList* list = _cursor->currentList();
