@@ -105,7 +105,7 @@
             <Instrument id="french-flageolet">
                   <longName>French Flageolet</longName>
                   <shortName>Fr. Fla.</shortName>
-                  <description>3 hole Flageolet</description>
+                  <description>4 hole Flageolet</description>
             </Instrument>
             <Instrument id="english-flageolet">
                   <longName>English Flageolet</longName>
@@ -716,7 +716,7 @@
             <Instrument id="aulochrome">
                   <longName>Aulochrome</longName>
                   <shortName>Aul.</shortName>
-                  <description>2 soprano saxes joinetogether</description>
+                  <description>2 soprano saxes joined together</description>
             </Instrument>
             <Instrument id="mezzo-soprano-saxophone">
                   <longName>Mezzo-Soprano Saxophone</longName>
