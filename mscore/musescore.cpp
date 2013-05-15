@@ -627,9 +627,11 @@ MuseScore::MuseScore()
       transportTools->addAction(metronomeAction);
 
       mag = new MagBox;
+      mag->setFixedHeight(preferences.iconHeight + 10);  // hack
       connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
       fileTools->addWidget(mag);
       viewModeCombo = new QComboBox(this);
+      viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
       viewModeCombo->addItem(tr("Page View"));
       viewModeCombo->addItem(tr("Continuous View"));
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));

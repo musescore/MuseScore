@@ -162,6 +162,7 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       p.end();
 
       int ww = img.width();
+#if 0
       if (state == QIcon::On) {
             for (int y = 0; y < img.height(); ++y) {
                   quint32* p = (quint32*)img.scanLine(y);
@@ -187,23 +188,25 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
                   }
             }
       else {
+#endif
             // change alpha channel
+            int delta = 51;
+            if (mode == QIcon::Disabled)
+                  delta = 178;
+            else if (state == QIcon::On)
+                  delta = 0;
             for (int y = 0; y < img.height(); ++y) {
                   QRgb *scanLine = (QRgb*)img.scanLine(y);
                   for (int x = 0; x < img.width(); ++x) {
                         QRgb pixel = *scanLine;
-                        int alpha = qAlpha(pixel);
-                        if (mode == QIcon::Disabled)
-                              alpha -= 178;
-                        else
-                              alpha -= 51;
+                        int alpha = qAlpha(pixel) - delta;
                         if (alpha < 0)
                               alpha = 0;
                         *scanLine = qRgba(qRed(pixel), qGreen(pixel), qBlue(pixel), alpha);
                         ++scanLine;
                         }
                   }
-            }
+//            }
 
       pm = QPixmap::fromImage(img);
       if (!pm.isNull())
