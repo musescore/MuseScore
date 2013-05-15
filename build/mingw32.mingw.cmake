@@ -26,8 +26,6 @@ set (QT_LIBRARY_DIR           ${CROSSQT}/lib)
 
 set (QT_MOC_EXECUTABLE        "${CROSSQT}/bin/moc.exe")
 set (QT_UIC_EXECUTABLE        "${CROSSQT}/bin/uic.exe")
-set (QT_LRELEASE_EXECUTABLE   "${CROSSQT}/bin/lrelease.exe")
-set (QT_LUPDATE_EXECUTABLE    "${CROSSQT}/bin/lupdate.exe")
 set (QT_RCC_EXECUTABLE        "${CROSSQT}/bin/rcc")
 set (QT_QTCORE_LIBRARY        "mops")
 
