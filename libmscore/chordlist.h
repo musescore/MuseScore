@@ -109,7 +109,7 @@ enum ChordTokenClass {
 class ChordToken {
    public:
       ChordTokenClass tokenClass;
-      QString name;
+      QStringList names;
       QList<RenderAction> renderList;
       };
 
@@ -119,8 +119,8 @@ class ChordToken {
 
 class ParsedChord {
    public:
-      const QList<RenderAction>& renderList(QHash<QString, ChordToken>&);
-      bool parse(QString);
+      const QList<RenderAction>& renderList(const QHash<QString, ChordToken>&);
+      bool parse(QString, bool syntaxOnly = false);
       bool renderable() { return _parseable; }
       bool transposable() { return _parseable; }
       bool understandable () { return _understandable; }
@@ -128,15 +128,17 @@ class ParsedChord {
       bool operator!=(const ParsedChord& c) { return !(*this == c); }
       operator QString() { return handle; }
       ParsedChord() { _parseable = false; _understandable = false; }
+      ~ParsedChord();
    private:
       QString handle;
       QString quality;
       QString extension;
       QStringList modifierList;
-      QStringList _tokenList;
+      QList<ChordToken> _tokenList;
       QList<RenderAction> _renderList;
       bool _parseable;
       bool _understandable;
+      void addToken (QString, ChordTokenClass);
       };
 
 //---------------------------------------------------------
@@ -156,7 +158,7 @@ struct ChordDescription {
       QList<RenderAction> renderList;
 
    public:
-      void read(XmlReader&, QHash<QString, ChordToken>&);
+      void read(XmlReader&, const QHash<QString, ChordToken>&);
       void write(Xml&);
       };
 
