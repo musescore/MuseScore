@@ -840,9 +840,13 @@ void Harmony::render(const TextStyle* st)
             if (cd)
                   render(cd->renderList, x, y, 0);
             }
-      // otherwise render from parsed form
+      // otherwise render directly from parsed form
+      // TODO: figure out if we really need to regenerate the renderList
+      // should only be true immediately after a load of a new chord description file
+      // or other change to the chord list
+      // but for now, set regenerate=true in call to _parsedForm->renderList
       else if (_parsedForm && _parsedForm->renderable())
-            render(_parsedForm->renderList(chordList->chordTokenList), x, y, 0);
+            render(_parsedForm->renderList(chordList->chordTokenList, true), x, y, 0);
 
       // render bass
       if (_baseTpc != INVALID_TPC)

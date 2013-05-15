@@ -111,6 +111,8 @@ class ChordToken {
       ChordTokenClass tokenClass;
       QStringList names;
       QList<RenderAction> renderList;
+      void read(XmlReader&);
+      void write(Xml&);
       };
 
 //---------------------------------------------------------
@@ -119,7 +121,7 @@ class ChordToken {
 
 class ParsedChord {
    public:
-      const QList<RenderAction>& renderList(const QHash<QString, ChordToken>&);
+      const QList<RenderAction>& renderList(const QList<ChordToken>&, bool regenerator = false);
       bool parse(QString, bool syntaxOnly = false);
       bool renderable() { return _parseable; }
       bool transposable() { return _parseable; }
@@ -128,7 +130,6 @@ class ParsedChord {
       bool operator!=(const ParsedChord& c) { return !(*this == c); }
       operator QString() { return handle; }
       ParsedChord() { _parseable = false; _understandable = false; }
-      ~ParsedChord();
    private:
       QString handle;
       QString quality;
@@ -158,7 +159,7 @@ struct ChordDescription {
       QList<RenderAction> renderList;
 
    public:
-      void read(XmlReader&, const QHash<QString, ChordToken>&);
+      void read(XmlReader&, const QList<ChordToken>&);
       void write(Xml&);
       };
 
@@ -195,7 +196,7 @@ class ChordList : public QMap<int, ChordDescription*> {
       QList<ChordFont> fonts;
       QList<RenderAction> renderListRoot;
       QList<RenderAction> renderListBase;
-      QHash<QString, ChordToken> chordTokenList;
+      QList<ChordToken> chordTokenList;
 
       ChordList() {}
 
