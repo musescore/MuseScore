@@ -1,9 +1,22 @@
 # Aeolus instrument definition file
 # Created by Aeolus-0.6.6 at Sat May 13 01:44:55 2006
 
+# Tuning parameters
+# base tuning in Hz followed by temperament as follows
+# 0 - Pythagorean
+# 1 Mean Tone 1/4
+# 2 Werckmeister III
+# 3 Kirnberger III
+# 4 Well Tempered
+# 5 Equal Temperament
+# 6 Vogel/Ahrend
+# 7 Vallotti
+# 8 Kellner
+# 9 Lehman
+# 10 Pure C/F/G
 
 /instr/new
-/tuning 440.0 1
+/tuning 440.0 5
 
 # Keyboards
 #
