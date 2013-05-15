@@ -466,26 +466,28 @@ void MuseScore::newFile()
             // remove all notes & rests
             //
             score->deselectAll();
-            for (Segment* s = score->firstMeasure()->first(); s;) {
-                  Segment* ns = s->next1();
-                  if (s->segmentType() == Segment::SegChordRest && s->tick() == 0) {
-                        int tracks = s->elist().size();
-                        for (int track = 0; track < tracks; ++track) {
-                              delete s->element(track);
-                              s->setElement(track, 0);
+            if (score->firstMeasure()) {
+                  for (Segment* s = score->firstMeasure()->first(); s;) {
+                        Segment* ns = s->next1();
+                        if (s->segmentType() == Segment::SegChordRest && s->tick() == 0) {
+                              int tracks = s->elist().size();
+                              for (int track = 0; track < tracks; ++track) {
+                                    delete s->element(track);
+                                    s->setElement(track, 0);
+                                    }
                               }
+                        else if (
+                           (s->segmentType() == Segment::SegChordRest)
+      //                     || (s->subtype() == Segment::SegClef)
+                           || (s->segmentType() == Segment::SegKeySig)
+                           || (s->segmentType() == Segment::SegGrace)
+                           || (s->segmentType() == Segment::SegBreath)
+                           ) {
+                              s->measure()->remove(s);
+                              delete s;
+                              }
+                        s = ns;
                         }
-                  else if (
-                     (s->segmentType() == Segment::SegChordRest)
-//                     || (s->subtype() == Segment::SegClef)
-                     || (s->segmentType() == Segment::SegKeySig)
-                     || (s->segmentType() == Segment::SegGrace)
-                     || (s->segmentType() == Segment::SegBreath)
-                     ) {
-                        s->measure()->remove(s);
-                        delete s;
-                        }
-                  s = ns;
                   }
             }
       //
@@ -592,7 +594,13 @@ void MuseScore::newFile()
                   continue;
             foreach(Staff* lstaff, staff->linkedStaves()->staves()) {
                   if (staff != lstaff) {
-                        cloneStaff(staff, lstaff);
+                        if (staff->score() == lstaff->score())
+                              cloneStaff(staff, lstaff);
+                        else {
+                              QList<int> srcStaves;
+                              srcStaves.append(staff->score()->staffIdx(staff));
+                              cloneStaves(staff->score(), lstaff->score(), srcStaves);
+                              }
                         }
                   }
             }
