@@ -27,7 +27,7 @@ LayoutBreak::LayoutBreak(Score* score)
       _pause               = score->styleD(ST_SectionPause);
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
-      lw                   = spatium() * 0.2;
+      lw                   = spatium() * 0.3;
       setFlag(ELEMENT_HAS_TAG, true);
       }
 
@@ -111,8 +111,8 @@ void LayoutBreak::layout0()
       qreal _spatium = spatium();
       path      = QPainterPath();
       path2      = QPainterPath();
-      qreal h  = _spatium * 2.0;
-      qreal w  = _spatium * 2.0;
+      qreal h  = _spatium * 3.0;
+      qreal w  = _spatium * 3.0;
 
       QRectF rect(0.0, 0.0, w, h);
       path.addRect(rect);
