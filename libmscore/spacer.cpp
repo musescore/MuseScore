@@ -44,7 +44,7 @@ void Spacer::draw(QPainter* painter) const
       if (score()->printing() || !score()->showUnprintable())
             return;
       QPen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-         spatium() * 0.2);
+         spatium() * 0.3);
       painter->setPen(pen);
       painter->setBrush(Qt::NoBrush);
       painter->drawPath(path);
