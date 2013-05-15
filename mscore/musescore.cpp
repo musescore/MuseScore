@@ -1866,7 +1866,7 @@ void MuseScore::removeTab(int i)
 
       if (checkDirty(score))
             return;
-      if (seq->score() == score) {
+      if (seq && seq->score() == score) {
             seq->stopWait();
             seq->setScoreView(0);
             }
