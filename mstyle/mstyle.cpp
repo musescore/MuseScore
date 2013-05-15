@@ -3968,7 +3968,7 @@ bool MgStyle::drawDialComplexControl( const QStyleOptionComplex* option, QPainte
 //   drawGroupBoxComplexControl
 //---------------------------------------------------------
 
-bool MgStyle::drawGroupBoxComplexControl(const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget) const {
+bool MgStyle::drawGroupBoxComplexControl(const QStyleOptionComplex* /*option*/, QPainter* /*painter*/, const QWidget* /*widget*/) const {
 #if 0
       const QStyleOptionGroupBox* groupBox = qstyleoption_cast<const QStyleOptionGroupBox*>(option);
       if (groupBox && groupBox->features & QStyleOptionFrameV2::Flat) {
@@ -5276,26 +5276,28 @@ bool MgStyle::drawPushButtonLabelControl(const QStyleOption* option, QPainter* p
             }
 
       // Draw the icon if there is one
-      if ( !bOpt->icon.isNull() ) {
+      if (!bOpt->icon.isNull() ) {
+            QIcon::Mode mode;
+            if (enabled)
+                  mode = (hasFocus) ? QIcon::Active : QIcon::Normal;
+            else
+                  mode = QIcon::Disabled;
 
+            QIcon::State iconState = active ? QIcon::On : QIcon::Off;
+            QSize size = bOpt->iconSize;
+            if (!size.isValid())
+                  size = QSize(pixelMetric(PM_SmallIconSize), pixelMetric(PM_SmallIconSize));
+            QPixmap icon = bOpt->icon.pixmap(size, mode, iconState);
+
+            QRect iconRect;
             if (!bOpt->text.isEmpty()) {
                   const int margin = PushButton_TextToIconSpace;
                   const int length = bOpt->iconSize.width() + margin + painter->fontMetrics().size(Qt::TextShowMnemonic, bOpt->text).width();
 
                   //Calculate offset.
                   const int offset = (w - length) / 2;
+                  iconRect = QRect(handleRTL( bOpt, QRect( QPoint(x + offset, y + h / 2 - bOpt->iconSize.height() / 2), bOpt->iconSize)));
 
-                  const QRect iconRect( handleRTL( bOpt, QRect( QPoint(x + offset, y + h / 2 - bOpt->iconSize.height() / 2), bOpt->iconSize) ) );
-
-                  QIcon::Mode mode;
-                  if ( enabled ) mode = (hasFocus) ? QIcon::Active : QIcon::Normal;
-                  else mode = QIcon::Disabled;
-
-                  QIcon::State iconState = active ? QIcon::On : QIcon::Off;
-
-                  QSize size = bOpt->iconSize;
-                  if ( !size.isValid() ) size = QSize(pixelMetric(PM_SmallIconSize), pixelMetric(PM_SmallIconSize));
-                  QPixmap icon = bOpt->icon.pixmap(size, mode, iconState);
                   painter->drawPixmap(centerRect( iconRect, icon.size()), icon);
 
                   //new bounding rect for the text
@@ -5303,20 +5305,9 @@ bool MgStyle::drawPushButtonLabelControl(const QStyleOption* option, QPainter* p
                   w =  length - bOpt->iconSize.width() - margin;
                   }
             else {
-
-                  const QRect iconRect( x, y, w, h );
-                  QIcon::Mode mode;
-                  if ( enabled ) mode = (hasFocus) ? QIcon::Active : QIcon::Normal;
-                  else mode = QIcon::Disabled;
-
-                  QIcon::State iconState = active ? QIcon::On : QIcon::Off;
-
-                  QSize size = bOpt->iconSize;
-                  if ( !size.isValid() ) size = QSize(pixelMetric(PM_SmallIconSize), pixelMetric(PM_SmallIconSize));
-                  QPixmap icon = bOpt->icon.pixmap(size, mode, iconState);
-                  painter->drawPixmap(centerRect( iconRect, icon.size()), icon);
-
+                  iconRect = QRect( x, y, w, h );
                   }
+            painter->drawPixmap(centerRect(iconRect, icon.size()), icon);
             }
       else {
             //Center the text
