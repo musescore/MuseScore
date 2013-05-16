@@ -297,7 +297,7 @@ void PluginCreator::runClicked()
       if (item->pluginType() == "dock") {
             dock = new QDockWidget("Plugin", 0);
             dock->setAttribute(Qt::WA_DeleteOnClose);
-            dock->setWidget(QWidget::createWindowContainer(view));
+//TODO-QML            dock->setWidget(QWidget::createWindowContainer(view));
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
             if (item->dockArea() == "left")
                   area = Qt::LeftDockWidgetArea;
