@@ -151,9 +151,9 @@
 #include <QHttpPart>
 #include <QHttpMultiPart>
 
-#include <QDeclarativeEngine>
-#include <QDeclarativeComponent>
-#include <QDeclarativeItem>
-#include <QDeclarativeView>
+#include <QQmlEngine>
+#include <QQmlComponent>
+#include <QQuickItem>
+#include <QQuickView>
 #endif
 

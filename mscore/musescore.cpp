@@ -4449,7 +4449,7 @@ void MuseScore::pluginTriggered(int) {}
 void MuseScore::loadPlugins() {}
 bool MuseScore::loadPlugin(const QString&) { return false;}
 void MuseScore::unloadPlugins() {}
-QDeclarativeEngine* MuseScore::qml() { return 0; }
+QQmlEngine* MuseScore::qml() { return 0; }
 #endif
 }
 

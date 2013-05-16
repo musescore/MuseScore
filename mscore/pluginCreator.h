@@ -35,7 +35,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       QmlPlugin* item;
       HelpBrowser* helpBrowser;
       QDockWidget* manualDock;
-      QPointer<QDeclarativeView> view;
+      QPointer<QQuickView> view;
       QPointer<QDockWidget> dock;
 
       void setState(PCState newState);
@@ -53,7 +53,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void textChanged();
       void closePlugin();
       void showManual();
-      void qmlWarnings(const QList<QDeclarativeError>&);
+      void qmlWarnings(const QList<QQmlError>&);
 
    signals:
       void closed(bool);

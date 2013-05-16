@@ -24,8 +24,8 @@ extern MuseScoreCore* mscoreCore;
 //   QmlPlugin
 //---------------------------------------------------------
 
-QmlPlugin::QmlPlugin(QDeclarativeItem* parent)
-   : QDeclarativeItem(parent)
+QmlPlugin::QmlPlugin(QQuickItem* parent)
+   : QQuickItem(parent)
       {
       msc = mscoreCore;
       }
@@ -49,9 +49,9 @@ Score* QmlPlugin::curScore() const
 //   scores
 //---------------------------------------------------------
 
-QDeclarativeListProperty<Score> QmlPlugin::scores()
+QQmlListProperty<Score> QmlPlugin::scores()
       {
-      return QDeclarativeListProperty<Score>(this, msc->scores());
+      return QQmlListProperty<Score>(this, msc->scores());
       }
 
 //---------------------------------------------------------
