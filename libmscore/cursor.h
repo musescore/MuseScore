@@ -44,12 +44,12 @@ class Cursor : public QObject {
       Q_PROPERTY(int staffIdx       READ staffIdx      WRITE setStaffIdx)
       Q_PROPERTY(int voice          READ voice         WRITE setVoice)
 
-      Q_PROPERTY(Element* element READ element)
-      Q_PROPERTY(Segment* segment READ segment)
+      Q_PROPERTY(Ms::Element* element READ element)
+      Q_PROPERTY(Ms::Segment* segment READ segment)
 
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
-      Q_PROPERTY(Score* score     READ score    WRITE setScore)
+      Q_PROPERTY(Ms::Score* score     READ score    WRITE setScore)
 
       Score* _score;
       int _track;

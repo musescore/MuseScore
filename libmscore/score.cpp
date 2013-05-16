@@ -282,7 +282,7 @@ void Score::init()
 #ifdef Q_OS_MAC
       _metaTags.insert("platform", "MAC");
 #endif
-#ifdef Q_OS_X11
+#ifdef Q_OS_LINUX
       _metaTags.insert("platform", "X11");
 #endif
       _metaTags.insert("movementNumber", "");

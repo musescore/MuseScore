@@ -266,17 +266,17 @@ static void qmlMsgHandler(QtMsgType type, const char* msg)
 void PluginCreator::runClicked()
       {
       log->clear();
-      QDeclarativeEngine* qml = mscore->qml();
-      connect(qml, SIGNAL(warnings(const QList<QDeclarativeError>&)),
-         SLOT(qmlWarnings(const QList<QDeclarativeError>&)));
+      QQmlEngine* qml = mscore->qml();
+      connect(qml, SIGNAL(warnings(const QList<QQmlError>&)),
+         SLOT(qmlWarnings(const QList<QQmlError>&)));
 
       item = 0;
-      QDeclarativeComponent component(qml);
+      QQmlComponent component(qml);
       component.setData(textEdit->toPlainText().toUtf8(), QUrl());
       QObject* obj = component.create();
       if (obj == 0) {
             msg("creating component failed\n");
-            foreach(QDeclarativeError e, component.errors())
+            foreach(QQmlError e, component.errors())
                   msg(QString("   line %1: %2\n").arg(e.line()).arg(e.description()));
             stop->setEnabled(false);
             return;
@@ -286,18 +286,18 @@ void PluginCreator::runClicked()
       run->setEnabled(false);
 
       item = qobject_cast<QmlPlugin*>(obj);
-      view = new QDeclarativeView;
-      view->setResizeMode(QDeclarativeView::SizeViewToRootObject);
-      // view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-      QGraphicsObject* go = qobject_cast<QGraphicsObject*>(item);
-      view->scene()->addItem(go);
+      view = new QQuickView;
+      view->setResizeMode(QQuickView::SizeViewToRootObject);
+      // view->setResizeMode(QQuickView::SizeRootObjectToView);
+//      QGraphicsObject* go = qobject_cast<QGraphicsObject*>(item);
+//TODO-QML      view->scene()->addItem(go);
 
       view->show();
 
       if (item->pluginType() == "dock") {
             dock = new QDockWidget("Plugin", 0);
             dock->setAttribute(Qt::WA_DeleteOnClose);
-            dock->setWidget(view);
+            dock->setWidget(QWidget::createWindowContainer(view));
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
             if (item->dockArea() == "left")
                   area = Qt::LeftDockWidgetArea;
@@ -308,7 +308,7 @@ void PluginCreator::runClicked()
             addDockWidget(area, dock);
             }
       view->raise();
-      view->setAttribute(Qt::WA_DeleteOnClose);
+      dock->widget()->setAttribute(Qt::WA_DeleteOnClose);
       connect(qml,  SIGNAL(quit()),      SLOT(closePlugin()));
       connect(view, SIGNAL(destroyed()), SLOT(closePlugin()));
       if (dock)
@@ -455,9 +455,9 @@ void PluginCreator::textChanged()
 //   qmlWarnings
 //---------------------------------------------------------
 
-void PluginCreator::qmlWarnings(const QList<QDeclarativeError>& el)
+void PluginCreator::qmlWarnings(const QList<QQmlError>& el)
       {
-      foreach(const QDeclarativeError& e, el)
+      foreach(const QQmlError& e, el)
             msg(QString("%1:%2: %3\n").arg(e.line()).arg(e.column()).arg(e.description()));
       }
 

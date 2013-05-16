@@ -51,8 +51,8 @@ enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 class Chord : public ChordRest {
       Q_OBJECT
 
-      Q_PROPERTY(QDeclarativeListProperty<Note> notes READ qmlNotes)
-      Q_PROPERTY(QDeclarativeListProperty<Lyrics> lyrics READ qmlLyrics)
+      Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
+      Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
 
       QList<Note*> _notes;          // sorted to increasing pitch
       LedgerLine*  _ledgerLines;    // single linked list
@@ -105,8 +105,8 @@ class Chord : public ChordRest {
       void layoutStem();
       void layoutArpeggio2();
 
-      QDeclarativeListProperty<Note> qmlNotes() { return QDeclarativeListProperty<Note>(this, _notes); }
-      QDeclarativeListProperty<Lyrics> qmlLyrics() { return QDeclarativeListProperty<Lyrics>(this, _lyricsList); }
+      QQmlListProperty<Ms::Note> qmlNotes() { return QQmlListProperty<Ms::Note>(this, _notes); }
+      QQmlListProperty<Ms::Lyrics> qmlLyrics() { return QQmlListProperty<Ms::Lyrics>(this, _lyricsList); }
       QList<Note*>& notes()                  { return _notes; }
       const QList<Note*>& notes() const      { return _notes; }
 

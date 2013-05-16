@@ -12,7 +12,7 @@
 
 #include "effectgui.h"
 #include "effect.h"
-#include <QDeclarativeContext>
+#include <QQmlContext>
 
 namespace Ms {
 
@@ -21,11 +21,11 @@ namespace Ms {
 //---------------------------------------------------------
 
 EffectGui::EffectGui(Effect* e)
-   : QDeclarativeView(0)
+   : QQuickView(0)
       {
       _effect = e;
-      setResizeMode(QDeclarativeView::SizeViewToRootObject);
-      setFocusPolicy(Qt::StrongFocus);
+      setResizeMode(QQuickView::SizeViewToRootObject);
+//      setFocusPolicy(Qt::StrongFocus);
       }
 
 //---------------------------------------------------------

@@ -321,7 +321,8 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5WebKit.dll
       ${CROSSQT}/bin/Qt5WebKitWidgets.dll
       ${CROSSQT}/bin/Qt5XmlPatterns.dll
-      ${CROSSQT}/bin/Qt5Declarative.dll
+      ${CROSSQT}/bin/Qt5Qml.dll
+      ${CROSSQT}/bin/Qt5Quick.dll
       ${CROSSQT}/bin/Qt5Script.dll
       ${CROSSQT}/bin/Qt5Sql.dll
       ${CROSSQT}/bin/Qt5V8.dll

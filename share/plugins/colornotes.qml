@@ -11,14 +11,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-import QtQuick 1.0
+import QtQuick 2.0
 import MuseScore 1.0
 
 MuseScore {
       version:  "1.0"
       description: "This demo plugin colors notes in the selection depending on pitch"
       menuPath: "Plugins.Notes.Color Notes"
- 
+
       property variant colors : [
                "#e21c48", "#f26622", "#f99d1c",
                "#ffcc33", "#fff32b", "#bcd85f",
@@ -26,7 +26,7 @@ MuseScore {
                "#5e50a1", "#8d5ba6", "#cf3e96"
                ]
       property variant black : "#000000"
- 
+
       // Apply the given function to all notes in selection
       // or, if nothing is selected, in the entire score
       function applyToNotesInSelection(func) {
@@ -44,7 +44,7 @@ MuseScore {
             }
        console.log(startStaff + " - " + endStaff + " - " + endTick)
             for (var staff = startStaff; staff <= endStaff; staff++) {
-                  for (var voice = 0; voice < 4; voice++) {          
+                  for (var voice = 0; voice < 4; voice++) {
                         cursor.rewind(1); // sets voice to 0
                         cursor.voice = voice; //voice has to be set after goTo
                         cursor.staffIdx = staff;
@@ -65,22 +65,22 @@ MuseScore {
                   }
             }
       }
- 
+
       function colorNote(note) {
             if (note.color == black)
                   note.color = colors[note.pitch % 12];
             else
                   note.color = black;
       }
- 
+
       onRun: {
             console.log("hello colornotes");
- 
+
             if (typeof curScore === 'undefined')
                   Qt.quit();
- 
+
             applyToNotesInSelection(colorNote)
- 
+
             Qt.quit();
          }
 }

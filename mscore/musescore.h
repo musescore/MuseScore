@@ -289,7 +289,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScriptEngine* se;
       QString pluginPath;
 
-      QDeclarativeEngine* _qml;
+      QQmlEngine* _qml;
       void createMenuEntry(PluginDescription*);
 
       QTimer* autoSaveTimer;
@@ -635,7 +635,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newLinesPalette();
 
       Inspector* getInspector()           { return inspector; }
-      QDeclarativeEngine* qml();
+      QQmlEngine* qml();
       PluginCreator* getPluginCreator()   { return pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
 };
