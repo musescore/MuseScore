@@ -693,11 +693,11 @@ void MgStyle::polish(QWidget* widget) {
 
             case Qt::ToolTip:
                   if (!widget->autoFillBackground() ) {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
                         widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
                         //FramelessWindowHint is needed on windows to make WA_TranslucentBackground work properly
                         widget->setWindowFlags(widget->windowFlags() | Qt::FramelessWindowHint);
 #endif
@@ -770,11 +770,11 @@ void MgStyle::polish(QWidget* widget) {
             }
       else if (qobject_cast<QToolBar*>(widget)) {
             widget->setBackgroundRole(QPalette::NoRole);
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
             widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
             widget->installEventFilter(this);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             //FramelessWindowHint is needed on windows to make WA_TranslucentBackground work properly
             widget->setWindowFlags(widget->windowFlags() | Qt::FramelessWindowHint);
 #endif
@@ -784,11 +784,11 @@ void MgStyle::polish(QWidget* widget) {
             }
       else if ( widget->inherits( "QTipLabel" ) ) {
             widget->setBackgroundRole(QPalette::NoRole);
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
             widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             //FramelessWindowHint is needed on windows to make WA_TranslucentBackground work properly
             widget->setWindowFlags(widget->windowFlags() | Qt::FramelessWindowHint);
 #endif
@@ -803,7 +803,7 @@ void MgStyle::polish(QWidget* widget) {
             }
       else if ( qobject_cast<QDockWidget*>(widget)) {
             widget->setBackgroundRole(QPalette::NoRole);
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
             widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
 //WS            widget->setContentsMargins(3, 3, 3, 3);
@@ -826,21 +826,21 @@ void MgStyle::polish(QWidget* widget) {
             widget->parentWidget()->setAutoFillBackground(false);
             }
       else if (qobject_cast<QMenu*>(widget)) {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
             // does not work on MAC
             widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             //FramelessWindowHint is needed on windows to make WA_TranslucentBackground work properly
             widget->setWindowFlags(widget->windowFlags() | Qt::FramelessWindowHint);
 #endif
             }
       else if ( widget->inherits("QComboBoxPrivateContainer")) {
             widget->installEventFilter(this);
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
             widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
             //FramelessWindowHint is needed on windows to make WA_TranslucentBackground work properly
             widget->setWindowFlags(widget->windowFlags() | Qt::FramelessWindowHint);
 #endif
@@ -4315,7 +4315,7 @@ bool MgStyle::eventFilterDockWidget( QDockWidget* dockWidget, QEvent* event ) {
             case QEvent::Resize: {
                   // make sure mask is appropriate
                   if ( dockWidget->isFloating() && !_helper.hasAlphaChannel( dockWidget ) ) {
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
                         dockWidget->setMask(_helper.roundedMask( dockWidget->rect() ) );
 #endif
                         }
@@ -4332,7 +4332,7 @@ bool MgStyle::eventFilterDockWidget( QDockWidget* dockWidget, QEvent* event ) {
                   const QColor color( dockWidget->palette().color(QPalette::Window) );
                   const QRect r( dockWidget->rect() );
                   if (dockWidget->isWindow()) {
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
                         bool hasAlpha( _helper.hasAlphaChannel( dockWidget ) );
                         if ( hasAlpha ) {
                               painter.setCompositionMode( QPainter::CompositionMode_Source );
@@ -4344,7 +4344,7 @@ bool MgStyle::eventFilterDockWidget( QDockWidget* dockWidget, QEvent* event ) {
                               }
 #endif
                         _helper.renderWindowBackground( &painter, r, dockWidget, color );
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
                         if ( hasAlpha ) painter.setClipping( false );
                         _helper.drawFloatFrame( &painter, r, color, !hasAlpha );
 #endif

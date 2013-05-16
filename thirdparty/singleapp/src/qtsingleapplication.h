@@ -70,11 +70,11 @@ public:
     QtSingleApplication(const QString &id, int &argc, char **argv);
 #if QT_VERSION < 0x050000
     QtSingleApplication(int &argc, char **argv, Type type);
-#  if defined(Q_WS_X11)
+#  if defined(Q_OS_LINUX)
     QtSingleApplication(Display* dpy, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
     QtSingleApplication(Display *dpy, int &argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE cmap= 0);
     QtSingleApplication(Display* dpy, const QString &appId, int argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
-#  endif // Q_WS_X11
+#  endif // Q_OS_LINUX
 #endif // QT_VERSION < 0x050000
 
     bool isRunning();

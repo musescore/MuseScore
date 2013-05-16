@@ -184,7 +184,7 @@ QtSingleApplication::QtSingleApplication(int &argc, char **argv, Type type)
 }
 
 
-#  if defined(Q_WS_X11)
+#  if defined(Q_OS_LINUX)
 /*!
   Special constructor for X11, ref. the documentation of
   QApplication's corresponding constructor. The application identifier

@@ -592,7 +592,7 @@ void initSymbols(int idx)
       symbols[idx][letterPSym]   = Sym('P',  2);
 
       QString path;
-#ifdef Q_WS_IOS
+#ifdef Q_OS_IOS
       {
       extern QString resourcePath();
       QString rpath = resourcePath();

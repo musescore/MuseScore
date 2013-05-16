@@ -262,7 +262,7 @@ const QColor& StyleHelper::calcMidColor(const QColor& color) const {
 //---------------------------------------------------------
 
 bool StyleHelper::hasAlphaChannel( const QWidget* widget ) const {
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
       if (compositingActive()) {
             if (widget)
                   return widget->x11Info().depth() == 32;

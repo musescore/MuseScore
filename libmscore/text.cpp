@@ -686,12 +686,12 @@ bool Text::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mo
                         }
                         break;
                   }
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
             if (key != Qt::Key_Space && key != Qt::Key_Minus)
                   return true;
 #endif
             }
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
       else if (modifiers == Qt::AltModifier) {
 	      if (key != Qt::Key_Space && key != Qt::Key_Minus)
                   return true;
