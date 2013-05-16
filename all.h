@@ -41,10 +41,6 @@
 #include <QXmlSchemaValidator>
 #include <QXmlStreamReader>
 
-#ifdef Q_OS_LINUX
-#include <QX11Info>
-#endif
-
 #include <QPointF>
 #include <QVariant>
 #include <QMap>
