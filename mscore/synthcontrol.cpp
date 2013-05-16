@@ -59,14 +59,14 @@ SynthControl::SynthControl(QWidget* parent)
       effectA->clear();
       for (Effect* e : synti->effectList(0)) {
             effectA->addItem(tr(e->name()));
-            effectStackA->addWidget(QWidget::createWindowContainer(e->gui()));
+//TODO-QML            effectStackA->addWidget(QWidget::createWindowContainer(e->gui()));
             connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
             }
 
       effectB->clear();
       for (Effect* e : synti->effectList(1)) {
             effectB->addItem(tr(e->name()));
-            effectStackB->addWidget(QWidget::createWindowContainer(e->gui()));
+//TODO-QML            effectStackB->addWidget(QWidget::createWindowContainer(e->gui()));
             connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
             }
 
