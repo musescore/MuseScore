@@ -18,10 +18,12 @@
 
 namespace Ms {
 
-#define CROSSMEASURE_UNKNOWN  -1
-#define CROSSMEASURE_NONE     0
-#define CROSSMEASURE_FIRST    1
-#define CROSSMEASURE_SECOND   2
+enum {
+      CROSSMEASURE_UNKNOWN = -1,
+      CROSSMEASURE_NONE = 0,
+      CROSSMEASURE_FIRST,
+      CROSSMEASURE_SECOND
+      };
 
 class Score;
 class Measure;

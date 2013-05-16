@@ -65,14 +65,15 @@ Articulation* ChordRest::hasArticulation(const Articulation* aa)
 ChordRest::ChordRest(Score* s)
    : DurationElement(s)
       {
-      _beam        = 0;
-      _small       = false;
-      _beamMode    = BeamMode::AUTO;
-      _up          = true;
-      _staffMove   = 0;
-      _tabDur      = 0;
-      _spannerFor  = 0;
-      _spannerBack = 0;
+      _beam         = 0;
+      _small        = false;
+      _beamMode     = BeamMode::AUTO;
+      _up           = true;
+      _staffMove    = 0;
+      _tabDur       = 0;
+      _spannerFor   = 0;
+      _spannerBack  = 0;
+      _crossMeasure = 0;
       }
 
 ChordRest::ChordRest(const ChordRest& cr)
@@ -106,6 +107,7 @@ ChordRest::ChordRest(const ChordRest& cr)
             }
       _spannerFor  = 0;
       _spannerBack = 0;
+      _crossMeasure = cr._crossMeasure;
       }
 
 //---------------------------------------------------------
