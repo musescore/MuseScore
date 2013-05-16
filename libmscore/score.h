@@ -338,8 +338,8 @@ class Score : public QObject {
 
       int _fileDivision; ///< division of current loading *.msc file
       int _mscVersion;   ///< version of current loading *.msc file
-      QHash<int, LinkedElements*> _elinks;
 
+      QMap<int, LinkedElements*> _elinks;
       QMap<QString, QString> _metaTags;
 
       QList<MusicXmlCreator*> _creators;
@@ -854,7 +854,7 @@ class Score : public QObject {
       void cmdUpdateNotes();
       void cmdUpdateAccidentals(Measure* m, int staffIdx);
       void updateAccidentals(Measure* m, int staffIdx);
-      QHash<int, LinkedElements*>& links();
+      QMap<int, LinkedElements*>& links();
       bool concertPitch() const { return styleB(ST_concertPitch); }
       void layoutFingering(Fingering*);
       void cmdSplitMeasure(ChordRest*);
@@ -913,6 +913,7 @@ class Score : public QObject {
       void setPlayMode(PlayMode v) { _playMode = v;    }
       int linkId();
       void linkId(int);
+      int getLinkId() const { return _linkId; }
       QList<Score*> scoreList();
       bool switchLayer(const QString& s);
       void layoutPage(const PageContext&,  qreal);

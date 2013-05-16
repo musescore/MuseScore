@@ -13,9 +13,9 @@
 
 subdirs(
       hairpin note compat link measure beam split join splitstaff
-      timesig layout element midi dynamic plugins copypaste tuplet
+      timesig layout element midi dynamic copypaste tuplet
       repeat concertpitch keysig
       )
 
 # midi - does not work
-
+# plugins - postponed
