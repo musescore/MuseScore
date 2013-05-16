@@ -403,6 +403,7 @@ void ChordToken::write(Xml& xml)
 bool ParsedChord::parse(QString s, bool syntaxOnly)
       {
       QString tok1, tok1L, tok2, tok2L, modifiers;
+      QString chordDigits = "123456789";
       QString special = "(),";
       QString leading = "(";
       QString trailing = "),";
@@ -420,8 +421,8 @@ bool ParsedChord::parse(QString s, bool syntaxOnly)
       lastLeadingToken = _tokenList.size();
       // get quality
       for (tok1 = ""; i < len; ++i) {
-            // up to first digit, paren, or comma
-            if (s[i].isDigit() || special.contains(s[i]))
+            // up to first (non-zero) digit, paren, or comma
+            if (chordDigits.contains(s[i]) || special.contains(s[i]))
                   break;
             tok1[i] = s[i];
             }
