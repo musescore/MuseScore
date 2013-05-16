@@ -603,7 +603,7 @@ bool ChordList::read(const QString& name)
       if (ftest.isAbsolute())
             path = name;
       else {
-#if defined(Q_WS_IOS)
+#if defined(Q_OS_IOS)
             path = QString("%1/%2").arg(MScore::globalShare()).arg(name);
 #elif defined(Q_OS_ANDROID)
             path = QString(":/styles/%1").arg(name);
@@ -614,7 +614,7 @@ bool ChordList::read(const QString& name)
       //default to stdchords.xml
       QFileInfo fi(path);
       if (!fi.exists())
-#if defined(Q_WS_IOS)
+#if defined(Q_OS_IOS)
             path = QString("%1/%2").arg(MScore::globalShare()).arg("stdchords.xml");
 #elif defined(Q_OS_ANDROID)
             path = QString(":/styles/stdchords.xml");

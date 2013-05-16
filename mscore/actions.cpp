@@ -1296,7 +1296,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","MIDI Import Panel")
          ),
       Shortcut(
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
          //Avoid conflict with M in text
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
 #else

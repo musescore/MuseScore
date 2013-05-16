@@ -41,7 +41,7 @@
 #include <QXmlSchemaValidator>
 #include <QXmlStreamReader>
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 #include <QX11Info>
 #endif
 

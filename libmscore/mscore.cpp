@@ -97,15 +97,15 @@ void MScore::init()
 
       DPMM = DPI / INCH;       // dots/mm
 
-#ifdef __MINGW32__
+#ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
       _globalShare = dir.absolutePath() + "/";
-#elif defined(Q_WS_IOS)
+#elif defined(Q_OS_IOS)
       {
       extern QString resourcePath();
       _globalShare = resourcePath();
       }
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
       _globalShare = dir.absolutePath() + "/";
 #else
@@ -142,7 +142,7 @@ void MScore::init()
       // do not load application specific fonts
       // for MAC, they are in Resources/fonts
       //
-#if !defined(Q_WS_MAC) && !defined(Q_WS_UIKIT)
+#if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
       static const char* fonts[] = {
             "mscore-20.otf",
             "MuseJazz.ttf",

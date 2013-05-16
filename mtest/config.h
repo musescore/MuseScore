@@ -42,7 +42,7 @@
 /* #undef OPENGL */
 #define SOUNDFONT3
 
-/* #undef Q_WS_UIKIT */
+/* #undef Q_OS_UIKIT */
 
 #define USE_BSP         true
 #define SCRIPT_INTERFACE

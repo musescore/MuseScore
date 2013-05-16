@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #include <locale.h>
 #endif
 

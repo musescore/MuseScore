@@ -44,7 +44,7 @@
 
 namespace Ms {
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
 #else
 #define CONTROL_MODIFIER Qt::ControlModifier

@@ -103,11 +103,6 @@ extern Ms::Synthesizer* createAeolus();
 extern Ms::Synthesizer* createZerberus();
 #endif
 
-// Mac-Applications don't have menubar icons:
-#ifdef Q_WS_MAC
-extern void qt_mac_set_menubar_icons(bool b);
-#endif
-
 namespace Ms {
 
 
@@ -190,11 +185,11 @@ void InsertMeasuresDialog::accept()
 
 static QString getSharePath()
       {
-#ifdef __MINGW32__
+#ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
       return dir.absolutePath() + "/";
 #else
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
       return dir.absolutePath() + "/";
 #else
@@ -1035,7 +1030,7 @@ MuseScore::MuseScore()
       connect(aboutMusicXMLAction, SIGNAL(triggered()), this, SLOT(aboutMusicXML()));
       menuHelp->addAction(aboutMusicXMLAction);
 
-#if defined(Q_WS_MAC) || defined(Q_WS_WIN)
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       menuHelp->addAction(tr("Check for &Update"), this, SLOT(checkForUpdate()));
 #endif
 
@@ -1935,7 +1930,7 @@ void setMscoreLocale(QString localeName)
             }
 
       QString resourceDir;
-#if defined(Q_WS_MAC) || defined(Q_WS_WIN)
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       resourceDir = mscoreGlobalShare + "locale/";
 #else
       resourceDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
@@ -2150,7 +2145,7 @@ void StartDialog::loadScoreClicked()
 //   Message handler
 //---------------------------------------------------------
 
-#if defined(QT_DEBUG) && defined(Q_WS_WIN)
+#if defined(QT_DEBUG) && defined(Q_OS_WIN)
 static void mscoreMessageHandler(QtMsgType type, const char *msg)
      {
      QTextStream cout(stdout);
@@ -4016,7 +4011,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             else
                   showNormal();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             // Qt Bug: Toolbar goes into unified mode
             // after switching back from fullscreen
             setUnifiedTitleAndToolBarOnMac(false);
@@ -4466,7 +4461,7 @@ using namespace Ms;
 
 int main(int argc, char* av[])
       {
-#if defined(QT_DEBUG) && defined(Q_WS_WIN)
+#if defined(QT_DEBUG) && defined(Q_OS_WIN)
       qInstallMsgHandler(mscoreMessageHandler);
 #endif
 
@@ -4475,7 +4470,7 @@ int main(int argc, char* av[])
       revision = QString(f.readAll()).trimmed();
       f.close();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
       MuseScoreApplication* app = new MuseScoreApplication("mscore-dev", argc, av);
 #else
       QtSingleApplication* app = new QtSingleApplication("mscore-dev", argc, av);
@@ -4488,7 +4483,7 @@ int main(int argc, char* av[])
       Q_INIT_RESOURCE(noeffect);
 //      Q_INIT_RESOURCE(freeverb);
 
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
       // Save the preferences in QSettings::NativeFormat
       QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
@@ -4728,7 +4723,7 @@ int main(int argc, char* av[])
       //    fall back to "C" locale
       //
 
-#ifndef __MINGW32__
+#ifndef Q_OS_WIN
       setenv("LANG", "C", 1);
 #endif
       QLocale::setDefault(QLocale(QLocale::C));
@@ -4767,11 +4762,8 @@ int main(int argc, char* av[])
       //read languages list
       mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
       QApplication::instance()->installEventFilter(mscore);
-
-      // Mac-Applications don't have menubar icons
-      qt_mac_set_menubar_icons(false);
 #endif
       mscore->setRevision(revision);
 
@@ -4791,7 +4783,7 @@ int main(int argc, char* av[])
                   if (!name.isEmpty())
                         ++files;
                   }
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
             if (!mscore->restoreSession(preferences.sessionStart == LAST_SESSION)) {
                   MuseScoreApplication* mApp = static_cast<MuseScoreApplication*>(qApp);
                   loadScores(mApp->paths);
@@ -4808,7 +4800,7 @@ int main(int argc, char* av[])
       mscore->loadPlugins();
       mscore->writeSessionFile(false);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
       // there's a bug in Qt showing the toolbar unified after switching showFullScreen(), showMaximized(),
       // showNormal()...
       mscore->setUnifiedTitleAndToolBarOnMac(false);

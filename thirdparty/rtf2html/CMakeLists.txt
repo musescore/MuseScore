@@ -40,6 +40,8 @@ set_target_properties( rtf2html
       COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
    )
 
+xcode_pch(rtf2html all)
+
 ADD_DEPENDENCIES(rtf2html mops1)
 ADD_DEPENDENCIES(rtf2html mops2)
 

@@ -131,7 +131,7 @@ void Preferences::init()
       showStatusBar      = true;
 //      playPanelPos       = QPoint(100, 300);
 
-#if defined(Q_WS_MAC) || defined(__MINGW32__)
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       useAlsaAudio       = false;
       useJackAudio       = false;
       usePortaudioAudio  = true;
@@ -218,7 +218,7 @@ void Preferences::init()
 
       MScore::setHRaster(2);        // _spatium / value
       MScore::setVRaster(2);
-#if defined(Q_WS_MAC) || defined(__MINGW32__)
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       // use system native file dialogs
       // Qt file dialog is very slow on Windows and Mac
       nativeDialogs           = true;
