@@ -276,13 +276,13 @@ void Score::init()
       _layer.append(l);
       _layerTags[0]   = "default";
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
       _metaTags.insert("platform", "WIN");
 #endif
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
       _metaTags.insert("platform", "MAC");
 #endif
-#ifdef Q_WS_X11
+#ifdef Q_OS_X11
       _metaTags.insert("platform", "X11");
 #endif
       _metaTags.insert("movementNumber", "");

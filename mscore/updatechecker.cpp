@@ -109,10 +109,10 @@ QString UpdateChecker::parseText(QXmlStreamReader& reader){
 void UpdateChecker::check(QString rev, bool m)
 {
     manual = m;
-    #if defined(Q_WS_WIN)
+    #if defined(Q_OS_WIN)
     os = "win";
     #endif
-    #if defined(Q_WS_MAC)
+    #if defined(Q_OS_MAC)
     os = "mac";
     #endif
     if(qApp->applicationName() == "MuseScore"){ //avoid nightly cymbals

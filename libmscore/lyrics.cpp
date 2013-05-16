@@ -232,7 +232,7 @@ void Lyrics::layout()
 
 void Lyrics::paste()
       {
-#if defined(Q_WS_MAC) || defined(__MINGW32__)
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       QClipboard::Mode mode = QClipboard::Clipboard;
 #else
       QClipboard::Mode mode = QClipboard::Selection;

@@ -1361,7 +1361,7 @@ void MuseScore::printFile()
       printerDev.setDoubleSidedPrinting(pf->twosided());
       printerDev.setOutputFormat(QPrinter::NativeFormat);
 
-#if defined(Q_WS_MAC) || defined(__MINGW32__)
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       printerDev.setOutputFileName("");
 #else
       // when setting this on windows platform, pd.exec() does not

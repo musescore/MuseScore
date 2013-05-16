@@ -963,7 +963,7 @@ bool StaffTypeTablature::readConfigFile(const QString& fileName)
       QString     path;
 
       if(fileName == 0 || fileName.isEmpty()) {       // defaults to built-in xml
-#ifdef Q_WS_IOS
+#ifdef Q_OS_IOS
             {
             extern QString resourcePath();
             QString rpath = resourcePath();
