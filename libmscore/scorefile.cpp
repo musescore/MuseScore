@@ -751,7 +751,7 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
                   e.unknown();
             }
       int id = 1;
-      foreach(LinkedElements* le, _elinks)
+      foreach (LinkedElements* le, _elinks)
             le->setLid(this, id++);
       _elinks.clear();
 
