@@ -246,10 +246,13 @@ void Harmony::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      if (_textName == "" && _id > 0) {
+      // if chord has valid extension tag, use it over name tag
+      if (_id > 0) {
             const ChordDescription* cd = descr();
             if (cd)
                   _textName = cd->names.front();
+            else
+                  _id = -1;
             }
       if (_textName != "") {
             _parsedForm = new ParsedChord;
