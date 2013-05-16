@@ -167,12 +167,15 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith)
       QStringList args;
       args.append(saveName);
       args.append(root + "/" + compareWith);
-      int n = QProcess::execute(cmd, args);
-      if (n) {
-            printf("   <%s", qPrintable(cmd));
-            foreach(const QString& s, args)
-                  printf(" %s", qPrintable(s));
-            printf("> failed\n");
+      QProcess p;
+      p.start(cmd, args);
+      if (!p.waitForFinished())
+            return false;
+      if (p.exitCode()) {
+            QByteArray ba = p.readAll();
+            qDebug("%s", qPrintable(ba));
+            qDebug("   <diff %s %s failed", qPrintable(saveName),
+               qPrintable(QString(root + "/" + compareWith)));
             return false;
             }
       return true;

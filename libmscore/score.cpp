@@ -1895,7 +1895,7 @@ RepeatList* Score::repeatList()  const
 //   links
 //---------------------------------------------------------
 
-QHash<int, LinkedElements*>& Score::links()
+QMap<int, LinkedElements*>& Score::links()
       {
       return rootScore()->_elinks;
       }

@@ -243,6 +243,7 @@ Score* TestParts::doAddBreath()
       {
       Score* score = readScore(DIR + "part1-2o.mscx");
       score->doLayout();
+
       foreach(Excerpt* e, score->excerpts())
             e->score()->doLayout();
 
@@ -259,6 +260,7 @@ Score* TestParts::doAddBreath()
       score->startCmd();
       note->drop(dd);
       score->endCmd();        // does layout
+
       return score;
       }
 
