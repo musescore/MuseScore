@@ -21,7 +21,7 @@ class Effect;
 //   EffectGui
 //---------------------------------------------------------
 
-class EffectGui : public QDeclarativeView {
+class EffectGui : public QQuickView {
       Q_OBJECT
       Effect* _effect;
 

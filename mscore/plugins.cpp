@@ -83,11 +83,11 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
             qDebug("Register Plugin <%s>", qPrintable(pluginPath));
       f.close();
       QObject* obj = 0;
-      QDeclarativeComponent component(qml(), QUrl::fromLocalFile(pluginPath));
+      QQmlComponent component(qml(), QUrl::fromLocalFile(pluginPath));
       obj = component.create();
       if (obj == 0) {
             qDebug("creating component <%s> failed", qPrintable(pluginPath));
-            foreach(QDeclarativeError e, component.errors()) {
+            foreach(QQmlError e, component.errors()) {
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
             return;
@@ -126,11 +126,11 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
 //   qml
 //---------------------------------------------------------
 
-QDeclarativeEngine* MuseScore::qml()
+QQmlEngine* MuseScore::qml()
       {
       if (_qml == 0) {
             //-----------some qt bindings
-            _qml = new QDeclarativeEngine;
+            _qml = new QQmlEngine;
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
             qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
@@ -348,8 +348,8 @@ bool MuseScore::loadPlugin(const QString& filename)
 void MuseScore::pluginTriggered(int idx)
       {
       QString pp = plugins[idx];
-      QDeclarativeView* view = new QDeclarativeView;
-      view->setResizeMode(QDeclarativeView::SizeViewToRootObject);
+      QQuickView* view = new QQuickView;
+      view->setResizeMode(QQuickView::SizeViewToRootObject);
       view->setSource(QUrl::fromLocalFile(pp));
       connect((QObject*)view->engine(), SIGNAL(quit()), view, SLOT(close()));
       view->show();
@@ -357,7 +357,7 @@ void MuseScore::pluginTriggered(int idx)
       if (p->pluginType() == "dock") {
             QDockWidget* dock = new QDockWidget("Plugin", 0);
             dock->setAttribute(Qt::WA_DeleteOnClose);
-            dock->setWidget(view);
+            dock->setWidget(QWidget::createWindowContainer(view));
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
             if (p->dockArea() == "left")
                   area = Qt::LeftDockWidgetArea;
@@ -383,11 +383,11 @@ void MuseScore::pluginTriggered(int idx)
 //   MsScoreView
 //---------------------------------------------------------
 
-MsScoreView::MsScoreView(QDeclarativeItem* parent)
-   : QDeclarativeItem(parent)
+MsScoreView::MsScoreView(QQuickItem* parent)
+   : QQuickItem(parent)
       {
-      setFlag(QGraphicsItem::ItemHasNoContents, false);
-      setCacheMode(QGraphicsItem::ItemCoordinateCache);
+//      setFlag(QGraphicsItem::ItemHasNoContents, false);
+//      setCacheMode(QGraphicsItem::ItemCoordinateCache);
       setAcceptedMouseButtons(Qt::LeftButton);
       score = 0;
       }
@@ -563,11 +563,11 @@ void collectPluginMetaInformation(PluginDescription* d)
       {
       printf("collect meta for <%s>\n", qPrintable(d->path));
 
-      QDeclarativeComponent component(mscore->qml(), QUrl::fromLocalFile(d->path));
+      QQmlComponent component(mscore->qml(), QUrl::fromLocalFile(d->path));
       QObject* obj = component.create();
       if (obj == 0) {
             qDebug("creating component <%s> failed", qPrintable(d->path));
-            foreach(QDeclarativeError e, component.errors()) {
+            foreach(QQmlError e, component.errors()) {
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
             return;

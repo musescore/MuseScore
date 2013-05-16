@@ -49,7 +49,7 @@ extern int updateVersion();
 //   @P scores                array[Score]   all currently open scores, read only
 //---------------------------------------------------------
 
-class QmlPlugin : public QDeclarativeItem {
+class QmlPlugin : public QQuickItem {
       Q_OBJECT
       Q_PROPERTY(QString menuPath        READ menuPath WRITE setMenuPath)
       Q_PROPERTY(QString version         READ version WRITE setVersion)
@@ -63,8 +63,8 @@ class QmlPlugin : public QDeclarativeItem {
       Q_PROPERTY(int mscoreMinorVersion  READ mscoreMinorVersion)
       Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion)
       Q_PROPERTY(qreal mscoreDPI         READ mscoreDPI)
-      Q_PROPERTY(Score* curScore         READ curScore)
-      Q_PROPERTY(QDeclarativeListProperty<Score> scores READ scores);
+      Q_PROPERTY(Ms::Score* curScore     READ curScore)
+      Q_PROPERTY(QQmlListProperty<Score> scores READ scores);
 
       MuseScoreCore* msc;
       QString _menuPath;
@@ -77,7 +77,7 @@ class QmlPlugin : public QDeclarativeItem {
       void run();
 
    public:
-      QmlPlugin(QDeclarativeItem* parent = 0);
+      QmlPlugin(QQuickItem* parent = 0);
       ~QmlPlugin();
 
       void setMenuPath(const QString& s)   { _menuPath = s;    }
@@ -101,7 +101,7 @@ class QmlPlugin : public QDeclarativeItem {
       qreal mscoreDPI() const             { return MScore::DPI;     }
 
       Score* curScore() const;
-      QDeclarativeListProperty<Score> scores();
+      QQmlListProperty<Score> scores();
 
       Q_INVOKABLE Score* newScore(const QString& name, const QString& part, int measures);
       Q_INVOKABLE Element* newElement(int);

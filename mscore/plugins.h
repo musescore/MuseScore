@@ -80,7 +80,7 @@ class MsProcess : public QProcess {
 //   @P scale qreal     scaling factor
 //---------------------------------------------------------
 
-class MsScoreView : public QDeclarativeItem, public MuseScoreView {
+class MsScoreView : public QQuickItem, public MuseScoreView {
       Q_OBJECT
       Q_PROPERTY(QColor color READ color WRITE setColor)
       Q_PROPERTY(qreal  scale READ scale WRITE setScale)
@@ -123,7 +123,7 @@ class MsScoreView : public QDeclarativeItem, public MuseScoreView {
       Q_INVOKABLE void prevPage();
 
    public:
-      MsScoreView(QDeclarativeItem* parent = 0);
+      MsScoreView(QQuickItem* parent = 0);
       virtual ~MsScoreView() {}
       QColor color() const            { return _color;        }
       void setColor(const QColor& c)  { _color = c;           }
