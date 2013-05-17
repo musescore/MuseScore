@@ -110,6 +110,13 @@ void KeySig::layout()
             delete ks;
       keySymbols.clear();
 
+      // if key sig is not generated, determine naturals from previous key sig of this staff
+      if (!generated() && staff()) {
+            KeySigEvent oldKey = staff()->key(tick()-1);
+            setOldSig(oldKey.accidentalType());
+            }
+
+      // determine current clef for this staff
       int clef = 0;
       if (staff())
             clef = staff()->clef(segment());
@@ -118,6 +125,7 @@ void KeySig::layout()
       int t2   = _sig.naturalType();
       qreal xo = 0.0;
 
+      // check ranges and compute masks for accidentals and naturals
       int accidentals = 0, naturals = 0;
       switch (qAbs(t1)) {
             case 7: accidentals = 0x7f; break;
@@ -149,17 +157,37 @@ void KeySig::layout()
       xo = 0.0;
       int coffset = t2 < 0 ? 7 : 0;
 
+      // remove redundant naturals
       if (!((t1 > 0) ^ (t2 > 0)))
             naturals &= ~accidentals;
 
-      if (_showNaturals) {
-	      for (int i = 0; i < 7; ++i) {
+      // manage display of naturals:
+      // naturals are shown if there is some natural AND naturals are on for this key sig
+      // AND style says they are not off (not implem. yet)
+      // OR key sig is CMaj/Amin (in which case they are always shown)
+      bool naturalsOn =
+            t2 != 0 && _showNaturals
+//            && score()->styleI(ST_keyNaturals) != KEYNATURALS_NONE
+            || t1 == 0;
+      // naturals shoud go BEFORE accidentals if style says so (not implem. yet)
+      // OR going from sharps to flats or vice versa
+      bool prefixNaturals =
+            naturalsOn
+//            && score()->styleI(ST_keyNaturals) == KEYNATURALS_BEFORE
+            || t1 * t2 < 0;
+      // naturals should go AFTER accidentals if they should not go before!
+      bool suffixNaturals = naturalsOn && !prefixNaturals;
+
+      // add prefixed naturals, if any
+      if (prefixNaturals) {
+            for (int i = 0; i < 7; ++i) {
                   if (naturals & (1 << i)) {
                         addLayout(naturalSym, xo, clefTable[clef].lines[i + coffset]);
-				xo += 1.0;
-				}
+                        xo += 1.0;
+                        }
                   }
             }
+      // add accidentals
       switch(t1) {
             case 7:  addLayout(sharpSym, xo + 6.0, clefTable[clef].lines[6]);
             case 6:  addLayout(sharpSym, xo + 5.0, clefTable[clef].lines[5]);
@@ -182,8 +210,18 @@ void KeySig::layout()
                   qDebug("illegal t1 key %d (t2=%d)\n", t1, t2);
                   break;
             }
-      setbbox(QRectF());
+      // add suffixed naturals, if any
+      if (suffixNaturals) {
+            for (int i = 0; i < 7; ++i) {
+                  if (naturals & (1 << i)) {
+                        addLayout(naturalSym, xo, clefTable[clef].lines[i + coffset]);
+                        xo += 1.0;
+                        }
+                  }
+            }
 
+      // compute bbox
+      setbbox(QRectF());
       foreach(KeySym* ks, keySymbols) {
             ks->pos = ks->spos * _spatium;
             addbbox(symbols[score()->symIdx()][ks->sym].bbox(magS()).translated(ks->pos));
