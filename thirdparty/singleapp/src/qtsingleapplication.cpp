@@ -222,7 +222,7 @@ QtSingleApplication::QtSingleApplication(Display* dpy, const QString &appId, int
 {
     sysInit(appId);
 }
-#  endif // Q_WS_X11
+#  endif // Q_OS_LINUX
 #endif // QT_VERSION < 0x050000
 
 
