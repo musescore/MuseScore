@@ -47,8 +47,8 @@ class KeySig : public Element {
       Q_PROPERTY(bool showCourtesy READ showCourtesy   WRITE undoSetShowCourtesy)
       Q_PROPERTY(bool showNaturals READ showNaturals   WRITE undoSetShowNaturals)
 
-	bool	_showCourtesy;
-	bool	_showNaturals;
+      bool	_showCourtesy;
+      bool	_showNaturals;
       QList<KeySym*> keySymbols;
       KeySigEvent _sig;
       void addLayout(int sym, qreal x, int y);
@@ -81,19 +81,21 @@ class KeySig : public Element {
       void changeKeySigEvent(const KeySigEvent&);
       void setKeySigEvent(const KeySigEvent& e)      { _sig = e; }
       int tick() const;
+      void insertIntoKeySigChain();
+      void removeFromKeySigChain();
 
-      bool showCourtesy() const           { return _showCourtesy; };
-      void setShowCourtesy(bool v)        { _showCourtesy = v;    };
+      bool showCourtesy() const           { return _showCourtesy; }
+      void setShowCourtesy(bool v)        { _showCourtesy = v;    }
       void undoSetShowCourtesy(bool v);
 
-      bool showNaturals() const           { return _showNaturals;    };
-	void setShowNaturals(bool v)        { _showNaturals = v;       };
-	void undoSetShowNaturals(bool v)    { _showNaturals = v;       };
+      bool showNaturals() const           { return _showNaturals;    }
+      void setShowNaturals(bool v)        { _showNaturals = v;       }
+      void undoSetShowNaturals(bool v)    { _showNaturals = v;       }
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
-	};
+      };
 
 extern const char* keyNames[15];
 
