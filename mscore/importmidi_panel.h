@@ -24,10 +24,10 @@ class ImportMidiPanel : public QWidget
       void setMidiFile(const QString& file);
 
    private slots:
-      void openMidiFile();
       void updateUiOnTimer();
       void onCurrentTrackChanged(const QModelIndex &currentIndex);
       void onLHRHchanged(bool doLHRH);
+      void onUseDotschanged(bool useDots);
       void importMidi();
       void hidePanel();
 
