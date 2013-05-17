@@ -323,6 +323,7 @@ Score* MuseScore::readScore(const QString& name)
             delete score;
             score = 0;
             }
+      showPanelIfMidiFile(name);
       return score;
       }
 
