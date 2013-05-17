@@ -420,11 +420,11 @@ bool ParsedChord::parse(QString s, bool syntaxOnly)
            addToken(QString(s[i++]),QUALITY);
       lastLeadingToken = _tokenList.size();
       // get quality
-      for (tok1 = ""; i < len; ++i) {
+      for (j = 0, tok1 = ""; i < len; ++i, ++j) {
             // up to first (non-zero) digit, paren, or comma
             if (chordDigits.contains(s[i]) || special.contains(s[i]))
                   break;
-            tok1[i] = s[i];
+            tok1[j] = s[i];
             }
       // TODO: special cases for mMaj, augadd, etc.
       if (tok1 != "")
