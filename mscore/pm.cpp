@@ -18,7 +18,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
   #include <windows.h>
   #include <mmsystem.h>
 #endif
