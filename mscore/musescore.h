@@ -613,6 +613,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void noteTooShortForTupletDialog();
       void enableInputToolbar(bool enableInput);
       void loadFiles();
+      void showPanelIfMidiFile(const QString &file);
 
       static Palette* newTextPalette();
       static Palette* newTimePalette();
