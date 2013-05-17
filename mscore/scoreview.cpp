@@ -179,7 +179,7 @@ class ContextTransition : public QEventTransition
 
    protected:
       virtual void onTransition(QEvent* e) {
-            QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(e)->event());
+            QContextMenuEvent* me = static_cast<QContextMenuEvent*>(static_cast<QStateMachine::WrappedEvent*>(e)->event());
             canvas->contextPopup(me);
             }
    public:
@@ -2876,9 +2876,10 @@ void ScoreView::endNoteEntry()
 //   contextPopup
 //---------------------------------------------------------
 
-void ScoreView::contextPopup(QMouseEvent* ev)
+void ScoreView::contextPopup(QContextMenuEvent* ev)
       {
       QPoint gp = ev->globalPos();
+
       startMove = toLogical(ev->pos());
       Element* e = elementNear(startMove);
       if (e) {
@@ -2886,7 +2887,7 @@ void ScoreView::contextPopup(QMouseEvent* ev)
                   // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
                   // _score->select(e, control ? SELECT_ADD : SELECT_SINGLE, 0);
                   curElement = e;
-                  select(ev);
+//TODO?                  select(ev);
                   }
             Element::ElementType type = e->type();
             seq->stopNotes();       // stop now because we dont get a mouseRelease event
