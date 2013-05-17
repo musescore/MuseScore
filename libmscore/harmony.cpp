@@ -114,8 +114,8 @@ Harmony::Harmony(Score* s)
       _rootTpc   = INVALID_TPC;
       _baseTpc   = INVALID_TPC;
       _id        = -1;
-      _parsedForm = NULL;
-      _description = NULL;
+      _parsedForm = nullptr;
+      _description = nullptr;
       }
 
 Harmony::Harmony(const Harmony& h)
@@ -125,8 +125,10 @@ Harmony::Harmony(const Harmony& h)
       _baseTpc    = h._baseTpc;
       _id         = h._id;
       _degreeList = h._degreeList;
-      _parsedForm = NULL;
-      _description = NULL;
+      _parsedForm = h._parsedForm;
+      _description = h._description;
+      _textName   = h._textName;
+      _userName   = h._userName;
       }
 
 //---------------------------------------------------------
@@ -345,6 +347,12 @@ static int convertRoot(const QString& s, bool germanNames)
 bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       {
       _id = -1;
+      if (_parsedForm) {
+            delete _parsedForm;
+            _parsedForm = nullptr;
+            }
+      _description = nullptr;
+      _textName = "";
       bool useLiteral = false;
       if (ss.endsWith(' '))
             useLiteral = true;
@@ -370,12 +378,8 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       else
             s = s.mid(idx).simplified();
       _userName = s;
-      if (_parsedForm)
-            delete _parsedForm;
       _parsedForm = new ParsedChord;
       bool parseable = _parsedForm->parse(s);
-      _textName = "";
-      _description = NULL;
       // attempt to match chord using exact string match
       // but also match using parsed forms as fallback
       foreach (const ChordDescription* cd, *score()->style()->chordList()) {
@@ -388,7 +392,7 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
                         return true;
                         }
                   }
-            if (parseable && _description == NULL && !useLiteral) {
+            if (parseable && _description == nullptr && !useLiteral) {
                   foreach (ParsedChord ssParsed, cd->parsedChords) {
                         if (*_parsedForm == ssParsed) {
                               _id = cd->id;
@@ -401,7 +405,7 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
                   }
             }
       // exact match failed, so fall back on parsed match if one was found
-      if (_description != NULL)
+      if (_description != nullptr)
             return true;
 
       // no match found
@@ -563,11 +567,11 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
 
 const ChordDescription* Harmony::descr() const
       {
-      if (_description != NULL)
+      if (_description != nullptr)
             return _description;
       else if (_id > 0)
             return score()->style()->chordDescription(_id);
-      return NULL;
+      return nullptr;
       }
 
 //---------------------------------------------------------
