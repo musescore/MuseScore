@@ -327,6 +327,15 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Sql.dll
       ${CROSSQT}/bin/Qt5V8.dll
       ${CROSSQT}/bin/Qt5PrintSupport.dll
+      ${CROSSQT}/bin/Qt5Multimedia.dll
+      ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
+      ${CROSSQT}/bin/Qt5OpenGL.dll
+      ${CROSSQT}/bin/icuin49.dll
+      ${CROSSQT}/bin/icuuc49.dll
+      ${CROSSQT}/bin/icudt49.dll
+      ${CROSSQT}/bin/libGLESv2.dll
+      ${CROSSQT}/bin/libEGL.dll
+      ${CROSSQT}/bin/D3DCompiler_43.dll
       )
    install_files ( /bin/iconengines .dll
       ${CROSSQT}/plugins/iconengines/qsvgicon.dll
