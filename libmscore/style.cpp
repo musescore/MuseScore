@@ -336,10 +336,7 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
          TR( "Chordname"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true,
-         Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
-         false, QColor(Qt::black), QColor(255, 255, 255, 0),            // default params
-         TextStyle::HIDE_IN_EDITOR));                                   // don't show in Style Editor
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true));
 
       AS(TextStyle(
          TR( "Rehearsal Mark"), ff,  14, true, false, false,
