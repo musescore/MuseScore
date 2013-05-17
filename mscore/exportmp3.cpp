@@ -241,7 +241,7 @@ bool MP3Exporter::initLibrary(QString libpath)
          lame_lib->resolve("lame_get_lametag_frame");
       lame_mp3_tags_fid = (lame_mp3_tags_fid_t *)
          lame_lib->resolve("lame_mp3_tags_fid");
-#if defined(Q_OS_WIN)
+#if 0 //defined(Q_OS_WIN)
       beWriteInfoTag = (beWriteInfoTag_t *)
          lame_lib->resolve("beWriteInfoTag");
       beVersion = (beVersion_t *)
@@ -268,12 +268,12 @@ bool MP3Exporter::initLibrary(QString libpath)
         !lame_set_padding_type ||
         !lame_set_bWriteVbrTag) {
             qDebug("Failed to find a required symbol in the LAME library\n");
-#if defined(Q_OS_WIN)
+#if 0 //defined(Q_OS_WIN)
             if (beVersion) {
                   be_version v;
                   beVersion(&v);
 
-                  mBladeVersion = QString("You are linking to lame_enc.dll v%d.%d. This version is not compatible with Audacity %d.\nPlease download the latest version of the LAME MP3 library.")
+                  mBladeVersion = QString("You are linking to lame_enc.dll v%d.%d. This version is not compatible with MuseScore %d.\nPlease download the latest version of the LAME MP3 library.")
                                 .arg(v.byMajorVersion)
                                 .arg(v.byMinorVersion)
                                 .arg(1); //TODO
@@ -525,7 +525,7 @@ void MP3Exporter::cancelEncoding()
          out.skipRawData (off);
          out.writeRawData(mInfoTagBuf, mInfoTagLen);
       }
-#if defined(Q_OS_WIN)
+#if 0 //defined(Q_OS_WIN)
       else if (beWriteInfoTag) {
          f.flush();
          QFileInfo fi(f);
@@ -543,7 +543,7 @@ void MP3Exporter::cancelEncoding()
    f.seek(f.size());
 }*/
 
-#if defined(Q_OS_WIN)
+#if 0 //defined(Q_OS_WIN)
 /* values for Windows */
 
 QString MP3Exporter::getLibraryPath()
