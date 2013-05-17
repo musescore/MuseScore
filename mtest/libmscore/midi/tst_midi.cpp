@@ -91,8 +91,8 @@ bool compareElements(Element* e1, Element* e2)
       else if (e1->type() == Element::REST) {
             }
       else if (e1->type() == Element::CHORD) {
-            Chord* c1 = static_cast<Chord*>(e1);
-            Chord* c2 = static_cast<Chord*>(e2);
+            Ms::Chord* c1 = static_cast<Ms::Chord*>(e1);
+            Ms::Chord* c2 = static_cast<Ms::Chord*>(e2);
             if (c1->duration() != c2->duration()) {
                   Fraction f1 = c1->duration();
                   Fraction f2 = c2->duration();

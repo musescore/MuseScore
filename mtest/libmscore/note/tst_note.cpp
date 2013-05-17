@@ -50,7 +50,7 @@ void TestNote::initTestCase()
 
 void TestNote::note()
       {
-      Chord* chord = new Chord(score);
+      Ms::Chord* chord = new Ms::Chord(score);
       Note* note = new Note(score);
       chord->add(note);
 

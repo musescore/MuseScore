@@ -249,7 +249,7 @@ Score* TestParts::doAddBreath()
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(480, false);
-      Chord* chord = static_cast<Chord*>(s->element(0));
+      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
       dd.view = 0;
@@ -385,7 +385,7 @@ Score* TestParts::doAddFingering()
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(480, false);
-      Chord* chord = static_cast<Chord*>(s->element(0));
+      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
       dd.view = 0;
@@ -451,7 +451,7 @@ Score* TestParts::doRemoveFingering()
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(Segment::SegChordRest);
-      Chord* chord = static_cast<Chord*>(s->element(0));
+      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;
       foreach(Element* e, note->el()) {
@@ -521,7 +521,7 @@ Score* TestParts::doAddSymbol()
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(480, false);
-      Chord* chord = static_cast<Chord*>(s->element(0));
+      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
       dd.view = 0;
@@ -586,7 +586,7 @@ Score* TestParts::doRemoveSymbol()
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(Segment::SegChordRest);
-      Chord* chord = static_cast<Chord*>(s->element(0));
+      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;
       foreach(Element* e, note->el()) {
@@ -657,7 +657,7 @@ Score* TestParts::doAddImage()
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->tick2segment(480, false);
-      Chord* chord = static_cast<Chord*>(s->element(0));
+      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
       dd.view = 0;
@@ -723,7 +723,7 @@ Score* TestParts::doRemoveImage()
 
       Measure* m   = score->firstMeasure();
       Segment* s   = m->first()->next(SegChordRest);
-      Chord* chord = static_cast<Chord*>(s->element(0));
+      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;
       foreach(Element* e, note->el()) {
