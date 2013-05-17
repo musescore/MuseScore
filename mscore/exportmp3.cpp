@@ -241,7 +241,7 @@ bool MP3Exporter::initLibrary(QString libpath)
          lame_lib->resolve("lame_get_lametag_frame");
       lame_mp3_tags_fid = (lame_mp3_tags_fid_t *)
          lame_lib->resolve("lame_mp3_tags_fid");
-#if 0 //defined(Q_OS_WIN)
+#if defined(Q_OS_WIN)
       beWriteInfoTag = (beWriteInfoTag_t *)
          lame_lib->resolve("beWriteInfoTag");
       beVersion = (beVersion_t *)
@@ -268,7 +268,7 @@ bool MP3Exporter::initLibrary(QString libpath)
         !lame_set_padding_type ||
         !lame_set_bWriteVbrTag) {
             qDebug("Failed to find a required symbol in the LAME library\n");
-#if 0 //defined(Q_OS_WIN)
+#if defined(Q_OS_WIN)
             if (beVersion) {
                   be_version v;
                   beVersion(&v);
@@ -525,7 +525,7 @@ void MP3Exporter::cancelEncoding()
          out.skipRawData (off);
          out.writeRawData(mInfoTagBuf, mInfoTagLen);
       }
-#if 0 //defined(Q_OS_WIN)
+#if defined(Q_OS_WIN)
       else if (beWriteInfoTag) {
          f.flush();
          QFileInfo fi(f);
@@ -543,7 +543,7 @@ void MP3Exporter::cancelEncoding()
    f.seek(f.size());
 }*/
 
-#if 0 //defined(Q_OS_WIN)
+#if defined(Q_OS_WIN)
 /* values for Windows */
 
 QString MP3Exporter::getLibraryPath()

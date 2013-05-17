@@ -6,7 +6,6 @@ if (Qt5Core_FOUND)
     set(_components
         Core
         Gui
-        DBus
         Designer
         Declarative
         Script
@@ -69,7 +68,7 @@ if (Qt5Core_FOUND)
     endif()
   endforeach()
 
-  get_filename_component(_modules_dir "${CMAKE_CURRENT_LIST_DIR}/../modules" ABSOLUTE)
+  get_filename_component(_modules_dir "${CMAKE_CURRENT_LIST_DIR}/../build" ABSOLUTE)
   include("${_modules_dir}/ECMQt4To5Porting.cmake") # TODO: Port away from this.
   include_directories(${QT_INCLUDES}) # TODO: Port away from this.
 

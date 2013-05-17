@@ -53,9 +53,9 @@ MACRO (QT4_GET_MOC_FLAGS _moc_flags)
     SET(${_moc_flags} ${${_moc_flags}} "-D${_current}")
   ENDFOREACH(_current ${_defines})
 
-  IF(Q_WS_WIN)
+  IF(Q_OS_WIN)
     SET(${_moc_flags} ${${_moc_flags}} -DWIN32)
-  ENDIF(Q_WS_WIN)
+  ENDIF(Q_OS_WIN)
 
 ENDMACRO(QT4_GET_MOC_FLAGS)
 
@@ -157,12 +157,12 @@ set(_qt_modules
   Widgets
   Script
   ScriptTools
-  DBus
   Network
   Test
   Designer
   Concurrent
   Xml
+  XmlPatterns
   UiTools
   Qml
   Quick1

@@ -23,7 +23,7 @@
 
 #include "globals.h"
 #include "lame/lame.h"
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 #include "windows.h"
 #endif
 
@@ -101,7 +101,7 @@ typedef int lame_set_bWriteVbrTag_t(lame_global_flags *, int);
 typedef size_t lame_get_lametag_frame_t(const lame_global_flags *, unsigned char* buffer, size_t size);
 typedef void lame_mp3_tags_fid_t(lame_global_flags *, FILE *);
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 // An alternative solution to give Windows an additional chance of writing the tag before
 // falling bato to lame_mp3_tag_fid().  The latter can have DLL sharing issues when mixing
 // Debug/Release builds of Audacity and the lame DLL.
@@ -200,7 +200,7 @@ class MP3Exporter {
       QLibrary* lame_lib;
       bool mLibraryLoaded;
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
       QString mBladeVersion;
 #endif
 
@@ -235,7 +235,7 @@ class MP3Exporter {
       lame_set_bWriteVbrTag_t *lame_set_bWriteVbrTag;
       lame_get_lametag_frame_t *lame_get_lametag_frame;
       lame_mp3_tags_fid_t *lame_mp3_tags_fid;
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
       beWriteInfoTag_t *beWriteInfoTag;
       beVersion_t *beVersion;
 #endif
