@@ -46,7 +46,7 @@ enum {
       ME_NOTE       = 0x1,
       ME_CHORD      = 0x2,
       ME_TICK1      = 0x3,  // metronome tick akzent
-      ME_TICK2      = 0x4,  // metronome tick
+      ME_TICK2      = 0x4   // metronome tick
       };
 
 //---------------------------------------------------------
@@ -73,7 +73,7 @@ enum {
       META_EOT             = 0x2f,  // end of track
       META_TEMPO           = 0x51,
       META_TIME_SIGNATURE  = 0x58,
-      META_KEY_SIGNATURE   = 0x59,
+      META_KEY_SIGNATURE   = 0x59
       };
 
 //---------------------------------------------------------
@@ -123,7 +123,7 @@ enum {
       CTRL_PROGRAM   = 0x81,
       CTRL_PITCH     = 0x82,
       CTRL_PRESS     = 0x83,
-      CTRL_POLYAFTER = 0x84,
+      CTRL_POLYAFTER = 0x84
       };
 
 //---------------------------------------------------------
@@ -140,7 +140,7 @@ class MidiCoreEvent {
    public:
       MidiCoreEvent() {}
       MidiCoreEvent(uchar t, uchar c, uchar a, uchar b)
-         : _type(t), _channel(c), _a(a), _b(b) {};
+         : _type(t), _channel(c), _a(a), _b(b) {}
 
       void set(uchar t, uchar c, uchar a, uchar b) {
             _type    = t;
@@ -194,7 +194,7 @@ class MidiEvent : public MidiCoreEvent {
    public:
       MidiEvent() {}
       MidiEvent(uchar t, uchar c, uchar a, uchar b)
-         : MidiCoreEvent(t, c, a, b), _edata(0), _len(0) {};
+         : MidiCoreEvent(t, c, a, b), _edata(0), _len(0) {}
 
       const uchar* edata() const     { return _edata; }
       void setEData(uchar* d)        { _edata = d; }
@@ -218,7 +218,7 @@ class PlayEvent : public MidiCoreEvent {
       PlayEvent() : MidiCoreEvent() {}
       PlayEvent(const MidiCoreEvent& e) : MidiCoreEvent(e) {}
       PlayEvent(uchar t, uchar c, uchar a, uchar b)
-         : MidiCoreEvent(t, c, a, b) {};
+         : MidiCoreEvent(t, c, a, b) {}
       float tuning() const           { return _tuning;  }
       void setTuning(float v)        { _tuning = v;     }
       };
@@ -234,7 +234,7 @@ class NPlayEvent : public PlayEvent {
    public:
       NPlayEvent() : PlayEvent() {}
       NPlayEvent(uchar t, uchar c, uchar a, uchar b)
-         : PlayEvent(t, c, a, b) {};
+         : PlayEvent(t, c, a, b) {}
       NPlayEvent(const MidiCoreEvent& e) : PlayEvent(e) {}
       const Note* note() const       { return _note; }
       void setNote(const Note* v)    { _note = v; }
