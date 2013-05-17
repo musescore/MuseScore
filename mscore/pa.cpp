@@ -55,7 +55,7 @@ int paCallback(const void*, void* out, long unsigned frames,
 Portaudio::Portaudio(Seq* s)
    : Driver(s)
       {
-      _sampleRate = 48000;
+      _sampleRate = preferences.alsaSampleRate;
       initialized = false;
       state       = Seq::TRANSPORT_STOP;
       seekflag    = false;

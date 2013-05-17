@@ -14,6 +14,7 @@
 #include "seq.h"
 #include <pulse/pulseaudio.h>
 #include "driver.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -70,7 +71,7 @@ void PulseAudio::paCallback(pa_stream* s, size_t len, void* data)
 PulseAudio::PulseAudio(Seq* s)
    : Driver(s)
       {
-      _sampleRate = 48000;
+      _sampleRate = preferences.alsaSampleRate;
       state       = Seq::TRANSPORT_STOP;
       runState    = 0;
       }
