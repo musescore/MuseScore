@@ -49,8 +49,9 @@ set (QT_mingw_LIBRARIES
     Qt5WebKit
     Qt5V8
     Qt5XmlPatterns
-    Qt5Declarative
     Qt5PrintSupport
+    Qt5Quick
+    Qt5Qml
     )
 
 #    Qt3Support4
