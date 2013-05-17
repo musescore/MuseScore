@@ -114,8 +114,8 @@ Harmony::Harmony(Score* s)
       _rootTpc   = INVALID_TPC;
       _baseTpc   = INVALID_TPC;
       _id        = -1;
-      _parsedForm = nullptr;
-      _description = nullptr;
+      _parsedForm = 0;
+      _description = 0;
       }
 
 Harmony::Harmony(const Harmony& h)
@@ -349,9 +349,9 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       _id = -1;
       if (_parsedForm) {
             delete _parsedForm;
-            _parsedForm = nullptr;
+            _parsedForm = 0;
             }
-      _description = nullptr;
+      _description = 0;
       _textName = "";
       bool useLiteral = false;
       if (ss.endsWith(' '))
@@ -392,7 +392,7 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
                         return true;
                         }
                   }
-            if (parseable && _description == nullptr && !useLiteral) {
+            if (parseable && _description == 0 && !useLiteral) {
                   foreach (ParsedChord ssParsed, cd->parsedChords) {
                         if (*_parsedForm == ssParsed) {
                               _id = cd->id;
@@ -405,7 +405,7 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
                   }
             }
       // exact match failed, so fall back on parsed match if one was found
-      if (_description != nullptr)
+      if (_description != 0)
             return true;
 
       // no match found
@@ -567,11 +567,11 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
 
 const ChordDescription* Harmony::descr() const
       {
-      if (_description != nullptr)
+      if (_description != 0)
             return _description;
       else if (_id > 0)
             return score()->style()->chordDescription(_id);
-      return nullptr;
+      return 0;
       }
 
 //---------------------------------------------------------
