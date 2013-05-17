@@ -1237,11 +1237,6 @@ void MuseScore::selectScore(QAction* action)
       {
       QString a = action->data().toString();
       if (!a.isEmpty()) {
-            if (ImportMidiPanel::isMidiFile(a)) {
-                  importmidi_panel->setMidiFile(a);
-                  if (!importmidi_panel->isVisible())
-                        showMidiImportPanel(true);
-                  }
             Score* score = readScore(a);
             if (score) {
                   setCurrentScoreView(appendScore(score));
@@ -1541,6 +1536,19 @@ void MuseScore::showMessage(const QString& s, int timeout)
       }
 
 //---------------------------------------------------------
+//   setIfMidiFile
+//---------------------------------------------------------
+
+void MuseScore::showPanelIfMidiFile(const QString &file)
+      {
+      if (ImportMidiPanel::isMidiFile(file)) {
+            importmidi_panel->setMidiFile(file);
+            if (!importmidi_panel->isVisible())
+                  showMidiImportPanel(true);
+            }
+      }
+
+//---------------------------------------------------------
 //   dragEnterEvent
 //---------------------------------------------------------
 
@@ -1573,11 +1581,6 @@ void MuseScore::dropEvent(QDropEvent* event)
             foreach(const QUrl& u, event->mimeData()->urls()) {
                   if (u.scheme() == "file") {
                         QString file = u.toLocalFile();
-                        if (ImportMidiPanel::isMidiFile(file)) {
-                              importmidi_panel->setMidiFile(file);
-                              if (!importmidi_panel->isVisible())
-                                    showMidiImportPanel(true);
-                              }
                         Score* score = readScore(file);
                         if (score) {
                               view = appendScore(score);
