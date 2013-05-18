@@ -157,7 +157,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -4093,6 +4093,9 @@ p, li { white-space: pre-wrap; }
          <layout class="QVBoxLayout" name="verticalLayout_31">
           <item>
            <widget class="QTableWidget" name="tableWidget">
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>150</number>
+            </attribute>
             <column>
              <property name="text">
               <string>Accidental</string>
@@ -4108,6 +4111,36 @@ p, li { white-space: pre-wrap; }
               <string>cents offset</string>
              </property>
             </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="keySigNaturalsGroup">
+         <property name="title">
+          <string>Naturals in key signatures</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_35">
+          <item>
+           <widget class="QRadioButton" name="radioKeySigNatNone">
+            <property name="text">
+             <string>Only for change to C Maj / A min</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioKeySigNatBefore">
+            <property name="text">
+             <string>Before change to less sharps / flats</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioKeySigNatAfter">
+            <property name="text">
+             <string>After change to less sharps / flats (but before change sharps &lt;=&gt; flats)</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -4317,6 +4350,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>timesigLeftMargin</tabstop>
   <tabstop>clefKeyRightMargin</tabstop>
   <tabstop>clefBarlineDistance</tabstop>
+  <tabstop>staffLineWidth</tabstop>
   <tabstop>showRepeatBarTips</tabstop>
   <tabstop>showStartBarlineSingle</tabstop>
   <tabstop>showStartBarlineMultiple</tabstop>
@@ -4332,6 +4366,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>accidentalDistance</tabstop>
   <tabstop>noteDotDistance</tabstop>
   <tabstop>dotDotDistance</tabstop>
+  <tabstop>stemWidth</tabstop>
   <tabstop>ledgerLineWidth</tabstop>
   <tabstop>ledgerLineLength</tabstop>
   <tabstop>clefTab1</tabstop>
@@ -4369,6 +4404,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>chordDescriptionFileButton</tabstop>
   <tabstop>harmonyY</tabstop>
   <tabstop>harmonyFretDist</tabstop>
+  <tabstop>minHarmonyDistance</tabstop>
   <tabstop>comboFBFont</tabstop>
   <tabstop>doubleSpinFBSize</tabstop>
   <tabstop>doubleSpinFBVertPos</tabstop>
@@ -4382,13 +4418,16 @@ p, li { white-space: pre-wrap; }
   <tabstop>propertyDistance</tabstop>
   <tabstop>articulationTable</tabstop>
   <tabstop>tableWidget</tabstop>
+  <tabstop>radioKeySigNatNone</tabstop>
+  <tabstop>radioKeySigNatBefore</tabstop>
+  <tabstop>radioKeySigNatAfter</tabstop>
   <tabstop>voice1Up</tabstop>
-  <tabstop>voice2Up</tabstop>
-  <tabstop>voice3Up</tabstop>
-  <tabstop>voice4Up</tabstop>
   <tabstop>voice1Down</tabstop>
+  <tabstop>voice2Up</tabstop>
   <tabstop>voice2Down</tabstop>
+  <tabstop>voice3Up</tabstop>
   <tabstop>voice3Down</tabstop>
+  <tabstop>voice4Up</tabstop>
   <tabstop>voice4Down</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
