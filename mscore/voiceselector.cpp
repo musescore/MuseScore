@@ -50,7 +50,6 @@ void VoiceButton::paintEvent(QPaintEvent* e)
       QColor c(MScore::selectColor[voice]);
       QColor bg(palette().color(QPalette::Normal, QPalette::Window));
       p.fillRect(QRect(0, 2, width(), height()), isChecked() ? c.light(170) : bg);
-      qDebug() << e->rect();
       p.setPen(QPen(preferences.globalStyle == 0 ? Qt::white : Qt::black));
       if (isChecked())
             p.setPen(QPen(Qt::black));
@@ -58,7 +57,6 @@ void VoiceButton::paintEvent(QPaintEvent* e)
       f.setPointSizeF(16.0);
       p.setFont(f);
       p.drawText(QRect(0, 1, width(), height()), Qt::AlignCenter, QString("%1").arg(voice+1));
-      qDebug() << width() << height();
       }
 
 //---------------------------------------------------------
