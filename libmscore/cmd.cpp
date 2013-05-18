@@ -1033,7 +1033,6 @@ qDebug("  +ChangeCRLen::setRest %d/%d", f2.numerator(), f2.denominator());
                         QList<TDuration> dList = toDurationList(f2, true);
                         undoChangeChordRestLen(cr, dList[0]);
                         if(dList.size() > 1) {
-                              dList.removeFirst();
                               TDuration remain = TDuration(f2) - dList[0];
                               setRest(tick +dList[0].ticks(), track, remain.fraction() * timeStretch, (remain.dots() > 0), tuplet);
                               }
