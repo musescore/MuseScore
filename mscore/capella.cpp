@@ -909,7 +909,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   qDebug("bad bracket 'from' value");
                   continue;
                   }
-            staff->setBracket(0, cb.curly ? BRACKET_AKKOLADE : BRACKET_NORMAL);
+            staff->setBracket(0, cb.curly ? BRACKET_BRACE : BRACKET_NORMAL);
             staff->setBracketSpan(0, cb.to - cb.from + 1);
             }
 
