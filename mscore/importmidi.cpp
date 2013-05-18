@@ -806,7 +806,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
                         score->staves().push_back(ss);
 
                         s->setInitialClef(CLEF_G);
-                        s->setBracket(0, BRACKET_AKKOLADE);
+                        s->setBracket(0, BRACKET_BRACE);
                         s->setBracketSpan(0, 2);
                         ss->setInitialClef(CLEF_F);
                         ++idx;
