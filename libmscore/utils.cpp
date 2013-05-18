@@ -581,7 +581,7 @@ Note* searchTieNote(Note* note)
       Chord* chord = note->chord();
       Segment* seg = chord->segment();
       Segment* nseg = seg->next1(Segment::SegChordRest);
-      if(!seg)
+      if(!nseg)
             return 0;
       Part* part   = chord->staff()->part();
       int strack   = part->staves()->front()->idx() * VOICES;
