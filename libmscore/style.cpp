@@ -212,7 +212,8 @@ StyleType styleTypes[] = {
       StyleType("tremoloDistance",         ST_SPATIUM),
 
       StyleType("linearStretch",           ST_DOUBLE),
-      StyleType("crossMeasureValues",      ST_BOOL)
+      StyleType("crossMeasureValues",      ST_BOOL),
+      StyleType("keySigNaturals",          ST_INT)
       };
 
 static const QString ff("FreeSerifMscore");
@@ -603,7 +604,8 @@ StyleData::StyleData()
             StyleVal(ST_tremoloDistance, Spatium(0.8)),
 
             StyleVal(ST_linearStretch, qreal(1.5)),
-            StyleVal(ST_crossMeasureValues, false)
+            StyleVal(ST_crossMeasureValues, false),
+            StyleVal(ST_keySigNaturals, NAT_NONE),
             };
 
       for (int idx = 0; idx < ST_STYLES; ++idx)

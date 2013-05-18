@@ -329,6 +329,7 @@ enum StyleIdx {
 
       ST_linearStretch,
       ST_crossMeasureValues,
+      ST_keySigNaturals,
 
       ST_STYLES
       };
