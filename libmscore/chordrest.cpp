@@ -834,7 +834,7 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   Text* f = static_cast<Text*>(e);
                   int st = f->textStyleType();
-                  if (st != TEXT_STYLE_UNKNOWN)
+                  if (st >= TEXT_STYLE_DEFAULT)
                         f->setTextStyleType(st);
                   }
                   score()->undoAddElement(e);
@@ -848,9 +848,8 @@ Element* ChordRest::drop(const DropData& data)
                   fb->setTrack( (track() / VOICES) * VOICES );
                   fb->setTicks( duration().ticks() );
                   fb->setOnNote(true);
-                  /* FiguredBass * fbNew =*/ FiguredBass::addFiguredBassToSegment(segment(),
+                  FiguredBass::addFiguredBassToSegment(segment(),
                         fb->track(), fb->ticks(), &bNew);
-                  // fbNew = fb;
                   if (bNew)
                         score()->undoAddElement(e);
                   return e;
