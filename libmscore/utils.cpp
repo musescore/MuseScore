@@ -577,12 +577,12 @@ int diatonicUpDown(int key, int pitch, int steps)
 
 Note* searchTieNote(Note* note)
       {
-      Segment* nseg = seg->next1(Segment::SegChordRest);
-      if(!seg)
-            return 0;
       Note* note2  = 0;
       Chord* chord = note->chord();
       Segment* seg = chord->segment();
+      Segment* nseg = seg->next1(Segment::SegChordRest);
+      if(!seg)
+            return 0;
       Part* part   = chord->staff()->part();
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
