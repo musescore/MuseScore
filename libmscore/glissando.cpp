@@ -189,17 +189,20 @@ void Glissando::draw(QPainter* painter) const
             qreal mags = magS();
             QRectF b = symbols[score()->symIdx()][trillelementSym].bbox(mags);
             qreal w  = symbols[score()->symIdx()][trillelementSym].width(mags);
-            int n    = lrint(l / w);
-            symbols[score()->symIdx()][trillelementSym].draw(painter, mags, QPointF(0.0, b.height()*.5), n);
+            int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
+            qreal x  = (l - n*w) * 0.5;   // centre line in available space
+            symbols[score()->symIdx()][trillelementSym].draw(painter, mags, QPointF(x, b.height()*.5), n);
             }
       if (_showText) {
             const TextStyle& st = score()->textStyle(TEXT_STYLE_GLISSANDO);
             QFont f = st.fontPx(_spatium);
             QRectF r = QFontMetricsF(f).boundingRect(_text);
             if (r.width() < l) {
+                  // raise text slightly more with WAVY than with STRAIGHT
+                  qreal yOffset = _spatium * (glissandoType() == GlissandoType::WAVY ? 0.75 : 0.5);
                   painter->setFont(f);
                   qreal x = (l - r.width()) * .5;
-                  painter->drawText(QPointF(x, -_spatium * .5), _text);
+                  painter->drawText(QPointF(x, -yOffset), _text);
                   }
             }
       painter->restore();
