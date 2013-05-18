@@ -2346,32 +2346,34 @@ void Measure::read(XmlReader& e, int staffIdx)
       //
       // for compatibility with 1.22:
       //
-      int ticks1 = 0;
-      for (Segment* s = last(); s; s = s->prev()) {
-            if (s->segmentType() == Segment::SegChordRest) {
-                  if (s->element(0)) {
-                        ChordRest* cr = static_cast<ChordRest*>(s->element(0));
-                        if (cr->type() == REPEAT_MEASURE)
-                              ticks1 = ticks();
-                        else
-                              ticks1 = s->rtick() + cr->actualTicks();
-                        break;
-                        }
-                  }
-            }
-      if (ticks() != ticks1) {
-            // this is a irregular measure
-            _len = Fraction::fromTicks(ticks1);
-            _len.reduce();
+      if (score()->mscVersion() == 122) {
+            int ticks1 = 0;
             for (Segment* s = last(); s; s = s->prev()) {
-                  if (s->tick() < tick() + ticks())
-                        break;
-                  if (s->segmentType() == Segment::SegBarLine) {
-                        qDebug("reduce BarLine to EndBarLine");
-                        s->setSegmentType(Segment::SegEndBarLine);
+                  if (s->segmentType() == Segment::SegChordRest) {
+                        if (s->element(0)) {
+                              ChordRest* cr = static_cast<ChordRest*>(s->element(0));
+                              if (cr->type() == REPEAT_MEASURE)
+                                    ticks1 = ticks();
+                              else
+                                    ticks1 = s->rtick() + cr->actualTicks();
+                              break;
+                              }
                         }
                   }
+            if (ticks() != ticks1) {
+                  // this is a irregular measure
+                  _len = Fraction::fromTicks(ticks1);
+                  _len.reduce();
+                  for (Segment* s = last(); s; s = s->prev()) {
+                        if (s->tick() < tick() + ticks())
+                              break;
+                        if (s->segmentType() == Segment::SegBarLine) {
+                              qDebug("reduce BarLine to EndBarLine");
+                              s->setSegmentType(Segment::SegEndBarLine);
+                              }
+                        }
 
+                  }
             }
       foreach (Tuplet* tuplet, e.tuplets()) {
             if (tuplet->elements().isEmpty()) {
