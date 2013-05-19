@@ -13,6 +13,7 @@
 #include "arpeggio.h"
 #include "glissando.h"
 #include "chord.h"
+#include "ledgerline.h"
 #include "note.h"
 #include "score.h"
 #include "segment.h"
@@ -104,6 +105,13 @@ void Glissando::layout()
                   y1 += yOff;                               // move starting point to base of note
             }
 
+      // shorten line to avoid ledger lines
+      if (LedgerLine* a=anchor1->chord()->ledgerLines()) {
+            x1 -= a->pos().x();     // assumes led.lin extends by the same amount on both sides of note head!!
+            }
+      if (LedgerLine* a=anchor2->chord()->ledgerLines()) {
+            x2 = a->pos().x();
+            }
       // shorten line so it doesn't go through accidential or arpeggio
       if (Accidental* a = anchor2->accidental()) {
             x2 = a->pos().x() + a->userOff().x();
@@ -197,11 +205,13 @@ void Glissando::draw(QPainter* painter) const
             const TextStyle& st = score()->textStyle(TEXT_STYLE_GLISSANDO);
             QFont f = st.fontPx(_spatium);
             QRectF r = QFontMetricsF(f).boundingRect(_text);
+            // if text longer than available space, skip it
             if (r.width() < l) {
-                  // raise text slightly more with WAVY than with STRAIGHT
-                  qreal yOffset = _spatium * (glissandoType() == GlissandoType::WAVY ? 0.75 : 0.5);
+                  qreal yOffset = r.height() + r.y();       // find text descender height
+                  // raise text slightly above line and slightly more with WAVY than with STRAIGHT
+                  yOffset += _spatium * (glissandoType() == GlissandoType::WAVY ? 0.3 : 0.05);
                   painter->setFont(f);
-                  qreal x = (l - r.width()) * .5;
+                  qreal x = (l - r.width()) * 0.5;
                   painter->drawText(QPointF(x, -yOffset), _text);
                   }
             }
