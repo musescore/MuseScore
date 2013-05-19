@@ -18,6 +18,7 @@
       <beamMinLen>1.25</beamMinLen>
       <propertyDistanceStem>0.5</propertyDistanceStem>
       <voltaY>-2</voltaY>
+      <keySigNaturals>1</keySigNaturals>
       <page-layout>
         <page-height>1683.78</page-height>
         <page-width>1190.55</page-width>
