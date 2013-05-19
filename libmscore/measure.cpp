@@ -2346,32 +2346,34 @@ void Measure::read(XmlReader& e, int staffIdx)
       //
       // for compatibility with 1.22:
       //
-      int ticks1 = 0;
-      for (Segment* s = last(); s; s = s->prev()) {
-            if (s->segmentType() == Segment::SegChordRest) {
-                  if (s->element(0)) {
-                        ChordRest* cr = static_cast<ChordRest*>(s->element(0));
-                        if (cr->type() == REPEAT_MEASURE)
-                              ticks1 = ticks();
-                        else
-                              ticks1 = s->rtick() + cr->actualTicks();
-                        break;
-                        }
-                  }
-            }
-      if (ticks() != ticks1) {
-            // this is a irregular measure
-            _len = Fraction::fromTicks(ticks1);
-            _len.reduce();
+      if (score()->mscVersion() == 122) {
+            int ticks1 = 0;
             for (Segment* s = last(); s; s = s->prev()) {
-                  if (s->tick() < tick() + ticks())
-                        break;
-                  if (s->segmentType() == Segment::SegBarLine) {
-                        qDebug("reduce BarLine to EndBarLine");
-                        s->setSegmentType(Segment::SegEndBarLine);
+                  if (s->segmentType() == Segment::SegChordRest) {
+                        if (s->element(0)) {
+                              ChordRest* cr = static_cast<ChordRest*>(s->element(0));
+                              if (cr->type() == REPEAT_MEASURE)
+                                    ticks1 = ticks();
+                              else
+                                    ticks1 = s->rtick() + cr->actualTicks();
+                              break;
+                              }
                         }
                   }
+            if (ticks() != ticks1) {
+                  // this is a irregular measure
+                  _len = Fraction::fromTicks(ticks1);
+                  _len.reduce();
+                  for (Segment* s = last(); s; s = s->prev()) {
+                        if (s->tick() < tick() + ticks())
+                              break;
+                        if (s->segmentType() == Segment::SegBarLine) {
+                              qDebug("reduce BarLine to EndBarLine");
+                              s->setSegmentType(Segment::SegEndBarLine);
+                              }
+                        }
 
+                  }
             }
       foreach (Tuplet* tuplet, e.tuplets()) {
             if (tuplet->elements().isEmpty()) {
@@ -2529,8 +2531,8 @@ bool Measure::setStartRepeatBarLine(bool val)
 
 //---------------------------------------------------------
 //   createEndBarLines
-//    actually create or modify barlines
-//    return true if layout changes
+//    actually creates or modifies barlines
+//    returns true if layout changes
 //---------------------------------------------------------
 
 bool Measure::createEndBarLines()
@@ -2542,6 +2544,7 @@ bool Measure::createEndBarLines()
       BarLine* bl = 0;
       int span    = 0;        // span counter
       int aspan   = 0;        // actual span
+      bool mensur = false;    // keep note of mensurstrich case
       int spanTot;            // to keep track of the target span
       int spanFrom;
       int spanTo;
@@ -2565,9 +2568,11 @@ bool Measure::createEndBarLines()
                         }
                   else {                              // otherwise, get from staff
                         span        = staff->barLineSpan();
-                        if (span) {
+                        // if some span OR last staff (span=0) of a mensurstrich case, get From/To from staff
+                        if (span || mensur) {
                               spanFrom    = staff->barLineFrom();
                               spanTo      = staff->barLineTo();
+                              mensur      = false;
                               }
                         // but if staff is set to no span, a multi-staff spanning bar line
                         // has been shortened to span less staves and following staves left without bars;
@@ -2575,7 +2580,7 @@ bool Measure::createEndBarLines()
                         else {
                               span        = 1;
                               spanFrom    = 0;
-                              spanTot     = (staff->lines()-1)*2;
+                              spanTo      = (staff->lines()-1)*2;
                               }
                         }
                   if ((staffIdx + span) > nstaves)
@@ -2669,8 +2674,10 @@ bool Measure::createEndBarLines()
                   }
             // if just finished (span==0) a multi-staff span (spanTot>1) ending at the top of a staff (spanTo<=0)
             // scan this staff again, as it may have its own bar lines (mensurstich(-like) span)
-            if (spanTot > 1 && spanTo <= 0 && span == 0)
+            if (spanTot > 1 && spanTo <= 0 && span == 0) {
+                  mensur = true;
                   staffIdx--;
+                  }
             }
       return changed;
       }

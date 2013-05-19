@@ -408,7 +408,7 @@ void ExportLy::brackRegister(int brnumber, int bratype, int staffnr, bool start,
       if (end) lybracks[staffnr].brakend=true;
       lybracks[staffnr].brakno=brnumber;
       break;
-    case BRACKET_AKKOLADE:
+    case BRACKET_BRACE:
       if (start) lybracks[staffnr].bracestart=true;
       if (end) lybracks[staffnr].braceend=true;
       lybracks[staffnr].braceno=brnumber;
