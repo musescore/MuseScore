@@ -29,6 +29,7 @@
       <chordDescriptionFile>cchords_muse.xml</chordDescriptionFile>
       <concertPitch>1</concertPitch>
       <voltaY>-2</voltaY>
+      <keySigNaturals>1</keySigNaturals>
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
