@@ -154,7 +154,8 @@ void Harmony::write(Xml& xml) const
             xml.tag("root", _rootTpc);
             if (_id > 0)
                   xml.tag("extension", _id);
-            xml.tag("name", _textName);
+            if (_textName != "")
+                  xml.tag("name", _textName);
             if (_baseTpc != INVALID_TPC)
                   xml.tag("base", _baseTpc);
             foreach(const HDegree& hd, _degreeList) {
@@ -412,6 +413,18 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       _textName = _userName;
       qDebug("2:parseHarmony failed <%s><%s> (%s)", qPrintable(ss), qPrintable(s), qPrintable(*_parsedForm));
       return parseable;
+      }
+
+//---------------------------------------------------------
+//   setNameFromId
+//---------------------------------------------------------
+void Harmony::setNameFromId()
+      {
+      ChordList* cl = score()->style()->chordList();
+      if (_id > 0 && cl->contains(_id)) {
+            ChordDescription* cd = cl->value(_id);
+            _textName = cd->names.front();
+            }
       }
 
 //---------------------------------------------------------

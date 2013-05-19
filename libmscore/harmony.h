@@ -119,6 +119,7 @@ class Harmony : public Text {
       void setBaseTpc(int val)                 { _baseTpc = val;       }
       int rootTpc() const                      { return _rootTpc;      }
       void setRootTpc(int val)                 { _rootTpc = val;       }
+      void setNameFromId();
       void addDegree(const HDegree& d);
       int numberOfDegrees() const;
       HDegree degree(int i) const;
