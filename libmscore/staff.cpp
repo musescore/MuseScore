@@ -363,11 +363,25 @@ void Staff::removeTimeSig(TimeSig* timesig)
 
 //---------------------------------------------------------
 //   Staff::key
+//
+//    locates the key sig currently in effect at tick
 //---------------------------------------------------------
 
 KeySigEvent Staff::key(int tick) const
       {
       return _keymap->key(tick);
+      }
+
+//---------------------------------------------------------
+//   Staff::nextKeyTick
+//
+//    return the tick at which the key sig after tick is located
+//    return 0, if no such a key sig
+//---------------------------------------------------------
+
+int Staff::nextKeyTick(int tick) const
+      {
+      return _keymap->nextKeyTick(tick);
       }
 
 //---------------------------------------------------------

@@ -520,13 +520,13 @@ Palette* MuseScore::newBracketsPalette()
       Bracket* b1 = new Bracket(gscore);
       b1->setBracketType(BRACKET_NORMAL);
       Bracket* b2 = new Bracket(gscore);
-      b2->setBracketType(BRACKET_AKKOLADE);
+      b2->setBracketType(BRACKET_BRACE);
       Bracket* b3 = new Bracket(gscore);
-      b3->setBracketType(BRACKET_SIMPLE);
+      b3->setBracketType(BRACKET_SQUARE);
 
-      sp->append(b1, tr("Square bracket"));
-      sp->append(b2, tr("Curly bracket"));
-      sp->append(b3, tr("Simple bracket"));
+      sp->append(b1, tr("Bracket"));
+      sp->append(b2, tr("Brace"));
+      sp->append(b3, tr("Square"));
 
       return sp;
       }

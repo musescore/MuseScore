@@ -34,7 +34,9 @@ VoiceButton::VoiceButton(int v, QWidget* parent)
       {
       voice = v;
       setToolButtonStyle(Qt::ToolButtonIconOnly);
-      setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+      setFixedWidth(preferences.iconWidth+6);
+      setFixedHeight(preferences.iconHeight+6);
+      setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
       setCheckable(true);
       }
 
@@ -47,12 +49,12 @@ void VoiceButton::paintEvent(QPaintEvent* e)
       QPainter p(this);
       QColor c(MScore::selectColor[voice]);
       QColor bg(palette().color(QPalette::Normal, QPalette::Window));
-      p.fillRect(e->rect(), isChecked() ? c.light(170) : bg);
+      p.fillRect(QRect(0, 2, width(), height()), isChecked() ? c.light(170) : bg);
       p.setPen(QPen(preferences.globalStyle == 0 ? Qt::white : Qt::black));
       if (isChecked())
             p.setPen(QPen(Qt::black));
       QFont f = font();
-      f.setPixelSize(height());
+      f.setPointSizeF(16.0);
       p.setFont(f);
       p.drawText(QRect(0, 1, width(), height()), Qt::AlignCenter, QString("%1").arg(voice+1));
       }
@@ -64,14 +66,14 @@ void VoiceButton::paintEvent(QPaintEvent* e)
 VoiceSelector::VoiceSelector(QWidget* parent)
    : QFrame(parent)
       {
-      setLineWidth(2);
-      setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-      QGridLayout* vwl = new QGridLayout;
+      setLineWidth(0);
+      setFrameStyle(QFrame::Box | QFrame::Plain);
+      QHBoxLayout* vwl = new QHBoxLayout;
       vwl->setSpacing(0);
       vwl->setContentsMargins(0, 0, 0, 0);
 
-      static const char* sl2[4] = { "voice-1", "voice-3", "voice-2", "voice-4" };
-      static const int v[4] = { 0, 2, 1, 3 };
+      static const char* sl2[4] = { "voice-1", "voice-2", "voice-3", "voice-4" };
+      static const int v[4] = { 0, 1, 2, 3 };
 
       QActionGroup* vag = new QActionGroup(this);
       vag->setExclusive(true);
@@ -81,7 +83,7 @@ VoiceSelector::VoiceSelector(QWidget* parent)
             vag->addAction(a);
             VoiceButton* tb = new VoiceButton(v[i]);
             tb->setDefaultAction(a);
-            vwl->addWidget(tb, i/2, i%2, 1, 1);
+            vwl->addWidget(tb);
             }
       setLayout(vwl);
       connect(vag, SIGNAL(triggered(QAction*)), this, SIGNAL(triggered(QAction*)));

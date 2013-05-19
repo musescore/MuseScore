@@ -3,23 +3,38 @@
 
 namespace Ms {
 
-struct MidiTrackOperations
+struct TrackMeta
       {
-      bool doImport;
-      bool doLHRHSeparation;
+      QString trackName;
+      QString instrumentName;
       };
 
-typedef QList<MidiTrackOperations> tMidiImportOperations;
+struct TrackOperations
+      {
+      bool doImport = true;
+      bool doLHRHSeparation = false;
+      bool useDots = false;
+      };
+
+typedef QList<TrackOperations> tMidiImportOperations;
 
 class MidiImportOperations
       {
    public:
-      const tMidiImportOperations& allOperations() const { return operations_; }
-      void addTrackOperations(const MidiTrackOperations& operations);
+      void appendTrackOperations(const TrackOperations& operations);
+      void duplicateTrackOperations(int trackIndex);
+      void eraseTrackOperations(int trackIndex);
       void clear();
+      void setCurrentTrack(int trackIndex);
+      int currentTrack() const { return currentTrack_; }
+      TrackOperations currentTrackOperations() const;
+      TrackOperations trackOperations(int trackIndex) const;
 
    private:
       tMidiImportOperations operations_;
+      int currentTrack_ = -1;
+
+      bool isValidIndex(int index) const;
       };
 
 

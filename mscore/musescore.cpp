@@ -525,13 +525,33 @@ MuseScore::MuseScore()
       mainWindow->addWidget(_navigator);
       showNavigator(preferences.showNavigator);
 
-      importmidi_panel = new ImportMidiPanel(this);
-      mainWindow->addWidget(importmidi_panel);
-      showMidiImportPanel(preferences.showMidiImportPanel);
-
+      mainWindow->setStretchFactor(0, 1);
+      mainWindow->setStretchFactor(1, 0);
+      {
       QList<int> sizes;
-      sizes << 500 << 50;     // initial size of score canvas relativ to navigator
+      sizes << 500 << 50;     // initial size of score canvas relative to navigator
       mainWindow->setSizes(sizes);
+      }
+
+      QSplitter* envelope = new QSplitter;
+      envelope->setChildrenCollapsible(false);
+      envelope->setOrientation(Qt::Vertical);
+
+      QLayout* envlayout = new QVBoxLayout;
+      envlayout->setMargin(0);
+      envlayout->setSpacing(0);
+      envelope->setLayout(envlayout);
+      envelope->addWidget(mainWindow);
+
+      importmidi_panel = new ImportMidiPanel(this);
+      showMidiImportPanel(false);
+      envelope->addWidget(importmidi_panel);
+
+      {
+      QList<int> sizes;
+      sizes << 550 << 180;     // initial size of score canvas relative to midi panel
+      envelope->setSizes(sizes);
+      }
 
       splitter = new QSplitter;
 
@@ -933,11 +953,6 @@ MuseScore::MuseScore()
       a->setChecked(preferences.showNavigator);
       menuDisplay->addAction(a);
 
-      a = getAction("toggle-midiimportpanel");
-      a->setCheckable(true);
-      a->setChecked(preferences.showMidiImportPanel);
-      menuDisplay->addAction(a);
-
       a = getAction("toggle-mixer");
       a->setCheckable(true);
       menuDisplay->addAction(a);
@@ -1044,7 +1059,7 @@ MuseScore::MuseScore()
       menuHelp->addAction(tr("Report a bug"), this, SLOT(reportBug()));
 #endif
 
-      setCentralWidget(mainWindow);
+      setCentralWidget(envelope);
 
       // load cascading instrument templates
       loadInstrumentTemplates(preferences.instrumentList1);
@@ -4421,9 +4436,11 @@ void MuseScore::showSearchDialog()
             layout->insertWidget(2, searchDialog);
 
             QToolButton* searchExit = new QToolButton;
-            searchExit->setIcon(QIcon(":/data/cancel.png"));
+            searchExit->setAutoRaise(true);
+            searchExit->setIcon(QIcon(":/data/close.png"));
             connect(searchExit, SIGNAL(clicked()), SLOT(endSearch()));
             searchDialogLayout->addWidget(searchExit);
+            searchDialogLayout->addSpacing(10);
 
             searchDialogLayout->addWidget(new QLabel(tr("Go To: ")));
 
