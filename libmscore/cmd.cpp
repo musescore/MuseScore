@@ -1028,7 +1028,18 @@ qDebug("ChangeCRLen::List:");
             if (cr->type() == Element::REST) {
 qDebug("  +ChangeCRLen::setRest %d/%d", f2.numerator(), f2.denominator());
                   Fraction timeStretch = cr1->staff()->timeStretch(cr1->tick());
-                  Rest* r = setRest(tick, track, f2 * timeStretch, (d.dots() > 0), tuplet);
+                  Rest* r = static_cast<Rest*>(cr);
+                  if (first) {
+                        QList<TDuration> dList = toDurationList(f2, true);
+                        undoChangeChordRestLen(cr, dList[0]);
+                        if(dList.size() > 1) {
+                              TDuration remain = TDuration(f2) - dList[0];
+                              setRest(tick +dList[0].ticks(), track, remain.fraction() * timeStretch, (remain.dots() > 0), tuplet);
+                              }
+                        }
+                  else {
+                        r = setRest(tick, track, f2 * timeStretch, (d.dots() > 0), tuplet);
+                        }
                   if (first) {
                         select(r, SELECT_SINGLE, 0);
                         first = false;

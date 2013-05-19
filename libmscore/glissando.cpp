@@ -86,6 +86,15 @@ void Glissando::layout()
       qreal x2 = anchor2->pos().x();
       qreal y2 = anchor2->pos().y();
 
+      // angle glissando between notes with the same pitch letter
+      if (anchor1->line() == anchor2->line()) {
+            int upDown = anchor2->pitch() - anchor1->pitch();
+            if (upDown != 0)
+                  upDown /= abs(upDown);
+            y1 += spatium() * 0.25 * upDown;
+            y2 -= spatium() * 0.25 * upDown;
+            }
+
       // on TAB's, adjust lower end point from string line height to base of note height (= ca. half line spacing)
       if (chord->staff()->isTabStaff()) {
             qreal yOff = chord->staff()->lineDistance() * 0.5 * spatium();
@@ -180,17 +189,20 @@ void Glissando::draw(QPainter* painter) const
             qreal mags = magS();
             QRectF b = symbols[score()->symIdx()][trillelementSym].bbox(mags);
             qreal w  = symbols[score()->symIdx()][trillelementSym].width(mags);
-            int n    = lrint(l / w);
-            symbols[score()->symIdx()][trillelementSym].draw(painter, mags, QPointF(0.0, b.height()*.5), n);
+            int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
+            qreal x  = (l - n*w) * 0.5;   // centre line in available space
+            symbols[score()->symIdx()][trillelementSym].draw(painter, mags, QPointF(x, b.height()*.5), n);
             }
       if (_showText) {
             const TextStyle& st = score()->textStyle(TEXT_STYLE_GLISSANDO);
             QFont f = st.fontPx(_spatium);
             QRectF r = QFontMetricsF(f).boundingRect(_text);
             if (r.width() < l) {
+                  // raise text slightly more with WAVY than with STRAIGHT
+                  qreal yOffset = _spatium * (glissandoType() == GlissandoType::WAVY ? 0.75 : 0.5);
                   painter->setFont(f);
                   qreal x = (l - r.width()) * .5;
-                  painter->drawText(QPointF(x, -_spatium * .5), _text);
+                  painter->drawText(QPointF(x, -yOffset), _text);
                   }
             }
       painter->restore();

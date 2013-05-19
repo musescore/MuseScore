@@ -49,6 +49,7 @@ Measure* Score::tick2measure(int tick) const
                   return lm;
             lm = m;
             }
+      // check last measure
       if (lm && (tick >= lm->tick()) && (tick <= (lm->tick() + lm->ticks())))
             return lm;
       qDebug("-tick2measure %d not found", tick);
@@ -579,10 +580,13 @@ Note* searchTieNote(Note* note)
       Note* note2  = 0;
       Chord* chord = note->chord();
       Segment* seg = chord->segment();
+      Segment* nseg = seg->next1(Segment::SegChordRest);
+      if(!nseg)
+            return 0;
       Part* part   = chord->staff()->part();
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
-      int tick     = seg->tick() + chord->globalDuration().ticks();
+      int tick     = nseg->tick();
 
 //      printf("searchTieNote %d-%d  %d - %d\n", strack, etrack, seg->tick(), tick);
 

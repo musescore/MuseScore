@@ -50,7 +50,7 @@ class VoiceButton : public QToolButton {
 
    public:
       VoiceButton(int voice, QWidget* parent = 0);
-      virtual QSize sizeHint() const { return QSize(16,8); }
+      virtual QSize sizeHint() const { return QSize(24,24); }
       };
 }
 
