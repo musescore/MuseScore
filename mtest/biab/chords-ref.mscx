@@ -97,6 +97,7 @@
         <Harmony>
           <root>14</root>
           <extension>2</extension>
+          <name>Maj</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -107,6 +108,7 @@
         <Harmony>
           <root>14</root>
           <extension>3</extension>
+          <name>5b</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -117,6 +119,7 @@
         <Harmony>
           <root>14</root>
           <extension>4</extension>
+          <name>+</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -127,6 +130,7 @@
         <Harmony>
           <root>14</root>
           <extension>5</extension>
+          <name>6</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -141,6 +145,7 @@
         <Harmony>
           <root>14</root>
           <extension>6</extension>
+          <name>Maj7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -151,6 +156,7 @@
         <Harmony>
           <root>14</root>
           <extension>7</extension>
+          <name>Maj9</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -161,6 +167,7 @@
         <Harmony>
           <root>14</root>
           <extension>8</extension>
+          <name>Maj9#11</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -171,6 +178,7 @@
         <Harmony>
           <root>14</root>
           <extension>9</extension>
+          <name>Maj13#11</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -185,6 +193,7 @@
         <Harmony>
           <root>14</root>
           <extension>10</extension>
+          <name>Maj13</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -195,6 +204,7 @@
         <Harmony>
           <root>14</root>
           <extension>13</extension>
+          <name>Maj7#5</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -205,6 +215,7 @@
         <Harmony>
           <root>14</root>
           <extension>14</extension>
+          <name>69</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -215,6 +226,7 @@
         <Harmony>
           <root>14</root>
           <extension>15</extension>
+          <name>2</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -229,6 +241,7 @@
         <Harmony>
           <root>14</root>
           <extension>16</extension>
+          <name>m</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -239,6 +252,7 @@
         <Harmony>
           <root>14</root>
           <extension>17</extension>
+          <name>m+</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -249,6 +263,7 @@
         <Harmony>
           <root>14</root>
           <extension>18</extension>
+          <name>mMaj7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -259,6 +274,7 @@
         <Harmony>
           <root>14</root>
           <extension>19</extension>
+          <name>m7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -273,6 +289,7 @@
         <Harmony>
           <root>14</root>
           <extension>20</extension>
+          <name>m9</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -283,6 +300,7 @@
         <Harmony>
           <root>14</root>
           <extension>21</extension>
+          <name>m11</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -293,6 +311,7 @@
         <Harmony>
           <root>14</root>
           <extension>22</extension>
+          <name>m13</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -303,6 +322,7 @@
         <Harmony>
           <root>14</root>
           <extension>23</extension>
+          <name>m6</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -317,6 +337,7 @@
         <Harmony>
           <root>14</root>
           <extension>24</extension>
+          <name>m#5</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -327,6 +348,7 @@
         <Harmony>
           <root>14</root>
           <extension>25</extension>
+          <name>m7#5</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -337,6 +359,7 @@
         <Harmony>
           <root>14</root>
           <extension>26</extension>
+          <name>m69</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -347,6 +370,7 @@
         <Harmony>
           <root>14</root>
           <extension>28</extension>
+          <name>Maj7Lyd</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -361,6 +385,7 @@
         <Harmony>
           <root>14</root>
           <extension>29</extension>
+          <name>Maj7b5</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -371,6 +396,7 @@
         <Harmony>
           <root>14</root>
           <extension>32</extension>
+          <name>m7b5</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -381,6 +407,7 @@
         <Harmony>
           <root>14</root>
           <extension>33</extension>
+          <name>dim</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -391,6 +418,7 @@
         <Harmony>
           <root>14</root>
           <extension>34</extension>
+          <name>m9b5</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -405,6 +433,7 @@
         <Harmony>
           <root>14</root>
           <extension>40</extension>
+          <name>5</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -415,6 +444,7 @@
         <Harmony>
           <root>14</root>
           <extension>56</extension>
+          <name>7+</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -425,6 +455,7 @@
         <Harmony>
           <root>14</root>
           <extension>57</extension>
+          <name>9+</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -435,6 +466,7 @@
         <Harmony>
           <root>14</root>
           <extension>58</extension>
+          <name>13+</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -449,6 +481,7 @@
         <Harmony>
           <root>14</root>
           <extension>64</extension>
+          <name>7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -459,6 +492,7 @@
         <Harmony>
           <root>14</root>
           <extension>65</extension>
+          <name>13</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -469,6 +503,7 @@
         <Harmony>
           <root>14</root>
           <extension>66</extension>
+          <name>7b13</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -479,6 +514,7 @@
         <Harmony>
           <root>14</root>
           <extension>67</extension>
+          <name>7#11</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -493,6 +529,7 @@
         <Harmony>
           <root>14</root>
           <extension>74</extension>
+          <name>13#11</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -503,6 +540,7 @@
         <Harmony>
           <root>14</root>
           <extension>75</extension>
+          <name>9#11b13</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -513,6 +551,7 @@
         <Harmony>
           <root>14</root>
           <extension>76</extension>
+          <name>7b9</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -523,6 +562,7 @@
         <Harmony>
           <root>14</root>
           <extension>77</extension>
+          <name>13b9</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -537,6 +577,7 @@
         <Harmony>
           <root>14</root>
           <extension>85</extension>
+          <name>9#11</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -547,6 +588,7 @@
         <Harmony>
           <root>14</root>
           <extension>74</extension>
+          <name>13#11</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -557,6 +599,7 @@
         <Harmony>
           <root>14</root>
           <extension>75</extension>
+          <name>9#11b13</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -567,6 +610,7 @@
         <Harmony>
           <root>14</root>
           <extension>76</extension>
+          <name>7b9</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -581,6 +625,7 @@
         <Harmony>
           <root>14</root>
           <extension>77</extension>
+          <name>13b9</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -591,6 +636,7 @@
         <Harmony>
           <root>14</root>
           <extension>78</extension>
+          <name>7b9b13</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -601,6 +647,7 @@
         <Harmony>
           <root>14</root>
           <extension>79</extension>
+          <name>7b9#11</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -611,6 +658,7 @@
         <Harmony>
           <root>14</root>
           <extension>80</extension>
+          <name>13b9#11</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
