@@ -81,6 +81,7 @@ class Harmony : public Text {
       mutable QRectF _tbbox;
 
       virtual void draw(QPainter*) const;
+      void render(const QString&, qreal&, qreal&);
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc);
 
    public:
