@@ -489,6 +489,28 @@ void MuseScore::newFile()
                         s = ns;
                         }
                   }
+            foreach(Excerpt* excerpt, score->excerpts()) {
+                  Score* exScore =  excerpt->score();
+                  if (exScore->firstMeasure()) {
+                        for (Segment* s = exScore->firstMeasure()->first(); s;) {
+                              Segment* ns = s->next1();
+                              if (s->segmentType() == Segment::SegChordRest && s->tick() == 0) {
+                                    int tracks = s->elist().size();
+                                    for (int track = 0; track < tracks; ++track) {
+                                          delete s->element(track);
+                                          s->setElement(track, 0);
+                                          }
+                                    }
+                              s->measure()->remove(s);
+                              if(s->measure()->segments()->size() == 0){
+                                    exScore->measures()->remove(s->measure(), s->measure());
+                                    delete s->measure();
+                                    }
+                              delete s;
+                              s = ns;
+                              }
+                        }
+                  }
             }
       //
       //  create new score from scratch
@@ -589,6 +611,7 @@ void MuseScore::newFile()
       //
       // ceate linked staves
       //
+      QMap<Score*, QList<int>> scoremap;
       foreach(Staff* staff, score->staves()) {
             if (!staff->linkedStaves())
                   continue;
@@ -597,13 +620,21 @@ void MuseScore::newFile()
                         if (staff->score() == lstaff->score())
                               cloneStaff(staff, lstaff);
                         else {
-                              QList<int> srcStaves;
+                              //keep reference of staves in parts to clone them later
+                              QList<int> srcStaves = scoremap.value(lstaff->score());
                               srcStaves.append(staff->score()->staffIdx(staff));
-                              cloneStaves(staff->score(), lstaff->score(), srcStaves);
+                              scoremap.insert(lstaff->score(), srcStaves);
                               }
                         }
                   }
             }
+       // clone staves for excerpts
+       auto it = scoremap.constBegin();
+       while (it != scoremap.constEnd()) {
+            cloneStaves(score, it.key(), it.value());
+            ++it;
+            }
+
       //
       // select first rest
       //
