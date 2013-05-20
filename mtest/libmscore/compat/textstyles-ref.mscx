@@ -72,7 +72,7 @@
         </TextStyle>
       <TextStyle>
         <halign>center</halign>
-        <valign>top</valign>
+        <valign>baseline</valign>
         <xoffset>0</xoffset>
         <yoffset>7</yoffset>
         <offsetType>spatium</offsetType>
@@ -83,7 +83,7 @@
         </TextStyle>
       <TextStyle>
         <halign>center</halign>
-        <valign>top</valign>
+        <valign>baseline</valign>
         <xoffset>0</xoffset>
         <yoffset>7</yoffset>
         <offsetType>spatium</offsetType>
