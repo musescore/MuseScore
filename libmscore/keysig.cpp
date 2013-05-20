@@ -157,18 +157,16 @@ void KeySig::layout()
 
       // manage display of naturals:
       // naturals are shown if there is some natural AND naturals are on for this key sig
-      // AND style says they are not off (not implem. yet)
+      // AND style says they are not off
       // OR key sig is CMaj/Amin (in which case they are always shown)
       bool naturalsOn =
             t2 != 0 && (_showNaturals
-//            && score()->styleI(ST_keyNaturals) != KEYNATURALS_NONE
-            || t1 == 0);
-      // naturals shoud go BEFORE accidentals if style says so (not implem. yet)
-      // OR going from sharps to flats or vice versa
+            && (score()->styleI(ST_keySigNaturals) != NAT_NONE || t1 == 0) );
+      // naturals shoud go BEFORE accidentals if style says so
+      // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
       bool prefixNaturals =
             naturalsOn
-//            && score()->styleI(ST_keyNaturals) == KEYNATURALS_BEFORE
-            || t1 * t2 < 0;
+            && (score()->styleI(ST_keySigNaturals) == NAT_BEFORE || t1 * t2 < 0);
       // naturals should go AFTER accidentals if they should not go before!
       bool suffixNaturals = naturalsOn && !prefixNaturals;
 
@@ -206,6 +204,13 @@ void KeySig::layout()
             }
       // add suffixed naturals, if any
       if (suffixNaturals) {
+            xo += qAbs(t1);               // skip accidentals
+            if(t1 > 0) {                  // after sharps, add a little more space
+                  xo += 0.15;
+                  // if last sharp (t1) is above next natural (t1+1)...
+                  if (clefTable[clef].lines[t1] < clefTable[clef].lines[t1+1])
+                        xo += 0.2;        // ... add more space
+                  }
             for (int i = 0; i < 7; ++i) {
                   if (naturals & (1 << i)) {
                         addLayout(naturalSym, xo, clefTable[clef].lines[i + coffset]);
