@@ -182,7 +182,8 @@ static const StyleVal style114[] = {
       StyleVal(ST_ArpeggioLineWidth, Spatium(.18)),
       StyleVal(ST_ArpeggioHookLen, Spatium(.8)),
       StyleVal(ST_FixMeasureNumbers, 0),
-      StyleVal(ST_FixMeasureWidth, false)
+      StyleVal(ST_FixMeasureWidth, false),
+      StyleVal(ST_keySigNaturals, NAT_BEFORE)
       };
 
 
