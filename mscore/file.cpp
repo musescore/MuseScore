@@ -547,7 +547,7 @@ void MuseScore::newFile()
                               // transpose key
                               //
                               KeySigEvent nKey = ks;
-                              if (part->instr()->transpose().chromatic && !newWizard->useTemplate()) {
+                              if (part->instr()->transpose().chromatic && !score->styleB(ST_concertPitch)) {
                                     int diff = -part->instr()->transpose().chromatic;
                                     nKey.setAccidentalType(transposeKey(nKey.accidentalType(), diff));
                                     }
