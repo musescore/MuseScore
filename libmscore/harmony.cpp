@@ -689,6 +689,18 @@ void TextSegment::set(const QString& s, const QFont& f, qreal _x, qreal _y)
 //   render
 //---------------------------------------------------------
 
+void Harmony::render(const QString& s, qreal& x, qreal& y)
+      {
+      int fontIdx = 0;
+      TextSegment* ts = new TextSegment(s, fontList[fontIdx], x, y);
+      textList.append(ts);
+      x += ts->width();
+      }
+
+//---------------------------------------------------------
+//   render
+//---------------------------------------------------------
+
 void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, int tpc)
       {
       ChordList* chordList = score()->style()->chordList();
