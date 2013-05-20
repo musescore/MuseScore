@@ -371,6 +371,8 @@ Score::FileError Score::read114(XmlReader& e)
                   // Change 1.2 Poet to Lyricist
                   if (s.name() == "Poet")
                         s.setName("Lyricist");
+                  if (s.name() == "Lyrics odd lines" || s.name() == "Lyrics even lines")
+                        s.setAlign((s.align() & ~ ALIGN_VMASK) | Align(ALIGN_BASELINE));
 
                   _style.setTextStyle(s);
                   }
