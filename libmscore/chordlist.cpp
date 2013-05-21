@@ -12,6 +12,7 @@
 
 #include "config.h"
 #include "chordlist.h"
+#include "score.h"
 #include "xml.h"
 #include "pitchspelling.h"
 #include "mscore.h"
@@ -276,6 +277,7 @@ void HChord::add(const QList<HDegree>& degreeList)
 
 static void readRenderList(QString val, QList<RenderAction>& renderList)
       {
+      renderList.clear();
       QStringList sl = val.split(" ", QString::SkipEmptyParts);
       foreach(const QString& s, sl) {
             if (s.startsWith("m:")) {
@@ -343,124 +345,269 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
       }
 
 //---------------------------------------------------------
-//  parse
+//  read
 //---------------------------------------------------------
 
-bool ParsedChord::parse (QString s)
+void ChordToken::read(XmlReader& e)
       {
-      QString sp, elem, elemLower, quality, extension, modifiers;
-      QStringList modifierList;
+      QString c = e.attribute("class");
+      if (c == "quality")
+            tokenClass = QUALITY;
+      else if (c == "extension")
+            tokenClass = EXTENSION;
+      else if (c == "modifier")
+            tokenClass = MODIFIER;
+      else
+            tokenClass = ALL;
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "name")
+                  names += e.readElementText();
+            else if (tag == "render")
+                  readRenderList(e.readElementText(), renderList);
+            }
+      }
+
+//---------------------------------------------------------
+//  write
+//---------------------------------------------------------
+
+void ChordToken::write(Xml& xml)
+      {
+      QString t = "token";
+      switch (tokenClass) {
+            case QUALITY:
+                  t += " class=\"quality\"";
+                  break;
+            case EXTENSION:
+                  t += " class=\"extension\"";
+                  break;
+            case MODIFIER:
+                  t += " class=\"modifier\"";
+                  break;
+            default:
+                  break;
+      }
+      xml.stag(t);
+      foreach(const QString& s, names)
+            xml.tag("name", s);
+      writeRenderList(xml, &renderList, "render");
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//  parse
+//    return true if chord was parseable
+//---------------------------------------------------------
+
+bool ParsedChord::parse(QString s, bool syntaxOnly)
+      {
+      QString tok1, tok1L, tok2, tok2L, modifiers;
+      QString chordDigits = "123456789";
+      QString special = "(),";
+      QString leading = "(";
+      QString trailing = "),";
+      int firstLeadingToken, lastLeadingToken;
       int len = s.size();
       int i, j;
 
-//      qDebug("flexibleChordParse: s = %s", qPrintable(s));
+      _parseable = true;
+      i = 0;
 
+      // eat leading parens
+      firstLeadingToken = _tokenList.size();
+      while (i < len && leading.contains(s[i]))
+           addToken(QString(s[i++]),QUALITY);
+      lastLeadingToken = _tokenList.size();
       // get quality
-      for (i = 0; i < len && !s[i].isDigit(); ++i) {
-            if (s[i] == '(')
+      for (j = 0, tok1 = ""; i < len; ++i, ++j) {
+            // up to first (non-zero) digit, paren, or comma
+            if (chordDigits.contains(s[i]) || special.contains(s[i]))
                   break;
-            elem[i] = s[i];
+            tok1[j] = s[i];
             }
-      elemLower = elem.toLower();
-      if (elem == "M" || elemLower == "ma" || elemLower == "maj")
-            quality = "<major>";
-      else if (elem == "m" || elemLower == "mi" || elemLower == "min" || elemLower == "-")
-            quality = "<minor>";
-      else if (elemLower == "aug" || elemLower == "+")
-            quality = "<augmented>";
-      else if (elemLower == "dim" || elemLower == "o")
-            quality = "<diminished>";
+      // TODO: special cases for mMaj, augadd, etc.
+      if (tok1 != "")
+            addToken(tok1,QUALITY);
+      else {
+            // leading tokens were not really QUALITY
+            for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
+                  _tokenList[t].tokenClass = EXTENSION;
+            }
+      tok1L = tok1.toLower();
+      if (tok1 == "M" || tok1L == "ma" || tok1L == "maj" || tok1L == "t" || tok1L == "^")
+            quality = "major";
+      else if (tok1L == "m" || tok1L == "mi" || tok1L == "min" || tok1L == "-")
+            quality = "minor";
+      else if (tok1L == "aug" || tok1L == "+")
+            quality = "augmented";
+      else if (tok1L == "dim" || tok1L == "o")
+            quality = "diminished";
+      else if (tok1L == "0")
+            quality = "half-diminished";
       else
-            quality = "<" + elemLower + ">";
-//      qDebug("flexibleChordParse: quality = %s, i = %d", qPrintable(quality), i);
+            quality = tok1L;
+      // eat trailing parens and commas
+      while (i < len && trailing.contains(s[i]))
+           addToken(QString(s[i++]),QUALITY);
 
-      // get extension
-      for (j = 0; i < len && s[i].isDigit(); ++i, ++j)
-            extension[j] = s[i];
-      extension = "<" + extension + ">";
-//      qDebug("flexibleChordParse: extension = %s, i = %d", qPrintable(extension), i);
+      // eat leading parens
+      firstLeadingToken = _tokenList.size();
+      while (i < len && leading.contains(s[i])) {
+            addToken(QString(s[i++]),EXTENSION);
+            }
+      lastLeadingToken = _tokenList.size();
+      // get extension - up to first non-digit
+      for (j = 0, tok1 = ""; i < len; ++i, ++j) {
+            if (!s[i].isDigit())
+                  break;
+            tok1[j] = s[i];
+            }
+      if (tok1 != "")
+            addToken(tok1,EXTENSION);
+      else {
+            // leading tokens were not really EXTENSION
+            for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
+                  _tokenList[t].tokenClass = MODIFIER;
+            }
+      extension = tok1;
+      // eat trailing parens and commas
+      while (i < len && trailing.contains(s[i]))
+           addToken(QString(s[i++]),EXTENSION);
 
       // get modifiers
       while (i < len) {
-            QString tok1, tok2;
-            // get first token - up to first digit
-            // ignore leading open parens
-            // skip past comma, close paren, or non-leading open paren and break
+            // eat leading parens
+            while (i < len && leading.contains(s[i]))
+                  addToken(QString(s[i++]),MODIFIER);
+            // get first token - up to first digit, paren, or comma
             for (j = 0, tok1 = ""; i < len; ++i) {
-                  if (s[i] == '(') {
-                        if (j == 0)
-                              continue;
-                        else {
-                              ++i;
-                              break;
-                              }
-                        }
-                  else if (s[i] == ',' || s[i] == ')') {
-                        ++i;
+                  if (s[i].isDigit() || special.contains(s[i]))
                         break;
-                        }
-                  else if (s[i].isDigit())
-                        break;
-                  else
-                        tok1[j++] = s[i];
+                  tok1[j++] = s[i];
                   }
-            tok1 = tok1.toLower();
-//            qDebug("flexibleChordParse: tok1 = <%s>, i = %d", qPrintable(tok1), i);
+            tok1L = tok1.toLower();
+            // if we reached the end of the string and never got a token,
+            // then nothing to do, and no sense in looking for a second token
+            if (i == len && tok1 == "")
+                  break;
             // get second token - up to first non-digit
-            // again skip past comma or close paren
             for (j = 0, tok2 = ""; i < len; ++i) {
-                  if (s[i] == ',' || s[i] == ')') {
-                        ++i;
+                  if (!s[i].isDigit())
                         break;
-                        }
-                  else if (!s[i].isDigit())
-                        break;
-                  else
-                        tok2[j++] = s[i];
+                  tok2[j++] = s[i];
                   }
-            tok2 = tok2.toLower();
-//            qDebug("flexibleChordParse: tok2 = <%s>, i = %d", qPrintable(tok2), i);
-            if (tok1 == "m" || tok1 == "ma" || tok1 == "maj")
-                  tok1 = "major";
-            else if (tok1 == "omit")
-                  tok1 = "no";
-            else if (tok1 == "sus" && tok2 == "")
-                  tok2 = "4";
-            else if (tok1 == "susb" || tok1 == "sus#") {
-                  modifierList += "<sus4>";
+            tok2L = tok2.toLower();
+            // special cases
+            if (tok1L == "susb" || tok1L == "sus#") {
+                  modifierList += "sus4";
+                  addToken("sus",MODIFIER);
                   tok1 = tok1[3];
+                  tok1L = tok1L[3];
                   }
-            elem = "<" + tok1 + tok2 + ">";
-            modifierList += elem;
+            else if (tok1 == "M" || tok1L == "ma" || tok1L == "maj" || tok1L == "t" || tok1L == "^")
+                  tok1L = "major";
+            else if (tok1L == "omit")
+                  tok1L = "no";
+            else if (tok1L == "sus" && tok2L == "")
+                  tok2L = "4";
+            if (tok1 != "")
+                  addToken(tok1,MODIFIER);
+            if (tok2 != "")
+                  addToken(tok2,MODIFIER);
+            QString mod = tok1L + tok2L;
+            if (mod != "")
+                  modifierList += mod;
+            // eat trailing parens and commas
+            while (i < len && trailing.contains(s[i]))
+                  addToken(QString(s[i++]),MODIFIER);
             }
       if (!modifierList.isEmpty()) {
             modifierList.sort();
-            modifiers = modifierList.join("");
+            modifiers = "<" + modifierList.join("><") + ">";
             }
 
       // special cases
-      if (quality == "<>") {
-            if (extension == "<7>" || extension == "<9>" || extension == "<11>" || extension == "<13>")
-                  quality = "<dominant>";
+      if (quality == "") {
+            if (extension == "7" || extension == "9" || extension == "11" || extension == "13")
+                  quality = "dominant";
             else
-                  quality = "<major>";
+                  quality = "major";
             }
       // more special cases TODO: mMaj, madd, augadd, ...?
 
-      // TODO - make attempt to "understand" the chord
+      handle = "<" + quality + "><" + extension + ">" + modifiers;
+//      qDebug("parse: %s -> %s", qPrintable(s), qPrintable(handle);
+      _understandable = false;
+      return _parseable;
+      }
 
-      handle = quality + extension + modifiers;
-//      qDebug("flexibleChordParse: %s", qPrintable(handle);
-      return true;
+//---------------------------------------------------------
+//   renderList
+//---------------------------------------------------------
+
+const QList<RenderAction>& ParsedChord::renderList(const QList<ChordToken>& tokenDefinitionList, bool regenerate)
+      {
+      if (regenerate)
+            _renderList.clear();
+      if (_renderList.isEmpty()) {
+            foreach (ChordToken tok, _tokenList) {
+                  QString n = tok.names.first();
+                  QList<RenderAction> rl;
+                  QList<ChordToken> definedTokens;
+                  bool found = false;
+                  // potential definitions for token
+                  foreach (ChordToken dt, tokenDefinitionList) {
+                        foreach (QString dtn, dt.names) {
+                              if (dtn == n)
+                                    definedTokens += dt;
+                              }
+                        }
+                  // find matching class, fallback on ALL
+                  foreach (ChordToken matchingTok, definedTokens) {
+                        if (tok.tokenClass == matchingTok.tokenClass) {
+                              rl = matchingTok.renderList;
+                              found = true;
+                              break;
+                              }
+                        else if (matchingTok.tokenClass == ALL) {
+                              rl = matchingTok.renderList;
+                              found = true;
+                              }
+                        }
+                  if (found)
+                        _renderList.append(rl);
+                  else {
+                        // no definition for token, so render as literal
+                        RenderAction a(RenderAction::RENDER_SET);
+                        a.text = tok.names.first();
+                        _renderList.append(a);
+                        }
+                  }
+            }
+      return _renderList;
+      }
+
+//---------------------------------------------------------
+//   addToken
+//---------------------------------------------------------
+
+ void ParsedChord::addToken(QString s, ChordTokenClass tc)
+      {
+      ChordToken tok;
+      tok.names += s;
+      tok.tokenClass = tc;
+      _tokenList += tok;
       }
 
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
-void ChordDescription::read(XmlReader& e)
+void ChordDescription::read(XmlReader& e, const QList<ChordToken>& tokenList)
       {
       int ni = 0, pci = 0;
+      bool renderFound = false;
       id = e.attribute("id").toInt();
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -478,10 +625,17 @@ void ChordDescription::read(XmlReader& e)
                   xmlDegrees.append(e.readElementText());
             else if (tag == "voicing")
                   chord = HChord(e.readElementText());
-            else if (tag == "render")
+            else if (tag == "render") {
                   readRenderList(e.readElementText(), renderList);
+                  renderFound = true;
+                  }
             else
                   e.unknown();
+            }
+      if (!renderFound) {
+            ParsedChord pc = parsedChords.first();
+            if (pc.renderable())
+                  renderList = pc.renderList(tokenList);
             }
       }
 
@@ -524,6 +678,7 @@ ChordList::~ChordList()
 void ChordList::read(XmlReader& e)
       {
       int fontIdx = 0;
+      static int privateID = 10000;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "font") {
@@ -547,12 +702,22 @@ void ChordList::read(XmlReader& e)
                   fonts.append(f);
                   ++fontIdx;
                   }
+            else if (tag == "token") {
+                  ChordToken t;
+                  t.read(e);
+                  chordTokenList.append(t);
+                  }
             else if (tag == "chord") {
                   int id = e.intAttribute("id");
+                  // if no id attribute (id == 0), then assign it a private id for just QMap purposes
+                  // user chords that match these ChordDescriptions will be treated as normal recognized chords
+                  // except that the id will not be written to the score file
+                  if (id == 0)
+                        id = privateID++;
                   ChordDescription* cd = take(id);
                   if (cd == 0)
                         cd = new ChordDescription();
-                  cd->read(e);
+                  cd->read(e,chordTokenList);
                   insert(id, cd);
                   }
             else if (tag == "renderRoot")
@@ -582,6 +747,8 @@ void ChordList::write(Xml& xml)
             xml.etag();
             ++fontIdx;
             }
+      foreach (ChordToken t, chordTokenList)
+            t.write(xml);
       if (!renderListRoot.isEmpty())
             writeRenderList(xml, &renderListRoot, "renderRoot");
       if (!renderListBase.isEmpty())
