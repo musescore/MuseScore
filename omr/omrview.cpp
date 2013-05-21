@@ -228,19 +228,20 @@ void OmrView::paintEvent(QPaintEvent* event)
                         }
                   }
 
-            foreach(const OmrSystem& system, page->systems()) {
+            foreach (const OmrSystem& system, page->systems()) {
                   if (_showBarlines) {
                         p.setPen(QPen(Qt::blue, 3.0));
                         foreach(const QLineF& l, system.barLines)
                               p.drawLine(l);
                         }
-                  foreach(const OmrStaff& staff, system.staves()) {
-                        foreach(const OmrNote* n, staff.notes()) {
+
+                  foreach (const OmrStaff& staff, system.staves()) {
+                        foreach (const OmrNote* n, staff.notes()) {
                               if (n->sym == quartheadSym)
                                     p.setPen(QPen(QColor(255, 0, 0), 2.0));
                               else
                                     p.setPen(QPen(QColor(0, 0, 255), 2.0));
-                              p.drawRect(n->r);
+                              p.drawRect(*n);
                               }
                         }
                   }
