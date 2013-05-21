@@ -1414,7 +1414,10 @@ RemoveElement::RemoveElement(Element* e)
                   Chord* chord = static_cast<Chord*>(e);
                   foreach(Note* note, chord->notes()) {
                         if (note->tieFor() && note->tieFor()->endNote())
-                              note->tieFor()->endNote()->setTieBack(0);
+//                              note->tieFor()->endNote()->setTieBack(0);
+                              score->undoRemoveElement(note->tieFor());
+                        if (note->tieBack())
+                              score->undoRemoveElement(note->tieBack());
                         }
                   }
             }
