@@ -247,7 +247,7 @@ else (MINGW)
 endif (MINGW)
 
 
-if (NOT MINGW)
+if (APPLE)
    if(SOUNDFONT3)
       ##
       ## libvorbis
@@ -256,10 +256,8 @@ if (NOT MINGW)
       PKGCONFIG (vorbis 1.3.3 VORBIS_INCDIR VORBIS_LIBDIR VORBIS_LIB VORBIS_CPP)
       if (VORBIS_INCDIR)
           message("libvorbis detected ${VORBIS_INCDIR} ${VORBIS_LIBDIR} ${VORBIS_LIB}")
-          set ( USE_VORBIS 1 )
       else (VORBIS_INCDIR)
           message("libvorbis not found\n")
-          set ( USE_VORBIS 0 )
       endif (VORBIS_INCDIR)
 
 
@@ -287,11 +285,15 @@ if (NOT MINGW)
          message("libsndfile not found\n")
       endif (SNDFILE_INCDIR)
    endif(HAS_AUDIOFILE)
-else(NOT MINGW)
-   set(SNDFILE_LIB sndfile-1)
+else(APPLE)
+   if(MINGW)  
+      set(SNDFILE_LIB sndfile-1)
+   else(MINGW)
+      set(SNDFILE_LIB sndfile)
+   endif(MINGW)
    set(OGG_LIB ogg)
    set(VORBIS_LIB vorbis)
-endif(NOT MINGW)
+endif(APPLE)
 
 ##
 ## QtSingleApplication
