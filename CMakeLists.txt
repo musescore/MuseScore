@@ -29,6 +29,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
 include (UsePkgConfig1)
 include (TargetDoc)
 include (FindPulseAudio)
+include (FindLame)
 include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
@@ -245,6 +246,53 @@ else (MINGW)
     endif (APPLE)
 endif (MINGW)
 
+
+if (NOT MINGW)
+   if(SOUNDFONT3)
+      ##
+      ## libvorbis
+      ##
+
+      PKGCONFIG (vorbis 1.3.3 VORBIS_INCDIR VORBIS_LIBDIR VORBIS_LIB VORBIS_CPP)
+      if (VORBIS_INCDIR)
+          message("libvorbis detected ${VORBIS_INCDIR} ${VORBIS_LIBDIR} ${VORBIS_LIB}")
+          set ( USE_VORBIS 1 )
+      else (VORBIS_INCDIR)
+          message("libvorbis not found\n")
+          set ( USE_VORBIS 0 )
+      endif (VORBIS_INCDIR)
+
+
+      ##
+      ## libogg
+      ##
+
+      PKGCONFIG (ogg 1.3.0 OGG_INCDIR OGG_LIBDIR OGG_LIB OGG_CPP)
+      if (OGG_INCDIR)
+          message("libogg detected ${OGG_INCDIR} ${OGG_LIBDIR} ${OGG_LIB}")
+      else (OGG_INCDIR)
+          message("libogg not found\n")
+      endif (OGG_INCDIR)
+   endif(SOUNDFONT3)
+
+   if(HAS_AUDIOFILE)
+      ##
+      ## libsndfile
+      ##
+
+      PKGCONFIG (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
+      if (SNDFILE_INCDIR)
+          message("libsndfile detected ${SNDFILE_INCDIR} ${SNDFILE_LIBDIR} ${SNDFILE_LIB}")
+      else (SNDFILE_INCDIR)
+         message("libsndfile not found\n")
+      endif (SNDFILE_INCDIR)
+   endif(HAS_AUDIOFILE)
+else(NOT MINGW)
+   set(SNDFILE_LIB sndfile-1)
+   set(OGG_LIB ogg)
+   set(VORBIS_LIB vorbis)
+endif(NOT MINGW)
+
 ##
 ## QtSingleApplication
 ##
@@ -343,6 +391,10 @@ include_directories(
    ${ALSA_INCDIR}
    ${JACK_INCDIR}
    ${PORTAUDIO_INCDIR}
+   ${OGG_INCDIR}
+   ${VORBIS_INCDIR}
+   ${SNDFILE_INCDIR}
+   ${LAME_INCLUDE_DIR}
 )
 
 ##
