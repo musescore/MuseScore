@@ -888,15 +888,27 @@ void Harmony::render(const TextStyle* st)
 
       if (capo > 0 && capo < 12) {
             int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
+            int newRootTpc = _rootTpc + tpcOffset[capo];
+            int newBassTpc = _baseTpc + tpcOffset[capo];
+
+            /* don't give bb or x to guitarists! */
+            if (newRootTpc < 6 || newBassTpc < 6) {
+                  newRootTpc += 12;
+                  newBassTpc += 12;
+                  }
+            else if (newRootTpc > 26 || newBassTpc > 26) {
+                  newRootTpc -= 12;
+                  newBassTpc -= 12;
+                  }
 
             render("(", x, y);
-            render(chordList->renderListRoot, x, y, _rootTpc + tpcOffset[capo]);
+            render(chordList->renderListRoot, x, y, newRootTpc);
             ChordDescription* cd = chordList->value(_id);
             if (cd) {
                   render(cd->renderList, x, y, 0);
                   }
             if (_baseTpc != INVALID_TPC)
-                  render(chordList->renderListBase, x, y, _baseTpc + tpcOffset[capo]);
+                  render(chordList->renderListBase, x, y, newBassTpc);
             render(")", x, y);
             }
       }
