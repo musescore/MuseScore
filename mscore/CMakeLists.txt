@@ -235,9 +235,12 @@ if (AEOLUS)
       target_link_libraries(mscore aeolus)
 endif ()
 if (SOUNDFONT3)
-      target_link_libraries(mscore vorbis ogg)
+      target_link_libraries(mscore ${VORBIS_LIB} ${OGG_LIB})
 endif ()
 
+if (HAS_AUDIOFILE)
+      target_link_libraries(mscore ${SNDFILE_LIB})
+endif (HAS_AUDIOFILE)
 
 if (APPLE)
       set_target_properties (mscore
@@ -285,10 +288,6 @@ if (MINGW)
       portmidi
       winmm
       )
-
-   if (HAS_AUDIOFILE)
-      target_link_libraries(mscore sndfile-1)
-   endif (HAS_AUDIOFILE)
 
    if (OMR)
       target_link_libraries(mscore omr fitz freetype jbig2dec jpeg openjpeg)
@@ -354,9 +353,6 @@ else (MINGW)
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
          LINK_FLAGS "-L${QT_LIBRARY_DIR}"
       )
-   if (HAS_AUDIOFILE)
-       target_link_libraries(mscore sndfile)
-   endif (HAS_AUDIOFILE)
 
    if (OMR)
       target_link_libraries(mscore omr fitz fontconfig freetype jbig2dec jpeg openjpeg)
