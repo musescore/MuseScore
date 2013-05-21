@@ -490,6 +490,7 @@ Score::FileError importBB(Score* score, const QString& name)
             else
                   h->setBaseTpc(INVALID_TPC);
             h->setId(c.extension);
+            h->setNameFromId();
             h->render();
             s->add(h);
             }
