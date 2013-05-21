@@ -95,7 +95,7 @@ QImage Pdf::page(int i)
             printf("cannot load page %d\n", i);
             return QImage();
             }
-      static const float resolution = 300.0;
+      static const float resolution = 600.0;
       const float zoom = resolution / 72.0;
       fz_rect bounds;
 

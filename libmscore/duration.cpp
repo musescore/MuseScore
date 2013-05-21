@@ -76,10 +76,7 @@ int DurationElement::actualTicks() const
 
 bool DurationElement::readProperties(XmlReader& e)
       {
-      if (Element::readProperties(e))
-            return true;
-      const QStringRef& tag(e.name());
-      if (tag == "Tuplet") {
+      if (e.name() == "Tuplet") {
             // setTuplet(0);
             int i = e.readInt();
             Tuplet* t = e.findTuplet(i);
@@ -100,10 +97,11 @@ bool DurationElement::readProperties(XmlReader& e)
                         e.addTuplet(t);
                         }
                   }
+            return true;
             }
-      else
-            return false;
-      return true;
+      if (Element::readProperties(e))
+            return true;
+      return false;
       }
 
 //---------------------------------------------------------

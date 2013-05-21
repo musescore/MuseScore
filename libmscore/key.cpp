@@ -173,8 +173,9 @@ void AccidentalState::init(const KeySigEvent& ks)
 
 KeySigEvent KeyList::key(int tick) const
       {
-      if (empty())
+      if (empty()) {
             return KeySigEvent();
+            }
       auto i = upper_bound(tick);
       if (i == begin())
             return KeySigEvent();

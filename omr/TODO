@@ -27,9 +27,29 @@ TODO:
       - Systeme erkennen
 
       System-Preamble erkennen:
-            - Schlüssel erkennen
+            * Schlüssel erkennen
+            * Taktart erkennen
             - Tonartvorzeichen erkennen
-            - Taktart erkennen
+            - Vorzeichen erkennen
+            - Notenhälse
+            - Flags
+            - Beams
 
-      - Seite aufbauen
+===========================================
+      * create OmrMeasure
+      * distribute notes into measures
+      * detect timesig
+      - detect clef
+
+      * create notes in score
+        for simple cases
+      * create chords
+
+      panel:
+            - note head detection threshold
+
+      score gui:
+            - hover with mouse and detect element
+            - show info about element
+
 

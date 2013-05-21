@@ -1340,9 +1340,7 @@ void Tie::write(Xml& xml) const
 void Tie::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            if (Element::readProperties(e))
-                  ;
-            else if (SlurTie::readProperties(e))
+            if (SlurTie::readProperties(e) || Element::readProperties(e))
                   ;
             else
                   e.unknown();

@@ -33,21 +33,29 @@ class Sym;
 class Pattern {
    protected:
       QImage _image;
+      Sym* _sym = 0;
+      int _id;
+      QPoint _base;
 
    public:
       Pattern();
       ~Pattern();
-      Pattern(Sym* symbol, double spatium);
+      Pattern(int id, Sym* symbol, double spatium);
       Pattern(QImage*, int, int, int, int);
 
       double match(const Pattern*) const;
+      double match(const QImage* img, int col, int row) const;
+
       void dump() const;
       const QImage* image() const { return &_image; }
-      int w() const { return _image.width(); }
-      int h() const { return _image.height(); }
+      int w() const       { return _image.width(); }
+      int h() const       { return _image.height(); }
       bool dot(int x, int y) const;
+      int id() const      { return _id; }
+      void setId(int val) { _id = val; }
+      const QPoint& base() const { return _base; }
+      void setBase(const QPoint& v) { _base = v; }
       };
-
 }
 
 #endif
