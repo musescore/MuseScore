@@ -33,6 +33,9 @@ QString Harmony::harmonyName() const
       HChord hc = descr() ? descr()->chord : HChord();
       QString s;
 
+      if (_leftParen)
+            s += "(";
+
       if (!_degreeList.isEmpty()) {
             hc.add(_degreeList);
             // try to find the chord in chordList
@@ -46,14 +49,14 @@ QString Harmony::harmonyName() const
                   }
             // now determine the chord name
             if (newExtension)
-                  s = tpc2name(_rootTpc, germanNames) + newExtension->names.front();
+                  s += tpc2name(_rootTpc, germanNames) + newExtension->names.front();
             else
                   // not in table, fallback to using HChord.name()
-                  s = hc.name(_rootTpc);
+                  s += hc.name(_rootTpc);
             //s += " ";
             } // end if (degreeList ...
       else {
-            s = tpc2name(_rootTpc, germanNames);
+            s += tpc2name(_rootTpc, germanNames);
             if (descr()) {
                   //s += " ";
                   s += descr()->names.front();
@@ -67,6 +70,10 @@ QString Harmony::harmonyName() const
             s += "/";
             s += tpc2name(_baseTpc, germanNames);
             }
+
+      if (_rightParen)
+            s += ")";
+
       return s;
       }
 
@@ -116,6 +123,8 @@ Harmony::Harmony(Score* s)
       _id        = -1;
       _parsedForm = 0;
       _description = 0;
+      _leftParen = false;
+      _rightParen = false;
       }
 
 Harmony::Harmony(const Harmony& h)
@@ -124,6 +133,8 @@ Harmony::Harmony(const Harmony& h)
       _rootTpc    = h._rootTpc;
       _baseTpc    = h._baseTpc;
       _id         = h._id;
+      _leftParen  = h._leftParen;
+      _rightParen  = h._rightParen;
       _degreeList = h._degreeList;
       _parsedForm = h._parsedForm;
       _description = h._description;
@@ -150,6 +161,8 @@ Harmony::~Harmony()
 void Harmony::write(Xml& xml) const
       {
       xml.stag("Harmony");
+      if (_leftParen)
+            xml.tagE("leftParen");
       if (_rootTpc != INVALID_TPC) {
             xml.tag("root", _rootTpc);
             if (_id > 0)
@@ -184,6 +197,8 @@ void Harmony::write(Xml& xml) const
             }
       else
             Text::writeProperties(xml);
+      if (_rightParen)
+            xml.tagE("rightParen");
       xml.etag();
       }
 
@@ -245,6 +260,14 @@ void Harmony::read(XmlReader& e)
                         else if (degreeType == "subtract")
                               addDegree(HDegree(degreeValue, degreeAlter, SUBTRACT));
                         }
+                  }
+            else if (tag == "leftParen") {
+                  _leftParen = true;
+                  e.readNext();
+                  }
+            else if (tag == "rightParen") {
+                  _rightParen = true;
+                  e.readNext();
                   }
             else if (!Text::readProperties(e))
                   e.unknown();
@@ -358,6 +381,17 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       if (ss.endsWith(' '))
             useLiteral = true;
       QString s = ss.simplified();
+      _userName = s;
+
+      if ((_leftParen = s.startsWith('(')))
+            s.remove(0,1);
+
+      if ((_rightParen = (s.endsWith(')') && s.count('(') < s.count(')'))))
+            s.remove(s.size()-1,1);
+
+      if (_leftParen || _rightParen)
+            s = s.simplified();     // in case of spaces inside parentheses
+
       int n = s.size();
       if (n < 1)
             return false;
@@ -859,6 +893,9 @@ void Harmony::render(const TextStyle* st)
       textList.clear();
       qreal x = 0.0, y = 0.0;
 
+      if (_leftParen)
+            render("( ", x, y);
+
       // render root
       render(chordList->renderListRoot, x, y, _rootTpc);
 
@@ -883,6 +920,9 @@ void Harmony::render(const TextStyle* st)
       // render bass
       if (_baseTpc != INVALID_TPC)
             render(chordList->renderListBase, x, y, _baseTpc);
+
+      if (_rightParen)
+            render(" )", x, y);
       }
 
 //---------------------------------------------------------
