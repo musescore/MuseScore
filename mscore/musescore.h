@@ -47,6 +47,7 @@ class Mixer;
 class Debugger;
 class MeasureListEditor;
 class Score;
+class Tuplet;
 class PageSettings;
 class PaletteBox;
 class Palette;
@@ -567,7 +568,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PaletteBox* getPaletteBox();
       void disableCommands(bool val) { inChordEditor = val; }
 
-      void tupletDialog();
+      Tuplet* tupletDialog();
       void selectSimilar(Element*, bool);
       void selectElementDialog(Element* e);
       void transpose();
