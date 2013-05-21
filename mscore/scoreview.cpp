@@ -2489,6 +2489,13 @@ void ScoreView::cmd(const QAction* a)
             cmdTuplet(8);
       else if (cmd == "nonuplet")
             cmdTuplet(9);
+      else if (cmd == "tuplet-dialog") {
+            _score->startCmd();
+            Tuplet* tuplet = mscore->tupletDialog();
+            if (tuplet)
+                  cmdCreateTuplet(_score->getSelectedChordRest(), tuplet);
+            _score->endCmd();
+            }
       else if (cmd == "repeat-sel")
             cmdRepeatSelection();
       else if (cmd == "voice-1")
@@ -4048,10 +4055,15 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
 
       if (ot)
             tuplet->setTuplet(ot);
+
+      cmdCreateTuplet(cr, tuplet);
+      }
+
+void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
+      {
       _score->cmdCreateTuplet(cr, tuplet);
 
       const QList<DurationElement*>& cl = tuplet->elements();
-
       int ne = cl.size();
       DurationElement* el = 0;
       if (ne && cl[0]->type() == Element::REST)
@@ -4064,7 +4076,7 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
                   sm->postEvent(new CommandEvent("note-input"));
                   qApp->processEvents();
                   }
-            _score->inputState().setDuration(baseLen);
+            _score->inputState().setDuration(tuplet->baseLen());
             mscore->updateInputState(_score);
             }
       }

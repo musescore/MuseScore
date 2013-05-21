@@ -73,20 +73,20 @@ void TupletDialog::setupTuplet(Tuplet* tuplet)
 //    create tuplet dialog
 //---------------------------------------------------------
 
-void MuseScore::tupletDialog()
+Tuplet* MuseScore::tupletDialog()
       {
       if (!cs)
-            return;
+            return 0;
       ChordRest* cr = cs->getSelectedChordRest();
       if (cr == 0)
-            return;
-      if (cr->durationType() < TDuration(TDuration::V_128TH)) {
+            return 0;
+      if (cr->durationType() < TDuration(TDuration::V_128TH) && cr->durationType() != TDuration(TDuration::V_MEASURE)) {
             noteTooShortForTupletDialog();
-            return;
+            return 0;
             }
       TupletDialog td;
       if (!td.exec())
-            return;
+            return 0;
 
       Tuplet* tuplet = new Tuplet(cs);
       tuplet->setTrack(cr->track());
@@ -105,10 +105,18 @@ void MuseScore::tupletDialog()
 
       tuplet->setBaseLen(Fraction(1, f.denominator()));
 
+      if (tuplet->baseLen() == TDuration::V_INVALID) {
+            QMessageBox::warning(0,
+               tr("MuseScore: Tuplet Error"),
+               tr("Cannot create tuplet with ratio %1 for duration %2").arg(tuplet->ratio().print()).arg(f1.print()));
+            delete tuplet;
+            return 0;
+            }
+
       Measure* measure = cr->measure();
       tuplet->setParent(measure);
 
-      cs->cmdCreateTuplet(cr, tuplet);
+      return tuplet;
       }
 
 }
