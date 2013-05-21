@@ -29,7 +29,7 @@ enum {
       KEY_MAX = KEY_C_S,
       INVALID_KEY = KEY_MIN-1,
       NUM_OF_KEYS = KEY_MAX - KEY_MIN + 1
-};
+      };
 
 // the delta in key value to reach the next (or prev) enharmonically equivalent key:
 static const int KEY_DELTA_ENHARMONIC = 12;

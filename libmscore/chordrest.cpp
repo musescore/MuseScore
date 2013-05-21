@@ -226,8 +226,6 @@ void ChordRest::writeProperties(Xml& xml) const
 
 bool ChordRest::readProperties(XmlReader& e)
       {
-      if (DurationElement::readProperties(e))
-            return true;
       const QStringRef& tag(e.name());
 
       if (tag == "BeamMode") {
@@ -348,6 +346,8 @@ bool ChordRest::readProperties(XmlReader& e)
             element->read(e);
             add(element);
             }
+      else if (DurationElement::readProperties(e))
+            return true;
       else
             return false;
       return true;

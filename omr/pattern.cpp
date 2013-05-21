@@ -58,8 +58,36 @@ double Pattern::match(const Pattern* a) const
             uchar v = (*(p1++)) ^ (*(p2++));
             k += Omr::bitsSetTable[v];
             }
-      // remove overscan
-      k -= (image()->bytesPerLine() * 8 - w()) * h();
+      return 1.0 - (double(k) / (h() * w()));
+      }
+
+double Pattern::match(const QImage* img, int col, int row) const
+      {
+      int rows      = h();
+      int bytes     = ((w() + 7) / 8) - 1;
+      int shift     = col & 7;
+      int k         = 0;
+      int eshift    = (col + w()) & 7;
+
+      for (int y = 0; y < rows; ++y) {
+            const uchar* p1 = image()->scanLine(y);
+            const uchar* p2 = img->scanLine(row + y) + (col/8);
+            for (int x = 0; x < bytes; ++x) {
+                  uchar a = *p1++;
+                  uchar b1 = *p2;
+                  uchar b2 = *(p2 + 1);
+                  p2++;
+                  uchar b  = (b1 >> shift) | (b2 << (7 - shift));
+                  uchar v = a ^ b;
+                  k += Omr::bitsSetTable[v];
+                  }
+            uchar a = *p1++;
+            uchar b1 = *p2;
+            uchar b2 = *(p2 + 1) & (0xff << eshift);
+            uchar b  = (b1 >> shift) | (b2 << (7 - shift));
+            uchar v = a ^ b;
+            k += Omr::bitsSetTable[v];
+            }
       return 1.0 - (double(k) / (h() * w()));
       }
 
@@ -68,16 +96,19 @@ double Pattern::match(const Pattern* a) const
 //    create a Pattern from symbol
 //---------------------------------------------------------
 
-Pattern::Pattern(Sym* symbol, double spatium)
+Pattern::Pattern(int id, Sym* symbol, double spatium)
       {
+      _id = id;
+      _sym = symbol;
       QFont f("MScore");
       f.setPixelSize(lrint(spatium * 4));
       QFontMetrics fm(f);
       QString s;
-      QChar code(symbol->code());
+      QChar code(_sym->code());
       QRect r(fm.boundingRect(code));
-      int _w = r.right() - r.left(); // r.width();
+      int _w = r.right() - r.left() + 2;
       int _h = ((r.height() + 1) / 2) * 2;
+      _base = QPoint(-r.left(), -r.top());
 
       _image = QImage(_w, _h, QImage::Format_MonoLSB);
       QVector<QRgb> ct(2);
@@ -89,7 +120,7 @@ Pattern::Pattern(Sym* symbol, double spatium)
       QPainter painter;
       painter.begin(&_image);
       painter.setFont(f);
-      painter.drawText(-r.left(), _h / 2, code);
+      painter.drawText(-r.left() + 1, -r.y(), code);
       painter.end();
 
       int ww = _w % 32;

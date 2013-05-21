@@ -213,16 +213,28 @@ void XmlReader::unknown() const
       }
 
 //---------------------------------------------------------
+//   addSpanner
+//---------------------------------------------------------
+
+void XmlReader::addSpanner(Spanner* s)
+      {
+      _spanner.insert(s->id(), s);
+      }
+
+void XmlReader::removeSpanner(Spanner* s)
+      {
+      _spanner.remove(s->id());
+      }
+
+//---------------------------------------------------------
 //   findSpanner
 //---------------------------------------------------------
 
 Spanner* XmlReader::findSpanner(int id) const
       {
-      int n = _spanner.size();
-      for (int i = 0; i < n; ++i) {
-            if (_spanner.at(i)->id() == id)
-                  return _spanner.at(i);
-            }
+      auto i = _spanner.find(id);
+      if (i != _spanner.end())
+            return *i;
       return 0;
       }
 

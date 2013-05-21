@@ -242,7 +242,7 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               int id = e.intAttribute("id");
                               Spanner* spanner = e.findSpanner(id);
                               if (spanner) {
-                                    e.spanner().removeOne(spanner);
+                                    e.removeSpanner(spanner);
                                     int tick = e.tick() - tickStart + dstTick;
                                     Measure* m = tick2measure(tick);
                                     Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);

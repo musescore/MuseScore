@@ -35,7 +35,7 @@ class XmlReader : public QXmlStreamReader {
       // Score read context (for read optimizations):
       int _tick;
       int _track;
-      QList<Spanner*> _spanner;
+      QHash<int, Spanner*> _spanner;
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
       QList<ClefList*> _clefListList;      // used reading 1.2 scores
@@ -75,16 +75,18 @@ class XmlReader : public QXmlStreamReader {
       void setTick(int val)       { _tick = val; }
       int track() const           { return _track; }
       void setTrack(int val)      { _track = val; }
-      void addSpanner(Spanner* s) { _spanner.append(s); }
-      void addTuplet(Tuplet* s);
-      void addBeam(Beam* s)       { _beams.append(s); }
-      void removeSpanner(Spanner* s) { _spanner.removeOne(s); }
 
+      void addSpanner(Spanner* s);
+      void removeSpanner(Spanner* s);
       Spanner* findSpanner(int) const;
-      Beam* findBeam(int) const;
+
+      void addTuplet(Tuplet* s);
       Tuplet* findTuplet(int) const;
 
-      QList<Spanner*>& spanner()       { return _spanner; }
+      void addBeam(Beam* s)       { _beams.append(s); }
+      Beam* findBeam(int) const;
+
+      QHash<int,Spanner*>& spanner()   { return _spanner; }
       QList<Tuplet*>& tuplets()        { return _tuplets; }
       QList<Beam*>& beams()            { return _beams; }
       QList<ClefList*>& clefListList() { return _clefListList; }

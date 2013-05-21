@@ -667,14 +667,18 @@ bool Element::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "color")
-            _color = e.readColor();
+      if (tag == "track")
+            setTrack(e.readInt());
       else if (tag == "visible")
             _visible = e.readInt();
-      else if (tag == "selected")
-            _selected = e.readInt();
+      else if (tag == "pos")
+            _readPos = e.readPoint() * spatium();
       else if (tag == "userOff")
             _userOff = e.readPoint();
+      else if (tag == "color")
+            _color = e.readColor();
+      else if (tag == "selected")
+            _selected = e.readInt();
       else if (tag == "lid") {
             int id = e.readInt();
             _links = score()->links().value(id);
@@ -707,12 +711,8 @@ bool Element::readProperties(XmlReader& e)
             setUserOff(pt);
             // _readPos = QPointF();
             }
-      else if (tag == "pos")
-            _readPos = e.readPoint() * spatium();
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
-      else if (tag == "track")
-            setTrack(e.readInt());
       else if (tag == "tag") {
             QString val(e.readElementText());
             for (int i = 1; i < MAX_TAGS; i++) {

@@ -21,18 +21,28 @@
 #include "omr.h"
 #include "omrview.h"
 #include "libmscore/xml.h"
+#include "libmscore/sym.h"
 #include "omrpage.h"
 #include "pdf.h"
 #ifdef OCR
 #include "ocr.h"
 #endif
 #include "utils.h"
+#include "pattern.h"
 
 namespace Ms {
 
 #ifdef OMR
 
 class ScoreView;
+
+Pattern* Omr::quartheadPattern;
+Pattern* Omr::halfheadPattern;
+Pattern* Omr::sharpPattern;
+Pattern* Omr::flatPattern;
+Pattern* Omr::naturalPattern;
+Pattern* Omr::trebleclefPattern;
+Pattern* Omr::bassclefPattern;
 
 //---------------------------------------------------------
 //   Omr
@@ -166,7 +176,7 @@ void Omr::process()
       int pages = 0;
       int n = _pages.size();
       for (int i = 0; i < n; ++i) {
-            _pages[i]->read(i);
+            _pages[i]->read();
             if (_pages[i]->systems().size() > 0) {
                   sp += _pages[i]->spatium();
                   ++pages;
@@ -178,6 +188,21 @@ void Omr::process()
       _dpmm    = w / 210.0;            // PaperSize A4
 
 // printf("*** spatium: %f mm  dpmm: %f\n", spatiumMM(), _dpmm);
+
+      quartheadPattern  = new Pattern(quartheadSym, &symbols[0][quartheadSym], _spatium);
+      halfheadPattern   = new Pattern(halfheadSym, &symbols[0][halfheadSym], _spatium);
+      sharpPattern      = new Pattern(sharpSym, &symbols[0][sharpSym], _spatium);
+      flatPattern       = new Pattern(flatSym, &symbols[0][flatSym], _spatium);
+      naturalPattern    = new Pattern(naturalSym, &symbols[0][naturalSym], _spatium);
+      trebleclefPattern = new Pattern(trebleclefSym, &symbols[0][trebleclefSym],  _spatium);
+      bassclefPattern   = new Pattern(bassclefSym, &symbols[0][bassclefSym],  _spatium);
+
+      for (int i = 0; i < n; ++i) {
+            OmrPage* page = _pages[i];
+            if (!page->systems().isEmpty()) {
+                  page->readBarLines(i);
+                  }
+            }
       }
 
 //---------------------------------------------------------
