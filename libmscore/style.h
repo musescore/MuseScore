@@ -234,6 +234,7 @@ enum StyleIdx {
       ST_harmonyY,
       ST_harmonyFretDist,
       ST_minHarmonyDistance,
+      ST_capoPosition,
 
       ST_showPageNumber,
       ST_showPageNumberOne,

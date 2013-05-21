@@ -837,6 +837,8 @@ void Harmony::render(const TextStyle* st)
       if (_rootTpc == INVALID_TPC)
             return;
 
+      int capo = score()->styleI(ST_capoPosition);
+
       if (st == 0)
             st = &textStyle();
       ChordList* chordList = score()->style()->chordList();
@@ -883,6 +885,20 @@ void Harmony::render(const TextStyle* st)
       // render bass
       if (_baseTpc != INVALID_TPC)
             render(chordList->renderListBase, x, y, _baseTpc);
+
+      if (capo > 0 && capo < 12) {
+            int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
+
+            render("(", x, y);
+            render(chordList->renderListRoot, x, y, _rootTpc + tpcOffset[capo]);
+            ChordDescription* cd = chordList->value(_id);
+            if (cd) {
+                  render(cd->renderList, x, y, 0);
+                  }
+            if (_baseTpc != INVALID_TPC)
+                  render(chordList->renderListBase, x, y, _baseTpc + tpcOffset[capo]);
+            render(")", x, y);
+            }
       }
 
 //---------------------------------------------------------
