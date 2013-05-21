@@ -99,17 +99,47 @@ struct RenderAction {
       };
 
 //---------------------------------------------------------
+//   ChordToken
+//---------------------------------------------------------
+
+enum ChordTokenClass {
+      ALL, QUALITY, EXTENSION, MODIFIER, ALTERATION, ADJUST, MODE, SUSPENSION, ADDITION, SUBTRACTION
+      };
+
+class ChordToken {
+   public:
+      ChordTokenClass tokenClass;
+      QStringList names;
+      QList<RenderAction> renderList;
+      void read(XmlReader&);
+      void write(Xml&);
+      };
+
+//---------------------------------------------------------
 //   ParsedChord
 //---------------------------------------------------------
 
 class ParsedChord {
    public:
-      bool parse(QString);
+      const QList<RenderAction>& renderList(const QList<ChordToken>&, bool regenerator = false);
+      bool parse(QString, bool syntaxOnly = false);
+      bool renderable() { return _parseable; }
+      bool transposable() { return _parseable; }
+      bool understandable () { return _understandable; }
       bool operator==(const ParsedChord& c) { return (this->handle == c.handle); }
       bool operator!=(const ParsedChord& c) { return !(*this == c); }
       operator QString() { return handle; }
+      ParsedChord() { _parseable = false; _understandable = false; }
    private:
       QString handle;
+      QString quality;
+      QString extension;
+      QStringList modifierList;
+      QList<ChordToken> _tokenList;
+      QList<RenderAction> _renderList;
+      bool _parseable;
+      bool _understandable;
+      void addToken (QString, ChordTokenClass);
       };
 
 //---------------------------------------------------------
@@ -118,6 +148,7 @@ class ParsedChord {
 
 struct ChordDescription {
       int id;                 // Chord id number (Band In A Box Chord Number)
+                              // 0 = no id specified (valid to allow chords to match without recording id in score file)
       QStringList names;      // list of alternative chord names
                               // that will by recognized from keyboard entry (without root/base)
       QList<ParsedChord> parsedChords;
@@ -128,7 +159,7 @@ struct ChordDescription {
       QList<RenderAction> renderList;
 
    public:
-      void read(XmlReader&);
+      void read(XmlReader&, const QList<ChordToken>&);
       void write(Xml&);
       };
 
@@ -165,6 +196,7 @@ class ChordList : public QMap<int, ChordDescription*> {
       QList<ChordFont> fonts;
       QList<RenderAction> renderListRoot;
       QList<RenderAction> renderListBase;
+      QList<ChordToken> chordTokenList;
 
       ChordList() {}
 
