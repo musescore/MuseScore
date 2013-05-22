@@ -1059,15 +1059,9 @@ void ChordRest::removeDeleteBeam()
       {
       if (_beam) {
             Beam* b = _beam;
-            b->score()->undoRemoveElement(b);
-//            b->remove(this);  // this sets _beam to zero
-/*            if (b->isEmpty()) {
-                  if (b->selected())
-                        score()->deselect(b);
-                  delete b;
-                  }
-            */
-            Q_ASSERT(_beam == 0);
+            _beam->remove(this);
+            if (b->isEmpty())
+                  score()->undoRemoveElement(b);
             }
       }
 
