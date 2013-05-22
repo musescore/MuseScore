@@ -920,7 +920,7 @@ class Score : public QObject {
       Q_INVOKABLE void appendMeasures(int);
       Q_INVOKABLE void addText(const QString&, const QString&);
       Q_INVOKABLE Cursor* newCursor();
-      qreal computeMinWidth(Segment* fs) const;
+      qreal computeMinWidth(Segment* fs);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
 

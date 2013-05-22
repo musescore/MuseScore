@@ -1388,7 +1388,6 @@ void Chord::layout()
                   qreal x = stemX - fretWidth*0.5;
                   note->setPos(x, _spatium * tab->physStringToVisual(note->string()) * lineDist);
 //                  note->layout2();              // needed? it is repeated later right before computing bbox
-
                   }
             // horiz. spacing: leave half width at each side of the (potential) stem
             qreal halfHeadWidth = headWidth * 0.5;
@@ -1495,27 +1494,30 @@ void Chord::layout()
             //    - position
             //-----------------------------------------
 
-            qreal stepDistance = _spatium * .5;
-            int stepOffset     = staff()->staffType()->stepOffset();
+//            qreal stepDistance = _spatium * .5;
+//            int stepOffset     = staff()->staffType()->stepOffset();
             int lx = 0.0;
 
             adjustReadPos();
 
-            qreal stemWidth5;
+//            qreal stemWidth5;
             qreal noteWidth = _notes.size() ? downNote()->headWidth() :
                         symbols[score()->symIdx()][quartheadSym].width(magS());
             qreal stemX = _up ? noteWidth : 0.0;
+#if 0
             if (stem()) {
                   stemWidth5 = stem()->lineWidth() * .5;
                   _stem->rxpos() = _up ? stemX - stemWidth5 : stemWidth5;
                   }
             else
                   stemWidth5 = 0.0;
+#endif
 
             int n = _notes.size();
             for (int i = 0; i < n; ++i) {
                   Note* note = _notes.at(i);
                   note->layout();
+#if 0
                   qreal x;
 
                   qreal hw = note->headWidth();
@@ -1531,9 +1533,10 @@ void Chord::layout()
                         else
                               x = 0.0;
                         }
-
-                  note->rypos() = (note->line() + stepOffset) * stepDistance;
                   note->rxpos() = x;
+                  note->rypos() = (note->line() + stepOffset) * stepDistance;
+#endif
+                  qreal x = note->rxpos();
 
                   Accidental* accidental = note->accidental();
                   if (accidental) {
