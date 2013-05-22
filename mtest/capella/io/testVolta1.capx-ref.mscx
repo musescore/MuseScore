@@ -84,13 +84,13 @@ p, li { white-space: pre-wrap; }
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Text>
-          <pos x="14.2045" y="-8.52273"/>
           <style></style>
+          <pos x="14.2045" y="-8.52273"/>
           <text>Volta 1</text>
           </Text>
         <Text>
-          <pos x="14.2045" y="-5.68182"/>
           <style></style>
+          <pos x="14.2045" y="-5.68182"/>
           <text>MuseScore testfile</text>
           </Text>
         <Chord>
@@ -148,8 +148,8 @@ p, li { white-space: pre-wrap; }
           <pause>3</pause>
           </LayoutBreak>
         <Text>
-          <pos x="2.84091" y="-3.40909"/>
           <style></style>
+          <pos x="2.84091" y="-3.40909"/>
           <text>Leon Vinken</text>
           </Text>
         <Chord>

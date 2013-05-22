@@ -72,7 +72,6 @@
       <TextStyle>
         <halign>center</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
         <yoffsetAbove>-3</yoffsetAbove>
         <yoffsetBelow>3</yoffsetBelow>
         <offsetType>spatium</offsetType>
@@ -85,7 +84,6 @@
       <TextStyle>
         <halign>center</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
         <yoffsetAbove>-3</yoffsetAbove>
         <yoffsetBelow>3</yoffsetBelow>
         <offsetType>spatium</offsetType>
