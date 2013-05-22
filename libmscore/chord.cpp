@@ -1494,48 +1494,18 @@ void Chord::layout()
             //    - position
             //-----------------------------------------
 
-//            qreal stepDistance = _spatium * .5;
-//            int stepOffset     = staff()->staffType()->stepOffset();
             int lx = 0.0;
 
             adjustReadPos();
 
-//            qreal stemWidth5;
             qreal noteWidth = _notes.size() ? downNote()->headWidth() :
                         symbols[score()->symIdx()][quartheadSym].width(magS());
             qreal stemX = _up ? noteWidth : 0.0;
-#if 0
-            if (stem()) {
-                  stemWidth5 = stem()->lineWidth() * .5;
-                  _stem->rxpos() = _up ? stemX - stemWidth5 : stemWidth5;
-                  }
-            else
-                  stemWidth5 = 0.0;
-#endif
 
             int n = _notes.size();
             for (int i = 0; i < n; ++i) {
                   Note* note = _notes.at(i);
                   note->layout();
-#if 0
-                  qreal x;
-
-                  qreal hw = note->headWidth();
-
-                  if (note->mirror())
-                        if (_up)
-                              x = stemX - stemWidth5 * 2;
-                        else
-                              x = stemX - hw + stemWidth5 * 2;
-                  else {
-                        if (_up)
-                              x = stemX - hw;
-                        else
-                              x = 0.0;
-                        }
-                  note->rxpos() = x;
-                  note->rypos() = (note->line() + stepOffset) * stepDistance;
-#endif
                   qreal x = note->rxpos();
 
                   Accidental* accidental = note->accidental();
@@ -1650,11 +1620,11 @@ void Chord::layout()
 
 void Chord::crossMeasureSetup(bool on)
       {
-      if(!on) {
+      if (!on) {
             _crossMeasure = CROSSMEASURE_UNKNOWN;
             return;
             }
-      if(_crossMeasure == CROSSMEASURE_UNKNOWN) {
+      if (_crossMeasure == CROSSMEASURE_UNKNOWN) {
             int tempCross = CROSSMEASURE_NONE;  // assume no cross-measure modification
             // if chord has only one note and note is tied forward
             if(notes().size() == 1 && _notes[0]->tieFor()) {
@@ -1723,9 +1693,6 @@ void Chord::layoutArpeggio2()
                         }
                   }
             }
-//      bool up = _arpeggio->subtype() != ARP_DOWN;
-//      if (!notes.isEmpty())
-//            renderArpeggio(notes, up);
       }
 
 //---------------------------------------------------------

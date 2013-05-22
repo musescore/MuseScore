@@ -71,6 +71,7 @@ Beam::Beam(const Beam& b)
    : Element(b)
       {
       _elements     = b._elements;
+      _id           = b._id;
       foreach(QLineF* bs, b.beamSegments)
             beamSegments.append(new QLineF(*bs));
       _direction       = b._direction;
