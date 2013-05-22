@@ -66,6 +66,10 @@ SyntiParameterData::SyntiParameterData(int i, const QString& name, const QString
       _sval = val;
       }
 
+SyntiParameterData::~SyntiParameterData()
+{
+}
+
 SyntiParameterData::SyntiParameterData(const SyntiParameterData& pd)
    : QSharedData(pd)
       {

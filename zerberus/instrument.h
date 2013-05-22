@@ -19,8 +19,8 @@
 class Zerberus;
 class XmlReader;
 class QZipReader;
-class Zone;
-class SfzRegion;
+struct Zone;
+struct SfzRegion;
 class Sample;
 
 //---------------------------------------------------------
