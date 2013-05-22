@@ -140,7 +140,6 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             endIdx   = -1;
             }
 
-      bool moveLeft = false;
       int ll        = 1000;      // line distance to previous note head
       bool isLeft   = notes[startIdx]->chord()->up();
       int move1     = notes[startIdx]->chord()->staffMove();
@@ -192,7 +191,6 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                               notes[idx-incIdx]->chord()->rxpos() = note->headWidth() - note->point(styleS(ST_stemWidth));
                               note->rxpos() = 0.0;
                               }
-                        moveLeft = true;
                         }
                   }
             if (note->userMirror() == MScore::DH_AUTO) {
@@ -204,9 +202,6 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         mirror = !mirror;
                   }
             note->setMirror(mirror);
-            if (mirror)                   //??
-                  moveLeft = true;
-
             move1         = move;
             ll            = line;
             lastHeadGroup = headGroup;
@@ -218,7 +213,11 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       //    find column for dots
       //---------------------------------------------------
 
-      QList<AcEl> aclist;
+      std::vector<AcEl> aclist;
+
+      qreal _spatium = spatium();
+      qreal stepDistance = _spatium * .5;
+      int stepOffset = staff->staffType()->stepOffset();
 
       qreal dotPosX  = 0.0;
       int nNotes = notes.size();
@@ -231,12 +230,46 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   AcEl acel;
                   acel.note = note;
                   acel.x    = 0.0;
-                  aclist.append(acel);
+                  aclist.push_back(acel);
                   }
-            qreal xx = note->pos().x() + note->headWidth() + note->chord()->pos().x();
+            qreal hw = note->headWidth();
+            qreal xx = note->pos().x() + hw + note->chord()->pos().x();
             if (xx > dotPosX)
                   dotPosX = xx;
+
+            Chord* chord = note->chord();
+            bool _up = chord->up();
+
+            qreal stemX;
+            if (_up)
+                  stemX = symbols[symIdx()][quartheadSym].width(_spatium / (MScore::DPI * SPATIUM20));
+            else
+                  stemX = 0;
+            qreal stemWidth5;
+            if (chord->stem()) {
+                  stemWidth5 = chord->stem()->lineWidth() * .5;
+                  chord->stem()->rxpos() = _up ? stemX - stemWidth5 : stemWidth5;
+                  }
+            else
+                  stemWidth5 = 0.0;
+
+            qreal x;
+            if (note->mirror()) {
+                  if (_up)
+                        x = stemX - stemWidth5 * 2;
+                  else
+                        x = stemX - hw + stemWidth5 * 2;
+                  }
+            else {
+                  if (_up)
+                        x = stemX - hw;
+                  else
+                        x = 0.0;
+                  }
+            note->rypos()  = (note->line() + stepOffset) * stepDistance;
+            note->rxpos()  = x;
             }
+
       segment->setDotPosX(staffIdx, dotPosX);
 
       int nAcc = aclist.size();
@@ -255,23 +288,23 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       // layout bottom accidental
       //
       if (nAcc > 1) {
-            note = aclist[nAcc-1].note;
+            note = aclist[nAcc-1].note;         // last note
             acc  = note->accidental();
             int l1 = aclist[0].note->line();
             int l2 = note->line();
 
             int st1   = aclist[0].note->accidental()->accidentalType();
-            int st2   = acc->accidentalType();
             int ldiff = st1 == Accidental::ACC_FLAT ? 4 : 5;
 
             if (qAbs(l1-l2) > ldiff) {
                   aclist[nAcc-1].x = -pnd * acc->mag() - acc->width() - acc->bbox().x();
                   }
             else {
+                  int st2   = acc->accidentalType();
                   if ((st1 == Accidental::ACC_FLAT) && (st2 == Accidental::ACC_FLAT) && (qAbs(l1-l2) > 2))
                         aclist[nAcc-1].x = aclist[0].x - acc->width() * .5;
                   else
-                        aclist[nAcc-1].x = aclist[0].x - acc->width();
+                        aclist[nAcc-1].x = aclist[0].x - acc->width() - pd;
                   }
             }
 
@@ -312,16 +345,17 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   }
             }
 
-      int n = aclist.size();
-      for (int i = 0; i < n; ++i) {
-            const AcEl& e = aclist.at(i);
+      qreal lx = 10000.0;
+      for (const AcEl& e : aclist) {
             Note* note = e.note;
-            qreal x    = e.x;
-            if (moveLeft) {
-                  Chord* chord = note->chord();
-                  if (((note->mirror() && chord->up()) || (!note->mirror() && !chord->up())))
-                        x -= note->headWidth();
-                  }
+            qreal x    = note->x();
+            if (x < lx)
+                  lx = x;
+            }
+
+      for (const AcEl& e : aclist) {
+            Note* note = e.note;
+            qreal x    = e.x + lx - note->x();
             note->accidental()->setPos(x, 0);
             note->accidental()->adjustReadPos();
             }
@@ -2518,7 +2552,7 @@ void Score::respace(QList<ChordRest*>* elements)
 ///    segment list fs
 //---------------------------------------------------------
 
-qreal Score::computeMinWidth(Segment* fs) const
+qreal Score::computeMinWidth(Segment* fs)
       {
       int _nstaves = nstaves();
       if (_nstaves == 0)
