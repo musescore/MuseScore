@@ -182,7 +182,7 @@ QVariant Image::getProperty(P_ID propertyId) const
             case P_SIZE_IS_SPATIUM:
                   return sizeIsSpatium();
             default:
-                  return Element::getProperty(propertyId);
+                  return BSymbol::getProperty(propertyId);
             }
       }
 
@@ -211,7 +211,7 @@ bool Image::setProperty(P_ID propertyId, const QVariant& v)
                   setSizeIsSpatium(v.toBool());
                   break;
             default:
-                  rv = Element::setProperty(propertyId, v);
+                  rv = BSymbol::setProperty(propertyId, v);
                   break;
             }
       setGenerated(false);
@@ -230,7 +230,7 @@ QVariant Image::propertyDefault(P_ID id) const
             case P_SIZE:                  break;
             case P_LOCK_ASPECT_RATIO:     return defaultLockAspectRatio;
             case P_SIZE_IS_SPATIUM:       return defaultSizeIsSpatium;
-            default:                      return Element::propertyDefault(id);
+            default:                      return BSymbol::propertyDefault(id);
             }
       return QVariant();
       }

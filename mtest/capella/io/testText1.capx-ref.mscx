@@ -84,13 +84,13 @@ p, li { white-space: pre-wrap; }
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Text>
-          <pos x="14.2045" y="-8.52273"/>
           <style></style>
+          <pos x="14.2045" y="-8.52273"/>
           <text>Test text 1</text>
           </Text>
         <Text>
-          <pos x="14.2045" y="-5.68182"/>
           <style></style>
+          <pos x="14.2045" y="-5.68182"/>
           <text>This is the subtitle</text>
           </Text>
         <Chord>
@@ -208,8 +208,8 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         <Text>
-          <pos x="2.84091" y="-3.40909"/>
           <style></style>
+          <pos x="2.84091" y="-3.40909"/>
           <text>MuseScore testfile
 Leon Vinken</text>
           </Text>

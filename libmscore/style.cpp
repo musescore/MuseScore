@@ -23,6 +23,8 @@
 
 namespace Ms {
 
+static const Element::Placement DEFAULT_STYLE_PLACEMENT = Element::ABOVE;
+
 MStyle* style;
 
 //  20 points        font design size
@@ -235,178 +237,178 @@ void initStyle(MStyle* s)
       // this is an empty style, no offsets are allowed
       // never show this style
       AS(TextStyle(
-         "", ff, 10, false, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), false,
+         "", ff, 10, false, false, false, Element::ABOVE, ALIGN_LEFT | ALIGN_BASELINE, 0.0, 0.0, 0.0, OS, QPointF(), false,
                Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false, false, QColor(Qt::black),
                QColor(255, 255, 255, 0), TextStyle::HIDE_ALWAYS));
 
       AS(TextStyle(
-         TR("Title"), ff, 24, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP, QPointF(), OA, QPointF(50.0, .0)));
+         TR("Title"), ff, 24, false, false, false, Element::ABOVE,
+         ALIGN_HCENTER | ALIGN_TOP, 0.0, 0.0, 0.0, OA, QPointF(50.0, .0)));
 
       AS(TextStyle(
-         TR("Subtitle"), ff, 14, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP, QPointF(0, MM(10)), OA, QPointF(50.0, .0)));
+         TR("Subtitle"), ff, 14, false, false, false, Element::ABOVE,
+               ALIGN_HCENTER | ALIGN_TOP, 0.0, MM(10), MM(10), OA, QPointF(50.0, .0)));
 
       AS(TextStyle(
-        TR("Composer"), ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_BASELINE, QPointF(MM(-1), MM(-2)), OA, QPointF(100.0, 100.0)));
+        TR("Composer"), ff, 12, false, false, false, Element::ABOVE,
+               ALIGN_RIGHT | ALIGN_BASELINE, MM(-1), MM(-2), MM(-2), OA, QPointF(100.0, 100.0)));
 
       AS(TextStyle(
-         TR("Lyricist"), ff, 12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(MM(1), MM(-2)), OA, QPointF(0.0, 100.0)));
+         TR("Lyricist"), ff, 12, false, false, false, Element::ABOVE,
+               ALIGN_LEFT | ALIGN_BASELINE, MM(1), MM(-2), MM(-2), OA, QPointF(0.0, 100.0)));
 
       AS(TextStyle(
-         TR("Lyrics odd lines"), ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, QPointF(), true));
+         TR("Lyrics odd lines"), ff, 11, false, false, false, Element::BELOW,
+         ALIGN_HCENTER | ALIGN_BASELINE,  0.0, -4.0, 3.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR("Lyrics even lines"), ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, QPointF(), true));
+         TR("Lyrics even lines"), ff, 11, false, false, false, Element::BELOW,
+         ALIGN_HCENTER | ALIGN_BASELINE, 0.0, -4.0, 3.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Fingering"), ff,  8, false, false, false,
-         ALIGN_CENTER, QPointF(), OA, QPointF(), true));
+         TR( "Fingering"), ff,  8, false, false, false, Element::ABOVE,
+         ALIGN_CENTER, 0.0, 0.0, 0.0, OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsLong"),   ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
+         TR( "InstrumentsLong"),   ff, 12, false, false, false, Element::ABOVE,
+         ALIGN_RIGHT | ALIGN_VCENTER, 0.0, 0.0, 0.0, OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsShort"),   ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
+         TR( "InstrumentsShort"),   ff, 12, false, false, false, Element::ABOVE,
+         ALIGN_RIGHT | ALIGN_VCENTER, 0.0, 0.0, 0.0, OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsExcerpt"), ff, 18, false, false, false,
-         ALIGN_LEFT | ALIGN_TOP, QPointF(), OA, QPointF()));
+         TR( "InstrumentsExcerpt"), ff, 18, false, false, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_TOP, 0.0, 0.0, 0.0, OA, QPointF()));
 
       AS(TextStyle(
          TR( "Dynamics"), ff, 12, false,
          false,                                 // italic?
-         false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
+         false, Element::BELOW,
+         ALIGN_LEFT | ALIGN_BASELINE, 0.0, -4.0, 4.0, OS, QPointF(), true));
 
 #if 0
       AS(TextStyle(           // internal style
-         TR( "Dynamics2"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true,
+         TR( "Dynamics2"), ff,  12, false, false, false, Element::BELOW,
+         ALIGN_LEFT | ALIGN_BASELINE, 0.0, -4.0, 4.0, OS, QPointF(), true,
          Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false, false,           // default params
          QColor(Qt::black), QColor(255, 255, 255, 0),                               // default params
          TextStyle::HIDE_ALWAYS));
 #endif
 
       AS(TextStyle(
-         TR( "Technik"), ff, 12, false, true, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS));
+         TR( "Technik"), ff, 12, false, true, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_BASELINE, 0.0, -2.0, 2.0, OS));
 
 #if 0
 // (temporarly) switch bold off as Qt cannot show bold glyphs with codepoint > 16bit
 // (used for musical symbols)
       AS(TextStyle(
-         TR( "Tempo"), ff, 12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS, QPointF(),
+         TR( "Tempo"), ff, 12, false, false, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_BASELINE, 0.0, -4.0, 4.0, OS, QPointF(),
          true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true));
 #else
       AS(TextStyle(
-         TR( "Tempo"), ff, 12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS, QPointF(),
+         TR( "Tempo"), ff, 12, false, false, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_BASELINE, 0.0, -4.0, 4.0, OS, QPointF(),
          true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true));
 #endif
       AS(TextStyle(
-         TR( "Metronome"), ff, 12, true, false, false, ALIGN_LEFT));
+         TR( "Metronome"), ff, 12, true, false, false, Element::ABOVE, ALIGN_LEFT));
 
       AS(TextStyle(
-         TR( "Measure Number"), ff, 8, false, false, false,
-         ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(.0, -2.0), OS, QPointF(), true));
+         TR( "Measure Number"), ff, 8, false, false, false, Element::ABOVE,
+         ALIGN_HCENTER | ALIGN_BOTTOM, 0.0, -2.0, 2.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Translator"), ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP, QPointF(0, 6)));
+         TR( "Translator"), ff, 11, false, false, false, Element::ABOVE,
+         ALIGN_HCENTER | ALIGN_TOP, 0.0, 6.0, 6.0));
 
       AS(TextStyle(
-         TR( "Tuplets"), ff,  10, false, true, false,
-         ALIGN_CENTER, QPointF(), OA, QPointF(), true));
+         TR( "Tuplets"), ff,  10, false, true, false, Element::ABOVE,
+         ALIGN_CENTER, 0.0, 0.0, 0.0, OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "System"), ff,  10, false, false, false,
-         ALIGN_LEFT, QPointF(0, -4.0), OS, QPointF(), true,
+         TR( "System"), ff,  10, false, false, false, Element::ABOVE,
+         ALIGN_LEFT, 0.0, -4.0, 4.0, OS, QPointF(), true,
          Spatium(0.0), Spatium(0.0), 25, Qt::black, false, true));
 
       AS(TextStyle(
-         TR( "Staff"), ff,  10, false, false, false,
-         ALIGN_LEFT, QPointF(0, -4.0), OS, QPointF(), true));
+         TR( "Staff"), ff,  10, false, false, false, Element::ABOVE,
+         ALIGN_LEFT, 0.0, -4.0, 4.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Chordname"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true));
+         TR( "Chordname"), ff,  12, false, false, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_BASELINE, 0.0, 0.0, 0.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Rehearsal Mark"), ff,  14, true, false, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -3.0), OS, QPointF(), true,
+         TR( "Rehearsal Mark"), ff,  14, true, false, false, Element::ABOVE,
+         ALIGN_HCENTER | ALIGN_BASELINE, 0.0, -3.0, 3.0, OS, QPointF(), true,
          Spatium(0.2), Spatium(.5), 20, Qt::black, false, true));
 
       AS(TextStyle(
-         TR( "Repeat Text Left"), "MScore",  20, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(), true,
+         TR( "Repeat Text Left"), "MScore",  20, false, false, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_BASELINE, 0.0, -2.0, 2.0, OS, QPointF(), true,
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
       AS(TextStyle(
-         TR( "Repeat Text Right"), ff,  12, false, false, false,
-         ALIGN_RIGHT | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
+         TR( "Repeat Text Right"), ff,  12, false, false, false, Element::ABOVE,
+         ALIGN_RIGHT | ALIGN_BASELINE, 0.0, -2.0, 2.0, OS, QPointF(100, 0), true,
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
       AS(TextStyle(
-         TR( "Repeat Text"), ff,  12, false, false, false,          // for backward compatibility
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
+         TR( "Repeat Text"), ff,  12, false, false, false, Element::ABOVE,    // for backward compatibility
+         ALIGN_HCENTER | ALIGN_BASELINE, 0.0, -2.0, 2.0, OS, QPointF(100, 0), true,
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
       // y offset may depend on voltaHook style element
       AS(TextStyle(
-         TR( "Volta"), ff, 11, true, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.5, 1.9), OS, QPointF(), true));
+         TR( "Volta"), ff, 11, true, false, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_BASELINE, 0.5, 1.9, 0.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Frame"), ff, 12, false, false, false, ALIGN_LEFT | ALIGN_TOP));
+         TR( "Frame"), ff, 12, false, false, false, Element::ABOVE, ALIGN_LEFT | ALIGN_TOP));
 
       AS(TextStyle(
-         TR( "TextLine"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, QPointF(), true));
+         TR( "TextLine"), ff,  12, false, false, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_VCENTER, 0.0, 0.0, 0.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Glissando"), ff, 8, false, true, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(), OS, QPointF(), true));
+         TR( "Glissando"), ff, 8, false, true, false, Element::ABOVE,
+         ALIGN_HCENTER | ALIGN_BASELINE, 0.0, 0.0, 0.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "String Number"), ff,  8, false, false, false,
-         ALIGN_CENTER, QPointF(0, -5.0), OS, QPointF(100, 0), true,
+         TR( "String Number"), ff,  8, false, false, false, Element::ABOVE,
+         ALIGN_CENTER, 0.0, -5.0, 5.0, OS, QPointF(100, 0), true,
          Spatium(0.1), Spatium(0.2), 0, Qt::black, true, false));
 
       AS(TextStyle(
-         TR( "Ottava"), ff, 12, false, true, false,
-         ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, QPointF(), true));
+         TR( "Ottava"), ff, 12, false, true, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_VCENTER, 0.0, 0.0, 0.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Bend"), ff, 8, false, false, false,
-         ALIGN_CENTER | ALIGN_BOTTOM, QPointF(), OS, QPointF(), true));
+         TR( "Bend"), ff, 8, false, false, false, Element::ABOVE,
+         ALIGN_CENTER | ALIGN_BOTTOM, 0.0, 0.0, 0.0, OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Header"), ff, 8, false, false, false,
+         TR( "Header"), ff, 8, false, false, false, Element::ABOVE,
          ALIGN_HCENTER | ALIGN_TOP));
 
       AS(TextStyle(
-         TR( "Footer"), ff, 8, false, false, false,
-         ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(0.0, MM(5)), OA));
+         TR( "Footer"), ff, 8, false, false, false, Element::ABOVE,
+         ALIGN_HCENTER | ALIGN_BOTTOM, 0.0, MM(5), MM(5), OA));
 
       AS(TextStyle(
-         TR( "Instrument Change"), ff,  12, true, false, false,
-         ALIGN_LEFT | ALIGN_BOTTOM, QPointF(0, -3.0), OS, QPointF(0, 0), true));
+         TR( "Instrument Change"), ff,  12, true, false, false, Element::ABOVE,
+         ALIGN_LEFT | ALIGN_BOTTOM, 0.0, -3.0, 3.0, OS, QPointF(0, 0), true));
 
       AS(TextStyle(
-         TR("Lyrics Verse"), ff, 11, false, false, false,
-         ALIGN_RIGHT | ALIGN_TOP, QPointF(), OS, QPointF(), true));
+         TR("Lyrics Verse"), ff, 11, false, false, false, Element::BELOW,
+         ALIGN_RIGHT | ALIGN_TOP, 0.0, 0.0, 0.0, OS, QPointF(), true));
 
       AS(TextStyle(
-      TR("Figured Bass"), "MScoreBC", 8, false, false, false,
-         ALIGN_LEFT | ALIGN_TOP, QPointF(0, 6), OS, QPointF(), true,
+      TR("Figured Bass"), "MScoreBC", 8, false, false, false, Element::BELOW,
+         ALIGN_LEFT | ALIGN_TOP, 0.0, -2.5, 2.5, OS, QPointF(), true,
          Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
          false, QColor(Qt::black), QColor(255, 255, 255, 0),            // default params
          TextStyle::HIDE_IN_EDITOR));                                   // don't show in Style Editor
@@ -688,14 +690,15 @@ TextStyle::TextStyle()
 
 TextStyle::TextStyle(QString _name, QString _family, qreal _size,
    bool _bold, bool _italic, bool _underline,
+   Element::Placement _defPlac,
    Align _align,
-   const QPointF& _off, OffsetType _ot, const QPointF& _roff,
+   qreal _offsetX, qreal _offsetYAbove, qreal _offsetYBelow, OffsetType _ot, const QPointF& _roff,
    bool sd,
    Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg, Hidden hidden)
       {
       d = new TextStyleData(_name, _family, _size,
-         _bold, _italic, _underline, _align, _off, _ot, _roff,
+         _bold, _italic, _underline, _defPlac, _align, _offsetX, _offsetYAbove, _offsetYBelow, _ot, _roff,
          sd, fw, pw, fr, co, _circle, _systemFlag, fg, bg);
       _hidden = hidden;
       }
@@ -737,6 +740,7 @@ TextStyleData::TextStyleData()
       paddingWidth           = Spatium(0);
       frameWidthMM           = 0.0;
       paddingWidthMM         = 0.0;
+      defaultPlacement       = DEFAULT_STYLE_PLACEMENT;
       frameRound             = 25;
       frameColor             = MScore::defaultColor;
       circle                 = false;
@@ -745,16 +749,16 @@ TextStyleData::TextStyleData()
       backgroundColor        = QColor(255, 255, 255, 0);
       }
 
-TextStyleData::TextStyleData(
-   QString _name, QString _family, qreal _size,
-   bool _bold, bool _italic, bool _underline,
+TextStyleData::TextStyleData(QString _name, QString _family, qreal _size,
+   bool _bold, bool _italic, bool _underline, Element::Placement _defPlac,
    Align _align,
-   const QPointF& _off, OffsetType _ot, const QPointF& _roff,
+   qreal _offsetX, qreal _offsetYAbove, qreal _offsetYBelow, OffsetType _ot, const QPointF& _roff,
    bool sd,
    Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg)
    :
-   ElementLayout(_align, _off, _ot, _roff),
+   ElementLayout(_align, _offsetX, _offsetYAbove, _offsetYBelow, _ot, _roff),
+   defaultPlacement(_defPlac),
    name(_name), size(_size), bold(_bold),
    italic(_italic), underline(_underline),
    sizeIsSpatiumDependent(sd), frameWidth(fw), paddingWidth(pw),
@@ -779,6 +783,7 @@ bool TextStyleData::operator!=(const TextStyleData& s) const
           || s.bold                   != bold
           || s.italic                 != italic
           || s.underline              != underline
+          || s.defaultPlacement       != defaultPlacement
           || s.hasFrame               != hasFrame
           || s.sizeIsSpatiumDependent != sizeIsSpatiumDependent
           || s.frameWidth             != frameWidth
@@ -790,7 +795,9 @@ bool TextStyleData::operator!=(const TextStyleData& s) const
           || s.foregroundColor        != foregroundColor
           || s.backgroundColor        != backgroundColor
           || s.align()                != align()
-          || s.offset()               != offset()
+          || s._offsetX               != _offsetX
+          || s._offsetYAbove          != _offsetYAbove
+          || s._offsetYBelow          != _offsetYBelow
           || s.rxoff()                != rxoff()
           || s.ryoff()                != ryoff()
           || s.offsetType()           != offsetType()
@@ -867,6 +874,8 @@ void TextStyleData::writeProperties(Xml& xml) const
             xml.tag("italic", italic);
       if (underline)
             xml.tag("underline", underline);
+      if (defaultPlacement != DEFAULT_STYLE_PLACEMENT)
+            xml.tag("defaultPlacement", defaultPlacement);
       if (sizeIsSpatiumDependent)
             xml.tag("sizeIsSpatiumDependent", sizeIsSpatiumDependent);
       if (foregroundColor != Qt::black)
@@ -899,6 +908,13 @@ void TextStyleData::read(XmlReader& e)
             if (!readProperties(e))
                   e.unknown();
             }
+      // TEMPORARY HACK: if Y offset above staff > half a standard staff & default placement is above,
+      // convert to placement below
+      if (_offsetType == OFFSET_SPATIUM && _offsetYAbove > 2.0 && defaultPlacement == DEFAULT_STYLE_PLACEMENT && _offsetYBelow <= 0.0) {
+            defaultPlacement = Element::BELOW;
+            _offsetYBelow = _offsetYAbove - 4.0;      // subtract the height of a standard staff
+            _offsetYAbove = - _offsetYBelow;          // 'reflect' offset below into offset above
+            }
       }
 
 //---------------------------------------------------------
@@ -921,6 +937,8 @@ bool TextStyleData::readProperties(XmlReader& e)
             italic = e.readInt();
       else if (tag == "underline")
             underline = e.readInt();
+      else if (tag == "defaultPlacement")
+            defaultPlacement = static_cast<Element::Placement>(e.readInt());
       else if (tag == "align")
             setAlign(Align(e.readInt()));
       else if (tag == "anchor")     // obsolete
@@ -1361,8 +1379,14 @@ bool TextStyle::italic() const                           { return d->italic; }
 bool TextStyle::underline() const                        { return d->underline; }
 bool TextStyle::hasFrame() const                         { return d->hasFrame; }
 Align TextStyle::align() const                           { return d->align(); }
-const QPointF& TextStyle::offset() const                 { return d->offset(); }
-QPointF TextStyle::offset(qreal spatium) const           { return d->offset(spatium); }
+Element::Placement TextStyle::defaultPlacement() const   { return d->defaultPlacement; }
+QPointF TextStyle::offset(Element::Placement plac, Staff *st) const
+                                                         { return d->offset(plac, st); }
+QPointF TextStyle::offset(Element::Placement plac, Staff *st, qreal spatium) const
+                                                         { return d->offset(plac, st, spatium); }
+QPointF TextStyle::offset(qreal spatium) const           { return d->offset(d->defaultPlacement, 0, spatium); }
+qreal TextStyle::xOffset() const                         { return d->xOffset(); }
+qreal TextStyle::yOffset(Element::Placement plac) const  { return d->yOffset(plac); }
 OffsetType TextStyle::offsetType() const                 { return d->offsetType(); }
 bool TextStyle::sizeIsSpatiumDependent() const           { return d->sizeIsSpatiumDependent; }
 
@@ -1387,8 +1411,9 @@ void TextStyle::setItalic(bool v)                        { d->italic = v; }
 void TextStyle::setUnderline(bool v)                     { d->underline = v; }
 void TextStyle::setHasFrame(bool v)                      { d->hasFrame = v; }
 void TextStyle::setAlign(Align v)                        { d->setAlign(v); }
+void TextStyle::setDefaultPlacement(Element::Placement v) { d->defaultPlacement = v; }
 void TextStyle::setXoff(qreal v)                         { d->setXoff(v); }
-void TextStyle::setYoff(qreal v)                         { d->setYoff(v); }
+void TextStyle::setYoff(qreal v, Element::Placement pl)  { d->setYoff(v, pl); }
 void TextStyle::setOffsetType(OffsetType v)              { d->setOffsetType(v); }
 void TextStyle::setRxoff(qreal v)                        { d->setRxoff(v); }
 void TextStyle::setRyoff(qreal v)                        { d->setRyoff(v); }

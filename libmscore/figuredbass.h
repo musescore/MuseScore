@@ -58,6 +58,7 @@ and it is edited (via the normalized text); so it is derived from Text.
 ---------------------------------------------------------*/
 
 #define FBIDigitNone    -1
+static const Element::Placement DEFAULT_FB_PLACEMENT = Element::BELOW;
 
 //---------------------------------------------------------
 //   @@ FiguredBassItem

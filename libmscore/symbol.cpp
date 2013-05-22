@@ -50,12 +50,14 @@ Symbol::Symbol(const Symbol& s)
 //---------------------------------------------------------
 //   setAbove
 //---------------------------------------------------------
-
+/*
 void Symbol::setAbove(bool val)
       {
-      setYoff(val ? -2.0 : 7.0);
+//      setYoff(val ? -2.0 : 7.0);
+      setPlacement(val ? Element::ABOVE : Element::BELOW);
+      layout();
       }
-
+*/
 //---------------------------------------------------------
 //   layout
 //    height() and width() should return sensible
@@ -212,6 +214,31 @@ QPointF BSymbol::canvasPos() const
             return Element::canvasPos();
       }
 
+//---------------------------------------------------------
+//   setYoff(val)
+//---------------------------------------------------------
+
+qreal BSymbol::yOffset() const
+      {
+      // placement above, simply return above offset
+      if (placement() == Element::ABOVE)
+            return _offsetYAbove;
+      // if placement below, return below offset + staff height (default height if no staff)
+      return (staff() ? staff()->height() : 4) + _offsetYBelow;
+      }
+
+//---------------------------------------------------------
+//   setYoff(val)
+//---------------------------------------------------------
+/*
+void BSymbol::setYoff(qreal val)
+      {
+      if (placement() == Element::ABOVE)
+            _offsetYAbove  = val;
+      else
+            _offsetYBelow = staff() ? val - staff()->height() : val;
+      }
+*/
 //---------------------------------------------------------
 //   FSymbol
 //---------------------------------------------------------

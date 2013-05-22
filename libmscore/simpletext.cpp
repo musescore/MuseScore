@@ -30,7 +30,7 @@ SimpleText::SimpleText(Score* s)
    : Element(s)
       {
       if (s)
-            _textStyle = s->textStyle(TEXT_STYLE_DEFAULT);
+            setTextStyle(s->textStyle(TEXT_STYLE_DEFAULT) );
       _layoutToParentWidth = false;
       _editMode            = false;
       }
@@ -40,7 +40,7 @@ SimpleText::SimpleText(const SimpleText& st)
       {
       _text                = st._text;
       _layout              = st._layout;
-      _textStyle           = st._textStyle;
+      setTextStyle(st._textStyle);
       _layoutToParentWidth = st._layoutToParentWidth;
       frame                = st.frame;
       _editMode            = false;
@@ -264,7 +264,9 @@ void SimpleText::layout()
             }
       if (_layout.isEmpty())
             _layout.append(TLine());
-      QPointF o(_textStyle.offset(spatium()));
+      // get offset from text style and move below staff if placement is BELOW
+      // TextStyle::offset() return the offset below
+      QPointF o(_textStyle.offset(placement(), staff(), spatium()));
 
       QRectF bb;
       qreal lh = lineHeight();
@@ -806,5 +808,16 @@ void SimpleText::deleteSelectedText()
       _cursor.column = c1;
       }
 
-}
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
 
+QVariant SimpleText::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_PLACEMENT:  return _textStyle.defaultPlacement();
+            default:           return Element::propertyDefault(id);
+            }
+      }
+
+}

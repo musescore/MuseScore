@@ -14,10 +14,11 @@
 #define __ELEMENTLAYOUT_H__
 
 #include "mscore.h"
+#include "element.h"
 
 namespace Ms {
 
-class Element;
+//class Element;
 class Xml;
 class XmlReader;
 
@@ -29,26 +30,32 @@ class ElementLayout {
 
    protected:
       Align  _align;
-      QPointF _offset;              // inch or spatium
+      qreal _offsetX;              // inch or spatium
+      qreal _offsetYAbove;
+      qreal _offsetYBelow;
       OffsetType _offsetType;
       QPointF _reloff;
 
    public:
       ElementLayout();
-      ElementLayout(Align a, const QPointF& o, OffsetType ot, const QPointF& r)
-         : _align(a), _offset(o), _offsetType(ot), _reloff(r) {}
+      ElementLayout(Align a, qreal offsetX, qreal offsetYAbove, qreal offsetYBelow, OffsetType ot, const QPointF& reloff)
+            : _align(a), _offsetX(offsetX), _offsetYAbove(offsetYAbove), _offsetYBelow(offsetYBelow), _offsetType(ot), _reloff(reloff) {}
+      virtual ~ElementLayout() {}
 
       Align align() const                 { return _align;        }
       OffsetType offsetType() const       { return _offsetType;   }
-      qreal xOffset() const               { return _offset.x();   }
-      qreal yOffset() const               { return _offset.y();   }
-      const QPointF& offset() const       { return _offset;      }
-      QPointF offset(qreal) const;
+      qreal xOffset() const               { return _offsetX;   }
+      virtual qreal yOffset() const = 0;
+      qreal yOffset(Element::Placement placement) const
+                                          { return placement == Element::ABOVE ? _offsetYAbove : _offsetYBelow; }
+      QPointF offset(Element::Placement plac, Staff* st) const;
+      QPointF offset(Element::Placement plac, Staff* st, qreal sp) const;
       const QPointF& reloff() const       { return _reloff;       }
       void setReloff(const QPointF& val)  { _reloff = val;        }
       void setAlign(Align val)            { _align  = val;        }
-      void setXoff(qreal val)             { _offset.rx() = val;   }
-      void setYoff(qreal val)             { _offset.ry() = val;        }
+      void setXoff(qreal val)             { _offsetX = val;       }
+      void setYoff(qreal val, Element::Placement placement)
+                                          { (placement == Element::ABOVE ? _offsetYAbove : _offsetYBelow) = val; }
       void setOffsetType(OffsetType val)  { _offsetType = val;    }
       void layout(Element*) const;
       void writeProperties(Xml& xml) const;

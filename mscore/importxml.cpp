@@ -2731,7 +2731,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         s->setSym(pedalasteriskSym);
                   else
                         qDebug("unknown pedal %s", type.toLatin1().data());
-                  if (hasYoffset) s->setYoff(yoffset);
+                  if (hasYoffset) s->setYoff(yoffset, placement == "above" ? Element::ABOVE : Element::BELOW);
                   else s->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
                   s->setUserOff(QPointF(rx, ry));
                   // s->setMxmlOff(offset);
@@ -5043,8 +5043,9 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       double rx = 0.1 * e.attribute("relative-x", "0").toDouble();
       double ry = -0.1 * e.attribute("relative-y", "0").toDouble();
 
-      double styleYOff = score->textStyle(TEXT_STYLE_HARMONY).offset().y();
-      OffsetType offsetType = score->textStyle(TEXT_STYLE_HARMONY).offsetType();
+      const TextStyle& ts = score->textStyle(TEXT_STYLE_HARMONY);
+      double styleYOff = ts.yOffset(ts.defaultPlacement());
+      OffsetType offsetType = ts.offsetType();
       if (offsetType == OFFSET_ABS) {
             styleYOff = styleYOff * MScore::DPMM / score->spatium();
             }
@@ -5052,8 +5053,8 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       double dy = -0.1 * e.attribute("default-y", QString::number(styleYOff* -10)).toDouble();
 
       QString printObject(e.attribute("print-object", "yes"));
-      QString printFrame(e.attribute("print-frame"));
-      QString printStyle(e.attribute("print-style"));
+//      QString printFrame(e.attribute("print-frame"));
+//      QString printStyle(e.attribute("print-style"));
 
       QString kind, kindText;
       QList<HDegree> degreeList;

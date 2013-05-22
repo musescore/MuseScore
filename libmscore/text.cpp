@@ -204,12 +204,12 @@ bool Text::systemFlag() const
 //---------------------------------------------------------
 //   setAbove
 //---------------------------------------------------------
-
+/*
 void Text::setAbove(bool val)
       {
       setYoff(val ? -2.0 : 7.0);
       }
-
+*/
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -267,7 +267,7 @@ void Text::layout1()
                   o.rx() -= (size.width() * .5);
             bbox().setRect(o.x(), o.y(), size.width(), size.height());
 
-            setPos(textStyle().offset(spatium()));
+            setPos(textStyle().offset(placement(), staff(), spatium()));
 
             _doc->setModified(false);
             }
@@ -394,11 +394,13 @@ void Text::read(XmlReader& e)
 
 void Text::writeProperties(Xml& xml, bool writeText) const
       {
-      Element::writeProperties(xml);
       if (xml.clipboardmode || styled())
             xml.tag("style", textStyle().name());
       if (xml.clipboardmode || !styled())
             _textStyle.writeProperties(xml);
+      // write Element props after text style props, otherwise stype props may overwrite custom Element props
+      // (in particular, placement)
+      Element::writeProperties(xml);
       if (writeText) {
             if (styled())
                   xml.tag("text", text());
@@ -1085,7 +1087,7 @@ void Text::setSizeIsSpatiumDependent(int v)
 
 qreal Text::xoff() const
       {
-      return textStyle().offset().x();
+      return textStyle().xOffset();
       }
 
 //---------------------------------------------------------
@@ -1130,7 +1132,7 @@ void Text::setXoff(qreal val)
 
 void Text::setYoff(qreal val)
       {
-      _textStyle.setYoff(val);
+      _textStyle.setYoff(val, placement());
       }
 
 //---------------------------------------------------------
@@ -1175,7 +1177,7 @@ void Text::setReloff(const QPointF& p)
 
 qreal Text::yoff() const
       {
-      return textStyle().offset().y();
+      return textStyle().yOffset(placement());
       }
 
 //---------------------------------------------------------

@@ -43,8 +43,7 @@
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>10</yoffset>
+        <yoffsetAbove>10</yoffsetAbove>
         <rxoffset>50</rxoffset>
         <offsetType>absolute</offsetType>
         <name>Subtitle</name>
@@ -73,23 +72,25 @@
       <TextStyle>
         <halign>center</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>7</yoffset>
+        <yoffsetAbove>-3</yoffsetAbove>
+        <yoffsetBelow>3</yoffsetBelow>
         <offsetType>spatium</offsetType>
         <name>Lyrics odd lines</name>
         <family>MuseJazz</family>
         <size>10</size>
+        <defaultPlacement>1</defaultPlacement>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
       <TextStyle>
         <halign>center</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>7</yoffset>
+        <yoffsetAbove>-3</yoffsetAbove>
+        <yoffsetBelow>3</yoffsetBelow>
         <offsetType>spatium</offsetType>
         <name>Lyrics even lines</name>
         <family>MuseJazz</family>
         <size>10</size>
+        <defaultPlacement>1</defaultPlacement>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
       <TextStyle>
@@ -131,20 +132,20 @@
       <TextStyle>
         <halign>left</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>8</yoffset>
+        <yoffsetAbove>-4</yoffsetAbove>
+        <yoffsetBelow>4</yoffsetBelow>
         <offsetType>spatium</offsetType>
         <name>Dynamics</name>
         <family>MuseJazz</family>
         <size>12</size>
         <italic>1</italic>
+        <defaultPlacement>1</defaultPlacement>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
       <TextStyle>
         <halign>left</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-2</yoffset>
+        <yoffsetAbove>-2</yoffsetAbove>
         <offsetType>spatium</offsetType>
         <name>Technik</name>
         <family>MuseJazz</family>
@@ -154,8 +155,7 @@
       <TextStyle>
         <halign>left</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
+        <yoffsetAbove>-4</yoffsetAbove>
         <offsetType>spatium</offsetType>
         <name>Tempo</name>
         <family>MuseJazz</family>
@@ -185,12 +185,13 @@
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>6</yoffset>
+        <yoffsetAbove>-2</yoffsetAbove>
+        <yoffsetBelow>2</yoffsetBelow>
         <offsetType>spatium</offsetType>
         <name>Translator</name>
         <family>MuseJazz</family>
         <size>11</size>
+        <defaultPlacement>1</defaultPlacement>
         </TextStyle>
       <TextStyle>
         <halign>center</halign>
@@ -204,8 +205,7 @@
       <TextStyle>
         <halign>left</halign>
         <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
+        <yoffsetAbove>-4</yoffsetAbove>
         <offsetType>spatium</offsetType>
         <name>System</name>
         <family>MuseJazz</family>
@@ -216,19 +216,19 @@
       <TextStyle>
         <halign>left</halign>
         <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>5.5</yoffset>
+        <yoffsetAbove>-1.5</yoffsetAbove>
+        <yoffsetBelow>1.5</yoffsetBelow>
         <offsetType>spatium</offsetType>
         <name>Staff</name>
         <family>MuseJazz</family>
         <size>10</size>
+        <defaultPlacement>1</defaultPlacement>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
       <TextStyle>
         <halign>left</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-2.5</yoffset>
+        <yoffsetAbove>-2.5</yoffsetAbove>
         <offsetType>spatium</offsetType>
         <name>Chordname</name>
         <family>MuseJazz</family>
@@ -239,7 +239,7 @@
         <halign>right</halign>
         <valign>baseline</valign>
         <xoffset>-2</xoffset>
-        <yoffset>-4</yoffset>
+        <yoffsetAbove>-4</yoffsetAbove>
         <offsetType>spatium</offsetType>
         <name>Rehearsal Mark</name>
         <family>MuseJazz</family>
@@ -254,8 +254,7 @@
       <TextStyle>
         <halign>center</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
+        <yoffsetAbove>-4</yoffsetAbove>
         <rxoffset>100</rxoffset>
         <offsetType>spatium</offsetType>
         <name>Repeat Text</name>
@@ -268,7 +267,7 @@
         <halign>left</halign>
         <valign>top</valign>
         <xoffset>0.1</xoffset>
-        <yoffset>-0.1</yoffset>
+        <yoffsetAbove>-0.1</yoffsetAbove>
         <offsetType>spatium</offsetType>
         <name>Volta</name>
         <family>MuseJazz</family>
@@ -307,8 +306,7 @@
       <TextStyle>
         <halign>center</halign>
         <valign>center</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-5</yoffset>
+        <yoffsetAbove>-5</yoffsetAbove>
         <rxoffset>100</rxoffset>
         <offsetType>spatium</offsetType>
         <name>String Number</name>
@@ -324,8 +322,7 @@
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-10</yoffset>
+        <yoffsetAbove>-10</yoffsetAbove>
         <rxoffset>50</rxoffset>
         <ryoffset>100</ryoffset>
         <offsetType>absolute</offsetType>
@@ -336,8 +333,7 @@
       <TextStyle>
         <halign>right</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-10</yoffset>
+        <yoffsetAbove>-10</yoffsetAbove>
         <rxoffset>50</rxoffset>
         <ryoffset>100</ryoffset>
         <offsetType>absolute</offsetType>
@@ -348,8 +344,7 @@
       <TextStyle>
         <halign>left</halign>
         <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-10</yoffset>
+        <yoffsetAbove>-10</yoffsetAbove>
         <rxoffset>50</rxoffset>
         <ryoffset>100</ryoffset>
         <offsetType>absolute</offsetType>
