@@ -166,6 +166,8 @@ int RepeatList::utick2tick(int tick) const
       unsigned n = size();
       if (n == 0)
             return tick;
+      if (tick < 0)
+            return 0;
       unsigned ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
       for (unsigned i = ii; i < n; ++i) {
             if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i+1)->utick))) {
