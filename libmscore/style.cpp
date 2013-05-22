@@ -339,7 +339,7 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
          TR( "Chordname"), ff,  12, false, false, false, Element::ABOVE,
-         ALIGN_LEFT | ALIGN_BASELINE, 0.0, 0.0, 0.0, OS, QPointF(), true);
+         ALIGN_LEFT | ALIGN_BASELINE, 0.0, 0.0, 0.0, OS, QPointF(), true));
 
       AS(TextStyle(
          TR( "Rehearsal Mark"), ff,  14, true, false, false, Element::ABOVE,

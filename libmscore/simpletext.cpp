@@ -821,4 +821,3 @@ QVariant SimpleText::propertyDefault(P_ID id) const
       }
 
 }
-
