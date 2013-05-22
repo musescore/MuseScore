@@ -18,6 +18,7 @@
 
 #define DIR QString("libmscore/transpose/")
 
+using namespace Ms;
 
 //---------------------------------------------------------
 //   TestTranspose
