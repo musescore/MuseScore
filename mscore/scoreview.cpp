@@ -2044,7 +2044,6 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
             p.translate(pos);
             Space sp = cr->space();
             QRectF r;
-printf("%f %f %f %f\n", -sp.lw(), y1, sp.rw(), y2);
             r.setCoords(-sp.lw(), y1, sp.rw(), y2);
             p.drawRect(r);
             p.translate(-pos);
