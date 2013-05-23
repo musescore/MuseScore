@@ -157,7 +157,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>18</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -217,14 +217,14 @@
           <item>
            <widget class="QCheckBox" name="concertPitch">
             <property name="text">
-             <string>Display in Concert Pitch</string>
+             <string>Display in concert pitch</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QGroupBox" name="multiMeasureRests">
             <property name="title">
-             <string>Create Multi Measure Rests</string>
+             <string>Create multi measure rests</string>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -261,7 +261,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="label_15">
                  <property name="text">
-                  <string>Minimum Number of empty measures:</string>
+                  <string>Minimum number of empty measures:</string>
                  </property>
                 </widget>
                </item>
@@ -276,7 +276,7 @@
           <item>
            <widget class="QCheckBox" name="hideEmptyStaves">
             <property name="text">
-             <string>Hide Empty Staves</string>
+             <string>Hide empty staves</string>
             </property>
            </widget>
           </item>
@@ -290,7 +290,7 @@
           <item>
            <widget class="QCheckBox" name="crossMeasureValues">
             <property name="text">
-             <string>Display note values across measure bar (EXPERIMENTAL, early music ony!)</string>
+             <string>Display note values across measure bar (EXPERIMENTAL, early music only!)</string>
             </property>
            </widget>
           </item>
@@ -504,7 +504,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Min. System distance</string>
+             <string>Min. system distance</string>
             </property>
            </widget>
           </item>
@@ -813,7 +813,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Max. System distance</string>
+             <string>Max. system distance</string>
             </property>
            </widget>
           </item>
@@ -874,7 +874,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Header Text</string>
+          <string>Header text</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -894,7 +894,7 @@
                <string>show header also on first page</string>
               </property>
               <property name="text">
-               <string>show first</string>
+               <string>Show first</string>
               </property>
              </widget>
             </item>
@@ -904,14 +904,14 @@
                <string>use odd even page header</string>
               </property>
               <property name="text">
-               <string>odd/even</string>
+               <string>Odd/Even</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="headerStyled">
               <property name="text">
-               <string>styled</string>
+               <string>Styled</string>
               </property>
              </widget>
             </item>
@@ -935,7 +935,7 @@
             <item row="0" column="1">
              <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>left</string>
+               <string>Left</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -945,7 +945,7 @@
             <item row="0" column="3">
              <widget class="QLabel" name="label_6">
               <property name="text">
-               <string>middle</string>
+               <string>Middle</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -955,7 +955,7 @@
             <item row="0" column="5">
              <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>right</string>
+               <string>Right</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -965,7 +965,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="label_67">
               <property name="text">
-               <string>even</string>
+               <string>Even</string>
               </property>
              </widget>
             </item>
@@ -1068,7 +1068,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="label_66">
               <property name="text">
-               <string>odd</string>
+               <string>Odd</string>
               </property>
              </widget>
             </item>
@@ -1174,7 +1174,7 @@
           <string/>
          </property>
          <property name="title">
-          <string>Footer Text</string>
+          <string>Footer text</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1194,7 +1194,7 @@
                <string>show footer also on first page</string>
               </property>
               <property name="text">
-               <string>show first</string>
+               <string>Show first</string>
               </property>
              </widget>
             </item>
@@ -1204,14 +1204,14 @@
                <string>use odd even page footer</string>
               </property>
               <property name="text">
-               <string>odd/even</string>
+               <string>Odd/Even</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="footerStyled">
               <property name="text">
-               <string>styled</string>
+               <string>Styled</string>
               </property>
              </widget>
             </item>
@@ -1245,7 +1245,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="label_80">
               <property name="text">
-               <string>even</string>
+               <string>Even</string>
               </property>
              </widget>
             </item>
@@ -1262,7 +1262,7 @@
             <item row="0" column="3">
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>middle</string>
+               <string>Middle</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1312,7 +1312,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="label_65">
               <property name="text">
-               <string>odd</string>
+               <string>Odd</string>
               </property>
              </widget>
             </item>
@@ -1335,7 +1335,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>left</string>
+               <string>Left</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1395,7 +1395,7 @@
             <item row="0" column="5">
              <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>right</string>
+               <string>Right</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1444,7 +1444,7 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="0">
         <widget class="QGroupBox" name="showMeasureNumber">
          <property name="title">
-          <string>Measure Numbers</string>
+          <string>Measure numbers</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1462,28 +1462,28 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QCheckBox" name="showFirstMeasureNumber">
             <property name="text">
-             <string>show first</string>
+             <string>Show first</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="showAllStaffsMeasureNumber">
             <property name="text">
-             <string>all staffs</string>
+             <string>All staves</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
            <widget class="QRadioButton" name="showEverySystemMeasureNumber">
             <property name="text">
-             <string>every system</string>
+             <string>Every system</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QRadioButton" name="showIntervalMeasureNumber">
             <property name="text">
-             <string>interval</string>
+             <string>Interval</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1527,7 +1527,7 @@ p, li { white-space: pre-wrap; }
             <item row="1" column="0">
              <widget class="QLabel" name="label_52">
               <property name="text">
-               <string>System Bracket Distance:</string>
+               <string>System bracket distance:</string>
               </property>
              </widget>
             </item>
@@ -1559,14 +1559,14 @@ p, li { white-space: pre-wrap; }
             <item row="3" column="0">
              <widget class="QLabel" name="label_90">
               <property name="text">
-               <string>Akkolade Distance:</string>
+               <string>Brace distance:</string>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="label_29">
               <property name="text">
-               <string>Fix Number of Measures/System:</string>
+               <string>Fix number of measures/system:</string>
               </property>
              </widget>
             </item>
@@ -1576,7 +1576,7 @@ p, li { white-space: pre-wrap; }
             <item row="5" column="0">
              <widget class="QCheckBox" name="fixMeasureWidth">
               <property name="text">
-               <string>Fix Measure Width</string>
+               <string>Fix measure width</string>
               </property>
              </widget>
             </item>
@@ -1599,14 +1599,14 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_91">
               <property name="text">
-               <string>System Bracket Width:</string>
+               <string>System bracket width:</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_92">
               <property name="text">
-               <string>Akkolade Width:</string>
+               <string>Brace width:</string>
               </property>
              </widget>
             </item>
@@ -2304,7 +2304,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QGroupBox" name="shortenStem">
             <property name="title">
-             <string>shorten stems</string>
+             <string>Shorten stems</string>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -2573,20 +2573,20 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QGroupBox" name="groupBox_18">
             <property name="title">
-             <string>Default TAB Clef</string>
+             <string>Default TAB clef</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_29">
              <item>
               <widget class="QRadioButton" name="clefTab1">
                <property name="text">
-                <string>Clef1</string>
+                <string>Clef 1</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="clefTab2">
                <property name="text">
-                <string>Clef2</string>
+                <string>Clef 2</string>
                </property>
               </widget>
              </item>
@@ -2855,7 +2855,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_30">
               <property name="text">
-               <string>line width at end</string>
+               <string>Line width at end</string>
               </property>
              </widget>
             </item>
@@ -2878,7 +2878,7 @@ p, li { white-space: pre-wrap; }
             <item row="1" column="0">
              <widget class="QLabel" name="label_31">
               <property name="text">
-               <string>line width middle</string>
+               <string>Line width middle</string>
               </property>
              </widget>
             </item>
@@ -2901,7 +2901,7 @@ p, li { white-space: pre-wrap; }
             <item row="2" column="0">
              <widget class="QLabel" name="label_32">
               <property name="text">
-               <string>bow</string>
+               <string>Bow</string>
               </property>
              </widget>
             </item>
@@ -2924,7 +2924,7 @@ p, li { white-space: pre-wrap; }
             <item row="3" column="0">
              <widget class="QLabel" name="label_33">
               <property name="text">
-               <string>dotted line width</string>
+               <string>Dotted line width</string>
               </property>
              </widget>
             </item>
@@ -3237,7 +3237,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_95">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3342,7 +3342,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_40">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3421,7 +3421,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_81">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3454,7 +3454,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_96">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3525,7 +3525,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_97">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3601,7 +3601,7 @@ p, li { white-space: pre-wrap; }
           <item row="2" column="0">
            <widget class="QLabel" name="label_17">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3660,7 +3660,7 @@ p, li { white-space: pre-wrap; }
           <item row="3" column="0">
            <widget class="QLabel" name="label_79">
             <property name="text">
-             <string>distance to fret diagram:</string>
+             <string>Distance to fret diagram:</string>
             </property>
            </widget>
           </item>
@@ -3686,7 +3686,7 @@ p, li { white-space: pre-wrap; }
           <item row="4" column="0">
            <widget class="QLabel" name="label_100">
             <property name="text">
-             <string>minimum chord spacing:</string>
+             <string>Minimum chord spacing:</string>
             </property>
            </widget>
           </item>
@@ -3972,7 +3972,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_35">
               <property name="text">
-               <string>note head distance</string>
+               <string>Note head distance</string>
               </property>
              </widget>
             </item>
@@ -3999,7 +3999,7 @@ p, li { white-space: pre-wrap; }
             <item row="2" column="0">
              <widget class="QLabel" name="label_41">
               <property name="text">
-               <string>articulation distance</string>
+               <string>Articulation distance</string>
               </property>
              </widget>
             </item>
@@ -4016,7 +4016,7 @@ p, li { white-space: pre-wrap; }
             <item row="1" column="0">
              <widget class="QLabel" name="label_37">
               <property name="text">
-               <string>staff distance</string>
+               <string>Staff distance</string>
               </property>
              </widget>
             </item>
@@ -4156,7 +4156,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Stem Direction in Multi-Voice Context</string>
+          <string>Stem direction in multi-voice context</string>
          </property>
          <property name="flat">
           <bool>false</bool>
