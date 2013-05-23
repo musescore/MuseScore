@@ -337,6 +337,7 @@ void Score::init()
       _sigmap         = 0; // new TimeSigMap();
       _tempomap       = 0; // new TempoMap;
       _layoutMode     = LayoutPage;
+      _noteHeadWidth  = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
       }
 
 //---------------------------------------------------------
@@ -1312,6 +1313,7 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       scanElements(data, spatiumHasChanged, true);
       foreach (Staff* staff, _staves)
             staff->spatiumChanged(oldValue, newValue);
+      _noteHeadWidth = symbols[_symIdx][quartheadSym].width(newValue / (MScore::DPI * SPATIUM20));
       }
 
 //---------------------------------------------------------
@@ -3441,7 +3443,6 @@ Cursor* Score::newCursor()
       {
       return new Cursor(this);
       }
-
 
 }
 

@@ -258,8 +258,6 @@ class Note : public Element {
       void read(XmlReader&);
       void write(Xml& xml) const;
 
-      QPointF stemPos(bool upFlag) const;    ///< Point to connect stem.
-
       bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       Element* drop(const DropData&);
 
@@ -291,8 +289,6 @@ class Note : public Element {
 
       void setOnTimeOffset(int v);
       void setOffTimeOffset(int v);
-
-//      void setBend(Bend* b)               { _bend = b;    }
 
       int customizeVelocity(int velo) const;
       Q_INVOKABLE NoteDot* dot(int n)       { return _dots[n];           }
