@@ -345,8 +345,6 @@ Score::FileError Score::read114(XmlReader& e)
                   _synthesizerState.read(e);
             else if (tag == "Spatium")
                   _style.setSpatium (e.readDouble() * MScore::DPMM);
-            else if (tag == "page-offset")
-                  setPageNumberOffset(e.readInt());
             else if (tag == "Division")
                   _fileDivision = e.readInt();
             else if (tag == "showInvisible")
@@ -380,7 +378,7 @@ Score::FileError Score::read114(XmlReader& e)
                   if (_layoutMode != LayoutFloat && _layoutMode != LayoutSystem) {
                         PageFormat pf;
                         pf.copy(*pageFormat());
-                        pf.read(e);
+                        pf.read(e, this);
                         setPageFormat(pf);
                         }
                   else
