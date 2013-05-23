@@ -250,27 +250,6 @@ void Chord::setStem(Stem* s)
       }
 
 //---------------------------------------------------------
-//   stemPos
-//    return page coordinates
-//---------------------------------------------------------
-
-QPointF Chord::stemPos() const
-      {
-      qreal _spatium = spatium();
-      if (staff() && staff()->isTabStaff())
-            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * _spatium) + pagePos();
-
-      QPointF p(pagePos());
-      if (_up) {
-            p.rx() += score()->noteHeadWidth();
-            p.ry() += upNote()->pos().y();
-            }
-      else
-            p.ry() += downNote()->pos().y();
-      return p;
-      }
-
-//---------------------------------------------------------
 //   stemPosX
 //    return page coordinates
 //---------------------------------------------------------
@@ -289,6 +268,27 @@ qreal Chord::stemPosX() const
       }
 
 //---------------------------------------------------------
+//   stemPos
+//    return page coordinates
+//---------------------------------------------------------
+
+QPointF Chord::stemPos() const
+      {
+      qreal _spatium = spatium();
+      if (staff() && staff()->isTabStaff())
+            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * _spatium) + pagePos();
+
+      QPointF p(pagePos());
+      if (_up) {
+            p.rx() += score()->noteHeadWidth();
+            p.ry() += downNote()->pos().y();
+            }
+      else
+            p.ry() += upNote()->pos().y();
+      return p;
+      }
+
+//---------------------------------------------------------
 //   stemPosBeam
 //    return stem position of note on beam side
 //    return canvas coordinates
@@ -302,10 +302,10 @@ QPointF Chord::stemPosBeam() const
       QPointF p(pagePos());
       if (_up) {
             p.rx() += score()->noteHeadWidth();
-            p.ry() += downNote()->pos().y();
+            p.ry() += upNote()->pos().y();
             }
       else
-            p.ry() += upNote()->pos().y();
+            p.ry() += downNote()->pos().y();
       return p;
       }
 
