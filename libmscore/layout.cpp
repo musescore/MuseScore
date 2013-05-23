@@ -100,7 +100,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       {
       Staff* staff = Score::staff(staffIdx);
 
-      if (staff->isDrumStaff() || staff->isTabStaff())
+      // if (staff->isDrumStaff() || staff->isTabStaff())
+      if (staff->isTabStaff())
             return;
 
       int startTrack = staffIdx * VOICES;
