@@ -277,7 +277,7 @@ void Beam::layout1()
             int mDown   = 0;
             int upDnLimit = staff()->lines() - 1;           // was '4' hard-coded in following code
 
-            foreach(ChordRest* cr, _elements) {
+            foreach (ChordRest* cr, _elements) {
                   if (cr->type() == CHORD) {
                         c2 = static_cast<Chord*>(cr);
                         if (c2->line() != upDnLimit)
@@ -1495,123 +1495,123 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             for (int i = 0; i < n; ++i) {
                   ChordRest* cr1 = crl[i];
                   int l = cr1->durationType().hooks() - 1;
-                  if (l >= beamLevel) {
-                        int c1 = i;
-                        ++i;
-                        for (; i < n; ++i) {
-                              ChordRest* c = crl[i];
-                              int l = c->durationType().hooks() - 1;
+                  if ((cr1->type() == REST) || l < beamLevel)
+                        continue;
+                  int c1 = i;
+                  ++i;
+                  for (; i < n; ++i) {
+                        ChordRest* c = crl[i];
+                        int l = c->durationType().hooks() - 1;
 
-                              BeamMode bm = c->beamMode();
-                              if (bm == BeamMode::AUTO)
-                                    bm = Groups::endBeam(c);
-                              bool b32 = (beamLevel >= 1) && (bm == BeamMode::BEGIN32);
-                              bool b64 = (beamLevel >= 2) && (bm == BeamMode::BEGIN64);
-                              if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel))
-                                    break;
-                              }
-
-                        int bl = growDown ? beamLevel : -beamLevel;
-
-                        ChordRest* cr2 = crl[i-1];
-                        if (c1 && (cr1->up() == cr2->up())) {
-                              QPointF stemPos(cr1->stemPos());
-                              qreal x  = stemPos.x() - _pagePos.x();
-                              qreal x2 = x - _pagePos.x();
-                              qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
-                              qreal y2 = cr1->stemPos().y();
-
-                              if ((y1 < y2) != growDown)
-                                    bl = baseLevel - (beamLevel + 1);
-                              }
-                        int c2 = i;
-                        if (c1 == 0 && c2 == n)
-                              ++baseLevel;
-
-                        qreal stemWidth  = point(score()->styleS(ST_stemWidth));
-                        qreal x2   = cr1->stemPosX() - _pagePos.x();
-                        qreal x3;
-
-                        if ((c2 - c1) > 1) {
-                              ChordRest* cr2 = crl[c2-1];
-                              // create segment
-                              x3 = cr2->stemPosX() - _pagePos.x();
-
-                              if (tab) {
-                                    x2 -= stemWidth * 0.5;
-                                    x3 += stemWidth * 0.5;
-                                    }
-                              else {
-                                    if (cr1->up())
-                                          x2 -= stemWidth;
-                                    else
-                                          x3 += stemWidth;
-                                    }
-                              }
-                        else {
-                              // create broken segment
-                              int n = crl.size();
-                              qreal len = point(score()->styleS(ST_beamMinLen));
-                              //
-                              // find direction (by default, segment points to right)
-                              //
-                              // if first or last of group
-                              // unconditionally set beam at right or left side
-                              if (c1 == 0)                // first => point to right
-                                    ;
-                              else if (c1 == n - 1)       // last => point to left
-                                    len = -len;
-                              else {
-                                    // if inside group
-                                    // PRO: this algorithm is simple(r) and finds the right direction in
-                                    // the great majority of cases, without attempting to 'understand'
-                                    // neither the rhythm nor the time signature
-                                    // CON: it fails in some highly subdivided tuplets (9-plet or more) or sub-tuplets.
-                                    // Compute the position in the measure of the end of this
-                                    // (i.e. of the beginning of next chord)
-                                    int measTick = cr1->measure()->tick();
-                                    int tickNext = crl[c1+1]->tick() - measTick;
-                                    // determine the tick length of a chord with one beam level less than this
-                                    // (i.e. twice the ticks of this)
-                                    int tickMod  = (tickNext - (crl[c1]->tick() - measTick)) * 2;
-                                    // if this completes, within the measure, a unit of tickMod length, flip beam to left
-                                    // (allow some tolerance for tick rounding in tuplets
-                                    // without tuplet tolerance, could be simplified to:)
-//                                  if (tickNext % tickMod == 0)
-#define BEAM_TUPLET_TOLERANCE 6
-                                    int mod = tickNext % tickMod;
-                                    if (mod <= BEAM_TUPLET_TOLERANCE || (tickMod - mod) <= BEAM_TUPLET_TOLERANCE)
-                                          len = -len;
-                                    }
-                              if (tab) {
-                                    if (len > 0)
-                                          x2 -= stemWidth * 0.5;
-                                    else
-                                          x2 += stemWidth * 0.5;
-                                    }
-                              else {
-                                    bool stemUp = cr1->up();
-                                    if (stemUp && len > 0)
-                                          x2 -= stemWidth;
-                                    else if (!stemUp && len < 0)
-                                          x2 += stemWidth;
-                                    }
-                              x3 = x2 + len;
-                              }
-                        //feathered beams
-                        qreal yo   = py1 + bl * _beamDist * _grow1;
-                        qreal yoo = py1 + bl * _beamDist * _grow2;
-                        qreal ly1  = (x2 - x1) * slope + yo;
-                        qreal ly2  = (x3 - x1) * slope + yoo;
-                        if (!qIsFinite(x2) || !qIsFinite(ly1)
-                           || !qIsFinite(x3) || !qIsFinite(ly2)) {
-                              qDebug("bad beam segment: slope %f", slope);
-                              }
-                        else {
-                              beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
-                              }
-                        --i;
+                        BeamMode bm = c->beamMode();
+                        if (bm == BeamMode::AUTO)
+                              bm = Groups::endBeam(c);
+                        bool b32 = (beamLevel >= 1) && (bm == BeamMode::BEGIN32);
+                        bool b64 = (beamLevel >= 2) && (bm == BeamMode::BEGIN64);
+                        if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel))
+                              break;
                         }
+
+                  int bl = growDown ? beamLevel : -beamLevel;
+
+                  ChordRest* cr2 = crl[i-1];
+                  if (c1 && (cr1->up() == cr2->up())) {
+                        QPointF stemPos(cr1->stemPos());
+                        qreal x  = stemPos.x() - _pagePos.x();
+                        qreal x2 = x - _pagePos.x();
+                        qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
+                        qreal y2 = cr1->stemPos().y();
+
+                        if ((y1 < y2) != growDown)
+                              bl = baseLevel - (beamLevel + 1);
+                        }
+                  int c2 = i;
+                  if (c1 == 0 && c2 == n)
+                        ++baseLevel;
+
+                  qreal stemWidth  = point(score()->styleS(ST_stemWidth));
+                  qreal x2   = cr1->stemPosX() - _pagePos.x();
+                  qreal x3;
+
+                  if ((c2 - c1) > 1) {
+                        ChordRest* cr2 = crl[c2-1];
+                        // create segment
+                        x3 = cr2->stemPosX() - _pagePos.x();
+
+                        if (tab) {
+                              x2 -= stemWidth * 0.5;
+                              x3 += stemWidth * 0.5;
+                              }
+                        else {
+                              if (cr1->up())
+                                    x2 -= stemWidth;
+                              else
+                                    x3 += stemWidth;
+                              }
+                        }
+                  else {
+                        // create broken segment
+                        int n = crl.size();
+                        qreal len = point(score()->styleS(ST_beamMinLen));
+                        //
+                        // find direction (by default, segment points to right)
+                        //
+                        // if first or last of group
+                        // unconditionally set beam at right or left side
+                        if (c1 == 0)                // first => point to right
+                              ;
+                        else if (c1 == n - 1)       // last => point to left
+                              len = -len;
+                        else {
+                              // if inside group
+                              // PRO: this algorithm is simple(r) and finds the right direction in
+                              // the great majority of cases, without attempting to 'understand'
+                              // neither the rhythm nor the time signature
+                              // CON: it fails in some highly subdivided tuplets (9-plet or more) or sub-tuplets.
+                              // Compute the position in the measure of the end of this
+                              // (i.e. of the beginning of next chord)
+                              int measTick = cr1->measure()->tick();
+                              int tickNext = crl[c1+1]->tick() - measTick;
+                              // determine the tick length of a chord with one beam level less than this
+                              // (i.e. twice the ticks of this)
+                              int tickMod  = (tickNext - (crl[c1]->tick() - measTick)) * 2;
+                              // if this completes, within the measure, a unit of tickMod length, flip beam to left
+                              // (allow some tolerance for tick rounding in tuplets
+                              // without tuplet tolerance, could be simplified to:)
+//                            if (tickNext % tickMod == 0)
+                              static const int BEAM_TUPLET_TOLERANCE = 6;
+                              int mod = tickNext % tickMod;
+                              if (mod <= BEAM_TUPLET_TOLERANCE || (tickMod - mod) <= BEAM_TUPLET_TOLERANCE)
+                                    len = -len;
+                              }
+                        if (tab) {
+                              if (len > 0)
+                                    x2 -= stemWidth * 0.5;
+                              else
+                                    x2 += stemWidth * 0.5;
+                              }
+                        else {
+                              bool stemUp = cr1->up();
+                              if (stemUp && len > 0)
+                                    x2 -= stemWidth;
+                              else if (!stemUp && len < 0)
+                                    x2 += stemWidth;
+                              }
+                        x3 = x2 + len;
+                        }
+                  //feathered beams
+                  qreal yo   = py1 + bl * _beamDist * _grow1;
+                  qreal yoo = py1 + bl * _beamDist * _grow2;
+                  qreal ly1  = (x2 - x1) * slope + yo;
+                  qreal ly2  = (x3 - x1) * slope + yoo;
+                  if (!qIsFinite(x2) || !qIsFinite(ly1)
+                     || !qIsFinite(x3) || !qIsFinite(ly2)) {
+                        qDebug("bad beam segment: slope %f", slope);
+                        }
+                  else {
+                        beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
+                        }
+                  --i;
                   }
             }
 
@@ -1624,6 +1624,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   continue;
             Stem* stem = c->stem();
             if (!stem) {
+                  // is this ever true?
+                  qDebug("create stem in layout beam");
                   stem = new Stem(score());
                   c->setStem(stem);
                   }
@@ -1653,6 +1655,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   }
             stem->setLen(y2 - (by + _pagePos.y()));
+#if 0       // TODO ??
             if (!tab) {
                   bool _up = c->up();
                   qreal stemWidth5 = stem->lineWidth() * .5;
@@ -1665,6 +1668,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         stemX = stemWidth5;
                   stem->rxpos() = stemX;
                   }
+#endif
 
             //
             // layout stem slash for acciacatura

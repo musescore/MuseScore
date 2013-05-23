@@ -318,7 +318,7 @@ void EditDrumset::updateExample()
       Stem* stem = new Stem(gscore);
       stem->setLen((up ? -3.0 : 3.0) * gscore->spatium());
       chord->setStem(stem);
-      stem->setPos(note->stemPos(up));
+      stem->setPos(chord->stemPos());
       drumNote->add(0,  chord, qApp->translate("drumset", qPrintable(nDrumset.name(pitch))));
       }
 

@@ -353,6 +353,8 @@ class Score : public QObject {
       bool _showOmr;
       PlayMode _playMode;
 
+      qreal _noteHeadWidth;
+
       //------------------
 
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false);
@@ -923,6 +925,8 @@ class Score : public QObject {
       qreal computeMinWidth(Segment* fs);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
+
+      qreal noteHeadWidth() const   { return _noteHeadWidth; }
 
       friend class ChangeSynthesizerState;
       };

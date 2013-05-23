@@ -256,9 +256,18 @@ void Chord::setStem(Stem* s)
 
 QPointF Chord::stemPos() const
       {
+      qreal _spatium = spatium();
       if (staff() && staff()->isTabStaff())
-            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * spatium()) + pagePos();
-      return (_up ? downNote() : upNote())->stemPos(_up);
+            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * _spatium) + pagePos();
+
+      QPointF p(pagePos());
+      if (_up) {
+            p.rx() += score()->noteHeadWidth();
+            p.ry() += upNote()->pos().y();
+            }
+      else
+            p.ry() += downNote()->pos().y();
+      return p;
       }
 
 //---------------------------------------------------------
@@ -269,12 +278,13 @@ QPointF Chord::stemPos() const
 qreal Chord::stemPosX() const
       {
       qreal x = pageX();
+      qreal _spatium = spatium();
       if (staff() && staff()->isTabStaff()) {
-            qreal stemX = static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosX(this) * spatium();
-            x += stemX;
+            qreal stemX = static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosX(this) * _spatium;
+            return x + stemX;
             }
-      else if (_up)
-            x += upNote()->headWidth();
+      if (_up)
+            x += score()->noteHeadWidth();
       return x;
       }
 
@@ -286,9 +296,17 @@ qreal Chord::stemPosX() const
 
 QPointF Chord::stemPosBeam() const
       {
+      qreal _spatium = spatium();
       if (staff() && staff()->isTabStaff())
-            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosBeam(this) * spatium()) + pagePos();
-      return (_up ? upNote() : downNote())->stemPos(_up);
+            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosBeam(this) * _spatium) + pagePos();
+      QPointF p(pagePos());
+      if (_up) {
+            p.rx() += score()->noteHeadWidth();
+            p.ry() += downNote()->pos().y();
+            }
+      else
+            p.ry() += upNote()->pos().y();
+      return p;
       }
 
 //---------------------------------------------------------
