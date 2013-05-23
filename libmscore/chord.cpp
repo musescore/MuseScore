@@ -262,8 +262,12 @@ qreal Chord::stemPosX() const
             qreal stemX = static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosX(this) * _spatium;
             return x + stemX;
             }
-      if (_up)
-            x += score()->noteHeadWidth();
+      if (_up) {
+            qreal nhw = score()->noteHeadWidth();
+            if (_noteType != NOTE_NORMAL)
+                  nhw *= score()->styleD(ST_graceNoteMag);
+            x += nhw;
+            }
       return x;
       }
 
@@ -280,7 +284,10 @@ QPointF Chord::stemPos() const
 
       QPointF p(pagePos());
       if (_up) {
-            p.rx() += score()->noteHeadWidth();
+            qreal nhw = score()->noteHeadWidth();
+            if (_noteType != NOTE_NORMAL)
+                  nhw *= score()->styleD(ST_graceNoteMag);
+            p.rx() += nhw;
             p.ry() += downNote()->pos().y();
             }
       else
@@ -301,7 +308,10 @@ QPointF Chord::stemPosBeam() const
             return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosBeam(this) * _spatium) + pagePos();
       QPointF p(pagePos());
       if (_up) {
-            p.rx() += score()->noteHeadWidth();
+            qreal nhw = score()->noteHeadWidth();
+            if (_noteType != NOTE_NORMAL)
+                  nhw *= score()->styleD(ST_graceNoteMag);
+            p.rx() += nhw;
             p.ry() += upNote()->pos().y();
             }
       else
@@ -501,7 +511,7 @@ void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible,
       qreal ll = hw + score()->styleS(ST_ledgerLineLength).val() * _spatium;
 
       if (_noteType != NOTE_NORMAL)
-            ll *= score()->style(ST_graceNoteMag).toDouble();
+            ll *= score()->styleD(ST_graceNoteMag);
       x -= ll * .5;
 
       x += (lr & 1) ? -hw2 : hw2;
@@ -1391,11 +1401,11 @@ void Chord::layoutPitch()
             delete _ledgerLines;
             _ledgerLines = l;
             }
+      setDotPosX(-1000.0);
 
       qreal lll       = 0.0;                    // space to leave at left of chord
       qreal rrr       = 0.0;                    // space to leave at right of chord
       Note* upnote    = upNote();
-      qreal headWidth = symbols[score()->symIdx()][quartheadSym].width(magS());
 
       delete _tabDur;   // no TAB? no duration symbol! (may happen when converting a TAB into PITCHED)
       _tabDur = 0;
@@ -1419,41 +1429,49 @@ void Chord::layoutPitch()
 
       //-----------------------------------------
       //  process notes
-      //    - position
       //-----------------------------------------
-
-      int lx = 0.0;
-      adjustReadPos();
-      qreal noteWidth = _notes.size() ? downNote()->headWidth() :
-                  symbols[score()->symIdx()][quartheadSym].width(magS());
-      qreal stemX = _up ? noteWidth : 0.0;
 
       for (int i = 0; i < _notes.size(); ++i) {
             Note* note = _notes.at(i);
             note->layout();
-            qreal x = note->rxpos();
+
+            qreal x1 = note->pos().x();
+            qreal x2 = x1 + note->headWidth();
+            if (-x1 > lll)
+                  lll = -x1;
+            if (x2 > rrr)
+                  rrr = x2;
+            if (x2 > dotPosX())
+                  setDotPosX(x2);
 
             Accidental* accidental = note->accidental();
             if (accidental) {
                   qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
-                  x = accidental->x() + note->x() - minNoteDistance;
+                  qreal x = accidental->x() + note->x() - minNoteDistance;
+                  if (-x > lll)
+                        lll = -x;
                   }
-            if (x < lx)
-                  lx = x;
             }
-      lll = -lx;
-      if (stem())
+
+      //-----------------------------------------
+      //  create ledger lines
+      //-----------------------------------------
+
+      qreal stemX;
+      if (stem()) {
             stem()->rypos() = (_up ? downNote() : upNote())->rypos();
-
+            stemX = stem()->pos().x();
+            }
+      else
+            stemX = 0.0;
       addLedgerLines(stemX, staffMove());
-
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
             ll->layout();
 
       if (_arpeggio) {
             qreal headHeight = upnote->headHeight();
             _arpeggio->layout();
-            lll += _arpeggio->width() + _spatium * .5;
+            lll    += _arpeggio->width() + _spatium * .5;
             qreal y = upNote()->pos().y() - headHeight * .5;
             qreal h = downNote()->pos().y() + downNote()->headHeight() - y;
             _arpeggio->setHeight(h);
@@ -1466,28 +1484,6 @@ void Chord::layoutPitch()
 
       if (_glissando)
             lll += _spatium * .5;
-
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i) {
-            Note* note = _notes.at(i);
-            qreal lhw = note->headWidth();
-            qreal rr = 0.0;               // assume note is at left of stem (0 space at right)
-            if (note->mirror()) {
-                  if (up())
-                        rr = lhw * 2.0;
-                  else {
-                        if (lhw > lll)
-                              lll = lhw;
-                        }
-                  }
-            else
-                  rr = lhw;
-            if (rr > rrr)
-                  rrr = rr;
-            qreal xx = note->pos().x() + headWidth + pos().x();
-            if (xx > dotPosX())
-                  setDotPosX(xx);
-            }
 
       if (dots()) {
             qreal x = dotPosX() + point(score()->styleS(ST_dotNoteDistance)
@@ -1526,7 +1522,7 @@ void Chord::layoutPitch()
             _notes.at(i)->layout2();
       QRectF bb;
       processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
-      setbbox(bb);
+      setbbox(bb.translated(_spatium*2, 0));
       }
 
 //---------------------------------------------------------
