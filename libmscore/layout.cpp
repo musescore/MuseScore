@@ -224,6 +224,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       int nNotes = notes.size();
       for (int i = nNotes-1; i >= 0; --i) {
             Note* note     = notes[i];
+note->layout();
             Accidental* ac = note->accidental();
             if (ac) {
                   ac->setMag(note->mag());
@@ -240,12 +241,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
             Chord* chord = note->chord();
             bool _up = chord->up();
+            qreal stemX = chord->stemPosX() - chord->pagePos().x();
 
-            qreal stemX;
-            if (_up)
-                  stemX = symbols[symIdx()][quartheadSym].width(_spatium / (MScore::DPI * SPATIUM20));
-            else
-                  stemX = 0;
             qreal stemWidth5;
             if (chord->stem()) {
                   stemWidth5 = chord->stem()->lineWidth() * .5;
