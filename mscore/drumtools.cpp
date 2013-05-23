@@ -113,6 +113,7 @@ void DrumTools::updateDrumset()
             Chord* chord = new Chord(gscore);
             chord->setDurationType(TDuration::V_QUARTER);
             chord->setStemDirection(dir);
+            chord->setUp(up);
             chord->setTrack(voice);
             Note* note = new Note(gscore);
             note->setParent(chord);
