@@ -888,27 +888,50 @@ void Harmony::render(const TextStyle* st)
 
       if (capo > 0 && capo < 12) {
             int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
-            int newRootTpc = _rootTpc + tpcOffset[capo];
-            int newBassTpc = _baseTpc + tpcOffset[capo];
+            int capoRootTpc = _rootTpc + tpcOffset[capo];
+            int capoBassTpc = _baseTpc;
 
-            /* don't give bb or x to guitarists! */
-            if (newRootTpc < 6 || newBassTpc < 6) {
-                  newRootTpc += 12;
-                  newBassTpc += 12;
+            if (capoBassTpc != INVALID_TPC)
+                  capoBassTpc += tpcOffset[capo];
+
+            /*
+             * For guitarists, avoid x and bb in Root or Bass,
+             * and also avoid E#, B#, Cb and Fb in Root.
+             */
+            if (capoRootTpc < 8 || (capoBassTpc != INVALID_TPC && capoBassTpc < 6)) {
+                  capoRootTpc += 12;
+                  if (capoBassTpc != INVALID_TPC)
+                        capoBassTpc += 12;
                   }
-            else if (newRootTpc > 26 || newBassTpc > 26) {
-                  newRootTpc -= 12;
-                  newBassTpc -= 12;
+            else if (capoRootTpc > 24 || (capoBassTpc != INVALID_TPC && capoBassTpc > 26)) {
+                  capoRootTpc -= 12;
+                  if (capoBassTpc != INVALID_TPC)
+                        capoBassTpc -= 12;
                   }
 
             render("(", x, y);
-            render(chordList->renderListRoot, x, y, newRootTpc);
-            ChordDescription* cd = chordList->value(_id);
-            if (cd) {
-                  render(cd->renderList, x, y, 0);
+            render(chordList->renderListRoot, x, y, capoRootTpc);
+
+            // render extension
+            // try description already recorded
+            if (_description)
+                  render(_description->renderList, x, y, 0);
+            // otherwise lookup description by id if valid
+            else if (_id > 0) {
+                  ChordDescription* cd = chordList->value(_id);
+                  if (cd)
+                        render(cd->renderList, x, y, 0);
                   }
-            if (_baseTpc != INVALID_TPC)
-                  render(chordList->renderListBase, x, y, newBassTpc);
+            // otherwise render directly from parsed form
+            // TODO: figure out if we really need to regenerate the renderList
+            // should only be true immediately after a load of a new chord description file
+            // or other change to the chord list
+            // but for now, set regenerate=true in call to _parsedForm->renderList
+            else if (_parsedForm && _parsedForm->renderable())
+                  render(_parsedForm->renderList(chordList->chordTokenList, true), x, y, 0);
+
+            if (capoBassTpc != INVALID_TPC)
+                  render(chordList->renderListBase, x, y, capoBassTpc);
             render(")", x, y);
             }
       }
