@@ -250,6 +250,8 @@ class Measure : public MeasureBase {
       Segment* getSegment(Segment::SegmentType st, int tick);
       Segment* getGraceSegment(int tick, int gl);
       Segment* findSegment(Segment::SegmentType st, int t);
+      Segment* findGraceSegment(int tick, int gl);
+      int findGraceLevel (Segment* gs);
 
       bool createEndBarLines();
 

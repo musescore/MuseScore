@@ -779,6 +779,74 @@ Segment* Measure::findSegment(Segment::SegmentType st, int t)
       }
 
 //---------------------------------------------------------
+//   findGraceSegment
+//---------------------------------------------------------
+
+/**
+  Search for a grace segment at position \a tick and grace level \a gl.
+  See explantion for getGraceSement
+*/
+
+Segment* Measure::findGraceSegment(int tick, int gl)
+      {
+      Segment* s;
+
+      for (s = first(Segment::SegChordRest); s && s->tick() < tick; s = s->next(Segment::SegChordRest))
+            ;
+
+      if (!s || s->tick() != tick)
+            return 0;
+
+      int nGraces = 0;
+      // count SegGrace segments backwords
+      for (; s && s->tick() == tick; s = s->prev()) {
+            if (s->segmentType() == Segment::SegGrace)
+                  nGraces++;
+
+            if (nGraces == gl)
+                  return s;
+            }
+
+      return 0;
+      }
+
+
+//---------------------------------------------------------
+//   findGraceLevel
+//---------------------------------------------------------
+
+/**
+  Find the grace level for segment \a gs.
+  If the segment is not found or it is not a SegGrace, 0 is returned.
+*/
+
+int Measure::findGraceLevel(Segment* gs)
+      {
+      if (gs->segmentType() != Segment::SegGrace)
+            return 0;
+
+      Segment* s;
+      // find ChordRest with tick equal to the grace segment
+      for (s = first(Segment::SegChordRest); s && s->tick() < gs->tick(); s = s->next(Segment::SegChordRest))
+            ;
+
+      if (!s || s->tick() != gs->tick())
+            return 0;
+
+      // count grace levels
+      int graceLevel = 0;
+      for (; s && s->tick() == gs->tick(); s = s->prev()) {
+            if (s->segmentType() == Segment::SegGrace)
+                  graceLevel++;
+
+            if (s == gs)
+                  return graceLevel;
+            }
+      return 0;
+      }
+
+
+//---------------------------------------------------------
 //   undoGetSegment
 //---------------------------------------------------------
 
