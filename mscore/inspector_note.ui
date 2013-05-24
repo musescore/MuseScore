@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>238</width>
-    <height>202</height>
+    <width>275</width>
+    <height>254</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,7 +72,7 @@
      <item row="6" column="1">
       <widget class="QDoubleSpinBox" name="tuning">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -121,7 +121,7 @@
      <item row="5" column="1">
       <widget class="QComboBox" name="dotPosition">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -151,6 +151,12 @@
      </item>
      <item row="5" column="2">
       <widget class="QToolButton" name="resetDotPosition">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string>reset value</string>
        </property>
@@ -172,7 +178,7 @@
      <item row="2" column="1">
       <widget class="QComboBox" name="noteHeadGroup">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -254,6 +260,12 @@
      </item>
      <item row="4" column="2">
       <widget class="QToolButton" name="resetMirrorHead">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string>reset value</string>
        </property>
@@ -274,6 +286,12 @@
      </item>
      <item row="7" column="2">
       <widget class="QToolButton" name="resetVelocityType">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string>reset value</string>
        </property>
@@ -294,6 +312,12 @@
      </item>
      <item row="3" column="2">
       <widget class="QToolButton" name="resetNoteHeadType">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string>reset value</string>
        </property>
@@ -315,7 +339,7 @@
      <item row="8" column="1">
       <widget class="QSpinBox" name="velocity">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -331,7 +355,7 @@
      <item row="3" column="1">
       <widget class="QComboBox" name="noteHeadType">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -369,7 +393,7 @@
      <item row="7" column="1">
       <widget class="QComboBox" name="velocityType">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -388,6 +412,12 @@
      </item>
      <item row="6" column="2">
       <widget class="QToolButton" name="resetTuning">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string>reset value</string>
        </property>
@@ -460,6 +490,12 @@
      </item>
      <item row="8" column="2">
       <widget class="QToolButton" name="resetVelocity">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string>reset value</string>
        </property>
@@ -481,7 +517,7 @@
      <item row="4" column="1">
       <widget class="QComboBox" name="mirrorHead">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -509,7 +545,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetNoteHeadGroup">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -545,6 +581,12 @@
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetSmall">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string>reset value</string>
        </property>

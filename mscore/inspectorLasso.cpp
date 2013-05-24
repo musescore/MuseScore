@@ -24,11 +24,19 @@ namespace Ms {
 InspectorLasso::InspectorLasso(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w = new QWidget;
-      b.setupUi(w);
-      _layout->addWidget(w);
+      b.setupUi(addWidget());
+
+      iList = {
+            { P_LASSO_POS,    0, false, b.posX,       0 },
+            { P_LASSO_POS,    1, false, b.posY,       0 },
+            { P_LASSO_SIZE,   0, false, b.sizeWidth,  0 },
+            { P_LASSO_SIZE,   1, false, b.sizeHeight, 0 },
+            };
+
+      mapSignals();
       }
 
+#if 0
 //---------------------------------------------------------
 //   setElement
 //---------------------------------------------------------
@@ -45,5 +53,7 @@ void InspectorLasso::setElement(Element* e)
 
       InspectorBase::setElement();
       }
+#endif
+
 }
 

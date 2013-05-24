@@ -43,6 +43,8 @@ class Lasso : public Element {
       virtual void layout();
       virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual void endEdit();
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
       };
 
 

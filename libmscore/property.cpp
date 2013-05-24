@@ -151,6 +151,9 @@ static const PropertyData propertyList[] = {
       { P_GROUPS,              false, 0,               T_GROUPS },
       { P_LINE_COLOR,          false, 0,               T_COLOR  },
 
+      { P_LASSO_POS,           false, 0,               T_POINT_MM  },
+      { P_LASSO_SIZE,          false, 0,               T_SIZE_MM   },
+
       { P_END,                 false, "",              T_INT    }
       };
 
@@ -160,6 +163,8 @@ static const PropertyData propertyList[] = {
 
 P_TYPE propertyType(P_ID id)
       {
+      if (id == P_LASSO_SIZE)
+            printf("lasso size type ist %d\n", propertyList[id].type);
       return propertyList[id].type;
       }
 

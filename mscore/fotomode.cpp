@@ -405,6 +405,7 @@ void ScoreView::doDragFoto(QMouseEvent* ev)
       mscore->statusBar()->showMessage(QString("%1 x %2").arg(sz.width()).arg(sz.height()), 3000);
 
       update();
+      mscore->showMessage("drag", 2000);
       }
 
 //---------------------------------------------------------
