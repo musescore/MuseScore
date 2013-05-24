@@ -13,6 +13,7 @@
 #include "lasso.h"
 #include "mscore.h"
 #include "mscoreview.h"
+#include "score.h"
 
 namespace Ms {
 
@@ -136,6 +137,46 @@ void Lasso::endEdit()
       {
       view = 0;
       }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Lasso::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_LASSO_POS:
+                  _rect.moveTo(v.toPointF());
+                  break;
+            case P_LASSO_SIZE:
+                  _rect.setSize(v.toSizeF());
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setUpdateAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Lasso::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_LASSO_POS:
+                  return _rect.topLeft();
+            case P_LASSO_SIZE:
+                  return _rect.size();
+            default:
+                  break;
+            }
+      return Element::getProperty(propertyId);
+      }
+
 
 }
 

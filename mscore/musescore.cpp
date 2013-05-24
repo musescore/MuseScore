@@ -1526,9 +1526,18 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       a->setChecked(cs->styleB(ST_concertPitch));
 
       setPos(cs->inputPos());
-      _statusBar->showMessage(cs->filePath(), 2000);
+      showMessage(cs->filePath(), 2000);
       if (_navigator && _navigator->widget())
             navigator()->setScoreView(view);
+      }
+
+//---------------------------------------------------------
+//   showMessage
+//---------------------------------------------------------
+
+void MuseScore::showMessage(const QString& s, int timeout)
+      {
+      _statusBar->showMessage(s, timeout);
       }
 
 //---------------------------------------------------------

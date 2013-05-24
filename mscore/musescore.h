@@ -639,7 +639,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QDeclarativeEngine* qml();
       PluginCreator* getPluginCreator()   { return pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
-};
+      void showMessage(const QString& s, int timeout);
+      };
 
 extern MuseScore* mscore;
 extern MuseScoreCore* mscoreCore;
