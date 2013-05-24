@@ -1458,12 +1458,17 @@ void Chord::layoutPitch()
       //-----------------------------------------
 
       qreal stemX;
-      if (stem()) {
+      if (stem())
             stem()->rypos() = (_up ? downNote() : upNote())->rypos();
-            stemX = stem()->pos().x();
+
+      if (_up) {
+            stemX = score()->noteHeadWidth();
+            if (_noteType != NOTE_NORMAL)
+                  stemX *= score()->styleD(ST_graceNoteMag);
             }
       else
             stemX = 0.0;
+
       addLedgerLines(stemX, staffMove());
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
             ll->layout();
