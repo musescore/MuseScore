@@ -381,7 +381,6 @@ bool Harmony::parseHarmony(const QString& ss, int* root, int* base)
       if (ss.endsWith(' '))
             useLiteral = true;
       QString s = ss.simplified();
-      _userName = s;
 
       if ((_leftParen = s.startsWith('(')))
             s.remove(0,1);
