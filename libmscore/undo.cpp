@@ -959,8 +959,23 @@ void Score::undoAddElement(Element* element)
                   Measure* m2    = s2->measure();
                   Measure* nm1   = score->tick2measure(m1->tick());
                   Measure* nm2   = score->tick2measure(m2->tick());
-                  Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
-                  Segment* ns2   = nm2->findSegment(s2->segmentType(), s2->tick());
+                  Segment* ns1;
+                  Segment* ns2;
+                  if (s1->segmentType() == Segment::SegGrace) {
+                        int gl = m1->findGraceLevel(s1);
+                        ns1 = nm1->findGraceSegment(s1->tick(), gl);
+                        }
+                  else {
+                        ns1 = nm1->findSegment(s1->segmentType(), s1->tick());
+                        }
+
+                  if (s2->segmentType() == Segment::SegGrace) {
+                        int gl = m2->findGraceLevel(s2);
+                        ns2 = nm2->findGraceSegment(s2->tick(), gl);
+                        }
+                  else {
+                        ns2 = nm2->findSegment(s2->segmentType(), s2->tick());
+                        }
                   Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
                   Chord* c2      = static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice()));
                   Slur* nslur    = static_cast<Slur*>(ne);
