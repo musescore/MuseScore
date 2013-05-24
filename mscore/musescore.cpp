@@ -759,7 +759,7 @@ MuseScore::MuseScore()
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("edit-info"));
 
-      if(enableExperimental)
+      if (enableExperimental)
             _fileMenu->addAction(getAction("media"));
 
       _fileMenu->addSeparator();
