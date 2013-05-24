@@ -29,13 +29,8 @@ class InspectorLasso : public InspectorBase {
 
       Ui::InspectorLasso b;
 
-   protected slots:
-
-   protected:
-
    public:
       InspectorLasso(QWidget* parent);
-      virtual void setElement(Element*);
       };
 
 

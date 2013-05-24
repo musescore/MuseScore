@@ -103,6 +103,8 @@ void Inspector::reset()
 
 void Inspector::setElement(Element* e)
       {
+      if (e)
+printf("setElement %s\n", e->name());
       QList<Element*> el;
       if (e)
             el.append(e);
