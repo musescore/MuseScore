@@ -395,7 +395,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool fotoScoreViewDragTest(QMouseEvent*);
       bool fotoScoreViewDragRectTest(QMouseEvent*);
       void doDragFotoRect(QMouseEvent*);
-      void fotoContextPopup(QMouseEvent*);
+      void fotoContextPopup(QContextMenuEvent*);
       bool fotoRectHit(const QPoint& p);
       void paintRect(bool printMode, QPainter& p, const QRectF& r, double mag);
       bool saveFotoAs(bool printMode, const QRectF&);
