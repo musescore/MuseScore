@@ -67,6 +67,9 @@ class MidiChord {
       QList<MidiNote> notes;
       };
 
+typedef std::multimap<int, MidiChord> tChordMap;
+typedef tChordMap::iterator tChordMapIter;
+
 //---------------------------------------------------------
 //   MTrack
 //---------------------------------------------------------
@@ -79,115 +82,150 @@ class MTrack {
       QString name;
       bool hasKey = false;
 
-      std::multimap<int, MidiChord> chords;
+      tChordMap chords;
 
       void convertTrack(int lastTick);
       void findChords();
       void cleanup(int lastTick, TimeSigMap*);
-      void quantize(int startTick, int endTick, std::multimap<int,MidiChord>&);
+      void quantize(int startBarTick, int endBarTick, tChordMap& dst);
       void processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, int tick);
       void processMeta(int tick, const MidiEvent& mm);
-};
 
-//---------------------------------------------------------
-//   quantize
-//---------------------------------------------------------
+   private:
+      tChordMapIter findStartChord(int startBarTick);
+      int findShortestNoteDurationInBar(const tChordMapIter &start, int endBarTick);
+      void quantizeToDurationList(const tChordMapIter &startChordIter,
+                                  int mintick, int endBarTick, tChordMap& dst);
+      };
 
-void MTrack::quantize(int startTick, int endTick, std::multimap<int, MidiChord>& dst)
+
+int MTrack::findShortestNoteDurationInBar(const tChordMapIter &start, int endBarTick)
       {
       int division = MScore::division;
+      int minDuration = division;
 
-      auto i = chords.begin();
-      for (; i != chords.end(); ++i) {
-            if (i->first >= startTick)
+      // find shortest note in measure
+      //
+      for (auto i = start; i != chords.end(); ++i) {
+            if (i->first >= endBarTick)
+                  break;
+            minDuration = qMin(minDuration, i->second.duration);
+            }
+      //
+      // determine suitable quantization value based
+      // on shortest note in measure
+      //
+      int div = division;
+      if (minDuration <= division / 16)        // minimum duration is 1/64
+            div = division / 16;
+      else if (minDuration <= division / 8)
+            div = division / 8;
+      else if (minDuration <= division / 4)
+            div = division / 4;
+      else if (minDuration <= division / 2)
+            div = division / 2;
+      else if (minDuration <= division)
+            div = division;
+      else if (minDuration <= division * 2)
+            div = division * 2;
+      else if (minDuration <= division * 4)
+            div = division * 4;
+      else if (minDuration <= division * 8)
+            div = division * 8;
+      if (div == (division / 16))
+            minDuration = div;
+      else
+            minDuration = quantizeLen(minDuration, div >> 1);    //closest
+
+      return minDuration;
+      }
+
+int userQuantNoteToDuration(Operation::Quant quantNote)
+      {
+      int division = MScore::division;
+      int userQuantValue = preferences.shortestNote;
+      // specified quantization value
+      switch (quantNote) {
+            case Operation::N_4:
+                  userQuantValue = division;
+                  break;
+            case Operation::N_4_triplet:
+                  userQuantValue = division * 2 / 3;
+                  break;
+            case Operation::N_8:
+                  userQuantValue = division / 2;
+                  break;
+            case Operation::N_8_triplet:
+                  userQuantValue = division / 3;
+                  break;
+            case Operation::N_16:
+                  userQuantValue = division / 4;
+                  break;
+            case Operation::N_16_triplet:
+                  userQuantValue = division / 6;
+                  break;
+            case Operation::N_32:
+                  userQuantValue = division / 8;
+                  break;
+            case Operation::N_32_triplet:
+                  userQuantValue = division / 12;
+                  break;
+            case Operation::N_64:
+                  userQuantValue = division / 16;
+                  break;
+            case Operation::FROM_PREFERENCES:
+            default:
+                  userQuantValue = preferences.shortestNote;
                   break;
             }
-      auto operations = preferences.midiImportOperations.currentTrackOperations();
-      int mintick = division;
-      auto si = i;
 
-      if (operations.quantize == Operation::SHORTEST_IN_MEASURE) {
-            // find shortest note in measure
-            //
-            for (; i != chords.end(); ++i) {
-                  if (i->first >= endTick)
-                        break;
-                  mintick = qMin(mintick, i->second.duration);
-                  }
-            //
-            // determine suitable quantization value based
-            // on shortest note in measure
-            //
-            int div = division;
-            if (mintick <= division / 16)        // minimum duration is 1/64
-                  div = division / 16;
-            else if (mintick <= division / 8)
-                  div = division / 8;
-            else if (mintick <= division / 4)
-                  div = division / 4;
-            else if (mintick <= division / 2)
-                  div = division / 2;
-            else if (mintick <= division)
-                  div = division;
-            else if (mintick <= division * 2)
-                  div = division * 2;
-            else if (mintick <= division * 4)
-                  div = division * 4;
-            else if (mintick <= division * 8)
-                  div = division * 8;
+      return userQuantValue;
+      }
 
-            if (div == (division / 16))
-                  mintick = div;
-            else
-                  mintick = quantizeLen(mintick, div >> 1);    //closest
+tChordMapIter MTrack::findStartChord(int startBarTick)
+      {
+      auto i = chords.begin();
+      for (; i != chords.end(); ++i) {
+            if (i->first >= startBarTick)
+                  break;
             }
-      else {
-            // specified quantization value
-            switch (operations.quantize) {
-                  case Operation::N_4:
-                        mintick = division;
-                        break;
-                  case Operation::N_4_triplet:
-                        mintick = division * 2 / 3;
-                        break;
-                  case Operation::N_8:
-                        mintick = division / 2;
-                        break;
-                  case Operation::N_8_triplet:
-                        mintick = division / 3;
-                        break;
-                  case Operation::N_16:
-                        mintick = division / 4;
-                        break;
-                  case Operation::N_16_triplet:
-                        mintick = division / 6;
-                        break;
-                  case Operation::N_32:
-                        mintick = division / 8;
-                        break;
-                  case Operation::N_32_triplet:
-                        mintick = division / 12;
-                        break;
-                  case Operation::N_64:
-                        mintick = division / 16;
-                        break;
-                  case Operation::FROM_PREFERENCES:
-                  default:
-                        mintick = preferences.shortestNote;
-                        break;
-                  }
-            }
+      return i;
+      }
 
+void MTrack::quantizeToDurationList(const tChordMapIter& startChordIter,
+                                    int mintick, int endBarTick, tChordMap& dst)
+      {
       int raster  = mintick;
       int raster2 = raster >> 1;
-      for (auto i = si; i != chords.end(); ++i) {
-            if (i->first >= endTick)
+      for (auto i = startChordIter; i != chords.end(); ++i) {
+            if (i->first >= endBarTick)
                   break;
             MidiChord e = i->second;
             e.onTime    = ((e.onTime + raster2) / raster) * raster;
             e.duration  = quantizeLen(e.duration, raster);
             dst.insert({e.onTime, e});
             }
+      }
+
+//---------------------------------------------------------
+//   quantize
+//---------------------------------------------------------
+
+void MTrack::quantize(int startBarTick, int endBarTick, tChordMap& dst)
+      {
+      auto startChordIter = findStartChord(startBarTick);
+      auto operations = preferences.midiImportOperations.currentTrackOperations();
+      int mintick = findShortestNoteDurationInBar(startChordIter, endBarTick);
+
+      if (!(operations.quantize == Operation::SHORTEST_IN_MEASURE)) {
+            int userQuantValue = userQuantNoteToDuration(operations.quantize);
+
+            // if user value larger than the smallest note in bar
+            // then use the smallest note to preserve faster events
+            mintick = qMin(userQuantValue, mintick);
+            }
+
+      quantizeToDurationList(startChordIter, mintick, endBarTick, dst);
       }
 
 //---------------------------------------------------------
@@ -202,7 +240,7 @@ void MTrack::quantize(int startTick, int endTick, std::multimap<int, MidiChord>&
 
 void MTrack::cleanup(int lastTick, TimeSigMap* sigmap)
       {
-      std::multimap<int, MidiChord> dl; // duration list
+      tChordMap dl; // duration list
 
       //    quantize every measure
       //    and fill the duration list with quantized chords
@@ -697,8 +735,8 @@ void splitIntoLRHands_HandWidth(QList<MTrack> &tracks, int &trackIndex)
       auto &srcTrack = tracks[trackIndex];
       auto &operations = preferences.midiImportOperations;
 
-      typedef std::multimap<int, MidiChord> tChords;
-      typedef std::multimap<int, MidiChord>::iterator tIter;
+      typedef tChordMap tChords;
+      typedef tChordMapIter tIter;
 
       tChords leftHandChords;
       tChords rightHandChords;
