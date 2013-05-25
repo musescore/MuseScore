@@ -18,6 +18,8 @@ struct Controller {
       Node *LHRHMethod = nullptr;
       Node *LHRHPitchOctave = nullptr;
       Node *LHRHPitchNote = nullptr;
+      Node *quantValue = nullptr;
+      Node *quantReduce = nullptr;
 
       bool updateNodesDependencies(Node *node, bool force_update);
       };
@@ -32,25 +34,35 @@ OperationsModel::OperationsModel()
       // - initialize opeations with their default values
       // - string lists below should match Operation enum values
 
-      Node *Quantize = new Node;
-      Quantize->name = "Quantization";
-      Quantize->oper.type = Operation::QUANTIZ_VALUE;
-      Quantize->oper.value = TrackOperations().quantize;
-      Quantize->values = {
-            "Shortest note in measure",
+      Node *quantValue = new Node;
+      quantValue->name = "Quantization";
+      quantValue->oper.type = Operation::QUANT_VALUE;
+      quantValue->oper.value = TrackOperations().quantize.value;
+      quantValue->values = {
+            "Shortest note in bar",
             "Value from preferences",
             "1/4",
-            "1/4 triplet",
+//            "1/4 triplet",
             "1/8",
-            "1/8 triplet",
+//            "1/8 triplet",
             "1/16",
-            "1/16 triplet",
+//            "1/16 triplet",
             "1/32",
-            "1/32 triplet",
+//            "1/32 triplet",
             "1/64"
             };
-      Quantize->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(Quantize));
+      quantValue->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(quantValue));
+      controller->quantValue = quantValue;
+
+
+      Node *reduceToShorter = new Node;
+      reduceToShorter->name = "Reduce to shorter notes in bar";
+      reduceToShorter->oper.type = Operation::QUANT_REDUCE;
+      reduceToShorter->oper.value = Quantization().reduceToShorterNotesInBar;
+      reduceToShorter->parent = quantValue;
+      quantValue->children.push_back(std::unique_ptr<Node>(reduceToShorter));
+      controller->quantReduce = reduceToShorter;
 
 
       Node *useDots = new Node;
@@ -318,11 +330,18 @@ enum class WalkTarget {
 void walkNodeOperations(Node *node, TrackOperations &opers, const WalkTarget &target)
       {
       switch (node->oper.type) {
-            case Operation::QUANTIZ_VALUE:
+            case Operation::QUANT_VALUE:
                   if (target == WalkTarget::TO_NODE)
-                        node->oper.value = opers.quantize;
+                        node->oper.value = opers.quantize.value;
                   else
-                        opers.quantize = (Operation::Quant)node->oper.value.toInt();
+                        opers.quantize.value = (Operation::QuantValue)node->oper.value.toInt();
+                  break;
+            case Operation::QUANT_REDUCE:
+                  if (target == WalkTarget::TO_NODE)
+                        node->oper.value = opers.quantize.reduceToShorterNotesInBar;
+                  else
+                        opers.quantize.reduceToShorterNotesInBar
+                                    = (Operation::QuantValue)node->oper.value.toInt();
                   break;
             case Operation::DO_LHRH_SEPARATION:
                   if (target == WalkTarget::TO_NODE)
@@ -426,7 +445,14 @@ bool Controller::updateNodesDependencies(Node *node, bool force_update)
             }
       if (force_update || (LHRHdoIt && node == LHRHdoIt)) {
             auto value = LHRHdoIt->oper.value.toBool();
-            LHRHMethod->visible = value;
+            if (LHRHMethod)
+                  LHRHMethod->visible = value;
+            result = true;
+            }
+      if (force_update || (quantValue && node == quantValue)) {
+            auto value = (Operation::QuantValue)quantValue->oper.value.toInt();
+            if (quantReduce)
+                  quantReduce->visible = (value != Operation::SHORTEST_IN_BAR);
             result = true;
             }
       // other nodes similar, if any

@@ -111,7 +111,7 @@ void ImportMidiPanel::tweakUi()
                                                              QHeaderView::ResizeToContents);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::INSTRUMENT,
                                                              QHeaderView::Stretch);
-      ui->treeViewOperations->header()->resizeSection(0, 220);
+      ui->treeViewOperations->header()->resizeSection(0, 230);
       }
 
 bool ImportMidiPanel::canImportMidi() const
