@@ -39,6 +39,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/pitchspelling.h"
 #include "preferences.h"
+#include "importmidi_meter.h"
 
 namespace Ms {
 
@@ -140,7 +141,7 @@ int MTrack::findShortestNoteDurationInBar(const tChordMapIter &start, int endBar
       return minDuration;
       }
 
-int userQuantNoteToDuration(Operation::Quant quantNote)
+int userQuantNoteToTicks(Operation::QuantValue quantNote)
       {
       int division = MScore::division;
       int userQuantValue = preferences.shortestNote;
@@ -149,27 +150,27 @@ int userQuantNoteToDuration(Operation::Quant quantNote)
             case Operation::N_4:
                   userQuantValue = division;
                   break;
-            case Operation::N_4_triplet:
-                  userQuantValue = division * 2 / 3;
-                  break;
+//            case Operation::N_4_triplet:
+//                  userQuantValue = division * 2 / 3;
+//                  break;
             case Operation::N_8:
                   userQuantValue = division / 2;
                   break;
-            case Operation::N_8_triplet:
-                  userQuantValue = division / 3;
-                  break;
+//            case Operation::N_8_triplet:
+//                  userQuantValue = division / 3;
+//                  break;
             case Operation::N_16:
                   userQuantValue = division / 4;
                   break;
-            case Operation::N_16_triplet:
-                  userQuantValue = division / 6;
-                  break;
+//            case Operation::N_16_triplet:
+//                  userQuantValue = division / 6;
+//                  break;
             case Operation::N_32:
                   userQuantValue = division / 8;
                   break;
-            case Operation::N_32_triplet:
-                  userQuantValue = division / 12;
-                  break;
+//            case Operation::N_32_triplet:
+//                  userQuantValue = division / 12;
+//                  break;
             case Operation::N_64:
                   userQuantValue = division / 16;
                   break;
@@ -215,16 +216,21 @@ void MTrack::quantize(int startBarTick, int endBarTick, tChordMap& dst)
       {
       auto startChordIter = findStartChord(startBarTick);
       auto operations = preferences.midiImportOperations.currentTrackOperations();
-      int mintick = findShortestNoteDurationInBar(startChordIter, endBarTick);
+      int mintick;
 
-      if (!(operations.quantize == Operation::SHORTEST_IN_MEASURE)) {
-            int userQuantValue = userQuantNoteToDuration(operations.quantize);
-
+      if (operations.quantize.value == Operation::SHORTEST_IN_BAR)
+            mintick = findShortestNoteDurationInBar(startChordIter, endBarTick);
+      else {
+            int userQuantValue = userQuantNoteToTicks(operations.quantize.value);
             // if user value larger than the smallest note in bar
-            // then use the smallest note to preserve faster events
-            mintick = qMin(userQuantValue, mintick);
+            // then use the smallest note to keep faster events
+            if (operations.quantize.reduceToShorterNotesInBar) {
+                  mintick = findShortestNoteDurationInBar(startChordIter, endBarTick);
+                  mintick = qMin(userQuantValue, mintick);
+                  }
+            else
+                  mintick = userQuantValue;
             }
-
       quantizeToDurationList(startChordIter, mintick, endBarTick, dst);
       }
 
@@ -462,7 +468,11 @@ void fillGapsWithRests(Score* score, int ctick, int restLen, int track)
                   ctick   += len;
                   }
             else {
-                  QList<TDuration> dl = toDurationList(Fraction::fromTicks(len), useDots);
+                  QList<TDuration> dl = Meter::toDurationList(ctick - measure->tick(),
+                                                              ctick + len - measure->tick(),
+                                                              measure->timesig(),
+                                                              Meter::DurationType::REST,
+                                                              useDots);
                   if (dl.isEmpty()) {
                         qDebug("cannot create duration list for len %d", len);
                         restLen = 0;      // fake
@@ -507,7 +517,12 @@ void MTrack::processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, 
             if ((tick + len) > measure->tick() + measure->ticks())
                   len = measure->tick() + measure->ticks() - tick;
 
-            QList<TDuration> dl = toDurationList(Fraction::fromTicks(len), useDots);
+            QList<TDuration> dl = Meter::toDurationList(tick - measure->tick(),
+                                                        tick + len - measure->tick(),
+                                                        measure->timesig(),
+                                                        Meter::DurationType::NOTE,
+                                                        useDots);
+
             if (dl.isEmpty())
                   break;
             TDuration d = dl[0];
