@@ -33,6 +33,8 @@ void OperationsDelegate::setEditorData(QWidget *editor,
             auto items = lw->findItems(index.data(Qt::DisplayRole).toString(), Qt::MatchExactly);
             if (!items.empty())
                   lw->setCurrentItem(items.first());
+            else
+                  lw->setCurrentItem(lw->item(0));
 
             const int EXTRA_WIDTH = 25;
             const int EXTRA_HEIGHT = 6;

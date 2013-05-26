@@ -53,17 +53,18 @@ void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
       {
       if (currentIndex.isValid()) {
             int row = currentIndex.row();
-            operationsModel->setTrack(row, tracksModel->trackData(row).opers);
+            QString trackLabel = tracksModel->data(
+                  tracksModel->index(row, TrackCol::TRACK_NUMBER)).toString();
+            operationsModel->setTrackData(trackLabel, tracksModel->trackOperations(row));
             ui->treeViewOperations->expandAll();
             }
       }
 
-void ImportMidiPanel::onOperationChanged(const QModelIndex &)
+void ImportMidiPanel::onOperationChanged(const QModelIndex &index)
       {
-      // always read all operations to simplify process
-      auto opers = operationsModel->trackOperations();
-      const QModelIndex &currentTrack = ui->tableViewTracks->currentIndex();
-      tracksModel->setTrackOperations(currentTrack.row(), opers);
+      Operation::Type operType = (Operation::Type)index.data(OperationTypeRole).toInt();
+      const QModelIndex &currentIndex = ui->tableViewTracks->currentIndex();
+      tracksModel->setOperation(currentIndex.row(), operType, index.data(DataRole));
       ui->treeViewOperations->expandAll();
       }
 

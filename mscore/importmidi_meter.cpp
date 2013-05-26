@@ -252,7 +252,6 @@ QList<TDuration> toDurationList(int startTickInBar, int endTickInBar,
             int effectiveLevel = splitPoint.level + splitPoint.levelCount - 1;
             if (effectiveLevel - node->startLevel > tol
                         || effectiveLevel - node->endLevel > tol
-//                        || !isSingleNoteDuration(node->endTick - node->startTick)
                         || isHalfRestOn34(node->startTick, node->endTick, barFraction)
                         || isLastQuarterRestInCompoundMeter(node->startTick, node->endTick, barFraction)
                         )
