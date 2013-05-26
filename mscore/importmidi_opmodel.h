@@ -1,14 +1,22 @@
 #ifndef IMPORTMIDI_OPMODEL_H
 #define IMPORTMIDI_OPMODEL_H
 
+#include "importmidi_operation.h"
+
 #include <memory>
 
 
 namespace Ms {
 
+enum {
+      OperationTypeRole = 100,
+      DataRole
+      };
+
 struct Node;
 struct Controller;
 struct TrackOperations;
+struct DefinedTrackOperations;
 
 struct OperationCol {
       enum {
@@ -26,8 +34,7 @@ class OperationsModel : public QAbstractItemModel
       OperationsModel();
       ~OperationsModel();
 
-      void setTrack(int trackIndex, const TrackOperations &opers);
-      TrackOperations trackOperations() const;
+      void setTrackData(const QString &trackLabel, const Ms::DefinedTrackOperations &opers);
 
       QModelIndex index(int row, int column, const QModelIndex &parent) const;
       QModelIndex parent(const QModelIndex &child) const;
@@ -44,7 +51,7 @@ class OperationsModel : public QAbstractItemModel
    private:
       std::unique_ptr<Node> root;
       std::unique_ptr<Controller> controller;
-      int trackIndex;
+      QString trackLabel;
 
       Node* nodeFromIndex(const QModelIndex &index) const;
       };
