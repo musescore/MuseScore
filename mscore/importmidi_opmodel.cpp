@@ -27,7 +27,6 @@ struct Controller {
 OperationsModel::OperationsModel()
             : root(std::unique_ptr<Node>(new Node()))
             , controller(std::unique_ptr<Controller>(new Controller()))
-            , trackIndex(0)
       {
       beginResetModel();
 
@@ -213,21 +212,30 @@ int OperationsModel::columnCount(const QModelIndex &parent) const
       }
 
 // All nodes can have either bool value or list of possible values
+// also node value can be undefined (QVariant()), for example grayed checkbox
 QVariant OperationsModel::data(const QModelIndex &index, int role) const
       {
       Node *node = nodeFromIndex(index);
       if (!node)
             return QVariant();
       switch (role) {
+            case DataRole:
+                  if (node->values.empty())  // checkbox
+                        return node->oper.value.toBool();
+                  else
+                        return node->oper.value.toInt();
+                  break;
             case Qt::DisplayRole:
                   switch (index.column()) {
                         case OperationCol::OPER_NAME:
                               return node->name;
                         case OperationCol::VALUE:
                               if (!node->values.empty()) {
+                                    if (!node->oper.value.isValid()) // undefined operation value
+                                          return " . . . ";
                                     // list contains names of possible string values
                                     // like {"1/4", "1/8"}
-                                    // and node value is one of enum items
+                                    // valid node value is one of enum items
                                     // -> use enum item as index
                                     int indexOfValue = node->oper.value.toInt();
                                     if (indexOfValue < node->values.size() && indexOfValue >= 0)
@@ -240,12 +248,13 @@ QVariant OperationsModel::data(const QModelIndex &index, int role) const
                         }
                   break;
             case Qt::EditRole:
-                  if (index.column() == OperationCol::VALUE && !node->values.empty()) {
+                  if (index.column() == OperationCol::VALUE && !node->values.empty())
                         return node->values;
-                        }
                   break;
             case Qt::CheckStateRole:
                   if (index.column() == OperationCol::VALUE && node->values.empty()) {
+                        if (!node->oper.value.isValid())
+                              return Qt::PartiallyChecked;
                         return (node->oper.value.toBool())
                                ? Qt::Checked : Qt::Unchecked;
                         }
@@ -256,6 +265,8 @@ QVariant OperationsModel::data(const QModelIndex &index, int role) const
                   sz.setHeight(22);
                   return sz;
                   }
+            case OperationTypeRole:
+                  return node->oper.type;
             default:
                   break;
             }
@@ -268,9 +279,7 @@ QVariant OperationsModel::headerData(int section, Qt::Orientation orientation, i
             {
             switch (section) {
                   case OperationCol::OPER_NAME:
-                        return "Selected track ["
-                                    + QString::number(trackIndex + 1)
-                                    + "] operations";
+                        return "Selected track [" + trackLabel + "] operations";
                   case OperationCol::VALUE:
                         return "Value";
                   default:
@@ -321,84 +330,43 @@ bool OperationsModel::setData(const QModelIndex &index, const QVariant &value, i
       return result;
       }
 
-enum class WalkTarget {
-      FROM_NODE,
-      TO_NODE
-      };
-
-// not very good solution but it reduces code repetition
-void walkNodeOperations(Node *node, TrackOperations &opers, const WalkTarget &target)
+void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
       {
-      switch (node->oper.type) {
-            case Operation::QUANT_VALUE:
-                  if (target == WalkTarget::TO_NODE)
-                        node->oper.value = opers.quantize.value;
-                  else
-                        opers.quantize.value = (Operation::QuantValue)node->oper.value.toInt();
-                  break;
-            case Operation::QUANT_REDUCE:
-                  if (target == WalkTarget::TO_NODE)
-                        node->oper.value = opers.quantize.reduceToShorterNotesInBar;
-                  else
-                        opers.quantize.reduceToShorterNotesInBar
-                                    = (Operation::QuantValue)node->oper.value.toInt();
-                  break;
-            case Operation::DO_LHRH_SEPARATION:
-                  if (target == WalkTarget::TO_NODE)
-                        node->oper.value = opers.LHRH.doIt;
-                  else
-                        opers.LHRH.doIt = node->oper.value.toBool();
-                  break;
-            case Operation::LHRH_METHOD:
-                  if (target == WalkTarget::TO_NODE)
-                        node->oper.value = opers.LHRH.method;
-                  else
-                        opers.LHRH.method = (Operation::LHRHMethod)node->oper.value.toInt();
-                  break;
-            case Operation::LHRH_SPLIT_OCTAVE:
-                  if (target == WalkTarget::TO_NODE)
-                        node->oper.value = opers.LHRH.splitPitchOctave;
-                  else
-                        opers.LHRH.splitPitchOctave = (Operation::LHRHOctave)node->oper.value.toInt();
-                  break;
-            case Operation::LHRH_SPLIT_NOTE:
-                  if (target == WalkTarget::TO_NODE)
-                        node->oper.value = opers.LHRH.splitPitchNote;
-                  else
-                        opers.LHRH.splitPitchNote = (Operation::LHRHNote)node->oper.value.toInt();
-                  break;
-            case Operation::USE_DOTS:
-                  if (target == WalkTarget::TO_NODE)
-                        node->oper.value = opers.useDots;
-                  else
-                        opers.useDots = node->oper.value.toBool();
-                  break;
-            case Operation::DO_IMPORT:
-                  break;
+      if (opers.undefinedOpers.contains(node->oper.type))
+            node->oper.value = QVariant();
+      else {
+            switch (node->oper.type) {
+                  case Operation::QUANT_VALUE:
+                        node->oper.value = opers.opers.quantize.value; break;
+                  case Operation::QUANT_REDUCE:
+                        node->oper.value = opers.opers.quantize.reduceToShorterNotesInBar; break;
+        
+                  case Operation::DO_LHRH_SEPARATION:
+                        node->oper.value = opers.opers.LHRH.doIt; break;
+                  case Operation::LHRH_METHOD:
+                        node->oper.value = opers.opers.LHRH.method; break;
+                  case Operation::LHRH_SPLIT_OCTAVE:
+                        node->oper.value = opers.opers.LHRH.splitPitchOctave; break;
+                  case Operation::LHRH_SPLIT_NOTE:
+                        node->oper.value = opers.opers.LHRH.splitPitchNote; break;
+                  case Operation::USE_DOTS:
+                        node->oper.value = opers.opers.useDots; break;
+                  case Operation::DO_IMPORT: break;
+                  }
             }
       for (const auto &nodePtr: node->children)
-            walkNodeOperations(nodePtr.get(), opers, target);
+            setNodeOperations(nodePtr.get(), opers);
       }
 
-void OperationsModel::setTrack(int trackIndex, const TrackOperations &opers)
+void OperationsModel::setTrackData(const QString &trackLabel, const DefinedTrackOperations &opers)
       {
-      this->trackIndex = trackIndex;
+      this->trackLabel = trackLabel;
       // set new operations values
       beginResetModel();
-      for (const auto &nodePtr: root->children) {
-            walkNodeOperations(nodePtr.get(), const_cast<TrackOperations &>(opers),
-                               WalkTarget::TO_NODE);
-            }
+      for (const auto &nodePtr: root->children)
+            setNodeOperations(nodePtr.get(), opers);
       controller->updateNodesDependencies(nullptr, true);
       endResetModel();
-      }
-
-TrackOperations OperationsModel::trackOperations() const
-      {
-      TrackOperations opers;
-      for (const auto &nodePtr: root->children)
-            walkNodeOperations(nodePtr.get(), opers, WalkTarget::FROM_NODE);
-      return opers;
       }
 
 void OperationsModel::onDataChanged(const QModelIndex &index)
@@ -418,7 +386,8 @@ Node* OperationsModel::nodeFromIndex(const QModelIndex &index) const
             return root.get();
       }
 
-// different controller actions, i.e. conditional visibility of node
+// Different controller actions, i.e. conditional visibility of node
+
 bool Controller::updateNodesDependencies(Node *node, bool force_update)
       {
       bool result = false;

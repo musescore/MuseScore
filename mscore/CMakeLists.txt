@@ -99,7 +99,7 @@ QT4_WRAP_CPP (mocs
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspectorTextLine.h
       importmidi_panel.h importmidi_operations.h
       importmidi_opmodel.h importmidi_trmodel.h importmidi_opdelegate.h
-      importmidi_meter.h
+      importmidi_meter.h importmidi_operation.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
