@@ -180,7 +180,7 @@ void KeySig::layout()
                   }
             }
       // add accidentals
-      static const qreal sspread = 1.1;
+      static const qreal sspread = 1.0;
       static const qreal fspread = 1.0;
       switch(t1) {
             case 7:  addLayout(sharpSym, xo + 6.0 * sspread, clefTable[clef].lines[6]);
