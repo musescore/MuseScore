@@ -664,6 +664,5 @@ void initSymbols(int idx)
 
             }
       }
-
 }
 

@@ -1029,6 +1029,7 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BRACKETS)
          || (type == SYMBOL)
          || (type == CLEF)
          || (type == BAR_LINE)
@@ -1158,6 +1159,16 @@ Element* Note::drop(const DropData& data)
                         case ICON_BEAM64:
                         case ICON_AUTOBEAM:
                               return ch->drop(data);
+                              break;
+                        case ICON_BRACKETS:
+                              {
+                              Symbol* s = new Symbol(score(), leftparenSym);
+                              s->setParent(this);
+                              score()->undoAddElement(s);
+                              s = new Symbol(score(), rightparenSym);
+                              s->setParent(this);
+                              score()->undoAddElement(s);
+                              }
                               break;
                         }
                   }
