@@ -2751,7 +2751,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             pscore->style()->set(ST_createMultiMeasureRests, true);
 
             QList<int> stavesMap;
-            Part* p = new Part(pscore);
+            Part*   p = new Part(pscore);
             p->setInstrument(*part->instr());
 
             Staff* staff = part->staves()->front();
@@ -2767,22 +2767,20 @@ Score::FileError importGTP(Score* score, const QString& name)
             p->staves()->append(s);
             pscore->staves().append(s);
             stavesMap.append(score->staffIdx(staff));
+            cloneStaves(score, pscore, stavesMap);
+
             if (part->staves()->front()->staffType()->group() == PITCHED_STAFF) {
-                  s = new Staff(pscore, p, 1);
-                  s->setUpdateKeymap(true);
+                  p->setStaves(2);
+                  Staff* s1 = p->staff(1);
+                  s1->setUpdateKeymap(true);
                   StaffTypeTablature* st = static_cast<StaffTypeTablature*>(pscore->staffType(TAB_STAFF_TYPE));
                   st->setSlashStyle(true);
-
-                  s->setStaffType(st);
-                  s->linkTo(staff);
-                  p->staves()->append(s);
-                  pscore->staves().append(s);
-                  stavesMap.append(score->staffIdx(staff));
+                  s1->setStaffType(st);
+                  s1->linkTo(s);
+                  cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BRACKET_NORMAL, 2));
                   }
             pscore->appendPart(p);
-
-            cloneStaves(score, pscore, stavesMap);
 
             pscore->setName(part->partName());
             Excerpt* excerpt = new Excerpt(pscore);
