@@ -2360,28 +2360,35 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Advance of a 1/64 note (F.B./Harm. only)")
          ),
       Shortcut(
-      STATE_HARMONY_FIGBASS_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "prev-measure-TEXT",
          QT_TRANSLATE_NOOP("action","Previous measure (F.B./Harm.)")
          ),
       Shortcut(
-      STATE_HARMONY_FIGBASS_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "next-measure-TEXT",
          QT_TRANSLATE_NOOP("action","Next measure (F.B./Harm.)")
          ),
       Shortcut(
-      STATE_HARMONY_FIGBASS_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "prev-beat-TEXT",
          QT_TRANSLATE_NOOP("action","Previous beat (Harmony)")
          ),
       Shortcut(
-      STATE_HARMONY_FIGBASS_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "next-beat-TEXT",
          QT_TRANSLATE_NOOP("action","Next beat (Harmony)")
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         A_CMD,
+         "add-brackets",
+         QT_TRANSLATE_NOOP("action","add brackets to notehead"),
+         brackets_ICON
          ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)

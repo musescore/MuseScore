@@ -124,7 +124,8 @@ static const char* iconNames[] = {
       "go-home.svg",
       "go-previous.svg",
       "go-next.svg",
-      "view-refresh.svg"
+      "view-refresh.svg",
+      "brackets.svg"
       };
 
 void genIcons()
