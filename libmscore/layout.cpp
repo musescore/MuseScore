@@ -224,7 +224,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       int nNotes = notes.size();
       for (int i = nNotes-1; i >= 0; --i) {
             Note* note     = notes[i];
-note->layout();
+note->layout();   // necessary?
             Accidental* ac = note->accidental();
             if (ac) {
                   ac->setMag(note->mag());
