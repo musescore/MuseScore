@@ -342,7 +342,6 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       connect(a, SIGNAL(triggered()), SLOT(reject()));
       addAction(a);
 
-      instrumentList->setSelectionMode(QAbstractItemView::SingleSelection);
       partiturList->setSelectionMode(QAbstractItemView::SingleSelection);
       QStringList header = (QStringList() << tr("Staves") << tr("Visib.") << tr("Clef") << tr("Link.") << tr("Staff type"));
       partiturList->setHeaderLabels(header);
@@ -437,7 +436,6 @@ void InstrumentsDialog::on_instrumentList_itemSelectionChanged()
       QList<QTreeWidgetItem*> wi = instrumentList->selectedItems();
       bool flag = !wi.isEmpty();
       addButton->setEnabled(flag);
-//      editButton->setEnabled(flag);
       }
 
 //---------------------------------------------------------
@@ -505,32 +503,28 @@ void InstrumentsDialog::on_instrumentList_itemDoubleClicked(QTreeWidgetItem*, in
 
 void InstrumentsDialog::on_addButton_clicked()
       {
-      QList<QTreeWidgetItem*> wi = instrumentList->selectedItems();
-      if (wi.isEmpty())
-            return;
-      InstrumentTemplateListItem* item = (InstrumentTemplateListItem*)wi.front();
-      const InstrumentTemplate* it     = item->instrumentTemplate();
-      if (it == 0)
-            return;
-      PartListItem* pli                = new PartListItem(it, partiturList);
-      pli->op = ITEM_ADD;
+      foreach(QTreeWidgetItem* i, instrumentList->selectedItems()) {
+            InstrumentTemplateListItem* item = static_cast<InstrumentTemplateListItem*>(i);
+            const InstrumentTemplate* it = item->instrumentTemplate();
+            if (it == 0)
+                  return;
+            PartListItem* pli = new PartListItem(it, partiturList);
+            pli->op = ITEM_ADD;
 
-      int n = it->nstaves();
-      for (int i = 0; i < n; ++i) {
-            StaffListItem* sli = new StaffListItem(pli);
-            sli->op       = ITEM_ADD;
-            sli->staff    = 0;
-            sli->setPartIdx(i);
-            sli->staffIdx = -1;
-            sli->setClef(it->clefTypes[i]);
-            sli->setStaffType(it->staffTypePreset);
+            int n = it->nstaves();
+            for (int i = 0; i < n; ++i) {
+                  StaffListItem* sli = new StaffListItem(pli);
+                  sli->op       = ITEM_ADD;
+                  sli->staff    = 0;
+                  sli->setPartIdx(i);
+                  sli->staffIdx = -1;
+                  sli->setClef(it->clefTypes[i]);
+                  sli->setStaffType(it->staffTypePreset);
+                  }
+            partiturList->setItemExpanded(pli, true);
+            partiturList->clearSelection();     // should not be necessary
+            partiturList->setItemSelected(pli, true);
             }
-//      partiturList->resizeColumnToContents(0);
-//      partiturList->resizeColumnToContents(2);
-//      partiturList->resizeColumnToContents(4);
-      partiturList->setItemExpanded(pli, true);
-      partiturList->clearSelection();     // should not be necessary
-      partiturList->setItemSelected(pli, true);
       }
 
 //---------------------------------------------------------
