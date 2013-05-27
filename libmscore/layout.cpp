@@ -382,13 +382,14 @@ void Score::layoutStage2()
                         continue;
                   // set up for cross-measure values as soon as possible
                   // to have all computations (stems, hooks, ...) consistent with it
-                  if(cr->type() == Element::CHORD && segment->segmentType() == Segment::SegChordRest)
+                  if (cr->type() == Element::CHORD && segment->segmentType() == Segment::SegChordRest)
                         ((Chord*)cr)->crossMeasureSetup(crossMeasure);
-                  bm = cr->beamMode();
-                  if (bm == BeamMode::AUTO)
-                        bm = Groups::endBeam(cr);
+
+                  bm = Groups::endBeam(cr);
+
                   // if chord has hooks and is 2nd element of a cross-measure value
                   // set beam mode to NONE (do not combine with following chord beam/hook, if any)
+
                   if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CROSSMEASURE_SECOND)
                         bm = BeamMode::NONE;
                   if (cr->measure() != measure) {
@@ -450,6 +451,7 @@ void Score::layoutStage2()
                               }
                         continue;
                         }
+
                   if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NONE)) {
                         if (beam) {
                               beam->layout1();
@@ -462,85 +464,48 @@ void Score::layoutStage2()
                         cr->removeDeleteBeam();
                         continue;
                         }
-                  bool beamEnd = false;
+
                   if (beam) {
-                        ChordRest* le = beam->elements().back();
-                        if ((!beamModeMid(bm) && (le->tuplet() != cr->tuplet())) || (bm == BeamMode::BEGIN)) {
-                              beamEnd = true;
-                              }
-                        else if (!beamModeMid(bm)) {
-                              if (le->tick() + le->actualTicks() < cr->tick())
-                                    beamEnd = true;
+                        bool beamEnd = bm == BeamMode::BEGIN;
+                        if (!beamEnd) {
+                              cr->removeDeleteBeam();
+                              beam->add(cr);
+                              cr = 0;
+                              beamEnd = (bm == BeamMode::END);
                               }
                         if (beamEnd) {
                               beam->layout1();
                               beam = 0;
                               }
-                        else {
-                              cr->removeDeleteBeam();
-                              beam->add(cr);
-                              cr = 0;
-
-                              // is cr the last beam element?
-                              if (bm == BeamMode::END) {
-                                    beam->layout1();
-                                    beam = 0;
-                                    }
-                              }
                         }
-                  if (cr && cr->tuplet() && (cr->tuplet()->elements().back() == cr)) {
-                        if (beam) {
-                              beam->layout1();
-                              beam = 0;
-                              cr->removeDeleteBeam();
+                  if (!cr)
+                        continue;
+
+                  if (a1 == 0)
+                        a1 = cr;
+                  else {
+                        if (!beamModeMid(bm)
+                             &&
+                             (bm == BeamMode::BEGIN
+                             || (a1->segment()->segmentType() != cr->segment()->segmentType())
+                             || (a1->tick() + a1->actualTicks() < cr->tick())
+                             )
+                           ) {
+                              a1->removeDeleteBeam();
+                              a1 = cr;
                               }
-                        else if (a1) {
+                        else {
                               beam = a1->beam();
                               if (beam == 0 || beam->elements().front() != a1) {
                                     beam = new Beam(this);
-                                    beam->setTrack(track);
                                     beam->setGenerated(true);
+                                    beam->setTrack(track);
                                     a1->removeDeleteBeam();
                                     beam->add(a1);
                                     }
                               cr->removeDeleteBeam();
                               beam->add(cr);
                               a1 = 0;
-                              beam->layout1();
-                              beam = 0;
-                              }
-                        else {
-                              //cr->setBeam(0);
-                              cr->removeDeleteBeam();
-                              }
-                        }
-                  else if (cr) {
-                        if (a1 == 0)
-                              a1 = cr;
-                        else {
-                              if (!beamModeMid(bm)
-                                   &&
-                                   (bm == BeamMode::BEGIN
-                                   || (a1->segment()->segmentType() != cr->segment()->segmentType())
-                                   || (a1->tick() + a1->actualTicks() < cr->tick())
-                                   )
-                                 ) {
-                                    a1->removeDeleteBeam();
-                                    a1 = cr;
-                                    }
-                              else {
-                                    beam = a1->beam();
-                                    if (beam == 0 || beam->elements().front() != a1) {
-                                          beam = new Beam(this);
-                                          beam->setGenerated(true);
-                                          beam->setTrack(track);
-                                          a1->removeDeleteBeam();
-                                          beam->add(a1);
-                                          }
-                                    cr->removeDeleteBeam();
-                                    beam->add(cr);
-                                    a1 = 0;
-                                    }
                               }
                         }
                   }
