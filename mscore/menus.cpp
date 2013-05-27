@@ -472,6 +472,13 @@ Palette* MuseScore::newNoteHeadsPalette()
             nh->setSym(sym);
             sp->append(nh, qApp->translate("symbol", Sym::id2name(sym)));
             }
+      Icon* ik = new Icon(gscore);
+      ik->setIconType(ICON_BRACKETS);
+      Shortcut* s = Shortcut::getShortcut("add-brackets");
+      QAction* action = s->action();
+      QIcon icon(action->icon());
+      ik->setAction("add-brackets", icon);
+      sp->append(ik, s->help());
       return sp;
       }
 

@@ -129,5 +129,6 @@
         <file>data/icons-dark/media-playback-pan.svg</file>
         <file>data/icons-dark/media-playback-repeats.svg</file>
         <file>data/icons-dark/sound-while-editing.svg</file>
+        <file>data/icons-dark/brackets.svg</file>
     </qresource>
 </RCC>
