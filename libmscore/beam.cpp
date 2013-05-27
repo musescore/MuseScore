@@ -1492,20 +1492,20 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       int baseLevel = 0;
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
             bool growDown = _up || cross;
-            for (int i = 0; i < n; ++i) {
+            for (int i = 0; i < n;) {
                   ChordRest* cr1 = crl[i];
                   int l = cr1->durationType().hooks() - 1;
-                  if ((cr1->type() == REST) || l < beamLevel)
+                  if ((cr1->type() == REST) || l < beamLevel) {
+                        ++i;
                         continue;
+                        }
                   int c1 = i;
                   ++i;
                   for (; i < n; ++i) {
                         ChordRest* c = crl[i];
                         int l = c->durationType().hooks() - 1;
 
-                        BeamMode bm = c->beamMode();
-                        if (bm == BeamMode::AUTO)
-                              bm = Groups::endBeam(c);
+                        BeamMode bm = Groups::endBeam(c);
                         bool b32 = (beamLevel >= 1) && (bm == BeamMode::BEGIN32);
                         bool b64 = (beamLevel >= 2) && (bm == BeamMode::BEGIN64);
                         if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel))
@@ -1611,7 +1611,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   else {
                         beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
                         }
-                  --i;
                   }
             }
 
