@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
+    <width>683</width>
     <height>340</height>
    </rect>
   </property>
@@ -46,6 +46,9 @@
          </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
          </property>
          <property name="uniformRowHeights">
           <bool>true</bool>
