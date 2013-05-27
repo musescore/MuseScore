@@ -752,7 +752,7 @@ class Score : public QObject {
       void cmdMirrorNoteHead();
 
       qreal spatium() const                    { return style()->spatium();    }
-      void setSpatium(qreal v)                 { style()->setSpatium(v);       }
+      void setSpatium(qreal v);
       const PageFormat* pageFormat() const     { return style()->pageFormat(); }
       void setPageFormat(const PageFormat& pf) { style()->setPageFormat(pf);   }
       qreal loWidth() const;

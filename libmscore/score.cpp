@@ -1316,6 +1316,11 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       _noteHeadWidth = symbols[_symIdx][quartheadSym].width(newValue / (MScore::DPI * SPATIUM20));
       }
 
+void Score::setSpatium(qreal v)
+      {
+      style()->setSpatium(v);
+      }
+
 //---------------------------------------------------------
 //   getCreateMeasure
 //    - return Measure for tick

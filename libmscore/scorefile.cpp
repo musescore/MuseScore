@@ -599,6 +599,7 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       e.setDocName(info.completeBaseName());
 
       FileError retval = read1(e, ignoreVersionError);
+      _noteHeadWidth = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
 
 #ifdef OMR
       //
@@ -648,7 +649,9 @@ Score::FileError Score::loadMsc(QString name, bool ignoreVersionError)
             }
 
       XmlReader xml(&f);
-      return read1(xml, ignoreVersionError);
+      FileError retval = read1(xml, ignoreVersionError);
+      _noteHeadWidth = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
+      return retval;
       }
 
 //---------------------------------------------------------
