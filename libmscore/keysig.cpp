@@ -180,22 +180,23 @@ void KeySig::layout()
                   }
             }
       // add accidentals
+      static const qreal spread = 1.1;
       switch(t1) {
-            case 7:  addLayout(sharpSym, xo + 6.0, clefTable[clef].lines[6]);
-            case 6:  addLayout(sharpSym, xo + 5.0, clefTable[clef].lines[5]);
-            case 5:  addLayout(sharpSym, xo + 4.0, clefTable[clef].lines[4]);
-            case 4:  addLayout(sharpSym, xo + 3.0, clefTable[clef].lines[3]);
-            case 3:  addLayout(sharpSym, xo + 2.0, clefTable[clef].lines[2]);
-            case 2:  addLayout(sharpSym, xo + 1.0, clefTable[clef].lines[1]);
-            case 1:  addLayout(sharpSym, xo + 0.0, clefTable[clef].lines[0]);
+            case 7:  addLayout(sharpSym, xo + 6.0*spread, clefTable[clef].lines[6]);
+            case 6:  addLayout(sharpSym, xo + 5.0*spread, clefTable[clef].lines[5]);
+            case 5:  addLayout(sharpSym, xo + 4.0*spread, clefTable[clef].lines[4]);
+            case 4:  addLayout(sharpSym, xo + 3.0*spread, clefTable[clef].lines[3]);
+            case 3:  addLayout(sharpSym, xo + 2.0*spread, clefTable[clef].lines[2]);
+            case 2:  addLayout(sharpSym, xo + 1.0*spread, clefTable[clef].lines[1]);
+            case 1:  addLayout(sharpSym, xo + 0.0*spread, clefTable[clef].lines[0]);
                      break;
-            case -7: addLayout(flatSym, xo + 6.0, clefTable[clef].lines[13]);
-            case -6: addLayout(flatSym, xo + 5.0, clefTable[clef].lines[12]);
-            case -5: addLayout(flatSym, xo + 4.0, clefTable[clef].lines[11]);
-            case -4: addLayout(flatSym, xo + 3.0, clefTable[clef].lines[10]);
-            case -3: addLayout(flatSym, xo + 2.0, clefTable[clef].lines[9]);
-            case -2: addLayout(flatSym, xo + 1.0, clefTable[clef].lines[8]);
-            case -1: addLayout(flatSym, xo + 0.0, clefTable[clef].lines[7]);
+            case -7: addLayout(flatSym, xo + 6.0*spread, clefTable[clef].lines[13]);
+            case -6: addLayout(flatSym, xo + 5.0*spread, clefTable[clef].lines[12]);
+            case -5: addLayout(flatSym, xo + 4.0*spread, clefTable[clef].lines[11]);
+            case -4: addLayout(flatSym, xo + 3.0*spread, clefTable[clef].lines[10]);
+            case -3: addLayout(flatSym, xo + 2.0*spread, clefTable[clef].lines[9]);
+            case -2: addLayout(flatSym, xo + 1.0*spread, clefTable[clef].lines[8]);
+            case -1: addLayout(flatSym, xo + 0.0*spread, clefTable[clef].lines[7]);
             case 0:
                   break;
             default:
