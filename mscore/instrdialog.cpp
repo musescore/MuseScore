@@ -342,6 +342,7 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       connect(a, SIGNAL(triggered()), SLOT(reject()));
       addAction(a);
 
+      instrumentList->setSelectionMode(QAbstractItemView::ExtendedSelection);
       partiturList->setSelectionMode(QAbstractItemView::SingleSelection);
       QStringList header = (QStringList() << tr("Staves") << tr("Visib.") << tr("Clef") << tr("Link.") << tr("Staff type"));
       partiturList->setHeaderLabels(header);

@@ -50,6 +50,7 @@ InstrumentWizard::InstrumentWizard(QWidget* parent)
    : QWidget(parent)
       {
       setupUi(this);
+      instrumentList->setSelectionMode(QAbstractItemView::ExtendedSelection);
       partiturList->setSelectionMode(QAbstractItemView::SingleSelection);
       instrumentList->setHeaderLabels(QStringList(tr("Instrument List")));
 
