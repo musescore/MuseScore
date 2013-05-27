@@ -46,19 +46,19 @@ static std::vector<NoteGroup> noteGroups {
 
 BeamMode Groups::endBeam(ChordRest* cr)
       {
+      if (cr->beamMode() != BeamMode::AUTO)
+            return cr->beamMode();
       Q_ASSERT(cr->staff());
 
       if (cr->tuplet() && !cr->tuplet()->elements().isEmpty()) {
-            if (cr->tuplet()->elements().front() == cr)     // end beam at tuplet
+            if (cr->tuplet()->elements().front() == cr)     // end beam at new tuplet
                   return BeamMode::BEGIN;
+            if (cr->tuplet()->elements().back() == cr)      // end beam at tuplet end
+                  return BeamMode::END;
             return BeamMode::AUTO;
             }
 
       TDuration d = cr->durationType();
-/*      int type    = int(d.type()) - int(TDuration::DurationType::V_EIGHT);
-      if (type < 0 || type > 3)
-            return BeamMode::AUTO;
-  */
       const Groups& g = cr->staff()->group(cr->tick());
       return g.beamMode(cr->rtick(), d.type());
       }
