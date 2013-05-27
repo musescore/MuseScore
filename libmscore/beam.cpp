@@ -1899,6 +1899,8 @@ void Beam::reset()
 
 void Beam::startEdit(MuseScoreView*, const QPointF& p)
       {
+      undoPushProperty(P_BEAM_POS);
+
       QPointF pt(p - pagePos());
       qreal ydiff = 100000000.0;
       int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
