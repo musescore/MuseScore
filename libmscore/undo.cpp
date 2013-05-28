@@ -1026,8 +1026,22 @@ void Score::undoAddElement(Element* element)
                   Segment* s2    = cr2 ? cr2->segment() : 0;
                   Measure* nm1   = score->tick2measure(s1->tick());
                   Measure* nm2   = s2 ? score->tick2measure(s2->tick()) : 0;
-                  Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
-                  Segment* ns2   = nm2 ? nm2->findSegment(s2->segmentType(), s2->tick()) : 0;
+                  Segment* ns1;
+                  Segment* ns2;
+                  if (s1->segmentType() == Segment::SegGrace) {
+                        int gl = s1->measure()->findGraceLevel(s1);
+                        ns1 = nm1->findGraceSegment(s1->tick(), gl);
+                        }
+                  else {
+                        ns1 = nm1->findSegment(s1->segmentType(), s1->tick());
+                        }
+                  if (s2 && s2->segmentType() == Segment::SegGrace) {
+                        int gl = s2->measure()->findGraceLevel(s2);
+                        ns2 = nm2->findGraceSegment(s2->tick(), gl);
+                        }
+                  else {
+                        ns2 = nm2 ? nm2->findSegment(s2->segmentType(), s2->tick()) : 0;
+                        }
                   Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
                   Chord* c2      = ns2 ? static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice())) : 0;
                   Note* nn1      = c1->findNote(n1->pitch());
