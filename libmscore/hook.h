@@ -31,6 +31,7 @@ class Hook : public Symbol {
    public:
       Hook(Score*);
       virtual Hook* clone() const      { return new Hook(*this); }
+      virtual qreal mag() const        { return parent()->mag(); }
       virtual ElementType type() const { return HOOK; }
       void setHookType(int v);
       int hookType() const             { return _hookType; }

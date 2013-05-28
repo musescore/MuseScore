@@ -399,7 +399,6 @@ void Chord::add(Element* e)
                   break;
             case STEM_SLASH:
                   _stemSlash = static_cast<StemSlash*>(e);
-                  _stemSlash->setMag(mag());
                   break;
             default:
                   ChordRest::add(e);
@@ -1072,16 +1071,6 @@ void Chord::setTrack(int val)
       }
 
 //---------------------------------------------------------
-//   setMag
-//---------------------------------------------------------
-
-void Chord::setMag(qreal val)
-      {
-      ChordRest::setMag(val);
-      processSiblings([val] (Element* e) { e->setMag(val); } );
-      }
-
-//---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
 
@@ -1137,7 +1126,6 @@ void Chord::layoutStem1()
                   hook->setParent(this);
                   score()->undoAddElement(hook);
                   }
-            _hook->setMag(mag());
             _hook->setHookType(hookIdx);
             }
       else if (_hook)
@@ -1174,7 +1162,6 @@ void Chord::layoutStem()
                         if (hookIdx) {
                               _hook->setHookType(hookIdx);
                               _hook->setPos(_stem->pos().x(), _stem->pos().y() + (up() ? -_stem->len() : _stem->len()));
-                              _hook->setMag(mag()*score()->styleD(ST_smallNoteMag));
                               _hook->adjustReadPos();
                               }
                         return;
@@ -2172,5 +2159,18 @@ void Chord::setStemSlash(StemSlash* s)
       _stemSlash = s;
       }
 
+//---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Chord::mag() const
+      {
+      qreal m = staff()->mag();
+      if (small())
+            m *= score()->styleD(ST_smallNoteMag);
+      if (_noteType != NOTE_NORMAL)
+            m *= score()->styleD(ST_graceNoteMag);
+      return m;
+      }
 }
 

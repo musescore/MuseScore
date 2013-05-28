@@ -569,8 +569,6 @@ void MidiArticulation::read(XmlReader& e)
 
 void InstrumentData::updateVelocity(int* velocity, int /*channelIdx*/, const QString& name)
       {
-//      const Channel& c = _channel[channelIdx];
-//      foreach(const MidiArticulation& a, c.articulation) {
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
                   *velocity = *velocity * a.velocity / 100;
@@ -585,13 +583,8 @@ void InstrumentData::updateVelocity(int* velocity, int /*channelIdx*/, const QSt
 
 void InstrumentData::updateGateTime(int* gateTime, int /*channelIdx*/, const QString& name)
       {
-//      const Channel& c = _channel[channelIdx];
-//      foreach(const MidiArticulation& a, c.articulation) {
-
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
-// qDebug("updateGateTime found %d", a.gateTime);
-                  // *gateTime = *gateTime * a.gateTime / 100;
                   *gateTime = a.gateTime;
                   break;
                   }
@@ -1060,7 +1053,7 @@ const Instrument& InstrumentList::instrument(int tick) const
       {
       if (empty())
             return defaultInstrument;
-      ciInstrument i = upper_bound(tick);
+      auto i = upper_bound(tick);
       if (i == begin())
             return defaultInstrument;
       --i;
@@ -1075,7 +1068,7 @@ Instrument& InstrumentList::instrument(int tick)
       {
       if (empty())
             return defaultInstrument;
-      iInstrument i = upper_bound(tick);
+      auto i = upper_bound(tick);
       if (i == begin())
             return defaultInstrument;
       --i;
@@ -1088,9 +1081,7 @@ Instrument& InstrumentList::instrument(int tick)
 
 void InstrumentList::setInstrument(const Instrument& instr, int tick)
       {
-      std::pair<int, Instrument> instrument(tick, instr);
-      std::pair<iInstrument,bool> p = insert(instrument);
-      if (!p.second)
+      if (!insert({tick, instr}).second)
             (*this)[tick] = instr;
       }
 

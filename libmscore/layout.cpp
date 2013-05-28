@@ -224,10 +224,9 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       int nNotes = notes.size();
       for (int i = nNotes-1; i >= 0; --i) {
             Note* note     = notes[i];
-note->layout();   // necessary?
+            // note->layout();   // necessary?
             Accidental* ac = note->accidental();
             if (ac) {
-                  ac->setMag(note->mag());
                   ac->layout();
                   AcEl acel;
                   acel.note = note;
@@ -717,15 +716,10 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                               keysig->changeKeySigEvent(keyIdx);
                               if (!keysig->isCustom() && oKeySigBefore.accidentalType() == keysig->keySignature())
                                     keysig->setOldSig(0);
-                              keysig->setMag(staff->mag());
                               break;
                         case Element::CLEF:
                               clef = static_cast<Clef*>(el);
-                              clef->setMag(staff->mag());
                               clef->setSmall(false);
-                              break;
-                        case Element::TIMESIG:
-                              el->setMag(staff->mag());
                               break;
                         default:
                               break;
@@ -747,7 +741,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                               keysig->setOldSig(0);
                         keysig->setTrack(i * VOICES);
                         keysig->setGenerated(true);
-                        keysig->setMag(staff->mag());
                         Segment* seg = m->undoGetSegment(Segment::SegKeySig, tick);
                         keysig->setParent(seg);
                         keysig->layout();
@@ -767,7 +760,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef->setTrack(i * VOICES);
                         clef->setGenerated(true);
                         clef->setSmall(false);
-                        clef->setMag(staff->mag());
 
                         Segment* s = m->undoGetSegment(Segment::SegClef, tick);
                         clef->setParent(s);
@@ -1291,7 +1283,6 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                         Element* el = seg->element(staffIdx * VOICES);
                         if (el == 0)
                               continue;
-                        qreal staffMag = staff(staffIdx)->mag();
 
                         if (el->generated() && ((st == Segment::SegTimeSigAnnounce && m != em)
                             || (el->type() == Element::CLEF   && seg->tick() != sm->tick())
@@ -1305,16 +1296,6 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                               bool small = seg != m->first() || s->firstMeasure() != m;
                               if (clef->small() != small) {
                                     clef->setSmall(small);
-                                    m->setDirty();
-                                    }
-                              if (clef->mag() != staffMag) {
-                                    clef->setMag(staffMag);
-                                    m->setDirty();
-                                    }
-                              }
-                        else if (el->type() == Element::KEYSIG || el->type() == Element::TIMESIG) {
-                              if (el->mag() != staffMag) {
-                                    el->setMag(staffMag);
                                     m->setDirty();
                                     }
                               }
@@ -1679,7 +1660,6 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                     ts = new TimeSig(this);
                                     ts->setTrack(track);
                                     ts->setGenerated(true);
-                                    ts->setMag(ts->staff()->mag());
                                     ts->setParent(s);
                                     undoAddElement(ts);
                                     }
@@ -1727,7 +1707,6 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                           ks->setKeySigEvent(ksv);
                                           ks->setTrack(track);
                                           ks->setGenerated(true);
-                                          ks->setMag(staff->mag());
                                           ks->setParent(s);
                                           undoAddElement(ks);
                                           }
@@ -1777,7 +1756,6 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                           c->setTrack(track);
                                           c->setGenerated(true);
                                           c->setSmall(true);
-                                          c->setMag(staff->mag());
                                           c->setParent(s);
                                           undoAddElement(c);
                                           }

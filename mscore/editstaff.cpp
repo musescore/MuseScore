@@ -29,6 +29,7 @@
 #include "libmscore/utils.h"
 #include "libmscore/instrtemplate.h"
 #include "seq.h"
+#include "musescore.h"
 #include "libmscore/stafftype.h"
 #include "selinstrument.h"
 #include "texteditor.h"
@@ -247,7 +248,7 @@ void EditStaff::apply()
             score->cmdUpdateNotes();
 
       score->setLayoutAll(true);
-      score->end();
+      score->update();
       }
 
 //---------------------------------------------------------

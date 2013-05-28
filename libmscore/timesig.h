@@ -79,6 +79,7 @@ class TimeSig : public Element {
 
       TimeSigType timeSigType() const    { return _timeSigType; }
 
+      virtual qreal mag() const;
       void draw(QPainter*) const;
       void write(Xml& xml) const;
       void read(XmlReader&);

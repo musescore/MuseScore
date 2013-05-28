@@ -111,9 +111,11 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   if (system)
                         yp += system->staff(staffIdx1)->y();
                   *y1 = l1->y1() - yp;
-                  *y1 += (_spanFrom * score()->staff(staffIdx1)->lineDistance() * _spatium) / 2;
+                  Staff* staff1 = score()->staff(staffIdx1);
+                  *y1 += (_spanFrom * staff1->lineDistance() * staff1->spatium()) / 2;
                   *y2 = l2->y1() - yp;
-                  *y2 += (_spanTo   * score()->staff(staffIdx2)->lineDistance() * _spatium) / 2;
+                  Staff* staff2 = score()->staff(staffIdx2);
+                  *y2 += (_spanTo   * staff2->lineDistance() * staff2->spatium()) / 2;
                   }
             }
       else {

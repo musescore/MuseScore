@@ -94,7 +94,7 @@ class Staff : public QObject {
 
       std::map<int,Clef*> clefs;
       std::map<int,TimeSig*> timesigs;
-      KeyList* _keymap;
+      KeyList _keymap;
 
       QList <BracketItem> _brackets;
       int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
@@ -157,7 +157,7 @@ class Staff : public QObject {
       TimeSig* timeSig(int tick) const;
       const Groups& group(int tick) const;
 
-      KeyList* keymap() const        { return _keymap;      }
+      KeyList* keymap()                   { return &_keymap;      }
       KeySigEvent key(int tick) const;
       int nextKeyTick(int tick) const;
       void setKey(int tick, int st);
