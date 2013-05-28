@@ -2165,7 +2165,7 @@ void Chord::setStemSlash(StemSlash* s)
 
 qreal Chord::mag() const
       {
-      qreal m = staff()->mag();
+      qreal m = staff() ? staff()->mag() : 1.0;
       if (small())
             m *= score()->styleD(ST_smallNoteMag);
       if (_noteType != NOTE_NORMAL)
