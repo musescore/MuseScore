@@ -332,6 +332,9 @@ class HarmonyView : public ShowElementBase {
    public:
       HarmonyView();
       virtual void setElement(Element*);
+   private slots:
+      void on_leftParen_clicked(bool checked);
+      void on_rightParen_clicked(bool checked);
       };
 
 //---------------------------------------------------------
