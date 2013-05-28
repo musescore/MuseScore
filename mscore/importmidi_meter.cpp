@@ -140,17 +140,35 @@ bool isQuarterDuration(int ticks)
       return (f.numerator() == 1 && f.denominator() == 4);
       }
 
-// Bad practice: last quarter rest in compound meter,
-// should be splitted into 2 8th rests
+int beatLength(const Fraction &barFraction)
+      {
+      int barLen = barFraction.ticks();
+      int beatLen = barLen / 4;
+      if (Meter::isDuple(barFraction))
+            beatLen = barLen / 2;
+      else if (Meter::isTriple(barFraction))
+            beatLen = barLen / 3;
+      else if (Meter::isQuadruple(barFraction))
+            beatLen = barLen / 4;
+      return beatLen;
+      }
 
-bool isLastQuarterRestInCompoundMeter(int startTickInBar, int endTickInBar,
+// If last 2/3 of beat in compound meter is rest,
+// it should be splitted into 2 rests
+
+bool is23RestEndOfBeatInCompoundMeter(int startTickInBar, int endTickInBar,
                                       const Fraction &barFraction)
       {
       if (endTickInBar - startTickInBar <= 0)
             return false;
-      if (isCompound(barFraction)
-                  && isQuarterDuration(endTickInBar - startTickInBar)
-                  && endTickInBar == barFraction.ticks())
+      if (!isCompound(barFraction))
+            return false;
+
+      int beatLen = beatLength(barFraction);
+      int divLen = beatLen / 3;
+
+      if ((startTickInBar - (startTickInBar / beatLen) * beatLen == divLen)
+                  && (endTickInBar % beatLen == 0))
             return true;
       return false;
       }
@@ -253,7 +271,7 @@ QList<TDuration> toDurationList(int startTickInBar, int endTickInBar,
             if (effectiveLevel - node->startLevel > tol
                         || effectiveLevel - node->endLevel > tol
                         || isHalfRestOn34(node->startTick, node->endTick, barFraction)
-                        || isLastQuarterRestInCompoundMeter(node->startTick, node->endTick, barFraction)
+                        || is23RestEndOfBeatInCompoundMeter(node->startTick, node->endTick, barFraction)
                         )
                   {
 
