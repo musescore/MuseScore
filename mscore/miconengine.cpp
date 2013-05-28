@@ -162,7 +162,7 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       p.end();
 
       int ww = img.width();
-#if 0
+#if 1
       if (state == QIcon::On) {
             for (int y = 0; y < img.height(); ++y) {
                   quint32* p = (quint32*)img.scanLine(y);
@@ -206,7 +206,7 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
                         ++scanLine;
                         }
                   }
-//            }
+            }
 
       pm = QPixmap::fromImage(img);
       if (!pm.isNull())
