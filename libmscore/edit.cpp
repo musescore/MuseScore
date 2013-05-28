@@ -920,7 +920,7 @@ void Score::cmdAddTie()
             int strack = part->staves()->front()->idx() * VOICES;
             int etrack = strack + part->staves()->size() * VOICES;
 
-            for (Segment* seg = chord->segment()->next1(Segment::SegChordRest); seg; seg = seg->next1(Segment::SegChordRest)) {
+            for (Segment* seg = chord->segment()->next1(Segment::SegChordRestGrace); seg; seg = seg->next1(Segment::SegChordRestGrace)) {
                   bool noteFound = false;
                   for (int track = strack; track < etrack; ++track) {
                         ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
