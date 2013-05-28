@@ -1144,8 +1144,10 @@ void Score::undoAddGrace(Chord* chord, Segment* s, bool behind)
       else
             staffList.append(ostaff);
       int tick = s->tick();
-      if (behind)
-            tick += chord->duration().ticks();
+      if (behind) {
+            Chord* c = static_cast<Chord*>(s->element(chord->track()));
+            tick += c->duration().ticks();
+            }
 
       foreach(Staff* staff, staffList) {
             //
