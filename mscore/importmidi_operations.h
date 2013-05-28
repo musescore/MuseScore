@@ -47,8 +47,6 @@ struct DefinedTrackOperations
       TrackOperations opers;
       };
 
-typedef QList<TrackOperations> tMidiImportOperations;
-
 class MidiImportOperations
       {
    public:
@@ -62,7 +60,7 @@ class MidiImportOperations
       TrackOperations trackOperations(int trackIndex) const;
 
    private:
-      tMidiImportOperations operations_;
+      QList<TrackOperations> operations_;
       int currentTrack_ = -1;
 
       bool isValidIndex(int index) const;
