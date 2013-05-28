@@ -68,9 +68,6 @@ class MidiChord {
       QList<MidiNote> notes;
       };
 
-typedef std::multimap<int, MidiChord> tChordMap;
-typedef tChordMap::iterator tChordMapIter;
-
 //---------------------------------------------------------
 //   MTrack
 //---------------------------------------------------------
@@ -83,24 +80,24 @@ class MTrack {
       QString name;
       bool hasKey = false;
 
-      tChordMap chords;
+      std::multimap<int, MidiChord> chords;
 
       void convertTrack(int lastTick);
       void findChords();
       void cleanup(int lastTick, TimeSigMap*);
-      void quantize(int startBarTick, int endBarTick, tChordMap& dst);
+      void quantize(int startBarTick, int endBarTick, std::multimap<int, MidiChord>& dst);
       void processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, int tick);
       void processMeta(int tick, const MidiEvent& mm);
 
    private:
-      tChordMapIter findStartChord(int startBarTick);
-      int findShortestNoteDurationInBar(const tChordMapIter &start, int endBarTick);
-      void quantizeToDurationList(const tChordMapIter &startChordIter,
-                                  int mintick, int endBarTick, tChordMap& dst);
+      std::multimap<int, MidiChord>::iterator findStartChord(int startBarTick);
+      int findShortestNoteDurationInBar(const std::multimap<int, MidiChord>::iterator &start, int endBarTick);
+      void quantizeToDurationList(const std::multimap<int, MidiChord>::iterator &startChordIter,
+                                  int mintick, int endBarTick, std::multimap<int, MidiChord>& dst);
       };
 
 
-int MTrack::findShortestNoteDurationInBar(const tChordMapIter &start, int endBarTick)
+int MTrack::findShortestNoteDurationInBar(const std::multimap<int, MidiChord>::iterator &start, int endBarTick)
       {
       int division = MScore::division;
       int minDuration = division;
@@ -183,7 +180,7 @@ int userQuantNoteToTicks(Operation::QuantValue quantNote)
       return userQuantValue;
       }
 
-tChordMapIter MTrack::findStartChord(int startBarTick)
+std::multimap<int, MidiChord>::iterator MTrack::findStartChord(int startBarTick)
       {
       auto i = chords.begin();
       for (; i != chords.end(); ++i) {
@@ -193,8 +190,8 @@ tChordMapIter MTrack::findStartChord(int startBarTick)
       return i;
       }
 
-void MTrack::quantizeToDurationList(const tChordMapIter& startChordIter,
-                                    int mintick, int endBarTick, tChordMap& dst)
+void MTrack::quantizeToDurationList(const std::multimap<int, MidiChord>::iterator& startChordIter,
+                                    int mintick, int endBarTick, std::multimap<int, MidiChord>& dst)
       {
       int raster  = mintick;
       int raster2 = raster >> 1;
@@ -212,7 +209,7 @@ void MTrack::quantizeToDurationList(const tChordMapIter& startChordIter,
 //   quantize
 //---------------------------------------------------------
 
-void MTrack::quantize(int startBarTick, int endBarTick, tChordMap& dst)
+void MTrack::quantize(int startBarTick, int endBarTick, std::multimap<int, MidiChord>& dst)
       {
       auto startChordIter = findStartChord(startBarTick);
       auto operations = preferences.midiImportOperations.currentTrackOperations();
@@ -246,7 +243,7 @@ void MTrack::quantize(int startBarTick, int endBarTick, tChordMap& dst)
 
 void MTrack::cleanup(int lastTick, TimeSigMap* sigmap)
       {
-      tChordMap dl; // duration list
+      std::multimap<int, MidiChord> dl; // duration list
 
       //    quantize every measure
       //    and fill the duration list with quantized chords
@@ -750,12 +747,9 @@ void splitIntoLRHands_HandWidth(QList<MTrack> &tracks, int &trackIndex)
       auto &srcTrack = tracks[trackIndex];
       auto &operations = preferences.midiImportOperations;
 
-      typedef tChordMap tChords;
-      typedef tChordMapIter tIter;
-
-      tChords leftHandChords;
-      tChords rightHandChords;
-      std::vector<tIter> chordGroup;
+      std::multimap<int, MidiChord> leftHandChords;
+      std::multimap<int, MidiChord> rightHandChords;
+      std::vector<std::multimap<int, MidiChord>::iterator> chordGroup;
 
       const int OCTAVE = 12;
       int currentTime = 0;
@@ -766,13 +760,15 @@ void splitIntoLRHands_HandWidth(QList<MTrack> &tracks, int &trackIndex)
             if (chordGroup.empty())
                   currentTime = i->second.onTime;
             chordGroup.push_back(i);
-            tIter next = i;
+            std::multimap<int, MidiChord>::iterator next = i;
             ++next;
             if ((next != srcTrack.chords.end() && next->second.onTime != currentTime)
                         || (next == srcTrack.chords.end())) {
                   // *i is the last element in group - process current group
                   struct {
-                        bool operator()(const tIter &iter1, const tIter &iter2) {
+                        bool operator()(const std::multimap<int, MidiChord>::iterator &iter1,
+                                        const std::multimap<int, MidiChord>::iterator &iter2)
+                              {
                               return iter1->second.notes[0].pitch < iter2->second.notes[0].pitch;
                               }
                         } lessThan;
