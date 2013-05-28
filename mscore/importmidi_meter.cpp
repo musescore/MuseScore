@@ -239,7 +239,7 @@ QList<TDuration> toDurationList(int startTickInBar, int endTickInBar,
 
       // analyse mectric structure of bar
       QList<int> divLevels = metricDivisionsOfBar(barFraction);
-      // create a root for binary tree of durations
+      // create a root for binary tree of durationsstd::multimap<int, MidiChord>
       std::unique_ptr<Node> root(new Node(startTickInBar, endTickInBar,
                                           levelOfTick(startTickInBar, divLevels),
                                           levelOfTick(endTickInBar, divLevels)));
