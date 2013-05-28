@@ -85,6 +85,8 @@ class Harmony : public Text {
       QList<QFont> fontList;              // temp values used in render()
       QList<TextSegment*> textList;       // rendered chord
 
+      bool _leftParen, _rightParen;       // include opening and/or closing parenthesis
+
       mutable QRectF _tbbox;
 
       virtual void draw(QPainter*) const;
@@ -100,6 +102,9 @@ class Harmony : public Text {
 
       void setId(int d)                        { _id = d; }
       int id() const                           { return _id;           }
+
+      bool leftParen() const                   { return _leftParen;    }
+      bool rightParen() const                  { return _rightParen;   }
 
       const ChordDescription* descr() const;
 
