@@ -186,6 +186,9 @@ class Note : public Element {
       ~Note();
       Note* clone() const      { return new Note(*this); }
       ElementType type() const { return NOTE; }
+
+      virtual qreal mag() const;
+
       QPointF pagePos() const;      ///< position in page coordinates
       QPointF canvasPos() const;    ///< position in page coordinates
       void layout();
@@ -280,7 +283,6 @@ class Note : public Element {
       bool dotIsUp() const;               // actual dot position
 
       void reset();
-      void setMag(qreal val);
 
       MScore::ValueType veloType() const    { return _veloType;          }
       void setVeloType(MScore::ValueType v) { _veloType = v;             }

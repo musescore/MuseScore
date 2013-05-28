@@ -232,8 +232,7 @@ void Element::spatiumChanged(qreal oldValue, qreal newValue)
 qreal Element::spatium() const
       {
       Staff* s = staff();
-      qreal v = _score->spatium();
-      return s ? v * s->mag() : v;
+      return s ? s->spatium() : _score->spatium();
       }
 
 //---------------------------------------------------------
@@ -242,7 +241,7 @@ qreal Element::spatium() const
 
 qreal Element::magS() const
       {
-      return _mag * (_score->spatium() /(MScore::DPI * SPATIUM20));
+      return mag() * (_score->spatium() /(MScore::DPI * SPATIUM20));
       }
 
 //---------------------------------------------------------

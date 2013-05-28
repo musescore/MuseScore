@@ -224,7 +224,7 @@ void Staff::read114(XmlReader& e, ClefList& _clefList)
             else if (tag == "cleflist")
                   _clefList.read(e, _score);
             else if (tag == "keylist")
-                  _keymap->read(e, _score);
+                  _keymap.read(e, _score);
             else if (tag == "bracket") {
                   BracketItem b;
                   b._bracket = BracketType(e.intAttribute("type", -1));
