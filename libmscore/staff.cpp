@@ -161,8 +161,7 @@ Staff::Staff(Score* s)
       _score          = s;
       _rstaff         = 0;
       _part           = 0;
-      _keymap         = new KeyList;
-      (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
+      _keymap[0]      = KeySigEvent(0);                  // default to C major
       _staffType      = _score->staffType(PITCHED_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
@@ -180,8 +179,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _score          = s;
       _rstaff         = rs;
       _part           = p;
-      _keymap         = new KeyList;
-      (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
+      _keymap[0]      = KeySigEvent(0);                  // default to C major
       _staffType      = _score->staffType(PITCHED_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
@@ -205,7 +203,6 @@ Staff::~Staff()
             if (_linkedStaves->isEmpty())
                   delete _linkedStaves;
             }
-      delete _keymap;
       }
 
 //---------------------------------------------------------
@@ -369,7 +366,7 @@ void Staff::removeTimeSig(TimeSig* timesig)
 
 KeySigEvent Staff::key(int tick) const
       {
-      return _keymap->key(tick);
+      return _keymap.key(tick);
       }
 
 //---------------------------------------------------------
@@ -381,7 +378,7 @@ KeySigEvent Staff::key(int tick) const
 
 int Staff::nextKeyTick(int tick) const
       {
-      return _keymap->nextKeyTick(tick);
+      return _keymap.nextKeyTick(tick);
       }
 
 //---------------------------------------------------------
@@ -456,7 +453,7 @@ void Staff::read(XmlReader& e)
             else if (tag == "invisible")
                   setInvisible(e.readInt());
             else if (tag == "keylist")
-                  _keymap->read(e, _score);
+                  _keymap.read(e, _score);
             else if (tag == "bracket") {
                   BracketItem b;
                   b._bracket     = BracketType(e.intAttribute("type", -1));
@@ -549,7 +546,7 @@ void Staff::setKey(int tick, int st)
 
 void Staff::setKey(int tick, const KeySigEvent& st)
       {
-      (*_keymap)[tick] = st;
+      _keymap[tick] = st;
       }
 
 //---------------------------------------------------------
@@ -558,7 +555,7 @@ void Staff::setKey(int tick, const KeySigEvent& st)
 
 void Staff::removeKey(int tick)
       {
-      _keymap->erase(tick);
+      _keymap.erase(tick);
       }
 
 //---------------------------------------------------------

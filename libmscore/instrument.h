@@ -190,9 +190,6 @@ class Instrument {
 //   InstrumentList
 //---------------------------------------------------------
 
-typedef std::map<const int, Instrument>::iterator iInstrument;
-typedef std::map<const int, Instrument>::const_iterator ciInstrument;
-
 class InstrumentList : public std::map<const int, Instrument> {
       static Instrument defaultInstrument;
    public:

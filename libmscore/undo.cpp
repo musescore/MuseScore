@@ -2395,17 +2395,15 @@ void ChangeStaff::flip()
       userDist  = oldUserDist;
       staffType = st;
 
+      Score* score = staff->score();
       if (invisibleChanged || typeChanged) {
-            Score* score = staff->score();
             int staffIdx = score->staffIdx(staff);
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
                   MStaff* mstaff = m->mstaff(staffIdx);
                   mstaff->lines->setVisible(!staff->invisible());
                   }
-            // if staff type changed, the whole staff across the entire score needs re-laying out
-            if(typeChanged)
-                  score->setLayoutAll(true);
             }
+      staff->score()->setLayoutAll(true);
       staff->score()->rebuildMidiMapping();
       staff->score()->setPlaylistDirty(true);
       }

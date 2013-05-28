@@ -955,7 +955,7 @@ void Score::rebuildMidiMapping()
       int idx     = 0;
       foreach(Part* part, _parts) {
             InstrumentList* il = part->instrList();
-            for (iInstrument i = il->begin(); i != il->end(); ++i) {
+            for (auto i = il->begin(); i != il->end(); ++i) {
                   bool drum = i->second.useDrumset();
                   for (int k = 0; k < i->second.channel().size(); ++k) {
                         Channel* a = &(i->second.channel(k));

@@ -92,6 +92,7 @@ class Chord : public ChordRest {
 
       virtual void setScore(Score* s);
       virtual ElementType type() const { return CHORD; }
+      virtual qreal mag() const;
 
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
@@ -167,7 +168,6 @@ class Chord : public ChordRest {
       bool userPlayEvents() const     { return _userPlayEvents; }
       void setUserPlayEvents(bool v)  { _userPlayEvents = v; }
 
-      virtual void setMag(qreal val);
       void pitchChanged();
       TremoloChordType tremoloChordType() const      { return _tremoloChordType; }
       void setTremoloChordType(TremoloChordType t)   { _tremoloChordType = t; }

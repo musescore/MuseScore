@@ -1331,7 +1331,6 @@ void Note::layout2()
                   NoteDot* dot = _dots[i];
                   if (dot) {
                         dot->setPos(x + d + dd * i, y);
-                        dot->setMag(mag());
                         _dots[i]->adjustReadPos();
                         }
                   }
@@ -1535,17 +1534,15 @@ void Note::reset()
       }
 
 //---------------------------------------------------------
-//   setMag
+//   mag
 //---------------------------------------------------------
 
-void Note::setMag(qreal val)
+qreal Note::mag() const
       {
-      val = val * (_small ? score()->styleD(ST_smallNoteMag) : 1.0);
-      Element::setMag(val);
-      if (_accidental)
-            _accidental->setMag(val);
-      for (Element* e : _el)
-            e->setMag(val);
+      qreal m = chord()->mag();
+      if (_small)
+            m *= score()->styleD(ST_smallNoteMag);
+      return m;
       }
 
 //---------------------------------------------------------

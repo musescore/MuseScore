@@ -71,6 +71,8 @@ class Articulation : public Element {
       virtual Articulation* clone() const   { return new Articulation(*this); }
       virtual ElementType type() const      { return ARTICULATION; }
 
+      virtual qreal mag() const             { return parent()->mag(); }
+
       void setArticulationType(ArticulationType);
       ArticulationType articulationType() const { return _articulationType; }
       void setSubtype(const QString& s);

@@ -357,24 +357,7 @@ bool ChordRest::readProperties(XmlReader& e)
 
 void ChordRest::setSmall(bool val)
       {
-      _small   = val;
-      qreal m = 1.0;
-      if (_small)
-            m = score()->styleD(ST_smallNoteMag);
-      if (staff()->small())
-            m *= score()->styleD(ST_smallStaffMag);
-      setMag(m);
-      }
-
-//---------------------------------------------------------
-//   setMag
-//---------------------------------------------------------
-
-void ChordRest::setMag(qreal val)
-      {
-      Element::setMag(val);
-      foreach(Articulation* a, _articulations)
-            a->setMag(val);
+      _small = val;
       }
 
 //---------------------------------------------------------

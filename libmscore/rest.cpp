@@ -525,5 +525,16 @@ void Rest::reset()
       ChordRest::reset();
       }
 
+//---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Rest::mag() const
+      {
+      qreal m = staff()->mag();
+      if (small())
+            m *= score()->styleD(ST_smallNoteMag);
+      return m;
+      }
 }
 

@@ -30,8 +30,8 @@ class StemSlash : public Element {
 
    public:
       StemSlash(Score* s) : Element(s) {}
-//      StemSlash& operator=(const Stem&);
 
+      virtual qreal mag() const        { return parent()->mag(); }
       void setLine(const QLineF& l);
 
       virtual StemSlash* clone() const { return new StemSlash(*this); }

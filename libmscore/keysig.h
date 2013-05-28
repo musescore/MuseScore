@@ -62,6 +62,7 @@ class KeySig : public Element {
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
       virtual void layout();
+      virtual qreal mag() const;
 
       void setSig(int oldSig, int newSig);
       void setOldSig(int oldSig);
