@@ -998,10 +998,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                                     nt = START_REPEAT;
                               }
                         if (ot != nt) {
-                              qreal w =
-                                 BarLine::layoutWidth(this, nt, bl->magS())
-                                 - BarLine::layoutWidth(this, ot, bl->magS());
-                              ww += w;
+                              qreal mag = bl->magS();
+                              ww += BarLine::layoutWidth(this, nt, mag)
+                                    - BarLine::layoutWidth(this, ot, mag);
                               }
                         }
                   qreal stretch = m->userStretch() * measureSpacing;
@@ -1514,9 +1513,9 @@ bool Score::doReLayout()
                         firstMeasure = false;
                         }
                   mb->setPos(pos);
-                  Measure* m    = static_cast<Measure*>(mb);
+                  Measure* m   = static_cast<Measure*>(mb);
                   qreal weight = m->ticks() * m->userStretch();
-                  ww            = m->layoutWidth() + rest * weight;
+                  ww           = m->layoutWidth() + rest * weight;
                   m->layout(ww);
                   }
             else if (mb->type() == HBOX) {
