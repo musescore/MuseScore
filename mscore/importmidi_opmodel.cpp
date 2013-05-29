@@ -37,19 +37,17 @@ OperationsModel::OperationsModel()
       quantValue->name = "Quantization";
       quantValue->oper.type = Operation::QUANT_VALUE;
       quantValue->oper.value = TrackOperations().quantize.value;
-      quantValue->values = {
-            "Shortest note in bar",
-            "Value from preferences",
-            "1/4",
-//            "1/4 triplet",
-            "1/8",
-//            "1/8 triplet",
-            "1/16",
-//            "1/16 triplet",
-            "1/32",
-//            "1/32 triplet",
-            "1/64"
-            };
+      quantValue->values.push_back("Shortest note in bar");
+      quantValue->values.push_back("Value from preferences");
+      quantValue->values.push_back("1/4");
+//    quantValue->values.push_back("1/4 triplet");
+      quantValue->values.push_back("1/8");
+//    quantValue->values.push_back("1/8 triplet");
+      quantValue->values.push_back("1/16");
+//    quantValue->values.push_back("1/16 triplet");
+      quantValue->values.push_back("1/32");
+//    quantValue->values.push_back("1/32 triplet");
+      quantValue->values.push_back("1/64");
       quantValue->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(quantValue));
       controller->quantValue = quantValue;
@@ -85,10 +83,8 @@ OperationsModel::OperationsModel()
       LHRHMethod->name = "Separation method";
       LHRHMethod->oper.type = Operation::LHRH_METHOD;
       LHRHMethod->oper.value = LHRHSeparation().method;
-      LHRHMethod->values = {
-            "Hand width",
-            "Fixed pitch"
-            };
+      LHRHMethod->values.push_back("Hand width");
+      LHRHMethod->values.push_back("Fixed pitch");
       LHRHMethod->parent = doLHRH;
       doLHRH->children.push_back(std::unique_ptr<Node>(LHRHMethod));
       controller->LHRHMethod = LHRHMethod;
@@ -98,19 +94,17 @@ OperationsModel::OperationsModel()
       LHRHPitchOctave->name = "Split pitch octave";
       LHRHPitchOctave->oper.type = Operation::LHRH_SPLIT_OCTAVE;
       LHRHPitchOctave->oper.value = LHRHSeparation().splitPitchOctave;
-      LHRHPitchOctave->values = {
-            "C-1",
-            "C0",
-            "C1",
-            "C2",
-            "C3",
-            "C4",
-            "C5",
-            "C6",
-            "C7",
-            "C8",
-            "C9"
-            };
+      LHRHPitchOctave->values.push_back("C-1");
+      LHRHPitchOctave->values.push_back("C0");
+      LHRHPitchOctave->values.push_back("C1");
+      LHRHPitchOctave->values.push_back("C2");
+      LHRHPitchOctave->values.push_back("C3");
+      LHRHPitchOctave->values.push_back("C4");
+      LHRHPitchOctave->values.push_back("C5");
+      LHRHPitchOctave->values.push_back("C6");
+      LHRHPitchOctave->values.push_back("C7");
+      LHRHPitchOctave->values.push_back("C8");
+      LHRHPitchOctave->values.push_back("C9");
       LHRHPitchOctave->parent = LHRHMethod;
       LHRHMethod->children.push_back(std::unique_ptr<Node>(LHRHPitchOctave));
       controller->LHRHPitchOctave = LHRHPitchOctave;
@@ -120,20 +114,18 @@ OperationsModel::OperationsModel()
       LHRHPitchNote->name = "Split pitch note";
       LHRHPitchNote->oper.type = Operation::LHRH_SPLIT_NOTE;
       LHRHPitchNote->oper.value = LHRHSeparation().splitPitchNote;
-      LHRHPitchNote->values = {
-            "C",
-            "C#",
-            "D",
-            "D#",
-            "E",
-            "F",
-            "F#",
-            "G",
-            "G#",
-            "A",
-            "A#",
-            "H"
-            };
+      LHRHPitchNote->values.push_back("C"); 
+      LHRHPitchNote->values.push_back("C#");
+      LHRHPitchNote->values.push_back("D"); 
+      LHRHPitchNote->values.push_back("D#");
+      LHRHPitchNote->values.push_back("E"); 
+      LHRHPitchNote->values.push_back("F"); 
+      LHRHPitchNote->values.push_back("F#");
+      LHRHPitchNote->values.push_back("G"); 
+      LHRHPitchNote->values.push_back("G#");
+      LHRHPitchNote->values.push_back("A"); 
+      LHRHPitchNote->values.push_back("A#");
+      LHRHPitchNote->values.push_back("H");
       LHRHPitchNote->parent = LHRHMethod;
       LHRHMethod->children.push_back(std::unique_ptr<Node>(LHRHPitchNote));
       controller->LHRHPitchNote = LHRHPitchNote;
