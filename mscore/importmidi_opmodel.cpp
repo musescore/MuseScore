@@ -403,7 +403,7 @@ bool Controller::updateNodesDependencies(Node *node, bool force_update)
                               LHRHPitchNote->visible = false;
                         result = true;
                         break;
-                  case Operation::FIXED_PITCH:
+                  case Operation::SPECIFIED_PITCH:
                         if (LHRHPitchOctave)
                               LHRHPitchOctave->visible = true;
                         if (LHRHPitchNote)
