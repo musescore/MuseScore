@@ -477,7 +477,7 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
 
 /**
  This is needed after
-      - inserting or removing a measure.
+      - inserting or removing a measure
       - changing the sigmap
       - after inserting/deleting time (changes the sigmap)
 */
