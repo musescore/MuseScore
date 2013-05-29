@@ -37,6 +37,7 @@ class Fraction {
       void set(int z, int n)     { _numerator = z; _denominator = n; }
 
       bool isZero() const        { return _numerator == 0;      }
+
       bool isValid() const       { return _denominator != 0;    }
       void reduce();
       Fraction reduced() const;

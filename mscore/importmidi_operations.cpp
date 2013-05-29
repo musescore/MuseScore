@@ -1,7 +1,7 @@
 #include "importmidi_operations.h"
 
-namespace Ms {
 
+namespace Ms {
 
 bool MidiImportOperations::isValidIndex(int index) const
       {
@@ -56,5 +56,6 @@ TrackOperations MidiImportOperations::trackOperations(int trackIndex) const
             return TrackOperations();
       return operations_[trackIndex];
       }
-}
+
+} // namespace Ms
 
