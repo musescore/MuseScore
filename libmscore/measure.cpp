@@ -3138,8 +3138,10 @@ void Measure::layoutX(qreal stretch)
       int hLastIdx   = -1;
       int ntick      = ticks();   // position of next measure
 
-      if (system()->firstMeasure() == this && system()->barLine())
-            x += BarLine::layoutWidth(score(), system()->barLine()->barLineType(), system()->barLine()->magS());
+      if (system()->firstMeasure() == this && system()->barLine()) {
+            BarLine* bl = system()->barLine();
+            x += BarLine::layoutWidth(score(), bl->barLineType(), bl->magS());
+            }
 
       qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
 
