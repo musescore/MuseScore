@@ -37,10 +37,10 @@ struct Operation
 //            N_32_triplet,
             N_64
             };
-
+//#undef FIXED_PITCH
       enum LHRHMethod {
             HAND_WIDTH = 0,
-            FIXED_PITCH
+            SPECIFIED_PITCH
             };
 
       enum LHRHOctave {
