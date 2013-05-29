@@ -47,22 +47,23 @@ class ChordRest : public DurationElement {
       Q_PROPERTY(int      durationType  READ durationTypeTicks WRITE setDurationType);
       Q_PROPERTY(BeamMode beamMode      READ beamMode          WRITE undoSetBeamMode);
 
-      TDuration _durationType;
-      int _staffMove;         // -1, 0, +1, used for crossbeaming
-
       Spanner* _spannerFor;
       Spanner* _spannerBack;
       QList<Element*> _annotations;
 
+      TDuration _durationType;
+      int _staffMove;         // -1, 0, +1, used for crossbeaming
+
    protected:
       QList<Articulation*> _articulations;
       Beam* _beam;
+      QList<Lyrics*> _lyricsList;
+      TabDurationSymbol* _tabDur;         // stores a duration symbol in tablature staves
+
       BeamMode _beamMode;
       bool _up;                           // actual stem direction
       bool _small;
       Space _space;                       // cached value from layout
-      QList<Lyrics*> _lyricsList;
-      TabDurationSymbol* _tabDur;         // stores a duration symbol in tablature staves
 
       // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
       int _crossMeasure;            ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note

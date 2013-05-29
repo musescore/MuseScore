@@ -1314,7 +1314,8 @@ void Note::layout2()
                   // if stems beside staff, do nothing
                   }
             // if not TAB, look at note line
-            else onLine = (_line & 1) == 0;
+            else
+                  onLine = (_line & 1) == 0;
             // if on line, displace dots by half spatium up or down according to voice
             if (onLine) {
                   if (_dotPosition == MScore::AUTO)
@@ -1552,7 +1553,6 @@ qreal Note::mag() const
 void Note::setSmall(bool val)
       {
       _small = val;
-      setMag(parent() ? parent()->mag() : 1.0);
       }
 
 //---------------------------------------------------------

@@ -173,6 +173,7 @@ Measure::Measure(const Measure& m)
       _repeatCount           = m._repeatCount;
       _repeatFlags           = m._repeatFlags;
 
+      staves.reserve(m.staves.size());
       foreach(MStaff* ms, m.staves)
             staves.append(new MStaff(*ms));
 
@@ -759,11 +760,8 @@ Segment* Measure::tick2segment(int tick, bool grace) const
 
 //---------------------------------------------------------
 //   findSegment
+/// Search for a segment of type \a st at position \a t.
 //---------------------------------------------------------
-
-/**
- Search for a segment of type \a st at position \a t.
-*/
 
 Segment* Measure::findSegment(Segment::SegmentType st, int t)
       {
