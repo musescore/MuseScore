@@ -216,9 +216,9 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
       std::vector<AcEl> aclist;
 
-      qreal _spatium = spatium();
-      qreal stepDistance = _spatium * .5;
-      int stepOffset = staff->staffType()->stepOffset();
+//      qreal _spatium     = spatium();
+      qreal stepDistance = staff->spatium() * .5;
+      int stepOffset     = staff->staffType()->stepOffset();
 
       qreal dotPosX  = 0.0;
       int nNotes = notes.size();
