@@ -20,6 +20,8 @@
 #include "colorscheme.h"
 #include "colorutils.h"
 
+static const double CONTRAST = .5;
+
 //---------------------------------------------------------
 //   StateEffects
 //---------------------------------------------------------
@@ -259,7 +261,7 @@ class ColorSchemePrivate : public QSharedData {
 #define DECO_DEFAULT(a) DEFAULT(defaultDecorationColors.a)
 
 ColorSchemePrivate::ColorSchemePrivate(QPalette::ColorGroup state, const char* group, SetDefaultColors defaults) {
-      _contrast = 1.0;    // KGlobalSettings::contrastF( config );
+      _contrast = CONTRAST;    // KGlobalSettings::contrastF( config );
 
       // loaded-from-config colors (no adjustment)
       _brushes.bg[0] = SET_DEFAULT(NormalBackground);
@@ -271,7 +273,7 @@ ColorSchemePrivate::ColorSchemePrivate(QPalette::ColorGroup state, const char* g
 
 ColorSchemePrivate::ColorSchemePrivate(QPalette::ColorGroup state,
                                        const char* group, SetDefaultColors defaults, const QBrush& tint) {
-      _contrast = 1.0; // KGlobalSettings::contrastF( config );
+      _contrast = CONTRAST; // KGlobalSettings::contrastF( config );
 
       // loaded-from-config colors
       _brushes.bg[0] = SET_DEFAULT(NormalBackground);
