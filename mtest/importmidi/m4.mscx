@@ -210,10 +210,10 @@
             </Note>
           </Chord>
         <Rest>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           </Rest>
         </Measure>
       <Measure number="2">
