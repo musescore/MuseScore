@@ -826,7 +826,7 @@ void splitIntoLeftRightHands(QList<MTrack> &tracks)
                   case Operation::HAND_WIDTH:
                         splitIntoLRHands_HandWidth(tracks, i);
                         break;
-                  case Operation::FIXED_PITCH:
+                  case Operation::SPECIFIED_PITCH:
                         splitIntoLRHands_FixedPitch(tracks, i);
                         break;
                   }
