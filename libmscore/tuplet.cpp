@@ -119,6 +119,7 @@ void Tuplet::layout()
             if (_number == 0) {
                   _number = new Text(score());
                   _number->setTextStyleType(TEXT_STYLE_TUPLET);
+                  _number->setTrack(track());
                   _number->setParent(this);
                   _number->setVisible(visible());
                   }
@@ -541,6 +542,7 @@ void Tuplet::read(XmlReader& e)
                   _number->read(e);
                   _number->setTextStyleType(TEXT_STYLE_TUPLET);
                   _number->setVisible(visible());     //?? override saved property
+                  _number->setTrack(track());
                   }
             else if (tag == "subtype")    // obsolete
                   ;
@@ -711,6 +713,8 @@ void Tuplet::dump() const
 
 void Tuplet::setTrack(int val)
       {
+      if (_number)
+            _number->setTrack(val);
       Element::setTrack(val);
       }
 
