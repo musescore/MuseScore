@@ -115,7 +115,6 @@ bool XmlReader::hasAttribute(const char* s) const
 QPointF XmlReader::readPoint()
       {
       Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
-      QPointF p;
 #ifndef NDEBUG
       if (!attributes().hasAttribute("x")) {
             QXmlStreamAttributes map = attributes();
@@ -132,10 +131,10 @@ QPointF XmlReader::readPoint()
             unknown();
             }
 #endif
-      p.setX(doubleAttribute("x", 0.0));
-      p.setY(doubleAttribute("y", 0.0));
+      qreal x = doubleAttribute("x", 0.0);
+      qreal y = doubleAttribute("y", 0.0);
       readNext();
-      return p;
+      return QPointF(x, y);
       }
 
 //---------------------------------------------------------
@@ -191,8 +190,8 @@ QRectF XmlReader::readRect()
 Fraction XmlReader::readFraction()
       {
       Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
-      qreal z = attribute("z", "0.0").toDouble();
-      qreal n = attribute("n", "0.0").toDouble();
+      int z = attribute("z", "0").toInt();
+      int n = attribute("n", "0").toInt();
       skipCurrentElement();
       return Fraction(z, n);
       }
@@ -219,7 +218,7 @@ void XmlReader::unknown() const
 Spanner* XmlReader::findSpanner(int id) const
       {
       int n = _spanner.size();
-      for (int i = 0; i < n; ++i) {
+      for (int i = n-1; i >= 0; --i) {
             if (_spanner.at(i)->id() == id)
                   return _spanner.at(i);
             }
@@ -260,12 +259,14 @@ Tuplet* XmlReader::findTuplet(int id) const
 
 void XmlReader::addTuplet(Tuplet* s)
       {
+#ifndef NDEBUG
       Tuplet* t = findTuplet(s->id());
       if (t) {
             qDebug("Tuplet %d already read", s->id());
             delete s;
             return;
             }
+#endif
       _tuplets.append(s);
       }
 
