@@ -106,7 +106,7 @@ private:
       virtual Accidental* clone() const     { return new Accidental(*this); }
       virtual ElementType type() const      { return ACCIDENTAL; }
 
-      virtual qreal mag() const             { return parent()->mag(); }
+      virtual qreal mag() const             { return parent() ? parent()->mag() : 1.0; }
 
       const char* subtypeUserName() const;
       void setSubtype(const QString& s);
