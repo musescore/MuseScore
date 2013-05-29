@@ -666,7 +666,9 @@ bool Element::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "color")
+      if (tag == "track")
+            setTrack(e.readInt());
+      else if (tag == "color")
             _color = e.readColor();
       else if (tag == "visible")
             _visible = e.readInt();
@@ -710,8 +712,6 @@ bool Element::readProperties(XmlReader& e)
             _readPos = e.readPoint() * spatium();
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
-      else if (tag == "track")
-            setTrack(e.readInt());
       else if (tag == "tag") {
             QString val(e.readElementText());
             for (int i = 1; i < MAX_TAGS; i++) {

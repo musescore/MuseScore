@@ -854,6 +854,24 @@ void Chord::readNote(XmlReader& e)
       add(note);
       }
 
+#if 0
+QMap<QString, int> chordTags;
+
+//---------------------------------------------------------
+//   dumpTags
+//---------------------------------------------------------
+
+void dumpTags()
+      {
+      printf("dump tags\n");
+      QMapIterator<QString, int> i(chordTags);
+      while(i.hasNext()) {
+            i.next();
+            printf("====%s %d\n", qPrintable(i.key()), i.value());
+            }
+      }
+#endif
+
 //---------------------------------------------------------
 //   Chord::read
 //---------------------------------------------------------
@@ -863,6 +881,7 @@ void Chord::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
+//            chordTags[tag.toString()]++;
             if (tag == "Note") {
                   Note* note = new Note(score());
                   // the note needs to know the properties of the track it belongs to
@@ -870,6 +889,18 @@ void Chord::read(XmlReader& e)
                   note->setChord(this);
                   note->read(e);
                   add(note);
+                  }
+            else if (ChordRest::readProperties(e))
+                  ;
+            else if (tag == "Stem") {
+                  _stem = new Stem(score());
+                  _stem->read(e);
+                  add(_stem);
+                  }
+            else if (tag == "Hook") {
+                  _hook = new Hook(score());
+                  _hook->read(e);
+                  add(_hook);
                   }
             else if (tag == "appoggiatura") {
                   _noteType = NOTE_APPOGGIATURA;
@@ -922,22 +953,12 @@ void Chord::read(XmlReader& e)
                   }
             else if (tag == "tickOffset")       // obsolete
                   ;
-            else if (tag == "Stem") {
-                  _stem = new Stem(score());
-                  _stem->read(e);
-                  add(_stem);
-                  }
-            else if (tag == "Hook") {
-                  _hook = new Hook(score());
-                  _hook->read(e);
-                  add(_hook);
-                  }
             else if (tag == "ChordLine") {
                   ChordLine* cl = new ChordLine(score());
                   cl->read(e);
                   add(cl);
                   }
-            else if (!ChordRest::readProperties(e))
+            else
                   e.unknown();
             }
       if (score()->mscVersion() <= 114) { // #19988

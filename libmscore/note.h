@@ -136,6 +136,7 @@ class Note : public Element {
       int _string;
       mutable int _tpc;       ///< tonal pitch class
       mutable int _pitch;     ///< Note pitch as midi value (0 - 127).
+
       bool _ghost;            ///< ghost note (guitar: death note)
       bool _hidden;           ///< markes this note as the hidden one if there are
                               ///< overlapping notes; hidden notes are not played

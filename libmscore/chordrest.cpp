@@ -228,7 +228,34 @@ bool ChordRest::readProperties(XmlReader& e)
             return true;
       const QStringRef& tag(e.name());
 
-      if (tag == "BeamMode") {
+      if (tag == "durationType") {
+            setDurationType(e.readElementText());
+            if (actualDurationType().type() != TDuration::V_MEASURE) {
+                  if ((type() == REST) &&
+                              // for backward compatibility, convert V_WHOLE rests to V_MEASURE
+                              // if long enough to fill a measure.
+                              // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
+                              // (see Fraction() constructor in fraction.h; this happens for instance
+                              // when pasting selection from clipboard): they should not be converted
+                              duration().numerator() != 0 &&
+                              // rest durations are initialized to full measure duration when
+                              // created upon reading the <Rest> tag (see Measure::read() )
+                              // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
+                              (actualDurationType()==TDuration::V_WHOLE && duration() <= Fraction(4, 4)) ) {
+                        // old pre 2.0 scores: convert
+                        setDurationType(TDuration::V_MEASURE);
+                        }
+                  else  // not from old score: set duration fraction from duration type
+                        setDuration(actualDurationType().fraction());
+                  }
+            else {
+                  if (score()->mscVersion() < 115) {
+                        SigEvent event = score()->sigmap()->timesig(e.tick());
+                        setDuration(event.timesig());
+                        }
+                  }
+            }
+      else if (tag == "BeamMode") {
             QString val(e.readElementText());
             BeamMode bm = BeamMode::AUTO;
             if (val == "auto")
@@ -291,33 +318,6 @@ bool ChordRest::readProperties(XmlReader& e)
                         qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(type));
                   }
             e.readNext();
-            }
-      else if (tag == "durationType") {
-            setDurationType(e.readElementText());
-            if (actualDurationType().type() != TDuration::V_MEASURE) {
-                  if ((type() == REST) &&
-                              // for backward compatibility, convert V_WHOLE rests to V_MEASURE
-                              // if long enough to fill a measure.
-                              // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
-                              // (see Fraction() constructor in fraction.h; this happens for instance
-                              // when pasting selection from clipboard): they should not be converted
-                              duration().numerator() != 0 &&
-                              // rest durations are initialized to full measure duration when
-                              // created upon reading the <Rest> tag (see Measure::read() )
-                              // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                              (actualDurationType()==TDuration::V_WHOLE && duration() <= Fraction(4, 4)) ) {
-                        // old pre 2.0 scores: convert
-                        setDurationType(TDuration::V_MEASURE);
-                        }
-                  else  // not from old score: set duration fraction from duration type
-                        setDuration(actualDurationType().fraction());
-                  }
-            else {
-                  if (score()->mscVersion() < 115) {
-                        SigEvent event = score()->sigmap()->timesig(e.tick());
-                        setDuration(event.timesig());
-                        }
-                  }
             }
       else if (tag == "duration")
             setDuration(e.readFraction());
