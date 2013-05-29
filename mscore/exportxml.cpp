@@ -4508,7 +4508,14 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             xml.etag();
 
             if (!h->xmlKind().isEmpty()) {
-                  xml.tag(QString("kind text=\"%1\"").arg(h->extensionName()), h->xmlKind());
+                  QString s = "kind";
+                  if (h->extensionName() != "")
+                        s += " text=\"" + h->extensionName() + "\"";
+                  if (h->xmlSymbols() == "yes")
+                        s += " use-symbols=\"yes\"";
+                  if (h->xmlParens() == "yes")
+                        s += " parentheses-degrees=\"yes\"";
+                  xml.tag(s, h->xmlKind());
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
                         foreach(QString tag, l) {

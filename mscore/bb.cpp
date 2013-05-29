@@ -24,6 +24,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/drumset.h"
 #include "libmscore/utils.h"
+#include "libmscore/chordlist.h"
 #include "libmscore/harmony.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/key.h"
@@ -490,7 +491,9 @@ Score::FileError importBB(Score* score, const QString& name)
             else
                   h->setBaseTpc(INVALID_TPC);
             h->setId(c.extension);
-            h->setNameFromId();
+            const ChordDescription* cd = h->getDescription();
+            if (cd)
+                  h->setTextName(cd->names.front());
             h->render();
             s->add(h);
             }
