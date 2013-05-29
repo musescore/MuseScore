@@ -1910,7 +1910,7 @@ Element* Chord::drop(const DropData& data)
 
 qreal Chord::dotPosX() const
       {
-      if(staffIdx())
+      if (parent())
             return segment()->dotPosX(staffIdx());
       return -1000.0;
       }
@@ -1921,7 +1921,7 @@ qreal Chord::dotPosX() const
 
 void Chord::setDotPosX(qreal val)
       {
-      if (staffIdx())
+      if (parent())
             segment()->setDotPosX(staffIdx(), val);
       }
 
