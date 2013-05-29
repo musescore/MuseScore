@@ -213,20 +213,27 @@ void Tuplet::layout()
       p1.ry() += headDistance;
       p2.ry() += headDistance;
 
+      qreal xx1 = p1.x();
+      qreal xx2 = p2.x();
+
       if (_isUp) {
             if (cr1->type() == CHORD) {
                   const Chord* chord1 = static_cast<const Chord*>(cr1);
                   Stem* stem = chord1->stem();
 
-                  if (stem && chord1->up())
-                        p1.setY(stem->abbox().y());
-                  else if ((cr2->type() == CHORD) && stem && !chord1->up()) {
-                        const Chord* chord2 = static_cast<const Chord*>(cr2);
-                        Stem* stem2 = chord2->stem();
-                        if (stem2) {
-                              int l1 = chord1->upNote()->line();
-                              int l2 = chord2->upNote()->line();
-                              p1.ry() = stem2->abbox().top() + _spatium * .5 * (l1 - l2);
+                  if (stem) {
+                        xx1 = stem->abbox().x();
+                        if (chord1->up())
+                              p1.setY(stem->abbox().y());
+                        else if ((cr2->type() == CHORD) && !chord1->up()) {
+                              const Chord* chord2 = static_cast<const Chord*>(cr2);
+                              Stem* stem2 = chord2->stem();
+                              if (stem2) {
+                                    xx2 = stem2->abbox().x();
+                                    int l1 = chord1->upNote()->line();
+                                    int l2 = chord2->upNote()->line();
+                                    p1.ry() = stem2->abbox().top() + _spatium * .5 * (l1 - l2);
+                                    }
                               }
                         }
                   }
@@ -289,16 +296,20 @@ void Tuplet::layout()
             if (cr1->type() == CHORD) {
                   const Chord* chord1 = static_cast<const Chord*>(cr1);
                   Stem* stem = chord1->stem();
-                  if (stem && !chord1->up()) {
-                        p1.setY(stem->abbox().bottom());
-                        }
-                  else if ((cr2->type() == CHORD) && stem && chord1->up()) {
-                        const Chord* chord2 = static_cast<const Chord*>(cr2);
-                        Stem* stem2 = chord2->stem();
-                        if (stem2) {
-                              int l1 = chord1->upNote()->line();
-                              int l2 = chord2->upNote()->line();
-                              p1.ry() = stem2->abbox().bottom() + _spatium * .5 * (l1 - l2);
+                  if (stem) {
+                        xx1 = stem->abbox().x();
+                        if (!chord1->up()) {
+                              p1.setY(stem->abbox().bottom());
+                              }
+                        else if ((cr2->type() == CHORD) && stem && chord1->up()) {
+                              const Chord* chord2 = static_cast<const Chord*>(cr2);
+                              Stem* stem2 = chord2->stem();
+                              if (stem2) {
+                                    xx2     = stem2->abbox().x();
+                                    int l1  = chord1->upNote()->line();
+                                    int l2  = chord2->upNote()->line();
+                                    p1.ry() = stem2->abbox().bottom() + _spatium * .5 * (l1 - l2);
+                                    }
                               }
                         }
                   }
@@ -368,6 +379,8 @@ void Tuplet::layout()
 
       p1 += _p1;
       p2 += _p2;
+      xx1 -= mp.x();
+      xx2 -= mp.x();
 
       // center number
       qreal x3 = 0.0;
@@ -375,11 +388,15 @@ void Tuplet::layout()
       qreal numberWidth = 0.0;
       if (_number) {
             _number->layout();
-            x3 = p1.x() + (p2.x() - p1.x()) * .5;
+            //
+            // for beamed tuplets, center number on beam
+            //
+            if (cr1->beam() && cr2->beam())
+                  x3 = xx1 + (xx2 - xx1) * .5;
+            else
+                  x3 = p1.x() + (p2.x() - p1.x()) * .5;
 
-            y3 = p1.y() + (p2.y() - p1.y()) * .5
-//               - _number->bbox().height() * .5
-               - (l1 + l2) * (_isUp ? 1.0 : -1.0);
+            y3 = p1.y() + (p2.y() - p1.y()) * .5 - (l1 + l2) * (_isUp ? 1.0 : -1.0);
 
             numberWidth = _number->bbox().width();
             _number->setPos(QPointF(x3, y3) - ipos());
