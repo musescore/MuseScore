@@ -41,8 +41,8 @@ class MyNetworkAccessManager: public QNetworkAccessManager
 
    protected:
       QNetworkReply * createRequest(Operation op,
-                                          const QNetworkRequest & req,
-                                          QIODevice * outgoingData = 0);
+                                    const QNetworkRequest & req,
+                                    QIODevice * outgoingData = 0);
       };
 
 // Derive from QWebPage, because a WebPage handles
