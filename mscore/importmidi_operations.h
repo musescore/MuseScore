@@ -8,16 +8,16 @@ namespace Ms {
 
 struct Quantization
       {
-      Operation::QuantValue value = Operation::FROM_PREFERENCES;
+      MidiOperation::QuantValue value = MidiOperation::QuantValue::FROM_PREFERENCES;
       bool reduceToShorterNotesInBar = true;
       };
 
 struct LHRHSeparation
       {
       bool doIt = false;
-      Operation::LHRHMethod method = Operation::HAND_WIDTH;
-      Operation::LHRHOctave splitPitchOctave = Operation::C4;
-      Operation::LHRHNote splitPitchNote = Operation::E;
+      MidiOperation::LHRHMethod method = MidiOperation::LHRHMethod::HAND_WIDTH;
+      MidiOperation::Octave splitPitchOctave = MidiOperation::Octave::C4;
+      MidiOperation::Note splitPitchNote = MidiOperation::Note::E;
       };
 
 // bool and enum-like elementary operations (itself and inside structs) allowed
@@ -43,7 +43,7 @@ struct TrackData
 
 struct DefinedTrackOperations
       {
-      QSet<Operation::Type> undefinedOpers;
+      QSet<int> undefinedOpers;
       TrackOperations opers;
       };
 
@@ -69,7 +69,7 @@ class MidiImportOperations
 } // namespace Ms
 
 
-Q_DECLARE_METATYPE(Ms::Operation)
+Q_DECLARE_METATYPE(Ms::MidiOperation)
 Q_DECLARE_METATYPE(Ms::TrackData)
 
 

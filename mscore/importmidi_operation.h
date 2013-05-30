@@ -7,9 +7,9 @@ namespace Ms {
 // all enums below should have default indexes like 0, 1, 2...
 // text names for enum items are in OperationsModel class
 
-struct Operation
+struct MidiOperation
       {
-      enum Type {
+      enum class Type {
             DO_IMPORT = 0,
             QUANT_VALUE,
             QUANT_REDUCE,
@@ -24,7 +24,7 @@ struct Operation
 
       QVariant value;
 
-      enum QuantValue {
+      enum class QuantValue {
             SHORTEST_IN_BAR = 0,
             FROM_PREFERENCES,
             N_4,
@@ -37,13 +37,13 @@ struct Operation
 //            N_32_triplet,
             N_64
             };
-//#undef FIXED_PITCH
-      enum LHRHMethod {
+
+      enum class LHRHMethod {
             HAND_WIDTH = 0,
-            SPECIFIED_PITCH
+            FIXED_PITCH
             };
 
-      enum LHRHOctave {
+      enum class Octave {
             C_1 = 0,
             C0,
             C1,
@@ -57,7 +57,7 @@ struct Operation
             C9
             };
 
-      enum LHRHNote {
+      enum class Note {
             C = 0,
             Cis,
             D,

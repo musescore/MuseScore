@@ -67,13 +67,18 @@ QList<int> metricDivisionsOfBar(const Fraction &barFraction)
       else {
             // if complex meter - not a complete solution: pos of central accent is unknown
             // so select the pos closest to center
-            divLevels.append(barLen / (barFraction.numerator() / 2));
+            divLevels.append(barLen / (barFraction.numerator() / 2)); // additional central accent
             divLevels.append(barLen / barFraction.numerator());
             }
 
-      // subdivide pulse of compound meter into 3 beats
-      if (Meter::isCompound(barFraction))
-            divLevels.append(divLevels.last() / 3);
+      if (Meter::isCompound(barFraction)) {
+            // add invalid level to make further levels -1 smaller
+            // (not so significant compared to beats)
+            int pulseLen = divLevels.last();
+            divLevels.append(-1);
+            // subdivide pulse of compound meter into 3 parts
+            divLevels.append(pulseLen / 3);
+            }
 
       // smallest allowed subdivision is 1/128
       const int minDuration = MScore::division / 32;
@@ -93,15 +98,17 @@ Meter::MaxLevel maxLevelBetween(int startTickInBar, int endTickInBar,
       level.level = -1;
       for (auto p = divLevels.begin() + 1; p != divLevels.end(); ++p) {
             int divLen = *p;
-            int maxEndRaster = (endTickInBar / divLen) * divLen;
-            if (maxEndRaster == endTickInBar)
-                  maxEndRaster -= divLen;
-            if (startTickInBar < maxEndRaster) {
-                  // max level found
-                  level.lastPos = maxEndRaster;
-                  int maxStartRaster = (startTickInBar / divLen) * divLen;
-                  level.levelCount = (maxEndRaster - maxStartRaster) / divLen;
-                  break;
+            if (divLen > 0) {
+                  int maxEndRaster = (endTickInBar / divLen) * divLen;
+                  if (maxEndRaster == endTickInBar)
+                        maxEndRaster -= divLen;
+                  if (startTickInBar < maxEndRaster) {
+                        // max level found
+                        level.lastPos = maxEndRaster;
+                        int maxStartRaster = (startTickInBar / divLen) * divLen;
+                        level.levelCount = (maxEndRaster - maxStartRaster) / divLen;
+                        break;
+                        }
                   }
             --level.level;
             }
@@ -112,8 +119,10 @@ int levelOfTick(int tick, const QList<int> &divLevels)
       {
       int level = 0;
       for (const auto &divLen: divLevels) {
-            if (tick % divLen == 0)
-                  return level;
+            if (divLen > 0) {
+                  if (tick % divLen == 0)
+                        return level;
+                  }
             --level;
             }
       return level;
@@ -156,7 +165,7 @@ int beatLength(const Fraction &barFraction)
 // If last 2/3 of beat in compound meter is rest,
 // it should be splitted into 2 rests
 
-bool is23RestEndOfBeatInCompoundMeter(int startTickInBar, int endTickInBar,
+bool is23EndOfBeatInCompoundMeter(int startTickInBar, int endTickInBar,
                                       const Fraction &barFraction)
       {
       if (endTickInBar - startTickInBar <= 0)
@@ -271,7 +280,8 @@ QList<TDuration> toDurationList(int startTickInBar, int endTickInBar,
             if (effectiveLevel - node->startLevel > tol
                         || effectiveLevel - node->endLevel > tol
                         || isHalfRestOn34(node->startTick, node->endTick, barFraction)
-                        || is23RestEndOfBeatInCompoundMeter(node->startTick, node->endTick, barFraction)
+                        || (durationType == DurationType::REST
+                            && is23EndOfBeatInCompoundMeter(node->startTick, node->endTick, barFraction))
                         )
                   {
 
