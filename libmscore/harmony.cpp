@@ -268,10 +268,7 @@ void Harmony::read(XmlReader& e)
 
       // lookup id in chord list
       // generate new chord description if necessary
-      const ChordDescription* cd = getDescription();
-      // use name from chord list over name in file, for compatibility
-      if (cd)
-            _textName = cd->names.front();
+      getDescription();
 
       // render chord from description
       render();
@@ -611,6 +608,8 @@ const ChordDescription* Harmony::getDescription()
             cd = generateDescription();
             _id = cd->id;
             }
+      if (cd)
+            _textName = cd->names.front();
       return cd;
       }
 

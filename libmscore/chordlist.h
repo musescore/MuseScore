@@ -218,7 +218,7 @@ class ChordList : public QMap<int, ChordDescription*> {
       QList<ChordToken> chordTokenList;
       static int privateID;
 
-      ChordList() { privateID = -1000; }
+      ChordList();
 
       virtual ~ChordList();
       void write(Xml& xml);
