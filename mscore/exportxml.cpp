@@ -4509,8 +4509,8 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 
             if (!h->xmlKind().isEmpty()) {
                   QString s = "kind";
-                  if (h->extensionName() != "")
-                        s += " text=\"" + h->extensionName() + "\"";
+                  if (h->xmlText() != "")
+                        s += " text=\"" + h->xmlText() + "\"";
                   if (h->xmlSymbols() == "yes")
                         s += " use-symbols=\"yes\"";
                   if (h->xmlParens() == "yes")
