@@ -28,7 +28,7 @@ void TracksModel::reset(const QList<TrackMeta> &tracksMeta)
       endResetModel();
       }
 
-void TracksModel::setOperation(int row, Operation::Type operType, const QVariant &operValue)
+void TracksModel::setOperation(int row, MidiOperation::Type operType, const QVariant &operValue)
       {
       int trackIndex = trackIndexFromRow(row);
       if (trackIndex == -1)
@@ -37,14 +37,14 @@ void TracksModel::setOperation(int row, Operation::Type operType, const QVariant
             setTrackOperation(trackIndex, operType, operValue);
       }
 
-void TracksModel::setOperationForAllTracks(Operation::Type operType,
+void TracksModel::setOperationForAllTracks(MidiOperation::Type operType,
                                            const QVariant &operValue)
       {
       for (int i = 0; i != trackCount_; ++i)
             setTrackOperation(i, operType, operValue);
       }
 
-void TracksModel::setTrackOperation(int trackIndex, Operation::Type operType,
+void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType,
                                     const QVariant &operValue)
       {
       if (!operValue.isValid())
@@ -52,30 +52,29 @@ void TracksModel::setTrackOperation(int trackIndex, Operation::Type operType,
       TrackData &trackData = tracksData_[trackIndex];
 
       switch (operType) {
-            case Operation::QUANT_VALUE:
-                  trackData.opers.quantize.value = (Operation::QuantValue)operValue.toInt();
+            case MidiOperation::Type::QUANT_VALUE:
+                  trackData.opers.quantize.value = (MidiOperation::QuantValue)operValue.toInt();
                   break;
-            case Operation::QUANT_REDUCE:
-                  trackData.opers.quantize.reduceToShorterNotesInBar
-                              = (Operation::QuantValue)operValue.toInt();
+            case MidiOperation::Type::QUANT_REDUCE:
+                  trackData.opers.quantize.reduceToShorterNotesInBar = operValue.toBool();
                   break;
-            case Operation::DO_LHRH_SEPARATION:
+            case MidiOperation::Type::DO_LHRH_SEPARATION:
                   trackData.opers.LHRH.doIt = operValue.toBool();
                   break;
-            case Operation::LHRH_METHOD:
-                  trackData.opers.LHRH.method = (Operation::LHRHMethod)operValue.toInt();
+            case MidiOperation::Type::LHRH_METHOD:
+                  trackData.opers.LHRH.method = (MidiOperation::LHRHMethod)operValue.toInt();
                   break;
-            case Operation::LHRH_SPLIT_OCTAVE:
+            case MidiOperation::Type::LHRH_SPLIT_OCTAVE:
                   trackData.opers.LHRH.splitPitchOctave
-                              = (Operation::LHRHOctave)operValue.toInt();
+                              = (MidiOperation::Octave)operValue.toInt();
                   break;
-            case Operation::LHRH_SPLIT_NOTE:
-                  trackData.opers.LHRH.splitPitchNote = (Operation::LHRHNote)operValue.toInt();
+            case MidiOperation::Type::LHRH_SPLIT_NOTE:
+                  trackData.opers.LHRH.splitPitchNote = (MidiOperation::Note)operValue.toInt();
                   break;
-            case Operation::USE_DOTS:
+            case MidiOperation::Type::USE_DOTS:
                   trackData.opers.useDots = operValue.toBool();
                   break;
-            case Operation::DO_IMPORT:
+            case MidiOperation::Type::DO_IMPORT:
                   break;
             }
       }
@@ -92,61 +91,61 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
 
             opers.opers = tracksData_.front().opers;
 
-            // Operation::QUANT_VALUE
+            // MidiOperation::Type::QUANT_VALUE
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.quantize.value != opers.opers.quantize.value) {
-                        opers.undefinedOpers.insert(Operation::QUANT_VALUE);
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::QUANT_VALUE);
                         break;
                         }
                   }
 
-            // Operation::QUANT_REDUCE
+            // MidiOperation::Type::QUANT_REDUCE
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.quantize.reduceToShorterNotesInBar
                               != opers.opers.quantize.reduceToShorterNotesInBar) {
-                        opers.undefinedOpers.insert(Operation::QUANT_REDUCE);
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::QUANT_REDUCE);
                         break;
                         }
                   }
 
-            // Operation::DO_LHRH_SEPARATION
+            // MidiOperation::Type::DO_LHRH_SEPARATION
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.LHRH.doIt != opers.opers.LHRH.doIt) {
-                        opers.undefinedOpers.insert(Operation::DO_LHRH_SEPARATION);
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::DO_LHRH_SEPARATION);
                         break;
                         }
                   }
 
-            // Operation::LHRH_METHOD
+            // MidiOperation::Type::LHRH_METHOD
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.LHRH.method != opers.opers.LHRH.method) {
-                        opers.undefinedOpers.insert(Operation::LHRH_METHOD);
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::LHRH_METHOD);
                         break;
                         }
                   }
 
-            // Operation::LHRH_SPLIT_OCTAVE
+            // MidiOperation::Type::LHRH_SPLIT_OCTAVE
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.LHRH.splitPitchOctave
                               != opers.opers.LHRH.splitPitchOctave) {
-                        opers.undefinedOpers.insert(Operation::LHRH_SPLIT_OCTAVE);
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::LHRH_SPLIT_OCTAVE);
                         break;
                         }
                   }
 
-            // Operation::LHRH_SPLIT_NOTE
+            // MidiOperation::Type::LHRH_SPLIT_NOTE
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.LHRH.splitPitchNote
                               != opers.opers.LHRH.splitPitchNote) {
-                        opers.undefinedOpers.insert(Operation::LHRH_SPLIT_NOTE);
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::LHRH_SPLIT_NOTE);
                         break;
                         }
                   }
 
-            // Operation::USE_DOTS
+            // MidiOperation::Type::USE_DOTS
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.useDots != opers.opers.useDots) {
-                        opers.undefinedOpers.insert(Operation::USE_DOTS);
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::USE_DOTS);
                         break;
                         }
                   }
@@ -233,11 +232,8 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         break;
                   switch (index.column()) {
                         case TrackCol::TRACK_NAME:
-                              if (tracksData_[trackIndex].meta.trackName == "-")
-                                    return Qt::AlignHCenter;
                         case TrackCol::INSTRUMENT:
-                              if (tracksData_[trackIndex].meta.instrumentName == "-")
-                                    return Qt::AlignHCenter;
+                              return Qt::AlignCenter;
                         default:
                               break;
                         }

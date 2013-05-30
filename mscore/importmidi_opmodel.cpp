@@ -6,7 +6,7 @@ namespace Ms {
 
 struct Node {
       QString name;
-      Operation oper;
+      MidiOperation oper;
       QStringList values;
       bool visible = true;
       Node *parent = nullptr;
@@ -35,8 +35,8 @@ OperationsModel::OperationsModel()
 
       Node *quantValue = new Node;
       quantValue->name = "Quantization";
-      quantValue->oper.type = Operation::QUANT_VALUE;
-      quantValue->oper.value = TrackOperations().quantize.value;
+      quantValue->oper.type = MidiOperation::Type::QUANT_VALUE;
+      quantValue->oper.value = (int)TrackOperations().quantize.value;
       quantValue->values.push_back("Shortest note in bar");
       quantValue->values.push_back("Value from preferences");
       quantValue->values.push_back("1/4");
@@ -54,8 +54,8 @@ OperationsModel::OperationsModel()
 
 
       Node *reduceToShorter = new Node;
-      reduceToShorter->name = "Reduce to shorter notes in bar";
-      reduceToShorter->oper.type = Operation::QUANT_REDUCE;
+      reduceToShorter->name = "Reduce to shortest (untied) notes in bar";
+      reduceToShorter->oper.type = MidiOperation::Type::QUANT_REDUCE;
       reduceToShorter->oper.value = Quantization().reduceToShorterNotesInBar;
       reduceToShorter->parent = quantValue;
       quantValue->children.push_back(std::unique_ptr<Node>(reduceToShorter));
@@ -64,7 +64,7 @@ OperationsModel::OperationsModel()
 
       Node *useDots = new Node;
       useDots->name = "Use dots";
-      useDots->oper.type = Operation::USE_DOTS;
+      useDots->oper.type = MidiOperation::Type::USE_DOTS;
       useDots->oper.value = TrackOperations().useDots;
       useDots->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(useDots));
@@ -72,7 +72,7 @@ OperationsModel::OperationsModel()
 
       Node *doLHRH = new Node;
       doLHRH->name = "LH/RH separation";
-      doLHRH->oper.type = Operation::DO_LHRH_SEPARATION;
+      doLHRH->oper.type = MidiOperation::Type::DO_LHRH_SEPARATION;
       doLHRH->oper.value = LHRHSeparation().doIt;
       doLHRH->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(doLHRH));
@@ -81,8 +81,8 @@ OperationsModel::OperationsModel()
 
       Node *LHRHMethod = new Node;
       LHRHMethod->name = "Separation method";
-      LHRHMethod->oper.type = Operation::LHRH_METHOD;
-      LHRHMethod->oper.value = LHRHSeparation().method;
+      LHRHMethod->oper.type = MidiOperation::Type::LHRH_METHOD;
+      LHRHMethod->oper.value = (int)LHRHSeparation().method;
       LHRHMethod->values.push_back("Hand width");
       LHRHMethod->values.push_back("Fixed pitch");
       LHRHMethod->parent = doLHRH;
@@ -92,8 +92,8 @@ OperationsModel::OperationsModel()
 
       Node *LHRHPitchOctave = new Node;
       LHRHPitchOctave->name = "Split pitch octave";
-      LHRHPitchOctave->oper.type = Operation::LHRH_SPLIT_OCTAVE;
-      LHRHPitchOctave->oper.value = LHRHSeparation().splitPitchOctave;
+      LHRHPitchOctave->oper.type = MidiOperation::Type::LHRH_SPLIT_OCTAVE;
+      LHRHPitchOctave->oper.value = (int)LHRHSeparation().splitPitchOctave;
       LHRHPitchOctave->values.push_back("C-1");
       LHRHPitchOctave->values.push_back("C0");
       LHRHPitchOctave->values.push_back("C1");
@@ -112,20 +112,20 @@ OperationsModel::OperationsModel()
 
       Node *LHRHPitchNote = new Node;
       LHRHPitchNote->name = "Split pitch note";
-      LHRHPitchNote->oper.type = Operation::LHRH_SPLIT_NOTE;
-      LHRHPitchNote->oper.value = LHRHSeparation().splitPitchNote;
-      LHRHPitchNote->values.push_back("C"); 
+      LHRHPitchNote->oper.type = MidiOperation::Type::LHRH_SPLIT_NOTE;
+      LHRHPitchNote->oper.value = (int)LHRHSeparation().splitPitchNote;
+      LHRHPitchNote->values.push_back("C");
       LHRHPitchNote->values.push_back("C#");
-      LHRHPitchNote->values.push_back("D"); 
+      LHRHPitchNote->values.push_back("D");
       LHRHPitchNote->values.push_back("D#");
-      LHRHPitchNote->values.push_back("E"); 
-      LHRHPitchNote->values.push_back("F"); 
+      LHRHPitchNote->values.push_back("E");
+      LHRHPitchNote->values.push_back("F");
       LHRHPitchNote->values.push_back("F#");
-      LHRHPitchNote->values.push_back("G"); 
+      LHRHPitchNote->values.push_back("G");
       LHRHPitchNote->values.push_back("G#");
-      LHRHPitchNote->values.push_back("A"); 
+      LHRHPitchNote->values.push_back("A");
       LHRHPitchNote->values.push_back("A#");
-      LHRHPitchNote->values.push_back("H");
+      LHRHPitchNote->values.push_back("B");
       LHRHPitchNote->parent = LHRHMethod;
       LHRHMethod->children.push_back(std::unique_ptr<Node>(LHRHPitchNote));
       controller->LHRHPitchNote = LHRHPitchNote;
@@ -258,7 +258,7 @@ QVariant OperationsModel::data(const QModelIndex &index, int role) const
                   return sz;
                   }
             case OperationTypeRole:
-                  return node->oper.type;
+                  return (int)node->oper.type;
             default:
                   break;
             }
@@ -324,26 +324,26 @@ bool OperationsModel::setData(const QModelIndex &index, const QVariant &value, i
 
 void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
       {
-      if (opers.undefinedOpers.contains(node->oper.type))
+      if (opers.undefinedOpers.contains((int)node->oper.type))
             node->oper.value = QVariant();
       else {
             switch (node->oper.type) {
-                  case Operation::QUANT_VALUE:
-                        node->oper.value = opers.opers.quantize.value; break;
-                  case Operation::QUANT_REDUCE:
+                  case MidiOperation::Type::QUANT_VALUE:
+                        node->oper.value = (int)opers.opers.quantize.value; break;
+                  case MidiOperation::Type::QUANT_REDUCE:
                         node->oper.value = opers.opers.quantize.reduceToShorterNotesInBar; break;
-        
-                  case Operation::DO_LHRH_SEPARATION:
+
+                  case MidiOperation::Type::DO_LHRH_SEPARATION:
                         node->oper.value = opers.opers.LHRH.doIt; break;
-                  case Operation::LHRH_METHOD:
-                        node->oper.value = opers.opers.LHRH.method; break;
-                  case Operation::LHRH_SPLIT_OCTAVE:
-                        node->oper.value = opers.opers.LHRH.splitPitchOctave; break;
-                  case Operation::LHRH_SPLIT_NOTE:
-                        node->oper.value = opers.opers.LHRH.splitPitchNote; break;
-                  case Operation::USE_DOTS:
+                  case MidiOperation::Type::LHRH_METHOD:
+                        node->oper.value = (int)opers.opers.LHRH.method; break;
+                  case MidiOperation::Type::LHRH_SPLIT_OCTAVE:
+                        node->oper.value = (int)opers.opers.LHRH.splitPitchOctave; break;
+                  case MidiOperation::Type::LHRH_SPLIT_NOTE:
+                        node->oper.value = (int)opers.opers.LHRH.splitPitchNote; break;
+                  case MidiOperation::Type::USE_DOTS:
                         node->oper.value = opers.opers.useDots; break;
-                  case Operation::DO_IMPORT: break;
+                  case MidiOperation::Type::DO_IMPORT: break;
                   }
             }
       for (const auto &nodePtr: node->children)
@@ -386,16 +386,16 @@ bool Controller::updateNodesDependencies(Node *node, bool force_update)
       if (!node && !force_update)
             return result;
       if (force_update || (LHRHMethod && node == LHRHMethod)) {
-            auto value = (Operation::LHRHMethod)LHRHMethod->oper.value.toInt();
+            auto value = (MidiOperation::LHRHMethod)LHRHMethod->oper.value.toInt();
             switch (value) {
-                  case Operation::HAND_WIDTH:
+                  case MidiOperation::LHRHMethod::HAND_WIDTH:
                         if (LHRHPitchOctave)
                               LHRHPitchOctave->visible = false;
                         if (LHRHPitchNote)
                               LHRHPitchNote->visible = false;
                         result = true;
                         break;
-                  case Operation::SPECIFIED_PITCH:
+                  case MidiOperation::LHRHMethod::FIXED_PITCH:
                         if (LHRHPitchOctave)
                               LHRHPitchOctave->visible = true;
                         if (LHRHPitchNote)
@@ -411,9 +411,9 @@ bool Controller::updateNodesDependencies(Node *node, bool force_update)
             result = true;
             }
       if (force_update || (quantValue && node == quantValue)) {
-            auto value = (Operation::QuantValue)quantValue->oper.value.toInt();
+            auto value = (MidiOperation::QuantValue)quantValue->oper.value.toInt();
             if (quantReduce)
-                  quantReduce->visible = (value != Operation::SHORTEST_IN_BAR);
+                  quantReduce->visible = (value != MidiOperation::QuantValue::SHORTEST_IN_BAR);
             result = true;
             }
       // other nodes similar, if any

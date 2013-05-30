@@ -62,7 +62,7 @@ void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
 
 void ImportMidiPanel::onOperationChanged(const QModelIndex &index)
       {
-      Operation::Type operType = (Operation::Type)index.data(OperationTypeRole).toInt();
+      MidiOperation::Type operType = (MidiOperation::Type)index.data(OperationTypeRole).toInt();
       const QModelIndex &currentIndex = ui->tableViewTracks->currentIndex();
       tracksModel->setOperation(currentIndex.row(), operType, index.data(DataRole));
       ui->treeViewOperations->expandAll();
@@ -112,7 +112,7 @@ void ImportMidiPanel::tweakUi()
                                                              QHeaderView::ResizeToContents);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::INSTRUMENT,
                                                              QHeaderView::Stretch);
-      ui->treeViewOperations->header()->resizeSection(0, 230);
+      ui->treeViewOperations->header()->resizeSection(0, 285);
       }
 
 bool ImportMidiPanel::canImportMidi() const

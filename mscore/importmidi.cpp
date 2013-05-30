@@ -138,40 +138,40 @@ int MTrack::findShortestNoteDurationInBar(const std::multimap<int, MidiChord>::i
       return minDuration;
       }
 
-int userQuantNoteToTicks(Operation::QuantValue quantNote)
+int userQuantNoteToTicks(MidiOperation::QuantValue quantNote)
       {
       int division = MScore::division;
       int userQuantValue = preferences.shortestNote;
       // specified quantization value
       switch (quantNote) {
-            case Operation::N_4:
+            case MidiOperation::QuantValue::N_4:
                   userQuantValue = division;
                   break;
-//            case Operation::N_4_triplet:
+//            case MidiOperation::QuantValue::N_4_triplet:
 //                  userQuantValue = division * 2 / 3;
 //                  break;
-            case Operation::N_8:
+            case MidiOperation::QuantValue::N_8:
                   userQuantValue = division / 2;
                   break;
-//            case Operation::N_8_triplet:
+//            case MidiOperation::QuantValue::N_8_triplet:
 //                  userQuantValue = division / 3;
 //                  break;
-            case Operation::N_16:
+            case MidiOperation::QuantValue::N_16:
                   userQuantValue = division / 4;
                   break;
-//            case Operation::N_16_triplet:
+//            case MidiOperation::QuantValue::N_16_triplet:
 //                  userQuantValue = division / 6;
 //                  break;
-            case Operation::N_32:
+            case MidiOperation::QuantValue::N_32:
                   userQuantValue = division / 8;
                   break;
-//            case Operation::N_32_triplet:
+//            case MidiOperation::QuantValue::N_32_triplet:
 //                  userQuantValue = division / 12;
 //                  break;
-            case Operation::N_64:
+            case MidiOperation::QuantValue::N_64:
                   userQuantValue = division / 16;
                   break;
-            case Operation::FROM_PREFERENCES:
+            case MidiOperation::QuantValue::FROM_PREFERENCES:
             default:
                   userQuantValue = preferences.shortestNote;
                   break;
@@ -215,7 +215,7 @@ void MTrack::quantize(int startBarTick, int endBarTick, std::multimap<int, MidiC
       auto operations = preferences.midiImportOperations.currentTrackOperations();
       int mintick;
 
-      if (operations.quantize.value == Operation::SHORTEST_IN_BAR)
+      if (operations.quantize.value == MidiOperation::QuantValue::SHORTEST_IN_BAR)
             mintick = findShortestNoteDurationInBar(startChordIter, endBarTick);
       else {
             int userQuantValue = userQuantNoteToTicks(operations.quantize.value);
@@ -823,10 +823,10 @@ void splitIntoLeftRightHands(QList<MTrack> &tracks)
             if (!operations.LHRH.doIt)
                   continue;
             switch (operations.LHRH.method) {
-                  case Operation::HAND_WIDTH:
+                  case MidiOperation::LHRHMethod::HAND_WIDTH:
                         splitIntoLRHands_HandWidth(tracks, i);
                         break;
-                  case Operation::SPECIFIED_PITCH:
+                  case MidiOperation::LHRHMethod::FIXED_PITCH:
                         splitIntoLRHands_FixedPitch(tracks, i);
                         break;
                   }
