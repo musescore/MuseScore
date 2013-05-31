@@ -239,6 +239,7 @@ void ScoreTab::updateExcerpts()
             }
       else {
             tab2->setVisible(false);
+            setExcerpt(0);
             }
       }
 
