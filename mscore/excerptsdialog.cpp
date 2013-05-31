@@ -85,8 +85,8 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
       connect(partList, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(partClicked(QListWidgetItem*)));
       connect(title, SIGNAL(textChanged(const QString&)), SLOT(titleChanged(const QString&)));
 
-//      if (!sel->isEmpty())
-//            excerptList->setCurrentRow(0);
+      if (score->excerpts().size() > 0)
+            excerptList->setCurrentRow(0);
       bool flag = excerptList->currentItem() != 0;
       editGroup->setEnabled(flag);
       deleteButton->setEnabled(flag);
@@ -192,7 +192,7 @@ void ExcerptsDialog::newAllClicked()
 
 void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
       {
-      bool b;
+      bool b = true;
       if (cur) {
             Excerpt* e = ((ExcerptItem*)cur)->excerpt();
             title->setText(e->title());
