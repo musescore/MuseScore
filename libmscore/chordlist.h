@@ -172,6 +172,7 @@ struct ChordDescription {
       QStringList xmlDegrees; // MusicXml: list of degrees (if any)
       HChord chord;           // C based chord
       QList<RenderAction> renderList;
+      bool generated;
       bool renderListGenerated;
 
    public:

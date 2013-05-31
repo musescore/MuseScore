@@ -266,9 +266,12 @@ void Harmony::read(XmlReader& e)
                   e.unknown();
             }
 
-      // lookup id in chord list
-      // generate new chord description if necessary
-      getDescription();
+      if (_id > 0)
+            // lookup id in chord list and generate new description if necessary
+            getDescription();
+      else if (_textName != "")
+            // no id - look up name, in case it is in chord list with no id
+            getDescription(_textName);
 
       // render chord from description
       render();
@@ -604,12 +607,33 @@ const ChordDescription* Harmony::descr() const
 const ChordDescription* Harmony::getDescription()
       {
       const ChordDescription* cd = descr();
-      if (!cd && _textName != "") {
+      if (cd)
+            _textName = cd->names.front();
+      else if (_textName != "") {
             cd = generateDescription();
             _id = cd->id;
             }
-      if (cd)
-            _textName = cd->names.front();
+      return cd;
+      }
+
+//---------------------------------------------------------
+//   getDescription
+//    same but lookup by name
+//---------------------------------------------------------
+
+const ChordDescription* Harmony::getDescription(const QString& name)
+      {
+      const ChordDescription* cd = 0;
+      foreach (cd, *score()->style()->chordList()) {
+            foreach (const QString& n, cd->names) {
+                  if (name == n) {
+                        _id = cd->id;
+                        _textName = cd->names.front();
+                        return cd;
+                        }
+                  }
+            }
+      cd = generateDescription();
       return cd;
       }
 

@@ -875,6 +875,7 @@ ChordDescription::ChordDescription(int i, ChordList* cl)
       if (!i)
             i = --(cl->privateID);
       id = i;
+      generated = false;
       renderListGenerated = false;
       }
 
@@ -887,6 +888,7 @@ ChordDescription::ChordDescription(int i, ChordList* cl)
 ChordDescription::ChordDescription(const QString& name, ChordList* cl)
       {
       id = --(cl->privateID);
+      generated = true;
       names.append(name);
       renderListGenerated = false;
       }
@@ -954,6 +956,8 @@ void ChordDescription::read(XmlReader& e)
 
 void ChordDescription::write(Xml& xml)
       {
+      if (generated)
+            return;
       if (id > 0)
             xml.stag(QString("chord id=\"%1\"").arg(id));
       else
@@ -1039,12 +1043,15 @@ void ChordList::read(XmlReader& e)
                         cd = take(id);
                   if (!cd)
                         cd = new ChordDescription(id,this);
-                  cd->read(e);
-                  // record private id
+                  // record updated id
                   id = cd->id;
-                  // throw away any old parsed chords
+                  // read rest of description
+                  cd->read(e);
+                  // restore updated id
+                  cd->id = id;
+                  // throw away previously parsed chords
                   cd->parsedChords.clear();
-                  // generate any missing info (including new parsed chord)
+                  // generate any missing info (including new parsed chords)
                   cd->complete(0,this);
                   // add to list
                   insert(id, cd);

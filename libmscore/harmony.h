@@ -106,6 +106,7 @@ class Harmony : public Text {
 
       const ChordDescription* descr() const;
       const ChordDescription* getDescription();
+      const ChordDescription* getDescription(const QString&);
       const ChordDescription* generateDescription();
 
       virtual void layout();
