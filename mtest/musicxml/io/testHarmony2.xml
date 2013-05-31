@@ -74,7 +74,7 @@
         <root>
           <root-step>C</root-step>
           </root>
-        <kind text="omit5">major</kind>
+        <kind>major</kind>
         <degree>
           <degree-value>5</degree-value>
           <degree-alter>0</degree-alter>
@@ -112,7 +112,7 @@
         <root>
           <root-step>C</root-step>
           </root>
-        <kind text="2">major</kind>
+        <kind>major</kind>
         <degree>
           <degree-value>2</degree-value>
           <degree-alter>0</degree-alter>
@@ -150,7 +150,7 @@
         <root>
           <root-step>C</root-step>
           </root>
-        <kind text="Maj7#5">major-seventh</kind>
+        <kind text="Maj7">major-seventh</kind>
         <degree>
           <degree-value>5</degree-value>
           <degree-alter>1</degree-alter>
@@ -189,7 +189,7 @@
           <root-step>E</root-step>
           <root-alter>-1</root-alter>
           </root>
-        <kind text="9sus">suspended-fourth</kind>
+        <kind text="sus">suspended-fourth</kind>
         <degree>
           <degree-value>7</degree-value>
           <degree-alter>0</degree-alter>
