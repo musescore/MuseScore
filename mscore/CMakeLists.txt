@@ -81,7 +81,7 @@ QT4_WRAP_CPP (mocs
       voltaproperties.h timesigproperties.h boxproperties.h newwizard.h
       transposedialog.h chordedit.h lineproperties.h
       excerptsdialog.h stafftextproperties.h glissandoproperties.h
-      articulationprop.h metaedit.h magbox.h voiceselector.h
+      articulationprop.h metaedit.h magbox.h
       textprop.h textproperties.h tupletdialog.h
       slurproperties.h selectdialog.h synthcontrol.h drumroll.h pianoroll.h
       piano.h ruler.h file.h
@@ -180,7 +180,7 @@ add_executable ( ${ExecutableName}
       editdrumset.cpp editstaff.cpp voltaproperties.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       chordedit.cpp excerptsdialog.cpp metaedit.cpp magbox.cpp
-      voiceselector.cpp capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
+      capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
       textproperties.cpp slurproperties.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
