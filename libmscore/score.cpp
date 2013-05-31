@@ -2547,9 +2547,6 @@ void Score::adjustBracketsIns(int sidx, int eidx)
                         continue;
                   if ((sidx >= staffIdx) && (eidx < (staffIdx + span)))
                         undoChangeBracketSpan(staff, i, span + (eidx-sidx));
-//                  else {
-//                        qDebug("TODO: adjust brackets\n");
-//                        }
                   }
             int span = staff->barLineSpan();
             if ((sidx >= staffIdx) && (eidx < (staffIdx + span)))

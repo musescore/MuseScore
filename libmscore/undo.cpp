@@ -2224,8 +2224,10 @@ ChangeBracketSpan::ChangeBracketSpan(Staff* s, int c, int sp)
 void ChangeBracketSpan::flip()
       {
       int oSpan  = staff->bracketSpan(column);
+      printf("ChangeBracketSpan %d -> %d\n", oSpan, span);
       staff->setBracketSpan(column, span);
       span = oSpan;
+      staff->score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
