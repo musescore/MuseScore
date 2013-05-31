@@ -818,6 +818,7 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
 
       const TextStyle& ts = l->textStyle();
       qreal lmag          = qreal(ts.size()) / 11.0;
+      qreal staffMag = l->staff()->mag();
 
       if (l->ticks()) {
             // melisma
@@ -845,7 +846,7 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
                         line = new Line(l->score(), false);
                         l->add(line);
                         }
-                  line->setLineWidth(Spatium(0.1 * lmag));
+                  line->setLineWidth(Spatium(0.1 * lmag * staffMag));
                   line->setPos(p1);
                   if (sysIdx1 == sysIdx2) {
                         // single segment
@@ -891,8 +892,8 @@ qDebug("Lyrics: melisma end segment not implemented");
 
       // TODO: the next two values should be style parameters
       // TODO: as well as the 0.3 factor a few lines below
-      const qreal maxl = 0.5 * _spatium * lmag;   // lyrics hyphen length
-      const Spatium hlw(0.14 * lmag);              // hyphen line width
+      const qreal maxl = 0.5 * _spatium * lmag * staffMag;   // lyrics hyphen length
+      const Spatium hlw(0.14 * lmag * staffMag);              // hyphen line width
 
       Lyrics* nl = searchNextLyrics(ns, staffIdx, verse);
       if (!nl) {
@@ -915,7 +916,7 @@ qDebug("Lyrics: melisma end segment not implemented");
             size *= _spatium / (SPATIUM20 * PPI);    // <= (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * Mscore::DPI))
       else
             size *= MScore::DPI / PPI;
-      qreal y = -size * 0.3;                    // a conventional percentage of the whole font height
+      qreal y = -size * staffMag * 0.3;                    // a conventional percentage of the whole font height
 
       qreal x1 = x + l->pagePos().x();
       qreal x2 = nl->bbox().left() + nl->pagePos().x();
