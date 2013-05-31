@@ -631,7 +631,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += QString("%1").arg(pageno);
                               break;
                         case 'n':
-                              d += QString("%1").arg(_score->pages().size());
+                              d += QString("%1").arg(_score->pages().size() + _score->pageNumberOffset());
                               break;
                         case 'f':
                               d += _score->name();
