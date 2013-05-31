@@ -298,10 +298,7 @@ void Bracket::endEditDrag()
       qreal sy = system()->staff(staffIdx1)->y();
       qreal ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
       h2 = (ey - sy) * .5;
-      layout();
-      int span = staffIdx2 - staffIdx1 + 1;
-      staff()->setBracketSpan(_column, span);
-      score()->setLayoutAll(true);
+      score()->undoChangeBracketSpan(staff(), _column, staffIdx2 - staffIdx1 + 1);
       }
 
 //---------------------------------------------------------
