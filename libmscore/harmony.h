@@ -105,8 +105,9 @@ class Harmony : public Text {
       bool rightParen() const                  { return _rightParen;   }
 
       const ChordDescription* descr() const;
+      const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;
       const ChordDescription* getDescription();
-      const ChordDescription* getDescription(const QString&);
+      const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
       const ChordDescription* generateDescription();
 
       virtual void layout();
@@ -138,7 +139,7 @@ class Harmony : public Text {
       QString harmonyName() const;
       void render(const TextStyle* ts = 0);
 
-      bool parseHarmony(const QString& s, int* root, int* base);
+      const ChordDescription* parseHarmony(const QString& s, int* root, int* base);
 
       const QString& extensionName() const;
 
@@ -153,7 +154,8 @@ class Harmony : public Text {
       virtual bool isEmpty() const;
       virtual qreal baseLine() const;
 
-      const ChordDescription* fromXml(const QString& s,  const QList<HDegree>&);
+      const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&);
+      const ChordDescription* fromXml(const QString& s, const QList<HDegree>&);
       const ChordDescription* fromXml(const QString& s);
       virtual void spatiumChanged(qreal oldValue, qreal newValue);
       virtual QLineF dragAnchor() const;
