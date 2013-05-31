@@ -42,7 +42,6 @@
 #include "driver.h"
 #include "libmscore/harmony.h"
 #include "magbox.h"
-#include "voiceselector.h"
 #include "libmscore/sig.h"
 #include "libmscore/undo.h"
 #include "synthcontrol.h"
@@ -679,49 +678,47 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       entryTools->addAction(a);
 
-      QStringList sl1;
-      sl1 << "repitch" << "pad-note-128" << "pad-note-64" << "pad-note-32" << "pad-note-16"
-         << "pad-note-8"
-         << "pad-note-4" << "pad-note-2" << "pad-note-1" << "note-breve" << "note-longa"
-         << "pad-dot"
-         << "pad-dotdot" << "tie" << "pad-rest";
+      static const char* sl1[] = {
+            "repitch", "pad-note-128", "pad-note-64", "pad-note-32", "pad-note-16",
+            "pad-note-8",
+            "pad-note-4", "pad-note-2", "pad-note-1", "note-breve", "note-longa",
+            "pad-dot",
+            "pad-dotdot", "tie", "pad-rest"
+            };
 
-      foreach(const QString& s, sl1) {
-            QToolButton* nb = new QToolButton;
-            QAction* a = getAction(qPrintable(s));
-            if (s != "tie")
+      for (const char* s : sl1) {
+            QAction* a = getAction(s);
+            if (strcmp(s, "tie") != 0)
                   a->setCheckable(true);
-            nb->setDefaultAction(a);
-            entryTools->addWidget(nb);
-            if (s == "tie" || s == "pad-rest")
+            entryTools->addAction(a);
+            if (strcmp(s, "tie") == 0 || strcmp(s, "pad-rest") == 0)
                   entryTools->addSeparator();
             }
-      QStringList sl2;
-      sl2 << "sharp2" << "sharp" << "nat" << "flat"  <<"flat2";
-      foreach(const QString& s, sl2) {
-            QToolButton* nb = new QToolButton;
-            QAction* a = getAction(qPrintable(s));
-            nb->setDefaultAction(a);
-            entryTools->addWidget(nb);
-            }
 
-      sl1.clear();
-      sl1 << "appoggiatura" << "acciaccatura" << "grace4" <<"grace16" << "grace32"
-          << "beam-start" << "beam-mid" << "no-beam" << "beam32" << "auto-beam"
-          << "show-invisible" << "show-unprintable" << "show-frames" << "show-pageborders";
+      static const char* sl2[] = { "sharp2", "sharp", "nat", "flat", "flat2" };
+      for (const char* s : sl2)
+            entryTools->addAction(getAction(s));
 
-      foreach(const QString& s, sl1) {
-            QAction* a = getAction(s.toLatin1().data());
-            a->setCheckable(true);
-            }
+      static const std::vector<const char*> sl4 {
+            "appoggiatura", "acciaccatura", "grace4", "grace16", "grace32",
+            "beam-start", "beam-mid", "no-beam", "beam32", "auto-beam",
+            "show-invisible", "show-unprintable", "show-frames", "show-pageborders"
+            };
+      for (const char* s : sl4)
+            getAction(s)->setCheckable(true);
 
       a = getAction("flip");
       entryTools->addAction(a);
       entryTools->addSeparator();
 
-      VoiceSelector* vw = new VoiceSelector;
-      entryTools->addWidget(vw);
-      connect(vw, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
+      static const char* sl3[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
+      QActionGroup* voiceGroup = new QActionGroup(this);
+      for (const char* s : sl3) {
+            QAction* a = getAction(s);
+            a->setCheckable(true);
+            voiceGroup->addAction(a);
+            entryTools->addAction(getAction(s));
+            }
 
       //---------------------
       //    Menus
