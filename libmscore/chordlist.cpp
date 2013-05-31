@@ -807,6 +807,20 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
       }
 
 //---------------------------------------------------------
+//   fromXml
+//---------------------------------------------------------
+
+QString ParsedChord::fromXml(const QString& kind, const QString& kindText, const QString& symbols, const QString& parens, const QList<HDegree>& dl, const ChordList* cl)
+      {
+      _xmlKind = kind;
+      _xmlText = kindText;
+      _xmlSymbols = symbols;
+      _xmlParens = parens;
+      QString s = kindText;
+      return s;
+      }
+
+//---------------------------------------------------------
 //   renderList
 //---------------------------------------------------------
 

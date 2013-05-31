@@ -5055,7 +5055,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       QString printFrame(e.attribute("print-frame"));
       QString printStyle(e.attribute("print-style"));
 
-      QString kind, kindText;
+      QString kind, kindText, symbols, parens;
       QList<HDegree> degreeList;
 
       if (harmony) {
@@ -5096,6 +5096,8 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                   //             print-style, halign, valign
 
                   kindText = e.attribute("text");
+                  symbols = e.attribute("use-symbols");
+                  parens = e.attribute("parentheses-degrees");
                   kind = e.text();
                   }
             else if (tag == "inversion") {
@@ -5172,38 +5174,52 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
 
       //TODO-WS ha->setTick(tick);
 
-      const ChordDescription* d = ha->fromXml(kind, degreeList);
-      if (d == 0) {
-            QString degrees;
-            foreach(const HDegree &d, degreeList) {
-                  if (!degrees.isEmpty())
-                        degrees += " ";
-                  degrees += d.text();
-                  }
-            qDebug("unknown chord txt: <%s> kind: <%s> degrees: %s",
-                   qPrintable(kindText), qPrintable(kind), qPrintable(degrees));
-
-            // Strategy II: lookup "kind", merge in degree list and try to find
-            //    harmony in list
-
-            d = ha->fromXml(kind);
-            if (d) {
-                  ha->setId(d->id);
-                  foreach(const HDegree &d, degreeList)
-                  ha->addDegree(d);
-                  ha->resolveDegreeList();
-                  ha->render();
-                  }
-            else {
-                  qDebug("'kind: <%s> not found in harmony data base", qPrintable(kind));
-                  QString s = tpc2name(ha->rootTpc(), score->style(ST_useGermanNoteNames).toBool()) + kindText;
-                  ha->setText(s);
-                  }
+      const ChordDescription* d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
+      if (d) {
+            ha->setId(d->id);
+            ha->setTextName(d->names.front());
+            ha->render();
             }
       else {
-            ha->setId(d->id);
-            // ha->resolveDegreeList();
-            ha->render();
+            // This code won't be hit if MusicXML was at all straightforward,
+            // as fromXml()is normally able to construct a chord description by itself.
+            // The following is a fallback for more complex cases,
+            // in case there is a match to be foundin the tags from the chord list.
+            d = ha->fromXml(kind, degreeList);
+            if (d == 0) {
+      #if 0
+                  // this code does nothing right now - d.text() always returns empty string
+                  QString degrees;
+                  foreach(const HDegree &d, degreeList) {
+                        if (!degrees.isEmpty())
+                              degrees += " ";
+                        degrees += d.text();
+                        }
+                  qDebug("unknown chord txt: <%s> kind: <%s> degrees: %s",
+                         qPrintable(kindText), qPrintable(kind), qPrintable(degrees));
+      #endif
+                  // Strategy II: lookup "kind", merge in degree list and try to find
+                  //    harmony in list
+
+                  d = ha->fromXml(kind);
+                  if (d) {
+                        ha->setId(d->id);
+                        foreach(const HDegree &d, degreeList)
+                              ha->addDegree(d);
+                        ha->resolveDegreeList();
+                        ha->render();
+                        }
+                  else {
+                        qDebug("'kind: <%s> not found in harmony data base", qPrintable(kind));
+                        QString s = tpc2name(ha->rootTpc(), score->style(ST_useGermanNoteNames).toBool()) + kindText;
+                        ha->setText(s);
+                        }
+                  }
+            else {
+                  ha->setId(d->id);
+                  // ha->resolveDegreeList();
+                  ha->render();
+                  }
             }
       ha->setVisible(printObject == "yes");
 
