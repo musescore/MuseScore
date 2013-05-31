@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>748</width>
-    <height>565</height>
+    <width>875</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QListWidget" name="pageList">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -147,6 +147,12 @@
      </property>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="standardButtons">
         <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
@@ -157,7 +163,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>18</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -1664,7 +1670,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout">
+           <layout class="QGridLayout" name="gridLayout_99">
             <property name="verticalSpacing">
              <number>0</number>
             </property>
@@ -3684,7 +3690,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QLabel" name="label_100">
+           <widget class="QLabel" name="label_1001">
             <property name="text">
              <string>Minimum chord spacing:</string>
             </property>
