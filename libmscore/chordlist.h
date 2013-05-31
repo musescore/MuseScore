@@ -123,6 +123,7 @@ class ChordToken {
 class ParsedChord {
    public:
       bool parse(const QString&, const ChordList*, bool syntaxOnly = false);
+      QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&, const ChordList*);
       const QList<RenderAction>& renderList(const ChordList*);
       bool parseable() const                    { return _parseable; }
       bool understandable() const               { return _understandable; }
@@ -131,11 +132,12 @@ class ParsedChord {
       const QString& xmlSymbols() const         { return _xmlSymbols; }
       const QString& xmlParens() const          { return _xmlParens; }
       const QStringList& xmlDegrees() const     { return _xmlDegrees; }
-      bool operator==(const ParsedChord& c)     { return (this->_handle == c._handle); }
-      bool operator!=(const ParsedChord& c)     { return !(*this == c); }
-      operator QString()                        { return _handle; }
+      operator QString() const                  { return _handle; }
+      bool operator==(const ParsedChord& c) const     { return (this->_handle == c._handle); }
+      bool operator!=(const ParsedChord& c) const     { return !(*this == c); }
       ParsedChord();
    private:
+      QString _name;
       QString _handle;
       QString _quality;
       QString _extension;
