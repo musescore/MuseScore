@@ -1316,9 +1316,10 @@ void ScoreView::moveCursor(int tick)
       // set cursor height for whole system
       //
       double y2 = 0.0;
+
       for (int i = 0; i < _score->nstaves(); ++i) {
             SysStaff* ss = system->staff(i);
-            if (!ss->show())
+            if (!ss->show() || !_score->staff(i)->show())
                   continue;
             y2 = ss->y() + ss->bbox().height();
             }
