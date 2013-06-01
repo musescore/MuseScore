@@ -137,6 +137,7 @@ class ParsedChord {
       bool operator!=(const ParsedChord& c) const     { return !(*this == c); }
       ParsedChord();
    private:
+      QString _name;
       QString _handle;
       QString _quality;
       QString _extension;

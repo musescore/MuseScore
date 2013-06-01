@@ -531,7 +531,7 @@ QString HDegree::text() const
 //    using musicXml "kind" string and degree list
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::fromXml(const QString& kind,  const QList<HDegree>& dl)
+const ChordDescription* Harmony::fromXml(const QString& kind, const QList<HDegree>& dl)
       {
       QStringList degrees;
 
@@ -579,8 +579,9 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
 const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kindText, const QString& symbols, const QString& parens, const QList<HDegree>& dl)
       {
       ParsedChord* pc = new ParsedChord;
-      QString name = pc->fromXml(kind, kindText, symbols, parens, dl, score()->style()->chordList());
-      const ChordDescription* cd = getDescription(name,pc);
+      _textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->style()->chordList());
+      qDebug("fromXml: name = %s",qPrintable(_textName));
+      const ChordDescription* cd = getDescription(_textName,pc);
       return cd;
       }
 

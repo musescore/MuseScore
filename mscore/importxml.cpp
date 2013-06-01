@@ -5180,6 +5180,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
             ha->setTextName(d->names.front());
             ha->render();
             }
+#if 0
       else {
             // This code won't be hit if MusicXML was at all straightforward,
             // as fromXml()is normally able to construct a chord description by itself.
@@ -5187,7 +5188,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
             // in case there is a match to be foundin the tags from the chord list.
             d = ha->fromXml(kind, degreeList);
             if (d == 0) {
-      #if 0
+      //#if 0
                   // this code does nothing right now - d.text() always returns empty string
                   QString degrees;
                   foreach(const HDegree &d, degreeList) {
@@ -5197,7 +5198,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                         }
                   qDebug("unknown chord txt: <%s> kind: <%s> degrees: %s",
                          qPrintable(kindText), qPrintable(kind), qPrintable(degrees));
-      #endif
+      //#endif
                   // Strategy II: lookup "kind", merge in degree list and try to find
                   //    harmony in list
 
@@ -5221,6 +5222,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                   ha->render();
                   }
             }
+#endif
       ha->setVisible(printObject == "yes");
 
       // TODO-LV: do this only if ha points to a valid harmony
