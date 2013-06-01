@@ -47,6 +47,34 @@ bool isQuadruple(const Fraction &barFraction)    // 4/4, 12/8, ...
       }
 
 
+int levelOfTick(int tick, const QList<int> &divLevels)
+      {
+      int level = 0;
+      for (const auto &divLen: divLevels) {
+            if (divLen > 0) {
+                  if (tick % divLen == 0)
+                        return level;
+                  }
+            --level;
+            }
+      return level;
+      }
+
+std::vector<int> metricLevelsOfBar(const Fraction &barFraction,
+                                   const QList<int> &divLevels,
+                                   int minDuration)
+      {
+      if (minDuration <= 0)
+            minDuration = MScore::division / 32;
+      int ticksInBar = barFraction.ticks();
+      std::vector<int> levels;
+      for (int tick = 0; tick <= ticksInBar; tick += minDuration)
+            levels.push_back(levelOfTick(tick, divLevels));
+      return levels;
+      }
+
+// list of bar division lengths in ticks (whole bar len, half bar len, ...)
+
 QList<int> metricDivisionsOfBar(const Fraction &barFraction)
       {
       int barLen = barFraction.ticks();
@@ -89,6 +117,13 @@ QList<int> metricDivisionsOfBar(const Fraction &barFraction)
       return divLevels;
       }
 
+
+std::vector<int> metricLevelsOfBar(const Fraction &barFraction, int minDuration)
+      {
+      QList<int> divLevels = metricDivisionsOfBar(barFraction);
+      return metricLevelsOfBar(barFraction, divLevels, minDuration);
+      }
+
 Meter::MaxLevel maxLevelBetween(int startTickInBar, int endTickInBar,
                                 const QList<int> &divLevels)
       {
@@ -111,19 +146,6 @@ Meter::MaxLevel maxLevelBetween(int startTickInBar, int endTickInBar,
                         }
                   }
             --level.level;
-            }
-      return level;
-      }
-
-int levelOfTick(int tick, const QList<int> &divLevels)
-      {
-      int level = 0;
-      for (const auto &divLen: divLevels) {
-            if (divLen > 0) {
-                  if (tick % divLen == 0)
-                        return level;
-                  }
-            --level;
             }
       return level;
       }
