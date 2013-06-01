@@ -69,9 +69,9 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       QPointF delta = toLogical(ev->pos()) - startMove;
 
       QPointF pt(delta);
-      if (qApp->keyboardModifiers() == Qt::ShiftModifier)
+      if (qApp->keyboardModifiers() & Qt::ShiftModifier)
             pt.setX(0.0);
-      else if (qApp->keyboardModifiers() == Qt::ControlModifier)
+      if (qApp->keyboardModifiers() & Qt::ControlModifier)
             pt.setY(0.0);
       EditData data;
       data.hRaster = mscore->hRaster();
