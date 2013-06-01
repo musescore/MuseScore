@@ -1221,9 +1221,9 @@ static QString tick2xml(const int ticks, int* dots)
 //   findVolta -- find volta starting in measure m
 //---------------------------------------------------------
 
-static Volta* findVolta(Measure* m, bool /*left*/)
+static Volta* findVolta(Measure* m, bool left)
       {
-      for (Spanner* el = m->spannerFor(); el; el = el->next()) {
+      for (Spanner* el = left ? m->spannerFor() : m->spannerBack(); el; el = el->next()) {
             if (el->type() != Element::VOLTA)
                   continue;
             return (Volta*) el;
