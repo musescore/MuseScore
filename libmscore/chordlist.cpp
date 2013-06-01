@@ -943,6 +943,10 @@ QString ParsedChord::fromXml(const QString& kind, const QString& kindText, const
                   extension = 13;
                   mod = "";
                   }
+            else if (mod == "add9" && kind.contains("sixth")) {
+                  extension = 69;
+                  mod = "";
+                  }
             if (mod != "")
                   _modifierList += mod;
             }
