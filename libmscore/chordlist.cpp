@@ -856,17 +856,18 @@ QString ParsedChord::fromXml(const QString& kind, const QString& kindText, const
             extension = 7;
             }
       else if (kind == "augmented-seventh") {
-            _quality = "augmented-seventh";
+            _quality = "augmented";
+            extension = 7;
             extend = true;
             }
-      else if (kind.contains("augmented"))
+      else if (kind == "augmented")
             _quality = "augmented";
       else if (kind == "half-diminished") {
             _quality = "half-diminished";
             extension = 7;
             extend = true;
             }
-      else if (kind.contains("diminished"))
+      else if (kind == "diminished")
             _quality = "diminished";
       else if (kind == "suspended-fourth") {
             _quality = "major";
@@ -889,6 +890,8 @@ QString ParsedChord::fromXml(const QString& kind, const QString& kindText, const
             implied = true;
             extension = 5;
             }
+      else
+            _quality = kind;
 
       // get extension info from kind
       if (kind.contains("seventh"))
@@ -969,6 +972,8 @@ QString ParsedChord::fromXml(const QString& kind, const QString& kindText, const
                   _name = symbols ? "o" : "dim";
             else if (_quality == "half-diminished")
                   _name = "0";
+            else
+                  _name = _quality;
             _name += _extension;
             }
       if (parens)
