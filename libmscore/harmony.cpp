@@ -580,7 +580,6 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kin
       {
       ParsedChord* pc = new ParsedChord;
       _textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->style()->chordList());
-      qDebug("fromXml: name = %s",qPrintable(_textName));
       const ChordDescription* cd = getDescription(_textName,pc);
       return cd;
       }

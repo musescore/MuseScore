@@ -447,6 +447,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
       _name = s;
       _parseable = true;
       _understandable = true;
+      _xmlParens = "no";
       i = 0;
 
       // eat leading parens
@@ -552,8 +553,10 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             addToken(tok1,EXTENSION);
       else {
             // leading tokens were not really EXTENSION
-            for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
+            for (int t = firstLeadingToken; t < lastLeadingToken; ++t) {
                   _tokenList[t].tokenClass = MODIFIER;
+                  _xmlParens = "yes";
+                  }
             }
       if (!syntaxOnly) {
             QStringList extl;
@@ -632,7 +635,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
 
       // get modifiers
       bool addPending = false;
-      _xmlParens = "no";
       _modifierList.clear();
       while (i < len) {
             // eat leading parens
@@ -841,7 +843,8 @@ QString ParsedChord::fromXml(const QString& kind, const QString& kindText, const
       // get quality info from kind
       if (kind == "major-minor") {
             _quality = "minor";
-            _modifierList += "Maj7";
+            _modifierList += "major7";
+            extend = true;
             }
       else if (kind.contains("major")) {
             _quality = "major";
@@ -866,6 +869,10 @@ QString ParsedChord::fromXml(const QString& kind, const QString& kindText, const
             _quality = "half-diminished";
             extension = 7;
             extend = true;
+            }
+      else if (kind == "diminished-seventh") {
+            _quality = "diminished";
+            extension = 7;
             }
       else if (kind == "diminished")
             _quality = "diminished";
@@ -956,11 +963,11 @@ QString ParsedChord::fromXml(const QString& kind, const QString& kindText, const
       if (extension)
             _extension = QString("%1").arg(extension);
 
-      // construct name
+      // construct name & handle
       if (kindText != "" && !kind.contains("suspended"))
             _name = kindText;
       else if (implied)
-            _name += _extension;
+            _name = _extension;
       else {
             if (_quality == "major")
                   _name = symbols ? "t" : "Maj";
@@ -978,11 +985,18 @@ QString ParsedChord::fromXml(const QString& kind, const QString& kindText, const
             }
       if (parens)
             _name += "(";
-      foreach (const QString& mod, _modifierList)
+      foreach (QString mod, _modifierList) {
+            mod.replace("major","Maj");
             _name += mod;
+            }
       if (parens)
             _name += ")";
-
+      if (!_modifierList.isEmpty()) {
+            _modifierList.sort();
+            _modifiers = "<" + _modifierList.join("><") + ">";
+            }
+      _handle = "<" + _quality + "><" + _extension + ">" + _modifiers;
+      qDebug("fromXml: name = <%s>, handle = %s",qPrintable(_name),qPrintable(_handle));
       return _name;
       }
 
