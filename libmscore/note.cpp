@@ -1343,8 +1343,14 @@ void Note::layout2()
                   continue;
             e->setMag(mag());
             e->layout();
-            if (e->type() == SYMBOL && static_cast<Symbol*>(e)->sym() == rightparenSym)
-                  e->setPos(headWidth(), 0.0);
+            if (e->type() == SYMBOL && static_cast<Symbol*>(e)->sym() == rightparenSym) {
+                  qreal w = headWidth();
+                  if (staff()->isTabStaff()) {
+                        StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+                        w = tabHeadWidth(tab);
+                        }
+                  e->setPos(w, 0.0);
+                  }
             }
       }
 
