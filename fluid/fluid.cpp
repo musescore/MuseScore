@@ -160,7 +160,7 @@ void Fluid::play(const PlayEvent& event)
                   return;
                   }
             if (cp->preset() == 0) {
-                  log("channel has no preset");
+                  qDebug("channel has no preset");
                   err = true;
                   }
             else {
@@ -377,7 +377,7 @@ bool Fluid::program_select(int chan, unsigned sfont_id, unsigned bank_num, unsig
       Channel* c     = channel[chan];
       Preset* preset = get_preset(sfont_id, bank_num, preset_num);
       if (preset == 0) {
-            log("There is no preset with bank number %d and preset number %d in SoundFont %d", bank_num, preset_num, sfont_id);
+            qDebug("There is no preset with bank number %d and preset number %d in SoundFont %d", bank_num, preset_num, sfont_id);
             return false;
             }
 
@@ -396,13 +396,17 @@ bool Fluid::program_select2(int chan, char* sfont_name, unsigned bank_num, unsig
       {
       Channel* c = channel[chan];
       SFont* sf = get_sfont_by_name(sfont_name);
-      if (sf == 0)
-            return log("Could not find SoundFont %s", sfont_name);
+      if (sf == 0) {
+            qDebug("Could not find SoundFont %s", sfont_name);
+            return false;
+            }
       int offset     = get_bank_offset(sf->id());
       Preset* preset = sf->get_preset(bank_num - offset, preset_num);
-      if (preset == 0)
-            return log("There is no preset with bank number %d and preset number %d in SoundFont %s",
+      if (preset == 0) {
+            qDebug("There is no preset with bank number %d and preset number %d in SoundFont %s",
                bank_num, preset_num, sfont_name);
+            return false;
+            }
 
       /* inform the channel of the new bank and program number */
       c->setSfontnum(sf->id());
@@ -531,7 +535,7 @@ Voice* Fluid::alloc_voice(unsigned id, Sample* sample, int chan, int key, int ve
             free_voice_by_kill();
 
       if (freeVoices.isEmpty()) {
-            log("Failed to allocate a synthesis process. (chan=%d,key=%d)", chan, key);
+            qDebug("Failed to allocate a synthesis process. (chan=%d,key=%d)", chan, key);
             return 0;
             }
 
@@ -890,7 +894,7 @@ void Fluid::set_gen2(int chan, int param, float value, int absolute, int normali
 float Fluid::get_gen(int chan, int param)
       {
       if ((param < 0) || (param >= GEN_LAST)) {
-            log("Parameter number out of range");
+            qDebug("Parameter number out of range");
             return 0.0;
             }
       return channel[chan]->getGen(param);
@@ -940,24 +944,6 @@ void Fluid::remove_bank_offset(int sfont_id)
 	BankOffset* bank_offset = get_bank_offset0(sfont_id);
 	if (bank_offset)
 		bank_offsets.removeAll(bank_offset);
-      }
-
-/**
- * Print a message to the log.
- * @param fmt Printf style format string for log message
- * @param ... Arguments for printf 'fmt' message string
- * @return Always returns -1
- */
-
-bool Fluid::log(const char* fmt, ...)
-      {
-      char buf[512];
-      va_list args;
-      va_start (args, fmt);
-      vsnprintf(buf, sizeof(buf), fmt, args);
-      va_end (args);
-      _error = buf;
-      return false;
       }
 
 //---------------------------------------------------------

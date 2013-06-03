@@ -243,7 +243,7 @@ if (SOUNDFONT3)
 endif ()
 
 if (HAS_AUDIOFILE)
-      target_link_libraries(mscore ${SNDFILE_LIB})
+      target_link_libraries(mscore audiofile ${SNDFILE_LIB})
 endif (HAS_AUDIOFILE)
 
 if (APPLE)

@@ -1276,13 +1276,13 @@ void SFont::load_pgen (int size)
 		                  // if global zone is not 1st zone, relocate
 		                  if (k != 0) {
 		                        Zone* save = zl.takeAt(k);
-		                        synth->log("Preset \"%s\": Global zone is not first zone", qPrintable(p->name));
+		                        qDebug("Preset \"%s\": Global zone is not first zone", qPrintable(p->name));
 		                        zl.prepend(save);
 		                        continue;
 		                        }
 		                  }
 	                  else {      // previous global zone exists, discard
-		                  synth->log("Preset \"%s\": Discarding invalid global zone", qPrintable(p->name));
+		                  qDebug("Preset \"%s\": Discarding invalid global zone", qPrintable(p->name));
 		                  sfont_zone_delete(&zl, z);
 		                  }
 	                  }
@@ -1295,7 +1295,7 @@ void SFont::load_pgen (int size)
 	                  }
 	            }
             if (discarded)
-	            synth->log("Preset \"%s\": Some invalid generators were discarded", qPrintable(p->name));
+	            qDebug("Preset \"%s\": Some invalid generators were discarded", qPrintable(p->name));
             }
       /* in case there isn't a terminal record */
       if (size == 0)
