@@ -302,7 +302,9 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             else {
                   int track1 = sel.staffStart() * VOICES;
                   int track2 = sel.staffEnd() * VOICES;
-                  for (Segment* s = sel.startSegment(); s && s != sel.endSegment(); s = s->next1()) {
+                  Segment* startSegment = sel.startSegment();
+                  Segment* endSegment = sel.endSegment(); //keep it, it could change during the loop
+                  for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                         for (int track = track1; track < track2; ++track) {
                               Element* e = s->element(track);
                               if (e == 0)
@@ -312,8 +314,11 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                                     foreach(Note* n, chord->notes())
                                           applyDrop(score, viewer, n, element);
                                     }
-                              else
-                                    applyDrop(score, viewer, e, element);
+                              else {
+                                    // do not apply articulation to barline in a range selection
+                                    if(e->type() != Element::BAR_LINE || element->type() != Element::ARTICULATION)
+                                          applyDrop(score, viewer, e, element);
+                                    }
                               }
                         }
                   }
