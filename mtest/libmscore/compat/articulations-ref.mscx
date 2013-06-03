@@ -97,7 +97,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <timeStretch>2</timeStretch>
             <subtype>fermata</subtype>
             </Articulation>
           <Note>
@@ -109,7 +108,6 @@
           <durationType>quarter</durationType>
           <Articulation>
             <direction>down</direction>
-            <timeStretch>2</timeStretch>
             <subtype>fermata</subtype>
             </Articulation>
           <Note>
@@ -121,7 +119,6 @@
           <durationType>quarter</durationType>
           <Articulation>
             <direction>up</direction>
-            <timeStretch>1.5</timeStretch>
             <subtype>shortfermata</subtype>
             </Articulation>
           <Note>
@@ -133,7 +130,6 @@
           <durationType>quarter</durationType>
           <Articulation>
             <direction>down</direction>
-            <timeStretch>1.5</timeStretch>
             <subtype>shortfermata</subtype>
             </Articulation>
           <Note>
@@ -147,7 +143,6 @@
           <durationType>quarter</durationType>
           <Articulation>
             <direction>up</direction>
-            <timeStretch>3</timeStretch>
             <subtype>longfermata</subtype>
             </Articulation>
           <Note>
@@ -159,7 +154,6 @@
           <durationType>quarter</durationType>
           <Articulation>
             <direction>down</direction>
-            <timeStretch>3</timeStretch>
             <subtype>longfermata</subtype>
             </Articulation>
           <Note>
@@ -171,7 +165,6 @@
           <durationType>quarter</durationType>
           <Articulation>
             <direction>up</direction>
-            <timeStretch>4</timeStretch>
             <subtype>verylongfermata</subtype>
             </Articulation>
           <Note>
@@ -183,7 +176,6 @@
           <durationType>quarter</durationType>
           <Articulation>
             <direction>down</direction>
-            <timeStretch>4</timeStretch>
             <subtype>verylongfermata</subtype>
             </Articulation>
           <Note>
