@@ -298,7 +298,10 @@ void ScoreTab::insertTab(Score* s)
 void ScoreTab::setTabText(int idx, const QString& s)
       {
       QString text(s);
-      tab->setTabText(idx, text.replace("&","&&"));
+      text.replace("&","&&");
+      tab->setTabText(idx, text);
+      if (tab2)
+            tab2->setTabText(0, text);
       }
 
 //---------------------------------------------------------
