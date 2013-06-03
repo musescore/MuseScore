@@ -968,15 +968,10 @@ void ChordRest::add(Element* e)
                   {
                   Articulation* a = static_cast<Articulation*>(e);
                   _articulations.push_back(a);
-                  if (a->timeStretch() > 0.0) {
-                        qreal otempo = score()->tempo(tick());
-                        qreal ntempo = otempo / a->timeStretch();
-                        score()->setTempo(tick(), ntempo);
-                        score()->setTempo(tick() + actualTicks(), otempo);
-                        }
+                  if (a->timeStretch() != 1.0)
+                        score()->fixTicks();          // update tempo map
                   }
                   break;
-//            case FIGURED_BASS:
             case LYRICS:
                   {
                   Lyrics* l = static_cast<Lyrics*>(e);
@@ -1007,10 +1002,8 @@ void ChordRest::remove(Element* e)
                   Articulation* a = static_cast<Articulation*>(e);
                   if (!_articulations.removeOne(a))
                         qDebug("ChordRest::remove(): articulation not found");
-                  if (a->timeStretch() > 0.0) {
-                        score()->removeTempo(tick());
-                        score()->removeTempo(tick() + actualTicks());
-                        }
+                  if (a->timeStretch() != 1.0)
+                        score()->fixTicks();           // update tempo map
                   }
                   break;
             case LYRICS:

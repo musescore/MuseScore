@@ -305,7 +305,8 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
             { P_USER_OFF,            0, 0, e.offsetX,      e.resetX          },
             { P_USER_OFF,            1, 0, e.offsetY,      e.resetY          },
             { P_ARTICULATION_ANCHOR, 0, 0, ar.anchor,      ar.resetAnchor    },
-            { P_DIRECTION,           0, 0, ar.direction,   ar.resetDirection }
+            { P_DIRECTION,           0, 0, ar.direction,   ar.resetDirection },
+            { P_TIME_STRETCH,        0, 0, ar.timeStretch, ar.resetTimeStretch }
             };
       mapSignals();
       }
