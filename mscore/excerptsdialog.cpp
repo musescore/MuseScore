@@ -259,24 +259,6 @@ void ExcerptsDialog::partClicked(QListWidgetItem* item)
       }
 
 //---------------------------------------------------------
-//   createExcerptClicked
-//---------------------------------------------------------
-
-void ExcerptsDialog::createExcerptClicked()
-      {
-      int n = excerptList->count();
-      for (int i = 0; i < n; ++i) {
-            QListWidgetItem* item = excerptList->item(i);
-            Excerpt* excerpt = static_cast<ExcerptItem*>(item)->excerpt();
-            if (excerpt->score()) {
-qDebug("  already there %d %d\n", i, n);
-                  continue;
-                  }
-            createExcerptClicked(item);
-            }
-      }
-
-//---------------------------------------------------------
 //   createExcerpt
 //---------------------------------------------------------
 
