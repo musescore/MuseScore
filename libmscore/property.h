@@ -146,6 +146,8 @@ enum P_ID {
       P_LASSO_POS,
       P_LASSO_SIZE,
 
+      P_TIME_STRETCH,
+
       P_END
       };
 

@@ -993,6 +993,5 @@ void Segment::removeAnnotation(Element* e)
                   }
             }
       }
-
 }
 

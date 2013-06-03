@@ -154,6 +154,7 @@ static const PropertyData propertyList[] = {
       { P_LASSO_POS,           false, 0,               T_POINT_MM  },
       { P_LASSO_SIZE,          false, 0,               T_SIZE_MM   },
 
+      { P_TIME_STRETCH,        false, 0,               T_REAL   },
       { P_END,                 false, "",              T_INT    }
       };
 

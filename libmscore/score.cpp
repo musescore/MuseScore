@@ -334,8 +334,8 @@ void Score::init()
       _omr            = 0;
       _audio          = 0;
       _showOmr        = false;
-      _sigmap         = 0; // new TimeSigMap();
-      _tempomap       = 0; // new TempoMap;
+      _sigmap         = 0;
+      _tempomap       = 0;
       _layoutMode     = LayoutPage;
       _noteHeadWidth  = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
       }
@@ -534,9 +534,8 @@ void Score::fixTicks()
                                           setTempo(tt->segment(), tt->tempo());
                                           }
                                     }
-                              qreal stretch = -1.0;
-                              int n = s->elist().size();
-                              for (int i = 0; i < n; ++i) {
+                              qreal stretch = 0.0;
+                              for (int i = 0; i < s->elist().size(); ++i) {
                                     Element* e = s->elist().at(i);
                                     if (!e)
                                           continue;
@@ -544,7 +543,7 @@ void Score::fixTicks()
                                     int nn = cr->articulations().size();
                                     for (int ii = 0; ii < nn; ++ii)
                                           stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
-                                    if (stretch > 0.0) {
+                                    if (stretch != 0.0) {
                                           qreal otempo = tempomap()->tempo(cr->tick());
                                           qreal ntempo = otempo / stretch;
                                           setTempo(cr->tick(), ntempo);

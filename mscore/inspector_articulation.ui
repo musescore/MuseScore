@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>237</width>
-    <height>154</height>
+    <width>268</width>
+    <height>168</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,6 +54,49 @@
      <property name="spacing">
       <number>0</number>
      </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Direction:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Anchor:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="anchor">
+       <item>
+        <property name="text">
+         <string>Top Staff</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Bottom Staff</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Chord Automatic</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Top Chord</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Bottom Chord</string>
+        </property>
+       </item>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="direction">
        <property name="sizePolicy">
@@ -96,6 +139,20 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Time Stretch:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QDoubleSpinBox" name="timeStretch">
+       <property name="minimum">
+        <double>0.100000000000000</double>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetAnchor">
        <property name="text">
@@ -113,47 +170,21 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
+     <item row="2" column="2">
+      <widget class="QToolButton" name="resetTimeStretch">
        <property name="text">
-        <string>Direction:</string>
+        <string>...</string>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Anchor:</string>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="anchor">
-       <item>
-        <property name="text">
-         <string>Top Staff</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bottom Staff</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Chord Automatic</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Top Chord</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bottom Chord</string>
-        </property>
-       </item>
+       <property name="iconSize">
+        <size>
+         <width>14</width>
+         <height>14</height>
+        </size>
+       </property>
       </widget>
      </item>
     </layout>
