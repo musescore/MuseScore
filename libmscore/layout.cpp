@@ -558,9 +558,8 @@ void Score::doLayout()
       if (layoutFlags & LAYOUT_PLAY_EVENTS)
             createPlayEvents();
 
-      for (MeasureBase* m = first(); m; m = m->next()) {
+      for (MeasureBase* m = first(); m; m = m->next())
             m->layout0();
-            }
 
       layoutFlags = 0;
 
