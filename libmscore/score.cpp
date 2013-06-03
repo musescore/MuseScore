@@ -547,7 +547,10 @@ void Score::fixTicks()
                                           qreal otempo = tempomap()->tempo(cr->tick());
                                           qreal ntempo = otempo / stretch;
                                           setTempo(cr->tick(), ntempo);
-                                          setTempo(cr->tick() + cr->actualTicks(), otempo);
+                                          int etick = cr->tick() + cr->actualTicks() - 1;
+                                          auto e = tempomap()->find(etick);
+                                          if (e == tempomap()->end())
+                                                setTempo(etick, otempo);
                                           break;
                                           }
                                     }
