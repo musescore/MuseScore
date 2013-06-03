@@ -1370,7 +1370,7 @@ void Voice::add_mod(const Mod* _mod, int mode)
 	   && (_mod->src1 != 13)      /* Channel pressure */
 	   && (_mod->src1 != 14)      /* Pitch wheel */
 	   && (_mod->src1 != 16))) {  /* Pitch wheel sensitivity */
-            _fluid->log("Ignoring invalid controller, using non-CC source %i.", _mod->src1);
+            qDebug("Ignoring invalid controller, using non-CC source %i.", _mod->src1);
             return;
             }
 

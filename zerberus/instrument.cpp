@@ -15,10 +15,10 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStringList>
-#include <sndfile.h>
 
 #include "libmscore/xml.h"
 #include "libmscore/qzipreader_p.h"
+#include "audiofile/audiofile.h"
 
 #include "instrument.h"
 #include "zone.h"
@@ -35,72 +35,6 @@ Sample::~Sample()
       {
       delete _data;
       }
-
-//---------------------------------------------------------
-//   getFileLen
-//---------------------------------------------------------
-
-static sf_count_t getFileLen(void*)
-      {
-      return ZInstrument::buf.size();
-      }
-
-//---------------------------------------------------------
-//   seek
-//---------------------------------------------------------
-
-static sf_count_t seek(sf_count_t offset, int whence, void*)
-      {
-      switch(whence) {
-            case SEEK_SET:
-                  ZInstrument::idx = offset;
-                  break;
-            case SEEK_CUR:
-                  ZInstrument::idx += offset;
-                  break;
-            case SEEK_END:
-                  ZInstrument::idx = ZInstrument::buf.size() + offset;
-                  break;
-            }
-      return ZInstrument::idx;
-      }
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-static sf_count_t read(void* ptr, sf_count_t count, void*)
-      {
-//      printf("read %ld at %d = %ld %d\n", count, Instrument::idx, count + Instrument::idx,
-//         Instrument::buf.size());
-      count = qMin(count, (sf_count_t)(ZInstrument::buf.size() - ZInstrument::idx));
-      memcpy(ptr, ZInstrument::buf.data() + ZInstrument::idx, count);
-      ZInstrument::idx += count;
-      return count;
-      }
-
-static sf_count_t write(const void* /*ptr*/, sf_count_t /*count*/, void*)
-      {
-      printf("write\n");
-      return 0;
-      }
-
-//---------------------------------------------------------
-//   tell
-//---------------------------------------------------------
-
-static sf_count_t tell(void*)
-      {
-      return ZInstrument::idx;
-      }
-
-static SF_VIRTUAL_IO sfio = {
-      getFileLen,
-	seek,
-	read,
-	write,
-	tell
-      };
 
 //---------------------------------------------------------
 //   readSample
@@ -125,22 +59,22 @@ Sample* ZInstrument::readSample(const QString& s, QZipReader* uz)
                   }
             buf = f.readAll();
             }
-      SF_INFO info;
-      memset(&info, 0, sizeof(info));
-      idx = 0;
-      SNDFILE* sf = sf_open_virtual(&sfio, SFM_READ, &info, this);
-      if (sf == 0) {
-            printf("open <%s> failed: %s\n", qPrintable(s), sf_strerror(0));
+
+      AudioFile a;
+      if (!a.open(buf)) {
+            printf("open <%s> failed: %s\n", qPrintable(s), a.error());
             return 0;
             }
-      short* data = new short[(info.frames + 3) * info.channels];
-      int channel = info.channels;
-      int frames  = info.frames;
-      int sr      = info.samplerate;
+
+      int channel = a.channels();
+      int frames  = a.frames();
+      int sr      = a.samplerate();
+
+      short* data = new short[(frames + 3) * channel];
       Sample* sa  = new Sample(channel, data, frames, sr);
 
-      if (info.frames != sf_readf_short(sf, data + channel, frames)) {
-            printf("Sample read failed: %s\n", sf_strerror(sf));
+      if (frames != a.read(data + channel, frames)) {
+            printf("Sample read failed: %s\n", a.error());
             delete[] data;
             delete sa;
             sa = 0;
@@ -150,7 +84,6 @@ Sample* ZInstrument::readSample(const QString& s, QZipReader* uz)
             data[(frames-1) * channel + i] = data[(frames-3) * channel + i];
             data[(frames-2) * channel + i] = data[(frames-3) * channel + i];
             }
-      sf_close(sf);
       return sa;
       }
 
