@@ -491,6 +491,25 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Articulation::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_DIRECTION:
+                  return int(MScore::AUTO);
+
+            case P_ARTICULATION_ANCHOR:
+                  return int(score()->style()->articulationAnchor(_articulationType));
+
+            default:
+                  break;
+            }
+      return Element::propertyDefault(propertyId);
+      }
+
 }
 
 

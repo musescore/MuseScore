@@ -347,8 +347,6 @@ class Fluid : public Synthesizer {
       virtual void allSoundsOff(int);
       virtual void allNotesOff(int);
 
-      bool log(const char* fmt, ...);
-
       Preset* get_preset(unsigned int sfontnum, unsigned int banknum, unsigned int prognum);
       Preset* find_preset(unsigned int banknum, unsigned int prognum);
       void modulate_voices(int chan, bool is_cc, int ctrl);
