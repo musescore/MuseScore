@@ -30,19 +30,19 @@ namespace Ms {
 ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
       { ufermataSym, dfermataSym,
             "fermata", QT_TRANSLATE_NOOP("articulation", "fermata"),
-            2.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { ushortfermataSym, dshortfermataSym,
             "shortfermata", QT_TRANSLATE_NOOP("articulation", "shortfermata"),
-            1.5, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { ulongfermataSym, dlongfermataSym,
             "longfermata", QT_TRANSLATE_NOOP("articulation", "longfermata"),
-            3.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { uverylongfermataSym, dverylongfermataSym,
             "verylongfermata", QT_TRANSLATE_NOOP("articulation", "verylongfermata"),
-            4.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { thumbSym, thumbSym,
             "thumb", QT_TRANSLATE_NOOP("articulation", "thumb"),
