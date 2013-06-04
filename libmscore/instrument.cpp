@@ -17,13 +17,11 @@
 #include "utils.h"
 #include "tablature.h"
 #include "instrtemplate.h"
-#include "synthesizer/msynthesizer.h"
 #include "mscore.h"
 
 namespace Ms {
 
 Instrument InstrumentList::defaultInstrument;
-extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   write

@@ -716,7 +716,6 @@ MuseScore::MuseScore()
             QAction* a = getAction(s);
             a->setCheckable(true);
             entryTools->addAction(a);
-            entryTools->addAction(getAction(s));
             }
 
       //---------------------
