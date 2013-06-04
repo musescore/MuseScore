@@ -72,6 +72,7 @@ class XmlReader : public QXmlStreamReader {
       void setDocName(const QString& s) { docName = s; }
 
       int tick()  const           { return _tick;  }
+      int& rtick()                { return _tick;  }
       void setTick(int val)       { _tick = val; }
       int track() const           { return _track; }
       void setTrack(int val)      { _track = val; }

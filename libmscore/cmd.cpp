@@ -997,6 +997,8 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
                         }
                   }
             undoChangeChordRestLen(cr, TDuration(dstF));
+qDebug("  setRest at %d+%d, %d/%d",
+   cr->tick(), cr->actualTicks(), (srcF-dstF).numerator(), (srcF-dstF).denominator());
             setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
             select(cr, SELECT_SINGLE, 0);
             return;

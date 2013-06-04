@@ -216,7 +216,6 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
       std::vector<AcEl> aclist;
 
-//      qreal _spatium     = spatium();
       qreal stepDistance = staff->spatium() * .5;
       int stepOffset     = staff->staffType()->stepOffset();
 
@@ -234,13 +233,10 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   aclist.push_back(acel);
                   }
             qreal hw = note->headWidth();
-            qreal xx = note->pos().x() + hw + note->chord()->pos().x();
-            if (xx > dotPosX)
-                  dotPosX = xx;
 
             Chord* chord = note->chord();
-            bool _up = chord->up();
-            qreal stemX = chord->stemPosX() - chord->pagePos().x();
+            bool _up     = chord->up();
+            qreal stemX  = chord->stemPosX() - chord->pagePos().x();
 
             qreal stemWidth5;
             if (chord->stem()) {
@@ -265,6 +261,10 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   }
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
+
+            qreal xx = x + hw + note->chord()->pos().x();
+            if (xx > dotPosX)
+                  dotPosX = xx;
             }
 
       segment->setDotPosX(staffIdx, dotPosX);

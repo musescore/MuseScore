@@ -1921,8 +1921,9 @@ qreal Chord::dotPosX() const
 
 void Chord::setDotPosX(qreal val)
       {
-      if (parent())
-            segment()->setDotPosX(staffIdx(), val);
+// TODO: done in Score->layoutChords1()
+//      if (parent())
+//            segment()->setDotPosX(staffIdx(), val);
       }
 
 //---------------------------------------------------------

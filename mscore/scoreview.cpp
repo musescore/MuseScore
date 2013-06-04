@@ -2822,7 +2822,6 @@ void ScoreView::startNoteEntry()
       _score->select(el, SELECT_SINGLE, 0);
       _score->setInputState(el);
       bool enable = el && (el->type() == Element::NOTE || el->type() == Element::REST);
-      mscore->enableInputToolbar(enable);
 
       _score->inputState().noteEntryMode = true;
       _score->inputState().rest = false;
@@ -4087,6 +4086,8 @@ void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
 
 void ScoreView::changeVoice(int voice)
       {
+      printf("changeVoice === %d\n", voice);
+
       InputState* is = &score()->inputState();
       int track = (is->track() / VOICES) * VOICES + voice;
       is->setTrack(track);

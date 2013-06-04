@@ -209,6 +209,7 @@ void XmlReader::unknown() const
          qPrintable(docName), lineNumber(), columnNumber(),
          name().toUtf8().data());
       abort();
+      // skipCurrentElement();
       }
 
 //---------------------------------------------------------

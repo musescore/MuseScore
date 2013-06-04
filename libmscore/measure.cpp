@@ -1959,7 +1959,6 @@ void Measure::read(XmlReader& e, int staffIdx)
       {
       Segment* segment = 0;
       qreal _spatium = spatium();
-      bool irregular;
 
       e.tuplets().clear();
 
@@ -1978,8 +1977,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             e.setTick(score()->fileDivision(e.intAttribute("tick")));
       setTick(e.tick());
 
-      const SigEvent& sigEvent = score()->sigmap()->timesig(tick());
-      _timesig  = sigEvent.nominal();
+      bool irregular;
       if (e.hasAttribute("len")) {
             QStringList sl = e.attribute("len").split('/');
             if (sl.size() == 2)
@@ -1990,11 +1988,9 @@ void Measure::read(XmlReader& e, int staffIdx)
             score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
             score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
             }
-      else {
-            if (staffIdx == 0)
-                  _len = sigEvent.timesig();
+      else
             irregular = false;
-            }
+
       Staff* staff = score()->staff(staffIdx);
       Fraction timeStretch(staff->timeStretch(tick()));
 
@@ -2094,11 +2090,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                               }
                         else {
                               tremolo->setParent(chord);
-                              e.setTick(e.tick() + crticks);
+                              e.rtick() += crticks;
                               }
                         }
                   else {
-                        e.setTick(e.tick() + crticks);
+                        e.rtick() += crticks;
                         }
                   segment->add(chord);
                   }
@@ -2115,7 +2111,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         rest->setDuration(timesig()/timeStretch);
                   Fraction ts(timeStretch * rest->globalDuration());
 
-                  e.setTick(e.tick() + ts.ticks());
+                  e.rtick() += ts.ticks();
                   }
             else if (tag == "Note") {                 // obsolete
                   Chord* chord = new Chord(score());
@@ -2197,20 +2193,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-                  if (segment && segment->next() && segment->next()->segmentType() == Segment::SegClef) {
+                  if (segment && segment->next() && segment->next()->segmentType() == Segment::SegClef)
                         segment = segment->next();
-                        }
                   else if (segment && segment != first()) {
-                        Segment* ns;
-                        if (e.tick() == tick())
-                              ns = first();
-                        else {
-                              // ??
-                              // Segment* ns = segment->next();
-                              ns = segment;
-                              while (ns && ns->tick() < e.tick())
-                                    ns = ns->next();
-                              }
+                        Segment* ns = segment->next();
                         segment = new Segment(this, Segment::SegClef, e.tick());
                         _segments.insert(segment, ns);
                         }
@@ -2225,22 +2211,18 @@ void Measure::read(XmlReader& e, int staffIdx)
                   ts->read(e);
                   segment = getSegment(Segment::SegTimeSig, e.tick());
                   segment->add(ts);
+                  timeStretch = ts->stretch().reduced();
+
+                  _timesig = (ts->sig() * timeStretch).reduced();
 
                   if (score()->mscVersion() > 114) {
-                        // in <= 114 sigmap is part of the mscx file
-                        timeStretch = ts->stretch();
-                        _timesig    = ts->sig();
-                        if (timeStretch == Fraction(1,1)) {
-                              // if len is not irregular, set _len to time sig and store new time sig
-                              if (!irregular) {
-                                    _len = _timesig * timeStretch;
-                                    score()->sigmap()->add(tick(), SigEvent(_timesig));
-                                    }
-                              // if len is irregular, update stored time sigs with new nominal value
-                              else {
-                                    score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
-                                    score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
-                                    }
+                        if (irregular) {
+                              score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
+                              score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
+                              }
+                        else {
+                              _len = _timesig;
+                              score()->sigmap()->add(tick(), SigEvent(_timesig));
                               }
                         }
                   }

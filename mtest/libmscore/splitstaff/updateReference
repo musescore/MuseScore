@@ -1,4 +1,5 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/split/splitstaff01.mscx splitstaff01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/splitstaff/splitstaff01.mscx splitstaff01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/splitstaff/splitstaff02.mscx splitstaff02-ref.mscx
 
