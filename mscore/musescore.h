@@ -611,7 +611,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool metronome() const         { return metronomeAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
-      void enableInputToolbar(bool enableInput);
       void loadFiles();
       void showPanelIfMidiFile(const QString &file);
 

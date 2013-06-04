@@ -294,17 +294,9 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                   continue;
                   }
 
-            qDebug("set rest %d/%d  -> measure %d/%d",
-               f.numerator(), f.denominator(),
-               measure->timesig().numerator(), measure->timesig().denominator()
-               );
-
             if ((measure->timesig() == measure->len())   // not in pickup measure
                && (measure->tick() == tick)
-               // && ((measure->timesig() / timeStretch) == f)
                && (measure->timesig() == f)) {
-//  removed to have measures a breve long or more cleared to measure rest instead of actual value rest(s)
-//               && (f < TDuration(TDuration::V_BREVE).fraction())
                   Rest* rest = addRest(tick, track, TDuration(TDuration::V_MEASURE), tuplet);
                   tick += measure->timesig().ticks();
                   if (r == 0)
@@ -314,10 +306,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                   //
                   // compute list of durations which will fit l
                   //
-
-                  Fraction ff = f / staff(track/VOICES)->timeStretch(tick);
-qDebug(" create duration list from %d/%d", ff.numerator(), ff.denominator());
-                  QList<TDuration> dList = toDurationList(ff, useDots);
+                  QList<TDuration> dList = toDurationList(f, useDots);
                   if (dList.isEmpty())
                         return 0;
                   foreach(TDuration d, dList) {

@@ -329,20 +329,22 @@ void KeySig::write(Xml& xml) const
       Element::writeProperties(xml);
       if (_sig.custom()) {
             xml.tag("custom", _sig.customType());
+            foreach(const KeySym* ks, keySymbols) {
+                  xml.stag("KeySym");
+                  xml.tag("sym", ks->sym);
+                  xml.tag("pos", ks->spos);
+                  xml.etag();
+                  }
             }
       else {
             xml.tag("accidental", _sig.accidentalType());
             if (_sig.naturalType())
                   xml.tag("natural", _sig.naturalType());
             }
-      foreach(const KeySym* ks, keySymbols) {
-            xml.stag("KeySym");
-            xml.tag("sym", ks->sym);
-            xml.tag("pos", ks->spos);
-            xml.etag();
-            }
-      xml.tag("showCourtesySig", _showCourtesy);
-      xml.tag("showNaturals",    _showNaturals);
+      if (!_showCourtesy)
+            xml.tag("showCourtesySig", _showCourtesy);
+      if (!_showNaturals)
+            xml.tag("showNaturals",    _showNaturals);
 	xml.etag();
       }
 

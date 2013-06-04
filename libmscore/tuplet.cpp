@@ -562,7 +562,7 @@ void Tuplet::read(XmlReader& e)
                   _number->setTrack(track());
                   }
             else if (tag == "subtype")    // obsolete
-                  ;
+                  e.skipCurrentElement();
             else if (tag == "hasNumber")             // obsolete
                   _numberType = e.readInt() ? SHOW_NUMBER : NO_TEXT;
             else if (tag == "hasLine") {          // obsolete

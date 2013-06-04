@@ -144,9 +144,6 @@ class Measure : public MeasureBase {
       void push_back(Segment* e);
       void push_front(Segment* e);
 
-//      void* pTimesig()  { return &_timesig; }
-//      void* pLen()      { return &_len;     }
-
    public:
       Measure(Score* = 0);
       Measure(const Measure&);
@@ -176,7 +173,6 @@ class Measure : public MeasureBase {
       bool irregular() const               { return _irregular;   }
       void setIrregular(bool val)          { _irregular = val;    }
       int noOffset() const                 { return _noOffset;    }
-//      Text* noText() const                 { return _noText;      }
 
       MeasureNumberMode measureNumberMode() const     { return _noMode;      }
       void setMeasureNumberMode(MeasureNumberMode v)  { _noMode = v;         }

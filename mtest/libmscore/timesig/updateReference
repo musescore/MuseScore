@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/timesig/timesig1.mscx timesig1-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig01.mscx timesig01-ref.mscx
 
