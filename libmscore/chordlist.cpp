@@ -426,6 +426,23 @@ void ParsedChord::configure(const ChordList* cl)
       }
 
 //---------------------------------------------------------
+//  correctXmlText
+//    remove digits from _xmlText, optionally replace with s
+//    needed for m(Maj9) et al
+//---------------------------------------------------------
+
+void ParsedChord::correctXmlText(const QString& s)
+      {
+      _xmlText.remove(QRegExp("[0-9]"));
+      if (s != "") {
+            int pos = _xmlText.lastIndexOf(')');
+            if (pos == -1)
+                  pos = _xmlText.size();
+            _xmlText.insert(pos,s);
+            }
+      }
+
+//---------------------------------------------------------
 //  parse
 //    return true if chord was parseable
 //---------------------------------------------------------
@@ -452,7 +469,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
       _understandable = true;
       i = 0;
 
-#ifdef ALLOW_PARENTHESIZED_EXTENSION
+#if 0
+// enable this code to allow quality to be parenthesized
+// otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
       // eat leading parens
       firstLeadingToken = _tokenList.size();
       while (i < len && leading.contains(s[i]))
@@ -513,7 +532,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             }
       if (tok1 != "")
             addToken(tok1,QUALITY);
-#ifdef ALLOW_PARENTHESIZED_EXTENSION
+#if 0
+// enable this code to allow quality to be parenthesized
+// otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
       else {
             // leading tokens were not really QUALITY
             for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
@@ -536,7 +557,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
       while (i < len && trailing.contains(s[i]))
            addToken(QString(s[i++]),QUALITY);
 
-#ifdef ALLOW_PARENTHESIZED_EXTENSION
+#if 0
+// enable this code to allow extensions to be parenthesized
+// otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
       // eat leading parens
       firstLeadingToken = _tokenList.size();
       while (i < len && leading.contains(s[i]))
@@ -566,7 +589,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             }
       if (tok1 != "")
             addToken(tok1,EXTENSION);
-#ifdef ALLOW_PARENTHESIZED_EXTENSION
+#if 0
+// enable this code to allow extensions to be parenthesized
+// otherwise, parentheses will automatically cause contents to be interpreted as modifier
       else {
             // leading tokens were not really EXTENSION
             for (int t = firstLeadingToken; t < lastLeadingToken; ++t) {
@@ -577,7 +602,13 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             }
 #endif
       if (!syntaxOnly) {
+            _xmlText += _extension;
             QStringList extl;
+            if (tok1 == "2" || tok1 == "4") {
+                  QString d = "add" + tok1;
+                  _xmlDegrees += d;
+                  _xmlText.remove(tok1);
+                  }
             if (tok1 == "5")
                   _xmlKind = "power";
             else if (tok1 == "6") {
@@ -596,13 +627,18 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   if (take9)
                         _xmlKind += "-ninth";
                   else if (take7) {
-                        _xmlKind += "-seventh";
+                              _xmlKind += "-seventh";
+                              extl << "9";
+                              correctXmlText("7");
+                              }
+                  else if (_xmlKind == "half-diminished") {
                         extl << "9";
+                        correctXmlText();
                         }
-                  else if (_xmlKind == "half-diminished")
-                        extl << "9";
-                  else
+                  else {
                         extl << "7" << "9";
+                        correctXmlText();
+                        }
                   }
             else if (tok1 == "11") {
                   if (take11)
@@ -610,11 +646,16 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   else if (take7) {
                         _xmlKind += "-seventh";
                         extl << "9" << "11";
+                        correctXmlText("7");
                         }
-                  else if (_xmlKind == "half-diminished")
+                  else if (_xmlKind == "half-diminished") {
                         extl << "9" << "11";
-                  else
+                        correctXmlText();
+                        }
+                  else {
                         extl << "7" << "9" << "11";
+                        correctXmlText();
+                        }
                   }
             else if (tok1 == "13") {
                   if (take13)
@@ -622,19 +663,27 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   else if (take7) {
                         _xmlKind += "-seventh";
                         extl << "9" << "11" << "13";
+                        correctXmlText("7");
                         }
-                  else if (_xmlKind == "half-diminished")
+                  else if (_xmlKind == "half-diminished") {
                         extl << "9" << "11" << "13";
-                  else
+                        correctXmlText();
+                        }
+                  else {
                         extl << "7" << "9" << "11" << "13";
+                        correctXmlText();
+                        }
                   }
             else if (tok1 == "69") {
                   if (take6) {
                         _xmlKind += "-sixth";
                         extl << "9";
+                        correctXmlText("6");
                         }
-                  else
+                  else {
                         extl << "6" << "9";
+                        correctXmlText();
+                        }
                   }
             foreach (QString e, extl) {
                   QString d = "add" + e;
@@ -642,10 +691,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   }
             if (_xmlKind == "dominant-seventh")
                   _xmlKind = "dominant";
-            if (tok1 == "69")
-                  _xmlText += "6";
-            else
-                  _xmlText += tok1;
             }
       // eat trailing parens and commas
       while (i < len && trailing.contains(s[i]))
@@ -698,6 +743,11 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   tok2[j++] = s[i];
                   }
             tok2L = tok2.toLower();
+            // re-attach "add"
+            if (addPending) {
+                  tok2L = tok1L + tok2L;
+                  tok1L = "add";
+                  }
             // standardize spelling
             if (tok1 == "M" || major.contains(tok1L))
                   tok1L = "major";
@@ -706,8 +756,28 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             else if (tok1L == "sus" && tok2L == "")
                   tok2L = "4";
             else if (augmented.contains(tok1L) && tok2L == "") {
-                  _quality = "augmented";
-                  tok1L = "";
+                  if (_quality == "dominant" && _extension == "7") {
+                        _quality = "augmented";
+                        if (!syntaxOnly) {
+                              _xmlKind = "augmented-seventh";
+                              _xmlText = _extension + tok1;
+                              }
+                        tok1L = "";
+                        }
+                  else {
+                        tok1L = "#";
+                        tok2L = "5";
+                        }
+                  }
+            else if ((lower.contains(tok1L) || raise.contains(tok1L)) && tok2L == "") {
+                  // trailing alteration - treat as applying to extension (and convert to modifier)
+                  // this handles C5b, C9#, etc
+                  tok2L = _extension;
+                  if (!syntaxOnly) {
+                        _xmlKind = (_quality == "dominant" ? "major" : _quality);
+                        _xmlText.remove(_extension);
+                        }
+                  _extension = "";
                   }
             QString m = tok1L + tok2L;
             if (m != "")
@@ -724,20 +794,32 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   else if (tok1L == "no")
                         degree = "sub" + tok2L;
                   else if (tok1L == "sus") {
-#ifdef TREAT_SUS_AS_DEGREE
-                        _xmlDegrees += "sub3";
-                        tok1L = "add";
+#if 0
+// enable this code to export 7sus4 as dominant,sub3,add4 rather than suspended-fourth,add7 (similar for 9sus4, 13sus4)
+                        if (_extension == "") {
+                              if (tok2L == "4")
+                                    _xmlKind = "suspended-fourth";
+                              else if (tok2L == "2")
+                                    _xmlKind = "suspended-second";
+                              _xmlText = tok1 + tok2;
+                              }
+                        else {
+                              _xmlDegrees += "sub3";
+                              tok1L = "add";
+                              }
 #else
+// enable this code to export 7sus4 as suspended-fourth,add7 rather than dominant,sub3,add4 (similar for 9sus4, 13sus4)
                         // convert chords with sus into suspended "kind"
                         // extension then becomes a series of degree adds
-                        QString seventh;
                         if (tok2L == "4")
                               _xmlKind = "suspended-fourth";
                         else if (tok2L == "2")
                               _xmlKind = "suspended-second";
                         _xmlText = tok1 + tok2;
-                        if (_extension == "7" || _extension == "9" || _extension == "11" || _extension == "13")
-                              degree = (_quality == "major") ? "add#7" : "add7";
+                        if (_extension == "7" || _extension == "9" || _extension == "11" || _extension == "13") {
+                              _xmlDegrees += (_quality == "major") ? "add#7" : "add7";
+                              degree = "";
+                              }
                         else if (_extension != "")
                               degree = "add" + _extension;
                         if (_extension == "13") {
@@ -767,7 +849,11 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                                     _xmlDegrees += "add11";
                                     _xmlDegrees += "add13";
                                     }
+                              _xmlText += tok1 + tok2;
+                              correctXmlText("7");
                               }
+                        else
+                              tok1L = "add";
                         }
                   else if (tok1L == "alt") {
                         _xmlDegrees += "altb5";
@@ -795,10 +881,11 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                               _xmlDegrees += "altb9";
                         else
                               _xmlDegrees += "addb9";
+                        _xmlText += tok1;
                         }
                   else if (tok1L == "tristan") {
                         _xmlKind = "Tristan";
-                        _xmlText = "Tristan";
+                        _xmlText = tok1;
                         }
                   else if (addPending)
                         degree = "add" + tok1L + tok2L;
@@ -815,11 +902,13 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   else
                         _understandable = false;
                   if (alter) {
-                        if (tok2 == "5")
+                        if (tok2L == "4" && _xmlKind == "suspended-fourth")
                               degree = "alt";
-                        else if (tok2 == "9" && (_extension == "11" || _extension == "13"))
+                        else if (tok2L == "5")
                               degree = "alt";
-                        else if (tok2 == "11" && _extension == "13")
+                        else if (tok2L == "9" && (_extension == "11" || _extension == "13"))
+                              degree = "alt";
+                        else if (tok2L == "11" && _extension == "13")
                               degree = "alt";
                         else
                               degree = "add";
@@ -833,18 +922,43 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   addToken(QString(s[i++]),MODIFIER);
             addPending = false;
             }
+      // fix "add" / "alt" conflicts
+      // so add9,altb9 -> addb9
+      if (!syntaxOnly) {
+            QStringList altList = _xmlDegrees.filter("alt");
+            foreach (const QString& d, altList) {
+                  QString unalt(d);
+                  unalt.replace(QRegExp("alt[b#]"),"add");
+                  if (_xmlDegrees.removeAll(unalt) > 0) {
+                        QString alt(d);
+                        alt.replace("alt","add");
+                        int i = _xmlDegrees.indexOf(d);
+                        _xmlDegrees.replace(i,alt);
+                        }
+                  }
+            }
+
+      // construct handle
       if (!_modifierList.isEmpty()) {
             _modifierList.sort();
             _modifiers = "<" + _modifierList.join("><") + ">";
             }
-
       _handle = "<" + _quality + "><" + _extension + ">" + _modifiers;
+
+      // force <minor><7><b5> to export as half-diminished
+      if (!syntaxOnly && _handle == "<minor><7><b5>") {
+                  _xmlKind = "half-diminished";
+                  _xmlText = s;
+                  _xmlDegrees.clear();
+            }
+
       qDebug("parse: source = <%s>, handle = %s",qPrintable(s),qPrintable(_handle));
       if (!syntaxOnly) {
             qDebug("parse: xmlKind = <%s>, text = <%s>",qPrintable(_xmlKind),qPrintable(_xmlText));
             qDebug("parse: xmlSymbols = %s, xmlParens = %s",qPrintable(_xmlSymbols),qPrintable(_xmlParens));
             qDebug("parse: xmlDegrees = <%s>",qPrintable(_xmlDegrees.join(",")));
             }
+
       return _parseable;
       }
 
@@ -852,8 +966,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
 //   fromXml
 //---------------------------------------------------------
 
-QString ParsedChord::fromXml(const QString& kind, const QString& rawKindText, const QString& useSymbols, const QString& useParens, const QList<HDegree>& dl, const ChordList* cl)
+QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText, const QString& useSymbols, const QString& useParens, const QList<HDegree>& dl, const ChordList* cl)
       {
+      QString kind = rawKind;
       QString kindText = rawKindText;
       bool symbols = (useSymbols == "yes");
       bool parens = (useParens == "yes");
@@ -902,18 +1017,12 @@ QString ParsedChord::fromXml(const QString& kind, const QString& rawKindText, co
       else if (kind == "suspended-fourth") {
             _quality = "major";
             implied = true;
-            if (kindText == "")
-                  _modifierList += "sus4";
-            else
-                  _modifierList += kindText;
+            _modifierList += "sus4";
             }
       else if (kind == "suspended-second") {
             _quality = "major";
             implied = true;
-            if (kindText == "")
-                  _modifierList += "sus2";
-            else
-                  _modifierList += kindText;
+            _modifierList += "sus2";
             }
       else if (kind == "power") {
             _quality = "major";
@@ -962,9 +1071,13 @@ QString ParsedChord::fromXml(const QString& kind, const QString& rawKindText, co
                   extension = 7;
                   extend = true;
                   mod = "";
-#ifdef TREAT_SUS_AS_DEGREE
-                  kindText = "";
-#endif
+                  }
+            else if (mod == "add#7" && kind.contains("suspended")) {
+                  _quality = "major";
+                  implied = false;
+                  extension = 7;
+                  extend = true;
+                  mod = "";
                   }
             else if (mod == "add9" && extend) {
                   if (extension < 9)
@@ -989,21 +1102,45 @@ QString ParsedChord::fromXml(const QString& kind, const QString& rawKindText, co
             }
       // convert no3,add[42] into sus[42]
       int no3 = _modifierList.indexOf("no3");
-      if (no3 >= 0 && (_modifierList.contains("add4") || _modifierList.contains("add2"))) {
+      if (no3 >= 0) {
             int addn = _modifierList.indexOf("add4");
             if (addn == -1)
                   addn = _modifierList.indexOf("add2");
-            QString& s = _modifierList[addn];
-            s.replace("add","sus");
-            _modifierList.removeAt(no3);
-      }
+            if (addn != -1) {
+                  QString& s = _modifierList[addn];
+                  s.replace("add","sus");
+                  _modifierList.removeAt(no3);
+                  }
+            }
+      // convert kind=minor-seventh, degree=altb5 to kind=half-diminished (suppression of degree=altb comes later)
+      if (kind == "minor-seventh" && _modifierList.size() == 1 && _modifierList.front() == "b5")
+            kind = "half-diminished";
+      // force parens where necessary)
+      if (!parens && extension == 0 && !_modifierList.isEmpty()) {
+            QString firstMod = _modifierList.front();
+            if (firstMod != "" && (firstMod.startsWith('#') || firstMod.startsWith('b')))
+                  parens = true;
+            }
+
       // record extension
       if (extension)
             _extension = QString("%1").arg(extension);
 
+      // validate kindText
+      if (kindText != "") {
+            ParsedChord validate;
+            validate.parse(kindText,cl,false);
+            // kindText should parse to produce same kind, no degrees
+            if (validate._xmlKind != kind || !validate._xmlDegrees.isEmpty())
+                  kindText = "";
+            }
+
       // construct name & handle
-      if (kindText != "" && !kind.contains("suspended") && kind != "major-minor") {
-            _name = kindText;
+      _name = "";
+      if (kindText != "") {
+            if (_extension != "" && kind.contains("suspended"))
+                  _name += _extension;
+            _name += kindText;
             if (extension == 69)
                   _name += "9";
             }
@@ -1020,8 +1157,6 @@ QString ParsedChord::fromXml(const QString& kind, const QString& rawKindText, co
                   _name = symbols ? "o" : "dim";
             else if (_quality == "half-diminished")
                   _name = symbols ? "0" : "m7b5";
-            else if (_quality == "major-minor")
-                  _name = symbols ? "-(^7)" : "m(maj7)";
             else
                   _name = _quality;
             _name += _extension;
@@ -1030,6 +1165,10 @@ QString ParsedChord::fromXml(const QString& kind, const QString& rawKindText, co
             _name += "(";
       foreach (QString mod, _modifierList) {
             mod.replace("major","maj");
+            if (kindText != "" && kind.contains("suspended") && mod.startsWith("sus"))
+                  continue;
+            else if (kindText != "" && kind == "major-minor" && mod.startsWith("maj"))
+                  continue;
             _name += mod;
             }
       if (parens)
@@ -1043,8 +1182,11 @@ QString ParsedChord::fromXml(const QString& kind, const QString& rawKindText, co
       _xmlText = kindText;
       _xmlSymbols = useSymbols;
       _xmlParens = useParens;
-      foreach (const HDegree& d, dl)
+      foreach (const HDegree& d, dl) {
+            if (kind == "half-diminished" && d.type() == ALTER && d.alter() == -1 && d.value() == 5)
+                  continue;
             _xmlDegrees += d.text();
+            }
 
       return _name;
       }
