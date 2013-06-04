@@ -950,7 +950,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
 //   readPageFormat
 //---------------------------------------------------------
 
-static void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
+void MusicXml::readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
       {
       qreal _oddRightMargin  = 0.0;
       qreal _evenRightMargin = 0.0;
@@ -990,10 +990,16 @@ static void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
                         pf->setEvenBottomMargin(bm);
                         }
                   }
-            else if (tag == "page-height")
+            else if (tag == "page-height") {
                   size.rheight() = val.toDouble() * conversion;
-            else if (tag == "page-width")
+                  // set pageHeight and pageWidth for use by doCredits()
+                  pageHeight = static_cast<int>(val.toDouble() + 0.5);
+                  }
+            else if (tag == "page-width") {
                   size.rwidth() = val.toDouble() * conversion;
+                  // set pageHeight and pageWidth for use by doCredits()
+                  pageWidth = static_cast<int>(val.toDouble() + 0.5);
+                  }
             else
                   domError(e);
             }
@@ -1089,7 +1095,6 @@ void MusicXml::scorePartwise(QDomElement ee)
                   // IMPORT_LAYOUT
                   double millimeter = score->spatium()/10.0;
                   double tenths = 1.0;
-                  QDomElement pageLayoutElement;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         QString tag(ee.tagName());
                         if (tag == "scaling") {
@@ -1107,18 +1112,10 @@ void MusicXml::scorePartwise(QDomElement ee)
                                     score->setSpatium(_spatium);
                               }
                         else if (tag == "page-layout") {
-                              // set pageHeight and pageWidth for use by doCredits()
-                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                                    QString tag(eee.tagName());
-                                    QString val(eee.text());
-                                    int i = static_cast<int>(val.toDouble() + 0.5);
-                                    if (tag == "page-height")
-                                          pageHeight = i;
-                                    else if (tag == "page-width")
-                                          pageWidth = i;
-                                    }
-                              // remember ee for PageFormat::readMusicXML call
-                              pageLayoutElement = ee;
+                              PageFormat pf;
+                              readPageFormat(&pf, ee, millimeter / (tenths * INCH));
+                              if (preferences.musicxmlImportLayout)
+                                    score->setPageFormat(pf);
                               }
                         else if (tag == "system-layout") {
                               for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
@@ -1160,11 +1157,6 @@ void MusicXml::scorePartwise(QDomElement ee)
                               domError(ee);
                         }
 
-                  if (preferences.musicxmlImportLayout) {
-                        PageFormat pf;
-                        readPageFormat(&pf, pageLayoutElement, millimeter / (tenths * INCH));
-                        score->setPageFormat(pf);
-                        }
                   score->setDefaultsRead(true); // TODO only if actually succeeded ?
                   // IMPORT_LAYOUT END
                   }
