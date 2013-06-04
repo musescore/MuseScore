@@ -719,7 +719,7 @@ qDebug("makeGap %s at %d track %d", qPrintable(_sd.print()), segment->tick(), tr
                   sd -= td;
                   if (sd.isZero())
                         return akkumulated;
-                  nextTick = seg1->tick();
+                  nextTick = tick2;
                   continue;
                   }
             //
