@@ -790,7 +790,7 @@ qDebug("BeginRepeat=============================================\n");
             Staff* staff = score->staff(i);
             int patch = channelDefaults[midiChannel].patch;
             ClefType clefId = CLEF_G;
-            if (c & 0x1 || patch == 0) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
@@ -808,7 +808,7 @@ qDebug("BeginRepeat=============================================\n");
 
 
             Channel& ch = instr->channel(0);
-            if (c & 0x1 || patch == 0) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }
@@ -1270,7 +1270,7 @@ qDebug("BeginRepeat=============================================\n");
             Staff* staff = score->staff(i);
             int patch = channelDefaults[midiChannel].patch;
             ClefType clefId = CLEF_G;
-            if (c & 0x1 || patch == 0) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
@@ -1287,7 +1287,7 @@ qDebug("BeginRepeat=============================================\n");
             segment->add(clef);
 
             Channel& ch = instr->channel(0);
-            if (c & 0x1 || patch == 0) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }
@@ -1788,7 +1788,7 @@ void GuitarPro4::read(QFile* fp)
             Staff* staff = score->staff(i);
             int patch = channelDefaults[midiChannel].patch;
             ClefType clefId = CLEF_G;
-            if (c & 0x1 || patch == 0) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
@@ -1806,7 +1806,7 @@ void GuitarPro4::read(QFile* fp)
 
 
             Channel& ch = instr->channel(0);
-            if (c & 0x1 || patch == 0) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }
@@ -2478,7 +2478,7 @@ void GuitarPro5::readTracks()
             //
             int patch = channelDefaults[midiChannel].patch;
             ClefType clefId = CLEF_G;
-            if (c & 0x1 || patch == 0) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
@@ -2496,7 +2496,7 @@ void GuitarPro5::readTracks()
 
 
             Channel& ch = instr->channel(0);
-            if (c & 0x1 || patch == 0) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }

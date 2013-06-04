@@ -36,6 +36,7 @@ class Tuplet;
 static const int GP_MAX_LYRIC_LINES = 5;
 static const int GP_MAX_TRACK_NUMBER = 32;
 static const int GP_MAX_STRING_NUMBER = 7;
+static const int GP_DEFAULT_PERCUSSION_CHANNEL = 9;
 
 static const int GP_INVALID_KEYSIG = 127;
 
