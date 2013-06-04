@@ -154,6 +154,7 @@ class ParsedChord {
       bool _parseable;
       bool _understandable;
       void configure(const ChordList*);
+      void correctXmlText(const QString& s = "");
       void addToken(QString, ChordTokenClass);
       };
 
