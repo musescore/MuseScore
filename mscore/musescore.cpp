@@ -699,7 +699,7 @@ MuseScore::MuseScore()
       for (const char* s : sl2)
             entryTools->addAction(getAction(s));
 
-      static const std::vector<const char*> sl4 {
+      static const char* sl4[] = {
             "appoggiatura", "acciaccatura", "grace4", "grace16", "grace32",
             "beam-start", "beam-mid", "no-beam", "beam32", "auto-beam",
             "show-invisible", "show-unprintable", "show-frames", "show-pageborders"
@@ -717,9 +717,9 @@ MuseScore::MuseScore()
             QAction* a = getAction(s);
             a->setCheckable(true);
             voiceGroup->addAction(a);
-            entryTools->addAction(getAction(s));
+            entryTools->addAction(a);
             }
-
+      connect(voiceGroup, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
       //---------------------
       //    Menus
       //---------------------
