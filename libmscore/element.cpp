@@ -672,8 +672,8 @@ bool Element::readProperties(XmlReader& e)
             _color = e.readColor();
       else if (tag == "visible")
             _visible = e.readInt();
-      else if (tag == "selected")
-            _selected = e.readInt();
+      else if (tag == "selected") // obsolete
+            e.readInt();
       else if (tag == "userOff")
             _userOff = e.readPoint();
       else if (tag == "lid") {
