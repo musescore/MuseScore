@@ -253,7 +253,7 @@ p, li { white-space: pre-wrap; }
         <Rest>
           <lid>178</lid>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration z="1" n="2"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -304,7 +304,7 @@ p, li { white-space: pre-wrap; }
         <Rest>
           <lid>179</lid>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration z="1" n="2"/>
           </Rest>
         </Measure>
       </Staff>
@@ -370,7 +370,7 @@ p, li { white-space: pre-wrap; }
         <Rest>
           <lid>180</lid>
           <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <duration z="1" n="2"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -595,7 +595,7 @@ p, li { white-space: pre-wrap; }
           <Rest>
             <lid>178</lid>
             <durationType>measure</durationType>
-            <duration z="2" n="4"/>
+            <duration z="1" n="2"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
@@ -646,7 +646,7 @@ p, li { white-space: pre-wrap; }
           <Rest>
             <lid>179</lid>
             <durationType>measure</durationType>
-            <duration z="2" n="4"/>
+            <duration z="1" n="2"/>
             </Rest>
           </Measure>
         </Staff>
@@ -823,7 +823,7 @@ p, li { white-space: pre-wrap; }
           <Rest>
             <lid>180</lid>
             <durationType>measure</durationType>
-            <duration z="2" n="4"/>
+            <duration z="1" n="2"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>

@@ -140,8 +140,8 @@ void Symbol::read(XmlReader& e)
                   image->read(e);
                   add(image);
                   }
-            else if (tag == "small" || tag == "subtype")
-                  ;
+            else if (tag == "small" || tag == "subtype")    // obsolete
+                  e.skipCurrentElement();
             else if (!BSymbol::readProperties(e))
                   e.unknown();
             }

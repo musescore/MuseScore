@@ -139,22 +139,29 @@ Tablature* InstrumentData::tablature() const
       }
 
 //---------------------------------------------------------
-//   write
+//   StaffNameDoc::write
+//---------------------------------------------------------
+
+void StaffNameDoc::write(Xml& xml, const char* tag) const
+      {
+      if (!name.isEmpty()) {
+            xml.stag(QString("%1 pos=\"%2\"").arg(tag).arg(pos));
+            xml.writeHtml(name.toHtml());
+            xml.etag();
+            }
+      }
+
+//---------------------------------------------------------
+//   InstrumentData::write
 //---------------------------------------------------------
 
 void InstrumentData::write(Xml& xml) const
       {
       xml.stag("Instrument");
-      foreach(const StaffNameDoc& doc, _longNames) {
-            xml.stag(QString("longName pos=\"%1\"").arg(doc.pos));
-            xml.writeHtml(doc.name.toHtml());
-            xml.etag();
-            }
-      foreach(const StaffNameDoc& doc, _shortNames) {
-            xml.stag(QString("shortName pos=\"%1\"").arg(doc.pos));
-            xml.writeHtml(doc.name.toHtml());
-            xml.etag();
-            }
+      foreach(const StaffNameDoc& doc, _longNames)
+            doc.write(xml, "longName");
+      foreach(const StaffNameDoc& doc, _shortNames)
+            doc.write(xml, "shortName");
       xml.tag("trackName", _trackName);
       if (_minPitchP > 0)
             xml.tag("minPitchP", _minPitchP);

@@ -603,7 +603,7 @@ p, li { white-space: pre-wrap; }
         <Rest>
           <lid>128</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration z="1" n="1"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -943,7 +943,7 @@ p, li { white-space: pre-wrap; }
         <Rest>
           <lid>129</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration z="1" n="1"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -1503,7 +1503,7 @@ p, li { white-space: pre-wrap; }
           <Rest>
             <lid>128</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
@@ -1953,7 +1953,7 @@ p, li { white-space: pre-wrap; }
           <Rest>
             <lid>129</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>

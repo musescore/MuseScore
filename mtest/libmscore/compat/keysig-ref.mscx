@@ -104,8 +104,6 @@ p, li { white-space: pre-wrap; }
           </Clef>
         <KeySig>
           <accidental>0</accidental>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -144,12 +142,6 @@ p, li { white-space: pre-wrap; }
       <Measure number="2">
         <KeySig>
           <accidental>1</accidental>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Chord>
           <durationType>quarter</durationType>
@@ -184,16 +176,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>2</accidental>
           <natural>1</natural>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Chord>
           <durationType>quarter</durationType>
@@ -228,28 +210,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>-3</accidental>
           <natural>2</natural>
-          <KeySym>
-            <sym>40</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <KeySym>
-            <sym>40</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="4" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="3" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="2" y="2"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Chord>
           <durationType>quarter</durationType>
