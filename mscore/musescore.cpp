@@ -718,7 +718,6 @@ MuseScore::MuseScore()
             entryTools->addAction(a);
             entryTools->addAction(getAction(s));
             }
-      connect(voiceGroup, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
 
       //---------------------
       //    Menus
