@@ -154,14 +154,15 @@ void EditStyle::buttonClicked(QAbstractButton* b)
 //---------------------------------------------------------
 
 void EditStyle::on_comboFBFont_currentIndexChanged(int index)
-{
-      qreal       size, lineHeight;
+      {
+      qreal size, lineHeight;
 
-      if(FiguredBass::fontData(index, 0, 0, &size, &lineHeight)) {
+      if (FiguredBass::fontData(index, 0, 0, &size, &lineHeight)) {
             doubleSpinFBSize->setValue(size);
             spinFBLineHeight->setValue((int)(lineHeight * 100.0));
+            }
       }
-}
+
 //---------------------------------------------------------
 //   apply
 //---------------------------------------------------------
@@ -171,8 +172,7 @@ void EditStyle::apply()
       getValues();
       cs->undo(new ChangeStyle(cs, lstyle));
       cs->setLayoutAll(true);
-      cs->end2();
-      cs->end();
+      cs->update();
       }
 
 //---------------------------------------------------------

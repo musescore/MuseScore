@@ -167,7 +167,7 @@ void System::layout(qreal xo1)
                         }
                   int span = lastStaff - firstStaff + 1;
                   //
-                  // do not show bracket, if it only spans one
+                  // do not show bracket if it only spans one
                   // system due to some invisible staves
                   //
                   if ((span > 1) || (s->bracketSpan(i) == span)) {
@@ -191,6 +191,7 @@ void System::layout(qreal xo1)
                               b->setBracketType(s->bracket(i));
                               b->setSpan(s->bracketSpan(i));
                               score()->undoAddElement(b);
+                              // add(b);
                               }
                         else {
                               _brackets.append(b);

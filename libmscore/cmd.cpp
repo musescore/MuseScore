@@ -113,8 +113,13 @@ void Score::endCmd()
             return;
             }
 
-      foreach(Score* s, scoreList())
-            s->end2();
+      foreach(Score* s, scoreList()) {
+            if (s->layoutAll()) {
+                  s->_updateAll  = true;
+                  s->doLayout();
+                  s->_layoutAll = false;
+                  }
+            }
 
       bool noUndo = undo()->current()->childCount() <= 1;
       if (!noUndo)
@@ -142,31 +147,14 @@ void Score::end()
 void Score::update()
       {
       foreach(Score* s, scoreList()) {
-            s->end2();
-            s->end1();
+            s->setUpdateAll(true);
+            s->doLayout();
+            foreach(MuseScoreView* v, viewer)
+                  v->updateAll();
+            s->setLayoutAll(false);
+            s->setUpdateAll(false);
+            s->refresh = QRectF();
             }
-      }
-
-//---------------------------------------------------------
-//   end2
-//---------------------------------------------------------
-
-void Score::end2()
-      {
-      bool _needLayout = false;
-      if (_layoutAll) {
-            _updateAll  = true;
-            _needLayout = true;
-            startLayout = 0;
-            }
-      else if (startLayout) {
-            _updateAll = true;
-            _needLayout = true;
-            }
-      if (_needLayout)
-            doLayout();
-      _layoutAll   = false;
-      startLayout = 0;
       }
 
 //---------------------------------------------------------
@@ -198,7 +186,7 @@ void Score::end1()
 void Score::endUndoRedo()
       {
       updateSelection();
-      foreach(Score* score, scoreList()) {
+      foreach (Score* score, scoreList()) {
             if (score->layoutAll()) {
                   score->setUndoRedo(true);
                   score->doLayout();
@@ -384,8 +372,7 @@ printf("add pitch %d add %d repitch %d\n", pitch, addFlag, _is.repitchMode());
                   return 0;
             Chord* chord = static_cast<Chord*>(_is.cr());
             Note* n = addNote(chord, pitch);
-            setLayoutAll(false);
-            setLayout(chord->measure());
+            setLayoutAll(true);
             moveToNextInputPos();
             return n;
             }
@@ -432,7 +419,7 @@ printf("add pitch %d add %d repitch %d\n", pitch, addFlag, _is.repitchMode());
             Segment* seg = setNoteRest(_is.segment(), track, nval, duration, stemDirection);
             if (seg) {
                   note = static_cast<Chord*>(seg->element(track))->upNote();
-                  setLayout(note->chord()->measure());
+                  setLayoutAll(true);
                   }
             }
 
@@ -500,7 +487,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
 
             undoAddElement(note);
             _playNote = true;
-            setLayout(on->chord()->measure());
+            setLayoutAll(true);
 
             select(note, SELECT_SINGLE, 0);
             _is.pitch = note->pitch();
@@ -682,7 +669,7 @@ qDebug("makeGap %s at %d track %d", qPrintable(_sd.print()), segment->tick(), tr
       assert(_sd.numerator());
 
       Measure* measure = segment->measure();
-      setLayout(measure);
+      setLayoutAll(true);
       Fraction akkumulated;
       Fraction sd = _sd;
 
