@@ -20,8 +20,10 @@ struct Controller {
       Node *LHRHPitchNote = nullptr;
       Node *quantValue = nullptr;
       Node *quantReduce = nullptr;
+      Node *quantHuman = nullptr;
 
-      bool updateNodesDependencies(Node *node, bool force_update);
+      int trackCount = 0;
+      bool updateNodeDependencies(Node *node, bool force_update);
       };
 
 OperationsModel::OperationsModel()
@@ -60,6 +62,15 @@ OperationsModel::OperationsModel()
       reduceToShorter->parent = quantValue;
       quantValue->children.push_back(std::unique_ptr<Node>(reduceToShorter));
       controller->quantReduce = reduceToShorter;
+
+
+      Node *humanPerformance = new Node;
+      humanPerformance->name = "Human performance";
+      humanPerformance->oper.type = MidiOperation::Type::QUANT_HUMAN;
+      humanPerformance->oper.value = Quantization().humanPerformance;
+      humanPerformance->parent = quantValue;
+      quantValue->children.push_back(std::unique_ptr<Node>(humanPerformance));
+      controller->quantHuman = humanPerformance;
 
 
       Node *useDots = new Node;
@@ -134,12 +145,17 @@ OperationsModel::OperationsModel()
       connect(this,
               SIGNAL(dataChanged(QModelIndex,QModelIndex)),
               SLOT(onDataChanged(QModelIndex)));
-      controller->updateNodesDependencies(nullptr, true);
+      controller->updateNodeDependencies(nullptr, true);
       endResetModel();
       }
 
 OperationsModel::~OperationsModel()
       {
+      }
+
+void OperationsModel::reset(int trackCount)
+      {
+      controller->trackCount = trackCount;
       }
 
 QModelIndex OperationsModel::index(int row, int column, const QModelIndex &parent) const
@@ -332,6 +348,8 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                         node->oper.value = (int)opers.opers.quantize.value; break;
                   case MidiOperation::Type::QUANT_REDUCE:
                         node->oper.value = opers.opers.quantize.reduceToShorterNotesInBar; break;
+                  case MidiOperation::Type::QUANT_HUMAN:
+                        node->oper.value = opers.opers.quantize.humanPerformance; break;
 
                   case MidiOperation::Type::DO_LHRH_SEPARATION:
                         node->oper.value = opers.opers.LHRH.doIt; break;
@@ -357,7 +375,7 @@ void OperationsModel::setTrackData(const QString &trackLabel, const DefinedTrack
       beginResetModel();
       for (const auto &nodePtr: root->children)
             setNodeOperations(nodePtr.get(), opers);
-      controller->updateNodesDependencies(nullptr, true);
+      controller->updateNodeDependencies(nullptr, true);
       endResetModel();
       }
 
@@ -366,7 +384,7 @@ void OperationsModel::onDataChanged(const QModelIndex &index)
       Node *node = nodeFromIndex(index);
       if (!node)
             return;
-      if (controller->updateNodesDependencies(node, false))
+      if (controller->updateNodeDependencies(node, false))
             layoutChanged();
       }
 
@@ -380,12 +398,12 @@ Node* OperationsModel::nodeFromIndex(const QModelIndex &index) const
 
 // Different controller actions, i.e. conditional visibility of node
 
-bool Controller::updateNodesDependencies(Node *node, bool force_update)
+bool Controller::updateNodeDependencies(Node *node, bool force_update)
       {
       bool result = false;
       if (!node && !force_update)
             return result;
-      if (force_update || (LHRHMethod && node == LHRHMethod)) {
+      if (LHRHMethod && (force_update || node == LHRHMethod)) {
             auto value = (MidiOperation::LHRHMethod)LHRHMethod->oper.value.toInt();
             switch (value) {
                   case MidiOperation::LHRHMethod::HAND_WIDTH:
@@ -404,20 +422,26 @@ bool Controller::updateNodesDependencies(Node *node, bool force_update)
                         break;
                   }
             }
-      if (force_update || (LHRHdoIt && node == LHRHdoIt)) {
+      if (LHRHdoIt && (force_update || node == LHRHdoIt)) {
             auto value = LHRHdoIt->oper.value.toBool();
             if (LHRHMethod)
                   LHRHMethod->visible = value;
             result = true;
             }
-      if (force_update || (quantValue && node == quantValue)) {
+      if (quantValue && (force_update || node == quantValue)) {
             auto value = (MidiOperation::QuantValue)quantValue->oper.value.toInt();
             if (quantReduce)
                   quantReduce->visible = (value != MidiOperation::QuantValue::SHORTEST_IN_BAR);
             result = true;
             }
-      // other nodes similar, if any
-      //
+      if (quantHuman) {
+            bool oneTrack = (trackCount == 1);
+            if (oneTrack != quantHuman->visible) {
+                  quantHuman->visible = oneTrack;
+                  result = true;
+                  }
+            }
+
       return result;
       }
 
