@@ -999,6 +999,12 @@ void Measure::add(Element* el)
                               score()->staff(track/VOICES)->setUpdateKeymap(true);
                               }
                         }
+
+                  // insert segment at specific position
+                  if (seg->next()) {
+                        _segments.insert(seg, seg->next());
+                        break;
+                        }
                   int t  = seg->tick();
                   Segment::SegmentType st = seg->segmentType();
                   Segment* s;

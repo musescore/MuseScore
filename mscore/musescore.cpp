@@ -3827,7 +3827,6 @@ void MuseScore::cmd(QAction* a)
 
 void MuseScore::endCmd()
       {
-      bool enableInput = false;
       if (cs) {
             if (cv->noteEntryMode())
                   cs->moveCursor();
@@ -3860,7 +3859,6 @@ void MuseScore::endCmd()
 
             if (e == 0 && cs->inputState().noteEntryMode)
                   e = cs->inputState().cr();
-            enableInput = e && (e->type() == Element::NOTE || e->isChordRest());
             cs->end();
             }
       else {
