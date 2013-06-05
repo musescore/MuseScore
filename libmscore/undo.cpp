@@ -457,23 +457,23 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                      st, clefTable[st].staffGroup, staff->staffType()->group());
                   continue;
                   }
-            Measure* measure = score->tick2measure(seg->tick());
+            int tick = seg->tick();
+            Measure* measure = score->tick2measure(tick);
             if (!measure) {
-                  qDebug("measure for tick %d not found!", seg->tick());
+                  qDebug("measure for tick %d not found!", tick);
                   continue;
                   }
 
             // move clef to last segment of prev measure?
             //    TODO: section break?
             Segment* segment = seg;
-            int tick = seg->tick();
             if (firstSeg
                && measure->prevMeasure()
                && !(measure->prevMeasure()->repeatFlags() & RepeatEnd)
                ) {
                   measure = measure->prevMeasure();
                   segment = measure->findSegment(seg->segmentType(), tick);
-                  if(!segment && (seg->segmentType() != Segment::SegClef))
+                  if (!segment && (seg->segmentType() != Segment::SegClef))
                         segment = measure->findSegment(Segment::SegClef, tick);
                   }
 
