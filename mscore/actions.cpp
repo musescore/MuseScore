@@ -1791,13 +1791,13 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Synthesizer")
          ),
       Shortcut(
-         STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
          A_CMD,
          "double-duration",
          QT_TRANSLATE_NOOP("action","Double duration")
          ),
       Shortcut(
-         STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
          A_CMD,
          "half-duration",
          QT_TRANSLATE_NOOP("action","Half duration")
