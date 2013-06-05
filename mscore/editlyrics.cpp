@@ -61,8 +61,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             ((Lyrics*)editObject)->moveCursorToStart();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -171,8 +170,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             ((Lyrics*)editObject)->moveCursorToStart();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -258,8 +256,7 @@ void ScoreView::lyricsMinus()
       ((Lyrics*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -348,8 +345,7 @@ void ScoreView::lyricsUnderscore()
       ((Lyrics*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -378,8 +374,7 @@ void ScoreView::lyricsReturn()
 
       adjustCanvasPosition(lyrics, false);
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------

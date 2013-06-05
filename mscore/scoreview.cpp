@@ -915,7 +915,8 @@ void ScoreView::setScore(Score* s)
       _foto->setScore(s);
       if (s) {
             s->setLayoutMode(LayoutPage);
-            s->doLayout();
+            s->setLayoutAll(true);
+            s->update();
             }
       }
 
@@ -2821,7 +2822,7 @@ void ScoreView::startNoteEntry()
 
       _score->select(el, SELECT_SINGLE, 0);
       _score->setInputState(el);
-      bool enable = el && (el->type() == Element::NOTE || el->type() == Element::REST);
+      // bool enable = el && (el->type() == Element::NOTE || el->type() == Element::REST);
 
       _score->inputState().noteEntryMode = true;
       _score->inputState().rest = false;
@@ -4263,8 +4264,7 @@ void ScoreView::harmonyTab(bool back)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -4362,8 +4362,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -4434,8 +4433,7 @@ void ScoreView::harmonyTicksTab(int ticks)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -4633,8 +4631,7 @@ void ScoreView::cmdAddChordName()
       startEdit(harmony);
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -5086,8 +5083,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
       _score->setLayoutAll(true);
-//      _score->end2();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
-//      _score->end1();                         //          "           "
+//      _score->update();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
       }
 
 //---------------------------------------------------------

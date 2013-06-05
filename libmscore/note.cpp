@@ -936,7 +936,7 @@ QRectF Note::drag(const EditData& data)
       bool tab = staff()->isTabStaff();
       qreal step = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
       _lineOffset = lrint(data.pos.y() / step);
-      score()->setLayout(chord()->measure());
+      score()->setLayoutAll(true);
       return bb.translated(chord()->pagePos());
       }
 

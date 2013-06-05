@@ -119,25 +119,25 @@ void Staff::cleanupBrackets()
       int index = idx();
       int n = _score->nstaves();
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket != NO_BRACKET) {
-                  int span = _brackets[i]._bracketSpan;
-                  if (span > (n - index)) {
-                        span = n - index;
-                        _brackets[i]._bracketSpan = span;
-                        }
+            if (_brackets[i]._bracket == NO_BRACKET)
+                  continue;
+            int span = _brackets[i]._bracketSpan;
+            if (span > (n - index)) {
+                  span = n - index;
+                  _brackets[i]._bracketSpan = span;
                   }
             }
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket != NO_BRACKET) {
-                  int span = _brackets[i]._bracketSpan;
-                  if (span <= 1)
-                        _brackets[i] = BracketItem();
-                  else {
-                        // delete all other brackets with same span
-                        for (int k = i + 1; k < _brackets.size(); ++k) {
-                              if (span == _brackets[k]._bracketSpan)
-                                    _brackets[k] = BracketItem();
-                              }
+            if (_brackets[i]._bracket == NO_BRACKET)
+                  continue;
+            int span = _brackets[i]._bracketSpan;
+            if (span <= 1)
+                  _brackets[i] = BracketItem();
+            else {
+                  // delete all other brackets with same span
+                  for (int k = i + 1; k < _brackets.size(); ++k) {
+                        if (span == _brackets[k]._bracketSpan)
+                              _brackets[k] = BracketItem();
                         }
                   }
             }
@@ -294,6 +294,7 @@ const Groups& Staff::group(int tick) const
       return Groups::endings(m->timesig());
       }
 
+#if 0
 //---------------------------------------------------------
 //   clefsGreater
 //---------------------------------------------------------
@@ -302,6 +303,7 @@ static bool clefsGreater(const Clef* a, const Clef* b)
       {
       return a->segment()->tick() < b->segment()->tick();
       }
+#endif
 
 //---------------------------------------------------------
 //   addClef
@@ -320,6 +322,7 @@ void Staff::addClef(Clef* clef)
       clefs[tick] = clef;
       }
 
+#if 0
 //---------------------------------------------------------
 //   timesigsGreater
 //---------------------------------------------------------
@@ -328,6 +331,7 @@ static bool timesigsGreater(const TimeSig* a, const TimeSig* b)
       {
       return a->segment()->tick() < b->segment()->tick();
       }
+#endif
 
 //---------------------------------------------------------
 //   addTimeSig

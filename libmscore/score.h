@@ -244,7 +244,6 @@ class Score : public QObject {
    private:
       int _linkId;
       Score* _parentScore;          // set if score is an excerpt (part)
-      QReadWriteLock _layoutLock;
       QList<MuseScoreView*> viewer;
 
       QString _mscoreVersion;
@@ -295,7 +294,6 @@ class Score : public QObject {
       //   determine what to layout and what to repaint:
 
       QRectF refresh;
-      Measure* startLayout;   ///< start a relayout at this measure
       LayoutFlags layoutFlags;
 
       bool _updateAll;
@@ -406,7 +404,6 @@ class Score : public QObject {
       void layoutStage2();
       void layoutStage3();
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
-      void reLayout(Measure*);
 
       void hideEmptyStaves(System* system, bool isFirstSystem);
 
@@ -560,7 +557,6 @@ class Score : public QObject {
       void endCmd();          // end undoable command
       void end();             // layout & update canvas
       void end1();
-      void end2();
       void update();
 
       void cmdRemoveTimeSig(TimeSig*);
@@ -692,8 +688,6 @@ class Score : public QObject {
 
       QList<Excerpt*>& excerpts()             { return _excerpts; }
       const QList<Excerpt*>& excerpts() const { return _excerpts; }
-
-      void setLayout(Measure* m);
 
       int midiPort(int idx) const;
       int midiChannel(int idx) const;
@@ -897,7 +891,6 @@ class Score : public QObject {
       LayoutMode layoutMode() const         { return _layoutMode; }
       void setLayoutMode(LayoutMode lm);
 
-      QReadWriteLock* layoutLock() { return &_layoutLock; }
       void doLayoutSystems();
       void doLayoutPages();
       Tuplet* searchTuplet(XmlReader& e, int id);

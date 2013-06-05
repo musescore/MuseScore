@@ -141,8 +141,7 @@ void TextStyleDialog::apply()
             else                                // style does not exist in score text styles yet
                   cs->undo(new AddTextStyle(cs, styles[listIdx]));
             }
-      cs->end2();
-      cs->end();
+      cs->update();
       }
 
 //---------------------------------------------------------
