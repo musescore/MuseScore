@@ -968,6 +968,15 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
             return;
       int track = cr->track();
       Tuplet* tuplet = cr->tuplet();
+
+            //keep selected note if any
+      Note* selNote = 0;
+      if(selection().isSingle()) {
+            Element* el = getSelectedElement();
+            if(el->type() == Element::NOTE)
+                  selNote = static_cast<Note*>(el);
+            }
+
       if (srcF > dstF) {
             //
             // make shorter and fill with rest
@@ -987,7 +996,10 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
 qDebug("  setRest at %d+%d, %d/%d",
    cr->tick(), cr->actualTicks(), (srcF-dstF).numerator(), (srcF-dstF).denominator());
             setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
-            select(cr, SELECT_SINGLE, 0);
+            if(!selNote)
+                  select(cr, SELECT_SINGLE, 0);
+            else
+                  select(selNote, SELECT_SINGLE, 0);
             return;
             }
 
@@ -1058,7 +1070,10 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
                                     oc = cc;
                                     }
                               if (oc && first) {
-                                    select(oc, SELECT_SINGLE, 0);
+                                    if(!selNote)
+                                          select(oc, SELECT_SINGLE, 0);
+                                    else
+                                          select(selNote, SELECT_SINGLE, 0);
                                     first = false;
                                     }
                               if (oc)
