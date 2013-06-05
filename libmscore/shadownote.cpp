@@ -57,8 +57,8 @@ void ShadowNote::draw(QPainter* painter) const
 
       qreal ms = spatium();
 
-      qreal x1 = sym->width(magS())*.5 - ms;
-      qreal x2 = x1 + 2 * ms;
+      qreal x1 = sym->width(magS())*.5 - (ms * mag());
+      qreal x2 = x1 + 2 * ms * mag();
 
       ms *= .5;
       if (_line < 100 && _line > -100 && !ps.rest) {
