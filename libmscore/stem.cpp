@@ -286,7 +286,7 @@ Element* Stem::drop(const DropData& data)
       switch(e->type()) {
             case TREMOLO:
                   e->setParent(ch);
-                  score()->setLayout(ch->measure());
+                  score()->setLayoutAll(true);
                   score()->undoAddElement(e);
                   return e;
             default:

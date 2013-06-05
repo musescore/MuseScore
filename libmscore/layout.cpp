@@ -540,9 +540,6 @@ void Score::layoutStage3()
 void Score::doLayout()
       {
 //      qDebug("doLayout");
-      {
-      QWriteLocker locker(&_layoutLock);
-
       int idx = _style.valueSt(ST_MusicalSymbolFont) == "Gonville" ? 1 : 0;
       if (idx != _symIdx) {
             _symIdx = idx;
@@ -665,7 +662,6 @@ void Score::doLayout()
 
       rebuildBspTree();
 
-      }     // unlock mutex
       int n = viewer.size();
       for (int i = 0; i < n; ++i)
             viewer.at(i)->layoutChanged();
@@ -1415,125 +1411,6 @@ void Score::remove(Element* el)
                   qDebug("Score::remove(): invalid element %s\n", el->name());
                   break;
             }
-      }
-
-//---------------------------------------------------------
-//   reLayout
-//---------------------------------------------------------
-
-void Score::reLayout(Measure* m)
-      {
-      startLayout = m;
-      }
-
-//---------------------------------------------------------
-//   doReLayout
-//    return true, if relayout was successful; if false
-//    a full layout must be done starting at "startLayout"
-//---------------------------------------------------------
-
-bool Score::doReLayout()
-      {
-#if 0
-#if 0
-      if (startLayout->type() == Element::MEASURE)
-            static_cast<Measure*>(startLayout)->layout0();
-#endif
-      System* system  = startLayout->system();
-      qreal sysWidth  = system->width();
-      qreal minWidth = system->leftMargin();
-
-      //
-      //  check if measures still fit in system
-      //
-      MeasureBase* m = 0;
-      foreach(m, system->measures()) {
-            qreal ww;
-            if (m->type() == HBOX)
-                  ww = point(static_cast<Box*>(m)->boxWidth());
-            else {            // MEASURE
-                  Measure* measure = static_cast<Measure*>(m);
-//TODOXX                  measure->layout0();
-//TODO            measure->layoutBeams1();
-
-                  measure->layoutX(1.0, true);
-                  ww      = measure->layoutWidth();
-                  qreal stretch = measure->userStretch() * styleD(ST_measureSpacing);
-
-                  ww *= stretch;
-                  if (ww < point(styleS(ST_minMeasureWidth)))
-                        ww = point(styleS(ST_minMeasureWidth));
-                  }
-            minWidth += ww;
-            }
-      if (minWidth > sysWidth)            // measure does not fit: do full layout
-            return false;
-
-      //
-      // check if another measure will fit into system
-      //
-      m = m->next();
-      if (m && m->type() == MEASURE) {
-            Measure* measure = static_cast<Measure*>(m);
-            measure->layoutX(1.0, true);
-            qreal ww      = measure->layoutWidth();
-            qreal stretch = measure->userStretch() * styleD(ST_measureSpacing);
-
-            ww *= stretch;
-            if (ww < point(styleS(ST_minMeasureWidth)))
-                  ww = point(styleS(ST_minMeasureWidth));
-            if ((minWidth + ww) <= sysWidth)    // if another measure fits, do full layout
-                  return false;
-            }
-      //
-      // stretch measures
-      //
-      minWidth    = system->leftMargin();
-      qreal totalWeight = 0.0;
-      foreach (MeasureBase* mb, system->measures()) {
-            if (mb->type() == HBOX)
-                  minWidth += point(static_cast<Box*>(mb)->boxWidth());
-            else {
-                  Measure* m   = static_cast<Measure*>(mb);
-                  minWidth    += m->layoutWidth();
-                  totalWeight += m->ticks() * m->userStretch();
-                  }
-            }
-
-      qreal rest = (sysWidth - minWidth) / totalWeight;
-
-      bool firstMeasure = true;
-      QPointF pos;
-      foreach(MeasureBase* mb, system->measures()) {
-            qreal ww = 0.0;
-            if (mb->type() == MEASURE) {
-                  if (firstMeasure) {
-                        pos.rx() += system->leftMargin();
-                        firstMeasure = false;
-                        }
-                  mb->setPos(pos);
-                  Measure* m   = static_cast<Measure*>(mb);
-                  qreal weight = m->ticks() * m->userStretch();
-                  ww           = m->layoutWidth() + rest * weight;
-                  m->layout(ww);
-                  }
-            else if (mb->type() == HBOX) {
-                  mb->setPos(pos);
-                  ww = point(static_cast<Box*>(mb)->boxWidth());
-                  mb->layout();
-                  }
-            pos.rx() += ww;
-            }
-
-      foreach(MeasureBase* mb, system->measures()) {
-            if (mb->type() == MEASURE)
-                  static_cast<Measure*>(mb)->layout2();
-            }
-
-      rebuildBspTree();
-      return true;
-#endif
-      return false;
       }
 
 //---------------------------------------------------------
@@ -2370,14 +2247,12 @@ void Score::layoutPage(const PageContext& pC, qreal d)
 
 void Score::doLayoutSystems()
       {
-      /*--*/ {
-            QWriteLocker locker(&_layoutLock);
-            foreach(System* system, _systems)
-                  system->layout2();
-            layoutPages();
-            rebuildBspTree();
-            _updateAll = true;
-            }
+      foreach(System* system, _systems)
+            system->layout2();
+      layoutPages();
+      rebuildBspTree();
+      _updateAll = true;
+
       foreach(MuseScoreView* v, viewer)
             v->layoutChanged();
       }
@@ -2389,12 +2264,9 @@ void Score::doLayoutSystems()
 
 void Score::doLayoutPages()
       {
-      /*--*/ {
-            QWriteLocker locker(&_layoutLock);
-            layoutPages();
-            rebuildBspTree();
-            _updateAll = true;
-            }
+      layoutPages();
+      rebuildBspTree();
+      _updateAll = true;
       foreach(MuseScoreView* v, viewer)
             v->layoutChanged();
       }

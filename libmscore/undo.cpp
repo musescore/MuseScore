@@ -437,6 +437,9 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
 
 //---------------------------------------------------------
 //   undoChangeClef
+//    change clef if seg contains a clef
+//    else
+//    create a clef before segment seg
 //---------------------------------------------------------
 
 void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
@@ -447,6 +450,8 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
             staffList = linkedStaves->staves();
       else
             staffList.append(ostaff);
+
+printf("undoChangeClef staves %d\n", staffList.size());
 
       bool firstSeg = seg->measure()->first() == seg;
 
@@ -466,7 +471,8 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
 
             // move clef to last segment of prev measure?
             //    TODO: section break?
-            Segment* segment = seg;
+            Segment* segment = measure->findSegment(seg->segmentType(), tick);
+
             if (firstSeg
                && measure->prevMeasure()
                && !(measure->prevMeasure()->repeatFlags() & RepeatEnd)
@@ -1741,7 +1747,6 @@ void ChangePitch::flip()
             Measure* measure = chord->segment()->measure();
             score->updateAccidentals(measure, chord->staffIdx());
             }
-      // score->setLayout(measure);
       score->setLayoutAll(true);
       }
 
@@ -2186,7 +2191,7 @@ void ChangeChordRestLen::flip()
             cr->setDuration(d.fraction());
             }
       d   = od;
-      cr->score()->setLayout(cr->measure());
+      cr->score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------

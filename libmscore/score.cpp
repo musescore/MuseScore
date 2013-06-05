@@ -296,7 +296,6 @@ void Score::init()
       _revisions      = new Revisions;
       _symIdx         = 0;
       _pageNumberOffset = 0;
-      startLayout     = 0;
       _undo           = new UndoStack();
       _repeatList     = new RepeatList(this);
       foreach (StaffType* st, Ms::staffTypes)
@@ -924,20 +923,6 @@ void Score::setInputTrack(int v)
       }
 
 //---------------------------------------------------------
-//   setLayout
-//---------------------------------------------------------
-
-void Score::setLayout(Measure* m)
-      {
-      if (m)
-            m->setDirty();
-      if (startLayout && startLayout != m)
-            setLayoutAll(true);
-      else
-            startLayout = m;
-      }
-
-//---------------------------------------------------------
 //   appendPart
 //---------------------------------------------------------
 
@@ -1374,10 +1359,8 @@ void Score::addElement(Element* element)
             static_cast<Segment*>(element->parent())->measure()->setDirty();
 
       Element::ElementType et = element->type();
-      if (et == Element::TREMOLO) {
-            Chord* chord = static_cast<Chord*>(element->parent());
-            setLayout(chord->measure());
-            }
+      if (et == Element::TREMOLO)
+            setLayoutAll(true);
 
       else if (et == Element::MEASURE
          || (et == Element::HBOX && element->parent()->type() != Element::VBOX)
@@ -1529,10 +1512,9 @@ void Score::removeElement(Element* element)
       // their parent is not static
 
       Element::ElementType et = element->type();
-      if (et == Element::TREMOLO) {
-            Chord* chord = static_cast<Chord*>(element->parent());
-            setLayout(chord->measure());
-            }
+      if (et == Element::TREMOLO)
+            setLayoutAll(true);
+
       else if (et == Element::MEASURE
          || (et == Element::HBOX && parent->type() != Element::VBOX)
          || et == Element::VBOX
@@ -2334,7 +2316,6 @@ void Score::splitStaff(int staffIdx, int splitPoint)
 
       rebuildMidiMapping();
       _instrumentsChanged = true;
-      startLayout = 0;
       doLayout();
 
       //

@@ -539,7 +539,7 @@ QRectF HBox::drag(const EditData& data)
 void HBox::endEditDrag()
       {
       score()->setLayoutAll(true);
-      score()->end2();
+      score()->update();
       }
 
 //---------------------------------------------------------
