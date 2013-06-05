@@ -930,11 +930,13 @@ void Score::cmdAddTie()
                   if (noteFound || note2)
                         break;
                   }
-            Tie* tie = new Tie(this);
-            tie->setStartNote(note);
-            tie->setEndNote(note2);
-            tie->setTrack(note->track());
-            undoAddElement(tie);
+            if(note2) {
+                  Tie* tie = new Tie(this);
+                  tie->setStartNote(note);
+                  tie->setEndNote(note2);
+                  tie->setTrack(note->track());
+                  undoAddElement(tie);
+                  }
             }
       endCmd();
       }
