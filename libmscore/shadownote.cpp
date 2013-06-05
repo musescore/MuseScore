@@ -63,11 +63,11 @@ void ShadowNote::draw(QPainter* painter) const
       ms *= .5;
       if (_line < 100 && _line > -100 && !ps.rest) {
             for (int i = -2; i >= _line; i -= 2) {
-                  qreal y = ms * (i - _line);
+                  qreal y = ms * mag() * (i - _line);
                   painter->drawLine(QLineF(x1, y, x2, y));
                   }
             for (int i = 10; i <= _line; i += 2) {
-                  qreal y = ms * (i - _line);
+                  qreal y = ms * mag() * (i - _line);
                   painter->drawLine(QLineF(x1, y, x2, y));
                   }
             }
