@@ -1435,16 +1435,14 @@ void Note::layout10(AccidentalState* as)
                         _accidental = 0;
                         }
                   }
-            if (tieBack())
-                  _line = tieBack()->startNote()->line();
-            else {
-                  //
-                  // calculate the real note line depending on clef
-                  //
-                  Staff* s = score()->staff(staffIdx() + chord()->staffMove());
-                  int tick = chord()->tick();
-                  _line    = relStep(_line, s->clef(tick));
-                  }
+
+            //
+            // calculate the real note line depending on clef
+            //
+            Staff* s = score()->staff(staffIdx() + chord()->staffMove());
+            int tick = chord()->tick();
+            _line    = relStep(_line, s->clef(tick));
+
             }
       }
 
