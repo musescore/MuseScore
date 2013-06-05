@@ -3616,9 +3616,7 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
                   switch(staffGroup) {
                         case PITCHED_STAFF:
                               if (note->tieBack()) {
-                                    int line = note->tieBack()->startNote()->line();
-                                    note->setLine(line);
-                                    if (note->accidental()) {
+                                    if (note->accidental() && note->tpc() == note->tieBack()->startNote()->tpc()) {
                                           // TODO: remove accidental only if note is not
                                           // on new system
                                           score()->undoRemoveElement(note->accidental());
