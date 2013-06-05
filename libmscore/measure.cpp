@@ -3622,8 +3622,7 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
                                           score()->undoRemoveElement(note->accidental());
                                           }
                                     }
-                              else
-                                    note->updateAccidental(tversatz);
+                              note->updateAccidental(tversatz);
                               break;
                         case PERCUSSION_STAFF:
                               {
