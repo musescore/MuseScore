@@ -171,6 +171,7 @@ void ImportMidiPanel::setMidiFile(const QString &file)
       if (isMidiFileExists) {
             QList<TrackMeta> tracksMeta(extractMidiTracksMeta(file));
             tracksModel->reset(tracksMeta);
+            operationsModel->reset(tracksMeta.size());
             ui->tableViewTracks->selectRow(0);
             }
       }
