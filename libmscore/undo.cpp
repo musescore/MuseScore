@@ -1049,7 +1049,10 @@ void Score::undoAddElement(Element* element)
                         ns2 = nm2 ? nm2->findSegment(s2->segmentType(), s2->tick()) : 0;
                         }
                   Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
-                  Chord* c2      = ns2 ? static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice())) : 0;
+                  int sm = 0;
+                  if (cr1->staffIdx() != cr2->staffIdx())
+                        sm = cr1->staffMove() + cr2->staffMove();
+                  Chord* c2      = ns2 ? static_cast<Chord*>(ns2->element((staffIdx + sm) * VOICES + cr2->voice())) : 0;
                   Note* nn1      = c1->findNote(n1->pitch());
                   Note* nn2      = c2 ? c2->findNote(n2->pitch()) : 0;
                   Tie* ntie      = static_cast<Tie*>(ne);
