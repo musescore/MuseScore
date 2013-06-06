@@ -155,6 +155,11 @@ static const PropertyData propertyList[] = {
       { P_LASSO_SIZE,          false, 0,               T_SIZE_MM   },
 
       { P_TIME_STRETCH,        false, 0,               T_REAL   },
+
+      { P_TIMESIG,             false, 0,               T_FRACTION },
+      { P_TIMESIG_GLOBAL,      false, 0,               T_FRACTION },
+
+
       { P_END,                 false, "",              T_INT    }
       };
 
@@ -188,7 +193,7 @@ const char* propertyName(P_ID id)
       }
 
 //---------------------------------------------------------
-// getProperty
+//    getProperty
 //---------------------------------------------------------
 
 QVariant getProperty(P_ID id, XmlReader& e)
@@ -273,6 +278,9 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   g.read(e);
                   return QVariant::fromValue(g);
                   }
+            case T_POINT_MM:
+            case T_SIZE_MM:
+                  return QVariant();
             }
       return QVariant();
       }

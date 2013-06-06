@@ -391,13 +391,16 @@ void Tuplet::layout()
             //
             // for beamed tuplets, center number on beam
             //
-            if (cr1->beam() && cr2->beam())
-                  x3 = xx1 + (xx2 - xx1) * .5;
-            else
-                  x3 = p1.x() + (p2.x() - p1.x()) * .5;
+            if (cr1->beam() && cr2->beam()) {
+                  qreal deltax = cr2->pagePos().x() - cr1->pagePos().x();
+                  x3 = xx1 + deltax * .5;
+                  }
+            else {
+                  qreal deltax = p2.x() - p1.x();
+                  x3 = p1.x() + deltax * .5;
+                  }
 
-            y3 = p1.y() + (p2.y() - p1.y()) * .5 - (l1 + l2) * (_isUp ? 1.0 : -1.0);
-
+            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - (l1 + l2) * (_isUp ? 1.0 : -1.0);
             numberWidth = _number->bbox().width();
             _number->setPos(QPointF(x3, y3) - ipos());
             }
