@@ -148,6 +148,9 @@ enum P_ID {
 
       P_TIME_STRETCH,
 
+      P_TIMESIG,
+      P_TIMESIG_GLOBAL,
+
       P_END
       };
 
