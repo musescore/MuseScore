@@ -212,17 +212,7 @@ void Articulation::read(XmlReader& e)
             else if (tag == "anchor")
                   _anchor = ArticulationAnchor(e.readInt());
             else if (tag == "direction") {
-                  MScore::Direction dir = MScore::AUTO;
-                  QString val = e.readElementText();
-                  if (val == "up")
-                        dir = MScore::UP;
-                  else if (val == "down")
-                        dir = MScore::DOWN;
-                  else if (val == "auto")
-                        dir = MScore::AUTO;
-                  else
-                        e.unknown();
-                  setDirection(dir);
+                  setProperty(P_DIRECTION, Ms::getProperty(P_DIRECTION, e));
                   }
             else if (tag == "timeStretch")
                   _timeStretch = e.readDouble();
@@ -240,16 +230,7 @@ void Articulation::write(Xml& xml) const
       xml.stag("Articulation");
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
-      switch(_direction) {
-            case MScore::UP:
-                  xml.tag("direction", QVariant("up"));
-                  break;
-            case MScore::DOWN:
-                  xml.tag("direction", QVariant("down"));
-                  break;
-            case MScore::AUTO:
-                  break;
-            }
+      writeProperty(xml, P_DIRECTION);
       if (_timeStretch != 1.0)
             xml.tag("timeStretch", _timeStretch);
       xml.tag("subtype", subtypeName());
