@@ -436,6 +436,8 @@ QVariant TimeSig::getProperty(P_ID propertyId) const
             case P_NUMERATOR_STRING:   return numeratorString();
             case P_DENOMINATOR_STRING: return denominatorString();
             case P_GROUPS:             return QVariant::fromValue(groups());
+            case P_TIMESIG:            return QVariant::fromValue(_sig);
+            case P_TIMESIG_GLOBAL:     return QVariant::fromValue(globalSig());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -460,6 +462,12 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
             case P_GROUPS:
                   setGroups(v.value<Groups>());
                   break;
+            case P_TIMESIG:
+                  setSig(v.value<Fraction>());
+                  break;
+            case P_TIMESIG_GLOBAL:
+                  setGlobalSig(v.value<Fraction>());
+                  break;
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;
@@ -480,6 +488,8 @@ QVariant TimeSig::propertyDefault(P_ID id) const
             case P_SHOW_COURTESY:      return true;
             case P_NUMERATOR_STRING:   return QString();
             case P_DENOMINATOR_STRING: return QString();
+            case P_TIMESIG:            return QVariant::fromValue(Fraction(4,4));
+            case P_TIMESIG_GLOBAL:     return QVariant::fromValue(Fraction(1,1));
             default:                   return Element::propertyDefault(id);
             }
       }

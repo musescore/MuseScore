@@ -67,14 +67,22 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             v = static_cast<Awl::ColorLabel*>(w)->color();
       else
             qFatal("not supported widget %s", w->metaObject()->className());
-      P_ID id  = ii.t;
-      P_TYPE t = propertyType(id);
-      if (t == T_POINT || t == T_SP_REAL)
-            v = v.toDouble() * inspector->element()->score()->spatium();
-      else if (t == T_TEMPO)
-            v = v.toDouble() / 60.0;
-      else if (t == T_POINT_MM || t == T_SIZE_MM)
-            v = v.toDouble() * MScore::DPMM;
+
+      switch(propertyType(ii.t)) {
+            case T_POINT:
+            case T_SP_REAL:
+                  v = v.toDouble() * inspector->element()->score()->spatium();
+                  break;
+            case T_TEMPO:
+                  v = v.toDouble() / 60.0;
+                  break;
+            case T_POINT_MM:
+            case T_SIZE_MM:
+                  v = v.toDouble() * MScore::DPMM;
+                  break;
+            default:
+                  break;
+            }
       return v;
       }
 
@@ -149,6 +157,11 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
             qreal v = ii.sv == 0 ? sz.x() : sz.y();
             return val.toDouble() == v;
             }
+      if (t == T_FRACTION) {
+            Fraction f = def.value<Fraction>();
+            int v = ii.sv == 0 ? f.numerator() : f.denominator();
+            return val.toInt() == v;
+            }
       return val == def;
       }
 
@@ -198,6 +211,13 @@ void InspectorBase::setElement()
                   else
                         val = QVariant(sz.y());
                   }
+            else if (pt == T_FRACTION) {
+                  Fraction f = val.value<Fraction>();
+                  if (ii.sv == 0)
+                        val = QVariant(f.numerator());
+                  else
+                        val = QVariant(f.denominator());
+                  }
 
             w->blockSignals(true);
             setValue(ii, val);
@@ -235,6 +255,13 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                               valuesAreDifferent = sz.x() != val.toDouble();
                         else
                               valuesAreDifferent = sz.y() != val.toDouble();
+                        }
+                  else if (pt == T_FRACTION) {
+                        Fraction f = e->getProperty(id).value<Fraction>();
+                        if (ii.sv == 0)
+                              valuesAreDifferent = f.numerator() != val.toInt();
+                        else
+                              valuesAreDifferent = f.denominator() != val.toInt();
                         }
                   else
                         valuesAreDifferent = e->getProperty(id) != val;
@@ -287,6 +314,24 @@ void InspectorBase::valueChanged(int idx)
                   else {
                         if (sz.y() != v)
                               score->undoChangeProperty(e, id, QVariant(QPointF(sz.x(), v)));
+                        }
+                  }
+            else if (pt == T_FRACTION) {
+                  int v      = val2.toInt();
+                  Fraction f = val1.value<Fraction>();
+                  if (ii.sv == 0) {
+                        if (f.numerator() != v) {
+                              QVariant va;
+                              va.setValue(Fraction(v, f.denominator()));
+                              score->undoChangeProperty(e, id, va);
+                              }
+                        }
+                  else {
+                        if (f.denominator() != v) {
+                              QVariant va;
+                              va.setValue(Fraction(f.numerator(), v));
+                              score->undoChangeProperty(e, id, va);
+                              }
                         }
                   }
             else {
