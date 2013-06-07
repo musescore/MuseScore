@@ -2088,11 +2088,16 @@ void Measure::read(XmlReader& e, int staffIdx)
                                     tremolo->setParent(pch);
                                     pch->setTremolo(tremolo);
                                     chord->setTremolo(0);
+                                    Fraction pts(timeStretch * pch->globalDuration());
+                                    int pcrticks = pch->noteType() != NOTE_NORMAL ? 0 : pts.ticks();
+                                    pch->setDuration(pcrticks / 2);
+                                    chord->setDuration(crticks / 2);
+                                    e.rtick() += crticks / 2;
                                     }
                               else {
                                     qDebug("tremolo: first note not found");
+                                    e.rtick() += crticks;
                                     }
-                              e.setTick(e.tick() + crticks / 2);
                               }
                         else {
                               tremolo->setParent(chord);
