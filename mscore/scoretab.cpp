@@ -97,7 +97,7 @@ QSplitter* ScoreTab::viewSplitter(int n) const
       Score* score = tsv->score;
       if (tsv->part) {
             QList<Excerpt*>& excerpts = score->excerpts();
-            if (!excerpts.isEmpty())
+            if (!excerpts.isEmpty() && ((tsv->part - 1) < excerpts.size()))
                   score = excerpts.at(tsv->part - 1)->score();
             }
 
@@ -227,6 +227,16 @@ void ScoreTab::updateExcerpts()
             return;
       Score* score = v->score()->rootScore();
       clearTab2();
+      //delete all scoreviews for parts, especially for the deleted ones
+      for (int i = 0; i < stack->count(); ++i) {
+            QSplitter* vs = static_cast<QSplitter*>(stack->widget(i));
+            ScoreView* sview = static_cast<ScoreView*>(vs->widget(0));
+            if (sview->score() != score && sview->score()->rootScore() == score) {
+                  stack->takeAt(i);
+                  delete sview;
+                  }
+            }
+
       QList<Excerpt*>& excerpts = score->excerpts();
       if (!excerpts.isEmpty()) {
             tab2->blockSignals(true);
