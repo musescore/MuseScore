@@ -119,6 +119,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setValues();
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
       connect(chordDescriptionFileButton, SIGNAL(clicked()), SLOT(selectChordDescriptionFile()));
+      connect(chordsStandard, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
+      connect(chordsJazz, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
+      connect(chordsCustom, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
 
       connect(hideEmptyStaves, SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
 
@@ -240,8 +243,13 @@ void EditStyle::getValues()
       lstyle.set(ST_genCourtesyKeysig,       genCourtesyKeysig->isChecked());
       lstyle.set(ST_genCourtesyClef,         genCourtesyClef->isChecked());
 
-      lstyle.set(ST_useGermanNoteNames,      useGermanNoteNames->isChecked());
-
+      if (chordsStandard->isChecked())
+            lstyle.set(ST_chordStyle, QString("std"));
+      else if (chordsJazz->isChecked())
+            lstyle.set(ST_chordStyle, QString("jazz"));
+      else
+            lstyle.set(ST_chordStyle, QString("custom"));
+      lstyle.set(ST_chordsXmlFile, chordsXmlFile->isChecked());
       if (lstyle.valueSt(ST_chordDescriptionFile) != chordDescriptionFile->text()) {
             ChordList* cl = new ChordList();
             if (lstyle.valueB(ST_chordsXmlFile))
@@ -250,6 +258,8 @@ void EditStyle::getValues()
             lstyle.setChordList(cl);
             lstyle.set(ST_chordDescriptionFile, chordDescriptionFile->text());
             }
+      lstyle.set(ST_useGermanNoteNames,      useGermanNoteNames->isChecked());
+
 
       lstyle.set(ST_concertPitch,            concertPitch->isChecked());
       lstyle.set(ST_createMultiMeasureRests, multiMeasureRests->isChecked());
@@ -466,9 +476,23 @@ void EditStyle::setValues()
       genCourtesyKeysig->setChecked(lstyle.valueB(ST_genCourtesyKeysig));
       genCourtesyClef->setChecked(lstyle.valueB(ST_genCourtesyClef));
 
-      useGermanNoteNames->setChecked(lstyle.valueB(ST_useGermanNoteNames));
       QString s(lstyle.valueSt(ST_chordDescriptionFile));
       chordDescriptionFile->setText(s);
+      chordsXmlFile->setChecked(lstyle.valueB(ST_chordsXmlFile));
+      QString cstyle(lstyle.valueSt(ST_chordStyle));
+      if (cstyle == "std") {
+            chordsStandard->setChecked(true);
+            chordDescriptionGroup->setEnabled(false);
+            }
+      else if (cstyle == "jazz") {
+            chordsJazz->setChecked(true);
+            chordDescriptionGroup->setEnabled(false);
+            }
+      else {
+            chordsCustom->setChecked(true);
+            chordDescriptionGroup->setEnabled(true);
+            }
+      useGermanNoteNames->setChecked(lstyle.valueB(ST_useGermanNoteNames));
       concertPitch->setChecked(lstyle.valueB(ST_concertPitch));
 
       multiMeasureRests->setChecked(lstyle.valueB(ST_createMultiMeasureRests));
@@ -626,6 +650,34 @@ void EditStyle::selectChordDescriptionFile()
       if (fn.isEmpty())
             return;
       chordDescriptionFile->setText(fn);
+      }
+
+//---------------------------------------------------------
+//   setChordStyle
+//---------------------------------------------------------
+
+void EditStyle::setChordStyle(bool checked)
+      {
+      if (!checked)
+            return;
+      if (chordsStandard->isChecked()) {
+            lstyle.set(ST_chordStyle, QString("std"));
+            chordDescriptionFile->setText("chords_std.xml");
+            lstyle.set(ST_chordsXmlFile, false);
+            chordsXmlFile->setChecked(false);
+            chordDescriptionGroup->setEnabled(false);
+            }
+      else if (chordsJazz->isChecked()) {
+            lstyle.set(ST_chordStyle, QString("jazz"));
+            chordDescriptionFile->setText("chords_jazz.xml");
+            lstyle.set(ST_chordsXmlFile, false);
+            chordsXmlFile->setChecked(false);
+            chordDescriptionGroup->setEnabled(false);
+            }
+      else {
+            lstyle.set(ST_chordStyle, QString("custom"));
+            chordDescriptionGroup->setEnabled(true);
+            }
       }
 
 //---------------------------------------------------------

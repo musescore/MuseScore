@@ -255,9 +255,8 @@ enum StyleIdx {
       ST_genCourtesyKeysig,
       ST_genCourtesyClef,
 
-      // 75
       ST_useGermanNoteNames,
-      //
+      ST_chordStyle,
       ST_chordsXmlFile,
       ST_chordDescriptionFile,
       ST_concertPitch,
@@ -269,7 +268,6 @@ enum StyleIdx {
       ST_stemDir1,
       ST_stemDir2,
 
-      // 84
       ST_stemDir3,
       ST_stemDir4,
       ST_gateTime,

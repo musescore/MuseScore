@@ -48,6 +48,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
    private slots:
       void selectChordDescriptionFile();
+      void setChordStyle(bool);
       void buttonClicked(QAbstractButton*);
       void editTextClicked(int id);
 

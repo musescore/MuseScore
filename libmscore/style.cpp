@@ -138,6 +138,7 @@ StyleType styleTypes[] = {
       StyleType("genCourtesyKeysig",       ST_BOOL),
       StyleType("genCourtesyClef",         ST_BOOL),
       StyleType("useGermanNoteNames",      ST_BOOL),
+      StyleType("chordStyle",              ST_STRING),
       StyleType("chordsXmlFile",           ST_BOOL),
       StyleType("chordDescriptionFile",    ST_STRING),
       StyleType("concertPitch",            ST_BOOL),            // display transposing instruments in concert pitch
@@ -530,8 +531,9 @@ StyleData::StyleData()
             StyleVal(ST_genCourtesyClef, true),
 
             StyleVal(ST_useGermanNoteNames, false),
-            StyleVal(ST_chordsXmlFile, true),
-            StyleVal(ST_chordDescriptionFile, QString("stdchords.xml")),
+            StyleVal(ST_chordStyle, QString("std")),
+            StyleVal(ST_chordsXmlFile, false),
+            StyleVal(ST_chordDescriptionFile, QString("chords_std.xml")),
             StyleVal(ST_concertPitch, false),
             StyleVal(ST_createMultiMeasureRests, false),
             StyleVal(ST_minEmptyMeasures, 2),
