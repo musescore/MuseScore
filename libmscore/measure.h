@@ -108,9 +108,6 @@ class Measure : public MeasureBase {
 
       QList<MStaff*>  staves;
 
-      Spanner* _spannerFor;
-      Spanner* _spannerBack;
-
       int    _no;             ///< Measure number, counting from zero
       int    _noOffset;       ///< Offset to measure number
       MeasureNumberMode _noMode;
@@ -295,13 +292,6 @@ class Measure : public MeasureBase {
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }
       QRectF staffabbox(int staffIdx) const;
-
-      Spanner* spannerFor() const    { return _spannerFor;        }
-      Spanner* spannerBack() const   { return _spannerBack;       }
-      void addSpannerBack(Spanner*);
-      bool removeSpannerBack(Spanner*);
-      void addSpannerFor(Spanner*);
-      bool removeSpannerFor(Spanner*);
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

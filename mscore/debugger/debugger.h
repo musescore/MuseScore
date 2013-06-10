@@ -52,6 +52,8 @@
 #include "ui_stem.h"
 #include "ui_box.h"
 #include "ui_harmony.h"
+#include "ui_spanner.h"
+#include "ui_system.h"
 
 #include "globals.h"
 #include "libmscore/element.h"
@@ -153,6 +155,7 @@ class ShowElementBase : public QWidget {
       ShowElementBase();
       virtual void setElement(Element*);
       Element* element() const { return el; }
+      QWidget* addWidget();
       };
 
 //---------------------------------------------------------
@@ -170,17 +173,6 @@ class ShowPageWidget : public ShowElementBase {
    public:
       ShowPageWidget();
       virtual void setElement(Element*);
-      };
-
-//---------------------------------------------------------
-//   ShowSystemWidget
-//---------------------------------------------------------
-
-class ShowSystemWidget : public ShowElementBase {
-      Q_OBJECT;
-
-   public:
-      ShowSystemWidget();
       };
 
 //---------------------------------------------------------
@@ -349,8 +341,7 @@ class HairpinView : public ShowElementBase {
       Ui::SpannerBase sp;
 
    private slots:
-      void startClicked();
-      void endClicked();
+      void elementClicked(QTreeWidgetItem* item);
 
    public:
       HairpinView();
@@ -441,11 +432,10 @@ class SlurView : public ShowElementBase {
 
       Ui::SlurTieBase st;
       Ui::SlurBase sb;
+      Ui::SpannerBase sp;
 
    private slots:
       void segmentClicked(QTreeWidgetItem* item);
-      void startClicked();
-      void endClicked();
 
    public:
       SlurView();
@@ -462,9 +452,6 @@ class TieView : public ShowElementBase {
       Ui::SlurTieBase st;
 
    private slots:
-      void segmentClicked(QTreeWidgetItem* item);
-      void startClicked();
-      void endClicked();
 
    public:
       TieView();
@@ -729,6 +716,22 @@ class BoxView : public ShowElementBase {
       virtual void setElement(Element*);
       };
 
+//---------------------------------------------------------
+//   SystemView
+//---------------------------------------------------------
+
+class SystemView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::SystemBase mb;
+
+   private slots:
+      void elementClicked(QTreeWidgetItem* item);
+
+   public:
+      SystemView();
+      virtual void setElement(Element*);
+      };
 
 } // namespace Ms
 #endif

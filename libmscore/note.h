@@ -171,8 +171,8 @@ class Note : public Element {
       NoteEventList _playEvents;
 
       int _lineOffset;        ///< Used during mouse dragging.
-      Spanner* _spannerFor;
-      Spanner* _spannerBack;
+      QList<Spanner*> _spannerFor;
+      QList<Spanner*> _spannerBack;
 
       virtual QRectF drag(const EditData& s);
       void endDrag();
@@ -303,13 +303,13 @@ class Note : public Element {
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
       void setPlayEvents(const NoteEventList& l) { _playEvents = l;    }
 
-      Spanner* spannerFor() const                { return _spannerFor;         }
-      Spanner* spannerBack() const               { return _spannerBack;        }
+      QList<Spanner*> spannerFor() const         { return _spannerFor;         }
+      QList<Spanner*> spannerBack() const        { return _spannerBack;        }
 
-      void addSpannerBack(Spanner* e);
-      bool removeSpannerBack(Spanner* e);
-      void addSpannerFor(Spanner* e);
-      bool removeSpannerFor(Spanner* e);
+      void addSpannerBack(Spanner* e)            { _spannerBack.push_back(e);  }
+      bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
+      void addSpannerFor(Spanner* e)             { _spannerFor.push_back(e);         }
+      bool removeSpannerFor(Spanner* e)          { return _spannerFor.removeOne(e);  }
 
       void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
@@ -332,8 +332,9 @@ class Note : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
 
-      bool mark() const             { return _mark;   }
-      void setMark(bool v) const    { _mark = v;   }
+      bool mark() const               { return _mark;   }
+      void setMark(bool v) const      { _mark = v;   }
+      virtual void setScore(Score* s);
       };
 
 extern Sym* noteHeadSym(bool up, int group, int n);

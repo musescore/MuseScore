@@ -2451,6 +2451,7 @@ int ExportLy::findSlur(const Slur* s) const
 
 void ExportLy::doSlurStart(Chord* chord, bool nextisrest)
 {
+#if 0 // TODO-S
   int slurcount=0;
   for(const Spanner* sp = chord->spannerFor(); sp; sp = sp->next())
     {
@@ -2509,6 +2510,8 @@ void ExportLy::doSlurStart(Chord* chord, bool nextisrest)
 	    qDebug("no free slur slot");
 	}
     }
+#endif
+
 }
 
 
@@ -2518,7 +2521,7 @@ void ExportLy::doSlurStart(Chord* chord, bool nextisrest)
 //-------------------------------------------
 void ExportLy::doSlurStop(Chord* chord)
 {
-
+#if 0 // TODO-S
   for(const Spanner* sp = chord->spannerBack(); sp; sp = sp->next())
     {
     if (sp->type() != Element::SLUR)
@@ -2547,29 +2550,26 @@ void ExportLy::doSlurStop(Chord* chord)
 	    qDebug("no free slur slot");
 	}
     }
-
-  for (int i = 0; i < 8; ++i)
-    {
-      if (slurre[i])
-	{
-	  if  (slurre[i]->endElement() == chord)
-	    {
-	      if (started[i])
-		{
-		  slurre[i] = 0;
-		  started[i] = false;
-		  if (phraseslur == slurstack)
-		    {
-		      out << "\\";
-		      phraseslur = 0;
-		    }
-		  slurstack--;
-		  out << ")"; //why do we never end here?!
-		}
-	    }
-	}
-    }
-}
+#endif
+      for (int i = 0; i < 8; ++i) {
+            if (slurre[i]) {
+#if 0 // TODO-S
+                  if  (slurre[i]->endElement() == chord) {
+                        if (started[i]) {
+                              slurre[i] = 0;
+                              started[i] = false;
+                              if (phraseslur == slurstack) {
+                                    out << "\\";
+     	                              phraseslur = 0;
+     	                              }
+                              slurstack--;
+                              out << ")"; //why do we never end here?!
+                              }
+                        }
+#endif
+	            }
+            }
+      }
 
 //-------------------------
 // checkSlur

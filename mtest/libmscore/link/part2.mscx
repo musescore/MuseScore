@@ -278,7 +278,6 @@ p, li { white-space: pre-wrap; }
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="start" number="3"/>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -298,9 +297,9 @@ p, li { white-space: pre-wrap; }
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <endSpanner id="3"/>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="stop" number="3"/>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>

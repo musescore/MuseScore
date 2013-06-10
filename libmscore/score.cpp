@@ -201,11 +201,13 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
                   for (Segment* s = m->first(st); s; s = s->next(st)) {
                         foreach(Element* e, s->elist()) {
                               if (e) {
+#if 0 // TODO-S
                                     ChordRest* cr = static_cast<ChordRest*>(e);
                                     for (Spanner* s = cr->spannerFor(); s; s = s->next())
                                           s->setStartElement(cr);
                                     for (Spanner* s = cr->spannerBack(); s; s = s->next())
                                           s->setEndElement(cr);
+#endif
                                     }
                               }
                         }
@@ -1361,7 +1363,6 @@ void Score::addElement(Element* element)
       Element::ElementType et = element->type();
       if (et == Element::TREMOLO)
             setLayoutAll(true);
-
       else if (et == Element::MEASURE
          || (et == Element::HBOX && element->parent()->type() != Element::VBOX)
          || et == Element::VBOX
@@ -1386,7 +1387,6 @@ void Score::addElement(Element* element)
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
                   foreach(SpannerSegment* ss, spanner->spannerSegments()) {
-                        Q_ASSERT(ss->spanner() == spanner);
                         if (ss->system())
                               ss->system()->add(ss);
                         }
@@ -1396,19 +1396,15 @@ void Score::addElement(Element* element)
             case Element::SLUR:
                   {
                   Slur* slur = static_cast<Slur*>(element);
-                  foreach(SpannerSegment* ss, slur->spannerSegments()) {
-                        Q_ASSERT(ss->spanner() == slur);
+                  foreach (SpannerSegment* ss, slur->spannerSegments()) {
                         if (ss->system())
                               ss->system()->add(ss);
                         }
-                  if (slur->startElement())
-                        static_cast<ChordRest*>(slur->startElement())->addSlurFor(slur);
-                  if (slur->endElement())
-                        static_cast<ChordRest*>(slur->endElement())->addSlurBack(slur);
                   }
                   addLayoutFlags(LAYOUT_PLAY_EVENTS);
                   break;
 
+#if 0 // TODO-S
             case Element::OTTAVA:
                   {
                   Ottava* o = static_cast<Ottava*>(element);
@@ -1429,7 +1425,7 @@ void Score::addElement(Element* element)
                   _playlistDirty = true;
                   }
                   break;
-
+#endif
             case Element::DYNAMIC:
                   layoutFlags |= LAYOUT_FIX_PITCH_VELO;
                   _playlistDirty = true;
@@ -1543,12 +1539,12 @@ void Score::removeElement(Element* element)
                         if (ss->system())
                               ss->system()->remove(ss);
                         }
-                  static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
-                  static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
+                  _spanner.removeOne(slur);
                   }
                   addLayoutFlags(LAYOUT_PLAY_EVENTS);
                   break;
 
+#if 0 // TODO-S
             case Element::VOLTA:
             case Element::TRILL:
             case Element::PEDAL:
@@ -1580,7 +1576,7 @@ void Score::removeElement(Element* element)
                   _playlistDirty = true;
                   }
                   break;
-
+#endif
             case Element::DYNAMIC:
                   layoutFlags |= LAYOUT_FIX_PITCH_VELO;
                   _playlistDirty = true;
@@ -2025,42 +2021,6 @@ void Score::removeExcerpt(Score* score)
                   }
             }
       qDebug("Score::removeExcerpt: excerpt not found\n");
-      }
-
-//---------------------------------------------------------
-//   findSpanner
-//---------------------------------------------------------
-
-Spanner* Score::findSpanner(int id) const
-      {
-      static const Segment::SegmentTypes st = Segment::SegChordRest;
-      for (Segment* s = firstMeasure()->first(st); s; s = s->next1(st)) {
-            for(Spanner* e = s->spannerFor(); e; e = e->next()) {
-                  if (e->id() == id)
-                        return e;
-                  }
-            int tracks = _staves.size() * VOICES;
-            for (int track = 0; track < tracks; ++track) {
-                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                  if (cr && cr->type() == Element::CHORD) {
-                        Chord* c = static_cast<Chord*>(cr);
-                        foreach(const Note* note, c->notes()) {
-                              for(Spanner* e = note->spannerFor(); e; e = e->next()) {
-                                    if (e->id() == id)
-                                          return e;
-                                    }
-                              }
-                        }
-                  }
-            }
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for(Spanner* e = m->spannerFor(); e; e = e->next()) {
-                  if (e->id() == id)
-                        return e;
-                  }
-            }
-      qDebug("Score::findSpanner(%d): not found", id);
-      return 0;
       }
 
 //---------------------------------------------------------
@@ -3428,6 +3388,37 @@ void Score::addText(const QString& type, const QString& txt)
 Cursor* Score::newCursor()
       {
       return new Cursor(this);
+      }
+
+//---------------------------------------------------------
+//   findSpanner
+//---------------------------------------------------------
+
+Spanner* Score::findSpanner(int id) const
+      {
+      int n = _spanner.size();
+      for (int i = n-1; i >= 0; --i) {
+            if (_spanner.at(i)->id() == id)
+                  return _spanner.at(i);
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   isSpannerStartEnd
+//    does is spanner start or end at tick position tick
+//    for track ?
+//---------------------------------------------------------
+
+bool Score::isSpannerStartEnd(int tick, int track) const
+      {
+      foreach (Spanner* s, _spanner) {
+            if (s->track() != track)
+                  continue;
+            if (s->tick() == tick || s->tick2() == tick)
+                  return true;
+            }
+      return false;
       }
 
 }

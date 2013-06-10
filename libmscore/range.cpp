@@ -47,8 +47,6 @@ TrackList::~TrackList()
             Element* e = at(i);
             if (e->isChordRest()) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
-                  for (Spanner* sp = cr->spannerFor(); sp; sp = sp->next())
-                        delete sp;
                   foreach(Element* el, cr->annotations())
                         delete el;
                   delete e;
@@ -69,6 +67,7 @@ TrackList::~TrackList()
 void TrackList::readSpanner(int track, Spanner* spannerFor, Spanner* spannerBack,
    ChordRest* dst, QHash<Spanner*,Spanner*>* map)
       {
+#if 0 // TODO-S
       for (Spanner* oldSpanner = spannerFor; oldSpanner; oldSpanner = oldSpanner->next()) {
             if (track != -1 && oldSpanner->track() != track)
                   continue;
@@ -105,6 +104,7 @@ void TrackList::readSpanner(int track, Spanner* spannerFor, Spanner* spannerBack
                         }
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -114,6 +114,7 @@ void TrackList::readSpanner(int track, Spanner* spannerFor, Spanner* spannerBack
 void TrackList::writeSpanner(int track, ChordRest* src, ChordRest* dst,
    Segment* segment, QHash<Spanner*, Spanner*>* map) const
       {
+#if 0 // TODO-S
       for (Spanner* oldSpanner = src->spannerFor(); oldSpanner; oldSpanner = oldSpanner->next()) {
             Spanner* newSpanner = static_cast<Spanner*>(oldSpanner->clone());
             newSpanner->setTrack(track);
@@ -167,6 +168,7 @@ void TrackList::writeSpanner(int track, ChordRest* src, ChordRest* dst,
                         }
                   }
             }
+#endif
       foreach(Element* e, src->annotations()) {
             Element* element = e->clone();
             element->setTrack(track);
@@ -190,14 +192,15 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
                && back()->type() == Element::REST;
             Segment* s = accumulateRest ? static_cast<Rest*>(e)->segment() : 0;
 
-            if (s && !s->spannerFor() && !s->spannerBack()) {
+            if (s && !s->score()->isSpannerStartEnd(s->tick(), e->track())) {
                   // akkumulate rests
                   Rest* rest = static_cast<Rest*>(back());
                   Fraction d = rest->duration();
                   d += static_cast<Rest*>(e)->duration();
                   rest->setDuration(d);
                   }
-            else {
+            else
+                  {
                   Element* element = e->clone();
                   QList<Element*>::append(element);
                   if (e->type() == Element::TUPLET) {
@@ -210,10 +213,11 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
                   else {
                         ChordRest* src = static_cast<ChordRest*>(e);
                         ChordRest* dst = static_cast<ChordRest*>(element);
-
+#if 0 // TODO-S
                         readSpanner(-1, src->spannerFor(), src->spannerBack(), dst, map);
                         Segment* s = src->segment();
                         readSpanner(src->track(), s->spannerFor(), s->spannerBack(), dst, map);
+#endif
                         foreach(Element* ee, src->segment()->annotations()) {
                               if (ee->track() == e->track())
                                     dst->annotations().append(ee->clone());
@@ -400,6 +404,19 @@ bool TrackList::canWrite(const Fraction& measureLen) const
                   }
             }
       return true;
+      }
+
+void TrackList::dump() const
+      {
+      printf("TrackList: elements %d, duration %d/%d\n", size(), _duration.numerator(), _duration.denominator());
+      for (int i = 0; i < size(); ++i) {
+            Element* e = at(i);
+            printf("   %s\n", e->name());
+            if (e->isDurationElement()) {
+                  Fraction d = static_cast<DurationElement*>(e)->duration();
+                  printf("     duration %d/%d\n", d.numerator(), d.denominator());
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -623,7 +640,7 @@ void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrac
       if (!spannerMap.isEmpty()) {
             qDebug("ScoreRange::read(): dangling Spanner");
             foreach(Spanner* s, spannerMap)
-                  qDebug("  <%s> end %p", s->name(), s->endElement());
+                  qDebug("  <%s>", s->name());
             }
 #endif
       }

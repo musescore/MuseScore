@@ -1923,17 +1923,15 @@ void GuitarPro4::read(QFile* fp)
                               Slur* slur = new Slur(score);
                               slur->setParent(0);
                               slur->setTrack(staffIdx * VOICES);
-                              slur->setStartElement(cr);
-                              slur->setEndElement(cr);
+                              slur->setTick(cr->tick());
+                              slur->setTick2(cr->tick());
                               slurs[staffIdx] = slur;
                               }
                         else if (slurs[staffIdx] && !hasSlur) {
                               // TODO: check slur
                               Slur* s = slurs[staffIdx];
                               slurs[staffIdx] = 0;
-                              s->setEndElement(cr);
-                              static_cast<Chord*>(s->startElement())->addSlurFor(s);
-                              static_cast<Chord*>(s->endElement())->addSlurBack(s);
+                              s->setTick2(cr->tick());
                               }
                         else if (slurs[staffIdx] && hasSlur) {
                               }

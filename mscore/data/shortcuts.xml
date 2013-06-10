@@ -374,7 +374,7 @@
     </SC>
   <SC>
     <key>add-hairpin</key>
-    <seq>Ctrl+H</seq>
+    <seq>H</seq>
     </SC>
   <SC>
     <key>add-hairpin-reverse</key>

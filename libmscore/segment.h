@@ -90,17 +90,12 @@ class Segment : public Element {
       Spatium _extraTrailingSpace;
       QList<qreal>   _dotPosX;     ///< size = staves
 
-      Spanner* _spannerFor;
-      Spanner* _spannerBack;
-
       std::vector<Element*> _annotations;
 
       QList<Element*> _elist;      ///< Element storage, size = staves * VOICES.
 
       void init();
       void checkEmpty() const;
-      void addSpanner(Spanner*);
-      void removeSpanner(Spanner*);
 
    public:
       Segment(Measure* m = 0);
@@ -167,17 +162,9 @@ class Segment : public Element {
 
       bool splitsTuplet() const;
 
-      Spanner* spannerFor() const                { return _spannerFor;         }
-      Spanner* spannerBack() const               { return _spannerBack;        }
-      void addSpannerBack(Spanner* e);
-      bool removeSpannerBack(Spanner* e);
-      void addSpannerFor(Spanner* e);
-      bool removeSpannerFor(Spanner* e);
-
       const std::vector<Element*>& annotations() const { return _annotations;        }
       void removeAnnotation(Element* e);
       bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
-
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
       void setDotPosX(int staffIdx, qreal val)   { _dotPosX[staffIdx] = val;   }

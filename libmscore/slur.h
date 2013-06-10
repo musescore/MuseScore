@@ -107,10 +107,10 @@ class SlurSegment : public SpannerSegment {
 
 class SlurTie : public Spanner {
       Q_OBJECT
-      Q_PROPERTY(int lineType            READ lineType WRITE undoSetLineType)
+      Q_PROPERTY(int lineType                        READ lineType WRITE undoSetLineType)
       Q_PROPERTY(Ms::MScore::Direction slurDirection READ slurDirection WRITE undoSetSlurDirection)
 
-      int _lineType;          // 0 = solid, 1 = dotted, 2 = dashed
+      int _lineType;    // 0 = solid, 1 = dotted, 2 = dashed
 
    protected:
       bool _up;               // actual direction
@@ -156,13 +156,14 @@ class SlurTie : public Spanner {
 
 //---------------------------------------------------------
 //   @@ Slur
-///   slurs have Chord's as startElement/endElement
 //---------------------------------------------------------
 
 class Slur : public SlurTie {
       Q_OBJECT
 
-      int _track2; // obsolete used temporarily for reading old version
+   protected:
+      ChordRest* cr1;
+      ChordRest* cr2;
 
    public:
       Slur(Score* = 0);
@@ -175,17 +176,7 @@ class Slur : public SlurTie {
       virtual void setTrack(int val);
       virtual void slurPos(SlurPos*);
       virtual void computeBezier(SlurSegment*, QPointF so = QPointF());
-
-      int track2() const        { return _track2; }
-      int staffIdx2() const     { return _track2 / VOICES; }
-      void setTrack2(int val)   { _track2 = val; }
-
-      Chord* startChord() const { return (Chord*)startElement(); }
-      Chord* endChord() const   { return (Chord*)endElement();   }
-
-      // obsolete:
-      void setStart(int /*tick*/, int /*track*/) {}
-      void setEnd(int /*tick*/,   int /*track*/) {}
+      friend SlurSegment;
       };
 
 //---------------------------------------------------------
@@ -196,14 +187,17 @@ class Slur : public SlurTie {
 class Tie : public SlurTie {
       Q_OBJECT
 
+      Note* _startNote;
+      Note* _endNote;
+
    public:
       Tie(Score* = 0);
-      virtual Tie* clone() const          { return new Tie(*this);        }
-      virtual ElementType type() const    { return TIE;                   }
+      virtual Tie* clone() const          { return new Tie(*this);  }
+      virtual ElementType type() const    { return TIE;             }
       void setStartNote(Note* note);
-      void setEndNote(Note* note)         { setEndElement((Element*)note); }
-      Note* startNote() const             { return (Note*)startElement(); }
-      Note* endNote() const               { return (Note*)endElement();   }
+      void setEndNote(Note* note)         { _endNote = note;        }
+      Note* startNote() const             { return _startNote;      }
+      Note* endNote() const               { return _endNote;        }
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       virtual void layout();

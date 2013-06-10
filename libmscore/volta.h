@@ -87,10 +87,6 @@ class Volta : public TextLine {
       VoltaType voltaType() const            { return _voltaType; }
 
       bool hasEnding(int repeat) const;
-      Measure* startMeasure() const    { return (Measure*)startElement(); }
-      Measure* endMeasure() const      { return (Measure*)endElement(); }
-      void setStartMeasure(Measure* m) { setStartElement((Element*)m); }
-      void setEndMeasure(Measure* m)   { setEndElement((Element*)m);   }
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

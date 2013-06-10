@@ -161,7 +161,7 @@ void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
             return;
             }
       slur[idx] = new Slur(score);
-      slur[idx]->setStart(tick, staffIdx * VOICES + voice);
+      slur[idx]->setTick(tick);
       slur[idx]->setTrack(staffIdx * VOICES + voice);
       score->add(slur[idx]);
       }
@@ -173,7 +173,7 @@ void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
 void MuseData::closeSlur(int idx, int tick, Staff* staff, int voice)
       {
       if (slur[idx]) {
-            slur[idx]->setEnd(tick, staff->idx() * VOICES + voice);
+            slur[idx]->setTickLen(tick - slur[idx]->tick());
             slur[idx] = 0;
             }
       else

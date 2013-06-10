@@ -307,6 +307,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               }
                         }
                   }
+#if 0 // TODO-S
             for(Spanner* e = s->spannerFor(); e; e = e->next()) {
                   if (e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
                         continue;
@@ -329,6 +330,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         events->insert(std::pair<int,NPlayEvent>(s2->tick() + tickOffset - 1, event));
                         }
                   }
+#endif
             }
       }
 
@@ -366,6 +368,7 @@ void Score::updateRepeatList(bool expandRepeats)
 
 void Score::updateHairpin(Hairpin* h)
       {
+#if 0 // TODO-S
       Staff* st = h->staff();
       int tick  = h->segment()->tick();
       int velo  = st->velocities().velo(tick);
@@ -411,6 +414,7 @@ void Score::updateHairpin(Hairpin* h)
                         }
                   break;
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -419,6 +423,7 @@ void Score::updateHairpin(Hairpin* h)
 
 void Score::removeHairpin(Hairpin* h)
       {
+#if 0 // TODO-S
       Staff* st = h->staff();
       int tick  = h->segment()->tick();
       Segment* es = static_cast<Segment*>(h->endElement());
@@ -444,6 +449,7 @@ void Score::removeHairpin(Hairpin* h)
                         }
                   break;
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -497,14 +503,6 @@ void Score::updateVelo()
                                     break;
                               }
                         }
-                  for (Spanner* e = s->spannerFor(); e; e = e->next()) {
-                        if (e->staffIdx() != staffIdx)
-                              continue;
-                        if (e->type() == Element::HAIRPIN) {
-                              Hairpin* h = static_cast<Hairpin*>(e);
-                              updateHairpin(h);
-                              }
-                        }
                   }
             }
       }
@@ -551,6 +549,7 @@ static int gateTime(Chord* chord)
                   ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
                   if (cr == 0)
                         continue;
+#if 0 // TODO-S
                   for (Spanner* spanner = cr->spannerFor(); spanner; spanner = spanner->next()) {
                         if (spanner->type() == Element::SLUR)
                               slurs.append(static_cast<Slur*>(spanner));
@@ -559,6 +558,7 @@ static int gateTime(Chord* chord)
                         if (spanner->type() == Element::SLUR)
                               slurs.removeOne(static_cast<Slur*>(spanner));
                         }
+#endif
                   if (cr == chord) {
                         if (slurs.isEmpty()) {
                               Instrument* instr = cr->staff()->part()->instr(seg->tick());
@@ -803,6 +803,7 @@ static void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
             ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
             if (cr == 0)
                   continue;
+#if 0 //TODO-S
             for (Spanner* spanner = cr->spannerFor(); spanner; spanner = spanner->next()) {
                   if (spanner->type() == Element::SLUR)
                         slurs->append(static_cast<Slur*>(spanner));
@@ -811,6 +812,7 @@ static void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
                   if (spanner->type() == Element::SLUR)
                         slurs->removeOne(static_cast<Slur*>(spanner));
                   }
+#endif
             if (cr->type() != Element::CHORD)
                   continue;
             Chord* chord = static_cast<Chord*>(cr);
