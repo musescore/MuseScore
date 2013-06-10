@@ -1197,39 +1197,42 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
 
 const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
       {
-      if (_renderList.isEmpty()) {
-            foreach (ChordToken tok, _tokenList) {
-                  QString n = tok.names.first();
-                  QList<RenderAction> rl;
-                  QList<ChordToken> definedTokens;
-                  bool found = false;
-                  // potential definitions for token
-                  foreach (ChordToken ct, cl->chordTokenList) {
-                        foreach (QString ctn, ct.names) {
-                              if (ctn == n)
-                                    definedTokens += ct;
-                              }
+      // generate anew on each call,
+      // in case chord list has changed since last time
+      qDebug("renderList: generating for %s",qPrintable(_handle));
+      if (!_renderList.isEmpty())
+            _renderList.clear();
+      foreach (ChordToken tok, _tokenList) {
+            QString n = tok.names.first();
+            QList<RenderAction> rl;
+            QList<ChordToken> definedTokens;
+            bool found = false;
+            // potential definitions for token
+            foreach (ChordToken ct, cl->chordTokenList) {
+                  foreach (QString ctn, ct.names) {
+                        if (ctn == n)
+                              definedTokens += ct;
                         }
-                  // find matching class, fallback on ALL
-                  foreach (ChordToken matchingTok, definedTokens) {
-                        if (tok.tokenClass == matchingTok.tokenClass) {
-                              rl = matchingTok.renderList;
-                              found = true;
-                              break;
-                              }
-                        else if (matchingTok.tokenClass == ALL) {
-                              rl = matchingTok.renderList;
-                              found = true;
-                              }
+                  }
+            // find matching class, fallback on ALL
+            foreach (ChordToken matchingTok, definedTokens) {
+                  if (tok.tokenClass == matchingTok.tokenClass) {
+                        rl = matchingTok.renderList;
+                        found = true;
+                        break;
                         }
-                  if (found)
-                        _renderList.append(rl);
-                  else {
-                        // no definition for token, so render as literal
-                        RenderAction a(RenderAction::RENDER_SET);
-                        a.text = tok.names.first();
-                        _renderList.append(a);
+                  else if (matchingTok.tokenClass == ALL) {
+                        rl = matchingTok.renderList;
+                        found = true;
                         }
+                  }
+            if (found)
+                  _renderList.append(rl);
+            else {
+                  // no definition for token, so render as literal
+                  RenderAction a(RenderAction::RENDER_SET);
+                  a.text = tok.names.first();
+                  _renderList.append(a);
                   }
             }
       return _renderList;
