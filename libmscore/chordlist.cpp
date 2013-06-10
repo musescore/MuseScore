@@ -1289,7 +1289,10 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
       if (!pc) {
             // generate parsed chord for its rendering & semantic (xml) info
             pc = &tempPc;
-            pc->parse(names.front(),cl);
+            QString n;
+            if (!names.isEmpty())
+                  n = names.front();
+            pc->parse(n,cl);
             }
       parsedChords.append(*pc);
       if (renderList.isEmpty() || renderListGenerated) {

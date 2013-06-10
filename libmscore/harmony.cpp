@@ -412,7 +412,8 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             }
       if (cd) {
             _id = cd->id;
-            _textName = cd->names.front();
+            if (!cd->names.isEmpty())
+                  _textName = cd->names.front();
             }
       else
             _textName = _userName;
@@ -633,7 +634,7 @@ const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* p
 const ChordDescription* Harmony::getDescription()
       {
       const ChordDescription* cd = descr();
-      if (cd)
+      if (cd && !cd->names.isEmpty())
             _textName = cd->names.front();
       else if (_textName != "") {
             cd = generateDescription();
