@@ -287,8 +287,10 @@ bool ChordRest::readProperties(XmlReader& e)
             if (!slur)
                   qDebug("ChordRest::read(): Slur id %d not found", id);
             else {
-                  if (type == "start")
+                  if (type == "start") {
                         slur->setTick(e.tick());
+                        slur->setTrack(e.track());
+                        }
                   else if (type == "stop")
                         slur->setTickLen(e.tick() - slur->tick());
                   else

@@ -185,7 +185,6 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, ChordRest* cr
             }
       else {
             sl->cr2 = cr;
-printf("SlurSegment::changeAnchor %d %d\n", sl->tick2(), cr->tick());
             sl->setTick2(cr->tick());
             }
 
@@ -193,7 +192,6 @@ printf("SlurSegment::changeAnchor %d %d\n", sl->tick2(), cr->tick());
       ups[curGrip].off = QPointF();
       sl->layout();
       if (sl->spannerSegments().size() != segments) {
-printf("segments changed %d %d\n", segments, sl->spannerSegments().size());
             SlurSegment* newSegment = curGrip == 3 ? sl->backSegment() : sl->frontSegment();
             score()->endCmd();
             score()->startCmd();
@@ -1049,6 +1047,8 @@ Slur::~Slur()
 void Slur::write(Xml& xml) const
       {
       xml.stag(QString("Slur id=\"%1\"").arg(id()));
+      if (track())
+            xml.tag("track", track());
       SlurTie::writeProperties(xml);
       xml.etag();
       }
@@ -1142,7 +1142,11 @@ void Slur::layout()
             }
       cr1 = startCR();
       cr2 = endCR();
-
+      if (cr1 == 0 || cr2 == 0) {
+            qDebug("Slur::layout(): id %d  %p %p %d-%d null anchor",
+               id(), cr1, cr2, tick(), tick2());
+            return;
+            }
       switch (_slurDirection) {
             case MScore::UP:
                   _up = true;

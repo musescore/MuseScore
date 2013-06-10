@@ -75,7 +75,7 @@ class ChordRest : public DurationElement {
       virtual ElementType type() const = 0;
       virtual Element* drop(const DropData&);
 
-      Segment* segment() const                   { return (Segment*)parent(); }
+      virtual Segment* segment() const           { return (Segment*)parent(); }
       virtual Measure* measure() const           { return parent() ? (Measure*)(parent()->parent()) : 0; }
 
       virtual void read(XmlReader&) = 0;

@@ -112,12 +112,19 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             Element* e = segment->element(track);
             if (e && (e->type() == Element::CHORD)) {
                   ++voices;
-                  notes.append(static_cast<Chord*>(e)->notes());
+                  Chord* chord = static_cast<Chord*>(e);
+                  for (Chord* c : chord->graceNotes())
+                        layoutChords1(c->notes(), 1, staff, 0);
+                  notes.append(chord->notes());
                   }
             }
       if (notes.isEmpty())
             return;
+      layoutChords1(notes, voices, staff, segment);
+      }
 
+void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment* segment)
+      {
       int startIdx, endIdx, incIdx;
 
       if (notes[0]->chord()->up() || (voices > 1)) {
@@ -267,7 +274,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   dotPosX = xx;
             }
 
-      segment->setDotPosX(staffIdx, dotPosX);
+      if (segment)
+            segment->setDotPosX(staff->idx(), dotPosX);
 
       int nAcc = aclist.size();
       if (nAcc == 0)
