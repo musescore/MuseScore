@@ -396,66 +396,175 @@ void ChordToken::write(Xml& xml)
       }
 
 //---------------------------------------------------------
+//  ParsedChord
+//---------------------------------------------------------
+
+ParsedChord::ParsedChord()
+      {
+      _parseable = false;
+      _understandable = false;
+      }
+
+//---------------------------------------------------------
+//  configure
+//---------------------------------------------------------
+
+void ParsedChord::configure(const ChordList* cl)
+      {
+      if (!cl)
+            return;
+      // TODO: allow this to be parameterized via chord list
+      major << "ma" << "maj" << "major" << "t" << "^";
+      minor << "mi" << "min" << "minor" << "-";
+      diminished << "dim" << "o";
+      augmented << "aug" << "+";
+      lower << "b" << "-";
+      raise << "#" << "+";
+      mod1 << "sus" << "alt";
+      mod2 << "sus" << "add" << "no" << "omit";
+      symbols << "t" << "^" << "-" << "+" << "o" << "0";
+      }
+
+//---------------------------------------------------------
+//  correctXmlText
+//    remove digits from _xmlText, optionally replace with s
+//    needed for m(Maj9) et al
+//---------------------------------------------------------
+
+void ParsedChord::correctXmlText(const QString& s)
+      {
+      _xmlText.remove(QRegExp("[0-9]"));
+      if (s != "") {
+            int pos = _xmlText.lastIndexOf(')');
+            if (pos == -1)
+                  pos = _xmlText.size();
+            _xmlText.insert(pos,s);
+            }
+      }
+
+//---------------------------------------------------------
 //  parse
 //    return true if chord was parseable
 //---------------------------------------------------------
 
-bool ParsedChord::parse(QString s, bool syntaxOnly)
+bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
       {
-      QString tok1, tok1L, tok2, tok2L, modifiers;
-      QString chordDigits = "123456789";
-      QString special = "(),";
-      QString leading = "(";
-      QString trailing = "),";
-      int firstLeadingToken, lastLeadingToken;
+      QString tok1, tok1L, tok2, tok2L;
+      QString extensionDigits = "123456789";
+      QString special = "()[], ";
+      QString leading = "([ ";
+      QString trailing = ")], ";
+      QString initial;
+      bool take6 = false, take7 = false, take9 = false, take11 = false, take13 = false;
+#ifdef ALLOW_PARENTHESIZED_EXTENSION
+      int firstLeadingToken;
+#endif
+      int lastLeadingToken;
       int len = s.size();
       int i, j;
 
+      configure(cl);
+      _name = s;
       _parseable = true;
+      _understandable = true;
       i = 0;
 
+#if 0
+// enable this code to allow quality to be parenthesized
+// otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
       // eat leading parens
       firstLeadingToken = _tokenList.size();
       while (i < len && leading.contains(s[i]))
            addToken(QString(s[i++]),QUALITY);
+#endif
       lastLeadingToken = _tokenList.size();
       // get quality
-      for (j = 0, tok1 = ""; i < len; ++i, ++j) {
+      for (j = 0, tok1 = "", tok1L = "", initial = ""; i < len; ++i, ++j) {
             // up to first (non-zero) digit, paren, or comma
-            if (chordDigits.contains(s[i]) || special.contains(s[i]))
+            if (extensionDigits.contains(s[i]) || special.contains(s[i]))
                   break;
             tok1[j] = s[i];
+            tok1L[j] = s[i].toLower();
+            if (tok1L == "m" || major.contains(tok1L) || minor.contains(tok1L) || diminished.contains(tok1L) || augmented.contains(tok1L))
+                  initial = tok1;
             }
-      // TODO: special cases for mMaj, augadd, etc.
+      // special case for "madd", which needs to parse as m,add rather than ma,dd
+      if (tok1L.startsWith("madd"))
+            initial = tok1[0];
+      // quality and first modifier ran together with no separation - eg, mima7, augadd
+      // keep quality portion, reset index to read modifier portion later
+      if (initial != "" && initial != tok1 && tok1L != "tristan" && tok1L != "omit") {
+            i -= (tok1.length() - initial.length());
+            tok1 = initial;
+            tok1L = initial.toLower();
+            }
+      // determine quality
+      if (tok1 == "M" || major.contains(tok1L)) {
+            _quality = "major";
+            take6 = true; take7 = true; take9 = true; take11 = true; take13 = true;
+            }
+      else if (tok1 == "m" || minor.contains(tok1L)) {
+            _quality = "minor";
+            take6 = true; take7 = true; take9 = true; take11 = true; take13 = true;
+            }
+      else if (diminished.contains(tok1L)) {
+            _quality = "diminished";
+            take7 = true;
+            }
+      else if (augmented.contains(tok1L)) {
+            _quality = "augmented";
+            take7 = true;
+            }
+      else if (tok1L == "0") {
+            _quality = "half-diminished";
+            }
+      else if (tok1L == "") {
+            // empty quality - this will turn out to be major or dominant
+            _quality = "";
+            }
+      else {
+            // anything else is not a quality after all, but a modifier
+            // reset to read again as modifier
+            _quality = "";
+            tok1 = "";
+            tok1L = "";
+            i = lastLeadingToken;
+            }
       if (tok1 != "")
             addToken(tok1,QUALITY);
+#if 0
+// enable this code to allow quality to be parenthesized
+// otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
       else {
             // leading tokens were not really QUALITY
             for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
                   _tokenList[t].tokenClass = EXTENSION;
             }
-      tok1L = tok1.toLower();
-      if (tok1 == "M" || tok1L == "ma" || tok1L == "maj" || tok1L == "t" || tok1L == "^")
-            quality = "major";
-      else if (tok1L == "m" || tok1L == "mi" || tok1L == "min" || tok1L == "-")
-            quality = "minor";
-      else if (tok1L == "aug" || tok1L == "+")
-            quality = "augmented";
-      else if (tok1L == "dim" || tok1L == "o")
-            quality = "diminished";
-      else if (tok1L == "0")
-            quality = "half-diminished";
-      else
-            quality = tok1L;
+#endif
+      if (!syntaxOnly) {
+            _xmlKind = _quality;
+            _xmlParens = "no";
+            if (symbols.contains(tok1)) {
+                  _xmlSymbols = "yes";
+                  _xmlText = "";
+                  }
+            else {
+                  _xmlSymbols = "no";
+                  _xmlText = tok1;
+                  }
+            }
       // eat trailing parens and commas
       while (i < len && trailing.contains(s[i]))
            addToken(QString(s[i++]),QUALITY);
 
+#if 0
+// enable this code to allow extensions to be parenthesized
+// otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
       // eat leading parens
       firstLeadingToken = _tokenList.size();
-      while (i < len && leading.contains(s[i])) {
+      while (i < len && leading.contains(s[i]))
             addToken(QString(s[i++]),EXTENSION);
-            }
+#endif
       lastLeadingToken = _tokenList.size();
       // get extension - up to first non-digit
       for (j = 0, tok1 = ""; i < len; ++i, ++j) {
@@ -463,34 +572,170 @@ bool ParsedChord::parse(QString s, bool syntaxOnly)
                   break;
             tok1[j] = s[i];
             }
+      _extension = tok1;
+      if (_quality == "") {
+            if (_extension == "7" || _extension == "9" || _extension == "11" || _extension == "13") {
+                  _quality = "dominant";
+                  if (!syntaxOnly)
+                        _xmlKind = "dominant";
+                  take7 = true; take9 = true; take11 = true; take13 = true;
+                  }
+            else {
+                  _quality = "major";
+                  if (!syntaxOnly)
+                        _xmlKind = "major";
+                  take6 = true; take7 = true; take9 = true; take11 = true; take13 = true;
+                  }
+            }
       if (tok1 != "")
             addToken(tok1,EXTENSION);
+#if 0
+// enable this code to allow extensions to be parenthesized
+// otherwise, parentheses will automatically cause contents to be interpreted as modifier
       else {
             // leading tokens were not really EXTENSION
-            for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
+            for (int t = firstLeadingToken; t < lastLeadingToken; ++t) {
                   _tokenList[t].tokenClass = MODIFIER;
+                  if (!syntaxOnly)
+                        _xmlParens = "yes";
+                  }
             }
-      extension = tok1;
+#endif
+      if (!syntaxOnly) {
+            _xmlText += _extension;
+            QStringList extl;
+            if (tok1 == "2" || tok1 == "4") {
+                  QString d = "add" + tok1;
+                  _xmlDegrees += d;
+                  _xmlText.remove(tok1);
+                  }
+            if (tok1 == "5")
+                  _xmlKind = "power";
+            else if (tok1 == "6") {
+                  if (take6)
+                        _xmlKind += "-sixth";
+                  else
+                        extl << "6";
+                  }
+            else if (tok1 == "7") {
+                  if (take7)
+                        _xmlKind += "-seventh";
+                  else if (_xmlKind != "half-diminished")
+                        extl << "7";
+                  }
+            else if (tok1 == "9") {
+                  if (take9)
+                        _xmlKind += "-ninth";
+                  else if (take7) {
+                              _xmlKind += "-seventh";
+                              extl << "9";
+                              correctXmlText("7");
+                              }
+                  else if (_xmlKind == "half-diminished") {
+                        extl << "9";
+                        correctXmlText();
+                        }
+                  else {
+                        extl << "7" << "9";
+                        correctXmlText();
+                        }
+                  }
+            else if (tok1 == "11") {
+                  if (take11)
+                        _xmlKind += "-11th";
+                  else if (take7) {
+                        _xmlKind += "-seventh";
+                        extl << "9" << "11";
+                        correctXmlText("7");
+                        }
+                  else if (_xmlKind == "half-diminished") {
+                        extl << "9" << "11";
+                        correctXmlText();
+                        }
+                  else {
+                        extl << "7" << "9" << "11";
+                        correctXmlText();
+                        }
+                  }
+            else if (tok1 == "13") {
+                  if (take13)
+                        _xmlKind += "-13th";
+                  else if (take7) {
+                        _xmlKind += "-seventh";
+                        extl << "9" << "11" << "13";
+                        correctXmlText("7");
+                        }
+                  else if (_xmlKind == "half-diminished") {
+                        extl << "9" << "11" << "13";
+                        correctXmlText();
+                        }
+                  else {
+                        extl << "7" << "9" << "11" << "13";
+                        correctXmlText();
+                        }
+                  }
+            else if (tok1 == "69") {
+                  if (take6) {
+                        _xmlKind += "-sixth";
+                        extl << "9";
+                        correctXmlText("6");
+                        }
+                  else {
+                        extl << "6" << "9";
+                        correctXmlText();
+                        }
+                  }
+            foreach (QString e, extl) {
+                  QString d = "add" + e;
+                  _xmlDegrees += d;
+                  }
+            if (_xmlKind == "dominant-seventh")
+                  _xmlKind = "dominant";
+            }
       // eat trailing parens and commas
       while (i < len && trailing.contains(s[i]))
            addToken(QString(s[i++]),EXTENSION);
 
       // get modifiers
+      bool addPending = false;
+      _modifierList.clear();
       while (i < len) {
             // eat leading parens
-            while (i < len && leading.contains(s[i]))
+            while (i < len && leading.contains(s[i])) {
                   addToken(QString(s[i++]),MODIFIER);
+                  _xmlParens = "yes";
+                  }
             // get first token - up to first digit, paren, or comma
-            for (j = 0, tok1 = ""; i < len; ++i) {
+            for (j = 0, tok1 = "", tok1L = "", initial = ""; i < len; ++i, ++j) {
                   if (s[i].isDigit() || special.contains(s[i]))
                         break;
-                  tok1[j++] = s[i];
+                  tok1[j] = s[i];
+                  tok1L[j] = s[i].toLower();
+                  if (mod2.contains(tok1L))
+                        initial = tok1;
                   }
-            tok1L = tok1.toLower();
             // if we reached the end of the string and never got a token,
             // then nothing to do, and no sense in looking for a second token
             if (i == len && tok1 == "")
                   break;
+            if (initial != "" && initial != tok1) {
+                  // two modifiers ran together with no separation - eg, susb9
+                  // keep first, reset index to read second later
+                  i -= (tok1.length() - initial.length());
+                  tok1 = initial;
+                  tok1L = initial.toLower();
+                  }
+            // for "add", just add the token and then read argument as a separate modifier
+            // this allows the argument to itself be a two-part string
+            // thus allowing addb9 -> add;b,9
+            if (tok1L == "add") {
+                  addToken(tok1,MODIFIER);
+                  addPending = true;
+                  continue;
+                  }
+            // eat spaces
+            while (i < len && s[i] == ' ')
+                  ++i;
             // get second token - up to first non-digit
             for (j = 0, tok2 = ""; i < len; ++i) {
                   if (!s[i].isDigit())
@@ -498,58 +743,460 @@ bool ParsedChord::parse(QString s, bool syntaxOnly)
                   tok2[j++] = s[i];
                   }
             tok2L = tok2.toLower();
-            // special cases
-            if (tok1L == "susb" || tok1L == "sus#") {
-                  modifierList += "sus4";
-                  addToken("sus",MODIFIER);
-                  tok1 = tok1[3];
-                  tok1L = tok1L[3];
+            // re-attach "add"
+            if (addPending) {
+                  tok2L = tok1L + tok2L;
+                  tok1L = "add";
                   }
-            else if (tok1 == "M" || tok1L == "ma" || tok1L == "maj" || tok1L == "t" || tok1L == "^")
+            // standardize spelling
+            if (tok1 == "M" || major.contains(tok1L))
                   tok1L = "major";
             else if (tok1L == "omit")
                   tok1L = "no";
             else if (tok1L == "sus" && tok2L == "")
                   tok2L = "4";
+            else if (augmented.contains(tok1L) && tok2L == "") {
+                  if (_quality == "dominant" && _extension == "7") {
+                        _quality = "augmented";
+                        if (!syntaxOnly) {
+                              _xmlKind = "augmented-seventh";
+                              _xmlText = _extension + tok1;
+                              }
+                        tok1L = "";
+                        }
+                  else {
+                        tok1L = "#";
+                        tok2L = "5";
+                        }
+                  }
+            else if ((lower.contains(tok1L) || raise.contains(tok1L)) && tok2L == "") {
+                  // trailing alteration - treat as applying to extension (and convert to modifier)
+                  // this handles C5b, C9#, etc
+                  tok2L = _extension;
+                  if (!syntaxOnly) {
+                        _xmlKind = (_quality == "dominant" ? "major" : _quality);
+                        _xmlText.remove(_extension);
+                        }
+                  _extension = "";
+                  }
+            QString m = tok1L + tok2L;
+            if (m != "")
+                  _modifierList += m;
             if (tok1 != "")
                   addToken(tok1,MODIFIER);
             if (tok2 != "")
                   addToken(tok2,MODIFIER);
-            QString mod = tok1L + tok2L;
-            if (mod != "")
-                  modifierList += mod;
+            if (!syntaxOnly) {
+                  QString degree;
+                  bool alter = false;
+                  if (tok1L == "add")
+                        degree = "add" + tok2L;
+                  else if (tok1L == "no")
+                        degree = "sub" + tok2L;
+                  else if (tok1L == "sus") {
+#if 0
+// enable this code to export 7sus4 as dominant,sub3,add4 rather than suspended-fourth,add7 (similar for 9sus4, 13sus4)
+                        if (_extension == "") {
+                              if (tok2L == "4")
+                                    _xmlKind = "suspended-fourth";
+                              else if (tok2L == "2")
+                                    _xmlKind = "suspended-second";
+                              _xmlText = tok1 + tok2;
+                              }
+                        else {
+                              _xmlDegrees += "sub3";
+                              tok1L = "add";
+                              }
+#else
+// enable this code to export 7sus4 as suspended-fourth,add7 rather than dominant,sub3,add4 (similar for 9sus4, 13sus4)
+                        // convert chords with sus into suspended "kind"
+                        // extension then becomes a series of degree adds
+                        if (tok2L == "4")
+                              _xmlKind = "suspended-fourth";
+                        else if (tok2L == "2")
+                              _xmlKind = "suspended-second";
+                        _xmlText = tok1 + tok2;
+                        if (_extension == "7" || _extension == "9" || _extension == "11" || _extension == "13") {
+                              _xmlDegrees += (_quality == "major") ? "add#7" : "add7";
+                              degree = "";
+                              }
+                        else if (_extension != "")
+                              degree = "add" + _extension;
+                        if (_extension == "13") {
+                              _xmlDegrees += "add9";
+                              _xmlDegrees += "add11";
+                              _xmlDegrees += "add13";
+                        }
+                        else if (_extension == "11") {
+                              _xmlDegrees += "add9";
+                              _xmlDegrees += "add11";
+                              }
+                        else if (_extension == "9")
+                              _xmlDegrees += "add9";
+#endif
+                        }
+                  else if (tok1L == "major") {
+                        if (_xmlKind.startsWith("minor")) {
+                              _xmlKind = "major-minor";
+                              if (_extension == "9" || tok2L == "9")
+                                    _xmlDegrees += "add9";
+                              if (_extension == "11" || tok2L == "11") {
+                                    _xmlDegrees += "add9";
+                                    _xmlDegrees += "add11";
+                                    }
+                              if (_extension == "13" || tok2L == "13") {
+                                    _xmlDegrees += "add9";
+                                    _xmlDegrees += "add11";
+                                    _xmlDegrees += "add13";
+                                    }
+                              _xmlText += tok1 + tok2;
+                              correctXmlText("7");
+                              }
+                        else
+                              tok1L = "add";
+                        }
+                  else if (tok1L == "alt") {
+                        _xmlDegrees += "altb5";
+                        _xmlDegrees += "add#5";
+                        _xmlDegrees += "addb9";
+                        _xmlDegrees += "add#9";
+                        }
+                  else if (tok1L == "blues") {
+                        // this isn't really well-defined, but it might as well mean something
+                        if (_extension == "11" || _extension == "13")
+                              _xmlDegrees += "alt#9";
+                        else
+                              _xmlDegrees += "add#9";
+                        }
+                  else if (tok1L == "lyd") {
+                        if (_extension == "13")
+                              _xmlDegrees += "alt#11";
+                        else
+                              _xmlDegrees += "add#11";
+                        }
+                  else if (tok1L == "phryg") {
+                        if (!_xmlKind.startsWith("minor"))
+                              _xmlKind = "minor-seventh";
+                        if (_extension == "11" || _extension == "13")
+                              _xmlDegrees += "altb9";
+                        else
+                              _xmlDegrees += "addb9";
+                        _xmlText += tok1;
+                        }
+                  else if (tok1L == "tristan") {
+                        _xmlKind = "Tristan";
+                        _xmlText = tok1;
+                        }
+                  else if (addPending)
+                        degree = "add" + tok1L + tok2L;
+                  else if (tok1L == "" && tok2L != "")
+                        degree = "add" + tok2L;
+                  else if (lower.contains(tok1L)) {
+                        tok1L = "b";
+                        alter = true;
+                        }
+                  else if (raise.contains(tok1L)) {
+                        tok1L = "#";
+                        alter = true;
+                        }
+                  else
+                        _understandable = false;
+                  if (alter) {
+                        if (tok2L == "4" && _xmlKind == "suspended-fourth")
+                              degree = "alt";
+                        else if (tok2L == "5")
+                              degree = "alt";
+                        else if (tok2L == "9" && (_extension == "11" || _extension == "13"))
+                              degree = "alt";
+                        else if (tok2L == "11" && _extension == "13")
+                              degree = "alt";
+                        else
+                              degree = "add";
+                        degree += tok1L + tok2L;
+                        }
+                  if (degree != "")
+                        _xmlDegrees += degree;
+                  }
             // eat trailing parens and commas
             while (i < len && trailing.contains(s[i]))
                   addToken(QString(s[i++]),MODIFIER);
+            addPending = false;
             }
-      if (!modifierList.isEmpty()) {
-            modifierList.sort();
-            modifiers = "<" + modifierList.join("><") + ">";
+      // fix "add" / "alt" conflicts
+      // so add9,altb9 -> addb9
+      if (!syntaxOnly) {
+            QStringList altList = _xmlDegrees.filter("alt");
+            foreach (const QString& d, altList) {
+                  QString unalt(d);
+                  unalt.replace(QRegExp("alt[b#]"),"add");
+                  if (_xmlDegrees.removeAll(unalt) > 0) {
+                        QString alt(d);
+                        alt.replace("alt","add");
+                        int i = _xmlDegrees.indexOf(d);
+                        _xmlDegrees.replace(i,alt);
+                        }
+                  }
             }
 
-      // special cases
-      if (quality == "") {
-            if (extension == "7" || extension == "9" || extension == "11" || extension == "13")
-                  quality = "dominant";
-            else
-                  quality = "major";
+      // construct handle
+      if (!_modifierList.isEmpty()) {
+            _modifierList.sort();
+            _modifiers = "<" + _modifierList.join("><") + ">";
             }
-      // more special cases TODO: mMaj, madd, augadd, ...?
+      _handle = "<" + _quality + "><" + _extension + ">" + _modifiers;
 
-      handle = "<" + quality + "><" + extension + ">" + modifiers;
-//      qDebug("parse: %s -> %s", qPrintable(s), qPrintable(handle);
-      _understandable = false;
+      // force <minor><7><b5> to export as half-diminished
+      if (!syntaxOnly && _handle == "<minor><7><b5>") {
+                  _xmlKind = "half-diminished";
+                  _xmlText = s;
+                  _xmlDegrees.clear();
+            }
+
+      qDebug("parse: source = <%s>, handle = %s",qPrintable(s),qPrintable(_handle));
+      if (!syntaxOnly) {
+            qDebug("parse: xmlKind = <%s>, text = <%s>",qPrintable(_xmlKind),qPrintable(_xmlText));
+            qDebug("parse: xmlSymbols = %s, xmlParens = %s",qPrintable(_xmlSymbols),qPrintable(_xmlParens));
+            qDebug("parse: xmlDegrees = <%s>",qPrintable(_xmlDegrees.join(",")));
+            }
+
       return _parseable;
+      }
+
+//---------------------------------------------------------
+//   fromXml
+//---------------------------------------------------------
+
+QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText, const QString& useSymbols, const QString& useParens, const QList<HDegree>& dl, const ChordList* cl)
+      {
+      QString kind = rawKind;
+      QString kindText = rawKindText;
+      bool symbols = (useSymbols == "yes");
+      bool parens = (useParens == "yes");
+      bool implied = false;
+      bool extend = false;
+      int extension = 0;
+      _parseable = true;
+      _understandable = true;
+
+      // get quality info from kind
+      if (kind == "major-minor") {
+            _quality = "minor";
+            _modifierList += "major7";
+            extend = true;
+            }
+      else if (kind.contains("major")) {
+            _quality = "major";
+            if (kind == "major" || kind == "major-sixth")
+                  implied = true;
+            }
+      else if (kind.contains("minor"))
+            _quality = "minor";
+      else if (kind.contains("dominant")) {
+            _quality = "dominant";
+            implied = true;
+            extension = 7;
+            }
+      else if (kind == "augmented-seventh") {
+            _quality = "augmented";
+            extension = 7;
+            extend = true;
+            }
+      else if (kind == "augmented")
+            _quality = "augmented";
+      else if (kind == "half-diminished") {
+            _quality = "half-diminished";
+            extension = 7;
+            extend = true;
+            }
+      else if (kind == "diminished-seventh") {
+            _quality = "diminished";
+            extension = 7;
+            }
+      else if (kind == "diminished")
+            _quality = "diminished";
+      else if (kind == "suspended-fourth") {
+            _quality = "major";
+            implied = true;
+            _modifierList += "sus4";
+            }
+      else if (kind == "suspended-second") {
+            _quality = "major";
+            implied = true;
+            _modifierList += "sus2";
+            }
+      else if (kind == "power") {
+            _quality = "major";
+            implied = true;
+            extension = 5;
+            }
+      else
+            _quality = kind;
+
+      // get extension info from kind
+      if (kind.contains("seventh"))
+            extension = 7;
+      else if (kind.contains("ninth"))
+            extension = 9;
+      else if (kind.contains("11th"))
+            extension = 11;
+      else if (kind.contains("13th"))
+            extension = 13;
+      else if (kind.contains("sixth"))
+            extension = 6;
+
+      // get modifier info from degree list
+      foreach (const HDegree& d, dl) {
+            QString mod;
+            int v = d.value();
+            switch (d.type()) {
+                  case ADD:
+                  case ALTER:
+                        switch (d.alter()) {
+                              case -1:    mod = "b"; break;
+                              case 1:     mod = "#"; break;
+                              case 0:     mod = "add"; break;
+                              }
+                        break;
+                  case SUBTRACT:
+                        mod = "no";
+                        break;
+                  case UNDEF:
+                  default:
+                        break;
+                  }
+            mod += QString("%1").arg(v);
+            if (mod == "add7" && kind.contains("suspended")) {
+                  _quality = "dominant";
+                  implied = true;
+                  extension = 7;
+                  extend = true;
+                  mod = "";
+                  }
+            else if (mod == "add#7" && kind.contains("suspended")) {
+                  _quality = "major";
+                  implied = false;
+                  extension = 7;
+                  extend = true;
+                  mod = "";
+                  }
+            else if (mod == "add9" && extend) {
+                  if (extension < 9)
+                        extension = 9;
+                  mod = "";
+                  }
+            else if (mod == "add11" && extend) {
+                  if (extension < 11)
+                        extension = 11;
+                  mod = "";
+                  }
+            else if (mod == "add13" && extend) {
+                  extension = 13;
+                  mod = "";
+                  }
+            else if (mod == "add9" && kind.contains("sixth")) {
+                  extension = 69;
+                  mod = "";
+                  }
+            if (mod != "")
+                  _modifierList += mod;
+            }
+      // convert no3,add[42] into sus[42]
+      int no3 = _modifierList.indexOf("no3");
+      if (no3 >= 0) {
+            int addn = _modifierList.indexOf("add4");
+            if (addn == -1)
+                  addn = _modifierList.indexOf("add2");
+            if (addn != -1) {
+                  QString& s = _modifierList[addn];
+                  s.replace("add","sus");
+                  _modifierList.removeAt(no3);
+                  }
+            }
+      // convert kind=minor-seventh, degree=altb5 to kind=half-diminished (suppression of degree=altb comes later)
+      if (kind == "minor-seventh" && _modifierList.size() == 1 && _modifierList.front() == "b5")
+            kind = "half-diminished";
+      // force parens where necessary)
+      if (!parens && extension == 0 && !_modifierList.isEmpty()) {
+            QString firstMod = _modifierList.front();
+            if (firstMod != "" && (firstMod.startsWith('#') || firstMod.startsWith('b')))
+                  parens = true;
+            }
+
+      // record extension
+      if (extension)
+            _extension = QString("%1").arg(extension);
+
+      // validate kindText
+      if (kindText != "") {
+            ParsedChord validate;
+            validate.parse(kindText,cl,false);
+            // kindText should parse to produce same kind, no degrees
+            if (validate._xmlKind != kind || !validate._xmlDegrees.isEmpty())
+                  kindText = "";
+            }
+
+      // construct name & handle
+      _name = "";
+      if (kindText != "") {
+            if (_extension != "" && kind.contains("suspended"))
+                  _name += _extension;
+            _name += kindText;
+            if (extension == 69)
+                  _name += "9";
+            }
+      else if (implied)
+            _name = _extension;
+      else {
+            if (_quality == "major")
+                  _name = symbols ? "^" : "maj";
+            else if (_quality == "minor")
+                  _name = symbols ? "-" : "m";
+            else if (_quality == "augmented")
+                  _name = symbols ? "+" : "aug";
+            else if (_quality == "diminished")
+                  _name = symbols ? "o" : "dim";
+            else if (_quality == "half-diminished")
+                  _name = symbols ? "0" : "m7b5";
+            else
+                  _name = _quality;
+            _name += _extension;
+            }
+      if (parens)
+            _name += "(";
+      foreach (QString mod, _modifierList) {
+            mod.replace("major","maj");
+            if (kindText != "" && kind.contains("suspended") && mod.startsWith("sus"))
+                  continue;
+            else if (kindText != "" && kind == "major-minor" && mod.startsWith("maj"))
+                  continue;
+            _name += mod;
+            }
+      if (parens)
+            _name += ")";
+
+      // parse name to construct handle & tokenList
+      parse(_name,cl,true);
+
+      // record original MusicXML
+      _xmlKind = kind;
+      _xmlText = kindText;
+      _xmlSymbols = useSymbols;
+      _xmlParens = useParens;
+      foreach (const HDegree& d, dl) {
+            if (kind == "half-diminished" && d.type() == ALTER && d.alter() == -1 && d.value() == 5)
+                  continue;
+            _xmlDegrees += d.text();
+            }
+
+      return _name;
       }
 
 //---------------------------------------------------------
 //   renderList
 //---------------------------------------------------------
 
-const QList<RenderAction>& ParsedChord::renderList(const QList<ChordToken>& tokenDefinitionList, bool regenerate)
+const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
       {
-      if (regenerate)
-            _renderList.clear();
       if (_renderList.isEmpty()) {
             foreach (ChordToken tok, _tokenList) {
                   QString n = tok.names.first();
@@ -557,10 +1204,10 @@ const QList<RenderAction>& ParsedChord::renderList(const QList<ChordToken>& toke
                   QList<ChordToken> definedTokens;
                   bool found = false;
                   // potential definitions for token
-                  foreach (ChordToken dt, tokenDefinitionList) {
-                        foreach (QString dtn, dt.names) {
-                              if (dtn == n)
-                                    definedTokens += dt;
+                  foreach (ChordToken ct, cl->chordTokenList) {
+                        foreach (QString ctn, ct.names) {
+                              if (ctn == n)
+                                    definedTokens += ct;
                               }
                         }
                   // find matching class, fallback on ALL
@@ -592,8 +1239,10 @@ const QList<RenderAction>& ParsedChord::renderList(const QList<ChordToken>& toke
 //   addToken
 //---------------------------------------------------------
 
- void ParsedChord::addToken(QString s, ChordTokenClass tc)
+void ParsedChord::addToken(QString s, ChordTokenClass tc)
       {
+      if (s == "")
+            return;
       ChordToken tok;
       tok.names += s;
       tok.tokenClass = tc;
@@ -601,23 +1250,77 @@ const QList<RenderAction>& ParsedChord::renderList(const QList<ChordToken>& toke
       }
 
 //---------------------------------------------------------
+//   ChordDescription
+//    this form is used when reading from file
+//    a private id is assigned for id = 0
+//---------------------------------------------------------
+
+ChordDescription::ChordDescription(int i, ChordList* cl)
+      {
+      if (!i)
+            i = --(cl->privateID);
+      id = i;
+      generated = false;
+      renderListGenerated = false;
+      }
+
+//---------------------------------------------------------
+//   ChordDescription
+//    this form is used when generating from name
+//    a private id is always assigned
+//---------------------------------------------------------
+
+ChordDescription::ChordDescription(const QString& name, ChordList* cl)
+      {
+      id = --(cl->privateID);
+      generated = true;
+      names.append(name);
+      renderListGenerated = false;
+      }
+
+//---------------------------------------------------------
+//   complete
+//    generate missing renderList and semantic (Xml) info
+//---------------------------------------------------------
+
+void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
+      {
+      ParsedChord tempPc;
+      if (!pc) {
+            // generate parsed chord for its rendering & semantic (xml) info
+            pc = &tempPc;
+            pc->parse(names.front(),cl);
+            }
+      parsedChords.append(*pc);
+      if (renderList.isEmpty() || renderListGenerated) {
+            renderList = pc->renderList(cl);
+            renderListGenerated = true;
+            }
+      if (xmlKind == "") {
+            xmlKind = pc->xmlKind();
+            xmlDegrees = pc->xmlDegrees();
+            }
+      // these fields are not read from chord description files
+      // so get them from the parsed representation in all cases
+      xmlText = pc->xmlText();
+      xmlSymbols = pc->xmlSymbols();
+      xmlParens = pc->xmlParens();
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
-void ChordDescription::read(XmlReader& e, const QList<ChordToken>& tokenList)
+void ChordDescription::read(XmlReader& e)
       {
-      int ni = 0, pci = 0;
-      bool renderFound = false;
+      int ni = 0;
       id = e.attribute("id").toInt();
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name") {
                   QString n = e.readElementText();
-                  names.insert(ni++,n); // stack name for this file on top of the list
-                  ParsedChord pc;
-                  pc.parse(n);
-                  if (parsedChords.indexOf(pc) < 0)
-                        parsedChords.insert(pci++,pc);
+                  // stack names for this file on top of the list
+                  names.insert(ni++,n);
                   }
             else if (tag == "xml")
                   xmlKind = e.readElementText();
@@ -627,15 +1330,10 @@ void ChordDescription::read(XmlReader& e, const QList<ChordToken>& tokenList)
                   chord = HChord(e.readElementText());
             else if (tag == "render") {
                   readRenderList(e.readElementText(), renderList);
-                  renderFound = true;
+                  renderListGenerated = false;
                   }
             else
                   e.unknown();
-            }
-      if (!renderFound) {
-            ParsedChord pc = parsedChords.first();
-            if (pc.renderable())
-                  renderList = pc.renderList(tokenList);
             }
       }
 
@@ -645,7 +1343,12 @@ void ChordDescription::read(XmlReader& e, const QList<ChordToken>& tokenList)
 
 void ChordDescription::write(Xml& xml)
       {
-      xml.stag(QString("chord id=\"%1\"").arg(id));
+      if (generated)
+            return;
+      if (id > 0)
+            xml.stag(QString("chord id=\"%1\"").arg(id));
+      else
+            xml.stag(QString("chord"));
       foreach(const QString& s, names)
             xml.tag("name", s);
       xml.tag("xml", xmlKind);
@@ -654,6 +1357,17 @@ void ChordDescription::write(Xml& xml)
             xml.tag("degree", s);
       writeRenderList(xml, &renderList, "render");
       xml.etag();
+      }
+
+
+//---------------------------------------------------------
+//   ChordList
+//---------------------------------------------------------
+
+int ChordList::privateID = -1000;
+
+ChordList::ChordList()
+      {
       }
 
 //---------------------------------------------------------
@@ -678,7 +1392,6 @@ ChordList::~ChordList()
 void ChordList::read(XmlReader& e)
       {
       int fontIdx = 0;
-      static int privateID = 10000;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "font") {
@@ -709,15 +1422,25 @@ void ChordList::read(XmlReader& e)
                   }
             else if (tag == "chord") {
                   int id = e.intAttribute("id");
-                  // if no id attribute (id == 0), then assign it a private id for just QMap purposes
+                  // if no id attribute (id == 0), then assign it a private id
                   // user chords that match these ChordDescriptions will be treated as normal recognized chords
                   // except that the id will not be written to the score file
-                  if (id == 0)
-                        id = privateID++;
-                  ChordDescription* cd = take(id);
-                  if (cd == 0)
-                        cd = new ChordDescription();
-                  cd->read(e,chordTokenList);
+                  ChordDescription* cd = 0;
+                  if (id)
+                        cd = take(id);
+                  if (!cd)
+                        cd = new ChordDescription(id,this);
+                  // record updated id
+                  id = cd->id;
+                  // read rest of description
+                  cd->read(e);
+                  // restore updated id
+                  cd->id = id;
+                  // throw away previously parsed chords
+                  cd->parsedChords.clear();
+                  // generate any missing info (including new parsed chords)
+                  cd->complete(0,this);
+                  // add to list
                   insert(id, cd);
                   }
             else if (tag == "renderRoot")
@@ -850,6 +1573,4 @@ bool ChordList::write(const QString& name)
 
 
 }
-
-
 
