@@ -347,35 +347,13 @@ void Measure::layoutChords0(Segment* segment, int startTrack)
 
 void Measure::layoutChords10(Segment* segment, int startTrack, AccidentalState* as)
       {
-      int staffIdx     = startTrack/VOICES;
-      Staff* staff     = score()->staff(staffIdx);
-      Drumset* drumset = 0;
-
-      if (staff->part()->instr()->useDrumset())
-            drumset = staff->part()->instr()->drumset();
-
       int endTrack = startTrack + VOICES;
       for (int track = startTrack; track < endTrack; ++track) {
             Element* e = segment->element(track);
             if (!e || e->type() != CHORD)
                  continue;
             Chord* chord = static_cast<Chord*>(e);
-            int n = chord->notes().size();
-            for (int i = 0; i < n; ++i) {
-                  Note* note = chord->notes().at(i);
-                  if (drumset) {
-                        int pitch = note->pitch();
-                        if (!drumset->isValid(pitch)) {
-                              // qDebug("unmapped drum note %d", pitch);
-                              }
-                        else {
-                              note->setHeadGroup(drumset->noteHead(pitch));
-                              note->setLine(drumset->line(pitch));
-                              continue;
-                              }
-                        }
-                  note->layout10(as);
-                  }
+            chord->layout10(as);
             }
       }
 
@@ -1915,6 +1893,7 @@ void Measure::read(XmlReader& e, int staffIdx)
       qreal _spatium = spatium();
 
       e.tuplets().clear();
+      e.setTrack(staffIdx * VOICES);
 
       for (int n = staves.size(); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
@@ -1930,6 +1909,7 @@ void Measure::read(XmlReader& e, int staffIdx)
       if (e.hasAttribute("tick"))
             e.setTick(score()->fileDivision(e.intAttribute("tick")));
       setTick(e.tick());
+      // e.setTick(tick());
 
       bool irregular;
       if (e.hasAttribute("len")) {
@@ -1974,83 +1954,105 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment->add(barLine);
                   }
             else if (tag == "Chord") {
-                  Chord* chord = new Chord(score());
-                  chord->setTrack(e.track());
-                  chord->read(e);
-
-                  if (chord->noteType() != NOTE_NORMAL
-                     && segment
-                     && segment->segmentType() == Segment::SegChordRest
-                     && segment->tick() == e.tick()
-                     && segment->element(e.track())
-                     && segment->element(e.track())->type() == CHORD
-                     )
-                        {
-                        //
-                        // handle grace note after chord
-                        //
-                        Segment* s = new Segment(this);
-                        s->setSegmentType(Segment::SegChordRest);
-                        s->setTick(segment->tick());
-                        s->setPrev(segment);
-                        s->setNext(segment->next());
-                        add(s);
-                        segment = s;
+                  segment = getSegment(Segment::SegChordRest, e.tick());
+                  Chord* chord = static_cast<Chord*>(segment->element(e.track()));
+                  if (chord == 0) {
+                        chord = new Chord(score());
+                        chord->setTrack(e.track());
+                        chord->read(e);
+                        if (chord->noteType() == NOTE_NORMAL)
+                              segment->add(chord);
                         }
-                  else
-                        segment = getSegment(chord, e.tick());
-                  Fraction ts(timeStretch * chord->globalDuration());
-                  int crticks = chord->noteType() != NOTE_NORMAL ? 0 : ts.ticks();
-                  if (chord->tremolo() && chord->tremolo()->tremoloType() < TREMOLO_R8) {
-                        //
-                        // old style tremolo found
-                        //
-                        Tremolo* tremolo = chord->tremolo();
-                        TremoloType st;
-                        switch (tremolo->tremoloType()) {
-                              default:
-                              case OLD_TREMOLO_R8:  st = TREMOLO_R8;  break;
-                              case OLD_TREMOLO_R16: st = TREMOLO_R16; break;
-                              case OLD_TREMOLO_R32: st = TREMOLO_R32; break;
-                              case OLD_TREMOLO_C8:  st = TREMOLO_C8;  break;
-                              case OLD_TREMOLO_C16: st = TREMOLO_C16; break;
-                              case OLD_TREMOLO_C32: st = TREMOLO_C32; break;
-                              }
-                        tremolo->setTremoloType(st);
-                        if (tremolo->twoNotes()) {
-                              int track = chord->track();
-                              Segment* ss = 0;
-                              for (Segment* ps = first(Segment::SegChordRest); ps; ps = ps->next(Segment::SegChordRest)) {
-                                    if (ps->tick() >= e.tick())
-                                          break;
-                                    if (ps->element(track))
-                                          ss = ps;
-                                    }
-                              Chord* pch = 0;       // previous chord
-                              if (ss) {
-                                    ChordRest* cr = static_cast<ChordRest*>(ss->element(track));
-                                    if (cr && cr->type() == CHORD)
-                                          pch = static_cast<Chord*>(cr);
-                                    }
-                              if (pch) {
-                                    tremolo->setParent(pch);
-                                    pch->setTremolo(tremolo);
-                                    chord->setTremolo(0);
-                                    }
-                              else {
-                                    qDebug("tremolo: first note not found");
-                                    }
-                              e.setTick(e.tick() + crticks / 2);
+                  else {
+                        if (chord->type() != CHORD)
+                              qDebug("readChord: expected Chord: found %s", chord->name());
+                        if (!chord->notes().empty())
+                              qDebug("read Chord: there is already a chord");
+                        chord->read(e);
+                        }
+
+                  if (chord->noteType() != NOTE_NORMAL) {
+                        // grace notes
+                        if (segment->tick() == e.tick()
+                           && segment->element(e.track())
+                           && segment->element(e.track())->type() == CHORD
+                           )
+                              {
+                              //
+                              // handle grace note after chord
+                              //
+                              Segment* s = new Segment(this);
+                              s->setSegmentType(Segment::SegChordRest);
+                              s->setTick(segment->tick());
+                              s->setPrev(segment);
+                              s->setNext(segment->next());
+                              add(s);
+                              segment = s;
                               }
                         else {
-                              tremolo->setParent(chord);
-                              e.rtick() += crticks;
+                              Chord* baseChord = static_cast<Chord*>(segment->element(e.track()));
+                              if (baseChord && baseChord->type() != CHORD) {
+                                    qDebug("grace note for non chord?");
+                                    }
+                              else {
+                                    baseChord = new Chord(score());
+                                    baseChord->setTrack(e.track());
+                                    segment->add(baseChord);
+                                    baseChord->addGraceChord(chord);
+                                    }
                               }
                         }
                   else {
+                        Fraction ts(timeStretch * chord->globalDuration());
+                        int crticks = ts.ticks();
+
+                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TREMOLO_R8) {
+                              //
+                              // old style tremolo found
+                              //
+                              Tremolo* tremolo = chord->tremolo();
+                              TremoloType st;
+                              switch (tremolo->tremoloType()) {
+                                    default:
+                                    case OLD_TREMOLO_R8:  st = TREMOLO_R8;  break;
+                                    case OLD_TREMOLO_R16: st = TREMOLO_R16; break;
+                                    case OLD_TREMOLO_R32: st = TREMOLO_R32; break;
+                                    case OLD_TREMOLO_C8:  st = TREMOLO_C8;  break;
+                                    case OLD_TREMOLO_C16: st = TREMOLO_C16; break;
+                                    case OLD_TREMOLO_C32: st = TREMOLO_C32; break;
+                                    }
+                              tremolo->setTremoloType(st);
+                              if (tremolo->twoNotes()) {
+                                    int track = chord->track();
+                                    Segment* ss = 0;
+                                    for (Segment* ps = first(Segment::SegChordRest); ps; ps = ps->next(Segment::SegChordRest)) {
+                                          if (ps->tick() >= e.tick())
+                                                break;
+                                          if (ps->element(track))
+                                                ss = ps;
+                                          }
+                                    Chord* pch = 0;       // previous chord
+                                    if (ss) {
+                                          ChordRest* cr = static_cast<ChordRest*>(ss->element(track));
+                                          if (cr && cr->type() == CHORD)
+                                                pch = static_cast<Chord*>(cr);
+                                          }
+                                    if (pch) {
+                                          tremolo->setParent(pch);
+                                          pch->setTremolo(tremolo);
+                                          chord->setTremolo(0);
+                                          }
+                                    else {
+                                          qDebug("tremolo: first note not found");
+                                          }
+                                    crticks /= 2;
+                                    }
+                              else {
+                                    tremolo->setParent(chord);
+                                    }
+                              }
                         e.rtick() += crticks;
                         }
-                  segment->add(chord);
                   }
             else if (tag == "Rest") {
                   Rest* rest = new Rest(score());

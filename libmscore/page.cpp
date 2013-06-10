@@ -82,7 +82,7 @@ const PaperSize* getPaperSize(const QString& name)
             if (name == paperSizes[i].name)
                   return &paperSizes[i];
             }
-      qDebug("unknown paper size\n");
+      qDebug("unknown paper size");
       return &paperSizes[(sizeof paperSizes/sizeof(PaperSize)) - 2];
       }
 
@@ -117,7 +117,7 @@ const PaperSize* getPaperSize(const qreal wi, const qreal hi)
                && sizeError(hi, paperSizes[i].w) < maxError)
                   return &paperSizes[i];
             }
-      qDebug("unknown paper size for %f x %f\n", wi, hi);
+      qDebug("unknown paper size for %f x %f", wi, hi);
       //return custom
       return &paperSizes[(sizeof paperSizes/sizeof(PaperSize)) - 2];
       }

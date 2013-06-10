@@ -36,6 +36,7 @@ class Stem;
 class Chord;
 class StemSlash;
 class LedgerLine;
+class AccidentalState;
 
 enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 
@@ -59,18 +60,19 @@ class Chord : public ChordRest {
 
       Stem*      _stem;
       Hook*      _hook;
-      StemSlash* _stemSlash;
+      StemSlash* _stemSlash;        // for acciacatura
 
-      MScore::Direction  _stemDirection;
       Arpeggio*  _arpeggio;
       Tremolo*   _tremolo;
-      TremoloChordType _tremoloChordType;
       Glissando* _glissando;
       ElementList _el;              ///< chordline
+      std::vector<Chord*> _graceNotes;
 
-      NoteType   _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
-      bool       _noStem;
-      bool       _userPlayEvents;   ///< play events were modified by user
+      MScore::Direction  _stemDirection;
+      TremoloChordType   _tremoloChordType;
+      NoteType           _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
+      bool               _noStem;
+      bool               _userPlayEvents;   ///< play events were modified by user
 
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
@@ -134,6 +136,9 @@ class Chord : public ChordRest {
       StemSlash* stemSlash() const           { return _stemSlash; }
       void setStemSlash(StemSlash* s);
 
+      const std::vector<Chord*>& graceNotes() const { return _graceNotes; }
+      std::vector<Chord*>& graceNotes()             { return _graceNotes; }
+
       virtual QPointF stemPos() const;        ///< page coordinates
       virtual qreal stemPosX() const;         ///< page coordinates
       QPointF stemPosBeam() const;            ///< page coordinates
@@ -141,11 +146,13 @@ class Chord : public ChordRest {
       Hook* hook() const                     { return _hook; }
 
       Q_INVOKABLE virtual void add(Element*);
+      void addGraceChord(Chord*);
       Q_INVOKABLE virtual void remove(Element*);
 
       Note* selectedNote() const;
       virtual void layout();
       void layout2();
+      void layout10(AccidentalState*);
 
       void readNote(XmlReader& node);
 
@@ -184,6 +191,9 @@ class Chord : public ChordRest {
       virtual QVariant propertyDefault(P_ID) const;
 
       virtual void reset();
+
+      virtual Segment* segment() const;
+      virtual Measure* measure() const;
       };
 
 

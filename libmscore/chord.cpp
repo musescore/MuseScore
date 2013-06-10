@@ -31,6 +31,7 @@
 #include "tremolo.h"
 #include "glissando.h"
 #include "staff.h"
+#include "part.h"
 #include "utils.h"
 #include "articulation.h"
 #include "undo.h"
@@ -46,6 +47,8 @@
 #include "rendermidi.h"
 #include "stemslash.h"
 #include "ledgerline.h"
+#include "drumset.h"
+#include "key.h"
 
 namespace Ms {
 
@@ -329,6 +332,18 @@ void Chord::setSelected(bool f)
       int n = _notes.size();
       for (int i = 0; i < n; ++i)
             _notes.at(i)->setSelected(f);
+      }
+
+//---------------------------------------------------------
+//   addGraceChord
+//---------------------------------------------------------
+
+void Chord::addGraceChord(Chord* c)
+      {
+      c->setParent(this);
+      c->setTrack(track());
+      c->setFlag(ELEMENT_ON_STAFF, false);
+      _graceNotes.push_back(c);
       }
 
 //---------------------------------------------------------
@@ -1050,6 +1065,8 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       for (int i = 0; i < n; ++i)
             _notes.at(i)->scanElements(data, func, all);
       n = _el.size();
+      for (Chord* chord : _graceNotes)
+            chord->scanElements(data, func, all);
       for (Element* e : _el)
             e->scanElements(data, func, all);
       ChordRest::scanElements(data, func, all);
@@ -1077,6 +1094,8 @@ void Chord::processSiblings(std::function<void(Element*)> func)
             func(ll);
       for (int i = 0; i < _notes.size(); ++i)
             func(_notes.at(i));
+      for (Chord* chord : _graceNotes)
+            func(chord);
       for (Element* e : _el)
             func(e);
       }
@@ -1112,6 +1131,8 @@ void Chord::setScore(Score* s)
 
 void Chord::layoutStem1()
       {
+      for (Chord* c : _graceNotes)
+            c->layoutStem1();
       int istaff = staffIdx();
 
       //-----------------------------------------
@@ -1163,6 +1184,8 @@ void Chord::layoutStem1()
 
 void Chord::layoutStem()
       {
+      for (Chord* c : _graceNotes)
+            c->layoutStem();
       //
       // TAB
       //
@@ -1329,6 +1352,9 @@ void Chord::layoutStem()
 
 void Chord::layout2()
       {
+      for (Chord* c : _graceNotes)
+            c->layout2();
+
       if (glissando())
             glissando()->layout();
       qreal _spatium = spatium();
@@ -1383,6 +1409,35 @@ void Chord::layout2()
       }
 
 //---------------------------------------------------------
+//   layout10
+//---------------------------------------------------------
+
+void Chord::layout10(AccidentalState* as)
+      {
+      for (Chord* c : _graceNotes)
+            c->layout10(as);
+
+      Drumset* drumset = 0;
+      if (staff()->part()->instr()->useDrumset())
+            drumset = staff()->part()->instr()->drumset();
+      for (int i = 0; i < notes().size(); ++i) {
+            Note* note = notes().at(i);
+            if (drumset) {
+                  int pitch = note->pitch();
+                  if (!drumset->isValid(pitch)) {
+                        // qDebug("unmapped drum note %d", pitch);
+                        }
+                  else {
+                        note->setHeadGroup(drumset->noteHead(pitch));
+                        note->setLine(drumset->line(pitch));
+                        continue;
+                        }
+                  }
+            note->layout10(as);
+            }
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -1402,6 +1457,8 @@ void Chord::layout()
 
 void Chord::layoutPitch()
       {
+      for (Chord* c : _graceNotes)
+            c->layoutPitch();
       qreal _spatium  = spatium();
 
       while (_ledgerLines) {
@@ -2198,6 +2255,30 @@ qreal Chord::mag() const
       if (_noteType != NOTE_NORMAL)
             m *= score()->styleD(ST_graceNoteMag);
       return m;
+      }
+
+//---------------------------------------------------------
+//   segment
+//---------------------------------------------------------
+
+Segment* Chord::segment() const
+      {
+      Element* e = parent();
+      for (; e && e->type() != SEGMENT; e = e->parent())
+            ;
+      return static_cast<Segment*>(e);
+      }
+
+//---------------------------------------------------------
+//   measure
+//---------------------------------------------------------
+
+Measure* Chord::measure() const
+      {
+      Element* e = parent();
+      for (; e && e->type() != MEASURE; e = e->parent())
+            ;
+      return static_cast<Measure*>(e);
       }
 }
 

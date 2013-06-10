@@ -87,7 +87,7 @@ Segment* Score::tick2segment(int tick, bool first, Segment::SegmentTypes st) con
             int t1 = segment->tick();
             Segment* nsegment = segment->next(st);
             int t2 = nsegment ? nsegment->tick() : INT_MAX;
-            if (((tick == t1) && first) || ((tick == t1) && (tick < t2)))
+            if ((tick == t1) && (first || (tick < t2)))
                   return segment;
             segment = nsegment;
             }

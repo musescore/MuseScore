@@ -3857,6 +3857,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
       Slur* slur = new Slur(_score);
       slur->setTick(cr1->tick());
       slur->setTickLen(cr2->tick() - cr1->tick());
+printf("addSlur: track %d\n", cr1->track());
       slur->setTrack(cr1->track());
       slur->setParent(0);
       _score->undoAddElement(slur);

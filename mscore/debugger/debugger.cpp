@@ -226,7 +226,7 @@ void Debugger::layoutScore()
 //   addSymbol
 //---------------------------------------------------------
 
-void Debugger::addSymbol(ElementItem* parent, BSymbol* bs)
+static void addSymbol(ElementItem* parent, BSymbol* bs)
       {
       const QList<Element*>el = bs->leafs();
       ElementItem* i = new ElementItem(parent, bs);
@@ -267,6 +267,77 @@ static void addBSymbol(ElementItem* item, BSymbol* e)
       ElementItem* si = new ElementItem(item, e);
       foreach(Element* ee, e->leafs())
             addBSymbol(si, static_cast<BSymbol*>(ee));
+      }
+
+//---------------------------------------------------------
+//   addChord
+//---------------------------------------------------------
+
+static void addChord(ElementItem* sei, Chord* chord)
+      {
+      if (chord->hook())
+            new ElementItem(sei, chord->hook());
+      if (chord->stem())
+            new ElementItem(sei, chord->stem());
+      if (chord->arpeggio())
+            new ElementItem(sei, chord->arpeggio());
+      if (chord->tremolo() && (chord->tremolo()->chord1() == chord))
+            new ElementItem(sei, chord->tremolo());
+      if (chord->glissando())
+            new ElementItem(sei, chord->glissando());
+
+      foreach(Articulation* a, chord->articulations())
+            new ElementItem(sei, a);
+      for(LedgerLine* h = chord->ledgerLines(); h; h = h->next())
+            new ElementItem(sei, h);
+      foreach(Note* note, chord->notes()) {
+            ElementItem* ni = new ElementItem(sei, note);
+            if (note->accidental()) {
+                  new ElementItem(ni, note->accidental());
+                  }
+            foreach(Element* f, note->el()) {
+                  if (f->type() == Element::SYMBOL || f->type() == Element::IMAGE) {
+                        BSymbol* bs = static_cast<BSymbol*>(f);
+                        addSymbol(ni, bs);
+                        }
+                  else
+                        new ElementItem(ni, f);
+                  }
+            for (int i = 0; i < 3; ++i) {
+                  if (note->dot(i))
+                        new ElementItem(ni, note->dot(i));
+                  }
+
+            if (note->tieFor()) {
+                  Tie* tie = note->tieFor();
+                  ElementItem* ti = new ElementItem(ni, tie);
+                  foreach(Element* el1, tie->spannerSegments())
+                        new ElementItem(ti, el1);
+                  }
+            foreach (Spanner* s, note->spannerFor()) {
+                  ElementItem* si = new ElementItem(ni, s);
+                  foreach(Element* ls, s->spannerSegments())
+                        new ElementItem(si, ls);
+                  }
+            }
+      foreach(Element* e, chord->el())
+            new ElementItem(sei, e);
+      foreach(Chord* c, chord->graceNotes()) {
+            ElementItem* ssei = new ElementItem(sei, c);
+            addChord(ssei, c);
+            }
+
+      if (chord->beam() && chord->beam()->elements().front() == chord)
+            new ElementItem(sei, chord->beam());
+      foreach(Lyrics* lyrics, chord->lyricsList()) {
+            if (lyrics)
+                  new ElementItem(sei, lyrics);
+            }
+      DurationElement* de = chord;
+      while (de->tuplet() && de->tuplet()->elements().front() == de) {
+            new ElementItem(sei, de->tuplet());
+            de = de->tuplet();
+            }
       }
 
 //---------------------------------------------------------
@@ -331,57 +402,9 @@ void Debugger::updateList(Score* s)
                                     if (!e)
                                           continue;
                                     ElementItem* sei = new ElementItem(segItem, e);
-                                    if (e->type() == Element::CHORD) {
-                                          Chord* chord = (Chord*)e;
-                                          if (chord->hook())
-                                                new ElementItem(sei, chord->hook());
-                                          if (chord->stem())
-                                                new ElementItem(sei, chord->stem());
-                                          if (chord->arpeggio())
-                                                new ElementItem(sei, chord->arpeggio());
-                                          if (chord->tremolo() && (chord->tremolo()->chord1() == chord))
-                                                new ElementItem(sei, chord->tremolo());
-                                          if (chord->glissando())
-                                                new ElementItem(sei, chord->glissando());
-
-                                          foreach(Articulation* a, chord->articulations())
-                                                new ElementItem(sei, a);
-                                          for(LedgerLine* h = chord->ledgerLines(); h; h = h->next())
-                                                new ElementItem(sei, h);
-                                          foreach(Note* note, chord->notes()) {
-                                                ElementItem* ni = new ElementItem(sei, note);
-                                                if (note->accidental()) {
-                                                      new ElementItem(ni, note->accidental());
-                                                      }
-                                                foreach(Element* f, note->el()) {
-                                                      if (f->type() == Element::SYMBOL || f->type() == Element::IMAGE) {
-                                                            BSymbol* bs = static_cast<BSymbol*>(f);
-                                                            addSymbol(ni, bs);
-                                                            }
-                                                      else
-                                                            new ElementItem(ni, f);
-                                                      }
-                                                for (int i = 0; i < 3; ++i) {
-                                                      if (note->dot(i))
-                                                            new ElementItem(ni, note->dot(i));
-                                                      }
-
-                                                if (note->tieFor()) {
-                                                      Tie* tie = note->tieFor();
-                                                      ElementItem* ti = new ElementItem(ni, tie);
-                                                      foreach(Element* el1, tie->spannerSegments())
-                                                            new ElementItem(ti, el1);
-                                                      }
-                                                foreach (Spanner* s, note->spannerFor()) {
-                                                      ElementItem* si = new ElementItem(ni, s);
-                                                      foreach(Element* ls, s->spannerSegments())
-                                                            new ElementItem(si, ls);
-                                                      }
-                                                }
-                                          foreach(Element* e, chord->el())
-                                                new ElementItem(sei, e);
-                                          }
-                                    if (e->isChordRest()) {
+                                    if (e->type() == Element::CHORD)
+                                          addChord(sei, static_cast<Chord*>(e));
+                                    else if (e->isChordRest()) {
                                           ChordRest* cr = static_cast<ChordRest*>(e);
                                           if (cr->beam() && cr->beam()->elements().front() == cr)
                                                 new ElementItem(sei, cr->beam());
@@ -836,6 +859,8 @@ ShowChordWidget::ShowChordWidget()
       connect(cb.stemDirection, SIGNAL(activated(int)), SLOT(directionChanged(int)));
       connect(cb.helplineList, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       connect(cb.notes, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      connect(cb.graceChords1, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      connect(cb.graceChords2, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
 
       crb.beamMode->addItem("auto");
       crb.beamMode->addItem("beam begin");
@@ -914,6 +939,14 @@ void ShowChordWidget::setElement(Element* e)
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)n));
             cb.notes->addItem(item);
+            }
+      cb.graceChords1->clear();
+      for (Chord* c : chord->graceNotes()) {
+            QString s;
+            s.setNum(long(c), 16);
+            QListWidgetItem* item = new QListWidgetItem(s);
+            item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)c));
+            cb.graceChords1->addItem(item);
             }
       cb.userPlayEvents->setChecked(chord->userPlayEvents());
       }
@@ -1056,6 +1089,7 @@ void ShowNoteWidget::setElement(Element* e)
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)text));
             nb.fingering->addItem(item);
             }
+      note->playEvents().clear();
       foreach(const NoteEvent& e, note->playEvents()) {
             QString s = QString("%1 %2 %3").arg(e.pitch()).arg(e.ontime()).arg(e.len());
             QListWidgetItem* item = new QListWidgetItem(s);
