@@ -1055,6 +1055,10 @@ void StyleData::load(XmlReader& e)
       // if we just specified a new chord description, load it
       QString newChordDescriptionFile = value(ST_chordDescriptionFile).toString();
       if (newChordDescriptionFile != oldChordDescriptionFile && !_customChordList) {
+            if (!newChordDescriptionFile.startsWith("chords_") && value(ST_chordStyle).toString() == "std") {
+                  set(StyleVal(ST_chordStyle, QString("custom")));
+                  set(StyleVal(ST_chordsXmlFile, true));
+                  }
             delete _chordList;
 #if 1
 // use this code to set chord list to be loaded on demand
@@ -1066,10 +1070,6 @@ void StyleData::load(XmlReader& e)
                   _chordList->read("chords.xml");
             _chordList->read(newChordDescriptionFile);
 #endif
-            if (!newChordDescriptionFile.startsWith("chords_") && value(ST_chordStyle).toString() == "std") {
-                  set(StyleVal(ST_chordStyle, QString("custom")));
-                  set(StyleVal(ST_chordsXmlFile, true));
-                  }
             }
 
       //
