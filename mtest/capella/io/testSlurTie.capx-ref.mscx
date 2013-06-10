@@ -75,11 +75,8 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Slur id="2">
-          </Slur>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="start" number="2"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -103,7 +100,6 @@
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="stop" number="2"/>
           <Note>
             <pitch>64</pitch>
             <tpc>18</tpc>

@@ -28,7 +28,7 @@
 #include "libmscore/image.h"
 #include "libmscore/mscore.h"
 #include "svggenerator.h"
-#include "inspector.h"
+#include "inspector/inspector.h"
 
 namespace Ms {
 

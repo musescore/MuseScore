@@ -151,6 +151,10 @@ enum P_ID {
       P_TIMESIG,
       P_TIMESIG_GLOBAL,
 
+      P_SPANNER_TICK,
+      P_SPANNER_TICKLEN,
+      P_USER_OFF2,
+
       P_END
       };
 

@@ -28,17 +28,16 @@ namespace Ms {
 
 Volta* Score::searchVolta(int tick) const
       {
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for(Spanner* e = m->spannerFor(); e; e = e->next()) {
-                  if (e->type() != Element::VOLTA)
-                        continue;
-                  Volta* volta = static_cast<Volta*>(e);
-                  int tick1 = volta->startMeasure()->tick();
-                  int tick2 = volta->endMeasure()->endTick();
-// qDebug("spanner %s %d - %d %d\n", e->name(), tick, tick1, tick2);
-                  if (tick >= tick1 && tick < tick2)
-                        return static_cast<Volta*>(e);
-                  }
+      foreach (Spanner* s, _spanner) {
+            if (s->type() != Element::VOLTA)
+                  continue;
+            Volta* volta = static_cast<Volta*>(s);
+            int tick1 = volta->tick();
+            Measure* m = tick2measure(volta->tick2());
+            int tick2 = m->endTick();
+// qDebug("spanner %s %d - %d %d\n", s->name(), tick, tick1, tick2);
+            if (tick >= tick1 && tick < tick2)
+                  return volta;
             }
       return 0;
       }

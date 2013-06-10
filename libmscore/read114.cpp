@@ -412,7 +412,7 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
                   slur->read(e);
-                  e.addSpanner(slur);
+                  _spanner.push_back(slur);
                   }
             else if ((tag == "HairPin")
                 || (tag == "Ottava")
@@ -426,19 +426,17 @@ Score::FileError Score::read114(XmlReader& e)
                         s->setTrack(e.track());
                   else
                         e.setTrack(s->track());       // update current track
-                  if (s->__tick1() == -1)
-                        s->__setTick1(e.tick());
+                  if (s->tick() == -1)
+                        s->setTick(e.tick());
                   else
-                        e.setTick(s->__tick1());      // update current tick
-                  if (s->__tick2() == -1) {
+                        e.setTick(s->tick());      // update current tick
+                  if (s->tickLen() == -1) {
                         delete s;
-                        qDebug("invalid spanner %s tick2: %d\n",
-                           s->name(), s->__tick2());
+                        qDebug("invalid spanner %s tickLen: %d\n",
+                           s->name(), s->tickLen());
                         }
                   else
-                        e.addSpanner(s);
-                  // qDebug("Spanner <%s> %d %d track %d", s->name(),
-                  //   s->__tick1(), s->__tick2(), s->track());
+                        _spanner.push_back(s);
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -518,6 +516,7 @@ Score::FileError Score::read114(XmlReader& e)
             }
       qDeleteAll(e.clefListList());
 
+#if 0 // TODO-S
       foreach(Spanner* s, e.spanner()) {
             if (s->type() == Element::OTTAVA
                || (s->type() == Element::TEXTLINE)
@@ -609,6 +608,7 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             }
+#endif
       connectTies();
 
       //

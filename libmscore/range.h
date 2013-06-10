@@ -50,6 +50,7 @@ class TrackList : public QList<Element*>
       Fraction duration() const  { return _duration; }
       ScoreRange* range() const { return _range; }
       void appendGap(const Fraction&);
+      void dump() const;
       };
 
 //---------------------------------------------------------

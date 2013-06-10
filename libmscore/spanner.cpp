@@ -10,12 +10,19 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "score.h"
 #include "spanner.h"
 #include "system.h"
 #include "chordrest.h"
 #include "segment.h"
+#include "measure.h"
 
 namespace Ms {
+
+int Spanner::editTick;
+int Spanner::editTickLen;
+QList<QPointF> Spanner::userOffsets2;
+QList<QPointF> Spanner::userOffsets;
 
 //---------------------------------------------------------
 //   SpannerSegment
@@ -63,8 +70,11 @@ void SpannerSegment::setSystem(System* s)
       if (system() != s) {
             if (system())
                   system()->remove(this);
+            if (s)
+                  s->add(this);
+            else
+                  setParent(0);
             }
-      s->add(this);
       }
 
 //---------------------------------------------------------
@@ -77,6 +87,9 @@ QVariant SpannerSegment::getProperty(P_ID id) const
             case P_COLOR:
             case P_VISIBLE:
                   return spanner()->getProperty(id);
+            case P_USER_OFF2:
+                  return _userOff2;
+
             default:
                   return Element::getProperty(id);
             }
@@ -92,9 +105,14 @@ bool SpannerSegment::setProperty(P_ID id, const QVariant& v)
             case P_COLOR:
             case P_VISIBLE:
                  return spanner()->setProperty(id, v);
+            case P_USER_OFF2:
+                  _userOff2 = v.toPointF();
+                  score()->setLayoutAll(true);
+                  break;
             default:
                   return Element::setProperty(id, v);
             }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -107,6 +125,8 @@ QVariant SpannerSegment::propertyDefault(P_ID id) const
             case P_COLOR:
             case P_VISIBLE:
                   return spanner()->propertyDefault(id);
+            case P_USER_OFF2:
+                  return QVariant();
             default:
                   return Element::propertyDefault(id);
             }
@@ -119,24 +139,19 @@ QVariant SpannerSegment::propertyDefault(P_ID id) const
 Spanner::Spanner(Score* s)
    : Element(s)
       {
-      _next         = 0;
-      _startElement = 0;
-      _endElement   = 0;
       _anchor       = ANCHOR_SEGMENT;
+      _tick         = -1;
+      _tickLen      = -1;
       _id           = 0;
-      _tick1        = -1;
-      _tick2        = -1;
-      oStartElement = 0;
-      oEndElement   = 0;
       }
 
 Spanner::Spanner(const Spanner& s)
    : Element(s)
       {
-      _next         = 0;
-      _startElement = s._startElement;
-      _endElement   = s._endElement;
-      _anchor       = s._anchor;
+      _anchor  = s._anchor;
+      _tick    = s._tick;
+      _tickLen = s._tickLen;
+      _id      = 0;
       foreach(SpannerSegment* ss, s.segments) {
             SpannerSegment* nss = ss->clone();
             add(nss);
@@ -180,7 +195,7 @@ void Spanner::remove(Element* e)
 void Spanner::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       Q_UNUSED(all)
-      foreach(SpannerSegment* seg, segments)
+      foreach (SpannerSegment* seg, segments)
             seg->scanElements(data, func, true);
       }
 
@@ -201,8 +216,34 @@ void Spanner::setScore(Score* s)
 
 void Spanner::startEdit(MuseScoreView*, const QPointF&)
       {
-      oStartElement = _startElement;
-      oEndElement   = _endElement;
+      editTick    = _tick;
+      editTickLen = _tickLen;
+      userOffsets.clear();
+      userOffsets2.clear();
+      foreach (SpannerSegment* ss, spannerSegments()) {
+            userOffsets.push_back(ss->userOff());
+            userOffsets2.push_back(ss->userOff2());
+            }
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void Spanner::endEdit()
+      {
+      score()->undoPropertyChanged(this, P_SPANNER_TICK, editTick);
+      score()->undoPropertyChanged(this, P_SPANNER_TICKLEN, editTickLen);
+
+      if (spannerSegments().size() != userOffsets2.size()) {
+            qDebug("SLine::endEdit(): segment size changed");
+            return;
+            }
+      for (int i = 0; i < userOffsets2.size(); ++i) {
+            SpannerSegment* ss = segments[i];
+            score()->undoPropertyChanged(ss, P_USER_OFF, userOffsets[i]);
+            score()->undoPropertyChanged(ss, P_USER_OFF2, userOffsets2[i]);
+            }
       }
 
 //---------------------------------------------------------
@@ -223,10 +264,8 @@ void Spanner::setSelected(bool f)
 
 bool Spanner::isEdited(Spanner* originalSpanner) const
       {
-      if (startElement() != originalSpanner->startElement()
-         || endElement() != originalSpanner->endElement()) {
+      if (_tick != originalSpanner->_tick || _tickLen != originalSpanner->_tickLen)
             return true;
-            }
       if (spannerSegments().size() != originalSpanner->spannerSegments().size())
             return true;
       for (int i = 0; i < segments.size(); ++i) {
@@ -237,60 +276,136 @@ bool Spanner::isEdited(Spanner* originalSpanner) const
       }
 
 //---------------------------------------------------------
-//   startTick
+//   getProperty
 //---------------------------------------------------------
 
-int Spanner::startTick() const
+QVariant Spanner::getProperty(P_ID propertyId) const
       {
-      if (startElement()->isChordRest())
-            return static_cast<ChordRest*>(startElement())->tick();
-      if (startElement()->type() == SEGMENT)
-            return static_cast<Segment*>(startElement())->tick();
-      qDebug("Spanner:: unknown spanner start %s\n", startElement()->name());
-      return 0;
+      switch (propertyId) {
+            case P_SPANNER_TICK:
+                  return tick();
+            case P_SPANNER_TICKLEN:
+                  return tickLen();
+            default:
+                  break;
+            }
+      return Element::getProperty(propertyId);
       }
 
 //---------------------------------------------------------
-//   endTick
+//   setProperty
 //---------------------------------------------------------
 
-int Spanner::endTick() const
+bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
       {
-      if (endElement()->isChordRest())
-            return static_cast<ChordRest*>(endElement())->tick();
-      if (endElement()->type() == SEGMENT)
-            return static_cast<Segment*>(endElement())->tick();
-      qDebug("Spanner:: unknown spanner end %s\n", endElement()->name());
-      return 0;
+      switch(propertyId) {
+            case P_SPANNER_TICK:
+                  setTick(v.toInt());
+                  break;
+            case P_SPANNER_TICKLEN:
+                  setTickLen(v.toInt());
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
       }
 
 //---------------------------------------------------------
-//   removeSpannerBack
+//   propertyDefault
 //---------------------------------------------------------
 
-bool Spanner::removeSpannerBack()
+QVariant Spanner::propertyDefault(P_ID propertyId) const
       {
-      if (endElement()->isChordRest())
-            return static_cast<ChordRest*>(endElement())->removeSpannerBack(this);
-      if (endElement()->type() == SEGMENT)
-            return static_cast<Segment*>(endElement())->removeSpannerBack(this);
-      qDebug("Spanner:: unknown spanner end %s\n", endElement()->name());
-      return false;
+      switch(propertyId) {
+            default:
+                  break;
+            }
+      return Element::propertyDefault(propertyId);
+      }
+
+Segment* Spanner::startSegment() const { return score()->tick2segment(tick()); }
+Segment* Spanner::endSegment() const   { return score()->tick2segment(tick2()); }
+
+//---------------------------------------------------------
+//   findCR
+//---------------------------------------------------------
+
+ChordRest* Score::findCR(int tick, int track) const
+      {
+      Segment* s = tick2segment(tick);
+      if (s)
+            return static_cast<ChordRest*>(s->element(track));
+      return nullptr;
       }
 
 //---------------------------------------------------------
-//   addSpannerBack
+//   startElement
 //---------------------------------------------------------
 
-void Spanner::addSpannerBack()
+ChordRest* Spanner::startCR() const
       {
-      if (endElement()->isChordRest())
-            static_cast<ChordRest*>(endElement())->addSpannerBack(this);
-      else if (endElement()->type() == SEGMENT)
-            static_cast<Segment*>(endElement())->addSpannerBack(this);
-      else
-            qDebug("Spanner:: unknown spanner end %s\n", endElement()->name());
+      return score()->findCR(tick(), track());
       }
 
+//---------------------------------------------------------
+//   endElement
+//---------------------------------------------------------
+
+ChordRest* Spanner::endCR() const
+      {
+      return score()->findCR(tick2(), track());
+      }
+
+//---------------------------------------------------------
+//   startElement
+//---------------------------------------------------------
+
+Element* Spanner::startElement() const
+      {
+      switch (_anchor) {
+            case ANCHOR_SEGMENT:
+                  return score()->tick2segment(tick());
+            case ANCHOR_MEASURE:
+                  {
+                  ChordRest* cr = startCR();
+                  if (cr)
+                        return cr->measure();
+                  return nullptr;
+                  }
+            case ANCHOR_CHORD:
+                  return startCR();
+            case ANCHOR_NOTE:
+                  break;
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   endElement
+//---------------------------------------------------------
+
+Element* Spanner::endElement() const
+      {
+      switch (_anchor) {
+            case ANCHOR_SEGMENT:
+                  return score()->tick2segment(tick2());
+            case ANCHOR_MEASURE:
+                  {
+                  ChordRest* cr = endCR();
+                  if (cr)
+                        return cr->measure();
+                  return nullptr;
+                  }
+            case ANCHOR_CHORD:
+                  return endCR();
+            case ANCHOR_NOTE:
+                  break;
+            }
+      return nullptr;
+      }
 }
 

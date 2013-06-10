@@ -317,6 +317,5 @@ void Hairpin::setYoff(qreal val)
       rUserYoffset() += (val - score()->styleS(ST_hairpinY).val()) * spatium();
       }
 
-
 }
 

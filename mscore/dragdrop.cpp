@@ -371,7 +371,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                         {
                         dragElement->setScore(score());
                         Spanner* spanner = static_cast<Spanner*>(dragElement);
-                        score()->cmdAddSpanner(spanner, pos, dragOffset);
+                        score()->cmdAddSpanner(spanner, pos);
                         event->acceptProposedAction();
                         }
                         break;

@@ -261,6 +261,7 @@ class Score : public QObject {
       int _pageNumberOffset;        ///< Offset for page numbers.
 
       MeasureBaseList _measures;          // here are the notes
+      QList<Spanner*> _spanner;
       //
       // generated objects during layout:
       //
@@ -507,6 +508,7 @@ class Score : public QObject {
       void undoChangeBarLine(Measure* m, BarLineType);
       void undoSwapCR(ChordRest* cr1, ChordRest* cr2);
       void undoChangeProperty(Element*, P_ID, const QVariant& v);
+      void undoPropertyChanged(Element*, P_ID, const QVariant& v);
       UndoStack* undo() const;
       void undo(UndoCommand* cmd) const;
 
@@ -538,7 +540,7 @@ class Score : public QObject {
       void addElement(Element*);
       void removeElement(Element*);
 
-      void cmdAddSpanner(Spanner* e, const QPointF& pos, const QPointF& dragOffset);
+      void cmdAddSpanner(Spanner* e, const QPointF& pos);
       void cmdAddBSymbol(BSymbol*, const QPointF&, const QPointF&);
 
       Note* addNote(Chord*, int pitch);
@@ -839,7 +841,6 @@ class Score : public QObject {
       QByteArray readCompressedToBuffer();
       QByteArray readToBuffer();
       void writeSegments(Xml& xml, const Measure*, int strack, int etrack, Segment* first, Segment* last, bool);
-      Spanner* findSpanner(int id) const;
 
       const QMap<QString, QString> metaTags() const           { return _metaTags; }
       QMap<QString, QString>& metaTags()                      { return _metaTags; }
@@ -919,7 +920,14 @@ class Score : public QObject {
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
 
-      qreal noteHeadWidth() const   { return _noteHeadWidth; }
+      qreal noteHeadWidth() const            { return _noteHeadWidth; }
+
+      QList<Spanner*>& spanner()             { return _spanner; }
+      const QList<Spanner*>& spanner() const { return _spanner; }
+      Spanner* findSpanner(int id) const;
+      bool isSpannerStartEnd(int tick, int track) const;
+
+      ChordRest* findCR(int tick, int track) const;
 
       friend class ChangeSynthesizerState;
       };

@@ -1669,10 +1669,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             Segment* seg2 = score->tick2segment(tick2);
             // qDebug(" seg1 %p seg2 %p", seg1, seg2);
             if (seg1 && seg2) {
-                  sp->setStartElement(seg1);
+                  sp->setTick(seg1->tick());
                   seg1->add(sp);
-                  sp->setEndElement(seg2);
-                  seg2->addSpannerBack(sp);
+                  sp->setTick2(seg2->tick());
                   if (sp->type() == Element::OTTAVA) {
                         Ottava* o = static_cast<Ottava*>(sp);
                         int shift = o->pitchShift();
@@ -2116,15 +2115,14 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                           // LVIFIX TODO also support endings "1 - 3"
                                           volta->endings().clear();
                                           volta->endings().append(iEndingNumbers);
-                                          volta->setStartElement(measure);
+                                          volta->setTick(measure->tick());
                                           measure->add(volta);
                                           lastVolta = volta;
                                           }
                                     else if (endingType == "stop") {
                                           if (lastVolta) {
                                                 lastVolta->setVoltaType(VoltaType::CLOSED);
-                                                lastVolta->setEndElement(measure);
-                                                measure->addSpannerBack(lastVolta);
+                                                lastVolta->setTickLen(measure->tick() - lastVolta->tick());
                                                 lastVolta = 0;
                                                 }
                                           else {
@@ -2134,8 +2132,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                     else if (endingType == "discontinue") {
                                           if (lastVolta) {
                                                 lastVolta->setVoltaType(VoltaType::OPEN);
-                                                lastVolta->setEndElement(measure);
-                                                measure->addSpannerBack(lastVolta);
+                                                lastVolta->setTick2(measure->tick());
                                                 lastVolta = 0;
                                                 }
                                           else {
@@ -4082,8 +4079,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                           slur[slurNo]->setLineType(1);
                                     else if (lineType == "dashed")
                                           slur[slurNo]->setLineType(2);
-                                    cr->addSlurFor(slur[slurNo]);
-                                    slur[slurNo]->setStartElement(cr);
+                                    slur[slurNo]->setTick(cr->tick());
                                     }
                               else
                                     endSlur = true;
@@ -4096,22 +4092,19 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               // slur[slurNo]->setTrack((staff + relStaff) * VOICES);
                               // score->add(slur[slurNo]);
                               if (endSlur) {
-                                    cr->addSlurFor(slur[slurNo]);
-                                    slur[slurNo]->setStartElement(cr);
+                                    slur[slurNo]->setTick(cr->tick());
                                     slur[slurNo] = 0;
                                     }
                               }
                         else if (slurType == "stop") {
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
-                                    cr->addSlurBack(slur[slurNo]);
-                                    slur[slurNo]->setEndElement(cr);
+                                    slur[slurNo]->setTick2(cr->tick());
                                     // slur[slurNo]->setEnd(tick, trk + voice);
                                     }
                               else {
                                     // slur[slurNo]->setEnd(tick, trk + voice);
-                                    cr->addSlurBack(slur[slurNo]);
-                                    slur[slurNo]->setEndElement(cr);
+                                    slur[slurNo]->setTick2(cr->tick());
                                     slur[slurNo] = 0;
                                     }
                               }

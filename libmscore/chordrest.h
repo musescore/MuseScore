@@ -47,8 +47,6 @@ class ChordRest : public DurationElement {
       Q_PROPERTY(int      durationType  READ durationTypeTicks WRITE setDurationType);
       Q_PROPERTY(BeamMode beamMode      READ beamMode          WRITE undoSetBeamMode);
 
-      Spanner* _spannerFor;
-      Spanner* _spannerBack;
       QList<Element*> _annotations;
 
       TDuration _durationType;
@@ -114,19 +112,6 @@ class ChordRest : public DurationElement {
 
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
-
-      Spanner* spannerFor() const               { return _spannerFor;         }
-      Spanner* spannerBack() const              { return _spannerBack;        }
-
-      void addSlurFor(Slur* s)                  { addSpannerFor((Spanner*)s);  }
-      void addSlurBack(Slur* s)                 { addSpannerBack((Spanner*)s);    }
-      bool removeSlurFor(Slur* s)               { return removeSpannerFor((Spanner*)s);  }
-      bool removeSlurBack(Slur* s)              { return removeSpannerBack((Spanner*)s); }
-
-      void addSpannerFor(Spanner*);
-      void addSpannerBack(Spanner*);
-      bool removeSpannerFor(Spanner*);
-      bool removeSpannerBack(Spanner*);
 
       const QList<Element*>& annotations() const { return _annotations;        }
       QList<Element*>& annotations()             { return _annotations;        }

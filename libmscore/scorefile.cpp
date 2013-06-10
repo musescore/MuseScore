@@ -25,6 +25,7 @@
 #include "page.h"
 #include "part.h"
 #include "staff.h"
+#include "system.h"
 #include "keysig.h"
 #include "clef.h"
 #include "text.h"
@@ -897,10 +898,16 @@ bool Score::read(XmlReader& e)
                   part->read(e);
                   _parts.push_back(part);
                   }
-            else if (tag == "Slur") {
-                  Slur* slur = new Slur(this);
-                  slur->read(e);
-                  e.addSpanner(slur);
+            else if ((tag == "HairPin")
+                || (tag == "Ottava")
+                || (tag == "TextLine")
+                || (tag == "Volta")
+                || (tag == "Trill")
+                || (tag == "Slur")
+                || (tag == "Pedal")) {
+                  Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
+                  s->read(e);
+                  _spanner.push_back(s);
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -949,6 +956,7 @@ bool Score::read(XmlReader& e)
             }
 
       // check slurs
+#if 0 // TODO-S
       foreach(Spanner* s, e.spanner()) {
             if (!s->startElement() || !s->endElement()) {
                   qDebug("remove incomplete Spanner %s", s->name());
@@ -1014,6 +1022,8 @@ bool Score::read(XmlReader& e)
                   qDebug("Slur references bad: %d %d", n1, n2);
 #endif
             }
+#endif
+
       connectTies();
 
       searchSelectedElements();
@@ -1240,28 +1250,33 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                               }
                         e->write(xml);
                         }
-                  for (Spanner* e = segment->spannerFor(); e; e = e->next()) {
-                        if (e->track() == track && !e->generated()) {
-                              if (needTick) {
-                                    xml.tag("tick", segment->tick() - xml.tickDiff);
-                                    xml.curTick = segment->tick();
-                                    needTick = false;
+                  if (segment->segmentType() & (Segment::SegChordRest)) {
+                        // foreach (SpannerSegment* ss, m->system()->spannerSegments()) {
+                        //      Spanner* s = ss->spanner();
+                        foreach (Spanner* s, _spanner) {
+                              if (s->track() == track && !s->generated()) {
+                                    if (s->tick() == segment->tick()) {
+                                          if (needTick) {
+                                                xml.tag("tick", segment->tick() - xml.tickDiff);
+                                                xml.curTick = segment->tick();
+                                                needTick = false;
+                                                }
+                                          s->setId(++xml.spannerId);
+                                          s->write(xml);
+                                          }
+                                    if ((s->tick() + s->tickLen()) == segment->tick()) {
+                                          if (needTick) {
+                                                xml.tag("tick", segment->tick() - xml.tickDiff);
+                                                xml.curTick = segment->tick();
+                                                needTick = false;
+                                                }
+                                          Q_ASSERT(s->id() != -1);
+                                          xml.tagE(QString("endSpanner id=\"%1\"").arg(s->id()));
+                                          }
                                     }
-                              e->setId(++xml.spannerId);
-                              e->write(xml);
                               }
                         }
-                  for (Spanner* e = segment->spannerBack(); e; e = e->next()) {
-                        if (e->track() == track && !e->generated()) {
-                              if (needTick) {
-                                    xml.tag("tick", segment->tick() - xml.tickDiff);
-                                    xml.curTick = segment->tick();
-                                    needTick = false;
-                                    }
-                              Q_ASSERT(e->id() != -1);
-                              xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
-                              }
-                        }
+
                   if (!e)
                         continue;
 
@@ -1298,22 +1313,6 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                               }
 #endif
                         cr->writeTuplet(xml);
-                        for (Spanner* slur = cr->spannerFor(); slur; slur = slur->next()) {
-                              if (!xml.spanner().contains(slur)) {
-                                    Q_ASSERT(slur->type() == Element::SLUR);
-                                    slur->setId(xml.spannerId++);
-                                    slur->write(xml);
-                                    xml.addSpanner(slur);
-                                    }
-                              }
-                        for (Spanner* slur = cr->spannerBack(); slur; slur = slur->next()) {
-                              if (!xml.spanner().contains(slur)) {
-                                    Q_ASSERT(slur->type() == Element::SLUR);
-                                    slur->setId(xml.spannerId++);
-                                    slur->write(xml);
-                                    xml.addSpanner(slur);
-                                    }
-                              }
                         }
                   if ((segment->segmentType() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
                         xml.stag("BarLine");

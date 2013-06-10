@@ -207,6 +207,7 @@ QPointF LineSegment::gripAnchor(int grip) const
 
 bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
+#if 1 // TODO-S
       if (!((modifiers & Qt::ShiftModifier)
          && ((spannerSegmentType() == SEGMENT_SINGLE)
               || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == GRIP_LINE_START)
@@ -258,7 +259,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                               ls = l->takeFirstSegment();
                         }
                   static_cast<Segment*>(l->startElement())->remove(l);
-                  l->setStartElement(s1);
+                  l->setTick(s1->tick());
                   s1->add(l);
                   }
             else if (l->endElement() != s2) {
@@ -268,9 +269,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                               ls = l->takeLastSegment();
                         }
 
-                  static_cast<Segment*>(l->endElement())->removeSpannerBack(l);
-                  l->setEndElement(s2);
-                  s2->addSpannerBack(l);
+                  l->setTickLen(s2->tick() - l->tick());
                   }
             }
       else {
@@ -314,7 +313,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                               ls = l->takeFirstSegment();
                         }
                   l->startElement()->remove(l);
-                  l->setStartElement(m1);
+                  l->setTick(m1->tick());
                   m1->add(l);
                   }
             else if (l->endElement() != m2) {
@@ -323,9 +322,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                         if (key == Qt::Key_Left)
                               ls = l->takeLastSegment();
                         }
-                  static_cast<Measure*>(l->endElement())->removeSpannerBack(l);
-                  l->setEndElement(m2);
-                  m2->addSpannerBack(l);
+                  l->setTickLen(m2->tick() - l->tick());
                   }
             }
       l->layout();
@@ -348,6 +345,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
             _score->rebuildBspTree();
       if (ls)
             _score->undoRemoveElement(ls);
+#endif
       return true;
       }
 
@@ -357,6 +355,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
 
 void LineSegment::editDrag(const EditData& ed)
       {
+#if 1 // TODO-S
       // Only for resizing according to the diagonal properties
       QPointF deltaResize(ed.delta.x(), line()->diagonal() ? ed.delta.y() : 0.0);
 
@@ -390,7 +389,7 @@ void LineSegment::editDrag(const EditData& ed)
 
                         noteOld->removeSpannerBack(l);
                         noteNew->addSpannerBack(l);
-                        l->setEndElement(noteNew);
+//TODO-S                        l->setEndElemen(noteNew);
 
                         _userOff2 += noteOld->canvasPos() - noteNew->canvasPos();
                         }
@@ -399,6 +398,7 @@ void LineSegment::editDrag(const EditData& ed)
                         }
                   }
             }
+#endif
       line()->layout();
       }
 
@@ -449,7 +449,6 @@ QPointF SLine::linePos(int grip, System** sys)
       {
       qreal _spatium = spatium();
       qreal x = 0.0;
-
       switch(anchor()) {
             case Spanner::ANCHOR_SEGMENT:
                   {
@@ -520,7 +519,6 @@ QPointF SLine::linePos(int grip, System** sys)
       //DEBUG:
       if ((*sys)->staves()->isEmpty())
             return QPointF(x, 0.0);
-
       qreal y = (*sys)->staff(staffIdx())->y();
       return QPointF(x, y);
       }
@@ -532,7 +530,7 @@ QPointF SLine::linePos(int grip, System** sys)
 
 void SLine::layout()
       {
-      if (parent() == 0) {
+      if (score() == gscore || tick() == -1) {
             //
             // when used in a palette, SLine has no parent and
             // tick and tick2 has no meaning so no layout is
@@ -700,10 +698,16 @@ bool SLine::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "tick2")           // obsolete
-            __setTick2(score()->fileDivision(e.readInt()));
-      else if (tag == "tick")       // obsolete
-            __setTick1(score()->fileDivision(e.readInt()));
+      if (tag == "tick2") {
+            int tick2 = e.readInt();
+            setTickLen(tick() == -1 ? tick2 : tick2 - tick());
+            }
+      else if (tag == "tick") {
+            int tick1 = e.readInt();
+            if (tickLen() != -1)
+                  setTickLen(tickLen() - tick1);
+            setTick(tick1);
+            }
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
             ls->read(e);
@@ -779,28 +783,6 @@ void SLine::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   tick
-//---------------------------------------------------------
-
-int SLine::tick() const
-      {
-      if (startElement()->type() != SEGMENT)
-            return -1;
-      return static_cast<Segment*>(startElement())->tick();
-      }
-
-//---------------------------------------------------------
-//   tick2
-//---------------------------------------------------------
-
-int SLine::tick2() const
-      {
-      if (endElement()->type() != SEGMENT)
-            return -1;
-      return static_cast<Segment*>(endElement())->tick();
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -841,8 +823,6 @@ QVariant SLine::propertyDefault(P_ID id) const
             default:         return Spanner::propertyDefault(id);
             }
       }
-
-
 
 }
 

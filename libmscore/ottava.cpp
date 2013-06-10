@@ -162,6 +162,7 @@ LineSegment* Ottava::createLineSegment()
 
 void Ottava::endEdit()
       {
+#if 0 // TODO-S
       if (oStartElement != startElement() || oEndElement != endElement()) {
             Staff* s = staff();
             int tick1 = static_cast<Segment*>(oStartElement)->tick();
@@ -176,6 +177,7 @@ void Ottava::endEdit()
 
             score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
             }
+#endif
       }
 
 //---------------------------------------------------------

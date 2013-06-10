@@ -70,16 +70,6 @@
           </Clef>
         <KeySig>
           <accidental>2</accidental>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>

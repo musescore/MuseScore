@@ -179,6 +179,9 @@ class System : public Element {
       qreal distance() const             { return _distance; }
       void setDistance(qreal val)        { _distance = val;  }
       QList<Bracket*>& brackets()        { return _brackets; }
+
+      QList<SpannerSegment*> spannerSegments()             { return _spannerSegments; }
+      const QList<SpannerSegment*> spannerSegments() const { return _spannerSegments; }
       };
 
 typedef QList<System*>::iterator iSystem;
