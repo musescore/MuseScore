@@ -22,6 +22,8 @@ install(FILES
       leadsheet.mss
       Jazz_Lead_Sheet.mss
       MuseJazz.mss
+      chords_std.xml
+      chords_jazz.xml
       chords.xml
       stdchords.xml
       jazzchords.xml
