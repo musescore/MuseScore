@@ -84,7 +84,7 @@ class Debugger : public QDialog, public Ui::DebuggerBase {
       ShowElementBase* elementViews[Element::MAXTYPE];
 
       bool searchElement(QTreeWidgetItem* pi, Element* el);
-      void addSymbol(ElementItem* parent, BSymbol* bs);
+//      void addSymbol(ElementItem* parent, BSymbol* bs);
       void updateElement(Element*);
       virtual void showEvent(QShowEvent*);
 

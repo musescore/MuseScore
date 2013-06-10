@@ -348,7 +348,7 @@ ChordRest* Score::findCR(int tick, int track) const
 
 ChordRest* Spanner::startCR() const
       {
-      return score()->findCR(tick(), track());
+      return static_cast<ChordRest*>(startElement());
       }
 
 //---------------------------------------------------------
@@ -357,7 +357,7 @@ ChordRest* Spanner::startCR() const
 
 ChordRest* Spanner::endCR() const
       {
-      return score()->findCR(tick2(), track());
+      return static_cast<ChordRest*>(endElement());
       }
 
 //---------------------------------------------------------
@@ -366,18 +366,33 @@ ChordRest* Spanner::endCR() const
 
 Element* Spanner::startElement() const
       {
+      bool first = _tickLen == 0;
+      Segment* s = score()->tick2segment(tick(), first, Segment::SegChordRestGrace);
       switch (_anchor) {
             case ANCHOR_SEGMENT:
-                  return score()->tick2segment(tick());
+                  return s;
             case ANCHOR_MEASURE:
                   {
-                  ChordRest* cr = startCR();
-                  if (cr)
-                        return cr->measure();
+                  if (s) {
+                        ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
+                        if (cr)
+                              return cr->measure();
+                        }
                   return nullptr;
                   }
             case ANCHOR_CHORD:
-                  return startCR();
+                  {
+                  ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
+                  while (cr == 0 && s->segmentType() == Segment::SegGrace) {
+                        s = s->next();
+                        if (s->segmentType() != Segment::SegGrace)
+                              break;
+                        cr = static_cast<ChordRest*>(s->element(track()));
+                        if (cr)
+                              break;
+                        }
+                  return cr;
+                  }
             case ANCHOR_NOTE:
                   break;
             }
@@ -395,13 +410,16 @@ Element* Spanner::endElement() const
                   return score()->tick2segment(tick2());
             case ANCHOR_MEASURE:
                   {
-                  ChordRest* cr = endCR();
+                  ChordRest* cr = score()->findCR(tick2(), track());
                   if (cr)
                         return cr->measure();
                   return nullptr;
                   }
             case ANCHOR_CHORD:
-                  return endCR();
+                  {
+                  ChordRest* cr = score()->findCR(tick2(), track());
+                  return cr;
+                  }
             case ANCHOR_NOTE:
                   break;
             }
