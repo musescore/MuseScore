@@ -968,6 +968,7 @@ bool TextStyleData::readProperties(XmlReader& e)
 
 void StyleData::load(XmlReader& e)
       {
+      QString oldChordDescriptionFile = value(ST_chordDescriptionFile).toString();
       while (e.readNextStartElement()) {
             QString tag = e.name().toString();
 
@@ -1050,6 +1051,27 @@ void StyleData::load(XmlReader& e)
                         }
                   }
             }
+
+      // if we just specified a new chord description, load it
+      QString newChordDescriptionFile = value(ST_chordDescriptionFile).toString();
+      if (newChordDescriptionFile != oldChordDescriptionFile && !_customChordList) {
+            delete _chordList;
+#if 1
+// use this code to set chord list to be loaded on demand
+            _chordList = 0;
+#else
+// use this code to load chord list now
+            _chordList = new ChordList;
+            if (value(ST_chordsXmlFile).toBool())
+                  _chordList->read("chords.xml");
+            _chordList->read(newChordDescriptionFile);
+#endif
+            if (!newChordDescriptionFile.startsWith("chords_") && value(ST_chordStyle).toString() == "std") {
+                  set(StyleVal(ST_chordStyle, QString("custom")));
+                  set(StyleVal(ST_chordsXmlFile, true));
+                  }
+            }
+
       //
       //  Compatibility with old scores/styles:
       //  translate old frameWidthMM and paddingWidthMM
