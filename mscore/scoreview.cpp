@@ -34,7 +34,7 @@
 #include "libmscore/pedal.h"
 #include "libmscore/volta.h"
 #include "libmscore/ottava.h"
-#include "libmscore/textline.h"
+#include "libmscore/noteline.h"
 #include "libmscore/trill.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/image.h"
@@ -79,7 +79,7 @@
 #include "libmscore/stafftype.h"
 
 #include "navigator.h"
-#include "inspector.h"
+#include "inspector/inspector.h"
 
 namespace Ms {
 
@@ -973,7 +973,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       createElementPropertyMenu(obj, popup);
 
       popup->addSeparator();
-      a = popup->addAction(tr("Object Debugger"));
+      a = popup->addAction(tr("Debugger"));
       a->setData("list");
       a = popup->exec(pos);
       if (a == 0)
@@ -2870,7 +2870,6 @@ void ScoreView::endNoteEntry()
             const QList<SpannerSegment*>& el = _score->inputState().slur->spannerSegments();
             if (!el.isEmpty())
                   el.front()->setSelected(false);
-            static_cast<ChordRest*>(_score->inputState().slur->endElement())->addSlurBack(_score->inputState().slur);
             _score->inputState().slur = 0;
             }
       setMouseTracking(false);
@@ -3744,7 +3743,6 @@ void ScoreView::cmdAddSlur()
             const QList<SpannerSegment*>& el = is.slur->spannerSegments();
             if (!el.isEmpty())
                   el.front()->setSelected(false);
-            static_cast<ChordRest*>(is.slur->endElement())->addSlurBack(is.slur);
             is.slur = 0;
             return;
             }
@@ -3769,10 +3767,10 @@ void ScoreView::cmdAddSlur()
                         ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1, false);
                         if (cr2 == 0)
                               cr2 = cr1;
-
                         Slur* slur = new Slur(_score);
-                        slur->setStartElement(cr1);
-                        slur->setEndElement(cr2);
+                        slur->setTick(cr1->tick());
+                        slur->setTickLen(cr2->tick() - cr1->tick());
+                        slur->setTrack(cr1->track());
                         slur->setParent(0);
                         _score->undoAddElement(slur);
                         }
@@ -3832,11 +3830,10 @@ void ScoreView::cmdAddNoteLine()
             qDebug("addNoteLine: no note %p %p", firstNote, lastNote);
             return;
             }
-      TextLine* tl = new TextLine(_score);
+      NoteLine* tl = new NoteLine(_score);
       tl->setParent(firstNote);
-      tl->setStartElement(firstNote);
-      tl->setEndElement(lastNote);
-      tl->setAnchor(Spanner::ANCHOR_NOTE);
+      tl->setStartNote(firstNote);
+      tl->setEndNote(lastNote);
       tl->setDiagonal(true);
       _score->startCmd();
       _score->undoAddElement(tl);
@@ -3858,8 +3855,9 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             cr2 = cr1;
 
       Slur* slur = new Slur(_score);
-      slur->setStartElement(cr1);
-      slur->setEndElement(cr2);
+      slur->setTick(cr1->tick());
+      slur->setTickLen(cr2->tick() - cr1->tick());
+      slur->setTrack(cr1->track());
       slur->setParent(0);
       _score->undoAddElement(slur);
       slur->layout();
@@ -3878,8 +3876,6 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
                   el.front()->setSelected(true);
             else
                   qDebug("addSlur: no segment");
-            // set again when leaving slur mode:
-            static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
             _score->endCmd();
             }
       else {

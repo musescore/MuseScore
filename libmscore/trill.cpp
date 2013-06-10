@@ -238,14 +238,13 @@ void Trill::layout()
 //      setPos(0.0, yoff() * _spatium);
 
       SLine::layout();
-
       //
       // special case:
       // if end segment is first chord/rest segment in measure,
       // shorten trill line so it ends at end of previous measure
       //
-      Segment* seg1  = static_cast<Segment*>(startElement());
-      Segment* seg2  = static_cast<Segment*>(endElement());
+      Segment* seg1  = startSegment();
+      Segment* seg2  = endSegment();
       if (seg2
          && (seg1->system() == seg2->system())
          && (spannerSegments().size() == 1)

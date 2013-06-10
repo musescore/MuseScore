@@ -251,6 +251,8 @@ void UndoStack::push1(UndoCommand* cmd)
       {
       if (curCmd)
             curCmd->appendChild(cmd);
+      else
+            qDebug("UndoStack:push1(): no active command, UndoStack %p", this);
       }
 
 //---------------------------------------------------------
@@ -354,6 +356,34 @@ void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st)
       }
 
 //---------------------------------------------------------
+//   undoPropertyChanged
+//---------------------------------------------------------
+
+void Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
+      {
+      if (propertyLink(t) && e->links()) {
+            foreach (Element* ee, *e->links()) {
+                  if (ee == e) {
+                        if (ee->getProperty(t) != st)
+                              undo()->push1(new ChangeProperty(ee, t, st));
+                        }
+                  else {
+                        // property in linked element has not changed yet
+                        // push() calls redo() to change it
+                        if (ee->getProperty(t) != e->getProperty(t))
+                              undo()->push(new ChangeProperty(ee, t, e->getProperty(t)));
+                        }
+                  }
+            }
+      else {
+            if (e->getProperty(t) != st) {
+                  qDebug("   changed");
+                  undo()->push1(new ChangeProperty(e, t, st));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   undoChangeElement
 //---------------------------------------------------------
 
@@ -450,8 +480,6 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
             staffList = linkedStaves->staves();
       else
             staffList.append(ostaff);
-
-printf("undoChangeClef staves %d\n", staffList.size());
 
       bool firstSeg = seg->measure()->first() == seg;
 
@@ -766,14 +794,9 @@ void Score::undoAddElement(Element* element)
                   }
             }
       QList<Staff*> staffList;
-      Staff* ostaff;
-      if (element->type() == Element::SLUR)
-            ostaff = static_cast<Slur*>(element)->startElement()->staff();
-      else
-            ostaff = element->staff();
+      Staff* ostaff = element->staff();
 
       Element::ElementType et = element->type();
-
 
       //
       // some elements are replicated for all parts regardless of
@@ -856,6 +879,7 @@ void Score::undoAddElement(Element* element)
          && et != Element::TRILL
          && et != Element::TEXTLINE
          && et != Element::VOLTA
+         && et != Element::PEDAL
          && et != Element::BREATH
          && et != Element::DYNAMIC
          && et != Element::STAFF_TEXT
@@ -955,40 +979,15 @@ void Score::undoAddElement(Element* element)
                   ne->setParent(seg);
                   undo(new AddElement(ne));
                   }
-            else if (element->type() == Element::SLUR) {
-                  Slur* slur     = static_cast<Slur*>(element);
-                  ChordRest* cr1 = static_cast<ChordRest*>(slur->startElement());
-                  ChordRest* cr2 = static_cast<ChordRest*>(slur->endElement());
-                  Segment* s1    = cr1->segment();
-                  Segment* s2    = cr2->segment();
-                  Measure* m1    = s1->measure();
-                  Measure* m2    = s2->measure();
-                  Measure* nm1   = score->tick2measure(m1->tick());
-                  Measure* nm2   = score->tick2measure(m2->tick());
-                  Segment* ns1;
-                  Segment* ns2;
-                  if (s1->segmentType() == Segment::SegGrace) {
-                        int gl = m1->findGraceLevel(s1);
-                        ns1 = nm1->findGraceSegment(s1->tick(), gl);
-                        }
-                  else {
-                        ns1 = nm1->findSegment(s1->segmentType(), s1->tick());
-                        }
-
-                  if (s2->segmentType() == Segment::SegGrace) {
-                        int gl = m2->findGraceLevel(s2);
-                        ns2 = nm2->findGraceSegment(s2->tick(), gl);
-                        }
-                  else {
-                        ns2 = nm2->findSegment(s2->segmentType(), s2->tick());
-                        }
-                  Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
-                  Chord* c2      = static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice()));
-                  Slur* nslur    = static_cast<Slur*>(ne);
-                  nslur->setStartElement(c1);
-                  nslur->setEndElement(c2);
-                  nslur->setParent(0);
-                  undo(new AddElement(nslur));
+            else if (element->type() == Element::SLUR
+               || element->type() == Element::HAIRPIN
+               || element->type() == Element::OTTAVA
+               || element->type() == Element::TRILL
+               || element->type() == Element::TEXTLINE
+               || element->type() == Element::PEDAL
+               || element->type() == Element::VOLTA) {
+                  ne->setParent(0);
+                  undo(new AddElement(ne));
                   }
             else if (element->type() == Element::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
                   Tremolo* tremolo = static_cast<Tremolo*>(element);
@@ -1071,53 +1070,6 @@ void Score::undoAddElement(Element* element)
                   InstrumentChange* nis = static_cast<InstrumentChange*>(ne);
                   nis->setParent(ns1);
                   undo(new AddElement(nis));
-                  }
-            else if (element->type() == Element::HAIRPIN
-               || element->type() == Element::OTTAVA
-               || element->type() == Element::TRILL
-               || element->type() == Element::TEXTLINE
-               || element->type() == Element::VOLTA
-               ) {
-                  SLine* hp  = static_cast<SLine*>(element);
-                  SLine* nhp = static_cast<SLine*>(ne);
-                  Element* e1;
-                  Element* e2;
-                  switch(hp->anchor()) {
-                        case Spanner::ANCHOR_SEGMENT:
-                              {
-                              Segment* s1  = static_cast<Segment*>(hp->startElement());
-                              Segment* s2  = static_cast<Segment*>(hp->endElement());
-                              Measure* m1  = s1->measure();
-                              Measure* m2  = s2->measure();
-                              Measure* nm1 = score->tick2measure(m1->tick());
-                              Measure* nm2 = score->tick2measure(m2->tick());
-                              e1           = nm1->findSegment(s1->segmentType(), s1->tick());
-                              e2           = nm2->findSegment(s2->segmentType(), s2->tick());
-                              }
-                              break;
-                        case Spanner::ANCHOR_MEASURE:
-                              {
-                              Measure* m1 = static_cast<Measure*>(hp->startElement());
-                              Measure* m2 = static_cast<Measure*>(hp->endElement());
-                              e1          = score->tick2measure(m1->tick());
-                              e2          = score->tick2measure(m2->tick());
-                              }
-                              break;
-                        case Spanner::ANCHOR_NOTE:
-                              {
-                              Note* n1 = static_cast<Note*>(hp->startElement());
-                              Note* n2 = static_cast<Note*>(hp->endElement());
-                              e1       = n1;          // TODO: parts
-                              e2       = n2;
-                              }
-                              break;
-                        default:
-                              abort();
-                        }
-                  nhp->setStartElement(e1);
-                  nhp->setEndElement(e2);
-                  nhp->setParent(e1);
-                  undo(new AddElement(nhp));
                   }
             else if (element->type() == Element::BREATH) {
                   Breath* breath   = static_cast<Breath*>(element);
@@ -1441,17 +1393,12 @@ RemoveElement::RemoveElement(Element* e)
       if (element->isChordRest()) {
             // remove any slurs pointing to this chor/rest
             ChordRest* cr = static_cast<ChordRest*>(element);
-            for (Spanner* s = cr->spannerFor(); s; s = s->next())
-                  score->undoRemoveElement(s);
-            for (Spanner* s = cr->spannerBack(); s; s = s->next())
-                  score->undoRemoveElement(s);
             if (cr->tuplet() && cr->tuplet()->elements().empty())
                   score->undoRemoveElement(cr->tuplet());
             if (e->type() == Element::CHORD) {
                   Chord* chord = static_cast<Chord*>(e);
                   foreach(Note* note, chord->notes()) {
                         if (note->tieFor() && note->tieFor()->endNote())
-//                              note->tieFor()->endNote()->setTieBack(0);
                               score->undoRemoveElement(note->tieFor());
                         if (note->tieBack())
                               score->undoRemoveElement(note->tieBack());
@@ -2229,7 +2176,6 @@ ChangeBracketSpan::ChangeBracketSpan(Staff* s, int c, int sp)
 void ChangeBracketSpan::flip()
       {
       int oSpan  = staff->bracketSpan(column);
-      printf("ChangeBracketSpan %d -> %d\n", oSpan, span);
       staff->setBracketSpan(column, span);
       span = oSpan;
       staff->score()->setLayoutAll(true);
@@ -3127,6 +3073,8 @@ void ChangeDurationType::flip()
 
 void ChangeSpannerAnchor::flip()
       {
+      printf("change spanner anchor\n");
+#if 0 // TODO-S
       Element* se = spanner->startElement();
       Element* ee = spanner->endElement();
 
@@ -3179,6 +3127,7 @@ void ChangeSpannerAnchor::flip()
             }
       startElement = se;
       endElement   = ee;
+#endif
       spanner->score()->setLayoutAll(true);
       }
 

@@ -214,7 +214,7 @@ void Score::moveCursor()
 //        HAIRPIN, and TEXTLINE
 //---------------------------------------------------------
 
-void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, const QPointF& /*dragOffset*/)
+void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
       {
       int staffIdx;
       Segment* segment;
@@ -229,8 +229,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, const QPointF& /
       spanner->setTrack(track);
 
       if (spanner->anchor() == Spanner::ANCHOR_SEGMENT) {
-            spanner->setStartElement(segment);
-            spanner->setParent(segment);
+            spanner->setTick(segment->tick());
 
             static const Segment::SegmentType st = Segment::SegChordRest;
             Segment* ns = 0;
@@ -244,7 +243,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, const QPointF& /
                   delete spanner;
                   return;
                   }
-            spanner->setEndElement(ns);
+            spanner->setTickLen(ns->tick() - spanner->tick());
             }
       else {      // ANCHOR_MEASURE
             Measure* m = static_cast<Measure*>(mb);
@@ -252,9 +251,8 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, const QPointF& /
 
             if (pos.x() >= (b.x() + b.width() * .5))
                   m = m->nextMeasure();
-            spanner->setStartElement(m);
-            spanner->setEndElement(m);
-            spanner->setParent(m);
+            spanner->setTick(m->tick());
+            spanner->setTickLen(m->ticks());
             }
 
       undoAddElement(spanner);
@@ -282,7 +280,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, const QPointF& /
                         s = s->next1(Segment::SegChordRest);
                         }
                   if (s)
-                        spanner->setEndElement(s);
+                        spanner->setTickLen(s->tick() - spanner->tick());
                   Fraction d(1,32);
                   Fraction e = l / d;
                   int n = e.numerator() / e.denominator();
@@ -436,13 +434,10 @@ printf("add pitch %d add %d repitch %d\n", pitch, addFlag, _is.repitchMode());
                   else if (ee->type() == Element::NOTE)
                         stick = static_cast<Note*>(ee)->chord()->tick();
                   if (stick == e->tick()) {
-                        if (_is.slur->startElement())
-                              static_cast<ChordRest*>(_is.slur->startElement())->removeSlurFor(_is.slur);
-                        _is.slur->setStartElement(e);
-                        static_cast<ChordRest*>(e)->addSlurFor(_is.slur);
+                        _is.slur->setTick(stick);
                         }
                   else
-                        _is.slur->setEndElement(e);
+                        _is.slur->setTickLen(e->tick() - _is.slur->tick());
                   }
             else
                   qDebug("addPitch: cannot find slur note");

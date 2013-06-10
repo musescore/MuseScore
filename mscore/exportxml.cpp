@@ -423,8 +423,8 @@ int SlurHandler::findSlur(const Slur* s) const
 void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) starting at this chord
-      for (Spanner* sp = chord->spannerFor(); sp; sp = sp->next()) {
-            if (sp->type() != Element::SLUR)
+      foreach (Spanner* sp, chord->score()->spanner()) {
+            if (sp->type() != Element::SLUR || sp->tick() != chord->tick() || sp->track() != chord->track())
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
             // check if on slur list (i.e. stop already seen)
@@ -479,8 +479,8 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
 void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) stopping at this chord but not on slur list yet
-      for (Spanner* sp = chord->spannerBack(); sp; sp = sp->next()) {
-            if (sp->type() != Element::SLUR)
+      foreach (Spanner* sp, chord->score()->spanner()) {
+            if (sp->type() != Element::SLUR || sp->tick2() != chord->tick() || sp->track() != chord->track())
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
             // check if on slur list
@@ -498,9 +498,10 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
                         qDebug("no free slur slot");
                   }
             }
+
       // search slur list for already started slur(s) stopping at this chord
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (slur[i] && slur[i]->endElement() == chord) {
+            if (slur[i] && slur[i]->tick() == chord->tick() && slur[i]->track() == chord->track()) {
                   if (started[i]) {
                         slur[i] = 0;
                         started[i] = false;
@@ -659,10 +660,11 @@ public:
 // TBD: must trill end be in the same staff as trill started ?
 // if so, no need to pass in strack and etrack (trill has a track)
 
-static void findTrillAnchors(const Trill* trill, const Segment* seg, Chord*& startChord, Chord*& stopChord)
+static void findTrillAnchors(const Trill* trill, Chord*& startChord, Chord*& stopChord)
       {
-      const int endTick = (static_cast<Segment*>(trill->endElement()))->tick();
-      const int strack = trill->track();
+      const Segment* seg = trill->startSegment();
+      const int endTick  = trill->tick2();
+      const int strack   = trill->track();
       // try to find chords in the same track:
       // find a track with suitable chords both for start and stop
       for (int i = 0; i < VOICES; ++i) {
@@ -712,26 +714,23 @@ static void findTrillAnchors(const Trill* trill, const Segment* seg, Chord*& sta
 static void findTrills(Measure* measure, int strack, int etrack, TrillHash& trillStart, TrillHash& trillStop)
       {
       // loop over all segments in this measure
-      for (Segment* seg = measure->first(); seg; seg = seg->next()) {
-            // loop over all spanners in this segment
-            for (Spanner* e = seg->spannerFor(); e; e = e->next()) {
+      foreach (Spanner* e, measure->score()->spanner()) {
+            if (e->type() == Element::TRILL && strack <= e->track() && e->track() < etrack
+               && e->tick() >= measure->tick() && e->tick() < measure->tick())
+                  {
+                  // a trill is found starting in this segment, trill end time is known
+                  // determine notes to write trill start and stop
+                  const Trill* tr = static_cast<const Trill*>(e);
+                  Chord* startChord = 0;  // chord where trill starts
+                  Chord* stopChord = 0;   // chord where trill stops
 
-                  if (e->type() == Element::TRILL && strack <= e->track() && e->track() < etrack) {
+                  findTrillAnchors(tr, startChord, stopChord);
 
-                        // a trill is found starting in this segment, trill end time is known
-                        // determine notes to write trill start and stop
-                        const Trill* tr = static_cast<const Trill*>(e);
-                        Chord* startChord = 0;  // chord where trill starts
-                        Chord* stopChord = 0;   // chord where trill stops
-
-                        findTrillAnchors(tr, seg, startChord, stopChord);
-
-                        if (startChord && stopChord) {
-                              trillStart.insert(startChord, tr);
-                              trillStop.insert(stopChord, tr);
-                              }
+                  if (startChord && stopChord) {
+                        trillStart.insert(startChord, tr);
+                        trillStop.insert(stopChord, tr);
                         }
-                  } // foreach
+                  }
             }
       }
 
@@ -1223,11 +1222,13 @@ static QString tick2xml(const int ticks, int* dots)
 
 static Volta* findVolta(Measure* m, bool left)
       {
+#if 0 // TODO-S
       for (Spanner* el = left ? m->spannerFor() : m->spannerBack(); el; el = el->next()) {
             if (el->type() != Element::VOLTA)
                   continue;
             return (Volta*) el;
             }
+#endif
       return 0;
       }
 
@@ -3686,6 +3687,7 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
 
 static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
+#if 0 // TODO-S
       if (seg->segmentType() == Segment::SegChordRest) {
             for (Spanner* e = seg->spannerFor(); e; e = e->next()) {
 
@@ -3719,6 +3721,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                         }
                   } // foreach
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -3729,6 +3732,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 
 static void spannerStop(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
+#if 0 // TODO-S
       if (seg->segmentType() == Segment::SegChordRest) {
             for (Spanner* e = seg->spannerBack(); e; e = e->next()) {
 
@@ -3762,6 +3766,7 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, int track, 
                         }
                   } // foreach
             }
+#endif
       }
 
 //---------------------------------------------------------

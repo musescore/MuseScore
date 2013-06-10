@@ -36,34 +36,82 @@ if (SCRIPT_INTERFACE)
 endif (SCRIPT_INTERFACE)
 
 QT4_WRAP_UI (ui_headers
-      insertmeasuresdialog.ui barline.ui chord.ui chordrest.ui editinstrument.ui editstyle.ui
-      edittempo.ui element.ui instrdialog.ui measure.ui measuresdialog.ui
-      note.ui page.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui
-      measureproperties.ui segment.ui text.ui textpalette.ui timedialog.ui
-      symboldialog.ui dynamic.ui tuplet.ui shortcutcapturedialog.ui slurtie.ui
-      slur.ui editdrumset.ui editstaff.ui line.ui linesegment.ui
-      voltaproperties.ui timesigproperties.ui boxproperties.ui
+      insertmeasuresdialog.ui editinstrument.ui editstyle.ui edittempo.ui  instrdialog.ui
+      measuresdialog.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui measureproperties.ui
+      textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
+      editstaff.ui voltaproperties.ui timesigproperties.ui boxproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
-      chordedit.ui transposedialog.ui
-      lineproperties.ui excerptsdialog.ui lyrics.ui stafftext.ui tupletdialog.ui
-      glissandoprop.ui articulation.ui metaedit.ui palette.ui
-      hairpin.ui textline.ui slurproperties.ui debugger.ui
-      select.ui synthcontrol.ui splitstaff.ui cellproperties.ui beam.ui keyedit.ui
-      harmonyedit.ui selectinstr.ui tremolo.ui fretdprops.ui stafftype.ui
-      sectionbreak.ui spanner.ui bend.ui tremolobar.ui
-      textproperties.ui editpitch.ui editstringdata.ui slursegment.ui
-      accidental.ui clef.ui editraster.ui mediadialog.ui textstyle.ui
-      album.ui layer.ui articulationbase.ui inspector_element.ui inspector_vbox.ui
-      inspector_articulation.ui inspector_spacer.ui inspector_hbox.ui keysig.ui
-      inspector_segment.ui inspector_beam.ui inspector_note.ui inspector_rest.ui
-      rest.ui inspector_chord.ui omrpanel.ui startdialog.ui masterpalette.ui
-      inspector_group_element.ui inspector_image.ui stem.ui inspector_lasso.ui
-      inspector_volta.ui inspector_ottava.ui inspector_trill.ui inspector_hairpin.ui
-      box.ui pluginManager.ui inspector_jump.ui inspector_marker.ui inspector_glissando.ui
-      inspector_clef.ui inspector_timesig.ui inspector_keysig.ui inspector_barline.ui
-      inspector_tuplet.ui inspector_accidental.ui inspector_tempotext.ui
-      inspector_dynamic.ui inspector_line.ui harmony.ui pathlistdialog.ui inspector_textline.ui
+      chordedit.ui transposedialog.ui lineproperties.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
+      glissandoprop.ui articulation.ui metaedit.ui palette.ui slurproperties.ui select.ui
+      synthcontrol.ui splitstaff.ui cellproperties.ui keyedit.ui selectinstr.ui
+      fretdprops.ui stafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
+      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui layer.ui
+      omrpanel.ui startdialog.ui masterpalette.ui pluginManager.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui importmidi_panel.ui
+
+      debugger/barline.ui
+      debugger/harmony.ui
+      debugger/box.ui
+      debugger/keysig.ui
+      debugger/rest.ui
+      debugger/articulationbase.ui
+      debugger/accidental.ui
+      debugger/clef.ui
+      debugger/slursegment.ui
+      debugger/spanner.ui
+      debugger/tremolo.ui
+      debugger/beam.ui
+      debugger/lyrics.ui
+      debugger/linesegment.ui
+      debugger/textline.ui
+      debugger/line.ui
+      debugger/slurtie.ui
+      debugger/slur.ui
+      debugger/tuplet.ui
+      debugger/dynamic.ui
+      debugger/hairpin.ui
+      debugger/chord.ui
+      debugger/chordrest.ui
+      debugger/segment.ui
+      debugger/measure.ui
+      debugger/element.ui
+      debugger/debugger.ui
+      debugger/note.ui
+      debugger/page.ui
+      debugger/text.ui
+      debugger/stem.ui
+      debugger/system.ui
+
+      inspector/inspector_element.ui
+      inspector/inspector_vbox.ui
+      inspector/inspector_articulation.ui
+      inspector/inspector_spacer.ui
+      inspector/inspector_hbox.ui
+      inspector/inspector_segment.ui
+      inspector/inspector_beam.ui
+      inspector/inspector_note.ui
+      inspector/inspector_rest.ui
+      inspector/inspector_chord.ui
+      inspector/inspector_group_element.ui
+      inspector/inspector_image.ui
+      inspector/inspector_lasso.ui
+      inspector/inspector_volta.ui
+      inspector/inspector_ottava.ui
+      inspector/inspector_trill.ui
+      inspector/inspector_hairpin.ui
+      inspector/inspector_jump.ui
+      inspector/inspector_marker.ui
+      inspector/inspector_glissando.ui
+      inspector/inspector_clef.ui
+      inspector/inspector_timesig.ui
+      inspector/inspector_keysig.ui
+      inspector/inspector_barline.ui
+      inspector/inspector_tuplet.ui
+      inspector/inspector_accidental.ui
+      inspector/inspector_tempotext.ui
+      inspector/inspector_dynamic.ui
+      inspector/inspector_line.ui
+      inspector/inspector_textline.ui
       ${SCRIPT_UI}
       )
 
@@ -73,7 +121,7 @@ endif (OMR)
 
 
 QT4_WRAP_CPP (mocs
-      scoreview.h editinstrument.h editstyle.h edittempo.h instrdialog.h debugger.h
+      scoreview.h editinstrument.h editstyle.h edittempo.h instrdialog.h
       musescore.h navigator.h pagesettings.h palette.h mixer.h playpanel.h
       measureproperties.h seq.h textpalette.h textstyle.h
       timedialog.h symboldialog.h shortcutcapturedialog.h simplebutton.h
@@ -91,15 +139,19 @@ QT4_WRAP_CPP (mocs
       bendcanvas.h tremolobarprop.h tremolobarcanvas.h
       drumtools.h texteditor.h texttools.h edittools.h pianotools.h editpitch.h
       editstringdata.h editraster.h mediadialog.h chordview.h album.h layer.h
-      webpage.h inspector.h inspectorBase.h inspectorBeam.h masterpalette.h
-      inspectorGroupElement.h inspectorImage.h waveview.h helpBrowser.h
-      inspectorLasso.h inspectorVolta.h inspectorOttava.h inspectorTrill.h
-      inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
-      inspectorJump.h inspectorMarker.h inspectorGlissando.h inspectorNote.h
-      paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspectorTextLine.h
+      webpage.h
+      inspector/inspector.h inspector/inspectorBase.h inspector/inspectorBeam.h masterpalette.h
+      inspector/inspectorGroupElement.h inspector/inspectorImage.h waveview.h helpBrowser.h
+      inspector/inspectorLasso.h inspector/inspectorVolta.h inspector/inspectorOttava.h
+      inspector/inspectorTrill.h
+      inspector/inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
+      inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
+      inspector/inspectorNote.h
+      paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
       importmidi_panel.h importmidi_operations.h
       importmidi_opmodel.h importmidi_trmodel.h importmidi_opdelegate.h
       importmidi_meter.h importmidi_operation.h
+      debugger/debugger.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -171,7 +223,9 @@ add_executable ( ${ExecutableName}
 
       actions.cpp scoreview.cpp editinstrument.cpp editstyle.cpp
       edittempo.cpp icons.cpp importbww.cpp
-      instrdialog.cpp debugger.cpp menus.cpp importmidi.cpp
+      instrdialog.cpp
+      debugger/debugger.cpp
+      menus.cpp importmidi.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       mixer.cpp playpanel.cpp preferences.cpp measureproperties.cpp
       seq.cpp boxproperties.cpp textpalette.cpp
@@ -196,17 +250,18 @@ add_executable ( ${ExecutableName}
       fretproperties.cpp sectionbreakprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
-      inspector.cpp dragelement.cpp svggenerator.cpp
-      inspectorBase.cpp inspectorBeam.cpp masterpalette.cpp
-      inspectorGroupElement.cpp dragdrop.cpp inspectorImage.cpp
-      waveview.cpp helpBrowser.cpp inspectorLasso.cpp
-      editelement.cpp inspectorVolta.cpp inspectorOttava.cpp inspectorTrill.cpp
-      inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
+      inspector/inspector.cpp dragelement.cpp svggenerator.cpp
+      inspector/inspectorBase.cpp inspector/inspectorBeam.cpp masterpalette.cpp
+      inspector/inspectorGroupElement.cpp dragdrop.cpp inspector/inspectorImage.cpp
+      waveview.cpp helpBrowser.cpp inspector/inspectorLasso.cpp
+      editelement.cpp inspector/inspectorVolta.cpp inspector/inspectorOttava.cpp
+      inspector/inspectorTrill.cpp
+      inspector/inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
-      savePositions.cpp pluginManager.cpp inspectorJump.cpp inspectorMarker.cpp
-      inspectorGlissando.cpp inspectorNote.cpp paletteBoxButton.cpp
+      savePositions.cpp pluginManager.cpp inspector/inspectorJump.cpp inspector/inspectorMarker.cpp
+      inspector/inspectorGlissando.cpp inspector/inspectorNote.cpp paletteBoxButton.cpp
       driver.cpp exportmidi.cpp noteGroups.cpp
-      pathlistdialog.cpp exampleview.cpp inspectorTextLine.cpp
+      pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp
       importmidi_panel.cpp importmidi_operations.cpp miconengine.cpp
       importmidi_opmodel.cpp importmidi_trmodel.cpp importmidi_opdelegate.cpp
       importmidi_meter.cpp

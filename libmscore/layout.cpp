@@ -618,8 +618,6 @@ void Score::doLayout()
       for (int track = 0; track < tracks; ++track) {
             for (Segment* segment = firstSegment(); segment; segment = segment->next1()) {
                   if (track == tracks-1) {
-                        for (Spanner* sp = segment->spannerFor(); sp; sp = sp->next())
-                              sp->layout();
                         int n = segment->annotations().size();
                         for (int i = 0; i < n; ++i)
                               segment->annotations().at(i)->layout();
@@ -650,6 +648,9 @@ void Score::doLayout()
                         e->layout();
                   }
             }
+
+      foreach (Spanner* s, _spanner)
+            s->layout();
 
 
       if (layoutMode() != LayoutLine) {
@@ -1337,8 +1338,8 @@ void Score::connectTies()
                               continue;
                         Note* nnote = searchTieNote(n);
                         if (nnote == 0) {
-                              qDebug("next note at %d track %d for tie not found, back: %p",
-                                 s->tick(), i, tie->endElement());
+                              qDebug("next note at %d track %d for tie not found",
+                                 s->tick(), i);
                               // n->setTieFor(0);  show short bow
                               // delete tie;
                               }
@@ -1375,10 +1376,16 @@ void Score::add(Element* el)
                   break;
             case Element::SLUR:
             case Element::TEXTLINE:
+            case Element::VOLTA:
+            case Element::TRILL:
+            case Element::PEDAL:
+            case Element::HAIRPIN:
+            case Element::OTTAVA:
+                  _spanner.push_back(static_cast<Spanner*>(el));
                   break;
 
             default:
-                  qFatal("Score::add() invalid element <%s>\n", el->name());
+                  qDebug("Score::add() invalid element <%s>", el->name());
                   break;
             }
       }
@@ -1406,9 +1413,15 @@ void Score::remove(Element* el)
                   break;
             case Element::SLUR:
             case Element::TEXTLINE:
+            case Element::VOLTA:
+            case Element::TRILL:
+            case Element::PEDAL:
+            case Element::HAIRPIN:
+            case Element::OTTAVA:
+                  _spanner.removeOne(static_cast<Spanner*>(el));
                   break;
             default:
-                  qDebug("Score::remove(): invalid element %s\n", el->name());
+                  qDebug("Score::remove(): invalid element %s", el->name());
                   break;
             }
       }

@@ -226,6 +226,7 @@ class Element : public QObject {
             PEDAL,
             TRILL,
             TEXTLINE,
+            NOTELINE,
             SEGMENT,
             SYSTEM,
             COMPOUND,

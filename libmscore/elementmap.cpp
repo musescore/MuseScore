@@ -52,6 +52,7 @@ Slur* SlurMap::findNew(Slur* o)
 
 void SlurMap::check()
       {
+#if 0 // TODO-S
       foreach(const Slur2& s2, map) {
             Slur* slur = s2.n;
             if (slur->endElement() == 0) {
@@ -60,6 +61,7 @@ void SlurMap::check()
                   delete slur;
                   }
             }
+#endif
       }
 
 }

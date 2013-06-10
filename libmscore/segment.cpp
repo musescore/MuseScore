@@ -25,7 +25,6 @@
 #include "lyrics.h"
 #include "repeat.h"
 #include "staff.h"
-#include "spanner.h"
 #include "line.h"
 #include "hairpin.h"
 #include "ottava.h"
@@ -106,8 +105,6 @@ Segment::Segment(Measure* m)
       setParent(m);
       init();
       empty = true;
-      _spannerFor = 0;
-      _spannerBack = 0;
       }
 
 Segment::Segment(Measure* m, SegmentType st, int t)
@@ -118,8 +115,6 @@ Segment::Segment(Measure* m, SegmentType st, int t)
       setTick(t);
       init();
       empty = true;
-      _spannerFor = 0;
-      _spannerBack = 0;
       }
 
 //---------------------------------------------------------
@@ -129,8 +124,6 @@ Segment::Segment(Measure* m, SegmentType st, int t)
 Segment::Segment(const Segment& s)
    : Element(s)
       {
-      _spannerFor = 0;
-      _spannerBack = 0;
       _next = 0;
       _prev = 0;
 
@@ -165,8 +158,6 @@ void Segment::setScore(Score* score)
             if (e)
                   e->setScore(score);
             }
-      for(Spanner* s = _spannerFor; s; s = s->next())
-            s->setScore(score);
       foreach(Element* e, _annotations)
             e->setScore(score);
       }
@@ -346,43 +337,6 @@ void Segment::removeStaff(int staff)
       }
 
 //---------------------------------------------------------
-//   addSpanner
-//---------------------------------------------------------
-
-void Segment::addSpanner(Spanner* l)
-      {
-      Element* e = l->endElement();
-      if (e)
-            static_cast<Segment*>(e)->addSpannerBack(l);
-      addSpannerFor(l);
-      foreach(SpannerSegment* ss, l->spannerSegments()) {
-            Q_ASSERT(ss->spanner() == l);
-            if (ss->system())
-                  ss->system()->add(ss);
-            }
-      }
-
-//---------------------------------------------------------
-//   removeSpanner
-//---------------------------------------------------------
-
-void Segment::removeSpanner(Spanner* l)
-      {
-      if (!static_cast<Segment*>(l->endElement())->removeSpannerBack(l)) {
-            qDebug("Segment(%p): cannot remove spannerBack %s %p", this, l->name(), l);
-            // abort();
-            }
-      if (!removeSpannerFor(l)) {
-            qDebug("Segment(%p): cannot remove spannerFor %s %p", this, l->name(), l);
-            // abort();
-            }
-      foreach(SpannerSegment* ss, l->spannerSegments()) {
-            if (ss->system())
-                  ss->system()->remove(ss);
-            }
-      }
-
-//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
@@ -403,35 +357,6 @@ void Segment::add(Element* el)
                   measure()->setRepeatFlags(measure()->repeatFlags() | RepeatMeasureFlag);
                   _elist[track] = el;
                   empty = false;
-                  break;
-
-            case HAIRPIN:
-                  addSpanner(static_cast<Spanner*>(el));
-                  score()->updateHairpin(static_cast<Hairpin*>(el));
-                  score()->setPlaylistDirty(true);
-                  break;
-
-            case OTTAVA:
-                  {
-                  addSpanner(static_cast<Spanner*>(el));
-                  Ottava* o   = static_cast<Ottava*>(el);
-                  Segment* es = static_cast<Segment*>(o->endElement());
-                  if (es) {
-                        int tick2   = es->tick();
-                        int shift   = o->pitchShift();
-                        Staff* st = o->staff();
-                        st->pitchOffsets().setPitchOffset(tick(), shift);
-                        st->pitchOffsets().setPitchOffset(tick2, 0);
-                        }
-                  score()->setPlaylistDirty(true);
-                  }
-                  break;
-
-            case VOLTA:
-            case TRILL:
-            case PEDAL:
-            case TEXTLINE:
-                  addSpanner(static_cast<Spanner*>(el));
                   break;
 
             case DYNAMIC:
@@ -536,32 +461,6 @@ void Segment::remove(Element* el)
             case REPEAT_MEASURE:
                   measure()->setRepeatFlags(measure()->repeatFlags() & ~RepeatMeasureFlag);
                   _elist[track] = 0;
-                  break;
-
-            case OTTAVA:
-                  {
-                  Ottava* o   = static_cast<Ottava*>(el);
-                  Segment* es = static_cast<Segment*>(o->endElement());
-                  int tick2   = es->tick();
-                  Staff* st   = o->staff();
-                  st->pitchOffsets().remove(tick());
-                  st->pitchOffsets().remove(tick2);
-                  removeSpanner(static_cast<Spanner*>(el));
-                  score()->setPlaylistDirty(true);
-                  }
-                  break;
-
-            case HAIRPIN:
-                  score()->removeHairpin(static_cast<Hairpin*>(el));
-                  removeSpanner(static_cast<Spanner*>(el));
-                  score()->setPlaylistDirty(true);
-                  break;
-
-            case VOLTA:
-            case TRILL:
-            case PEDAL:
-            case TEXTLINE:
-                  removeSpanner(static_cast<Spanner*>(el));
                   break;
 
             case DYNAMIC:
@@ -900,66 +799,6 @@ bool Segment::operator>(const Segment& s) const
       for (Segment* ns = prev1(); ns && (ns->tick() == s.tick()); ns = ns->prev1()) {
             if (ns == &s)
                   return true;
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
-//   addSpannerBack
-//---------------------------------------------------------
-
-void Segment::addSpannerBack(Spanner* e)
-      {
-      e->setNext(_spannerBack);
-      _spannerBack = e;
-      }
-
-//---------------------------------------------------------
-//   removeSpannerBack
-//---------------------------------------------------------
-
-bool Segment::removeSpannerBack(Spanner* e)
-      {
-      Spanner* sp = _spannerBack;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerBack = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
-//   addSpannerFor
-//---------------------------------------------------------
-
-void Segment::addSpannerFor(Spanner* e)
-      {
-      e->setNext(_spannerFor);
-      _spannerFor = e;
-      }
-
-bool Segment::removeSpannerFor(Spanner* e)
-      {
-      Spanner* sp = _spannerFor;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerFor = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
             }
       return false;
       }

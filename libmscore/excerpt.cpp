@@ -209,7 +209,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               ++st;
                               }
                         if (((srcTrack % VOICES) == 0) && track != -1) {
-                              for(Spanner* s = m->spannerFor(); s; s = s->next()) {
+#if 0 //TODO-S
+                              for (Spanner* s = m->spannerFor(); s; s = s->next()) {
                                     if (s->track() != srcTrack)
                                           continue;
                                     Spanner* ns = static_cast<Spanner*>(s->linkedClone());
@@ -224,7 +225,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     nm->addSpannerFor(ns);
                                     spannerMap.add(s, ns);
                                     }
-                              for(Spanner* s = m->spannerBack(); s; s = s->next()) {
+                              for (Spanner* s = m->spannerBack(); s; s = s->next()) {
                                     if (s->track() != srcTrack)
                                           continue;
                                     Spanner* ns = spannerMap.findNew(s);
@@ -232,13 +233,12 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ns->setEndElement(nm);
                                           nm->addSpannerBack(ns);
                                           }
-#if 1
                                     else {
                                           qDebug("cloneSpanner(measure): (%d) cannot find spanner %p <%s> %d track %d",
                                              m->tick(), s, s->name(), m->no(), srcTrack);
                                           }
-#endif
                                     }
+#endif
                               }
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns;
@@ -254,6 +254,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               else
                                     ns = nm->getSegment(oseg->segmentType(), oseg->tick());
 
+#if 0 //TODO-S
                               for (Spanner* spanner = oseg->spannerFor(); spanner; spanner = spanner->next()) {
                                     if ((spanner->track() != srcTrack) || (track == -1))
                                           continue;
@@ -291,7 +292,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           qDebug("cloneSpanner(seg): cannot find spanner old %p", spanner);
                                           }
                                     }
-
+#endif
                               foreach(Element* e, oseg->annotations()) {
                                     if (e->generated())
                                           continue;
@@ -337,6 +338,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           nt->add(ncr);
                                           ncr->setTuplet(nt);
                                           }
+#if 0 // TODO-S
                                     for (Spanner* sp = ocr->spannerFor(); sp; sp = sp->next()) {
                                           if (sp->type() != Element::SLUR)
                                                 continue;
@@ -360,6 +362,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                 qDebug("cloneStave: cannot find slur");
                                                 }
                                           }
+#endif
 
                                     if (oe->type() == Element::CHORD) {
                                           Chord* och = static_cast<Chord*>(ocr);
@@ -477,6 +480,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                     ncr->setTuplet(nt);
                                     nt->add(ncr);
                                     }
+#if 0 // TODO-S
                               for (Spanner* sp = ocr->spannerFor(); sp; sp = sp->next()) {
                                     if (sp->type() != Element::SLUR)
                                           continue;
@@ -499,6 +503,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           qDebug("cloneStave: cannot find slur");
                                           }
                                     }
+#endif
                               foreach (Element* e, seg->annotations()) {
                                     if (e->generated() || e->systemFlag())
                                           continue;

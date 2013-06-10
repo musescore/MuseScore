@@ -143,11 +143,9 @@ void Score::cmdPaste(MuseScoreView* view)
 
 void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       {
-      static const Segment::SegmentTypes st = Segment::SegChordRest;
-      for (Segment* s = firstMeasure()->first(st); s; s = s->next1(st)) {
-            for (Spanner* e = s->spannerFor(); e; e = e->next())
-                  e->setId(-1);
-            }
+      foreach (Spanner* s, _spanner)
+            s->setId(-1);
+
       int dstStaffStart = dst->staffIdx();
       int dstTick = dst->tick();
 
@@ -204,12 +202,6 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               tuplet->setTick(tick);
                               e.addTuplet(tuplet);
                               }
-                        else if (tag == "Slur") {
-                              Slur* slur = new Slur(this);
-                              slur->read(e);
-                              slur->setTrack(dstStaffIdx * VOICES);
-                              e.addSpanner(slur);
-                              }
                         else if (tag == "Chord" || tag == "Rest" || tag == "RepeatMeasure") {
                               ChordRest* cr = static_cast<ChordRest*>(Element::name2Element(tag, this));
                               cr->setTrack(e.track());
@@ -227,15 +219,12 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                            || tag == "Ottava"
                            || tag == "Trill"
                            || tag == "TextLine"
+                           || tag == "Slur"
                            || tag == "Volta") {
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->setTrack(dstStaffIdx * VOICES);
                               sp->read(e);
-                              int tick = e.tick() - tickStart + dstTick;
-                              Measure* m = tick2measure(tick);
-                              Segment* segment = m->undoGetSegment(Segment::SegChordRest, tick);
-                              sp->setStartElement(segment);
-                              sp->setParent(segment);
+                              sp->setTick(e.tick() - tickStart + dstTick);
                               e.addSpanner(sp);
                               }
                         else if (tag == "endSpanner") {
@@ -243,19 +232,14 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               Spanner* spanner = e.findSpanner(id);
                               if (spanner) {
                                     e.spanner().removeOne(spanner);
-                                    int tick = e.tick() - tickStart + dstTick;
-                                    Measure* m = tick2measure(tick);
-                                    Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);
-                                    spanner->setEndElement(seg);
-                                    seg->addSpannerBack(spanner);
+                                    spanner->setTick2(e.tick() - tickStart + dstTick);
                                     undoAddElement(spanner);
                                     if (spanner->type() == Element::OTTAVA) {
                                           Ottava* o = static_cast<Ottava*>(spanner);
                                           int shift = o->pitchShift();
                                           Staff* st = o->staff();
-                                          int tick1 = static_cast<Segment*>(o->startElement())->tick();
-                                          st->pitchOffsets().setPitchOffset(tick1, shift);
-                                          st->pitchOffsets().setPitchOffset(tick, 0);
+                                          st->pitchOffsets().setPitchOffset(o->tick(), shift);
+                                          st->pitchOffsets().setPitchOffset(o->tick2(), 0);
                                           }
                                     else if (spanner->type() == Element::HAIRPIN) {
                                           Hairpin* hp = static_cast<Hairpin*>(spanner);
@@ -264,7 +248,6 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                                     }
                               e.readNext();
                               }
-
                         else if (tag == "Lyrics") {
                               Lyrics* lyrics = new Lyrics(this);
                               lyrics->setTrack(e.track());
@@ -395,42 +378,14 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         _selection.setState(SEL_RANGE);
                   }
             }
+
       foreach(Spanner* sp, e.spanner()) {
             printf("  %s %p %p\n", sp->name(), sp->startElement(), sp->endElement());
-            if (sp->startElement() == 0 || sp->endElement() == 0) {
-                  // spanner is not copied complete, lets remove it:
-                  printf("    remove\n");
-                  switch(sp->anchor()) {
-                        case Spanner::ANCHOR_SEGMENT:
-                              if (sp->startElement())
-                                    static_cast<Segment*>(sp->startElement())->removeSpannerFor(sp);
-                              else if (sp->endElement())
-                                    static_cast<Segment*>(sp->endElement())->removeSpannerBack(sp);
-                              break;
-                        case Spanner::ANCHOR_MEASURE:
-                              if (sp->startElement())
-                                    static_cast<Measure*>(sp->startElement())->removeSpannerFor(sp);
-                              else if (sp->endElement())
-                                    static_cast<Measure*>(sp->endElement())->removeSpannerBack(sp);
-                              break;
-                              break;
-                        case Spanner::ANCHOR_CHORD:
-                              if (sp->startElement())
-                                    static_cast<ChordRest*>(sp->startElement())->removeSpannerFor(sp);
-                              else if (sp->endElement())
-                                    static_cast<ChordRest*>(sp->endElement())->removeSpannerBack(sp);
-                              break;
-                        case Spanner::ANCHOR_NOTE:
-                              if (sp->startElement())
-                                    static_cast<Note*>(sp->startElement())->removeSpannerFor(sp);
-                              else if (sp->endElement())
-                                    static_cast<Note*>(sp->endElement())->removeSpannerBack(sp);
-                              break;
-                        }
+            if (sp->tick() == -1 || sp->tickLen() == -1)
                   delete sp;
-                  }
             }
-      connectTies();
+      foreach (Score* s, scoreList())     // for all parts
+            s->connectTies();
       }
 
 //---------------------------------------------------------

@@ -2064,6 +2064,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       // reserve space for slur
       bool botGap = false;
       bool topGap = false;
+#if 0 // TODO-S
       for (Spanner* sp = spannerFor(); sp; sp = sp->next()) {
             if (sp->type() != SLUR)
                  continue;
@@ -2082,6 +2083,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
             else
                   botGap = true;
             }
+#endif
       if (botGap)
             chordBotY += _spStaff;
       else

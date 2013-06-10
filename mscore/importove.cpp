@@ -681,7 +681,7 @@ void OveToMScore::convertTrackElements(int track) {
                 	}
 
                     Segment* s = measure->getSegment(Segment::SegChordRest, absTick);
-                    ottava->setStartElement(s);
+                    ottava->setTick(s->tick());
                     s->add(ottava);
 
 				} else {
@@ -694,11 +694,10 @@ void OveToMScore::convertTrackElements(int track) {
 					int absTick = mtt_->getTick(i, octave->getEndTick());
 
                     Segment* s = measure->getSegment(Segment::SegChordRest, absTick);
-                    ottava->setEndElement(s);
-                    s->addSpannerBack(ottava);
+                    ottava->setTick2(s->tick());
                     int shift = ottava->pitchShift();
                     Staff* st = ottava->staff();
-                    int tick1 = static_cast<Segment*>(ottava->startElement())->tick();
+                    int tick1 = ottava->tick();
                     st->pitchOffsets().setPitchOffset(tick1, shift);
                     st->pitchOffsets().setPitchOffset(s->tick(), 0);
 
@@ -1842,18 +1841,16 @@ void OveToMScore::convertArticulation(
 			pedal_ = new Pedal(score_);
 			pedal_->setTrack(track);
             Segment* seg = measure->getSegment(Segment::SegChordRest, absTick);
-            pedal_->setStartElement(seg);
+            pedal_->setTick(seg->tick());
             seg->add(pedal_);
 		}
 		break;
 	}
 	case OVE::Articulation_Pedal_Up :{
 		if(pedal_){
-            Segment* seg = measure->getSegment(Segment::SegChordRest, absTick);
-            pedal_->setEndElement(seg);
-            seg->addSpannerBack(pedal_);
-
-			pedal_ = 0;
+              Segment* seg = measure->getSegment(Segment::SegChordRest, absTick);
+              pedal_->setTick2(seg->tick());
+		  pedal_ = 0;
 		}
 		break;
 	}
@@ -2141,8 +2138,8 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
                            volta->name(), absTick1, absTick2, s1, s2);
                         }
                   else {
-                        volta->setStartElement(s1);
-                        volta->setEndElement(s2);
+                        volta->setTick(s1->tick());
+                        volta->setTick2(s2->tick());
                         s1->add(volta);
                         }
 
@@ -2188,12 +2185,10 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
                   }
               else {
                   if (n1->isChordRest()) {
-                        ((ChordRest*)n1)->addSlurFor(slur);
-                        slur->setStartElement(n1);
+                        slur->setTick(((ChordRest*)n1)->tick());
                         }
                   if (n2->isChordRest()) {
-                        ((ChordRest*)n2)->addSlurBack(slur);
-                        slur->setEndElement(n2);
+                        slur->setTick2(((ChordRest*)n2)->tick());
                         }
                   }
 
@@ -2402,11 +2397,10 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
 			hp->setTrack(track);
 
 			Segment* seg = measure->getSegment(Segment::SegChordRest, absTick);
-		    hp->setStartElement(seg);
+		    hp->setTick(seg->tick());
 		    seg->add(hp);
 		    seg = measure->getSegment(Segment::SegChordRest, absTick2);
-		    hp->setEndElement(seg);
-		    seg->addSpannerBack(hp);
+                hp->setTick2(seg->tick());
 		    score_->updateHairpin(hp);
 		}
 	}

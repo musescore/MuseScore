@@ -71,8 +71,6 @@ ChordRest::ChordRest(Score* s)
       _up          = true;
       _staffMove   = 0;
       _tabDur      = 0;
-      _spannerFor  = 0;
-      _spannerBack = 0;
       }
 
 ChordRest::ChordRest(const ChordRest& cr)
@@ -104,8 +102,6 @@ ChordRest::ChordRest(const ChordRest& cr)
             nl->setTrack(track());
             _lyricsList.append(nl);
             }
-      _spannerFor  = 0;
-      _spannerBack = 0;
       }
 
 //---------------------------------------------------------
@@ -114,11 +110,11 @@ ChordRest::ChordRest(const ChordRest& cr)
 
 ChordRest::~ChordRest()
       {
-      foreach(Articulation* a,  _articulations)
+      foreach (Articulation* a,  _articulations)
             delete a;
-      foreach(Lyrics* l, _lyricsList)
+      foreach (Lyrics* l, _lyricsList)
             delete l;
-      if(_tabDur)
+      if (_tabDur)
             delete _tabDur;
       }
 
@@ -186,21 +182,6 @@ void ChordRest::writeProperties(Xml& xml) const
             xml.fTag("duration", duration());
       foreach(const Articulation* a, _articulations)
             a->write(xml);
-      //
-      // ignore spanner with id==-1 as they are outside of the write range
-      //
-      for (Spanner* s = _spannerFor; s; s = s->next()) {
-            if (s->id() != -1)
-                  xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(s->id()+1));
-            else
-                  qDebug("ChordRest: spannerFor->id == -1");
-            }
-      for (Spanner* s = _spannerBack; s; s = s->next()) {
-            if (s->id() != -1)
-                  xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(s->id()+1));
-            else
-                  qDebug("ChordRest: spannerBack->id == -1");
-            }
 #ifndef NDEBUG
       if (_beam && (MScore::testMode || !_beam->generated()))
             xml.tag("Beam", _beam->id());
@@ -302,18 +283,14 @@ bool ChordRest::readProperties(XmlReader& e)
       else if (tag == "Slur") {
             int id = e.intAttribute("number");
             QString type(e.attribute("type"));
-            Slur* slur = static_cast<Slur*>(e.findSpanner(id));
+            Slur* slur = static_cast<Slur*>(score()->findSpanner(id));
             if (!slur)
                   qDebug("ChordRest::read(): Slur id %d not found", id);
             else {
-                  if (type == "start") {
-                        slur->setStartElement(this);
-                        addSlurFor(slur);
-                        }
-                  else if (type == "stop") {
-                        slur->setEndElement(this);
-                        addSlurBack(slur);
-                        }
+                  if (type == "start")
+                        slur->setTick(e.tick());
+                  else if (type == "stop")
+                        slur->setTickLen(e.tick() - slur->tick());
                   else
                         qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(type));
                   }
@@ -559,6 +536,7 @@ void ChordRest::layoutArticulations()
       bool botGap = false;
       bool topGap = false;
 
+#if 0 // TODO-S
       for (Spanner* sp = _spannerFor; sp; sp = sp->next()) {
             if (sp->type() != SLUR)
                   continue;
@@ -577,6 +555,7 @@ void ChordRest::layoutArticulations()
             else
                   botGap = true;
             }
+#endif
       if (botGap)
             chordBotY += _spatium;
       if (topGap)
@@ -659,78 +638,6 @@ void ChordRest::layoutArticulations()
                   }
             a->adjustReadPos();
             }
-      }
-
-//---------------------------------------------------------
-//   addSpannerBack
-//---------------------------------------------------------
-
-void ChordRest::addSpannerBack(Spanner* e)
-      {
-      for (Spanner* spanner = _spannerBack; spanner; spanner = spanner->next()) {
-            if (spanner == e) {
-                  qDebug("ChordRest::addSpannerBack: spanner already in list");
-                  return;
-                  }
-            }
-      e->setNext(_spannerBack);
-      _spannerBack = e;
-      }
-
-//---------------------------------------------------------
-//   removeSpannerBack
-//---------------------------------------------------------
-
-bool ChordRest::removeSpannerBack(Spanner* e)
-      {
-      Spanner* sp = _spannerBack;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerBack = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
-//   addSpannerFor
-//---------------------------------------------------------
-
-void ChordRest::addSpannerFor(Spanner* e)
-      {
-      for (Spanner* spanner = _spannerFor; spanner; spanner = spanner->next()) {
-            if (spanner == e) {
-                  qDebug("ChordRest::addSpannerFor: spanner already in list");
-                  return;
-                  }
-            }
-      e->setNext(_spannerFor);
-      _spannerFor = e;
-      }
-
-bool ChordRest::removeSpannerFor(Spanner* e)
-      {
-      Spanner* sp = _spannerFor;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerFor = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
-            }
-      return false;
       }
 
 //---------------------------------------------------------

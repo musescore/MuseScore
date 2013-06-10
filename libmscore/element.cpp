@@ -80,6 +80,7 @@
 #include "image.h"
 #include "marker.h"
 #include "jump.h"
+#include "noteline.h"
 
 namespace Ms {
 
@@ -159,6 +160,7 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "Pedal"),
       QT_TRANSLATE_NOOP("elementName", "Trill"),
       QT_TRANSLATE_NOOP("elementName", "TextLine"),
+      QT_TRANSLATE_NOOP("elementName", "NoteLine"),
       QT_TRANSLATE_NOOP("elementName", "Segment"),
       QT_TRANSLATE_NOOP("elementName", "System"),
       QT_TRANSLATE_NOOP("elementName", "Compound"),
@@ -1237,6 +1239,7 @@ Element* Element::create(ElementType type, Score* score)
             case VOLTA:             return new Volta(score);
             case OTTAVA:            return new Ottava(score);
             case TEXTLINE:          return new TextLine(score);
+            case NOTELINE:          return new NoteLine(score);
             case TRILL:             return new Trill(score);
             case PEDAL:             return new Pedal(score);
             case HAIRPIN:           return new Hairpin(score);
@@ -1537,7 +1540,7 @@ bool Element::isDurationElement() const
 bool Element::isSLine() const
       {
       return type() == HAIRPIN || type() == OTTAVA || type() == PEDAL
-         || type() == TRILL || type() == VOLTA || type() == TEXTLINE;
+         || type() == TRILL || type() == VOLTA || type() == TEXTLINE || type() == NOTELINE;
       }
 
 //---------------------------------------------------------
@@ -1559,22 +1562,6 @@ bool Element::isText() const
          || type() == FIGURED_BASS
          || type() == TEMPO_TEXT;
       }
-
-//---------------------------------------------------------
-//   parentChordRest
-//---------------------------------------------------------
-
-#if 0
-Element* Element::parentChordRest()
-      {
-      if (isChordRest())
-            return this;
-      else if (_parent)
-            return _parent->parentChordRest();
-      else
-            return 0;
-      }
-#endif
 
 //---------------------------------------------------------
 //   findMeasure
