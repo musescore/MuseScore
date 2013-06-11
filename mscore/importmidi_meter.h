@@ -6,6 +6,7 @@ namespace Ms {
 
 class Fraction;
 class TDuration;
+struct TupletData;
 
 namespace Meter {
 
@@ -22,13 +23,18 @@ bool isDuple(const Fraction &barFraction);
 bool isTriple(const Fraction &barFraction);
 bool isQuadruple(const Fraction &barFraction);
 
+int beatLength(const Fraction &barFraction);
 
-// list of levels (0, -1, ...) of all ticks in bar that are multiples of minDuration
-// if minDuration <= 0 then minDuration will be set to min allowed note length (1/128)
-std::vector<int> metricLevelsOfBar(const Fraction &barFraction, int minDuration);
+            // division lengths of bar, each can be a tuplet length
+std::vector<int> divisionsOfBarForTuplets(const Fraction &barFraction);
 
-QList<TDuration> toDurationList(int startTickInBar, int endTickInBar,
-                                const Fraction &barFraction, DurationType durationType,
+            // duration and all tuplets should belong to the same voice
+            // nested tuplets are not allowed
+QList<TDuration> toDurationList(int startTickInBar,
+                                int endTickInBar,
+                                const Fraction &barFraction,
+                                const std::vector<TupletData> &tupletsInBar,
+                                DurationType durationType,
                                 bool useDots);
 
 } // namespace Meter

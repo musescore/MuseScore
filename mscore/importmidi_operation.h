@@ -30,13 +30,9 @@ struct MidiOperation
             SHORTEST_IN_BAR = 0,
             FROM_PREFERENCES,
             N_4,
-//            N_4_triplet,
             N_8,
-//            N_8_triplet,
             N_16,
-//            N_16_triplet,
             N_32,
-//            N_32_triplet,
             N_64
             };
 

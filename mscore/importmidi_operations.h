@@ -21,7 +21,7 @@ struct LHRHSeparation
       MidiOperation::Note splitPitchNote = MidiOperation::Note::E;
       };
 
-// bool and enum-like elementary operations (itself and inside structs) allowed
+      // bool and enum-like elementary operations (itself and inside structs) allowed
 struct TrackOperations
       {
       bool doImport = true;

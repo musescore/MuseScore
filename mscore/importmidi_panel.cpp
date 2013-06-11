@@ -134,7 +134,7 @@ void ImportMidiPanel::updateUi()
             ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: black;}");
             ui->lineEditMidiFile->setToolTip(midiFile);
             }
-      else {  // midi file not exists
+      else {            // midi file does not exist
             ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: red;}");
             ui->lineEditMidiFile->setToolTip(tr("MIDI file not found"));
             }
