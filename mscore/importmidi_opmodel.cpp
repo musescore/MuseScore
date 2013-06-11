@@ -31,10 +31,8 @@ OperationsModel::OperationsModel()
             , controller(std::unique_ptr<Controller>(new Controller()))
       {
       beginResetModel();
-
-      // - initialize opeations with their default values
-      // - string lists below should match Operation enum values
-
+                  // - initialize opeations with their default values
+                  // - string lists below should match Operation enum values
       Node *quantValue = new Node;
       quantValue->name = "Quantization";
       quantValue->oper.type = MidiOperation::Type::QUANT_VALUE;
@@ -42,13 +40,9 @@ OperationsModel::OperationsModel()
       quantValue->values.push_back("Shortest note in bar");
       quantValue->values.push_back("Value from preferences");
       quantValue->values.push_back("1/4");
-//    quantValue->values.push_back("1/4 triplet");
       quantValue->values.push_back("1/8");
-//    quantValue->values.push_back("1/8 triplet");
       quantValue->values.push_back("1/16");
-//    quantValue->values.push_back("1/16 triplet");
       quantValue->values.push_back("1/32");
-//    quantValue->values.push_back("1/32 triplet");
       quantValue->values.push_back("1/64");
       quantValue->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(quantValue));
@@ -167,7 +161,7 @@ QModelIndex OperationsModel::index(int row, int column, const QModelIndex &paren
             return QModelIndex();
       if (parent_node->children.empty() || row >= (int)parent_node->children.size())
             return QModelIndex();
-      // find new row in connection with invisible items
+                  // find new row in connection with invisible items
       int shift = 0;
       for (int i = 0; i <= row + shift; ++i) {
             if (i >= (int)parent_node->children.size())
@@ -206,7 +200,7 @@ int OperationsModel::rowCount(const QModelIndex &parent) const
       Node *parent_node = nodeFromIndex(parent);
       if (!parent_node)
             return 0;
-      // take only visible nodes into account
+                  // take only visible nodes into account
       size_t counter = 0;
       for (const auto &p: parent_node->children)
             if (p->visible)
@@ -221,6 +215,7 @@ int OperationsModel::columnCount(const QModelIndex &parent) const
 
 // All nodes can have either bool value or list of possible values
 // also node value can be undefined (QVariant()), for example grayed checkbox
+
 QVariant OperationsModel::data(const QModelIndex &index, int role) const
       {
       Node *node = nodeFromIndex(index);
@@ -241,15 +236,15 @@ QVariant OperationsModel::data(const QModelIndex &index, int role) const
                               if (!node->values.empty()) {
                                     if (!node->oper.value.isValid()) // undefined operation value
                                           return " . . . ";
-                                    // list contains names of possible string values
-                                    // like {"1/4", "1/8"}
-                                    // valid node value is one of enum items
-                                    // -> use enum item as index
+                                                // list contains names of possible string values
+                                                // like {"1/4", "1/8"}
+                                                // valid node value is one of enum items
+                                                // -> use enum item as index
                                     int indexOfValue = node->oper.value.toInt();
                                     if (indexOfValue < node->values.size() && indexOfValue >= 0)
                                           return node->values.at(indexOfValue);
                                     }
-                              // otherwise return nothing because it's a checkbox
+                                          // otherwise return nothing because it's a checkbox
                               break;
                         default:
                               break;
@@ -304,9 +299,9 @@ Qt::ItemFlags OperationsModel::flags(const QModelIndex &index) const
             return Qt::ItemFlags();
       Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled);
       if (index.column() == OperationCol::VALUE) {
-            if (node->values.empty()) // node value is bool - a checkbox
+            if (node->values.empty())           // node value is bool - a checkbox
                   flags |= Qt::ItemIsUserCheckable;
-            else // node has list of values
+            else        // node has list of values
                   flags |= Qt::ItemIsEditable;
             }
       return flags;
@@ -325,7 +320,7 @@ bool OperationsModel::setData(const QModelIndex &index, const QVariant &value, i
                         result = true;
                         break;
                   case Qt::EditRole:
-                        // set enum value from value == list index
+                                    // set enum value from value == list index
                         node->oper.value = value.toInt();
                         result = true;
                         break;
@@ -371,7 +366,7 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
 void OperationsModel::setTrackData(const QString &trackLabel, const DefinedTrackOperations &opers)
       {
       this->trackLabel = trackLabel;
-      // set new operations values
+                  // set new operations values
       beginResetModel();
       for (const auto &nodePtr: root->children)
             setNodeOperations(nodePtr.get(), opers);
