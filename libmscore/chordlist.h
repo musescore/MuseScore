@@ -177,6 +177,7 @@ struct ChordDescription {
       QList<RenderAction> renderList;
       bool generated;
       bool renderListGenerated;
+      bool exportOk;
 
    public:
       ChordDescription(int, ChordList*);

@@ -1265,6 +1265,7 @@ ChordDescription::ChordDescription(int i, ChordList* cl)
       id = i;
       generated = false;
       renderListGenerated = false;
+      exportOk = true;
       }
 
 //---------------------------------------------------------
@@ -1279,6 +1280,7 @@ ChordDescription::ChordDescription(const QString& name, ChordList* cl)
       generated = true;
       names.append(name);
       renderListGenerated = false;
+      exportOk = false;
       }
 
 //---------------------------------------------------------
@@ -1349,7 +1351,7 @@ void ChordDescription::read(XmlReader& e)
 
 void ChordDescription::write(Xml& xml)
       {
-      if (generated)
+      if (generated && !exportOk)
             return;
       if (id > 0)
             xml.stag(QString("chord id=\"%1\"").arg(id));
