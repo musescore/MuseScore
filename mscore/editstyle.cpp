@@ -243,23 +243,25 @@ void EditStyle::getValues()
       lstyle.set(ST_genCourtesyKeysig,       genCourtesyKeysig->isChecked());
       lstyle.set(ST_genCourtesyClef,         genCourtesyClef->isChecked());
 
+      bool customChords = false;
       if (chordsStandard->isChecked())
             lstyle.set(ST_chordStyle, QString("std"));
       else if (chordsJazz->isChecked())
             lstyle.set(ST_chordStyle, QString("jazz"));
-      else
+      else {
             lstyle.set(ST_chordStyle, QString("custom"));
+            customChords = true;
+            }
       lstyle.set(ST_chordsXmlFile, chordsXmlFile->isChecked());
       if (lstyle.valueSt(ST_chordDescriptionFile) != chordDescriptionFile->text()) {
             ChordList* cl = new ChordList();
             if (lstyle.valueB(ST_chordsXmlFile))
                   cl->read("chords.xml");
             cl->read(chordDescriptionFile->text());
-            lstyle.setChordList(cl);
+            lstyle.setChordList(cl, customChords);
             lstyle.set(ST_chordDescriptionFile, chordDescriptionFile->text());
             }
       lstyle.set(ST_useGermanNoteNames,      useGermanNoteNames->isChecked());
-
 
       lstyle.set(ST_concertPitch,            concertPitch->isChecked());
       lstyle.set(ST_createMultiMeasureRests, multiMeasureRests->isChecked());

@@ -969,6 +969,7 @@ bool TextStyleData::readProperties(XmlReader& e)
 void StyleData::load(XmlReader& e)
       {
       QString oldChordDescriptionFile = value(ST_chordDescriptionFile).toString();
+      bool chordListTag = false;
       while (e.readNextStartElement()) {
             QString tag = e.name().toString();
 
@@ -988,6 +989,7 @@ void StyleData::load(XmlReader& e)
                   _chordList = new ChordList;
                   _chordList->read(e);
                   _customChordList = true;
+                  chordListTag = true;
                   }
             else if (tag == "pageFillLimit")   // obsolete
                   e.skipCurrentElement();
@@ -1052,13 +1054,19 @@ void StyleData::load(XmlReader& e)
                   }
             }
 
-      // if we just specified a new chord description, load it
+      // if we just specified a new chord description file
+      // and didn't encounter a ChordList tag
+      // then load the chord description file
       QString newChordDescriptionFile = value(ST_chordDescriptionFile).toString();
-      if (newChordDescriptionFile != oldChordDescriptionFile && !_customChordList) {
+      if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
             if (!newChordDescriptionFile.startsWith("chords_") && value(ST_chordStyle).toString() == "std") {
                   set(StyleVal(ST_chordStyle, QString("custom")));
                   set(StyleVal(ST_chordsXmlFile, true));
                   }
+            if (value(ST_chordStyle).toString() == "custom")
+                  _customChordList = true;
+            else
+                  _customChordList = false;
             delete _chordList;
 #if 1
 // use this code to set chord list to be loaded on demand
@@ -1182,11 +1190,11 @@ ChordList* StyleData::chordList()  const
 //   setChordList
 //---------------------------------------------------------
 
-void StyleData::setChordList(ChordList* cl)
+void StyleData::setChordList(ChordList* cl, bool custom)
       {
       delete _chordList;
       _chordList = cl;
-      _customChordList = true;      // TODO: check
+      _customChordList = custom;
       }
 
 //---------------------------------------------------------
@@ -1322,9 +1330,9 @@ ChordList* MStyle::chordList() const
 //   setChordList
 //---------------------------------------------------------
 
-void MStyle::setChordList(ChordList* cl)
+void MStyle::setChordList(ChordList* cl, bool custom)
       {
-      d->setChordList(cl);
+      d->setChordList(cl, custom);
       }
 
 //---------------------------------------------------------
