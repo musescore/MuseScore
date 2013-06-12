@@ -33,14 +33,12 @@ namespace Ms {
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
+ChordRest* nextChordRest(ChordRest* cr)
       {
       if (!cr)
             return 0;
       int track = cr->track();
       Segment::SegmentTypes st = Segment::SegChordRest;
-      if (!skipGrace)
-            st |= Segment::SegGrace;
 
       for (Segment* seg = cr->segment()->next1(st); seg; seg = seg->next1(st)) {
             if (seg->measure()->multiMeasure() < 0)
@@ -57,14 +55,12 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
 //    return previous Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
+ChordRest* prevChordRest(ChordRest* cr)
       {
       if (!cr)
             return 0;
       int track = cr->track();
       Segment::SegmentTypes st = Segment::SegChordRest;
-      if (!skipGrace)
-            st |= Segment::SegGrace;
       for (Segment* seg = cr->segment()->prev1(st); seg; seg = seg->prev1(st)) {
             if (seg->measure()->multiMeasure() < 0)
                   continue;
@@ -251,7 +247,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior)
 
       Measure* measure = static_cast<Measure*>(mb);
 
-      int endTick = element->measure()->last()->nextChordRest(element->track(), true)->tick();
+      int endTick = element->measure()->last()->nextChordRest(element->track())->tick();
       bool last = false;
 
       if (selection().state() == SEL_RANGE) {

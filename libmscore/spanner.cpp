@@ -367,7 +367,7 @@ ChordRest* Spanner::endCR() const
 Element* Spanner::startElement() const
       {
       bool first = _tickLen == 0;
-      Segment* s = score()->tick2segment(tick(), first, Segment::SegChordRestGrace);
+      Segment* s = score()->tick2segment(tick(), first, Segment::SegChordRest);
       switch (_anchor) {
             case ANCHOR_SEGMENT:
                   return s;
@@ -381,18 +381,8 @@ Element* Spanner::startElement() const
                   return nullptr;
                   }
             case ANCHOR_CHORD:
-                  {
-                  ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
-                  while (cr == 0 && s->segmentType() == Segment::SegGrace) {
-                        s = s->next();
-                        if (s->segmentType() != Segment::SegGrace)
-                              break;
-                        cr = static_cast<ChordRest*>(s->element(track()));
-                        if (cr)
-                              break;
-                        }
-                  return cr;
-                  }
+                  return static_cast<ChordRest*>(s->element(track()));
+
             case ANCHOR_NOTE:
                   break;
             }

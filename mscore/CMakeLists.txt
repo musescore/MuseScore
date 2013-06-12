@@ -230,7 +230,8 @@ add_executable ( ${ExecutableName}
       mixer.cpp playpanel.cpp preferences.cpp measureproperties.cpp
       seq.cpp boxproperties.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
-      simplebutton.cpp musedata.cpp exportly.cpp
+      simplebutton.cpp musedata.cpp
+      # exportly.cpp
       editdrumset.cpp editstaff.cpp voltaproperties.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       chordedit.cpp excerptsdialog.cpp metaedit.cpp magbox.cpp

@@ -162,9 +162,9 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
       ChordRest* e1 = curGrip == 0 ? sl->cr2 : sl->cr1;
 
       if (key == Qt::Key_Left)
-            cr = prevChordRest(e, false);
+            cr = prevChordRest(e);
       else if (key == Qt::Key_Right)
-            cr = nextChordRest(e, false);
+            cr = nextChordRest(e);
 
       if (cr == 0 || cr == e1)
             return true;

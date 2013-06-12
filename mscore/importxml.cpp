@@ -4834,8 +4834,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   cr->setDots(dots);
                   cr->setDuration(cr->durationType().fraction());
                   // qDebug(" cr->tick()=%d ", cr->tick());
-                  Segment* s = measure->getGraceSegment(loc_tick, gl);
-                  s->add(cr);
+//TODO-S                  Segment* s = measure->getGraceSegment(loc_tick, gl);
+//                  s->add(cr);
                   }
             cr->setStaffMove(move);
 
