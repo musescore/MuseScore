@@ -1762,7 +1762,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
       if (type == Element::MEASURE)
          scorelist = scoreList();
       else
-         scorelist = {this};
+         scorelist.append(this);
 
       foreach(Score* score, scorelist) {
             MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
