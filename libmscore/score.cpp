@@ -197,7 +197,7 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
       for (MeasureBase* mb = fm;;) {
             if (mb->type() == Measure::MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
-                  Segment::SegmentTypes st = Segment::SegChordRestGrace;
+                  Segment::SegmentTypes st = Segment::SegChordRest;
                   for (Segment* s = m->first(st); s; s = s->next(st)) {
                         foreach(Element* e, s->elist()) {
                               if (e) {
@@ -653,7 +653,7 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
       int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
       SysStaff* sstaff = m->system()->staff(i);
-      Segment::SegmentTypes st = Segment::SegChordRestGrace;
+      Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
             if (!validSegment(segment, strack, etrack))
                   continue;
@@ -2036,7 +2036,7 @@ void Score::updateNotes()
                   tversatz.init(staff(staffIdx)->keymap()->key(m->tick()));
 
                   for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                        if (!(segment->segmentType() & (Segment::SegChordRestGrace)))
+                        if (!(segment->segmentType() & (Segment::SegChordRest)))
                               continue;
                         m->layoutChords10(segment, staffIdx * VOICES, &tversatz);
                         }
@@ -2082,7 +2082,7 @@ void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
                               return;
                               }
                         }
-                  if (s->segmentType() & (Segment::SegChordRestGrace))
+                  if (s->segmentType() & (Segment::SegChordRest))
                         m->updateAccidentals(s, staffIdx, &as);
                   }
             }
@@ -2101,7 +2101,7 @@ void Score::updateAccidentals(Measure* m, int staffIdx)
       as.init(st->keymap()->key(m->tick()));
 
       for (Segment* segment = m->first(); segment; segment = segment->next()) {
-            if (segment->segmentType() & (Segment::SegChordRestGrace))
+            if (segment->segmentType() & (Segment::SegChordRest))
                   m->updateAccidentals(segment, staffIdx, &as);
             }
       }

@@ -3764,7 +3764,7 @@ void ScoreView::cmdAddSlur()
                         if (firstNote == lastNote)
                               lastNote = 0;
                         ChordRest* cr1 = firstNote->chord();
-                        ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1, false);
+                        ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
                         if (cr2 == 0)
                               cr2 = cr1;
                         Slur* slur = new Slur(_score);
@@ -3849,7 +3849,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
       {
       _score->startCmd();
       ChordRest* cr1 = firstNote->chord();
-      ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1, false);
+      ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
 
       if (cr2 == 0)
             cr2 = cr1;

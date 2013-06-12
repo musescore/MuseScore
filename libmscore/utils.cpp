@@ -580,7 +580,7 @@ Note* searchTieNote(Note* note)
       Note* note2  = 0;
       Chord* chord = note->chord();
       Segment* seg = chord->segment();
-      Segment* nseg = seg->next1(Segment::SegChordRestGrace);
+      Segment* nseg = seg->next1(Segment::SegChordRest);
       if(!nseg)
             return 0;
       Part* part   = chord->staff()->part();
@@ -590,7 +590,7 @@ Note* searchTieNote(Note* note)
 
 //      printf("searchTieNote %d-%d  %d - %d\n", strack, etrack, seg->tick(), tick);
 
-      while ((seg = seg->next1(Segment::SegChordRestGrace))) {
+      while ((seg = seg->next1(Segment::SegChordRest))) {
             if (seg->tick() < tick)
                   continue;
             // if (seg->tick() > tick)

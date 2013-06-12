@@ -382,7 +382,7 @@ void Score::layoutStage2()
             Measure* measure = 0;
 
             BeamMode bm = BeamMode::AUTO;
-            Segment::SegmentTypes st = Segment::SegChordRestGrace;
+            Segment::SegmentTypes st = Segment::SegChordRest;
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
@@ -416,6 +416,7 @@ void Score::layoutStage2()
                               beam    = 0;
                               }
                         }
+#if 0 // TODO-S
                   if (segment->segmentType() == Segment::SegGrace) {
                         Segment* nseg = segment->next();
                         if (nseg
@@ -458,6 +459,7 @@ void Score::layoutStage2()
                               }
                         continue;
                         }
+#endif
 
                   if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NONE)) {
                         if (beam) {
@@ -530,7 +532,7 @@ void Score::layoutStage2()
 
 void Score::layoutStage3()
       {
-      Segment::SegmentTypes st = Segment::SegChordRestGrace;
+      Segment::SegmentTypes st = Segment::SegChordRest;
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   layoutChords1(segment, staffIdx);
@@ -1332,7 +1334,7 @@ void Score::connectTies()
       Measure* m = firstMeasure();
       if (!m)
             return;
-      Segment::SegmentTypes st = Segment::SegChordRestGrace;
+      Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* s = m->first(st); s; s = s->next1(st)) {
             for (int i = 0; i < tracks; ++i) {
                   Chord* c = static_cast<Chord*>(s->element(i));
@@ -2448,7 +2450,7 @@ qreal Score::computeMinWidth(Segment* fs)
                   bool found = false;
                   bool hFound = false;
                   bool eFound = false;
-                  if (segType & (Segment::SegChordRestGrace)) {
+                  if (segType & (Segment::SegChordRest)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
                         Lyrics* lyrics = 0;
@@ -2463,7 +2465,7 @@ qreal Score::computeMinWidth(Segment* fs)
                                     minDistance     = qMax(minDistance, sp);
                                     stretchDistance = sp * .7;
                                     }
-                              else if (pt & (Segment::SegChordRestGrace)) {
+                              else if (pt & (Segment::SegChordRest)) {
                                     minDistance = qMax(minDistance, minNoteDistance);
                                     }
                               else {

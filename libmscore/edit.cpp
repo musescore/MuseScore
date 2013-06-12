@@ -909,7 +909,7 @@ void Score::cmdAddTie()
             int strack = part->staves()->front()->idx() * VOICES;
             int etrack = strack + part->staves()->size() * VOICES;
 
-            for (Segment* seg = chord->segment()->next1(Segment::SegChordRestGrace); seg; seg = seg->next1(Segment::SegChordRestGrace)) {
+            for (Segment* seg = chord->segment()->next1(Segment::SegChordRest); seg; seg = seg->next1(Segment::SegChordRest)) {
                   bool noteFound = false;
                   for (int track = strack; track < etrack; ++track) {
                         ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
@@ -1389,9 +1389,7 @@ void Score::cmdDeleteSelection()
                   int tick  = -1;
                   Tuplet* tuplet = 0;
                   for (Segment* s = s1; s != s2; s = s->next1()) {
-                        if (s->element(track) &&
-                           ((s->segmentType() == Segment::SegBreath)
-                           || (s->segmentType() == Segment::SegGrace))) {
+                        if (s->element(track) && s->segmentType() == Segment::SegBreath) {
                               deleteItem(s->element(track));
                               continue;
                               }

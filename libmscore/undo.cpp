@@ -1033,20 +1033,8 @@ void Score::undoAddElement(Element* element)
                   Measure* nm2   = s2 ? score->tick2measure(s2->tick()) : 0;
                   Segment* ns1;
                   Segment* ns2;
-                  if (s1->segmentType() == Segment::SegGrace) {
-                        int gl = s1->measure()->findGraceLevel(s1);
-                        ns1 = nm1->findGraceSegment(s1->tick(), gl);
-                        }
-                  else {
-                        ns1 = nm1->findSegment(s1->segmentType(), s1->tick());
-                        }
-                  if (s2 && s2->segmentType() == Segment::SegGrace) {
-                        int gl = s2->measure()->findGraceLevel(s2);
-                        ns2 = nm2->findGraceSegment(s2->tick(), gl);
-                        }
-                  else {
-                        ns2 = nm2 ? nm2->findSegment(s2->segmentType(), s2->tick()) : 0;
-                        }
+                  ns1 = nm1->findSegment(s1->segmentType(), s1->tick());
+                  ns2 = nm2 ? nm2->findSegment(s2->segmentType(), s2->tick()) : 0;
                   Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
                   Chord* c2      = ns2 ? static_cast<Chord*>(ns2->element(staffIdx * VOICES + cr2->voice())) : 0;
                   Note* nn1      = c1->findNote(n1->pitch());
@@ -1088,6 +1076,7 @@ void Score::undoAddElement(Element* element)
             }
       }
 
+#if 0
 //---------------------------------------------------------
 //   undoAddGrace
 //---------------------------------------------------------
@@ -1149,6 +1138,7 @@ void Score::undoAddGrace(Chord* chord, Segment* s, bool behind)
             score->updateAccidentals(m, staffIdx);
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   undoAddCR
@@ -1165,18 +1155,12 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
             staffList = linkedStaves->staves();
       else
             staffList.append(ostaff);
-      Segment::SegmentType segmentType;
-      if ((cr->type() == Element::CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL))
-            segmentType = Segment::SegGrace;
-      else
-            segmentType = Segment::SegChordRest;
+      Segment::SegmentType segmentType = Segment::SegChordRest;
       foreach(Staff* staff, staffList) {
             Score* score = staff->score();
             Measure* m   = (score == this) ? measure : score->tick2measure(tick);
             // always create new segment for grace note:
-            Segment* seg = 0;
-            if (segmentType != Segment::SegGrace)
-                  seg = m->findSegment(segmentType, tick);
+            Segment* seg = m->findSegment(segmentType, tick);
             if (seg == 0) {
                   seg = new Segment(m, segmentType, tick);
                   score->undoAddElement(seg);
@@ -1689,7 +1673,7 @@ void ChangePitch::flip()
       line           = f_line;
 
       Score* score = note->score();
-      if(updateAccid) {
+      if (updateAccid) {
             Chord* chord = note->chord();
             Measure* measure = chord->segment()->measure();
             score->updateAccidentals(measure, chord->staffIdx());

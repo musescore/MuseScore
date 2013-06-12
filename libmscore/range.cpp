@@ -290,9 +290,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Span
                         tick += gap;
                         }
                   append(de, map);
-                  // add duration to ticks if not grace note
-                  if (!(de->type() == Element::CHORD && static_cast<Chord*>(de)->isGrace()))
-                        tick += de->duration().ticks();;
+                  tick += de->duration().ticks();;
                   }
             else if (e->type() == Element::BAR_LINE)
                   ;
@@ -349,11 +347,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const
       foreach (DurationElement* e, tuplet->elements()) {
             if (e->isChordRest()) {
                   Element* ne = e->clone();
-                  Segment::SegmentType st;
-                  if (ne->type() == Element::CHORD && static_cast<Chord*>(ne)->noteType() != NOTE_NORMAL)
-                        st = Segment::SegGrace;
-                  else
-                        st = Segment::SegChordRest;
+                  Segment::SegmentType st = Segment::SegChordRest;
                   Segment* segment = measure->getSegment(st, tick);
                   segment->add(ne);
                   dt->add(ne);
@@ -438,15 +432,6 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
             if (e->isDurationElement()) {
                   Fraction duration = static_cast<DurationElement*>(e)->duration();
 
-                  if (e->type() == Element::CHORD && static_cast<Chord*>(e)->isGrace()) {
-                        segment = m->getSegment(Segment::SegGrace, m->tick() + pos.ticks());
-                        Element* element = e->clone();
-                        element->setTrack(track);
-                        segment->add(element);
-                        writeSpanner(track + i, static_cast<Chord*>(e),
-                           static_cast<Chord*>(element), segment, map);
-                        continue;
-                        }
                   if (duration > rest && e->type() == Element::TUPLET) {
                         // cannot split tuplet
                         qDebug("TrackList::write: cannot split tuplet\n");
