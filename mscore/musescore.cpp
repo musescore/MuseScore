@@ -2114,8 +2114,8 @@ static bool processNonGui()
                   return mscore->savePng(cs, fn);
             if (fn.endsWith(".svg"))
                   return mscore->saveSvg(cs, fn);
-            if (fn.endsWith(".ly"))
-                  return mscore->saveLilypond(cs, fn);
+//            if (fn.endsWith(".ly"))
+//                  return mscore->saveLilypond(cs, fn);
 #ifdef HAS_AUDIOFILE
             if (fn.endsWith(".wav"))
                   return mscore->saveAudio(cs, fn, "wav");

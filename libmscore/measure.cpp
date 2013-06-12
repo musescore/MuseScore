@@ -367,7 +367,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
       AccidentalState tversatz;  // state of already set accidentals for this measure
       tversatz.init(note->chord()->staff()->keymap()->key(tick()));
 
-      Segment::SegmentTypes st = Segment::SegChordRestGrace;
+      Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
             int startTrack = note->staffIdx() * VOICES;
             int endTrack   = startTrack + VOICES;
@@ -411,7 +411,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
       Staff* staff = score()->staff(staffIdx);
       tversatz.init(staff->keymap()->key(tick()));
 
-      Segment::SegmentTypes st = Segment::SegChordRestGrace;
+      Segment::SegmentTypes st = Segment::SegChordRest;
       int startTrack           = staffIdx * VOICES;
       int endTrack             = startTrack + VOICES;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
@@ -526,7 +526,7 @@ void Measure::layout2()
 
       qreal _spatium = spatium();
       int tracks = staves.size() * VOICES;
-      static const Segment::SegmentTypes st = Segment::SegChordRestGrace;
+      static const Segment::SegmentTypes st = Segment::SegChordRest;
       for (int track = 0; track < tracks; ++track) {
             for (Segment* s = first(st); s; s = s->next(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(s->element(track));
@@ -674,8 +674,8 @@ Chord* Measure::findChord(int tick, int track, int gl)
             if (seg->tick() < tick)
                   return 0;
             if (seg->tick() == tick) {
-                  if (seg->segmentType() == Segment::SegGrace)
-                        graces++;
+//TODO-S                  if (seg->segmentType() == Segment::SegGrace)
+//                        graces++;
                   Element* el = seg->element(track);
                   if (el && el->type() == CHORD && graces == gl)
                         return static_cast<Chord*>(el);
@@ -715,8 +715,8 @@ Segment* Measure::tick2segment(int tick, bool grace) const
       {
       for (Segment* s = first(); s; s = s->next()) {
             if (s->tick() == tick) {
-                  if (grace && (s->segmentType() == Segment::SegGrace))
-                        return s;
+//TODO-S                  if (grace && (s->segmentType() == Segment::SegGrace))
+//                        return s;
                   if (s->segmentType() == Segment::SegChordRest)
                         return s;
                   }
@@ -744,6 +744,7 @@ Segment* Measure::findSegment(Segment::SegmentType st, int t)
       return 0;
       }
 
+#if 0
 //---------------------------------------------------------
 //   findGraceSegment
 //---------------------------------------------------------
@@ -775,7 +776,6 @@ Segment* Measure::findGraceSegment(int tick, int gl)
 
       return 0;
       }
-
 
 //---------------------------------------------------------
 //   findGraceLevel
@@ -810,7 +810,7 @@ int Measure::findGraceLevel(Segment* gs)
             }
       return 0;
       }
-
+#endif
 
 //---------------------------------------------------------
 //   undoGetSegment
@@ -832,23 +832,7 @@ Segment* Measure::undoGetSegment(Segment::SegmentType type, int tick)
 
 Segment* Measure::getSegment(Element* e, int tick)
       {
-      Segment::SegmentType st;
-      if ((e->type() == CHORD) && (((Chord*)e)->noteType() != NOTE_NORMAL)) {
-            Segment* s = findSegment(Segment::SegGrace, tick);
-            if (s) {
-                  if (s->element(e->track())) {
-                        s = s->next();
-                        if (s && s->segmentType() == Segment::SegGrace && !s->element(e->track()))
-                              return s;
-                        }
-                  else
-                        return s;
-                  }
-            s = new Segment(this, Segment::SegGrace, tick);
-            add(s);
-            return s;
-            }
-      st = Segment::segmentType(e->type());
+      Segment::SegmentType st = Segment::segmentType(e->type());
       return getSegment(st, tick);
       }
 
@@ -868,6 +852,7 @@ Segment* Measure::getSegment(Segment::SegmentType st, int tick)
       return s;
       }
 
+#if 0
 //---------------------------------------------------------
 //   getSegment
 //---------------------------------------------------------
@@ -923,6 +908,7 @@ Segment* Measure::getGraceSegment(int t, int gl)
             }
       return 0; // should not be reached
       }
+#endif
 
 //---------------------------------------------------------
 //   add
@@ -976,43 +962,27 @@ void Measure::add(Element* el)
                   int t  = seg->tick();
                   Segment::SegmentType st = seg->segmentType();
                   Segment* s;
-                  if (st == Segment::SegGrace) {
-                        for (s = first(); s && s->tick() < t; s = s->next())
-                              ;
-                        if (s && (s->tick() > t)) {
-                              seg->setParent(this);
-                              _segments.insert(seg, s);
-                              break;
-                              }
-                        if (s && s->segmentType() != Segment::SegChordRest) {
-                              for (; s && s->segmentType() != Segment::SegEndBarLine
-                                 && s->segmentType() != Segment::SegChordRest; s = s->next())
-                                    ;
-                              }
-                        }
-                  else {
-                        for (s = first(); s && s->tick() < t; s = s->next())
-                              ;
-                        if (s) {
-                              if (st == Segment::SegChordRest) {
-                                    while (s && s->segmentType() != st && s->tick() == t) {
-                                          if (s->segmentType() == Segment::SegEndBarLine)
-                                                break;
-                                          s = s->next();
-                                          }
+                  for (s = first(); s && s->tick() < t; s = s->next())
+                        ;
+                  if (s) {
+                        if (st == Segment::SegChordRest) {
+                              while (s && s->segmentType() != st && s->tick() == t) {
+                                    if (s->segmentType() == Segment::SegEndBarLine)
+                                          break;
+                                    s = s->next();
                                     }
-                              else {
-                                    while (s && s->segmentType() <= st) {
-                                          if (s->next() && s->next()->tick() != t)
-                                                break;
-                                          s = s->next();
-                                          }
-                                    //
-                                    // place breath _after_ chord
-                                    //
-                                    if (s && st == Segment::SegBreath)
-                                          s = s->next();
+                              }
+                        else {
+                              while (s && s->segmentType() <= st) {
+                                    if (s->next() && s->next()->tick() != t)
+                                          break;
+                                    s = s->next();
                                     }
+                              //
+                              // place breath _after_ chord
+                              //
+                              if (s && st == Segment::SegBreath)
+                                    s = s->next();
                               }
                         }
                   seg->setParent(this);
@@ -1651,7 +1621,7 @@ qDebug("drop staffList");
                   //
                   _score->select(0, SELECT_SINGLE, 0);
                   for (Segment* s = first(); s; s = s->next()) {
-                        if (s->segmentType() & Segment::SegChordRestGrace) {
+                        if (s->segmentType() & Segment::SegChordRest) {
                               int strack = staffIdx * VOICES;
                               int etrack = strack + VOICES;
                               for (int track = strack; track < etrack; ++track) {
@@ -3099,7 +3069,7 @@ void Measure::layoutX(qreal stretch)
                   bool found = false;
                   bool hFound = false;
                   bool eFound = false;
-                  if (segType & (Segment::SegChordRestGrace)) {
+                  if (segType & (Segment::SegChordRest)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
                         Lyrics* lyrics = 0;
@@ -3114,7 +3084,7 @@ void Measure::layoutX(qreal stretch)
                                     minDistance     = qMax(minDistance, sp);
                                     // stretchDistance = sp * .7;
                                     }
-                              else if (pt & (Segment::SegChordRestGrace)) {
+                              else if (pt & (Segment::SegChordRest)) {
                                     minDistance = qMax(minDistance, minNoteDistance);
                                     }
                               else {
@@ -3469,7 +3439,7 @@ void Measure::layoutStage1()
                               setBreakMMRest(true);
                         }
 
-                  if (segment->segmentType() & Segment::SegChordRestGrace)
+                  if (segment->segmentType() & Segment::SegChordRest)
                         layoutChords0(segment, staffIdx * VOICES);
                   }
             }
@@ -3512,6 +3482,11 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
             Chord* chord = static_cast<Chord*>(segment->element(track));
             if (!chord || chord->type() != CHORD)
                  continue;
+
+            for (Chord* ch : chord->graceNotes()) {
+                  for (Note* note : ch->notes())
+                        note->updateAccidental(tversatz);
+                  }
 
             // TAB_STAFF is different, as each note has to be fretted
             // in the context of the all of the chords of the whole segment

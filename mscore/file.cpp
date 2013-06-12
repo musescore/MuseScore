@@ -481,7 +481,6 @@ void MuseScore::newFile()
                            (s->segmentType() == Segment::SegChordRest)
       //                     || (s->subtype() == Segment::SegClef)
                            || (s->segmentType() == Segment::SegKeySig)
-                           || (s->segmentType() == Segment::SegGrace)
                            || (s->segmentType() == Segment::SegBreath)
                            ) {
                               s->measure()->remove(s);
@@ -1632,10 +1631,12 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save as svg file *.svg
             rv = saveSvg(cs, fn);
             }
+#if 0
       else if (ext == "ly") {
             // save as lilypond file *.ly
             rv = saveLilypond(cs, fn);
             }
+#endif
 #ifdef HAS_AUDIOFILE
       else if (ext == "wav" || ext == "flac" || ext == "ogg")
             rv = saveAudio(cs, fn, ext);

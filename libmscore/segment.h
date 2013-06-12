@@ -66,14 +66,12 @@ class Segment : public Element {
             SegTimeSig            = 0x4,
             SegStartRepeatBarLine = 0x8,
             SegBarLine            = 0x10,
-            SegGrace              = 0x20,
-            SegChordRest          = 0x40,
-            SegBreath             = 0x80,
-            SegEndBarLine         = 0x100,
-            SegTimeSigAnnounce    = 0x200,
-            SegKeySigAnnounce     = 0x400,
+            SegChordRest          = 0x20,
+            SegBreath             = 0x40,
+            SegEndBarLine         = 0x80,
+            SegTimeSigAnnounce    = 0x100,
+            SegKeySigAnnounce     = 0x200,
             SegAll                = 0xfff,
-            SegChordRestGrace     = SegChordRest | SegGrace
             };
       typedef QFlags<SegmentType> SegmentTypes;
 
@@ -154,7 +152,6 @@ class Segment : public Element {
       bool isEmpty() const                       { return empty; }
       void fixStaffIdx();
       bool isChordRest() const                   { return _segmentType == SegChordRest; }
-      bool isGrace() const                       { return _segmentType == SegGrace; }
       void setTick(int);
       int tick() const;
       int rtick() const                          { return _tick; } // tickposition relative to measure start

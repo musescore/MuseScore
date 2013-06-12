@@ -500,7 +500,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
 ///   \len is the visual duration of the grace note (1/16 or 1/32)
 //---------------------------------------------------------
 
-void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool behind, int len)
+void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool /*behind*/, int len)
       {
       Note* note = new Note(this);
       note->setPitch(pitch);
@@ -508,6 +508,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool behind, int l
       Chord* chord = new Chord(this);
       chord->setTrack(ch->track());
       chord->add(note);
+      chord->setParent(ch);
 
       TDuration d;
       d.setVal(len);
@@ -516,9 +517,10 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool behind, int l
       chord->setNoteType(type);
       chord->setMag(ch->staff()->mag() * styleD(ST_graceNoteMag));
 
-      undoAddGrace(chord, ch->segment(), behind);
+      undoAddElement(chord);
 
       note->setTpcFromPitch();      // tick must be known
+      updateNotes();
       select(note, SELECT_SINGLE, 0);
       }
 
@@ -531,19 +533,6 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool behind, int l
 Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd,
    MScore::Direction stemDirection)
       {
-      if (segment->segmentType() == Segment::SegGrace) {
-            Chord* chord = static_cast<Chord*>(segment->element(track));
-            if (chord->notes().size() == 1) {
-                  Note* note = chord->upNote();
-                  int key = chord->staff()->key(chord->tick()).accidentalType();
-
-                  // always prefer sharpened scale tone for non-diatonic grace note?
-                  int tpc = pitch2tpc(nval.pitch, key, PREFER_SHARPS);
-                  int line = note->line();
-                  undoChangePitch(note, nval.pitch, tpc, line);
-                  }
-            return segment;
-            }
       assert(segment->segmentType() == Segment::SegChordRest);
 
       int tick      = segment->tick();
@@ -675,15 +664,7 @@ qDebug("makeGap %s at %d track %d", qPrintable(_sd.print()), segment->tick(), tr
       Segment* firstSegment = segment;
       int nextTick = segment->tick();
 
-      for (Segment* seg = firstSegment; seg; seg = seg->next(Segment::SegChordRestGrace)) {
-            if (seg->segmentType() == Segment::SegGrace) {
-                  if (seg->element(track)) {
-                        undoRemoveElement(seg->element(track));
-                        if (seg->isEmpty() && seg != firstSegment)
-                              undoRemoveElement(seg);
-                        }
-                  continue;
-                  }
+      for (Segment* seg = firstSegment; seg; seg = seg->next(Segment::SegChordRest)) {
             //
             // voices != 0 may have gaps:
             //
@@ -821,7 +802,7 @@ qDebug("  akkumulated %d/%d rest %d/%d (-%d/%d)",
 bool Score::makeGap1(int tick, int staffIdx, Fraction len)
       {
       ChordRest* cr = 0;
-      Segment* seg = tick2segment(tick, true, Segment::SegChordRestGrace);
+      Segment* seg = tick2segment(tick, true, Segment::SegChordRest);
       if (!seg) {
             qDebug("1:makeGap1: no segment at %d", tick);
             return false;
@@ -829,41 +810,31 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
       int track = staffIdx * VOICES;
       cr = static_cast<ChordRest*>(seg->element(track));
       if (!cr) {
-            if (seg->segmentType() & Segment::SegGrace) {
-                  seg = seg->next1(Segment::SegChordRest);
-                  if (!seg || !seg->element(track)) {
-                        qDebug("makeGap1: no chord/rest at %d staff %d", tick, staffIdx);
+            // check if we are in the middle of a chord/rest
+            Segment* seg1 = 0;
+            for (;;) {
+                  seg1 = seg->prev(Segment::SegChordRest);
+                  if (seg1 == 0) {
+                        qDebug("1:makeGap1: no segment at %d", tick);
                         return false;
                         }
-                  cr = static_cast<ChordRest*>(seg->element(track));
+                  if (seg1->element(track))
+                        break;
                   }
-            else {
-                  // check if we are in the middle of a chord/rest
-                  Segment* seg1 = 0;
-                  for (;;) {
-                        seg1 = seg->prev(Segment::SegChordRest);
-                        if (seg1 == 0) {
-                              qDebug("1:makeGap1: no segment at %d", tick);
-                              return false;
-                              }
-                        if (seg1->element(track))
-                              break;
+            ChordRest* cr1 = static_cast<ChordRest*>(seg1->element(track));
+            Fraction dstF = Fraction::fromTicks(tick - cr1->tick());
+            len -= cr1->duration() - dstF;
+            undoChangeChordRestLen(cr1, TDuration(dstF));
+            for (;;) {
+                  seg = seg->next1(Segment::SegChordRest);
+                  if (seg == 0) {
+                        qDebug("2:makeGap1: no segment");
+                        return false;
                         }
-                  ChordRest* cr1 = static_cast<ChordRest*>(seg1->element(track));
-                  Fraction dstF = Fraction::fromTicks(tick - cr1->tick());
-                  len -= cr1->duration() - dstF;
-                  undoChangeChordRestLen(cr1, TDuration(dstF));
-                  for (;;) {
-                        seg = seg->next1(Segment::SegChordRestGrace);
-                        if (seg == 0) {
-                              qDebug("2:makeGap1: no segment");
-                              return false;
-                              }
-                        if (seg->element(track)) {
-                              tick = seg->tick();
-                              cr = static_cast<ChordRest*>(seg->element(track));
-                              break;
-                              }
+                  if (seg->element(track)) {
+                        tick = seg->tick();
+                        cr = static_cast<ChordRest*>(seg->element(track));
+                        break;
                         }
                   }
             }
@@ -1133,14 +1104,14 @@ void Score::upDown(bool up, UpDownMode mode)
             return;
 
       foreach(Note* oNote, el) {
-            Part* part  = oNote->staff()->part();
-            int key = oNote->staff()->key(tick).accidentalType();
-            int tpc     = oNote->tpc();
-            int pitch   = oNote->pitch();
-            int newTpc  = tpc;      // default to unchanged
-            int newPitch = pitch;   // default to unchanged
-            int string = oNote->string();
-            int fret   = oNote->fret();
+            Part* part   = oNote->staff()->part();
+            int key      = oNote->staff()->key(tick).accidentalType();
+            int tpc      = oNote->tpc();
+            int pitch    = oNote->pitch();
+            int newTpc   = tpc;      // default to unchanged
+            int newPitch = pitch;    // default to unchanged
+            int string   = oNote->string();
+            int fret     = oNote->fret();
             Tablature* tab;
 
             switch(oNote->staff()->staffType()->group()) {
@@ -1609,7 +1580,7 @@ void Score::cmdResetBeamMode()
       int startTick = selection().tickStart();
       int endTick   = selection().tickEnd();
 
-      Segment::SegmentTypes st = Segment::SegChordRestGrace;
+      Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             if (seg->tick() < startTick)
                   continue;
@@ -1780,8 +1751,8 @@ Element* Score::move(const QString& cmd)
                   case Element::SEGMENT: {      // from segment go to top chordrest in segment
                         Segment* seg  = static_cast<Segment*>(el);
                         // if segment is not chord/rest or grace, move to next chord/rest or grace segment
-                        if (!seg->isChordRest() && !seg->isGrace()) {
-                              seg = seg->next1(Segment::SegChordRestGrace);
+                        if (!seg->isChordRest()) {
+                              seg = seg->next1(Segment::SegChordRest);
                               if (seg == 0)     // if none found, reutrn failure
                                     return 0;
                               }
@@ -1825,7 +1796,7 @@ Element* Score::move(const QString& cmd)
       if (cmd == "next-chord") {
             if (noteEntryMode())
                   moveToNextInputPos();
-            el = nextChordRest(cr, false);
+            el = nextChordRest(cr);
             }
       else if (cmd == "prev-chord") {
             if (noteEntryMode()) {
@@ -1851,7 +1822,7 @@ Element* Score::move(const QString& cmd)
                         s = m->firstCRSegment();
                   moveInputPos(s);
                   }
-            el = prevChordRest(cr, false);
+            el = prevChordRest(cr);
             }
       else if (cmd == "next-measure") {
             el = nextMeasure(cr);

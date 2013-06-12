@@ -76,6 +76,7 @@ static void addDynamic(Score* score, Segment* s, int track, const char* name)
       s->add(d);
       }
 
+#if 0 // TODO-S
 //---------------------------------------------------------
 //   levelofGraceSeg
 //---------------------------------------------------------
@@ -91,6 +92,7 @@ static int levelofGraceSeg(Measure* m,int tick)
             }
       return nGraces;
       }
+#endif
 
 //---------------------------------------------------------
 //   SetCapGraceDuration
@@ -397,11 +399,13 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         TDuration d;
                         d.setVal(ticks);
                         Measure* m = score->getCreateMeasure(tick);
-                        int gl = levelofGraceSeg(m,tick);
+
+//TODO-S                        int gl = levelofGraceSeg(m,tick);
                         bool isgracenote = (!(o->invisible) && (ticks==0));
-                        Segment* s = (isgracenote) ? m->getGraceSegment(tick, gl) : m->getSegment(Segment::SegChordRest, tick);
-                        if (isgracenote)
-                              s = m->getGraceSegment(tick,1);
+//                        Segment* s = (isgracenote) ? m->getGraceSegment(tick, gl) : m->getSegment(Segment::SegChordRest, tick);
+                        Segment* s = m->getSegment(Segment::SegChordRest, tick);
+//                        if (isgracenote)
+//                              s = m->getGraceSegment(tick,1);
                         if (o->count) {
                               if (tuplet == 0) {
                                     tupletCount = o->count;

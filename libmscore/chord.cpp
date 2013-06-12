@@ -415,6 +415,9 @@ void Chord::add(Element* e)
             case STEM_SLASH:
                   _stemSlash = static_cast<StemSlash*>(e);
                   break;
+            case CHORD:
+                  addGraceChord(static_cast<Chord*>(e));
+                  break;
             default:
                   ChordRest::add(e);
                   break;
@@ -473,6 +476,9 @@ void Chord::remove(Element* e)
                   break;
             case CHORDLINE:
                   _el.remove(e);
+                  break;
+            case CHORD:
+                  _graceNotes.erase(std::find(_graceNotes.begin(), _graceNotes.end(), static_cast<Chord*>(e)));
                   break;
             default:
                   ChordRest::remove(e);
@@ -756,6 +762,9 @@ Note* Chord::selectedNote() const
 
 void Chord::write(Xml& xml) const
       {
+      for (Chord* c : _graceNotes)
+            c->write(xml);
+
       xml.stag("Chord");
       ChordRest::writeProperties(xml);
       if (_noteType != NOTE_NORMAL) {
@@ -1366,7 +1375,7 @@ void Chord::layout2()
 
       const qreal minDist = _spatium * .17;
 
-      Segment* s = segment()->prev(Segment::SegChordRestGrace);
+      Segment* s = segment()->prev(Segment::SegChordRest);
       if (s) {
             int strack = staff2track(staffIdx());
             int etrack = strack + VOICES;
@@ -1457,8 +1466,10 @@ void Chord::layout()
 
 void Chord::layoutPitch()
       {
-      for (Chord* c : _graceNotes)
+      for (Chord* c : _graceNotes) {
+            printf("layoutPitch: grace hook %p\n", c->hook());
             c->layoutPitch();
+            }
       qreal _spatium  = spatium();
 
       while (_ledgerLines) {
@@ -1586,6 +1597,12 @@ void Chord::layoutPitch()
                   if (x > _space.rw())
                         _space.setRw(x);
                   }
+            }
+
+      for (Chord* c : _graceNotes) {
+            printf("grace lw %f rw %f width %f\n", _space.lw(), _space.rw(), c->width());
+            qreal x = -_space.lw() - _space.rw();
+            c->setPos(x, 0);
             }
 
       for (int i = 0; i < _notes.size(); ++i)

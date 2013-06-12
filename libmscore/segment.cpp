@@ -49,7 +49,6 @@ const char* Segment::subTypeName() const
             case SegTimeSig:              return "Time Signature";
             case SegStartRepeatBarLine:   return "Begin Repeat";
             case SegBarLine:              return "BarLine";
-            case SegGrace:                return "Grace";
             case SegChordRest:            return "ChordRest";
             case SegBreath:               return "Breath";
             case SegEndBarLine:           return "EndBarLine";
@@ -640,7 +639,7 @@ void Segment::setTick(int t)
 
 const QList<Lyrics*>* Segment::lyricsList(int track) const
       {
-      if (!(segmentType() & (SegChordRestGrace))) {
+      if (!(segmentType() & (SegChordRest))) {
             if (MScore::debugMode)
                   qDebug("warning : lyricsList  bad segment type <%s><%s>", name(), subTypeName());
             return 0;

@@ -1451,8 +1451,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				}
 				cr->setDuration(cr->durationType().fraction());
 
-				Segment* s = measure->getGraceSegment(tick, graceLevel);
-				s->add(cr);
+//TODO-S				Segment* s = measure->getGraceSegment(tick, graceLevel);
+//				s->add(cr);
 			}
 
 			for (j = 0; j < notes.size(); ++j) {
