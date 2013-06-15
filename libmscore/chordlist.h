@@ -77,7 +77,8 @@ class HChord {
       int getKeys() const { return keys; }
       void print() const;
 
-      QString name(int tpc);
+      QString name(int tpc) const;
+      QString voicing() const;
       void add(const QList<HDegree>& degreeList);
       };
 
@@ -132,6 +133,7 @@ class ParsedChord {
       const QString& xmlSymbols() const         { return _xmlSymbols; }
       const QString& xmlParens() const          { return _xmlParens; }
       const QStringList& xmlDegrees() const     { return _xmlDegrees; }
+      int keys() const                          { return chord.getKeys(); }
       operator QString() const                  { return _handle; }
       bool operator==(const ParsedChord& c) const     { return (this->_handle == c._handle); }
       bool operator!=(const ParsedChord& c) const     { return !(*this == c); }
@@ -151,6 +153,7 @@ class ParsedChord {
       QString _xmlParens;
       QStringList _xmlDegrees;
       QStringList major, minor, diminished, augmented, lower, raise, mod1, mod2, symbols;
+      HChord chord;
       bool _parseable;
       bool _understandable;
       void configure(const ChordList*);
