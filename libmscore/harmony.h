@@ -139,7 +139,7 @@ class Harmony : public Text {
       QString harmonyName() const;
       void render(const TextStyle* ts = 0);
 
-      const ChordDescription* parseHarmony(const QString& s, int* root, int* base);
+      const ChordDescription* parseHarmony(const QString& s, int* root, int* base, bool syntaxOnly = false);
 
       const QString& extensionName() const;
 

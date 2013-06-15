@@ -99,7 +99,7 @@ void HChord::rotate(int semiTones)
 //   name
 //---------------------------------------------------------
 
-QString HChord::name(int tpc)
+QString HChord::name(int tpc) const
       {
       static const HChord C0(0,3,6,9);
       static const HChord C1(0,3);
@@ -204,6 +204,23 @@ QString HChord::name(int tpc)
       }
 
 //---------------------------------------------------------
+//   voicing
+//---------------------------------------------------------
+
+QString HChord::voicing() const
+      {
+      QString s = "C";
+      const char* names[] = { "C", " Db", " D", " Eb", " E", " F", " Gb", " G", " Ab", " A", " Bb", " B" };
+
+      for (int i = 1; i < 12; i++) {
+            if (contains(i))
+                  s += names[i];
+            }
+      return s;
+      }
+
+
+//---------------------------------------------------------
 //   print
 //---------------------------------------------------------
 
@@ -261,7 +278,6 @@ void HChord::add(const QList<HDegree>& degreeList)
                   else {
                         qDebug("SUB: chord does not contain degree %d(%d):",
                            d.value(), d.alter());
-                        print();
                         }
                   }
             else
@@ -418,8 +434,8 @@ void ParsedChord::configure(const ChordList* cl)
       minor << "mi" << "min" << "minor" << "-";
       diminished << "dim" << "o";
       augmented << "aug" << "+";
-      lower << "b" << "-";
-      raise << "#" << "+";
+      lower << "b" << "-" << "dim";
+      raise << "#" << "+" << "aug";
       mod1 << "sus" << "alt";
       mod2 << "sus" << "add" << "no" << "omit";
       symbols << "t" << "^" << "-" << "+" << "o" << "0";
@@ -456,12 +472,17 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
       QString trailing = ")], ";
       QString initial;
       bool take6 = false, take7 = false, take9 = false, take11 = false, take13 = false;
-#ifdef ALLOW_PARENTHESIZED_EXTENSION
+#if 0
+// enable this to allow quality or extension to be parenthesized
       int firstLeadingToken;
 #endif
       int lastLeadingToken;
       int len = s.size();
       int i, j;
+      int thirdKey, seventhKey;
+      bool susChord = false;
+      QList<HDegree> hdl;
+      int key[] = { 0, 0, 2, 4, 5, 7, 9, 11, 0, 2, 4, 5, 7, 9, 11 };
 
       configure(cl);
       _name = s;
@@ -502,25 +523,37 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
       if (tok1 == "M" || major.contains(tok1L)) {
             _quality = "major";
             take6 = true; take7 = true; take9 = true; take11 = true; take13 = true;
+            if (!syntaxOnly)
+                  chord = HChord("C E G");
             }
       else if (tok1 == "m" || minor.contains(tok1L)) {
             _quality = "minor";
             take6 = true; take7 = true; take9 = true; take11 = true; take13 = true;
+            if (!syntaxOnly)
+                  chord = HChord("C Eb G");
             }
       else if (diminished.contains(tok1L)) {
             _quality = "diminished";
             take7 = true;
+            if (!syntaxOnly)
+                  chord = HChord("C Eb Gb");
             }
       else if (augmented.contains(tok1L)) {
             _quality = "augmented";
             take7 = true;
+            if (!syntaxOnly)
+                  chord = HChord("C E G#");
             }
       else if (tok1L == "0") {
             _quality = "half-diminished";
+            if (!syntaxOnly)
+                  chord = HChord("C Eb Gb Bb");
             }
       else if (tok1L == "") {
             // empty quality - this will turn out to be major or dominant
             _quality = "";
+            if (!syntaxOnly)
+                  chord = HChord("C E G");
             }
       else {
             // anything else is not a quality after all, but a modifier
@@ -529,6 +562,8 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             tok1 = "";
             tok1L = "";
             i = lastLeadingToken;
+            if (!syntaxOnly)
+                  chord = HChord("C E G");
             }
       if (tok1 != "")
             addToken(tok1,QUALITY);
@@ -602,26 +637,47 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             }
 #endif
       if (!syntaxOnly) {
+            if (_quality == "minor")
+                  thirdKey = 3;
+            else
+                  thirdKey = 4;
+            if (_quality == "major")
+                  seventhKey = 11;
+            else if (_quality == "diminished")
+                  seventhKey = 9;
+            else
+                  seventhKey = 10;
             _xmlText += _extension;
             QStringList extl;
-            if (tok1 == "2" || tok1 == "4") {
+            if (tok1 == "2") {
                   QString d = "add" + tok1;
                   _xmlDegrees += d;
                   _xmlText.remove(tok1);
+                  chord += 2;
                   }
-            if (tok1 == "5")
+            else if (tok1 == "4") {
+                  QString d = "add" + tok1;
+                  _xmlDegrees += d;
+                  _xmlText.remove(tok1);
+                  chord += 5;
+                  }
+            else if (tok1 == "5") {
                   _xmlKind = "power";
+                  chord -= thirdKey;
+                  }
             else if (tok1 == "6") {
                   if (take6)
                         _xmlKind += "-sixth";
                   else
                         extl << "6";
+                  chord += 9;
                   }
             else if (tok1 == "7") {
                   if (take7)
                         _xmlKind += "-seventh";
                   else if (_xmlKind != "half-diminished")
                         extl << "7";
+                  chord += seventhKey;
                   }
             else if (tok1 == "9") {
                   if (take9)
@@ -639,6 +695,8 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         extl << "7" << "9";
                         correctXmlText();
                         }
+                  chord += seventhKey;
+                  chord += 2;
                   }
             else if (tok1 == "11") {
                   if (take11)
@@ -656,6 +714,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         extl << "7" << "9" << "11";
                         correctXmlText();
                         }
+                  chord += seventhKey;
+                  chord += 2;
+                  chord += 5;
                   }
             else if (tok1 == "13") {
                   if (take13)
@@ -673,6 +734,10 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         extl << "7" << "9" << "11" << "13";
                         correctXmlText();
                         }
+                  chord += seventhKey;
+                  chord += 2;
+                  chord += 5;
+                  chord += 9;
                   }
             else if (tok1 == "69") {
                   if (take6) {
@@ -684,6 +749,8 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         extl << "6" << "9";
                         correctXmlText();
                         }
+                  chord += 9;
+                  chord += 2;
                   }
             foreach (QString e, extl) {
                   QString d = "add" + e;
@@ -745,6 +812,12 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             tok2L = tok2.toLower();
             // re-attach "add"
             if (addPending) {
+                  if (raise.contains(tok1L))
+                        tok1L = "#";
+                  else if (lower.contains(tok1L))
+                        tok1L = "b";
+                  else if (tok1 == "M" || major.contains(tok1L))
+                        tok1L = "major";
                   tok2L = tok1L + tok2L;
                   tok1L = "add";
                   }
@@ -761,6 +834,8 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         if (!syntaxOnly) {
                               _xmlKind = "augmented-seventh";
                               _xmlText = _extension + tok1;
+                              chord -= 7;
+                              chord += 8;
                               }
                         tok1L = "";
                         }
@@ -774,11 +849,25 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   // this handles C5b, C9#, etc
                   tok2L = _extension;
                   if (!syntaxOnly) {
-                        _xmlKind = (_quality == "dominant" ? "major" : _quality);
+                        _xmlKind = (_quality == "dominant") ? "major" : _quality;
                         _xmlText.remove(_extension);
+                        if (_extension == "5")
+                              chord += thirdKey;
+                        else
+                              chord -= seventhKey;
                         }
+                  if (_quality == "dominant")
+                        _quality = "major";
                   _extension = "";
+                  if (lower.contains(tok1L))
+                        tok1L = "b";
+                  else
+                        tok1L = "#";
                   }
+            else if (lower.contains(tok1L))
+                  tok1L = "b";
+            else if (raise.contains(tok1L))
+                  tok1L = "#";
             QString m = tok1L + tok2L;
             if (m != "")
                   _modifierList += m;
@@ -787,12 +876,44 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             if (tok2 != "")
                   addToken(tok2,MODIFIER);
             if (!syntaxOnly) {
+                  int d;
+                  if (tok2L == "")
+                        d = 0;
+                  else
+                        d = tok2L.toInt();
                   QString degree;
                   bool alter = false;
-                  if (tok1L == "add")
+                  if (tok1L == "add") {
+                        if (d)
+                              hdl += HDegree(d, 0, ADD);
+                        else if (tok2L != "") {
+                              // this was result of addPending
+                              // alteration; tok1 = alter, tok2 = value
+                              d = tok2.toInt();
+                              if (raise.contains(tok1) || tok1 == "M" || major.contains(tok1.toLower())) {
+                                    if (d == 7) {
+                                          chord += 11;
+                                          tok2L = "#7";
+                                          }
+                                    else if (raise.contains(tok1))
+                                          hdl += HDegree(d, 1, ADD);
+                                    }
+                              else if (lower.contains(tok1)) {
+                                    if (d == 7)
+                                          chord += 10;
+                                    else
+                                          hdl += HDegree(d, -1, ADD);
+                                    }
+                              else if (d)
+                                    hdl += HDegree(d, 0, ADD);
+                              }
                         degree = "add" + tok2L;
-                  else if (tok1L == "no")
+                        }
+                  else if (tok1L == "no") {
                         degree = "sub" + tok2L;
+                        if (d)
+                              hdl += HDegree(d, 0, SUBTRACT);
+                        }
                   else if (tok1L == "sus") {
 #if 0
 // enable this code to export 7sus4 as dominant,sub3,add4 rather than suspended-fourth,add7 (similar for 9sus4, 13sus4)
@@ -834,6 +955,10 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         else if (_extension == "9")
                               _xmlDegrees += "add9";
 #endif
+                        susChord = true;
+                        chord -= thirdKey;
+                        if (d)
+                              chord += key[d];
                         }
                   else if (tok1L == "major") {
                         if (_xmlKind.startsWith("minor")) {
@@ -854,12 +979,21 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                               }
                         else
                               tok1L = "add";
+                        chord -= 10;
+                        chord += 11;
+                        if (d && d != 7)
+                              hdl += HDegree(d, 0, ADD);
                         }
                   else if (tok1L == "alt") {
                         _xmlDegrees += "altb5";
                         _xmlDegrees += "add#5";
                         _xmlDegrees += "addb9";
                         _xmlDegrees += "add#9";
+                        chord -= 7;
+                        chord += 6;
+                        chord += 8;
+                        chord += 1;
+                        chord += 3;
                         }
                   else if (tok1L == "blues") {
                         // this isn't really well-defined, but it might as well mean something
@@ -867,12 +1001,14 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                               _xmlDegrees += "alt#9";
                         else
                               _xmlDegrees += "add#9";
+                        chord += 3;
                         }
                   else if (tok1L == "lyd") {
                         if (_extension == "13")
                               _xmlDegrees += "alt#11";
                         else
                               _xmlDegrees += "add#11";
+                        chord += 6;
                         }
                   else if (tok1L == "phryg") {
                         if (!_xmlKind.startsWith("minor"))
@@ -882,15 +1018,26 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         else
                               _xmlDegrees += "addb9";
                         _xmlText += tok1;
+                        chord = HChord("C Db Eb G Bb");
                         }
                   else if (tok1L == "tristan") {
                         _xmlKind = "Tristan";
                         _xmlText = tok1;
+                        chord = HChord("C F# A# D#");
                         }
-                  else if (addPending)
+                  else if (addPending) {
                         degree = "add" + tok1L + tok2L;
-                  else if (tok1L == "" && tok2L != "")
+                        if (raise.contains(tok1L))
+                              hdl += HDegree(d, 1, ADD);
+                        else if (lower.contains(tok1L))
+                              hdl += HDegree(d, -1, ADD);
+                        else
+                              hdl += HDegree(d, 0, ADD);
+                        }
+                  else if (tok1L == "" && tok2L != "") {
                         degree = "add" + tok2L;
+                        hdl += HDegree(d, 0, ADD);
+                        }
                   else if (lower.contains(tok1L)) {
                         tok1L = "b";
                         alter = true;
@@ -913,6 +1060,12 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         else
                               degree = "add";
                         degree += tok1L + tok2L;
+                        if (chord.contains(key[d]) && !(susChord && (d == 11)))
+                              hdl += HDegree(d, 0, SUBTRACT);
+                        if (tok1L == "#")
+                              hdl += HDegree(d, 1, ADD);
+                        else if (tok1L == "b")
+                              hdl += HDegree(d, -1, ADD);
                         }
                   if (degree != "")
                         _xmlDegrees += degree;
@@ -922,9 +1075,10 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   addToken(QString(s[i++]),MODIFIER);
             addPending = false;
             }
-      // fix "add" / "alt" conflicts
-      // so add9,altb9 -> addb9
       if (!syntaxOnly) {
+            chord.add(hdl);
+            // fix "add" / "alt" conflicts
+            // so add9,altb9 -> addb9
             QStringList altList = _xmlDegrees.filter("alt");
             foreach (const QString& d, altList) {
                   QString unalt(d);
@@ -952,11 +1106,12 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   _xmlDegrees.clear();
             }
 
-      qDebug("parse: source = <%s>, handle = %s",qPrintable(s),qPrintable(_handle));
+      qDebug("parse: source = <%s>, handle = %s", qPrintable(s), qPrintable(_handle));
       if (!syntaxOnly) {
-            qDebug("parse: xmlKind = <%s>, text = <%s>",qPrintable(_xmlKind),qPrintable(_xmlText));
-            qDebug("parse: xmlSymbols = %s, xmlParens = %s",qPrintable(_xmlSymbols),qPrintable(_xmlParens));
-            qDebug("parse: xmlDegrees = <%s>",qPrintable(_xmlDegrees.join(",")));
+            qDebug("parse: HChord = <%s> (%d)", qPrintable(chord.voicing()), chord.getKeys());
+            qDebug("parse: xmlKind = <%s>, text = <%s>", qPrintable(_xmlKind), qPrintable(_xmlText));
+            qDebug("parse: xmlSymbols = %s, xmlParens = %s", qPrintable(_xmlSymbols), qPrintable(_xmlParens));
+            qDebug("parse: xmlDegrees = <%s>", qPrintable(_xmlDegrees.join(",")));
             }
 
       return _parseable;
@@ -1199,7 +1354,6 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
       {
       // generate anew on each call,
       // in case chord list has changed since last time
-      qDebug("renderList: generating for %s",qPrintable(_handle));
       if (!_renderList.isEmpty())
             _renderList.clear();
       foreach (ChordToken tok, _tokenList) {
@@ -1313,6 +1467,9 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
       xmlText = pc->xmlText();
       xmlSymbols = pc->xmlSymbols();
       xmlParens = pc->xmlParens();
+      if (chord.getKeys() == 0) {
+            chord = HChord(pc->keys());
+            }
       }
 
 //---------------------------------------------------------
@@ -1360,7 +1517,7 @@ void ChordDescription::write(Xml& xml)
       foreach(const QString& s, names)
             xml.tag("name", s);
       xml.tag("xml", xmlKind);
-      xml.tag("voicing", chord.getKeys());
+      xml.tag("voicing", chord.voicing());
       foreach(const QString& s, xmlDegrees)
             xml.tag("degree", s);
       writeRenderList(xml, &renderList, "render");
