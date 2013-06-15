@@ -266,6 +266,11 @@ void Harmony::read(XmlReader& e)
                   e.unknown();
             }
 
+      // TODO: now that we can render arbitrary chords,
+      // we could try to construct a full representation from a degree list.
+      // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
+      // or constructed in the Harmony Properties dialog.
+
       if (_id > 0)
             // lookup id in chord list and generate new description if necessary
             getDescription();
@@ -358,7 +363,7 @@ static int convertRoot(const QString& s, bool germanNames)
 //    return true if chord is recognized
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int* base)
+const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int* base, bool syntaxOnly)
       {
       _id = -1;
       if (_parsedForm) {
@@ -407,7 +412,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             cd = descr(s);
       else {
             _parsedForm = new ParsedChord();
-            _parsedForm->parse(s,cl);
+            _parsedForm->parse(s,cl,syntaxOnly);
             cd = descr(s,_parsedForm);
             }
       if (cd) {
@@ -444,7 +449,7 @@ bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers
       bool rv = Text::edit(view, grip, key, mod, s);
       QString str = text();
       int root, base;
-      bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base);
+      bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base, true);
       spellCheckUnderline(badSpell);
       return rv;
       }
