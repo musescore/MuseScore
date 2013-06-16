@@ -158,8 +158,8 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             return false;
 
       ChordRest* cr = 0;
-      ChordRest* e  = curGrip == 0 ? sl->cr1 : sl->cr2;
-      ChordRest* e1 = curGrip == 0 ? sl->cr2 : sl->cr1;
+      ChordRest* e  = curGrip == 0 ? sl->startCR() : sl->endCR();
+      ChordRest* e1 = curGrip == 0 ? sl->endCR() : sl->startCR();
 
       if (key == Qt::Key_Left)
             cr = prevChordRest(e);
@@ -180,11 +180,11 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, ChordRest* cr
       {
       Slur* sl = static_cast<Slur*>(slurTie());
       if (curGrip == 0) {
-            sl->cr1 = cr;
+            sl->setStartElement(cr);
             sl->setTick(cr->tick());
             }
       else {
-            sl->cr2 = cr;
+            sl->setEndElement(cr);
             sl->setTick2(cr->tick());
             }
 
@@ -300,8 +300,8 @@ void SlurSegment::editDrag(const EditData& ed)
                ) {
                   if (e && e->type() == NOTE) {
                         Chord* chord = static_cast<Note*>(e)->chord();
-                        if ((ed.curGrip == GRIP_END && chord != slur->cr2)
-                           || (ed.curGrip == GRIP_START && chord != slur->cr1)) {
+                        if ((ed.curGrip == GRIP_END && chord != slur->endCR())
+                           || (ed.curGrip == GRIP_START && chord != slur->startCR())) {
                               changeAnchor(ed.view, ed.curGrip, chord);
                               QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
                               ups[ed.curGrip].off = p1 / _spatium;
@@ -391,8 +391,8 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p2 = pp2 - pp1;
       if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
             qDebug("zero slur");
-            Measure* m1 = cr1->segment()->measure();
-            Measure* m2 = cr2->segment()->measure();
+            Measure* m1 = startCR()->segment()->measure();
+            Measure* m2 = endCR()->segment()->measure();
             qDebug("   at tick %d in measure %d-%d",
                m1->tick(), m1->no(), m2->no());
             return;
@@ -665,36 +665,84 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
 
 //---------------------------------------------------------
 //   slurPos
+//    Calculate position of start- and endpoint of slur
+//    relative to System() position.
+//---------------------------------------------------------
+
+void Slur::slurPosChord(SlurPos* sp)
+      {
+      Note* _startNote = startChord()->downNote();
+      Note* _endNote   = endChord()->downNote();
+      qreal hw         = _startNote->headWidth();
+      qreal __up       = _up ? -1.0 : 1.0;
+      qreal _spatium = spatium();
+
+      sp->system1 = endChord()->measure()->system();
+      sp->system2 = sp->system1;
+      QPointF pp(sp->system1->pagePos());
+
+      qreal xo;
+      qreal yo;
+
+      //------p1
+      if (_up) {
+            xo = _startNote->x() + hw * 1.12;
+            yo = _startNote->pos().y() + hw * .3 * __up;
+            }
+      else {
+            xo = _startNote->x() + hw * 0.4;
+            yo = _startNote->pos().y() + _spatium * .75 * __up;
+            }
+      sp->p1 = startChord()->pagePos() - pp + QPointF(xo, yo);
+
+      //------p2
+      if ((endChord()->notes().size() > 1) || (endChord()->stem() && !endChord()->up() && !_up)) {
+            xo = _endNote->x() - hw * 0.12;
+            yo = _endNote->pos().y() + hw * .3 * __up;
+            }
+      else {
+            xo = _endNote->x() + hw * 0.15;
+            yo = _endNote->pos().y() + _spatium * .75 * __up;
+            }
+      sp->p2 = endChord()->pagePos() - pp + QPointF(xo, yo);
+      }
+
+//---------------------------------------------------------
+//   slurPos
 //    calculate position of start- and endpoint of slur
 //    relative to System() position
 //---------------------------------------------------------
 
 void Slur::slurPos(SlurPos* sp)
       {
+      if (anchor() == ANCHOR_CHORD) {
+            slurPosChord(sp);
+            return;
+            }
       qreal _spatium = spatium();
 
-      if (cr2 == 0) {
-            sp->p1 = cr1->pagePos();
-            sp->p1.rx() += cr1->width();
+      if (endCR() == 0) {
+            sp->p1 = startCR()->pagePos();
+            sp->p1.rx() += startCR()->width();
             sp->p2 = sp->p1;
             sp->p2.rx() += 5 * _spatium;
-            sp->system1 = cr1->measure()->system();
+            sp->system1 = startCR()->measure()->system();
             sp->system2 = sp->system1;
             return;
             }
 
-      ChordRest* scr   = cr1;
-      ChordRest* ecr   = cr2;
+      ChordRest* scr   = startCR();
+      ChordRest* ecr   = endCR();
       Chord* sc   = 0;
       Note* note1 = 0;
-      if (cr1->type() == CHORD) {
-            sc = static_cast<Chord*>(cr1);
+      if (startCR()->type() == CHORD) {
+            sc = static_cast<Chord*>(startCR());
             note1 = _up ? sc->upNote() : sc->downNote();
             }
       Chord* ec = 0;
       Note* note2 = 0;
-      if (cr2->type() == CHORD) {
-            ec   = static_cast<Chord*>(cr2);
+      if (endCR()->type() == CHORD) {
+            ec   = static_cast<Chord*>(endCR());
             note2 = _up ? ec->upNote() : ec->downNote();
             }
 
@@ -721,7 +769,7 @@ void Slur::slurPos(SlurPos* sp)
             }
 
       qreal __up = _up ? -1.0 : 1.0;
-      qreal hw   = note1 ? note1->headWidth() : cr1->width();
+      qreal hw   = note1 ? note1->headWidth() : startCR()->width();
       switch (sa1) {
             case SA_STEM: //sc can't be null
                   sp->p1 += sc->stemPosBeam() - sc->pagePos() + sc->stem()->p2();
@@ -749,9 +797,9 @@ void Slur::slurPos(SlurPos* sp)
       if (note1)
             yo = note1->pos().y();
       else if(_up)
-            yo = cr1->bbox().top();
+            yo = startCR()->bbox().top();
       else
-            yo = cr1->bbox().top() + cr1->height();
+            yo = startCR()->bbox().top() + startCR()->height();
       yo += _spatium * .9 * __up;
       xo = hw * .5;
 
@@ -775,7 +823,7 @@ void Slur::slurPos(SlurPos* sp)
                         Note* n2  = 0;
                         if(ec)
                               n2 = ec->up() ? ec->downNote() : ec->upNote();
-                        qreal yd  = (n2 ? n2->pos().y() : cr2->pos().y()) - n1->pos().y();
+                        qreal yd  = (n2 ? n2->pos().y() : endCR()->pos().y()) - n1->pos().y();
 
                         yd *= .5;
 
@@ -805,9 +853,9 @@ void Slur::slurPos(SlurPos* sp)
       if (note2)
             yo = note2->pos().y();
       else if(_up)
-            yo = cr2->bbox().top();
+            yo = endCR()->bbox().top();
       else
-            yo = cr2->bbox().top() + cr2->height();
+            yo = endCR()->bbox().top() + endCR()->height();
       yo += _spatium * .9 * __up;
 
       if (stem2) { //ec can't be null
@@ -838,7 +886,7 @@ void Slur::slurPos(SlurPos* sp)
                   if(sc)
                         sc->up() ? sc->downNote() : sc->upNote();
                   Note* n2 = ec->up() ? ec->downNote() : ec->upNote();
-                  qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : cr1->pos().y());
+                  qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
 
                   yd *= .5;
 
@@ -1028,8 +1076,6 @@ Slur::Slur(Score* s)
       {
       setId(-1);
       setAnchor(ANCHOR_CHORD);
-      cr1 = 0;
-      cr2 = 0;
       }
 
 //---------------------------------------------------------
@@ -1118,7 +1164,16 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 
 void Slur::layout()
       {
+      if (anchor() == ANCHOR_CHORD) {
+            layoutChord();
+            return;
+            }
       qreal _spatium = spatium();
+
+      if (anchor() == Spanner::ANCHOR_SEGMENT) {
+            computeStartElement();
+            computeEndElement();
+            }
 
       if (score() == gscore || tick() == -1) {
             //
@@ -1140,11 +1195,9 @@ void Slur::layout()
             setbbox(frontSegment()->bbox());
             return;
             }
-      cr1 = startCR();
-      cr2 = endCR();
-      if (cr1 == 0 || cr2 == 0) {
+      if (startCR() == 0 || endCR() == 0) {
             qDebug("Slur::layout(): id %d  %p %p %d-%d null anchor",
-               id(), cr1, cr2, tick(), tick2());
+               id(), startCR(), endCR(), tick(), tick2());
             return;
             }
       switch (_slurDirection) {
@@ -1160,36 +1213,36 @@ void Slur::layout()
                   // assumption:
                   // slurs have only chords or rests as start/end elements
                   //
-                  if (cr1 == 0 || cr2 == 0) {
+                  if (startCR() == 0 || endCR() == 0) {
                         _up = true;
                         break;
                         }
-                  Measure* m1    = cr1->measure();
+                  Measure* m1    = startCR()->measure();
 
-                  Chord* c1 = (cr1->type() == CHORD) ? static_cast<Chord*>(cr1) : 0;
-                  Chord* c2 = (cr2->type() == CHORD) ? static_cast<Chord*>(cr2) : 0;
+                  Chord* c1 = (startCR()->type() == CHORD) ? static_cast<Chord*>(startCR()) : 0;
+                  Chord* c2 = (endCR()->type() == CHORD) ? static_cast<Chord*>(endCR()) : 0;
 
-                  _up = !(cr1->up());
+                  _up = !(startCR()->up());
 
-                  if ((cr2->tick() - cr1->tick()) > m1->ticks()) {
+                  if ((endCR()->tick() - startCR()->tick()) > m1->ticks()) {
                         // long slurs are always above
                         _up = true;
                         }
                   else
-                        _up = !(cr1->up());
+                        _up = !(startCR()->up());
 
                   if (c1 && c2 && isDirectionMixture(c1, c2) && (c1->noteType() == NOTE_NORMAL)) {
                         // slurs go above if start and end note have different stem directions,
                         // but grace notes are exceptions
                         _up = true;
                         }
-                  else if (m1->mstaff(cr1->staffIdx())->hasVoices && c1 && c1->noteType() == NOTE_NORMAL) {
+                  else if (m1->mstaff(startCR()->staffIdx())->hasVoices && c1 && c1->noteType() == NOTE_NORMAL) {
                         // in polyphonic passage, slurs go on the stem side
-                        _up = cr1->up();
+                        _up = startCR()->up();
                         }
                   else if (c1 && c2 && chordsHaveTie(c1, c2)) {
                         // could confuse slur with tie, put slur on stem side
-                        _up = cr1->up();
+                        _up = startCR()->up();
                         }
                   }
                   break;
@@ -1464,6 +1517,138 @@ void Tie::layout()
             _up = _slurDirection == MScore::UP ? true : false;
 
       qreal w   = startNote()->headWidth();
+      qreal xo1 = w * 1.12;
+      qreal h   = w * 0.3;
+      qreal yo  = _up ? -h : h;
+
+      QPointF off1(xo1, yo);
+      QPointF off2(0.0, yo);
+
+      QPointF ppos(pagePos());
+
+      // TODO: cleanup
+
+      SlurPos sPos;
+      slurPos(&sPos);
+
+      // p1, p2, s1, s2
+
+      QList<System*>* systems = score()->systems();
+      setPos(0, 0);
+
+      //---------------------------------------------------------
+      //   count number of segments, if no change, all
+      //    user offsets (drags) are retained
+      //---------------------------------------------------------
+
+      int sysIdx1 = systems->indexOf(sPos.system1);
+      if (sysIdx1 == -1) {
+            qDebug("system not found");
+            foreach(System* s, *systems)
+                  qDebug("   search %p in %p", sPos.system1, s);
+            return;
+            }
+
+      int sysIdx2     = systems->indexOf(sPos.system2);
+      if (sysIdx2 < 0)
+            sysIdx2 = sysIdx1;
+      unsigned nsegs  = sysIdx2 - sysIdx1 + 1;
+      fixupSegments(nsegs);
+
+      int i = 0;
+      for (uint ii = 0; ii < nsegs; ++ii) {
+            System* system = (*systems)[sysIdx1++];
+            if (system->isVbox())
+                  continue;
+            SlurSegment* segment = segmentAt(i);
+            segment->setSystem(system);
+
+            // case 1: one segment
+            if (sPos.system1 == sPos.system2) {
+                  segment->layout(sPos.p1, sPos.p2);
+                  segment->setSpannerSegmentType(SEGMENT_SINGLE);
+                  }
+            // case 2: start segment
+            else if (i == 0) {
+                  qreal x = system->bbox().width();
+                  segment->layout(sPos.p1, QPointF(x, sPos.p1.y()));
+                  segment->setSpannerSegmentType(SEGMENT_BEGIN);
+                  }
+            // case 4: end segment
+            else {
+                  qreal x = firstNoteRestSegmentX(system) - 2 * _spatium;
+
+                  segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
+                  segment->setSpannerSegmentType(SEGMENT_END);
+                  }
+            ++i;
+            }
+      }
+
+//---------------------------------------------------------
+//   layoutChord
+//---------------------------------------------------------
+
+void Slur::layoutChord()
+      {
+      qreal _spatium = spatium();
+
+      //
+      //    show short bow
+      //
+      if (startChord() == 0 || endChord() == 0) {
+            qDebug("no start/end chord");
+            return;
+            }
+
+      Chord* c1 = startChord();
+      Chord* c2 = endChord();
+      Note* startNote = c1->upNote();
+      // Note* endNote = c2->upNote();
+
+      if (_slurDirection == MScore::AUTO) {
+            QList<Note*> notes = c1->notes();
+            int n = notes.size();
+            if (n == 1) {
+                  //
+                  // single note
+                  //
+                  if (c1->up() != c2->up()) {
+                        // if stem direction is mixed, always up
+                        _up = true;
+                        }
+                  else
+                        _up = !c1->up();
+                  }
+            else {
+                  //
+                  // chords
+                  //
+                  QList<int> ties;
+                  int idx = 0;
+                  for (int i = 0; i < n; ++i) {
+                        if (notes[i]->tieFor()) {
+                              ties.append(notes[i]->line());
+                              if (notes[i] == startNote)
+                                    idx = ties.size() - 1;
+                              }
+                        }
+                  if (idx == 0)
+                        _up = false;
+                  else if (idx == ties.size() - 1)
+                        _up = true;
+                  else {
+                        if (ties[idx] <= 4)
+                              _up = ((ties[idx-1] - ties[idx]) <= 1) || ((ties[idx] - ties[idx+1]) > 1);
+                        else
+                              _up = ((ties[idx-1] - ties[idx]) <= 1) && ((ties[idx] - ties[idx+1]) > 1);
+                        }
+                  }
+            }
+      else
+            _up = _slurDirection == MScore::UP ? true : false;
+
+      qreal w   = startNote->headWidth();
       qreal xo1 = w * 1.12;
       qreal h   = w * 0.3;
       qreal yo  = _up ? -h : h;

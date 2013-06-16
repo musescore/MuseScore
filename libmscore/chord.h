@@ -67,6 +67,7 @@ class Chord : public ChordRest {
       Glissando* _glissando;
       ElementList _el;              ///< chordline
       std::vector<Chord*> _graceNotes;
+      int _graceIndex;              ///< if this is a grace note, index in parent list
 
       MScore::Direction  _stemDirection;
       TremoloChordType   _tremoloChordType;
@@ -80,7 +81,7 @@ class Chord : public ChordRest {
       void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible, qreal hw);
       void addLedgerLines(qreal x, int move);
       void processSiblings(std::function<void(Element*)> func);
-      void layoutPitch();
+      void layoutPitched();
       void layoutTablature();
 
    public:
@@ -138,6 +139,8 @@ class Chord : public ChordRest {
 
       const std::vector<Chord*>& graceNotes() const { return _graceNotes; }
       std::vector<Chord*>& graceNotes()             { return _graceNotes; }
+      int graceIndex() const                        { return _graceIndex; }
+      void setGraceIndex(int val)                   { _graceIndex = val;  }
 
       virtual QPointF stemPos() const;        ///< page coordinates
       virtual qreal stemPosX() const;         ///< page coordinates
@@ -146,7 +149,6 @@ class Chord : public ChordRest {
       Hook* hook() const                     { return _hook; }
 
       Q_INVOKABLE virtual void add(Element*);
-      void addGraceChord(Chord*);
       Q_INVOKABLE virtual void remove(Element*);
 
       Note* selectedNote() const;

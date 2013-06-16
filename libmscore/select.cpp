@@ -312,7 +312,7 @@ void Selection::updateSelectedElements()
             // for each measure in the selection, check if it contains spanners within our selection
             Measure* sm = _startSegment->measure();
             Measure* em = _endSegment ? _endSegment->measure()->nextMeasure() : 0;
-            int endTick = _endSegment ? _endSegment->tick() : score()->lastMeasure()->endTick();
+            // int endTick = _endSegment ? _endSegment->tick() : score()->lastMeasure()->endTick();
             for (Measure* m = sm; m && m != em; m = m->nextMeasure()) {
 #if 0 // TODO-S
                   for(Spanner* sp = m->spannerFor(); sp; sp = sp->next()) {

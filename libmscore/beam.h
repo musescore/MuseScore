@@ -85,6 +85,7 @@ class Beam : public Element {
       System* system() const { return (System*)parent(); }
 
       void layout1();
+      void layoutGraceNotes();
       void layout();
 
       const QList<ChordRest*>& elements() { return _elements;  }

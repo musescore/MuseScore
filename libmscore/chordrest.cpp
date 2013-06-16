@@ -282,19 +282,34 @@ bool ChordRest::readProperties(XmlReader& e)
             _small = e.readInt();
       else if (tag == "Slur") {
             int id = e.intAttribute("number");
-            QString type(e.attribute("type"));
-            Slur* slur = static_cast<Slur*>(score()->findSpanner(id));
-            if (!slur)
+            Spanner* spanner = score()->findSpanner(id);
+            if (!spanner)
                   qDebug("ChordRest::read(): Slur id %d not found", id);
             else {
-                  if (type == "start") {
+                  QString atype(e.attribute("type"));
+                  Slur* slur = static_cast<Slur*>(spanner);
+                  if (atype == "start") {
                         slur->setTick(e.tick());
                         slur->setTrack(e.track());
+                        slur->setStartElement(this);
+                        if (type() == CHORD && isGrace()) {
+                              slur->setAnchor(Spanner::ANCHOR_CHORD);
+                              Chord* c = static_cast<Chord*>(slur->startChord());
+                              c->add(slur);
+                              }
+                        else
+                              slur->setAnchor(Spanner::ANCHOR_SEGMENT);
                         }
-                  else if (type == "stop")
+                  else if (atype == "stop") {
                         slur->setTickLen(e.tick() - slur->tick());
+                        slur->setEndElement(this);
+                        if (slur->anchor() == Spanner::ANCHOR_CHORD) {
+                              // remove Slur from Score::spanner
+                              score()->spanner().removeOne(slur);
+                              }
+                        }
                   else
-                        qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(type));
+                        qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(atype));
                   }
             e.readNext();
             }
@@ -1001,5 +1016,9 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
       score()->setLayoutAll(true);
       }
 
+bool ChordRest::isGrace() const
+      {
+      return type() == Element::CHORD && ((Chord*)this)->noteType() != NOTE_NORMAL;
+      }
 }
 

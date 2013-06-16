@@ -161,9 +161,8 @@ class SlurTie : public Spanner {
 class Slur : public SlurTie {
       Q_OBJECT
 
-   protected:
-      ChordRest* cr1;
-      ChordRest* cr2;
+      void slurPosChord(SlurPos*);
+      void layoutChord();
 
    public:
       Slur(Score* = 0);
@@ -201,10 +200,9 @@ class Tie : public SlurTie {
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       virtual void layout();
-      virtual void slurPos(SlurPos*);
+      virtual void slurPos(SlurPos*) override;
       virtual void computeBezier(SlurSegment*, QPointF so = QPointF());
       };
-
 
 }     // namespace Ms
 #endif
