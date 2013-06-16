@@ -20,6 +20,7 @@ namespace Ms {
 class Segment;
 class Spanner;
 class System;
+class Chord;
 class ChordRest;
 
 //---------------------------------------------------------
@@ -100,6 +101,8 @@ class Spanner : public Element {
 
       QList<SpannerSegment*> segments;
       Anchor _anchor;
+      Element* _startElement;
+      Element* _endElement;
       int _tick, _tickLen;
       int _id;                // used for xml serialization
 
@@ -144,13 +147,25 @@ class Spanner : public Element {
       bool setProperty(P_ID propertyId, const QVariant& v);
       QVariant propertyDefault(P_ID propertyId) const;
 
-      ChordRest* startCR() const;      // helper functions
+      void computeStartElement();
+      void computeEndElement();
+
+      Element* startElement() const    { return _startElement; }
+      Element* endElement() const      { return _endElement; }
+      void setStartElement(Element* e) { _startElement = e; }
+      void setEndElement(Element* e)   { _endElement = e; }
+
+      void setStartChord(Chord*);
+      void setEndChord(Chord*);
+
+      Chord* startChord() const;
+      Chord* endChord() const;
+
+      ChordRest* startCR() const;
       ChordRest* endCR() const;
+
       Segment* startSegment() const;
       Segment* endSegment() const;
-
-      Element* startElement() const;
-      Element* endElement() const;
       };
 
 }     // namespace Ms

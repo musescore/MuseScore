@@ -367,6 +367,26 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
       }
 
 //---------------------------------------------------------
+//   beamGraceNotes
+//---------------------------------------------------------
+
+void Score::beamGraceNotes(Chord* mainNote)
+      {
+      // TODO: support beam mode
+      foreach (ChordRest* cr, mainNote->graceNotes())
+            cr->removeDeleteBeam();
+      if (mainNote->graceNotes().size() < 2)
+            return;
+      Beam* b = new Beam(this);
+      b->setTrack(mainNote->track());
+      b->setGenerated(true);
+      foreach (ChordRest* cr, mainNote->graceNotes())
+            b->add(cr);
+
+      b->layoutGraceNotes();
+      }
+
+//---------------------------------------------------------
 //   layoutStage2
 //    auto - beamer
 //---------------------------------------------------------
@@ -387,6 +407,8 @@ void Score::layoutStage2()
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
                         continue;
+                  if (cr->type() == Element::CHORD)
+                        beamGraceNotes(static_cast<Chord*>(cr));
                   // set up for cross-measure values as soon as possible
                   // to have all computations (stems, hooks, ...) consistent with it
                   if (cr->type() == Element::CHORD && segment->segmentType() == Segment::SegChordRest)
@@ -416,51 +438,6 @@ void Score::layoutStage2()
                               beam    = 0;
                               }
                         }
-#if 0 // TODO-S
-                  if (segment->segmentType() == Segment::SegGrace) {
-                        Segment* nseg = segment->next();
-                        if (nseg
-                           && nseg->segmentType() == Segment::SegGrace
-                           && nseg->element(track)
-                           && cr->durationType().hooks()
-                           && static_cast<ChordRest*>(nseg->element(track))->durationType().hooks()
-                           && bm != BeamMode::NONE
-                           )
-                              {
-                              Beam* b = cr->beam();
-                              if (b == 0 || b->elements().front() != cr) {
-                                    b = new Beam(this);
-                                    b->setTrack(track);
-                                    b->setGenerated(true);
-                                    cr->removeDeleteBeam();
-                                    b->add(cr);
-                                    }
-                              Segment* s = nseg;
-                              for (;;) {
-                                    nseg = s;
-                                    ChordRest* cr = static_cast<ChordRest*>(nseg->element(track));
-                                    if (!cr->durationType().hooks())
-                                          break;
-                                    b->add(cr);
-                                    s = nseg->next();
-                                    if (!s || (s->segmentType() != Segment::SegGrace) || !s->element(track)
-                                       || !static_cast<ChordRest*>(s->element(track))->durationType().hooks())
-                                          break;
-                                    }
-                              if (b->elements().size() < 2) {
-                                    b->elements().front()->removeDeleteBeam();
-                                    }
-                              else
-                                    b->layout1();
-                              segment = nseg;
-                              }
-                        else {
-                              cr->removeDeleteBeam();
-                              }
-                        continue;
-                        }
-#endif
-
                   if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NONE)) {
                         if (beam) {
                               beam->layout1();
@@ -549,7 +526,6 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
-//      qDebug("doLayout");
       int idx = _style.valueSt(ST_MusicalSymbolFont) == "Gonville" ? 1 : 0;
       if (idx != _symIdx) {
             _symIdx = idx;
@@ -642,6 +618,13 @@ void Score::doLayout()
 
                         if (cr->type() == Element::CHORD) {
                               Chord* c = static_cast<Chord*>(cr);
+                              for (Chord* cc : c->graceNotes()) {
+                                    if (cc->beam() && cc->beam()->elements().front() == cc) {
+                                          cc->beam()->layout();
+                                          if (!cc->beam())
+                                                cc->layoutStem();
+                                          }
+                                    }
                               if (!c->beam())
                                     c->layoutStem();
                               c->layoutArpeggio2();
@@ -661,7 +644,6 @@ void Score::doLayout()
 
       foreach (Spanner* s, _spanner)
             s->layout();
-
 
       if (layoutMode() != LayoutLine) {
             layoutSystems2();
@@ -1428,7 +1410,8 @@ void Score::remove(Element* el)
             case Element::PEDAL:
             case Element::HAIRPIN:
             case Element::OTTAVA:
-                  _spanner.removeOne(static_cast<Spanner*>(el));
+                  if (!_spanner.removeOne(static_cast<Spanner*>(el)))
+                        qDebug("Score::remove() cannot find spanner %s\n", el->name());
                   break;
             default:
                   qDebug("Score::remove(): invalid element %s", el->name());

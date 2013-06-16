@@ -166,6 +166,7 @@ Chord::Chord(Score* s)
       _noStem           = false;
       _userPlayEvents   = false;
       _crossMeasure     = CROSSMEASURE_UNKNOWN;
+      _graceIndex   = 0;
       setFlags(ELEMENT_MOVABLE | ELEMENT_ON_STAFF);
       }
 
@@ -183,6 +184,7 @@ Chord::Chord(const Chord& c)
       _arpeggio      = 0;
       _stemSlash     = 0;
 
+      _graceIndex     = c._graceIndex;
       _noStem         = c._noStem;
       _userPlayEvents = c._userPlayEvents;
 
@@ -313,7 +315,7 @@ QPointF Chord::stemPosBeam() const
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
             if (_noteType != NOTE_NORMAL)
-                  nhw *= score()->styleD(ST_graceNoteMag);
+                 nhw *= score()->styleD(ST_graceNoteMag);
             p.rx() += nhw;
             p.ry() += upNote()->pos().y();
             }
@@ -332,18 +334,6 @@ void Chord::setSelected(bool f)
       int n = _notes.size();
       for (int i = 0; i < n; ++i)
             _notes.at(i)->setSelected(f);
-      }
-
-//---------------------------------------------------------
-//   addGraceChord
-//---------------------------------------------------------
-
-void Chord::addGraceChord(Chord* c)
-      {
-      c->setParent(this);
-      c->setTrack(track());
-      c->setFlag(ELEMENT_ON_STAFF, false);
-      _graceNotes.push_back(c);
       }
 
 //---------------------------------------------------------
@@ -410,13 +400,26 @@ void Chord::add(Element* e)
                   _hook = static_cast<Hook*>(e);
                   break;
             case CHORDLINE:
+            case SLUR:
+                  {
                   _el.push_back(e);
+                  Slur* gs = static_cast<Slur*>(e);
+                  foreach (SpannerSegment* ss, gs->spannerSegments()) {
+                        if (ss->system())
+                              ss->system()->add(ss);
+                        }
+                  }
                   break;
             case STEM_SLASH:
                   _stemSlash = static_cast<StemSlash*>(e);
                   break;
             case CHORD:
-                  addGraceChord(static_cast<Chord*>(e));
+                  {
+                  Chord* gc = static_cast<Chord*>(e);
+                  int idx = gc->graceIndex();
+                  gc->setFlags(ELEMENT_MOVABLE);
+                  _graceNotes.insert(_graceNotes.begin() + idx, gc);
+                  }
                   break;
             default:
                   ChordRest::add(e);
@@ -474,11 +477,26 @@ void Chord::remove(Element* e)
             case HOOK:
                   _hook = 0;
                   break;
+            case SLUR:
+                  {
+                  _el.remove(e);
+                  Slur* gs = static_cast<Slur*>(e);
+                  foreach (SpannerSegment* ss, gs->spannerSegments()) {
+                        if (ss->system())
+                              ss->system()->remove(ss);
+                        }
+                  }
+                  break;
             case CHORDLINE:
                   _el.remove(e);
                   break;
             case CHORD:
-                  _graceNotes.erase(std::find(_graceNotes.begin(), _graceNotes.end(), static_cast<Chord*>(e)));
+                  {
+                  auto i = std::find(_graceNotes.begin(), _graceNotes.end(), static_cast<Chord*>(e));
+                  Chord* grace = *i;
+                  grace->setGraceIndex(i - _graceNotes.begin());
+                  _graceNotes.erase(i);
+                  }
                   break;
             default:
                   ChordRest::remove(e);
@@ -765,6 +783,12 @@ void Chord::write(Xml& xml) const
       for (Chord* c : _graceNotes)
             c->write(xml);
 
+      for (Element* e : _el) {
+            if (e->type() == Element::SLUR) {
+                  static_cast<Slur*>(e)->setId(++xml.spannerId);
+                  e->write(xml);
+                  }
+            }
       xml.stag("Chord");
       ChordRest::writeProperties(xml);
       if (_noteType != NOTE_NORMAL) {
@@ -810,8 +834,22 @@ void Chord::write(Xml& xml) const
       if (_tremolo)
             _tremolo->write(xml);
       n = _el.size();
-      for (Element* e : _el)
-            e->write(xml);
+      for (Element* e : _el) {
+            if (e->type() == Element::SLUR) {
+                  Slur* gs = static_cast<Slur*>(e);
+                  xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(gs->id()));
+                  }
+            else
+                  e->write(xml);
+            }
+      for (Chord* c : _graceNotes) {
+            for (Element* e : c->el()) {
+                  if (e->type() == Element::SLUR) {
+                        Slur* gs = static_cast<Slur*>(e);
+                        xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(gs->id()));
+                        }
+                  }
+            }
       xml.etag();
       }
 
@@ -878,24 +916,6 @@ void Chord::readNote(XmlReader& e)
       add(note);
       }
 
-#if 0
-QMap<QString, int> chordTags;
-
-//---------------------------------------------------------
-//   dumpTags
-//---------------------------------------------------------
-
-void dumpTags()
-      {
-      printf("dump tags\n");
-      QMapIterator<QString, int> i(chordTags);
-      while(i.hasNext()) {
-            i.next();
-            printf("====%s %d\n", qPrintable(i.key()), i.value());
-            }
-      }
-#endif
-
 //---------------------------------------------------------
 //   Chord::read
 //---------------------------------------------------------
@@ -905,7 +925,6 @@ void Chord::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-//            chordTags[tag.toString()]++;
             if (tag == "Note") {
                   Note* note = new Note(score());
                   // the note needs to know the properties of the track it belongs to
@@ -1195,6 +1214,8 @@ void Chord::layoutStem()
       {
       for (Chord* c : _graceNotes)
             c->layoutStem();
+      if (beam())
+            return;
       //
       // TAB
       //
@@ -1334,9 +1355,11 @@ void Chord::layoutStem()
                   stemLen += n * .5;
                   }
             // scale stemLen according to staff line spacing
-            if(staff())
+            if (staff())
                   stemLen *= staff()->staffType()->lineDistance().val();
-            _stem->setLen(stemLen * _spatium);
+           _stem->setLen(stemLen * _spatium);
+            // if (isGrace())
+            //      abort();
             if (_hook) {
                   _hook->setPos(_stem ->hookPos());
                   _hook->adjustReadPos();
@@ -1457,20 +1480,19 @@ void Chord::layout()
       if (staff() && staff()->isTabStaff())
             layoutTablature();
       else
-            layoutPitch();
+            layoutPitched();
       }
 
 //---------------------------------------------------------
-//   layoutPitch
+//   layoutPitched
 //---------------------------------------------------------
 
-void Chord::layoutPitch()
+void Chord::layoutPitched()
       {
-      for (Chord* c : _graceNotes) {
-            printf("layoutPitch: grace hook %p\n", c->hook());
-            c->layoutPitch();
-            }
+      for (Chord* c : _graceNotes)
+            c->layoutPitched();
       qreal _spatium  = spatium();
+      qreal minNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
 
       while (_ledgerLines) {
             LedgerLine* l = _ledgerLines->next();
@@ -1522,7 +1544,6 @@ void Chord::layoutPitch()
 
             Accidental* accidental = note->accidental();
             if (accidental) {
-                  qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
                   qreal x = accidental->x() + note->x() - minNoteDistance;
                   if (-x > lll)
                         lll = -x;
@@ -1567,8 +1588,8 @@ void Chord::layoutPitch()
             lll += _spatium * .5;
 
       if (dots()) {
-            qreal x = dotPosX() + point(score()->styleS(ST_dotNoteDistance)
-               + (dots()-1) * score()->styleS(ST_dotDotDistance));
+            qreal x = dotPosX() + minNoteDistance
+               + (dots()-1) * score()->styleS(ST_dotDotDistance).val() * _spatium;
             x += symbols[score()->symIdx()][dotSym].width(1.0);
             if (x > rrr)
                   rrr = x;
@@ -1590,21 +1611,32 @@ void Chord::layoutPitch()
       _space.setLw(lll);
       _space.setRw(rrr + ipos().x());
 
-      for (Element* e : _el) {
-            e->layout();
-            if (e->type() == CHORDLINE) {
-                  int x = bbox().translated(e->pos()).right();
-                  if (x > _space.rw())
-                        _space.setRw(x);
+      int n = _graceNotes.size();
+      qreal x = -(_space.lw() + minNoteDistance);
+      qreal graceMag = score()->styleD(ST_graceNoteMag);
+      for (int i = n-1; i >= 0; --i) {
+            Chord* c = _graceNotes[i];
+            x -= c->space().rw();
+            c->setPos(x, 0);
+            x -= c->space().lw() + minNoteDistance * graceMag;
+            for (Element* e : c->el()) {
+                  if (e->type() == Element::SLUR)
+                        e->layout();
                   }
             }
+      if (-x > _space.lw())
+            _space.setLw(-x);
 
-      for (Chord* c : _graceNotes) {
-            printf("grace lw %f rw %f width %f\n", _space.lw(), _space.rw(), c->width());
-            qreal x = -_space.lw() - _space.rw();
-            c->setPos(x, 0);
+      for (Element* e : _el) {
+            if (e->type() != Element::SLUR) {
+                  e->layout();
+                  if (e->type() == CHORDLINE) {
+                        int x = bbox().translated(e->pos()).right();
+                        if (x > _space.rw())
+                              _space.setRw(x);
+                        }
+                  }
             }
-
       for (int i = 0; i < _notes.size(); ++i)
             _notes.at(i)->layout2();
       QRectF bb;
@@ -1619,6 +1651,7 @@ void Chord::layoutPitch()
 void Chord::layoutTablature()
       {
       qreal _spatium  = spatium();
+      qreal minNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
 
       while (_ledgerLines) {
             LedgerLine* l = _ledgerLines->next();
@@ -1745,8 +1778,8 @@ void Chord::layoutTablature()
             lll += _spatium * .5;
 
       if (dots()) {
-            qreal x = dotPosX() + point(score()->styleS(ST_dotNoteDistance)
-               + (dots()-1) * score()->styleS(ST_dotDotDistance));
+            qreal x = dotPosX() + minNoteDistance
+               + (dots()-1) * score()->styleS(ST_dotDotDistance).val() * _spatium;
             x += symbols[score()->symIdx()][dotSym].width(1.0);
             if (x > rrr)
                   rrr = x;
@@ -2297,5 +2330,6 @@ Measure* Chord::measure() const
             ;
       return static_cast<Measure*>(e);
       }
+
 }
 

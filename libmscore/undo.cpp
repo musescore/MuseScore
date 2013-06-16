@@ -1426,9 +1426,7 @@ void RemoveElement::redo()
       element->score()->removeElement(element);
       if (element->isChordRest())
             undoRemoveTuplet(static_cast<ChordRest*>(element));
-      if (element->type() == Element::MEASURE)
-            element->score()->setLayoutAll(true);    //DEBUG
-      if (element->type() == Element::KEYSIG) {
+      else if (element->type() == Element::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(element);
             if (!ks->generated())
                   ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());

@@ -1517,7 +1517,7 @@ void Note::setTrack(int val)
             foreach(SpannerSegment* seg, _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
-      for (Element* e : _el)
+      foreach (Element* e, _el)
             e->setTrack(val);
       if (_accidental)
             _accidental->setTrack(val);

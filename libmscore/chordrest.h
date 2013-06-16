@@ -76,7 +76,7 @@ class ChordRest : public DurationElement {
       virtual Element* drop(const DropData&);
 
       virtual Segment* segment() const           { return (Segment*)parent(); }
-      virtual Measure* measure() const           { return parent() ? (Measure*)(parent()->parent()) : 0; }
+      virtual Measure* measure() const = 0;
 
       virtual void read(XmlReader&) = 0;
       void writeProperties(Xml& xml) const;
@@ -152,6 +152,7 @@ class ChordRest : public DurationElement {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      bool isGrace() const;
       };
 
 

@@ -1251,8 +1251,6 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         e->write(xml);
                         }
                   if (segment->segmentType() & (Segment::SegChordRest)) {
-                        // foreach (SpannerSegment* ss, m->system()->spannerSegments()) {
-                        //      Spanner* s = ss->spanner();
                         foreach (Spanner* s, _spanner) {
                               if (s->track() == track && !s->generated()) {
                                     if (s->tick() == segment->tick()) {

@@ -711,12 +711,10 @@ ChordRest* Measure::findChordRest(int tick, int track)
 //   tick2segment
 //---------------------------------------------------------
 
-Segment* Measure::tick2segment(int tick, bool grace) const
+Segment* Measure::tick2segment(int tick) const
       {
       for (Segment* s = first(); s; s = s->next()) {
             if (s->tick() == tick) {
-//TODO-S                  if (grace && (s->segmentType() == Segment::SegGrace))
-//                        return s;
                   if (s->segmentType() == Segment::SegChordRest)
                         return s;
                   }
@@ -1862,6 +1860,8 @@ void Measure::read(XmlReader& e, int staffIdx)
       Segment* segment = 0;
       qreal _spatium = spatium();
 
+      QList<Chord*> graceNotes;
+
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
 
@@ -1925,54 +1925,21 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "Chord") {
                   segment = getSegment(Segment::SegChordRest, e.tick());
-                  Chord* chord = static_cast<Chord*>(segment->element(e.track()));
-                  if (chord == 0) {
-                        chord = new Chord(score());
-                        chord->setTrack(e.track());
-                        chord->read(e);
-                        if (chord->noteType() == NOTE_NORMAL)
-                              segment->add(chord);
-                        }
-                  else {
-                        if (chord->type() != CHORD)
-                              qDebug("readChord: expected Chord: found %s", chord->name());
-                        if (!chord->notes().empty())
-                              qDebug("read Chord: there is already a chord");
-                        chord->read(e);
-                        }
+                  Chord* chord = new Chord(score());
+                  chord->setTrack(e.track());
+                  chord->read(e);
 
-                  if (chord->noteType() != NOTE_NORMAL) {
-                        // grace notes
-                        if (segment->tick() == e.tick()
-                           && segment->element(e.track())
-                           && segment->element(e.track())->type() == CHORD
-                           )
-                              {
-                              //
-                              // handle grace note after chord
-                              //
-                              Segment* s = new Segment(this);
-                              s->setSegmentType(Segment::SegChordRest);
-                              s->setTick(segment->tick());
-                              s->setPrev(segment);
-                              s->setNext(segment->next());
-                              add(s);
-                              segment = s;
-                              }
-                        else {
-                              Chord* baseChord = static_cast<Chord*>(segment->element(e.track()));
-                              if (baseChord && baseChord->type() != CHORD) {
-                                    qDebug("grace note for non chord?");
-                                    }
-                              else {
-                                    baseChord = new Chord(score());
-                                    baseChord->setTrack(e.track());
-                                    segment->add(baseChord);
-                                    baseChord->addGraceChord(chord);
-                                    }
-                              }
-                        }
+                  if (chord->noteType() != NOTE_NORMAL)
+                        graceNotes.push_back(chord);
                   else {
+                        segment->add(chord);
+                        for (int i = 0; i < graceNotes.size(); ++i) {
+                              Chord* gc = graceNotes[i];
+                              gc->setGraceIndex(i);
+                              chord->add(gc);
+                              }
+                        graceNotes.clear();
+
                         Fraction ts(timeStretch * chord->globalDuration());
                         int crticks = ts.ticks();
 
@@ -2087,6 +2054,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
+                  sp->setAnchor(Spanner::ANCHOR_SEGMENT);
                   sp->read(e);
                   score()->spanner().push_back(sp);
                   }

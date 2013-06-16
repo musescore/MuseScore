@@ -14,6 +14,7 @@
 #include "spanner.h"
 #include "system.h"
 #include "chordrest.h"
+#include "chord.h"
 #include "segment.h"
 #include "measure.h"
 
@@ -140,6 +141,8 @@ Spanner::Spanner(Score* s)
    : Element(s)
       {
       _anchor       = ANCHOR_SEGMENT;
+      _startElement = 0;
+      _endElement   = 0;
       _tick         = -1;
       _tickLen      = -1;
       _id           = 0;
@@ -148,11 +151,13 @@ Spanner::Spanner(Score* s)
 Spanner::Spanner(const Spanner& s)
    : Element(s)
       {
-      _anchor  = s._anchor;
-      _tick    = s._tick;
-      _tickLen = s._tickLen;
-      _id      = 0;
-      foreach(SpannerSegment* ss, s.segments) {
+      _anchor       = s._anchor;
+      _startElement = s._startElement;
+      _endElement   = s._endElement;
+      _tick         = s._tick;
+      _tickLen      = s._tickLen;
+      _id           = 0;
+      foreach (SpannerSegment* ss, s.segments) {
             SpannerSegment* nss = ss->clone();
             add(nss);
             }
@@ -160,7 +165,7 @@ Spanner::Spanner(const Spanner& s)
 
 Spanner::~Spanner()
       {
-      foreach(SpannerSegment* ss, spannerSegments())
+      foreach (SpannerSegment* ss, spannerSegments())
             delete ss;
       }
 
@@ -343,77 +348,99 @@ ChordRest* Score::findCR(int tick, int track) const
       }
 
 //---------------------------------------------------------
-//   startElement
+//   computeStartElement
 //---------------------------------------------------------
 
-ChordRest* Spanner::startCR() const
-      {
-      return static_cast<ChordRest*>(startElement());
-      }
-
-//---------------------------------------------------------
-//   endElement
-//---------------------------------------------------------
-
-ChordRest* Spanner::endCR() const
-      {
-      return static_cast<ChordRest*>(endElement());
-      }
-
-//---------------------------------------------------------
-//   startElement
-//---------------------------------------------------------
-
-Element* Spanner::startElement() const
+void Spanner::computeStartElement()
       {
       bool first = _tickLen == 0;
-      Segment* s = score()->tick2segment(tick(), first, Segment::SegChordRest);
+      Element* e = 0;
       switch (_anchor) {
             case ANCHOR_SEGMENT:
-                  return s;
+                  e = score()->findCR(tick(), track());
+                  break;
+
             case ANCHOR_MEASURE:
                   {
+                  Segment* s = score()->tick2segment(tick(), first, Segment::SegChordRest);
                   if (s) {
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
                         if (cr)
-                              return cr->measure();
+                              e = cr->measure();
                         }
-                  return nullptr;
                   }
-            case ANCHOR_CHORD:
-                  return static_cast<ChordRest*>(s->element(track()));
-
-            case ANCHOR_NOTE:
                   break;
+
+            case ANCHOR_CHORD:
+            case ANCHOR_NOTE:
+                  return;
             }
-      return nullptr;
+      _startElement = e;
       }
 
 //---------------------------------------------------------
-//   endElement
+//   computeEndElement
 //---------------------------------------------------------
 
-Element* Spanner::endElement() const
+void Spanner::computeEndElement()
       {
+      Element* e = 0;
       switch (_anchor) {
             case ANCHOR_SEGMENT:
-                  return score()->tick2segment(tick2());
+                  e = score()->findCR(tick2(), track());
+                  break;
+
             case ANCHOR_MEASURE:
                   {
                   ChordRest* cr = score()->findCR(tick2(), track());
                   if (cr)
-                        return cr->measure();
-                  return nullptr;
+                        e = cr->measure();
                   }
+                  break;
+
             case ANCHOR_CHORD:
-                  {
-                  ChordRest* cr = score()->findCR(tick2(), track());
-                  return cr;
-                  }
+                  return;
+
             case ANCHOR_NOTE:
                   break;
             }
-      return nullptr;
+      _endElement = e;
       }
+
+void Spanner::setStartChord(Chord* c)
+      {
+      _anchor = ANCHOR_CHORD;
+      _startElement = c;
+      }
+
+Chord* Spanner::startChord() const
+      {
+      Q_ASSERT(_anchor == ANCHOR_CHORD);
+      return static_cast<Chord*>(_startElement);
+      }
+
+void Spanner::setEndChord(Chord* c)
+      {
+      _endElement = c;
+      }
+
+Chord* Spanner::endChord() const
+      {
+      Q_ASSERT(_anchor == ANCHOR_CHORD);
+      return static_cast<Chord*>(_endElement);
+      }
+
+ChordRest* Spanner::startCR() const
+      {
+      Q_ASSERT(_anchor == ANCHOR_SEGMENT || _anchor == ANCHOR_CHORD);
+      return static_cast<ChordRest*>(_startElement);
+      }
+
+ChordRest* Spanner::endCR() const
+      {
+      Q_ASSERT(_anchor == ANCHOR_SEGMENT || _anchor == ANCHOR_CHORD);
+      return static_cast<ChordRest*>(_endElement);
+      }
+
 }
 
