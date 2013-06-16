@@ -404,6 +404,7 @@ class Score : public QObject {
 
       void layoutStage2();
       void layoutStage3();
+      void beamGraceNotes(Chord*);
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
 
       void hideEmptyStaves(System* system, bool isFirstSystem);

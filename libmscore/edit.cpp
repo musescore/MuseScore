@@ -930,7 +930,7 @@ void Score::cmdAddTie()
                   if (noteFound || note2)
                         break;
                   }
-            if(note2) {
+            if (note2) {
                   Tie* tie = new Tie(this);
                   tie->setStartNote(note);
                   tie->setEndNote(note2);
@@ -1211,13 +1211,6 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::MEASURE:
-                  {
-                  Measure* measure = static_cast<Measure*>(el);
-                  undo(new RemoveElement(measure));
-                  }
-                  break;
-
             case Element::ACCIDENTAL:
                   changeAccidental(static_cast<Note*>(el->parent()), Accidental::ACC_NONE);
                   break;
@@ -1260,6 +1253,10 @@ void Score::deleteItem(Element* el)
                   break;
             case Element::TUPLET:
                   cmdDeleteTuplet(static_cast<Tuplet*>(el), true);
+                  break;
+
+            case Element::MEASURE:
+                  undo(new RemoveElement(el);
                   break;
 
             default:
@@ -1314,7 +1311,7 @@ void Score::cmdDeleteSelectedMeasures()
             }
 
       QList<Score*> scores = scoreList();
-      foreach(Score* score, scores) {
+      foreach (Score* score, scores) {
             MeasureBase* is = score->measure(startIdx);
             MeasureBase* ie = score->measure(endIdx);
             for (;;) {

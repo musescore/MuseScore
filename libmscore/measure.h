@@ -227,7 +227,7 @@ class Measure : public MeasureBase {
       void insertStaves(int s, int e);
 
       qreal tick2pos(int) const;
-      Segment* tick2segment(int, bool grace = false) const;
+      Segment* tick2segment(int) const;
 
       void sortStaves(QList<int>& dst);
 

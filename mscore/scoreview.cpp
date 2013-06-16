@@ -3849,15 +3849,36 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
       {
       _score->startCmd();
       ChordRest* cr1 = firstNote->chord();
-      ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
+      ChordRest* cr2;
+      if (cr1->isGrace())
+            cr2 = static_cast<Chord*>(cr1->parent());
+      else
+            cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
+
+      if (cr1->isGrace()) {
+            // slur from a gracenote
+            //
+            Q_ASSERT(cr1->type() == Element::CHORD);
+            Q_ASSERT(cr2->type() == Element::CHORD);
+            Slur* slur = new Slur(score());
+            slur->setAnchor(Spanner::ANCHOR_CHORD);
+
+            slur->setStartChord(static_cast<Chord*>(cr1));
+            slur->setEndChord(static_cast<Chord*>(cr2));
+            slur->setTrack(cr1->track());
+            slur->setParent(cr1);
+            score()->undoAddElement(slur);
+            _score->endCmd();
+            return;
+            }
 
       if (cr2 == 0)
             cr2 = cr1;
 
       Slur* slur = new Slur(_score);
+      slur->setAnchor(Spanner::ANCHOR_SEGMENT);
       slur->setTick(cr1->tick());
       slur->setTickLen(cr2->tick() - cr1->tick());
-printf("addSlur: track %d\n", cr1->track());
       slur->setTrack(cr1->track());
       slur->setParent(0);
       _score->undoAddElement(slur);
@@ -4084,8 +4105,6 @@ void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
 
 void ScoreView::changeVoice(int voice)
       {
-      printf("changeVoice === %d\n", voice);
-
       InputState* is = &score()->inputState();
       int track = (is->track() / VOICES) * VOICES + voice;
       is->setTrack(track);

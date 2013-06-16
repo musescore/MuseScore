@@ -35,6 +35,7 @@
 #include "ui_dynamic.h"
 #include "ui_tuplet.h"
 #include "ui_slurtie.h"
+#include "ui_graceslur.h"
 #include "ui_slur.h"
 #include "ui_line.h"
 #include "ui_textline.h"
@@ -143,7 +144,10 @@ class ShowElementBase : public QWidget {
       void offsetyChanged(double);
       void selectedClicked(bool);
       void visibleClicked(bool);
-      void gotoElement(QListWidgetItem* ai);
+
+   public slots:
+      void gotoElement(QListWidgetItem*);
+      void gotoElement(QTreeWidgetItem*);
 
    protected:
       QVBoxLayout* layout;
@@ -195,10 +199,10 @@ class MeasureView : public ShowElementBase {
       };
 
 //---------------------------------------------------------
-//   ShowChordWidget
+//   ChordDebug
 //---------------------------------------------------------
 
-class ShowChordWidget : public ShowElementBase {
+class ChordDebug : public ShowElementBase {
       Q_OBJECT;
       Ui::ChordRestBase crb;
       Ui::ChordBase cb;
@@ -217,7 +221,7 @@ class ShowChordWidget : public ShowElementBase {
       void glissandoClicked();
 
    public:
-      ShowChordWidget();
+      ChordDebug();
       virtual void setElement(Element*);
       };
 
@@ -330,18 +334,32 @@ class HarmonyView : public ShowElementBase {
       };
 
 //---------------------------------------------------------
+//   SpannerView
+//---------------------------------------------------------
+
+class SpannerView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::SpannerBase sp;
+
+   private slots:
+      void startClicked();
+      void endClicked();
+
+   public:
+      SpannerView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
 //   HairpinView
 //---------------------------------------------------------
 
-class HairpinView : public ShowElementBase {
+class HairpinView : public SpannerView {
       Q_OBJECT;
 
       Ui::HairpinBase hp;
       Ui::SLineBase sl;
-      Ui::SpannerBase sp;
-
-   private slots:
-      void elementClicked(QTreeWidgetItem* item);
 
    public:
       HairpinView();
@@ -424,21 +442,19 @@ class DoubleLabel : public QLabel {
       };
 
 //---------------------------------------------------------
-//   SlurView
+//   SlurTieView
 //---------------------------------------------------------
 
-class SlurView : public ShowElementBase {
+class SlurTieView : public SpannerView {
       Q_OBJECT;
 
       Ui::SlurTieBase st;
-      Ui::SlurBase sb;
-      Ui::SpannerBase sp;
 
    private slots:
       void segmentClicked(QTreeWidgetItem* item);
 
    public:
-      SlurView();
+      SlurTieView();
       virtual void setElement(Element*);
       };
 

@@ -295,7 +295,7 @@ static void addChord(ElementItem* sei, Chord* chord)
             if (note->accidental()) {
                   new ElementItem(ni, note->accidental());
                   }
-            foreach(Element* f, note->el()) {
+            foreach (Element* f, note->el()) {
                   if (f->type() == Element::SYMBOL || f->type() == Element::IMAGE) {
                         BSymbol* bs = static_cast<BSymbol*>(f);
                         addSymbol(ni, bs);
@@ -311,7 +311,7 @@ static void addChord(ElementItem* sei, Chord* chord)
             if (note->tieFor()) {
                   Tie* tie = note->tieFor();
                   ElementItem* ti = new ElementItem(ni, tie);
-                  foreach(Element* el1, tie->spannerSegments())
+                  foreach (Element* el1, tie->spannerSegments())
                         new ElementItem(ti, el1);
                   }
             foreach (Spanner* s, note->spannerFor()) {
@@ -320,9 +320,15 @@ static void addChord(ElementItem* sei, Chord* chord)
                         new ElementItem(si, ls);
                   }
             }
-      foreach(Element* e, chord->el())
-            new ElementItem(sei, e);
-      foreach(Chord* c, chord->graceNotes()) {
+      foreach(Element* e, chord->el()) {
+            ElementItem* ei = new ElementItem(sei, e);
+            if (e->type() == Element::SLUR) {
+                  Slur* gs = static_cast<Slur*>(e);
+                  foreach (SpannerSegment* sp, gs->spannerSegments())
+                        new ElementItem(ei, sp);
+                  }
+            }
+      foreach (Chord* c, chord->graceNotes()) {
             ElementItem* ssei = new ElementItem(sei, c);
             addChord(ssei, c);
             }
@@ -559,7 +565,7 @@ void Debugger::updateElement(Element* el)
                   case Element::PAGE:          ew = new ShowPageWidget;    break;
                   case Element::SYSTEM:        ew = new SystemView;        break;
                   case Element::MEASURE:       ew = new MeasureView;       break;
-                  case Element::CHORD:         ew = new ShowChordWidget;   break;
+                  case Element::CHORD:         ew = new ChordDebug;         break;
                   case Element::NOTE:          ew = new ShowNoteWidget;    break;
                   case Element::REST:          ew = new RestView;          break;
                   case Element::CLEF:          ew = new ClefView;          break;
@@ -570,7 +576,7 @@ void Debugger::updateElement(Element* el)
                   case Element::BAR_LINE:      ew = new BarLineView;       break;
                   case Element::DYNAMIC:       ew = new DynamicView;       break;
                   case Element::TUPLET:        ew = new TupletView;        break;
-                  case Element::SLUR:          ew = new SlurView;          break;
+                  case Element::SLUR:          ew = new SlurTieView;       break;
                   case Element::TIE:           ew = new TieView;           break;
                   case Element::VOLTA:         ew = new VoltaView;         break;
                   case Element::VOLTA_SEGMENT: ew = new VoltaSegmentView;  break;
@@ -830,10 +836,10 @@ void SegmentView::setElement(Element* e)
       }
 
 //---------------------------------------------------------
-//   ShowChordWidget
+//   ChordDebug
 //---------------------------------------------------------
 
-ShowChordWidget::ShowChordWidget()
+ChordDebug::ChordDebug()
    : ShowElementBase()
       {
       // chord rest
@@ -843,8 +849,6 @@ ShowChordWidget::ShowChordWidget()
       connect(crb.upFlag,   SIGNAL(toggled(bool)), SLOT(upChanged(bool)));
       connect(crb.beamMode, SIGNAL(activated(int)), SLOT(beamModeChanged(int)));
       connect(crb.attributes, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
-      connect(crb.slurFor, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
-      connect(crb.slurBack, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       connect(crb.lyrics, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
 
       // chord
@@ -861,6 +865,7 @@ ShowChordWidget::ShowChordWidget()
       connect(cb.notes, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       connect(cb.graceChords1, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       connect(cb.graceChords2, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      connect(cb.elements,     SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
 
       crb.beamMode->addItem("auto");
       crb.beamMode->addItem("beam begin");
@@ -879,7 +884,7 @@ ShowChordWidget::ShowChordWidget()
 //   setElement
 //---------------------------------------------------------
 
-void ShowChordWidget::setElement(Element* e)
+void ChordDebug::setElement(Element* e)
       {
       Chord* chord = (Chord*)e;
       ShowElementBase::setElement(e);
@@ -921,9 +926,8 @@ void ShowChordWidget::setElement(Element* e)
             s.setNum(long(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)lyrics));
-            crb.slurBack->addItem(item);
+            crb.lyrics->addItem(item);
             }
-
       cb.helplineList->clear();
       for (LedgerLine* h = chord->ledgerLines(); h; h = h->next()) {
             QString s;
@@ -933,7 +937,7 @@ void ShowChordWidget::setElement(Element* e)
             cb.helplineList->addItem(item);
             }
       cb.notes->clear();
-      foreach(Note* n, chord->notes()) {
+      foreach(Element* n, chord->notes()) {
             QString s;
             s.setNum(long(n), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -941,12 +945,20 @@ void ShowChordWidget::setElement(Element* e)
             cb.notes->addItem(item);
             }
       cb.graceChords1->clear();
-      for (Chord* c : chord->graceNotes()) {
+      for (Element* c : chord->graceNotes()) {
             QString s;
             s.setNum(long(c), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)c));
             cb.graceChords1->addItem(item);
+            }
+      cb.elements->clear();
+      for (Element* c : chord->el()) {
+            QString s;
+            s.setNum(long(c), 16);
+            QListWidgetItem* item = new QListWidgetItem(s);
+            item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)c));
+            cb.elements->addItem(item);
             }
       cb.userPlayEvents->setChecked(chord->userPlayEvents());
       }
@@ -955,7 +967,7 @@ void ShowChordWidget::setElement(Element* e)
 //   hookClicked
 //---------------------------------------------------------
 
-void ShowChordWidget::hookClicked()
+void ChordDebug::hookClicked()
       {
       emit elementChanged(((Chord*)element())->hook());
       }
@@ -964,7 +976,7 @@ void ShowChordWidget::hookClicked()
 //   stemClicked
 //---------------------------------------------------------
 
-void ShowChordWidget::stemClicked()
+void ChordDebug::stemClicked()
       {
       emit elementChanged(((Chord*)element())->stem());
       }
@@ -973,7 +985,7 @@ void ShowChordWidget::stemClicked()
 //   beamClicked
 //---------------------------------------------------------
 
-void ShowChordWidget::beamClicked()
+void ChordDebug::beamClicked()
       {
       emit elementChanged(((Chord*)element())->beam());
       }
@@ -982,27 +994,27 @@ void ShowChordWidget::beamClicked()
 //   tupletClicked
 //---------------------------------------------------------
 
-void ShowChordWidget::tupletClicked()
+void ChordDebug::tupletClicked()
       {
       emit elementChanged(((Chord*)element())->tuplet());
       }
 
-void ShowChordWidget::stemSlashClicked()
+void ChordDebug::stemSlashClicked()
       {
       emit elementChanged(((Chord*)element())->stemSlash());
       }
 
-void ShowChordWidget::arpeggioClicked()
+void ChordDebug::arpeggioClicked()
       {
       emit elementChanged(((Chord*)element())->arpeggio());
       }
 
-void ShowChordWidget::tremoloClicked()
+void ChordDebug::tremoloClicked()
       {
       emit elementChanged(((Chord*)element())->tremolo());
       }
 
-void ShowChordWidget::glissandoClicked()
+void ChordDebug::glissandoClicked()
       {
       emit elementChanged(((Chord*)element())->glissando());
       }
@@ -1011,7 +1023,7 @@ void ShowChordWidget::glissandoClicked()
 //   upChanged
 //---------------------------------------------------------
 
-void ShowChordWidget::upChanged(bool val)
+void ChordDebug::upChanged(bool val)
       {
       ((Chord*)element())->setUp(val);
       }
@@ -1020,7 +1032,7 @@ void ShowChordWidget::upChanged(bool val)
 //   beamModeChanged
 //---------------------------------------------------------
 
-void ShowChordWidget::beamModeChanged(int n)
+void ChordDebug::beamModeChanged(int n)
       {
       ((Chord*)element())->setBeamMode(BeamMode(n));
       element()->score()->setLayoutAll(true);
@@ -1030,7 +1042,7 @@ void ShowChordWidget::beamModeChanged(int n)
 //   directionChanged
 //---------------------------------------------------------
 
-void ShowChordWidget::directionChanged(int val)
+void ChordDebug::directionChanged(int val)
       {
       ((Chord*)element())->setStemDirection(MScore::Direction(val));
       }
@@ -1182,8 +1194,6 @@ RestView::RestView()
       connect(crb.beamButton, SIGNAL(clicked()), SLOT(beamClicked()));
       connect(crb.tupletButton, SIGNAL(clicked()), SLOT(tupletClicked()));
       connect(crb.attributes, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
-      connect(crb.slurFor, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
-      connect(crb.slurBack, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       connect(crb.lyrics, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       }
 
@@ -1224,7 +1234,7 @@ void RestView::setElement(Element* e)
             s.setNum(long(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)lyrics));
-            crb.slurBack->addItem(item);
+            crb.lyrics->addItem(item);
             }
 
       Measure* m = rest->measure();
@@ -1425,16 +1435,71 @@ void HarmonyView::on_rightParen_clicked(bool checked)
       }
 
 //---------------------------------------------------------
+//   SpannerView
+//---------------------------------------------------------
+
+SpannerView::SpannerView()
+   : ShowElementBase()
+      {
+      sp.setupUi(addWidget());
+      connect(sp.segments, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(gotoElement(QTreeWidgetItem*)));
+      connect(sp.startElement, SIGNAL(clicked()), SLOT(startClicked()));
+      connect(sp.endElement, SIGNAL(clicked()), SLOT(endClicked()));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void SpannerView::setElement(Element* e)
+      {
+      Spanner* spanner = static_cast<Spanner*>(e);
+      ShowElementBase::setElement(e);
+      sp.tick->setValue(spanner->tick());
+      sp.tickLen->setValue(spanner->tickLen());
+      sp.anchor->setCurrentIndex(int(spanner->anchor()));
+
+      sp.segments->clear();
+      foreach(const Element* e, spanner->spannerSegments()) {
+            QTreeWidgetItem* item = new QTreeWidgetItem;
+            item->setText(0, e->name());
+            void* p = (void*) e;
+            item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
+            sp.segments->addTopLevelItem(item);
+            }
+      sp.startElement->setEnabled(spanner->startElement() != 0);
+      sp.endElement->setEnabled(spanner->endElement() != 0);
+      }
+
+//---------------------------------------------------------
+//   startClicked
+//---------------------------------------------------------
+
+void SpannerView::startClicked()
+      {
+      Spanner* spanner = static_cast<Spanner*>(element());
+      emit elementChanged(spanner->startElement());
+      }
+
+//---------------------------------------------------------
+//   startClicked
+//---------------------------------------------------------
+
+void SpannerView::endClicked()
+      {
+      Spanner* spanner = static_cast<Spanner*>(element());
+      emit elementChanged(spanner->endElement());
+      }
+
+//---------------------------------------------------------
 //   HairpinView
 //---------------------------------------------------------
 
 HairpinView::HairpinView()
-   : ShowElementBase()
+   : SpannerView()
       {
-      sp.setupUi(addWidget());
       sl.setupUi(addWidget());
       hp.setupUi(addWidget());
-      connect(sp.segments, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(elementClicked(QTreeWidgetItem*)));
       }
 
 //---------------------------------------------------------
@@ -1443,32 +1508,11 @@ HairpinView::HairpinView()
 
 void HairpinView::setElement(Element* e)
       {
+      SpannerView::setElement(e);
       Hairpin* hairpin = (Hairpin*)e;
       ShowElementBase::setElement(e);
       sl.diagonal->setChecked(hairpin->diagonal());
-      sp.tick->setValue(hairpin->tick());
-      sp.tickLen->setValue(hairpin->tickLen());
-
-      sp.segments->clear();
-      foreach(const Element* e, hairpin->spannerSegments()) {
-            QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, e->name());
-            void* p = (void*) e;
-            item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
-            sp.segments->addTopLevelItem(item);
-            }
-
       hp.veloChange->setValue(hairpin->veloChange());
-      }
-
-//---------------------------------------------------------
-//   elementClicked
-//---------------------------------------------------------
-
-void HairpinView::elementClicked(QTreeWidgetItem* item)
-      {
-      Element* e = (Element*)item->data(0, Qt::UserRole).value<void*>();
-      emit elementChanged(e);
       }
 
 //---------------------------------------------------------
@@ -1637,7 +1681,7 @@ ShowElementBase::ShowElementBase()
       {
       layout = new QVBoxLayout;
       setLayout(layout);
-      layout->addStretch(20);
+      layout->addStretch(2000);
 
       eb.setupUi(addWidget());
 
@@ -1667,6 +1711,16 @@ QWidget* ShowElementBase::addWidget()
 void ShowElementBase::gotoElement(QListWidgetItem* item)
       {
       Element* e = (Element*)item->data(Qt::UserRole).value<void*>();
+      emit elementChanged(e);
+      }
+
+//---------------------------------------------------------
+//   gotoElement
+//---------------------------------------------------------
+
+void ShowElementBase::gotoElement(QTreeWidgetItem* item)
+      {
+      Element* e = (Element*)item->data(0, Qt::UserRole).value<void*>();
       emit elementChanged(e);
       }
 
@@ -1797,48 +1851,33 @@ void ShowElementBase::offsetyChanged(double val)
       }
 
 //---------------------------------------------------------
-//   SlurView
+//   SlurTieView
 //---------------------------------------------------------
 
-SlurView::SlurView()
-   : ShowElementBase()
+SlurTieView::SlurTieView()
+   : SpannerView()
       {
-      sp.setupUi(addWidget());
       st.setupUi(addWidget());
-      sb.setupUi(addWidget());
-      connect(sp.segments, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(elementClicked(QTreeWidgetItem*)));
       }
 
 //---------------------------------------------------------
 //   setElement
 //---------------------------------------------------------
 
-void SlurView::setElement(Element* e)
+void SlurTieView::setElement(Element* e)
       {
       Slur* slur = (Slur*)e;
-      ShowElementBase::setElement(e);
+      SpannerView::setElement(e);
 
       st.upFlag->setChecked(slur->up());
       st.direction->setCurrentIndex(slur->slurDirection());
-
-      sp.tick->setValue(slur->tick());
-      sp.tickLen->setValue(slur->tickLen());
-
-      sp.segments->clear();
-      foreach(const Element* e, slur->spannerSegments()) {
-            QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, e->name());
-            void* p = (void*) e;
-            item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
-            sp.segments->addTopLevelItem(item);
-            }
       }
 
 //---------------------------------------------------------
 //   segmentClicked
 //---------------------------------------------------------
 
-void SlurView::segmentClicked(QTreeWidgetItem* item)
+void SlurTieView::segmentClicked(QTreeWidgetItem* item)
       {
       Element* e = (Element*)item->data(0, Qt::UserRole).value<void*>();
       emit elementChanged(e);

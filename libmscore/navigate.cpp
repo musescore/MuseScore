@@ -37,6 +37,18 @@ ChordRest* nextChordRest(ChordRest* cr)
       {
       if (!cr)
             return 0;
+      if (cr->isGrace()) {
+            // cr is a grace note
+            Chord* c  = static_cast<Chord*>(cr);
+            Chord* pc = static_cast<Chord*>(cr->parent());
+            auto i = std::find(pc->graceNotes().begin(), pc->graceNotes().end(), c);
+            if (i == pc->graceNotes().end())
+                  return 0;
+            ++i;
+            if (i != pc->graceNotes().end())
+                  return *i;
+            return pc;
+            }
       int track = cr->track();
       Segment::SegmentTypes st = Segment::SegChordRest;
 
@@ -44,8 +56,14 @@ ChordRest* nextChordRest(ChordRest* cr)
             if (seg->measure()->multiMeasure() < 0)
                   continue;
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
-            if (e)
+            if (e) {
+                  if (e->type() == Element::CHORD) {
+                        Chord* c = static_cast<Chord*>(e);
+                        if (!c->graceNotes().empty())
+                              return c->graceNotes().front();
+                        }
                   return e;
+                  }
             }
       return 0;
       }
@@ -59,6 +77,25 @@ ChordRest* prevChordRest(ChordRest* cr)
       {
       if (!cr)
             return 0;
+      if (cr->isGrace()) {
+            // cr is a grace note
+            Chord* c  = static_cast<Chord*>(cr);
+            Chord* pc = static_cast<Chord*>(cr->parent());
+            auto i = std::find(pc->graceNotes().begin(), pc->graceNotes().end(), c);
+            if (i == pc->graceNotes().end())
+                  return 0;
+            if (i == pc->graceNotes().begin())
+                  cr = pc;
+            else
+                  return *--i;
+            }
+      else {
+            if (cr->type() == Element::CHORD) {
+                  Chord* c = static_cast<Chord*>(cr);
+                  if (!c->graceNotes().empty())
+                        return c->graceNotes().back();
+                  }
+            }
       int track = cr->track();
       Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* seg = cr->segment()->prev1(st); seg; seg = seg->prev1(st)) {
