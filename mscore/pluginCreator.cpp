@@ -16,6 +16,7 @@
 #include "qmlplugin.h"
 #include "icons.h"
 #include "helpBrowser.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -39,6 +40,8 @@ PluginCreator::PluginCreator(QWidget* parent)
       dock        = 0;
       manualDock  = 0;
       helpBrowser = 0;
+
+      setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
 
       setupUi(this);
 
