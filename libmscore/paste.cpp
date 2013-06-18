@@ -286,13 +286,11 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               harmony->setTrack(e.track());
                               harmony->read(e);
                               harmony->setTrack(dstStaffIdx * VOICES);
-                              //transpose
+                              // transpose
                               Part* partDest = staff(dstStaffIdx)->part();
-                              Part* partSrc = staff(srcStaffIdx)->part();
-                              Interval intervalDest = partDest->instr()->transpose();
-                              Interval intervalSrc = partSrc->instr()->transpose();
-                              Interval interval = Interval(intervalSrc.diatonic - intervalDest.diatonic, intervalSrc.chromatic - intervalDest.chromatic);
-                              if (!styleB(ST_concertPitch)) {
+                              Interval interval = partDest->instr()->transpose();
+                              if (!styleB(ST_concertPitch) && !interval.isZero()) {
+                                    interval.flip();
                                     int rootTpc = transposeTpc(harmony->rootTpc(), interval, false);
                                     int baseTpc = transposeTpc(harmony->baseTpc(), interval, false);
                                     undoTransposeHarmony(harmony, rootTpc, baseTpc);
