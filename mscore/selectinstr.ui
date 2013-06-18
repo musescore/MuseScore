@@ -41,7 +41,7 @@
    <item>
     <widget class="QTreeWidget" name="instrumentList">
      <property name="expandsOnDoubleClick">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <attribute name="headerVisible">
       <bool>false</bool>
