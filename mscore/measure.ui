@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>535</width>
-    <height>529</height>
+    <height>532</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
@@ -316,14 +316,14 @@
         <item row="4" column="5">
          <widget class="QLabel" name="timesig">
           <property name="text">
-           <string>TextLabel</string>
+           <string notr="true">TextLabel</string>
           </property>
          </widget>
         </item>
         <item row="4" column="8">
          <widget class="QLabel" name="len">
           <property name="text">
-           <string>TextLabel</string>
+           <string notr="true">TextLabel</string>
           </property>
          </widget>
         </item>
@@ -353,7 +353,7 @@
         <item row="0" column="3" colspan="2">
          <widget class="QCheckBox" name="breakMultiMeasureRest">
           <property name="text">
-           <string>breakMultiMeasureRest</string>
+           <string notr="true">breakMultiMeasureRest</string>
           </property>
          </widget>
         </item>
@@ -387,7 +387,7 @@
         <item row="3" column="0">
          <widget class="QLabel" name="label_17">
           <property name="text">
-           <string>endBarLine:</string>
+           <string notr="true">endBarLine:</string>
           </property>
          </widget>
         </item>
@@ -408,7 +408,7 @@
         <item row="0" column="1">
          <widget class="QCheckBox" name="sectionBreak">
           <property name="text">
-           <string>Section Break</string>
+           <string notr="true">Section Break</string>
           </property>
          </widget>
         </item>
@@ -468,7 +468,7 @@
           <item>
            <widget class="QLabel" name="label_18">
             <property name="text">
-             <string>spannerFor</string>
+             <string notr="true">spannerFor</string>
             </property>
            </widget>
           </item>
@@ -496,7 +496,7 @@
           <item>
            <widget class="QLabel" name="label_20">
             <property name="text">
-             <string>spannerBack</string>
+             <string notr="true">spannerBack</string>
             </property>
            </widget>
           </item>

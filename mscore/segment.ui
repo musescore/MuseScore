@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>555</width>
-    <height>330</height>
+    <width>564</width>
+    <height>347</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -26,7 +26,7 @@
       <string notr="true"/>
      </property>
      <property name="title">
-      <string>Segment</string>
+      <string notr="true">Segment</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -44,7 +44,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Annotations:</string>
+         <string notr="true">Annotations:</string>
         </property>
        </widget>
       </item>
@@ -54,7 +54,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Lyrics:</string>
+         <string notr="true">Lyrics:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -67,7 +67,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>SpannerFor:</string>
+         <string notr="true">SpannerFor:</string>
         </property>
        </widget>
       </item>
@@ -77,7 +77,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>SpannerBack:</string>
+         <string notr="true">SpannerBack:</string>
         </property>
        </widget>
       </item>
@@ -137,7 +137,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Ticks</string>
+           <string notr="true">Ticks</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -153,7 +153,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>tick:</string>
+           <string notr="true">tick:</string>
           </property>
          </widget>
         </item>
@@ -173,7 +173,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Bar</string>
+           <string notr="true">Bar</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -189,7 +189,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Beat</string>
+           <string notr="true">Beat</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -215,42 +215,42 @@
           </property>
           <item>
            <property name="text">
-            <string>Clef Segment</string>
+            <string notr="true">Clef Segment</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Key Signature</string>
+            <string notr="true">Key Signature</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Time Signature</string>
+            <string notr="true">Time Signature</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Begin Repeat</string>
+            <string notr="true">Begin Repeat</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Chord/Rest</string>
+            <string notr="true">Chord/Rest</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Breath Segment</string>
+            <string notr="true">Breath Segment</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>End Bar Line</string>
+            <string notr="true">End Bar Line</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Time Signature Announce</string>
+            <string notr="true">Time Signature Announce</string>
            </property>
           </item>
          </widget>
@@ -261,7 +261,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>rTick:</string>
+           <string notr="true">rTick:</string>
           </property>
          </widget>
         </item>
@@ -284,7 +284,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Segment Type:</string>
+           <string notr="true">Segment Type:</string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
