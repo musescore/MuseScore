@@ -813,11 +813,102 @@ MuseScore::MuseScore()
       pref->setMenuRole(QAction::PreferencesRole);
 
       //---------------------
+      //    Menu View
+      //---------------------
+
+      menuView = mb->addMenu(tr("&View"));
+      menuView->setObjectName("View");
+
+      a = getAction("toggle-palette");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      a = getAction("masterpalette");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      a = getAction("inspector");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+#ifdef OMR
+      a = getAction("omr");
+      a->setCheckable(true);
+      menuView->addAction(a);
+#endif
+
+      playId = getAction("toggle-playpanel");
+      playId->setCheckable(true);
+      menuView->addAction(playId);
+
+      a = getAction("toggle-navigator");
+      a->setCheckable(true);
+      a->setChecked(preferences.showNavigator);
+      menuView->addAction(a);
+
+      a = getAction("toggle-mixer");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      a = getAction("synth-control");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      a = getAction("toogle-piano");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      a = getAction("musescore-connect");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      menuView->addSeparator();
+      menuView->addAction(getAction("zoomin"));
+      menuView->addAction(getAction("zoomout"));
+      menuView->addSeparator();
+
+      a = getAction("toggle-transport");
+      a->setCheckable(true);
+      a->setChecked(transportTools->isVisible());
+      menuView->addAction(a);
+
+      a = getAction("toggle-noteinput");
+      a->setCheckable(true);
+      a->setChecked(true);
+      menuView->addAction(a);
+
+      a = getAction("toggle-statusbar");
+      a->setCheckable(true);
+      a->setChecked(true);
+      menuView->addAction(a);
+
+      menuView->addSeparator();
+      a = getAction("split-h");
+      a->setCheckable(true);
+      a->setChecked(false);
+      menuView->addAction(a);
+      a = getAction("split-v");
+      a->setCheckable(true);
+      a->setChecked(false);
+      menuView->addAction(a);
+
+      menuView->addSeparator();
+      menuView->addAction(getAction("show-invisible"));
+      menuView->addAction(getAction("show-unprintable"));
+      menuView->addAction(getAction("show-frames"));
+      menuView->addAction(getAction("show-pageborders"));
+      menuView->addSeparator();
+      a = getAction("fullscreen");
+      a->setCheckable(true);
+      a->setChecked(false);
+      menuView->addAction(a);
+
+      //---------------------
       //    Menu Create
       //---------------------
 
       QMenu* menuCreate = genCreateMenu(mb);
-      mb->setObjectName("Create");
+      mb->setObjectName("Insert");
       mb->addMenu(menuCreate);
 
       //---------------------
@@ -913,98 +1004,6 @@ MuseScore::MuseScore()
       menuStyle->addAction(getAction("load-style"));
       menuStyle->addAction(getAction("save-style"));
       menuStyle->addAction(getAction("save-default-style"));
-
-      //---------------------
-      //    Menu Display
-      //---------------------
-
-      menuDisplay = mb->addMenu(tr("&View"));
-      menuDisplay->setObjectName("View");
-
-      a = getAction("toggle-palette");
-      a->setCheckable(true);
-      menuDisplay->addAction(a);
-
-      a = getAction("masterpalette");
-      a->setCheckable(true);
-      menuDisplay->addAction(a);
-
-      a = getAction("inspector");
-      a->setCheckable(true);
-      menuDisplay->addAction(a);
-
-#ifdef OMR
-      a = getAction("omr");
-      a->setCheckable(true);
-      menuDisplay->addAction(a);
-#endif
-
-      playId = getAction("toggle-playpanel");
-      playId->setCheckable(true);
-      menuDisplay->addAction(playId);
-
-      a = getAction("toggle-navigator");
-      a->setCheckable(true);
-      a->setChecked(preferences.showNavigator);
-      menuDisplay->addAction(a);
-
-      a = getAction("toggle-mixer");
-      a->setCheckable(true);
-      menuDisplay->addAction(a);
-
-      a = getAction("synth-control");
-      a->setCheckable(true);
-      menuDisplay->addAction(a);
-
-      a = getAction("toogle-piano");
-      a->setCheckable(true);
-      menuDisplay->addAction(a);
-
-      a = getAction("musescore-connect");
-      a->setCheckable(true);
-      menuDisplay->addAction(a);
-
-      menuDisplay->addSeparator();
-      menuDisplay->addAction(getAction("zoomin"));
-      menuDisplay->addAction(getAction("zoomout"));
-      menuDisplay->addSeparator();
-
-      a = getAction("toggle-transport");
-      a->setCheckable(true);
-      a->setChecked(transportTools->isVisible());
-      menuDisplay->addAction(a);
-
-      a = getAction("toggle-noteinput");
-      a->setCheckable(true);
-      a->setChecked(true);
-      menuDisplay->addAction(a);
-
-      a = getAction("toggle-statusbar");
-      a->setCheckable(true);
-      a->setChecked(true);
-      menuDisplay->addAction(a);
-
-      menuDisplay->addSeparator();
-      a = getAction("split-h");
-      a->setCheckable(true);
-      a->setChecked(false);
-      menuDisplay->addAction(a);
-      a = getAction("split-v");
-      a->setCheckable(true);
-      a->setChecked(false);
-      menuDisplay->addAction(a);
-
-      menuDisplay->addSeparator();
-      menuDisplay->addAction(getAction("show-invisible"));
-      menuDisplay->addAction(getAction("show-unprintable"));
-      menuDisplay->addAction(getAction("show-frames"));
-      menuDisplay->addAction(getAction("show-pageborders"));
-      menuDisplay->addSeparator();
-      a = getAction("fullscreen");
-      a->setCheckable(true);
-      a->setChecked(false);
-      menuDisplay->addAction(a);
-
 
       //---------------------
       //    Menu Plugins
