@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>374</width>
-    <height>128</height>
+    <height>143</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -65,17 +65,17 @@
        <widget class="QTreeWidget" name="elements">
         <column>
          <property name="text">
-          <string>Chord/Rest</string>
+          <string notr="true">Chord/Rest</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>Type</string>
+          <string notr="true">Type</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>Tick</string>
+          <string notr="true">Tick</string>
          </property>
         </column>
        </widget>

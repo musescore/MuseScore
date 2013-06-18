@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -80,7 +80,7 @@
       <item row="0" column="3">
        <widget class="QSpinBox" name="head">
         <property name="toolTip">
-         <string>head index</string>
+         <string notr="true">head index</string>
         </property>
         <property name="readOnly">
          <bool>true</bool>
@@ -123,7 +123,7 @@
       <item row="2" column="3">
        <widget class="QSpinBox" name="headGroup">
         <property name="toolTip">
-         <string>note head group</string>
+         <string notr="true">note head group</string>
         </property>
         <property name="readOnly">
          <bool>true</bool>
@@ -238,8 +238,11 @@
       </item>
       <item row="0" column="4">
        <widget class="QLabel" name="label_12">
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
-         <string>NoteEvents</string>
+         <string notr="true">NoteEvents</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -248,6 +251,9 @@
       </item>
       <item row="2" column="4">
        <widget class="QLabel" name="label_10">
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
          <string notr="true" comment="do not translate">Elements</string>
         </property>
@@ -330,7 +336,7 @@
          <bool>true</bool>
         </property>
         <property name="specialValueText">
-         <string>invalid</string>
+         <string notr="true">invalid</string>
         </property>
         <property name="minimum">
          <number>-1</number>
@@ -356,7 +362,7 @@
          <bool>true</bool>
         </property>
         <property name="specialValueText">
-         <string>invalid</string>
+         <string notr="true">invalid</string>
         </property>
         <property name="minimum">
          <number>-1</number>
@@ -369,21 +375,21 @@
       <item row="7" column="4">
        <widget class="QPushButton" name="dot1">
         <property name="text">
-         <string>Dot1</string>
+         <string notr="true">Dot1</string>
         </property>
        </widget>
       </item>
       <item row="7" column="5">
        <widget class="QPushButton" name="dot2">
         <property name="text">
-         <string>Dot2</string>
+         <string notr="true">Dot2</string>
         </property>
        </widget>
       </item>
       <item row="7" column="6">
        <widget class="QPushButton" name="dot3">
         <property name="text">
-         <string>Dot3</string>
+         <string notr="true">Dot3</string>
         </property>
        </widget>
       </item>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <item>
@@ -150,7 +150,7 @@
         <item>
          <widget class="QCheckBox" name="leftParen">
           <property name="text">
-           <string>Left Paren Before</string>
+           <string notr="true">Left Paren Before</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -160,7 +160,7 @@
         <item>
          <widget class="QCheckBox" name="rightParen">
           <property name="text">
-           <string>Right Paren After</string>
+           <string notr="true">Right Paren After</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -436,17 +436,17 @@
           </attribute>
           <column>
            <property name="text">
-            <string>Type</string>
+            <string notr="true">Type</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Value</string>
+            <string notr="true">Value</string>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Alter</string>
+            <string notr="true">Alter</string>
            </property>
           </column>
          </widget>
