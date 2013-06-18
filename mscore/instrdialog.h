@@ -130,7 +130,6 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentDialogBase {
 
       void on_search_textChanged(const QString &searchPhrase);
       void on_clearSearch_clicked();
-      void on_search_returnPressed();
 
    public:
       InstrumentsDialog(QWidget* parent = 0);
