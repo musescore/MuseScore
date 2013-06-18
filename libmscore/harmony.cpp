@@ -19,6 +19,9 @@
 #include "chordlist.h"
 #include "mscore.h"
 #include "fret.h"
+#include "staff.h"
+#include "part.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -164,13 +167,22 @@ void Harmony::write(Xml& xml) const
       if (_leftParen)
             xml.tagE("leftParen");
       if (_rootTpc != INVALID_TPC) {
-            xml.tag("root", _rootTpc);
+            int rRootTpc = _rootTpc;
+            int rBaseTpc = _baseTpc;
+            if (staff()) {
+                  const Interval& interval = staff()->part()->instr()->transpose();
+                  if (xml.clipboardmode && !score()->styleB(ST_concertPitch) && interval.chromatic) {
+                        rRootTpc = transposeTpc(_rootTpc, interval, false);
+                        rBaseTpc = transposeTpc(_baseTpc, interval, false);
+                        }
+                  }
+            xml.tag("root", rRootTpc);
             if (_id > 0)
                   xml.tag("extension", _id);
             if (_textName != "")
                   xml.tag("name", _textName);
-            if (_baseTpc != INVALID_TPC)
-                  xml.tag("base", _baseTpc);
+            if (rBaseTpc != INVALID_TPC)
+                  xml.tag("base", rBaseTpc);
             foreach(const HDegree& hd, _degreeList) {
                   int tp = hd.type();
                   if (tp == ADD || tp == ALTER || tp == SUBTRACT) {
