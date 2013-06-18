@@ -1026,8 +1026,8 @@ void MuseScore::populatePalette()
 
 QMenu* MuseScore::genCreateMenu(QWidget* parent)
       {
-      QMenu* popup = new QMenu(tr("&Create"), parent);
-      popup->setObjectName("Create");
+      QMenu* popup = new QMenu(tr("&Insert"), parent);
+      popup->setObjectName("Insert");
 
       popup->addAction(getAction("instruments"));
 
