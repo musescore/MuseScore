@@ -358,6 +358,7 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       belowButton->setEnabled(false);
       linkedButton->setEnabled(false);
       connect(showMore, SIGNAL(clicked()), SLOT(buildTemplateList()));
+      connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
       }
 
 //---------------------------------------------------------
@@ -393,6 +394,19 @@ void InstrumentsDialog::buildTemplateList()
 
       populateInstrumentList(instrumentList, showMore->isChecked());
       }
+
+//---------------------------------------------------------
+//   expandOrCollapse
+//---------------------------------------------------------
+
+void InstrumentsDialog::expandOrCollapse(const QModelIndex &model)
+      {
+      if(instrumentList->isExpanded(model))
+            instrumentList->collapse(model);
+      else
+            instrumentList->expand(model);
+      }
+
 
 //---------------------------------------------------------
 //   genPartList

@@ -30,6 +30,9 @@
        <property name="itemsExpandable">
         <bool>true</bool>
        </property>
+       <property name="expandsOnDoubleClick">
+        <bool>false</bool>
+       </property>
        <property name="columnCount">
         <number>1</number>
        </property>
@@ -241,6 +244,19 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>search</tabstop>
+  <tabstop>clearSearch</tabstop>
+  <tabstop>instrumentList</tabstop>
+  <tabstop>showMore</tabstop>
+  <tabstop>addButton</tabstop>
+  <tabstop>removeButton</tabstop>
+  <tabstop>upButton</tabstop>
+  <tabstop>downButton</tabstop>
+  <tabstop>belowButton</tabstop>
+  <tabstop>linkedButton</tabstop>
+  <tabstop>partiturList</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
