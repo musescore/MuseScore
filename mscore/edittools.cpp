@@ -14,6 +14,7 @@
 #include "edittools.h"
 #include "musescore.h"
 #include "scoreview.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -43,6 +44,7 @@ EditTools::EditTools(QWidget* parent)
       setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
 
       QToolBar* tb = new QToolBar(tr("Edit Mode Tools"));
+      tb->setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
 
       QToolButton* b = new QToolButton(this);
       QAction* a = getAction("hraster");
