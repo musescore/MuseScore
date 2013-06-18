@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string comment="do not translate">Text</string>
+      <string notr="true" comment="do not translate">Text</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -75,12 +75,12 @@
           </property>
           <item>
            <property name="text">
-            <string>MM</string>
+            <string notr="true">MM</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Space</string>
+            <string notr="true">Space</string>
            </property>
           </item>
          </widget>
@@ -94,7 +94,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Type:</string>
+           <string notr="true">Type:</string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -104,14 +104,14 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_7">
           <property name="text">
-           <string comment="do not translate">Abs.:</string>
+           <string notr="true" comment="do not translate">Abs.:</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_6">
           <property name="text">
-           <string comment="do not translate">Rel.:</string>
+           <string notr="true" comment="do not translate">Rel.:</string>
           </property>
          </widget>
         </item>
@@ -125,14 +125,14 @@
         <item>
          <widget class="QCheckBox" name="styled">
           <property name="text">
-           <string>styled</string>
+           <string notr="true">styled</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="layoutToParentWidth">
           <property name="text">
-           <string>layoutToParentWidth</string>
+           <string notr="true">layoutToParentWidth</string>
           </property>
          </widget>
         </item>
@@ -160,7 +160,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string comment="do not translate">Text:</string>
+         <string notr="true" comment="do not translate">Text:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -179,7 +179,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string comment="do not translate">Offset:</string>
+         <string notr="true" comment="do not translate">Offset:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -189,7 +189,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string comment="do not translate">TextStyle:</string>
+         <string notr="true" comment="do not translate">TextStyle:</string>
         </property>
        </widget>
       </item>

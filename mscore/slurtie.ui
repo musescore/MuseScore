@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -108,14 +108,14 @@
         <item>
          <widget class="QPushButton" name="startElement">
           <property name="text">
-           <string extracomment="do not translate">startElement</string>
+           <string notr="true" extracomment="do not translate">startElement</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="endElement">
           <property name="text">
-           <string extracomment="do not translate - only for debugging">endElement</string>
+           <string notr="true" extracomment="do not translate - only for debugging">endElement</string>
           </property>
          </widget>
         </item>

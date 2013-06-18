@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -35,21 +35,21 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>accidentalType</string>
+         <string notr="true">accidentalType</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QCheckBox" name="custom">
         <property name="text">
-         <string>custom</string>
+         <string notr="true">custom</string>
         </property>
        </widget>
       </item>
       <item row="1" column="4">
        <widget class="QLabel" name="label_10">
         <property name="text">
-         <string>customType</string>
+         <string notr="true">customType</string>
         </property>
        </widget>
       </item>
@@ -69,14 +69,14 @@
       <item row="2" column="1">
        <widget class="QCheckBox" name="invalid">
         <property name="text">
-         <string>invalid</string>
+         <string notr="true">invalid</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>naturalType</string>
+         <string notr="true">naturalType</string>
         </property>
        </widget>
       </item>
@@ -97,14 +97,14 @@
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="showCourtesySig">
         <property name="text">
-         <string>showCourtesySig</string>
+         <string notr="true">showCourtesySig</string>
         </property>
        </widget>
       </item>
       <item row="0" column="2" colspan="2">
        <widget class="QCheckBox" name="showNaturals">
         <property name="text">
-         <string>showNaturals</string>
+         <string notr="true">showNaturals</string>
         </property>
        </widget>
       </item>

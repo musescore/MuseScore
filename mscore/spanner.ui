@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -74,12 +74,12 @@
           </item>
           <item>
            <property name="text">
-            <string>CHORD</string>
+            <string notr="true">CHORD</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>NOTE</string>
+            <string notr="true">NOTE</string>
            </property>
           </item>
          </widget>
