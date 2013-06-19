@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>407</width>
-    <height>222</height>
+    <height>231</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -79,313 +79,244 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="Awl::Slider" name="aeolusAzimuth3">
+      <widget class="Awl::Slider" name="aeolusAzimuth3" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="Awl::Slider" name="aeolusWidth3">
+      <widget class="Awl::Slider" name="aeolusWidth3" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="Awl::Slider" name="aeolusDirect3">
+      <widget class="Awl::Slider" name="aeolusDirect3" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="5" column="1">
-      <widget class="Awl::Slider" name="aeolusReflect3">
+      <widget class="Awl::Slider" name="aeolusReflect3" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="Awl::Slider" name="aeolusReverb3">
+      <widget class="Awl::Slider" name="aeolusReverb3" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="8" column="1">
-      <widget class="Awl::Slider" name="reverbDelay">
+      <widget class="Awl::Slider" name="reverbDelay" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minValue">
+       <property name="minValue" stdset="0">
         <double>25.000000000000000</double>
        </property>
-       <property name="maxValue">
+       <property name="maxValue" stdset="0">
         <double>150.000000000000000</double>
        </property>
-       <property name="lineStep">
+       <property name="lineStep" stdset="0">
         <double>10.000000000000000</double>
        </property>
-       <property name="pageStep">
+       <property name="pageStep" stdset="0">
         <double>25.000000000000000</double>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="9" column="1">
-      <widget class="Awl::Slider" name="reverbTime">
+      <widget class="Awl::Slider" name="reverbTime" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="Awl::Slider" name="aeolusAzimuth2">
+      <widget class="Awl::Slider" name="aeolusAzimuth2" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="3" column="2">
-      <widget class="Awl::Slider" name="aeolusWidth2">
+      <widget class="Awl::Slider" name="aeolusWidth2" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="4" column="2">
-      <widget class="Awl::Slider" name="aeolusDirect2">
+      <widget class="Awl::Slider" name="aeolusDirect2" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="5" column="2">
-      <widget class="Awl::Slider" name="aeolusReflect2">
+      <widget class="Awl::Slider" name="aeolusReflect2" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="6" column="2">
-      <widget class="Awl::Slider" name="aeolusReverb2">
+      <widget class="Awl::Slider" name="aeolusReverb2" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="Awl::Slider" name="aeolusAzimuth1">
+      <widget class="Awl::Slider" name="aeolusAzimuth1" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="3" column="3">
-      <widget class="Awl::Slider" name="aeolusWidth1">
+      <widget class="Awl::Slider" name="aeolusWidth1" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="4" column="3">
-      <widget class="Awl::Slider" name="aeolusDirect1">
+      <widget class="Awl::Slider" name="aeolusDirect1" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="5" column="3">
-      <widget class="Awl::Slider" name="aeolusReflect1">
+      <widget class="Awl::Slider" name="aeolusReflect1" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="6" column="3">
-      <widget class="Awl::Slider" name="aeolusReverb1">
+      <widget class="Awl::Slider" name="aeolusReverb1" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="1" column="4">
-      <widget class="Awl::Slider" name="aeolusAzimuthP">
+      <widget class="Awl::Slider" name="aeolusAzimuthP" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="3" column="4">
-      <widget class="Awl::Slider" name="aeolusWidthP">
+      <widget class="Awl::Slider" name="aeolusWidthP" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="4" column="4">
-      <widget class="Awl::Slider" name="aeolusDirectP">
+      <widget class="Awl::Slider" name="aeolusDirectP" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="5" column="4">
-      <widget class="Awl::Slider" name="aeolusReflectP">
+      <widget class="Awl::Slider" name="aeolusReflectP" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="6" column="4">
-      <widget class="Awl::Slider" name="aeolusReverbP">
+      <widget class="Awl::Slider" name="aeolusReverbP" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="9" column="2">
-      <widget class="Awl::Slider" name="position">
+      <widget class="Awl::Slider" name="position" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>

@@ -4465,7 +4465,7 @@ bool saveMxl(Score* score, const QString& name)
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      uz.addDirectory("META-INF");
+      //uz.addDirectory("META-INF");
       uz.addFile("META-INF/container.xml", cbuf.data());
 
       QBuffer dbuf;
@@ -4513,7 +4513,14 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             xml.etag();
 
             if (!h->xmlKind().isEmpty()) {
-                  xml.tag(QString("kind text=\"%1\"").arg(h->extensionName()), h->xmlKind());
+                  QString s = "kind";
+                  if (h->xmlText() != "")
+                        s += " text=\"" + h->xmlText() + "\"";
+                  if (h->xmlSymbols() == "yes")
+                        s += " use-symbols=\"yes\"";
+                  if (h->xmlParens() == "yes")
+                        s += " parentheses-degrees=\"yes\"";
+                  xml.tag(s, h->xmlKind());
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
                         foreach(QString tag, l) {

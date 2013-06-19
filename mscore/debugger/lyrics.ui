@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Lyrics</string>
+      <string notr="true">Lyrics</string>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -26,7 +26,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Syllabic:</string>
+         <string notr="true">Syllabic:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -40,22 +40,22 @@
         </property>
         <item>
          <property name="text">
-          <string>Single</string>
+          <string notr="true">Single</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Begin</string>
+          <string notr="true">Begin</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>End</string>
+          <string notr="true">End</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Middle</string>
+          <string notr="true">Middle</string>
          </property>
         </item>
        </widget>
@@ -63,7 +63,7 @@
       <item row="0" column="2">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Row:</string>
+         <string notr="true">Row:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -80,7 +80,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>End Tick:</string>
+         <string notr="true">End Tick:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

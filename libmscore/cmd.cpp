@@ -831,10 +831,29 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
                         qDebug("2:makeGap1: no segment");
                         return false;
                         }
+#if 1
                   if (seg->element(track)) {
                         tick = seg->tick();
                         cr = static_cast<ChordRest*>(seg->element(track));
                         break;
+#else
+                  ChordRest* cr1 = static_cast<ChordRest*>(seg1->element(track));
+                  Fraction srcF = cr1->duration();
+                  Fraction dstF = Fraction::fromTicks(tick - cr1->tick());
+                  undoChangeChordRestLen(cr1, TDuration(dstF));
+                  setRest(tick, track, srcF - dstF, true, 0);
+                  for (;;) {
+                        seg1 = seg1->next1(Segment::SegChordRestGrace);
+                        if (seg1 == 0) {
+                              qDebug("2:makeGap1: no segment");
+                              return false;
+                              }
+                        if (seg1->element(track)) {
+                              tick = seg1->tick();
+                              cr = static_cast<ChordRest*>(seg1->element(track));
+                              break;
+                              }
+#endif
                         }
                   }
             }

@@ -1113,6 +1113,8 @@ void Score::cmdAddBSymbol(BSymbol* s, const QPointF& pos, const QPointF& off)
 
 void Score::deleteItem(Element* el)
       {
+      if(!el)
+            return;
       switch(el->type()) {
             case Element::INSTRUMENT_NAME: {
                   Part* part = el->staff()->part();
@@ -1311,11 +1313,20 @@ void Score::cmdDeleteSelectedMeasures()
             }
 
       QList<Score*> scores = scoreList();
+#if 1
       foreach (Score* score, scores) {
             MeasureBase* is = score->measure(startIdx);
             MeasureBase* ie = score->measure(endIdx);
             int startTick = is->tick();
             int ticks = 0;
+#else
+      int startTick = measure(startIdx)->tick();
+      int endTick = measure(endIdx)->tick();
+      foreach(Score* score, scores) {
+            MeasureBase* is = score->tick2measure(startTick);
+            MeasureBase* ie = score->tick2measure(endTick);
+            mBeforeSel = is->prevMeasure();
+#endif
             for (;;) {
                   ticks += ie->ticks();
                   deleteItem(ie);
@@ -1325,6 +1336,7 @@ void Score::cmdDeleteSelectedMeasures()
                   if (ie == 0)
                         break;
                   }
+#if 0
             score->insertTime(startTick, -ticks);    // handle spanner
             }
 
@@ -1336,31 +1348,43 @@ void Score::cmdDeleteSelectedMeasures()
                   Measure* lastMeasure = static_cast<Measure*>(mb);
                   if (lastMeasure->endBarLineType() == NORMAL_BAR) {
                         undoChangeEndBarLineType(lastMeasure, END_BAR);
+#else
+            if (createEndBar) {
+                  MeasureBase* mb = score->measures()->last();
+                  while (mb && mb->type() != Element::MEASURE)
+                        mb = mb->prev();
+                  if (mb) {
+                        Measure* lastMeasure = static_cast<Measure*>(mb);
+                        if (lastMeasure->endBarLineType() == NORMAL_BAR) {
+                              undoChangeEndBarLineType(lastMeasure, END_BAR);
+                              }
+#endif
+                        }
+                  }
+            // insert correct timesig after deletion
+            Measure* mAfterSel = mBeforeSel ? mBeforeSel->nextMeasure() : firstMeasure();
+            if (mAfterSel && lastDeletedSig) {
+                  bool changed = true;
+                  if (mBeforeSel) {
+                        if (mBeforeSel->timesig() == mAfterSel->timesig()) {
+                              changed = false;
+                              }
+                        }
+                  Segment* s = mAfterSel->findSegment(Segment::SegTimeSig, mAfterSel->tick());
+                  if (!s && changed) {
+                        Segment* ns = mAfterSel->undoGetSegment(Segment::SegTimeSig, mAfterSel->tick());
+                        for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
+                              TimeSig* nts = new TimeSig(score);
+                              nts->setTrack(staffIdx * VOICES);
+                              nts->setParent(ns);
+                              nts->setSig(lastDeletedSig->sig(), lastDeletedSig->timeSigType());
+                              score->undoAddElement(nts);
+                              }
                         }
                   }
             }
 
-      // insert correct timesig after deletion
-      Measure* mAfterSel = mBeforeSel ? mBeforeSel->nextMeasure() : firstMeasure();
-      if (mAfterSel && lastDeletedSig) {
-            bool changed = true;
-            if (mBeforeSel) {
-                  if (mBeforeSel->timesig() == mAfterSel->timesig()) {
-                        changed = false;
-                        }
-                  }
-            Segment* s = mAfterSel->findSegment(Segment::SegTimeSig, mAfterSel->tick());
-            if (!s && changed) {
-                  Segment* ns = mAfterSel->undoGetSegment(Segment::SegTimeSig, mAfterSel->tick());
-                  for (int staffIdx = 0; staffIdx < nstaves(); staffIdx++) {
-                        TimeSig* nts = new TimeSig(this);
-                        nts->setTrack(staffIdx * VOICES);
-                        nts->setParent(ns);
-                        nts->setSig(lastDeletedSig->sig(), lastDeletedSig->timeSigType());
-                        undoAddElement(nts);
-                        }
-                  }
-            }
+
 
       select(0, SELECT_SINGLE, 0);
       _is.setSegment(0);        // invalidate position
@@ -1752,7 +1776,13 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
             }
 
       MeasureBase* omb = 0;
-      foreach(Score* score, scoreList()) {
+      QList<Score*> scorelist;
+      if (type == Element::MEASURE)
+         scorelist = scoreList();
+      else
+         scorelist.append(this);
+
+      foreach(Score* score, scorelist) {
             MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
             MeasureBase* im = idx != -1 ? score->measure(idx) : 0;
             // insert before im, append if im = 0

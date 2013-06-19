@@ -47,7 +47,7 @@
         <root>
           <root-step>G</root-step>
           </root>
-        <kind text="">major</kind>
+        <kind>major</kind>
         </harmony>
       <note>
         <pitch>
@@ -68,7 +68,7 @@
         <root>
           <root-step>C</root-step>
           </root>
-        <kind text="">major</kind>
+        <kind>major</kind>
         <frame>
           <frame-strings>6</frame-strings>
           <frame-frets>5</frame-frets>

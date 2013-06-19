@@ -197,7 +197,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             // if the time sig. is not generated (= not courtesy) and is in track 0
             // add the specific menu item
             QAction* a;
-            if (!ts->generated() && !_track) {
+            if (!ts->generated() && !_track && ts->measure() != score()->firstMeasure()) {
                   a = popup->addAction(ts->showCourtesySig()
                      ? QT_TRANSLATE_NOOP("TimeSig", "Hide Courtesy Time Signature")
                      : QT_TRANSLATE_NOOP("TimeSig", "Show Courtesy Time Signature") );
@@ -216,8 +216,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::CLEF) {
             genPropertyMenu1(e, popup);
+            Clef* clef = static_cast<Clef*>(e);
             // if the clef is not generated (= not courtesy) add the specific menu item
-            if (!e->generated()) {
+            if (!e->generated() && clef->measure() != score()->firstMeasure()) {
                   QAction* a = popup->addAction(static_cast<Clef*>(e)->showCourtesy()
                      ? QT_TRANSLATE_NOOP("Clef", "Hide courtesy clef")
                      : QT_TRANSLATE_NOOP("Clef", "Show courtesy clef") );
@@ -259,7 +260,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::KEYSIG) {
             genPropertyMenu1(e, popup);
             KeySig* ks = static_cast<KeySig*>(e);
-            if (!e->generated()) {
+            if (!e->generated() && ks->measure() != score()->firstMeasure()) {
                   QAction* a = popup->addAction(ks->showCourtesy()
                      ? QT_TRANSLATE_NOOP("KeySig", "Hide Courtesy Key Signature")
                      : QT_TRANSLATE_NOOP("KeySig", "Show Courtesy Key Signature") );

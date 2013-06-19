@@ -1570,6 +1570,12 @@ void ScoreView::drawBackground(QPainter* p, const QRectF& r) const
 
 void ScoreView::paintPageBorder(QPainter& p, Page* page)
       {
+      //add a black border to pages
+      QRectF r(page->canvasBoundingRect());
+      p.setBrush(Qt::NoBrush);
+      p.setPen(QPen(Qt::black, 1));
+      p.drawRect(r);
+
 #if 0
       QRectF r(page->bbox());
       qreal x1 = r.x();

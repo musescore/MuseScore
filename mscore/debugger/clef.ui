@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -128,7 +128,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>TransposingClef</string>
+           <string notr="true">TransposingClef</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -177,14 +177,14 @@
         <item>
          <widget class="QCheckBox" name="small">
           <property name="text">
-           <string>small</string>
+           <string notr="true">small</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="showCourtesy">
           <property name="text">
-           <string>showCourtesy</string>
+           <string notr="true">showCourtesy</string>
           </property>
          </widget>
         </item>

@@ -225,7 +225,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ImportMidiPanel* importmidi_panel;
       QSplitter* mainWindow;
 
-      QMenu* menuDisplay;
+      QMenu* menuView;
       QMenu* openRecent;
 
       MagBox* mag;

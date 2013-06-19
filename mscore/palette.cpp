@@ -1069,8 +1069,8 @@ void Palette::write(const QString& p)
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      f.addDirectory("META-INF");
-      f.addDirectory("Pictures");
+      //f.addDirectory("META-INF");
+      //f.addDirectory("Pictures");
       f.addFile("META-INF/container.xml", cbuf.data());
 
       // save images
