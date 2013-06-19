@@ -81,7 +81,6 @@ void TextLineSegment::draw(QPainter* painter) const
             color = textLine()->curColor();
             normalColor = true;
             }
-qDebug() << "normal color" << color;
       qreal l = 0.0;
       int sym = spannerSegmentType() == SEGMENT_MIDDLE ? tl->continueSymbol() : tl->beginSymbol();
       if (_text) {
@@ -110,7 +109,6 @@ qDebug() << "normal color" << color;
       QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth);
       pen.setStyle(tl->lineStyle());
       painter->setPen(pen);
-qDebug() << "pen color" << pen.color();
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END) {
             if (tl->endSymbol() != -1) {
                   int sym = tl->endSymbol();
@@ -321,7 +319,6 @@ TextLine::TextLine(Score* s)
       _beginTextPlace    = PLACE_LEFT;
       _continueTextPlace = PLACE_LEFT;
       _lineColor         = curColor();
-qDebug() << _lineColor;
       _beginSymbol       = noSym;
       _continueSymbol    = noSym;
       _endSymbol         = noSym;
