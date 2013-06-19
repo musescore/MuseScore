@@ -390,8 +390,7 @@ void Spanner::computeEndElement()
             case ANCHOR_MEASURE:
                   {
                   ChordRest* cr = score()->findCR(tick2(), track());
-                  if (cr)
-                        e = cr->measure();
+                  e = cr ? cr->measure() : 0;
                   }
                   break;
 

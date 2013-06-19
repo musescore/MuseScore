@@ -1918,6 +1918,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "Chord") {
                   segment = getSegment(Segment::SegChordRest, e.tick());
+
                   Chord* chord = new Chord(score());
                   chord->setTrack(e.track());
                   chord->read(e);
