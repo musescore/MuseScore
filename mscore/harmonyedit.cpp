@@ -606,6 +606,8 @@ void HarmonyCanvas::updateChordDescription()
             x = ts->x + ts->width();
             y = ts->y;
             }
+      chordDescription->exportOk = true;
       }
+
 }
 
