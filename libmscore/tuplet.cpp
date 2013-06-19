@@ -541,7 +541,7 @@ void Tuplet::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "direction")
-                  _direction = MScore::Direction(e.readInt());
+                  setProperty(P_DIRECTION, Ms::getProperty(P_DIRECTION, e));
             else if (tag == "numberType")
                   _numberType = e.readInt();
             else if (tag == "bracketType")

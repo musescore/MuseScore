@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>103</height>
+    <height>105</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -26,7 +26,7 @@
       <string notr="true"/>
      </property>
      <property name="title">
-      <string>BarLine</string>
+      <string notr="true">BarLine</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -129,7 +129,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>spanFrom:</string>
+           <string notr="true">spanFrom:</string>
           </property>
          </widget>
         </item>
@@ -162,7 +162,7 @@
         <item row="1" column="2">
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>spanTo:</string>
+           <string notr="true">spanTo:</string>
           </property>
          </widget>
         </item>

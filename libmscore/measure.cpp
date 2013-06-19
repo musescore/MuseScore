@@ -1907,7 +1907,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   else if (barLine->barLineType() == START_REPEAT)
                         segment = getSegment(Segment::SegStartRepeatBarLine, e.tick());
                   else {
-                        setEndBarLineType(barLine->barLineType(), false, true, Qt::black);
+                        setEndBarLineType(barLine->barLineType(), false, true);
                         if(!barLine->customSpan()) {
                               Staff* staff = score()->staff(staffIdx);
                               barLine->setSpan(staff->barLineSpan());
@@ -2597,7 +2597,10 @@ void Measure::setEndBarLineType(BarLineType val, bool g, bool visible, QColor co
       _endBarLineType      = val;
       _endBarLineGenerated = g;
       _endBarLineVisible   = visible;
-      _endBarLineColor     = color;
+      if(color.isValid())
+            _endBarLineColor = color;
+      else
+            _endBarLineColor = curColor();
       }
 
 //---------------------------------------------------------

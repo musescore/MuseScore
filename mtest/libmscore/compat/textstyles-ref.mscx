@@ -26,6 +26,8 @@
       <propertyDistanceStem>0.5</propertyDistanceStem>
       <pageNumberOddEven>0</pageNumberOddEven>
       <showMeasureNumber>0</showMeasureNumber>
+      <chordStyle>custom</chordStyle>
+      <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>cchords_muse.xml</chordDescriptionFile>
       <concertPitch>1</concertPitch>
       <voltaY>-2</voltaY>
