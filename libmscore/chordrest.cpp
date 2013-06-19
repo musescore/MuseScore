@@ -294,19 +294,16 @@ bool ChordRest::readProperties(XmlReader& e)
                         slur->setTick(e.tick());
                         slur->setTrack(e.track());
                         slur->setStartElement(this);
-                        if (type() == CHORD && isGrace()) {
-                              slur->setAnchor(Spanner::ANCHOR_CHORD);
-                              Chord* c = static_cast<Chord*>(slur->startChord());
-                              c->add(slur);
-                              }
-                        else
-                              slur->setAnchor(Spanner::ANCHOR_SEGMENT);
+                        slur->setAnchor(Spanner::ANCHOR_SEGMENT);
                         }
                   else if (atype == "stop") {
                         slur->setTickLen(e.tick() - slur->tick());
                         slur->setEndElement(this);
-                        if (slur->anchor() == Spanner::ANCHOR_CHORD) {
-                              // remove Slur from Score::spanner
+                        // remove Slur from Score::spanner
+                        Chord* start = static_cast<Chord*>(slur->startElement());
+                        if (start && start->type() == CHORD && start->noteType() != NOTE_NORMAL) {
+                              start->add(slur);
+                              slur->setAnchor(Spanner::ANCHOR_CHORD);
                               score()->spanner().removeOne(slur);
                               }
                         }

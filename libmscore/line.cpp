@@ -504,6 +504,9 @@ void SLine::layout()
             return;
             }
 
+      computeStartElement();
+      computeEndElement();
+
       System* s1;
       System* s2;
       QPointF p1 = linePos(GRIP_LINE_START, &s1);

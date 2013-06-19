@@ -390,11 +390,10 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
 
       QPointF p2 = pp2 - pp1;
       if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
-            qDebug("zero slur");
             Measure* m1 = startCR()->segment()->measure();
             Measure* m2 = endCR()->segment()->measure();
-            qDebug("   at tick %d in measure %d-%d",
-               m1->tick(), m1->no(), m2->no());
+            qDebug("zero slur id%d at tick %d(%d) track %d in measure %d-%d",
+               id(), m1->tick(), tick(), track(), m1->no(), m2->no());
             return;
             }
 
