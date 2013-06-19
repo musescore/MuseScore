@@ -255,9 +255,8 @@ enum StyleIdx {
       ST_genCourtesyKeysig,
       ST_genCourtesyClef,
 
-      // 75
       ST_useGermanNoteNames,
-      //
+      ST_chordStyle,
       ST_chordsXmlFile,
       ST_chordDescriptionFile,
       ST_concertPitch,
@@ -269,7 +268,6 @@ enum StyleIdx {
       ST_stemDir1,
       ST_stemDir2,
 
-      // 84
       ST_stemDir3,
       ST_stemDir4,
       ST_gateTime,
@@ -390,7 +388,7 @@ class MStyle {
       bool isDefault(StyleIdx idx) const;
       const ChordDescription* chordDescription(int id) const;
       ChordList* chordList() const;
-      void setChordList(ChordList*);      // Style gets ownership of ChordList
+      void setChordList(ChordList*, bool custom = true);    // Style gets ownership of ChordList
 
       const TextStyle& textStyle(int) const;
       const TextStyle& textStyle(const QString& name) const;
