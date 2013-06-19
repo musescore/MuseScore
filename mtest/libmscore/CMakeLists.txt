@@ -17,7 +17,7 @@
 #      repeat concertpitch keysig clef
 #      )
 subdirs(
-      hairpin note compat beam split join splitstaff
+      hairpin note compat measure beam split join splitstaff
       timesig element midi dynamic plugins copypaste tuplet
       repeat concertpitch keysig clef
       )

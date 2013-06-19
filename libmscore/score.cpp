@@ -3458,7 +3458,7 @@ void Score::insertTime(int tick, int len)
                         //
                         undoRemoveElement(s);
                         }
-                  else if (s->tick() > tick && s->tick2() >= tick2) {
+                  else if (s->tick() > tick && s->tick2() > tick2) {
                         //
                         //  case D:
                         //       +----spanner--------+
