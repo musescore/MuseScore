@@ -1298,18 +1298,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         }
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
-                        Beam* beam = cr->beam();
-#ifndef NDEBUG
-                        if (beam && beam->elements().front() == cr && (MScore::testMode || !beam->generated())) {
-                              beam->setId(xml.beamId++);
-                              beam->write(xml);
-                              }
-#else
-                        if (beam && !beam->generated() && beam->elements().front() == cr) {
-                              beam->setId(xml.beamId++);
-                              beam->write(xml);
-                              }
-#endif
+                        cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
                   if ((segment->segmentType() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {

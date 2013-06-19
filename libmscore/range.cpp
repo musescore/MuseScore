@@ -45,13 +45,7 @@ TrackList::~TrackList()
       int n = size();
       for (int i = 0; i < n; ++i) {
             Element* e = at(i);
-            if (e->isChordRest()) {
-                  ChordRest* cr = static_cast<ChordRest*>(e);
-                  foreach(Element* el, cr->annotations())
-                        delete el;
-                  delete e;
-                  }
-            else if (e->type() == Element::TUPLET) {
+            if (e->type() == Element::TUPLET) {
                   Tuplet* t = static_cast<Tuplet*>(e);
                   cleanupTuplet(t);
                   }
@@ -61,129 +55,11 @@ TrackList::~TrackList()
       }
 
 //---------------------------------------------------------
-//   readSpanner
-//---------------------------------------------------------
-
-void TrackList::readSpanner(int track, Spanner* spannerFor, Spanner* spannerBack,
-   ChordRest* dst, QHash<Spanner*,Spanner*>* map)
-      {
-#if 0 // TODO-S
-      for (Spanner* oldSpanner = spannerFor; oldSpanner; oldSpanner = oldSpanner->next()) {
-            if (track != -1 && oldSpanner->track() != track)
-                  continue;
-            Spanner* newSpanner = static_cast<Spanner*>(oldSpanner->clone());
-            map->insert(oldSpanner, newSpanner);
-            dst->addSpannerFor(newSpanner);
-            newSpanner->setStartElement(dst);
-            int etick = oldSpanner->endTick();
-            if (etick >= range()->last()->tick()) {
-                  newSpanner->setEndElement(oldSpanner->endElement());
-                  oldSpanner->removeSpannerBack();
-                  map->remove(oldSpanner);
-                  }
-            }
-      for (Spanner* oldSpanner = spannerBack; oldSpanner; oldSpanner = oldSpanner->next()) {
-            if (track != -1 && oldSpanner->track() != track)
-                  continue;
-            Spanner* newSpanner = map->value(oldSpanner);
-            if (newSpanner) {
-                  dst->addSpannerBack(newSpanner);
-                  newSpanner->setEndElement(dst);
-                  map->remove(oldSpanner);
-                  }
-            else {
-                  int stick = oldSpanner->startTick();
-                  if (stick < range()->first()->tick()) {
-                        dst->addSpannerBack(oldSpanner);
-                        }
-                  else {
-                        qDebug("readSpanner: %s not found", oldSpanner->name());
-                        // TODO: handle failure case:
-                        // - remove start spanner
-                        // - delete spanner
-                        }
-                  }
-            }
-#endif
-      }
-
-//---------------------------------------------------------
-//   writeSpanner
-//---------------------------------------------------------
-
-void TrackList::writeSpanner(int track, ChordRest* src, ChordRest* dst,
-   Segment* segment, QHash<Spanner*, Spanner*>* map) const
-      {
-#if 0 // TODO-S
-      for (Spanner* oldSpanner = src->spannerFor(); oldSpanner; oldSpanner = oldSpanner->next()) {
-            Spanner* newSpanner = static_cast<Spanner*>(oldSpanner->clone());
-            newSpanner->setTrack(track);
-            map->insert(oldSpanner, newSpanner);
-            if (newSpanner->type() == Element::SLUR) {
-                  dst->addSpannerFor(newSpanner);
-                  newSpanner->setStartElement(dst);
-                  }
-            else {
-                  segment->addSpannerFor(newSpanner);
-                  newSpanner->setStartElement(segment);
-                  }
-            int etick = oldSpanner->endTick();
-            if (etick >= range()->last()->tick()) {
-                  newSpanner->setEndElement(oldSpanner->endElement());
-                  newSpanner->addSpannerBack();
-                  map->remove(oldSpanner);
-                  }
-            }
-
-      for (Spanner* oldSpanner = src->spannerBack(); oldSpanner; oldSpanner = oldSpanner->next()) {
-            Spanner* newSpanner = map->value(oldSpanner);
-            if (newSpanner) {
-                  if (newSpanner->type() == Element::SLUR) {
-                        dst->addSpannerBack(newSpanner);
-                        newSpanner->setEndElement(dst);
-                        }
-                  else {
-                        segment->addSpannerBack(newSpanner);
-                        newSpanner->setEndElement(segment);
-                        }
-                  map->remove(oldSpanner);
-                  }
-            else {
-                  int stick = oldSpanner->startTick();
-                  if (stick < range()->first()->tick()) {
-                        if (oldSpanner->type() == Element::SLUR) {
-                              dst->addSpannerBack(oldSpanner);
-                              oldSpanner->setEndElement(dst);
-                              }
-                        else {
-                              segment->addSpannerBack(oldSpanner);
-                              oldSpanner->setEndElement(segment);
-                              }
-                        }
-                  else {
-                        qDebug("writeSpanner: %s not found", oldSpanner->name());
-                        // TODO: handle failure case:
-                        // - remove start slur from chord/rest
-                        // - delete slur
-                        }
-                  }
-            }
-#endif
-      foreach(Element* e, src->annotations()) {
-            Element* element = e->clone();
-            element->setTrack(track);
-            segment->add(element);
-            }
-      }
-
-//---------------------------------------------------------
 //   append
 //---------------------------------------------------------
 
-void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
+void TrackList::append(Element* e)
       {
-      Q_ASSERT(map);
-
       if (e->isDurationElement()) {
             Fraction d = static_cast<DurationElement*>(e)->duration();
             _duration += d;
@@ -212,15 +88,10 @@ void TrackList::append(Element* e, QHash<Spanner*,Spanner*>* map)
                         }
                   else {
                         ChordRest* src = static_cast<ChordRest*>(e);
-                        ChordRest* dst = static_cast<ChordRest*>(element);
-#if 0 // TODO-S
-                        readSpanner(-1, src->spannerFor(), src->spannerBack(), dst, map);
                         Segment* s = src->segment();
-                        readSpanner(src->track(), s->spannerFor(), s->spannerBack(), dst, map);
-#endif
-                        foreach(Element* ee, src->segment()->annotations()) {
+                        foreach(Element* ee, s->annotations()) {
                               if (ee->track() == e->track())
-                                    dst->annotations().append(ee->clone());
+                                    _range->annotations.push_back({ s->tick(), ee->clone() });
                               }
                         }
                   }
@@ -255,7 +126,7 @@ void TrackList::appendGap(const Fraction& d)
 //   read
 //---------------------------------------------------------
 
-void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Spanner*,Spanner*>* map)
+void TrackList::read(int track, const Segment* fs, const Segment* es)
       {
       int tick = fs->tick();
       int gap  = 0;
@@ -289,13 +160,13 @@ void TrackList::read(int track, const Segment* fs, const Segment* es, QHash<Span
                         appendGap(Fraction::fromTicks(gap));
                         tick += gap;
                         }
-                  append(de, map);
+                  append(de);
                   tick += de->duration().ticks();;
                   }
             else if (e->type() == Element::BAR_LINE)
                   ;
             else
-                  append(e, map);
+                  append(e);
             }
       gap = es->tick() - tick;
       if (gap)
@@ -400,6 +271,10 @@ bool TrackList::canWrite(const Fraction& measureLen) const
       return true;
       }
 
+//---------------------------------------------------------
+//   dump
+//---------------------------------------------------------
+
 void TrackList::dump() const
       {
       printf("TrackList: elements %d, duration %d/%d\n", size(), _duration.numerator(), _duration.denominator());
@@ -418,7 +293,7 @@ void TrackList::dump() const
 //    rewrite notes into measure list m
 //---------------------------------------------------------
 
-bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* map) const
+bool TrackList::write(int track, Measure* measure) const
       {
       Fraction pos;
       Measure* m       = measure;
@@ -441,7 +316,6 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                   // split note/rest
                   //
 
-                  bool firstCRinSplit = true;
                   while (duration.numerator() > 0) {
                         if (e->type() == Element::REST
                            && (duration >= rest || e == back())
@@ -457,10 +331,6 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                                     r->setDuration(m->len());
                                     r->setTrack(track);
                                     segment->add(r);
-                                    if (e->isChordRest() && firstCRinSplit) {
-                                          ChordRest* src = static_cast<ChordRest*>(e);
-                                          writeSpanner(track, src, r, segment, map);
-                                          }
                                     }
                               duration -= m->len();
                               pos      += m->len();
@@ -468,11 +338,9 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                               }
                         else {
                               Fraction d = qMin(rest, duration);
-                              ChordRest* dst;
                               if (e->type() == Element::REST) {
                                     segment = m->getSegment(Segment::SegChordRest, m->tick() + pos.ticks());
                                     Rest* r = new Rest(score, TDuration(d));
-                                    dst = r;
                                     r->setTrack(track);
                                     segment->add(r);
                                     duration -= d;
@@ -482,7 +350,6 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                               else if (e->type() == Element::CHORD) {
                                     segment = m->getSegment(e, m->tick() + pos.ticks());
                                     Chord* c = static_cast<Chord*>(e)->clone();
-                                    dst = c;
                                     c->setScore(score);
                                     c->setTrack(track);
                                     c->setDuration(d);
@@ -506,11 +373,6 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                                     duration -= d;
                                     rest     -= d;
                                     pos      += d;
-                                    }
-
-                              if (e->isChordRest() && firstCRinSplit) {
-                                    ChordRest* src = static_cast<ChordRest*>(e);
-                                    writeSpanner(track, src, dst, segment, map);
                                     }
                               }
                         if (pos == m->len()) {
@@ -541,7 +403,6 @@ bool TrackList::write(int track, Measure* measure, QHash<Spanner*, Spanner*>* ma
                                           }
                                     }
                               }
-                        firstCRinSplit = false;
                         }
                   }
             else if (e->type() == Element::KEYSIG) {
@@ -613,21 +474,23 @@ bool ScoreRange::canWrite(const Fraction& f) const
 
 void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrack)
       {
+      printf("ScoreRange::read: tick %d\n", first->tick());
       _first = first;
       _last  = last;
-      spannerMap.clear();
+      spanner.clear();
+      for (Spanner* s : first->score()->spanner()) {
+            if (s->tick() >= first->tick() && s->tick() < last->tick() &&
+               s->track() >= startTrack && s->track() < endTrack) {
+                  Spanner* ns = static_cast<Spanner*>(s->clone());
+                  ns->setTick(ns->tick() - first->tick());
+                  spanner.push_back(ns);
+                  }
+            }
       for (int track = startTrack; track < endTrack; ++track) {
             TrackList* dl = new TrackList(this);
-            dl->read(track, first, last, &spannerMap);
+            dl->read(track, first, last);
             tracks.append(dl);
             }
-#ifndef NDEBUG
-      if (!spannerMap.isEmpty()) {
-            qDebug("ScoreRange::read(): dangling Spanner");
-            foreach(Spanner* s, spannerMap)
-                  qDebug("  <%s>", s->name());
-            }
-#endif
       }
 
 //---------------------------------------------------------
@@ -636,51 +499,28 @@ void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrac
 
 bool ScoreRange::write(int track, Measure* m) const
       {
-      spannerMap.clear();
+      printf("ScoreRange::write: tick %d\n", m->tick());
+
       int n = tracks.size();
       for (int i = 0; i < n; ++i) {
             const TrackList* dl = tracks[i];
-            if (!dl->write(track + i, m, &spannerMap))
+            if (!dl->write(track + i, m))
                   return false;
             }
-#ifndef NDEBUG
-      if (!spannerMap.isEmpty()) {
-            qDebug("ScoreRange::write(): dangling Spanner");
-            foreach(Spanner* s, spannerMap)
-                  qDebug("  <%s>", s->name());
+      Score* score = m->score();
+      for (Spanner* s : spanner) {
+            s->setTick(s->tick() + m->tick());
+            score->undoAddElement(s);
             }
-#endif
+      for (const Annotation& a : annotations) {
+            Segment* s = score->tick2segment(a.tick);
+            if (s) {
+                  a.e->setParent(s);
+                  score->undoAddElement(a.e);
+                  }
+            }
       return true;
       }
-
-#if 0
-//---------------------------------------------------------
-//   check
-//---------------------------------------------------------
-
-void ScoreRange::check() const
-      {
-      int n = tracks.size();
-      for (int i = 0; i < n; ++i) {
-            Fraction d;
-            const TrackList* dl = tracks[i];
-            int nn = dl->size();
-            for (int ii = 0; ii < nn; ++ii) {
-                  Element* e = dl->at(ii);
-                  if (e->isDurationElement()) {
-                        Fraction duration = static_cast<const DurationElement*>(e)->duration();
-                        d += duration;
-                        }
-                  }
-            d.reduce();
-            qDebug("ScoreRange check %2d: %d/%d  %d elements",
-               i, d.numerator(), d.denominator(), dl->size());
-            d = dl->duration().reduced();
-            qDebug("                     %d/%d",
-               d.numerator(), d.denominator());
-            }
-      }
-#endif
 
 //---------------------------------------------------------
 //   fill

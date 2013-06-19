@@ -814,7 +814,6 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       {
       if (cap->systems.isEmpty())
             return;
-      qDebug("==================convert-capella");
 
       score->style()->set(ST_measureSpacing, 1.0);
       score->setSpatium(cap->normalLineDist * MScore::DPMM);
@@ -1022,6 +1021,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             }
       // score->connectSlurs();
+      score->fixTicks();
       }
 
 //---------------------------------------------------------

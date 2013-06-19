@@ -151,7 +151,8 @@ class Spanner : public Element {
       void computeEndElement();
 
       Element* startElement() const    { return _startElement; }
-      Element* endElement() const      { return _endElement; }
+      Element* endElement() const      { return _endElement;   }
+
       void setStartElement(Element* e) { _startElement = e; }
       void setEndElement(Element* e)   { _endElement = e; }
 

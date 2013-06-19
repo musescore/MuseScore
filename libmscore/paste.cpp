@@ -146,6 +146,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       foreach (Spanner* s, _spanner)
             s->setId(-1);
 
+      QList<Chord*> graceNotes;
       int dstStaffStart = dst->staffIdx();
       int dstTick = dst->tick();
 
@@ -211,8 +212,21 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               int track = dstStaffIdx * VOICES + voice;
                               cr->setTrack(track);
                               int tick = e.tick() - tickStart + dstTick;
-                              e.setTick(e.tick() + cr->actualTicks());
-                              pasteChordRest(cr, tick);
+                              if (cr->isGrace())
+                                    graceNotes.push_back(static_cast<Chord*>(cr));
+                              else {
+                                    e.setTick(e.tick() + cr->actualTicks());
+                                    if (cr->type() == Element::CHORD) {
+                                          Chord* chord = static_cast<Chord*>(cr);
+                                          for (int i = 0; i < graceNotes.size(); ++i) {
+                                                Chord* gc = graceNotes[i];
+                                                gc->setGraceIndex(i);
+                                                chord->add(gc);
+                                                }
+                                          graceNotes.clear();
+                                          }
+                                    pasteChordRest(cr, tick);
+                                    }
                               }
                         else if (tag == "HairPin"
                            || tag == "Pedal"
@@ -421,11 +435,11 @@ void Score::pasteChordRest(ChordRest* cr, int tick)
             }
 
       Measure* measure = tick2measure(tick);
-      bool isGrace = (cr->type() == Element::CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL);
-      int measureEnd = measure->tick() + measure->ticks();
-      if (tick >= measureEnd)       // end of score
+      if (!measure)
             return;
 
+      int measureEnd = measure->endTick();
+      bool isGrace = (cr->type() == Element::CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL);
       if (!isGrace && (tick + cr->actualTicks() > measureEnd)) {
             if (cr->type() == Element::CHORD) {
                   // split Chord

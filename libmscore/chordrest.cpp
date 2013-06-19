@@ -193,10 +193,12 @@ void ChordRest::writeProperties(Xml& xml) const
             if (lyrics)
                   lyrics->write(xml);
             }
-      Fraction t(globalDuration());
-      if (staff())
-            t *= staff()->timeStretch(xml.curTick);
-      xml.curTick += t.ticks();
+      if (!isGrace()) {
+            Fraction t(globalDuration());
+            if (staff())
+                  t *= staff()->timeStretch(xml.curTick);
+            xml.curTick += t.ticks();
+            }
       }
 
 //---------------------------------------------------------
@@ -1016,9 +1018,34 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
       score()->setLayoutAll(true);
       }
 
+//---------------------------------------------------------
+//   isGrace
+//---------------------------------------------------------
+
 bool ChordRest::isGrace() const
       {
       return type() == Element::CHORD && ((Chord*)this)->noteType() != NOTE_NORMAL;
       }
+
+//---------------------------------------------------------
+//   writeBeam
+//---------------------------------------------------------
+
+void ChordRest::writeBeam(Xml& xml)
+      {
+      Beam* b = beam();
+#ifndef NDEBUG
+      if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {
+            b->setId(xml.beamId++);
+            b->write(xml);
+            }
+#else
+      if (b && !b->generated() && b->elements().front() == this) {
+            b->setId(xml.beamId++);
+            b->write(xml);
+            }
+#endif
+      }
+
 }
 

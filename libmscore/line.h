@@ -45,7 +45,6 @@ class LineSegment : public SpannerSegment {
       virtual void setGrip(int grip, const QPointF& p);
       virtual QPointF getGrip(int) const;
       virtual QPointF gripAnchor(int) const;
-      virtual void layout() {}
 
    public:
       LineSegment(Score* s);

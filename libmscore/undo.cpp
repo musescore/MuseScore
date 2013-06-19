@@ -377,7 +377,6 @@ void Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
             }
       else {
             if (e->getProperty(t) != st) {
-                  qDebug("   changed");
                   undo()->push1(new ChangeProperty(e, t, st));
                   }
             }
@@ -2672,6 +2671,22 @@ void ChangeTimesig::flip()
 
       timesig->layout();
       timesig->score()->addRefresh(timesig->abbox());
+      }
+
+//---------------------------------------------------------
+//   undoRemoveMeasures
+//---------------------------------------------------------
+
+void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
+      {
+      int tick1 = m1->tick();
+      int tick2 = m2->endTick();
+printf("undoRemoveMeasures  %d - %d\n", tick1, tick2);
+      for (Spanner* s : m1->score()->spanner()) {
+            if (s->tick() >= tick1 && s->tick() < tick2)
+                  undoRemoveElement(s);
+            }
+      undo(new RemoveMeasures(m1, m2));
       }
 
 //---------------------------------------------------------
