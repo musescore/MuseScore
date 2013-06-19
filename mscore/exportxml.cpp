@@ -4460,7 +4460,7 @@ bool saveMxl(Score* score, const QString& name)
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      uz.addDirectory("META-INF");
+      //uz.addDirectory("META-INF");
       uz.addFile("META-INF/container.xml", cbuf.data());
 
       QBuffer dbuf;
