@@ -405,11 +405,11 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      uz.addDirectory("META-INF");
+      //uz.addDirectory("META-INF");
       uz.addFile("META-INF/container.xml", cbuf.data());
 
       // save images
-      uz.addDirectory("Pictures");
+      //uz.addDirectory("Pictures");
       foreach(ImageStoreItem* ip, imageStore) {
             if (!ip->isUsed(this))
                   continue;
