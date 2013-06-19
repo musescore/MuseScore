@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Articulation</string>
+      <string notr="true">Articulation</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -25,7 +25,7 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Direction:</string>
+           <string notr="true">Direction:</string>
           </property>
          </widget>
         </item>
@@ -61,7 +61,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Anchor:</string>
+           <string notr="true">Anchor:</string>
           </property>
          </widget>
         </item>

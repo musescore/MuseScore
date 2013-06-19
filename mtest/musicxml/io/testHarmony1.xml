@@ -46,7 +46,7 @@
         <root>
           <root-step>C</root-step>
           </root>
-        <kind text="">major</kind>
+        <kind>major</kind>
         </harmony>
       <note>
         <pitch>
@@ -102,7 +102,7 @@
         <root>
           <root-step>C</root-step>
           </root>
-        <kind text="+">augmented</kind>
+        <kind use-symbols="yes">augmented</kind>
         </harmony>
       <note>
         <pitch>

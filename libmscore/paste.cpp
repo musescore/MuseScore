@@ -162,14 +162,13 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
             int staves        = e.intAttribute("staves", 0);
             e.setTick(tickStart);
 
-            QSet<int> blackList;
             for (int i = 0; i < staves; ++i) {
                   int staffIdx = i + dstStaffStart;
                   if (staffIdx >= nstaves())
                         break;
                   if (!makeGap1(dst->tick(), staffIdx, Fraction::fromTicks(tickLen))) {
-qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
-                        blackList.insert(staffIdx);
+                        qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
+                        return;
                         }
                   }
             bool pasted = false;
@@ -179,10 +178,6 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         break;
                         }
                   int srcStaffIdx = e.attribute("id", "0").toInt();
-                  if (blackList.contains(srcStaffIdx)) {
-                        e.skipCurrentElement();
-                        continue;
-                        }
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
                   if (dstStaffIdx >= nstaves())
                         break;
@@ -283,13 +278,11 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               harmony->setTrack(e.track());
                               harmony->read(e);
                               harmony->setTrack(dstStaffIdx * VOICES);
-                              //transpose
+                              // transpose
                               Part* partDest = staff(dstStaffIdx)->part();
-                              Part* partSrc = staff(srcStaffIdx)->part();
-                              Interval intervalDest = partDest->instr()->transpose();
-                              Interval intervalSrc = partSrc->instr()->transpose();
-                              Interval interval = Interval(intervalSrc.diatonic - intervalDest.diatonic, intervalSrc.chromatic - intervalDest.chromatic);
-                              if (!styleB(ST_concertPitch)) {
+                              Interval interval = partDest->instr()->transpose();
+                              if (!styleB(ST_concertPitch) && !interval.isZero()) {
+                                    interval.flip();
                                     int rootTpc = transposeTpc(harmony->rootTpc(), interval, false);
                                     int baseTpc = transposeTpc(harmony->baseTpc(), interval, false);
                                     undoTransposeHarmony(harmony, rootTpc, baseTpc);

@@ -245,7 +245,7 @@ class Measure : public MeasureBase {
 
       bool createEndBarLines();
 
-      void setEndBarLineType(BarLineType val, bool g, bool visible = true, QColor color = Qt::black);
+      void setEndBarLineType(BarLineType val, bool g, bool visible = true, QColor color = QColor());
       BarLineType endBarLineType() const        { return _endBarLineType; }
 
       void setMmEndBarLineType(BarLineType v)   { _mmEndBarLineType = v;    }

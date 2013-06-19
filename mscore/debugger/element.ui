@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>412</width>
-    <height>212</height>
+    <height>236</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -241,7 +241,7 @@
            <string notr="true"/>
           </property>
           <property name="frameShape">
-            <set>QFrame::Box</set>
+           <enum>QFrame::Box</enum>
           </property>
          </widget>
         </item>

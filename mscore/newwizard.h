@@ -52,6 +52,7 @@ class InstrumentWizard : public QWidget, private Ui::InstrumentWizard {
       void on_linkedButton_clicked();
       void on_belowButton_clicked();
       void buildTemplateList();
+      void expandOrCollapse(const QModelIndex &);
 
       void on_search_textChanged(const QString &searchPhrase);
 

@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>475</width>
-    <height>154</height>
+    <height>160</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>0</string>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -23,7 +23,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>SlurSegment</string>
+      <string notr="true">SlurSegment</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -86,7 +86,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>UP1:</string>
+         <string notr="true">UP1:</string>
         </property>
        </widget>
       </item>
@@ -125,7 +125,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>UP2:</string>
+         <string notr="true">UP2:</string>
         </property>
        </widget>
       </item>
@@ -308,42 +308,42 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>UP3:</string>
+         <string notr="true">UP3:</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>UP4:</string>
+         <string notr="true">UP4:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>pos-x</string>
+         <string notr="true">pos-x</string>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>pos-y</string>
+         <string notr="true">pos-y</string>
         </property>
        </widget>
       </item>
       <item row="0" column="3">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>offset-x</string>
+         <string notr="true">offset-x</string>
         </property>
        </widget>
       </item>
       <item row="0" column="4">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>offset-y</string>
+         <string notr="true">offset-y</string>
         </property>
        </widget>
       </item>

@@ -68,6 +68,7 @@ InstrumentWizard::InstrumentWizard(QWidget* parent)
       linkedButton->setEnabled(false);
       belowButton->setEnabled(false);
       connect(showMore, SIGNAL(clicked()), SLOT(buildTemplateList()));
+      connect( instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
       }
 
 //---------------------------------------------------------
@@ -83,6 +84,17 @@ void InstrumentWizard::buildTemplateList()
       populateInstrumentList(instrumentList, showMore->isChecked());
       }
 
+//---------------------------------------------------------
+//   expandOrCollapse
+//---------------------------------------------------------
+
+void InstrumentWizard::expandOrCollapse(const QModelIndex &model)
+      {
+      if(instrumentList->isExpanded(model))
+            instrumentList->collapse(model);
+      else
+            instrumentList->expand(model);
+      }
 
 //---------------------------------------------------------
 //   init

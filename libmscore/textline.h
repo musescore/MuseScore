@@ -127,7 +127,7 @@ class TextLine : public SLine {
       Spatium endHookHeight() const           { return _endHookHeight;        }
 
       Spatium lineWidth() const               { return _lineWidth;            }
-      QColor lineColor() const                { return _lineColor;            }
+      QColor lineColor() const                { return (_lineColor == Qt::black)? curColor() : _lineColor; }
       Qt::PenStyle lineStyle() const          { return _lineStyle;            }
       void setLineWidth(const Spatium& v)     { _lineWidth = v;               }
       void setLineColor(const QColor& v)      { _lineColor = v;               }

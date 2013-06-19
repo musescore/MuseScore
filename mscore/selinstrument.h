@@ -37,6 +37,7 @@ class SelectInstrument : public QDialog, private Ui::SelectInstrument {
 
    private slots:
       void buildTemplateList();
+      void expandOrCollapse(const QModelIndex &);
       void on_instrumentList_itemSelectionChanged();
       void on_instrumentList_itemDoubleClicked(QTreeWidgetItem* item, int);
 

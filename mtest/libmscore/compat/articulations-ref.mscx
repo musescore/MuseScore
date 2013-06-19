@@ -19,6 +19,9 @@
       <beamMinLen>1.25</beamMinLen>
       <propertyDistanceStem>0.5</propertyDistanceStem>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <chordStyle>custom</chordStyle>
+      <chordsXmlFile>1</chordsXmlFile>
+      <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
       <voltaY>-2</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <page-layout>

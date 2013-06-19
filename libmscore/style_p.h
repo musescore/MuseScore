@@ -115,7 +115,7 @@ class StyleData : public QSharedData {
 
       const ChordDescription* chordDescription(int id) const;
       ChordList* chordList() const;
-      void setChordList(ChordList*);      // Style gets ownership of ChordList
+      void setChordList(ChordList*, bool custom);     // Style gets ownership of ChordList
       const PageFormat* pageFormat() const           { return &_pageFormat; }
       void setPageFormat(const PageFormat& pf);
       friend class MStyle;
