@@ -72,14 +72,12 @@ class Harmony : public Text {
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
                                           // or notation of base note in chord
-      int _id;                            // >0 = matched chord from chord list
-                                          // -1 = no match
-                                          // 0 = matched a chord with no id - use info, but don't record id in score file
+      int _id;                            // >0 = id of matched chord from chord list, if applicable
+                                          // -1 = invalid chord
+                                          // <-10000 = private id of generated chord or matched chord with no id
       QString _userName;                  // name as typed by user if applicable
-      QString _textName;                  // name recognized from chord list, read from score file, or constructed by degrees
+      QString _textName;                  // name recognized from chord list, read from score file, or constructed from imported source
       ParsedChord* _parsedForm;           // parsed form of chord
-      const ChordDescription* _description;
-                                          // matched chord description from list, if applicable
 
       QList<HDegree> _degreeList;
       QList<QFont> fontList;              // temp values used in render()
@@ -107,6 +105,10 @@ class Harmony : public Text {
       bool rightParen() const                  { return _rightParen;   }
 
       const ChordDescription* descr() const;
+      const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;
+      const ChordDescription* getDescription();
+      const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
+      const ChordDescription* generateDescription();
 
       virtual void layout();
 
@@ -125,7 +127,7 @@ class Harmony : public Text {
       void setBaseTpc(int val)                 { _baseTpc = val;       }
       int rootTpc() const                      { return _rootTpc;      }
       void setRootTpc(int val)                 { _rootTpc = val;       }
-      void setNameFromId();
+      void setTextName(const QString& s)       { _textName = s;        }
       void addDegree(const HDegree& d);
       int numberOfDegrees() const;
       HDegree degree(int i) const;
@@ -137,12 +139,14 @@ class Harmony : public Text {
       QString harmonyName() const;
       void render(const TextStyle* ts = 0);
 
-      bool parseHarmony(const QString& s, int* root, int* base);
+      const ChordDescription* parseHarmony(const QString& s, int* root, int* base, bool syntaxOnly = false);
 
-      // extension name is used by MusicXml export as <kind text="name">xmlKind</>
+      const QString& extensionName() const;
 
-      QString extensionName() const;
       QString xmlKind() const;
+      QString xmlText() const;
+      QString xmlSymbols() const;
+      QString xmlParens() const;
       QStringList xmlDegrees() const;
 
       void resolveDegreeList();
@@ -150,7 +154,8 @@ class Harmony : public Text {
       virtual bool isEmpty() const;
       virtual qreal baseLine() const;
 
-      const ChordDescription* fromXml(const QString& s,  const QList<HDegree>&);
+      const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&);
+      const ChordDescription* fromXml(const QString& s, const QList<HDegree>&);
       const ChordDescription* fromXml(const QString& s);
       virtual void spatiumChanged(qreal oldValue, qreal newValue);
       virtual QLineF dragAnchor() const;
