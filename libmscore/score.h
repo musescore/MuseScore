@@ -422,6 +422,7 @@ class Score : public QObject {
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);
       void createPlayEvents();
+      void insertTime(int tickPos, int tickLen);
 
    protected:
       SynthesizerState _synthesizerState;
@@ -512,6 +513,7 @@ class Score : public QObject {
       void undoPropertyChanged(Element*, P_ID, const QVariant& v);
       UndoStack* undo() const;
       void undo(UndoCommand* cmd) const;
+      void undoRemoveMeasures(Measure*, Measure*);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
 
@@ -620,6 +622,7 @@ class Score : public QObject {
       MeasureBase* tick2measureBase(int tick) const;
       Segment* tick2segment(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll) const;
       Segment* tick2segmentEnd(int track, int tick) const;
+      Segment* tick2nearestSegment(int tick) const;
       void fixTicks();
       bool addArticulation(Element*, Articulation* atr);
 

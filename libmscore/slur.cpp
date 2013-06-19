@@ -629,7 +629,6 @@ SlurTie::SlurTie(const SlurTie& t)
       _up            = t._up;
       _slurDirection = t._slurDirection;
       _lineType      = t._lineType;
-      // delSegments    = t.delSegments;
       }
 
 //---------------------------------------------------------

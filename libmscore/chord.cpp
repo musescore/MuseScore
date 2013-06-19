@@ -780,8 +780,10 @@ Note* Chord::selectedNote() const
 
 void Chord::write(Xml& xml) const
       {
-      for (Chord* c : _graceNotes)
+      for (Chord* c : _graceNotes) {
+            c->writeBeam(xml);
             c->write(xml);
+            }
 
       for (Element* e : _el) {
             if (e->type() == Element::SLUR) {
@@ -791,28 +793,27 @@ void Chord::write(Xml& xml) const
             }
       xml.stag("Chord");
       ChordRest::writeProperties(xml);
-      if (_noteType != NOTE_NORMAL) {
-            switch(_noteType) {
-                  case NOTE_INVALID:
-                  case NOTE_NORMAL:
-                        break;
-                  case NOTE_ACCIACCATURA:
-                        xml.tagE("acciaccatura");
-                        break;
-                  case NOTE_APPOGGIATURA:
-                        xml.tagE("appoggiatura");
-                        break;
-     	            case NOTE_GRACE4:
-                        xml.tagE("grace4");
-                        break;
-                  case NOTE_GRACE16:
-                        xml.tagE("grace16");
-                        break;
-                  case NOTE_GRACE32:
-                        xml.tagE("grace32");
-                        break;
-                  }
+      switch (_noteType) {
+            case NOTE_INVALID:
+            case NOTE_NORMAL:
+                  break;
+            case NOTE_ACCIACCATURA:
+                  xml.tagE("acciaccatura");
+                  break;
+            case NOTE_APPOGGIATURA:
+                  xml.tagE("appoggiatura");
+                  break;
+     	      case NOTE_GRACE4:
+                  xml.tagE("grace4");
+                  break;
+            case NOTE_GRACE16:
+                  xml.tagE("grace16");
+                  break;
+            case NOTE_GRACE32:
+                  xml.tagE("grace32");
+                  break;
             }
+
       if (_noStem)
             xml.tag("noStem", _noStem);
       else if (_stem && (!_stem->userOff().isNull() || (_stem->userLen() != 0.0) || !_stem->visible() || (_stem->color() != MScore::defaultColor)))
@@ -824,16 +825,14 @@ void Chord::write(Xml& xml) const
             case MScore::DOWN: xml.tag("StemDirection", QVariant("down")); break;
             case MScore::AUTO: break;
             }
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i)
-            _notes.at(i)->write(xml);
+      for (Note* n : _notes)
+            n->write(xml);
       if (_arpeggio)
             _arpeggio->write(xml);
       if (_glissando)
             _glissando->write(xml);
       if (_tremolo)
             _tremolo->write(xml);
-      n = _el.size();
       for (Element* e : _el) {
             if (e->type() == Element::SLUR) {
                   Slur* gs = static_cast<Slur*>(e);
@@ -1491,6 +1490,7 @@ void Chord::layoutPitched()
       {
       for (Chord* c : _graceNotes)
             c->layoutPitched();
+
       qreal _spatium  = spatium();
       qreal minNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
 
@@ -1501,9 +1501,9 @@ void Chord::layoutPitched()
             }
       setDotPosX(-1000.0);
 
-      qreal lll       = 0.0;                    // space to leave at left of chord
-      qreal rrr       = 0.0;                    // space to leave at right of chord
-      Note* upnote    = upNote();
+      qreal lll    = 0.0;         // space to leave at left of chord
+      qreal rrr    = 0.0;         // space to leave at right of chord
+      Note* upnote = upNote();
 
       delete _tabDur;   // no TAB? no duration symbol! (may happen when converting a TAB into PITCHED)
       _tabDur = 0;
@@ -1609,23 +1609,26 @@ void Chord::layoutPitched()
             }
 
       _space.setLw(lll);
-      _space.setRw(rrr + ipos().x());
+//      _space.setRw(rrr + ipos().x()); // does not work with grace notes
+      _space.setRw(rrr);
 
       int n = _graceNotes.size();
-      qreal x = -(_space.lw() + minNoteDistance);
-      qreal graceMag = score()->styleD(ST_graceNoteMag);
-      for (int i = n-1; i >= 0; --i) {
-            Chord* c = _graceNotes[i];
-            x -= c->space().rw();
-            c->setPos(x, 0);
-            x -= c->space().lw() + minNoteDistance * graceMag;
-            for (Element* e : c->el()) {
-                  if (e->type() == Element::SLUR)
-                        e->layout();
+      if (n) {
+            qreal x = -(_space.lw() + minNoteDistance);
+            qreal graceMag = score()->styleD(ST_graceNoteMag);
+            for (int i = n-1; i >= 0; --i) {
+                  Chord* c = _graceNotes[i];
+                  x -= c->space().rw();
+                  c->setPos(x, 0);
+                  x -= c->space().lw() + minNoteDistance * graceMag;
+                  for (Element* e : c->el()) {
+                        if (e->type() == Element::SLUR)
+                              e->layout();
+                        }
                   }
+            if (-x > _space.lw())
+                  _space.setLw(-x);
             }
-      if (-x > _space.lw())
-            _space.setLw(-x);
 
       for (Element* e : _el) {
             if (e->type() != Element::SLUR) {

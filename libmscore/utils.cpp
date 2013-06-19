@@ -111,13 +111,10 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
             return 0;
             }
       // loop over all segments
-      for (Segment* segment = m->first(); segment; segment = segment->next()) {
-            Element* el = segment->element(track);
-            if (!el)
+      for (Segment* segment = m->first(Segment::SegChordRest); segment; segment = segment->next(Segment::SegChordRest)) {
+            ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
+            if (!cr)
                   continue;
-            if (!el->isChordRest())
-                  continue;
-            ChordRest* cr = static_cast<ChordRest*>(el);
             // TODO LVI: check if following is correct, see exceptions in
             // ExportMusicXml::chord() and ExportMusicXml::rest()
             int endTick = cr->tick() + cr->actualTicks();
@@ -130,6 +127,29 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
                   // endTick > tick (beyond the tick we are looking for)
                   return 0;
                   }
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   tick2nearestSegment
+//---------------------------------------------------------
+
+Segment* Score::tick2nearestSegment(int tick) const
+      {
+      Measure* m = tick2measure(tick);
+      if (m == 0) {
+            qDebug("tick2nearestSegment(): not found tick %d\n", tick);
+            return 0;
+            }
+      // loop over all segments
+      Segment* ps = 0;
+      for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
+            if (tick < s->tick())
+                  return ps;
+            else if (tick == s->tick())
+                  return s;
+            ps = s;
             }
       return 0;
       }

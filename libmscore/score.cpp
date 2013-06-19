@@ -194,28 +194,6 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
             nm->setPrev(lm);
       else
             _last = lm;
-      for (MeasureBase* mb = fm;;) {
-            if (mb->type() == Measure::MEASURE) {
-                  Measure* m = static_cast<Measure*>(mb);
-                  Segment::SegmentTypes st = Segment::SegChordRest;
-                  for (Segment* s = m->first(st); s; s = s->next(st)) {
-                        foreach(Element* e, s->elist()) {
-                              if (e) {
-#if 0 // TODO-S
-                                    ChordRest* cr = static_cast<ChordRest*>(e);
-                                    for (Spanner* s = cr->spannerFor(); s; s = s->next())
-                                          s->setStartElement(cr);
-                                    for (Spanner* s = cr->spannerBack(); s; s = s->next())
-                                          s->setEndElement(cr);
-#endif
-                                    }
-                              }
-                        }
-                  }
-            if (mb == lm)
-                  break;
-            mb = mb->next();
-            }
       }
 
 //---------------------------------------------------------
@@ -465,7 +443,6 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
       {
       m->setNext(pos);
       _measures.add(m);
-      addLayoutFlags(LAYOUT_FIX_TICKS);
       }
 
 //---------------------------------------------------------
@@ -565,11 +542,10 @@ void Score::fixTicks()
             number += m->noOffset();
             if (m->no() != number)
                   m->setNo(number);
+
             if (m->sectionBreak())
                   number = 0;
-            else if (m->irregular())      // dont count measure
-                  ;
-            else
+            else if (!m->irregular())      // dont count measure
                   ++number;
 
             //
@@ -1384,6 +1360,7 @@ void Score::addElement(Element* element)
             case Element::TRILL:
             case Element::PEDAL:
             case Element::TEXTLINE:
+            case Element::HAIRPIN:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
                   foreach(SpannerSegment* ss, spanner->spannerSegments()) {
@@ -1402,7 +1379,6 @@ void Score::addElement(Element* element)
                         }
                   }
                   addLayoutFlags(LAYOUT_PLAY_EVENTS);
-//                  setLayoutAll(true);
                   break;
 
 #if 0 // TODO-S
@@ -1541,19 +1517,15 @@ void Score::removeElement(Element* element)
                         if (ss->system())
                               ss->system()->remove(ss);
                         }
-                  _spanner.removeOne(slur);
                   }
                   addLayoutFlags(LAYOUT_PLAY_EVENTS);
-//                  setLayoutAll(true);
                   break;
 
-#if 0 // TODO-S
             case Element::VOLTA:
             case Element::TRILL:
             case Element::PEDAL:
             case Element::TEXTLINE:
-//            case Element::HAIRPIN:
-//            case Element::TIE:
+            case Element::HAIRPIN:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
                   foreach(SpannerSegment* ss, spanner->spannerSegments()) {
@@ -1563,6 +1535,7 @@ void Score::removeElement(Element* element)
                   }
                   break;
 
+#if 0 // TODO-S
             case Element::OTTAVA:
                   {
                   Ottava* o = static_cast<Ottava*>(element);
@@ -3422,6 +3395,87 @@ bool Score::isSpannerStartEnd(int tick, int track) const
                   return true;
             }
       return false;
+      }
+
+//---------------------------------------------------------
+//   insertTime
+//---------------------------------------------------------
+
+void Score::insertTime(int tick, int len)
+      {
+      if (len == 0)
+            return;
+
+      foreach (Spanner* s, _spanner) {
+            if (s->tick2() < tick)
+                  continue;
+            printf("   change spanner %d+%d\n", s->tick(), s->tickLen());
+            if (len > 0) {
+                  if (tick > s->tick() && tick < s->tick2()) {
+                        //
+                        //  case a:
+                        //  +----spanner--------+
+                        //    +---add---
+                        //
+                        undoChangeProperty(s, P_SPANNER_TICKLEN, s->tickLen() + len);
+                       }
+                  else if (tick < s->tick()) {
+                        //
+                        //  case b:
+                        //       +----spanner--------
+                        //  +---add---
+                        //
+                        undoChangeProperty(s, P_SPANNER_TICK, s->tick() + len);
+                        }
+                  }
+            else {
+                  int tick2 = tick - len;
+                  if (s->tick() > tick2) {
+                        //
+                        //  case A:
+                        //  +----remove---+ +---spanner---+
+                        //
+                        int t = s->tick() + len;
+                        if (t < 0)
+                              t = 0;
+                        undoChangeProperty(s, P_SPANNER_TICK, t);
+                        }
+                  else if ((s->tick() < tick) && (s->tick2() > tick2)) {
+                        //
+                        //  case B:
+                        //  +----spanner--------+
+                        //    +---remove---+
+                        //
+                        int l = s->tickLen() + len;
+                        if (l > 0)
+                              undoChangeProperty(s, P_SPANNER_TICKLEN, l);
+                        }
+                  else if (s->tick() >= tick && s->tick2() < tick2) {
+                        //
+                        //  case C:
+                        //    +---spanner---+
+                        //  +----remove--------+
+                        //
+                        undoRemoveElement(s);
+                        }
+                  else if (s->tick() > tick && s->tick2() >= tick2) {
+                        //
+                        //  case D:
+                        //       +----spanner--------+
+                        //  +---remove---+
+                        //
+                        int d1 = s->tick() - tick;
+                        int d2 = tick2 - s->tick();
+                        int len = s->tickLen() - d2;
+                        if (len == 0)
+                             undoRemoveElement(s);
+                        else {
+                              undoChangeProperty(s, P_SPANNER_TICK, s->tick() - d1);
+                              undoChangeProperty(s, P_SPANNER_TICKLEN, s->tickLen() - d2);
+                              }
+                        }
+                  }
+            }
       }
 
 }

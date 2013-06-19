@@ -47,7 +47,7 @@ class ChordRest : public DurationElement {
       Q_PROPERTY(int      durationType  READ durationTypeTicks WRITE setDurationType);
       Q_PROPERTY(BeamMode beamMode      READ beamMode          WRITE undoSetBeamMode);
 
-      QList<Element*> _annotations;
+//      QList<Element*> _annotations;
 
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
@@ -66,6 +66,7 @@ class ChordRest : public DurationElement {
       // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
       int _crossMeasure;            ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
       TDuration _crossMeasureTDur;  ///< the total Duration type of the combined notes
+
 
    public:
       ChordRest(Score*);
@@ -113,9 +114,9 @@ class ChordRest : public DurationElement {
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
 
-      const QList<Element*>& annotations() const { return _annotations;        }
-      QList<Element*>& annotations()             { return _annotations;        }
-      void removeAnnotation(Element* e)          { _annotations.removeOne(e);  }
+//      const QList<Element*>& annotations() const { return _annotations;        }
+//      QList<Element*>& annotations()             { return _annotations;        }
+//      void removeAnnotation(Element* e)          { _annotations.removeOne(e);  }
 
       void layoutArticulations();
 
@@ -153,6 +154,7 @@ class ChordRest : public DurationElement {
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
       bool isGrace() const;
+      void writeBeam(Xml& xml);
       };
 
 

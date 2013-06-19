@@ -332,9 +332,6 @@ QVariant Spanner::propertyDefault(P_ID propertyId) const
       return Element::propertyDefault(propertyId);
       }
 
-Segment* Spanner::startSegment() const { return score()->tick2segment(tick()); }
-Segment* Spanner::endSegment() const   { return score()->tick2segment(tick2()); }
-
 //---------------------------------------------------------
 //   findCR
 //---------------------------------------------------------
@@ -407,11 +404,19 @@ void Spanner::computeEndElement()
       _endElement = e;
       }
 
+//---------------------------------------------------------
+//   setStartChord
+//---------------------------------------------------------
+
 void Spanner::setStartChord(Chord* c)
       {
       _anchor = ANCHOR_CHORD;
       _startElement = c;
       }
+
+//---------------------------------------------------------
+//   startChord
+//---------------------------------------------------------
 
 Chord* Spanner::startChord() const
       {
@@ -419,10 +424,18 @@ Chord* Spanner::startChord() const
       return static_cast<Chord*>(_startElement);
       }
 
+//---------------------------------------------------------
+//   setEndChord
+//---------------------------------------------------------
+
 void Spanner::setEndChord(Chord* c)
       {
       _endElement = c;
       }
+
+//---------------------------------------------------------
+//   endChord
+//---------------------------------------------------------
 
 Chord* Spanner::endChord() const
       {
@@ -430,16 +443,42 @@ Chord* Spanner::endChord() const
       return static_cast<Chord*>(_endElement);
       }
 
+//---------------------------------------------------------
+//   startCR
+//---------------------------------------------------------
+
 ChordRest* Spanner::startCR() const
       {
       Q_ASSERT(_anchor == ANCHOR_SEGMENT || _anchor == ANCHOR_CHORD);
       return static_cast<ChordRest*>(_startElement);
       }
 
+//---------------------------------------------------------
+//   endCR
+//---------------------------------------------------------
+
 ChordRest* Spanner::endCR() const
       {
       Q_ASSERT(_anchor == ANCHOR_SEGMENT || _anchor == ANCHOR_CHORD);
       return static_cast<ChordRest*>(_endElement);
+      }
+
+//---------------------------------------------------------
+//   startSegment
+//---------------------------------------------------------
+
+Segment* Spanner::startSegment() const
+      {
+      return score()->tick2segment(tick());
+      }
+
+//---------------------------------------------------------
+//   endSegment
+//---------------------------------------------------------
+
+Segment* Spanner::endSegment() const
+      {
+      return score()->tick2segment(tick2());
       }
 
 }

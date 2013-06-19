@@ -35,18 +35,14 @@ class TrackList : public QList<Element*>
       ScoreRange* _range;
 
       Tuplet* writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const;
-      void append(Element*, QHash<Spanner*, Spanner*>*);
-      void readSpanner(int track, Spanner* spannerFor,
-         Spanner* spannerBack, ChordRest* dst, QHash<Spanner*,Spanner*>* map);
-      void writeSpanner(int track, ChordRest* src, ChordRest* dst,
-         Segment* segment, QHash<Spanner*, Spanner*>* map) const;
+      void append(Element*);
 
    public:
       TrackList(ScoreRange* r) { _range = r; }
       ~TrackList();
-      void read(int track, const Segment* fs, const Segment* ls, QHash<Spanner*, Spanner*>*);
+      void read(int track, const Segment* fs, const Segment* ls);
       bool canWrite(const Fraction& f) const;
-      bool write(int track, Measure*, QHash<Spanner*, Spanner*>*) const;
+      bool write(int track, Measure*) const;
       Fraction duration() const  { return _duration; }
       ScoreRange* range() const { return _range; }
       void appendGap(const Fraction&);
@@ -54,14 +50,26 @@ class TrackList : public QList<Element*>
       };
 
 //---------------------------------------------------------
+//   Annotation
+//---------------------------------------------------------
+
+struct Annotation {
+      int tick;
+      Element* e;
+      };
+
+//---------------------------------------------------------
 //   ScoreRange
 //---------------------------------------------------------
 
 class ScoreRange {
-      mutable QHash<Spanner*, Spanner*> spannerMap;
       QList<TrackList*> tracks;
       Segment* _first;
       Segment* _last;
+
+   protected:
+      QList<Spanner*> spanner;
+      QList<Annotation> annotations;
 
    public:
       ScoreRange() {}
@@ -73,7 +81,8 @@ class ScoreRange {
       Segment* first() const { return _first; }
       Segment* last() const  { return _last;  }
       void fill(const Fraction&);
-//      void check() const;
+
+      friend class TrackList;
       };
 
 

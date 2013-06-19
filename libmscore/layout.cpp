@@ -1356,7 +1356,7 @@ void Score::add(Element* el)
             case Element::VBOX:
             case Element::TBOX:
             case Element::FBOX:
-                  measures()->add((MeasureBase*)el);
+                  measures()->add(static_cast<MeasureBase*>(el));
                   break;
             case Element::BEAM:
                   {

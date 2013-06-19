@@ -207,7 +207,6 @@ QPointF LineSegment::gripAnchor(int grip) const
 
 bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
-#if 1 // TODO-S
       if (!((modifiers & Qt::ShiftModifier)
          && ((spannerSegmentType() == SEGMENT_SINGLE)
               || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == GRIP_LINE_START)
@@ -221,23 +220,16 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
       int track   = l->track();
 
       if (l->anchor() == Spanner::ANCHOR_SEGMENT) {
-            Segment* s1 = static_cast<Segment*>(l->startElement());
-            Segment* s2 = static_cast<Segment*>(l->endElement());
-
-            bool removeSegment = false;
+            Segment* s1 = score()->tick2nearestSegment(spanner()->tick());
+            Segment* s2 = score()->tick2nearestSegment(spanner()->tick2());
+            if (!s1 || !s2)
+                  return true;
 
             if (key == Qt::Key_Left) {
-                  if (curGrip == GRIP_LINE_START) {
+                  if (curGrip == GRIP_LINE_START)
                         s1 = prevSeg1(s1, track);
-                        }
-                  else if (curGrip == GRIP_LINE_END) {
+                  else if (curGrip == GRIP_LINE_END)
                         s2 = prevSeg1(s2, track);
-                        if (s2
-                           && (s2->system()->firstMeasure() == s2->measure())
-                           && (s2->tick() == s2->measure()->tick())) {
-                              removeSegment = true;
-                              }
-                        }
                   }
             else if (key == Qt::Key_Right) {
                   if (curGrip == GRIP_LINE_START)
@@ -251,26 +243,10 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                   }
             if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick())
                   return true;
-
-            if (l->startElement() != s1) {
-                  if (s1->system() != (static_cast<Segment*>(l->startElement())->system())) {
-                        bspDirty = true;
-                        if (key == Qt::Key_Right)
-                              ls = l->takeFirstSegment();
-                        }
-                  static_cast<Segment*>(l->startElement())->remove(l);
-                  l->setTick(s1->tick());
-                  s1->add(l);
-                  }
-            else if (l->endElement() != s2) {
-                  if (removeSegment) {
-                        bspDirty = true;
-                        if (key == Qt::Key_Left)
-                              ls = l->takeLastSegment();
-                        }
-
-                  l->setTickLen(s2->tick() - l->tick());
-                  }
+            if (s1->tick() != spanner()->tick())
+                  spanner()->setTick(s1->tick());
+            if (s2->tick() != spanner()->tick2())
+                  spanner()->setTick2(s2->tick());
             }
       else {
             Measure* m1 = static_cast<Measure*>(l->startElement());
@@ -345,7 +321,6 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
             _score->rebuildBspTree();
       if (ls)
             _score->undoRemoveElement(ls);
-#endif
       return true;
       }
 
@@ -452,21 +427,10 @@ QPointF SLine::linePos(int grip, System** sys)
       switch(anchor()) {
             case Spanner::ANCHOR_SEGMENT:
                   {
-                  Segment* seg = static_cast<Segment*>(grip == 0 ? startElement() : endElement());
-                  Measure* m   = seg->measure();
-                  *sys         = m->system();
-                  if (*sys == 0)
-                        return QPointF(x, 0.0);
-                  x = seg->pos().x() + m->pos().x();
-                  if (grip == GRIP_LINE_END) {
-                        if (((*sys)->firstMeasure() == m) && (seg->tick() == m->tick())) {
-                              m = m->prevMeasure();
-                              if (m) {
-                                    *sys = m->system();
-                                    x = m->pos().x() + m->width();
-                                    }
-                              }
-                        }
+                  int t      = grip == GRIP_LINE_START ? tick() : tick2();
+                  Measure* m = score()->tick2measure(t);
+                  *sys  = m->system();
+                  x     = m->tick2pos(t);
                   }
                   break;
 
@@ -515,11 +479,7 @@ QPointF SLine::linePos(int grip, System** sys)
                   qFatal("Sline::linePos(): anchor not implemented\n");
                   break;
             }
-
-      //DEBUG:
-      if ((*sys)->staves()->isEmpty())
-            return QPointF(x, 0.0);
-      qreal y = (*sys)->staff(staffIdx())->y();
+      qreal y = (*sys)->staves()->isEmpty() ? 0.0 : (*sys)->staff(staffIdx())->y();
       return QPointF(x, y);
       }
 
@@ -541,11 +501,6 @@ void SLine::layout()
                   s->layout();
                   setbbox(s->bbox());
                   }
-            return;
-            }
-      if (startElement() == 0 || endElement() == 0) {
-            qDebug("SLine::layout() failed: %s %s", parent()->name(), name());
-            qDebug("   start %p   end %p", startElement(), endElement());
             return;
             }
 
@@ -612,7 +567,6 @@ void SLine::layout()
                   // single segment
                   seg->setSpannerSegmentType(SEGMENT_SINGLE);
                   seg->setPos(p1);
-                  // seg->setPos2(QPointF(p2.x() - p1.x(), 0.0));
                   seg->setPos2(p2 - p1);
                   }
             else if (i == sysIdx1) {

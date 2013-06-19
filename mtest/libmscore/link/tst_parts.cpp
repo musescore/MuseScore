@@ -247,7 +247,7 @@ Score* TestParts::doAddBreath()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(480, false);
+      Segment* s   = m->tick2segment(480);
       Chord* chord = static_cast<Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
@@ -382,7 +382,7 @@ Score* TestParts::doAddFingering()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(480, false);
+      Segment* s   = m->tick2segment(480);
       Chord* chord = static_cast<Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
@@ -518,7 +518,7 @@ Score* TestParts::doAddSymbol()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(480, false);
+      Segment* s   = m->tick2segment(480);
       Chord* chord = static_cast<Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
@@ -654,7 +654,7 @@ Score* TestParts::doAddImage()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(480, false);
+      Segment* s   = m->tick2segment(480);
       Chord* chord = static_cast<Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
