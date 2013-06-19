@@ -163,14 +163,13 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
             int staves        = e.intAttribute("staves", 0);
             e.setTick(tickStart);
 
-            QSet<int> blackList;
             for (int i = 0; i < staves; ++i) {
                   int staffIdx = i + dstStaffStart;
                   if (staffIdx >= nstaves())
                         break;
                   if (!makeGap1(dst->tick(), staffIdx, Fraction::fromTicks(tickLen))) {
-qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
-                        blackList.insert(staffIdx);
+                        qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
+                        return;
                         }
                   }
             bool pasted = false;
@@ -180,10 +179,6 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         break;
                         }
                   int srcStaffIdx = e.attribute("id", "0").toInt();
-                  if (blackList.contains(srcStaffIdx)) {
-                        e.skipCurrentElement();
-                        continue;
-                        }
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
                   if (dstStaffIdx >= nstaves())
                         break;
