@@ -469,6 +469,7 @@ void Measure::layout(qreal width)
 
 //---------------------------------------------------------
 //   tick2pos
+//    return x position for tick relative to System
 //---------------------------------------------------------
 
 qreal Measure::tick2pos(int tck) const
@@ -485,33 +486,25 @@ qreal Measure::tick2pos(int tck) const
       qreal x2 = 0;
       int tick1 = tick();
       int tick2 = tick1;
-      for (s = first(); s; s = s->next()) {
-            if (s->segmentType() != Segment::SegChordRest)
-                  continue;
-            x2 = s->x();
+      for (s = first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
+            x2    = s->x();
             tick2 = s->tick();
-            if (tck <= tick2) {
-                  if (tck == tick2)
-                        x1 = x2;
+            if (tck == tick2)
+                  return x2 + pos().x();
+            if (tck <= tick2)
                   break;
-                  }
             x1    = x2;
             tick1 = tick2;
             }
       if (s == 0) {
+            printf("     no segment found\n");
             x2    = width();
-            tick2 = tick() + ticks();
+            tick2 = endTick();
             }
-      qreal x = 0;
-      if (tick2 > tick1) {
-            qreal dx = x2 - x1;
-            int dt    = tick2 - tick1;
-            if (dt == 0)
-                  x = 0.0;
-            else
-                  x = dx * (tck - tick1) / dt;
-            }
-      return x1 + x;
+      qreal dx = x2 - x1;
+      int dt   = tick2 - tick1;
+      x1      += (dt == 0) ? 0.0 : (dx * (tck - tick1) / dt);
+      return x1 + pos().x();
       }
 
 //---------------------------------------------------------

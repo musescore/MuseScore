@@ -394,7 +394,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
 
 //      range.check();
 
-      undo(new RemoveMeasures(fm, lm));
+      undoRemoveMeasures(fm, lm);
       //
       // calculate number of required measures = nm
       //
@@ -1256,7 +1256,7 @@ void Score::deleteItem(Element* el)
                   break;
 
             case Element::MEASURE:
-                  undo(new RemoveElement(el);
+                  undoRemoveMeasures(static_cast<Measure*>(el), static_cast<Measure*>(el));
                   break;
 
             default:
@@ -1314,7 +1314,10 @@ void Score::cmdDeleteSelectedMeasures()
       foreach (Score* score, scores) {
             MeasureBase* is = score->measure(startIdx);
             MeasureBase* ie = score->measure(endIdx);
+            int startTick = is->tick();
+            int ticks = 0;
             for (;;) {
+                  ticks += ie->ticks();
                   deleteItem(ie);
                   if (ie == is)
                         break;
@@ -1322,6 +1325,7 @@ void Score::cmdDeleteSelectedMeasures()
                   if (ie == 0)
                         break;
                   }
+            score->insertTime(startTick, -ticks);    // handle spanner
             }
 
       if (createEndBar) {
@@ -1854,6 +1858,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
             else {
                   undo(new InsertMeasure(mb, im));
                   }
+            insertTime(mb->tick(), mb->ticks());
             }
       if (type == Element::MEASURE && !createEmptyMeasures) {
             //
