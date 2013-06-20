@@ -36,7 +36,7 @@ static SynthesizerState defaultState = {
             },
             },
       { "Fluid", {
-            { 0, "fluid.sf3" },
+            { 0, "FluidR3_GM2-2.sf3" },
             },
             },
 //      { "Zerberus", {
