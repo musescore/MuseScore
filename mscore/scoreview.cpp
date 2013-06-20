@@ -3873,6 +3873,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             slur->setEndChord(static_cast<Chord*>(cr2));
             slur->setTrack(cr1->track());
             slur->setParent(cr1);
+            printf("undoAddElement %s %p\n", slur->name(), slur->parent());
             score()->undoAddElement(slur);
             _score->endCmd();
             return;
