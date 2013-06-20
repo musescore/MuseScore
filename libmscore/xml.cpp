@@ -213,20 +213,6 @@ void XmlReader::unknown() const
       }
 
 //---------------------------------------------------------
-//   findSpanner
-//---------------------------------------------------------
-
-Spanner* XmlReader::findSpanner(int id) const
-      {
-      int n = _spanner.size();
-      for (int i = n-1; i >= 0; --i) {
-            if (_spanner.at(i)->id() == id)
-                  return _spanner.at(i);
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   findBeam
 //---------------------------------------------------------
 
@@ -709,7 +695,6 @@ void Xml::dump(int len, const unsigned char* p)
 
 void Xml::htmlToString(XmlReader& e, int level, QString* s)
       {
-// printf("  html <%s>\n", e.name().toUtf8().data());
       *s += QString("<%1").arg(e.name().toString());
       QXmlStreamAttributes map = e.attributes();
       int n = map.size();
@@ -721,26 +706,21 @@ void Xml::htmlToString(XmlReader& e, int level, QString* s)
       ++level;
       for (;;) {
             QXmlStreamReader::TokenType t = e.readNext();
-//            printf("    token %d\n", int(t));
             switch(t) {
                   case QXmlStreamReader::StartElement:
-//                        printf("         start <%s>\n", e.name().toUtf8().data());
                         htmlToString(e, level, s);
                         break;
                   case QXmlStreamReader::EndElement:
-//                        printf("         end <%s>\n", e.name().toUtf8().data());
                         *s += QString("</%1>").arg(e.name().toString());
                         --level;
                         return;
                   case QXmlStreamReader::Characters:
-//                        printf("         char <%s>\n", e.text().toUtf8().data());
                         if (!e.isWhitespace())
                               *s += e.text().toString();
                         break;
                   case QXmlStreamReader::Comment:
                         break;
                   default:
-//                        printf("      ?? %d\n", int(t));
                         return;
                   }
             }
@@ -751,7 +731,6 @@ QString Xml::htmlToString(XmlReader& e)
       QString s;
       if (e.readNextStartElement()) {
             htmlToString(e, 0, &s);
-//            printf("====HTML<%s>====\n", qPrintable(s));
             e.skipCurrentElement();
             }
       return s;

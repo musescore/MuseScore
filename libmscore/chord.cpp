@@ -1619,23 +1619,19 @@ void Chord::layoutPitched()
                   x -= c->space().rw();
                   c->setPos(x, 0);
                   x -= c->space().lw() + minNoteDistance * graceMag;
-                  for (Element* e : c->el()) {
-                        if (e->type() == Element::SLUR)
-                              e->layout();
-                        }
                   }
             if (-x > _space.lw())
                   _space.setLw(-x);
             }
 
       for (Element* e : _el) {
-            if (e->type() != Element::SLUR) {
-                  e->layout();
-                  if (e->type() == CHORDLINE) {
-                        int x = bbox().translated(e->pos()).right();
-                        if (x > _space.rw())
-                              _space.setRw(x);
-                        }
+            if (e->type() == Element::SLUR)     // we cannot at this time as chordpositions are not fixed
+                  continue;
+            e->layout();
+            if (e->type() == CHORDLINE) {
+                  int x = bbox().translated(e->pos()).right();
+                  if (x > _space.rw())
+                        _space.setRw(x);
                   }
             }
       for (int i = 0; i < _notes.size(); ++i)

@@ -649,7 +649,6 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
 Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
       {
-qDebug("makeGap %s at %d track %d", qPrintable(_sd.print()), segment->tick(), track);
       assert(_sd.numerator());
 
       Measure* measure = segment->measure();
@@ -698,18 +697,13 @@ qDebug("makeGap %s at %d track %d", qPrintable(_sd.print()), segment->tick(), tr
                               }
                         t = t->tuplet();
                         }
-                  if (tupletEnd) {
-//                        qDebug("makeGap: end of tuplet reached");
+                  if (tupletEnd)
                         return akkumulated;
-                        }
                   }
             Fraction td(cr->duration());
-qDebug("remove %s %s at tick %d track %d",
-   cr->name(), qPrintable(cr->duration().print()), seg->tick(), track);
 
             Tuplet* ltuplet = cr->tuplet();
             if (cr->tuplet() != tuplet) {
-//                  qDebug("   remove tuplet %d", sd >= ltuplet->fraction());
                   //
                   // Current location points to the start of a (nested)tuplet.
                   // We have to remove the complete tuplet.
@@ -724,7 +718,6 @@ qDebug("remove %s %s at tick %d track %d",
                   tuplet = 0;
                   }
             else {
-qDebug("  makeGap: remove %d/%d at %d", td.numerator(), td.denominator(), cr->tick());
                   if(seg != firstSegment || !keepChord)
                         undoRemoveElement(cr);
                   if (seg->isEmpty() && seg != firstSegment)
@@ -744,18 +737,14 @@ qDebug("  makeGap: remove %d/%d at %d", td.numerator(), td.denominator(), cr->ti
                   akkumulated = _sd;
                   Fraction rd = td - sd;
 
-qDebug("  makeGap: %d/%d removed %d/%d too much", sd.numerator(), sd.denominator(), rd.numerator(), rd.denominator());
-
                   QList<TDuration> dList = toDurationList(rd, false);
                   if (dList.isEmpty())
                         return akkumulated;
-qDebug("   dList: %d\n", dList.size());
 
                   Fraction f(cr->staff()->timeStretch(cr->tick()) * sd);
                   for (Tuplet* t = tuplet; t; t = t->tuplet())
                         f /= t->ratio();
                   int tick  = cr->tick() + f.ticks();
-qDebug("   gap at tick %d+%d", cr->tick(), f.ticks());
 
                   if ((tuplet == 0) && (((measure->tick() - tick) % dList[0].ticks()) == 0)) {
                         foreach(TDuration d, dList) {
@@ -767,14 +756,10 @@ qDebug("   gap at tick %d+%d", cr->tick(), f.ticks());
                         for (int i = dList.size() - 1; i >= 0; --i)
                               tick += addClone(cr, tick, dList[i])->actualTicks();
                         }
-// qDebug("  return %d/%d", akkumulated.numerator(), akkumulated.denominator());
                   return akkumulated;
                   }
             akkumulated += td;
             sd          -= td;
-qDebug("  akkumulated %d/%d rest %d/%d (-%d/%d)",
-   akkumulated.numerator(), akkumulated.denominator(), sd.numerator(), sd.denominator(),
-   td.numerator(), td.denominator());
             if (sd.isZero())
                   return akkumulated;
             }

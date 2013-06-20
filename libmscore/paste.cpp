@@ -232,15 +232,16 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                            || tag == "Volta") {
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->setTrack(dstStaffIdx * VOICES);
+                              sp->setAnchor(Spanner::ANCHOR_SEGMENT);
                               sp->read(e);
                               sp->setTick(e.tick() - tickStart + dstTick);
-                              e.addSpanner(sp);
+                              addSpanner(sp);
                               }
                         else if (tag == "endSpanner") {
                               int id = e.intAttribute("id");
-                              Spanner* spanner = e.findSpanner(id);
+                              Spanner* spanner = findSpanner(id);
                               if (spanner) {
-                                    e.spanner().removeOne(spanner);
+                                    // e.spanner().removeOne(spanner);
                                     spanner->setTick2(e.tick() - tickStart + dstTick);
                                     undoAddElement(spanner);
                                     if (spanner->type() == Element::OTTAVA) {
@@ -384,12 +385,6 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                   if (selection().state() != SEL_RANGE)
                         _selection.setState(SEL_RANGE);
                   }
-            }
-
-      foreach(Spanner* sp, e.spanner()) {
-            printf("  %s %p %p\n", sp->name(), sp->startElement(), sp->endElement());
-            if (sp->tick() == -1 || sp->tickLen() == -1)
-                  delete sp;
             }
       foreach (Score* s, scoreList())     // for all parts
             s->connectTies();
