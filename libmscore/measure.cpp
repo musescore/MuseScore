@@ -298,45 +298,56 @@ void Measure::layoutChords0(Segment* segment, int startTrack)
       int staffIdx     = startTrack/VOICES;
       Staff* staff     = score()->staff(staffIdx);
       qreal staffMag  = staff->mag();
-      Drumset* drumset = 0;
-
-      if (staff->part()->instr()->useDrumset())
-            drumset = staff->part()->instr()->drumset();
 
       int endTrack = startTrack + VOICES;
       for (int track = startTrack; track < endTrack; ++track) {
             ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
             if (!cr)
                  continue;
-            qreal m = staffMag;
-            if (cr->small())
-                  m *= score()->styleD(ST_smallNoteMag);
+            layoutCR0(cr, staffMag);
+            }
+      }
 
-            if (cr->type() == CHORD) {
-                  Chord* chord = static_cast<Chord*>(cr);
+//---------------------------------------------------------
+//   layoutCR0
+//---------------------------------------------------------
 
-                  if (chord->noteType() != NOTE_NORMAL)
-                        m *= score()->styleD(ST_graceNoteMag);
-                  if (drumset) {
-                        foreach(Note* note, chord->notes()) {
-                              int pitch = note->pitch();
-                              if (!drumset->isValid(pitch)) {
-                                    // qDebug("unmapped drum note %d", pitch);
-                                    }
-                              else {
-                                    note->setHeadGroup(drumset->noteHead(pitch));
-                                    note->setLine(drumset->line(pitch));
-                                    continue;
-                                    }
+void Measure::layoutCR0(ChordRest* cr, qreal mm)
+      {
+      Drumset* drumset = 0;
+      if (cr->staff()->part()->instr()->useDrumset())
+            drumset = cr->staff()->part()->instr()->drumset();
+
+      qreal m = mm;
+      if (cr->small())
+            m *= score()->styleD(ST_smallNoteMag);
+
+      if (cr->type() == CHORD) {
+            Chord* chord = static_cast<Chord*>(cr);
+            for (Chord* c : chord->graceNotes())
+                  layoutCR0(c, mm);
+
+            if (chord->noteType() != NOTE_NORMAL)
+                  m *= score()->styleD(ST_graceNoteMag);
+            if (drumset) {
+                  foreach(Note* note, chord->notes()) {
+                        int pitch = note->pitch();
+                        if (!drumset->isValid(pitch)) {
+                              // qDebug("unmapped drum note %d", pitch);
+                              }
+                        else {
+                              note->setHeadGroup(drumset->noteHead(pitch));
+                              note->setLine(drumset->line(pitch));
+                              continue;
                               }
                         }
-                  chord->computeUp();
-                  chord->layoutStem1();
                   }
-            if (m != mag()) {
-                  cr->setMag(m);
-                  setDirty();
-                  }
+            chord->computeUp();
+            chord->layoutStem1();
+            }
+      if (m != mag()) {
+            cr->setMag(m);
+            setDirty();
             }
       }
 
@@ -3370,7 +3381,6 @@ void Measure::layoutX(qreal stretch)
 
 void Measure::layoutStage1()
       {
-//      (systemHeader() ? _minWidth2 : _minWidth1) = 0.0;
       setDirty();
 
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {

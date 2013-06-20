@@ -588,6 +588,7 @@ void Score::doLayout()
       // compute note head lines and accidentals:
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
             m->layoutStage1();
+
       layoutStage2();   // beam notes, finally decide if chord is up/down
       layoutStage3();   // compute note head horizontal positions
 
@@ -619,14 +620,10 @@ void Score::doLayout()
                         if (cr->type() == Element::CHORD) {
                               Chord* c = static_cast<Chord*>(cr);
                               for (Chord* cc : c->graceNotes()) {
-                                    if (cc->beam() && cc->beam()->elements().front() == cc) {
+                                    if (cc->beam() && cc->beam()->elements().front() == cc)
                                           cc->beam()->layout();
-                                          if (!cc->beam())
-                                                cc->layoutStem();
-                                          }
                                     }
-                              if (!c->beam())
-                                    c->layoutStem();
+                              c->layoutStem();
                               c->layoutArpeggio2();
                               int n = c->notes().size();
                               for (int i = 0; i < n; ++i) {

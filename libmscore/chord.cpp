@@ -270,7 +270,7 @@ qreal Chord::stemPosX() const
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
             if (_noteType != NOTE_NORMAL)
-                  nhw *= score()->styleD(ST_graceNoteMag);
+                 nhw *= score()->styleD(ST_graceNoteMag);
             x += nhw;
             }
       return x;
@@ -1158,8 +1158,6 @@ void Chord::setScore(Score* s)
 
 void Chord::layoutStem1()
       {
-      for (Chord* c : _graceNotes)
-            c->layoutStem1();
       int istaff = staffIdx();
 
       //-----------------------------------------
@@ -1167,7 +1165,7 @@ void Chord::layoutStem1()
       //-----------------------------------------
 
       bool hasStem = durationType().hasStem() && !(_noStem || measure()->slashStyle(istaff));
-      int hookIdx  = hasStem ? durationType().hooks() : 0;
+      int hookIdx  = durationType().hooks();
 
       if (hasStem) {
             if (!_stem)
@@ -1201,13 +1199,13 @@ void Chord::layoutStem1()
             score()->undoRemoveElement(_hook);
       }
 
-//---------------------------------------------------------
+//-----------------------------------------------------------------------------
 //   layoutStem
 ///   Layout chord tremolo stem and hook.
 //
 //    hook: sets position
 //    stem: sets length, but not position (assumed to be set in Chord::layout())
-//---------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 void Chord::layoutStem()
       {
