@@ -423,8 +423,11 @@ int SlurHandler::findSlur(const Slur* s) const
 void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) starting at this chord
-      foreach (Spanner* sp, chord->score()->spanner()) {
-            if (sp->type() != Element::SLUR || sp->tick() != chord->tick() || sp->track() != chord->track())
+      int tick = chord->tick();
+      auto sl = chord->score()->spanner();
+      for (auto it = sl.lower_bound(tick); it != sl.upper_bound(tick); ++it) {
+            Spanner* sp = it->second;
+            if (sp->type() != Element::SLUR || sp->track() != chord->track())
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
             // check if on slur list (i.e. stop already seen)
@@ -479,7 +482,8 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
 void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) stopping at this chord but not on slur list yet
-      foreach (Spanner* sp, chord->score()->spanner()) {
+      for (auto it : chord->score()->spanner()) {
+            Spanner* sp = it.second;
             if (sp->type() != Element::SLUR || sp->tick2() != chord->tick() || sp->track() != chord->track())
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
@@ -714,7 +718,8 @@ static void findTrillAnchors(const Trill* trill, Chord*& startChord, Chord*& sto
 static void findTrills(Measure* measure, int strack, int etrack, TrillHash& trillStart, TrillHash& trillStop)
       {
       // loop over all segments in this measure
-      foreach (Spanner* e, measure->score()->spanner()) {
+      for (auto it : measure->score()->spanner()) {
+            Spanner* e = it.second;
             if (e->type() == Element::TRILL && strack <= e->track() && e->track() < etrack
                && e->tick() >= measure->tick() && e->tick() < measure->tick())
                   {

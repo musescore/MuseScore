@@ -366,8 +366,8 @@ void Debugger::updateList(Score* s)
 
       QTreeWidgetItem* li = new QTreeWidgetItem(list, Element::INVALID);
       li->setText(0, "Global");
-      foreach (Spanner* s, s->spanner())
-            new ElementItem(li, s);
+      for (auto i : s->spanner())
+            new ElementItem(li, i.second);
 
       int staves = cs->nstaves();
       int tracks = staves * VOICES;

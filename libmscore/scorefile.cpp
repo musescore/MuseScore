@@ -907,7 +907,7 @@ bool Score::read(XmlReader& e)
                 || (tag == "Pedal")) {
                   Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
                   s->read(e);
-                  _spanner.push_back(s);
+                  addSpanner(s);
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -1251,7 +1251,8 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         e->write(xml);
                         }
                   if (segment->segmentType() & (Segment::SegChordRest)) {
-                        foreach (Spanner* s, _spanner) {
+                        for (auto i : _spanner) {
+                              Spanner* s = i.second;
                               if (s->track() == track && !s->generated()) {
                                     if (s->tick() == segment->tick()) {
                                           if (needTick) {

@@ -478,7 +478,8 @@ void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrac
       _first = first;
       _last  = last;
       spanner.clear();
-      for (Spanner* s : first->score()->spanner()) {
+      for (auto i : first->score()->spanner()) {
+            Spanner* s = i.second;
             if (s->tick() >= first->tick() && s->tick() < last->tick() &&
                s->track() >= startTrack && s->track() < endTrack) {
                   Spanner* ns = static_cast<Spanner*>(s->clone());

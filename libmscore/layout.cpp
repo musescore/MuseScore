@@ -639,8 +639,8 @@ void Score::doLayout()
                   }
             }
 
-      foreach (Spanner* s, _spanner)
-            s->layout();
+      for (const std::pair<int,Spanner*>& s : _spanner)
+            s.second->layout();
 
       if (layoutMode() != LayoutLine) {
             layoutSystems2();
@@ -1370,7 +1370,7 @@ void Score::add(Element* el)
             case Element::PEDAL:
             case Element::HAIRPIN:
             case Element::OTTAVA:
-                  _spanner.push_back(static_cast<Spanner*>(el));
+                  addSpanner(static_cast<Spanner*>(el));
                   break;
 
             default:
@@ -1407,8 +1407,7 @@ void Score::remove(Element* el)
             case Element::PEDAL:
             case Element::HAIRPIN:
             case Element::OTTAVA:
-                  if (!_spanner.removeOne(static_cast<Spanner*>(el)))
-                        qDebug("Score::remove() cannot find spanner %s\n", el->name());
+                  removeSpanner(static_cast<Spanner*>(el));
                   break;
             default:
                   qDebug("Score::remove(): invalid element %s", el->name());

@@ -143,8 +143,8 @@ void Score::cmdPaste(MuseScoreView* view)
 
 void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       {
-      foreach (Spanner* s, _spanner)
-            s->setId(-1);
+      for (auto i :_spanner)
+            i.second->setId(-1);
 
       QList<Chord*> graceNotes;
       int dstStaffStart = dst->staffIdx();

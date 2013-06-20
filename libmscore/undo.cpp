@@ -2684,8 +2684,9 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
       {
       int tick1 = m1->tick();
       int tick2 = m2->endTick();
-printf("undoRemoveMeasures  %d - %d\n", tick1, tick2);
-      for (Spanner* s : m1->score()->spanner()) {
+
+      for (auto i : m1->score()->spanner()) {
+            Spanner* s = i.second;
             if (s->tick() >= tick1 && s->tick() < tick2)
                   undoRemoveElement(s);
             }
