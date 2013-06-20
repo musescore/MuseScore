@@ -41,7 +41,6 @@
 #include "pitchspelling.h"
 #include "line.h"
 #include "volta.h"
-// #include "event.h"
 #include "repeat.h"
 #include "ottava.h"
 #include "barline.h"
@@ -3367,15 +3366,37 @@ Cursor* Score::newCursor()
       }
 
 //---------------------------------------------------------
+//   addSpanner
+//---------------------------------------------------------
+
+void Score::addSpanner(Spanner* s)
+      {
+      _spanner.insert(std::pair<int,Spanner*>(s->tick(), s));
+      }
+
+//---------------------------------------------------------
+//   removeSpanner
+//---------------------------------------------------------
+
+void Score::removeSpanner(Spanner* s)
+      {
+      for (auto i = _spanner.lower_bound(s->tick()); i != _spanner.upper_bound(s->tick()); ++i) {
+            if (i->second == s) {
+                  _spanner.erase(i);
+                  break;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   findSpanner
 //---------------------------------------------------------
 
 Spanner* Score::findSpanner(int id) const
       {
-      int n = _spanner.size();
-      for (int i = n-1; i >= 0; --i) {
-            if (_spanner.at(i)->id() == id)
-                  return _spanner.at(i);
+      for (auto i = _spanner.rbegin(); i != _spanner.rend(); ++i) {
+            if (i->second->id() == id)
+                  return i->second;
             }
       return 0;
       }
@@ -3388,10 +3409,10 @@ Spanner* Score::findSpanner(int id) const
 
 bool Score::isSpannerStartEnd(int tick, int track) const
       {
-      foreach (Spanner* s, _spanner) {
-            if (s->track() != track)
+      for (auto i : _spanner) {
+            if (i.second->track() != track)
                   continue;
-            if (s->tick() == tick || s->tick2() == tick)
+            if (i.second->tick() == tick || i.second->tick2() == tick)
                   return true;
             }
       return false;
@@ -3406,7 +3427,8 @@ void Score::insertTime(int tick, int len)
       if (len == 0)
             return;
 
-      foreach (Spanner* s, _spanner) {
+      for (auto i : _spanner) {
+            Spanner* s = i.second;
             if (s->tick2() < tick)
                   continue;
             printf("   change spanner %d+%d\n", s->tick(), s->tickLen());

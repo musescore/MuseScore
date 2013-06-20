@@ -2061,7 +2061,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   sp->setTick(e.tick());
                   sp->setAnchor(Spanner::ANCHOR_SEGMENT);
                   sp->read(e);
-                  score()->spanner().push_back(sp);
+                  score()->addSpanner(sp);
                   }
             else if (tag == "RepeatMeasure") {
                   RepeatMeasure* rm = new RepeatMeasure(score());

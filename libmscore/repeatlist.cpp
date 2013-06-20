@@ -28,7 +28,8 @@ namespace Ms {
 
 Volta* Score::searchVolta(int tick) const
       {
-      foreach (Spanner* s, _spanner) {
+      for (const std::pair<int,Spanner*>& p : _spanner) {
+            Spanner* s = p.second;
             if (s->type() != Element::VOLTA)
                   continue;
             Volta* volta = static_cast<Volta*>(s);
