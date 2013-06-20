@@ -845,6 +845,7 @@ void Score::undoAddElement(Element* element)
          || (et == Element::SYMBOL && element->parent()->type() != Element::SEGMENT)
          || et == Element::NOTE
          || et == Element::GLISSANDO
+         || (et == Element::SLUR && element->parent() && element->parent()->type() == Element::CHORD)
             ) {
             Element* parent       = element->parent();
             LinkedElements* links = parent->links();
@@ -1077,70 +1078,6 @@ void Score::undoAddElement(Element* element)
                   qDebug("undoAddElement: unhandled: <%s>", element->name());
             }
       }
-
-#if 0
-//---------------------------------------------------------
-//   undoAddGrace
-//---------------------------------------------------------
-
-void Score::undoAddGrace(Chord* chord, Segment* s, bool behind)
-      {
-      QList<Staff*> staffList;
-      Staff* ostaff = chord->staff();
-      LinkedStaves* linkedStaves = ostaff->linkedStaves();
-      if (linkedStaves)
-            staffList = linkedStaves->staves();
-      else
-            staffList.append(ostaff);
-      int tick = s->tick();
-      if (behind) {
-            Chord* c = static_cast<Chord*>(s->element(chord->track()));
-            tick += c->duration().ticks();
-            }
-
-      foreach(Staff* staff, staffList) {
-            //
-            // search for segment s
-            //
-            Score* score = staff->score();
-            Measure* m;
-            Segment* ss;
-            if (score == this) {
-                  m   = s->measure();
-                  ss  = s;
-                  }
-            else {
-                  m   = score->tick2measure(tick);
-                  ss  = m->findSegment(Segment::SegChordRest, tick);
-                  }
-            // always create new segment for grace note:
-            Segment* seg = new Segment(m, Segment::SegGrace, tick);
-            if (behind) {
-                  seg->setNext(ss->next());
-                  seg->setPrev(ss);
-                  }
-            else {
-                  seg->setNext(ss);
-                  seg->setPrev(ss->prev());
-                  }
-            score->undoAddElement(seg);
-
-            Chord* nc = (staff == ostaff) ? chord : static_cast<Chord*>(chord->linkedClone());
-            nc->setScore(score);
-            int staffIdx = score->staffIdx(staff);
-            int ntrack = staffIdx * VOICES + chord->voice();
-            nc->setTrack(ntrack);
-            nc->setParent(seg);
-            // setTpcFromPitch needs to know the note tick position
-            foreach(Note* note, nc->notes()) {
-                  if (note->tpc() == INVALID_TPC)
-                        note->setTpcFromPitch();
-                  }
-            undo(new AddElement(nc));
-            score->updateAccidentals(m, staffIdx);
-            }
-      }
-#endif
 
 //---------------------------------------------------------
 //   undoAddCR
