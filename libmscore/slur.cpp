@@ -1604,45 +1604,8 @@ void Slur::layoutChord()
       Note* startNote = c1->upNote();
       // Note* endNote = c2->upNote();
 
-      if (_slurDirection == MScore::AUTO) {
-            QList<Note*> notes = c1->notes();
-            int n = notes.size();
-            if (n == 1) {
-                  //
-                  // single note
-                  //
-                  if (c1->up() != c2->up()) {
-                        // if stem direction is mixed, always up
-                        _up = true;
-                        }
-                  else
-                        _up = !c1->up();
-                  }
-            else {
-                  //
-                  // chords
-                  //
-                  QList<int> ties;
-                  int idx = 0;
-                  for (int i = 0; i < n; ++i) {
-                        if (notes[i]->tieFor()) {
-                              ties.append(notes[i]->line());
-                              if (notes[i] == startNote)
-                                    idx = ties.size() - 1;
-                              }
-                        }
-                  if (idx == 0)
-                        _up = false;
-                  else if (idx == ties.size() - 1)
-                        _up = true;
-                  else {
-                        if (ties[idx] <= 4)
-                              _up = ((ties[idx-1] - ties[idx]) <= 1) || ((ties[idx] - ties[idx+1]) > 1);
-                        else
-                              _up = ((ties[idx-1] - ties[idx]) <= 1) && ((ties[idx] - ties[idx+1]) > 1);
-                        }
-                  }
-            }
+      if (_slurDirection == MScore::AUTO)
+            _up = false;
       else
             _up = _slurDirection == MScore::UP ? true : false;
 
