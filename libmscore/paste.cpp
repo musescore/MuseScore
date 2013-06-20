@@ -149,8 +149,10 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       QList<Chord*> graceNotes;
       int dstStaffStart = dst->staffIdx();
       int dstTick = dst->tick();
-
+      bool done = false;
       while (e.readNextStartElement()) {
+            if (done)
+                  break;
             if (e.name() != "StaffList") {
                   e.unknown();
                   break;
@@ -179,8 +181,10 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                         }
                   int srcStaffIdx = e.attribute("id", "0").toInt();
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
-                  if (dstStaffIdx >= nstaves())
+                  if (dstStaffIdx >= nstaves()) {
+                        done = true; // break main loop, nothing more to paste
                         break;
+                        }
                   e.tuplets().clear();
                   while (e.readNextStartElement()) {
                         pasted = true;
