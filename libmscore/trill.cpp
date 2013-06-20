@@ -238,6 +238,8 @@ void Trill::layout()
 //      setPos(0.0, yoff() * _spatium);
 
       SLine::layout();
+      if (score() == gscore)
+            return;
       //
       // special case:
       // if end segment is first chord/rest segment in measure,

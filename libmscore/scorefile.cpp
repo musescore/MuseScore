@@ -1213,7 +1213,7 @@ qDebug("createRevision\n");
 //---------------------------------------------------------
 
 void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
-   Segment* fs, Segment* ls, bool writeSystemElements)
+   Segment* fs, Segment* ls, bool writeSystemElements, bool clip)
       {
       for (int track = strack; track < etrack; ++track) {
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
@@ -1251,27 +1251,28 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         e->write(xml);
                         }
                   if (segment->segmentType() & (Segment::SegChordRest)) {
-                        for (auto i : _spanner) {
+                        for (auto i : _spanner) {     // TODO: dont search whole list
                               Spanner* s = i.second;
-                              if (s->track() == track && !s->generated()) {
-                                    if (s->tick() == segment->tick()) {
-                                          if (needTick) {
-                                                xml.tag("tick", segment->tick() - xml.tickDiff);
-                                                xml.curTick = segment->tick();
-                                                needTick = false;
-                                                }
-                                          s->setId(++xml.spannerId);
-                                          s->write(xml);
+                              if (s->track() != track || s->generated())
+                                    continue;
+
+                              if (s->tick() == segment->tick() && (!clip || s->tick2() < ls->tick())) {
+                                    if (needTick) {
+                                          xml.tag("tick", segment->tick() - xml.tickDiff);
+                                          xml.curTick = segment->tick();
+                                          needTick = false;
                                           }
-                                    if ((s->tick() + s->tickLen()) == segment->tick()) {
-                                          if (needTick) {
-                                                xml.tag("tick", segment->tick() - xml.tickDiff);
-                                                xml.curTick = segment->tick();
-                                                needTick = false;
-                                                }
-                                          Q_ASSERT(s->id() != -1);
-                                          xml.tagE(QString("endSpanner id=\"%1\"").arg(s->id()));
+                                    s->setId(++xml.spannerId);
+                                    s->write(xml);
+                                    }
+                              if (s->tick2() == segment->tick() && (!clip || s->tick() >= fs->tick())) {
+                                    if (needTick) {
+                                          xml.tag("tick", segment->tick() - xml.tickDiff);
+                                          xml.curTick = segment->tick();
+                                          needTick = false;
                                           }
+                                    Q_ASSERT(s->id() != -1);
+                                    xml.tagE(QString("endSpanner id=\"%1\"").arg(s->id()));
                                     }
                               }
                         }

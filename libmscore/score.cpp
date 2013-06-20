@@ -1355,6 +1355,10 @@ void Score::addElement(Element* element)
             element->parent()->add(element);
 
       switch(et) {
+            case Element::SLUR:
+                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
+                  // fall through
+
             case Element::VOLTA:
             case Element::TRILL:
             case Element::PEDAL:
@@ -1367,17 +1371,6 @@ void Score::addElement(Element* element)
                               ss->system()->add(ss);
                         }
                   }
-                  break;
-
-            case Element::SLUR:
-                  {
-                  Slur* slur = static_cast<Slur*>(element);
-                  foreach (SpannerSegment* ss, slur->spannerSegments()) {
-                        if (ss->system())
-                              ss->system()->add(ss);
-                        }
-                  }
-                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
                   break;
 
 #if 0 // TODO-S
@@ -1509,16 +1502,8 @@ void Score::removeElement(Element* element)
 
       switch(et) {
             case Element::SLUR:
-                  {
-                  Slur* slur = static_cast<Slur*>(element);
-                  foreach(SpannerSegment* ss, slur->spannerSegments()) {
-                        Q_ASSERT(ss->spanner() == slur);
-                        if (ss->system())
-                              ss->system()->remove(ss);
-                        }
-                  }
                   addLayoutFlags(LAYOUT_PLAY_EVENTS);
-                  break;
+                  // fall through
 
             case Element::VOLTA:
             case Element::TRILL:

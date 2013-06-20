@@ -243,6 +243,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                               if (spanner) {
                                     // e.spanner().removeOne(spanner);
                                     spanner->setTick2(e.tick() - tickStart + dstTick);
+                                    removeSpanner(spanner);
                                     undoAddElement(spanner);
                                     if (spanner->type() == Element::OTTAVA) {
                                           Ottava* o = static_cast<Ottava*>(spanner);

@@ -1073,7 +1073,7 @@ Slur::Slur(Score* s)
    : SlurTie(s)
       {
       setId(-1);
-      setAnchor(ANCHOR_CHORD);
+      setAnchor(ANCHOR_SEGMENT);
       }
 
 //---------------------------------------------------------
@@ -1168,11 +1168,6 @@ void Slur::layout()
             }
       qreal _spatium = spatium();
 
-      if (anchor() == Spanner::ANCHOR_SEGMENT) {
-            computeStartElement();
-            computeEndElement();
-            }
-
       if (score() == gscore || tick() == -1) {
             //
             // when used in a palette, slur has no parent and
@@ -1193,6 +1188,12 @@ void Slur::layout()
             setbbox(frontSegment()->bbox());
             return;
             }
+
+      if (anchor() == Spanner::ANCHOR_SEGMENT) {
+            computeStartElement();
+            computeEndElement();
+            }
+
       if (startCR() == 0 || endCR() == 0) {
             qDebug("Slur::layout(): id %d  track %d %p %p %d-%d null anchor",
                id(), track(), startCR(), endCR(), tick(), tick2());
