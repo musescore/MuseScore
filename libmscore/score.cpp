@@ -3380,12 +3380,14 @@ void Score::addSpanner(Spanner* s)
 
 void Score::removeSpanner(Spanner* s)
       {
-      for (auto i = _spanner.lower_bound(s->tick()); i != _spanner.upper_bound(s->tick()); ++i) {
+//      for (auto i = _spanner.lower_bound(s->tick()); i != _spanner.upper_bound(s->tick()); ++i) {
+      for (auto i = _spanner.begin(); i != _spanner.end(); ++i) {
             if (i->second == s) {
                   _spanner.erase(i);
-                  break;
+                  return;
                   }
             }
+      qDebug("Score::removeSpanner: %s not found", s->name());
       }
 
 //---------------------------------------------------------

@@ -65,7 +65,7 @@ class Chord : public ChordRest {
       Arpeggio*  _arpeggio;
       Tremolo*   _tremolo;
       Glissando* _glissando;
-      ElementList _el;              ///< chordline
+      ElementList _el;              ///< chordline, slur
       std::vector<Chord*> _graceNotes;
       int _graceIndex;              ///< if this is a grace note, index in parent list
 

@@ -1105,15 +1105,15 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   _xmlText = s;
                   _xmlDegrees.clear();
             }
-
-      qDebug("parse: source = <%s>, handle = %s", qPrintable(s), qPrintable(_handle));
-      if (!syntaxOnly) {
-            qDebug("parse: HChord = <%s> (%d)", qPrintable(chord.voicing()), chord.getKeys());
-            qDebug("parse: xmlKind = <%s>, text = <%s>", qPrintable(_xmlKind), qPrintable(_xmlText));
-            qDebug("parse: xmlSymbols = %s, xmlParens = %s", qPrintable(_xmlSymbols), qPrintable(_xmlParens));
-            qDebug("parse: xmlDegrees = <%s>", qPrintable(_xmlDegrees.join(",")));
+      if (MScore::debugMode) {
+            qDebug("parse: source = <%s>, handle = %s", qPrintable(s), qPrintable(_handle));
+            if (!syntaxOnly) {
+                  qDebug("parse: HChord = <%s> (%d)", qPrintable(chord.voicing()), chord.getKeys());
+                  qDebug("parse: xmlKind = <%s>, text = <%s>", qPrintable(_xmlKind), qPrintable(_xmlText));
+                  qDebug("parse: xmlSymbols = %s, xmlParens = %s", qPrintable(_xmlSymbols), qPrintable(_xmlParens));
+                  qDebug("parse: xmlDegrees = <%s>", qPrintable(_xmlDegrees.join(",")));
+                  }
             }
-
       return _parseable;
       }
 

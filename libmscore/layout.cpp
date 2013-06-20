@@ -622,6 +622,10 @@ void Score::doLayout()
                               for (Chord* cc : c->graceNotes()) {
                                     if (cc->beam() && cc->beam()->elements().front() == cc)
                                           cc->beam()->layout();
+                                    for (Element* e : cc->el()) {
+                                          if (e->type() == Element::SLUR)
+                                                e->layout();
+                                          }
                                     }
                               c->layoutStem();
                               c->layoutArpeggio2();
