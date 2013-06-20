@@ -122,7 +122,7 @@ void Score::cmdPaste(MuseScoreView* view)
                   }
 
             QByteArray data(ms->data(mimeStaffListFormat));
-// qDebug("paste <%s>", data.data());
+ qDebug("paste <%s>", data.data());
             XmlReader e(data);
             pasteStaff(e, cr);
             }
@@ -164,17 +164,10 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
             int staves        = e.intAttribute("staves", 0);
             e.setTick(tickStart);
 
-            for (int i = 0; i < staves; ++i) {
-                  int staffIdx = i + dstStaffStart;
-                  if (staffIdx >= nstaves())
-                        break;
-                  if (!makeGap1(dst->tick(), staffIdx, Fraction::fromTicks(tickLen))) {
-                        qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
-                        return;
-                        }
-                  }
             bool pasted = false;
             while (e.readNextStartElement()) {
+                  if (done)
+                        break;
                   if (e.name() != "Staff") {
                         e.unknown();
                         break;
@@ -190,8 +183,16 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                         pasted = true;
                         const QStringRef& tag(e.name());
 
-                        if (tag == "tick")
-                              e.setTick(e.readInt());
+                        if (tag == "tick") {
+                              int tick = e.readInt();
+                              e.setTick(tick);
+                              int shift = tick - tickStart;
+                              if (!makeGap1(dstTick + shift, dstStaffIdx, Fraction::fromTicks(tickLen - shift))) {
+                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
+                                    done = true; // break main loop, cannot make gap
+                                    break;
+                                    }
+                              }
                         else if (tag == "Tuplet") {
                               Tuplet* tuplet = new Tuplet(this);
                               tuplet->setTrack(e.track());
