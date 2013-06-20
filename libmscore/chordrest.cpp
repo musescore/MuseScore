@@ -301,6 +301,8 @@ bool ChordRest::readProperties(XmlReader& e)
                         slur->setEndElement(this);
                         // remove Slur from Score::spanner
                         Chord* start = static_cast<Chord*>(slur->startElement());
+                        if (start)
+                              slur->setTrack(start->track());
                         if (start && start->type() == CHORD && start->noteType() != NOTE_NORMAL) {
                               start->add(slur);
                               slur->setAnchor(Spanner::ANCHOR_CHORD);
