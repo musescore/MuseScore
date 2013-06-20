@@ -412,7 +412,7 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
                   slur->read(e);
-                  _spanner.push_back(slur);
+                  addSpanner(slur);
                   }
             else if ((tag == "HairPin")
                 || (tag == "Ottava")
@@ -436,7 +436,7 @@ Score::FileError Score::read114(XmlReader& e)
                            s->name(), s->tickLen());
                         }
                   else
-                        _spanner.push_back(s);
+                        addSpanner(s);
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);

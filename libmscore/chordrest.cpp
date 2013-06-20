@@ -306,7 +306,7 @@ bool ChordRest::readProperties(XmlReader& e)
                         if (start && start->type() == CHORD && start->noteType() != NOTE_NORMAL) {
                               start->add(slur);
                               slur->setAnchor(Spanner::ANCHOR_CHORD);
-                              score()->spanner().removeOne(slur);
+                              score()->removeSpanner(slur);
                               }
                         }
                   else
