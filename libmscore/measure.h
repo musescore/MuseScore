@@ -140,6 +140,7 @@ class Measure : public MeasureBase {
 
       void push_back(Segment* e);
       void push_front(Segment* e);
+      void layoutCR0(ChordRest* cr, qreal m);
 
    public:
       Measure(Score* = 0);

@@ -1194,8 +1194,8 @@ void Slur::layout()
             return;
             }
       if (startCR() == 0 || endCR() == 0) {
-            qDebug("Slur::layout(): id %d  %p %p %d-%d null anchor",
-               id(), startCR(), endCR(), tick(), tick2());
+            qDebug("Slur::layout(): id %d  track %d %p %p %d-%d null anchor",
+               id(), track(), startCR(), endCR(), tick(), tick2());
             return;
             }
       switch (_slurDirection) {
