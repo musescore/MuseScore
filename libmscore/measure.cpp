@@ -1851,7 +1851,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   el->write(xml);
                   }
             }
-      score()->writeSegments(xml, this, strack, etrack, first(), last()->next1(), writeSystemElements);
+      score()->writeSegments(xml, this, strack, etrack, first(), last()->next1(), writeSystemElements, false);
       xml.etag();
       }
 

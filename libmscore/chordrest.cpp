@@ -299,7 +299,6 @@ bool ChordRest::readProperties(XmlReader& e)
                   else if (atype == "stop") {
                         slur->setTickLen(e.tick() - slur->tick());
                         slur->setEndElement(this);
-                        // remove Slur from Score::spanner
                         Chord* start = static_cast<Chord*>(slur->startElement());
                         if (start)
                               slur->setTrack(start->track());
