@@ -874,6 +874,11 @@ void Score::undoAddElement(Element* element)
                               n->setTpcFromPitch();
                         ne->score()->updateNotes();
                         }
+                  else if (ne->type() == Element::SLUR) {
+                        Slur* slur = static_cast<Slur*>(ne);
+                        slur->setStartElement(e);
+                        slur->setEndElement(e->parent());
+                        }
                   }
             return;
             }
