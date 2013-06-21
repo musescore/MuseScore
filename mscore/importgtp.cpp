@@ -2825,7 +2825,15 @@ Score::FileError importGTP(Score* score, const QString& name)
       score->setSaved(false);
       score->setCreated(true);
       delete gp;
+
+      score->setPlaylistDirty(true);
       score->rebuildMidiMapping();
+      score->updateChannel();
+      score->updateNotes();
+
+      score->setLayoutAll(true);
+      score->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
+      score->doLayout();
       return Score::FILE_NO_ERROR;
       }
 }
