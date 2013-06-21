@@ -42,7 +42,6 @@
 #include "tablature.h"
 #include "stafftype.h"
 #include "tupletmap.h"
-#include "slurmap.h"
 #include "tiemap.h"
 #include "stem.h"
 #include "iname.h"
@@ -1757,9 +1756,11 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
       MeasureBase* omb = 0;
       QList<Score*> scorelist;
       if (type == Element::MEASURE)
-         scorelist = scoreList();
+            scorelist = scoreList();
       else
-         scorelist.append(this);
+            scorelist.append(this);
+
+printf("insertMeasure\n");
 
       foreach(Score* score, scorelist) {
             MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
@@ -1867,8 +1868,9 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
             else {
                   undo(new InsertMeasure(mb, im));
                   }
-            insertTime(mb->tick(), mb->ticks());
             }
+      insertTime(tick, measure->ticks());
+
       if (type == Element::MEASURE && !createEmptyMeasures) {
             //
             // fill measure with rest

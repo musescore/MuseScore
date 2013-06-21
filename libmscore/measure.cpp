@@ -69,7 +69,6 @@
 #include "fret.h"
 #include "stafftype.h"
 #include "tablature.h"
-#include "slurmap.h"
 #include "tiemap.h"
 #include "tupletmap.h"
 #include "spannermap.h"
