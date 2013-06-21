@@ -518,9 +518,6 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool /*behind*/, i
       chord->setMag(ch->staff()->mag() * styleD(ST_graceNoteMag));
 
       undoAddElement(chord);
-
-      note->setTpcFromPitch();      // tick must be known
-      updateNotes();
       select(note, SELECT_SINGLE, 0);
       }
 

@@ -846,6 +846,7 @@ void Score::undoAddElement(Element* element)
          || et == Element::NOTE
          || et == Element::GLISSANDO
          || (et == Element::SLUR && element->parent() && element->parent()->type() == Element::CHORD)
+         || (et == Element::CHORD && static_cast<Chord*>(element)->isGrace())
             ) {
             Element* parent       = element->parent();
             LinkedElements* links = parent->links();
@@ -853,9 +854,14 @@ void Score::undoAddElement(Element* element)
                   undo(new AddElement(element));
                   if (element->type() == Element::FINGERING)
                         element->score()->layoutFingering(static_cast<Fingering*>(element));
+                  else if (element->type() == Element::CHORD) {
+                        for (Note* n : static_cast<Chord*>(element)->notes())
+                              n->setTpcFromPitch();
+                        element->score()->updateNotes();
+                        }
                   return;
                   }
-            foreach(Element* e, *links) {
+            foreach (Element* e, *links) {
                   Element* ne = (e == parent) ? element : element->linkedClone();
                   ne->setScore(e->score());
                   ne->setSelected(false);
@@ -863,6 +869,11 @@ void Score::undoAddElement(Element* element)
                   undo(new AddElement(ne));
                   if (ne->type() == Element::FINGERING)
                         e->score()->layoutFingering(static_cast<Fingering*>(ne));
+                  else if (ne->type() == Element::CHORD) {
+                        for (Note* n : static_cast<Chord*>(ne)->notes())
+                              n->setTpcFromPitch();
+                        ne->score()->updateNotes();
+                        }
                   }
             return;
             }
