@@ -109,11 +109,6 @@ p, li { white-space: pre-wrap; }
         <HairPin id="2">
           <subtype>1</subtype>
           <veloChange>10</veloChange>
-          <Segment>
-            <subtype>0</subtype>
-            <off2 x="-0.166675" y="0"/>
-            <pos x="13.2023" y="8"/>
-            </Segment>
           </HairPin>
         <Chord>
           <durationType>quarter</durationType>
