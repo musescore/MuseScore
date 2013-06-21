@@ -4,7 +4,7 @@ cp ../../../build.debug/mtest/libmscore/link/part1-1.mscx part1.mscx
 cp ../../../build.debug/mtest/libmscore/link/part1-2.mscx part1-2o.mscx
 cp ../../../build.debug/mtest/libmscore/link/part2-1.mscx part2.mscx
 cp ../../../build.debug/mtest/libmscore/link/part2-2.mscx part2-2o.mscx
-# cp ../../../build.debug/mtest/libmscore/link/part2-4.mscx part2-4o.mscx
+cp ../../../build.debug/mtest/libmscore/link/part2-4.mscx part2-4o.mscx
 cp ../../../build.debug/mtest/libmscore/link/part2-3.mscx part2-3o.mscx
 cp ../../../build.debug/mtest/libmscore/link/part2-6.mscx part2-6o.mscx
 cp ../../../build.debug/mtest/libmscore/link/part3-1.mscx part3.mscx

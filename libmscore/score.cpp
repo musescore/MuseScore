@@ -55,7 +55,6 @@
 #include "tempotext.h"
 #include "articulation.h"
 #include "revisions.h"
-#include "slurmap.h"
 #include "tiemap.h"
 #include "spannermap.h"
 #include "layoutbreak.h"
@@ -3414,11 +3413,12 @@ void Score::insertTime(int tick, int len)
       if (len == 0)
             return;
 
+printf("insertTime score %p at %d len %d\n", this, tick, len);
       for (auto i : _spanner) {
             Spanner* s = i.second;
             if (s->tick2() < tick)
                   continue;
-            printf("   change spanner %d+%d\n", s->tick(), s->tickLen());
+printf("   %p score %p change spanner %d+%d\n", s, s->score(), s->tick(), s->tickLen());
             if (len > 0) {
                   if (tick > s->tick() && tick < s->tick2()) {
                         //

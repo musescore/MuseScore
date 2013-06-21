@@ -157,10 +157,6 @@ Spanner::Spanner(const Spanner& s)
       _tick         = s._tick;
       _tickLen      = s._tickLen;
       _id           = 0;
-      foreach (SpannerSegment* ss, s.segments) {
-            SpannerSegment* nss = ss->clone();
-            add(nss);
-            }
       }
 
 Spanner::~Spanner()
