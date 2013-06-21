@@ -14,6 +14,7 @@
 #define __HARMONY_H__
 
 #include "text.h"
+#include "pitchspelling.h"
 
 namespace Ms {
 
@@ -87,9 +88,13 @@ class Harmony : public Text {
 
       mutable QRectF _tbbox;
 
+      NoteSpellingType _rootSpelling, _baseSpelling;
+      bool _rootLowerCase, _baseLowerCase;
+
+      void determineRootBaseSpelling();
       virtual void draw(QPainter*) const;
       void render(const QString&, qreal&, qreal&);
-      void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc);
+      void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType spelling = STANDARD, bool lowerCase = false);
 
    public:
       Harmony(Score* = 0);
@@ -110,6 +115,8 @@ class Harmony : public Text {
       const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
       const ChordDescription* generateDescription();
 
+      void determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& rootLowerCase, NoteSpellingType& baseSpelling, bool& baseLowerCase);
+
       virtual void layout();
 
       const QRectF& bboxtight() const          { return _tbbox;        }
@@ -128,6 +135,8 @@ class Harmony : public Text {
       int rootTpc() const                      { return _rootTpc;      }
       void setRootTpc(int val)                 { _rootTpc = val;       }
       void setTextName(const QString& s)       { _textName = s;        }
+      QString rootName();
+      QString baseName();
       void addDegree(const HDegree& d);
       int numberOfDegrees() const;
       HDegree degree(int i) const;
@@ -136,7 +145,7 @@ class Harmony : public Text {
 
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
-      QString harmonyName() const;
+      QString harmonyName();
       void render(const TextStyle* ts = 0);
 
       const ChordDescription* parseHarmony(const QString& s, int* root, int* base, bool syntaxOnly = false);

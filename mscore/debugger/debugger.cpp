@@ -1364,7 +1364,6 @@ HarmonyView::HarmonyView()
 void HarmonyView::setElement(Element* e)
       {
       Harmony* harmony = (Harmony*)e;
-      bool germanNames = e->score()->styleB(ST_useGermanNoteNames);
 
       tb.textStyle->clear();
       for (int i = 0; i < TEXT_STYLES; ++i)
@@ -1391,12 +1390,12 @@ void HarmonyView::setElement(Element* e)
       if (harmony->rootTpc() == INVALID_TPC)
             hb.rootName->setText("");
       else
-            hb.rootName->setText(tpc2name(harmony->rootTpc(),germanNames));
+            hb.rootName->setText(harmony->rootName());
       hb.bassTpc->setValue(harmony->baseTpc());
       if (harmony->baseTpc() == INVALID_TPC)
             hb.bassName->setText("");
       else
-            hb.bassName->setText(tpc2name(harmony->baseTpc(),germanNames));
+            hb.bassName->setText(harmony->baseName());
       hb.chordId->setValue(harmony->id());
       hb.chordName->setText(harmony->hTextName());
       hb.userName->setText(harmony->hUserName());

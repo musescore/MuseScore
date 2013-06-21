@@ -49,6 +49,7 @@ const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (
 // pitch2tpc(pitch) replaced by pitch2tpc(pitch, KEY_C, PREFER_NEAREST)
 
 enum { PREFER_FLATS=8, PREFER_NEAREST=11, PREFER_SHARPS=13 };
+enum NoteSpellingType { STANDARD = 0, GERMAN, ITALIAN };
 
 extern int pitch2tpc(int pitch, int key, int prefer);
 
@@ -56,8 +57,9 @@ extern void spell(QList<Event>& notes, int);
 extern void spell(QList<Note*>& notes);
 extern int computeWindow(const QList<Note*>& notes, int start, int end);
 extern int tpc(int idx, int pitch, int opt);
-extern QString tpc2name(int tpc, bool germanNames);
-extern void tpc2name(int tpc, bool germanNames, QChar* name, int* acc);
+extern QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase);
+extern void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QString& acc);
+extern void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, int& acc);
 extern int step2tpc(const QString& stepName, AccidentalVal alter);
 extern int step2tpc(int step);
 extern int step2tpc(int step, AccidentalVal alter);
