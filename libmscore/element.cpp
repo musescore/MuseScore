@@ -706,7 +706,7 @@ bool Element::readProperties(XmlReader& e)
             }
       else if (tag == "tick") {
             int val = e.readInt();
-            if (type() != SYMBOL && (type() != GLISSANDO || score()->mscVersion() > 114))   // hack for 1.2
+            if (type() != SYMBOL && type() != TEMPO_TEXT && (type() != GLISSANDO || score()->mscVersion() > 114))   // hack for 1.2
                   e.setTick(score()->fileDivision(val));
             }
       else if (tag == "offset") {         // ??obsolete -> used for volta
