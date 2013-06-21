@@ -301,7 +301,7 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
 //   render
 //---------------------------------------------------------
 
-void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, double& y, int tpc)
+void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, double& y, int tpc, NoteSpellingType spelling, bool lowerCase)
       {
       QStack<QPointF> stack;
       int fontIdx = 0;
@@ -352,10 +352,9 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
                         qDebug("RenderAction::RENDER_POP: stack empty\n");
                   }
             else if (a.type == RenderAction::RENDER_NOTE) {
-                  bool germanNames = gscore->styleB(ST_useGermanNoteNames);
-                  QChar c;
+                  QString c;
                   int acc;
-                  tpc2name(tpc, germanNames, &c, &acc);
+                  tpc2name(tpc, spelling, lowerCase, c, acc);
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(QString(c));
                   if (cs.isValid()) {
@@ -368,9 +367,9 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
                   x += ts->width();
                   }
             else if (a.type == RenderAction::RENDER_ACCIDENTAL) {
-                  QChar c;
+                  QString c;
                   int acc;
-                  tpc2name(tpc, false, &c, &acc);
+                  tpc2name(tpc, spelling, lowerCase, c, acc);
                   if (acc) {
                         TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                         QString s;
@@ -449,8 +448,12 @@ void HarmonyCanvas::setChordDescription(ChordDescription* sd, ChordList* sl)
       if (chordList) {
             int tpc = 14;
             double x = 0.0, y = 0.0;
-            render(chordList->renderListRoot, x, y, 14);
-            render(chordDescription->renderList, x, y, tpc);
+            NoteSpellingType rootSpelling, baseSpelling;
+            bool rootLowerCase, baseLowerCase;
+            Harmony h;
+            h.determineRootBaseSpelling(rootSpelling, rootLowerCase, baseSpelling, baseLowerCase);
+            render(chordList->renderListRoot, x, y, tpc, rootSpelling, rootLowerCase);
+            render(chordDescription->renderList, x, y, tpc, baseSpelling, baseLowerCase);
             }
       moveElement = 0;
       dragElement = 0;
