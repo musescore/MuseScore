@@ -261,7 +261,11 @@ void EditStyle::getValues()
             lstyle.setChordList(cl, customChords);
             lstyle.set(ST_chordDescriptionFile, chordDescriptionFile->text());
             }
+
+      lstyle.set(ST_useStandardNoteNames,    useStandardNoteNames->isChecked());
       lstyle.set(ST_useGermanNoteNames,      useGermanNoteNames->isChecked());
+      lstyle.set(ST_useItalianNoteNames,     useItalianNoteNames->isChecked());
+      lstyle.set(ST_lowerCaseMinorChords,    lowerCaseMinorChords->isChecked());
 
       lstyle.set(ST_concertPitch,            concertPitch->isChecked());
       lstyle.set(ST_createMultiMeasureRests, multiMeasureRests->isChecked());
@@ -495,7 +499,10 @@ void EditStyle::setValues()
             chordsCustom->setChecked(true);
             chordDescriptionGroup->setEnabled(true);
             }
+      useStandardNoteNames->setChecked(lstyle.valueB(ST_useStandardNoteNames));
       useGermanNoteNames->setChecked(lstyle.valueB(ST_useGermanNoteNames));
+      useItalianNoteNames->setChecked(lstyle.valueB(ST_useItalianNoteNames));
+      lowerCaseMinorChords->setChecked(lstyle.valueB(ST_lowerCaseMinorChords));
       concertPitch->setChecked(lstyle.valueB(ST_concertPitch));
 
       multiMeasureRests->setChecked(lstyle.valueB(ST_createMultiMeasureRests));

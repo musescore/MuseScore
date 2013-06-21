@@ -123,7 +123,10 @@ static const StyleVal style114[] = {
       StyleVal(ST_genCourtesyTimesig, true),
       StyleVal(ST_genCourtesyKeysig, true),
 
+      StyleVal(ST_useStandardNoteNames, false),
       StyleVal(ST_useGermanNoteNames, false),
+      StyleVal(ST_useItalianNoteNames, false),
+      StyleVal(ST_lowerCaseMinorChords, false),
       StyleVal(ST_chordDescriptionFile, QString("stdchords.xml")),
       StyleVal(ST_concertPitch, false),
       StyleVal(ST_createMultiMeasureRests, false),
@@ -680,6 +683,8 @@ Score::FileError Score::read114(XmlReader& e)
             style()->set(ST_chordDescriptionFile, QString("stdchords.xml"));
       style()->set(StyleVal(ST_chordStyle, QString("custom")));
       style()->set(StyleVal(ST_chordsXmlFile, true));
+      if (styleB(ST_useGermanNoteNames))
+            style()->set(StyleVal(ST_useStandardNoteNames, false));
 
       _showOmr = false;
 

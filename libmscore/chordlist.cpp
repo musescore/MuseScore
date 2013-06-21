@@ -104,7 +104,7 @@ QString HChord::name(int tpc) const
       static const HChord C0(0,3,6,9);
       static const HChord C1(0,3);
 
-      QString buf = tpc2name(tpc, false);
+      QString buf = tpc2name(tpc, STANDARD, false);
       HChord c(*this);
 
       int key = tpc2pitch(tpc);
@@ -1046,8 +1046,15 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         tok1L = "#";
                         alter = true;
                         }
-                  else
+                  else {
                         _understandable = false;
+                        if (s.startsWith(tok1)) {
+                              // unrecognized token right from very beginning
+                              _xmlKind = "other";
+                              _xmlText = tok1;
+                              break;
+                              }
+                        }
                   if (alter) {
                         if (tok2L == "4" && _xmlKind == "suspended-fourth")
                               degree = "alt";
@@ -1282,7 +1289,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             _extension = QString("%1").arg(extension);
 
       // validate kindText
-      if (kindText != "") {
+      if (kindText != "" && kind != "none") {
             ParsedChord validate;
             validate.parse(kindText,cl,false);
             // kindText should parse to produce same kind, no degrees
