@@ -196,7 +196,7 @@ void Fluid::play(const PlayEvent& event)
                   }
             }
       if (err)
-            qWarning("FluidSynth error: event 0x%2x channel %d: %s\n",
+            qWarning("FluidSynth error: event 0x%2x channel %d: %s",
                type, ch, qPrintable(error()));
       }
 
