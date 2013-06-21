@@ -31,7 +31,6 @@
 #include "lyrics.h"
 #include "segment.h"
 #include "tupletmap.h"
-#include "slurmap.h"
 #include "tiemap.h"
 #include "spannermap.h"
 #include "layoutbreak.h"
@@ -165,9 +164,7 @@ Score* createExcerpt(const QList<Part*>& parts)
 
 void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
       {
-      SlurMap slurMap;
       TieMap  tieMap;
-      SpannerMap spannerMap;
 
       MeasureBaseList* nmbl = score->measures();
       for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
@@ -302,8 +299,6 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   }
             nmbl->add(nmb);
             }
-      //DEBUG:
-      slurMap.check();
 
       int n = map.size();
       for (int dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
@@ -325,6 +320,27 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         }
                   }
             }
+
+      for (auto i : oscore->spanner()) {
+            Spanner* s = i.second;
+            int staffIdx = s->staffIdx();
+            int dstTrack = -1;
+            int st = 0;
+            for (int i : map) {
+                  if (i == staffIdx) {
+                        dstTrack = st * VOICES + s->voice();
+                        break;
+                        }
+                  ++st;
+                  }
+            if (dstTrack == -1)
+                  continue;
+            Spanner* ns = static_cast<Spanner*>(s->linkedClone());
+            ns->setScore(score);
+            ns->setParent(0);
+            ns->setTrack(dstTrack);
+            score->addSpanner(ns);
+            }
       }
 
 //---------------------------------------------------------
@@ -336,7 +352,6 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
       {
       Score* score = srcStaff->score();
 
-      SlurMap slurMap;
       TieMap tieMap;
 
       int srcStaffIdx  = score->staffIdx(srcStaff);
