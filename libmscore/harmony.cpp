@@ -42,7 +42,11 @@ QString Harmony::harmonyName()
       r = tpc2name(_rootTpc, _rootSpelling, _rootLowerCase);
 
       if (_textName != "")
+#if 1
+            e = _textName.remove('=');
+#else
             e = _textName;
+#endif
       else if (!_degreeList.isEmpty()) {
             hc.add(_degreeList);
             // try to find the chord in chordList
@@ -327,13 +331,14 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
       else if (score()->styleB(ST_useItalianNoteNames))
             rootSpelling = ITALIAN;
       baseSpelling = rootSpelling;
-      if (_parsedForm) {
+      const ChordDescription* cd = getDescription();
+      if (cd) {
             QString quality;
-            quality = _parsedForm->quality();
+            quality = cd->quality();
             if (score()->styleB(ST_lowerCaseMinorChords) && (quality == "minor" || quality == "diminished" || quality == "half-diminished"))
                   rootLowerCase = true;
             else
-                  baseLowerCase = false;
+                  rootLowerCase = false;
             }
       else
             rootLowerCase = false;
@@ -494,7 +499,15 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             return 0;
             }
       *root = r;
-      // int idx = ((n > 1) && ((s[1] == 'b') || (s[1] == '#'))) ? 2 : 1;
+#if 1
+// enable this code to let "c" automatically imply C minor if lowerCaseMinorChords set
+// doesn't work yet, but this is a start
+      bool preferMinor;
+      if (score()->styleB(ST_lowerCaseMinorChords) && s[0].isLower())
+            preferMinor = true;
+      else
+            preferMinor = false;
+#endif
       *base = INVALID_TPC;
       int slash = s.indexOf('/');
       if (slash != -1) {
@@ -512,8 +525,16 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             cd = descr(s);
       else {
             _parsedForm = new ParsedChord();
-            _parsedForm->parse(s,cl,syntaxOnly);
-            cd = descr(s,_parsedForm);
+#if 0
+            _parsedForm->parse(s, cl, syntaxOnly);
+#else
+// more code to allow "c" to automatically imply C minor
+// this much works, but the problem is propagating this charade everywhere else
+            _parsedForm->parse(s, cl, syntaxOnly, preferMinor);
+            if (preferMinor)
+                  s = _parsedForm->name();
+#endif
+            cd = descr(s, _parsedForm);
             }
       if (cd) {
             _id = cd->id;
@@ -521,7 +542,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
                   _textName = cd->names.front();
             }
       else
-            _textName = _userName;
+            _textName = s;
       return cd;
       }
 
@@ -776,8 +797,8 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 const ChordDescription* Harmony::generateDescription()
       {
       ChordList* cl = score()->style()->chordList();
-      ChordDescription* cd = new ChordDescription(_textName,cl);
-      cd->complete(_parsedForm,cl);
+      ChordDescription* cd = new ChordDescription(_textName, cl);
+      cd->complete(_parsedForm, cl);
       // remove parsed chord from description
       // so we will only match it literally in the future
       cd->parsedChords.clear();
@@ -960,7 +981,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   ChordSymbol cs = chordList->symbol(a.text);
                   if (cs.isValid()) {
                         ts->font = fontList[cs.fontIdx];
-                        ts->setText(QString(cs.code));
+                        ts->setText(cs.value);
                         }
                   else
                         ts->setText(a.text);
@@ -987,10 +1008,13 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   int acc;
                   tpc2name(tpc, spelling, lowerCase, c, acc);
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
-                  ChordSymbol cs = chordList->symbol(c);
+                  QString lookup = "note" + c;
+                  ChordSymbol cs = chordList->symbol(lookup);
+                  if (!cs.isValid())
+                        cs = chordList->symbol(c);
                   if (cs.isValid()) {
                         ts->font = fontList[cs.fontIdx];
-                        ts->setText(QString(cs.code));
+                        ts->setText(cs.value);
                         }
                   else
                         ts->setText(c);
@@ -1006,7 +1030,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                         ChordSymbol cs = chordList->symbol(acc);
                         if (cs.isValid()) {
                               ts->font = fontList[cs.fontIdx];
-                              ts->setText(QString(cs.code));
+                              ts->setText(cs.value);
                               }
                         else
                               ts->setText(acc);
