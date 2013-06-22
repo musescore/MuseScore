@@ -190,6 +190,7 @@ class Staff : public QObject {
       StaffType* staffType() const     { return _staffType;      }
       void setStaffType(StaffType* st);
       StaffGroup staffGroup() const    { return _staffType->group(); }
+      bool isPitchedStaff() const      { return staffGroup() == PITCHED_STAFF; }
       bool isTabStaff() const          { return staffGroup() == TAB_STAFF; }
       bool isDrumStaff() const         { return staffGroup() == PERCUSSION_STAFF; }
 
@@ -205,6 +206,8 @@ class Staff : public QObject {
       qreal userDist() const        { return _userDist;  }
       void setUserDist(qreal val)   { _userDist = val;  }
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+      bool genKeySig();
+      bool showLedgerLines();
       };
 
 }     // namespace Ms
