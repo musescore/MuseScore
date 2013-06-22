@@ -845,5 +845,33 @@ void Staff::setInitialClef(ClefType ct)
       _initialClef = ClefTypeList(ct, ct);
       }
 
+bool Staff::genKeySig()
+      {
+      switch(_staffType->group()) {
+            case TAB_STAFF:
+                  return false;
+            case PITCHED_STAFF:
+                  return static_cast<StaffTypePitched*>(_staffType)->genKeysig();
+            case PERCUSSION_STAFF:
+                  return static_cast<StaffTypePercussion*>(_staffType)->genKeysig();
+            default:
+                  return true;
+            }
+      }
+
+bool Staff::showLedgerLines()
+      {
+      switch(_staffType->group()) {
+            case TAB_STAFF:
+                  return false;
+            case PITCHED_STAFF:
+                  return static_cast<StaffTypePitched*>(_staffType)->showLedgerLines();
+            case PERCUSSION_STAFF:
+                  return static_cast<StaffTypePercussion*>(_staffType)->showLedgerLines();
+            default:
+                  return true;
+            }
+      }
+
 }
 

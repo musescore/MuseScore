@@ -165,10 +165,6 @@ void Beam::remove(ChordRest* a)
 
 void Beam::draw(QPainter* painter) const
       {
-      if (staff()->isTabStaff()) {
-            if (staff()->staffType()->slashStyle())
-                  return;
-            }
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
       qreal lw2 = point(score()->styleS(ST_beamWidth)) * .5 * mag();
