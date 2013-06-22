@@ -8,9 +8,11 @@ class Tie;
 
 class MidiNote {
    public:
-      int pitch, velo;
-      int onTime, len;
-      Tie* tie = 0;
+      int pitch;
+      int velo;
+      int onTime;
+      int len;
+      Tie* tie = nullptr;
       };
 
 class MidiChord {
