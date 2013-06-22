@@ -69,7 +69,7 @@ class MTrack {
       void processMeta(int tick, const MidiEvent& mm);
       void fillGapsWithRests(Score *score, int voice, int ctick, int restLen, int track);
       std::vector<TupletData> findTupletsForDuration(int voice, int barTick, int durationOnTime, int durationLen);
-};
+      };
 
 
 // remove overlapping notes with the same pitch
