@@ -4130,6 +4130,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (est->exec() && est->isModified()) {
                   Score* score = cs;
                   score->startCmd();
+                  score->deselectAll();
                   QList<StaffType*> tl = est->getStaffTypes();
                   score->replaceStaffTypes(tl);
                   score->setLayoutAll(true);

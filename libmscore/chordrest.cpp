@@ -124,7 +124,8 @@ ChordRest::~ChordRest()
 
 void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      if (_beam && (_beam->elements().front() == this))
+      if (_beam && (_beam->elements().front() == this)
+       && !measure()->slashStyle(staffIdx()))
             _beam->scanElements(data, func, all);
       foreach(Articulation* a, _articulations)
             func(data, a);

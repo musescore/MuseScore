@@ -100,7 +100,7 @@ void KeySig::layout()
       qreal _spatium = spatium();
       setbbox(QRectF());
 
-      if (staff() && staff()->isTabStaff()) {     // no key sigs on TAB staves
+      if (staff() && !staff()->genKeySig()) {     // no key sigs on TAB staves
             foreach(KeySym* ks, keySymbols)
                   delete ks;
             keySymbols.clear();
