@@ -123,11 +123,13 @@ static const StyleVal style114[] = {
       StyleVal(ST_genCourtesyTimesig, true),
       StyleVal(ST_genCourtesyKeysig, true),
 
-      StyleVal(ST_useStandardNoteNames, false),
+      StyleVal(ST_chordStyle, QString("custom")),
+      StyleVal(ST_chordDescriptionFile, QString("stdchords.xml")),
+      StyleVal(ST_chordsXmlFile, true),
+      StyleVal(ST_useStandardNoteNames, true),
       StyleVal(ST_useGermanNoteNames, false),
       StyleVal(ST_useItalianNoteNames, false),
       StyleVal(ST_lowerCaseMinorChords, false),
-      StyleVal(ST_chordDescriptionFile, QString("stdchords.xml")),
       StyleVal(ST_concertPitch, false),
       StyleVal(ST_createMultiMeasureRests, false),
       StyleVal(ST_minEmptyMeasures, 2),
@@ -315,6 +317,9 @@ Score::FileError Score::read114(XmlReader& e)
 
       for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
             style()->set(style114[i]);
+
+      if (style()->chordList())
+            style()->setChordList(0, false);
 
       while (e.readNextStartElement()) {
             e.setTrack(-1);
@@ -679,10 +684,6 @@ Score::FileError Score::read114(XmlReader& e)
             style()->set(ST_voltaY, Spatium(-2.0));
       if (styleB(ST_hideEmptyStaves) == true) // http://musescore.org/en/node/16228
             style()->set(ST_dontHideStavesInFirstSystem, false);
-      if (styleSt(ST_chordDescriptionFile) == "chords_std.xml")
-            style()->set(ST_chordDescriptionFile, QString("stdchords.xml"));
-      style()->set(StyleVal(ST_chordStyle, QString("custom")));
-      style()->set(StyleVal(ST_chordsXmlFile, true));
       if (styleB(ST_useGermanNoteNames))
             style()->set(StyleVal(ST_useStandardNoteNames, false));
 
