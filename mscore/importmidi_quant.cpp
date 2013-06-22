@@ -24,14 +24,14 @@ void applyAdaptiveQuant(std::multimap<int, MidiChord> &/*chords*/,
       }
 
 
-int shortestNoteInBar(const std::multimap<int, MidiChord> &chords,
-                      const std::multimap<int, MidiChord>::const_iterator &start,
+int shortestNoteInBar(const std::multimap<int, MidiChord>::const_iterator &startBarChordIt,
+                      const std::multimap<int, MidiChord>::const_iterator &endChordIt,
                       int endBarTick)
       {
       int division = MScore::division;
       int minDuration = division;
                   // find shortest note in measure
-      for (auto it = start; it != chords.end(); ++it) {
+      for (auto it = startBarChordIt; it != endChordIt; ++it) {
             if (it->first >= endBarTick)
                   break;
             for (const auto &note: it->second.notes)
@@ -94,21 +94,21 @@ int userQuantNoteToTicks(MidiOperation::QuantValue quantNote)
       return userQuantValue;
       }
 
-int findQuantRaster(const std::multimap<int, MidiChord> &chords,
-                    const std::multimap<int, MidiChord>::const_iterator &startChordIter,
+int findQuantRaster(const std::multimap<int, MidiChord>::iterator &startBarChordIt,
+                    const std::multimap<int, MidiChord>::iterator &endChordIt,
                     int endBarTick)
       {
       int raster;
       auto operations = preferences.midiImportOperations.currentTrackOperations();
                   // find raster value for quantization
       if (operations.quantize.value == MidiOperation::QuantValue::SHORTEST_IN_BAR)
-            raster = shortestNoteInBar(chords, startChordIter, endBarTick);
+            raster = shortestNoteInBar(startBarChordIt, endChordIt, endBarTick);
       else {
             int userQuantValue = userQuantNoteToTicks(operations.quantize.value);
                         // if user value larger than the smallest note in bar
                         // then use the smallest note to keep faster events
             if (operations.quantize.reduceToShorterNotesInBar) {
-                  raster = shortestNoteInBar(chords, startChordIter, endBarTick);
+                  raster = shortestNoteInBar(startBarChordIt, endChordIt, endBarTick);
                   raster = qMin(userQuantValue, raster);
                   }
             else
@@ -119,14 +119,14 @@ int findQuantRaster(const std::multimap<int, MidiChord> &chords,
 
 // chords onTime values don't repeat despite multimap
 
-void doGridQuantizationOfBar(const std::multimap<int, MidiChord> &chords,
-                             std::multimap<int, MidiChord> &quantizedChords,
-                             const std::multimap<int, MidiChord>::const_iterator &startChordIter,
+void doGridQuantizationOfBar(std::multimap<int, MidiChord> &quantizedChords,
+                             const std::multimap<int, MidiChord>::iterator &startChordIt,
+                             const std::multimap<int, MidiChord>::iterator &endChordIt,
                              int raster,
                              int endBarTick)
       {
       int raster2 = raster >> 1;
-      for (auto it = startChordIter; it != chords.end(); ++it) {
+      for (auto it = startChordIt; it != endChordIt; ++it) {
             if (it->first >= endBarTick)
                   break;
             if (quantizedChords.find(it->first) != quantizedChords.end())
@@ -141,30 +141,56 @@ void doGridQuantizationOfBar(const std::multimap<int, MidiChord> &chords,
             }
       }
 
-const std::multimap<int, MidiChord>::const_iterator
-findFirstChordInBar(const std::multimap<int, MidiChord> &chords, int startBarTick, int endBarTick)
+std::multimap<int, MidiChord>::iterator
+findFirstChordInRange(int startRangeTick,
+                      int endRangeTick,
+                      const std::multimap<int, MidiChord>::iterator &startChordIt,
+                      const std::multimap<int, MidiChord>::iterator &endChordIt)
       {
-      auto it = chords.begin();
-      for (; it != chords.end(); ++it) {
-            if (it->first >= startBarTick) {
-                  if (it->first >= endBarTick)
-                        return chords.end();
+      auto it = startChordIt;
+      for (; it != endChordIt; ++it) {
+            if (it->first >= startRangeTick) {
+                  if (it->first >= endRangeTick)
+                        it = endChordIt;
                   break;
                   }
             }
       return it;
       }
 
-void quantizeChordsOfBar(const std::multimap<int, MidiChord> &chords,
-                         std::multimap<int, MidiChord> &quantizedChords,
-                         int startBarTick,
-                         int endBarTick)
+std::multimap<int, MidiChord>::iterator
+findEndChordInRange(int endRangeTick,
+                    const std::multimap<int, MidiChord>::iterator &startChordIt,
+                    const std::multimap<int, MidiChord>::iterator &endChordIt)
       {
-      auto startChordIter = findFirstChordInBar(chords, startBarTick, endBarTick);
-      if (startChordIter == chords.end())       // if no chords found in this bar
-            return;
-      int raster = findQuantRaster(chords, startChordIter, endBarTick);
-      doGridQuantizationOfBar(chords, quantizedChords, startChordIter, raster, endBarTick);
+      auto it = startChordIt;
+      for (; it != endChordIt; ++it) {
+            if (it->first > endRangeTick)
+                  break;
+            }
+      return it;
+      }
+
+void applyGridQuant(std::multimap<int, MidiChord> &chords,
+                    std::multimap<int, MidiChord> &quantizedChords,
+                    int lastTick,
+                    const TimeSigMap* sigmap)
+      {
+      int startBarTick = 0;
+      auto startBarChordIt = chords.begin();
+      for (int i = 1;; ++i) {       // iterate over all measures by indexes
+            int endBarTick = sigmap->bar2tick(i, 0);
+            startBarChordIt = findFirstChordInRange(startBarTick, endBarTick,
+                                                    startBarChordIt, chords.end());
+            if (startBarChordIt != chords.end()) {     // if no chords found in this bar
+                  int raster = findQuantRaster(startBarChordIt, chords.end(), endBarTick);
+                  doGridQuantizationOfBar(quantizedChords, startBarChordIt, chords.end(),
+                                          raster, endBarTick);
+                  }
+            if (endBarTick > lastTick)
+                  break;
+            startBarTick = endBarTick;
+            }
       }
 
 void applyGridQuant(std::multimap<int, MidiChord> &chords,
@@ -172,155 +198,40 @@ void applyGridQuant(std::multimap<int, MidiChord> &chords,
                     int lastTick)
       {
       std::multimap<int, MidiChord> quantizedChords;
-      int startBarTick = 0;
-      for (int i = 1;; ++i) {       // iterate over all measures by indexes
-            int endBarTick = sigmap->bar2tick(i, 0);
-            quantizeChordsOfBar(chords, quantizedChords, startBarTick, endBarTick);
-            if (endBarTick > lastTick)
-                  break;
-            startBarTick = endBarTick;
-            }
+      applyGridQuant(chords, quantizedChords, lastTick, sigmap);
       std::swap(chords, quantizedChords);
       }
 
-
-// TODO: optimize start and end chord iterators
-
-struct TupletInfo
+bool isTupletAllowed(int tupletNumber,
+                     int tupletLen,
+                     int tupletOnTimeSumError,
+                     int regularSumError,
+                     int quantValue,
+                     const std::map<int, std::multimap<int, MidiChord>::iterator> &tupletChords)
       {
-      int voice;
-      int onTime;
-      int len;
-      int tupletNumber;
-      int tupletQuantValue;
-      int regularQuantValue;
-                  // note number in tuplet, chord iterator
-      std::map<int, std::multimap<int, MidiChord>::iterator> chords;
-      int tupletOnTimeSumError = 0;
-      int regularSumError = 0;
-      };
-
-
-std::multimap<int, MidiChord>::iterator
-findFirstChordInBar(int startBarTick,
-                    int endBarTick,
-                    std::multimap<int, MidiChord> &chords)
-      {
-      std::multimap<int, MidiChord>::iterator startBarChordIt = chords.end();
-      for (auto it = chords.begin(); it != chords.end(); ++it) {
-            if (it->first >= startBarTick && it->first < endBarTick) {
-                  startBarChordIt = it;
-                  break;
-                  }
-            }
-      return startBarChordIt;
-      }
-
-std::multimap<int, MidiChord>::iterator
-findEndChordInBar(int endBarTick,
-                  const std::multimap<int, MidiChord>::iterator &startBarChordIt,
-                  std::multimap<int, MidiChord> &chords)
-      {
-      std::multimap<int, MidiChord>::iterator endBarChordIt = chords.end();
-      for (auto it = startBarChordIt; it != chords.end(); ++it) {
-            if (it->first > endBarTick) {
-                  endBarChordIt = it;
-                  break;
-                  }
-            }
-      return endBarChordIt;
-      }
-
-std::multimap<int, MidiChord>::iterator
-findFirstChordInDivision(int startDivTime,
-                         int endDivTime,
-                         const std::multimap<int, MidiChord>::iterator &startBarChordIt,
-                         const std::multimap<int, MidiChord>::iterator &endBarChordIt)
-      {
-      std::multimap<int, MidiChord>::iterator startDivChordIt = endBarChordIt;
-      for (auto it = startBarChordIt; it != endBarChordIt; ++it) {
-            if (it->first >= startDivTime && it->first < endDivTime) {
-                  startDivChordIt = it;
-                  break;
-                  }
-            }
-      return startDivChordIt;
-      }
-
-std::multimap<int, MidiChord>::iterator
-findEndChordInDivision(int endDivTime,
-                       const std::multimap<int, MidiChord>::iterator &startDivChordIt,
-                       const std::multimap<int, MidiChord>::iterator &endBarChordIt)
-      {
-      std::multimap<int, MidiChord>::iterator endDivChordIt = endBarChordIt;
-      for (auto it = startDivChordIt; it != endBarChordIt; ++it) {
-            if (it->first > endDivTime) {
-                  endDivChordIt = it;
-                  break;
-                  }
-            }
-      return endDivChordIt;
-      }
-
-struct BestChord
-      {
-      std::multimap<int, MidiChord>::iterator chordIter;
-      int minTupletError;
-      };
-
-BestChord findBestChordForTupletNote(int tupletNotePos,
-                                     int quantValue,
-                                     const std::multimap<int, MidiChord>::iterator &startTupletChordIt,
-                                     const std::multimap<int, MidiChord>::iterator &endDivChordIt)
-      {
-                  // choose the best chord, if any, for this tuplet note
-      BestChord bestChord;
-      bestChord.chordIter = endDivChordIt;
-      bestChord.minTupletError = std::numeric_limits<int>::max();
-                  // check chords - whether they can be in tuplet without large error
-      for (auto chordIt = startTupletChordIt; chordIt != endDivChordIt; ++chordIt) {
-            int tupletError = std::abs(chordIt->first - tupletNotePos);
-            if (tupletError > quantValue)
-                  continue;
-            if (tupletError < bestChord.minTupletError) {
-                  bestChord.minTupletError = tupletError;
-                  bestChord.chordIter = chordIt;
-                  }
-            }
-      return bestChord;
-      }
-
-bool isSpecialTupletAllowed(int tupletNumber,
-                            int divLen,
-                            int quantValue,
-                            const TupletInfo &tupletInfo)
-      {
+                  // special check for duplets and triplets
       std::vector<int> nums = {2, 3};
-                  // for duplet: if note first and single - only 1/2*divLen duration is allowed
-                  // for triplet: if note first and single - only 1/3*divLen duration is allowed
+                  // for duplet: if note first and single - only 1/2*tupletLen duration is allowed
+                  // for triplet: if note first and single - only 1/3*tupletLen duration is allowed
       for (auto num: nums) {
-            if (tupletNumber == num && tupletInfo.chords.size() == 1
-                        && tupletInfo.chords.begin()->first == 0) {
-                  auto &chordEventIt = tupletInfo.chords.begin()->second;
+            if (tupletNumber == num && tupletChords.size() == 1
+                        && tupletChords.begin()->first == 0) {
+                  auto &chordEventIt = tupletChords.begin()->second;
                   for (const auto &note: chordEventIt->second.notes) {
-                        if (std::abs(note.len - divLen / num) > quantValue)
+                        if (std::abs(note.len - tupletLen / num) > quantValue)
                               return false;
                         }
                   }
             }
-      return true;
-      }
-
-bool isTupletAllowed(const TupletInfo &tupletInfo)
-      {
-      int minAllowedNoteCount = tupletInfo.tupletNumber / 2 + tupletInfo.tupletNumber / 4;
-      if ((int)tupletInfo.chords.size() < minAllowedNoteCount
-                  || tupletInfo.tupletOnTimeSumError >= tupletInfo.regularSumError) {
+                  // for all tuplets
+      int minAllowedNoteCount = tupletNumber / 2 + tupletNumber / 4;
+      if ((int)tupletChords.size() < minAllowedNoteCount
+                  || tupletOnTimeSumError >= regularSumError) {
             return false;
             }
 
-      int tupletNoteLen = tupletInfo.len / tupletInfo.tupletNumber;
-      for (const auto &tupletChord: tupletInfo.chords) {
+      int tupletNoteLen = tupletLen / tupletNumber;
+      for (const auto &tupletChord: tupletChords) {
             for (const auto &note: tupletChord.second->second.notes) {
                   if (note.len >= tupletNoteLen / 2)
                         return true;
@@ -346,33 +257,64 @@ int findOnTimeRegularError(int onTime, int quantValue)
       return std::abs(onTime - regularPos);
       }
 
+// return: <chordIter, minChordError>
+
+std::pair<std::multimap<int, MidiChord>::iterator, int>
+findBestChordForTupletNote(int tupletNotePos,
+                           int quantValue,
+                           const std::multimap<int, MidiChord>::iterator &startChordIt,
+                           const std::multimap<int, MidiChord>::iterator &endChordIt)
+      {
+                  // choose the best chord, if any, for this tuplet note
+      std::pair<std::multimap<int, MidiChord>::iterator, int> bestChord;
+      bestChord.first = endChordIt;
+      bestChord.second = std::numeric_limits<int>::max();
+                  // check chords - whether they can be in tuplet without large error
+      for (auto chordIt = startChordIt; chordIt != endChordIt; ++chordIt) {
+            int tupletError = std::abs(chordIt->first - tupletNotePos);
+            if (tupletError > quantValue)
+                  continue;
+            if (tupletError < bestChord.second) {
+                  bestChord.first = chordIt;
+                  bestChord.second = tupletError;
+                  }
+            }
+      return bestChord;
+      }
+
 TupletInfo findTupletApproximation(int tupletNumber,
                                    int tupletNoteLen,
                                    int quantValue,
-                                   int startDivTime,
-                                   const std::multimap<int, MidiChord>::iterator &startDivChordIt,
-                                   const std::multimap<int, MidiChord>::iterator &endDivChordIt)
+                                   int startTupletTime,
+                                   const std::multimap<int, MidiChord>::iterator &startChordIt,
+                                   const std::multimap<int, MidiChord>::iterator &endChordIt)
       {
       TupletInfo tupletInfo;
       tupletInfo.tupletNumber = tupletNumber;
+      tupletInfo.onTime = startTupletTime;
+      tupletInfo.len = tupletNoteLen * tupletNumber;
+      tupletInfo.tupletQuantValue = tupletNoteLen;
+      while (tupletInfo.tupletQuantValue / 2 >= quantValue)
+            tupletInfo.tupletQuantValue /= 2;
+      tupletInfo.regularQuantValue = quantValue;
 
-      auto startTupletChordIt = startDivChordIt;
+      auto startTupletChordIt = startChordIt;
       for (int k = 0; k != tupletNumber; ++k) {
-            int tupletNotePos = startDivTime + k * tupletNoteLen;
+            int tupletNotePos = startTupletTime + k * tupletNoteLen;
                         // choose the best chord, if any, for this tuplet note
-            BestChord bestChord = findBestChordForTupletNote(tupletNotePos, quantValue,
-                                                             startTupletChordIt, endDivChordIt);
-            if (bestChord.chordIter == endDivChordIt)
+            auto bestChord = findBestChordForTupletNote(tupletNotePos, quantValue,
+                                                        startTupletChordIt, endChordIt);
+            if (bestChord.first == endChordIt)
                   continue;   // no chord fits to this tuplet note position
                         // chord can be in tuplet
-            tupletInfo.chords.insert({k, bestChord.chordIter});
-            tupletInfo.tupletOnTimeSumError += bestChord.minTupletError;
+            tupletInfo.chords.insert({k, bestChord.first});
+            tupletInfo.tupletOnTimeSumError += bestChord.second;
                         // for next tuplet note we start from the next chord
                         // because chord for the next tuplet note cannot be earlier
-            startTupletChordIt = bestChord.chordIter;
+            startTupletChordIt = bestChord.first;
             ++startTupletChordIt;
                         // find chord quant error for a regular grid
-            int regularError = findOnTimeRegularError(bestChord.chordIter->first, quantValue);
+            int regularError = findOnTimeRegularError(bestChord.first->first, quantValue);
             tupletInfo.regularSumError += regularError;
             }
 
@@ -389,14 +331,17 @@ findTupletCandidatesOfBar(int startBarTick,
       if (chords.empty() || startBarTick >= endBarTick)     // invalid cases
             return tupletCandidates;
 
-      auto startBarChordIt = findFirstChordInBar(startBarTick, endBarTick, chords);
+      int barLen = barFraction.ticks();
+      auto startBarChordIt = findFirstChordInRange(startBarTick - barLen / 4,
+                                                   endBarTick,
+                                                   chords.begin(),
+                                                   chords.end());
       if (startBarChordIt == chords.end()) // no chords in this bar
             return tupletCandidates;
                   // end iterator, as usual, will point to the next - invalid chord
-      auto endBarChordIt = findEndChordInBar(endBarTick, startBarChordIt, chords);
+      auto endBarChordIt = findEndChordInRange(endBarTick + barLen / 4, startBarChordIt, chords.end());
 
-      int barLen = barFraction.ticks();
-      int quantValue = findQuantRaster(chords, startBarChordIt, endBarTick);
+      int quantValue = findQuantRaster(startBarChordIt, endBarChordIt, endBarTick);
       auto divLengths = Meter::divisionsOfBarForTuplets(barFraction);
 
       for (const auto &divLen: divLengths) {
@@ -406,37 +351,32 @@ findTupletCandidatesOfBar(int startBarTick,
             for (int i = 0; i != divCount; ++i) {
                   int startDivTime = startBarTick + i * divLen;
                   int endDivTime = startDivTime + divLen;
-                              // check which chords can be inside tuplet period = [startDivTime, endDivTime]
-                  auto startDivChordIt = findFirstChordInDivision(startDivTime, endDivTime,
-                                                                  startBarChordIt, endBarChordIt);
+                              // check which chords can be inside tuplet period
+                              // [startDivTime - quantValue, endDivTime + quantValue]
+                  auto startDivChordIt = findFirstChordInRange(startDivTime - quantValue,
+                                                               endDivTime + quantValue,
+                                                               startBarChordIt,
+                                                               endBarChordIt);
                   if (startDivChordIt == endBarChordIt) // no chords in this division
                         continue;
                               // end iterator, as usual, will point to the next - invalid chord
-                  auto endDivChordIt = findEndChordInDivision(endDivTime, startDivChordIt, endBarChordIt);
+                  auto endDivChordIt = findEndChordInRange(endDivTime + quantValue, startDivChordIt,
+                                                           endBarChordIt);
                               // try different tuplets, nested tuplets are not allowed
                   for (const auto &tupletNumber: tupletNumbers) {
                         int tupletNoteLen = divLen / tupletNumber;
                         if (tupletNoteLen < quantValue)
                               continue;
                         TupletInfo tupletInfo = findTupletApproximation(tupletNumber, tupletNoteLen,
-                                          quantValue, startDivTime, startDivChordIt, endDivChordIt);
-                        tupletInfo.onTime = startDivTime;
-                        tupletInfo.len = divLen;
-                              // check - is it a good tuplet approximation?
-                                    // check tuplet note count
-                                    // and tuplet error compared to the regular quantization error
-                        if (!isTupletAllowed(tupletInfo))
-                              continue;
-                                    // additional check: tuplet special cases
-                        if (!isSpecialTupletAllowed(tupletNumber, divLen, quantValue, tupletInfo))
+                                    quantValue, startDivTime - quantValue, startDivChordIt, endDivChordIt);
+                              // check - is it a valid tuplet approximation?
+                        if (!isTupletAllowed(tupletNumber, divLen,
+                                             tupletInfo.tupletOnTimeSumError,
+                                             tupletInfo.regularSumError,
+                                             quantValue, tupletInfo.chords))
                               continue;
                                     // --- tuplet found ---
                         double averageError = tupletInfo.tupletOnTimeSumError * 1.0 / tupletInfo.chords.size();
-                        tupletInfo.tupletQuantValue = tupletNoteLen;
-                        while (tupletInfo.tupletQuantValue / 2 >= quantValue)
-                              tupletInfo.tupletQuantValue /= 2;
-                        tupletInfo.regularQuantValue = quantValue;
-
                         tupletCandidates.insert({averageError, tupletInfo});
                         }     // next tuplet type
                   }
@@ -546,21 +486,6 @@ void quantizeTupletChord(MidiChord &midiChord, int onTime, const TupletInfo &tup
             }
       }
 
-void quantizeNonTupletChords(const std::multimap<int, MidiChord> &chords,
-                             std::multimap<int, MidiChord> &quantizedChords,
-                             int lastTick,
-                             const TimeSigMap* sigmap)
-      {
-      int startBarTick = 0;
-      for (int i = 1;; ++i) {       // iterate over all measures by indexes
-            int endBarTick = sigmap->bar2tick(i, 0);
-            quantizeChordsOfBar(chords, quantizedChords, startBarTick, endBarTick);
-            if (endBarTick > lastTick)
-                  break;
-            startBarTick = endBarTick;
-            }
-      }
-
 // input chords - sorted by onTime value,
 // onTime values don't repeat even in multimap below
 
@@ -599,7 +524,7 @@ void quantizeChordsAndFindTuplets(std::multimap<int, TupletData> &tupletEvents,
             startBarTick = endBarTick;
             }
                   // quantize non-tuplet (remaining) chords with ordinary grid
-      quantizeNonTupletChords(chords, quantizedChords, lastTick, sigmap);
+      applyGridQuant(chords, quantizedChords, lastTick, sigmap);
 
       std::swap(chords, quantizedChords);
       }
