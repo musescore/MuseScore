@@ -41,6 +41,7 @@
     <sym code="0x00f8" name="oslash"/>
     <sym code="0x266f" name="#"/>
     <sym code="0x266d" name="b"/>
+    <sym value="b" class="note" name="b"/>
   </font>
 
 <!--
@@ -64,7 +65,7 @@
     <render>oslash</render>
   </token>
 
-  <renderRoot>:n m:0:-1 :a m:.5:1</renderRoot>
+  <renderRoot>:n :a m:0.5:0</renderRoot>
   <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
 
 <!--

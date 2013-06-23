@@ -3720,12 +3720,12 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="useItalianNoteNames">
+                <widget class="QRadioButton" name="useSolfeggioNoteNames">
                  <property name="toolTip">
                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La, Sib, Si, Do, Do#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
-                  <string>Italian</string>
+                  <string>Solfeggio</string>
                  </property>
                 </widget>
                </item>
@@ -4565,7 +4565,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>chordsXmlFile</tabstop>
   <tabstop>useStandardNoteNames</tabstop>
   <tabstop>useGermanNoteNames</tabstop>
-  <tabstop>useItalianNoteNames</tabstop>
+  <tabstop>useSolfeggioNoteNames</tabstop>
   <tabstop>lowerCaseMinorChords</tabstop>
   <tabstop>harmonyY</tabstop>
   <tabstop>harmonyFretDist</tabstop>

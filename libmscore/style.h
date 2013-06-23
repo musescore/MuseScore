@@ -258,7 +258,7 @@ enum StyleIdx {
 
       ST_useStandardNoteNames,
       ST_useGermanNoteNames,
-      ST_useItalianNoteNames,
+      ST_useSolfeggioNoteNames,
       ST_lowerCaseMinorChords,
       ST_chordStyle,
       ST_chordsXmlFile,
