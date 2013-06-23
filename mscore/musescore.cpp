@@ -4677,18 +4677,19 @@ int main(int argc, char* av[])
                         QApplication::setStyle(st);
                         qApp->setStyleSheet(appStyleSheet());
                         QPalette p(QApplication::palette());
-                        p.setColor(QPalette::Window,        QColor(0x52, 0x52, 0x52));
-                        p.setColor(QPalette::WindowText,    Qt::white);
-                        p.setColor(QPalette::Base,          QColor(0x42, 0x42, 0x42));
-                        p.setColor(QPalette::AlternateBase, QColor(0x62, 0x62, 0x62));
-                        p.setColor(QPalette::Text,          Qt::white);
-                        p.setColor(QPalette::Button,        QColor(0x52, 0x52, 0x52));
-                        p.setColor(QPalette::ButtonText,    Qt::white);
-                        p.setColor(QPalette::BrightText,    Qt::black);
+                        QSettings s;
+                        p.setColor(QPalette::Window,        QColor(s.value("WindowColor", "#525252").toString()));
+                        p.setColor(QPalette::WindowText,    QColor(s.value("WindowTextColor", "#FFFFFF").toString()));
+                        p.setColor(QPalette::Base,          QColor(s.value("BaseColor", "#424242").toString()));
+                        p.setColor(QPalette::AlternateBase, QColor(s.value("AlternateBaseColor", "#626262").toString()));
+                        p.setColor(QPalette::Text,          QColor(s.value("TextColor", "#FFFFFF").toString()));
+                        p.setColor(QPalette::Button,        QColor(s.value("ButtonColor", "#525252").toString()));
+                        p.setColor(QPalette::ButtonText,    QColor(s.value("ButtonTextColor", "#FFFFFF").toString()));
+                        p.setColor(QPalette::BrightText,    QColor(s.value("BrightTextColor", "#000000").toString()));
                         QApplication::setPalette(p);
 
                         QPalette palette = QToolTip::palette();
-                        palette.setBrush(QPalette::ToolTipBase, QBrush(Qt::darkGray));
+                        palette.setBrush(QPalette::ToolTipBase, QBrush(QColor(s.value("ToolTipBaseColor", "#808080").toString())));
                         QToolTip::setPalette(palette);
 
                         break;
