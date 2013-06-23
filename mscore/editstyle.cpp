@@ -264,7 +264,7 @@ void EditStyle::getValues()
 
       lstyle.set(ST_useStandardNoteNames,    useStandardNoteNames->isChecked());
       lstyle.set(ST_useGermanNoteNames,      useGermanNoteNames->isChecked());
-      lstyle.set(ST_useItalianNoteNames,     useItalianNoteNames->isChecked());
+      lstyle.set(ST_useSolfeggioNoteNames,   useSolfeggioNoteNames->isChecked());
       lstyle.set(ST_lowerCaseMinorChords,    lowerCaseMinorChords->isChecked());
 
       lstyle.set(ST_concertPitch,            concertPitch->isChecked());
@@ -501,7 +501,7 @@ void EditStyle::setValues()
             }
       useStandardNoteNames->setChecked(lstyle.valueB(ST_useStandardNoteNames));
       useGermanNoteNames->setChecked(lstyle.valueB(ST_useGermanNoteNames));
-      useItalianNoteNames->setChecked(lstyle.valueB(ST_useItalianNoteNames));
+      useSolfeggioNoteNames->setChecked(lstyle.valueB(ST_useSolfeggioNoteNames));
       lowerCaseMinorChords->setChecked(lstyle.valueB(ST_lowerCaseMinorChords));
       concertPitch->setChecked(lstyle.valueB(ST_concertPitch));
 

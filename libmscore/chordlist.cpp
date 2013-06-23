@@ -1663,7 +1663,7 @@ void ChordList::write(Xml& xml) const
                         if (s.code.isNull())
                               xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name).arg(s.value));
                         else
-                              xml.tagE(QString("sym name=\"%1\" code=\"%2\"").arg(s.name).arg(s.code.unicode()));
+                              xml.tagE(QString("sym name=\"%1\" code=\"0x%2\"").arg(s.name).arg(s.code.unicode(),0,16));
                         }
                   }
             xml.etag();
