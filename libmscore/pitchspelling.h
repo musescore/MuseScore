@@ -49,7 +49,7 @@ const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (
 // pitch2tpc(pitch) replaced by pitch2tpc(pitch, KEY_C, PREFER_NEAREST)
 
 enum { PREFER_FLATS=8, PREFER_NEAREST=11, PREFER_SHARPS=13 };
-enum NoteSpellingType { STANDARD = 0, GERMAN, ITALIAN };
+enum NoteSpellingType { STANDARD = 0, GERMAN, SOLFEGGIO };
 
 extern int pitch2tpc(int pitch, int key, int prefer);
 
