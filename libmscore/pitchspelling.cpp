@@ -272,8 +272,8 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, in
                         acc = 0;
                         }
                   break;
-            case ITALIAN: s = inames[idx]; break;
-            default: s = names[idx]; break;
+            case SOLFEGGIO:   s = inames[idx]; break;
+            default:          s = names[idx]; break;
             }
       if (lowerCase)
             s = s.toLower();

@@ -42,11 +42,7 @@ QString Harmony::harmonyName()
       r = tpc2name(_rootTpc, _rootSpelling, _rootLowerCase);
 
       if (_textName != "")
-#if 1
             e = _textName.remove('=');
-#else
-            e = _textName;
-#endif
       else if (!_degreeList.isEmpty()) {
             hc.add(_degreeList);
             // try to find the chord in chordList
@@ -328,8 +324,8 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
             rootSpelling = STANDARD;
       else if (score()->styleB(ST_useGermanNoteNames))
             rootSpelling = GERMAN;
-      else if (score()->styleB(ST_useItalianNoteNames))
-            rootSpelling = ITALIAN;
+      else if (score()->styleB(ST_useSolfeggioNoteNames))
+            rootSpelling = SOLFEGGIO;
       baseSpelling = rootSpelling;
       const ChordDescription* cd = getDescription();
       if (cd) {
@@ -379,7 +375,7 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
       int acci;
       switch (spelling) {
             case GERMAN:      acci = 1; break;
-            case ITALIAN:     acci = 2; break;
+            case SOLFEGGIO:   acci = 2; break;
             default:          acci = 1; break;
             }
       idx = acci;
@@ -424,7 +420,7 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                         return INVALID_TPC;
                   }
             }
-      else if (spelling == ITALIAN) {
+      else if (spelling == SOLFEGGIO) {
             QString ss = s.toLower().left(2);
             if (ss == "do")
                   r = 0;
@@ -499,15 +495,11 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             return 0;
             }
       *root = r;
-#if 1
-// enable this code to let "c" automatically imply C minor if lowerCaseMinorChords set
-// doesn't work yet, but this is a start
       bool preferMinor;
       if (score()->styleB(ST_lowerCaseMinorChords) && s[0].isLower())
             preferMinor = true;
       else
             preferMinor = false;
-#endif
       *base = INVALID_TPC;
       int slash = s.indexOf('/');
       if (slash != -1) {
@@ -525,15 +517,9 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             cd = descr(s);
       else {
             _parsedForm = new ParsedChord();
-#if 0
-            _parsedForm->parse(s, cl, syntaxOnly);
-#else
-// more code to allow "c" to automatically imply C minor
-// this much works, but the problem is propagating this charade everywhere else
             _parsedForm->parse(s, cl, syntaxOnly, preferMinor);
             if (preferMinor)
                   s = _parsedForm->name();
-#endif
             cd = descr(s, _parsedForm);
             }
       if (cd) {

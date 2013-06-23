@@ -140,7 +140,7 @@ StyleType styleTypes[] = {
       StyleType("genCourtesyClef",         ST_BOOL),
       StyleType("useStandardNoteNames",    ST_BOOL),
       StyleType("useGermanNoteNames",      ST_BOOL),
-      StyleType("useItalianNoteNames",     ST_BOOL),
+      StyleType("useSolfeggioNoteNames",   ST_BOOL),
       StyleType("lowerCaseMinorChords",    ST_BOOL),
       StyleType("chordStyle",              ST_STRING),
       StyleType("chordsXmlFile",           ST_BOOL),
@@ -537,7 +537,7 @@ StyleData::StyleData()
 
             StyleVal(ST_useStandardNoteNames, true),
             StyleVal(ST_useGermanNoteNames, false),
-            StyleVal(ST_useItalianNoteNames, false),
+            StyleVal(ST_useSolfeggioNoteNames, false),
             StyleVal(ST_lowerCaseMinorChords, false),
             StyleVal(ST_chordStyle, QString("std")),
             StyleVal(ST_chordsXmlFile, false),

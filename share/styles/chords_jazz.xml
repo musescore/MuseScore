@@ -51,7 +51,7 @@
     <sym code="0xe181" name="mi"/>
     <sym code="0xe182" name="s11"/>
     <sym code="0xe183" name="s13"/>
-    <sym code="0xe184" name="dim"/>
+    <sym code="0xe184" name="sdim"/>
     <sym code="0xe185" name="sus"/>
     <sym code="0xe186" name="+"/>
     <sym code="0xe187" name="degree"/>
@@ -79,15 +79,28 @@
     <sym code="0x266e" name="natural"/>
     <sym code="0x266f" name="#"/>
 
+<!-- these declarations enable b and mi render as literals when encountered as note names -->
+    <sym class="note" name="b"/>
+    <sym class="note" name="mi"/>
+
     </font>
 
   <font family="MuseJazz">
     <mag>0.85</mag>
 
-    <sym code="0x28" name="("/>
-    <sym code="0x29" name=")"/>
-
-    <sym code="0x4d" name="M"/>
+    <sym name="("/>
+    <sym name=")"/>
+    <sym name="M"/>
+    <sym name="Ma"/>
+    <sym name="Maj"/>
+    <sym name="maj"/>
+    <sym name="m"/>
+    <sym name="min"/>
+    <sym name="aug"/>
+    <sym name="dim"/>
+    <sym name="alt"/>
+    <sym name="no"/>
+    <sym name="omit"/>
 
   </font>
 
@@ -113,38 +126,14 @@
   <font family="MuseJazz">
     <mag>0.75</mag>
 
-    <sym code="0x28" name="s("/>
-    <sym code="0x29" name="s)"/>
-    <sym code="0x2c" name="s,"/>
+    <sym value="(" name="s("/>
+    <sym value=")" name="s)"/>
+    <sym value="," name="s,"/>
 
     <sym code="0xe18a" name="striangle"/>
 
-    <sym code="0x61" name="a"/>
-    <sym code="0x62" name="letterb"/>
-    <sym code="0x63" name="c"/>
-    <sym code="0x64" name="d"/>
-    <sym code="0x65" name="e"/>
-    <sym code="0x66" name="f"/>
-    <sym code="0x67" name="g"/>
-    <sym code="0x68" name="h"/>
-    <sym code="0x69" name="i"/>
-    <sym code="0x6a" name="j"/>
-    <sym code="0x6b" name="k"/>
-    <sym code="0x6c" name="l"/>
-    <sym code="0x6d" name="m"/>
-    <sym code="0x6e" name="n"/>
-    <sym code="0x6f" name="o"/>
-    <sym code="0x70" name="p"/>
-    <sym code="0x71" name="q"/>
-    <sym code="0x72" name="r"/>
-    <sym code="0x73" name="s"/>
-    <sym code="0x74" name="t"/>
-    <sym code="0x75" name="u"/>
-    <sym code="0x76" name="v"/>
-    <sym code="0x77" name="w"/>
-    <sym code="0x78" name="x"/>
-    <sym code="0x79" name="y"/>
-    <sym code="0x7a" name="z"/>
+    <sym name="es"/>
+    <sym name="is"/>
 
     </font>
 
@@ -170,21 +159,6 @@
     <render>m:0:-&mod; striangle m:0:&mod;</render>
   </token>
 
-  <token>
-    <name>Ma</name>
-    <render>M a</render>
-  </token>
-
-  <token>
-    <name>Maj</name>
-    <render>M a j</render>
-  </token>
-
-  <token>
-    <name>maj</name>
-    <render>m a j</render>
-  </token>
-
   <token class="modifier">
     <name>M</name>
     <render>m:0:-&mod; M m:0:&mod;</render>
@@ -192,7 +166,7 @@
 
   <token class="modifier">
     <name>Ma</name>
-    <render>m:0:-&mod; M a m:0:&mod;</render>
+    <render>m:0:-&mod; Ma m:0:&mod;</render>
   </token>
 
   <token class="modifier">
@@ -202,22 +176,12 @@
 
   <token class="modifier">
     <name>Maj</name>
-    <render>m:0:-&mod; M a j m:0:&mod;</render>
+    <render>m:0:-&mod; Maj m:0:&mod;</render>
   </token>
 
   <token class="modifier">
     <name>maj</name>
-    <render>m:0:-&mod; m a j m:0:&mod;</render>
-  </token>
-
-  <token>
-    <name>min</name>
-    <render>m i n</render>
-  </token>
-
-  <token>
-    <name>dim</name>
-    <render>d i m</render>
+    <render>m:0:-&mod; maj m:0:&mod;</render>
   </token>
 
   <token>
@@ -228,11 +192,6 @@
   <token>
     <name>0</name>
     <render>m:0:-4 oslash m:0:4</render>
-  </token>
-
-  <token>
-    <name>aug</name>
-    <render>a u g</render>
   </token>
 
   <token>

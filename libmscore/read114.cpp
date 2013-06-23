@@ -128,7 +128,7 @@ static const StyleVal style114[] = {
       StyleVal(ST_chordsXmlFile, true),
       StyleVal(ST_useStandardNoteNames, true),
       StyleVal(ST_useGermanNoteNames, false),
-      StyleVal(ST_useItalianNoteNames, false),
+      StyleVal(ST_useSolfeggioNoteNames, false),
       StyleVal(ST_lowerCaseMinorChords, false),
       StyleVal(ST_concertPitch, false),
       StyleVal(ST_createMultiMeasureRests, false),
