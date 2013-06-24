@@ -186,7 +186,7 @@ void TimeSig::read(XmlReader& e)
                   }
             else if (tag == "subtype") {
                   TimeSigType i = TimeSigType(e.readInt());
-                  if (score()->mscVersion() < 122) {
+                  if (score()->mscVersion() < 122 && score()->mscVersion() > 114) {
                         setSig(Fraction(
                              ((i >> 24) & 0x3f)
                            + ((i >> 18) & 0x3f)
