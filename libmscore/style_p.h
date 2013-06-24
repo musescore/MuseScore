@@ -88,7 +88,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
 class StyleData : public QSharedData {
    protected:
       QVector<StyleVal> _values;
-      mutable ChordList* _chordList;
+      ChordList* _chordList;
       QList<TextStyle> _textStyles;
       PageFormat _pageFormat;
       qreal _spatium;
