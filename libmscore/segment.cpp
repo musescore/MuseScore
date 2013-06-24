@@ -114,6 +114,8 @@ Segment::Segment(Measure* m)
 Segment::Segment(Measure* m, SegmentType st, int t)
    : Element(m->score())
       {
+      if (st == SegBreath)
+            abort();
       setParent(m);
       setSegmentType(st);
       setTick(t);
@@ -670,7 +672,7 @@ void Segment::swapElements(int i1, int i2)
             _elist[i2]->setTrack(i2);
       }
 
-
+#if 0
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -708,6 +710,7 @@ void Segment::read(XmlReader& e)
                   e.unknown();
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   getProperty

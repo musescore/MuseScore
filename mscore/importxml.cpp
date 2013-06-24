@@ -4796,7 +4796,10 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             // if (grace)
             //       qDebug(" grace: nrOfGraceSegsReq: %d", nrOfGraceSegsReq(pn));
             int gl = nrOfGraceSegsReq(pn);
-            cr = measure->findChord(loc_tick, track, grace);
+            // TODO-S  cr = measure->findChord(loc_tick, track, grace);
+            // implementation of grace notes has changed
+
+            cr = measure->findChord(loc_tick, track);
             if (cr == 0) {
                   // Segment::SegmentType st = Segment::SegChordRest;
                   cr = new Chord(score);
