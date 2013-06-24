@@ -672,7 +672,6 @@ void Segment::swapElements(int i1, int i2)
             _elist[i2]->setTrack(i2);
       }
 
-#if 0
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -685,7 +684,8 @@ void Segment::write(Xml& xml) const
       if (_extraLeadingSpace.isZero() && _extraTrailingSpace.isZero())
             return;
       xml.stag(name());
-      xml.tag("subtype", _segmentType);
+      if (_segmentType != SegChordRest)
+            xml.tag("subtype", subTypeName());
       xml.tag("leadingSpace", _extraLeadingSpace.val());
       xml.tag("trailingSpace", _extraTrailingSpace.val());
       xml.etag();
@@ -700,8 +700,20 @@ void Segment::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "subtype")
-                  _segmentType = SegmentType(e.readInt());
+            if (tag == "subtype") {
+                  _segmentType = SegChordRest;       // default
+                  QString s(e.readElementText());
+                  static std::vector<SegmentType> types = {
+                        SegClef, SegKeySig, SegTimeSig, SegStartRepeatBarLine, SegBarLine,
+                        SegChordRest, SegBreath, SegEndBarLine, SegTimeSigAnnounce, SegKeySigAnnounce
+                        };
+                  for (SegmentType t : types) {
+                        if (subTypeName(t) == s) {
+                              _segmentType = t;
+                              break;
+                              }
+                        }
+                  }
             else if (tag == "leadingSpace")
                   _extraLeadingSpace = Spatium(e.readDouble());
             else if (tag == "trailingSpace")
@@ -710,7 +722,6 @@ void Segment::read(XmlReader& e)
                   e.unknown();
             }
       }
-#endif
 
 //---------------------------------------------------------
 //   getProperty

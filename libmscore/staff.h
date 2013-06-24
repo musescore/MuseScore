@@ -92,7 +92,7 @@ class Staff : public QObject {
 
       ClefTypeList _initialClef;    // used by new score wizard
 
-      std::map<int,Clef*> clefs;
+      std::multimap<int, Clef*> clefs;
       std::map<int,TimeSig*> timesigs;
       KeyList _keymap;
 
