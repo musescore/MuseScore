@@ -2321,7 +2321,7 @@ bool Measure::visible(int staffIdx) const
 
 bool Measure::slashStyle(int staffIdx) const
       {
-      return score()->staff(staffIdx)->slashStyle() || staves[staffIdx]->_slashStyle;
+      return score()->staff(staffIdx)->slashStyle() || staves[staffIdx]->_slashStyle || score()->staff(staffIdx)->staffType()->slashStyle();
       }
 
 //---------------------------------------------------------

@@ -272,6 +272,7 @@ void EditStyle::getValues()
 
       lstyle.set(ST_accidentalNoteDistance,  Spatium(accidentalNoteDistance->value()));
       lstyle.set(ST_accidentalDistance,      Spatium(accidentalDistance->value()));
+      lstyle.set(ST_dotMag,                  dotMag->value() * 0.01);
       lstyle.set(ST_dotNoteDistance,         Spatium(noteDotDistance->value()));
       lstyle.set(ST_dotDotDistance,          Spatium(dotDotDistance->value()));
       lstyle.set(ST_stemWidth,               Spatium(stemWidth->value()));
@@ -506,6 +507,7 @@ void EditStyle::setValues()
 
       accidentalNoteDistance->setValue(lstyle.valueS(ST_accidentalNoteDistance).val());
       accidentalDistance->setValue(lstyle.valueS(ST_accidentalDistance).val());
+      dotMag->setValue(lstyle.value(ST_dotMag).toDouble() * 100.0);
       noteDotDistance->setValue(lstyle.valueS(ST_dotNoteDistance).val());
       dotDotDistance->setValue(lstyle.valueS(ST_dotDotDistance).val());
       stemWidth->setValue(lstyle.valueS(ST_stemWidth).val());
