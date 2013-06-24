@@ -96,6 +96,7 @@ StyleType styleTypes[] = {
       StyleType("beamMinSlope",            ST_DOUBLE),
       StyleType("beamMaxSlope",            ST_DOUBLE),
       StyleType("maxBeamTicks",            ST_INT),
+      StyleType("dotMag",                  ST_DOUBLE),
       StyleType("dotNoteDistance",         ST_SPATIUM),
       StyleType("dotRestDistance",         ST_SPATIUM),
       StyleType("dotDotDistance",          ST_SPATIUM),
@@ -490,6 +491,7 @@ StyleData::StyleData()
 
             StyleVal(ST_beamMaxSlope,         qreal(0.2)),
             StyleVal(ST_maxBeamTicks,         MScore::division),
+            StyleVal(ST_dotMag,         qreal(1.0)),
             StyleVal(ST_dotNoteDistance,      Spatium(0.35)),
             StyleVal(ST_dotRestDistance,      Spatium(0.25)),
             StyleVal(ST_dotDotDistance,       Spatium(0.5)),

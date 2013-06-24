@@ -1074,9 +1074,9 @@ qreal Chord::centerX() const
 
 void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      if (_hook)
-            func(data, _hook);
-      if (_stem)
+      if (_hook && !measure()->slashStyle(staffIdx()))
+            func(data, _hook );
+      if (_stem && !measure()->slashStyle(staffIdx()))
             func(data, _stem);
       if (_stemSlash)
             func(data, _stemSlash);
@@ -1086,8 +1086,9 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _tremolo);
       if (_glissando)
             func(data, _glissando);
-      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
-            func(data, ll);
+      if(staff()->showLedgerLines())
+            for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+                  func(data, ll);
       int n = _notes.size();
       for (int i = 0; i < n; ++i)
             _notes.at(i)->scanElements(data, func, all);
@@ -1598,7 +1599,7 @@ void Chord::layoutPitched()
                   score()->undoRemoveElement(_hook);
             else {
                   _hook->layout();
-                  if (up()) {
+                  if (up() && stem()) {
                         // hook position is not set yet
                         qreal x = _hook->bbox().right() + stem()->hookPos().x();
                         rrr = qMax(rrr, x);
