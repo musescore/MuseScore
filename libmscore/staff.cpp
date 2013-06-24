@@ -294,17 +294,6 @@ const Groups& Staff::group(int tick) const
       return Groups::endings(m->timesig());
       }
 
-#if 0
-//---------------------------------------------------------
-//   clefsGreater
-//---------------------------------------------------------
-
-static bool clefsGreater(const Clef* a, const Clef* b)
-      {
-      return a->segment()->tick() < b->segment()->tick();
-      }
-#endif
-
 //---------------------------------------------------------
 //   addClef
 //---------------------------------------------------------
@@ -319,19 +308,8 @@ void Staff::addClef(Clef* clef)
       if (clef->segment()->measure() == 0)
             abort();
       int tick = clef->segment()->tick();
-      clefs[tick] = clef;
+      clefs.insert(std::pair<int,Clef*>(tick, clef));
       }
-
-#if 0
-//---------------------------------------------------------
-//   timesigsGreater
-//---------------------------------------------------------
-
-static bool timesigsGreater(const TimeSig* a, const TimeSig* b)
-      {
-      return a->segment()->tick() < b->segment()->tick();
-      }
-#endif
 
 //---------------------------------------------------------
 //   addTimeSig
@@ -348,8 +326,17 @@ void Staff::addTimeSig(TimeSig* timesig)
 
 void Staff::removeClef(Clef* clef)
       {
+      if (clef->generated())
+            return;
       int tick = clef->segment()->tick();
-      clefs.erase(tick);
+      for (auto i = clefs.lower_bound(tick); i != clefs.upper_bound(tick); ++i) {
+            if (i->second == clef) {
+                  clefs.erase(i);
+                  return;
+                  }
+            }
+      qDebug("Staff::removeClef: Clef at %d not found", tick);
+      abort();
       }
 
 //---------------------------------------------------------

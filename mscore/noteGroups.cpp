@@ -92,11 +92,12 @@ void NoteGroups::setSig(Fraction sig, const Groups& g)
       chords8.clear();
       chords16.clear();
       chords32.clear();
-      int n   = _sig.numerator() * (8 / _sig.denominator());
+      Fraction f = _sig.reduced();
+      int n   = f.numerator() * (8 / f.denominator());
       view8->setScore(createScore(n, TDuration::V_EIGHT, &chords8));
-      n <<= 1;
+      n   = f.numerator() * (16 / f.denominator());
       view16->setScore(createScore(n, TDuration::V_16TH, &chords16));
-      n <<= 1;
+      n   = f.numerator() * (32 / f.denominator());
       view32->setScore(createScore(n, TDuration::V_32ND, &chords32));
       }
 
