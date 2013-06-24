@@ -166,10 +166,10 @@ class Segment : public Element {
       void setExtraLeadingSpace(Spatium v)       { _extraLeadingSpace = v;     }
       Spatium extraTrailingSpace() const         { return _extraTrailingSpace; }
       void setExtraTrailingSpace(Spatium v)      { _extraTrailingSpace = v;    }
-      bool written() const                       { return _written;            }
-      void setWritten(bool val)                  { _written = val;             }
-//      virtual void write(Xml&) const;
-//      virtual void read(XmlReader&);
+      bool written() const                       { return _written; }
+      void setWritten(bool val)                  { _written = val; }
+      virtual void write(Xml&) const;
+      virtual void read(XmlReader&);
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

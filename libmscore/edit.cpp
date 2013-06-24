@@ -1875,15 +1875,16 @@ printf("insertMeasure\n");
             //
             // fill measure with rest
             //
-            Score*      root = rootScore();
-            Measure*    m = static_cast<Measure*>(omb);
+            Score*   root = rootScore();
+            Measure* m = static_cast<Measure*>(omb);
             for (int staffIdx = 0; staffIdx < root->nstaves(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   Segment* s = m->findSegment(Segment::SegChordRest, m->tick());
                   if (s == 0 || s->element(track) == 0) {
                         // add rest to this staff and to all the staves linked to it
                         Rest* rest = new Rest(root, TDuration(TDuration::V_MEASURE));
-                        rest->setDuration(m->len());
+                        Fraction timeStretch(staff(staffIdx)->timeStretch(m->tick()));
+                        rest->setDuration(m->len() / timeStretch);
                         rest->setTrack(track);
                         undoAddCR(rest, m, m->tick());
                         }

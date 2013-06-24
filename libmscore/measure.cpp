@@ -667,7 +667,6 @@ void Measure::layout2()
 
 Chord* Measure::findChord(int tick, int track)
       {
-      int graces = 0;
       for (Segment* seg = last(); seg; seg = seg->prev()) {
             if (seg->tick() < tick)
                   return 0;
@@ -1871,7 +1870,7 @@ void Measure::read(XmlReader& e, int staffIdx)
       // tick is obsolete
       if (e.hasAttribute("tick"))
             e.setTick(score()->fileDivision(e.intAttribute("tick")));
-      setTick(e.tick());
+      // setTick(e.tick());
       // e.setTick(tick());
 
       bool irregular;
@@ -2228,7 +2227,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.addBeam(beam);
                   }
             else if (tag == "Segment")
-                  e.skipCurrentElement();       // segment->read(e);
+                  segment->read(e);
             else if (tag == "MeasureNumber") {
                   Text* noText = new Text(score());
                   noText->read(e);
