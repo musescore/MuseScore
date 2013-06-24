@@ -388,7 +388,7 @@ void ChordToken::read(XmlReader& e)
 //  write
 //---------------------------------------------------------
 
-void ChordToken::write(Xml& xml)
+void ChordToken::write(Xml& xml) const
       {
       QString t = "token";
       switch (tokenClass) {
@@ -1362,10 +1362,12 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             QList<ChordToken> definedTokens;
             bool found = false;
             // potential definitions for token
-            foreach (ChordToken ct, cl->chordTokenList) {
-                  foreach (QString ctn, ct.names) {
-                        if (ctn == n)
-                              definedTokens += ct;
+            if (cl) {
+                  foreach (ChordToken ct, cl->chordTokenList) {
+                        foreach (QString ctn, ct.names) {
+                              if (ctn == n)
+                                    definedTokens += ct;
+                              }
                         }
                   }
             // find matching class, fallback on ALL
@@ -1506,7 +1508,7 @@ void ChordDescription::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void ChordDescription::write(Xml& xml)
+void ChordDescription::write(Xml& xml) const
       {
       if (generated && !exportOk)
             return;
@@ -1621,7 +1623,7 @@ void ChordList::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void ChordList::write(Xml& xml)
+void ChordList::write(Xml& xml) const
       {
       int fontIdx = 0;
       foreach (ChordFont f, fonts) {
@@ -1705,7 +1707,7 @@ bool ChordList::read(const QString& name)
 //   writeChordList
 //---------------------------------------------------------
 
-bool ChordList::write(const QString& name)
+bool ChordList::write(const QString& name) const
       {
       QFileInfo info(name);
 
