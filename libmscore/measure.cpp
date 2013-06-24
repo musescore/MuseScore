@@ -662,25 +662,18 @@ void Measure::layout2()
 
 //---------------------------------------------------------
 //   findChord
+///   Search for chord at position \a tick in \a track
 //---------------------------------------------------------
 
-/**
- Search for chord at position \a tick in \a track at grace level \a gl.
- Grace level is 0 for a normal chord, 1 for the grace note closest
- to the normal chord, etc.
-*/
-
-Chord* Measure::findChord(int tick, int track, int gl)
+Chord* Measure::findChord(int tick, int track)
       {
       int graces = 0;
       for (Segment* seg = last(); seg; seg = seg->prev()) {
             if (seg->tick() < tick)
                   return 0;
             if (seg->tick() == tick) {
-//TODO-S                  if (seg->segmentType() == Segment::SegGrace)
-//                        graces++;
                   Element* el = seg->element(track);
-                  if (el && el->type() == CHORD && graces == gl)
+                  if (el && el->type() == CHORD)
                         return static_cast<Chord*>(el);
                   }
             }
@@ -689,11 +682,8 @@ Chord* Measure::findChord(int tick, int track, int gl)
 
 //---------------------------------------------------------
 //   findChordRest
+///   Search for chord or rest at position \a tick at \a staff in \a voice.
 //---------------------------------------------------------
-
-/**
- Search for chord or rest at position \a tick at \a staff in \a voice.
-*/
 
 ChordRest* Measure::findChordRest(int tick, int track)
       {
@@ -1937,6 +1927,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                         graceNotes.push_back(chord);
                   else {
                         segment->add(chord);
+                        Q_ASSERT(segment->segmentType() == Segment::SegChordRest);
+
                         for (int i = 0; i < graceNotes.size(); ++i) {
                               Chord* gc = graceNotes[i];
                               gc->setGraceIndex(i);
@@ -2236,7 +2228,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.addBeam(beam);
                   }
             else if (tag == "Segment")
-                  segment->read(e);
+                  e.skipCurrentElement();       // segment->read(e);
             else if (tag == "MeasureNumber") {
                   Text* noText = new Text(score());
                   noText->read(e);

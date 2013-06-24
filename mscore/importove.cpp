@@ -1413,8 +1413,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 		} else {
 			QList<OVE::Note*> notes = container->getNotesRests();
 			int graceLevel = getGraceLevel(containers, container->getTick(), container->start()->getOffset());
-
-			cr = measure->findChord(tick, noteTrack, graceLevel);
+			// TODO-S          cr = measure->findChord(tick, noteTrack, graceLevel);
+			cr = measure->findChord(tick, noteTrack);
 			if (cr == 0) {
 				// Segment::SegmentType st = Segment::SegChordRest;
 

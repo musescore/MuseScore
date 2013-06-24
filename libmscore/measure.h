@@ -211,7 +211,7 @@ class Measure : public MeasureBase {
       void layout(qreal width);
       void layout2();
 
-      Chord* findChord(int tick, int track, int gl);
+      Chord* findChord(int tick, int track);
       ChordRest* findChordRest(int tick, int track);
       int snap(int tick, const QPointF p) const;
       int snapNote(int tick, const QPointF p, int staff) const;

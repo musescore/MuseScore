@@ -47,11 +47,6 @@ class System;
 
  Segments are children of Measures and store Clefs, KeySigs, TimeSigs,
  BarLines and ChordRests.
-
- special case SegGrace:
-      - tick()                 is play position of acciaccatura and appoggiatura notes
-      - tick() - tickOffset()  is logical position, relevant for layout
-                               (logicl position is the tick position of the next main note)
 */
 
 class Segment : public Element {
@@ -147,7 +142,7 @@ class Segment : public Element {
       static const char* subTypeName(SegmentType);
       static SegmentType segmentType(ElementType type);
       SegmentType segmentType() const            { return _segmentType; }
-      void setSegmentType(SegmentType t)         { _segmentType = t; }
+      void setSegmentType(SegmentType t)         { if (t == SegBreath) abort(); _segmentType = t; }
 
       void removeGeneratedElements();
       bool isEmpty() const                       { return empty; }
@@ -173,8 +168,8 @@ class Segment : public Element {
       void setExtraTrailingSpace(Spatium v)      { _extraTrailingSpace = v;    }
       bool written() const                       { return _written;            }
       void setWritten(bool val)                  { _written = val;             }
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
+//      virtual void write(Xml&) const;
+//      virtual void read(XmlReader&);
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
