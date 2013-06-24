@@ -623,14 +623,16 @@ const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* p
       {
       const ChordList* cl = score()->style()->chordList();
       const ChordDescription* match = 0;
-      foreach (const ChordDescription* cd, *cl) {
-            foreach (const QString& s, cd->names) {
-                  if (s == name)
-                        return cd;
-                  else if (pc) {
-                        foreach (const ParsedChord& sParsed, cd->parsedChords) {
-                              if (sParsed == *pc)
-                                    match = cd;
+      if (cl) {
+            foreach (const ChordDescription* cd, *cl) {
+                  foreach (const QString& s, cd->names) {
+                        if (s == name)
+                              return cd;
+                        else if (pc) {
+                              foreach (const ParsedChord& sParsed, cd->parsedChords) {
+                                    if (sParsed == *pc)
+                                          match = cd;
+                                    }
                               }
                         }
                   }

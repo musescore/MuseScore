@@ -388,7 +388,7 @@ class MStyle {
 
       bool isDefault(StyleIdx idx) const;
       const ChordDescription* chordDescription(int id) const;
-      ChordList* chordList() const;
+      ChordList* chordList();
       void setChordList(ChordList*, bool custom = true);    // Style gets ownership of ChordList
 
       const TextStyle& textStyle(int) const;
