@@ -43,7 +43,12 @@ namespace Ms {
 
 const char* Segment::subTypeName() const
       {
-      switch(segmentType()) {
+      return subTypeName(segmentType());
+      }
+
+const char* Segment::subTypeName(SegmentType t)
+      {
+      switch(t) {
             case SegClef:                 return "Clef";
             case SegKeySig:               return "Key Signature";
             case SegTimeSig:              return "Time Signature";
