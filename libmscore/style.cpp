@@ -615,7 +615,6 @@ StyleData::StyleData()
             _values[idx] = values[idx];
 
 // _textStyles.append(TextStyle(defaultTextStyles[i]));
-      _chordList = 0;
       _spatium = SPATIUM20 * MScore::DPI;
       _articulationAnchor[Articulation_Fermata]         = A_TOP_STAFF;
       _articulationAnchor[Articulation_Shortfermata]    = A_TOP_STAFF;
@@ -658,11 +657,8 @@ StyleData::StyleData()
 StyleData::StyleData(const StyleData& s)
    : QSharedData(s)
       {
-      _values = s._values;
-      if (s._chordList)
-            _chordList = new ChordList(*(s._chordList));
-      else
-            _chordList = 0;
+      _values          = s._values;
+      _chordList       = s._chordList;
       _customChordList = s._customChordList;
       _textStyles      = s._textStyles;
       _pageFormat.copy(s._pageFormat);
@@ -677,7 +673,6 @@ StyleData::StyleData(const StyleData& s)
 
 StyleData::~StyleData()
       {
-      delete _chordList;
       }
 
 //---------------------------------------------------------
@@ -987,9 +982,8 @@ void StyleData::load(XmlReader& e)
             else if (tag == "displayInConcertPitch")
                   set(StyleVal(ST_concertPitch, bool(e.readInt())));
             else if (tag == "ChordList") {
-                  delete _chordList;
-                  _chordList = new ChordList;
-                  _chordList->read(e);
+                  _chordList.clear();
+                  _chordList.read(e);
                   _customChordList = true;
                   chordListTag = true;
                   }
@@ -1069,11 +1063,10 @@ void StyleData::load(XmlReader& e)
                   _customChordList = true;
             else
                   _customChordList = false;
-            delete _chordList;
-            _chordList = new ChordList;
+            _chordList.clear();
             if (value(ST_chordsXmlFile).toBool())
-                  _chordList->read("chords.xml");
-            _chordList->read(newChordDescriptionFile);
+                  _chordList.read("chords.xml");
+            _chordList.read(newChordDescriptionFile);
             }
 
       //
@@ -1142,9 +1135,9 @@ void StyleData::save(Xml& xml, bool optimize) const
             }
       for (int i = TEXT_STYLES; i < _textStyles.size(); ++i)
             _textStyles[i].write(xml);
-      if (_customChordList && _chordList) {
+      if (_customChordList && !_chordList.isEmpty()) {
             xml.stag("ChordList");
-            _chordList->write(xml);
+            _chordList.write(xml);
             xml.etag();
             }
       for (int i = 0; i < ARTICULATIONS; ++i) {
@@ -1164,16 +1157,16 @@ void StyleData::save(Xml& xml, bool optimize) const
 
 const ChordDescription* StyleData::chordDescription(int id) const
       {
-      return chordList()->value(id);
+      return _chordList.value(id);
       }
 
 //---------------------------------------------------------
 //   chordList
 //---------------------------------------------------------
 
-ChordList* StyleData::chordList()  const
+ChordList* StyleData::chordList()
       {
-      return _chordList;
+      return &_chordList;
       }
 
 //---------------------------------------------------------
@@ -1182,8 +1175,7 @@ ChordList* StyleData::chordList()  const
 
 void StyleData::setChordList(ChordList* cl, bool custom)
       {
-      delete _chordList;
-      _chordList = cl;
+      _chordList = *cl;
       _customChordList = custom;
       }
 
@@ -1311,7 +1303,7 @@ const ChordDescription* MStyle::chordDescription(int id) const
 //   chordList
 //---------------------------------------------------------
 
-ChordList* MStyle::chordList() const
+ChordList* MStyle::chordList()
       {
       return d->chordList();
       }

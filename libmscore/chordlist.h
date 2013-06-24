@@ -114,7 +114,7 @@ class ChordToken {
       QStringList names;
       QList<RenderAction> renderList;
       void read(XmlReader&);
-      void write(Xml&);
+      void write(Xml&) const;
       };
 
 //---------------------------------------------------------
@@ -187,7 +187,7 @@ struct ChordDescription {
       ChordDescription(const QString&, ChordList*);
       void complete(ParsedChord* pc, const ChordList*);
       void read(XmlReader&);
-      void write(Xml&);
+      void write(Xml&) const;
       };
 
 //---------------------------------------------------------
@@ -229,10 +229,10 @@ class ChordList : public QMap<int, ChordDescription*> {
       ChordList();
 
       virtual ~ChordList();
-      void write(Xml& xml);
+      void write(Xml& xml) const;
       void read(XmlReader&);
       bool read(const QString&);
-      bool write(const QString&);
+      bool write(const QString&) const;
       ChordSymbol symbol(const QString& s) const { return symbols.value(s); }
       };
 
