@@ -1068,16 +1068,10 @@ void StyleData::load(XmlReader& e)
             else
                   _customChordList = false;
             delete _chordList;
-#if 1
-// use this code to set chord list to be loaded on demand
-            _chordList = 0;
-#else
-// use this code to load chord list now
             _chordList = new ChordList;
             if (value(ST_chordsXmlFile).toBool())
                   _chordList->read("chords.xml");
             _chordList->read(newChordDescriptionFile);
-#endif
             }
 
       //
@@ -1177,12 +1171,6 @@ const ChordDescription* StyleData::chordDescription(int id) const
 
 ChordList* StyleData::chordList()  const
       {
-      if (_chordList == 0) {
-            _chordList = new ChordList();
-            if (value(ST_chordsXmlFile).toBool())
-                  _chordList->read("chords.xml");
-            _chordList->read(value(ST_chordDescriptionFile).toString());
-            }
       return _chordList;
       }
 
