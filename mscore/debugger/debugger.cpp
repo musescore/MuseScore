@@ -763,17 +763,13 @@ SegmentView::SegmentView()
       {
       sb.setupUi(addWidget());
       sb.segmentType->clear();
-      sb.segmentType->addItem("SegClef",               0x1);
-      sb.segmentType->addItem("SegKeySig",             0x2);
-      sb.segmentType->addItem("SegTimeSig",            0x4);
-      sb.segmentType->addItem("SegStartRepeatBarLine", 0x8);
-      sb.segmentType->addItem("SegBarLine",            0x10);
-      sb.segmentType->addItem("SegGrace",              0x20);
-      sb.segmentType->addItem("SegChordRest",          0x40);
-      sb.segmentType->addItem("SegBreath",             0x80);
-      sb.segmentType->addItem("SegEndBarLine",         0x100);
-      sb.segmentType->addItem("SegTimeSigAnnounce",    0x200);
-      sb.segmentType->addItem("SegKeySigAnnounce",     0x400);
+      static std::vector<Segment::SegmentType> segmentTypes = {
+            Segment::SegClef, Segment::SegKeySig, Segment::SegTimeSig, Segment::SegStartRepeatBarLine,
+            Segment::SegBarLine, Segment::SegChordRest, Segment::SegBreath, Segment::SegEndBarLine,
+            Segment::SegTimeSigAnnounce, Segment::SegKeySigAnnounce
+            };
+      for (Segment::SegmentType t : segmentTypes)
+            sb.segmentType->addItem(Segment::subTypeName(t), int(t));
       connect(sb.lyrics, SIGNAL(itemClicked(QListWidgetItem*)),      SLOT(gotoElement(QListWidgetItem*)));
       connect(sb.spannerFor, SIGNAL(itemClicked(QListWidgetItem*)),  SLOT(gotoElement(QListWidgetItem*)));
       connect(sb.spannerBack, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
