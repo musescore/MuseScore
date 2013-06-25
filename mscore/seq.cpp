@@ -1129,6 +1129,7 @@ void Seq::heartBeatTimeout()
             --ppos;
       mutex.unlock();
 
+      QRectF r;
       for (;guiPos != events.cend(); ++guiPos) {
             if (guiPos->first > ppos->first)
                   break;
@@ -1139,7 +1140,7 @@ void Seq::heartBeatTimeout()
                         while (note1) {
                               note1->setMark(true);
                               markedNotes.append(note1);
-                              cs->addRefresh(note1->canvasBoundingRect());
+                              r |= note1->canvasBoundingRect();
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
                               }
 
@@ -1147,7 +1148,7 @@ void Seq::heartBeatTimeout()
                   else {
                         while (note1) {
                               note1->setMark(false);
-                              cs->addRefresh(note1->canvasBoundingRect());
+                              r |= note1->canvasBoundingRect();
                               markedNotes.removeOne(note1);
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
                               }
@@ -1164,7 +1165,7 @@ void Seq::heartBeatTimeout()
       PianorollEditor* pre = mscore->getPianorollEditor();
       if (pre && pre->isVisible())
             pre->heartBeat(this);
-      cs->update();
+      cv->update(cv->toPhysical(r));
       }
 
 //---------------------------------------------------------
