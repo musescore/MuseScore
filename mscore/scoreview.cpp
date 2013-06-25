@@ -3775,7 +3775,7 @@ void ScoreView::cmdAddSlur()
                               cr2 = cr1;
                         Slur* slur = new Slur(_score);
                         slur->setTick(cr1->tick());
-                        slur->setTickLen(cr2->tick() - cr1->tick());
+                        slur->setTick2(cr2->tick());
                         slur->setTrack(cr1->track());
                         slur->setParent(0);
                         _score->undoAddElement(slur);
@@ -3885,7 +3885,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
       Slur* slur = new Slur(_score);
       slur->setAnchor(Spanner::ANCHOR_SEGMENT);
       slur->setTick(cr1->tick());
-      slur->setTickLen(cr2->tick() - cr1->tick());
+      slur->setTick2(cr2->tick());
       slur->setTrack(cr1->track());
       slur->setParent(0);
       _score->undoAddElement(slur);

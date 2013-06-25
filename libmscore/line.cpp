@@ -298,7 +298,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                         if (key == Qt::Key_Left)
                               ls = l->takeLastSegment();
                         }
-                  l->setTickLen(m2->tick() - l->tick());
+                  l->setTick2(m2->tick());
                   }
             }
       l->layout();
@@ -655,16 +655,10 @@ bool SLine::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "tick2") {
-            int tick2 = e.readInt();
-            setTickLen(tick() == -1 ? tick2 : tick2 - tick());
-            }
-      else if (tag == "tick") {
-            int tick1 = e.readInt();
-            if (tickLen() != -1)
-                  setTickLen(tickLen() - tick1);
-            setTick(tick1);
-            }
+      if (tag == "tick2")                 // obsolete
+            setTick2(e.readInt());
+      else if (tag == "tick")             // obsolete
+            setTick(e.readInt());
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
             ls->read(e);

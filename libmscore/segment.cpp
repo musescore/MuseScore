@@ -114,8 +114,6 @@ Segment::Segment(Measure* m)
 Segment::Segment(Measure* m, SegmentType st, int t)
    : Element(m->score())
       {
-      if (st == SegBreath)
-            abort();
       setParent(m);
       setSegmentType(st);
       setTick(t);

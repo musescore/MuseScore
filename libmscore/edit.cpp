@@ -961,7 +961,7 @@ void Score::cmdAddHairpin(bool decrescendo)
       pin->setHairpinType(decrescendo ? Hairpin::DECRESCENDO : Hairpin::CRESCENDO);
       pin->setTrack(cr1->track());
       pin->setTick(cr1->segment()->tick());
-      pin->setTickLen(cr2->segment()->tick() - pin->tick());
+      pin->setTick2(cr2->segment()->tick());
       pin->setParent(cr1->segment());
       undoAddElement(pin);
       if (!noteEntryMode())

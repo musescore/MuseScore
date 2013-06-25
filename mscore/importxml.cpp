@@ -2122,7 +2122,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                     else if (endingType == "stop") {
                                           if (lastVolta) {
                                                 lastVolta->setVoltaType(VoltaType::CLOSED);
-                                                lastVolta->setTickLen(measure->tick() - lastVolta->tick());
+                                                lastVolta->setTick2(measure->tick());
                                                 lastVolta = 0;
                                                 }
                                           else {
