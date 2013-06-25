@@ -36,12 +36,28 @@
 -->
 
   <font>
+
     <sym code="0x0394" name="triangle"/>
     <sym code="0x03bf" name="circle"/>
     <sym code="0x00f8" name="oslash"/>
     <sym code="0x266f" name="#"/>
     <sym code="0x266d" name="b"/>
-  </font>
+
+<!-- this allows "b" to render as a literal when when encountered as a note name -->
+    <sym value="b" class="note" name="b"/>
+
+<!-- edit the "value" attribute of these to get an accent on the "e" for French spelling -->
+    <sym value="Re" class="note" name="Re"/>
+    <sym value="re" class="note" name="re"/>
+
+<!-- add "code" attributes to these, matching those for "b" and "#" above
+    (0x266d / 0x266f) to get German chords to render with flat and sharp -->
+    <sym name="es"/>
+    <sym name="is"/>
+<!-- this is to render the "s" in "As" and "Es" in German -->
+    <sym name="s"/>
+
+    </font>
 
 <!--
       Part II: token list
@@ -57,14 +73,14 @@
     <name>t</name>
     <name>^</name>
     <render>triangle</render>
-  </token>
+    </token>
 
   <token>
     <name>0</name>
     <render>oslash</render>
-  </token>
+    </token>
 
-  <renderRoot>:n m:0:-1 :a m:.5:1</renderRoot>
+  <renderRoot>:n :a m:0.5:0</renderRoot>
   <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
 
 <!--

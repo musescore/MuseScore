@@ -55,7 +55,7 @@ class HarmonyCanvas : public QFrame {
       virtual void dragLeaveEvent(QDragLeaveEvent*);
       virtual void dragMoveEvent(QDragMoveEvent*);
 
-      void render(const QList<RenderAction>&, double& x, double& y, int tpc);
+      void render(const QList<RenderAction>&, double& x, double& y, int tpc, NoteSpellingType spelling, bool lowerCase);
 
    private slots:
       void deleteAction();

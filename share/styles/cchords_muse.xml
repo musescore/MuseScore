@@ -934,7 +934,7 @@
     </chord>
 
   <chord id="210">
-    <name>&parse_major;7&p_alp;#11&p_arp;</name>
+    <name>&parse_major;7#11</name>
     <xml>major-seventh</xml>
     <degree>add#11</degree>
     <voicing>C E G B F#</voicing>
@@ -942,7 +942,7 @@
     </chord>
 
   <chord id="211">
-    <name>&parse_major;9&p_alp;#5&p_arp;</name>
+    <name>&parse_major;9#5</name>
     <xml>major-ninth</xml>
     <degree>alt#5</degree>
     <voicing>C E G# B D</voicing>
@@ -950,7 +950,7 @@
     </chord>
 
   <chord id="212">
-    <name>&parse_major;7&p_alp;#9&p_arp;</name>
+    <name>&parse_major;7#9</name>
     <xml>major-seventh</xml>
     <degree>add#9</degree>
     <voicing>C E G B D#</voicing>
@@ -1002,7 +1002,7 @@
     </chord>
 
   <chord id="220">
-    <name>&parse_minor;7&p_alp;b9&p_arp;</name>
+    <name>&parse_minor;7b9</name>
     <xml>minor-seventh</xml>
     <degree>addb9</degree>
     <voicing>C Eb G Bb Db</voicing>
@@ -1010,7 +1010,7 @@
     </chord>
 
   <chord id="221">
-    <name>&parse_minor;7&p_alp;b13&p_arp;</name>
+    <name>&parse_minor;7b13</name>
     <xml>minor-seventh</xml>
     <degree>addb13</degree>
     <voicing>C Eb G Bb Ab</voicing>
@@ -1035,7 +1035,7 @@
     </chord>
 
   <chord id="230">
-    <name>7&p_alp;b9#9&p_arp;</name>
+    <name>7b9#9</name>
     <xml>dominant</xml>
     <degree>addb9</degree>
     <degree>add#9</degree>
@@ -1053,7 +1053,7 @@
     </chord>
 
   <chord id="241">
-    <name>&parse_major;7&p_alp;b13&p_arp;</name>
+    <name>&parse_major;7b13</name>
     <xml>major-seventh</xml>
     <degree>addb13</degree>
     <voicing>C E G B Ab</voicing>
