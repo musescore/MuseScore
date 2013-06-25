@@ -17,6 +17,7 @@
 #include "spatium.h"
 #include "fraction.h"
 #include "property.h"
+#include "../xml/qxmlstream.h"
 
 namespace Ms {
 
@@ -29,7 +30,7 @@ class ClefList;
 //   XmlReader
 //---------------------------------------------------------
 
-class XmlReader : public QXmlStreamReader {
+class XmlReader : public XmlStreamReader {
       QString docName;  // used for error reporting
 
       // Score read context (for read optimizations):

@@ -279,6 +279,7 @@ target_link_libraries(mscore
       diff_match_patch
       bww
       rtf2html
+      xmlreader
       ${QTSINGLEAPPLICATION_LIBRARIES}
       synthesizer
       midi
