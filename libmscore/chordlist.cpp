@@ -1060,7 +1060,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                               // unrecognized token right from very beginning
                               _xmlKind = "other";
                               _xmlText = tok1;
-                              break;
                               }
                         }
                   if (alter) {

@@ -241,7 +241,13 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QS
       tpc2name(tpc, spelling, lowerCase, s, n);
       switch (n) {
             case -2: acc = "bb" ; break;
-            case -1: acc = (spelling != GERMAN) ? "b" : "es";  break;
+            case -1:
+                  if (spelling != GERMAN)
+                        acc = "b";
+                  else
+                        // render flats as "es" except for A and E, which get "s"
+                        acc = (tpc == 10 || tpc == 11) ? "s" : "es";
+                  break;
             case  0: acc = ""; break;
             case  1: acc = (spelling != GERMAN) ? "#" : "is"; break;
             case  2: acc = "##"; break;

@@ -386,11 +386,15 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
             if (acc.startsWith("b")) {
                   alter = -1;
                   idx += 1;
-            }
+                  }
             else if (spelling == GERMAN && acc.startsWith("es")) {
                   alter = -1;
                   idx += 2;
-            }
+                  }
+            else if (spelling == GERMAN && acc.startsWith("s") && !acc.startsWith("su")) {
+                  alter = -1;
+                  idx += 1;
+                  }
             else if (acc.startsWith("#")) {
                   alter = 1;
                   idx += 1;
