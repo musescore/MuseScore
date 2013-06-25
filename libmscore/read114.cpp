@@ -516,8 +516,8 @@ Score::FileError Score::read114(XmlReader& e)
             }
       qDeleteAll(e.clefListList());
 
-#if 0 // TODO-S
-      foreach(Spanner* s, e.spanner()) {
+      for (std::pair<int,Spanner*> p : spanner()) {
+            Spanner* s = p.second;
             if (s->type() == Element::OTTAVA
                || (s->type() == Element::TEXTLINE)
                || (s->type() == Element::VOLTA)
@@ -529,71 +529,10 @@ Score::FileError Score::read114(XmlReader& e)
                   tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
                   }
 
-            if (s->type() == Element::SLUR) {
-                  Slur* slur = static_cast<Slur*>(s);
-
-                  if (!slur->startElement() || !slur->endElement()) {
-                        qDebug("incomplete Slur");
-                        if (slur->startElement()) {
-                              qDebug("  front %d", static_cast<ChordRest*>(slur->startElement())->tick());
-                              static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
-                              }
-                        if (slur->endElement()) {
-                              qDebug("  back %d", static_cast<ChordRest*>(slur->endElement())->tick());
-                              static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
-                              }
-                        }
-                  else {
-                        ChordRest* cr1 = (ChordRest*)(slur->startElement());
-                        ChordRest* cr2 = (ChordRest*)(slur->endElement());
-                        if (cr1->tick() > cr2->tick()) {
-                              qDebug("Slur invalid start-end tick %d-%d", cr1->tick(), cr2->tick());
-                              slur->setStartElement(cr2);
-                              slur->setEndElement(cr1);
-                              }
-                        int n1 = 0;
-                        int n2 = 0;
-                        for (Spanner* s = cr1->spannerFor(); s; s = s->next()) {
-                              if (s == slur)
-                                    ++n1;
-                              }
-                        for (Spanner* s = cr2->spannerBack(); s; s = s->next()) {
-                              if (s == slur)
-                                    ++n2;
-                              }
-                        if (n1 != 1 || n2 != 1) {
-                              qDebug("Slur references bad: %d %d", n1, n2);
-                              }
-                        }
-                  }
-            else {
-                  Segment* s1 = tick2segment(s->__tick1());
-                  Segment* s2 = tick2segment(s->__tick2());
-                  if (s1 == 0 || s2 == 0) {
-                        qDebug("cannot place %s at tick %d - %d",
-                           s->name(), s->__tick1(), s->__tick2());
-                        continue;
-                        }
+            if (s->type() != Element::SLUR) {
                   if (s->type() == Element::VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
                         volta->setAnchor(Spanner::ANCHOR_MEASURE);
-                        volta->setStartMeasure(s1->measure());
-                        Measure* m2 = s2->measure();
-                        if (s2->tick() == m2->tick())
-                              m2 = m2->prevMeasure();
-                        volta->setEndMeasure(m2);
-                        s1->measure()->add(s);
-                        int n = volta->spannerSegments().size();
-                        if (n) {
-                              // volta->setYoff(-styleS(ST_voltaHook).val());
-                              // LineSegment* ls = volta->segmentAt(0);
-                              // ls->setReadPos(QPointF());
-                              }
-                        }
-                  else {
-                        s->setStartElement(s1);
-                        s->setEndElement(s2);
-                        s1->add(s);
                         }
                   }
 
@@ -608,7 +547,7 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             }
-#endif
+
       connectTies();
 
       //
@@ -684,7 +623,11 @@ Score::FileError Score::read114(XmlReader& e)
       _showOmr = false;
 
       // create excerpts
-      foreach(Excerpt* excerpt, _excerpts) {
+      foreach (Excerpt* excerpt, _excerpts) {
+            if (excerpt->parts().isEmpty()) {         // ignore empty parts
+                  _excerpts.removeOne(excerpt);
+                  continue;
+                  }
             Score* nscore = Ms::createExcerpt(excerpt->parts());
             if (nscore) {
                   nscore->setParentScore(this);

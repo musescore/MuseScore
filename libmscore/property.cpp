@@ -160,7 +160,7 @@ static const PropertyData propertyList[] = {
       { P_TIMESIG_GLOBAL,      false, 0,               T_FRACTION },
 
       { P_SPANNER_TICK,        true,  "tick",          T_INT      },
-      { P_SPANNER_TICKLEN,     true,  "tickLen",       T_INT      },
+      { P_SPANNER_TICK2,       true,  "tick2",         T_INT      },
       { P_USER_OFF2,           false, "userOff2",      T_POINT    },
 
       { P_END,                 false, "",              T_INT      }

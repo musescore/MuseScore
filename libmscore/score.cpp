@@ -3426,7 +3426,7 @@ printf("   %p score %p change spanner %d+%d\n", s, s->score(), s->tick(), s->tic
                         //  +----spanner--------+
                         //    +---add---
                         //
-                        undoChangeProperty(s, P_SPANNER_TICKLEN, s->tickLen() + len);
+                        undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
                        }
                   else if (tick < s->tick()) {
                         //
@@ -3455,9 +3455,9 @@ printf("   %p score %p change spanner %d+%d\n", s, s->score(), s->tick(), s->tic
                         //  +----spanner--------+
                         //    +---remove---+
                         //
-                        int l = s->tickLen() + len;
-                        if (l > 0)
-                              undoChangeProperty(s, P_SPANNER_TICKLEN, l);
+                        int t2 = s->tick2() + len;
+                        if (t2 > s->tick())
+                              undoChangeProperty(s, P_SPANNER_TICK2, t2);
                         }
                   else if (s->tick() >= tick && s->tick2() < tick2) {
                         //
@@ -3478,10 +3478,8 @@ printf("   %p score %p change spanner %d+%d\n", s, s->score(), s->tick(), s->tic
                         int len = s->tickLen() - d2;
                         if (len == 0)
                              undoRemoveElement(s);
-                        else {
+                        else
                               undoChangeProperty(s, P_SPANNER_TICK, s->tick() - d1);
-                              undoChangeProperty(s, P_SPANNER_TICKLEN, s->tickLen() - d2);
-                              }
                         }
                   }
             }

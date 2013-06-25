@@ -298,7 +298,7 @@ bool ChordRest::readProperties(XmlReader& e)
                         slur->setAnchor(Spanner::ANCHOR_SEGMENT);
                         }
                   else if (atype == "stop") {
-                        slur->setTickLen(e.tick() - slur->tick());
+                        slur->setTick2(e.tick());
                         slur->setEndElement(this);
                         Chord* start = static_cast<Chord*>(slur->startElement());
                         if (start)

@@ -96,17 +96,17 @@ class Spanner : public Element {
             };
    private:
       Q_PROPERTY(int    tick    READ tick    WRITE setTick)
-      Q_PROPERTY(int    tickLen READ tickLen WRITE setTickLen)
+      Q_PROPERTY(int    tick2   READ tick2   WRITE setTick2)
       Q_PROPERTY(Anchor anchor  READ anchor  WRITE setAnchor)
 
       QList<SpannerSegment*> segments;
       Anchor _anchor;
       Element* _startElement;
       Element* _endElement;
-      int _tick, _tickLen;
+      int _tick, _tick2;
       int _id;                // used for xml serialization
 
-      static int editTick, editTickLen;
+      static int editTick, editTick2;
       static QList<QPointF> userOffsets;
       static QList<QPointF> userOffsets2;
 
@@ -118,12 +118,12 @@ class Spanner : public Element {
       virtual ElementType type() const = 0;
       virtual void setScore(Score* s);
 
-      int tick() const         { return _tick; }
-      void setTick(int v)      { _tick = v;  }
-      int tickLen() const      { return _tickLen; }
-      void setTickLen(int v)   { _tickLen = v; }
-      int tick2() const        { return _tick + _tickLen; }       // helper function
-      void setTick2(int v)     { _tickLen = v - _tick;    }       // assume _tick is already set
+      int tick() const         { return _tick;          }
+      void setTick(int v)      { _tick = v;             }
+      int tickLen() const      { return _tick2 - _tick; }
+      int tick2() const        { return _tick2;         }
+      void setTick2(int v)     { _tick2 = v;            }
+
       int id() const           { return _id; }
       void setId(int v)        { _id = v;    }
 

@@ -142,7 +142,7 @@ class Segment : public Element {
       static const char* subTypeName(SegmentType);
       static SegmentType segmentType(ElementType type);
       SegmentType segmentType() const            { return _segmentType; }
-      void setSegmentType(SegmentType t)         { if (t == SegBreath) abort(); _segmentType = t; }
+      void setSegmentType(SegmentType t)         { _segmentType = t; }
 
       void removeGeneratedElements();
       bool isEmpty() const                       { return empty; }
