@@ -56,6 +56,7 @@ class Segment : public Element {
 
    public:
       enum SegmentType {
+            SegInvalid            = 0x0,
             SegClef               = 0x1,
             SegKeySig             = 0x2,
             SegTimeSig            = 0x4,
@@ -142,7 +143,7 @@ class Segment : public Element {
       static const char* subTypeName(SegmentType);
       static SegmentType segmentType(ElementType type);
       SegmentType segmentType() const            { return _segmentType; }
-      void setSegmentType(SegmentType t)         { _segmentType = t; }
+      void setSegmentType(SegmentType t);
 
       void removeGeneratedElements();
       bool isEmpty() const                       { return empty; }

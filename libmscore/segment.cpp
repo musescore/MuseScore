@@ -43,7 +43,7 @@ namespace Ms {
 
 const char* Segment::subTypeName() const
       {
-      return subTypeName(segmentType());
+      return subTypeName(_segmentType);
       }
 
 const char* Segment::subTypeName(SegmentType t)
@@ -72,6 +72,7 @@ void Segment::setElement(int track, Element* el)
       {
       if (el) {
             el->setParent(this);
+            printf("Segment::setElement %s segment %s\n", el->name(), subTypeName());
             _elist[track] = el;
             empty = false;
             }
@@ -115,7 +116,7 @@ Segment::Segment(Measure* m, SegmentType st, int t)
    : Element(m->score())
       {
       setParent(m);
-      setSegmentType(st);
+      _segmentType = st;
       setTick(t);
       init();
       empty = true;
@@ -131,8 +132,11 @@ Segment::Segment(const Segment& s)
       _next = 0;
       _prev = 0;
 
-      empty = s.empty;           // cached value
-      _tick = s._tick;
+      empty               = s.empty;           // cached value
+      _segmentType        = s._segmentType;
+      _tick               = s._tick;
+      _extraLeadingSpace  = s._extraLeadingSpace;
+      _extraTrailingSpace = s._extraTrailingSpace;
 
       foreach (Element* e, s._annotations) {
             Element* ne = e->clone();
@@ -149,6 +153,13 @@ Segment::Segment(const Segment& s)
             _elist.append(ne);
             }
       _dotPosX = s._dotPosX;
+      }
+
+void Segment::setSegmentType(SegmentType t)
+      {
+      if (_segmentType == SegClef && t == SegChordRest)
+            abort();
+      _segmentType = t;
       }
 
 //---------------------------------------------------------
@@ -346,17 +357,13 @@ void Segment::removeStaff(int staff)
 
 void Segment::add(Element* el)
       {
-// qDebug("%p segment add(%d, %d, %s %p)", this, tick(), el->track(), el->name(), el);
+      // qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
       el->setParent(this);
 
       int track = el->track();
-      if (track == -1) {
-            qDebug("element <%s> has invalid track -1", el->name());
-            abort();
-            }
-      int staffIdx = track / VOICES;
+      Q_ASSERT(track != -1);
 
-      switch(el->type()) {
+      switch (el->type()) {
             case REPEAT_MEASURE:
                   measure()->setRepeatFlags(measure()->repeatFlags() | RepeatMeasureFlag);
                   _elist[track] = el;
@@ -400,12 +407,24 @@ void Segment::add(Element* el)
                   }
 
             case CLEF:
+                  Q_ASSERT(_segmentType == SegClef);
+                  if (_elist[track]) {
+                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
+                           el->name(), _elist[track]->name(),
+                           score()->sigmap()->pos(tick()), tick(), track, score());
+                        }
                   _elist[track] = el;
                   el->staff()->addClef(static_cast<Clef*>(el));
                   empty = false;
                   break;
 
             case TIMESIG:
+                  Q_ASSERT(segmentType() == SegTimeSig || segmentType() == SegTimeSigAnnounce);
+                  if (_elist[track]) {
+                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
+                           el->name(), _elist[track]->name(),
+                           score()->sigmap()->pos(tick()), tick(), track, score());
+                        }
                   _elist[track] = el;
                   el->staff()->addTimeSig(static_cast<TimeSig*>(el));
                   empty = false;
@@ -413,25 +432,26 @@ void Segment::add(Element* el)
 
             case CHORD:
             case REST:
+                  Q_ASSERT(_segmentType == SegChordRest);
                   if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
-                           el->name(), _elist[track]->name(),
+                        qDebug("%p Segment %s add(%s) there is already an %s at %s(%d) track %d. score %p",
+                           this, subTypeName(), el->name(), _elist[track]->name(),
                            score()->sigmap()->pos(tick()), tick(), track, score());
-                        ChordRest* cr = static_cast<ChordRest*>(el);
-                        ChordRest* cr1  = static_cast<ChordRest*>(_elist[track]);
-                        qDebug("   %d/%d -> %d/%d",
-                           cr->duration().numerator(), cr->duration().denominator(),
-                           cr1->duration().numerator(), cr1->duration().denominator());
                         return;
                         }
                   if (track % VOICES)
-                        measure()->mstaff(staffIdx)->hasVoices = true;
+                        measure()->mstaff(track / VOICES)->hasVoices = true;
 
                   // fall through
 
             case KEYSIG:
             case BAR_LINE:
             case BREATH:
+                  if (_elist[track]) {
+                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
+                           el->name(), _elist[track]->name(),
+                           score()->sigmap()->pos(tick()), tick(), track, score());
+                        }
                   _elist[track] = el;
                   empty = false;
                   break;
@@ -682,8 +702,6 @@ void Segment::write(Xml& xml) const
       if (_extraLeadingSpace.isZero() && _extraTrailingSpace.isZero())
             return;
       xml.stag(name());
-      if (_segmentType != SegChordRest)
-            xml.tag("subtype", subTypeName());
       xml.tag("leadingSpace", _extraLeadingSpace.val());
       xml.tag("trailingSpace", _extraTrailingSpace.val());
       xml.etag();
@@ -698,20 +716,8 @@ void Segment::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "subtype") {
-                  _segmentType = SegChordRest;       // default
-                  QString s(e.readElementText());
-                  static std::vector<SegmentType> types = {
-                        SegClef, SegKeySig, SegTimeSig, SegStartRepeatBarLine, SegBarLine,
-                        SegChordRest, SegBreath, SegEndBarLine, SegTimeSigAnnounce, SegKeySigAnnounce
-                        };
-                  for (SegmentType t : types) {
-                        if (subTypeName(t) == s) {
-                              _segmentType = t;
-                              break;
-                              }
-                        }
-                  }
+            if (tag == "subtype")
+                  e.skipCurrentElement();
             else if (tag == "leadingSpace")
                   _extraLeadingSpace = Spatium(e.readDouble());
             else if (tag == "trailingSpace")
