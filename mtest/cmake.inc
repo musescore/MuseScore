@@ -27,6 +27,7 @@ target_link_libraries(
       testutils
       libmscore
       synthesizer
+      xmlreader
       midi
       ${QT_LIBRARIES}
       )
