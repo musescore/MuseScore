@@ -3435,6 +3435,7 @@ printf("   %p score %p change spanner %d+%d\n", s, s->score(), s->tick(), s->tic
                         //  +---add---
                         //
                         undoChangeProperty(s, P_SPANNER_TICK, s->tick() + len);
+                        undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
                         }
                   }
             else {
@@ -3448,6 +3449,7 @@ printf("   %p score %p change spanner %d+%d\n", s, s->score(), s->tick(), s->tic
                         if (t < 0)
                               t = 0;
                         undoChangeProperty(s, P_SPANNER_TICK, t);
+                        undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
                         }
                   else if ((s->tick() < tick) && (s->tick2() > tick2)) {
                         //

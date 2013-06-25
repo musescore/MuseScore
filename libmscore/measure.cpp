@@ -727,80 +727,12 @@ Segment* Measure::findSegment(Segment::SegmentType st, int t)
       for (s = first(); s && s->tick() < t; s = s->next())
             ;
 
-      for (Segment* ss = s; ss && ss->tick() == t; ss = ss->next()) {
-            if (ss->segmentType() == st)
-                  return ss;
-            }
-      return 0;
-      }
-
-#if 0
-//---------------------------------------------------------
-//   findGraceSegment
-//---------------------------------------------------------
-
-/**
-  Search for a grace segment at position \a tick and grace level \a gl.
-  See explantion for getGraceSement
-*/
-
-Segment* Measure::findGraceSegment(int tick, int gl)
-      {
-      Segment* s;
-
-      for (s = first(Segment::SegChordRest); s && s->tick() < tick; s = s->next(Segment::SegChordRest))
-            ;
-
-      if (!s || s->tick() != tick)
-            return 0;
-
-      int nGraces = 0;
-      // count SegGrace segments backwords
-      for (; s && s->tick() == tick; s = s->prev()) {
-            if (s->segmentType() == Segment::SegGrace)
-                  nGraces++;
-
-            if (nGraces == gl)
+      for (; s && s->tick() == t; s = s->next()) {
+            if (s->segmentType() == st)
                   return s;
             }
-
       return 0;
       }
-
-//---------------------------------------------------------
-//   findGraceLevel
-//---------------------------------------------------------
-
-/**
-  Find the grace level for segment \a gs.
-  If the segment is not found or it is not a SegGrace, 0 is returned.
-*/
-
-int Measure::findGraceLevel(Segment* gs)
-      {
-      if (gs->segmentType() != Segment::SegGrace)
-            return 0;
-
-      Segment* s;
-      // find ChordRest with tick equal to the grace segment
-      for (s = first(Segment::SegChordRest); s && s->tick() < gs->tick(); s = s->next(Segment::SegChordRest))
-            ;
-
-      if (!s || s->tick() != gs->tick())
-            return 0;
-
-      // count grace levels
-      int graceLevel = 0;
-      for (; s && s->tick() == gs->tick(); s = s->prev()) {
-            if (s->segmentType() == Segment::SegGrace)
-                  graceLevel++;
-
-            if (s == gs)
-                  return graceLevel;
-            }
-      return 0;
-      }
-#endif
 
 //---------------------------------------------------------
 //   undoGetSegment
@@ -822,8 +754,7 @@ Segment* Measure::undoGetSegment(Segment::SegmentType type, int tick)
 
 Segment* Measure::getSegment(Element* e, int tick)
       {
-      Segment::SegmentType st = Segment::segmentType(e->type());
-      return getSegment(st, tick);
+      return getSegment(Segment::segmentType(e->type()), tick);
       }
 
 //---------------------------------------------------------
@@ -841,64 +772,6 @@ Segment* Measure::getSegment(Segment::SegmentType st, int tick)
             }
       return s;
       }
-
-#if 0
-//---------------------------------------------------------
-//   getSegment
-//---------------------------------------------------------
-
-/**
- Get a grace segment at tick position \a t and grace level \a gl.
- Grace level is 0 for a normal chord, 1 for the grace note closest
- to the normal chord, etc.
- If the segment does not exist, it is created.
-*/
-
-// when looking for a SegChordRest, return the first one found at t
-// when looking for a SegGrace, first search for a SegChordRest at t,
-// then search backwards for gl SegGraces
-
-Segment* Measure::getGraceSegment(int t, int gl)
-      {
-      Segment* s = 0;
-
-      // find the first segment at tick == t and create it if necessary
-      for (Segment* ss = first(Segment::SegChordRest); ss && ss->tick() <= t; ss = ss->next(Segment::SegChordRest)) {
-            if(ss->tick() == t) {
-                  s = ss;
-                  break;
-                  }
-            }
-      if (s == 0) {
-            s = new Segment(this, Segment::SegChordRest, t);
-            add(s);
-            }
-
-      int nGraces  = 0;
-      Segment* sCr = s;
-      // count SegGrace segments
-      for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {
-            if ((ss->segmentType() == Segment::SegGrace) && (ss->tick() == t))
-                  nGraces++;
-            }
- 	    //create grace segment if necessary
-      for (; nGraces < gl; ++nGraces) {
-            Segment* ps = new Segment(this, Segment::SegGrace, t);
-            _segments.insert(ps, s);
-            s = ps;
-            setDirty();
-            }
-
-      int graces = 0;
-      for (Segment* ss = sCr; ss && ss->tick() == t; ss = ss->prev()) {
-            if ((ss->segmentType() == Segment::SegGrace) && (ss->tick() == t))
-                  graces++;
-            if (gl == graces)
-                  return ss;
-            }
-      return 0; // should not be reached
-      }
-#endif
 
 //---------------------------------------------------------
 //   add

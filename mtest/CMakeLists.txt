@@ -60,6 +60,7 @@ add_executable(
 
 target_link_libraries(
       mtest
+      xmlreader
       ${QT_LIBRARIES}
       )
 
