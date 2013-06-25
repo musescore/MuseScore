@@ -173,7 +173,7 @@ void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
 void MuseData::closeSlur(int idx, int tick, Staff* staff, int voice)
       {
       if (slur[idx]) {
-            slur[idx]->setTickLen(tick - slur[idx]->tick());
+            slur[idx]->setTick2(tick);
             slur[idx] = 0;
             }
       else

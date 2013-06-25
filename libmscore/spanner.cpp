@@ -21,7 +21,7 @@
 namespace Ms {
 
 int Spanner::editTick;
-int Spanner::editTickLen;
+int Spanner::editTick2;
 QList<QPointF> Spanner::userOffsets2;
 QList<QPointF> Spanner::userOffsets;
 
@@ -144,7 +144,7 @@ Spanner::Spanner(Score* s)
       _startElement = 0;
       _endElement   = 0;
       _tick         = -1;
-      _tickLen      = -1;
+      _tick2        = -1;
       _id           = 0;
       }
 
@@ -155,7 +155,7 @@ Spanner::Spanner(const Spanner& s)
       _startElement = s._startElement;
       _endElement   = s._endElement;
       _tick         = s._tick;
-      _tickLen      = s._tickLen;
+      _tick2        = s._tick2;
       _id           = 0;
       }
 
@@ -217,8 +217,8 @@ void Spanner::setScore(Score* s)
 
 void Spanner::startEdit(MuseScoreView*, const QPointF&)
       {
-      editTick    = _tick;
-      editTickLen = _tickLen;
+      editTick  = _tick;
+      editTick2 = _tick2;
       userOffsets.clear();
       userOffsets2.clear();
       foreach (SpannerSegment* ss, spannerSegments()) {
@@ -234,7 +234,7 @@ void Spanner::startEdit(MuseScoreView*, const QPointF&)
 void Spanner::endEdit()
       {
       score()->undoPropertyChanged(this, P_SPANNER_TICK, editTick);
-      score()->undoPropertyChanged(this, P_SPANNER_TICKLEN, editTickLen);
+      score()->undoPropertyChanged(this, P_SPANNER_TICK2, editTick2);
 
       if (spannerSegments().size() != userOffsets2.size()) {
             qDebug("SLine::endEdit(): segment size changed");
@@ -265,7 +265,7 @@ void Spanner::setSelected(bool f)
 
 bool Spanner::isEdited(Spanner* originalSpanner) const
       {
-      if (_tick != originalSpanner->_tick || _tickLen != originalSpanner->_tickLen)
+      if (_tick != originalSpanner->_tick || _tick2 != originalSpanner->_tick2)
             return true;
       if (spannerSegments().size() != originalSpanner->spannerSegments().size())
             return true;
@@ -285,8 +285,8 @@ QVariant Spanner::getProperty(P_ID propertyId) const
       switch (propertyId) {
             case P_SPANNER_TICK:
                   return tick();
-            case P_SPANNER_TICKLEN:
-                  return tickLen();
+            case P_SPANNER_TICK2:
+                  return tick2();
             default:
                   break;
             }
@@ -303,8 +303,8 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
             case P_SPANNER_TICK:
                   setTick(v.toInt());
                   break;
-            case P_SPANNER_TICKLEN:
-                  setTickLen(v.toInt());
+            case P_SPANNER_TICK2:
+                  setTick2(v.toInt());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -334,7 +334,7 @@ QVariant Spanner::propertyDefault(P_ID propertyId) const
 
 ChordRest* Score::findCR(int tick, int track) const
       {
-      Segment* s = tick2segment(tick);
+      Segment* s = tick2segment(tick, false, Segment::SegChordRest);
       if (s)
             return static_cast<ChordRest*>(s->element(track));
       return nullptr;
@@ -346,29 +346,20 @@ ChordRest* Score::findCR(int tick, int track) const
 
 void Spanner::computeStartElement()
       {
-      bool first = _tickLen == 0;
-      Element* e = 0;
+      _startElement = 0;
       switch (_anchor) {
             case ANCHOR_SEGMENT:
-                  e = score()->findCR(tick(), track());
+                  _startElement = score()->findCR(tick(), track());
                   break;
 
             case ANCHOR_MEASURE:
-                  {
-                  Segment* s = score()->tick2segment(tick(), first, Segment::SegChordRest);
-                  if (s) {
-                        ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
-                        if (cr)
-                              e = cr->measure();
-                        }
-                  }
+                  _startElement = score()->tick2measure(tick());
                   break;
 
             case ANCHOR_CHORD:
             case ANCHOR_NOTE:
                   return;
             }
-      _startElement = e;
       }
 
 //---------------------------------------------------------
@@ -377,26 +368,20 @@ void Spanner::computeStartElement()
 
 void Spanner::computeEndElement()
       {
-      Element* e = 0;
+      _endElement = 0;
       switch (_anchor) {
             case ANCHOR_SEGMENT:
-                  e = score()->findCR(tick2(), track());
+                  _endElement = score()->findCR(tick2(), track());
                   break;
 
             case ANCHOR_MEASURE:
-                  {
-                  ChordRest* cr = score()->findCR(tick2(), track());
-                  e = cr ? cr->measure() : 0;
-                  }
+                  _endElement = score()->tick2measure(tick2());
                   break;
 
             case ANCHOR_CHORD:
-                  return;
-
             case ANCHOR_NOTE:
                   break;
             }
-      _endElement = e;
       }
 
 //---------------------------------------------------------

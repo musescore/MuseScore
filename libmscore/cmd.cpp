@@ -243,7 +243,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
                   delete spanner;
                   return;
                   }
-            spanner->setTickLen(ns->tick() - spanner->tick());
+            spanner->setTick2(ns->tick());
             }
       else {      // ANCHOR_MEASURE
             Measure* m = static_cast<Measure*>(mb);
@@ -252,7 +252,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             if (pos.x() >= (b.x() + b.width() * .5))
                   m = m->nextMeasure();
             spanner->setTick(m->tick());
-            spanner->setTickLen(m->ticks());
+            spanner->setTick2(m->endTick());
             }
 
       undoAddElement(spanner);
@@ -280,7 +280,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
                         s = s->next1(Segment::SegChordRest);
                         }
                   if (s)
-                        spanner->setTickLen(s->tick() - spanner->tick());
+                        spanner->setTick2(s->tick());
                   Fraction d(1,32);
                   Fraction e = l / d;
                   int n = e.numerator() / e.denominator();
@@ -437,7 +437,7 @@ printf("add pitch %d add %d repitch %d\n", pitch, addFlag, _is.repitchMode());
                         _is.slur->setTick(stick);
                         }
                   else
-                        _is.slur->setTickLen(e->tick() - _is.slur->tick());
+                        _is.slur->setTick2(e->tick());
                   }
             else
                   qDebug("addPitch: cannot find slur note");

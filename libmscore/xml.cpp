@@ -690,7 +690,7 @@ void Xml::dump(int len, const unsigned char* p)
       }
 
 //---------------------------------------------------------
-//   htmlToString
+//   htmlToStringg
 //---------------------------------------------------------
 
 void Xml::htmlToString(XmlReader& e, int level, QString* s)
