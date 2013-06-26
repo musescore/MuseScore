@@ -955,78 +955,7 @@ bool Score::read(XmlReader& e)
                   e.unknown();
             }
 
-      // check slurs
-#if 0 // TODO-S
-      foreach(Spanner* s, e.spanner()) {
-            if (!s->startElement() || !s->endElement()) {
-                  qDebug("remove incomplete Spanner %s", s->name());
-                  switch (s->anchor()) {
-                        case Spanner::ANCHOR_SEGMENT: {
-                              if (s->startElement()) {
-                                    Segment* seg = static_cast<Segment*>(s->startElement());
-                                    seg->removeSpannerFor(s);
-                                    }
-                              if (s->endElement()) {
-                                    Segment* seg = static_cast<Segment*>(s->endElement());
-                                    seg->removeSpannerBack(s);
-                                    }
-                              Segment* seg = static_cast<Segment*>(s->parent());
-                              if (seg->isEmpty())
-                                    seg->measure()->remove(seg);
-                              delete s;
-                              }
-                              break;
-                        case Spanner::ANCHOR_CHORD:
-                              if (s->startElement()) {
-                                    ChordRest* cr = static_cast<ChordRest*>(s->startElement());
-                                    cr->removeSpannerFor(s);
-                                    }
-                              if (s->endElement()) {
-                                    ChordRest* cr = static_cast<ChordRest*>(s->endElement());
-                                    cr->removeSpannerBack(s);
-                                    }
-                              e.removeSpanner(s);
-                              delete s;
-                              break;
-
-                        case Spanner::ANCHOR_NOTE:
-                        case Spanner::ANCHOR_MEASURE:
-                              break;
-                        }
-                  continue;
-                  }
-            if (s->type() != Element::SLUR)
-                  continue;
-
-            Slur* slur = static_cast<Slur*>(s);
-
-            ChordRest* cr1 = (ChordRest*)(slur->startElement());
-            ChordRest* cr2 = (ChordRest*)(slur->endElement());
-            if (cr1->tick() > cr2->tick()) {
-                  qDebug("Slur invalid start-end tick %d-%d\n", cr1->tick(), cr2->tick());
-                  slur->setStartElement(cr2);
-                  slur->setEndElement(cr1);
-                  }
-#if 1 // DEBUG
-            int n1 = 0;
-            int n2 = 0;
-            for (Spanner* s = cr1->spannerFor(); s; s = s->next()) {
-                  if (s == slur)
-                        ++n1;
-                  }
-            for (Spanner* s = cr2->spannerBack(); s; s = s->next()) {
-                  if (s == slur)
-                        ++n2;
-                  }
-            if (n1 != 1 || n2 != 1)
-                  qDebug("Slur references bad: %d %d", n1, n2);
-#endif
-            }
-#endif
-
       connectTies();
-
-      searchSelectedElements();
 
       _fileDivision = MScore::division;
 

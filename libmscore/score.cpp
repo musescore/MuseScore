@@ -3041,17 +3041,6 @@ void Score::lassoSelectEnd()
       }
 
 //---------------------------------------------------------
-//   searchSelectedElements
-//    "ElementList selected"
-//---------------------------------------------------------
-
-void Score::searchSelectedElements()
-      {
-      _selection.searchSelectedElements();
-      _selectionChanged = true;
-      }
-
-//---------------------------------------------------------
 //   addLyrics
 //---------------------------------------------------------
 
