@@ -375,7 +375,7 @@ void Spanner::computeEndElement()
                   break;
 
             case ANCHOR_MEASURE:
-                  _endElement = score()->tick2measure(tick2());
+                  _endElement = score()->tick2measure(tick2() - 1);
                   break;
 
             case ANCHOR_CHORD:
