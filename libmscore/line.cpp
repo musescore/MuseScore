@@ -298,7 +298,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                         if (key == Qt::Key_Left)
                               ls = l->takeLastSegment();
                         }
-                  l->setTick2(m2->tick());
+                  l->setTick2(m2->endTick());
                   }
             }
       l->layout();
