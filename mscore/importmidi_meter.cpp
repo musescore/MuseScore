@@ -67,7 +67,7 @@ struct DivisionInfo
       int onTime = 0;         // division start tick (tick is counted from the beginning of bar)
       int len = 0;            // length of this whole division
       bool isTuplet = false;
-      std::vector<DivLengthInfo> divLengths;    // lengths of len subdivisions
+      std::vector<DivLengthInfo> divLengths;    // lengths of 'len' subdivisions
       };
 
 
@@ -346,9 +346,11 @@ void treeToDurationList(Node *node,
             treeToDurationList(node->left.get(), dl, useDots);
             treeToDurationList(node->right.get(), dl, useDots);
             }
-      else
+      else {
+            const int MAX_DOTS = 1;
             dl.append(toDurationList(
-                  Fraction::fromTicks(node->endTick - node->startTick), useDots));
+                  Fraction::fromTicks(node->endTick - node->startTick), useDots, MAX_DOTS));
+            }
       }
 
 // duration start/end should be quantisized at least to 1/128 note
