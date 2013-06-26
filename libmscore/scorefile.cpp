@@ -740,8 +740,10 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
                               }
                         else if (tag == "programRevision")
                               _mscoreRevision = e.readInt();
-                        else if (tag == "Score")
-                              read(e);
+                        else if (tag == "Score") {
+                              if (!read(e))
+                                    return FILE_BAD_FORMAT;
+                              }
                         else if (tag == "Revision") {
                               Revision* revision = new Revision;
                               revision->read(e);
@@ -954,6 +956,8 @@ bool Score::read(XmlReader& e)
             else
                   e.unknown();
             }
+      if (e.error() != QXmlStreamReader::NoError)
+            return false;
 
       connectTies();
 
