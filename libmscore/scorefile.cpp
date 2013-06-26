@@ -1146,7 +1146,7 @@ qDebug("createRevision\n");
 //---------------------------------------------------------
 
 void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
-   Segment* fs, Segment* ls, bool writeSystemElements, bool clip)
+   Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
       for (int track = strack; track < etrack; ++track) {
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
@@ -1157,7 +1157,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                   // special case: - barline span > 1
                   //               - part (excerpt) staff starts after
                   //                 barline element
-                  bool needTick = segment->tick() != xml.curTick;
+                  bool needTick = (needFirstTick && segment == fs) || (segment->tick() != xml.curTick);
                   if ((segment->segmentType() == Segment::SegEndBarLine)
                      && (e == 0)
                      && writeSystemElements

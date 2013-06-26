@@ -477,7 +477,7 @@ QByteArray Selection::staffMimeData() const
             xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
             int startTrack = staffIdx * VOICES;
             int endTrack   = startTrack + VOICES;
-            score()->writeSegments(xml, 0, startTrack, endTrack, seg1, seg2, false, true);
+            score()->writeSegments(xml, 0, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
             }
 
