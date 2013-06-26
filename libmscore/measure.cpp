@@ -1789,11 +1789,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment->add(barLine);
                   }
             else if (tag == "Chord") {
-                  segment = getSegment(Segment::SegChordRest, e.tick());
 
                   Chord* chord = new Chord(score());
                   chord->setTrack(e.track());
                   chord->read(e);
+                  segment = getSegment(Segment::SegChordRest, e.tick());
 
                   if (chord->noteType() != NOTE_NORMAL)
                         graceNotes.push_back(chord);
