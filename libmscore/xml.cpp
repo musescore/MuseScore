@@ -626,9 +626,13 @@ QString Xml::xmlString(const QString& s)
                         break;
                   default:
                         // ignore invalid characters in xml 1.0
+#if 0
                         if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) ||
                            (c > 0xD7FF && c < 0xE000) ||
                            (c > 0xFFFD))
+                              break;
+#endif
+                        if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D))
                               break;
                         escaped += QChar(c);
                         break;
@@ -717,8 +721,13 @@ QString Xml::htmlToString(XmlReader& e)
 //   writeHtml
 //---------------------------------------------------------
 
-void Xml::writeHtml(const QString& s)
+void Xml::writeHtml(QString s)
       {
+      for (int i = 0; i < s.size(); ++i) {
+            ushort c = s.at(i).unicode();
+            if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D)
+                  s[i] = '?';
+            }
       QStringList sl(s.split("\n"));
       //
       // remove first line from html (DOCTYPE...)

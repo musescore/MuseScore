@@ -138,7 +138,7 @@ class Xml : public QTextStream {
       void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
       void tag(const char* name, const QWidget*);
 
-      void writeHtml(const QString& s);
+      void writeHtml(QString s);
       void dump(int len, const unsigned char* p);
 
       static QString xmlString(const QString&);
