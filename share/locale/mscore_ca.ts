@@ -90,10 +90,54 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>Accidental</name>
+    <name>AeolusGui</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
+        <source>Azimuth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reflect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reverb</source>
+        <translation type="unfinished">Reverberació</translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Direct</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>III</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>II</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I</source>
+        <translation type="unfinished">C</translation>
+    </message>
+    <message>
+        <source>P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -164,25 +208,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>ArticulationBase</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-    <message>
-        <source>Articulation</source>
-        <translation type="unfinished">Articulació</translation>
-    </message>
-    <message>
-        <source>Direction:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Anchor:</source>
-        <translation type="unfinished">Àncora:</translation>
-    </message>
-</context>
-<context>
     <name>ArticulationProperties</name>
     <message>
         <source>MuseScore: Articulations Properties</source>
@@ -242,40 +267,9 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>BarLineBase</name>
+    <name>Awl::ColorLabel</name>
     <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
-        <source>BarLine</source>
-        <translation>Barra de compàs</translation>
-    </message>
-    <message>
-        <source>spanFrom:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>spanTo:</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BeamBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
-        <source>Chord/Rest</source>
-        <translation>Acord / Silenci</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished">Tipus</translation>
-    </message>
-    <message>
-        <source>Tick</source>
+        <source>MuseScore: Select Color</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -311,37 +305,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>PreBend/Release</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BoxBase</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-    <message>
-        <source>bottomMargin:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>topGap:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bottomGap:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>leftMargin:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>topMargin:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>rightMargin:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1088,20 +1051,12 @@ spatium unit</extracomment>
 <context>
     <name>ChordRestBase</name>
     <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
         <source>Lyrics:</source>
         <translation type="unfinished">Lletra:</translation>
     </message>
 </context>
 <context>
     <name>ChordStyleEditor</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
     <message>
         <source>Id</source>
         <translation>Id</translation>
@@ -1130,50 +1085,12 @@ spatium unit</extracomment>
 <context>
     <name>Clef</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-    <message>
-        <source>TransposingClef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>small</source>
-        <translation type="unfinished">Petit</translation>
-    </message>
-    <message>
-        <source>showCourtesy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Hide courtesy clef</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Show courtesy clef</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DebuggerBase</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-    <message>
-        <source>Select</source>
-        <translation type="unfinished">Selecciona</translation>
-    </message>
-    <message>
-        <source>Layout</source>
-        <translation type="unfinished">Disseny</translation>
-    </message>
-</context>
-<context>
-    <name>DynamicBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
     </message>
 </context>
 <context>
@@ -1430,7 +1347,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Si</translation>
     </message>
     <message>
         <source>C 8</source>
@@ -3137,6 +3054,38 @@ p, li { white-space: pre-wrap; }
         <source>down</source>
         <translation type="unfinished">Avall</translation>
     </message>
+    <message>
+        <source>Dot size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Jazz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load chords.xml</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Root / bass spelling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Positioning</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>EditTempoBase</name>
@@ -3159,13 +3108,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>MuseScore: Tempo Text</source>
         <translation>MuseScore: Text de tempo</translation>
-    </message>
-</context>
-<context>
-    <name>ElementBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
     </message>
 </context>
 <context>
@@ -3200,6 +3142,37 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New All</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FluidGui</name>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished">Amunt</translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished">Avall</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Elimina</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished">Afegeix</translation>
+    </message>
+    <message>
+        <source>MuseScore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soundfont %1 already loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cannot load soundfont %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3241,45 +3214,7 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>HairpinBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-</context>
-<context>
-    <name>HarmonyBase</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-    <message>
-        <source>Left Paren Before</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right Paren After</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished">Tipus</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="unfinished">Valor</translation>
-    </message>
-    <message>
-        <source>Alter</source>
-        <translation type="unfinished">Alteració</translation>
-    </message>
-</context>
-<context>
     <name>ImportMidiPanel</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
@@ -4051,43 +3986,43 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>normal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">normal</translation>
     </message>
     <message>
         <source>cross</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">creu</translation>
     </message>
     <message>
         <source>diamond</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">diamant</translation>
     </message>
     <message>
         <source>triangle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">triangle</translation>
     </message>
     <message>
         <source>slash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">barra obliqua</translation>
     </message>
     <message>
         <source>xcircle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">xcercle</translation>
     </message>
     <message>
         <source>do</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">do</translation>
     </message>
     <message>
         <source>re</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">re</translation>
     </message>
     <message>
         <source>mi</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">mi</translation>
     </message>
     <message>
         <source>fa</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">fa</translation>
     </message>
     <message>
         <source>sol</source>
@@ -4095,11 +4030,11 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>la</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">la</translation>
     </message>
     <message>
         <source>ti</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">si</translation>
     </message>
     <message>
         <source>alt. brevis</source>
@@ -4648,10 +4583,6 @@ spatium unit</extracomment>
 <context>
     <name>InstrumentWizard</name>
     <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -4707,10 +4638,6 @@ spatium unit</extracomment>
 <context>
     <name>KeyEdit</name>
     <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
         <source>Create Key Signature</source>
         <translation>Crea armadura</translation>
     </message>
@@ -4729,38 +4656,6 @@ spatium unit</extracomment>
 </context>
 <context>
     <name>KeySig</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-    <message>
-        <source>accidentalType</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>custom</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>customType</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>invalid</source>
-        <translation type="unfinished">Invàlid</translation>
-    </message>
-    <message>
-        <source>naturalType</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>showCourtesySig</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>showNaturals</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Hide Courtesy Key Signature</source>
         <translation type="unfinished"></translation>
@@ -5061,52 +4956,6 @@ spatium unit</extracomment>
     </message>
 </context>
 <context>
-    <name>LineSegmentBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-</context>
-<context>
-    <name>LyricsBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
-        <source>Lyrics</source>
-        <translation>Lletra</translation>
-    </message>
-    <message>
-        <source>Syllabic:</source>
-        <translation>Sil.làbic:</translation>
-    </message>
-    <message>
-        <source>Single</source>
-        <translation>Individual</translation>
-    </message>
-    <message>
-        <source>Begin</source>
-        <translation>Inici</translation>
-    </message>
-    <message>
-        <source>End</source>
-        <translation>Fi</translation>
-    </message>
-    <message>
-        <source>Middle</source>
-        <translation>Mig</translation>
-    </message>
-    <message>
-        <source>Row:</source>
-        <translation>Fila:</translation>
-    </message>
-    <message>
-        <source>End Tick:</source>
-        <translation>Pulsació final:</translation>
-    </message>
-</context>
-<context>
     <name>MP3Exporter</name>
     <message>
         <source>Where is %1 ?</source>
@@ -5215,37 +5064,6 @@ Would you like to locate %2 now?</source>
     <message>
         <source>Symbols</source>
         <translation type="unfinished">Símbols</translation>
-    </message>
-</context>
-<context>
-    <name>MeasureBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
-        <source>breakMultiMeasureRest</source>
-        <translation>Trenca silenci multi-compàs</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation type="unfinished">Etiqueta de text</translation>
-    </message>
-    <message>
-        <source>endBarLine:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Section Break</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>spannerFor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>spannerBack</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5477,6 +5295,237 @@ Would you like to locate %2 now?</source>
     <message>
         <source>New</source>
         <translation type="unfinished">Nou</translation>
+    </message>
+</context>
+<context>
+    <name>Ms</name>
+    <message>
+        <source>Treble clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Treble clef 8va</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Treble clef 15ma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Treble clef 8vb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bass clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bass clef 8vb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bass clef 15mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Baritone clef (F clef)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subbass clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soprano clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mezzo-soprano clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alto clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tenor clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tablature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percussion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Baritone clef (C clef)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>French violin clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bass clef 8va</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bass clef 15ma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tablature2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Títol</translation>
+    </message>
+    <message>
+        <source>Subtitle</source>
+        <translation type="unfinished">Subtítol</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation type="unfinished">Compositor</translation>
+    </message>
+    <message>
+        <source>Lyricist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lyrics odd lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lyrics even lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fingering</source>
+        <translation type="unfinished">Digitació</translation>
+    </message>
+    <message>
+        <source>InstrumentsLong</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InstrumentsShort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InstrumentsExcerpt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dynamics</source>
+        <translation type="unfinished">Dinàmiques</translation>
+    </message>
+    <message>
+        <source>Dynamics2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Technik</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tempo</source>
+        <translation type="unfinished">Tempo</translation>
+    </message>
+    <message>
+        <source>Metronome</source>
+        <translation type="unfinished">Metrònom</translation>
+    </message>
+    <message>
+        <source>Measure Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tuplets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation type="unfinished">Sistema</translation>
+    </message>
+    <message>
+        <source>Staff</source>
+        <translation type="unfinished">Pentagrama</translation>
+    </message>
+    <message>
+        <source>Chordname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rehearsal Mark</source>
+        <translation type="unfinished">Marca d&apos;assaig</translation>
+    </message>
+    <message>
+        <source>Repeat Text Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat Text Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volta</source>
+        <translation type="unfinished">Volta</translation>
+    </message>
+    <message>
+        <source>Frame</source>
+        <translation type="unfinished">Marc</translation>
+    </message>
+    <message>
+        <source>TextLine</source>
+        <translation type="unfinished">Text de línia</translation>
+    </message>
+    <message>
+        <source>Glissando</source>
+        <translation type="unfinished">Glissando</translation>
+    </message>
+    <message>
+        <source>String Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ottava</source>
+        <translation type="unfinished">Octava</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Footer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Instrument Change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lyrics Verse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Figured Bass</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6476,10 +6525,6 @@ abans de tancar?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Create</source>
-        <translation type="unfinished">&amp;Crea</translation>
-    </message>
-    <message>
         <source>&amp;Measures</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6755,6 +6800,10 @@ Restaurar sessió?</translation>
     <message>
         <source>&apos;%1&apos; does already exist,
 please choose a different name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Insert</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7322,6 +7371,10 @@ crear primer algún pentagrama</translation>
 Please select a measure and try again</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Debugger</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Ms::ShortcutCaptureDialog</name>
@@ -7561,13 +7614,69 @@ please choose a different name:</source>
         <source></source>
         <translation></translation>
     </message>
+    <message>
+        <source>G major, E minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cb major, Ab minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D major, B minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gb major, Eb minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A major, F# minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Db major, Bb minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E major, C# minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ab major, F minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B major, G# minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eb major, C minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F# major, D# minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bb major, G minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C# major, A# minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F major,  D minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C major, A minor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NewWizard</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
     <message>
         <source>Title:</source>
         <translation>Títol:</translation>
@@ -7594,41 +7703,6 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Lyricist:</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>NoteBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
-        <source>head index</source>
-        <translation>Índex de cap de nota</translation>
-    </message>
-    <message>
-        <source>note head group</source>
-        <translation>Grup de caps de notes</translation>
-    </message>
-    <message>
-        <source>NoteEvents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>invalid</source>
-        <translation type="unfinished">Invàlid</translation>
-    </message>
-    <message>
-        <source>Dot1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dot2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dot3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7662,10 +7736,6 @@ please choose a different name:</source>
 <context>
     <name>OmrPanel</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-    <message>
         <source>mm</source>
         <translation type="unfinished">mm</translation>
     </message>
@@ -7692,21 +7762,6 @@ please choose a different name:</source>
     <message>
         <source>Show Lines</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PageBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
-        <source>Page</source>
-        <translation>Pàgina</translation>
-    </message>
-    <message>
-        <source>Page No.:</source>
-        <translation>Pàgina núm.:</translation>
     </message>
 </context>
 <context>
@@ -8967,6 +9022,118 @@ Fallada: </translation>
     </message>
 </context>
 <context>
+    <name>QMessageBox</name>
+    <message>
+        <source>MuseScore:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No note or lyrics selected:
+Please select a single note or lyrics and retry operation
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No note or figured bass selected:
+Please select a single note or figured bass and retry.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No note selected:
+Please select a single note and retry operation
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No note or rest selected:
+Please select a single note or rest and retry operation
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a single note or slur and retry operation
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select one or more staves and retry operation
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>normal</source>
+        <translation type="unfinished">normal</translation>
+    </message>
+    <message>
+        <source>Perc. 1 lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Perc. 3 lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Perc. 5 lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. 6-str simple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. 6-str common</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. 6-str full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. 4-str simple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. 4-str common</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. 4-str full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. ukulele</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. balalajka</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. 6-str Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab. 6-str French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard (built-in)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tablature (built-in)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Percussion (built-in)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QWidget</name>
     <message>
         <source>Quit</source>
@@ -9060,20 +9227,6 @@ Fallada: </translation>
     </message>
 </context>
 <context>
-    <name>Rest</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-</context>
-<context>
-    <name>SLineBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-</context>
-<context>
     <name>SectionBreakProperties</name>
     <message>
         <source>MuseScore: Section Break Properties</source>
@@ -9093,89 +9246,6 @@ Fallada: </translation>
     </message>
     <message>
         <source>start new section with measure number one</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SegmentBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
-        <source>Segment</source>
-        <translation>Segment</translation>
-    </message>
-    <message>
-        <source>Clef Segment</source>
-        <translation>Segment de clau</translation>
-    </message>
-    <message>
-        <source>Key Signature</source>
-        <translation>Armadura</translation>
-    </message>
-    <message>
-        <source>Time Signature</source>
-        <translation>Indicació de compàs</translation>
-    </message>
-    <message>
-        <source>Begin Repeat</source>
-        <translation>Inici de repetició</translation>
-    </message>
-    <message>
-        <source>Chord/Rest</source>
-        <translation>Acord / Silenci</translation>
-    </message>
-    <message>
-        <source>Breath Segment</source>
-        <translation>Segment de respiració</translation>
-    </message>
-    <message>
-        <source>End Bar Line</source>
-        <translation>Barra de fi de compàs</translation>
-    </message>
-    <message>
-        <source>Time Signature Announce</source>
-        <translation>Notificació d&apos;indicació de compàs</translation>
-    </message>
-    <message>
-        <source>Lyrics:</source>
-        <translation>Lletra:</translation>
-    </message>
-    <message>
-        <source>Segment Type:</source>
-        <translation>Tipus de segment:</translation>
-    </message>
-    <message>
-        <source>Annotations:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SpannerFor:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SpannerBack:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ticks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tick:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Beat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>rTick:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9250,6 +9320,20 @@ Fallada: </translation>
     </message>
 </context>
 <context>
+    <name>SfListDialog</name>
+    <message>
+        <source>Soundfont files</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SfzListDialog</name>
+    <message>
+        <source>SFZ files</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <source>Enter shortcut sequence</source>
@@ -9285,13 +9369,6 @@ Fallada: </translation>
     </message>
 </context>
 <context>
-    <name>SlurBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-</context>
-<context>
     <name>SlurPropertyBase</name>
     <message>
         <source>Slur Properties</source>
@@ -9313,44 +9390,8 @@ Fallada: </translation>
 <context>
     <name>SlurSegment</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-    <message>
-        <source>SlurSegment</source>
-        <translation type="unfinished">Segment de lligadura</translation>
-    </message>
-    <message>
-        <source>UP1:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UP2:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UP3:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UP4:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pos-x</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pos-y</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>offset-x</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>offset-y</source>
-        <translation type="unfinished"></translation>
+        <source>0</source>
+        <translation type="unfinished">0</translation>
     </message>
 </context>
 <context>
@@ -9359,30 +9400,24 @@ Fallada: </translation>
         <source>Form</source>
         <translation>Formulari</translation>
     </message>
-    <message>
-        <source>startElement</source>
-        <extracomment>do not translate</extracomment>
-        <translation>Element d&apos;inici</translation>
-    </message>
-    <message>
-        <source>endElement</source>
-        <extracomment>do not translate - only for debugging</extracomment>
-        <translation>Element final</translation>
-    </message>
 </context>
 <context>
     <name>SpannerBase</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
+        <source>startElement</source>
+        <translation type="unfinished">Element d&apos;inici</translation>
     </message>
     <message>
-        <source>CHORD</source>
+        <source>tickLen:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>NOTE</source>
+        <source>tick:</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>endElement</source>
+        <translation type="unfinished">Element final</translation>
     </message>
 </context>
 <context>
@@ -9718,18 +9753,7 @@ altera</source>
     </message>
 </context>
 <context>
-    <name>StemBase</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
-</context>
-<context>
     <name>SymbolDialogBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
     <message>
         <source>System Flag</source>
         <translation>Indicador de sistema</translation>
@@ -9804,67 +9828,10 @@ altera</source>
     </message>
 </context>
 <context>
-    <name>TextBase</name>
+    <name>SystemBase</name>
     <message>
         <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
-        <source>Type:</source>
-        <translation>Tipus:</translation>
-    </message>
-    <message>
-        <source>MM</source>
-        <translation>mm</translation>
-    </message>
-    <message>
-        <source>Space</source>
-        <translation>Espais</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <comment>do not translate</comment>
-        <translation>Text</translation>
-    </message>
-    <message>
-        <source>Text:</source>
-        <comment>do not translate</comment>
-        <translation>Text:</translation>
-    </message>
-    <message>
-        <source>Offset:</source>
-        <comment>do not translate</comment>
-        <translation>Desplaçament</translation>
-    </message>
-    <message>
-        <source>Abs.:</source>
-        <comment>do not translate</comment>
-        <translation>Abs.:</translation>
-    </message>
-    <message>
-        <source>Rel.:</source>
-        <comment>do not translate</comment>
-        <translation>Rel.:</translation>
-    </message>
-    <message>
-        <source>TextStyle:</source>
-        <comment>do not translate</comment>
-        <translation>Estil de text:</translation>
-    </message>
-    <message>
-        <source>styled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>layoutToParentWidth</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TextLineBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
+        <translation type="unfinished">Formulari</translation>
     </message>
 </context>
 <context>
@@ -9888,10 +9855,6 @@ altera</source>
 </context>
 <context>
     <name>TextProperties</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulari</translation>
-    </message>
     <message>
         <source>Styled</source>
         <translation type="unfinished"></translation>
@@ -9930,7 +9893,7 @@ altera</source>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Si</translation>
     </message>
     <message>
         <source>italic</source>
@@ -10061,7 +10024,7 @@ altera</source>
     <message>
         <source>Space</source>
         <extracomment>spatium unit</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Espais</translation>
     </message>
     <message>
         <source>enable text frame</source>
@@ -10141,10 +10104,6 @@ altera</source>
 </context>
 <context>
     <name>TimeDialogBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
     <message>
         <source>add time signature to palette</source>
         <translation>Afegeix indicació de compàs a la paleta</translation>
@@ -10232,10 +10191,6 @@ altera</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>GroupBox</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Actual Value:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10243,13 +10198,13 @@ altera</source>
         <source>Global Value:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Note Groups</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TimesigWizard</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
     <message>
         <source>Enter Time Signature:</source>
         <translation>Introdueix la indicació de compàs:</translation>
@@ -10600,30 +10555,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>TremoloBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-    <message>
-        <source>firstChord</source>
-        <extracomment>do not translate</extracomment>
-        <translation>Primer acord</translation>
-    </message>
-    <message>
-        <source>secondChord</source>
-        <extracomment>do not translate - only for debugging</extracomment>
-        <translation>Segon acord</translation>
-    </message>
-</context>
-<context>
-    <name>TupletBase</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulari</translation>
-    </message>
-</context>
-<context>
     <name>TupletDialog</name>
     <message>
         <source>Type</source>
@@ -10704,6 +10635,231 @@ Fallada: </translation>
     </message>
     <message>
         <source>MuseScore: Writing Workspace file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>XmlStream</name>
+    <message>
+        <source>Extra content at end of document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid entity value.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid XML character.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sequence &apos;]]&gt;&apos; not allowed in content.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encountered incorrectly encoded content.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Namespace prefix &apos;%1&apos; not declared</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal namespace declaration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attribute redefined.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unexpected character &apos;%1&apos; in public id literal.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid XML version string.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsupported XML version.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The standalone pseudo attribute must appear after the encoding.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is an invalid encoding name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encoding %1 is unsupported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standalone accepts only yes or no.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid attribute in XML declaration.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Premature end of document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>, but got &apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unexpected &apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected character data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ZerberusGui</name>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Elimina</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished">Afegeix</translation>
+    </message>
+    <message>
+        <source>MuseScore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soundfont %1 already loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cannot load soundfont %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>accidental</name>
+    <message>
+        <source>none</source>
+        <translation type="unfinished">Cap</translation>
+    </message>
+    <message>
+        <source>sharp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>double sharp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>double flat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>natural</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat-slash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat-slash2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mirrored-flat2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mirrored-flat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mirrored-flat-slash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat-flat-slash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp-slash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp-slash2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp-slash3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp-slash4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp arrow up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp arrow down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp arrow both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat arrow up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat arrow down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat arrow both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>natural arrow up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>natural arrow down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>natural arrow both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sori</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>koron</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -12803,6 +12959,18 @@ Fallada: </translation>
     </message>
 </context>
 <context>
+    <name>addRemoveTimeSig</name>
+    <message>
+        <source>MuseScore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cannot rewrite measures:
+tuplet would cross measure</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>articulation</name>
     <message>
         <source>Bend</source>
@@ -12810,6 +12978,584 @@ Fallada: </translation>
     </message>
     <message>
         <source>Tremolo Bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>fermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>shortfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>longfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>verylongfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>thumb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sforzato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>espressivo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>staccato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>staccatissimo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tenuto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>portato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>marcato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ouvert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>plusstop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>upbow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>downbow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reverseturn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>trill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>prall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mordent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>prallprall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>prallmordent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>upprall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>downprall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>upmordent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>downmordent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pralldown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>prallup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lineprall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>schleifer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>snappizzicato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>slapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>popping</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>drumset</name>
+    <message>
+        <source>Acoustic Bass Drum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bass Drum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side Stick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snare (Acoustic)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snare (Electric)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tom 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hi-Hat Closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tom 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hi-Hat Pedal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tom 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hi-Hat Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tom 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tom 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Crash 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ride</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>China</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ride (Bell)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tambourine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>open high conga</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>low conga</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>elementName</name>
+    <message>
+        <source>invalid</source>
+        <translation type="unfinished">Invàlid</translation>
+    </message>
+    <message>
+        <source>Symbol</source>
+        <translation type="unfinished">Símbol</translation>
+    </message>
+    <message>
+        <source>Text</source>
+        <translation type="unfinished">Text</translation>
+    </message>
+    <message>
+        <source>InstrumentName</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SlurSegment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StaffLines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BarLine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StemSlash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation type="unfinished">Línia</translation>
+    </message>
+    <message>
+        <source>Bracket</source>
+        <translation type="unfinished">Claudàtor</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation type="unfinished">Arpegi</translation>
+    </message>
+    <message>
+        <source>Accidental</source>
+        <translation type="unfinished">Alteració</translation>
+    </message>
+    <message>
+        <source>Stem</source>
+        <translation type="unfinished">Plica</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation type="unfinished">Nota</translation>
+    </message>
+    <message>
+        <source>Clef</source>
+        <translation type="unfinished">Clau</translation>
+    </message>
+    <message>
+        <source>KeySig</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TimeSig</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rest</source>
+        <translation type="unfinished">Silenci</translation>
+    </message>
+    <message>
+        <source>Breath</source>
+        <translation type="unfinished">Respiració</translation>
+    </message>
+    <message>
+        <source>Glissando</source>
+        <translation type="unfinished">Glissando</translation>
+    </message>
+    <message>
+        <source>RepeatMeasure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation type="unfinished">Imatge</translation>
+    </message>
+    <message>
+        <source>Tie</source>
+        <translation type="unfinished">Lligadura</translation>
+    </message>
+    <message>
+        <source>Articulation</source>
+        <translation type="unfinished">Articulació</translation>
+    </message>
+    <message>
+        <source>ChordLine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dynamic</source>
+        <translation type="unfinished">Dinàmica</translation>
+    </message>
+    <message>
+        <source>Beam</source>
+        <translation type="unfinished">Agrupació</translation>
+    </message>
+    <message>
+        <source>Hook</source>
+        <translation type="unfinished">Lligadura</translation>
+    </message>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished">Lletra</translation>
+    </message>
+    <message>
+        <source>FiguredBass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Marker</source>
+        <translation type="unfinished">Marcador</translation>
+    </message>
+    <message>
+        <source>Jump</source>
+        <translation type="unfinished">Salt</translation>
+    </message>
+    <message>
+        <source>Fingering</source>
+        <translation type="unfinished">Digitació</translation>
+    </message>
+    <message>
+        <source>Tuplet</source>
+        <translation type="unfinished">Grup irregular</translation>
+    </message>
+    <message>
+        <source>Tempo</source>
+        <translation type="unfinished">Tempo</translation>
+    </message>
+    <message>
+        <source>StaffText</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RehearsalMark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InstrumentChange</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Harmony</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FretDiagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TremoloBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volta</source>
+        <translation type="unfinished">Volta</translation>
+    </message>
+    <message>
+        <source>HairpinSegment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OttavaSegment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TrillSegment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TextLineSegment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>VoltaSegment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PedalSegment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LayoutBreak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spacer</source>
+        <translation type="unfinished">Espaiador</translation>
+    </message>
+    <message>
+        <source>StaffState</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LedgerLine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NoteHead</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NoteDot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tremolo</source>
+        <translation type="unfinished">Tremolo</translation>
+    </message>
+    <message>
+        <source>Measure</source>
+        <translation type="unfinished">Compàs</translation>
+    </message>
+    <message>
+        <source>Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lasso</source>
+        <translation type="unfinished">Lasso</translation>
+    </message>
+    <message>
+        <source>ShadowNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RubberBand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TabDurationSymbol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FSymbol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Page</source>
+        <translation type="unfinished">Pàgina</translation>
+    </message>
+    <message>
+        <source>HairPin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ottava</source>
+        <translation type="unfinished">Octava</translation>
+    </message>
+    <message>
+        <source>Pedal</source>
+        <translation type="unfinished">Pedal</translation>
+    </message>
+    <message>
+        <source>Trill</source>
+        <translation type="unfinished">Trino</translation>
+    </message>
+    <message>
+        <source>TextLine</source>
+        <translation type="unfinished">Text de línia</translation>
+    </message>
+    <message>
+        <source>NoteLine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Segment</source>
+        <translation type="unfinished">Segment</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation type="unfinished">Sistema</translation>
+    </message>
+    <message>
+        <source>Compound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chord</source>
+        <translation type="unfinished">Acord</translation>
+    </message>
+    <message>
+        <source>Slur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Element</source>
+        <translation type="unfinished">Element</translation>
+    </message>
+    <message>
+        <source>ElementList</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StaffList</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MeasureList</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>VBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AccidentalBracket</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ossia</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -12857,6 +13603,78 @@ Fallada: </translation>
     <message>
         <source>could not open compressed MusicXML file
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cannot open chord description:
+%1
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Chord Description
+%1
+failed: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Write Chord Description failed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cannot open figured bass description:
+%1
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The following file is locked: 
+%1 
+
+Try saving to a different location.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Temp File
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+failed: </source>
+        <translation type="unfinished">
+Fallada: </translation>
+    </message>
+    <message>
+        <source>MuseScore: Save File failed: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>renaming temp. file &lt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&gt; to &lt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&gt; failed:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Style File
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Write Style failed: </source>
+        <translation type="unfinished">Error escrivint l&apos;estil: </translation>
+    </message>
+    <message>
+        <source>cannot open tablature font description:
+%1
+%2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -13007,6 +13825,944 @@ Fallada: </translation>
     <name>styles_directory</name>
     <message>
         <source>Styles</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>symblo</name>
+    <message>
+        <source>period</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>symbol</name>
+    <message>
+        <source>whole rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>half rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>outside whole rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>outside half rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>rest M3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>breve rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>longa rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quart rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>clas quart rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>eight rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>16&apos; rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>32&apos; rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>64&apos; rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>128&apos; rest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp arrow up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp arrow both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp slash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp slash2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp slash3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp slash4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>natural</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>natural arrow up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>natural arrow down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>natural arrow both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat arrow up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat arrow both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat slash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat slash2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mirrored flat2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mirrored flat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mirrored flat slash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat flat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flat flat slash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sharp sharp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sori</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>koron</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>right parenthesis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>left parenthesis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>open arrowhead 01</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>open arrowhead 0M1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>open arrowhead 11</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>open arrowhead 1M1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close arrowhead 01</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close arrowhead 0M1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close arrowhead 11</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close arrowhead 1M1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dot</source>
+        <translation type="unfinished">Puntejada</translation>
+    </message>
+    <message>
+        <source>longa up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>longa down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>brevis head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>brevis double head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>whole head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>half head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quart head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>whole diamond head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>half diamond head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>diamond head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>whole triangle head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>down half triangle head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>up half triangle head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>up quart triangle head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>down quart triangle head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>whole slash head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>half slash head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quart slash head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>whole cross head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>half cross head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cross head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>x circle head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s0do head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d1do head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u1do head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d2do head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u2do head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s0re head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u1re head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d1re head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u2re head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d2re head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s0mi head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s1mi head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s2mi head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u0fa head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d0fa head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u1fa head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d1fa head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u2fa head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d2fa head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s0la head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s1la head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s2la head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s0ti head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u1ti head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d1ti head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>u2ti head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d2ti head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s0sol head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s1sol head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s2sol head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ufermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>snappizzicato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ushortfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dshortfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ulongfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dlongfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>uverylongfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dverylongfermata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>thumb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sforza to accent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>espressivo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>staccato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ustaccatissimo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dstaccatissimo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tenuto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>uportato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dportato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>umarcato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dmarcato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ouvert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>halfopen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>plus stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>up bow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>down bow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reverse turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>trill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>upedal heel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dpedalheel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>upedal toe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dpedal toe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>flageolet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>segno</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>var segno</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>coda</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>varied coda</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>rcomma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lcomma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>rcomma variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lcomma variation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>arpeggio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>trillelement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>arpeggio arrow down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>arpeggio arrow up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>trill element</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>prall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mordent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>prall prall</source>
+        <translation type="unfinished">Prall prall</translation>
+    </message>
+    <message>
+        <source>prall mordent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>up prall</source>
+        <translation type="unfinished">Prall amunt</translation>
+    </message>
+    <message>
+        <source>up mordent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>prall down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>down prall</source>
+        <translation type="unfinished">Prall avall</translation>
+    </message>
+    <message>
+        <source>down mordent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>prall up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>schleifer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>line prall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>caesura curved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>caesura straight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>eight flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sixteenth flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>thirtysecond flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sixtyfour flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>128flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>deight flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>grace dash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dgrace dash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dsixteenth flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dthirtysecond flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dsixtyfourth flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>d128flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>alto clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>calto clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bass clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cbass clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>trebleclef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ctrebleclef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>percussion clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>cpercussion clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tab clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ctab clef</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>four four meter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>allabreve</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pedalasterisk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pedaldash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pedaldot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pedalP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pedald</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pedale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pedal ped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bracket tips up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bracket tips down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bracket tips left up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bracket tips left down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>accordion dot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>accordion freebase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>accordion stdbase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>accordion bayanbase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>accordion old ee</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>accordion discant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>accordion push</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>accordion pull</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>plus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>comma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hyphen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>zero</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>one</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>two</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>three</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>four</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>five</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>six</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>seven</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>eight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>z</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>f</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>p</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>m</source>
+        <translation type="unfinished">m</translation>
+    </message>
+    <message>
+        <source>r</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>longa up alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>longa down alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>brevis head alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>time sig C dot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>time sig O</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>time sig O cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>time sig O dot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tab2 clef</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
