@@ -721,9 +721,6 @@ void Xml::htmlToString(XmlReader& e, int level, QString* s)
                   case QXmlStreamReader::Comment:
                         break;
 
-                  case QXmlStreamReader::Invalid:
-                        qDebug("htmlToString: invalid token: %s", qPrintable(e.errorString()));
-                        return;
                   default:
                         qDebug("htmlToString: read token: %s", qPrintable(e.tokenString()));
                         return;

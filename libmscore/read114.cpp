@@ -455,6 +455,9 @@ Score::FileError Score::read114(XmlReader& e)
                   e.unknown();
             }
 
+      if (e.error() != QXmlStreamReader::NoError)
+            return FILE_BAD_FORMAT;
+
       int n = nstaves();
       for (int idx = 0; idx < n; ++idx) {
             Staff* s = _staves[idx];
