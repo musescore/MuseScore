@@ -1,6 +1,11 @@
 #!/bin/bash
 
+# Linux
 MSCORE=../../build/mscore/mscore
+# OS X terminal build
+#MSCORE=../applebuild/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build
+#MSCORE=../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
 
 echo "------------------------------"
 echo "Regression Tests for MuseScore"

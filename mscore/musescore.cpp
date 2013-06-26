@@ -2246,6 +2246,9 @@ bool MuseScoreApplication::event(QEvent *event)
       {
       switch(event->type()) {
             case QEvent::FileOpen:
+                  // store names of files requested to be loaded by OS X to be handled later
+                  // this event is generated when a file is dragged onto the MuseScore icon
+                  // in the dock and MuseScore is not running yet
                   paths.append(static_cast<QFileOpenEvent *>(event)->file());
                   return true;
             default:
@@ -2261,6 +2264,9 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
       {
       switch(event->type()) {
             case QEvent::FileOpen:
+                  // open files requested to be loaded by OS X
+                  // this event is generated when a file is dragged onto the MuseScore icon
+                  // in the dock when MuseScore is already running
                   handleMessage(static_cast<QFileOpenEvent *>(event)->file());
                   return true;
             default:
@@ -4783,23 +4789,27 @@ int main(int argc, char* av[])
 
             mscore->showWebPanel(preferences.showWebPanel);
             static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
+            // count filenames specified on the command line
+            // these are the non-empty strings remaining in argv
             foreach(const QString& name, argv) {
                   if (!name.isEmpty())
                         ++files;
                   }
 #ifdef Q_WS_MAC
-            if (!mscore->restoreSession(preferences.sessionStart == LAST_SESSION)) {
-                  MuseScoreApplication* mApp = static_cast<MuseScoreApplication*>(qApp);
-                  loadScores(mApp->paths);
-                  files = mApp->paths.size();
+            // app->paths contains files requested to be loaded by OS X
+            // append these to argv and update file count
+            foreach(const QString& name, app->paths) {
+                  if (!name.isEmpty()) {
+                        argv << name;
+                        ++files;
+                        }
                   }
-#else
+#endif
             //
             // TODO: delete old session backups
             //
             if (!mscore->restoreSession((preferences.sessionStart == LAST_SESSION) && (files == 0)) || files)
                   loadScores(argv);
-#endif
             }
       mscore->loadPlugins();
       mscore->writeSessionFile(false);
