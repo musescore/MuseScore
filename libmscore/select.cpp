@@ -357,38 +357,6 @@ void Selection::setRange(Segment* a, Segment* b, int c, int d)
       }
 
 //---------------------------------------------------------
-//   searchSelectedElements
-//    "ElementList selected"
-//---------------------------------------------------------
-
-/**
- Rebuild list of selected Elements.
-*/
-static void collectSelectedElements(void* data, Element* e)
-      {
-      QList<const Element*>* l = static_cast<QList<const Element*>*>(data);
-      if (e->selected())
-            l->append(e);
-      }
-
-void Selection::searchSelectedElements()
-      {
-      _el.clear();
-      _score->scanElements(&_el, collectSelectedElements, true);
-      updateState();
-      }
-
-//---------------------------------------------------------
-//   reconstructElementList
-///    reconstruct list of selected elements after undo/redo
-//---------------------------------------------------------
-
-void Selection::reconstructElementList()
-      {
-      searchSelectedElements();
-      }
-
-//---------------------------------------------------------
 //   update
 ///   Set select flag for all Elements in select list.
 //---------------------------------------------------------
