@@ -73,6 +73,7 @@ struct DivisionInfo
 
 // list of bar division lengths in ticks (whole bar len, half bar len, ...)
 // and its corresponding levels
+// tuplets are not taken into account here
 
 DivisionInfo metricDivisionsOfBar(const Fraction &barFraction)
       {
@@ -121,10 +122,10 @@ DivisionInfo metricDivisionsOfTuplet(const TupletData &tuplet,
       tupletDivInfo.isTuplet = true;
       int divLen = tuplet.len / tuplet.tupletNumber;
       tupletDivInfo.divLengths.push_back({divLen, TUPLET_BOUNDARY_LEVEL});
-      while (tupletDivInfo.divLengths.back().len >= 2 * minAllowedDuration())
+      while (tupletDivInfo.divLengths.back().len >= 2 * minAllowedDuration()) {
             tupletDivInfo.divLengths.push_back({
-                  tupletDivInfo.divLengths.back().len / 2, --startLevel
-            });
+                        tupletDivInfo.divLengths.back().len / 2, --startLevel});
+            }
       return tupletDivInfo;
       }
 
@@ -157,7 +158,7 @@ std::vector<int> divisionsOfBarForTuplets(const Fraction &barFraction)
       return divLengths;
       }
 
-// result in vector: first - all tuplets info, at the end - one bar division info
+// result in vector: first elements - all tuplets info, one at the end - bar division info
 
 std::vector<DivisionInfo> divisionInfo(const Fraction &barFraction,
                                        const std::vector<TupletData> &tupletsInBar)
@@ -253,6 +254,18 @@ Meter::MaxLevel maxLevelBetween(int startTickInBar,
       return level;
       }
 
+int tupletNumberForDuration(int startTick,
+                            int endTick,
+                            const std::vector<TupletData> &tupletsInBar)
+      {
+      for (const auto &tupletData: tupletsInBar) {
+            if (startTick >= tupletData.onTime
+                        && endTick <= tupletData.onTime + tupletData.len)
+                  return tupletData.tupletNumber;
+            }
+      return -1;  // this duration is not inside any tuplet
+      }
+
 bool isPowerOfTwo(unsigned int x)
       {
       return x && !(x & (x - 1));
@@ -323,8 +336,11 @@ bool isHalfRestOn34(int startTickInBar,
 struct Node
       {
       Node(int startTick, int endTick, int startLevel, int endLevel)
-            : startTick(startTick), endTick(endTick)
-            , startLevel(startLevel), endLevel(endLevel)
+            : startTick(startTick)
+            , endTick(endTick)
+            , startLevel(startLevel)
+            , endLevel(endLevel)
+            , tupletCoeff(1.0)
             , parent(nullptr)
             {}
 
@@ -332,11 +348,19 @@ struct Node
       int endTick;
       int startLevel;
       int endLevel;
+             // all durations inside tuplets are smaller/larger than their regular versions
+      double tupletCoeff;
 
       Node *parent;
       std::unique_ptr<Node> left;
       std::unique_ptr<Node> right;
       };
+
+// conversion coefficients from tuplet durations to regular durations
+// for example, 8th note in triplet * 3/2 = regular 8th note
+
+const std::map<int, double> tupletCoeffs = {{2, 2.0/3}, {3, 3.0/2}, {4, 4.0/3}, {5, 5.0/4}, {7.0, 7.0/4}};
+
 
 void treeToDurationList(Node *node,
                         QList<TDuration> &dl,
@@ -348,12 +372,13 @@ void treeToDurationList(Node *node,
             }
       else {
             const int MAX_DOTS = 1;
-            dl.append(toDurationList(
-                  Fraction::fromTicks(node->endTick - node->startTick), useDots, MAX_DOTS));
+            QList<TDuration> list = toDurationList(Fraction::fromTicks(std::round(node->tupletCoeff
+                                          * (node->endTick - node->startTick))), useDots, MAX_DOTS);
+            dl.append(list);
             }
       }
 
-// duration start/end should be quantisized at least to 1/128 note
+// duration start/end should be quantisized, quantum >= 1/128 note
 
 QList<TDuration> toDurationList(int startTickInBar,
                                 int endTickInBar,
@@ -368,7 +393,7 @@ QList<TDuration> toDurationList(int startTickInBar,
             return durations;
                   // analyse mectric structure of bar
       auto divInfo = divisionInfo(barFraction, tupletsInBar);
-                  // create a root for binary tree of durationsstd::multimap<int, MidiChord>
+                  // create a root for binary tree of durations
       std::unique_ptr<Node> root(new Node(startTickInBar, endTickInBar,
                                           levelOfTick(startTickInBar, divInfo),
                                           levelOfTick(endTickInBar, divInfo)));
@@ -385,6 +410,16 @@ QList<TDuration> toDurationList(int startTickInBar,
                   // build duration tree such that durations don't go across strong beat divisions
       while (!nodesToProcess.isEmpty()) {
             Node *node = nodesToProcess.dequeue();
+                        // if node duration is completely inside some tuplet
+                        // then assign to the node tuplet-to-regular-duration conversion coefficient
+            if (node->tupletCoeff != 1.0) {
+                  int tupletNumber = tupletNumberForDuration(node->startTick, node->endTick, tupletsInBar);
+                  if (tupletNumber != -1) {
+                        auto it = tupletCoeffs.find(tupletNumber);
+                        if (it != tupletCoeffs.end())
+                              node->tupletCoeff = it->second;
+                        }
+                  }
                         // don't split node if its duration is less than minDuration
             if (node->endTick - node->startTick < minDuration)
                   continue;
@@ -409,6 +444,11 @@ QList<TDuration> toDurationList(int startTickInBar,
                                              splitPoint.level, node->endLevel));
                   node->right->parent = node;
                   nodesToProcess.enqueue(node->right.get());
+
+                  if (node->tupletCoeff != 1.0) {
+                        node->left->tupletCoeff = node->tupletCoeff;
+                        node->right->tupletCoeff = node->tupletCoeff;
+                        }
                   }
             }
                   // collect the resulting durations
