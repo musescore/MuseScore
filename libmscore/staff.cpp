@@ -336,7 +336,7 @@ void Staff::removeClef(Clef* clef)
                   }
             }
       qDebug("Staff::removeClef: Clef at %d not found", tick);
-      abort();
+      // abort();
       }
 
 //---------------------------------------------------------
