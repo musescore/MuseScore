@@ -1913,7 +1913,7 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
 
       // normal (auto-raised) toolbuttons
       if (flags & (State_Sunken | State_On)) {
-            painter->setBrush(QColor(0x42, 0x42, 0x42));
+            painter->setBrush(palette.color(QPalette::Base));
             painter->setPen(Qt::NoPen);
             _helper.fillHole(*painter, slitRect.adjusted(-2, -2, 4, 4));
             QColor color(palette.color(QPalette::Window));
