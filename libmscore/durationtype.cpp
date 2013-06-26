@@ -436,27 +436,31 @@ TDuration& TDuration::operator+=(const TDuration& t)
 //   toDurationList
 //---------------------------------------------------------
 
-QList<TDuration> toDurationList(Fraction l, bool useDottedValues)
+QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots)
       {
       QList<TDuration> dList;
-      if (useDottedValues) {
+      if (useDots) {
             for (TDuration d = TDuration(TDuration::V_LONG); d.isValid() && (l.numerator() != 0);) {
-                  // double dots is a bad practice - so we start from 1 dot
-                  d.setDots(1);
-                  Fraction ff = l - d.fraction();
-                  if (ff.numerator() >= 0) {
-                        dList.append(d);
-                        l -= d.fraction();
-                        continue;
+                  int dots = maxDots;
+                  for ( ; dots > 0; --dots) {
+                        d.setDots(dots);
+                        Fraction ff = l - d.fraction();
+                        if (ff.numerator() >= 0) {
+                              dList.append(d);
+                              l -= d.fraction();
+                              break;
+                              }
                         }
+                  if (dots > 0)
+                        continue;
                   d.setDots(0);
-                  ff = l - d.fraction();
+                  Fraction ff = l - d.fraction();
                   if (ff.numerator() < 0) {
                         d = d.shift(1);
                         }
                   else {
-                        l -= d.fraction();
                         dList.append(d);
+                        l -= d.fraction();
                         }
                   }
             }
