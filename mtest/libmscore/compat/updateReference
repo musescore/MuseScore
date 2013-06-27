@@ -9,4 +9,5 @@ cp $P/notes-test.mscx notes-ref.mscx
 cp $P/textstyles-test.mscx textstyles-ref.mscx
 cp $P/title-test.mscx title-ref.mscx
 cp $P/notes_useroffset-test.mscx notes_useroffset-ref.mscx
+cp $P/tremolo2notes-test.mscx tremolo2notes-ref.mscx
 
