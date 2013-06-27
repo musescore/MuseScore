@@ -226,11 +226,12 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
       qreal stepDistance = staff->spatium() * .5;
       int stepOffset     = staff->staffType()->stepOffset();
 
+      qreal lx       = 10000.0;     // leftmost note head position
       qreal dotPosX  = 0.0;
+
       int nNotes = notes.size();
       for (int i = nNotes-1; i >= 0; --i) {
             Note* note     = notes[i];
-            // note->layout();   // necessary?
             Accidental* ac = note->accidental();
             if (ac) {
                   ac->layout();
@@ -268,6 +269,8 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
                   }
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
+            if (x < lx)
+                  lx = x;
 
             qreal xx = x + hw + note->chord()->pos().x();
             if (xx > dotPosX)
@@ -282,19 +285,21 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
             return;
       qreal pd  = point(styleS(ST_accidentalDistance));
       qreal pnd = point(styleS(ST_accidentalNoteDistance));
+
       //
       // layout top accidental
       //
       Note* note      = aclist[0].note;
       Accidental* acc = note->accidental();
-      aclist[0].x     = -pnd * acc->mag() - acc->width() - acc->bbox().x();
+      qreal x         = -pnd * acc->mag() - acc->width() - acc->bbox().x();
+      aclist[0].x     = x;
 
       //
       // layout bottom accidental
       //
       if (nAcc > 1) {
-            note = aclist[nAcc-1].note;         // last note
-            acc  = note->accidental();
+            note   = aclist[nAcc-1].note;         // last note
+            acc    = note->accidental();
             int l1 = aclist[0].note->line();
             int l2 = note->line();
 
@@ -348,14 +353,6 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
                         x -= pd * acc->mag();   // accidental distance
                   aclist[i].x = x - acc->width() - acc->bbox().x();
                   }
-            }
-
-      qreal lx = 10000.0;
-      for (const AcEl& e : aclist) {
-            Note* note = e.note;
-            qreal x    = note->x();
-            if (x < lx)
-                  lx = x;
             }
 
       for (const AcEl& e : aclist) {
