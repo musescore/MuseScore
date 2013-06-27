@@ -5,7 +5,7 @@
     <name>AboutBox</name>
     <message>
         <source>About MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>Über MuseScore</translation>
     </message>
     <message>
         <source>Copy revision number</source>
@@ -28,7 +28,7 @@ p, li { white-space: pre-wrap; }
     <name>AboutMusicXMLBox</name>
     <message>
         <source>About MusicXML</source>
-        <translation type="unfinished"></translation>
+        <translation>Über MusicXML</translation>
     </message>
     <message utf8="true">
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -43,7 +43,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>The MusicXML Public License:</source>
-        <translation type="unfinished"></translation>
+        <translation>Die MusicXML Lizenz</translation>
     </message>
     <message utf8="true">
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -93,51 +93,51 @@ p, li { white-space: pre-wrap; }
     <name>AeolusGui</name>
     <message>
         <source>Azimuth</source>
-        <translation type="unfinished"></translation>
+        <translation>Azimuth</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Breite</translation>
     </message>
     <message>
         <source>Reflect</source>
-        <translation type="unfinished"></translation>
+        <translation>Reflektion</translation>
     </message>
     <message>
         <source>Reverb</source>
-        <translation type="unfinished">Hall</translation>
+        <translation>Hall</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzögerung</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit</translation>
     </message>
     <message>
         <source>Direct</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Direkt</translation>
     </message>
     <message>
         <source>III</source>
-        <translation type="unfinished"></translation>
+        <translation>III</translation>
     </message>
     <message>
         <source>II</source>
-        <translation type="unfinished"></translation>
+        <translation>II</translation>
     </message>
     <message>
         <source>I</source>
-        <translation type="unfinished">K</translation>
+        <translation>I</translation>
     </message>
     <message>
         <source>P</source>
-        <translation type="unfinished"></translation>
+        <translation>P</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Position</translation>
     </message>
 </context>
 <context>
@@ -223,89 +223,89 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Aussehen</translation>
     </message>
     <message>
         <source>Direction:</source>
-        <translation type="unfinished"></translation>
+        <translation>Richtung:</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">automatisch</translation>
+        <translation>automatisch</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Tief</translation>
     </message>
     <message>
         <source>Anchor:</source>
-        <translation type="unfinished">Anker:</translation>
+        <translation>Anker:</translation>
     </message>
     <message>
         <source>Top Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Oberste Zeile</translation>
     </message>
     <message>
         <source>Bottom Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterste Zeile</translation>
     </message>
     <message>
         <source>Chord Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord Ausrichtung</translation>
     </message>
     <message>
         <source>Top Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Oberster Akkord</translation>
     </message>
     <message>
         <source>Bottom Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterster Akkord</translation>
     </message>
 </context>
 <context>
     <name>Awl::ColorLabel</name>
     <message>
         <source>MuseScore: Select Color</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Farbauswahl</translation>
     </message>
 </context>
 <context>
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MuseScore: Eigenschaften Bend</translation>
     </message>
     <message>
         <source>Bend type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend Typ:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
-        <translation type="unfinished"></translation>
+        <translation>Click um Punkt zuzufügen oder entfernen</translation>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend</translation>
     </message>
     <message>
         <source>Bend/Release</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend/Release</translation>
     </message>
     <message>
         <source>Bend/Release/Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend/ReleaseBend</translation>
     </message>
     <message>
         <source>PreBend</source>
-        <translation type="unfinished"></translation>
+        <translation>PreBend</translation>
     </message>
     <message>
         <source>PreBend/Release</source>
-        <translation type="unfinished"></translation>
+        <translation>PreBend/Release</translation>
     </message>
 </context>
 <context>
@@ -336,38 +336,38 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Gaps</source>
-        <translation type="unfinished"></translation>
+        <translation>Lücken</translation>
     </message>
     <message>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
 spatium unit</extracomment>
-        <translation type="unfinished">sp</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <source>top/left</source>
-        <translation type="unfinished"></translation>
+        <translation>oben/links</translation>
     </message>
     <message>
         <source>bottom/right</source>
-        <translation type="unfinished"></translation>
+        <translation>unten/rechts</translation>
     </message>
     <message>
         <source>Inner Margins</source>
-        <translation type="unfinished"></translation>
+        <translation>Innenrand</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <source>width:</source>
-        <translation type="unfinished"></translation>
+        <translation>B:</translation>
     </message>
     <message>
         <source>height:</source>
-        <translation type="unfinished"></translation>
+        <translation>H:</translation>
     </message>
 </context>
 <context>
@@ -1052,7 +1052,7 @@ spatium unit</extracomment>
     <name>ChordRestBase</name>
     <message>
         <source>Lyrics:</source>
-        <translation type="unfinished">Liedtext:</translation>
+        <translation>Liedtext:</translation>
     </message>
 </context>
 <context>
@@ -1071,26 +1071,26 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Tab 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab 1</translation>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab 2</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Laden</translation>
+        <translation>Laden</translation>
     </message>
 </context>
 <context>
     <name>Clef</name>
     <message>
         <source>Hide courtesy clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Ankündigung verstecken</translation>
     </message>
     <message>
         <source>Show courtesy clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Ankündigung zeigen</translation>
     </message>
 </context>
 <context>
@@ -1181,31 +1181,31 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Laden</translation>
+        <translation>Laden</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <source>No.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nr.</translation>
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation>1</translation>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished">2</translation>
+        <translation>2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished">3</translation>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished">4</translation>
+        <translation>4</translation>
     </message>
 </context>
 <context>
@@ -1255,606 +1255,606 @@ spatium unit</extracomment>
     <name>EditPitchBase</name>
     <message>
         <source>Note Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Notenauswahl</translation>
     </message>
     <message>
         <source>Select Note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Note auswählen:</translation>
     </message>
     <message>
         <source>Octave 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave 8</translation>
     </message>
     <message>
         <source>Octave 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave 7</translation>
     </message>
     <message>
         <source>Octave 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave 6</translation>
     </message>
     <message>
         <source>Octave 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave 5</translation>
     </message>
     <message>
         <source>Octave 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave 4</translation>
     </message>
     <message>
         <source>Octave 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave 3</translation>
     </message>
     <message>
         <source>Octave 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave 2</translation>
     </message>
     <message>
         <source>Octave 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave 1</translation>
     </message>
     <message>
         <source>Octave 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave 0</translation>
     </message>
     <message>
         <source>Octave -1</source>
-        <translation type="unfinished"></translation>
+        <translation>Oktave -1</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"></translation>
+        <translation>C#</translation>
     </message>
     <message>
         <source>D</source>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <source>Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <source>E</source>
-        <translation type="unfinished">E</translation>
+        <translation>E</translation>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished">F</translation>
+        <translation>F</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"></translation>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <source>Ab</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <source>A</source>
-        <translation type="unfinished">A</translation>
+        <translation>A</translation>
     </message>
     <message>
         <source>Bb</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished">H</translation>
+        <translation>H</translation>
     </message>
     <message>
         <source>C 8</source>
-        <translation type="unfinished"></translation>
+        <translation>C8</translation>
     </message>
     <message>
         <source>C# 8</source>
-        <translation type="unfinished"></translation>
+        <translation>C# 8</translation>
     </message>
     <message>
         <source>D 8</source>
-        <translation type="unfinished"></translation>
+        <translation>D 8</translation>
     </message>
     <message>
         <source>Eb 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb 8</translation>
     </message>
     <message>
         <source>E 8</source>
-        <translation type="unfinished"></translation>
+        <translation>E 8</translation>
     </message>
     <message>
         <source>F 8</source>
-        <translation type="unfinished"></translation>
+        <translation>F 8</translation>
     </message>
     <message>
         <source>F# 8</source>
-        <translation type="unfinished"></translation>
+        <translation>F# 8</translation>
     </message>
     <message>
         <source>G 8</source>
-        <translation type="unfinished"></translation>
+        <translation>G 8</translation>
     </message>
     <message>
         <source>Ab 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab 8</translation>
     </message>
     <message>
         <source>A 8</source>
-        <translation type="unfinished"></translation>
+        <translation>A 8</translation>
     </message>
     <message>
         <source>Bb 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb 8</translation>
     </message>
     <message>
         <source>B 8</source>
-        <translation type="unfinished"></translation>
+        <translation>H 8</translation>
     </message>
     <message>
         <source>C 7</source>
-        <translation type="unfinished"></translation>
+        <translation>C 7</translation>
     </message>
     <message>
         <source>C# 7</source>
-        <translation type="unfinished"></translation>
+        <translation>C# 7</translation>
     </message>
     <message>
         <source>D 7</source>
-        <translation type="unfinished"></translation>
+        <translation>D 7</translation>
     </message>
     <message>
         <source>Eb 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb 7</translation>
     </message>
     <message>
         <source>E 7</source>
-        <translation type="unfinished"></translation>
+        <translation>E 7</translation>
     </message>
     <message>
         <source>F 7</source>
-        <translation type="unfinished"></translation>
+        <translation>F 7</translation>
     </message>
     <message>
         <source>F# 7</source>
-        <translation type="unfinished"></translation>
+        <translation>F# 7</translation>
     </message>
     <message>
         <source>G 7</source>
-        <translation type="unfinished"></translation>
+        <translation>G 7</translation>
     </message>
     <message>
         <source>Ab 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab 7</translation>
     </message>
     <message>
         <source>A 7</source>
-        <translation type="unfinished"></translation>
+        <translation>A 7</translation>
     </message>
     <message>
         <source>Bb 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb 7</translation>
     </message>
     <message>
         <source>B 7</source>
-        <translation type="unfinished"></translation>
+        <translation>B 7</translation>
     </message>
     <message>
         <source>C 6</source>
-        <translation type="unfinished"></translation>
+        <translation>C 6</translation>
     </message>
     <message>
         <source>C# 6</source>
-        <translation type="unfinished"></translation>
+        <translation>C# 6</translation>
     </message>
     <message>
         <source>D 6</source>
-        <translation type="unfinished"></translation>
+        <translation>D 6</translation>
     </message>
     <message>
         <source>Eb 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb 6</translation>
     </message>
     <message>
         <source>E 6</source>
-        <translation type="unfinished"></translation>
+        <translation>E 6</translation>
     </message>
     <message>
         <source>F 6</source>
-        <translation type="unfinished"></translation>
+        <translation>F 6</translation>
     </message>
     <message>
         <source>F# 6</source>
-        <translation type="unfinished"></translation>
+        <translation>F# 6</translation>
     </message>
     <message>
         <source>G 6</source>
-        <translation type="unfinished"></translation>
+        <translation>G 6</translation>
     </message>
     <message>
         <source>Ab 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab 6</translation>
     </message>
     <message>
         <source>A 6</source>
-        <translation type="unfinished"></translation>
+        <translation>A 6</translation>
     </message>
     <message>
         <source>Bb 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb 6</translation>
     </message>
     <message>
         <source>B 6</source>
-        <translation type="unfinished"></translation>
+        <translation>B 6</translation>
     </message>
     <message>
         <source>C 5</source>
-        <translation type="unfinished"></translation>
+        <translation>C 5</translation>
     </message>
     <message>
         <source>C# 5</source>
-        <translation type="unfinished"></translation>
+        <translation>C# 5</translation>
     </message>
     <message>
         <source>D 5</source>
-        <translation type="unfinished"></translation>
+        <translation>D 5</translation>
     </message>
     <message>
         <source>Eb 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb 5</translation>
     </message>
     <message>
         <source>E 5</source>
-        <translation type="unfinished"></translation>
+        <translation>E 5</translation>
     </message>
     <message>
         <source>F 5</source>
-        <translation type="unfinished"></translation>
+        <translation>F 5</translation>
     </message>
     <message>
         <source>F# 5</source>
-        <translation type="unfinished"></translation>
+        <translation>F# 5</translation>
     </message>
     <message>
         <source>G 5</source>
-        <translation type="unfinished"></translation>
+        <translation>G 5</translation>
     </message>
     <message>
         <source>Ab 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab 5</translation>
     </message>
     <message>
         <source>A 5</source>
-        <translation type="unfinished"></translation>
+        <translation>A 5</translation>
     </message>
     <message>
         <source>Bb 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb 5</translation>
     </message>
     <message>
         <source>B 5</source>
-        <translation type="unfinished"></translation>
+        <translation>B 5</translation>
     </message>
     <message>
         <source>C 4</source>
-        <translation type="unfinished"></translation>
+        <translation>C 4</translation>
     </message>
     <message>
         <source>C# 4</source>
-        <translation type="unfinished"></translation>
+        <translation>C# 4</translation>
     </message>
     <message>
         <source>D 4</source>
-        <translation type="unfinished"></translation>
+        <translation>D 4</translation>
     </message>
     <message>
         <source>Eb 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb 4</translation>
     </message>
     <message>
         <source>E 4</source>
-        <translation type="unfinished"></translation>
+        <translation>E 4</translation>
     </message>
     <message>
         <source>F 4</source>
-        <translation type="unfinished"></translation>
+        <translation>F 4</translation>
     </message>
     <message>
         <source>F# 4</source>
-        <translation type="unfinished"></translation>
+        <translation>F# 4</translation>
     </message>
     <message>
         <source>G 4</source>
-        <translation type="unfinished"></translation>
+        <translation>G 4</translation>
     </message>
     <message>
         <source>Ab 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab 4</translation>
     </message>
     <message>
         <source>A 4</source>
-        <translation type="unfinished"></translation>
+        <translation>A 4</translation>
     </message>
     <message>
         <source>Bb 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb 4</translation>
     </message>
     <message>
         <source>B 4</source>
-        <translation type="unfinished"></translation>
+        <translation>B 4</translation>
     </message>
     <message>
         <source>C 3</source>
-        <translation type="unfinished"></translation>
+        <translation>C 3</translation>
     </message>
     <message>
         <source>C# 3</source>
-        <translation type="unfinished"></translation>
+        <translation>C# 3</translation>
     </message>
     <message>
         <source>D 3</source>
-        <translation type="unfinished"></translation>
+        <translation>D 3</translation>
     </message>
     <message>
         <source>Eb 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb 3</translation>
     </message>
     <message>
         <source>E 3</source>
-        <translation type="unfinished"></translation>
+        <translation>E 3</translation>
     </message>
     <message>
         <source>F 3</source>
-        <translation type="unfinished"></translation>
+        <translation>F 3</translation>
     </message>
     <message>
         <source>F# 3</source>
-        <translation type="unfinished"></translation>
+        <translation>F# 3</translation>
     </message>
     <message>
         <source>G 3</source>
-        <translation type="unfinished"></translation>
+        <translation>G 3</translation>
     </message>
     <message>
         <source>Ab 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab 3</translation>
     </message>
     <message>
         <source>A 3</source>
-        <translation type="unfinished"></translation>
+        <translation>A 3</translation>
     </message>
     <message>
         <source>Bb 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb 3</translation>
     </message>
     <message>
         <source>B 3</source>
-        <translation type="unfinished"></translation>
+        <translation>B 3</translation>
     </message>
     <message>
         <source>C 2</source>
-        <translation type="unfinished"></translation>
+        <translation>C 2</translation>
     </message>
     <message>
         <source>C# 2</source>
-        <translation type="unfinished"></translation>
+        <translation>C# 2</translation>
     </message>
     <message>
         <source>D 2</source>
-        <translation type="unfinished"></translation>
+        <translation>D 2</translation>
     </message>
     <message>
         <source>Eb 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb 2</translation>
     </message>
     <message>
         <source>E 2</source>
-        <translation type="unfinished"></translation>
+        <translation>E 2</translation>
     </message>
     <message>
         <source>F 2</source>
-        <translation type="unfinished"></translation>
+        <translation>F 2</translation>
     </message>
     <message>
         <source>F# 2</source>
-        <translation type="unfinished"></translation>
+        <translation>F# 2</translation>
     </message>
     <message>
         <source>G 2</source>
-        <translation type="unfinished"></translation>
+        <translation>G 2</translation>
     </message>
     <message>
         <source>Ab 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab 2</translation>
     </message>
     <message>
         <source>A 2</source>
-        <translation type="unfinished"></translation>
+        <translation>A 2</translation>
     </message>
     <message>
         <source>Bb 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb 2</translation>
     </message>
     <message>
         <source>B 2</source>
-        <translation type="unfinished"></translation>
+        <translation>B 2</translation>
     </message>
     <message>
         <source>C 1</source>
-        <translation type="unfinished"></translation>
+        <translation>C 1</translation>
     </message>
     <message>
         <source>C# 1</source>
-        <translation type="unfinished"></translation>
+        <translation>C# 1</translation>
     </message>
     <message>
         <source>D 1</source>
-        <translation type="unfinished"></translation>
+        <translation>D 1</translation>
     </message>
     <message>
         <source>Eb 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb 1</translation>
     </message>
     <message>
         <source>E 1</source>
-        <translation type="unfinished"></translation>
+        <translation>E 1</translation>
     </message>
     <message>
         <source>F 1</source>
-        <translation type="unfinished"></translation>
+        <translation>F 1</translation>
     </message>
     <message>
         <source>F# 1</source>
-        <translation type="unfinished"></translation>
+        <translation>F# 1</translation>
     </message>
     <message>
         <source>G 1</source>
-        <translation type="unfinished"></translation>
+        <translation>G 1</translation>
     </message>
     <message>
         <source>Ab 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab 1</translation>
     </message>
     <message>
         <source>A 1</source>
-        <translation type="unfinished"></translation>
+        <translation>A 1</translation>
     </message>
     <message>
         <source>Bb 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb 1</translation>
     </message>
     <message>
         <source>B 1</source>
-        <translation type="unfinished"></translation>
+        <translation>B 1</translation>
     </message>
     <message>
         <source>C 0</source>
-        <translation type="unfinished"></translation>
+        <translation>C 0</translation>
     </message>
     <message>
         <source>C# 0</source>
-        <translation type="unfinished"></translation>
+        <translation>C# 0</translation>
     </message>
     <message>
         <source>D 0</source>
-        <translation type="unfinished"></translation>
+        <translation>D 0</translation>
     </message>
     <message>
         <source>Eb 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb 0</translation>
     </message>
     <message>
         <source>E 0</source>
-        <translation type="unfinished"></translation>
+        <translation>E 0</translation>
     </message>
     <message>
         <source>F 0</source>
-        <translation type="unfinished"></translation>
+        <translation>F 0</translation>
     </message>
     <message>
         <source>F# 0</source>
-        <translation type="unfinished"></translation>
+        <translation>F# 0</translation>
     </message>
     <message>
         <source>G 0</source>
-        <translation type="unfinished"></translation>
+        <translation>G 0</translation>
     </message>
     <message>
         <source>Ab 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab 0</translation>
     </message>
     <message>
         <source>A 0</source>
-        <translation type="unfinished"></translation>
+        <translation>A 0</translation>
     </message>
     <message>
         <source>Bb 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb 0</translation>
     </message>
     <message>
         <source>B 0</source>
-        <translation type="unfinished"></translation>
+        <translation>B 0</translation>
     </message>
     <message>
         <source>C -1</source>
-        <translation type="unfinished"></translation>
+        <translation>C -1</translation>
     </message>
     <message>
         <source>C# -1</source>
-        <translation type="unfinished"></translation>
+        <translation>C# -1</translation>
     </message>
     <message>
         <source>D -1</source>
-        <translation type="unfinished"></translation>
+        <translation>D -1</translation>
     </message>
     <message>
         <source>Eb -1</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb -1</translation>
     </message>
     <message>
         <source>E -1</source>
-        <translation type="unfinished"></translation>
+        <translation>E -1</translation>
     </message>
     <message>
         <source>F -1</source>
-        <translation type="unfinished"></translation>
+        <translation>F -1</translation>
     </message>
     <message>
         <source>F# -1</source>
-        <translation type="unfinished"></translation>
+        <translation>F# -1</translation>
     </message>
     <message>
         <source>G -1</source>
-        <translation type="unfinished"></translation>
+        <translation>G -1</translation>
     </message>
     <message>
         <source>Ab -1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab -1</translation>
     </message>
     <message>
         <source>A -1</source>
-        <translation type="unfinished"></translation>
+        <translation>A -1</translation>
     </message>
     <message>
         <source>Bb -1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bb -1</translation>
     </message>
     <message>
         <source>B -1</source>
-        <translation type="unfinished"></translation>
+        <translation>B -1</translation>
     </message>
 </context>
 <context>
     <name>EditRaster</name>
     <message>
         <source>MuseScore: Edit Raster</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Raster editieren</translation>
     </message>
     <message>
         <source>Edit Raster</source>
-        <translation type="unfinished"></translation>
+        <translation>Raster editieren</translation>
     </message>
     <message>
         <source>horizontal Raster:</source>
-        <translation type="unfinished"></translation>
+        <translation>horizontales Raster</translation>
     </message>
     <message>
         <source>1 / </source>
-        <translation type="unfinished"></translation>
+        <translation>1 / </translation>
     </message>
     <message>
         <source>spatium</source>
-        <translation type="unfinished"></translation>
+        <translation>Spatium</translation>
     </message>
     <message>
         <source>vertical  Raster:</source>
-        <translation type="unfinished"></translation>
+        <translation>vertikales Raster:</translation>
     </message>
 </context>
 <context>
@@ -1917,15 +1917,15 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Part Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Auszugsname:</translation>
     </message>
     <message>
         <source>Instrument:</source>
-        <translation type="unfinished">Instrument:</translation>
+        <translation>Instrument:</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>0 - Perfect Unison</source>
@@ -2033,66 +2033,66 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Number of strings:</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl Saiten</translation>
     </message>
     <message>
         <source>Edit string data...</source>
-        <translation type="unfinished"></translation>
+        <translation>Saitendaten editieren</translation>
     </message>
     <message>
         <source>Invisible staff lines</source>
-        <translation type="unfinished"></translation>
+        <translation>unsichtbare Notenlinien</translation>
     </message>
     <message>
         <source>Type:</source>
-        <translation type="unfinished">Typ:</translation>
+        <translation>Typ:</translation>
     </message>
     <message>
         <source>Small staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleine Notenzeile</translation>
     </message>
     <message>
         <source>Extra distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Extra Abstand:</translation>
     </message>
     <message>
         <source>sp</source>
-        <translation type="unfinished">sp</translation>
+        <translation>sp</translation>
     </message>
 </context>
 <context>
     <name>EditStaffType</name>
     <message>
         <source>MuseScore: Edit Staff Type</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Notenzeilentyp editieren</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished">Name:</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <source>Lines:</source>
-        <translation type="unfinished">Zeilen:</translation>
+        <translation>Zeilen:</translation>
     </message>
     <message>
         <source>Line Distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Linienabstand</translation>
     </message>
     <message>
         <source>sp</source>
-        <translation type="unfinished">sp</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <source>Show Clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Schlüssel zeigen</translation>
     </message>
     <message>
         <source>Show Time Sign.</source>
-        <translation type="unfinished"></translation>
+        <translation>Taktart zeigen</translation>
     </message>
     <message>
         <source>Show Barlines</source>
-        <translation type="unfinished"></translation>
+        <translation>Taktstriche zeigen</translation>
     </message>
     <message>
         <source>PITCHED STAFF</source>
@@ -2100,19 +2100,19 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Ledger Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfslinien</translation>
     </message>
     <message>
         <source>Key Signature</source>
-        <translation type="unfinished">Vorzeichen (Tonart)</translation>
+        <translation>Tonart</translation>
     </message>
     <message>
         <source>Stemless</source>
-        <translation type="unfinished">Halslos</translation>
+        <translation>Halslos</translation>
     </message>
     <message>
         <source>Create a new staff type of current group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuen Notenzeilentyp der aktuellen Gruppe erzeugen</translation>
     </message>
     <message>
         <source>Create new pitched type</source>
@@ -2124,11 +2124,11 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreinstellungen</translation>
     </message>
     <message>
         <source>Select:</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswählen:</translation>
     </message>
     <message utf8="true">
         <source>« Full Configuration</source>
@@ -2291,27 +2291,27 @@ spatium unit</extracomment>
     <name>EditStringDataBase</name>
     <message>
         <source>String Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Saitendaten</translation>
     </message>
     <message>
         <source>Strings Tuning:</source>
-        <translation type="unfinished"></translation>
+        <translation>Saitenstimmung</translation>
     </message>
     <message>
         <source>New String...</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Saite...</translation>
     </message>
     <message>
         <source>Edit String...</source>
-        <translation type="unfinished"></translation>
+        <translation>Saite editieren</translation>
     </message>
     <message>
         <source>Delete String</source>
-        <translation type="unfinished"></translation>
+        <translation>Saite löschen</translation>
     </message>
     <message>
         <source>NumOfFrets:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bünde:</translation>
     </message>
 </context>
 <context>
@@ -2608,35 +2608,35 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Header, Footer, Numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopf, Fuß, Zahlen</translation>
     </message>
     <message>
         <source>Clefs</source>
-        <translation type="unfinished">Schlüssel</translation>
+        <translation>Schlüssel</translation>
     </message>
     <message>
         <source>Slurs/Ties</source>
-        <translation type="unfinished"></translation>
+        <translation>Binde-/Haltebögen</translation>
     </message>
     <message>
         <source>Hairpins, Volta, Ottava</source>
-        <translation type="unfinished"></translation>
+        <translation>Crescendo, Volta, Ottava</translation>
     </message>
     <message>
         <source>Pedal, Trill</source>
-        <translation type="unfinished"></translation>
+        <translation>Pedal, Triller</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Generalbass</translation>
     </message>
     <message>
         <source>Accidentals</source>
-        <translation type="unfinished">Versetzungszeichen</translation>
+        <translation>Versetzungszeichen</translation>
     </message>
     <message>
         <source>Musical symbols font: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Font für Musiksymbole: </translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
@@ -2644,15 +2644,15 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Create multi measure rests</source>
-        <translation type="unfinished"></translation>
+        <translation>Mehrtaktpause erzeugen</translation>
     </message>
     <message>
         <source>Minimum number of empty measures:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimalzahl der leeren Takte:</translation>
     </message>
     <message>
         <source>Hide empty staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Leere Notenzeilen verstecken</translation>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
@@ -2916,7 +2916,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Height:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Höhe:</translation>
     </message>
     <message>
         <source>Line break height:</source>
@@ -2928,7 +2928,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volta</source>
-        <translation type="unfinished">Volta</translation>
+        <translation>Volta</translation>
     </message>
     <message>
         <source>Hook height:</source>
@@ -3016,7 +3016,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Accidental</source>
-        <translation type="unfinished">Vorzeichen</translation>
+        <translation>Vorzeichen</translation>
     </message>
     <message>
         <source>semitones offset</source>
@@ -3060,7 +3060,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aussehen</translation>
     </message>
     <message>
         <source>Standard</source>
@@ -3149,46 +3149,46 @@ p, li { white-space: pre-wrap; }
     <name>FluidGui</name>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Tief</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished">Hinzufügen</translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Soundfont %1 already loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Soundfont %1 bereits geladen</translation>
     </message>
     <message>
         <source>cannot load soundfont %1</source>
-        <translation type="unfinished"></translation>
+        <translation>kann Soundfont %1 nicht laden</translation>
     </message>
 </context>
 <context>
     <name>FretDiagramProperties</name>
     <message>
         <source>MuseScore: Fret Diagram Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften Bund-Diagramm</translation>
     </message>
     <message>
         <source>Strings:</source>
-        <translation type="unfinished"></translation>
+        <translation>Saiten:</translation>
     </message>
     <message>
         <source>Frets:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bünde:</translation>
     </message>
 </context>
 <context>
@@ -3217,15 +3217,15 @@ p, li { white-space: pre-wrap; }
     <name>ImportMidiPanel</name>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished">Anwenden</translation>
+        <translation>Anwenden</translation>
     </message>
     <message>
         <source>MIDI file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mididatei:</translation>
     </message>
 </context>
 <context>
@@ -3255,50 +3255,50 @@ p, li { white-space: pre-wrap; }
     <name>InspectorAccidental</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Accidental</source>
-        <translation type="unfinished">Vorzeichen</translation>
+        <translation>Vorzeichen</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation type="unfinished">Klein</translation>
+        <translation>Klein</translation>
     </message>
 </context>
 <context>
     <name>InspectorArticulation</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Articulation</source>
-        <translation type="unfinished">Artikulation</translation>
+        <translation>Artikulation</translation>
     </message>
     <message>
         <source>Direction:</source>
-        <translation type="unfinished"></translation>
+        <translation>Richtung:</translation>
     </message>
     <message>
         <source>Anchor:</source>
-        <translation type="unfinished">Anker:</translation>
+        <translation>Anker:</translation>
     </message>
     <message>
         <source>Top Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Oberste Zeile</translation>
     </message>
     <message>
         <source>Bottom Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterste Zeile</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
@@ -3306,218 +3306,218 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Top Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Oberster Akkord</translation>
     </message>
     <message>
         <source>Bottom Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterster Akkord</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">automatisch</translation>
+        <translation>automatisch</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Tief</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Time Stretch:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeitdehnung</translation>
     </message>
 </context>
 <context>
     <name>InspectorBarLine</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Barline</source>
-        <translation type="unfinished"></translation>
+        <translation>Taktstrich</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>Double</source>
-        <translation type="unfinished"></translation>
+        <translation>Doppel</translation>
     </message>
     <message>
         <source>Start Repeat</source>
-        <translation type="unfinished">Anfang Wiederholung</translation>
+        <translation>Anfang Wiederholung</translation>
     </message>
     <message>
         <source>End Repeat</source>
-        <translation type="unfinished">Ende Wiederholung</translation>
+        <translation>Ende Wiederholung</translation>
     </message>
     <message>
         <source>Dashed</source>
-        <translation type="unfinished">gestrichelt</translation>
+        <translation>gestrichelt</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished">Ende</translation>
+        <translation>Ende</translation>
     </message>
     <message>
         <source>End-Start Repeat</source>
-        <translation type="unfinished">Anfang/Ende Wiederholung</translation>
+        <translation>Anfang/Ende Wiederholung</translation>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"></translation>
+        <translation>gepunktet</translation>
     </message>
     <message>
         <source>Type:</source>
-        <translation type="unfinished">Typ:</translation>
+        <translation>Typ:</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
 </context>
 <context>
     <name>InspectorBeam</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Beam</source>
-        <translation type="unfinished">Balken</translation>
+        <translation>Balken</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">automatisch</translation>
+        <translation>automatisch</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Tief</translation>
     </message>
     <message>
         <source>Grow Right</source>
-        <translation type="unfinished"></translation>
+        <translation>nach rechts wachsen</translation>
     </message>
     <message>
         <source>Grow Left</source>
-        <translation type="unfinished"></translation>
+        <translation>nach links wachsen</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Richtung</translation>
     </message>
     <message>
         <source>sp</source>
-        <translation type="unfinished">sp</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Position</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>User Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwenderposition</translation>
     </message>
     <message>
         <source>Local Relayout</source>
-        <translation type="unfinished"></translation>
+        <translation>lokal relayouten</translation>
     </message>
 </context>
 <context>
     <name>InspectorChord</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Chord</source>
-        <translation type="unfinished">Akkord</translation>
+        <translation>Akkord</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Stem direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Notenhalsrichtung</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">automatisch</translation>
+        <translation>automatisch</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Tief</translation>
     </message>
     <message>
         <source>Offset Y:</source>
-        <translation type="unfinished"></translation>
+        <translation>Offset Y:</translation>
     </message>
     <message>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
 spatium unit</extracomment>
-        <translation type="unfinished">sp</translation>
+        <translation>Sp</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>Offset X:</source>
-        <translation type="unfinished"></translation>
+        <translation>Offset X:</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation type="unfinished">Klein</translation>
+        <translation>Klein</translation>
     </message>
     <message>
         <source>Stemless</source>
-        <translation type="unfinished">Halslos</translation>
+        <translation>Halslos</translation>
     </message>
 </context>
 <context>
     <name>InspectorClef</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Schlüssel</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Show Courtesy</source>
@@ -3528,54 +3528,54 @@ spatium unit</extracomment>
     <name>InspectorDynamic</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Dynamic</source>
-        <translation type="unfinished">Dynamik</translation>
+        <translation>Dynamik</translation>
     </message>
     <message>
         <source>Dynamic Range:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dynamikbereich:</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Anschlag</translation>
     </message>
     <message>
         <source>Staff</source>
-        <translation type="unfinished">Notenzeile</translation>
+        <translation>Notenzeile</translation>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"></translation>
+        <translation>Part</translation>
     </message>
     <message>
         <source>SYstem</source>
-        <translation type="unfinished"></translation>
+        <translation>System</translation>
     </message>
 </context>
 <context>
     <name>InspectorElement</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Element</source>
-        <translation type="unfinished">Element</translation>
+        <translation>Element</translation>
     </message>
     <message>
         <source>Offset Y:</source>
-        <translation type="unfinished"></translation>
+        <translation>Offset Y:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3586,150 +3586,150 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Offset X:</source>
-        <translation type="unfinished"></translation>
+        <translation>Offset X:</translation>
     </message>
     <message>
         <source>Color:</source>
-        <translation type="unfinished">Farbe:</translation>
+        <translation>Farbe:</translation>
     </message>
     <message>
         <source>Visible</source>
-        <translation type="unfinished">Sichtbar</translation>
+        <translation>Sichtbar</translation>
     </message>
 </context>
 <context>
     <name>InspectorGlissando</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Glissando</source>
-        <translation type="unfinished">Glissando</translation>
+        <translation>Glissando</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation type="unfinished">Text</translation>
+        <translation>Text</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>straight</source>
-        <translation type="unfinished"></translation>
+        <translation>direkt</translation>
     </message>
     <message>
         <source>wavy</source>
-        <translation type="unfinished"></translation>
+        <translation>wellig</translation>
     </message>
     <message>
         <source>Show Text</source>
-        <translation type="unfinished">Text anzeigen</translation>
+        <translation>Text anzeigen</translation>
     </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Element Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Element Gruppe</translation>
     </message>
     <message>
         <source>Set Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Farbe einstellen</translation>
     </message>
     <message>
         <source>Set Visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichtbar machen</translation>
     </message>
     <message>
         <source>Set Invisible</source>
-        <translation type="unfinished">Unsichtbar machen</translation>
+        <translation>Unsichtbar machen</translation>
     </message>
 </context>
 <context>
     <name>InspectorHBox</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
-    </message>
-    <message>
-        <source>Element</source>
-        <translation type="unfinished">Element</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
 spatium unit</extracomment>
-        <translation type="unfinished">sp</translation>
+        <translation>Sp</translation>
     </message>
     <message>
         <source>Width:</source>
-        <translation type="unfinished">Breite:</translation>
+        <translation>Breite:</translation>
     </message>
     <message>
         <source>Left Gap:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lücke links:</translation>
     </message>
     <message>
         <source>Right Gap:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lücke rechts:</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
+    </message>
+    <message>
+        <source>Horizontal Frame</source>
+        <translation>Horizontaler Rahmen</translation>
     </message>
 </context>
 <context>
     <name>InspectorHairpin</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Hairpin</source>
-        <translation type="unfinished">Gabel</translation>
+        <translation>Gabel</translation>
     </message>
     <message>
         <source>crescendo</source>
-        <translation type="unfinished">Crescendo-Gabel</translation>
+        <translation>Crescendo-Gabel</translation>
     </message>
     <message>
         <source>decrescendo</source>
-        <translation type="unfinished">Diminuendo-Gabel</translation>
+        <translation>Diminuendo-Gabel</translation>
     </message>
     <message>
         <source>Subtype:</source>
-        <translation type="unfinished"></translation>
+        <translation>Subtyp</translation>
     </message>
     <message>
         <source>Dynamic Range:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dynamikbereich</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Velo. change:</source>
@@ -3737,15 +3737,15 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Staff</source>
-        <translation type="unfinished">Notenzeile</translation>
+        <translation>Notenzeile</translation>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Part</translation>
     </message>
     <message>
         <source>SYstem</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">System</translation>
     </message>
 </context>
 <context>
@@ -3760,19 +3760,19 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Scale to Frame Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf Rahmengröße skalieren</translation>
     </message>
     <message>
         <source>Lock Aspect Ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Seitenverhältnis</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <source>Scale:</source>
@@ -3780,11 +3780,11 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>%</source>
-        <translation type="unfinished">%</translation>
+        <translation>%</translation>
     </message>
     <message>
         <source>Size in Spatium Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe in Spatien</translation>
     </message>
 </context>
 <context>
@@ -3826,7 +3826,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -3861,7 +3861,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Größe</translation>
     </message>
 </context>
 <context>
@@ -3880,7 +3880,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -3958,7 +3958,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anschlag</translation>
     </message>
     <message>
         <source>Mirror Head</source>
@@ -3978,7 +3978,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4125,7 +4125,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4144,7 +4144,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4182,7 +4182,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4201,7 +4201,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Height:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Höhe:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -4225,7 +4225,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4260,7 +4260,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4283,7 +4283,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4334,7 +4334,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4353,7 +4353,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4389,7 +4389,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Richtung</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -4408,69 +4408,69 @@ spatium unit</extracomment>
     <name>InspectorVBox</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Vertical Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertikaler Rahmen</translation>
     </message>
     <message>
         <source>Right Margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>rechter Rand</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Bottom Margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>unterer Rand</translation>
     </message>
     <message>
         <source>mm</source>
-        <translation type="unfinished">mm</translation>
+        <translation>mm</translation>
     </message>
     <message>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
 spatium unit</extracomment>
-        <translation type="unfinished">sp</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <source>Top Gap:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lücke oben:</translation>
     </message>
     <message>
         <source>Height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Höhe:</translation>
     </message>
     <message>
         <source>Top Margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>oberer Rand</translation>
     </message>
     <message>
         <source>Left Margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>linker Rand</translation>
     </message>
     <message>
         <source>Bottom Gap:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lücke unten</translation>
     </message>
 </context>
 <context>
     <name>InspectorVolta</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Volta</source>
-        <translation type="unfinished">Volta</translation>
+        <translation>Volta</translation>
     </message>
     <message>
         <source>Open</source>
@@ -4486,7 +4486,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4565,7 +4565,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Clef</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schlüssel</translation>
     </message>
     <message>
         <source>Linked</source>
@@ -4966,8 +4966,8 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses
-the freely available LAME library.  You must obtain %1
+        <source>MuseScore does not export MP3 files directly, but instead uses 
+the freely available LAME library.  You must obtain %1 
 separately, and then locate the file for MuseScore.
 You only need to do this once.
 
@@ -5059,7 +5059,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Frames &amp; Measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Rahmen &amp; Takte</translation>
     </message>
     <message>
         <source>Symbols</source>
@@ -5485,7 +5485,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Frame</source>
-        <translation type="unfinished">Rahmen</translation>
+        <translation>Rahmen</translation>
     </message>
     <message>
         <source>TextLine</source>
@@ -5505,7 +5505,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bend</translation>
     </message>
     <message>
         <source>Header</source>
@@ -5525,7 +5525,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Generalbass</translation>
     </message>
 </context>
 <context>
@@ -5821,7 +5821,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Clef</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schlüssel</translation>
     </message>
     <message>
         <source>Link.</source>
@@ -5848,7 +5848,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Clef</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schlüssel</translation>
     </message>
     <message>
         <source>Link.</source>
@@ -5996,7 +5996,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MuseScore</translation>
     </message>
     <message>
         <source>Save changes to the score &quot;%1&quot;
@@ -6277,7 +6277,7 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: InsertImage</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder einfügen</translation>
     </message>
     <message>
         <source>All Supported Files (*.svg *.jpg *.png *.xpm);;Scalable vector graphics (*.svg);;JPEG (*.jpg);;PNG (*.png);;XPM (*.xpm);;All Files (*)</source>
@@ -6529,7 +6529,7 @@ before closing?</source>
     </message>
     <message>
         <source>&amp;Frames</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rahmen</translation>
     </message>
     <message>
         <source>&amp;Text</source>
@@ -6646,7 +6646,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>&amp;Online Handbook</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Online Handbuch</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -6666,7 +6666,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>Report a bug</source>
-        <translation type="unfinished"></translation>
+        <translation>Einen Fehler melden</translation>
     </message>
     <message>
         <source>MuseScore: Load error</source>
@@ -6803,7 +6803,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>&amp;Insert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">E&amp;infügen</translation>
     </message>
 </context>
 <context>
@@ -6918,61 +6918,61 @@ please choose a different name:</source>
     <name>Ms::Palette</name>
     <message>
         <source>Show More...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeige mehr...</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <source>Properties...</source>
-        <translation type="unfinished">Eigenschaften...</translation>
+        <translation>Eigenschaften...</translation>
     </message>
 </context>
 <context>
     <name>Ms::PaletteBox</name>
     <message>
         <source>Palettes</source>
-        <translation type="unfinished">Paletten</translation>
+        <translation>Paletten</translation>
     </message>
     <message>
         <source>new Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>neue Palette</translation>
     </message>
 </context>
 <context>
     <name>Ms::PaletteBoxButton</name>
     <message>
         <source>Palette Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften Palette...</translation>
     </message>
     <message>
         <source>Insert New Palette...</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Palette einfügen...</translation>
     </message>
     <message>
         <source>Move Palette Up</source>
-        <translation type="unfinished">Palette nach oben verschieben</translation>
+        <translation>Palette nach oben verschieben</translation>
     </message>
     <message>
         <source>Move Palette Down</source>
-        <translation type="unfinished">Palette nach unten verschieben</translation>
+        <translation>Palette nach unten verschieben</translation>
     </message>
     <message>
         <source>Enable Editing</source>
-        <translation type="unfinished">Bearbeitung erlauben</translation>
+        <translation>Bearbeitung erlauben</translation>
     </message>
     <message>
         <source>Save Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Palette sichern</translation>
     </message>
     <message>
         <source>Load Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Palette laden</translation>
     </message>
     <message>
         <source>Delete Palette</source>
-        <translation type="unfinished">Palette löschen</translation>
+        <translation>Palette löschen</translation>
     </message>
 </context>
 <context>
@@ -7048,7 +7048,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MuseScore</translation>
     </message>
     <message>
         <source>Plugin &quot;%1&quot; has changes
@@ -7128,11 +7128,11 @@ save before closing?</source>
     </message>
     <message>
         <source>MuseScore Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MuseScore Tastenbefehle</translation>
     </message>
     <message>
         <source>Print Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Drucke Tastenbefehle</translation>
     </message>
 </context>
 <context>
@@ -7199,7 +7199,7 @@ save before closing?</source>
     </message>
     <message>
         <source>Set Visible</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sichtbar machen</translation>
     </message>
     <message>
         <source>Color...</source>
@@ -7231,7 +7231,7 @@ save before closing?</source>
     </message>
     <message>
         <source>Frame Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften Rahmen</translation>
     </message>
     <message>
         <source>Volta Properties...</source>
@@ -7817,7 +7817,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Height:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Höhe:</translation>
     </message>
     <message>
         <source>Width:</source>
@@ -7848,7 +7848,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Rahmen</translation>
     </message>
     <message>
         <source>Dynamics</source>
@@ -7880,7 +7880,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gepunktet</translation>
     </message>
     <message>
         <source>End Bar</source>
@@ -8133,19 +8133,19 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>width:</source>
-        <translation type="unfinished"></translation>
+        <translation>B:</translation>
     </message>
     <message>
         <source>height:</source>
-        <translation type="unfinished"></translation>
+        <translation>H:</translation>
     </message>
     <message>
         <source>sp</source>
-        <translation type="unfinished">sp</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <source>show &apos;more Elements&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>zeige &apos;mehr Elemente&apos;</translation>
     </message>
 </context>
 <context>
@@ -8350,15 +8350,15 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Define Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tastenkürzel definieren</translation>
     </message>
     <message>
         <source>Path:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pfad:</translation>
     </message>
     <message>
         <source>Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tastenkürzel</translation>
     </message>
     <message>
         <source>Version:</source>
@@ -8505,7 +8505,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Shortcut</source>
-        <translation>Tastenkombination</translation>
+        <translation>Tastenkürzel</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -8982,7 +8982,7 @@ in Pixel (größerer Wert gleich größerer Radius)</translation>
     </message>
     <message>
         <source>Reset Shortcut to Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tastenkürzel auf Voreinstellung zurücksetzen</translation>
     </message>
     <message>
         <source>Print</source>
@@ -9378,7 +9378,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gepunktet</translation>
     </message>
     <message>
         <source>Dashed</source>
@@ -9501,7 +9501,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>III</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">III</translation>
     </message>
     <message>
         <source>Principal
@@ -9563,7 +9563,7 @@ VI</source>
     </message>
     <message>
         <source>II</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">II</translation>
     </message>
     <message>
         <source>Harmonic
@@ -9691,7 +9691,7 @@ altera</source>
     </message>
     <message>
         <source>P</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">P</translation>
     </message>
     <message>
         <source>Subbass
@@ -10030,7 +10030,7 @@ altera</source>
     </message>
     <message>
         <source>Frame</source>
-        <translation type="unfinished">Rahmen</translation>
+        <translation>Rahmen</translation>
     </message>
     <message>
         <source>draw circled frame</source>
@@ -10517,15 +10517,15 @@ p, li { white-space: pre-wrap; }
     <name>TremoloBarDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MuseScore: Eigenschaften Bend</translation>
     </message>
     <message>
         <source>Bend type:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bend Typ:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Click um Punkt zuzufügen oder entfernen</translation>
     </message>
     <message>
         <source>Dip</source>
@@ -10637,97 +10637,6 @@ fehlgeschlagen: </translation>
     </message>
 </context>
 <context>
-    <name>XmlStream</name>
-    <message>
-        <source>Extra content at end of document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid entity value.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid XML character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sequence &apos;]]&gt;&apos; not allowed in content.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Encountered incorrectly encoded content.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attribute redefined.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unexpected character &apos;%1&apos; in public id literal.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid XML version string.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unsupported XML version.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The standalone pseudo attribute must appear after the encoding.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 is an invalid encoding name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Encoding %1 is unsupported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Standalone accepts only yes or no.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid attribute in XML declaration.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Premature end of document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Expected </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>, but got &apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unexpected &apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Expected character data.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ZerberusGui</name>
     <message>
         <source>Delete</source>
@@ -10739,15 +10648,15 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MuseScore</translation>
     </message>
     <message>
         <source>Soundfont %1 already loaded</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Soundfont %1 bereits geladen</translation>
     </message>
     <message>
         <source>cannot load soundfont %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kann Soundfont %1 nicht laden</translation>
     </message>
 </context>
 <context>
@@ -11725,7 +11634,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Local Handbook...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lokales Handbuch</translation>
     </message>
     <message>
         <source>Save Selection...</source>
@@ -11773,11 +11682,11 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Insert A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">A Einfügen</translation>
     </message>
     <message>
         <source>Insert note A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Note A einfügen</translation>
     </message>
     <message>
         <source>Insert B</source>
@@ -11929,7 +11838,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Slur</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bindebogen</translation>
     </message>
     <message>
         <source>Add Slur</source>
@@ -11965,11 +11874,11 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Insert Text Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Textrahmen einfügen</translation>
     </message>
     <message>
         <source>Append Text Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Textrahmen anhängen</translation>
     </message>
     <message>
         <source>Insert Fret Diagram Frame</source>
@@ -12385,11 +12294,11 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Insert Special Characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonderzeichen einfügen</translation>
     </message>
     <message>
         <source>Whole rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Ganze Pause</translation>
     </message>
     <message>
         <source>Note entry: whole rest</source>
@@ -12609,7 +12518,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Generalbass</translation>
     </message>
     <message>
         <source>Transpose Up</source>
@@ -12960,7 +12869,7 @@ fehlgeschlagen: </translation>
     <name>addRemoveTimeSig</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MuseScore</translation>
     </message>
     <message>
         <source>cannot rewrite measures:
@@ -12972,7 +12881,7 @@ tuplet would cross measure</source>
     <name>articulation</name>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bend</translation>
     </message>
     <message>
         <source>Tremolo Bar</source>
@@ -13266,7 +13175,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Clef</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schlüssel</translation>
     </message>
     <message>
         <source>KeySig</source>
@@ -13370,7 +13279,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bend</translation>
     </message>
     <message>
         <source>TremoloBar</source>
@@ -13506,7 +13415,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Slur</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bindebogen</translation>
     </message>
     <message>
         <source>Element</source>
@@ -13626,13 +13535,6 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The following file is locked:
-%1
-
-Try saving to a different location.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Open Temp File
 </source>
         <translation type="unfinished"></translation>
@@ -13675,23 +13577,30 @@ fehlgeschlagen: </translation>
 %2</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The following file is locked: 
+%1 
+
+Try saving to a different location.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>images_directory</name>
     <message>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder</translation>
     </message>
 </context>
 <context>
     <name>lines</name>
     <message>
         <source>Slur</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindebogen</translation>
     </message>
     <message>
         <source>Crescendo</source>
-        <translation type="unfinished">Crescendo</translation>
+        <translation>Crescendo</translation>
     </message>
 </context>
 <context>
@@ -13764,7 +13673,7 @@ fehlgeschlagen: </translation>
     <name>plugins_directory</name>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins</translation>
     </message>
 </context>
 <context>
@@ -14768,7 +14677,7 @@ fehlgeschlagen: </translation>
     <name>templates_directory</name>
     <message>
         <source>Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorlagen</translation>
     </message>
 </context>
 </TS>
