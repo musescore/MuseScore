@@ -1846,6 +1846,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                                           tremolo->setParent(pch);
                                           pch->setTremolo(tremolo);
                                           chord->setTremolo(0);
+                                          // force duration to half
                                           Fraction pts(timeStretch * pch->globalDuration());
                                           int pcrticks = pts.ticks();
                                           pch->setDuration(pcrticks / 2);
@@ -3285,24 +3286,33 @@ void Measure::layoutStage1()
                         layoutChords0(segment, staffIdx * VOICES);
                   }
             }
-#if 0 // TODO-S
-      for (Spanner* sp = _spannerFor; sp; sp = sp->next()) {
-            if (sp->type() == Element::VOLTA)
-                  setBreakMMRest(true);
+
+      if(!breakMMRest()) {
+            for (auto i = score()->spanner().lower_bound(tick()); i != score()->spanner().upper_bound(tick()); ++i) {
+               Spanner* sp = i->second;
+               if (sp->type() == Element::VOLTA)
+                     setBreakMMRest(true);
+                     break;
+               }
             }
-#endif
+      if(!breakMMRest() && this != score()->lastMeasure()) {
+            auto i = score()->spanner().upper_bound(tick());
+            std::reverse_iterator<std::map<int,Spanner*>::iterator> revit (i);
+            for (; revit != score()->spanner().rend(); revit++) {
+                  Spanner* sp = revit->second;
+                  if (sp->type() == Element::VOLTA)
+                        if(sp->tick2() == tick())
+                              setBreakMMRest(true);
+                        break;
+                  }
+            }
+
       MeasureBase* mb = prev();
       if (mb && mb->type() == Element::MEASURE) {
             Measure* pm = static_cast<Measure*>(mb);
             if (pm->endBarLineType() != NORMAL_BAR
                && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
                   setBreakMMRest(true);
-#if 0
-            for (Spanner* sp = pm->_spannerBack; sp; sp = sp->next()) {
-                  if (sp->type() == Element::VOLTA)
-                        setBreakMMRest(true);
-                  }
-#endif
             }
       }
 
