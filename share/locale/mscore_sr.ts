@@ -3666,10 +3666,6 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Element</source>
-        <translation type="unfinished">Element</translation>
-    </message>
-    <message>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -3695,6 +3691,10 @@ spatium unit</extracomment>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Horizontal Frame</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10631,97 +10631,6 @@ neuspešno: </translation>
     </message>
     <message>
         <source>MuseScore: Writing Workspace file</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>XmlStream</name>
-    <message>
-        <source>Extra content at end of document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid entity value.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid XML character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sequence &apos;]]&gt;&apos; not allowed in content.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Encountered incorrectly encoded content.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attribute redefined.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unexpected character &apos;%1&apos; in public id literal.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid XML version string.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unsupported XML version.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The standalone pseudo attribute must appear after the encoding.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 is an invalid encoding name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Encoding %1 is unsupported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Standalone accepts only yes or no.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid attribute in XML declaration.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Premature end of document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Expected </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>, but got &apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unexpected &apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Expected character data.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
