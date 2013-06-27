@@ -61,6 +61,7 @@ void TestCompat::compat_data()
       QTest::newRow("textstyles") << "textstyles";
       QTest::newRow("title") << "title";
       QTest::newRow("notes_useroffset") << "notes_useroffset";
+      QTest::newRow("tremolo2notes") << "tremolo2notes";
       }
 
 //---------------------------------------------------------
