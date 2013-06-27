@@ -659,6 +659,7 @@ void Score::doLayout()
       int n = viewer.size();
       for (int i = 0; i < n; ++i)
             viewer.at(i)->layoutChanged();
+      _layoutAll = false;
       }
 
 //-------------------------------------------------------------------

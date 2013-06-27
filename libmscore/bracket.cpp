@@ -29,12 +29,12 @@ namespace Ms {
 Bracket::Bracket(Score* s)
    : Element(s)
       {
-      _bracketType    = BRACKET_BRACE;
-      h2          = 3.5 * spatium();
-      _column     = 0;
-      _span       = 0;
-      _firstStaff = 0;
-      _lastStaff  = 0;
+      _bracketType = BRACKET_BRACE;
+      h2           = 3.5 * spatium();
+      _column      = 0;
+      _span        = 0;
+      _firstStaff  = 0;
+      _lastStaff   = 0;
       setGenerated(true);     // brackets are not saved
       }
 
@@ -263,6 +263,7 @@ void Bracket::editDrag(const EditData& ed)
       {
       h2 += ed.delta.y() * .5;
       layout();
+      score()->setLayoutAll(false);
       }
 
 //---------------------------------------------------------

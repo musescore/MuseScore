@@ -117,7 +117,6 @@ void Score::endCmd()
             if (s->layoutAll()) {
                   s->_updateAll  = true;
                   s->doLayout();
-                  s->_layoutAll = false;
                   }
             }
 
@@ -147,13 +146,11 @@ void Score::end()
 void Score::update()
       {
       foreach(Score* s, scoreList()) {
-            s->setUpdateAll(true);
-            s->doLayout();
-            foreach(MuseScoreView* v, viewer)
-                  v->updateAll();
-            s->setLayoutAll(false);
-            s->setUpdateAll(false);
-            s->refresh = QRectF();
+            if (s->layoutAll()) {
+                  s->setUpdateAll(true);
+                  s->doLayout();
+                  }
+            s->end1();
             }
       }
 

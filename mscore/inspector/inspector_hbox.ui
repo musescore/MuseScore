@@ -29,7 +29,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Element</string>
+      <string>Horizontal Frame</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -150,7 +150,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="musescore.qrc">
+        <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
@@ -170,7 +170,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="musescore.qrc">
+        <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
@@ -186,7 +186,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="musescore.qrc"/>
+  <include location="../musescore.qrc"/>
  </resources>
  <connections/>
 </ui>

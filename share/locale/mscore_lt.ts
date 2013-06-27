@@ -4729,8 +4729,8 @@ spatium unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="32"/>
-        <source>Element</source>
-        <translation type="unfinished">Elementas</translation>
+        <source>Horizontal Frame</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="69"/>
@@ -13609,120 +13609,6 @@ failed: </source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="209"/>
         <source>MuseScore: Writing Workspace file</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>XmlStream</name>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="611"/>
-        <source>Extra content at end of document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="887"/>
-        <source>Invalid entity value.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="996"/>
-        <source>Invalid XML character.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1255"/>
-        <source>Sequence &apos;]]&gt;&apos; not allowed in content.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1534"/>
-        <source>Encountered incorrectly encoded content.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1564"/>
-        <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1597"/>
-        <location filename="../../xml/qxmlstream.cpp" line="1609"/>
-        <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1642"/>
-        <source>Attribute redefined.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1757"/>
-        <source>Unexpected character &apos;%1&apos; in public id literal.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1785"/>
-        <source>Invalid XML version string.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1787"/>
-        <source>Unsupported XML version.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1808"/>
-        <source>The standalone pseudo attribute must appear after the encoding.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1810"/>
-        <source>%1 is an invalid encoding name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1817"/>
-        <source>Encoding %1 is unsupported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1833"/>
-        <source>Standalone accepts only yes or no.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1835"/>
-        <source>Invalid attribute in XML declaration.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1851"/>
-        <source>Premature end of document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1853"/>
-        <source>Invalid document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1893"/>
-        <source>Expected </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1904"/>
-        <source>, but got &apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="1908"/>
-        <source>Unexpected &apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../xml/qxmlstream.cpp" line="2133"/>
-        <source>Expected character data.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
