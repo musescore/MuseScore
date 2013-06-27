@@ -55,7 +55,7 @@ int paCallback(const void*, void* out, long unsigned frames,
 Portaudio::Portaudio(Seq* s)
    : Driver(s)
       {
-      _sampleRate = 48000;
+      _sampleRate = 48000;    // will be replaced by device default sample rate
       initialized = false;
       state       = Seq::TRANSPORT_STOP;
       seekflag    = false;
@@ -93,9 +93,11 @@ bool Portaudio::init()
             qDebug("using PortAudio Version: %s", Pa_GetVersionText());
 
       PaDeviceIndex idx = preferences.portaudioDevice;
-
       if (idx < 0)
             idx = Pa_GetDefaultOutputDevice();
+
+      const PaDeviceInfo* di = Pa_GetDeviceInfo(idx);
+      _sampleRate = int(di->defaultSampleRate);
 
       /* Open an audio I/O stream. */
       struct PaStreamParameters out;
