@@ -448,6 +448,30 @@ QPointF SLine::linePos(int grip, System** sys)
                         m = static_cast<Measure*>(endElement());
                         x = m->pos().x() + m->bbox().right();
                         if (type() == VOLTA) {
+                              if (score()->styleB(ST_createMultiMeasureRests)) {
+                                    //find the actual measure where the volta should stop
+                                    Measure* sm = static_cast<Measure*>(startElement());
+                                    bool foundMeasure = false;
+                                    while(sm != m) {
+                                          Measure* mm = sm;
+                                          int nn = mm->multiMeasure() - 1;
+                                          if (nn > 0) {
+                                                // skip to last rest measure of multi measure rest
+                                                for (int k = 0; k < nn; ++k) {
+                                                      mm = mm->nextMeasure();
+                                                      if(mm == m) {
+                                                            m = sm;
+                                                            foundMeasure = true;
+                                                            break;
+                                                            }
+                                                      }
+                                                }
+                                          if (foundMeasure)
+                                                break;
+                                          sm = sm->nextMeasure();
+                                          }
+                                    x = m->pos().x() + m->bbox().right();
+                                    }
                               Segment* seg = m->last();
                               if (seg->segmentType() == Segment::SegEndBarLine) {
                                     Element* e = seg->element(0);

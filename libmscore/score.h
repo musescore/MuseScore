@@ -261,7 +261,7 @@ class Score : public QObject {
       int _pageNumberOffset;        ///< Offset for page numbers.
 
       MeasureBaseList _measures;          // here are the notes
-      std::multimap<int, Spanner*> _spanner;
+      std::multimap<int, Spanner*> _spanner; // spanner map, key is the start tick of the spanner
       //
       // generated objects during layout:
       //

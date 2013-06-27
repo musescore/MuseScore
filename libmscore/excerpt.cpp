@@ -326,12 +326,17 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             int staffIdx = s->staffIdx();
             int dstTrack = -1;
             int st = 0;
-            for (int i : map) {
-                  if (i == staffIdx) {
-                        dstTrack = st * VOICES + s->voice();
-                        break;
+            //always export voltas to first staff in part
+            if(s->type() == Element::VOLTA)
+                  dstTrack = s->voice();
+            else { //export other spanner if staffidx matches
+                  for (int index : map) {
+                        if (index == staffIdx) {
+                              dstTrack = st * VOICES + s->voice();
+                              break;
+                              }
+                        ++st;
                         }
-                  ++st;
                   }
             if (dstTrack == -1)
                   continue;
