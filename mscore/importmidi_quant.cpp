@@ -182,11 +182,13 @@ void applyGridQuant(std::multimap<int, MidiChord> &chords,
             int endBarTick = sigmap->bar2tick(i, 0);
             startBarChordIt = findFirstChordInRange(startBarTick, endBarTick,
                                                     startBarChordIt, chords.end());
-            if (startBarChordIt != chords.end()) {     // if no chords found in this bar
+            if (startBarChordIt != chords.end()) {     // if chords are found in this bar
                   int raster = findQuantRaster(startBarChordIt, chords.end(), endBarTick);
                   doGridQuantizationOfBar(quantizedChords, startBarChordIt, chords.end(),
                                           raster, endBarTick);
                   }
+            else
+                  startBarChordIt = chords.begin();
             if (endBarTick > lastTick)
                   break;
             startBarTick = endBarTick;
