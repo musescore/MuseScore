@@ -119,6 +119,9 @@ bool Portaudio::init()
                   return false;
                   }
             }
+      const PaStreamInfo* si = Pa_GetStreamInfo(stream);
+      if (si)
+            _sampleRate = int(si->sampleRate);
 #ifdef USE_ALSA
       midiDriver = new AlsaMidiDriver(seq);
 #endif
