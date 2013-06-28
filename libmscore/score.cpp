@@ -1324,8 +1324,6 @@ Measure* Score::getCreateMeasure(int tick)
 
 void Score::addElement(Element* element)
       {
-//      if (_undoRedo)
-//            qFatal("Score:addElement in undo/redo");
       if (MScore::debugMode) {
             qDebug("   Score(%p)::addElement %p(%s) parent %p(%s)",
                this, element, element->name(), element->parent(),
@@ -1461,8 +1459,6 @@ void Score::addElement(Element* element)
 
 void Score::removeElement(Element* element)
       {
-//      if (_undoRedo)
-//            qFatal("Score:removeElement in undo/redo");
       Element* parent = element->parent();
 
       if (MScore::debugMode) {

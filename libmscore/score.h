@@ -93,6 +93,7 @@ class UndoCommand;
 class Cursor;
 struct PageContext;
 class BarLine;
+class Bracket;
 
 extern bool showRubberBand;
 
@@ -514,6 +515,8 @@ class Score : public QObject {
       UndoStack* undo() const;
       void undo(UndoCommand* cmd) const;
       void undoRemoveMeasures(Measure*, Measure*);
+      void undoAddBracket(Staff* staff, int level, BracketType type, int span);
+      void undoRemoveBracket(Bracket*);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
 

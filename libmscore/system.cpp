@@ -190,12 +190,10 @@ void System::layout(qreal xo1)
                               b->setLevel(i);
                               b->setBracketType(s->bracket(i));
                               b->setSpan(s->bracketSpan(i));
-                              score()->undoAddElement(b);
-                              // add(b);
+                              add(b);
                               }
-                        else {
+                        else
                               _brackets.append(b);
-                              }
                         b->setFirstStaff(firstStaff);
                         b->setLastStaff(lastStaff);
                         bracketWidth[i] = qMax(bracketWidth[i], b->width());
@@ -211,9 +209,7 @@ void System::layout(qreal xo1)
                   }
             }
 
-      _brackets.append(bl);
-      foreach(Bracket* b, bl)
-            score()->undoRemoveElement(b);
+      qDeleteAll(bl);
 
       //---------------------------------------------------
       //  layout  SysStaff and StaffLines
@@ -588,8 +584,8 @@ void System::add(Element* el)
                         b->setLevel(level);
                         b->setSpan(1);
                         }
-                  b->staff()->setBracket(level,     b->bracketType());
-                  b->staff()->setBracketSpan(level, b->span());
+//                  b->staff()->setBracket(level,     b->bracketType());
+//                  b->staff()->setBracketSpan(level, b->span());
                   _brackets.append(b);
                   }
                   break;
@@ -648,7 +644,7 @@ void System::remove(Element* el)
                   Bracket* b = static_cast<Bracket*>(el);
                   if (!_brackets.removeOne(b))
                         qDebug("System::remove: bracket not found");
-                  b->staff()->setBracket(b->level(), NO_BRACKET);
+//                  b->staff()->setBracket(b->level(), NO_BRACKET);
                   }
                   break;
             case MEASURE:

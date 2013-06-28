@@ -1371,11 +1371,21 @@ qDebug("drop staffList");
                   return e;
 
             case BRACKET:
-                  e->setTrack(staffIdx * VOICES);
-                  e->setParent(system());
-                  static_cast<Bracket*>(e)->setLevel(-1);  // add bracket
-                  score()->undoAddElement(e);
-                  return e;
+                  {
+                  Bracket* b = static_cast<Bracket*>(e);
+                  int level = 0;
+                  int firstStaff = 0;
+                  foreach (Staff* s, score()->staves()) {
+                        foreach (const BracketItem& bi, s->brackets()) {
+                              int lastStaff = firstStaff + bi._bracketSpan - 1;
+                              if (staffIdx >= firstStaff && staffIdx <= lastStaff)
+                                    ++level;
+                              }
+                        }
+                  score()->undoAddBracket(staff, level, b->bracketType(), 1);
+                  delete b;
+                  }
+                  return 0;
 
             case CLEF:
                   score()->undoChangeClef(staff, first(), static_cast<Clef*>(e)->clefType());
