@@ -2636,10 +2636,13 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
       int tick1 = m1->tick();
       int tick2 = m2->endTick();
 
-      for (auto i : m1->score()->spanner()) {
-            Spanner* s = i.second;
-            if (s->tick() >= tick1 && s->tick() < tick2)
+      auto i = _spanner.lower_bound(tick1);
+      while(i != _spanner.upper_bound(tick2)) {
+            Spanner* s = i->second;
+            ++i; //iterate before potentially deleting it
+            if (s->tick() >= tick1 && s->tick() < tick2) {
                   undoRemoveElement(s);
+                  }
             }
       //
       //  handle ties which start before m1 and end in (m1-m2)
