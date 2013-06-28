@@ -1766,7 +1766,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "edit-harmony",
-         QT_TRANSLATE_NOOP("action","Chords..."),
+         QT_TRANSLATE_NOOP("action","Chordnames..."),
          QT_TRANSLATE_NOOP("action","Edit chord style")
          ),
       Shortcut(
