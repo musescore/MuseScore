@@ -228,13 +228,13 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
             if (key == Qt::Key_Left) {
                   if (curGrip == GRIP_LINE_START)
                         s1 = prevSeg1(s1, track);
-                  else if (curGrip == GRIP_LINE_END)
+                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE)
                         s2 = prevSeg1(s2, track);
                   }
             else if (key == Qt::Key_Right) {
                   if (curGrip == GRIP_LINE_START)
                         s1 = nextSeg1(s1, track);
-                  else if (curGrip == GRIP_LINE_END) {
+                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE) {
                         if ((s2->system()->firstMeasure() == s2->measure())
                            && (s2->tick() == s2->measure()->tick()))
                               bspDirty = true;
@@ -259,7 +259,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                         if (m1->prevMeasure())
                               m1 = m1->prevMeasure();
                         }
-                  else if (curGrip == GRIP_LINE_END) {
+                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE) {
                         if (m2 && (m2->system()->firstMeasure() == m2))
                               removeSegment = true;
                         Measure* m = m2->prevMeasure();
@@ -272,7 +272,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                         if (m1->nextMeasure())
                               m1 = m1->nextMeasure();
                         }
-                  else if (curGrip == GRIP_LINE_END) {
+                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE) {
                         if (m2->nextMeasure())
                               m2 = m2->nextMeasure();
                         if (m2->system()->firstMeasure() == m2)
