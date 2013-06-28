@@ -200,7 +200,6 @@ class Measure : public MeasureBase {
       Segment* first(Segment::SegmentTypes t) const { return _segments.first(t);      }
 
       Q_INVOKABLE Segment* last() const    { return _segments.last(); }
-      Segment* firstCRSegment() const      { return _segments.firstCRSegment(); }
       void remove(Segment* s);
       SegmentList* segments()              { return &_segments; }
 

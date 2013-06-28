@@ -1829,6 +1829,7 @@ void Score::layoutSystems()
                   foreach(SysStaff* ss, *system->staves())
                         delete ss;
                   system->staves()->clear();
+
                   system->setWidth(w);
                   VBox* vbox = static_cast<VBox*>(curMeasure);
                   vbox->setParent(system);

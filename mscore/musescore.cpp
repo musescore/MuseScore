@@ -1440,7 +1440,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   updateInputState(cv->score());
             cs = cv->score();
             view->setFocusRect();
-            cs->end();  // do layout if necessary
+//            cs->end();  // do layout if necessary
             }
       else
             cs = 0;

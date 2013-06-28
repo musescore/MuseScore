@@ -3046,70 +3046,6 @@ void ChangeDurationType::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeSpannerAnchor::flip
-//---------------------------------------------------------
-
-void ChangeSpannerAnchor::flip()
-      {
-      printf("change spanner anchor\n");
-#if 0 // TODO-S
-      Element* se = spanner->startElement();
-      Element* ee = spanner->endElement();
-
-//      qDebug("ChangeSpannerAnchor:flip() spanner(%p--%p) %s  end(%p) -> end(%p)",
-//         spanner->score(), spanner, spanner->name(),
-//         spanner->endElement(), endElement);
-
-      switch(spanner->anchor()) {
-            case Spanner::ANCHOR_CHORD:
-                  {
-                  Q_ASSERT(spanner->type() == Element::SLUR);
-                  Slur* slur = static_cast<Slur*>(spanner);
-                  slur->startChord()->removeSlurFor(slur);
-                  spanner->setStartElement(startElement);
-                  static_cast<ChordRest*>(startElement)->addSlurFor(slur);
-
-                  slur->endChord()->removeSlurBack(slur);
-                  spanner->setEndElement(endElement);
-                  static_cast<ChordRest*>(endElement)->addSlurBack(slur);
-                  }
-                  break;
-
-            case Spanner::ANCHOR_MEASURE:
-                  Q_ASSERT(spanner->startElement()->type() == Element::MEASURE);
-                  static_cast<Measure*>(spanner->startElement())->removeSpannerFor(spanner);
-                  spanner->setStartElement(startElement);
-                  static_cast<Measure*>(startElement)->addSpannerFor(spanner);
-
-                  Q_ASSERT(spanner->endElement()->type() == Element::MEASURE);
-                  static_cast<Measure*>(spanner->endElement())->removeSpannerBack(spanner);
-                  spanner->setEndElement(endElement);
-                  static_cast<Measure*>(endElement)->addSpannerBack(spanner);
-                  break;
-
-            case Spanner::ANCHOR_SEGMENT:
-                  Q_ASSERT(spanner->startElement()->type() == Element::SEGMENT);
-                  static_cast<Segment*>(spanner->startElement())->removeSpannerFor(spanner);
-                  spanner->setStartElement(startElement);
-                  static_cast<Segment*>(startElement)->addSpannerFor(spanner);
-
-                  Q_ASSERT(spanner->endElement()->type() == Element::SEGMENT);
-                  static_cast<Segment*>(spanner->endElement())->removeSpannerBack(spanner);
-                  spanner->setEndElement(endElement);
-                  static_cast<Segment*>(endElement)->addSpannerBack(spanner);
-                  break;
-
-            default:
-                  qDebug("ChangeSpannerAnchor: not implemented for %s", spanner->name());
-                  break;
-            }
-      startElement = se;
-      endElement   = ee;
-#endif
-      spanner->score()->setLayoutAll(true);
-      }
-
-//---------------------------------------------------------
 //   ChangeStaffUserDist::flip
 //---------------------------------------------------------
 
@@ -3186,6 +3122,49 @@ void ChangeSynthesizerState::flip()
       {
       std::swap(state, score->_synthesizerState);
       }
+
+//---------------------------------------------------------
+//   undoAddBracket
+//---------------------------------------------------------
+
+void Score::undoAddBracket(Staff* staff, int level, BracketType type, int span)
+      {
+      undo(new AddBracket(staff, level, type, span));
+      }
+
+//---------------------------------------------------------
+//   undoRemoveBracket
+//---------------------------------------------------------
+
+void Score::undoRemoveBracket(Bracket* b)
+      {
+      undo(new RemoveBracket(b->staff(), b->level(), b->bracketType(), b->span()));
+      }
+
+void AddBracket::redo()
+      {
+      staff->setBracket(level, type);
+      staff->setBracketSpan(level, span);
+      }
+
+void AddBracket::undo()
+      {
+      staff->setBracket(level, NO_BRACKET);
+      }
+
+
+void RemoveBracket::redo()
+      {
+      staff->setBracket(level, NO_BRACKET);
+      }
+
+void RemoveBracket::undo()
+      {
+      staff->setBracket(level, type);
+      staff->setBracketSpan(level, span);
+      }
+
+
 
 }
 

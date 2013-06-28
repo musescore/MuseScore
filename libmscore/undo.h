@@ -32,6 +32,7 @@
 #include "timesig.h"
 #include "noteevent.h"
 #include "synthesizerstate.h"
+#include "bracket.h"
 
 namespace Ms {
 
@@ -1172,23 +1173,6 @@ class ChangeDurationType : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeSpannerAnchor
-//---------------------------------------------------------
-
-class ChangeSpannerAnchor : public UndoCommand {
-      Spanner* spanner;
-      Element* startElement;
-      Element* endElement;
-
-      void flip();
-
-   public:
-      ChangeSpannerAnchor(Spanner* s, Element* se, Element* ee)
-         : spanner(s), startElement(se), endElement(ee) {}
-      UNDO_NAME("ChangeSpannerAnchor");
-      };
-
-//---------------------------------------------------------
 //   ChangeStaffUserDist
 //---------------------------------------------------------
 
@@ -1269,6 +1253,43 @@ class ChangeSynthesizerState : public UndoCommand {
       ChangeSynthesizerState(Score* s, const SynthesizerState& st) : score(s), state(st) {}
       UNDO_NAME("ChangeSynthesizerState");
       };
+
+//---------------------------------------------------------
+//   RemoveBracket
+//---------------------------------------------------------
+
+class RemoveBracket : public UndoCommand {
+      Staff* staff;
+      int level;
+      BracketType type;
+      int span;
+
+      virtual void undo();
+      virtual void redo();
+
+   public:
+      RemoveBracket(Staff* s, int l, BracketType t, int sp) : staff(s), level(l), type(t), span(sp) {}
+      UNDO_NAME("RemoveBracket");
+      };
+
+//---------------------------------------------------------
+//   AddBracket
+//---------------------------------------------------------
+
+class AddBracket : public UndoCommand {
+      Staff* staff;
+      int level;
+      BracketType type;
+      int span;
+
+      virtual void undo();
+      virtual void redo();
+
+   public:
+      AddBracket(Staff* s, int l, BracketType t, int sp) : staff(s), level(l), type(t), span(sp) {}
+      UNDO_NAME("AddBracket");
+      };
+
 
 
 }     // namespace Ms
