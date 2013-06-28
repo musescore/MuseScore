@@ -35,7 +35,6 @@ void HairpinSegment::layout()
       qreal h1 = score()->styleS(ST_hairpinHeight).val() * _spatium * .5;
       qreal h2 = score()->styleS(ST_hairpinContHeight).val() * _spatium * .5;
 
-      rypos() = 0.0;
       qreal len;
       qreal x = pos2().x();
       if (x < _spatium)             // minimum size of hairpin

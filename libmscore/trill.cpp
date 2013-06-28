@@ -110,7 +110,6 @@ void TrillSegment::draw(QPainter* painter) const
 
 void TrillSegment::layout()
       {
-      rypos() = 0.0;
       QRectF b1(symbols[score()->symIdx()][trillSym].bbox(magS()));
       QRectF rr(b1.translated(-b1.x(), 0.0));
       rr |= QRectF(0.0, rr.y(), pos2().x(), rr.height());
