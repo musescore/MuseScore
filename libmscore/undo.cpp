@@ -2641,6 +2641,27 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
             if (s->tick() >= tick1 && s->tick() < tick2)
                   undoRemoveElement(s);
             }
+      //
+      //  handle ties which start before m1 and end in (m1-m2)
+      //
+      for (Segment* s = m1->first(); s != m2->last(); s = s->next1()) {
+            if (s->segmentType() != Segment::SegChordRest)
+                  continue;
+            for (int track = 0; track < ntracks(); ++track) {
+                  Chord* c = static_cast<Chord*>(s->element(track));
+                  if (c == 0 || c->type() != Element::CHORD)
+                        continue;
+                  for (Note* n : c->notes()) {
+                        Tie* t = n->tieBack();
+                        if (t) {
+                              if (t->startNote()->chord()->tick() < m1->tick()) {
+                                    t->setEndNote(0);
+                                    n->setTieBack(0);
+                                    }
+                              }
+                        }
+                  }
+            }
       undo(new RemoveMeasures(m1, m2));
       }
 
@@ -2662,6 +2683,7 @@ void RemoveMeasures::undo()
       {
       fm->score()->measures()->insert(fm, lm);
       fm->score()->fixTicks();
+      fm->score()->connectTies();
       }
 
 //---------------------------------------------------------
@@ -2695,6 +2717,7 @@ void InsertMeasures::redo()
       {
       fm->score()->measures()->insert(fm, lm);
       fm->score()->fixTicks();
+      fm->score()->connectTies();
       }
 
 //---------------------------------------------------------

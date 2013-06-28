@@ -391,8 +391,6 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
       if (!range.canWrite(ns))
             return false;
 
-//      range.check();
-
       undoRemoveMeasures(fm, lm);
       //
       // calculate number of required measures = nm

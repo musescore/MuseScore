@@ -35,7 +35,7 @@
 #include "ui_dynamic.h"
 #include "ui_tuplet.h"
 #include "ui_slurtie.h"
-// #include "ui_slur.h"
+#include "ui_tie.h"
 #include "ui_line.h"
 #include "ui_textline.h"
 #include "ui_linesegment.h"
@@ -461,12 +461,14 @@ class SlurTieView : public SpannerView {
 //   TieView
 //---------------------------------------------------------
 
-class TieView : public ShowElementBase {
+class TieView : public SlurTieView {
       Q_OBJECT;
 
-      Ui::SlurTieBase st;
+      Ui::TieBase tb;
 
    private slots:
+      void startClicked();
+      void endClicked();
 
    public:
       TieView();

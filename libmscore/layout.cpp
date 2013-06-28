@@ -1321,9 +1321,7 @@ void Score::connectTies()
                   Chord* c = static_cast<Chord*>(s->element(i));
                   if (c == 0 || c->type() != Element::CHORD)
                         continue;
-                  int nn = c->notes().size();
-                  for (int i = 0; i < nn; ++i) {
-                        Note* n = c->notes().at(i);
+                  for (Note* n : c->notes()) {
                         Tie* tie = n->tieFor();
                         if (!tie)
                               continue;
