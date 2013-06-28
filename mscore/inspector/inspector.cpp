@@ -229,6 +229,24 @@ void Inspector::setElements(const QList<Element*>& l)
       ie->setElement();
       }
 
+void UiInspectorElement::setupUi(QWidget *InspectorElement)
+      {
+      Ui::InspectorElement::setupUi(InspectorElement);
+
+      QAction* a = getAction("hraster");
+      a->setCheckable(true);
+      hRaster->setDefaultAction(a);
+      hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+      hRaster->addAction(getAction("config-raster"));
+
+      a = getAction("vraster");
+      a->setCheckable(true);
+      vRaster->setDefaultAction(a);
+      vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+      vRaster->addAction(getAction("config-raster"));
+
+}
+
 //---------------------------------------------------------
 //   InspectorElement
 //---------------------------------------------------------

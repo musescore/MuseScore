@@ -16,7 +16,6 @@
 
 #include "inspector.h"
 #include "ui_inspector_beam.h"
-#include "ui_inspector_element.h"
 #include "libmscore/property.h"
 
 namespace Ms {
@@ -28,7 +27,7 @@ namespace Ms {
 class InspectorBeam : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorBeam b;
 
    protected slots:

@@ -62,7 +62,6 @@
 #include "libmscore/box.h"
 #include "libmscore/textframe.h"
 #include "texttools.h"
-#include "edittools.h"
 #include "libmscore/clef.h"
 #include "scoretab.h"
 #include "measureproperties.h"
@@ -1165,11 +1164,6 @@ void ScoreView::updateGrips()
 
       if (curGrip == -1)
             curGrip = grips-1;
-
-      if (!editObject->isText()) {
-            QPointF pt(editObject->getGrip(curGrip));
-            mscore->editTools()->setEditPos(pt);
-            }
 
       QPointF anchor = editObject->gripAnchor(curGrip);
       if (!anchor.isNull())

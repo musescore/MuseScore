@@ -13,8 +13,8 @@
 #ifndef __INSPECTOR_NOTE_H__
 #define __INSPECTOR_NOTE__H__
 
+#include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_element.h"
 #include "ui_inspector_note.h"
 #include "ui_inspector_chord.h"
 #include "ui_inspector_segment.h"
@@ -28,7 +28,7 @@ namespace Ms {
 class InspectorNote : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement b;
+      UiInspectorElement b;
       Ui::InspectorNote    n;
       Ui::InspectorChord   c;
       Ui::InspectorSegment s;

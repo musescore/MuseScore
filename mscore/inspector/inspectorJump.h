@@ -14,8 +14,8 @@
 #ifndef __INSPECTOR_JUMP_H__
 #define __INSPECTOR_JUMP_H__
 
+#include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_element.h"
 #include "ui_inspector_jump.h"
 
 namespace Ms {
@@ -27,7 +27,7 @@ namespace Ms {
 class InspectorJump : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement b;
+      UiInspectorElement b;
       Ui::InspectorJump j;
 
    public:

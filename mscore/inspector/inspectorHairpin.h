@@ -14,8 +14,8 @@
 #ifndef __INSPECTOR_HAIRPIN_H__
 #define __INSPECTOR_HAIRPIN_H__
 
+#include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_element.h"
 #include "ui_inspector_hairpin.h"
 #include "ui_inspector_line.h"
 
@@ -28,7 +28,7 @@ namespace Ms {
 class InspectorHairpin : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorLine l;
       Ui::InspectorHairpin h;
 

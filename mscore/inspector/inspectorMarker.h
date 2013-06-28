@@ -14,8 +14,8 @@
 #ifndef __INSPECTOR_MARKER_H__
 #define __INSPECTOR_MARKER_H__
 
+#include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_element.h"
 #include "ui_inspector_marker.h"
 #include "libmscore/property.h"
 
@@ -28,7 +28,7 @@ namespace Ms {
 class InspectorMarker : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement b;
+      UiInspectorElement b;
       Ui::InspectorMarker  m;
 
    public:

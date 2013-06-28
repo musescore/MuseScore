@@ -14,8 +14,8 @@
 #ifndef __INSPECTOR_OTTAVA_H__
 #define __INSPECTOR_OTTAVA_H__
 
+#include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_element.h"
 #include "ui_inspector_textline.h"
 #include "ui_inspector_ottava.h"
 
@@ -28,7 +28,7 @@ namespace Ms {
 class InspectorOttava : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement  e;
+      UiInspectorElement  e;
       Ui::InspectorTextLine l;
       Ui::InspectorOttava   o;
 
