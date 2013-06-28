@@ -244,6 +244,7 @@ void FSymbol::draw(QPainter* painter) const
             }
       else
             s = QChar(_code);
+      painter->setPen(curColor());
       painter->drawText(QPointF(0, 0), s);
       }
 
