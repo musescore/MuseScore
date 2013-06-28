@@ -1884,9 +1884,11 @@ void SlurTieView::segmentClicked(QTreeWidgetItem* item)
 //---------------------------------------------------------
 
 TieView::TieView()
-   : ShowElementBase()
+   : SlurTieView()
       {
-      st.setupUi(addWidget());
+      tb.setupUi(addWidget());
+      connect(tb.startNote, SIGNAL(clicked()), SLOT(startClicked()));
+      connect(tb.endNote, SIGNAL(clicked()), SLOT(endClicked()));
       }
 
 //---------------------------------------------------------
@@ -1896,10 +1898,25 @@ TieView::TieView()
 void TieView::setElement(Element* e)
       {
       Tie* tie = (Tie*)e;
-      ShowElementBase::setElement(e);
+      SlurTieView::setElement(e);
+      }
 
-      st.upFlag->setChecked(tie->up());
-      st.direction->setCurrentIndex(tie->slurDirection());
+//---------------------------------------------------------
+//   startClicked
+//---------------------------------------------------------
+
+void TieView::startClicked()
+      {
+      emit elementChanged(static_cast<Spanner*>(element())->startElement());
+      }
+
+//---------------------------------------------------------
+//   endClicked
+//---------------------------------------------------------
+
+void TieView::endClicked()
+      {
+      emit elementChanged(static_cast<Spanner*>(element())->endElement());
       }
 
 //---------------------------------------------------------

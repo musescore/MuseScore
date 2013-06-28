@@ -917,11 +917,11 @@ void Slur::slurPos(SlurPos* sp)
 
 void Tie::slurPos(SlurPos* sp)
       {
-      qreal hw   = _startNote->headWidth();
+      qreal hw   = startNote()->headWidth();
       qreal __up = _up ? -1.0 : 1.0;
       qreal _spatium = spatium();
 
-      Chord* sc   = _startNote->chord();
+      Chord* sc   = startNote()->chord();
       sp->system1 = sc->measure()->system();
 
       qreal xo;
@@ -929,27 +929,27 @@ void Tie::slurPos(SlurPos* sp)
 
       //------p1
       if ((sc->notes().size() > 1) || (sc->stem() && (sc->up() == _up))) {
-            xo = _startNote->x() + hw * 1.12;
-            yo = _startNote->pos().y() + hw * .3 * __up;
+            xo = startNote()->x() + hw * 1.12;
+            yo = startNote()->pos().y() + hw * .3 * __up;
             }
       else {
-            xo = _startNote->x() + hw * 0.85;
-            yo = _startNote->pos().y() + _spatium * .75 * __up;
+            xo = startNote()->x() + hw * 0.85;
+            yo = startNote()->pos().y() + _spatium * .75 * __up;
             }
       sp->p1 = sc->pagePos() - sp->system1->pagePos() + QPointF(xo, yo);
 
       //------p2
-      if (_endNote == 0) {
+      if (endNote() == 0) {
             sp->p2 = sp->p1 + QPointF(_spatium * 3, 0.0);
             sp->system2 = sp->system1;
             return;
             }
-      Chord* ec   = _endNote->chord();
+      Chord* ec   = endNote()->chord();
       sp->system2 = ec->measure()->system();
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
-            xo = _endNote->x() - hw * 0.12;
+            xo = endNote()->x() - hw * 0.12;
       else
-            xo = _endNote->x() + hw * 0.15;
+            xo = endNote()->x() + hw * 0.15;
       sp->p2 = ec->pagePos() - sp->system2->pagePos() + QPointF(xo, yo);
       }
 
@@ -1356,8 +1356,6 @@ void Slur::setTrack(int n)
 Tie::Tie(Score* s)
    : SlurTie(s)
       {
-      _startNote = 0;
-      _endNote = 0;
       setAnchor(ANCHOR_NOTE);
       }
 
@@ -1367,7 +1365,7 @@ Tie::Tie(Score* s)
 
 void Tie::setStartNote(Note* note)
       {
-      _startNote = note;
+      setStartElement(note);
       setParent(note);
       }
 
@@ -1438,8 +1436,8 @@ void Tie::layout()
       //
       //    show short bow
       //
-      if (_startNote == 0 || _endNote == 0) {
-            if (_startNote == 0) {
+      if (startNote() == 0 || endNote() == 0) {
+            if (startNote() == 0) {
                   qDebug("Tie::layout(): no start note");
                   return;
                   }
