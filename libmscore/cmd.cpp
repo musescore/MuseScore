@@ -843,7 +843,7 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
                         return true;
                         }
                   }
-            Segment* s = m->firstCRSegment();
+            Segment* s = m->first(Segment::SegChordRest);
             int track  = cr->track();
             cr = static_cast<ChordRest*>(s->element(track));
             if (cr == 0) {
@@ -1053,7 +1053,7 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
             Measure* m1 = m->nextMeasure();
             if (m1 == 0)
                   break;
-            Segment* s = m1->firstCRSegment();
+            Segment* s = m1->first(Segment::SegChordRest);
             expandVoice(s, track);
             cr1 = static_cast<ChordRest*>(s->element(track));
             }
@@ -1799,7 +1799,7 @@ Element* Score::move(const QString& cmd)
                               break;
                         }
                   if (s && !s->element(track))
-                        s = m->firstCRSegment();
+                        s = m->first(Segment::SegChordRest);
                   moveInputPos(s);
                   }
             el = prevChordRest(cr);

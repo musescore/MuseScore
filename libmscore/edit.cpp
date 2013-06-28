@@ -51,6 +51,7 @@
 #include "tempotext.h"
 #include "dynamic.h"
 #include "repeat.h"
+#include "bracket.h"
 
 namespace Ms {
 
@@ -1256,6 +1257,10 @@ void Score::deleteItem(Element* el)
 
             case Element::MEASURE:
                   undoRemoveMeasures(static_cast<Measure*>(el), static_cast<Measure*>(el));
+                  break;
+
+            case Element::BRACKET:
+                  undoRemoveBracket(static_cast<Bracket*>(el));
                   break;
 
             default:

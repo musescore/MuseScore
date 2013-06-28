@@ -65,6 +65,7 @@
 #include "libmscore/ledgerline.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/chordlist.h"
+#include "libmscore/bracket.h"
 
 namespace Ms {
 
@@ -376,17 +377,16 @@ void Debugger::updateList(Score* s)
 
             foreach(System* system, *page->systems()) {
                   ElementItem* si = new ElementItem(pi, system);
-
                   if (system->barLine())
                         new ElementItem(si, system->barLine());
-
-
+                  for (Bracket* b : system->brackets())
+                        new ElementItem(si, b);
                   foreach(SysStaff* ss, *system->staves()) {
                         foreach(InstrumentName* in, ss->instrumentNames)
                               new ElementItem(si, in);
                         }
 
-                  for (MeasureBase* mb = system->measures().front(); mb; mb = mb->next()) {
+                  for (MeasureBase* mb : system->measures()) {
                         ElementItem* mi = new ElementItem(si, mb);
                         addMeasureBaseToList(mi, mb);
 
@@ -1897,7 +1897,6 @@ TieView::TieView()
 
 void TieView::setElement(Element* e)
       {
-      Tie* tie = (Tie*)e;
       SlurTieView::setElement(e);
       }
 

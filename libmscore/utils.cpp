@@ -604,10 +604,7 @@ Note* searchTieNote(Note* note)
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
 
-      printf("searchTieNote track %d-%d  at %d\n", strack, etrack, seg->tick());
-
       while ((seg = seg->next1(Segment::SegChordRest))) {
-            printf("   searchTieNote: check at %d\n", seg->tick());
             for (int track = strack; track < etrack; ++track) {
                   Chord* c = static_cast<Chord*>(seg->element(track));
                   if (c == 0 || c->type() != Element::CHORD)
