@@ -588,6 +588,8 @@ void Seq::process(unsigned n, float* buffer)
       processMessages();
 
       if (state == TRANSPORT_PLAY) {
+            if(!cs)
+                  return;
             //
             // play events for one segment
             //
