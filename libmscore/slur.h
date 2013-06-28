@@ -186,17 +186,14 @@ class Slur : public SlurTie {
 class Tie : public SlurTie {
       Q_OBJECT
 
-      Note* _startNote;
-      Note* _endNote;
-
    public:
       Tie(Score* = 0);
       virtual Tie* clone() const          { return new Tie(*this);  }
       virtual ElementType type() const    { return TIE;             }
       void setStartNote(Note* note);
-      void setEndNote(Note* note)         { _endNote = note;        }
-      Note* startNote() const             { return _startNote;      }
-      Note* endNote() const               { return _endNote;        }
+      void setEndNote(Note* note)         { setEndElement((Element*)note);      }
+      Note* startNote() const             { return (Note*) startElement();      }
+      Note* endNote() const               { return (Note*) endElement();        }
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       virtual void layout();

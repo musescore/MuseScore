@@ -600,34 +600,24 @@ Note* searchTieNote(Note* note)
       Note* note2  = 0;
       Chord* chord = note->chord();
       Segment* seg = chord->segment();
-      Segment* nseg = seg->next1(Segment::SegChordRest);
-      if(!nseg)
-            return 0;
       Part* part   = chord->staff()->part();
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
-      int tick     = nseg->tick();
 
-//      printf("searchTieNote %d-%d  %d - %d\n", strack, etrack, seg->tick(), tick);
+      printf("searchTieNote track %d-%d  at %d\n", strack, etrack, seg->tick());
 
       while ((seg = seg->next1(Segment::SegChordRest))) {
-            if (seg->tick() < tick)
-                  continue;
-            // if (seg->tick() > tick)
-            //      break;
+            printf("   searchTieNote: check at %d\n", seg->tick());
             for (int track = strack; track < etrack; ++track) {
-                  ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-                  if (cr == 0 || cr->type() != Element::CHORD)
+                  Chord* c = static_cast<Chord*>(seg->element(track));
+                  if (c == 0 || c->type() != Element::CHORD)
                         continue;
-                  int staffIdx = cr->staffIdx() + cr->staffMove();
+                  int staffIdx = c->staffIdx() + c->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
                         continue;
-                  Chord* c = static_cast<Chord*>(cr);
-                  int n = c->notes().size();
-                  for (int i = 0; i < n; ++i) {
-                        Note* n = c->notes().at(i);
+                  for (Note* n : c->notes()) {
                         if (n->pitch() == note->pitch()) {
-                              if (note2 == 0 || cr->track() == chord->track())
+                              if (note2 == 0 || c->track() == chord->track())
                                     note2 = n;
                               }
                         }

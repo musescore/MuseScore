@@ -66,6 +66,7 @@ QT4_WRAP_UI (ui_headers
       debugger/textline.ui
       debugger/line.ui
       debugger/slurtie.ui
+      debugger/tie.ui
       debugger/tuplet.ui
       debugger/dynamic.ui
       debugger/hairpin.ui

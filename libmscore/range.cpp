@@ -474,7 +474,6 @@ bool ScoreRange::canWrite(const Fraction& f) const
 
 void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrack)
       {
-      printf("ScoreRange::read: tick %d\n", first->tick());
       _first = first;
       _last  = last;
       spanner.clear();
@@ -500,8 +499,6 @@ void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrac
 
 bool ScoreRange::write(int track, Measure* m) const
       {
-      printf("ScoreRange::write: tick %d\n", m->tick());
-
       int n = tracks.size();
       for (int i = 0; i < n; ++i) {
             const TrackList* dl = tracks[i];
