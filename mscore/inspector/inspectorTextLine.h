@@ -13,8 +13,8 @@
 #ifndef __INSPECTOR_TEXTLINE_H__
 #define __INSPECTOR_TEXTLINE_H__
 
+#include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_element.h"
 #include "ui_inspector_textline.h"
 
 namespace Ms {
@@ -26,7 +26,7 @@ namespace Ms {
 class InspectorTextLine : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorTextLine l;
 
    public:

@@ -14,8 +14,8 @@
 #ifndef __INSPECTOR_TRILL_H__
 #define __INSPECTOR_TRILL_H__
 
+#include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_element.h"
 #include "ui_inspector_line.h"
 #include "ui_inspector_trill.h"
 
@@ -28,7 +28,7 @@ namespace Ms {
 class InspectorTrill : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorLine l;
       Ui::InspectorTrill t;
 

@@ -15,7 +15,6 @@
 #define __INSPECTOR_GLISSANDO_H__
 
 #include "inspector.h"
-#include "ui_inspector_element.h"
 #include "ui_inspector_glissando.h"
 #include "libmscore/property.h"
 
@@ -28,7 +27,7 @@ namespace Ms {
 class InspectorGlissando : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement   e;
+      UiInspectorElement   e;
       Ui::InspectorGlissando g;
 
    public:
