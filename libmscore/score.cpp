@@ -3429,7 +3429,7 @@ printf("   %p score %p change spanner %d+%d\n", s, s->score(), s->tick(), s->tic
                   }
             else {
                   int tick2 = tick - len;
-                  if (s->tick() > tick2) {
+                  if (s->tick() >= tick2) {
                         //
                         //  case A:
                         //  +----remove---+ +---spanner---+
