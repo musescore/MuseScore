@@ -79,7 +79,7 @@
     <sym code="0x266e" name="natural"/>
     <sym code="0x266f" name="#"/>
 
-<!-- these enable "b" and "mi" render as literals when encountered as note names -->
+<!-- these enable "b" and "mi" to render as literals when encountered as note names -->
     <sym class="note" name="b"/>
     <sym class="note" name="mi"/>
 

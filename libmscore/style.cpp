@@ -1062,8 +1062,11 @@ void StyleData::load(XmlReader& e)
       QString newChordDescriptionFile = value(ST_chordDescriptionFile).toString();
       if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
             if (!newChordDescriptionFile.startsWith("chords_") && value(ST_chordStyle).toString() == "std") {
+                  // should not normally happen,
+                  // but treat as "old" (114) score just in case
                   set(StyleVal(ST_chordStyle, QString("custom")));
                   set(StyleVal(ST_chordsXmlFile, true));
+                  qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
                   }
             if (value(ST_chordStyle).toString() == "custom")
                   _customChordList = true;
@@ -1073,7 +1076,7 @@ void StyleData::load(XmlReader& e)
             }
 
       // make sure we have a chordlist
-      if(_chordList.isEmpty() && !chordListTag) {
+      if (_chordList.isEmpty() && !chordListTag) {
             if (value(ST_chordsXmlFile).toBool())
                   _chordList.read("chords.xml");
             _chordList.read(newChordDescriptionFile);

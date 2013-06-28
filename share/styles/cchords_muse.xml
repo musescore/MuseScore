@@ -284,6 +284,8 @@
 <!-- true lower case letters -->
     <sym code="0x61" name="a"/>
     <sym code="0x62" name="letterb"/>
+    <sym class="note" name="b"/>
+    <sym class="note" name="mi"/>
     <sym code="0x63" name="c"/>
     <sym code="0x64" name="d"/>
     <sym code="0x65" name="e"/>

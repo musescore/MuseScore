@@ -362,84 +362,86 @@
       <ChordList>
         <font id="0" family="MuseJazz">
           <mag>1</mag>
-          <sym name="circle" code="57742"/>
-          <sym name="ma" code="57728"/>
-          <sym name="dim" code="57732"/>
-          <sym name="s11" code="57730"/>
-          <sym name="s13" code="57731"/>
-          <sym name="mi" code="57729"/>
-          <sym name="minus" code="45"/>
-          <sym name="#" code="57612"/>
-          <sym name="(" code="40"/>
-          <sym name=")" code="41"/>
-          <sym name="s#" code="57737"/>
-          <sym name="triangle" code="57738"/>
-          <sym name="+" code="57734"/>
-          <sym name="s0" code="57744"/>
-          <sym name="s1" code="57745"/>
-          <sym name="s2" code="57746"/>
-          <sym name="s3" code="57747"/>
-          <sym name="s4" code="57748"/>
-          <sym name="s5" code="57749"/>
-          <sym name="s6" code="57750"/>
-          <sym name="s7" code="57751"/>
-          <sym name="s8" code="57752"/>
-          <sym name="s9" code="57753"/>
-          <sym name="b" code="57613"/>
-          <sym name="sb" code="57736"/>
-          <sym name="sus4" code="57741"/>
-          <sym name="degree" code="57735"/>
-          <sym name="sus" code="57733"/>
-          <sym name="oslash" code="57743"/>
+          <sym name="circle" code="0xe18e"/>
+          <sym name="ma" code="0xe180"/>
+          <sym name="dim" code="0xe184"/>
+          <sym name="s11" code="0xe182"/>
+          <sym name="s13" code="0xe183"/>
+          <sym name="mi" code="0xe181"/>
+          <sym name="minus" code="0x2d"/>
+          <sym name="#" code="0xe10c"/>
+          <sym name="(" code="0x28"/>
+          <sym name=")" code="0x29"/>
+          <sym name="s#" code="0xe189"/>
+          <sym name="triangle" code="0xe18a"/>
+          <sym name="+" code="0xe186"/>
+          <sym name="s0" code="0xe190"/>
+          <sym name="s1" code="0xe191"/>
+          <sym name="s2" code="0xe192"/>
+          <sym name="s3" code="0xe193"/>
+          <sym name="s4" code="0xe194"/>
+          <sym name="s5" code="0xe195"/>
+          <sym name="s6" code="0xe196"/>
+          <sym name="s7" code="0xe197"/>
+          <sym name="s8" code="0xe198"/>
+          <sym name="s9" code="0xe199"/>
+          <sym name="b" code="0xe10d"/>
+          <sym name="sb" code="0xe188"/>
+          <sym name="sus4" code="0xe18d"/>
+          <sym name="degree" code="0xe187"/>
+          <sym name="sus" code="0xe185"/>
+          <sym name="oslash" code="0xe18f"/>
           </font>
         <font id="1" family="MuseJazz">
           <mag>1.25</mag>
-          <sym name="add11" code="57740"/>
-          <sym name="11" code="57730"/>
-          <sym name="0" code="57744"/>
-          <sym name="13" code="57731"/>
-          <sym name="1" code="57745"/>
-          <sym name="2" code="57746"/>
-          <sym name="3" code="57747"/>
-          <sym name="4" code="57748"/>
-          <sym name="5" code="57749"/>
-          <sym name="6" code="57750"/>
-          <sym name="7" code="57751"/>
-          <sym name="8" code="57752"/>
-          <sym name="9" code="57753"/>
-          <sym name="add" code="57739"/>
+          <sym name="add11" code="0xe18c"/>
+          <sym name="11" code="0xe182"/>
+          <sym name="0" code="0xe190"/>
+          <sym name="13" code="0xe183"/>
+          <sym name="1" code="0xe191"/>
+          <sym name="2" code="0xe192"/>
+          <sym name="3" code="0xe193"/>
+          <sym name="4" code="0xe194"/>
+          <sym name="5" code="0xe195"/>
+          <sym name="6" code="0xe196"/>
+          <sym name="7" code="0xe197"/>
+          <sym name="8" code="0xe198"/>
+          <sym name="9" code="0xe199"/>
+          <sym name="add" code="0xe18b"/>
           </font>
         <font id="2" family="MuseJazz">
           <mag>0.8</mag>
-          <sym name="s(" code="40"/>
-          <sym name="s)" code="41"/>
-          <sym name="letterb" code="98"/>
-          <sym name="a" code="97"/>
-          <sym name="c" code="99"/>
-          <sym name="d" code="100"/>
-          <sym name="e" code="101"/>
-          <sym name="f" code="102"/>
-          <sym name="g" code="103"/>
-          <sym name="h" code="104"/>
-          <sym name="i" code="105"/>
-          <sym name="j" code="106"/>
-          <sym name="k" code="107"/>
-          <sym name="l" code="108"/>
-          <sym name="m" code="109"/>
-          <sym name="n" code="110"/>
-          <sym name="o" code="111"/>
-          <sym name="p" code="112"/>
-          <sym name="q" code="113"/>
-          <sym name="r" code="114"/>
-          <sym name="s" code="115"/>
-          <sym name="t" code="116"/>
-          <sym name="u" code="117"/>
-          <sym name="v" code="118"/>
-          <sym name="w" code="119"/>
-          <sym name="x" code="120"/>
-          <sym name="striangle" code="57738"/>
-          <sym name="y" code="121"/>
-          <sym name="z" code="122"/>
+          <sym name="s(" code="0x28"/>
+          <sym name="s)" code="0x29"/>
+          <sym name="letterb" code="0x62"/>
+          <sym name="notemi" value="mi"/>
+          <sym name="noteb" value="b"/>
+          <sym name="a" code="0x61"/>
+          <sym name="c" code="0x63"/>
+          <sym name="d" code="0x64"/>
+          <sym name="e" code="0x65"/>
+          <sym name="f" code="0x66"/>
+          <sym name="g" code="0x67"/>
+          <sym name="h" code="0x68"/>
+          <sym name="i" code="0x69"/>
+          <sym name="j" code="0x6a"/>
+          <sym name="k" code="0x6b"/>
+          <sym name="l" code="0x6c"/>
+          <sym name="m" code="0x6d"/>
+          <sym name="n" code="0x6e"/>
+          <sym name="o" code="0x6f"/>
+          <sym name="p" code="0x70"/>
+          <sym name="q" code="0x71"/>
+          <sym name="r" code="0x72"/>
+          <sym name="s" code="0x73"/>
+          <sym name="t" code="0x74"/>
+          <sym name="u" code="0x75"/>
+          <sym name="v" code="0x76"/>
+          <sym name="w" code="0x77"/>
+          <sym name="x" code="0x78"/>
+          <sym name="striangle" code="0xe18a"/>
+          <sym name="y" code="0x79"/>
+          <sym name="z" code="0x7a"/>
           </font>
         <font id="3" family="MuseJazz">
           <mag>0.55</mag>
@@ -1782,115 +1784,149 @@
           <render>a u g  m:0:2 13 m:0:-2</render>
           </chord>
         <chord id="210">
-          <name>ma7</name>
+          <name>ma7#11</name>
           <name>Maj7#11</name>
           <xml>major-seventh</xml>
           <voicing>C E Gb G B</voicing>
           <degree>add#11</degree>
-          <render>ma 7</render>
+          <degree>add#11</degree>
+          <render>ma  m:0:2 7 m:0:-2  s#  m:0:-1 s11 m:0:1</render>
           </chord>
         <chord id="211">
+          <name>ma9#5</name>
           <name>Maj9#5</name>
           <xml>major-ninth</xml>
           <voicing>C D E Ab B</voicing>
           <degree>alt#5</degree>
-          <render>Maj 9 # 5</render>
+          <degree>alt#5</degree>
+          <render>ma  m:0:2 9 m:0:-2  s#  m:0:-1 s5 m:0:1</render>
           </chord>
         <chord id="212">
+          <name>ma7#9</name>
           <name>Maj7#9</name>
           <xml>major-seventh</xml>
           <voicing>C Eb E G B</voicing>
           <degree>add#9</degree>
-          <render>Maj 7 # 9</render>
+          <degree>add#9</degree>
+          <render>ma  m:0:2 7 m:0:-2  s#  m:0:-1 s9 m:0:1</render>
           </chord>
         <chord id="213">
+          <name>add2</name>
           <name>add2</name>
           <xml>major</xml>
           <voicing>C D E G</voicing>
           <degree>add2</degree>
-          <render>add 2</render>
+          <degree>add9</degree>
+          <render>m:0:2 add m:0:-2 m:0:-1 s2 m:0:1</render>
           </chord>
         <chord id="214">
+          <name>add9</name>
           <name>add9</name>
           <xml>major</xml>
           <voicing>C D E G</voicing>
           <degree>add9</degree>
-          <render>add 9</render>
+          <degree>add9</degree>
+          <render>m:0:2 add m:0:-2 m:0:-1 s9 m:0:1</render>
           </chord>
         <chord id="215">
+          <name>susb9</name>
           <name>susb9</name>
           <xml>suspended-fourth</xml>
           <voicing>C Db F G</voicing>
           <degree>addb9</degree>
-          <render>sus b 9</render>
+          <degree>addb9</degree>
+          <render>sus   sb  m:0:-1 s9 m:0:1</render>
           </chord>
         <chord id="216">
+          <name>ma7sus</name>
           <name>Maj7sus</name>
           <xml>major-seventh</xml>
           <voicing>C F G B</voicing>
           <degree>sub3</degree>
           <degree>add4</degree>
-          <render>Maj 7 sus</render>
+          <degree>sub3</degree>
+          <degree>add4</degree>
+          <render>ma  m:0:2 7 m:0:-2  sus </render>
           </chord>
         <chord id="217">
+          <name>ma9sus</name>
           <name>Maj9sus</name>
           <xml>major-ninth</xml>
           <voicing>C D F G B</voicing>
           <degree>sub3</degree>
           <degree>add4</degree>
-          <render>Maj 9 sus</render>
+          <degree>sub3</degree>
+          <degree>add4</degree>
+          <render>ma  m:0:2 9 m:0:-2  sus </render>
           </chord>
         <chord id="220">
+          <name>mi7b9</name>
           <name>m7b9</name>
           <xml>minor-seventh</xml>
           <voicing>C Db Eb G Bb</voicing>
           <degree>addb9</degree>
-          <render>m 7 b 9</render>
+          <degree>addb9</degree>
+          <render>mi  m:0:2 7 m:0:-2  sb  m:0:-1 s9 m:0:1</render>
           </chord>
         <chord id="221">
+          <name>mi7b13</name>
           <name>m7b13</name>
           <xml>minor-seventh</xml>
           <voicing>C Eb G Ab Bb</voicing>
           <degree>addb13</degree>
-          <render>m 7 b 13</render>
+          <degree>addb13</degree>
+          <render>mi  m:0:2 7 m:0:-2  sb  m:0:-1 s13 m:0:1</render>
           </chord>
         <chord id="222">
+          <name>Phryg</name>
           <name>Phryg</name>
           <xml>minor-seventh</xml>
           <voicing>C Db Eb F G Bb</voicing>
           <degree>addb9</degree>
           <degree>add4</degree>
-          <render>Phryg</render>
+          <degree>addb9</degree>
+          <degree>add4</degree>
+          <render>p h r y g </render>
           </chord>
         <chord id="223">
+          <name>miadd2</name>
           <name>madd2</name>
           <xml>minor</xml>
           <voicing>C D Eb G</voicing>
           <degree>add9</degree>
-          <render>m add 2</render>
+          <degree>add9</degree>
+          <render>mi  m:0:2 add m:0:-2 m:0:-1 s2 m:0:1</render>
           </chord>
         <chord id="230">
+          <name>7b9#9</name>
           <name>7b9#9</name>
           <xml>dominant</xml>
           <voicing>C Db Eb E G Bb</voicing>
           <degree>addb9</degree>
           <degree>add#9</degree>
-          <render>7 b 9 # 9</render>
+          <degree>addb9</degree>
+          <degree>add#9</degree>
+          <render>m:0:2 7 m:0:-2  sb  m:0:-1 s9 m:0:1  s#  m:0:-1 s9 m:0:1</render>
           </chord>
         <chord id="240">
+          <name>sus#4</name>
           <name>sus#4</name>
           <xml>major</xml>
           <voicing>C Gb G</voicing>
           <degree>sub3</degree>
           <degree>add#4</degree>
-          <render>sus # 4</render>
+          <degree>sub3</degree>
+          <degree>add#4</degree>
+          <render>sus   s#  m:0:-1 s4 m:0:1</render>
           </chord>
         <chord id="241">
+          <name>ma7b13</name>
           <name>Maj7b13</name>
           <xml>major-seventh</xml>
           <voicing>C E G Ab B</voicing>
           <degree>addb13</degree>
-          <render>Maj 7 b 13</render>
+          <degree>addb13</degree>
+          <render>ma  m:0:2 7 m:0:-2  sb  m:0:-1 s13 m:0:1</render>
           </chord>
         </ChordList>
       <page-layout>
