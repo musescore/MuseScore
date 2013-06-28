@@ -76,7 +76,6 @@
 #include "drumtools.h"
 #include "editstafftype.h"
 #include "texttools.h"
-#include "edittools.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -398,7 +397,6 @@ MuseScore::MuseScore()
       newWizard             = 0;
       lastOpenPath          = preferences.myScoresPath;
       _textTools            = 0;
-      _editTools            = 0;
       _pianoTools           = 0;
       _webPage              = 0;
       _mediaDialog          = 0;
@@ -1475,8 +1473,6 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   if (textPalette)
                         textPalette->hide();
                   }
-            if (_editTools)
-                  _editTools->hide();
             if (_pianoTools)
                   _pianoTools->hide();
             if (_drumTools)
@@ -2520,7 +2516,6 @@ void MuseScore::changeState(ScoreState val)
                   e = cv->getEditObject();
             }
       if (!e) {
-            editTools()->hide();
             textTools()->hide();
             if (textPalette)
                   textPalette->hide();
@@ -2530,11 +2525,6 @@ void MuseScore::changeState(ScoreState val)
                   textTools()->setText(static_cast<Text*>(e));
                   textTools()->updateTools();
                   textTools()->show();
-                  }
-            else {
-                  editTools()->setElement(e);
-                  editTools()->updateTools();
-                  editTools()->show();
                   }
             if (inspector)
                   inspector->setElement(e);

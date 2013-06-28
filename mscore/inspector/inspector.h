@@ -42,13 +42,19 @@ class Inspector;
 class Segment;
 class Chord;
 
+
+class UiInspectorElement: public Ui::InspectorElement {
+   public:
+      void setupUi(QWidget *InspectorElement);
+      };
+
 //---------------------------------------------------------
 //   InspectorElement
 //---------------------------------------------------------
 
 class InspectorElement : public InspectorBase {
       Q_OBJECT
-      Ui::InspectorElement b;
+      UiInspectorElement b;
 
    public:
       InspectorElement(QWidget* parent);
@@ -84,7 +90,7 @@ class InspectorHBox : public InspectorBase {
 
 class InspectorArticulation : public InspectorBase {
       Q_OBJECT
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorArticulation ar;
 
    public:
@@ -110,7 +116,7 @@ class InspectorSpacer : public InspectorBase {
 class InspectorRest : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorRest    r;
 
@@ -125,7 +131,7 @@ class InspectorRest : public InspectorBase {
 class InspectorClef : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorClef    c;
 
@@ -140,7 +146,7 @@ class InspectorClef : public InspectorBase {
 class InspectorTimeSig : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorTimeSig t;
 
@@ -155,7 +161,7 @@ class InspectorTimeSig : public InspectorBase {
 class InspectorKeySig : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorKeySig k;
 
@@ -170,7 +176,7 @@ class InspectorKeySig : public InspectorBase {
 class InspectorTuplet : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorTuplet t;
 
    public:
@@ -184,7 +190,7 @@ class InspectorTuplet : public InspectorBase {
 class InspectorAccidental : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorAccidental a;
 
    public:
@@ -198,7 +204,7 @@ class InspectorAccidental : public InspectorBase {
 class InspectorTempoText : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorTempoText t;
 
    public:
@@ -213,7 +219,7 @@ class InspectorTempoText : public InspectorBase {
 class InspectorDynamic : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorDynamic d;
 
    public:
@@ -230,7 +236,7 @@ class InspectorDynamic : public InspectorBase {
 class InspectorBarLine : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorElement e;
+      UiInspectorElement e;
       Ui::InspectorBarLine b;
 
       static QString builtinSpanNames[BARLINE_BUILTIN_SPANS];

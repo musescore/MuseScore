@@ -79,7 +79,6 @@ class Capella;
 class Inspector;
 class OmrPanel;
 class NScrollArea;
-class EditTools;
 class Sym;
 class MasterPalette;
 class PluginCreator;
@@ -239,7 +238,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QToolBar* transportTools;
       QToolBar* entryTools;
       TextTools* _textTools;
-      EditTools* _editTools;
       PianoTools* _pianoTools;
       WebPageDockWidget* _webPage;
       MediaDialog* _mediaDialog;
@@ -499,7 +497,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool noScore() const { return scoreList.isEmpty(); }
 
       TextTools* textTools();
-      EditTools* editTools();
       void showDrumTools(Drumset*, Staff*);
       void updateDrumTools();
       void showWebPanel(bool on);

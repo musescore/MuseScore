@@ -26,7 +26,16 @@
    <property name="sizeConstraint">
     <enum>QLayout::SetNoConstraint</enum>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -119,6 +128,48 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Color:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="QToolButton" name="resetX">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>14</width>
+         <height>10</height>
+        </size>
+       </property>
+      </widget>
+     </item>
      <item row="4" column="1">
       <widget class="QDoubleSpinBox" name="offsetY">
        <property name="sizePolicy">
@@ -141,7 +192,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="2">
+     <item row="4" column="3">
       <widget class="QToolButton" name="resetY">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -153,7 +204,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="musescore.qrc">
+        <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
@@ -183,8 +234,8 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
-      <widget class="QToolButton" name="resetX">
+     <item row="1" column="3">
+      <widget class="QToolButton" name="resetVisible">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -195,7 +246,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="musescore.qrc">
+        <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
@@ -206,26 +257,58 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label">
+     <item row="2" column="3">
+      <widget class="QToolButton" name="resetColor">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>28</height>
-        </size>
-       </property>
        <property name="text">
-        <string>Color:</string>
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>14</width>
+         <height>10</height>
+        </size>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="2">
+      <widget class="QToolButton" name="vRaster">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons-dark/vraster.svg</normaloff>:/data/icons-dark/vraster.svg</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QToolButton" name="hRaster">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons-dark/hraster.svg</normaloff>:/data/icons-dark/hraster.svg</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
       <widget class="Awl::ColorLabel" name="color">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
@@ -244,53 +327,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="resetVisible">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QToolButton" name="resetColor">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2">
+     <item row="1" column="0" colspan="3">
       <widget class="QCheckBox" name="visible">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -322,7 +359,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="musescore.qrc"/>
+  <include location="../musescore.qrc"/>
  </resources>
  <connections/>
 </ui>
