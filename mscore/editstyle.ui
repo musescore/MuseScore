@@ -3696,26 +3696,60 @@ p, li { white-space: pre-wrap; }
             <property name="title">
              <string>Root / bass spelling</string>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <layout class="QVBoxLayout" name="verticalLayout_37">
              <item>
-              <widget class="QCheckBox" name="useGermanNoteNames">
-               <property name="text">
-                <string>Use German names</string>
-               </property>
-              </widget>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QRadioButton" name="useStandardNoteNames">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, Bb, B, C, C#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>Standard</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="useGermanNoteNames">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, B, H, C, Cis, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>German</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="useSolfeggioNoteNames">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La, Sib, Si, Do, Do#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>Solfeggio</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_12">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </item>
              <item>
-              <spacer name="horizontalSpacer_12">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+              <widget class="QCheckBox" name="lowerCaseMinorChords">
+               <property name="text">
+                <string>Lower case minor chords</string>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -4529,7 +4563,10 @@ p, li { white-space: pre-wrap; }
   <tabstop>chordDescriptionFile</tabstop>
   <tabstop>chordDescriptionFileButton</tabstop>
   <tabstop>chordsXmlFile</tabstop>
+  <tabstop>useStandardNoteNames</tabstop>
   <tabstop>useGermanNoteNames</tabstop>
+  <tabstop>useSolfeggioNoteNames</tabstop>
+  <tabstop>lowerCaseMinorChords</tabstop>
   <tabstop>harmonyY</tabstop>
   <tabstop>harmonyFretDist</tabstop>
   <tabstop>minHarmonyDistance</tabstop>

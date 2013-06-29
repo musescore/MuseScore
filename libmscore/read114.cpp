@@ -123,7 +123,9 @@ static const StyleVal style114[] = {
       StyleVal(ST_genCourtesyTimesig, true),
       StyleVal(ST_genCourtesyKeysig, true),
 
+      StyleVal(ST_useStandardNoteNames, true),
       StyleVal(ST_useGermanNoteNames, false),
+      StyleVal(ST_useSolfeggioNoteNames, false),
       StyleVal(ST_chordDescriptionFile, QString("stdchords.xml")),
       StyleVal(ST_chordStyle, QString("custom")),
       StyleVal(ST_chordsXmlFile, true),
@@ -621,8 +623,8 @@ Score::FileError Score::read114(XmlReader& e)
             style()->set(ST_voltaY, Spatium(-2.0));
       if (styleB(ST_hideEmptyStaves) == true) // http://musescore.org/en/node/16228
             style()->set(ST_dontHideStavesInFirstSystem, false);
-      if (styleSt(ST_chordDescriptionFile) == "chords_std.xml")
-            style()->set(ST_chordDescriptionFile, QString("stdchords.xml"));
+      if (styleB(ST_useGermanNoteNames))
+            style()->set(ST_useStandardNoteNames, false);
 
       _showOmr = false;
 
