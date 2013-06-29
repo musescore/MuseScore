@@ -385,6 +385,14 @@
           <sym name="s7" code="0xe197"/>
           <sym name="s8" code="0xe198"/>
           <sym name="s9" code="0xe199"/>
+          <sym name="notea" value="a"/>
+          <sym name="noteb" value="b"/>
+          <sym name="notec" value="c"/>
+          <sym name="noted" value="d"/>
+          <sym name="notee" value="e"/>
+          <sym name="notef" value="f"/>
+          <sym name="noteg" value="g"/>
+          <sym name="noteh" value="h"/>
           <sym name="b" code="0xe10d"/>
           <sym name="sb" code="0xe188"/>
           <sym name="sus4" code="0xe18d"/>
@@ -411,11 +419,12 @@
           </font>
         <font id="2" family="MuseJazz">
           <mag>0.8</mag>
+          <sym name="es" value="es"/>
           <sym name="s(" code="0x28"/>
           <sym name="s)" code="0x29"/>
           <sym name="letterb" code="0x62"/>
           <sym name="notemi" value="mi"/>
-          <sym name="noteb" value="b"/>
+          <sym name="is" value="is"/>
           <sym name="a" code="0x61"/>
           <sym name="c" code="0x63"/>
           <sym name="d" code="0x64"/>
