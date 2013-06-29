@@ -240,6 +240,15 @@
     <sym code="0xe10c" name="#"/>
     <sym code="0xe10d" name="b"/>
 
+    <sym class="note" name="a"/>
+    <sym class="note" name="b"/>
+    <sym class="note" name="c"/>
+    <sym class="note" name="d"/>
+    <sym class="note" name="e"/>
+    <sym class="note" name="f"/>
+    <sym class="note" name="g"/>
+    <sym class="note" name="h"/>
+
 <!-- Italian / solfege chord names
     <sym code="0xe201" name="C"/>
     <sym code="0xe202" name="D"/>
@@ -281,11 +290,13 @@
 
     <sym code="0xe18a" name="striangle"/>
 
+    <sym class="note" name="mi"/>
+    <sym name="es"/>
+    <sym name="is"/>
+
 <!-- true lower case letters -->
     <sym code="0x61" name="a"/>
     <sym code="0x62" name="letterb"/>
-    <sym class="note" name="b"/>
-    <sym class="note" name="mi"/>
     <sym code="0x63" name="c"/>
     <sym code="0x64" name="d"/>
     <sym code="0x65" name="e"/>
