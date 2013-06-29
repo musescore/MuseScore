@@ -123,11 +123,15 @@ class ChordToken {
 
 class ParsedChord {
    public:
-      bool parse(const QString&, const ChordList*, bool syntaxOnly = false);
+      bool parse(const QString&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
       QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&, const ChordList*);
       const QList<RenderAction>& renderList(const ChordList*);
       bool parseable() const                    { return _parseable; }
       bool understandable() const               { return _understandable; }
+      const QString& name() const               { return _name; }
+      const QString& quality() const            { return _quality; }
+      const QString& extension() const          { return _extension; }
+      const QString& modifiers() const          { return _modifiers; }
       const QString& xmlKind() const            { return _xmlKind; }
       const QString& xmlText() const            { return _xmlText; }
       const QString& xmlSymbols() const         { return _xmlSymbols; }
@@ -181,10 +185,12 @@ struct ChordDescription {
       bool generated;
       bool renderListGenerated;
       bool exportOk;
+      QString _quality;
 
    public:
       ChordDescription(int, ChordList*);
       ChordDescription(const QString&, ChordList*);
+      QString quality() const       { return _quality; }
       void complete(ParsedChord* pc, const ChordList*);
       void read(XmlReader&);
       void write(Xml&) const;
@@ -197,6 +203,7 @@ struct ChordDescription {
 struct ChordSymbol {
       int fontIdx;
       QString name;
+      QString value;
       QChar code;
 
       ChordSymbol() { fontIdx = -1; }

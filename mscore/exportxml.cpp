@@ -4582,7 +4582,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             //
             xml.stag("direction");
             xml.stag("direction-type");
-            xml.tag("words default-y=\"100\"", h->text());
+            xml.tag("words", h->text());
             xml.etag();
             xml.etag();
             }
