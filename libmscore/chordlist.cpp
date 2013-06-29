@@ -104,7 +104,7 @@ QString HChord::name(int tpc) const
       static const HChord C0(0,3,6,9);
       static const HChord C1(0,3);
 
-      QString buf = tpc2name(tpc, false);
+      QString buf = tpc2name(tpc, STANDARD, false);
       HChord c(*this);
 
       int key = tpc2pitch(tpc);
@@ -431,7 +431,7 @@ void ParsedChord::configure(const ChordList* cl)
             return;
       // TODO: allow this to be parameterized via chord list
       major << "ma" << "maj" << "major" << "t" << "^";
-      minor << "mi" << "min" << "minor" << "-";
+      minor << "mi" << "min" << "minor" << "-" << "=";
       diminished << "dim" << "o";
       augmented << "aug" << "+";
       lower << "b" << "-" << "dim";
@@ -460,10 +460,10 @@ void ParsedChord::correctXmlText(const QString& s)
 
 //---------------------------------------------------------
 //  parse
-//    return true if chord was parseable
+//    returns true if chord was parseable
 //---------------------------------------------------------
 
-bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
+bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, bool preferMinor)
       {
       QString tok1, tok1L, tok2, tok2L;
       QString extensionDigits = "123456789";
@@ -550,10 +550,12 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   chord = HChord("C Eb Gb Bb");
             }
       else if (tok1L == "") {
-            // empty quality - this will turn out to be major or dominant
+            // empty quality - this will turn out to be major or dominant (or minor if preferMinor)
             _quality = "";
             if (!syntaxOnly)
-                  chord = HChord("C E G");
+                  chord = preferMinor ? HChord("C Eb G") : HChord("C E G");
+            if (preferMinor)
+                  _name = "=" + _name;
             }
       else {
             // anything else is not a quality after all, but a modifier
@@ -564,6 +566,10 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
             i = lastLeadingToken;
             if (!syntaxOnly)
                   chord = HChord("C E G");
+            }
+      if (tok1L == "=") {
+            tok1 = "";
+            tok1L = "";
             }
       if (tok1 != "")
             addToken(tok1,QUALITY);
@@ -594,7 +600,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
 
 #if 0
 // enable this code to allow extensions to be parenthesized
-// otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
+// otherwise, parentheses will automatically cause contents to be interpreted as modifier
       // eat leading parens
       firstLeadingToken = _tokenList.size();
       while (i < len && leading.contains(s[i]))
@@ -610,15 +616,15 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
       _extension = tok1;
       if (_quality == "") {
             if (_extension == "7" || _extension == "9" || _extension == "11" || _extension == "13") {
-                  _quality = "dominant";
+                  _quality = preferMinor ? "minor" : "dominant";
                   if (!syntaxOnly)
-                        _xmlKind = "dominant";
+                        _xmlKind = preferMinor ? "minor" : "dominant";
                   take7 = true; take9 = true; take11 = true; take13 = true;
                   }
             else {
-                  _quality = "major";
+                  _quality = preferMinor ? "minor" : "major";
                   if (!syntaxOnly)
-                        _xmlKind = "major";
+                        _xmlKind = preferMinor ? "minor" : "major";
                   take6 = true; take7 = true; take9 = true; take11 = true; take13 = true;
                   }
             }
@@ -917,6 +923,8 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                   else if (tok1L == "sus") {
 #if 0
 // enable this code to export 7sus4 as dominant,sub3,add4 rather than suspended-fourth,add7 (similar for 9sus4, 13sus4)
+// should basically work, but not fully tested
+// probably needs corresponding special casing at end of loop
                         if (_extension == "") {
                               if (tok2L == "4")
                                     _xmlKind = "suspended-fourth";
@@ -1046,8 +1054,14 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly)
                         tok1L = "#";
                         alter = true;
                         }
-                  else
+                  else {
                         _understandable = false;
+                        if (s.startsWith(tok1)) {
+                              // unrecognized token right from very beginning
+                              _xmlKind = "other";
+                              _xmlText = tok1;
+                              }
+                        }
                   if (alter) {
                         if (tok2L == "4" && _xmlKind == "suspended-fourth")
                               degree = "alt";
@@ -1282,7 +1296,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             _extension = QString("%1").arg(extension);
 
       // validate kindText
-      if (kindText != "") {
+      if (kindText != "" && kind != "none") {
             ParsedChord validate;
             validate.parse(kindText,cl,false);
             // kindText should parse to produce same kind, no degrees
@@ -1472,6 +1486,7 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
       if (chord.getKeys() == 0) {
             chord = HChord(pc->keys());
             }
+      _quality = pc->quality();
       }
 
 //---------------------------------------------------------
@@ -1568,9 +1583,22 @@ void ChordList::read(XmlReader& e)
                   while (e.readNextStartElement()) {
                         if (e.name() == "sym") {
                               ChordSymbol cs;
+                              QString code;
+                              QString symClass;
                               cs.fontIdx = fontIdx;
                               cs.name    = e.attribute("name");
-                              cs.code    = e.attribute("code").toInt(0, 0);
+                              cs.value   = e.attribute("value");
+                              code       = e.attribute("code");
+                              symClass   = e.attribute("class");
+                              if (code != "") {
+                                    cs.code = code.toInt(0, 0);
+                                    cs.value = QString(cs.code);
+                                    }
+                              else
+                                    cs.code = 0;
+                              if (cs.value == "")
+                                    cs.value = cs.name;
+                              cs.name = symClass + cs.name;
                               symbols.insert(cs.name, cs);
                               e.readNext();
                               }
@@ -1596,7 +1624,7 @@ void ChordList::read(XmlReader& e)
                   if (id)
                         cd = take(id);
                   if (!cd)
-                        cd = new ChordDescription(id,this);
+                        cd = new ChordDescription(id, this);
                   // record updated id
                   id = cd->id;
                   // read rest of description
@@ -1631,7 +1659,10 @@ void ChordList::write(Xml& xml) const
             xml.tag("mag", f.mag);
             foreach(ChordSymbol s, symbols) {
                   if (s.fontIdx == fontIdx) {
-                        xml.tagE(QString("sym name=\"%1\" code=\"%2\"").arg(s.name).arg(s.code.unicode()));
+                        if (s.code.isNull())
+                              xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name).arg(s.value));
+                        else
+                              xml.tagE(QString("sym name=\"%1\" code=\"0x%2\"").arg(s.name).arg(s.code.unicode(),0,16));
                         }
                   }
             xml.etag();

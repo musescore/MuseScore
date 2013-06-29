@@ -219,41 +219,70 @@ int tpc2alterByKey(int tpc, int key) {
       }
 
 //---------------------------------------------------------
-//   printTpc
-//    print note name
+//   tpc2name
+//    return note name
 //---------------------------------------------------------
 
-QString tpc2name(int tpc, bool germanNames)
+QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase)
       {
-      const char names[] = "FCGDAEB";
-      int acc   = ((tpc+1) / 7) - 2;
-      QString s(names[(tpc + 1) % 7]);
-      if (germanNames && (s == "B")) {
-            if (acc == -1)
-                  return s;
-            s = "H";
-            }
-      switch(acc) {
-            case -2: s += "bb"; break;
-            case -1: s += "b";  break;
-            case  0: break;
-            case  1: s += "#";  break;
-            case  2: s += "##"; break;
-            default:
-                  qDebug("tpc2name(%d): acc %d\n", tpc, acc);
-                  s += "??";
-                  break;
-            }
-      return s;
+      QString s;
+      QString acc;
+      tpc2name(tpc, spelling, lowerCase, s, acc);
+      return s + acc;
       }
 
-void tpc2name(int tpc, bool germanNames, QChar* name, int* acc)
+//---------------------------------------------------------
+//   tpc2name
+//---------------------------------------------------------
+
+void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QString& acc)
+      {
+      int n;
+      tpc2name(tpc, spelling, lowerCase, s, n);
+      switch (n) {
+            case -2: acc = "bb" ; break;
+            case -1:
+                  if (spelling != GERMAN)
+                        acc = "b";
+                  else
+                        // render flats as "es" except for A and E, which get "s"
+                        acc = (tpc == 10 || tpc == 11) ? "s" : "es";
+                  break;
+            case  0: acc = ""; break;
+            case  1: acc = (spelling != GERMAN) ? "#" : "is"; break;
+            case  2: acc = "##"; break;
+            default:
+                  qDebug("tpc2name(%d): acc %d\n", tpc, n);
+                  acc = "";
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
+//   tpc2name
+//---------------------------------------------------------
+
+void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, int& acc)
       {
       const char names[]  = "FCGDAEB";
       const char gnames[] = "FCGDAEH";
-      *acc   = ((tpc+1) / 7) - 2;
+      const QString inames[] = { "Fa", "Do", "Sol", "Re", "La", "Mi", "Si" };
+
+      acc = ((tpc+1) / 7) - 2;
       int idx = (tpc + 1) % 7;
-      *name = QChar::fromLatin1(germanNames ? gnames[idx] : names[idx]);
+      switch (spelling) {
+            case GERMAN:
+                  s = gnames[idx];
+                  if (s == "H" && acc == -1) {
+                        s = "B";
+                        acc = 0;
+                        }
+                  break;
+            case SOLFEGGIO:   s = inames[idx]; break;
+            default:          s = names[idx]; break;
+            }
+      if (lowerCase)
+            s = s.toLower();
       }
 
 //---------------------------------------------------------
