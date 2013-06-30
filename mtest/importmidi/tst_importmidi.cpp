@@ -63,6 +63,7 @@ class TestImportMidi : public QObject, public MTest
       void findOnTimeRegularError();
       void findTupletApproximation();
       void findTupletCandidatesOfBar();
+      void separateTupletVoices();
       };
 
 //---------------------------------------------------------
@@ -410,7 +411,85 @@ void TestImportMidi::findTupletCandidatesOfBar()
 //      std::multimap<double, TupletInfo> candidates
 //                  = Quantize::findTupletCandidatesOfBar(startBarTick, endBarTick,
 //                                                        barFraction, chords);
-//      QVERIFY(candidates.size() == 2);
+      //      QVERIFY(candidates.size() == 2);
+      }
+
+MidiNote noteFactory(int onTime, int len, int pitch)
+      {
+      MidiNote note;
+      note.onTime = onTime;
+      note.len = len;
+      note.pitch = pitch;
+      return note;
+      }
+
+MidiChord chordFactory(int onTime, int len, const std::vector<int> &pitches)
+      {
+      std::vector<MidiNote> notes;
+      for (const auto &pitch: pitches)
+            notes.push_back(noteFactory(onTime, len, pitch));
+      MidiChord chord;
+      if (notes.empty())
+            return chord;
+      chord.onTime = notes.front().onTime;
+      chord.duration = notes.front().len;
+      for (const auto &note: notes)
+            chord.notes.push_back(note);
+
+      return chord;
+      }
+
+void TestImportMidi::separateTupletVoices()
+      {
+      int tupletLen = MScore::division;
+      std::multimap<int, MidiChord> chords;
+                  // let's create 2 tuplets with the same first chord
+
+                  // triplet
+      int tripletNoteLen = tupletLen / 3;
+      MidiChord chord1 = chordFactory(0 * tripletNoteLen, tripletNoteLen, {76, 71, 67});
+      MidiChord chord2_3 = chordFactory(1 * tripletNoteLen, tripletNoteLen, {74});
+      MidiChord chord3_3 = chordFactory(2 * tripletNoteLen, tripletNoteLen, {77});
+                  // quintuplet
+      int quintupletNoteLen = tupletLen / 5;
+//    MidiChord chord1 - the same
+      MidiChord chord2_5 = chordFactory(1 * quintupletNoteLen, quintupletNoteLen, {60});
+      MidiChord chord3_5 = chordFactory(2 * quintupletNoteLen, quintupletNoteLen, {62});
+      MidiChord chord4_5 = chordFactory(3 * quintupletNoteLen, quintupletNoteLen, {58});
+      MidiChord chord5_5 = chordFactory(4 * quintupletNoteLen, quintupletNoteLen, {60});
+
+      chords.insert({chord1.onTime, chord1});
+      chords.insert({chord2_3.onTime, chord2_3});
+      chords.insert({chord3_3.onTime, chord3_3});
+      chords.insert({chord2_5.onTime, chord2_5});
+      chords.insert({chord3_5.onTime, chord3_5});
+      chords.insert({chord4_5.onTime, chord4_5});
+      chords.insert({chord5_5.onTime, chord5_5});
+
+      Quantize::TupletInfo tripletInfo;
+      tripletInfo.onTime = chord1.onTime;
+      tripletInfo.len = tupletLen;
+      tripletInfo.chords.insert({0, chords.find(0 * tripletNoteLen)});
+      tripletInfo.chords.insert({1, chords.find(1 * tripletNoteLen)});
+      tripletInfo.chords.insert({2, chords.find(2 * tripletNoteLen)});
+
+      Quantize::TupletInfo quintupletInfo;
+      quintupletInfo.onTime = chord1.onTime;
+      quintupletInfo.len = tupletLen;
+      quintupletInfo.chords.insert({0, chords.find(0 * quintupletNoteLen)});
+      quintupletInfo.chords.insert({1, chords.find(1 * quintupletNoteLen)});
+      quintupletInfo.chords.insert({2, chords.find(2 * quintupletNoteLen)});
+      quintupletInfo.chords.insert({3, chords.find(3 * quintupletNoteLen)});
+      quintupletInfo.chords.insert({4, chords.find(4 * quintupletNoteLen)});
+
+      std::vector<Quantize::TupletInfo> tuplets;
+      tuplets.push_back(tripletInfo);
+      tuplets.push_back(quintupletInfo);
+
+//      chords.find(0 * quintupletNoteLen);
+      QVERIFY(chords.size() == 7);
+      Quantize::separateTupletVoices(tuplets, chords);
+      QVERIFY(chords.size() == 8);
       }
 
 
