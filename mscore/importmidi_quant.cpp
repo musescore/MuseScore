@@ -334,6 +334,7 @@ findTupletCandidatesOfBar(int startBarTick,
             return tupletCandidates;
 
       int barLen = barFraction.ticks();
+                  // barLen / 4 - additional tolerance
       auto startBarChordIt = findFirstChordInRange(startBarTick - barLen / 4,
                                                    endBarTick,
                                                    chords.begin(),
@@ -371,13 +372,13 @@ findTupletCandidatesOfBar(int startBarTick,
                               continue;
                         TupletInfo tupletInfo = findTupletApproximation(tupletNumber, tupletNoteLen,
                                     quantValue, startDivTime - quantValue, startDivChordIt, endDivChordIt);
-                              // check - is it a valid tuplet approximation?
+                                    // check - is it a valid tuplet approximation?
                         if (!isTupletAllowed(tupletNumber, divLen,
                                              tupletInfo.tupletOnTimeSumError,
                                              tupletInfo.regularSumError,
                                              quantValue, tupletInfo.chords))
                               continue;
-                                    // --- tuplet found ---
+                                    // tuplet found
                         double averageError = tupletInfo.tupletOnTimeSumError * 1.0 / tupletInfo.chords.size();
                         tupletCandidates.insert({averageError, tupletInfo});
                         }     // next tuplet type
@@ -420,18 +421,21 @@ bool isChordInUse(const std::map<int, int> &usedFirstTupletNotes,
                   const std::map<int, std::multimap<int, MidiChord>::iterator> &tupletChords)
       {
       auto i = tupletChords.begin();
-                  // check are first tuplet notes all in use (1 note - 1 voice)
-      int chordOnTime = i->first;
-      auto ii = usedFirstTupletNotes.find(chordOnTime);
-      if (ii != usedFirstTupletNotes.end()) {
-            if (ii->second >= VOICES) {
+      int tupletNoteIndex = i->first;
+      if (tupletNoteIndex == 0) {
+                        // check are first tuplet notes all in use (1 note - 1 voice)
+            int chordOnTime = i->second->first;
+            auto ii = usedFirstTupletNotes.find(chordOnTime);
+            if (ii != usedFirstTupletNotes.end()) {
+                  if (ii->second >= i->second->second.notes.size()) {
                               // need to choose next tuplet candidate - no more available voices
-                  return true;
+                        return true;
+                        }
                   }
-            }
-      ++i;                    // start from the second chord
+            ++i;
+      }
       for ( ; i != tupletChords.end(); ++i) {
-            chordOnTime = i->first;
+            int chordOnTime = i->second->first;
             if (usedChords.find(chordOnTime) != usedChords.end()) {
                               // the chord note is in use - cannot use this chord again
                   return true;
@@ -444,7 +448,6 @@ bool isChordInUse(const std::map<int, int> &usedFirstTupletNotes,
 // to any other tuplet at the same time
 // if there are enough notes in this first chord
 // to be splitted to different voices
-// the same is for duplet second chord: it can belong to 4-tuplet
 
 void filterTuplets(std::multimap<double, TupletInfo> &tuplets)
       {
@@ -468,6 +471,57 @@ void filterTuplets(std::multimap<double, TupletInfo> &tuplets)
             ++tc;
             }
       }
+
+void separateTupletVoices(std::vector<TupletInfo> &tuplets,
+                          std::multimap<int, MidiChord> &chords)
+      {
+                  // it's better before to sort tuplets by their average pitch
+                  // and notes of each chord as well (desc. order)
+      for (auto now = tuplets.begin(); now != tuplets.end(); ++now) {
+            int counter = 0;
+            auto lastMatch = tuplets.end();
+            auto firstNowChordIt = now->chords.begin();
+            for (auto prev = tuplets.begin(); prev != now; ++prev) {
+                              // check is now tuplet go over previous tuplets
+                  if (now->onTime + now->len > prev->onTime
+                              && now->onTime < prev->onTime + prev->len)
+                        ++counter;
+                              // if first notes in tuplets match - split this chord
+                              // into 2 voices
+                  auto firstPrevChordIt = prev->chords.begin();
+                  if (firstNowChordIt->first == 0 && firstPrevChordIt->first == 0
+                              && firstNowChordIt->second->second.onTime == firstPrevChordIt->second->second.onTime) {
+                        lastMatch = prev;
+                        }
+                  }
+            if (lastMatch != tuplets.end()) {
+                              // split first tuplet chord, that belong to 2 tuplets, into 2 voices
+                  MidiChord &prevMidiChord = lastMatch->chords.begin()->second->second;
+                  MidiChord newChord = prevMidiChord;
+                              // erase all notes except the first one
+                  auto beg = prevMidiChord.notes.begin();
+                  prevMidiChord.notes.erase(++beg, prevMidiChord.notes.end());
+                              // erase the first note
+                  newChord.notes.erase(newChord.notes.begin());
+                  auto newChordIt = chords.insert({newChord.onTime, newChord});
+                              // update 'now' first tuplet chord
+                  now->chords.begin()->second = newChordIt;
+                  if (newChord.notes.isEmpty()) {
+                                    // normally this should not happen at all
+                        qDebug("Tuplets were not filtered correctly: same notes in different tuplets");
+                        return;
+                        }
+                  }
+
+            for (auto &tupletChord: now->chords) {
+                  MidiChord &midiChord = tupletChord.second->second;
+                  midiChord.voice = counter;
+                  }
+            }
+      }
+
+
+// TODO: separate different overlapping tuplet voices
 
 void quantizeTupletChord(MidiChord &midiChord, int onTime, const TupletInfo &tupletInfo)
       {
