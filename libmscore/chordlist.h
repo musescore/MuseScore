@@ -240,6 +240,8 @@ class ChordList : public QMap<int, ChordDescription*> {
       void read(XmlReader&);
       bool read(const QString&);
       bool write(const QString&) const;
+      bool loaded() const;
+      void unload();
       ChordSymbol symbol(const QString& s) const { return symbols.value(s); }
       };
 
