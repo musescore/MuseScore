@@ -114,8 +114,8 @@
             <Events>
               <Event>
                 <pitch>0</pitch>
-                <ontime>-1000</ontime>
-                <len>2000</len>
+                <ontime>0</ontime>
+                <len>1000</len>
                 </Event>
               </Events>
             <pitch>69</pitch>
