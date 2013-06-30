@@ -1639,6 +1639,7 @@ void Chord::layoutPitched()
       QRectF bb;
       processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
       setbbox(bb.translated(_spatium*2, 0));
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -2023,7 +2024,7 @@ qreal Chord::dotPosX() const
 //   setDotPosX
 //---------------------------------------------------------
 
-void Chord::setDotPosX(qreal val)
+void Chord::setDotPosX(qreal /*val*/)
       {
 // TODO: done in Score->layoutChords1()
 //      if (parent())
