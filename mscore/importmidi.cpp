@@ -602,9 +602,9 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
                   midiChord.onTime   = midiChord.onTime + len;
                   midiChord.duration = midiChord.duration - len;
 
-                  for (auto &note: midiChord.notes) {
-                        note.onTime = midiChord.onTime;
-                        note.len = midiChord.duration;
+                  for (auto &midiNote: midiChord.notes) {
+                        midiNote.onTime = midiChord.onTime;
+                        midiNote.len = midiChord.duration;
                         }
                   }
             startChordTick += len;
@@ -612,10 +612,6 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
 //      if (voice == 0)
       fillGapWithRests(score, voice, startChordTick, nextChordTick - startChordTick, track);
       }
-
-//---------------------------------------------------------
-//   convertTrack
-//---------------------------------------------------------
 
 void MTrack::convertTrack(int lastTick)
       {

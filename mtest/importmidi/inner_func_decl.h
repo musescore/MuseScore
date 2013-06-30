@@ -52,6 +52,9 @@ findTupletCandidatesOfBar(int startBarTick,
                           const Fraction &barFraction,
                           std::multimap<int, MidiChord> &chords);
 
+void separateTupletVoices(std::vector<TupletInfo> &tuplets,
+                          std::multimap<int, MidiChord> &chords);
+
 } // namespace Quantize
 } // namespace Ms
 
