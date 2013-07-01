@@ -73,6 +73,7 @@ class MTrack {
                                                      int durationOnTime, int durationLen);
       QList<TDuration> toDurationList(const Measure *measure, int voice, int startTick, int len,
                                       Meter::DurationType durationType);
+      int voicesInBar(int tickInBar);
       };
 
 
@@ -618,7 +619,7 @@ void MTrack::convertTrack(int lastTick)
       Score* score     = staff->score();
       int key          = 0;                      // TODO-LIB findKey(mtrack, score->sigmap());
       int track        = staff->idx() * VOICES;
-      int voices       = 1;          // VOICES;  // mtrack->separateVoices(2);
+      int voices       = VOICES;          // VOICES;  // mtrack->separateVoices(2);
 
       for (int voice = 0; voice < voices; ++voice) {
                         // startChordTick is onTime value of all simultaneous notes

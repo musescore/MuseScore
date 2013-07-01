@@ -414,6 +414,9 @@ void TestImportMidi::findTupletCandidatesOfBar()
       //      QVERIFY(candidates.size() == 2);
       }
 
+//--------------------------------------------------------------------------
+      // tuplet voice separation
+
 MidiNote noteFactory(int onTime, int len, int pitch)
       {
       MidiNote note;
@@ -443,20 +446,30 @@ void TestImportMidi::separateTupletVoices()
       {
       int tupletLen = MScore::division;
       std::multimap<int, MidiChord> chords;
-                  // let's create 2 tuplets with the same first chord
+                  // let's create 3 tuplets with the same first chord
 
                   // triplet
-      int tripletNoteLen = tupletLen / 3;
+      int tripletLen = tupletLen;
+      int tripletNoteLen = tripletLen / 3;
       MidiChord chord1 = chordFactory(0 * tripletNoteLen, tripletNoteLen, {76, 71, 67});
       MidiChord chord2_3 = chordFactory(1 * tripletNoteLen, tripletNoteLen, {74});
       MidiChord chord3_3 = chordFactory(2 * tripletNoteLen, tripletNoteLen, {77});
                   // quintuplet
-      int quintupletNoteLen = tupletLen / 5;
-//    MidiChord chord1 - the same
+      int quintupletLen = tupletLen;
+      int quintupletNoteLen = quintupletLen / 5;
       MidiChord chord2_5 = chordFactory(1 * quintupletNoteLen, quintupletNoteLen, {60});
       MidiChord chord3_5 = chordFactory(2 * quintupletNoteLen, quintupletNoteLen, {62});
       MidiChord chord4_5 = chordFactory(3 * quintupletNoteLen, quintupletNoteLen, {58});
       MidiChord chord5_5 = chordFactory(4 * quintupletNoteLen, quintupletNoteLen, {60});
+                  // septuplet
+      int septupletLen = 2 * tupletLen;
+      int septupletNoteLen = septupletLen / 7;
+      MidiChord chord2_7 = chordFactory(1 * septupletNoteLen, septupletNoteLen, {50});
+      MidiChord chord3_7 = chordFactory(2 * septupletNoteLen, septupletNoteLen, {52});
+      MidiChord chord4_7 = chordFactory(3 * septupletNoteLen, septupletNoteLen, {48});
+      MidiChord chord5_7 = chordFactory(4 * septupletNoteLen, septupletNoteLen, {51});
+      MidiChord chord6_7 = chordFactory(5 * septupletNoteLen, septupletNoteLen, {47});
+      MidiChord chord7_7 = chordFactory(6 * septupletNoteLen, septupletNoteLen, {47});
 
       chords.insert({chord1.onTime, chord1});
       chords.insert({chord2_3.onTime, chord2_3});
@@ -465,31 +478,97 @@ void TestImportMidi::separateTupletVoices()
       chords.insert({chord3_5.onTime, chord3_5});
       chords.insert({chord4_5.onTime, chord4_5});
       chords.insert({chord5_5.onTime, chord5_5});
+      chords.insert({chord2_7.onTime, chord2_7});
+      chords.insert({chord3_7.onTime, chord3_7});
+      chords.insert({chord4_7.onTime, chord4_7});
+      chords.insert({chord5_7.onTime, chord5_7});
+      chords.insert({chord6_7.onTime, chord6_7});
+      chords.insert({chord7_7.onTime, chord7_7});
 
       Quantize::TupletInfo tripletInfo;
       tripletInfo.onTime = chord1.onTime;
-      tripletInfo.len = tupletLen;
+      tripletInfo.len = tripletLen;
       tripletInfo.chords.insert({0, chords.find(0 * tripletNoteLen)});
       tripletInfo.chords.insert({1, chords.find(1 * tripletNoteLen)});
       tripletInfo.chords.insert({2, chords.find(2 * tripletNoteLen)});
 
       Quantize::TupletInfo quintupletInfo;
       quintupletInfo.onTime = chord1.onTime;
-      quintupletInfo.len = tupletLen;
+      quintupletInfo.len = quintupletLen;
       quintupletInfo.chords.insert({0, chords.find(0 * quintupletNoteLen)});
       quintupletInfo.chords.insert({1, chords.find(1 * quintupletNoteLen)});
       quintupletInfo.chords.insert({2, chords.find(2 * quintupletNoteLen)});
       quintupletInfo.chords.insert({3, chords.find(3 * quintupletNoteLen)});
       quintupletInfo.chords.insert({4, chords.find(4 * quintupletNoteLen)});
 
+      Quantize::TupletInfo septupletInfo;
+      septupletInfo.onTime = chord1.onTime;
+      septupletInfo.len = septupletLen;
+      septupletInfo.chords.insert({0, chords.find(0 * septupletNoteLen)});
+      septupletInfo.chords.insert({1, chords.find(1 * septupletNoteLen)});
+      septupletInfo.chords.insert({2, chords.find(2 * septupletNoteLen)});
+      septupletInfo.chords.insert({3, chords.find(3 * septupletNoteLen)});
+      septupletInfo.chords.insert({4, chords.find(4 * septupletNoteLen)});
+      septupletInfo.chords.insert({5, chords.find(5 * septupletNoteLen)});
+      septupletInfo.chords.insert({6, chords.find(6 * septupletNoteLen)});
+
       std::vector<Quantize::TupletInfo> tuplets;
       tuplets.push_back(tripletInfo);
       tuplets.push_back(quintupletInfo);
+      tuplets.push_back(septupletInfo);
 
-//      chords.find(0 * quintupletNoteLen);
-      QVERIFY(chords.size() == 7);
+      QVERIFY(chords.size() == 13);
+
+      auto tripletIt = tripletInfo.chords.find(0);
+      QCOMPARE(tripletIt->second->second.notes.size(), 3);
+      QCOMPARE(tripletIt->second->second.notes[0].pitch, 76);
+      QCOMPARE(tripletIt->second->second.notes[1].pitch, 71);
+      QCOMPARE(tripletIt->second->second.notes[2].pitch, 67);
+
+      auto quintupletIt = quintupletInfo.chords.find(0);
+      QCOMPARE(quintupletIt->second->second.notes.size(), 3);
+      QCOMPARE(quintupletIt->second->second.notes[0].pitch, 76);
+      QCOMPARE(quintupletIt->second->second.notes[1].pitch, 71);
+      QCOMPARE(quintupletIt->second->second.notes[2].pitch, 67);
+
+      auto septupletIt = septupletInfo.chords.find(0);
+      QCOMPARE(septupletIt->second->second.notes.size(), 3);
+      QCOMPARE(septupletIt->second->second.notes[0].pitch, 76);
+      QCOMPARE(septupletIt->second->second.notes[1].pitch, 71);
+      QCOMPARE(septupletIt->second->second.notes[2].pitch, 67);
+
       Quantize::separateTupletVoices(tuplets, chords);
-      QVERIFY(chords.size() == 8);
+
+      QVERIFY(chords.size() == 15);
+
+      tripletInfo = tuplets[0];
+      quintupletInfo = tuplets[1];
+      septupletInfo = tuplets[2];
+
+      tripletIt = tripletInfo.chords.find(0);
+      QCOMPARE(tripletIt->second->second.notes.size(), 1);
+      QCOMPARE(tripletIt->second->second.notes[0].pitch, 76);
+
+      quintupletIt = quintupletInfo.chords.find(0);
+      QCOMPARE(quintupletIt->second->second.notes.size(), 1);
+      QCOMPARE(quintupletIt->second->second.notes[0].pitch, 71);
+
+      septupletIt = septupletInfo.chords.find(0);
+      QCOMPARE(septupletIt->second->second.notes.size(), 1);
+      QCOMPARE(septupletIt->second->second.notes[0].pitch, 67);
+
+      for (const auto &chord: tripletInfo.chords) {
+            const MidiChord &midiChord = chord.second->second;
+            QCOMPARE(midiChord.voice, 0);
+            }
+      for (const auto &chord: quintupletInfo.chords) {
+            const MidiChord &midiChord = chord.second->second;
+            QCOMPARE(midiChord.voice, 1);
+            }
+      for (const auto &chord: septupletInfo.chords) {
+            const MidiChord &midiChord = chord.second->second;
+            QCOMPARE(midiChord.voice, 2);
+            }
       }
 
 
