@@ -26,7 +26,7 @@ namespace Ms {
 
 class InspectorImage : public InspectorBase {
       Q_OBJECT
-
+      UiInspectorElement e;
       Ui::InspectorImage b;
 
       void updateScaleFromSize(const QSizeF&);

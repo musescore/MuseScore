@@ -30,9 +30,14 @@ enum {
 InspectorImage::InspectorImage(QWidget* parent)
    : InspectorBase(parent)
       {
+      e.setupUi(addWidget());
       b.setupUi(addWidget());
 
       iList = {
+            { P_COLOR,         0, 0, e.color,       e.resetColor       },
+            { P_VISIBLE,       0, 0, e.visible,     e.resetVisible     },
+            { P_USER_OFF,      0, 0, e.offsetX,     e.resetX           },
+            { P_USER_OFF,      1, 0, e.offsetY,     e.resetY           },
             { P_AUTOSCALE,         0, false, b.autoscale,       b.resetAutoscale       },
             { P_SIZE,              0, false, b.sizeWidth,       0                      },
             { P_SIZE,              1, false, b.sizeHeight,      0                      },
