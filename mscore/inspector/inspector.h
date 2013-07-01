@@ -33,6 +33,7 @@
 #include "ui_inspector_accidental.h"
 #include "ui_inspector_tempotext.h"
 #include "ui_inspector_dynamic.h"
+#include "ui_inspector_slur.h"
 
 namespace Ms {
 
@@ -226,7 +227,6 @@ class InspectorDynamic : public InspectorBase {
       InspectorDynamic(QWidget* parent);
       };
 
-
 //---------------------------------------------------------
 //   InspectorBarLine
 //---------------------------------------------------------
@@ -269,6 +269,20 @@ class Inspector : public QDockWidget {
       Element* element() const            { return _element;       }
       const QList<Element*>& el() const   { return _el;            }
       void setInspectorEdit(bool val)     { _inspectorEdit = val;  }
+      };
+
+//---------------------------------------------------------
+//   InspectorSlur
+//---------------------------------------------------------
+
+class InspectorSlur : public InspectorBase {
+      Q_OBJECT
+
+      UiInspectorElement e;
+      Ui::InspectorSlur s;
+
+   public:
+      InspectorSlur(QWidget* parent);
       };
 
 

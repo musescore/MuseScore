@@ -698,8 +698,6 @@ void Score::createPlayEvents(Chord* chord)
             instr->updateGateTime(&gateTime, 0, "");
             }
 
-      printf("gate time %d %d\n", tick, gateTime);
-
       int n = chord->graceNotes().size();
       int ontime = 0;
       if (n) {

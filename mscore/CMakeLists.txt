@@ -42,7 +42,7 @@ QT4_WRAP_UI (ui_headers
       editstaff.ui voltaproperties.ui timesigproperties.ui boxproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
       chordedit.ui transposedialog.ui lineproperties.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
-      glissandoprop.ui articulation.ui metaedit.ui palette.ui slurproperties.ui select.ui
+      glissandoprop.ui articulation.ui metaedit.ui palette.ui select.ui
       synthcontrol.ui splitstaff.ui cellproperties.ui keyedit.ui selectinstr.ui
       fretdprops.ui stafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui layer.ui
@@ -112,6 +112,7 @@ QT4_WRAP_UI (ui_headers
       inspector/inspector_dynamic.ui
       inspector/inspector_line.ui
       inspector/inspector_textline.ui
+      inspector/inspector_slur.ui
       ${SCRIPT_UI}
       )
 
@@ -131,7 +132,7 @@ QT4_WRAP_CPP (mocs
       excerptsdialog.h stafftextproperties.h glissandoproperties.h
       articulationprop.h metaedit.h magbox.h
       textprop.h textproperties.h tupletdialog.h
-      slurproperties.h selectdialog.h synthcontrol.h drumroll.h pianoroll.h
+      selectdialog.h synthcontrol.h drumroll.h pianoroll.h
       piano.h ruler.h file.h
       pianoview.h drumview.h splitstaff.h scoretab.h keyedit.h keycanvas.h harmonyedit.h
       harmonycanvas.h updatechecker.h fretproperties.h fretcanvas.h editstafftype.h
@@ -235,8 +236,7 @@ add_executable ( ${ExecutableName}
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       chordedit.cpp excerptsdialog.cpp metaedit.cpp magbox.cpp
       capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
-      textproperties.cpp slurproperties.cpp
-      synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
+      textproperties.cpp synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
       updatechecker.cpp importove.cpp ove.cpp ruler.cpp
       importgtp.cpp fotomode.cpp drumtools.cpp
