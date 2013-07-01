@@ -54,7 +54,7 @@ enum {
 
 enum MuseScoreStyleType {
       STYLE_DARK,
-      STYLE_NATIVE
+      STYLE_LIGHT
       };
 
 // MusicXML export break values

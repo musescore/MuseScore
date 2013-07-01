@@ -4674,14 +4674,14 @@ int main(int argc, char* av[])
                         qApp->setStyleSheet(appStyleSheet());
                         QPalette p(QApplication::palette());
                         QSettings s;
-                        p.setColor(QPalette::Window,        QColor(s.value("WindowColor", "#525252").toString()));
-                        p.setColor(QPalette::WindowText,    QColor(s.value("WindowTextColor", "#FFFFFF").toString()));
-                        p.setColor(QPalette::Base,          QColor(s.value("BaseColor", "#424242").toString()));
+                        p.setColor(QPalette::Window,        QColor(s.value("WindowColor",        "#525252").toString()));
+                        p.setColor(QPalette::WindowText,    QColor(s.value("WindowTextColor",    "#FFFFFF").toString()));
+                        p.setColor(QPalette::Base,          QColor(s.value("BaseColor",          "#424242").toString()));
                         p.setColor(QPalette::AlternateBase, QColor(s.value("AlternateBaseColor", "#626262").toString()));
-                        p.setColor(QPalette::Text,          QColor(s.value("TextColor", "#FFFFFF").toString()));
-                        p.setColor(QPalette::Button,        QColor(s.value("ButtonColor", "#525252").toString()));
-                        p.setColor(QPalette::ButtonText,    QColor(s.value("ButtonTextColor", "#FFFFFF").toString()));
-                        p.setColor(QPalette::BrightText,    QColor(s.value("BrightTextColor", "#000000").toString()));
+                        p.setColor(QPalette::Text,          QColor(s.value("TextColor",          "#FFFFFF").toString()));
+                        p.setColor(QPalette::Button,        QColor(s.value("ButtonColor",        "#525252").toString()));
+                        p.setColor(QPalette::ButtonText,    QColor(s.value("ButtonTextColor",    "#FFFFFF").toString()));
+                        p.setColor(QPalette::BrightText,    QColor(s.value("BrightTextColor",    "#000000").toString()));
                         QApplication::setPalette(p);
 
                         QPalette palette = QToolTip::palette();
@@ -4690,7 +4690,27 @@ int main(int argc, char* av[])
 
                         break;
                         }
-                  case STYLE_NATIVE:
+                  case STYLE_LIGHT:
+                        MgStyle* st = new MgStyle;
+                        QApplication::setStyle(st);
+                        qApp->setStyleSheet(appStyleSheet());
+                        QPalette p(QApplication::palette());
+                        QSettings s;
+                        p.setColor(QPalette::Window,        QColor(s.value("WindowColor",        "#c2c2c2").toString()));
+                        p.setColor(QPalette::WindowText,    QColor(s.value("WindowTextColor",    "#000000").toString()));
+                        p.setColor(QPalette::Base,          QColor(s.value("BaseColor",          "#b2b2b2").toString()));
+                        p.setColor(QPalette::AlternateBase, QColor(s.value("AlternateBaseColor", "#929292").toString()));
+                        p.setColor(QPalette::Text,          QColor(s.value("TextColor",          "#000000").toString()));
+                        p.setColor(QPalette::Button,        QColor(s.value("ButtonColor",        "#c2c2c2").toString()));
+                        p.setColor(QPalette::ButtonText,    QColor(s.value("ButtonTextColor",    "#000000").toString()));
+                        p.setColor(QPalette::BrightText,    QColor(s.value("BrightTextColor",    "#ffffff").toString()));
+                        QApplication::setPalette(p);
+
+                        QPalette palette = QToolTip::palette();
+                        palette.setBrush(QPalette::ToolTipBase, QBrush(QColor(s.value("ToolTipBaseColor", "#808080").toString())));
+                        QToolTip::setPalette(palette);
+
+                        break;
                         break;
                   }
             seq            = new Seq();
