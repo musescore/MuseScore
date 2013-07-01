@@ -84,6 +84,10 @@ class SlurSegment : public SpannerSegment {
       virtual void move(qreal xd, qreal yd) { move(QPointF(xd, yd)); }
       virtual void move(const QPointF& s);
 
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID id) const;
+
       SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
       void write(Xml& xml, int no) const;
@@ -150,8 +154,10 @@ class SlurTie : public Spanner {
       SlurSegment* segmentAt(int n) const { return (SlurSegment*)spannerSegments().at(n); }
       virtual void slurPos(SlurPos*) = 0;
       virtual void computeBezier(SlurSegment*, QPointF so = QPointF()) = 0;
+
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID id) const;
       };
 
 //---------------------------------------------------------

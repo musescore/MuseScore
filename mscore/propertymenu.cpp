@@ -30,7 +30,6 @@
 #include "textproperties.h"
 #include "sectionbreakprop.h"
 #include "stafftextproperties.h"
-#include "slurproperties.h"
 #include "glissandoproperties.h"
 #include "fretproperties.h"
 #include "selinstrument.h"
@@ -277,7 +276,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::SLUR_SEGMENT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Edit Mode"))->setData("edit");
-            popup->addAction(tr("Slur Properties..."))->setData("slur-props");
             }
       else if (e->type() == Element::REST) {
             genPropertyMenu1(e, popup);
@@ -567,18 +565,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         }
                   else
                         qDebug("no template selected?\n");
-                  }
-            }
-      else if (cmd == "slur-props") {
-            SlurSegment* ss = static_cast<SlurSegment*>(e);
-            SlurProperties sp(0);
-            sp.setLineType(ss->slurTie()->lineType());
-            int rv = sp.exec();
-            if (rv) {
-                  int lt = sp.getLineType();
-                  if (lt != ss->slurTie()->lineType()) {
-                        score()->undoChangeProperty(ss->slurTie(), P_LINE_TYPE, lt);
-                        }
                   }
             }
       else if (cmd == "articulation") {
