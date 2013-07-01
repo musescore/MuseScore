@@ -360,14 +360,10 @@ void Score::updateRepeatList(bool expandRepeats)
 void Score::updateHairpin(Hairpin* h)
       {
       Staff* st = h->staff();
-      int tick  = h->segment()->tick();
+      int tick  = h->tick();
       int velo  = st->velocities().velo(tick);
       int incr  = h->veloChange();
-
-      Segment* es = static_cast<Segment*>(h->endElement());
-      if (!es || es->parent() == 0)
-            return;
-      int tick2 = es->tick() - 1;
+      int tick2 = h->tick2() - 1;
 
       //
       // If velocity increase/decrease is zero, then assume
@@ -413,11 +409,8 @@ void Score::updateHairpin(Hairpin* h)
 void Score::removeHairpin(Hairpin* h)
       {
       Staff* st = h->staff();
-      int tick  = h->segment()->tick();
-      Segment* es = static_cast<Segment*>(h->endElement());
-      if (!es)
-            return;
-      int tick2 = es->tick() - 1;
+      int tick  = h->tick();
+      int tick2 = h->tick2() - 1;
 
       switch(h->dynRange()) {
             case Element::DYNAMIC_STAFF:
