@@ -49,7 +49,6 @@ public:
       };
 
 extern Tablature emptyStringData;
-extern Tablature guitarTablature;
 
 }     // namespace Ms
 #endif
