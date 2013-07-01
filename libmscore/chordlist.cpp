@@ -1769,6 +1769,32 @@ bool ChordList::write(const QString& name) const
       return true;
       }
 
+//---------------------------------------------------------
+//   loaded
+//---------------------------------------------------------
+
+bool ChordList::loaded() const
+      {
+      // track whether a description file has been loaded
+      // since chords.xml really doesn't load enough to stand alone,
+      // we need a way to track when a "real" chord list has been loaded
+      // for lack of anything better, key off renderListRoot
+      return !renderListRoot.isEmpty();
+      }
+
+//---------------------------------------------------------
+//   unload
+//---------------------------------------------------------
+
+void ChordList::unload()
+      {
+      clear();
+      symbols.clear();
+      fonts.clear();
+      renderListRoot.clear();
+      renderListBase.clear();
+      chordTokenList.clear();
+      }
+
 
 }
-
