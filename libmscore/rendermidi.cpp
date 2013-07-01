@@ -130,17 +130,29 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             return;
 
       int pitch = note->ppitch();
-      int tick1 = note->chord()->tick() + tickOffset;
 
-      int ticks = note->playTicks();
-      foreach(const NoteEvent& e, note->playEvents()) {
+      Chord* chord = note->chord();
+      int tieLen;
+      int ticks;
+      if (chord->isGrace()) {
+            chord = static_cast<Chord*>(chord->parent());
+            tieLen = 0;
+            ticks = chord->duration().ticks();
+            }
+      else {
+            ticks = chord->duration().ticks();
+            tieLen = note->playTicks() - ticks;
+            }
+      int tick1 = chord->tick() + tickOffset;
+
+      foreach (const NoteEvent& e, note->playEvents()) {
             int p = pitch + e.pitch();
             if (p < 0)
                   p = 0;
             else if (p > 127)
                   p = 127;
             int on  = tick1 + (ticks * e.ontime())/1000;
-            int off = on + (ticks * e.len())/1000 - 1;
+            int off = on + (ticks * e.len())/1000 - 1 + tieLen;
             playNote(events, note, channel, p, velo, on, off);
             }
 #if 0
@@ -261,9 +273,13 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   Staff* staff = chord->staff();
                   int velocity = staff->velocities().velo(seg->tick());
                   Instrument* instr = chord->staff()->part()->instr(tick);
-
                   int channel = instr->channel(chord->upNote()->subchannel()).channel;
-                  foreach(const Note* note, chord->notes())
+
+                  for (Chord* c : chord->graceNotes()) {
+                        for (const Note* note : c->notes())
+                              collectNote(events, channel, note, velocity, tickOffset);
+                        }
+                  foreach (const Note* note, chord->notes())
                         collectNote(events, channel, note, velocity, tickOffset);
                   }
             }
@@ -307,30 +323,6 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               }
                         }
                   }
-#if 0 // TODO-S
-            for(Spanner* e = s->spannerFor(); e; e = e->next()) {
-                  if (e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
-                        continue;
-                  if (e->type() == Element::PEDAL) {
-                        Segment* s1 = static_cast<Segment*>(e->startElement());
-                        Segment* s2 = static_cast<Segment*>(e->endElement());
-                        if (s2 == 0) {
-                              qDebug("CollectMeasureEvents: spanner %s: no end element at measure %d, staff %d",
-                                 e->name(), s1->measure()->no(), e->staffIdx());
-                              continue;
-                              }
-                        Staff* staff = e->staff();
-
-                        int channel = staff->channel(s1->tick(), 0);
-
-                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
-                        events->insert(std::pair<int,NPlayEvent>(s1->tick() + tickOffset, event));
-
-                        event.setValue(0);
-                        events->insert(std::pair<int,NPlayEvent>(s2->tick() + tickOffset - 1, event));
-                        }
-                  }
-#endif
             }
       }
 
@@ -366,7 +358,7 @@ void Score::updateRepeatList(bool expandRepeats)
 //   updateHairpin
 //---------------------------------------------------------
 
-void Score::updateHairpin(Hairpin* h)
+void Score::updateHairpin(Hairpin* /*h*/)
       {
 #if 0 // TODO-S
       Staff* st = h->staff();
@@ -421,7 +413,7 @@ void Score::updateHairpin(Hairpin* h)
 //   removeHairpin
 //---------------------------------------------------------
 
-void Score::removeHairpin(Hairpin* h)
+void Score::removeHairpin(Hairpin* /*h*/)
       {
 #if 0 // TODO-S
       Staff* st = h->staff();
@@ -574,11 +566,13 @@ static int gateTime(Chord* chord)
 
 //---------------------------------------------------------
 //   renderChord
+//    ontime in 1/1000 of duration
 //---------------------------------------------------------
 
 static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       {
       QList<NoteEventList> ell;
+
       if (chord->notes().isEmpty())
             return ell;
       Segment* seg = chord->segment();
@@ -722,11 +716,6 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       return ell;
       }
 
-QList<NoteEventList> renderChord(Chord* chord)
-      {
-      return renderChord(chord, gateTime(chord), 0);
-      }
-
 //---------------------------------------------------------
 //   createPlayEvents
 //    create default play events
@@ -738,11 +727,17 @@ static void createPlayEvents(Chord* chord, int gateTime)
       int ontime = 0;
       if (n) {
             //
-            //    render chords with grace notes
+            //  render grace notes:
+            //  simplified implementation:
+            //  - grace notes start on the beat of the main note
+            //  - duration: acciacatura: 0.128 * duration of main note
+            //              appoggiatura: 0.5  * duration of main note
+            //  - the duration is divided by the number of grace notes
+            //  - the grace note duration as notated does not matter
             //
-            ontime = (chord->graceNotes()[0]->noteType() ==  NOTE_ACCIACCATURA) ? 128 : 500;
-            qreal scale = (qreal)chord->graceNotes()[0]->duration().denominator() / (qreal)chord->duration().denominator();
-            int graceDuration = (ontime * scale)/ n;
+            Chord* graceChord = chord->graceNotes()[0];
+            ontime      = (graceChord->noteType() ==  NOTE_ACCIACCATURA) ? 128 : 500;
+            int graceDuration = ontime / n;
 
             int on = 0;
             for (int i = 0; i < n; ++i) {
@@ -853,6 +848,10 @@ void Score::renderMidi(EventMap* events)
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
+
+            //
+            //    add metronome tick events
+            //
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                   Fraction ts = sigmap()->timesig(m->tick()).timesig();
 
@@ -865,6 +864,28 @@ void Score::renderMidi(EventMap* events)
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;
+                  }
+            //
+            // create sustain pedal events
+            //
+            int utick1 = rs->utick;
+            int utick2 = utick1 + rs->len;
+
+            for (std::pair<int,Spanner*> sp : _spanner) {
+                  Spanner* s = sp.second;
+                  if (s->type() != Element::PEDAL)
+                        continue;
+
+                  int channel = s->staff()->channel(s->tick(), 0);
+                  if (s->tick() >= utick1 && s->tick() < utick2) {
+                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
+                        events->insert(std::pair<int,NPlayEvent>(s->tick() + tickOffset, event));
+                        }
+
+                  if (s->tick2() >= utick1 && s->tick2() < utick2) {
+                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
+                        events->insert(std::pair<int,NPlayEvent>(s->tick2() + tickOffset, event));
+                        }
                   }
             }
       }
