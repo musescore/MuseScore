@@ -524,12 +524,13 @@ void Score::layoutStage3()
 void Score::doLayout()
       {
       int idx = _style.valueSt(ST_MusicalSymbolFont) == "Gonville" ? 1 : 0;
+
+      initSymbols(idx);
+
       if (idx != _symIdx) {
             _symIdx = idx;
             _noteHeadWidth  = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
             }
-
-      initSymbols(_symIdx);
 
       if (layoutFlags & LAYOUT_FIX_TICKS)
             fixTicks();
