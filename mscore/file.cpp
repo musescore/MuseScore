@@ -1773,6 +1773,11 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   if (f.open(QIODevice::ReadOnly))
                         score->style()->load(&f);
                   }
+            else {
+                  if (score->style()->value(ST_chordsXmlFile).toBool())
+                        score->style()->chordList()->read("chords.xml");
+                  score->style()->chordList()->read(score->style()->valueSt(ST_chordDescriptionFile));
+                  }
             uint n = sizeof(imports)/sizeof(*imports);
             uint i;
             for (i = 0; i < n; ++i) {

@@ -1072,11 +1072,11 @@ void StyleData::load(XmlReader& e)
                   _customChordList = true;
             else
                   _customChordList = false;
-            _chordList.clear();
+            _chordList.unload();
             }
 
       // make sure we have a chordlist
-      if (_chordList.isEmpty() && !chordListTag) {
+      if (!_chordList.loaded() && !chordListTag) {
             if (value(ST_chordsXmlFile).toBool())
                   _chordList.read("chords.xml");
             _chordList.read(newChordDescriptionFile);
