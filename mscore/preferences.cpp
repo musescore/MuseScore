@@ -482,8 +482,8 @@ void Preferences::read()
             }
       else {
             iconGroup = "icons-dark/";
-            appStyleFile = ":/data/appstyle.css";
-            globalStyle  = STYLE_NATIVE;
+            appStyleFile = ":/data/appstyle-light.css";
+            globalStyle  = STYLE_LIGHT;
             }
 
       singlePalette    = s.value("singlePalette",    singlePalette).toBool();
@@ -1409,9 +1409,9 @@ void PreferenceDialog::apply()
             }
       else {
             iconGroup = "icons/";
-            appStyleFile = ":/data/appstyle.css";
-            prefs.styleName = "native";
-            prefs.globalStyle = STYLE_NATIVE;
+            appStyleFile = ":/data/appstyle-light.css";
+            prefs.styleName = "light";
+            prefs.globalStyle = STYLE_LIGHT;
             }
 
       if (languageChanged) {
