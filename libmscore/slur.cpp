@@ -1052,6 +1052,68 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant SlurTie::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_LINE_TYPE:
+                  return 0;
+            case P_SLUR_DIRECTION:
+                  return MScore::AUTO;
+            default:
+                  return Spanner::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant SlurSegment::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_LINE_TYPE:
+            case P_SLUR_DIRECTION:
+                  return slurTie()->getProperty(propertyId);
+            default:
+                  return SpannerSegment::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_LINE_TYPE:
+            case P_SLUR_DIRECTION:
+                  return slurTie()->setProperty(propertyId, v);
+            default:
+                  return SpannerSegment::setProperty(propertyId, v);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant SlurSegment::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_LINE_TYPE:
+            case P_SLUR_DIRECTION:
+                  return slurTie()->propertyDefault(id);
+            default:
+                  return SpannerSegment::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 

@@ -198,6 +198,9 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::PEDAL_SEGMENT:
                               ie = new InspectorTextLine(this);
                               break;
+                        case Element::SLUR_SEGMENT:
+                              ie = new InspectorSlur(this);
+                              break;
                         case Element::BAR_LINE:
                               ie = new InspectorBarLine(this);
                               break;
@@ -548,6 +551,27 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
             };
       mapSignals();
       }
+
+//---------------------------------------------------------
+//   InspectorSlur
+//---------------------------------------------------------
+
+InspectorSlur::InspectorSlur(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      s.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,      0, 0, e.color,    e.resetColor    },
+            { P_VISIBLE,    0, 0, e.visible,  e.resetVisible  },
+            { P_USER_OFF,   0, 0, e.offsetX,  e.resetX        },
+            { P_USER_OFF,   1, 0, e.offsetY,  e.resetY        },
+            { P_LINE_TYPE,  0, 0, s.lineType, s.resetLineType }
+            };
+      mapSignals();
+      }
+
 
 #if 0
 
