@@ -44,7 +44,6 @@
 #include "accidental.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
-#include "rendermidi.h"
 #include "stemslash.h"
 #include "ledgerline.h"
 #include "drumset.h"
@@ -2277,7 +2276,7 @@ void Chord::reset()
       {
       score()->undoChangeProperty(this, P_STEM_DIRECTION, int(MScore::AUTO));
       score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::AUTO));
-      createPlayEvents(this);
+      score()->createPlayEvents(this);
       ChordRest::reset();
       }
 

@@ -46,7 +46,6 @@
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
-#include "rendermidi.h"
 
 namespace Ms {
 
@@ -101,8 +100,8 @@ void Score::updateChannel()
                               }
                         }
                   }
+            }
       }
-}
 
 //---------------------------------------------------------
 //   playNote
@@ -358,9 +357,8 @@ void Score::updateRepeatList(bool expandRepeats)
 //   updateHairpin
 //---------------------------------------------------------
 
-void Score::updateHairpin(Hairpin* /*h*/)
+void Score::updateHairpin(Hairpin* h)
       {
-#if 0 // TODO-S
       Staff* st = h->staff();
       int tick  = h->segment()->tick();
       int velo  = st->velocities().velo(tick);
@@ -388,7 +386,7 @@ void Score::updateHairpin(Hairpin* /*h*/)
       else if (endVelo < 1)
             endVelo = 1;
 
-      switch(h->dynRange()) {
+      switch (h->dynRange()) {
             case Element::DYNAMIC_STAFF:
                   st->velocities().setVelo(tick,  VeloEvent(VELO_RAMP, velo));
                   st->velocities().setVelo(tick2, VeloEvent(VELO_FIX, endVelo));
@@ -406,16 +404,14 @@ void Score::updateHairpin(Hairpin* /*h*/)
                         }
                   break;
             }
-#endif
       }
 
 //---------------------------------------------------------
 //   removeHairpin
 //---------------------------------------------------------
 
-void Score::removeHairpin(Hairpin* /*h*/)
+void Score::removeHairpin(Hairpin* h)
       {
-#if 0 // TODO-S
       Staff* st = h->staff();
       int tick  = h->segment()->tick();
       Segment* es = static_cast<Segment*>(h->endElement());
@@ -441,7 +437,6 @@ void Score::removeHairpin(Hairpin* /*h*/)
                         }
                   break;
             }
-#endif
       }
 
 //---------------------------------------------------------
@@ -523,45 +518,6 @@ void Score::renderStaff(EventMap* events, Staff* staff)
                         break;
                   }
             }
-      }
-
-//---------------------------------------------------------
-//   gateTime
-//---------------------------------------------------------
-
-static int gateTime(Chord* chord)
-      {
-      QList<Slur*> slurs;
-      int track = chord->track();
-      int gateTime = 100;
-      Score* score = chord->score();
-      for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-            const Segment::SegmentTypes st = Segment::SegChordRest;
-            for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                  ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-                  if (cr == 0)
-                        continue;
-#if 0 // TODO-S
-                  for (Spanner* spanner = cr->spannerFor(); spanner; spanner = spanner->next()) {
-                        if (spanner->type() == Element::SLUR)
-                              slurs.append(static_cast<Slur*>(spanner));
-                        }
-                  for (Spanner* spanner = cr->spannerBack(); spanner; spanner = spanner->next()) {
-                        if (spanner->type() == Element::SLUR)
-                              slurs.removeOne(static_cast<Slur*>(spanner));
-                        }
-#endif
-                  if (cr == chord) {
-                        if (slurs.isEmpty()) {
-                              Instrument* instr = cr->staff()->part()->instr(seg->tick());
-                              int channel = 0;
-                              instr->updateGateTime(&gateTime, channel, "");
-                              }
-                        break;
-                        }
-                  }
-            }
-      return gateTime;
       }
 
 //---------------------------------------------------------
@@ -721,8 +677,29 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
 //    create default play events
 //---------------------------------------------------------
 
-static void createPlayEvents(Chord* chord, int gateTime)
+void Score::createPlayEvents(Chord* chord)
       {
+      int gateTime = 100;
+
+      int tick = chord->tick();
+      Slur* slur = 0;
+      for (auto sp : _spanner) {
+            if (sp.second->type() != Element::SLUR || sp.second->track() != chord->track())
+                  continue;
+            Slur* s = static_cast<Slur*>(sp.second);
+            if (tick >= s->tick() && tick < s->tick2()) {
+                  slur = s;
+                  break;
+                  }
+            }
+      // gateTime is 100% for slured notes
+      if (!slur) {
+            Instrument* instr = chord->staff()->part()->instr(tick);
+            instr->updateGateTime(&gateTime, 0, "");
+            }
+
+      printf("gate time %d %d\n", tick, gateTime);
+
       int n = chord->graceNotes().size();
       int ontime = 0;
       if (n) {
@@ -772,57 +749,22 @@ static void createPlayEvents(Chord* chord, int gateTime)
             }
       }
 
-void createPlayEvents(Chord* chord)
-      {
-      createPlayEvents(chord, gateTime(chord));
-      }
-
-static void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
-      {
-      // skip linked staves, except primary
-      if (!m->score()->staff(track / VOICES)->primaryStaff())
-            return;
-      QList<Chord*> graceNotes;
-      const Segment::SegmentTypes st = Segment::SegChordRest;
-      for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-            ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-            if (cr == 0)
-                  continue;
-#if 0 //TODO-S
-            for (Spanner* spanner = cr->spannerFor(); spanner; spanner = spanner->next()) {
-                  if (spanner->type() == Element::SLUR)
-                        slurs->append(static_cast<Slur*>(spanner));
-                  }
-            for (Spanner* spanner = cr->spannerBack(); spanner; spanner = spanner->next()) {
-                  if (spanner->type() == Element::SLUR)
-                        slurs->removeOne(static_cast<Slur*>(spanner));
-                  }
-#endif
-            if (cr->type() != Element::CHORD)
-                  continue;
-            Chord* chord = static_cast<Chord*>(cr);
-            if (chord->noteType() != NOTE_NORMAL) {
-                  graceNotes.append(chord);
-                  continue;
-                  }
-            int gateTime = 100;
-            if (slurs->isEmpty()) {
-                  Instrument* instr = cr->staff()->part()->instr(seg->tick());
-                  int channel = 0;
-                  instr->updateGateTime(&gateTime, channel, "");
-                  }
-            createPlayEvents(chord, gateTime);
-            graceNotes.clear();
-            }
-      }
-
 void Score::createPlayEvents()
       {
-      QList<Slur*> slurs;
       int etrack = nstaves() * VOICES;
       for (int track = 0; track < etrack; ++track) {
-            for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
-                  Ms::createPlayEvents(m, track, &slurs);
+            for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+                  // skip linked staves, except primary
+                  if (!m->score()->staff(track / VOICES)->primaryStaff())
+                        continue;
+                  const Segment::SegmentTypes st = Segment::SegChordRest;
+                  for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+                        Chord* chord = static_cast<Chord*>(seg->element(track));
+                        if (chord == 0 || chord->type() != Element::CHORD)
+                              continue;
+                        createPlayEvents(chord);
+                        }
+                  }
             }
       }
 

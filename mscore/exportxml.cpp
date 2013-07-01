@@ -505,7 +505,7 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
 
       // search slur list for already started slur(s) stopping at this chord
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (slur[i] && slur[i]->tick() == chord->tick() && slur[i]->track() == chord->track()) {
+            if (slur[i] && slur[i]->tick2() == chord->tick() && slur[i]->track() == chord->track()) {
                   if (started[i]) {
                         slur[i] = 0;
                         started[i] = false;

@@ -67,7 +67,6 @@
 #include "audio.h"
 #include "instrtemplate.h"
 #include "cursor.h"
-#include "rendermidi.h"
 
 namespace Ms {
 
@@ -1426,7 +1425,7 @@ void Score::addElement(Element* element)
                   break;
 
             case Element::CHORD:
-                  Ms::createPlayEvents(static_cast<Chord*>(element));
+                  createPlayEvents(static_cast<Chord*>(element));
                   break;
 
             case Element::NOTE: {
@@ -1441,7 +1440,7 @@ void Score::addElement(Element* element)
                   {
                   Element* cr = element->parent();
                   if (cr->type() == Element::CHORD)
-                         Ms::createPlayEvents(static_cast<Chord*>(cr));
+                         createPlayEvents(static_cast<Chord*>(cr));
                   }
                   break;
             default:
@@ -1580,7 +1579,7 @@ void Score::removeElement(Element* element)
                   {
                   Element* cr = element->parent();
                   if (cr->type() == Element::CHORD)
-                         Ms::createPlayEvents(static_cast<Chord*>(cr));
+                         createPlayEvents(static_cast<Chord*>(cr));
                   }
                   break;
 
