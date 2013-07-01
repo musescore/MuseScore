@@ -36,8 +36,8 @@ install(FILES
 
 if (APPLE)
       install(FILES
-            appstyle-mac.css
-            RENAME appstyle.css
+            appstyle-mac-light.css
+            RENAME appstyle-light.css
             DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}styles
             )
       install(FILES
@@ -47,7 +47,7 @@ if (APPLE)
             )
 else (APPLE)
       install(FILES
-            appstyle.css
+            appstyle-light.css
             appstyle-dark.css
             DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}styles
             )
