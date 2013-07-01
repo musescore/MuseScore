@@ -393,33 +393,33 @@ void markChordsAsUsed(std::map<int, int> &usedFirstTupletNotes,
       {
       if (tupletChords.empty())
             return;
-      auto i = tupletChords.begin();
-      auto chordEventIt = i->second;
-      int chordOnTime = chordEventIt->first;
-      int voice = 0;
-                  // check is the note of the first tuplet chord in use
-      auto ii = usedFirstTupletNotes.find(chordOnTime);
-      if (ii == usedFirstTupletNotes.end())
-            ii = usedFirstTupletNotes.insert({chordOnTime, 1}).first;
-      else {
-            voice = ii->second;     // voice = counter - 1
-            ++(ii->second);         // increase chord note counter
-            }
 
-      ++i;              // start from the second chord
+      auto i = tupletChords.begin();
+      int tupletNoteIndex = i->first;
+      if (tupletNoteIndex == 0) {
+                        // check is the note of the first tuplet chord in use
+            int chordOnTime = i->second->first;
+            auto ii = usedFirstTupletNotes.find(chordOnTime);
+            if (ii == usedFirstTupletNotes.end())
+                  ii = usedFirstTupletNotes.insert({chordOnTime, 1}).first;
+            else
+                  ++(ii->second);         // increase chord note counter
+            ++i;              // start from the second chord
+            }
       for ( ; i != tupletChords.end(); ++i) {
                         // mark the chord as used
-            chordEventIt = i->second;
-            chordOnTime = chordEventIt->first;
+            int chordOnTime = i->second->first;
             usedChords.insert(chordOnTime);
-            chordEventIt->second.voice = voice;
             }
       }
 
-bool isChordInUse(const std::map<int, int> &usedFirstTupletNotes,
-                  const std::set<int> &usedChords,
-                  const std::map<int, std::multimap<int, MidiChord>::iterator> &tupletChords)
+bool areTupletChordsInUse(const std::map<int, int> &usedFirstTupletNotes,
+                          const std::set<int> &usedChords,
+                          const std::map<int, std::multimap<int, MidiChord>::iterator> &tupletChords)
       {
+      if (tupletChords.empty())
+            return false;
+
       auto i = tupletChords.begin();
       int tupletNoteIndex = i->first;
       if (tupletNoteIndex == 0) {
@@ -456,27 +456,70 @@ void filterTuplets(std::multimap<double, TupletInfo> &tuplets)
                   // onTime values - tick - of already used chords
       std::set<int> usedChords;
                   // select tuplets with min average error
-      for (auto tc = tuplets.begin(); tc != tuplets.end(); ) { // tc - tuplet candidate
+      for (auto tc = tuplets.begin(); tc != tuplets.end(); ) {  // tc - tuplet candidate
             auto &tupletChords = tc->second.chords;
                         // check for chords notes already used in another tuplets
             if (tupletChords.empty()
-                        || isChordInUse(usedFirstTupletNotes, usedChords, tupletChords)) {
+                        || areTupletChordsInUse(usedFirstTupletNotes, usedChords, tupletChords)) {
                   tc = tuplets.erase(tc);
                   continue;
                   }
                         // we can use this tuplet
             markChordsAsUsed(usedFirstTupletNotes, usedChords, tupletChords);
-            const auto &chordEventIt = tupletChords.begin()->second;
-            tc->second.voice = chordEventIt->second.voice;
             ++tc;
             }
       }
+
+int averagePitch(const std::map<int, std::multimap<int, MidiChord>::iterator> &chords)
+      {
+      int sumPitch = 0;
+      int noteCounter = 0;
+      for (const auto &chord: chords) {
+            const auto &midiNotes = chord.second->second.notes;
+            for (const auto &midiNote: midiNotes) {
+                  sumPitch += midiNote.pitch;
+                  ++noteCounter;
+                  }
+            }
+      return sumPitch / noteCounter;
+      }
+
+void sortNotesByPitch(std::multimap<int, MidiChord> &chords)
+      {
+      struct {
+            bool operator()(const MidiNote &n1, const MidiNote &n2)
+                  {
+                  return (n1.pitch > n2.pitch);
+                  }
+            } pitchComparator;
+
+      for (auto &chordEvent: chords) {
+            auto &midiNotes = chordEvent.second.notes;
+            std::sort(midiNotes.begin(), midiNotes.end(), pitchComparator);
+            }
+      }
+
+void sortTupletsByAveragePitch(std::vector<TupletInfo> &tuplets)
+      {
+      struct {
+            bool operator()(const TupletInfo &t1, const TupletInfo &t2)
+                  {
+                  return (averagePitch(t1.chords) > averagePitch(t2.chords));
+                  }
+            } averagePitchComparator;
+      std::sort(tuplets.begin(), tuplets.end(), averagePitchComparator);
+      }
+
+// tuplets should be filtered (for mutual validity)
 
 void separateTupletVoices(std::vector<TupletInfo> &tuplets,
                           std::multimap<int, MidiChord> &chords)
       {
                   // it's better before to sort tuplets by their average pitch
                   // and notes of each chord as well (desc. order)
+      sortNotesByPitch(chords);
+      sortTupletsByAveragePitch(tuplets);
+
       for (auto now = tuplets.begin(); now != tuplets.end(); ++now) {
             int counter = 0;
             auto lastMatch = tuplets.end();
@@ -490,7 +533,8 @@ void separateTupletVoices(std::vector<TupletInfo> &tuplets,
                               // into 2 voices
                   auto firstPrevChordIt = prev->chords.begin();
                   if (firstNowChordIt->first == 0 && firstPrevChordIt->first == 0
-                              && firstNowChordIt->second->second.onTime == firstPrevChordIt->second->second.onTime) {
+                              && firstNowChordIt->second->second.onTime
+                              == firstPrevChordIt->second->second.onTime) {
                         lastMatch = prev;
                         }
                   }
@@ -550,7 +594,7 @@ void quantizeChordsAndFindTuplets(std::multimap<int, TupletData> &tupletEvents,
                                   const TimeSigMap* sigmap,
                                   int lastTick)
       {
-      std::multimap<int, MidiChord> quantizedChords;  // set of already quantized onTime values
+      std::multimap<int, MidiChord> quantizedChords;  // chords with already quantized onTime values
                   // quantize chords in tuplets
       int startBarTick = 0;
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
@@ -558,8 +602,14 @@ void quantizeChordsAndFindTuplets(std::multimap<int, TupletData> &tupletEvents,
             Fraction barFraction = sigmap->timesig(startBarTick).timesig();
             auto tuplets = findTupletCandidatesOfBar(startBarTick, endBarTick, barFraction, chords);
             filterTuplets(tuplets);
+
+            std::vector<TupletInfo> preparedTuplets;
+            for (const auto &t: tuplets)
+                  preparedTuplets.push_back(t.second);
+            separateTupletVoices(preparedTuplets, chords);
+
             for (auto &tuplet: tuplets) {
-                  auto &tupletInfo = tuplet.second;
+                  TupletInfo &tupletInfo = tuplet.second;
                   auto &infoChords = tupletInfo.chords;
                   for (auto &tupletChord: infoChords) {
                         int tupletNoteNum = tupletChord.first;
