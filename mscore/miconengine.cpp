@@ -13,6 +13,7 @@
 // this is a modified version of qt QSvgIconEngine
 
 #include "miconengine.h"
+#include "preferences.h"
 
 //---------------------------------------------------------
 //   MIconEnginePrivate
@@ -161,49 +162,79 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       renderer.render(&p);
       p.end();
 
+      bool light = Ms::preferences.globalStyle == Ms::STYLE_LIGHT;
+
       int ww = img.width();
-#if 1
       if (state == QIcon::On) {
-            for (int y = 0; y < img.height(); ++y) {
-                  quint32* p = (quint32*)img.scanLine(y);
-                  for (int x = 0; x < ww; ++x) {
-                        if (*p & 0xff000000) {
-                              int d = 0xff - (*p & 0xff);
-                              int dd = 50;
-                              QColor color(QColor::fromRgba(*p));
-                              int r = 70 - d + dd;
-                              if (r < 0)
-                                    r = 0;
-                              int g = 130 - d + dd;
-                              if (g < 0)
-                                    g = 0;
-                              int b = 180 - d + dd;
-                              if (b < 0)
-                                    b = 0;
-                              QColor nc = QColor(r, g, b, color.alpha());
-                              *p = nc.rgba();
+            if (light) {
+                  for (int y = 0; y < img.height(); ++y) {
+                        QRgb *scanLine = (QRgb*)img.scanLine(y);
+                        for (int x = 0; x < img.width(); ++x) {
+                              QRgb pixel = *scanLine;
+                              int alpha = qAlpha(pixel);
+                              if (alpha < 0)
+                                    alpha = 0;
+                              *scanLine = qRgba(qRed(255-pixel), qGreen(255-pixel), qBlue(255-pixel), alpha);
+                              ++scanLine;
                               }
-                        ++p;
+                        }
+                  }
+            else {
+                  for (int y = 0; y < img.height(); ++y) {
+                        quint32* p = (quint32*)img.scanLine(y);
+                        for (int x = 0; x < ww; ++x) {
+                              if (*p & 0xff000000) {
+                                    int d = 0xff - (*p & 0xff);
+                                    int dd = 50;
+                                    QColor color(QColor::fromRgba(*p));
+                                    int r = 70 - d + dd;
+                                    if (r < 0)
+                                          r = 0;
+                                    int g = 130 - d + dd;
+                                    if (g < 0)
+                                          g = 0;
+                                    int b = 180 - d + dd;
+                                    if (b < 0)
+                                          b = 0;
+                                    QColor nc = QColor(r, g, b, color.alpha());
+                                    *p = nc.rgba();
+                                    }
+                              ++p;
+                              }
                         }
                   }
             }
       else {
-#endif
             // change alpha channel
             int delta = 51;
             if (mode == QIcon::Disabled)
                   delta = 178;
             else if (state == QIcon::On)
                   delta = 0;
-            for (int y = 0; y < img.height(); ++y) {
-                  QRgb *scanLine = (QRgb*)img.scanLine(y);
-                  for (int x = 0; x < img.width(); ++x) {
-                        QRgb pixel = *scanLine;
-                        int alpha = qAlpha(pixel) - delta;
-                        if (alpha < 0)
-                              alpha = 0;
-                        *scanLine = qRgba(qRed(pixel), qGreen(pixel), qBlue(pixel), alpha);
-                        ++scanLine;
+            if (light) {
+                  for (int y = 0; y < img.height(); ++y) {
+                        QRgb *scanLine = (QRgb*)img.scanLine(y);
+                        for (int x = 0; x < img.width(); ++x) {
+                              QRgb pixel = *scanLine;
+                              int alpha = qAlpha(pixel) - delta;
+                              if (alpha < 0)
+                                    alpha = 0;
+                              *scanLine = qRgba(qRed(255-pixel), qGreen(255-pixel), qBlue(255-pixel), alpha);
+                              ++scanLine;
+                              }
+                        }
+                  }
+            else {
+                  for (int y = 0; y < img.height(); ++y) {
+                        QRgb *scanLine = (QRgb*)img.scanLine(y);
+                        for (int x = 0; x < img.width(); ++x) {
+                              QRgb pixel = *scanLine;
+                              int alpha = qAlpha(pixel) - delta;
+                              if (alpha < 0)
+                                    alpha = 0;
+                              *scanLine = qRgba(qRed(pixel), qGreen(pixel), qBlue(pixel), alpha);
+                              ++scanLine;
+                              }
                         }
                   }
             }
@@ -280,4 +311,5 @@ QIconEngine *MIconEngine::clone() const
       {
       return new MIconEngine(*this);
       }
+
 

@@ -398,7 +398,7 @@
             </item>
             <item>
              <property name="text">
-              <string>native</string>
+              <string>light</string>
              </property>
             </item>
            </widget>
@@ -2589,9 +2589,6 @@
               </widget>
              </item>
             </layout>
-            <zorder>exportNoBreaks</zorder>
-            <zorder>exportAllBreaks</zorder>
-            <zorder>exportManualBreaks</zorder>
             <zorder>exportNoBreaks</zorder>
             <zorder>exportAllBreaks</zorder>
             <zorder>exportManualBreaks</zorder>
