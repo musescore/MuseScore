@@ -487,7 +487,7 @@ void Staff::read(XmlReader& e)
                         }
                   else {
                         int idx = score()->staffIdx(this);
-                        if (v < idx)
+                        if (v >= 0 && v < idx)
                               linkTo(score()->staff(v));
                         }
                   }
