@@ -426,6 +426,7 @@ class Score : public QObject {
       void insertTime(int tickPos, int tickLen);
 
    protected:
+      void createPlayEvents(Chord*);
       SynthesizerState _synthesizerState;
 
    public:
@@ -939,6 +940,7 @@ class Score : public QObject {
       ChordRest* findCR(int tick, int track) const;
 
       friend class ChangeSynthesizerState;
+      friend class Chord;
       };
 
 extern Score* gscore;
