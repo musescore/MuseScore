@@ -63,7 +63,7 @@ class MTrack {
       bool hasKey = false;
 
       std::multimap<int, MidiChord> chords;
-      std::multimap<int, TupletData> tuplets;
+      std::multimap<int, TupletData> tuplets;   // <tupletOnTime, TupletData>
 
       void convertTrack(int lastTick);
       void processPendingNotes(QList<MidiChord>& midiChords, int voice, int startChordTick, int nextChordTick);
@@ -470,6 +470,22 @@ void MTrack::fillGapWithRests(Score* score, int voice, int startChordTick,
                   rest->setTrack(track);
                   Segment* s = measure->getSegment(rest, startChordTick);
                   s->add(rest);
+
+
+                  // TODO: optimize search (lower_bound, ...)
+                  for (auto &tupletEvent: tuplets) {
+                        auto &tupletInfo = tupletEvent.second;
+                        if (tupletInfo.voice != voice)
+                              continue;
+
+                        if (startChordTick >= tupletInfo.onTime
+                                    && startChordTick + len <= tupletInfo.onTime + tupletInfo.len) {
+                                          // add chord to the tuplet
+                              tupletInfo.elements.push_back(rest);
+                              }
+                        }
+
+
                   restLen -= len;
                   startChordTick += len;
                   }
@@ -487,10 +503,27 @@ void MTrack::fillGapWithRests(Score* score, int voice, int startChordTick,
                         rest->setTrack(track);
                         Segment* s = measure->getSegment(Segment::SegChordRest, startChordTick);
                         s->add(rest);
+
+
+                        // TODO: optimize search (lower_bound, ...)
+                        for (auto &tupletEvent: tuplets) {
+                              auto &tupletInfo = tupletEvent.second;
+                              if (tupletInfo.voice != voice)
+                                    continue;
+
+                              if (startChordTick >= tupletInfo.onTime
+                                          && startChordTick + len <= tupletInfo.onTime + tupletInfo.len) {
+                                                // add chord to the tuplet
+                                    tupletInfo.elements.push_back(rest);
+                                    }
+                              }
+
+
                         restLen -= duration.ticks();
                         startChordTick += duration.ticks();
                         }
                   }
+
             }
       }
 
@@ -594,6 +627,23 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
                   MidiChord& midiChord = midiChords[k];
                   setMusicNotesFromMidi(score, midiChord.notes, len, chord, tick,
                                         drumset, useDrumset);
+
+
+                  // TODO: optimize search (lower_bound, ...)
+                  for (auto &tupletEvent: tuplets) {
+                        auto &tupletInfo = tupletEvent.second;
+                        if (tupletInfo.voice != voice)
+                              continue;
+
+                        if (midiChord.onTime >= tupletInfo.onTime
+                                    && midiChord.onTime + len <= tupletInfo.onTime + tupletInfo.len) {
+                                          // add chord to the tuplet
+                              tupletInfo.elements.push_back(chord);
+                              }
+                        }
+
+
+
                   if (midiChord.duration <= len) {
                         midiChords.removeAt(k);
                         --k;
