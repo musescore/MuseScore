@@ -319,18 +319,12 @@ void Beam::layout1()
                   }
 
             cross   = minMove < maxMove;
-            int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
+            // int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
             slope   = 0.0;
 
-            if (cross || _userModified[idx]) {
-                  //
-                  // guess stem direction for every chord
-                  //
-                  }
-            else {
-                  foreach(ChordRest* cr, _elements)
-                        cr->setUp(_up);
-                  }
+            foreach(ChordRest* cr, _elements)
+                  cr->setUp(_up);
+
             }     // end of if/else(tablature)
       }
 
