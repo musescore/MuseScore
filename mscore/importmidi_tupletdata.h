@@ -4,12 +4,15 @@
 
 namespace Ms {
 
+class Element;
+
 struct TupletData
       {
       int voice;
       int onTime;
       int len;
       int tupletNumber;
+      std::vector<Element *> elements;
       };
 
 class MidiChord;
