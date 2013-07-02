@@ -641,8 +641,14 @@ void Score::doLayout()
                   }
             }
 
-      for (const std::pair<int,Spanner*>& s : _spanner)
-            s.second->layout();
+      for (const std::pair<int,Spanner*>& s : _spanner) {
+            Spanner* sp = s.second;
+            if (sp->tick() == -1 || sp->tick2() == -1) {
+                  printf("bad spanner %s %d - %d\n", sp->name(), sp->tick(), sp->tick2());
+                  }
+            else
+                  sp->layout();
+            }
 
       if (layoutMode() != LayoutLine) {
             layoutSystems2();
