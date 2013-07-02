@@ -496,6 +496,7 @@ void MTrack::fillGapWithRests(Score* score, int voice, int startChordTick,
 
 void setMusicNotesFromMidi(Score *score,
                            const QList<MidiNote> &midiNotes,
+                           int len,
                            Chord *chord,
                            int tick,
                            const Drumset *drumset,
@@ -515,7 +516,7 @@ void setMusicNotesFromMidi(Score *score,
 
             NoteEventList el;
             int ron  = (mn.onTime - tick) * 1000 / actualTicks;
-            int rlen = mn.len * 1000 / actualTicks;
+            int rlen = len * 1000 / actualTicks;
             el.append(NoteEvent(0, ron, rlen));
             note->setPlayEvents(el);
 
@@ -591,7 +592,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
 
             for (int k = 0; k < midiChords.size(); ++k) {
                   MidiChord& midiChord = midiChords[k];
-                  setMusicNotesFromMidi(score, midiChord.notes, chord, tick,
+                  setMusicNotesFromMidi(score, midiChord.notes, len, chord, tick,
                                         drumset, useDrumset);
                   if (midiChord.duration <= len) {
                         midiChords.removeAt(k);
