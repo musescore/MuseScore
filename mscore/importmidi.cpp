@@ -614,12 +614,35 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
       fillGapWithRests(score, voice, startChordTick, nextChordTick - startChordTick, track);
       }
 
+// here is supposed that all voices in bar go in order: 0, 1, 2...
+// and there cannot be missed voices like 0, 2... (#1 is missing)
+
+int MTrack::voicesInBar(int tickInBar)
+      {
+      Score* score     = staff->score();
+      Measure* measure = score->tick2measure(tickInBar);
+
+      auto it = chords.upper_bound(measure->tick() + measure->ticks());
+      if (it == chords.end())
+            return 0;
+
+      int maxVoice = 0;
+      --it;
+      for (; it->first + it->second.duration > measure->tick(); --it) {
+            if (it->second.voice > maxVoice)
+                  maxVoice = it->second.voice;
+            if (it == chords.begin())
+                  break;
+            }
+      return maxVoice + 1;
+      }
+
 void MTrack::convertTrack(int lastTick)
       {
       Score* score     = staff->score();
       int key          = 0;                      // TODO-LIB findKey(mtrack, score->sigmap());
       int track        = staff->idx() * VOICES;
-      int voices       = VOICES;          // VOICES;  // mtrack->separateVoices(2);
+      int voices       = 1;          // VOICES;  // mtrack->separateVoices(2);
 
       for (int voice = 0; voice < voices; ++voice) {
                         // startChordTick is onTime value of all simultaneous notes
@@ -630,8 +653,8 @@ void MTrack::convertTrack(int lastTick)
 
             for (auto it = chords.begin(); it != chords.end();) {
                   int nextChordTick = it->first;
-                  const MidiChord& e = it->second;
-                  if (e.voice != voice) {
+                  const MidiChord& midiChord = it->second;
+                  if (midiChord.voice != voice) {
                         ++it;
                         continue;
                         }
@@ -641,12 +664,12 @@ void MTrack::convertTrack(int lastTick)
                               // collect all midiChords on current tick position
                   startChordTick = nextChordTick;       // debug
                   for (;it != chords.end(); ++it) {
-                        const MidiChord& e = it->second;
+                        const MidiChord& midiChord = it->second;
                         if (it->first != startChordTick)
                               break;
-                        if (e.voice != voice)
+                        if (midiChord.voice != voice)
                               continue;
-                        midiChords.append(e);
+                        midiChords.append(midiChord);
                         }
                   if (midiChords.isEmpty())
                         break;
