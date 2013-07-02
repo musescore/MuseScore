@@ -772,7 +772,7 @@ void Note::read(XmlReader& e)
                   if (ok) {
                         // on older scores, a note could have both a <userAccidental> tag and an <Accidental> tag
                         // if a userAccidental has some other property set (like for instance offset)
-                        // only costruct a new accidental, if the other tag has not been read yet
+                        // only construct a new accidental, if the other tag has not been read yet
                         // (<userAccidental> tag is only used in older scores: no need to check the score mscVersion)
                         if (!hasAccidental) {
                               _accidental = new Accidental(score());
@@ -784,44 +784,35 @@ void Note::read(XmlReader& e)
                         Accidental::AccidentalType at = Accidental::ACC_NONE;
                         switch(k) {
                               case 0: at = Accidental::ACC_NONE; break;
-                              case 1:
-                              case 11: at = Accidental::ACC_SHARP; break;
-                              case 2:
-                              case 12: at = Accidental::ACC_FLAT; break;
-                              case 3:
-                              case 13: at = Accidental::ACC_SHARP2; break;
-                              case 4:
-                              case 14: at = Accidental::ACC_FLAT2; break;
-                              case 5:
-                              case 15: at = Accidental::ACC_NATURAL; break;
+                              case 1: at = Accidental::ACC_SHARP; break;
+                              case 2: at = Accidental::ACC_FLAT; break;
+                              case 3: at = Accidental::ACC_SHARP2; break;
+                              case 4: at = Accidental::ACC_FLAT2; break;
+                              case 5: at = Accidental::ACC_NATURAL; break;
 
-                              case 6:  at = Accidental::ACC_SHARP; bracket = true; break;
-                              case 7:  at = Accidental::ACC_FLAT; bracket = true; break;
-                              case 8:  at = Accidental::ACC_SHARP2; bracket = true; break;
-                              case 9:  at = Accidental::ACC_FLAT2; bracket = true; break;
-                              case 10: at = Accidental::ACC_NATURAL; bracket = true; break;
+                              case 6: at = Accidental::ACC_FLAT_SLASH; break;
+                              case 7: at = Accidental::ACC_FLAT_SLASH2; break;
+                              case 8: at = Accidental::ACC_MIRRORED_FLAT2; break;
+                              case 9: at = Accidental::ACC_MIRRORED_FLAT; break;
+                              case 10: at = Accidental::ACC_MIRRIRED_FLAT_SLASH; break;
+                              case 11: at = Accidental::ACC_FLAT_FLAT_SLASH; break;
 
-                              case 16: at = Accidental::ACC_FLAT_SLASH; break;
-                              case 17: at = Accidental::ACC_FLAT_SLASH2; break;
-                              case 18: at = Accidental::ACC_MIRRORED_FLAT2; break;
-                              case 19: at = Accidental::ACC_MIRRORED_FLAT; break;
-                              case 20: at = Accidental::ACC_MIRRIRED_FLAT_SLASH; break;
-                              case 21: at = Accidental::ACC_FLAT_FLAT_SLASH; break;
+                              case 12: at = Accidental::ACC_SHARP_SLASH; break;
+                              case 13: at = Accidental::ACC_SHARP_SLASH2; break;
+                              case 14: at = Accidental::ACC_SHARP_SLASH3; break;
+                              case 15: at = Accidental::ACC_SHARP_SLASH4; break;
 
-                              case 22: at = Accidental::ACC_SHARP_SLASH; break;
-                              case 23: at = Accidental::ACC_SHARP_SLASH2; break;
-                              case 24: at = Accidental::ACC_SHARP_SLASH3; break;
-                              case 25: at = Accidental::ACC_SHARP_SLASH4; break;
-
-                              case 26: at = Accidental::ACC_SHARP_ARROW_UP; break;
-                              case 27: at = Accidental::ACC_SHARP_ARROW_DOWN; break;
-                              case 28: at = Accidental::ACC_SHARP_ARROW_BOTH; break;
-                              case 29: at = Accidental::ACC_FLAT_ARROW_UP; break;
-                              case 30: at = Accidental::ACC_FLAT_ARROW_DOWN; break;
-                              case 31: at = Accidental::ACC_FLAT_ARROW_BOTH; break;
-                              case 32: at = Accidental::ACC_NATURAL_ARROW_UP; break;
-                              case 33: at = Accidental::ACC_NATURAL_ARROW_DOWN; break;
-                              case 34: at = Accidental::ACC_NATURAL_ARROW_BOTH; break;
+                              case 16: at = Accidental::ACC_SHARP_ARROW_UP; break;
+                              case 17: at = Accidental::ACC_SHARP_ARROW_DOWN; break;
+                              case 18: at = Accidental::ACC_SHARP_ARROW_BOTH; break;
+                              case 19: at = Accidental::ACC_FLAT_ARROW_UP; break;
+                              case 20: at = Accidental::ACC_FLAT_ARROW_DOWN; break;
+                              case 21: at = Accidental::ACC_FLAT_ARROW_BOTH; break;
+                              case 22: at = Accidental::ACC_NATURAL_ARROW_UP; break;
+                              case 23: at = Accidental::ACC_NATURAL_ARROW_DOWN; break;
+                              case 24: at = Accidental::ACC_NATURAL_ARROW_BOTH; break;
+                              case 25: at = Accidental::ACC_SORI; break;
+                              case 26: at = Accidental::ACC_KORON; break;
                               }
                         _accidental->setAccidentalType(at);
                         _accidental->setHasBracket(bracket);
