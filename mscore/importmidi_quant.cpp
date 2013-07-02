@@ -510,7 +510,21 @@ void sortTupletsByAveragePitch(std::vector<TupletInfo> &tuplets)
       std::sort(tuplets.begin(), tuplets.end(), averagePitchComparator);
       }
 
-// tuplets should be filtered (for mutual validity)
+// all chords here have different onTime values
+
+int nonTupletChordCount(const std::vector<TupletInfo> &tuplets,
+                        const std::multimap<int, MidiChord> &chords)
+      {
+      std::set<int> tupletOnTimes;
+      for (const auto &tupletInfo: tuplets) {
+            for (const auto &chordIt: tupletInfo.chords) {
+                  tupletOnTimes.insert(chordIt.second->second.onTime);
+                  }
+            }
+      return chords.size() - tupletOnTimes.size();
+      }
+
+// the input tuplets should be filtered (for mutual validity)
 
 void separateTupletVoices(std::vector<TupletInfo> &tuplets,
                           std::multimap<int, MidiChord> &chords)
@@ -520,15 +534,17 @@ void separateTupletVoices(std::vector<TupletInfo> &tuplets,
       sortNotesByPitch(chords);
       sortTupletsByAveragePitch(tuplets);
 
+      int startVoice = (nonTupletChordCount(tuplets, chords) > 0) ? 1 : 0;
+
       for (auto now = tuplets.begin(); now != tuplets.end(); ++now) {
-            int counter = 0;
+            int voice = startVoice;
             auto lastMatch = tuplets.end();
             auto firstNowChordIt = now->chords.begin();
             for (auto prev = tuplets.begin(); prev != now; ++prev) {
                               // check is now tuplet go over previous tuplets
                   if (now->onTime + now->len > prev->onTime
                               && now->onTime < prev->onTime + prev->len)
-                        ++counter;
+                        ++voice;
                               // if first notes in tuplets match - split this chord
                               // into 2 voices
                   auto firstPrevChordIt = prev->chords.begin();
@@ -559,18 +575,14 @@ void separateTupletVoices(std::vector<TupletInfo> &tuplets,
 
             for (auto &tupletChord: now->chords) {
                   MidiChord &midiChord = tupletChord.second->second;
-                  midiChord.voice = counter;
+                  midiChord.voice = voice;
                   }
             }
       }
 
-
-// TODO: separate different overlapping tuplet voices
-
 void quantizeTupletChord(MidiChord &midiChord, int onTime, const TupletInfo &tupletInfo)
       {
       midiChord.onTime = onTime;
-      midiChord.voice = tupletInfo.voice;
       for (auto &note: midiChord.notes) {
             int raster;
             if (note.onTime + note.len <= tupletInfo.onTime + tupletInfo.len) {
@@ -621,8 +633,10 @@ void quantizeChordsAndFindTuplets(std::multimap<int, TupletData> &tupletEvents,
                         quantizeTupletChord(midiChord, onTime, tupletInfo);
                         quantizedChords.insert({onTime, midiChord});
                         }
-                  TupletData tupletData = {tupletInfo.voice, tupletInfo.onTime,
-                                           tupletInfo.len, tupletInfo.tupletNumber};
+                  TupletData tupletData = {tupletInfo.chords.begin()->second->second.voice,
+                                           tupletInfo.onTime,
+                                           tupletInfo.len,
+                                           tupletInfo.tupletNumber};
                   tupletEvents.insert({tupletInfo.onTime, tupletData});
                   }
             if (endBarTick > lastTick)

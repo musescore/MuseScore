@@ -18,7 +18,6 @@ namespace Quantize {
 
 struct TupletInfo
       {
-      int voice;
       int onTime;
       int len;
       int tupletNumber;
