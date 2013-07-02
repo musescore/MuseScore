@@ -46,7 +46,7 @@ class InstrumentTemplate {
    public:
       QString id;
       QString trackName;
-      QString groupId;
+//      QString groupId;
       QList<StaffName> longNames;      ///< shown on first system
       QList<StaffName> shortNames;     ///< shown on followup systems
       QString musicXMLid;              ///< used in MusicXML 3.0
@@ -79,7 +79,7 @@ class InstrumentTemplate {
 
       bool extended;          // belongs to extended instrument set if true
 
-      InstrumentGenre instrumentGenres;
+//      InstrumentGenre instrumentGenres;
 
       InstrumentTemplate();
       InstrumentTemplate(const InstrumentTemplate&);
@@ -97,10 +97,10 @@ class InstrumentTemplate {
       };
 
 //---------------------------------------------------------
-//   InstrumentType
+//   InstrumentGroup - Extends InstrumentSection
 //---------------------------------------------------------
 
-struct InstrumentType {
+struct InstrumentGroup {
       QString id;
       QString name;
       QString groupId;
@@ -108,28 +108,33 @@ struct InstrumentType {
       QList<InstrumentTemplate*> instrumentTemplates;
 
       void read(XmlReader&);
-
-      InstrumentType() { extended = false; }
-      };
-
-//---------------------------------------------------------
-//   InstrumentGroup - Extends InstrumentType as well as being its parent
-//---------------------------------------------------------
-
-struct InstrumentGroup : public InstrumentType {
-//      QString id;
-//      QString name;
-//      bool extended;          // belongs to extended instruments set if true
-      QList<InstrumentType *>instrumentTypes;
-//      QList<InstrumentTemplate*> instrumentTemplates;
-
-//      void read(XmlReader&);
+//      InstrumentGroup * searchInstrumentGroup(const QString& name);
 
       InstrumentGroup() { extended = false; }
       };
 
-extern QList<InstrumentGroup*> instrumentGroups;
+//---------------------------------------------------------
+//   InstrumentSection - Extends InstrumentGroup
+//                       Can contain a list of instrument groups,
+//                       & can contain instruments
+//---------------------------------------------------------
+
+struct InstrumentSection {      // : public InstrumentGroup {
+      QString id;
+      QString name;
+      QString sectionId;
+      bool extended;          // belongs to extended instruments set if true
+      QList<InstrumentGroup*> instrumentGroups;
+
+      void read(XmlReader&);
+
+      InstrumentSection * searchInstrumentSection(const QString& name);
+      InstrumentSection() { extended = false; }
+      };
+
 extern QList<InstrumentGenre*> instrumentGenres;
+extern QList<InstrumentSection*> instrumentSections;
+extern QList<InstrumentGroup*> instrumentGroups;
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
@@ -138,6 +143,10 @@ extern InstrumentTemplate* searchTemplate(const QString& name);
 
 extern InstrumentType* searchInstrumentType(const QString& name);
 extern InstrumentGroup * searchInstrumentGroup(const QString& name);
+
+
+// extern InstrumentGroup * searchInstrumentGroup(const QString& name);
+//extern InstrumentSection* searchInstrumentSection(const QString& name);
 
 #endif
 

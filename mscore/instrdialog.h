@@ -144,9 +144,11 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentDialogBase {
 class InstrumentTemplateListItem : public QTreeWidgetItem {
       InstrumentTemplate* _instrumentTemplate;
       QString _group;
+      QString _section;
 
    public:
       InstrumentTemplateListItem(QString group, QTreeWidget* parent);
+      InstrumentTemplateListItem(QString section, InstrumentTemplateListItem* parent);
       InstrumentTemplateListItem(InstrumentTemplate* i, InstrumentTemplateListItem* parent);
       InstrumentTemplateListItem(InstrumentTemplate* i, QTreeWidget* parent);
 
