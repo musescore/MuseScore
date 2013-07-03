@@ -813,7 +813,7 @@ void Seq::seek(int utick)
 void Seq::seek(int utick, Segment* seg)
       {
       if (seg)
-            mscore->currentScoreView()->moveCursor(seg, -1);
+            mscore->currentScoreView()->moveCursor(seg->tick());
 
       cs->setPlayPos(utick);
       cs->setLayoutAll(false);

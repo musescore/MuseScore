@@ -2669,7 +2669,6 @@ void MuseScore::play(Element* e, int pitch) const
             int tick = note->chord()->tick();
             if (tick < 0)
                   tick = 0;
-            seq->seek(tick);
             Part* part = note->staff()->part();
             Instrument* instr = part->instr(tick);
             const Channel& channel = instr->channel(note->subchannel());
