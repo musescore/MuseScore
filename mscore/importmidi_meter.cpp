@@ -412,7 +412,7 @@ QList<TDuration> toDurationList(int startTickInBar,
             Node *node = nodesToProcess.dequeue();
                         // if node duration is completely inside some tuplet
                         // then assign to the node tuplet-to-regular-duration conversion coefficient
-            if (node->tupletCoeff != 1.0) {
+            if (node->tupletCoeff == 1.0) {
                   int tupletNumber = tupletNumberForDuration(node->startTick, node->endTick, tupletsInBar);
                   if (tupletNumber != -1) {
                         auto it = tupletCoeffs.find(tupletNumber);
