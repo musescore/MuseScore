@@ -196,10 +196,8 @@ void Seq::setScoreView(ScoreView* v)
 
       playlistChanged = true;
       _synti->reset();
-      if (cs) {
+      if (cs)
             initInstruments();
-            seek(cs->playPos());
-            }
       }
 
 //---------------------------------------------------------

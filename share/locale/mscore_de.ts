@@ -117,7 +117,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Direct</source>
-        <translation type="unfinished">Direkt</translation>
+        <translation>Direkt</translation>
     </message>
     <message>
         <source>III</source>
@@ -277,7 +277,7 @@ p, li { white-space: pre-wrap; }
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
-        <translation type="unfinished">MuseScore: Eigenschaften Bend</translation>
+        <translation>MuseScore: Eigenschaften Bend</translation>
     </message>
     <message>
         <source>Bend type:</source>
@@ -2120,7 +2120,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>TABLATURE STAFF</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">TABULATUR Notenzeile</translation>
     </message>
     <message>
         <source>Presets</source>
@@ -2132,35 +2132,35 @@ spatium unit</extracomment>
     </message>
     <message utf8="true">
         <source>« Full Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Komplette Konfiguration</translation>
     </message>
     <message>
         <source>Upside Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopf nach unten</translation>
     </message>
     <message utf8="true">
         <source>Quick Presets »</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnelle Einstellungen</translation>
     </message>
     <message>
         <source>Fret Marks</source>
-        <translation type="unfinished"></translation>
+        <translation>Bundmarkierungen</translation>
     </message>
     <message>
         <source>Font:</source>
-        <translation type="unfinished">Schriftart:</translation>
+        <translation>Schriftart:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished">Größe:</translation>
+        <translation>Größe:</translation>
     </message>
     <message>
         <source>pt</source>
-        <translation type="unfinished">pt</translation>
+        <translation>punkt</translation>
     </message>
     <message>
         <source>Vert. Offset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vert. Verschiebung</translation>
     </message>
     <message>
         <source>Marks are:</source>
@@ -2168,83 +2168,83 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Numbers</source>
-        <translation type="unfinished">Zahlen</translation>
+        <translation>Zahlen</translation>
     </message>
     <message>
         <source>Letters</source>
-        <translation type="unfinished"></translation>
+        <translation>Buchstaben</translation>
     </message>
     <message>
         <source>Marks are drawn:</source>
-        <translation type="unfinished"></translation>
+        <translation>Markierungen zeichnen:</translation>
     </message>
     <message>
         <source>On Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf Linien</translation>
     </message>
     <message>
         <source>Above Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Über Linien</translation>
     </message>
     <message>
         <source>Lines are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Linien sind:</translation>
     </message>
     <message>
         <source>Continuous</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortlaufend</translation>
     </message>
     <message>
         <source>Broken</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebrochen</translation>
     </message>
     <message>
         <source>Note Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Notenwerte</translation>
     </message>
     <message>
         <source>Shown as:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dargestellt als:</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Nichts</translation>
     </message>
     <message>
         <source>Note Symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Notensymbole</translation>
     </message>
     <message>
         <source>Stems and beams</source>
-        <translation type="unfinished"></translation>
+        <translation>Notenhälse und Balken</translation>
     </message>
     <message>
         <source>Stem style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Notenhals Stil:</translation>
     </message>
     <message>
         <source>Beside staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Neben Notenzeile</translation>
     </message>
     <message>
         <source>Through staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Durch Notenzeile</translation>
     </message>
     <message>
         <source>Stem position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Notenhalsposition:</translation>
     </message>
     <message>
         <source>Above</source>
-        <translation type="unfinished">Darüber</translation>
+        <translation>Darüber</translation>
     </message>
     <message>
         <source>Below</source>
-        <translation type="unfinished"></translation>
+        <translation>Unter</translation>
     </message>
     <message>
         <source>Half notes:</source>
-        <translation type="unfinished"></translation>
+        <translation>Halbe Noten:</translation>
     </message>
     <message>
         <source>As short stem</source>
@@ -2260,11 +2260,11 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Preview</source>
-        <translation type="unfinished">Vorschau</translation>
+        <translation>Vorschau</translation>
     </message>
     <message>
         <source>Create new tablature type</source>
-        <translation type="unfinished"></translation>
+        <translation>Erzeuge neue Tabulatur</translation>
     </message>
     <message>
         <source>PERCUSSION STAFF</source>
@@ -2280,11 +2280,11 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Laden</translation>
+        <translation>Laden</translation>
     </message>
 </context>
 <context>
@@ -2636,7 +2636,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Musical symbols font: </source>
-        <translation type="unfinished">Font für Musiksymbole: </translation>
+        <translation>Font für Musiksymbole: </translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
@@ -2664,15 +2664,15 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Grand staff distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeilenabstand für Pianosystem</translation>
     </message>
     <message>
         <source>Min. system distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Min. Systemabstand</translation>
     </message>
     <message>
         <source>Vertical-frame upper margin</source>
-        <translation type="unfinished"></translation>
+        <translation>oberer Rand Vert. Rahmen</translation>
     </message>
     <message>
         <source>Vertical-frame lower margin</source>
@@ -4966,8 +4966,8 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses 
-the freely available LAME library.  You must obtain %1 
+        <source>MuseScore does not export MP3 files directly, but instead uses
+the freely available LAME library.  You must obtain %1
 separately, and then locate the file for MuseScore.
 You only need to do this once.
 
@@ -5134,55 +5134,55 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation>1</translation>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished">2</translation>
+        <translation>2</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished">4</translation>
+        <translation>4</translation>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished">8</translation>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished">16</translation>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
-        <translation type="unfinished">32</translation>
+        <translation>32</translation>
     </message>
     <message>
         <source>64</source>
-        <translation type="unfinished">64</translation>
+        <translation>64</translation>
     </message>
     <message>
         <source>Exclude from measure count</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt nicht zählen</translation>
     </message>
     <message>
         <source>Repeat Count:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholungszahl:</translation>
     </message>
     <message>
         <source>Layout Stretch:</source>
-        <translation type="unfinished"></translation>
+        <translation>Layoutdehnung</translation>
     </message>
     <message>
         <source>Add to Measure Number</source>
-        <translation type="unfinished"></translation>
+        <translation>zur Taktzahl addieren:</translation>
     </message>
     <message>
         <source>Measure Number Mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Taktzahl Modus:</translation>
     </message>
     <message>
         <source>AUTO</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch</translation>
     </message>
     <message>
         <source>always show</source>
@@ -7563,46 +7563,46 @@ please choose a different name:</source>
     <name>Ms::UpdateChecker</name>
     <message>
         <source>An update for MuseScore is available: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</source>
-        <translation type="unfinished">Eine neue Version von MuseScore ist verfügbar: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
+        <translation>Eine neue Version von MuseScore ist verfügbar: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Update Available</source>
-        <translation type="unfinished">Neue Version verfügbar</translation>
+        <translation>Neue Version verfügbar</translation>
     </message>
     <message>
         <source>No Update Available</source>
-        <translation type="unfinished">Kein Update verfügbar</translation>
+        <translation>Kein Update verfügbar</translation>
     </message>
 </context>
 <context>
     <name>Ms::WebPageDockWidget</name>
     <message>
         <source>Connect with the &lt;br /&gt; Community</source>
-        <translation type="unfinished">Mit der Gemeinschaft &lt;br /&gt; verbinden</translation>
+        <translation>Mit der Gemeinschaft &lt;br /&gt; verbinden</translation>
     </message>
     <message>
         <source>Find help</source>
-        <translation type="unfinished">Hilfe finden</translation>
+        <translation>Finde Hilfe</translation>
     </message>
     <message>
         <source>Improve your skills</source>
-        <translation type="unfinished">Fähigkeiten verbesseren</translation>
+        <translation>Verbessere deine Fähigkeiten</translation>
     </message>
     <message>
         <source>Read the latest news</source>
-        <translation type="unfinished">Die letzten Neuigkeiten lesen</translation>
+        <translation>Lies die letzten Neuigkeiten</translation>
     </message>
     <message>
         <source>Download free sheet music</source>
-        <translation type="unfinished">Freie Partituren herunterladen</translation>
+        <translation>Lade freie Partituren herunter</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Start</translation>
+        <translation>Start</translation>
     </message>
     <message>
         <source>Close this permanently</source>
-        <translation type="unfinished">Dauerhaft schließen</translation>
+        <translation>Dauerhaft schließen</translation>
     </message>
 </context>
 <context>
@@ -7700,7 +7700,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Lyricist:</source>
-        <translation type="unfinished"></translation>
+        <translation>Texter</translation>
     </message>
 </context>
 <context>
@@ -13578,8 +13578,8 @@ fehlgeschlagen: </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The following file is locked: 
-%1 
+        <source>The following file is locked:
+%1
 
 Try saving to a different location.</source>
         <translation type="unfinished"></translation>
