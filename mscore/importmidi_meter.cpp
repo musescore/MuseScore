@@ -340,7 +340,7 @@ struct Node
             , endTick(endTick)
             , startLevel(startLevel)
             , endLevel(endLevel)
-            , tupletCoeff(1.0)
+            , tupletRatio({2, 2})
             , parent(nullptr)
             {}
 
@@ -349,21 +349,16 @@ struct Node
       int startLevel;
       int endLevel;
              // all durations inside tuplets are smaller/larger than their regular versions
-      double tupletCoeff;
+             // this difference is represented by tuplet ratio: 3/2 for triplets, etc.
+      Fraction tupletRatio;
 
       Node *parent;
       std::unique_ptr<Node> left;
       std::unique_ptr<Node> right;
       };
 
-// conversion coefficients from tuplet durations to regular durations
-// for example, 8th note in triplet * 3/2 = regular 8th note
-
-const std::map<int, double> tupletCoeffs = {{2, 2.0/3}, {3, 3.0/2}, {4, 4.0/3}, {5, 5.0/4}, {7.0, 7.0/4}};
-
-
 void treeToDurationList(Node *node,
-                        QList<TDuration> &dl,
+                        QList<std::pair<Fraction, TDuration>> &dl,
                         bool useDots)
       {
       if (node->left != nullptr && node->right != nullptr) {
@@ -372,22 +367,30 @@ void treeToDurationList(Node *node,
             }
       else {
             const int MAX_DOTS = 1;
-            QList<TDuration> list = toDurationList(Fraction::fromTicks(std::round(node->tupletCoeff
-                                          * (node->endTick - node->startTick))), useDots, MAX_DOTS);
-            dl.append(list);
+            QList<TDuration> list = toDurationList(
+                  Fraction::fromTicks(
+                        node->tupletRatio.numerator()
+                        * (node->endTick - node->startTick)
+                        / node->tupletRatio.denominator()),
+                  useDots, MAX_DOTS);
+            for (const auto &duration: list)
+                  dl.push_back({node->tupletRatio, duration});
             }
       }
 
 // duration start/end should be quantisized, quantum >= 1/128 note
+// pair here represents the tuplet ratio of duration and the duration itself
+// for regular (non-tuplet) durations fraction.numerator/fraction.denominator == 1
 
-QList<TDuration> toDurationList(int startTickInBar,
-                                int endTickInBar,
-                                const Fraction &barFraction,
-                                const std::vector<TupletData> &tupletsInBar,
-                                DurationType durationType,
-                                bool useDots)
+QList<std::pair<Fraction, TDuration> >
+toDurationList(int startTickInBar,
+               int endTickInBar,
+               const Fraction &barFraction,
+               const std::vector<TupletData> &tupletsInBar,
+               DurationType durationType,
+               bool useDots)
       {
-      QList<TDuration> durations;
+      QList<std::pair<Fraction, TDuration>> durations;
       if (startTickInBar < 0 || endTickInBar <= startTickInBar
                   || endTickInBar > barFraction.ticks())
             return durations;
@@ -412,12 +415,12 @@ QList<TDuration> toDurationList(int startTickInBar,
             Node *node = nodesToProcess.dequeue();
                         // if node duration is completely inside some tuplet
                         // then assign to the node tuplet-to-regular-duration conversion coefficient
-            if (node->tupletCoeff == 1.0) {
+            if (node->tupletRatio.numerator() / node->tupletRatio.denominator() == 1) {
                   int tupletNumber = tupletNumberForDuration(node->startTick, node->endTick, tupletsInBar);
                   if (tupletNumber != -1) {
-                        auto it = tupletCoeffs.find(tupletNumber);
-                        if (it != tupletCoeffs.end())
-                              node->tupletCoeff = it->second;
+                        auto it = tupletRatios.find(tupletNumber);
+                        if (it != tupletRatios.end())
+                              node->tupletRatio = it->second;
                         }
                   }
                         // don't split node if its duration is less than minDuration
@@ -445,9 +448,9 @@ QList<TDuration> toDurationList(int startTickInBar,
                   node->right->parent = node;
                   nodesToProcess.enqueue(node->right.get());
 
-                  if (node->tupletCoeff != 1.0) {
-                        node->left->tupletCoeff = node->tupletCoeff;
-                        node->right->tupletCoeff = node->tupletCoeff;
+                  if (node->tupletRatio.numerator() / node->tupletRatio.denominator() != 1) {
+                        node->left->tupletRatio = node->tupletRatio;
+                        node->right->tupletRatio = node->tupletRatio;
                         }
                   }
             }
