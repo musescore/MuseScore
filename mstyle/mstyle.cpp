@@ -806,7 +806,6 @@ void MgStyle::polish(QWidget* widget) {
 #ifndef Q_WS_MAC
             widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
-//WS            widget->setContentsMargins(3, 3, 3, 3);
             widget->setContentsMargins(3, 3, 3, 3);
             widget->installEventFilter(this);
             }
@@ -1913,7 +1912,8 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
 
       // normal (auto-raised) toolbuttons
       if (flags & (State_Sunken | State_On)) {
-            painter->setBrush(palette.color(QPalette::Base));
+            // painter->setBrush(palette.color(QPalette::Base));           // button Background
+            painter->setBrush(widget->palette().color(QPalette::Base));           // button Background
             painter->setPen(Qt::NoPen);
             _helper.fillHole(*painter, slitRect.adjusted(-2, -2, 4, 4));
             QColor color(palette.color(QPalette::Window));
