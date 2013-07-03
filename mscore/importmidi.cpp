@@ -409,8 +409,11 @@ MTrack::findTupletsForDuration(int voice, int barTick, int durationOnTime, int d
                   tupletData.onTime -= barTick;
                   tupletsData.push_back(tupletData);
                   }
+            if (tupletIt == tuplets.begin())
+                  break;
             --tupletIt;
             }
+
       struct {
             bool operator()(const TupletData &d1, const TupletData &d2)
                   {
