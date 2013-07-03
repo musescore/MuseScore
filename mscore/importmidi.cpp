@@ -281,9 +281,9 @@ void quantizeAllTracks(QList<MTrack>& tracks, TimeSigMap* sigmap, int lastTick)
                               // pass current track index through MidiImportOperations
                               // for further usage
                   opers.setCurrentTrack(i);
-                  Quantize::applyGridQuant(tracks[i].chords, sigmap, lastTick);
-                  //                  Quantize::quantizeChordsAndFindTuplets(tracks[i].tuplets, tracks[i].chords,
-                  //                                                         sigmap, lastTick);
+//                  Quantize::applyGridQuant(tracks[i].chords, sigmap, lastTick);
+                  Quantize::quantizeChordsAndFindTuplets(tracks[i].tuplets, tracks[i].chords,
+                                                         sigmap, lastTick);
                   }
             }
       }
@@ -727,6 +727,30 @@ void MTrack::convertTrack(int lastTick)
                   }
                         // process last chords at the end of the score
             processPendingNotes(midiChords, voice, startChordTick, lastTick);
+
+            /*
+
+            Tuplet* tuplet = new Tuplet(_score);
+            tuplet->setRatio(ratio);
+
+            //
+            // "fr" is the fraction value of one tuple element
+            //
+            // "tuplet time" is "normal time" / tuplet->ratio()
+            //    Example: an 1/8 has 240 midi ticks, in an 1/8 triplet the note
+            //             has a tick duration of 240 / (3/2) = 160 ticks
+            //
+
+            tuplet->setDuration(f);
+            TDuration baseLen(fr);
+            tuplet->setBaseLen(baseLen);
+
+            tuplet->setTrack(cr->track());
+            tuplet->setTick(tick);
+            Measure* measure = cr->measure();
+            tuplet->setParent(measure);
+            */
+
             }
 
       KeyList* km = staff->keymap();
