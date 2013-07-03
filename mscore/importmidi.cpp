@@ -71,9 +71,10 @@ class MTrack {
       void fillGapWithRests(Score *score, int voice, int startChordTick, int restLen, int track);
       std::vector<TupletData> findTupletsForDuration(int voice, int barTick,
                                                      int durationOnTime, int durationLen);
-      QList<TDuration> toDurationList(const Measure *measure, int voice, int startTick, int len,
+      QList<std::pair<Fraction, TDuration> > toDurationList(const Measure *measure, int voice, int startTick, int len,
                                       Meter::DurationType durationType);
       int voicesInBar(int tickInBar);
+      void addElementToTuplet(int voice, int onTime, int len, DurationElement *el);
       };
 
 
@@ -426,8 +427,12 @@ MTrack::findTupletsForDuration(int voice, int barTick, int durationOnTime, int d
       return tupletsData;
       }
 
-QList<TDuration> MTrack::toDurationList(const Measure *measure, int voice, int startTick, int len,
-                                        Meter::DurationType durationType)
+QList<std::pair<Fraction, TDuration> >
+MTrack::toDurationList(const Measure *measure,
+                       int voice,
+                       int startTick,
+                       int len,
+                       Meter::DurationType durationType)
       {
       bool useDots = preferences.midiImportOperations.currentTrackOperations().useDots;
                   // find tuplets over which duration is go
@@ -435,10 +440,9 @@ QList<TDuration> MTrack::toDurationList(const Measure *measure, int voice, int s
                                                                   startTick, len);
       int startTickInBar = startTick - measure->tick();
       int endTickInBar = startTickInBar + len;
-      QList<TDuration> dl = Meter::toDurationList(startTickInBar, endTickInBar,
-                                                  measure->timesig(), tupletData,
-                                                  durationType, useDots);
-      return dl;
+      return Meter::toDurationList(startTickInBar, endTickInBar,
+                                   measure->timesig(), tupletData,
+                                   durationType, useDots);
       }
 
 int splitDurationOnBarBoundary(int len, int onTime, const Measure* measure)
@@ -467,61 +471,33 @@ void MTrack::fillGapWithRests(Score* score, int voice, int startChordTick,
             if (len >= measure->ticks()) {
                               // rest to the whole measure
                   len = measure->ticks();
-                  TDuration duration(TDuration::V_MEASURE);
-                  Rest* rest = new Rest(score, duration);
-                  rest->setDuration(measure->len());
-                  rest->setTrack(track);
-                  Segment* s = measure->getSegment(rest, startChordTick);
-                  s->add(rest);
-
-
-                  // TODO: optimize search (lower_bound, ...)
-                  for (auto &tupletEvent: tuplets) {
-                        auto &tupletInfo = tupletEvent.second;
-                        if (tupletInfo.voice != voice)
-                              continue;
-
-                        if (startChordTick >= tupletInfo.onTime
-                                    && startChordTick + len <= tupletInfo.onTime + tupletInfo.len) {
-                                          // add chord to the tuplet
-                              tupletInfo.elements.push_back(rest);
-                              }
+                  if (voice == 0) {
+                        TDuration duration(TDuration::V_MEASURE);
+                        Rest* rest = new Rest(score, duration);
+                        rest->setDuration(measure->len());
+                        rest->setTrack(track);
+                        Segment* s = measure->getSegment(rest, startChordTick);
+                        s->add(rest);
                         }
-
-
                   restLen -= len;
                   startChordTick += len;
                   }
             else {
-                  QList<TDuration> dl = toDurationList(measure, voice, startChordTick, len,
-                                                       Meter::DurationType::REST);
+                  auto dl = toDurationList(measure, voice, startChordTick, len,
+                                           Meter::DurationType::REST);
                   if (dl.isEmpty()) {
                         qDebug("cannot create duration list for len %d", len);
                         restLen = 0;      // fake
                         break;
                         }
-                  for (const auto &duration: dl) {
+                  for (const auto &durationPair: dl) {
+                        const auto &duration = durationPair.second;
                         Rest* rest = new Rest(score, duration);
                         rest->setDuration(duration.fraction());
                         rest->setTrack(track);
                         Segment* s = measure->getSegment(Segment::SegChordRest, startChordTick);
                         s->add(rest);
-
-
-                        // TODO: optimize search (lower_bound, ...)
-                        for (auto &tupletEvent: tuplets) {
-                              auto &tupletInfo = tupletEvent.second;
-                              if (tupletInfo.voice != voice)
-                                    continue;
-
-                              if (startChordTick >= tupletInfo.onTime
-                                          && startChordTick + len <= tupletInfo.onTime + tupletInfo.len) {
-                                                // add chord to the tuplet
-                                    tupletInfo.elements.push_back(rest);
-                                    }
-                              }
-
-
+                        addElementToTuplet(voice, startChordTick, len, rest);
                         restLen -= duration.ticks();
                         startChordTick += duration.ticks();
                         }
@@ -591,6 +567,24 @@ void setTies(Chord *chord, Score *score, QList<MidiNote> &midiNotes)
             }
       }
 
+void MTrack::addElementToTuplet(int voice, int onTime, int len, DurationElement *el)
+      {
+      auto it = tuplets.lower_bound(onTime);
+      if (it != tuplets.begin())
+            --it;
+      for ( ; it != tuplets.end(); ++it) {
+            auto &tupletData = it->second;
+            if (tupletData.voice != voice)
+                  continue;
+            if (onTime >= tupletData.onTime
+                        && onTime + len <= tupletData.onTime + tupletData.len) {
+                              // add chord/rest to the tuplet
+                  tupletData.elements.push_back(el);
+                  break;
+                  }
+            }
+      }
+
 // convert midiChords with the same onTime value to music notation
 // and fill the remaining empty duration with rests
 
@@ -611,12 +605,12 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
             Measure* measure = score->tick2measure(tick);
             len = splitDurationOnBarBoundary(len, tick, measure);
 
-            QList<TDuration> dl = toDurationList(measure, voice, tick, len,
-                                                 Meter::DurationType::NOTE);
+            auto dl = toDurationList(measure, voice, tick, len, Meter::DurationType::NOTE);
             if (dl.isEmpty())
                   break;
-            TDuration d = dl[0];
-            len = d.ticks();
+            TDuration d = dl[0].second;
+            const Fraction &tupletRatio = dl[0].first;
+            len = d.ticks() * tupletRatio.denominator() / tupletRatio.numerator();
 
             Chord* chord = new Chord(score);
             chord->setTrack(track);
@@ -630,23 +624,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
                   MidiChord& midiChord = midiChords[k];
                   setMusicNotesFromMidi(score, midiChord.notes, len, chord, tick,
                                         drumset, useDrumset);
-
-
-                  // TODO: optimize search (lower_bound, ...)
-                  for (auto &tupletEvent: tuplets) {
-                        auto &tupletInfo = tupletEvent.second;
-                        if (tupletInfo.voice != voice)
-                              continue;
-
-                        if (midiChord.onTime >= tupletInfo.onTime
-                                    && midiChord.onTime + len <= tupletInfo.onTime + tupletInfo.len) {
-                                          // add chord to the tuplet
-                              tupletInfo.elements.push_back(chord);
-                              }
-                        }
-
-
-
+                  addElementToTuplet(voice, midiChord.onTime, len, chord);
                   if (midiChord.duration <= len) {
                         midiChords.removeAt(k);
                         --k;
@@ -664,31 +642,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
                   }
             startChordTick += len;
             }
-//      if (voice == 0)
       fillGapWithRests(score, voice, startChordTick, nextChordTick - startChordTick, track);
-      }
-
-// here is supposed that all voices in bar go in order: 0, 1, 2...
-// and there cannot be missed voices like 0, 2... (#1 is missing)
-
-int MTrack::voicesInBar(int tickInBar)
-      {
-      Score* score     = staff->score();
-      Measure* measure = score->tick2measure(tickInBar);
-
-      auto it = chords.upper_bound(measure->tick() + measure->ticks());
-      if (it == chords.end())
-            return 0;
-
-      int maxVoice = 0;
-      --it;
-      for (; it->first + it->second.duration > measure->tick(); --it) {
-            if (it->second.voice > maxVoice)
-                  maxVoice = it->second.voice;
-            if (it == chords.begin())
-                  break;
-            }
-      return maxVoice + 1;
       }
 
 void MTrack::convertTrack(int lastTick)
@@ -696,7 +650,7 @@ void MTrack::convertTrack(int lastTick)
       Score* score     = staff->score();
       int key          = 0;                      // TODO-LIB findKey(mtrack, score->sigmap());
       int track        = staff->idx() * VOICES;
-      int voices       = 1;          // VOICES;  // mtrack->separateVoices(2);
+      int voices       = VOICES;
 
       for (int voice = 0; voice < voices; ++voice) {
                         // startChordTick is onTime value of all simultaneous notes
@@ -730,30 +684,29 @@ void MTrack::convertTrack(int lastTick)
                   }
                         // process last chords at the end of the score
             processPendingNotes(midiChords, voice, startChordTick, lastTick);
+            }
 
-            /*
+      for (const auto &tupletEvent: tuplets) {
+            const auto &tupletData = tupletEvent.second;
+            Tuplet* tuplet = new Tuplet(score);
+            auto ratioIt = tupletRatios.find(tupletData.tupletNumber);
+            Fraction tupletRatio = (ratioIt != tupletRatios.end())
+                        ? ratioIt->second : Fraction(2, 2);
+            tuplet->setRatio(tupletRatio);
 
-            Tuplet* tuplet = new Tuplet(_score);
-            tuplet->setRatio(ratio);
-
-            //
-            // "fr" is the fraction value of one tuple element
-            //
-            // "tuplet time" is "normal time" / tuplet->ratio()
-            //    Example: an 1/8 has 240 midi ticks, in an 1/8 triplet the note
-            //             has a tick duration of 240 / (3/2) = 160 ticks
-            //
-
-            tuplet->setDuration(f);
-            TDuration baseLen(fr);
+            tuplet->setDuration(tupletData.len);
+            TDuration baseLen(Fraction::fromTicks(tupletData.len / tupletRatio.denominator()));
             tuplet->setBaseLen(baseLen);
 
-            tuplet->setTrack(cr->track());
-            tuplet->setTick(tick);
-            Measure* measure = cr->measure();
+            tuplet->setTrack(track);
+            tuplet->setTick(tupletData.onTime);
+            Measure* measure = score->tick2measure(tupletData.onTime);
             tuplet->setParent(measure);
-            */
 
+            for (DurationElement *el: tupletData.elements) {
+                  tuplet->add(el);
+                  el->setTuplet(tuplet);
+                  }
             }
 
       KeyList* km = staff->keymap();
@@ -829,10 +782,6 @@ void MTrack::convertTrack(int lastTick)
       mf->move(-tick);
 #endif
 
-//---------------------------------------------------------
-//   metaTimeSignature
-//---------------------------------------------------------
-
 Fraction metaTimeSignature(const MidiEvent& e)
       {
       const unsigned char* data = e.edata();
@@ -851,7 +800,7 @@ void insertNewLeftHandTrack(QList<MTrack> &tracks,
       auto leftHandTrack = tracks[trackIndex];
       leftHandTrack.chords = leftHandChords;
       tracks.insert(trackIndex + 1, leftHandTrack);
-      // synchronize operations length and tracks list length
+                  // synchronize operations length and tracks list length
       preferences.midiImportOperations.duplicateTrackOperations(trackIndex);
       ++trackIndex;
       }
@@ -950,10 +899,6 @@ void splitIntoLeftRightHands(QList<MTrack> &tracks)
                   }
             }
       }
-
-//---------------------------------------------------------
-//   createMTrackList
-//---------------------------------------------------------
 
 void createMTrackList(int& lastTick, TimeSigMap* sigmap, QList<MTrack>& tracks, MidiFile* mf)
       {

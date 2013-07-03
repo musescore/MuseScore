@@ -4,7 +4,7 @@
 
 namespace Ms {
 
-class Element;
+class DurationElement;
 
 struct TupletData
       {
@@ -12,9 +12,17 @@ struct TupletData
       int onTime;
       int len;
       int tupletNumber;
-      std::vector<Element *> elements;
+      std::vector<DurationElement *> elements;
       };
 
+class Fraction;
+
+// conversion ratios from tuplet durations to regular durations
+// for example, 8th note in triplet * 3/2 = regular 8th note
+
+const std::map<int, Fraction> tupletRatios = {{2, Fraction({2, 3})}, {3, Fraction({3, 2})},
+                                              {4, Fraction({4, 3})}, {5, Fraction({5, 4})},
+                                              {7.0, Fraction({7, 4})}};
 class MidiChord;
 
 namespace Quantize {

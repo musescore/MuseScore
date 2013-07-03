@@ -29,13 +29,14 @@ int beatLength(const Fraction &barFraction);
 std::vector<int> divisionsOfBarForTuplets(const Fraction &barFraction);
 
             // duration and all tuplets should belong to the same voice
-            // nested tuplets are not allowed
-QList<TDuration> toDurationList(int startTickInBar,
-                                int endTickInBar,
-                                const Fraction &barFraction,
-                                const std::vector<TupletData> &tupletsInBar,
-                                DurationType durationType,
-                                bool useDots);
+// nested tuplets are not allowed
+QList<std::pair<Fraction, TDuration> >
+toDurationList(int startTickInBar,
+               int endTickInBar,
+               const Fraction &barFraction,
+               const std::vector<TupletData> &tupletsInBar,
+               DurationType durationType,
+               bool useDots);
 
 } // namespace Meter
 } // namespace Ms
