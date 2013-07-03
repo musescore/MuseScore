@@ -371,7 +371,7 @@ findTupletCandidatesOfBar(int startBarTick,
                         if (tupletNoteLen < quantValue)
                               continue;
                         TupletInfo tupletInfo = findTupletApproximation(tupletNumber, tupletNoteLen,
-                                    quantValue, startDivTime - quantValue, startDivChordIt, endDivChordIt);
+                                    quantValue, startDivTime, startDivChordIt, endDivChordIt);
                                     // check - is it a valid tuplet approximation?
                         if (!isTupletAllowed(tupletNumber, divLen,
                                              tupletInfo.tupletOnTimeSumError,
@@ -512,8 +512,9 @@ void sortTupletsByAveragePitch(std::vector<TupletInfo> &tuplets)
 
 // all chords here have different onTime values
 
-int nonTupletChordCount(const std::vector<TupletInfo> &tuplets,
-                        const std::multimap<int, MidiChord> &chords)
+std::vector<std::multimap<int, MidiChord>::const_iterator>
+nonTupletChords(const std::vector<TupletInfo> &tuplets,
+                const std::multimap<int, MidiChord> &chords)
       {
       std::set<int> tupletOnTimes;
       for (const auto &tupletInfo: tuplets) {
@@ -521,7 +522,24 @@ int nonTupletChordCount(const std::vector<TupletInfo> &tuplets,
                   tupletOnTimes.insert(chordIt.second->second.onTime);
                   }
             }
-      return chords.size() - tupletOnTimes.size();
+      std::vector<std::multimap<int, MidiChord>::const_iterator> nonTuplets;
+      for (auto it = chords.begin(); it != chords.end(); ++it) {
+            if (tupletOnTimes.find(it->first) == tupletOnTimes.end())
+                  nonTuplets.push_back(it);
+            }
+      return nonTuplets;
+      }
+
+bool hasIntersectionWithChord(int startTick, int endTick,
+            const std::vector<std::multimap<int, MidiChord>::const_iterator> &nonTupletChords)
+      {
+      for (const auto &chordEvent: nonTupletChords) {
+            const MidiChord &midiChord = chordEvent->second;
+            if (endTick > midiChord.onTime
+                        && startTick < midiChord.onTime + midiChord.duration)
+                  return true;
+            }
+      return false;
       }
 
 // the input tuplets should be filtered (for mutual validity)
@@ -533,13 +551,15 @@ void separateTupletVoices(std::vector<TupletInfo> &tuplets,
                   // and notes of each chord as well (desc. order)
       sortNotesByPitch(chords);
       sortTupletsByAveragePitch(tuplets);
-
-      int startVoice = (nonTupletChordCount(tuplets, chords) > 0) ? 1 : 0;
+      auto nonTuplets = nonTupletChords(tuplets, chords);
 
       for (auto now = tuplets.begin(); now != tuplets.end(); ++now) {
-            int voice = startVoice;
+            int voice = 0;
             auto lastMatch = tuplets.end();
             auto firstNowChordIt = now->chords.begin();
+
+            if (hasIntersectionWithChord(now->onTime, now->onTime + now->len, nonTuplets))
+                  ++voice;
             for (auto prev = tuplets.begin(); prev != now; ++prev) {
                               // check is now tuplet go over previous tuplets
                   if (now->onTime + now->len > prev->onTime
@@ -612,16 +632,17 @@ void quantizeChordsAndFindTuplets(std::multimap<int, TupletData> &tupletEvents,
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
             int endBarTick = sigmap->bar2tick(i, 0);
             Fraction barFraction = sigmap->timesig(startBarTick).timesig();
+            std::vector<TupletInfo> preparedTuplets;
+            {
             auto tuplets = findTupletCandidatesOfBar(startBarTick, endBarTick, barFraction, chords);
             filterTuplets(tuplets);
 
-            std::vector<TupletInfo> preparedTuplets;
             for (const auto &t: tuplets)
                   preparedTuplets.push_back(t.second);
+            }
             separateTupletVoices(preparedTuplets, chords);
 
-            for (auto &tuplet: tuplets) {
-                  TupletInfo &tupletInfo = tuplet.second;
+            for (auto &tupletInfo: preparedTuplets) {
                   auto &infoChords = tupletInfo.chords;
                   for (auto &tupletChord: infoChords) {
                         int tupletNoteNum = tupletChord.first;
