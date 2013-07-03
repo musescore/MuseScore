@@ -197,6 +197,13 @@ void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
       Text::startEdit(v, p);
       }
 
+void Dynamic::endEdit()
+      {
+      Text::endEdit();
+      if (!styled() || text() != QString::fromUtf8(dynList[_dynamicType].text))
+            _dynamicType = DYNAMIC_OTHER;
+      }
+
 //---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
