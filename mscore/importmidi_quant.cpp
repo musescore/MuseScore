@@ -117,7 +117,8 @@ int findQuantRaster(const std::multimap<int, MidiChord>::iterator &startBarChord
       return raster;
       }
 
-// chords onTime values don't repeat despite multimap
+// chords onTime values here don't repeat
+// chords that were quantisized in tuplets aren't quantisized here
 
 void doGridQuantizationOfBar(std::multimap<int, MidiChord> &quantizedChords,
                              const std::multimap<int, MidiChord>::iterator &startChordIt,
