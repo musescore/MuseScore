@@ -1866,7 +1866,10 @@ void Beam::editDrag(const EditData& ed)
       f->py2[idx] += dy;
       _userModified[idx] = true;
       setGenerated(false);
-      layout1();
+      if (_elements.front()->isGrace())
+            layoutGraceNotes();
+      else
+            layout1();
       layout();
       }
 

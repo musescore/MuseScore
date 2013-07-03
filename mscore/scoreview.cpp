@@ -1242,19 +1242,6 @@ void ScoreView::updateAll()
 
 //---------------------------------------------------------
 //   moveCursor
-//---------------------------------------------------------
-
-void ScoreView::moveCursor()
-      {
-      const InputState& is = _score->inputState();
-      int track = is.track() == -1 ? 0 : is.track();
-      Segment* segment = is.segment();
-      if (segment)
-            moveCursor(segment, track);
-      }
-
-//---------------------------------------------------------
-//   moveCursor
 //    move cursor during playback
 //---------------------------------------------------------
 
@@ -1328,8 +1315,18 @@ void ScoreView::moveCursor(int tick)
             adjustCanvasPosition(measure, true);
       }
 
-void ScoreView::moveCursor(Segment* segment, int track)
+//---------------------------------------------------------
+//   moveCursor
+//---------------------------------------------------------
+
+void ScoreView::moveCursor()
       {
+      const InputState& is = _score->inputState();
+      int track = is.track() == -1 ? 0 : is.track();
+      Segment* segment = is.segment();
+      if (!segment)
+            return;
+
       int voice = track == -1 ? 0 : track % VOICES;
       QColor c(MScore::selectColor[voice]);
       c.setAlpha(50);
@@ -1371,7 +1368,6 @@ void ScoreView::moveCursor(Segment* segment, int track)
             }
       else {
             Staff* staff    = _score->staff(staffIdx);
-//            double lineDist = staff->isTabStaff() ? 1.5 * _spatium : _spatium;
             double lineDist = staff->staffType()->lineDistance().val() * _spatium;
             int lines       = staff->lines();
             int strg        = _score->inputState().string();
@@ -1390,6 +1386,7 @@ void ScoreView::moveCursor(Segment* segment, int track)
             }
       _cursor->setRect(QRectF(x, y, w, h));
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
+      update();   //DEBUG
       }
 
 //---------------------------------------------------------
@@ -3867,7 +3864,6 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             slur->setEndChord(static_cast<Chord*>(cr2));
             slur->setTrack(cr1->track());
             slur->setParent(cr1);
-            printf("undoAddElement %s %p\n", slur->name(), slur->parent());
             score()->undoAddElement(slur);
             _score->endCmd();
             return;
@@ -4942,7 +4938,6 @@ void ScoreView::search(const QString& s)
 
 void ScoreView::searchPage(int n)
       {
-      printf("search page %d\n", n);
       if (n >= _score->npages())
             n = _score->npages() - 1;
       const Page* page = _score->pages()[n];

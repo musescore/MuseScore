@@ -201,7 +201,7 @@ void Score::endUndoRedo()
 
 void Score::moveCursor()
       {
-      foreach(MuseScoreView* v, viewer)
+      foreach (MuseScoreView* v, viewer)
             v->moveCursor();
       }
 
@@ -359,8 +359,6 @@ void Score::expandVoice()
 
 Note* Score::addPitch(int pitch, bool addFlag)
       {
-printf("add pitch %d add %d repitch %d\n", pitch, addFlag, _is.repitchMode());
-
       if (addFlag) {
             moveToPrevInputPos();
             if (_is.cr() == 0 || _is.cr()->type() != Element::CHORD)
@@ -1643,17 +1641,6 @@ void Score::moveInputPos(Segment* s)
       if (s == 0)
             return;
       _is.setSegment(s);
-//      emit posChanged(s->tick());
-#if 0
-      Element* el;
-      if (s->element(_is.track()))
-            el = s->element(_is.track());
-      else
-            el = s->element(_is.track() / VOICES * VOICES);
-      if (el->type() == CHORD)
-            el = static_cast<Chord*>(el)->upNote();
-      emit adjustCanvasPosition(el, false);
-#endif
       }
 
 //---------------------------------------------------------
@@ -1672,6 +1659,7 @@ void Score::moveToPrevInputPos()
             }
       moveInputPos(s);
       }
+
 //---------------------------------------------------------
 //   moveToNextInputPos
 //   TODO: special case: note is first note of tie: goto to last note of tie
