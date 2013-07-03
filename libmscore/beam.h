@@ -122,9 +122,9 @@ class Beam : public Element {
       QPointF beamPos() const;
       void setBeamPos(const QPointF& bp);
 
-      QVariant getProperty(P_ID propertyId) const;
-      bool setProperty(P_ID propertyId, const QVariant&);
-      QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID propertyId) const;
+      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID id) const;
       };
 
 

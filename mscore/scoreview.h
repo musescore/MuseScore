@@ -314,7 +314,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void startEdit(Element*, int startGrip);
       void startEdit(Element*);
 
-      void moveCursor(Segment*, int track);
+//      void moveCursor(Segment*, int track);
       void moveCursor(int tick);
       int cursorTick() const;
       void setCursorOn(bool);
