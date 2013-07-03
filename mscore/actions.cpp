@@ -1161,37 +1161,37 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "voice-1",
+         QT_TRANSLATE_NOOP("action","1"),
          QT_TRANSLATE_NOOP("action","Voice 1"),
-         QT_TRANSLATE_NOOP("action","Voice 1"),
-         QT_TRANSLATE_NOOP("action","Voice 1"),
-          voice1_ICON
+         QT_TRANSLATE_NOOP("action","Voice 1")
+//          voice1_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "voice-2",
+         QT_TRANSLATE_NOOP("action","2"),
          QT_TRANSLATE_NOOP("action","Voice 2"),
-         QT_TRANSLATE_NOOP("action","Voice 2"),
-         QT_TRANSLATE_NOOP("action","Voice 2"),
-          voice2_ICON
+         QT_TRANSLATE_NOOP("action","Voice 2")
+//          voice2_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "voice-3",
+         QT_TRANSLATE_NOOP("action","3"),
          QT_TRANSLATE_NOOP("action","Voice 3"),
-         QT_TRANSLATE_NOOP("action","Voice 3"),
-         QT_TRANSLATE_NOOP("action","Voice 3"),
-          voice3_ICON
+         QT_TRANSLATE_NOOP("action","Voice 3")
+//          voice3_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "voice-4",
+         QT_TRANSLATE_NOOP("action","4"),
          QT_TRANSLATE_NOOP("action","Voice 4"),
-         QT_TRANSLATE_NOOP("action","Voice 4"),
-         QT_TRANSLATE_NOOP("action","Voice 4"),
-          voice4_ICON
+         QT_TRANSLATE_NOOP("action","Voice 4")
+//          voice4_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,

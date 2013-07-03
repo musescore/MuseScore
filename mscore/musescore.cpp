@@ -710,10 +710,16 @@ MuseScore::MuseScore()
       entryTools->addSeparator();
 
       static const char* sl3[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
-      for (const char* s : sl3) {
-            QAction* a = getAction(s);
+      for (int i = 0; i < 4; ++i) {
+            QToolButton* tb = new QToolButton(this);
+            tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
+            QPalette p(tb->palette());
+            p.setColor(QPalette::Base, MScore::selectColor[i]);
+            tb->setPalette(p);
+            QAction* a = getAction(sl3[i]);
             a->setCheckable(true);
-            entryTools->addAction(a);
+            tb->setDefaultAction(a);
+            entryTools->addWidget(tb);
             }
 
       //---------------------
