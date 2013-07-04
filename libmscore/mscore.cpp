@@ -42,6 +42,7 @@ int     MScore::_hRaster;
 QColor  MScore::selectColor[VOICES];
 QColor  MScore::defaultColor;
 QColor  MScore::layoutBreakColor;
+QColor  MScore::frameMarginColor;
 QColor  MScore::bgColor;
 QColor  MScore::dropColor;
 bool    MScore::warnPitchRange;
@@ -130,6 +131,7 @@ void MScore::init()
       lastError           = "";
 
       layoutBreakColor    = QColor("#6abed3");
+      frameMarginColor    = QColor("#6abed3");
       bgColor.setRgb(0xbf, 0xbf, 0xbf);
 
       _defaultStyle         = new MStyle();

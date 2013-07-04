@@ -80,7 +80,7 @@ ViewRect::ViewRect(QWidget* w)
 void ViewRect::paintEvent(QPaintEvent* ev)
       {
       QPainter p(this);
-      QPen pen(Qt::blue, 2.0);
+      QPen pen(MScore::selectColor[0], 2.0);
       p.setPen(pen);
       p.setBrush(QColor(0, 0, 255, 40));
       p.drawRect(ev->rect());

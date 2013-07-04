@@ -285,7 +285,7 @@ void Image::draw(QPainter* painter) const
             }
       if (selected() && !(score() && score()->printing())) {
             painter->setBrush(Qt::NoBrush);
-            painter->setPen(Qt::blue);
+            painter->setPen(MScore::selectColor[0]);
             painter->drawRect(bbox());
             }
       }
