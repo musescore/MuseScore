@@ -5041,11 +5041,18 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
             if (tag == "root") {
                   QString step;
                   int alter = 0;
+                  bool invalidRoot = false;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         QString tag(ee.tagName());
                         if (tag == "root-step") {
                               // attributes: print-style
                               step = ee.text();
+                              if (ee.hasAttribute("text")) {
+                                    QString rtext = ee.attribute("text");
+                                    if (rtext == "") {
+                                          invalidRoot = true;
+                                          }
+                                    }
                               }
                         else if (tag == "root-alter") {
                               // attributes: print-object, print-style
@@ -5055,7 +5062,10 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                         else
                               domError(ee);
                         }
-                  ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
+                  if (invalidRoot)
+                        ha->setRootTpc(INVALID_TPC);
+                  else
+                        ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
                   }
             else if (tag == "function") {
                   // attributes: print-style
@@ -5145,52 +5155,19 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
 
       //TODO-WS ha->setTick(tick);
 
-      const ChordDescription* d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
+      const ChordDescription* d = 0;
+      if (ha->rootTpc() != INVALID_TPC)
+            d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
       if (d) {
             ha->setId(d->id);
             ha->setTextName(d->names.front());
-            ha->render();
             }
-#if 0
       else {
-            // This code won't be hit if MusicXML was at all straightforward,
-            // as fromXml() is normally able to construct a chord description by itself.
-            // The following is retained from previous revisions as a fallback,
-            // in case fromXml fails but there is a match to be found in the tags from the chord list.
-            d = ha->fromXml(kind, degreeList);
-            if (d == 0) {
-                  QString degrees;
-                  foreach(const HDegree &d, degreeList) {
-                        if (!degrees.isEmpty())
-                              degrees += " ";
-                        degrees += d.text();
-                        }
-                  qDebug("unknown chord txt: <%s> kind: <%s> degrees: %s",
-                         qPrintable(kindText), qPrintable(kind), qPrintable(degrees));
-                  // Strategy II: lookup "kind", merge in degree list and try to find
-                  //    harmony in list
-
-                  d = ha->fromXml(kind);
-                  if (d) {
-                        ha->setId(d->id);
-                        foreach(const HDegree &d, degreeList)
-                              ha->addDegree(d);
-                        ha->resolveDegreeList();
-                        ha->render();
-                        }
-                  else {
-                        qDebug("'kind: <%s> not found in harmony data base", qPrintable(kind));
-                        QString s = tpc2name(ha->rootTpc(), score->style(ST_useGermanNoteNames).toBool()) + kindText;
-                        ha->setText(s);
-                        }
-                  }
-            else {
-                  ha->setId(d->id);
-                  // ha->resolveDegreeList();
-                  ha->render();
-                  }
+            ha->setId(-1);
+            ha->setTextName(kindText);
             }
-#endif
+      ha->render();
+
       ha->setVisible(printObject == "yes");
 
       // TODO-LV: do this only if ha points to a valid harmony
