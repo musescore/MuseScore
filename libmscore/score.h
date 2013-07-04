@@ -546,7 +546,6 @@ class Score : public QObject {
       void removeElement(Element*);
 
       void cmdAddSpanner(Spanner* e, const QPointF& pos);
-      void cmdAddBSymbol(BSymbol*, const QPointF&, const QPointF&);
 
       Note* addNote(Chord*, int pitch);
       Note* addNote(Chord*, NoteVal &noteVal);
