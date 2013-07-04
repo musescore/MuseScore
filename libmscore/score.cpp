@@ -1362,6 +1362,8 @@ void Score::addElement(Element* element)
             case Element::HAIRPIN:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
+                  if (et == Element::TEXTLINE && spanner->anchor() == Spanner::ANCHOR_NOTE)
+                        break;
                   foreach(SpannerSegment* ss, spanner->spannerSegments()) {
                         if (ss->system())
                               ss->system()->add(ss);

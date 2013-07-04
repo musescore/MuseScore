@@ -3827,11 +3827,13 @@ void ScoreView::cmdAddNoteLine()
             qDebug("addNoteLine: no note %p %p", firstNote, lastNote);
             return;
             }
-      NoteLine* tl = new NoteLine(_score);
+      TextLine* tl = new TextLine(_score);
       tl->setParent(firstNote);
-      tl->setStartNote(firstNote);
-      tl->setEndNote(lastNote);
+      tl->setStartElement(firstNote);
+      tl->setEndElement(lastNote);
       tl->setDiagonal(true);
+      tl->setAnchor(Spanner::ANCHOR_NOTE);
+      tl->setTick(firstNote->chord()->tick());
       _score->startCmd();
       _score->undoAddElement(tl);
       _score->endCmd();

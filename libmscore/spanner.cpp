@@ -346,7 +346,7 @@ ChordRest* Score::findCR(int tick, int track) const
 
 void Spanner::computeStartElement()
       {
-      _startElement = 0;
+//      _startElement = 0;
       switch (_anchor) {
             case ANCHOR_SEGMENT:
                   _startElement = score()->findCR(tick(), track());
@@ -368,7 +368,7 @@ void Spanner::computeStartElement()
 
 void Spanner::computeEndElement()
       {
-      _endElement = 0;
+//      _endElement = 0;
       switch (_anchor) {
             case ANCHOR_SEGMENT:
                   _endElement = score()->findCR(tick2(), track());

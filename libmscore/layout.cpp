@@ -627,11 +627,12 @@ void Score::doLayout()
                                     }
                               c->layoutStem();
                               c->layoutArpeggio2();
-                              int n = c->notes().size();
-                              for (int i = 0; i < n; ++i) {
-                                    Tie* tie = c->notes().at(i)->tieFor();
+                              for (Note* n : c->notes()) {
+                                    Tie* tie = n->tieFor();
                                     if (tie)
                                           tie->layout();
+                                    for (Spanner* sp : n->spannerFor())
+                                          sp->layout();
                                     }
                               }
                         cr->layoutArticulations();
@@ -1370,8 +1371,12 @@ void Score::add(Element* el)
                         b->elements().at(i)->setBeam(b);
                   }
                   break;
-            case Element::SLUR:
             case Element::TEXTLINE:
+                  if (static_cast<Spanner*>(el)->anchor() == Spanner::ANCHOR_NOTE)
+                        break;
+                  // fall through
+
+            case Element::SLUR:
             case Element::VOLTA:
             case Element::TRILL:
             case Element::PEDAL:

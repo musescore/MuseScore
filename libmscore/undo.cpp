@@ -1000,7 +1000,7 @@ void Score::undoAddElement(Element* element)
                || element->type() == Element::TEXTLINE
                || element->type() == Element::PEDAL
                || element->type() == Element::VOLTA) {
-                  ne->setParent(0);
+                  // ne->setParent(0);  ???
                   undo(new AddElement(ne));
                   }
             else if (element->type() == Element::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {

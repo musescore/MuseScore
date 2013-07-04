@@ -2610,10 +2610,6 @@ spatium unit</extracomment>
         <translation>Μικρό μέγεθος κλειδιού</translation>
     </message>
     <message>
-        <source>Use German names</source>
-        <translation>Χρήση γερμανικών ονομάτων</translation>
-    </message>
-    <message>
         <source>Chord description file</source>
         <translation>Αρχείο περιγραφής συγχορδίας</translation>
     </message>
@@ -3095,6 +3091,30 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Positioning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, Bb, B, C, C#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, B, H, C, Cis, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La, Sib, Si, Do, Do#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Solfeggio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lower case minor chords</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4200,6 +4220,41 @@ spatium unit</extracomment>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorSlur</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Μορφή</translation>
+    </message>
+    <message>
+        <source>Slur</source>
+        <translation type="unfinished">Σύζευξη</translation>
+    </message>
+    <message>
+        <source>reset value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Line Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>solid</source>
+        <translation type="unfinished">στερεό</translation>
+    </message>
+    <message>
+        <source>dotted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dashed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5732,25 +5787,6 @@ failed: </source>
     </message>
 </context>
 <context>
-    <name>Ms::EditTools</name>
-    <message>
-        <source>Edit Mode Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>sp</source>
-        <translation type="unfinished">sp</translation>
-    </message>
-    <message>
-        <source>x:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>y:</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Ms::ImportMidiPanel</name>
     <message>
         <source>MIDI file not found</source>
@@ -7271,10 +7307,6 @@ save before closing?</source>
         <translation type="unfinished">Λειτουργία Επεξεργασίας</translation>
     </message>
     <message>
-        <source>Slur Properties...</source>
-        <translation type="unfinished">Ιδιότητες Σύζευξης...</translation>
-    </message>
-    <message>
         <source>Staff</source>
         <translation type="unfinished">Πεντάγραμμο</translation>
     </message>
@@ -8722,10 +8754,6 @@ failed: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>native</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Icon size:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8996,6 +9024,10 @@ failed: </source>
     <message>
         <source>Print</source>
         <translation type="unfinished">Εκτύπωση</translation>
+    </message>
+    <message>
+        <source>light</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9372,25 +9404,6 @@ failed: </source>
     <message>
         <source>Replace</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SlurPropertyBase</name>
-    <message>
-        <source>Slur Properties</source>
-        <translation>Ιδιότητες Σύζευξης</translation>
-    </message>
-    <message>
-        <source>Solid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dotted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dashed</source>
-        <translation type="unfinished">Με παύλες</translation>
     </message>
 </context>
 <context>
@@ -10107,6 +10120,21 @@ altera</source>
     <message>
         <source>New</source>
         <translation type="unfinished">Νέο</translation>
+    </message>
+</context>
+<context>
+    <name>TieBase</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Μορφή</translation>
+    </message>
+    <message>
+        <source>EndNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StartNote</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12366,10 +12394,6 @@ failed: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Chords...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Edit chord style</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12871,6 +12895,26 @@ failed: </source>
     </message>
     <message>
         <source>add brackets to notehead</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="unfinished">1</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation type="unfinished">2</translation>
+    </message>
+    <message>
+        <source>3</source>
+        <translation type="unfinished">3</translation>
+    </message>
+    <message>
+        <source>4</source>
+        <translation type="unfinished">4</translation>
+    </message>
+    <message>
+        <source>Chordnames...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
