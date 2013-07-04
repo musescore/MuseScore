@@ -1073,7 +1073,7 @@ void Score::cmdAddBSymbol(BSymbol* s, const QPointF& pos, const QPointF& off)
       s->setSelected(false);
       bool foundPage = false;
       foreach (Page* page, pages()) {
-            if (page->contains(pos)) {
+            if (page->contains(pos - page->pagePos())) {
                   const QList<System*>* sl = page->systems();
                   if (sl->isEmpty()) {
                         qDebug("addSymbol: cannot put symbol here: no system on page");
@@ -1096,7 +1096,7 @@ void Score::cmdAddBSymbol(BSymbol* s, const QPointF& pos, const QPointF& off)
                   }
             }
       if (!foundPage) {
-            qDebug("addSymbol: cannot put symbol here: no page");
+            qDebug("addSymbol: cannot put symbol here: no page: %f %f", pos.x(), pos.y());
             delete s;
             return;
             }
