@@ -438,6 +438,10 @@ bool Image::load(const QString& ss)
       _linkPath = fi.canonicalFilePath();
       _storeItem = imageStore.add(_linkPath, ba);
       _storeItem->reference(this);
+      if (path.endsWith(".svg"))
+            setImageType(IMAGE_SVG);
+      else
+            setImageType(IMAGE_RASTER);
       return true;
       }
 

@@ -3760,7 +3760,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Scale to Frame Size</source>
-        <translation>Auf Rahmengröße skalieren</translation>
+        <translation>Skalieren</translation>
     </message>
     <message>
         <source>Lock Aspect Ratio</source>
@@ -4888,7 +4888,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Hook</source>
-        <translation>Haken</translation>
+        <translation>Fähnchen</translation>
     </message>
     <message>
         <source>Up</source>
@@ -5778,85 +5778,85 @@ fehlgeschlagen: </translation>
     <name>Ms::InspectorNote</name>
     <message>
         <source>Select</source>
-        <translation type="unfinished">Auswahl</translation>
+        <translation>Auswählen</translation>
     </message>
     <message>
         <source>Dot1</source>
-        <translation type="unfinished"></translation>
+        <translation>Punkt1</translation>
     </message>
     <message>
         <source>Dot2</source>
-        <translation type="unfinished"></translation>
+        <translation>Punkt2</translation>
     </message>
     <message>
         <source>Dot3</source>
-        <translation type="unfinished"></translation>
+        <translation>Punkt3</translation>
     </message>
     <message>
         <source>Hook</source>
-        <translation type="unfinished">Haken</translation>
+        <translation>Fähnchen</translation>
     </message>
     <message>
         <source>Stem</source>
-        <translation type="unfinished">Notenhals</translation>
+        <translation>Notenhals</translation>
     </message>
     <message>
         <source>Beam</source>
-        <translation type="unfinished">Balken</translation>
+        <translation>Balken</translation>
     </message>
 </context>
 <context>
     <name>Ms::InstrumentWizard</name>
     <message>
         <source>Instrument List</source>
-        <translation type="unfinished">Instrumentenliste</translation>
+        <translation>Instrumentenliste</translation>
     </message>
     <message>
         <source>Staves</source>
-        <translation type="unfinished">Notenzeilen</translation>
+        <translation>Notenzeilen</translation>
     </message>
     <message>
         <source>Visib.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichtbar</translation>
     </message>
     <message>
         <source>Clef</source>
-        <translation type="unfinished">Schlüssel</translation>
+        <translation>Schlüssel</translation>
     </message>
     <message>
         <source>Link.</source>
-        <translation type="unfinished"></translation>
+        <translation>Link.</translation>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeilentyp</translation>
     </message>
 </context>
 <context>
     <name>Ms::InstrumentsDialog</name>
     <message>
         <source>Staff %1</source>
-        <translation type="unfinished">Notenzeile %1</translation>
+        <translation>Notenzeile %1</translation>
     </message>
     <message>
         <source>Staves</source>
-        <translation type="unfinished">Notenzeilen</translation>
+        <translation>Notenzeilen</translation>
     </message>
     <message>
         <source>Visib.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichtbar</translation>
     </message>
     <message>
         <source>Clef</source>
-        <translation type="unfinished">Schlüssel</translation>
+        <translation>Schlüssel</translation>
     </message>
     <message>
         <source>Link.</source>
-        <translation type="unfinished"></translation>
+        <translation>Link.</translation>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeilentyp</translation>
     </message>
     <message>
         <source>MuseScore: Save Instrument List</source>
@@ -5869,7 +5869,7 @@ fehlgeschlagen: </translation>
     <message>
         <source>Open Instruments File
 </source>
-        <translation type="unfinished">Instrumentenliste öffnen
+        <translation>Instrumentenliste öffnen
 </translation>
     </message>
     <message>
@@ -13227,7 +13227,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Hook</source>
-        <translation type="unfinished">Haken</translation>
+        <translation>Fähnchen</translation>
     </message>
     <message>
         <source>Lyrics</source>
