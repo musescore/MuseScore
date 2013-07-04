@@ -169,7 +169,7 @@ void SimpleText::drawFrame(QPainter* painter) const
       if (!visible())
             color = Qt::gray;
       else if (selected())
-            color = Qt::blue;
+            color = MScore::selectColor[0];
       if (frameWidth().val() != 0.0) {
             QPen pen(color, frameWidth().val() * spatium());
             painter->setPen(pen);

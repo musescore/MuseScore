@@ -384,6 +384,7 @@ class MScore : public QObject {
       static QColor defaultColor;
       static QColor dropColor;
       static QColor layoutBreakColor;
+      static QColor frameMarginColor;
       static QColor bgColor;
       static bool warnPitchRange;
 

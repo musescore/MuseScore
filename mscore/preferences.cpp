@@ -282,6 +282,7 @@ void Preferences::write()
       s.setValue("portMidiInput",   portMidiInput);
 
       s.setValue("layoutBreakColor",   MScore::layoutBreakColor);
+      s.setValue("frameMarginColor",   MScore::frameMarginColor);
       s.setValue("antialiasedDrawing", antialiasedDrawing);
       switch(sessionStart) {
             case EMPTY_SESSION:  s.setValue("sessionStart", "empty"); break;
@@ -430,6 +431,7 @@ void Preferences::read()
       portaudioDevice    = s.value("portaudioDevice", portaudioDevice).toInt();
       portMidiInput      = s.value("portMidiInput", portMidiInput).toString();
       MScore::layoutBreakColor   = s.value("layoutBreakColor", MScore::layoutBreakColor).value<QColor>();
+      MScore::frameMarginColor   = s.value("frameMarginColor", MScore::frameMarginColor).value<QColor>();
       antialiasedDrawing = s.value("antialiasedDrawing", antialiasedDrawing).toBool();
 
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();

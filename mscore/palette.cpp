@@ -530,8 +530,10 @@ void Palette::paintEvent(QPaintEvent* event)
       p.setRenderHint(QPainter::Antialiasing, true);
 
       QColor bgColor(0xf6, 0xf0, 0xda);
+      if (preferences.fgUseColor)
+         bgColor = preferences.fgColor;
 #if 1
-      p.setBrush(QColor(0xf6, 0xf0, 0xda));
+      p.setBrush(bgColor);
       p.drawRoundedRect(0, 0, width()-3, height(), 2, 2);
 #else
       p.fillRect(event->rect(), QColor(0xf6, 0xf0, 0xda));
