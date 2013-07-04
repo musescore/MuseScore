@@ -26,7 +26,7 @@
 #include "mtest/testutils.h"
 #include "inner_func_decl.h"
 #include "mscore/importmidi_chord.h"
-#include "mscore/importmidi_tupletdata.h"
+#include "mscore/importmidi_tuplet.h"
 
 
 namespace Ms {
@@ -62,7 +62,6 @@ class TestImportMidi : public QObject, public MTest
       void findTupletNumbers();
       void findOnTimeRegularError();
       void findTupletApproximation();
-      void findTupletCandidatesOfBar();
       void separateTupletVoices();
       };
 
@@ -107,27 +106,27 @@ void TestImportMidi::findChordInBar()
       int startBarTick = 0;
       int endBarTick = 4 * MScore::division; // 4/4
 
-      auto firstChordIt = Quantize::findFirstChordInRange(startBarTick, endBarTick,
-                                                          chords.begin(), chords.end());
+      auto firstChordIt = findFirstChordInRange(startBarTick, endBarTick,
+                                                chords.begin(), chords.end());
       QCOMPARE(firstChordIt, chords.begin());
-      auto endChordIt = Quantize::findEndChordInRange(endBarTick, firstChordIt, chords.end());
+      auto endChordIt = findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.find(2000));
 
       endBarTick = 0;
 
-      firstChordIt = Quantize::findFirstChordInRange(startBarTick, endBarTick,
-                                                     chords.begin(), chords.end());
+      firstChordIt = findFirstChordInRange(startBarTick, endBarTick,
+                                           chords.begin(), chords.end());
       QCOMPARE(firstChordIt, chords.end());
-      endChordIt = Quantize::findEndChordInRange(endBarTick, firstChordIt, chords.end());
+      endChordIt = findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.end());
 
       startBarTick = 10;
       endBarTick = -100;
 
-      firstChordIt = Quantize::findFirstChordInRange(startBarTick, endBarTick,
-                                                     chords.begin(), chords.end());
+      firstChordIt = findFirstChordInRange(startBarTick, endBarTick,
+                                           chords.begin(), chords.end());
       QCOMPARE(firstChordIt, chords.end());
-      endChordIt = Quantize::findEndChordInRange(endBarTick, firstChordIt, chords.end());
+      endChordIt = findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.end());
       }
 
@@ -148,14 +147,14 @@ void TestImportMidi::bestChordForTupletNote()
       chords.insert({3201, MidiChord()});
 
       int tupletNotePos = 1 * tupletNoteLen;
-      auto bestChord = Quantize::findBestChordForTupletNote(tupletNotePos, quantValue,
-                                                            chords.begin(), chords.end());
+      auto bestChord = MidiTuplet::findBestChordForTupletNote(tupletNotePos, quantValue,
+                                                              chords.begin(), chords.end());
       QCOMPARE(bestChord.first, chords.find(160));
       QCOMPARE(bestChord.second, 0);
 
       tupletNotePos = 2 * tupletNoteLen;
-      bestChord = Quantize::findBestChordForTupletNote(tupletNotePos, quantValue,
-                                                       chords.begin(), chords.end());
+      bestChord = MidiTuplet::findBestChordForTupletNote(tupletNotePos, quantValue,
+                                                         chords.begin(), chords.end());
       QCOMPARE(bestChord.first, chords.find(360));
       QCOMPARE(bestChord.second, 40);
       }
@@ -184,8 +183,8 @@ void isSingleNoteInTupletAllowed(int tupletNumber,
                   // tuplet error is less than regular error => allowed
       int tupletOnTimeSumError = 0;
       int regularSumError = 1;
-      QCOMPARE(Quantize::isTupletAllowed(tupletNumber, tupletLen, tupletOnTimeSumError,
-                                         regularSumError, quantValue, tupletChords),
+      QCOMPARE(MidiTuplet::isTupletAllowed(tupletNumber, tupletLen, tupletOnTimeSumError,
+                                           regularSumError, quantValue, tupletChords),
                expectedResult);
       }
 
@@ -210,8 +209,8 @@ void isChordCountInTupletAllowed(int tupletNumber,
                   // tuplet error is less than regular error => allowed
       int tupletOnTimeSumError = 0;
       int regularSumError = 1;
-      QCOMPARE(Quantize::isTupletAllowed(tupletNumber, tupletLen, tupletOnTimeSumError,
-                                         regularSumError, quantValue, tupletChords),
+      QCOMPARE(MidiTuplet::isTupletAllowed(tupletNumber, tupletLen, tupletOnTimeSumError,
+                                           regularSumError, quantValue, tupletChords),
                expectedResult);
       }
 
@@ -233,8 +232,8 @@ void isTupletErrorAllowed(int tupletOnTimeSumError,
 
       std::map<int, std::multimap<int, MidiChord>::iterator> tupletChords;
       tupletChords.insert({0, chords.begin()});
-      QCOMPARE(Quantize::isTupletAllowed(tupletNumber, tupletLen, tupletOnTimeSumError,
-                                         regularSumError, quantValue, tupletChords),
+      QCOMPARE(MidiTuplet::isTupletAllowed(tupletNumber, tupletLen, tupletOnTimeSumError,
+                                           regularSumError, quantValue, tupletChords),
                expectedResult);
       }
 
@@ -315,7 +314,7 @@ void TestImportMidi::findTupletNumbers()
       {
       Fraction barFraction(4, 4);
       int divLen = barFraction.ticks() / 4;
-      auto numbers = Quantize::findTupletNumbers(divLen, barFraction);
+      auto numbers = MidiTuplet::findTupletNumbers(divLen, barFraction);
       QVERIFY(numbers.size() == 3);
       QCOMPARE(numbers[0], 3);
       QCOMPARE(numbers[1], 5);
@@ -324,7 +323,7 @@ void TestImportMidi::findTupletNumbers()
       {
       Fraction barFraction(6, 8);
       int divLen = barFraction.ticks() / 2;
-      auto numbers = Quantize::findTupletNumbers(divLen, barFraction);
+      auto numbers = MidiTuplet::findTupletNumbers(divLen, barFraction);
       QVERIFY(numbers.size() == 2);
       QCOMPARE(numbers[0], 2);
       QCOMPARE(numbers[1], 4);
@@ -335,7 +334,7 @@ void TestImportMidi::findOnTimeRegularError()
       {
       int quantValue = MScore::division / 4;  // 1/16
       int onTime = quantValue + 12;
-      QCOMPARE(Quantize::findOnTimeRegularError(onTime, quantValue), 12);
+      QCOMPARE(MidiTuplet::findOnTimeRegularError(onTime, quantValue), 12);
       }
 
 void TestImportMidi::findTupletApproximation()
@@ -356,7 +355,7 @@ void TestImportMidi::findTupletApproximation()
 
       {
       int startTupletTime = 0;
-      Ms::Quantize::TupletInfo tupletApprox = Quantize::findTupletApproximation(
+      MidiTuplet::TupletInfo tupletApprox = MidiTuplet::findTupletApproximation(
                         tupletNumber, tupletNoteLen, quantValue,
                         startTupletTime, chords.begin(), chords.end()
                         );
@@ -374,7 +373,7 @@ void TestImportMidi::findTupletApproximation()
       }
       {
       int startTupletTime = 960;
-      Ms::Quantize::TupletInfo tupletApprox = Quantize::findTupletApproximation(
+      MidiTuplet::TupletInfo tupletApprox = MidiTuplet::findTupletApproximation(
                         tupletNumber, tupletNoteLen, quantValue,
                         startTupletTime, chords.begin(), chords.end()
                         );
@@ -382,7 +381,7 @@ void TestImportMidi::findTupletApproximation()
       }
       {
       int startTupletTime = 1440;
-      Ms::Quantize::TupletInfo tupletApprox = Quantize::findTupletApproximation(
+      MidiTuplet::TupletInfo tupletApprox = MidiTuplet::findTupletApproximation(
                         tupletNumber, tupletNoteLen, quantValue,
                         startTupletTime, chords.begin(), chords.end()
                         );
@@ -391,27 +390,6 @@ void TestImportMidi::findTupletApproximation()
       QCOMPARE(tupletApprox.regularSumError, 40);
       QCOMPARE(tupletApprox.chords.find(0)->second, chords.find(1480));
       }
-      }
-
-void TestImportMidi::findTupletCandidatesOfBar()
-      {
-//      int startBarTick = 0;
-//      int endBarTick = 1920;
-//      Fraction barFraction(4, 4);
-
-//      std::multimap<int, MidiChord> chords;
-//      chords.insert({0, MidiChord()});
-//      chords.insert({160, MidiChord()});
-//      chords.insert({320, MidiChord()});
-//      chords.insert({480, MidiChord()});
-//      chords.insert({1480, MidiChord()});
-//      chords.insert({2000, MidiChord()});
-//      chords.insert({3201, MidiChord()});
-
-//      std::multimap<double, TupletInfo> candidates
-//                  = Quantize::findTupletCandidatesOfBar(startBarTick, endBarTick,
-//                                                        barFraction, chords);
-      //      QVERIFY(candidates.size() == 2);
       }
 
 //--------------------------------------------------------------------------
@@ -485,14 +463,14 @@ void TestImportMidi::separateTupletVoices()
       chords.insert({chord6_7.onTime, chord6_7});
       chords.insert({chord7_7.onTime, chord7_7});
 
-      Quantize::TupletInfo tripletInfo;
+      MidiTuplet::TupletInfo tripletInfo;
       tripletInfo.onTime = chord1.onTime;
       tripletInfo.len = tripletLen;
       tripletInfo.chords.insert({0, chords.find(0 * tripletNoteLen)});
       tripletInfo.chords.insert({1, chords.find(1 * tripletNoteLen)});
       tripletInfo.chords.insert({2, chords.find(2 * tripletNoteLen)});
 
-      Quantize::TupletInfo quintupletInfo;
+      MidiTuplet::TupletInfo quintupletInfo;
       quintupletInfo.onTime = chord1.onTime;
       quintupletInfo.len = quintupletLen;
       quintupletInfo.chords.insert({0, chords.find(0 * quintupletNoteLen)});
@@ -501,7 +479,7 @@ void TestImportMidi::separateTupletVoices()
       quintupletInfo.chords.insert({3, chords.find(3 * quintupletNoteLen)});
       quintupletInfo.chords.insert({4, chords.find(4 * quintupletNoteLen)});
 
-      Quantize::TupletInfo septupletInfo;
+      MidiTuplet::TupletInfo septupletInfo;
       septupletInfo.onTime = chord1.onTime;
       septupletInfo.len = septupletLen;
       septupletInfo.chords.insert({0, chords.find(0 * septupletNoteLen)});
@@ -512,7 +490,7 @@ void TestImportMidi::separateTupletVoices()
       septupletInfo.chords.insert({5, chords.find(5 * septupletNoteLen)});
       septupletInfo.chords.insert({6, chords.find(6 * septupletNoteLen)});
 
-      std::vector<Quantize::TupletInfo> tuplets;
+      std::vector<MidiTuplet::TupletInfo> tuplets;
       tuplets.push_back(tripletInfo);
       tuplets.push_back(quintupletInfo);
       tuplets.push_back(septupletInfo);
@@ -537,7 +515,7 @@ void TestImportMidi::separateTupletVoices()
       QCOMPARE(septupletIt->second->second.notes[1].pitch, 71);
       QCOMPARE(septupletIt->second->second.notes[2].pitch, 67);
 
-      Quantize::separateTupletVoices(tuplets, chords);
+      MidiTuplet::separateTupletVoices(tuplets, chords);
 
       QVERIFY(chords.size() == 15);
 

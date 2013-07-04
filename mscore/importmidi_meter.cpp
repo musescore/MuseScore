@@ -2,7 +2,7 @@
 #include "libmscore/fraction.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
-#include "importmidi_tupletdata.h"
+#include "importmidi_tuplet.h"
 
 #include <memory>
 
@@ -113,7 +113,7 @@ DivisionInfo metricDivisionsOfBar(const Fraction &barFraction)
       return barDivInfo;
       }
 
-DivisionInfo metricDivisionsOfTuplet(const TupletData &tuplet,
+DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData &tuplet,
                                      int startLevel)
       {
       DivisionInfo tupletDivInfo;
@@ -161,7 +161,7 @@ std::vector<int> divisionsOfBarForTuplets(const Fraction &barFraction)
 // result in vector: first elements - all tuplets info, one at the end - bar division info
 
 std::vector<DivisionInfo> divisionInfo(const Fraction &barFraction,
-                                       const std::vector<TupletData> &tupletsInBar)
+                                       const std::vector<MidiTuplet::TupletData> &tupletsInBar)
       {
       std::vector<DivisionInfo> divsInfo;
 
@@ -256,7 +256,7 @@ Meter::MaxLevel maxLevelBetween(int startTickInBar,
 
 int tupletNumberForDuration(int startTick,
                             int endTick,
-                            const std::vector<TupletData> &tupletsInBar)
+                            const std::vector<MidiTuplet::TupletData> &tupletsInBar)
       {
       for (const auto &tupletData: tupletsInBar) {
             if (startTick >= tupletData.onTime
@@ -386,7 +386,7 @@ QList<std::pair<Fraction, TDuration> >
 toDurationList(int startTickInBar,
                int endTickInBar,
                const Fraction &barFraction,
-               const std::vector<TupletData> &tupletsInBar,
+               const std::vector<MidiTuplet::TupletData> &tupletsInBar,
                DurationType durationType,
                bool useDots)
       {
@@ -418,8 +418,8 @@ toDurationList(int startTickInBar,
             if (node->tupletRatio.numerator() / node->tupletRatio.denominator() == 1) {
                   int tupletNumber = tupletNumberForDuration(node->startTick, node->endTick, tupletsInBar);
                   if (tupletNumber != -1) {
-                        auto it = tupletRatios.find(tupletNumber);
-                        if (it != tupletRatios.end())
+                        auto it = MidiTuplet::tupletRatios().find(tupletNumber);
+                        if (it != MidiTuplet::tupletRatios().end())
                               node->tupletRatio = it->second;
                         }
                   }

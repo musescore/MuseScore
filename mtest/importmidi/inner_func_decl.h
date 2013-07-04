@@ -7,18 +7,7 @@ namespace Ms {
 class MidiChord;
 class Fraction;
 
-namespace Quantize {
-
-std::multimap<int, MidiChord>::iterator
-findFirstChordInRange(int startDivTick,
-                      int endDivTick,
-                      const std::multimap<int, MidiChord>::iterator &startBarChordIt,
-                      const std::multimap<int, MidiChord>::iterator &endBarChordIt);
-
-std::multimap<int, MidiChord>::iterator
-findEndChordInRange(int endDivTick,
-                    const std::multimap<int, MidiChord>::iterator &startDivChordIt,
-                    const std::multimap<int, MidiChord>::iterator &endBarChordIt);
+namespace MidiTuplet {
 
 std::pair<std::multimap<int, MidiChord>::iterator, int>
 findBestChordForTupletNote(int tupletNotePos,
@@ -45,15 +34,6 @@ TupletInfo findTupletApproximation(int tupletNumber,
                                    int startTupletTime,
                                    const std::multimap<int, MidiChord>::iterator &startChordIt,
                                    const std::multimap<int, MidiChord>::iterator &endChordIt);
-
-std::multimap<double, TupletInfo>
-findTupletCandidatesOfBar(int startBarTick,
-                          int endBarTick,
-                          const Fraction &barFraction,
-                          std::multimap<int, MidiChord> &chords);
-
-void separateTupletVoices(std::vector<TupletInfo> &tuplets,
-                          std::multimap<int, MidiChord> &chords);
 
 } // namespace Quantize
 } // namespace Ms

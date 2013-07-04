@@ -6,7 +6,10 @@ namespace Ms {
 
 class MidiChord;
 class TimeSigMap;
+
+namespace MidiTuplet {
 struct TupletData;
+}
 
 namespace Quantize {
 
@@ -16,10 +19,14 @@ void applyGridQuant(std::multimap<int, MidiChord> &chords,
                     const TimeSigMap* sigmap,
                     int lastTick);
 
-void quantizeChordsAndFindTuplets(std::multimap<int, TupletData> &tupletEvents,
-                                  std::multimap<int, MidiChord> &chords,
-                                  const TimeSigMap* sigmap,
-                                  int lastTick);
+void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tupletEvents,
+                              std::multimap<int, MidiChord> &chords,
+                              const TimeSigMap* sigmap,
+                              int lastTick);
+
+int findQuantRaster(const std::multimap<int, MidiChord>::iterator &startBarChordIt,
+                    const std::multimap<int, MidiChord>::iterator &endChordIt,
+                    int endBarTick);
 
 } // namespace Quantize
 } // namespace Ms
