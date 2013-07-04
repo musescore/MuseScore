@@ -330,7 +330,6 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
 
 void LineSegment::editDrag(const EditData& ed)
       {
-#if 1 // TODO-S
       // Only for resizing according to the diagonal properties
       QPointF deltaResize(ed.delta.x(), line()->diagonal() ? ed.delta.y() : 0.0);
 
@@ -364,7 +363,7 @@ void LineSegment::editDrag(const EditData& ed)
 
                         noteOld->removeSpannerBack(l);
                         noteNew->addSpannerBack(l);
-//TODO-S                        l->setEndElemen(noteNew);
+                        l->setEndElement(noteNew);
 
                         _userOff2 += noteOld->canvasPos() - noteNew->canvasPos();
                         }
@@ -373,7 +372,6 @@ void LineSegment::editDrag(const EditData& ed)
                         }
                   }
             }
-#endif
       line()->layout();
       }
 
@@ -545,6 +543,7 @@ void SLine::layout()
                   continue;
             ++segmentsNeeded;
             }
+
       int segCount = spannerSegments().size();
 
       if (segmentsNeeded != segCount) {
