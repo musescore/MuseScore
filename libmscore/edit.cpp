@@ -1064,48 +1064,6 @@ void Score::cmdFlip()
       }
 
 //---------------------------------------------------------
-//   cmdAddBSymbol
-//    add Symbol or Image
-//---------------------------------------------------------
-
-void Score::cmdAddBSymbol(BSymbol* s, const QPointF& pos, const QPointF& off)
-      {
-      s->setSelected(false);
-      bool foundPage = false;
-      foreach (Page* page, pages()) {
-            if (page->contains(pos - page->pagePos())) {
-                  const QList<System*>* sl = page->systems();
-                  if (sl->isEmpty()) {
-                        qDebug("addSymbol: cannot put symbol here: no system on page");
-                        delete s;
-                        return;
-                        }
-                  System* system = sl->front();
-                  MeasureBase* m = system->measures().front();
-                  if (m == 0) {
-                        qDebug("addSymbol: cannot put symbol here: no measure in system");
-                        delete s;
-                        return;
-                        }
-                  s->setPos(0.0, 0.0);
-                  s->setUserOff(pos - m->pagePos() - off);
-                  s->setTrack(0);
-                  s->setParent(m);
-                  foundPage = true;
-                  break;
-                  }
-            }
-      if (!foundPage) {
-            qDebug("addSymbol: cannot put symbol here: no page: %f %f", pos.x(), pos.y());
-            delete s;
-            return;
-            }
-      undoAddElement(s);
-      addRefresh(s->abbox());
-      select(s, SELECT_SINGLE, 0);
-      }
-
-//---------------------------------------------------------
 //   deleteItem
 //---------------------------------------------------------
 

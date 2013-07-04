@@ -424,6 +424,8 @@ bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
             case LAYOUT_BREAK:
             case TEXT:
             case STAFF_TEXT:
+            case IMAGE:
+            case SYMBOL:
                   return true;
             case ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {

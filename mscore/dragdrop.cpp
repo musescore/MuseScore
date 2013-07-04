@@ -496,23 +496,12 @@ void ScoreView::dropEvent(QDropEvent* event)
                   qDebug("drop image <%s> <%s>", qPrintable(str), qPrintable(str));
 
                   Element* el = elementAt(pos);
-                  if (el && (el->type() == Element::NOTE || el->type() == Element::REST)) {
-                        s->setTrack(el->track());
-                        if (el->type() == Element::NOTE) {
-                              Note* note = (Note*)el;
-                              // s->setTick(note->chord()->tick());
-                              s->setParent(note->chord()->segment()->measure());
+                  if (el) {
+                        if (el->acceptDrop(this, pos, s)) {
+                              dropData.element = s;
+                              el->drop(dropData);
                               }
-                        else  {
-                              Rest* rest = (Rest*)el;
-                              // s->setTick(rest->tick());
-                              s->setParent(rest->segment()->measure());
-                              }
-                        score()->undoAddElement(s);
                         }
-                  else
-                        score()->cmdAddBSymbol(s, pos, dragOffset);
-
                   event->acceptProposedAction();
                   score()->endCmd();
                   mscore->endCmd();

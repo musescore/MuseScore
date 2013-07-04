@@ -160,7 +160,8 @@ QLineF BSymbol::dragAnchor() const
       if (parent() && parent()->type() == SEGMENT) {
             System* system = segment()->measure()->system();
             qreal y        = system->staff(staffIdx())->y() + system->y();
-            QPointF anchor(segment()->pageX(), y);
+//            QPointF anchor(segment()->pageX(), y);
+            QPointF anchor(segment()->canvasPos().x(), y);
             return QLineF(canvasPos(), anchor);
             }
       else {
