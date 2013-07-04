@@ -42,7 +42,7 @@
 #include "importmidi_meter.h"
 #include "importmidi_chord.h"
 #include "importmidi_quant.h"
-#include "importmidi_tupletdata.h"
+#include "importmidi_tuplet.h"
 #include "libmscore/tuplet.h"
 
 
@@ -63,18 +63,19 @@ class MTrack {
       bool hasKey = false;
 
       std::multimap<int, MidiChord> chords;
-      std::multimap<int, TupletData> tuplets;   // <tupletOnTime, TupletData>
+      std::multimap<int, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
 
       void convertTrack(int lastTick);
       void processPendingNotes(QList<MidiChord>& midiChords, int voice, int startChordTick, int nextChordTick);
       void processMeta(int tick, const MidiEvent& mm);
       void fillGapWithRests(Score *score, int voice, int startChordTick, int restLen, int track);
-      std::vector<TupletData> findTupletsForDuration(int voice, int barTick,
-                                                     int durationOnTime, int durationLen);
+      std::vector<MidiTuplet::TupletData> findTupletsForDuration(int voice, int barTick,
+                                                                 int durationOnTime, int durationLen);
       QList<std::pair<Fraction, TDuration> > toDurationList(const Measure *measure, int voice, int startTick, int len,
-                                      Meter::DurationType durationType);
+                                                            Meter::DurationType durationType);
       int voicesInBar(int tickInBar);
       void addElementToTuplet(int voice, int onTime, int len, DurationElement *el);
+      void createTuplets(int track, Score *score);
       };
 
 
@@ -283,7 +284,7 @@ void quantizeAllTracks(QList<MTrack>& tracks, TimeSigMap* sigmap, int lastTick)
                               // for further usage
                   opers.setCurrentTrack(i);
 //                  Quantize::applyGridQuant(tracks[i].chords, sigmap, lastTick);
-                  Quantize::quantizeChordsAndFindTuplets(tracks[i].tuplets, tracks[i].chords,
+                  Quantize::quantizeChordsAndTuplets(tracks[i].tuplets, tracks[i].chords,
                                                          sigmap, lastTick);
                   }
             }
@@ -393,10 +394,10 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
 
 // find tuplets over which duration lies
 
-std::vector<TupletData>
+std::vector<MidiTuplet::TupletData>
 MTrack::findTupletsForDuration(int voice, int barTick, int durationOnTime, int durationLen)
       {
-      std::vector<TupletData> tupletsData;
+      std::vector<MidiTuplet::TupletData> tupletsData;
       if (tuplets.empty())
             return tupletsData;
       auto tupletIt = tuplets.lower_bound(durationOnTime + durationLen);
@@ -416,7 +417,7 @@ MTrack::findTupletsForDuration(int voice, int barTick, int durationOnTime, int d
             }
 
       struct {
-            bool operator()(const TupletData &d1, const TupletData &d2)
+            bool operator()(const MidiTuplet::TupletData &d1, const MidiTuplet::TupletData &d2)
                   {
                   return (d1.len > d2.len);
                   }
@@ -436,8 +437,8 @@ MTrack::toDurationList(const Measure *measure,
       {
       bool useDots = preferences.midiImportOperations.currentTrackOperations().useDots;
                   // find tuplets over which duration is go
-      std::vector<TupletData> tupletData = findTupletsForDuration(voice, measure->tick(),
-                                                                  startTick, len);
+      std::vector<MidiTuplet::TupletData> tupletData = findTupletsForDuration(voice, measure->tick(),
+                                                                              startTick, len);
       int startTickInBar = startTick - measure->tick();
       int endTickInBar = startTickInBar + len;
       return Meter::toDurationList(startTickInBar, endTickInBar,
@@ -645,6 +646,32 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
       fillGapWithRests(score, voice, startChordTick, nextChordTick - startChordTick, track);
       }
 
+void MTrack::createTuplets(int track, Score *score)
+{
+      for (const auto &tupletEvent: tuplets) {
+            const auto &tupletData = tupletEvent.second;
+            Tuplet* tuplet = new Tuplet(score);
+            auto ratioIt = MidiTuplet::tupletRatios().find(tupletData.tupletNumber);
+            Fraction tupletRatio = (ratioIt != MidiTuplet::tupletRatios().end())
+                        ? ratioIt->second : Fraction(2, 2);
+            tuplet->setRatio(tupletRatio);
+
+            tuplet->setDuration(tupletData.len);
+            TDuration baseLen(Fraction::fromTicks(tupletData.len / tupletRatio.denominator()));
+            tuplet->setBaseLen(baseLen);
+
+            tuplet->setTrack(track);
+            tuplet->setTick(tupletData.onTime);
+            Measure* measure = score->tick2measure(tupletData.onTime);
+            tuplet->setParent(measure);
+
+            for (DurationElement *el: tupletData.elements) {
+                  tuplet->add(el);
+                  el->setTuplet(tuplet);
+                  }
+            }
+      }
+
 void MTrack::convertTrack(int lastTick)
       {
       Score* score     = staff->score();
@@ -686,28 +713,7 @@ void MTrack::convertTrack(int lastTick)
             processPendingNotes(midiChords, voice, startChordTick, lastTick);
             }
 
-      for (const auto &tupletEvent: tuplets) {
-            const auto &tupletData = tupletEvent.second;
-            Tuplet* tuplet = new Tuplet(score);
-            auto ratioIt = tupletRatios.find(tupletData.tupletNumber);
-            Fraction tupletRatio = (ratioIt != tupletRatios.end())
-                        ? ratioIt->second : Fraction(2, 2);
-            tuplet->setRatio(tupletRatio);
-
-            tuplet->setDuration(tupletData.len);
-            TDuration baseLen(Fraction::fromTicks(tupletData.len / tupletRatio.denominator()));
-            tuplet->setBaseLen(baseLen);
-
-            tuplet->setTrack(track);
-            tuplet->setTick(tupletData.onTime);
-            Measure* measure = score->tick2measure(tupletData.onTime);
-            tuplet->setParent(measure);
-
-            for (DurationElement *el: tupletData.elements) {
-                  tuplet->add(el);
-                  el->setTuplet(tuplet);
-                  }
-            }
+      createTuplets(track, score);
 
       KeyList* km = staff->keymap();
       if (!hasKey && !mtrack->drumTrack()) {
