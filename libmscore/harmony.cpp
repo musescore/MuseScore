@@ -39,7 +39,8 @@ QString Harmony::harmonyName()
       if (_leftParen)
             s = "(";
 
-      r = tpc2name(_rootTpc, _rootSpelling, _rootLowerCase);
+      if (_rootTpc != INVALID_TPC)
+            r = tpc2name(_rootTpc, _rootSpelling, _rootLowerCase);
 
       if (_textName != "")
             e = _textName.remove('=');
@@ -220,8 +221,11 @@ void Harmony::write(Xml& xml) const
                   }
             Element::writeProperties(xml);
             }
-      else
-            Text::writeProperties(xml);
+      else {
+            xml.tag("name", _textName);
+            Element::writeProperties(xml);
+//            Text::writeProperties(xml);
+            }
       if (_rightParen)
             xml.tagE("rightParen");
       xml.etag();
@@ -303,14 +307,18 @@ void Harmony::read(XmlReader& e)
       // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
       // or constructed in the Harmony Properties dialog.
 
-      if (_id > 0)
-            // lookup id in chord list and generate new description if necessary
-            getDescription();
-      else if (_textName != "")
-            // no id - look up name, in case it is in chord list with no id
-            getDescription(_textName);
+      if (_rootTpc != INVALID_TPC) {
+            if (_id > 0)
+                  // lookup id in chord list and generate new description if necessary
+                  getDescription();
+            else if (_textName != "")
+                  // no id - look up name, in case it is in chord list with no id
+                  getDescription(_textName);
+            }
+      else if (_textName == "")
+            _textName = text();
 
-      // render chord from description
+      // render chord from description (or _textName)
       render();
       }
 
@@ -327,7 +335,7 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
       else if (score()->styleB(ST_useSolfeggioNoteNames))
             rootSpelling = SOLFEGGIO;
       baseSpelling = rootSpelling;
-      const ChordDescription* cd = getDescription();
+      const ChordDescription* cd = descr();
       if (cd) {
             QString quality;
             quality = cd->quality();
@@ -337,7 +345,7 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
                   rootLowerCase = false;
             }
       else
-            rootLowerCase = false;
+            rootLowerCase = score()->styleB(ST_lowerCaseMinorChords);
       if (baseSpelling == GERMAN)
             baseLowerCase = true;
       else
@@ -496,6 +504,8 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       int r = convertRoot(s, _rootSpelling, idx);
       if (r == INVALID_TPC) {
             qDebug("1:parseHarmony failed <%s>", qPrintable(ss));
+            _userName = s;
+            _textName = s;
             return 0;
             }
       *root = r;
@@ -595,13 +605,14 @@ void Harmony::setHarmony(const QString& s)
             render();
             }
       else {
-            // syntax error, leave text as is
+            // unparseable chord, render as plain text
             foreach(const TextSegment* s, textList)
                   delete s;
             textList.clear();
             setRootTpc(INVALID_TPC);
             setBaseTpc(INVALID_TPC);
             _id = -1;
+            render();
             }
       }
 
@@ -1040,9 +1051,6 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
 
 void Harmony::render(const TextStyle* st)
       {
-      if (_rootTpc == INVALID_TPC)
-            return;
-
       if (st == 0)
             st = &textStyle();
       ChordList* chordList = score()->style()->chordList();
@@ -1070,13 +1078,16 @@ void Harmony::render(const TextStyle* st)
       if (_leftParen)
             render("( ", x, y);
 
-      // render root
-      render(chordList->renderListRoot, x, y, _rootTpc, _rootSpelling, _rootLowerCase);
-
-      // render extension
-      const ChordDescription* cd = getDescription();
-      if (cd)
-            render(cd->renderList, x, y, 0);
+      if (_rootTpc != INVALID_TPC) {
+            // render root
+            render(chordList->renderListRoot, x, y, _rootTpc, _rootSpelling, _rootLowerCase);
+            // render extension
+            const ChordDescription* cd = getDescription();
+            if (cd)
+                  render(cd->renderList, x, y, 0);
+            }
+      else
+            render(_textName, x, y);
 
       // render bass
       if (_baseTpc != INVALID_TPC)
