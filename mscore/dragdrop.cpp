@@ -493,8 +493,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   _score->startCmd();
                   QString str(u.toLocalFile());
                   s->load(str);
-if (MScore::debugMode)
-      qDebug("drop image <%s> <%s>", qPrintable(str), qPrintable(str));
+                  qDebug("drop image <%s> <%s>", qPrintable(str), qPrintable(str));
 
                   Element* el = elementAt(pos);
                   if (el && (el->type() == Element::NOTE || el->type() == Element::REST)) {
