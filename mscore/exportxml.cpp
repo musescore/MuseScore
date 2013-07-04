@@ -4499,13 +4499,13 @@ double ExportMusicXml::getTenthsFromDots(double dots)
 
 void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd)
       {
+      double rx = h->userOff().x()*10;
+      QString relative;
+      if (rx > 0) {
+            relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
+            }
       int rootTpc = h->rootTpc();
       if (rootTpc != INVALID_TPC) {
-            double rx = h->userOff().x()*10;
-            QString relative;
-            if (rx > 0) {
-                  relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
-                  }
             if (h->hasFrame())
                   xml.stag(QString("harmony print-frame=\"yes\"").append(relative));
             else
@@ -4580,13 +4580,24 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             // export an unrecognized Chord
             // which may contain arbitrary text
             //
+            xml.stag(QString("harmony").append(relative));
+            xml.stag("root");
+            xml.tag("root-step text=\"\"", "C");
+            xml.etag();       // root
+            QString k = "kind text=\"" + h->hTextName() + "\"";
+            xml.tag(k, "none");
+            xml.etag();       // harmony
+#if 0
+// prior to 2.0, MuseScore exported unrecognized chords as plain text
             xml.stag("direction");
             xml.stag("direction-type");
             xml.tag("words", h->text());
             xml.etag();
             xml.etag();
+#endif
             }
 #if 0
+// this is very old code that may never have actually been used
       xml.tag(QString("kind text=\"%1\"").arg(h->extensionName()), extension);
       for (int i = 0; i < h->numberOfDegrees(); i++) {
             HDegree hd = h->degree(i);
