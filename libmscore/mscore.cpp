@@ -112,10 +112,11 @@ void MScore::init()
       _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
-      selectColor[0].setRgb(0, 0, 255);     //blue
-      selectColor[1].setRgb(0, 150, 0);     //green
-      selectColor[2].setRgb(230, 180, 50);  //yellow
-      selectColor[3].setRgb(200, 0, 200);   //purple
+      selectColor[0].setNamedColor("#2456aa");     //blue
+      selectColor[1].setNamedColor("#5f8f00");     //green
+      selectColor[2].setNamedColor("#d79112");  //yellow
+      selectColor[3].setNamedColor("#75112b");   //purple
+
       defaultColor        = Qt::black;
       dropColor           = Qt::red;
       nudgeStep           = .1;       // in spatium units (default 0.1)
@@ -128,8 +129,8 @@ void MScore::init()
 
       lastError           = "";
 
-      layoutBreakColor    = Qt::gray;
-      bgColor.setRgb(0x76, 0x76, 0x6e);
+      layoutBreakColor    = QColor("#6abed3");
+      bgColor.setRgb(0xbf, 0xbf, 0xbf);
 
       _defaultStyle         = new MStyle();
       Ms::initStyle(_defaultStyle);

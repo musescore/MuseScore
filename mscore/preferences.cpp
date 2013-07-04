@@ -112,12 +112,12 @@ void Preferences::init()
       // set fallback defaults:
 
       bgUseColor         = true;
-      fgUseColor         = false;
+      fgUseColor         = true;
       bgWallpaper        = QString();
       fgWallpaper        = ":/data/paper5.png";
-      fgColor.setRgb(255, 255, 255);
+      fgColor.setNamedColor("#f9f9f9");
       iconHeight         = 24;
-      iconWidth          = 30;
+      iconWidth          = 28;
 
       enableMidiInput    = true;
       playNotes          = true;
