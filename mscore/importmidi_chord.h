@@ -23,6 +23,17 @@ class MidiChord {
       QList<MidiNote> notes;
       };
 
+std::multimap<int, MidiChord>::iterator
+findFirstChordInRange(int startRangeTick,
+                      int endRangeTick,
+                      const std::multimap<int, MidiChord>::iterator &startChordIt,
+                      const std::multimap<int, MidiChord>::iterator &endChordIt);
+
+std::multimap<int, MidiChord>::iterator
+findEndChordInRange(int endRangeTick,
+                    const std::multimap<int, MidiChord>::iterator &startChordIt,
+                    const std::multimap<int, MidiChord>::iterator &endChordIt);
+
 } // namespace Ms
 
 

@@ -6,7 +6,10 @@ namespace Ms {
 
 class Fraction;
 class TDuration;
+
+namespace MidiTuplet {
 struct TupletData;
+}
 
 namespace Meter {
 
@@ -34,7 +37,7 @@ QList<std::pair<Fraction, TDuration> >
 toDurationList(int startTickInBar,
                int endTickInBar,
                const Fraction &barFraction,
-               const std::vector<TupletData> &tupletsInBar,
+               const std::vector<MidiTuplet::TupletData> &tupletsInBar,
                DurationType durationType,
                bool useDots);
 
