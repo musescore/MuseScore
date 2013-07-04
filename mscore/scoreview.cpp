@@ -1516,7 +1516,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
 
       if (grips) {
             qreal lw = 2.0/vp.matrix().m11();
-            QPen pen(Qt::gray);
+            QPen pen(MScore::frameMarginColor);
             pen.setWidthF(lw);
             if (grips == 6) {       // HACK: this are grips of a slur
                   vp.setPen(pen);
@@ -1529,7 +1529,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             pen.setColor(MScore::defaultColor);
             vp.setPen(pen);
             for (int i = 0; i < grips; ++i) {
-                  vp.setBrush(((i == curGrip) && hasFocus()) ? QBrush(Qt::blue) : Qt::NoBrush);
+                  vp.setBrush(((i == curGrip) && hasFocus()) ? MScore::selectColor[0] : Qt::NoBrush);
                   vp.drawRect(grip[i]);
                   }
             if (editObject)      // if object is moved, it may not be covered by bsp
@@ -1564,7 +1564,7 @@ void ScoreView::paintPageBorder(QPainter& p, Page* page)
       //add a black border to pages
       QRectF r(page->canvasBoundingRect());
       p.setBrush(Qt::NoBrush);
-      p.setPen(QPen(Qt::black, 1));
+      p.setPen(QPen(QColor(0,0,0,102), 1));
       p.drawRect(r);
 
 #if 0
@@ -1644,7 +1644,7 @@ void ScoreView::paintPageBorder(QPainter& p, Page* page)
       if (_score->showPageborders()) {
             // show page margins
             p.setBrush(Qt::NoBrush);
-            p.setPen(QColor(0, 0, 255, 50));
+            p.setPen(MScore::frameMarginColor);
             QRectF f(page->canvasBoundingRect());
             f.adjust(page->lm(), page->tm(), -page->rm(), -page->bm());
             p.drawRect(f);

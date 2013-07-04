@@ -454,7 +454,8 @@ MuseScore::MuseScore()
       _positionLabel->setText("001:01:000");
 
       _modeText = new QLabel;
-      _modeText->setAutoFillBackground(true);
+      _modeText->setAutoFillBackground(false);
+      _modeText->setObjectName("modeLabel");
       _statusBar = new QStatusBar;
 
       hRasterAction = getAction("hraster");
@@ -653,7 +654,6 @@ MuseScore::MuseScore()
       viewModeCombo->addItem(tr("Continuous View"));
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
       fileTools->addWidget(viewModeCombo);
-      addToolBarBreak();
 
       cpitchTools = addToolBar(tr("Concert Pitch"));
       cpitchTools->setObjectName("pitch-tools");
@@ -664,6 +664,8 @@ MuseScore::MuseScore()
       a = getAction("fotomode");
       a->setCheckable(true);
       foto->addAction(a);
+
+      addToolBarBreak();
 
       //-------------------------------
       //    Note Entry Tool Bar
@@ -3702,9 +3704,9 @@ GreendotButton::GreendotButton(QWidget* parent)
 QRectF drawHandle(QPainter& p, const QPointF& pos, bool active)
       {
       p.save();
-      p.setPen(QPen(QColor(Qt::blue), 2.0/p.matrix().m11()));
+      p.setPen(QPen(QColor(MScore::selectColor[0]), 2.0/p.matrix().m11()));
       if (active)
-            p.setBrush(Qt::blue);
+            p.setBrush(MScore::selectColor[0]);
       else
             p.setBrush(Qt::NoBrush);
       qreal w = 8.0 / p.matrix().m11();
