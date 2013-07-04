@@ -404,19 +404,10 @@ int Note::playTicks() const
 
 void Note::addSpanner(Spanner* l)
       {
-#if 0       // TODO-S
       Element* e = l->endElement();
       if (e)
             static_cast<Note*>(e)->addSpannerBack(l);
       addSpannerFor(l);
-      int n = l->spannerSegments().size();
-      for (int i = 0; i < n; ++i) {
-            SpannerSegment* ss = l->spannerSegments().at(i);
-            Q_ASSERT(ss->spanner() == l);
-            if (ss->system())
-                  ss->system()->add(ss);
-            }
-#endif
       }
 
 //---------------------------------------------------------
@@ -425,7 +416,6 @@ void Note::addSpanner(Spanner* l)
 
 void Note::removeSpanner(Spanner* l)
       {
-#if 0       // TODO-S
       if (!static_cast<Note*>(l->endElement())->removeSpannerBack(l)) {
             qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->name(), l);
             // abort();
@@ -434,13 +424,6 @@ void Note::removeSpanner(Spanner* l)
             qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->name(), l);
             // abort();
             }
-      int n = l->spannerSegments().size();
-      for (int i = 0; i < n; ++i) {
-            SpannerSegment* ss = l->spannerSegments().at(i);
-            if (ss->system())
-                  ss->system()->remove(ss);
-            }
-#endif
       }
 
 //---------------------------------------------------------
@@ -877,25 +860,26 @@ void Note::read(XmlReader& e)
                   }
             else if (tag == "endSpanner") {
                   int id = e.intAttribute("id");
-                  Spanner* e = score()->findSpanner(id);
-                  if (e && e->type() == TIE) {
-                        static_cast<Tie*>(e)->setEndNote(this);
-                        addSpannerBack(e);
+                  Spanner* sp = score()->findSpanner(id);
+                  if (sp) {
+                        sp->setEndElement(this);
+                        addSpannerBack(sp);
                         }
                   else
                         qDebug("Note::read(): cannot find spanner %d", id);
+                  score()->removeSpanner(sp);
+                  e.readNext();
                   }
             else if (tag == "TextLine") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(track());
                   sp->read(e);
                   sp->setAnchor(Spanner::ANCHOR_NOTE);
-#if 0 // TODO-S
                   sp->setStartElement(this);
+                  sp->setTick(e.tick());
                   addSpannerFor(sp);
                   sp->setParent(this);
-                  e.addSpanner(sp);
-#endif
+                  score()->addSpanner(sp);
                   }
             else if (tag == "onTimeType")                   // obsolete
                   e.skipCurrentElement(); // _onTimeType = readValueType(e);
@@ -1485,6 +1469,8 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
+      for (Spanner* sp : _spannerFor)
+            sp->scanElements(data, func, all);
 
       if (!dragMode && _accidental)
             func(data, _accidental);

@@ -2599,10 +2599,6 @@ spatium unit</extracomment>
         <translation>Größe kleiner Schlüssel</translation>
     </message>
     <message>
-        <source>Use German names</source>
-        <translation>Deutsche Akkordnamen verwenden</translation>
-    </message>
-    <message>
         <source>Chord description file</source>
         <translation>Akkordbeschreibungsdatei</translation>
     </message>
@@ -3084,6 +3080,30 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Positioning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, Bb, B, C, C#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, B, H, C, Cis, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La, Sib, Si, Do, Do#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Solfeggio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lower case minor chords</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4190,6 +4210,41 @@ spatium unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorSlur</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Formular</translation>
+    </message>
+    <message>
+        <source>Slur</source>
+        <translation type="unfinished">Bindebogen</translation>
+    </message>
+    <message>
+        <source>reset value</source>
+        <translation type="unfinished">Wert zurücksetzen</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Line Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>solid</source>
+        <translation type="unfinished">massiv</translation>
+    </message>
+    <message>
+        <source>dotted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>InspectorSpacer</name>
     <message>
         <source>Form</source>
@@ -4248,19 +4303,19 @@ spatium unit</extracomment>
     <name>InspectorTextLine</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>TextLine</source>
-        <translation type="unfinished">Textzeile</translation>
+        <translation>Text-Linie</translation>
     </message>
     <message>
         <source>Line Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Linienfarbe:</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished">Wert zurücksetzen</translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
@@ -4577,7 +4632,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zeilentyp</translation>
     </message>
 </context>
 <context>
@@ -4944,7 +4999,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Unter</translation>
     </message>
     <message utf8="true">
         <source>90°</source>
@@ -4966,8 +5021,8 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses
-the freely available LAME library.  You must obtain %1
+        <source>MuseScore does not export MP3 files directly, but instead uses 
+the freely available LAME library.  You must obtain %1 
 separately, and then locate the file for MuseScore.
 You only need to do this once.
 
@@ -5716,25 +5771,6 @@ fehlgeschlagen: </translation>
     <message>
         <source>Edit HTML Text</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Ms::EditTools</name>
-    <message>
-        <source>Edit Mode Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>sp</source>
-        <translation type="unfinished">sp</translation>
-    </message>
-    <message>
-        <source>x:</source>
-        <translation type="unfinished">x:</translation>
-    </message>
-    <message>
-        <source>y:</source>
-        <translation type="unfinished">y:</translation>
     </message>
 </context>
 <context>
@@ -7258,10 +7294,6 @@ save before closing?</source>
         <translation type="unfinished">Bearbeitungsmodus</translation>
     </message>
     <message>
-        <source>Slur Properties...</source>
-        <translation type="unfinished">Eigenschaften Bindebogen...</translation>
-    </message>
-    <message>
         <source>Staff</source>
         <translation type="unfinished">Notenzeile</translation>
     </message>
@@ -8713,10 +8745,6 @@ in Pixel (größerer Wert gleich größerer Radius)</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>native</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Icon size:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8987,6 +9015,10 @@ in Pixel (größerer Wert gleich größerer Radius)</translation>
     <message>
         <source>Print</source>
         <translation type="unfinished">Drucken</translation>
+    </message>
+    <message>
+        <source>light</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9367,25 +9399,6 @@ fehlgeschlagen: </translation>
     </message>
 </context>
 <context>
-    <name>SlurPropertyBase</name>
-    <message>
-        <source>Slur Properties</source>
-        <translation>Eigenschaften Bindebogen</translation>
-    </message>
-    <message>
-        <source>Solid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dotted</source>
-        <translation type="unfinished">gepunktet</translation>
-    </message>
-    <message>
-        <source>Dashed</source>
-        <translation type="unfinished">gestrichelt</translation>
-    </message>
-</context>
-<context>
     <name>SlurSegment</name>
     <message>
         <source>0</source>
@@ -9601,7 +9614,7 @@ altera</source>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nichts</translation>
     </message>
     <message>
         <source>Krumhorn</source>
@@ -10098,6 +10111,21 @@ altera</source>
     <message>
         <source>New</source>
         <translation type="unfinished">Neu</translation>
+    </message>
+</context>
+<context>
+    <name>TieBase</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Formular</translation>
+    </message>
+    <message>
+        <source>EndNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StartNote</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12357,10 +12385,6 @@ fehlgeschlagen: </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Chords...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Edit chord style</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12862,6 +12886,26 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>add brackets to notehead</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="unfinished">1</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation type="unfinished">2</translation>
+    </message>
+    <message>
+        <source>3</source>
+        <translation type="unfinished">3</translation>
+    </message>
+    <message>
+        <source>4</source>
+        <translation type="unfinished">4</translation>
+    </message>
+    <message>
+        <source>Chordnames...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -13578,8 +13622,8 @@ fehlgeschlagen: </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The following file is locked:
-%1
+        <source>The following file is locked: 
+%1 
 
 Try saving to a different location.</source>
         <translation type="unfinished"></translation>
