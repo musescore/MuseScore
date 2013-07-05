@@ -3,6 +3,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_meter.h"
 #include "importmidi_quant.h"
+#include "libmscore/mscore.h"
 
 #include <set>
 
@@ -49,7 +50,7 @@ bool isTupletAllowed(int tupletNumber,
                   || tupletOnTimeSumError >= regularSumError) {
             return false;
             }
-
+                  // only notes with len >= (half tuplet note len) allowed
       int tupletNoteLen = tupletLen / tupletNumber;
       for (const auto &tupletChord: tupletChords) {
             for (const auto &note: tupletChord.second->second.notes) {
@@ -245,7 +246,8 @@ bool areTupletChordsInUse(const std::map<int, int> &usedFirstTupletNotes,
             int chordOnTime = i->second->first;
             auto ii = usedFirstTupletNotes.find(chordOnTime);
             if (ii != usedFirstTupletNotes.end()) {
-                  if (ii->second >= i->second->second.notes.size()) {
+                  if (ii->second >= i->second->second.notes.size()
+                              || ii->second >= VOICES) {
                               // need to choose next tuplet candidate - no more available voices
                         return true;
                         }
@@ -366,7 +368,7 @@ void separateTupletVoices(std::vector<TupletInfo> &tuplets,
                           std::multimap<int, MidiChord> &chords)
       {
                   // it's better before to sort tuplets by their average pitch
-                  // and notes of each chord as well (desc. order)
+                  // and notes of each chord as well
       sortNotesByPitch(chords);
       sortTupletsByAveragePitch(tuplets);
       auto nonTuplets = nonTupletChords(tuplets, chords);

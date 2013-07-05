@@ -492,14 +492,16 @@ void MTrack::fillGapWithRests(Score* score, int voice, int startChordTick,
                         }
                   for (const auto &durationPair: dl) {
                         const auto &duration = durationPair.second;
+                        const Fraction &tupletRatio = durationPair.first;
+                        len = duration.ticks() * tupletRatio.denominator() / tupletRatio.numerator();
                         Rest* rest = new Rest(score, duration);
                         rest->setDuration(duration.fraction());
                         rest->setTrack(track);
                         Segment* s = measure->getSegment(Segment::SegChordRest, startChordTick);
                         s->add(rest);
                         addElementToTuplet(voice, startChordTick, len, rest);
-                        restLen -= duration.ticks();
-                        startChordTick += duration.ticks();
+                        restLen -= len;
+                        startChordTick += len;
                         }
                   }
 
