@@ -89,7 +89,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/checkmark.svg</normaloff>:/data/icons-dark/checkmark.svg</iconset>
+         <normaloff>:/data/icons/checkmark.svg</normaloff>:/data/icons/checkmark.svg</iconset>
        </property>
       </widget>
      </item>

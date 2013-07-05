@@ -116,7 +116,7 @@ bool enableExperimental = false;
 bool enableTestMode = false;
 
 QString dataPath;
-QString iconPath, iconGroup;
+QString iconPath;
 
 bool converterMode = false;
 bool noGui = false;
@@ -4595,8 +4595,7 @@ int main(int argc, char* av[])
             argv.removeAt(i);
             }
       mscoreGlobalShare = getSharePath();
-      iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/");
-      iconGroup = "icons-dark/";
+      iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
       if (!converterMode) {
             if (!argv.isEmpty()) {
