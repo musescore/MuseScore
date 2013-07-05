@@ -74,7 +74,6 @@ class Workspace;
 class AlbumManager;
 class WebPageDockWidget;
 class ChordList;
-class EditTempo;
 class Capella;
 class Inspector;
 class OmrPanel;
@@ -341,7 +340,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QNetworkAccessManager* networkManager;
       QAction* lastCmd;
       Shortcut* lastShortcut;
-      EditTempo* editTempo;
 
       QAction* metronomeAction;
       QAction* panAction;

@@ -65,7 +65,6 @@
 #include "transposedialog.h"
 #include "metaedit.h"
 #include "chordedit.h"
-#include "edittempo.h"
 #include "inspector/inspector.h"
 #include "omrpanel.h"
 #include "shortcut.h"
@@ -437,7 +436,6 @@ MuseScore::MuseScore()
       _fullscreen           = false;
       lastCmd               = 0;
       lastShortcut          = 0;
-      editTempo             = 0;
       importmidi_panel      = 0;
 
       if (!preferences.styleName.isEmpty()) {

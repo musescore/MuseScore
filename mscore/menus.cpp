@@ -29,7 +29,6 @@
 #include "libmscore/hairpin.h"
 #include "scoreview.h"
 #include "musescore.h"
-#include "edittempo.h"
 #include "libmscore/select.h"
 #include "libmscore/tempo.h"
 #include "libmscore/segment.h"
@@ -1081,19 +1080,13 @@ void MuseScore::addTempo()
       ChordRest* cr = cs->getSelectedChordRest();
       if (!cr)
             return;
-      if (editTempo == 0)
-            editTempo = new EditTempo(0);
-      int rv = editTempo->exec();
-      if (rv == 1) {
-            double bps = editTempo->bpm() / 60.0;
-            TempoText* tt = new TempoText(cs);
-            tt->setParent(cr->segment());
-            tt->setTrack(cr->track());
-            tt->setText(editTempo->text());
-            tt->setTempo(bps);
-            cs->undoAddElement(tt);
-            cs->addRefresh(tt->abbox());  // ??
-            }
+      double bps = 120.0;
+      TempoText* tt = new TempoText(cs);
+      tt->setParent(cr->segment());
+      tt->setTrack(cr->track());
+      tt->setText(tr("tempo"));
+      tt->setTempo(bps);
+      cs->undoAddElement(tt);
       }
 }
 
