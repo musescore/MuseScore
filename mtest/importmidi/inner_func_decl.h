@@ -35,6 +35,12 @@ TupletInfo findTupletApproximation(int tupletNumber,
                                    const std::multimap<int, MidiChord>::iterator &startChordIt,
                                    const std::multimap<int, MidiChord>::iterator &endChordIt);
 
+void separateTupletVoices(std::vector<TupletInfo> &tuplets,
+                          std::multimap<int, MidiChord>::iterator startBarChordIt,
+                          std::multimap<int, MidiChord>::iterator endBarChordIt,
+                          std::multimap<int, MidiChord> &chords,
+                          int endBarTick);
+
 } // namespace Quantize
 } // namespace Ms
 

@@ -262,7 +262,8 @@ void splitUnequalChords(QList<MTrack> &tracks)
                               }
                         ++it;
                         }
-                  chord.duration = notes.first().len;
+                  if (!notes.empty())
+                        chord.duration = notes.first().len;
                   }
             for (const auto &event: newChordEvents)
                   chords.insert(event);
