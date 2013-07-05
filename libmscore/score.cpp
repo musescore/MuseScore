@@ -56,7 +56,6 @@
 #include "articulation.h"
 #include "revisions.h"
 #include "tiemap.h"
-#include "spannermap.h"
 #include "layoutbreak.h"
 #include "harmony.h"
 #include "mscore.h"
@@ -1371,7 +1370,6 @@ void Score::addElement(Element* element)
                   }
                   break;
 
-#if 0 // TODO-S
             case Element::OTTAVA:
                   {
                   Ottava* o = static_cast<Ottava*>(element);
@@ -1380,23 +1378,18 @@ void Score::addElement(Element* element)
                               ss->system()->add(ss);
                         }
                   Staff* s  = o->staff();
-                  if (o->startElement()) {
-                        int tick = static_cast<Segment*>(o->startElement())->tick();
-                        s->pitchOffsets().setPitchOffset(tick, o->pitchShift());
-                        }
-                  if (o->endElement()) {
-                        int tick = static_cast<Segment*>(o->endElement())->tick();
-                        s->pitchOffsets().setPitchOffset(tick, 0);
-                        }
+                  s->pitchOffsets().setPitchOffset(o->tick(), o->pitchShift());
+                  s->pitchOffsets().setPitchOffset(o->tick2(), 0);
                   layoutFlags |= LAYOUT_FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
                   break;
-#endif
+
             case Element::DYNAMIC:
                   layoutFlags |= LAYOUT_FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
+
             case Element::CLEF:
                   {
                   Clef* clef = static_cast<Clef*>(element);
@@ -1404,6 +1397,7 @@ void Score::addElement(Element* element)
                         updateNoteLines(clef->segment(), clef->track());
                   }
                   break;
+
             case Element::KEYSIG:
                   {
                   KeySig* ks = static_cast<KeySig*>(element);
@@ -1415,12 +1409,14 @@ void Score::addElement(Element* element)
                         }
                   }
                   break;
+
             case Element::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(element);
                   setTempo(tt->segment(), tt->tempo());
                   }
                   break;
+
             case Element::INSTRUMENT_CHANGE:
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
@@ -1515,7 +1511,6 @@ void Score::removeElement(Element* element)
                   }
                   break;
 
-#if 0 // TODO-S
             case Element::OTTAVA:
                   {
                   Ottava* o = static_cast<Ottava*>(element);
@@ -1524,15 +1519,13 @@ void Score::removeElement(Element* element)
                               ss->system()->remove(ss);
                         }
                   Staff* s = o->staff();
-                  int tick1 = static_cast<Segment*>(o->startElement())->tick();
-                  int tick2 = static_cast<Segment*>(o->endElement())->tick();
-                  s->pitchOffsets().remove(tick1);
-                  s->pitchOffsets().remove(tick2);
+                  s->pitchOffsets().remove(o->tick());
+                  s->pitchOffsets().remove(o->tick2());
                   layoutFlags |= LAYOUT_FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
                   break;
-#endif
+
             case Element::DYNAMIC:
                   layoutFlags |= LAYOUT_FIX_PITCH_VELO;
                   _playlistDirty = true;
@@ -2170,13 +2163,12 @@ void Score::removeAudio()
 bool Score::appendScore(Score* score)
       {
       TieMap  tieMap;
-      SpannerMap spannerMap;
 
       MeasureBaseList* ml = &score->_measures;
       for (MeasureBase* mb = ml->first(); mb; mb = mb->next()) {
             MeasureBase* nmb;
             if (mb->type() == Element::MEASURE)
-                  nmb = static_cast<Measure*>(mb)->cloneMeasure(this, &tieMap, &spannerMap);
+                  nmb = static_cast<Measure*>(mb)->cloneMeasure(this, &tieMap);
             else
                   nmb = mb->clone();
             nmb->setNext(0);
@@ -3341,7 +3333,7 @@ Cursor* Score::newCursor()
 
 void Score::addSpanner(Spanner* s)
       {
-      _spanner.insert(std::pair<int,Spanner*>(s->tick(), s));
+      _spanner.addSpanner(s);
       }
 
 //---------------------------------------------------------
@@ -3350,14 +3342,7 @@ void Score::addSpanner(Spanner* s)
 
 void Score::removeSpanner(Spanner* s)
       {
-//      for (auto i = _spanner.lower_bound(s->tick()); i != _spanner.upper_bound(s->tick()); ++i) {
-      for (auto i = _spanner.begin(); i != _spanner.end(); ++i) {
-            if (i->second == s) {
-                  _spanner.erase(i);
-                  return;
-                  }
-            }
-      qDebug("Score::removeSpanner: %s not found", s->name());
+      _spanner.removeSpanner(s);
       }
 
 //---------------------------------------------------------
@@ -3366,7 +3351,7 @@ void Score::removeSpanner(Spanner* s)
 
 Spanner* Score::findSpanner(int id) const
       {
-      for (auto i = _spanner.rbegin(); i != _spanner.rend(); ++i) {
+      for (auto i = _spanner.crbegin(); i != _spanner.crend(); ++i) {
             if (i->second->id() == id)
                   return i->second;
             }
@@ -3381,7 +3366,7 @@ Spanner* Score::findSpanner(int id) const
 
 bool Score::isSpannerStartEnd(int tick, int track) const
       {
-      for (auto i : _spanner) {
+      for (auto i : _spanner.map()) {
             if (i.second->track() != track)
                   continue;
             if (i.second->tick() == tick || i.second->tick2() == tick)
@@ -3399,12 +3384,10 @@ void Score::insertTime(int tick, int len)
       if (len == 0)
             return;
 
-printf("insertTime score %p at %d len %d\n", this, tick, len);
-      for (auto i : _spanner) {
+      for (auto i : _spanner.map()) {
             Spanner* s = i.second;
             if (s->tick2() < tick)
                   continue;
-printf("   %p score %p change spanner %d+%d\n", s, s->score(), s->tick(), s->tickLen());
             if (len > 0) {
                   if (tick > s->tick() && tick < s->tick2()) {
                         //

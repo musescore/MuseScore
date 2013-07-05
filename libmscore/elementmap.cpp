@@ -13,7 +13,6 @@
 #include "elementmap.h"
 #include "tupletmap.h"
 #include "tiemap.h"
-#include "spannermap.h"
 #include "slur.h"
 #include "chordrest.h"
 

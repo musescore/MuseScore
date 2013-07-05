@@ -28,7 +28,7 @@ namespace Ms {
 
 Volta* Score::searchVolta(int tick) const
       {
-      for (const std::pair<int,Spanner*>& p : _spanner) {
+      for (const std::pair<int,Spanner*>& p : _spanner.map()) {
             Spanner* s = p.second;
             if (s->type() != Element::VOLTA)
                   continue;

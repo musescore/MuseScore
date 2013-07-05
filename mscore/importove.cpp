@@ -577,7 +577,7 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
 	part->setMidiProgram(track->getPatch());
 
 	if (ove_->getShowTransposeTrack() && track->getTranspose() != 0 ) {
-        Interval interval = part->instr()->transpose();
+        Ms::Interval interval = part->instr()->transpose();
         interval.diatonic = -track->getTranspose();
         part->instr()->setTranspose(interval);
 	}

@@ -2168,7 +2168,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       // reserve space for slur
       bool botGap = false;
       bool topGap = false;
-#if 0 // TODO-S
+#if 0 // TODO-S:  optimize
       for (Spanner* sp = spannerFor(); sp; sp = sp->next()) {
             if (sp->type() != SLUR)
                  continue;

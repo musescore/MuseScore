@@ -554,7 +554,7 @@ void ChordRest::layoutArticulations()
       bool botGap = false;
       bool topGap = false;
 
-#if 0 // TODO-S
+#if 0 // TODO-S: optimize
       for (Spanner* sp = _spannerFor; sp; sp = sp->next()) {
             if (sp->type() != SLUR)
                   continue;

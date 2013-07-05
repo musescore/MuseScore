@@ -106,9 +106,11 @@ class Spanner : public Element {
       int _tick, _tick2;
       int _id;                // used for xml serialization
 
-      static int editTick, editTick2;
       static QList<QPointF> userOffsets;
       static QList<QPointF> userOffsets2;
+
+   protected:
+      static int editTick, editTick2;
 
    public:
       Spanner(Score* = 0);
