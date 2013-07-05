@@ -160,7 +160,7 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -205,7 +205,7 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -247,7 +247,7 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -270,7 +270,7 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -287,7 +287,7 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons-dark/vraster.svg</normaloff>:/data/icons-dark/vraster.svg</iconset>
+         <normaloff>:/data/icons/vraster.svg</normaloff>:/data/icons/vraster.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -301,7 +301,7 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons-dark/hraster.svg</normaloff>:/data/icons-dark/hraster.svg</iconset>
+         <normaloff>:/data/icons/hraster.svg</normaloff>:/data/icons/hraster.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
