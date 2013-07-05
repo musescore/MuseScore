@@ -434,6 +434,23 @@ void quantizeTupletChord(MidiChord &midiChord, int onTime, const TupletInfo &tup
             note.onTime = onTime;
             note.len = offTime - onTime;
             }
+            // notes in chord here may have different durations
+            // so we don't set the whole chord duration
+      }
+
+std::vector<TupletInfo> findTuplets(int startBarTick,
+                                    int endBarTick,
+                                    const Fraction &barFraction,
+                                    std::multimap<int, MidiChord> &chords)
+      {
+      std::vector<TupletInfo> preparedTuplets;
+      auto tuplets = findTupletCandidatesOfBar(startBarTick, endBarTick,
+                                               barFraction, chords);
+      filterTuplets(tuplets);
+      for (const auto &t: tuplets)
+            preparedTuplets.push_back(t.second);
+
+      return preparedTuplets;
       }
 
 } // namespace MidiTuplet
