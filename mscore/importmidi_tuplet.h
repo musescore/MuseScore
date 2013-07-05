@@ -28,8 +28,10 @@ struct TupletInfo
       int regularQuantValue;
                   // <note index in tuplet, chord iterator>
       std::map<int, std::multimap<int, MidiChord>::iterator> chords;
-      int tupletOnTimeSumError = 0;
+      int tupletSumError = 0;
       int regularSumError = 0;
+      double averageError = 0.0;
+      int sumLengthOfRests = 0;
       };
 
 // conversion ratios from tuplet durations to regular durations
@@ -37,7 +39,7 @@ struct TupletInfo
 
 const std::map<int, Fraction>& tupletRatios();
 
-void filterTuplets(std::multimap<double, TupletInfo> &tuplets);
+void filterTuplets(std::vector<TupletInfo> &tuplets);
 
 void separateTupletVoices(std::vector<TupletInfo> &tuplets,
                           std::multimap<int, MidiChord> &chords);
