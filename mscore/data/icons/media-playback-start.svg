@@ -17,7 +17,9 @@
   <title id='title9167'>MuseScore Icon Theme</title>
   <defs id='defs7386'/>
   <g inkscape:groupmode='layer' id='actions' inkscape:label='actions' style='display:inline' transform='translate(-77,-231)'>
-    
-    <path inkscape:connector-curvature='0' d='m 83.000075,235.5 0,15 1.359375,0 0.140625,0 c 0.262371,0.001 0.521673,-0.0582 0.75,-0.1875 l 10.5,-6 C 96.216124,244.05467 96.4532,243.52733 96.4532,243 c 0,-0.52733 -0.237076,-1.05467 -0.703125,-1.3125 l -10.5,-6 c -0.228327,-0.12937 -0.487629,-0.18946 -0.75,-0.1875 l -0.140625,0 z' id='path3807-1-1-9-38-4' sodipodi:nodetypes='ccccccsccccc' style='font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#ffffff;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans'/>
+
+    <path inkscape:connector-curvature='0' d='m 83.000075,235.5 0,15 1.359375,0 0.140625,0 c 0.262371,0.001 0.521673,-0.0582 0.75,-0.1875 l 10.5,-6 C 96.216124,244.05467 96.4532,243.52733 96.4532,243 c 0,-0.52733 -0.237076,-1.05467 -0.703125,-1.3125 l -10.5,-6 c -0.228327,-0.12937 -0.487629,-0.18946 -0.75,-0.1875 l -0.140625,0 z' id='path3807-1-1-9-38-4' sodipodi:nodetypes='ccccccsccccc' style='font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;
+    color:#000000;fill:#ffffff;fill-rule:nonzero;stroke:none;stroke-width:2;
+    marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans'/>
   </g>
 </svg>
