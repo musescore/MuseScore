@@ -129,7 +129,7 @@ TupletInfo findTupletApproximation(int tupletNumber,
                   continue;   // no chord fits to this tuplet note position
                         // chord can be in tuplet
             tupletInfo.chords.insert({k, bestChord.first});
-            tupletInfo.tupletOnTimeSumError += bestChord.second;
+            tupletInfo.tupletSumError += bestChord.second;
                         // for next tuplet note we start from the next chord
                         // because chord for the next tuplet note cannot be earlier
             startTupletChordIt = bestChord.first;
@@ -138,17 +138,48 @@ TupletInfo findTupletApproximation(int tupletNumber,
             int regularError = findOnTimeRegularError(bestChord.first->first, quantValue);
             tupletInfo.regularSumError += regularError;
             }
+      tupletInfo.averageError = tupletInfo.tupletSumError * 1.0 / tupletInfo.chords.size();
+
+      int beg = tupletInfo.onTime;
+      int tupletEndTime = tupletInfo.onTime + tupletInfo.len;
+      for (const auto &chord: tupletInfo.chords) {
+            const MidiChord &midiChord = chord.second->second;
+            tupletInfo.sumLengthOfRests += midiChord.onTime - beg;
+            beg = midiChord.onTime + midiChord.duration;
+            if (beg >= tupletInfo.onTime + tupletInfo.len)
+                  break;
+            }
+      if (beg < tupletEndTime)
+            tupletInfo.sumLengthOfRests += tupletEndTime - beg;
 
       return tupletInfo;
       }
 
-std::multimap<double, TupletInfo>
+void sortTupletCandidates(std::vector<TupletInfo> &tupletCandidates)
+      {
+      struct {
+            bool operator()(const TupletInfo &t1, const TupletInfo &t2)
+                  {
+                  if (t1.averageError < t2.averageError)
+                        return true;
+                  if (t1.averageError == t2.averageError) {
+                        if (t1.sumLengthOfRests < t2.sumLengthOfRests)
+                              return true;
+                        }
+                  return false;
+                  }
+            } errorComparator;
+
+      std::sort(tupletCandidates.begin(), tupletCandidates.end(), errorComparator);
+      }
+
+std::vector<TupletInfo>
 findTupletCandidatesOfBar(int startBarTick,
                           int endBarTick,
                           const Fraction &barFraction,
                           std::multimap<int, MidiChord> &chords)
       {
-      std::multimap<double, TupletInfo> tupletCandidates;   // average error, TupletInfo
+      std::vector<TupletInfo> tupletCandidates;
       if (chords.empty() || startBarTick >= endBarTick)     // invalid cases
             return tupletCandidates;
 
@@ -193,16 +224,17 @@ findTupletCandidatesOfBar(int startBarTick,
                                     quantValue, startDivTime, startDivChordIt, endDivChordIt);
                                     // check - is it a valid tuplet approximation?
                         if (!isTupletAllowed(tupletNumber, divLen,
-                                             tupletInfo.tupletOnTimeSumError,
+                                             tupletInfo.tupletSumError,
                                              tupletInfo.regularSumError,
                                              quantValue, tupletInfo.chords))
                               continue;
                                     // tuplet found
-                        double averageError = tupletInfo.tupletOnTimeSumError * 1.0 / tupletInfo.chords.size();
-                        tupletCandidates.insert({averageError, tupletInfo});
+                        tupletCandidates.push_back(tupletInfo);
                         }     // next tuplet type
                   }
             }
+      sortTupletCandidates(tupletCandidates);
+
       return tupletCandidates;
       }
 
@@ -269,24 +301,24 @@ bool areTupletChordsInUse(const std::map<int, int> &usedFirstTupletNotes,
 // if there are enough notes in this first chord
 // to be splitted to different voices
 
-void filterTuplets(std::multimap<double, TupletInfo> &tuplets)
+void filterTuplets(std::vector<TupletInfo> &tuplets)
       {
                   // structure of map: <tick, count of use of first tuplet chord with this tick>
       std::map<int, int> usedFirstTupletNotes;
                   // onTime values - tick - of already used chords
       std::set<int> usedChords;
                   // select tuplets with min average error
-      for (auto tc = tuplets.begin(); tc != tuplets.end(); ) {  // tc - tuplet candidate
-            auto &tupletChords = tc->second.chords;
+      for (auto tupletInfo = tuplets.begin(); tupletInfo != tuplets.end(); ) {
+            auto &tupletChords = tupletInfo->chords;
                         // check for chords notes already used in another tuplets
             if (tupletChords.empty()
                         || areTupletChordsInUse(usedFirstTupletNotes, usedChords, tupletChords)) {
-                  tc = tuplets.erase(tc);
+                  tupletInfo = tuplets.erase(tupletInfo);
                   continue;
                   }
                         // we can use this tuplet
             markChordsAsUsed(usedFirstTupletNotes, usedChords, tupletChords);
-            ++tc;
+            ++tupletInfo;
             }
       }
 
@@ -445,14 +477,11 @@ std::vector<TupletInfo> findTuplets(int startBarTick,
                                     const Fraction &barFraction,
                                     std::multimap<int, MidiChord> &chords)
       {
-      std::vector<TupletInfo> preparedTuplets;
       auto tuplets = findTupletCandidatesOfBar(startBarTick, endBarTick,
                                                barFraction, chords);
       filterTuplets(tuplets);
-      for (const auto &t: tuplets)
-            preparedTuplets.push_back(t.second);
 
-      return preparedTuplets;
+      return tuplets;
       }
 
 } // namespace MidiTuplet
