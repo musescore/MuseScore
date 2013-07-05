@@ -24,9 +24,13 @@ void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tuplet
                               const TimeSigMap* sigmap,
                               int lastTick);
 
+int fixedQuantRaster();
+
 int findQuantRaster(const std::multimap<int, MidiChord>::iterator &startBarChordIt,
                     const std::multimap<int, MidiChord>::iterator &endChordIt,
                     int endBarTick);
+
+void quantizeChord(MidiChord &chord, int raster);
 
 } // namespace Quantize
 } // namespace Ms
