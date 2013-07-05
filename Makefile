@@ -25,6 +25,8 @@ PREFIX    = "/usr/local"
 VERSION   = "2.0b-${REVISION}"
 #VERSION   = 2.0
 
+export PATH=/bin:/usr/bin
+
 release:
 	mkdir build.release;                       \
       cd build.release;                          \
