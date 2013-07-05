@@ -79,9 +79,7 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-# subdirs (libmscore importmidi capella biab)
-# musicxml - work in progress
-subdirs (libmscore importmidi capella biab)
+subdirs (libmscore importmidi capella biab musicxml)
 
 if (OMR)
 subdirs(omr)

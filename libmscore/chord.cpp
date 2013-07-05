@@ -399,11 +399,13 @@ void Chord::add(Element* e)
                   _hook = static_cast<Hook*>(e);
                   break;
             case CHORDLINE:
+                  _el.push_back(e);
+                  break;
             case SLUR:
                   {
                   _el.push_back(e);
-                  Slur* gs = static_cast<Slur*>(e);
-                  foreach (SpannerSegment* ss, gs->spannerSegments()) {
+                  Spanner* s = static_cast<Spanner*>(e);
+                  foreach (SpannerSegment* ss, s->spannerSegments()) {
                         if (ss->system())
                               ss->system()->add(ss);
                         }

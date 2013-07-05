@@ -1665,29 +1665,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             int tick1 = i.value().first;
             int tick2 = i.value().second;
             // qDebug("wedge %p tick1 %d tick2 %d", sp, tick1, tick2);
-            Segment* seg1 = score->tick2segment(tick1);
-            Segment* seg2 = score->tick2segment(tick2);
-            // qDebug(" seg1 %p seg2 %p", seg1, seg2);
-            if (seg1 && seg2) {
-                  sp->setTick(seg1->tick());
-                  seg1->add(sp);
-                  sp->setTick2(seg2->tick());
-                  if (sp->type() == Element::OTTAVA) {
-                        Ottava* o = static_cast<Ottava*>(sp);
-                        int shift = o->pitchShift();
-                        Staff* st = o->staff();
-                        st->pitchOffsets().setPitchOffset(tick1, shift);
-                        st->pitchOffsets().setPitchOffset(tick2, 0);
-                        }
-                  else if (sp->type() == Element::HAIRPIN) {
-                        Hairpin* hp = static_cast<Hairpin*>(sp);
-                        score->updateHairpin(hp);
-                        }
-                  }
-            else {
-                  qDebug("Can't find segments to attach spanner (wedge) to: tick1=%d tick2=%d seg1=%p seg2=%p",
-                         tick1, tick2, seg1, seg2);
-                  }
+            sp->setTick(tick1);
+            sp->setTick2(tick2);
+            sp->score()->addElement(sp);
             ++i;
             }
       spanners.clear();
