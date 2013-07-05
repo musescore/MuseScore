@@ -94,6 +94,12 @@ int userQuantNoteToTicks(MidiOperation::QuantValue quantNote)
       return userQuantValue;
       }
 
+int fixedQuantRaster()
+      {
+      auto operations = preferences.midiImportOperations.currentTrackOperations();
+      return userQuantNoteToTicks(operations.quantize.value);
+      }
+
 int findQuantRaster(const std::multimap<int, MidiChord>::iterator &startBarChordIt,
                     const std::multimap<int, MidiChord>::iterator &endChordIt,
                     int endBarTick)
@@ -117,6 +123,16 @@ int findQuantRaster(const std::multimap<int, MidiChord>::iterator &startBarChord
       return raster;
       }
 
+void quantizeChord(MidiChord &chord, int raster)
+      {
+      int raster2 = raster >> 1;
+      chord.onTime = ((chord.onTime + raster2) / raster) * raster;
+      for (auto &note: chord.notes) {
+            note.onTime = chord.onTime;
+            note.len = quantizeLen(note.len, raster);
+            }
+      }
+
 void doGridQuantizationOfBar(std::multimap<int, MidiChord> &quantizedChords,
                              const std::multimap<int, MidiChord>::iterator &startChordIt,
                              const std::multimap<int, MidiChord>::iterator &endChordIt,
@@ -124,7 +140,6 @@ void doGridQuantizationOfBar(std::multimap<int, MidiChord> &quantizedChords,
                              int endBarTick,
                              const std::vector<std::multimap<int, MidiChord>::iterator> &chordsNotQuant)
       {
-      int raster2 = raster >> 1;
       for (auto it = startChordIt; it != endChordIt; ++it) {
             if (it->first >= endBarTick)
                   break;
@@ -132,11 +147,7 @@ void doGridQuantizationOfBar(std::multimap<int, MidiChord> &quantizedChords,
             if (found != chordsNotQuant.end())
                   continue;
             auto chord = it->second;
-            chord.onTime = ((chord.onTime + raster2) / raster) * raster;
-            for (auto &note: chord.notes) {
-                  note.onTime = chord.onTime;
-                  note.len = quantizeLen(note.len, raster);
-                  }
+            quantizeChord(chord, raster);
             quantizedChords.insert({chord.onTime, chord});
             }
       }
@@ -191,7 +202,6 @@ void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tuplet
             int endBarTick = sigmap->bar2tick(i, 0);
             Fraction barFraction = sigmap->timesig(startBarTick).timesig();
             auto tuplets = MidiTuplet::findTuplets(startBarTick, endBarTick, barFraction, chords);
-            MidiTuplet::separateTupletVoices(tuplets, chords);
 
             for (auto &tupletInfo: tuplets) {
                   auto &infoChords = tupletInfo.chords;

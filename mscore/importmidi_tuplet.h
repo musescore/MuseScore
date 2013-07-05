@@ -41,9 +41,6 @@ const std::map<int, Fraction>& tupletRatios();
 
 void filterTuplets(std::vector<TupletInfo> &tuplets);
 
-void separateTupletVoices(std::vector<TupletInfo> &tuplets,
-                          std::multimap<int, MidiChord> &chords);
-
 void quantizeTupletChord(MidiChord &midiChord, int onTime, const TupletInfo &tupletInfo);
 
 std::vector<TupletInfo> findTuplets(int startBarTick,
