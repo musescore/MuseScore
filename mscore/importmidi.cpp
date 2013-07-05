@@ -283,9 +283,8 @@ void quantizeAllTracks(QList<MTrack>& tracks, TimeSigMap* sigmap, int lastTick)
                               // pass current track index through MidiImportOperations
                               // for further usage
                   opers.setCurrentTrack(i);
-//                  Quantize::applyGridQuant(tracks[i].chords, sigmap, lastTick);
                   Quantize::quantizeChordsAndTuplets(tracks[i].tuplets, tracks[i].chords,
-                                                         sigmap, lastTick);
+                                                     sigmap, lastTick);
                   }
             }
       }
@@ -570,7 +569,11 @@ void setTies(Chord *chord, Score *score, QList<MidiNote> &midiNotes)
 
 void MTrack::addElementToTuplet(int voice, int onTime, int len, DurationElement *el)
       {
+      if (tuplets.empty())
+            return;
       auto it = tuplets.lower_bound(onTime);
+      if (it == tuplets.end())
+            it = tuplets.begin();
       if (it != tuplets.begin())
             --it;
       for ( ; it != tuplets.end(); ++it) {
@@ -620,12 +623,12 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
             Segment* s = measure->getSegment(chord, tick);
             s->add(chord);
             chord->setUserPlayEvents(true);
+            addElementToTuplet(voice, tick, len, chord);
 
             for (int k = 0; k < midiChords.size(); ++k) {
                   MidiChord& midiChord = midiChords[k];
                   setMusicNotesFromMidi(score, midiChord.notes, len, chord, tick,
                                         drumset, useDrumset);
-                  addElementToTuplet(voice, midiChord.onTime, len, chord);
                   if (midiChord.duration <= len) {
                         midiChords.removeAt(k);
                         --k;
@@ -647,9 +650,12 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
       }
 
 void MTrack::createTuplets(int track, Score *score)
-{
+      {
       for (const auto &tupletEvent: tuplets) {
             const auto &tupletData = tupletEvent.second;
+            if (tupletData.elements.empty())
+                  continue;
+
             Tuplet* tuplet = new Tuplet(score);
             auto ratioIt = MidiTuplet::tupletRatios().find(tupletData.tupletNumber);
             Fraction tupletRatio = (ratioIt != MidiTuplet::tupletRatios().end())
