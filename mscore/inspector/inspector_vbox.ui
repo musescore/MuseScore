@@ -71,7 +71,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -91,7 +91,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -292,7 +292,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -312,7 +312,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -332,7 +332,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -352,7 +352,7 @@
        </property>
        <property name="icon">
         <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons-dark/resetproperty.png</normaloff>:/data/icons-dark/resetproperty.png</iconset>
+         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
         <size>
