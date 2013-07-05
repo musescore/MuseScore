@@ -887,7 +887,7 @@ void OveToMScore::convertSignatures(){
 				OVE::MeasureData* measureData = ove_->getMeasureData(i, j, k);
 				QList<OVE::MusicData*> tempoPtrs = measureData->getMusicDatas(OVE::MusicData_Tempo);
 
-				if(k==0 || ( k>0 && abs(measure->getTypeTempo()-ove_->getMeasure(k-1)->getTypeTempo())>0.01 )){
+				if(k==0 || ( k>0 && qAbs(measure->getTypeTempo()-ove_->getMeasure(k-1)->getTypeTempo())>0.01 )){
 					int tick = mtt_->getTick(k, 0);
 					tempos[tick] = (int)measure->getTypeTempo();
 				}
