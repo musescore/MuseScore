@@ -676,7 +676,7 @@ void Score::createPlayEvents(Chord* chord)
 
       int tick = chord->tick();
       Slur* slur = 0;
-      for (auto sp : _spanner) {
+      for (auto sp : _spanner.map()) {
             if (sp.second->type() != Element::SLUR || sp.second->track() != chord->track())
                   continue;
             Slur* s = static_cast<Slur*>(sp.second);
@@ -804,7 +804,7 @@ void Score::renderMidi(EventMap* events)
             int utick1 = rs->utick;
             int utick2 = utick1 + rs->len;
 
-            for (std::pair<int,Spanner*> sp : _spanner) {
+            for (std::pair<int,Spanner*> sp : _spanner.map()) {
                   Spanner* s = sp.second;
                   if (s->type() != Element::PEDAL)
                         continue;

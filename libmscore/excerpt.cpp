@@ -32,7 +32,6 @@
 #include "segment.h"
 #include "tupletmap.h"
 #include "tiemap.h"
-#include "spannermap.h"
 #include "layoutbreak.h"
 
 namespace Ms {

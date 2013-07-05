@@ -76,7 +76,7 @@ add_library (
       cursor.cpp read114.cpp paste.cpp
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
-      noteline.cpp
+      noteline.cpp spannermap.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (

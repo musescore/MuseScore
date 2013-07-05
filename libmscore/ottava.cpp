@@ -161,22 +161,16 @@ LineSegment* Ottava::createLineSegment()
 
 void Ottava::endEdit()
       {
-#if 0 // TODO-S
-      if (oStartElement != startElement() || oEndElement != endElement()) {
+      if (editTick != tick() || editTick2 != tick2()) {
             Staff* s = staff();
-            int tick1 = static_cast<Segment*>(oStartElement)->tick();
-            int tick2 = static_cast<Segment*>(oEndElement)->tick();
-            s->pitchOffsets().remove(tick1);
-            s->pitchOffsets().remove(tick2);
+            s->pitchOffsets().remove(editTick);
+            s->pitchOffsets().remove(editTick2);
 
-            tick1 = static_cast<Segment*>(startElement())->tick();
-            tick2 = static_cast<Segment*>(endElement())->tick();
-            s->pitchOffsets().setPitchOffset(tick1, _pitchShift);
-            s->pitchOffsets().setPitchOffset(tick2, 0);
+            s->pitchOffsets().setPitchOffset(tick(), _pitchShift);
+            s->pitchOffsets().setPitchOffset(tick2(), 0);
 
             score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
             }
-#endif
       }
 
 //---------------------------------------------------------

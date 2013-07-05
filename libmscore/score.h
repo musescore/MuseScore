@@ -30,6 +30,7 @@
 #include "segment.h"
 #include "accidental.h"
 #include "note.h"
+#include "spannermap.h"
 
 class QPainter;
 
@@ -262,7 +263,7 @@ class Score : public QObject {
       int _pageNumberOffset;        ///< Offset for page numbers.
 
       MeasureBaseList _measures;          // here are the notes
-      std::multimap<int, Spanner*> _spanner; // spanner map, key is the start tick of the spanner
+      SpannerMap _spanner;
       //
       // generated objects during layout:
       //
@@ -929,8 +930,8 @@ class Score : public QObject {
 
       qreal noteHeadWidth() const            { return _noteHeadWidth; }
 
-      std::multimap<int, Spanner*>& spanner()             { return _spanner; }
-      const std::multimap<int, Spanner*>& spanner() const { return _spanner; }
+      std::multimap<int, Spanner*>& spanner()             { return _spanner.map(); }
+      const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
       Spanner* findSpanner(int id) const;
       bool isSpannerStartEnd(int tick, int track) const;
       void removeSpanner(Spanner*);

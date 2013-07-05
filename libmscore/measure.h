@@ -37,7 +37,6 @@ class System;
 class Note;
 class Spacer;
 class TieMap;
-class SpannerMap;
 class AccidentalState;
 class Spanner;
 class Part;
@@ -149,7 +148,7 @@ class Measure : public MeasureBase {
       virtual Measure* clone() const   { return new Measure(*this); }
       virtual ElementType type() const { return MEASURE; }
       virtual void setScore(Score* s);
-      Measure* cloneMeasure(Score*, TieMap*, SpannerMap*);
+      Measure* cloneMeasure(Score*, TieMap*);
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
