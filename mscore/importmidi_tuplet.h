@@ -42,13 +42,12 @@ void filterTuplets(std::multimap<double, TupletInfo> &tuplets);
 void separateTupletVoices(std::vector<TupletInfo> &tuplets,
                           std::multimap<int, MidiChord> &chords);
 
-std::multimap<double, TupletInfo>
-findTupletCandidatesOfBar(int startBarTick,
-                          int endBarTick,
-                          const Fraction &barFraction,
-                          std::multimap<int, MidiChord> &chords);
-
 void quantizeTupletChord(MidiChord &midiChord, int onTime, const TupletInfo &tupletInfo);
+
+std::vector<TupletInfo> findTuplets(int startBarTick,
+                                    int endBarTick,
+                                    const Fraction &barFraction,
+                                    std::multimap<int, MidiChord> &chords);
 
 } // namespace MidiTuplet
 } // namespace Ms
