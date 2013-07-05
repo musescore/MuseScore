@@ -3449,8 +3449,10 @@ void Score::insertTime(int tick, int len)
                         int len = s->tickLen() - d2;
                         if (len == 0)
                              undoRemoveElement(s);
-                        else
+                        else {
                               undoChangeProperty(s, P_SPANNER_TICK, s->tick() - d1);
+                              undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() - (tick2-tick));
+                              }
                         }
                   }
             }
