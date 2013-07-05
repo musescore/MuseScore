@@ -24,10 +24,8 @@
 #include "musescore.h"
 #include "preferences.h"
 #include "prefsdialog.h"
-// #include "msynth/synti.h"
 #include "seq.h"
 #include "libmscore/note.h"
-//#include "playpanel.h"
 #include "icons.h"
 #include "shortcutcapturedialog.h"
 #include "scoreview.h"
@@ -50,7 +48,6 @@ bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = fal
 
 extern bool useFactorySettings;
 extern bool externalStyle;
-extern QString iconGroup;
 
 static const char* appStyleFile;
 static int exportAudioSampleRates[2] = { 44100, 48000 };
@@ -478,12 +475,10 @@ void Preferences::read()
       oscPort                = s.value("oscPort", oscPort).toInt();
       styleName              = s.value("style", styleName).toString();
       if (styleName == "dark") {
-            iconGroup = "icons-dark/";
             appStyleFile = ":/data/appstyle-dark.css";
             globalStyle  = STYLE_DARK;
             }
       else {
-            iconGroup = "icons-dark/";
             appStyleFile = ":/data/appstyle-light.css";
             globalStyle  = STYLE_LIGHT;
             }
@@ -1404,13 +1399,11 @@ void PreferenceDialog::apply()
       prefs.useOsc  = oscServer->isChecked();
       prefs.oscPort = oscPort->value();
       if (styleName->currentIndex() == STYLE_DARK) {
-            iconGroup = "icons-dark/";
             appStyleFile = ":/data/appstyle-dark.css";
             prefs.styleName = "dark";
             prefs.globalStyle = STYLE_DARK;
             }
       else {
-            iconGroup = "icons/";
             appStyleFile = ":/data/appstyle-light.css";
             prefs.styleName = "light";
             prefs.globalStyle = STYLE_LIGHT;

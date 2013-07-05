@@ -114,8 +114,22 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
             QString svgFile = svgFiles.value(hashKey(mode, state));
             if (svgFile.isEmpty())
                   svgFile = svgFiles.value(hashKey(QIcon::Normal, QIcon::Off));
-            if (!svgFile.isEmpty())
-                  renderer->load(svgFile);
+            if (!svgFile.isEmpty()) {
+                  QFile f(svgFile);
+                  f.open(QIODevice::ReadOnly);
+                  QByteArray ba = f.readAll();
+                  if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT) {
+                        if (state == QIcon::On)
+                              ba.replace("fill:#ffffff", "fill:#2463aa");
+                        else
+                              ba.replace("fill:#ffffff", "fill:#000000");
+                        }
+                  else {
+                        if (state == QIcon::On)
+                              ba.replace("fill:#ffffff", "fill:#78b4e6");
+                        }
+                  renderer->load(ba);
+                  }
             }
       }
 
@@ -161,7 +175,7 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       QPainter p(&img);
       renderer.render(&p);
       p.end();
-
+#if 0
       bool light = Ms::preferences.globalStyle == Ms::STYLE_LIGHT;
 
       int ww = img.width();
@@ -238,6 +252,7 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
                         }
                   }
             }
+#endif
 
       pm = QPixmap::fromImage(img);
       if (!pm.isNull())
