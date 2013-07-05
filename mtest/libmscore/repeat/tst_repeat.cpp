@@ -46,6 +46,7 @@ class TestRepeat : public QObject, public MTest
       void repeat11() { repeat("repeat11.mscx", "1;2;3;4;2;3;5;6;7;8;2;9;10"); }
       void repeat12() { repeat("repeat12.mscx", "1;2;3;4;3;5;6;2;3;5;6;7"); }
       void repeat13() { repeat("repeat13.mscx", "1;2;3;4;5"); }
+      void repeat14() { repeat("repeat14.mscx", "1;2;3;4;5;6;7;8;9;10; 2;3;4;5;6;7;8;11;12; 2;3;4;5;6;7;8;13;14;15; 16;17;18; 16;17;18; 19;20;21;22;23; 5;6;7; 24;25;26"); }
       };
 
 
@@ -78,8 +79,10 @@ void TestRepeat::repeat(const char* f1, const QString & ref)
                   }
             }
       QString s = sl.join(";");
+      QString ref1 = ref;
+      ref1.replace(" ","");
       qDebug("sequence %s", qPrintable(s));
-      QCOMPARE(s,ref);
+      QCOMPARE(s, ref1);
       delete score;
       }
 
