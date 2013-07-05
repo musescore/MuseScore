@@ -1184,7 +1184,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         e->write(xml);
                         }
                   if (segment->segmentType() & (Segment::SegChordRest)) {
-                        for (auto i : _spanner) {     // TODO: dont search whole list
+                        for (auto i : _spanner.map()) {     // TODO: dont search whole list
                               Spanner* s = i.second;
                               if (s->track() != track || s->generated())
                                     continue;

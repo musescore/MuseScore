@@ -71,7 +71,6 @@
 #include "tablature.h"
 #include "tiemap.h"
 #include "tupletmap.h"
-#include "spannermap.h"
 #include "accidental.h"
 #include "layout.h"
 #include "icon.h"
@@ -3408,7 +3407,7 @@ Fraction Measure::stretchedLen(Staff* staff) const
 //   cloneMeasure
 //---------------------------------------------------------
 
-Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap, SpannerMap* /*spannerMap*/)
+Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       {
       Measure* m      = new Measure(sc);
       m->_timesig     = _timesig;
