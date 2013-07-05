@@ -98,6 +98,10 @@ p, li { white-space: pre-wrap; }
           </Rest>
         </Measure>
       <Measure number="2">
+        <HairPin id="2">
+          <subtype>1</subtype>
+          <veloChange>10</veloChange>
+          </HairPin>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -119,6 +123,7 @@ p, li { white-space: pre-wrap; }
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
