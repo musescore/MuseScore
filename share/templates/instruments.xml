@@ -4590,7 +4590,6 @@
                         <program value="0"/>
                   </Channel>
             </Instrument>
-
             <Instrument id="snare-drum">
                   <longName>Snare Drum</longName>
                   <shortName>Sn. Dr.</shortName>
@@ -4755,44 +4754,6 @@
                         <voice>0</voice>
                         <name>High Tom 1</name>
                         <stem>1</stem>
-                  </Drum>
-                  <Channel>
-                        <controller ctrl="0" value="1"/>
-                        <program value="0"/>
-                  </Channel>
-            </Instrument>
-            <Instrument id="hi-hat">
-                  <longName>Hi-hat</longName>
-                  <shortName>Hi-hat</shortName>
-                  <description>Hi-hat</description>
-                  <musicXMLid>metal.hi-hat</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafflines>1</stafflines>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <Drum pitch="42">
-                        <head>1</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Closed Hi-hat</name>
-                        <stem>1</stem>
-                        <shortcut>B</shortcut>
-                  </Drum>
-                  <Drum pitch="44">
-                        <head>1</head>
-                        <line>9</line>
-                        <voice>1</voice>
-                        <name>Pedal Hi-Hat</name>
-                        <stem>2</stem>
-                        <shortcut>F</shortcut>
-                  </Drum>
-                  <Drum pitch="46">
-                        <head>1</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Open Hi-hat</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
@@ -5025,7 +4986,44 @@
                         <program value="0"/>
                   </Channel>
             </Instrument>
-
+            <Instrument id="hi-hat">
+                  <longName>Hi-hat</longName>
+                  <shortName>Hi-hat</shortName>
+                  <description>Hi-hat</description>
+                  <musicXMLid>metal.hi-hat</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafflines>1</stafflines>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Drum pitch="42">
+                        <head>1</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Closed Hi-hat</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                  </Drum>
+                  <Drum pitch="44">
+                        <head>1</head>
+                        <line>9</line>
+                        <voice>1</voice>
+                        <name>Pedal Hi-Hat</name>
+                        <stem>2</stem>
+                        <shortcut>F</shortcut>
+                  </Drum>
+                  <Drum pitch="46">
+                        <head>1</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Open Hi-hat</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                  </Drum>
+                  <Channel>
+                        <controller ctrl="0" value="1"/>
+                        <program value="0"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="tam-tam">
                   <longName>Tam-tam</longName>
                   <shortName>Tam-tam</shortName>
@@ -8039,6 +8037,16 @@
                   <longName>Electric Guitar</longName>
                   <shortName>El. Guit.</shortName>
                   <description>Electric Guitar</description>
+                  <musicXMLid>pluck.guitar.electric</musicXMLid>
+                  <Tablature>
+                        <frets>19</frets>
+                        <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
+                        <string>55</string>
+                        <string>59</string>
+                        <string>64</string>
+                  </Tablature>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-86</aPitchRange>
