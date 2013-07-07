@@ -30,7 +30,6 @@ struct TupletInfo
       std::map<int, std::multimap<int, MidiChord>::iterator> chords;
       int tupletSumError = 0;
       int regularSumError = 0;
-      double averageError = 0.0;
       int sumLengthOfRests = 0;
       };
 
