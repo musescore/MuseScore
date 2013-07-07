@@ -368,12 +368,7 @@ void treeToDurationList(Node *node,
             const int MAX_DOTS = 1;
             QList<TDuration> list = toDurationList(
                               node->tupletRatio * (node->endPos - node->startPos),
-
-//                  Fraction::fromTicks(
-//                        node->tupletRatio.numerator()
-//                        * (node->endTick - node->startTick)
-//                        / node->tupletRatio.denominator()),
-                  useDots, MAX_DOTS);
+                              useDots, MAX_DOTS);
             for (const auto &duration: list)
                   dl.push_back({node->tupletRatio, duration});
             }

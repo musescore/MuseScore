@@ -219,7 +219,8 @@ void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tuplet
                   MidiTuplet::TupletData tupletData = {tupletInfo.chords.begin()->second->second.voice,
                                                        tupletInfo.onTime,
                                                        tupletInfo.len,
-                                                       tupletInfo.tupletNumber};
+                                                       tupletInfo.tupletNumber,
+                                                       {}};
                   tupletEvents.insert({tupletInfo.onTime, tupletData});
                   }
             if (endBarTick > lastTick)

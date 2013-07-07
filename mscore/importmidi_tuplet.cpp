@@ -113,6 +113,45 @@ int maxNoteLen(const QList<MidiNote> &notes)
       return maxLen;
       }
 
+
+// find tuplets over which duration lies
+
+std::vector<TupletData>
+findTupletsForDuration(int voice, int barTick, int durationOnTime, int durationLen,
+                       const std::multimap<int, TupletData> &tuplets)
+      {
+      std::vector<TupletData> tupletsData;
+      if (tuplets.empty())
+            return tupletsData;
+      auto tupletIt = tuplets.lower_bound(durationOnTime + durationLen);
+      if (tupletIt != tuplets.begin())
+            --tupletIt;
+      while (durationOnTime + durationLen > tupletIt->first
+             && durationOnTime < tupletIt->first + tupletIt->second.len.ticks()) {
+            if (tupletIt->second.voice == voice) {
+                              // if tuplet and duration intersect each other
+                  auto tupletData = tupletIt->second;
+                              // convert tuplet onTime to local bar ticks
+                  tupletData.onTime -= barTick;
+                  tupletsData.push_back(tupletData);
+                  }
+            if (tupletIt == tuplets.begin())
+                  break;
+            --tupletIt;
+            }
+
+      struct {
+            bool operator()(const TupletData &d1, const TupletData &d2)
+                  {
+                  return (d1.len > d2.len);
+                  }
+            } comparator;
+                  // sort by tuplet length in desc order
+      sort(tupletsData.begin(), tupletsData.end(), comparator);
+
+      return tupletsData;
+      }
+
 TupletInfo findTupletApproximation(const Fraction &tupletLen,
                                    int tupletNumber,
                                    int quantValue,
@@ -700,7 +739,7 @@ std::vector<TupletInfo> findTuplets(int startBarTick,
                                                            endBarChordIt);
                               // try different tuplets, nested tuplets are not allowed
                   for (const auto &tupletNumber: tupletNumbers) {
-                        int tupletNoteLen = divLen.ticks() / tupletNumber;
+                        int tupletNoteLen = (divLen / tupletNumber).ticks();
                         if (tupletNoteLen < quantValue)
                               continue;
                         auto tupletInfo = findTupletApproximation(divLen, tupletNumber,
