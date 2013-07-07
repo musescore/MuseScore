@@ -66,13 +66,15 @@ class MTrack {
       std::multimap<int, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
 
       void convertTrack(int lastTick);
-      void processPendingNotes(QList<MidiChord>& midiChords, int voice, int startChordTick, int nextChordTick);
+      void processPendingNotes(QList<MidiChord>& midiChords, int voice,
+                               int startChordTick, int nextChordTick);
       void processMeta(int tick, const MidiEvent& mm);
       void fillGapWithRests(Score *score, int voice, int startChordTick, int restLen, int track);
       std::vector<MidiTuplet::TupletData> findTupletsForDuration(int voice, int barTick,
                                                                  int durationOnTime, int durationLen);
-      QList<std::pair<Fraction, TDuration> > toDurationList(const Measure *measure, int voice, int startTick, int len,
-                                                            Meter::DurationType durationType);
+      QList<std::pair<Fraction, TDuration> >
+            toDurationList(const Measure *measure, int voice, int startTick, int len,
+                     Meter::DurationType durationType);
       int voicesInBar(int tickInBar);
       void addElementToTuplet(int voice, int onTime, int len, DurationElement *el);
       void createTuplets(int track, Score *score);
@@ -392,43 +394,6 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             }
       }
 
-// find tuplets over which duration lies
-
-std::vector<MidiTuplet::TupletData>
-MTrack::findTupletsForDuration(int voice, int barTick, int durationOnTime, int durationLen)
-      {
-      std::vector<MidiTuplet::TupletData> tupletsData;
-      if (tuplets.empty())
-            return tupletsData;
-      auto tupletIt = tuplets.lower_bound(durationOnTime + durationLen);
-      if (tupletIt != tuplets.begin())
-            --tupletIt;
-      while (durationOnTime + durationLen > tupletIt->first
-             && durationOnTime < tupletIt->first + tupletIt->second.len.ticks()) {
-            if (tupletIt->second.voice == voice) {
-                              // if tuplet and duration intersect each other
-                  auto tupletData = tupletIt->second;
-                              // convert tuplet onTime to local bar ticks
-                  tupletData.onTime -= barTick;
-                  tupletsData.push_back(tupletData);
-                  }
-            if (tupletIt == tuplets.begin())
-                  break;
-            --tupletIt;
-            }
-
-      struct {
-            bool operator()(const MidiTuplet::TupletData &d1, const MidiTuplet::TupletData &d2)
-                  {
-                  return (d1.len > d2.len);
-                  }
-            } comparator;
-                  // sort by tuplet length in desc order
-      sort(tupletsData.begin(), tupletsData.end(), comparator);
-
-      return tupletsData;
-      }
-
 QList<std::pair<Fraction, TDuration> >
 MTrack::toDurationList(const Measure *measure,
                        int voice,
@@ -438,8 +403,9 @@ MTrack::toDurationList(const Measure *measure,
       {
       bool useDots = preferences.midiImportOperations.currentTrackOperations().useDots;
                   // find tuplets over which duration is go
-      std::vector<MidiTuplet::TupletData> tupletData = findTupletsForDuration(voice, measure->tick(),
-                                                                              startTick, len);
+      std::vector<MidiTuplet::TupletData> tupletData
+                  = MidiTuplet::findTupletsForDuration(voice, measure->tick(),
+                                                       startTick, len, tuplets);
       int startTickInBar = startTick - measure->tick();
       int endTickInBar = startTickInBar + len;
       return Meter::toDurationList(startTickInBar, endTickInBar,

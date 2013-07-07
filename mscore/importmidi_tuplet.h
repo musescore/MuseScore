@@ -48,6 +48,12 @@ std::vector<TupletInfo> findTuplets(int startBarTick,
                                     const Fraction &barFraction,
                                     std::multimap<int, MidiChord> &chords);
 
+std::vector<TupletData> findTupletsForDuration(int voice,
+                                               int barTick,
+                                               int durationOnTime,
+                                               int durationLen,
+                                               const std::multimap<int, TupletData> &tuplets);
+
 } // namespace MidiTuplet
 } // namespace Ms
 
