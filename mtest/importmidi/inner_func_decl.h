@@ -16,21 +16,20 @@ findBestChordForTupletNote(int tupletNotePos,
                            const std::multimap<int, MidiChord>::iterator &endChordIt);
 
 bool isTupletAllowed(int tupletNumber,
-                     int tupletLen,
+                     const Fraction &tupletLen,
                      int tupletOnTimeSumError,
                      int regularSumError,
                      int quantValue,
                      const std::map<int, std::multimap<int, MidiChord>::iterator> &tupletChords);
 
-std::vector<int> findTupletNumbers(int divLen, const Fraction &barFraction);
+std::vector<int> findTupletNumbers(const Fraction &divLen, const Fraction &barFraction);
 
 int findOnTimeRegularError(int onTime, int quantValue);
 
 struct TupletInfo;
 
-TupletInfo findTupletApproximation(int tupletLen,
+TupletInfo findTupletApproximation(const Fraction &tupletLen,
                                    int tupletNumber,
-                                   int tupletNoteLen,
                                    int quantValue,
                                    int startTupletTime,
                                    const std::multimap<int, MidiChord>::iterator &startChordIt,
