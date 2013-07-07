@@ -207,8 +207,8 @@ void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tuplet
                   auto &infoChords = tupletInfo.chords;
                   for (auto &tupletChord: infoChords) {
                         int tupletNoteNum = tupletChord.first;
-                        int onTime = tupletInfo.onTime + tupletNoteNum
-                                    * (tupletInfo.len / tupletInfo.tupletNumber);
+                        int onTime = tupletInfo.onTime
+                                   + ((tupletInfo.len / tupletInfo.tupletNumber) * tupletNoteNum).ticks();
                         std::multimap<int, MidiChord>::iterator &midiChordEventIt = tupletChord.second;
                                     // quantize chord to onTime value
                         MidiChord midiChord = midiChordEventIt->second;
