@@ -401,9 +401,10 @@ MTrack::findTupletsForDuration(int voice, int barTick, int durationOnTime, int d
       if (tuplets.empty())
             return tupletsData;
       auto tupletIt = tuplets.lower_bound(durationOnTime + durationLen);
-      --tupletIt;
+      if (tupletIt != tuplets.begin())
+            --tupletIt;
       while (durationOnTime + durationLen > tupletIt->first
-             && durationOnTime < tupletIt->first + tupletIt->second.len) {
+             && durationOnTime < tupletIt->first + tupletIt->second.len.ticks()) {
             if (tupletIt->second.voice == voice) {
                               // if tuplet and duration intersect each other
                   auto tupletData = tupletIt->second;
@@ -584,7 +585,7 @@ void MTrack::addElementToTuplet(int voice, int onTime, int len, DurationElement 
             if (tupletData.voice != voice)
                   continue;
             if (onTime >= tupletData.onTime
-                        && onTime + len <= tupletData.onTime + tupletData.len) {
+                        && onTime + len <= tupletData.onTime + tupletData.len.ticks()) {
                               // add chord/rest to the tuplet
                   tupletData.elements.push_back(el);
                   break;
@@ -666,7 +667,7 @@ void MTrack::createTuplets(int track, Score *score)
             tuplet->setRatio(tupletRatio);
 
             tuplet->setDuration(tupletData.len);
-            TDuration baseLen(Fraction::fromTicks(tupletData.len / tupletRatio.denominator()));
+            TDuration baseLen(tupletData.len / tupletRatio.denominator());
             tuplet->setBaseLen(baseLen);
 
             tuplet->setTrack(track);

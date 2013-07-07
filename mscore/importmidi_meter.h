@@ -26,10 +26,10 @@ bool isDuple(const Fraction &barFraction);
 bool isTriple(const Fraction &barFraction);
 bool isQuadruple(const Fraction &barFraction);
 
-int beatLength(const Fraction &barFraction);
+Fraction beatLength(const Fraction &barFraction);
 
             // division lengths of bar, each can be a tuplet length
-std::vector<int> divisionsOfBarForTuplets(const Fraction &barFraction);
+std::vector<Fraction> divisionsOfBarForTuplets(const Fraction &barFraction);
 
             // duration and all tuplets should belong to the same voice
 // nested tuplets are not allowed

@@ -24,7 +24,7 @@ const std::map<int, Fraction>& tupletRatios()
       }
 
 bool isTupletAllowed(int tupletNumber,
-                     int tupletLen,
+                     const Fraction &tupletLen,
                      int tupletOnTimeSumError,
                      int regularSumError,
                      int quantValue,
@@ -39,7 +39,7 @@ bool isTupletAllowed(int tupletNumber,
                         && tupletChords.begin()->first == 0) {
                   auto &chordEventIt = tupletChords.begin()->second;
                   for (const auto &note: chordEventIt->second.notes) {
-                        if (std::abs(note.len - tupletLen / num) > quantValue)
+                        if (std::abs(note.len - (tupletLen / num).ticks()) > quantValue)
                               return false;
                         }
                   }
@@ -51,10 +51,10 @@ bool isTupletAllowed(int tupletNumber,
             return false;
             }
                   // only notes with len >= (half tuplet note len) allowed
-      int tupletNoteLen = tupletLen / tupletNumber;
+      Fraction tupletNoteLen = tupletLen / tupletNumber;
       for (const auto &tupletChord: tupletChords) {
             for (const auto &note: tupletChord.second->second.notes) {
-                  if (note.len >= tupletNoteLen / 2)
+                  if (note.len >= (tupletNoteLen / 2).ticks())
                         return true;
                   }
             }
@@ -62,7 +62,7 @@ bool isTupletAllowed(int tupletNumber,
       return false;
       }
 
-std::vector<int> findTupletNumbers(int divLen, const Fraction &barFraction)
+std::vector<int> findTupletNumbers(const Fraction &divLen, const Fraction &barFraction)
       {
       std::vector<int> tupletNumbers;
       if (Meter::isCompound(barFraction) && divLen == Meter::beatLength(barFraction))
@@ -113,9 +113,8 @@ int maxNoteLen(const QList<MidiNote> &notes)
       return maxLen;
       }
 
-TupletInfo findTupletApproximation(int tupletLen,
+TupletInfo findTupletApproximation(const Fraction &tupletLen,
                                    int tupletNumber,
-                                   int tupletNoteLen,
                                    int quantValue,
                                    int startTupletTime,
                                    const std::multimap<int, MidiChord>::iterator &startChordIt,
@@ -125,14 +124,15 @@ TupletInfo findTupletApproximation(int tupletLen,
       tupletInfo.tupletNumber = tupletNumber;
       tupletInfo.onTime = startTupletTime;
       tupletInfo.len = tupletLen;
-      tupletInfo.tupletQuantValue = tupletNoteLen;
-      while (tupletInfo.tupletQuantValue / 2 >= quantValue)
+      tupletInfo.tupletQuantValue = tupletLen / tupletNumber;
+      while ((tupletInfo.tupletQuantValue / 2).ticks() >= quantValue)
             tupletInfo.tupletQuantValue /= 2;
-      tupletInfo.regularQuantValue = quantValue;
+      tupletInfo.regularQuantValue = Fraction::fromTicks(quantValue);
 
       auto startTupletChordIt = startChordIt;
       for (int k = 0; k != tupletNumber; ++k) {
-            int tupletNotePos = startTupletTime + k * tupletNoteLen;
+            int tupletNotePos = startTupletTime
+                        + (tupletLen / tupletNumber * k).ticks();
                         // choose the best chord, if any, for this tuplet note
             auto bestChord = findBestChordForTupletNote(tupletNotePos, quantValue,
                                                         startTupletChordIt, endChordIt);
@@ -151,7 +151,7 @@ TupletInfo findTupletApproximation(int tupletLen,
             }
 
       int beg = tupletInfo.onTime;
-      int tupletEndTime = tupletInfo.onTime + tupletInfo.len;
+      int tupletEndTime = tupletInfo.onTime + tupletInfo.len.ticks();
       for (const auto &chord: tupletInfo.chords) {
             const MidiChord &midiChord = chord.second->second;
                         // approximate length of gaps between successive chords
@@ -159,7 +159,7 @@ TupletInfo findTupletApproximation(int tupletLen,
             if (beg < midiChord.onTime)
                   tupletInfo.sumLengthOfRests += midiChord.onTime - beg;
             beg = midiChord.onTime + maxNoteLen(midiChord.notes);
-            if (beg >= tupletInfo.onTime + tupletInfo.len)
+            if (beg >= tupletInfo.onTime + tupletInfo.len.ticks())
                   break;
             }
       if (beg < tupletEndTime)
@@ -268,7 +268,7 @@ validateTuplets(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
             for (const auto &chord: tuplets[i].chords)
                   excludedChords.erase(&*chord.second);
             }
-      int regularQuant = tuplets.front().regularQuantValue;
+      int regularQuant = tuplets.front().regularQuantValue.ticks();
       for (const auto &chordIt: excludedChords)
             sumError += findOnTimeRegularError(chordIt->first, regularQuant);
 
@@ -385,12 +385,13 @@ void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
             std::vector<int> leavedIndexes;
             for (int i = 0; i != notes.size(); ++i) {
                   const auto &note = notes[i];
-                  if (note.len <= tupletInfo.len && notes.size() > (int)removedIndexes.size() + 1)
+                  if (note.len <= tupletInfo.len.ticks()
+                              && notes.size() > (int)removedIndexes.size() + 1)
                         {
                         int tupletError = noteLenQuantError(
-                                          note.onTime, note.len, tupletInfo.tupletQuantValue);
+                                          note.onTime, note.len, tupletInfo.tupletQuantValue.ticks());
                         int regularError = noteLenQuantError(
-                                          note.onTime, note.len, tupletInfo.regularQuantValue);
+                                          note.onTime, note.len, tupletInfo.regularQuantValue.ticks());
                         if (tupletError > regularError) {
                               removedIndexes.push_back(i);
                               continue;
@@ -533,8 +534,10 @@ int findNonTupletVoice(const std::vector<std::multimap<int, MidiChord>::iterator
       int nonTupletPitch = averagePitch(nonTuplets);
       int voice = 0;
       for (const auto &tupletInfo: sortedTuplets) {
-            if (!hasIntersectionWithChord(tupletInfo.onTime, tupletInfo.onTime + tupletInfo.len,
-                                          regularRaster, nonTuplets))
+            if (!hasIntersectionWithChord(tupletInfo.onTime,
+                                          tupletInfo.onTime + tupletInfo.len.ticks(),
+                                          regularRaster,
+                                          nonTuplets))
                   continue;
             int tupletPitch = averagePitch(tupletInfo.chords);
             if (nonTupletPitch >= tupletPitch)
@@ -580,15 +583,15 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
             for (auto prev = tuplets.begin(); prev != now; ) {
                               // check is now tuplet go over previous tuplets and non-tuplet chords
                   if (!flag && prev - tuplets.begin() == nonTupletVoice) {
-                        if (hasIntersectionWithChord(now->onTime, now->onTime + now->len,
+                        if (hasIntersectionWithChord(now->onTime, now->onTime + now->len.ticks(),
                                                      regularRaster, nonTuplets))
                               ++voice;
                         flag = true;
                         continue;
                         }
                   else {
-                        if (now->onTime + now->len > prev->onTime
-                                    && now->onTime < prev->onTime + prev->len)
+                        if (now->onTime + now->len.ticks() > prev->onTime
+                                    && now->onTime < prev->onTime + prev->len.ticks())
                               ++voice;
                         }
                   if (flag)
@@ -628,10 +631,10 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
       return nonTupletVoice;
       }
 
-int findRasterForNote(int noteOnTime, int noteLen, const TupletInfo &tupletInfo)
+Fraction findRasterForNote(int noteOnTime, int noteLen, const TupletInfo &tupletInfo)
       {
-      int raster;
-      if (noteOnTime + noteLen <= tupletInfo.onTime + tupletInfo.len) {
+      Fraction raster;
+      if (noteOnTime + noteLen <= tupletInfo.onTime + tupletInfo.len.ticks()) {
                         // if offTime is inside the tuplet - quant by tuplet grid
             raster = tupletInfo.tupletQuantValue;
             }
@@ -645,8 +648,8 @@ void quantizeTupletChord(MidiChord &midiChord, int onTime, const TupletInfo &tup
       {
       midiChord.onTime = onTime;
       for (auto &note: midiChord.notes) {
-            int raster = findRasterForNote(note.onTime, note.len, tupletInfo);
-            int offTime = findNoteOffTime(note.onTime, note.len, raster);
+            Fraction raster = findRasterForNote(note.onTime, note.len, tupletInfo);
+            int offTime = findNoteOffTime(note.onTime, note.len, raster.ticks());
             note.onTime = onTime;
             note.len = offTime - onTime;
             }
@@ -663,7 +666,6 @@ std::vector<TupletInfo> findTuplets(int startBarTick,
       if (chords.empty() || startBarTick >= endBarTick)     // invalid cases
             return tuplets;
 
-      int barLen = barFraction.ticks();
       int tol = Quantize::fixedQuantRaster() / 2;
       auto startBarChordIt = findFirstChordInRange(startBarTick - tol,
                                                    endBarTick,
@@ -679,11 +681,12 @@ std::vector<TupletInfo> findTuplets(int startBarTick,
 
       for (const auto &divLen: divLengths) {
             auto tupletNumbers = findTupletNumbers(divLen, barFraction);
-            int divCount = barLen / divLen;
+            auto div = barFraction / divLen;
+            int divCount = std::round(div.numerator() * 1.0 / div.denominator());
 
             for (int i = 0; i != divCount; ++i) {
-                  int startDivTime = startBarTick + i * divLen;
-                  int endDivTime = startDivTime + divLen;
+                  int startDivTime = startBarTick + (divLen * i).ticks();
+                  int endDivTime = startBarTick + (divLen * (i + 1)).ticks();
                               // check which chords can be inside tuplet period
                               // [startDivTime - quantValue, endDivTime + quantValue]
                   auto startDivChordIt = findFirstChordInRange(startDivTime - quantValue,
@@ -697,10 +700,10 @@ std::vector<TupletInfo> findTuplets(int startBarTick,
                                                            endBarChordIt);
                               // try different tuplets, nested tuplets are not allowed
                   for (const auto &tupletNumber: tupletNumbers) {
-                        int tupletNoteLen = divLen / tupletNumber;
+                        int tupletNoteLen = divLen.ticks() / tupletNumber;
                         if (tupletNoteLen < quantValue)
                               continue;
-                        auto tupletInfo = findTupletApproximation(divLen, tupletNumber, tupletNoteLen,
+                        auto tupletInfo = findTupletApproximation(divLen, tupletNumber,
                                     quantValue, startDivTime, startDivChordIt, endDivChordIt);
                                     // check - is it a valid tuplet approximation?
                         if (!isTupletAllowed(tupletNumber, divLen,

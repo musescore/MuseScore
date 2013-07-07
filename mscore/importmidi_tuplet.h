@@ -1,11 +1,12 @@
 #ifndef IMPORTMIDI_TUPLET_H
 #define IMPORTMIDI_TUPLET_H
 
+#include "libmscore/fraction.h"
+
 
 namespace Ms {
 
 class MidiChord;
-class Fraction;
 class DurationElement;
 
 namespace MidiTuplet {
@@ -14,7 +15,7 @@ struct TupletData
       {
       int voice;
       int onTime;
-      int len;
+      Fraction len;
       int tupletNumber;
       std::vector<DurationElement *> elements;
       };
@@ -22,10 +23,10 @@ struct TupletData
 struct TupletInfo
       {
       int onTime;
-      int len;
+      Fraction len;
       int tupletNumber;
-      int tupletQuantValue;
-      int regularQuantValue;
+      Fraction tupletQuantValue;
+      Fraction regularQuantValue;
                   // <note index in tuplet, chord iterator>
       std::map<int, std::multimap<int, MidiChord>::iterator> chords;
       int tupletSumError = 0;
