@@ -356,6 +356,7 @@ void TestImportMidi::findTupletApproximation()
       {
       int startTupletTime = 0;
       MidiTuplet::TupletInfo tupletApprox = MidiTuplet::findTupletApproximation(
+                        tupletLen,
                         tupletNumber, tupletNoteLen, quantValue,
                         startTupletTime, chords.begin(), chords.end()
                         );
@@ -374,6 +375,7 @@ void TestImportMidi::findTupletApproximation()
       {
       int startTupletTime = 960;
       MidiTuplet::TupletInfo tupletApprox = MidiTuplet::findTupletApproximation(
+                        tupletLen,
                         tupletNumber, tupletNoteLen, quantValue,
                         startTupletTime, chords.begin(), chords.end()
                         );
@@ -382,6 +384,7 @@ void TestImportMidi::findTupletApproximation()
       {
       int startTupletTime = 1440;
       MidiTuplet::TupletInfo tupletApprox = MidiTuplet::findTupletApproximation(
+                        tupletLen,
                         tupletNumber, tupletNoteLen, quantValue,
                         startTupletTime, chords.begin(), chords.end()
                         );
@@ -423,6 +426,7 @@ MidiChord chordFactory(int onTime, int len, const std::vector<int> &pitches)
 void TestImportMidi::separateTupletVoices()
       {
       int tupletLen = MScore::division;
+      int endBarTick = 4 * tupletLen;
       std::multimap<int, MidiChord> chords;
                   // let's create 3 tuplets with the same first chord
 
@@ -515,8 +519,8 @@ void TestImportMidi::separateTupletVoices()
       QCOMPARE(septupletIt->second->second.notes[1].pitch, 71);
       QCOMPARE(septupletIt->second->second.notes[2].pitch, 67);
 
-      MidiTuplet::separateTupletVoices(tuplets, chords);
-
+      MidiTuplet::separateTupletVoices(tuplets, chords.begin(), chords.end(),
+                                       chords, endBarTick);
       QVERIFY(chords.size() == 15);
 
       tripletInfo = tuplets[0];
