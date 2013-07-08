@@ -410,7 +410,6 @@ MidiChord chordFactory(const Fraction &len, const std::vector<int> &pitches)
       MidiChord chord;
       if (notes.empty())
             return chord;
-      chord.duration = notes.front().len;
       for (const auto &note: notes)
             chord.notes.push_back(note);
 
