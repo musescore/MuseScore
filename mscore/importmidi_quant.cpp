@@ -123,12 +123,9 @@ int findQuantRaster(const std::multimap<int, MidiChord>::iterator &startBarChord
       return raster;
       }
 
-void quantizeChord(MidiChord &chord, int raster)
+int quantizeOnTime(int onTime, int raster)
       {
-      int raster2 = raster >> 1;
-      chord.onTime = ((chord.onTime + raster2) / raster) * raster;
-      for (auto &note: chord.notes)
-            note.len = quantizeLen(note.len, raster);
+      return ((onTime + raster / 2) / raster) * raster;
       }
 
 void doGridQuantizationOfBar(std::multimap<int, MidiChord> &quantizedChords,
@@ -145,8 +142,10 @@ void doGridQuantizationOfBar(std::multimap<int, MidiChord> &quantizedChords,
             if (found != chordsNotQuant.end())
                   continue;
             auto chord = it->second;
-            quantizeChord(chord, raster);
-            quantizedChords.insert({chord.onTime, chord});
+            int onTime = quantizeOnTime(it->first, raster);
+            for (auto &note: chord.notes)
+                  note.len = quantizeLen(note.len, raster);
+            quantizedChords.insert({onTime, chord});
             }
       }
 
@@ -210,7 +209,12 @@ void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tuplet
                         std::multimap<int, MidiChord>::iterator &midiChordEventIt = tupletChord.second;
                                     // quantize chord to onTime value
                         MidiChord midiChord = midiChordEventIt->second;
-                        MidiTuplet::quantizeTupletChord(midiChord, onTime, tupletInfo);
+                        for (auto &note: midiChord.notes) {
+                              Fraction raster = MidiTuplet::findRasterForTupletNote(
+                                                onTime, note.len, tupletInfo);
+                              int offTime = Quantize::quantizeOnTime(onTime + note.len, raster.ticks());
+                              note.len = offTime - onTime;
+                              }
                         quantizedChords.insert({onTime, midiChord});
                         tupletChords.push_back(midiChordEventIt);
                         }

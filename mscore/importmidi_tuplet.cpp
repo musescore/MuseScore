@@ -4,6 +4,7 @@
 #include "importmidi_meter.h"
 #include "importmidi_quant.h"
 #include "libmscore/mscore.h"
+#include "libmscore/utils.h"
 
 #include <set>
 
@@ -74,7 +75,7 @@ std::vector<int> findTupletNumbers(const Fraction &divLen, const Fraction &barFr
 
 int findOnTimeRegularError(int onTime, int quantValue)
       {
-      int regularPos = ((onTime + quantValue / 2) / quantValue) * quantValue;
+      int regularPos = Quantize::quantizeOnTime(onTime, quantValue);
       return std::abs(onTime - regularPos);
       }
 
@@ -193,11 +194,12 @@ TupletInfo findTupletApproximation(const Fraction &tupletLen,
       int tupletEndTime = tupletInfo.onTime + tupletInfo.len.ticks();
       for (const auto &chord: tupletInfo.chords) {
             const MidiChord &midiChord = chord.second->second;
-                        // approximate length of gaps between successive chords
+            int chordOnTime = chord.second->first;
+                        // approximate length of gaps between successive chords,
                         // quantization is not taken into account
-            if (beg < midiChord.onTime)
-                  tupletInfo.sumLengthOfRests += midiChord.onTime - beg;
-            beg = midiChord.onTime + maxNoteLen(midiChord.notes);
+            if (beg < chordOnTime)
+                  tupletInfo.sumLengthOfRests += chordOnTime - beg;
+            beg = chordOnTime + maxNoteLen(midiChord.notes);
             if (beg >= tupletInfo.onTime + tupletInfo.len.ticks())
                   break;
             }
@@ -394,14 +396,9 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
       std::swap(tuplets, newTuplets);
       }
 
-int findNoteOffTime(int noteOnTime, int noteLen, int raster)
-      {
-      return ((noteOnTime + noteLen + raster / 2) / raster) * raster;
-      }
-
 int noteLenQuantError(int noteOnTime, int noteLen, int raster)
       {
-      int offTime = findNoteOffTime(noteOnTime, noteLen, raster);
+      int offTime = Quantize::quantizeOnTime(noteOnTime + noteLen, raster);
       int quantizedLen = offTime - noteOnTime;
       return std::abs(noteLen - quantizedLen);
       }
@@ -418,8 +415,8 @@ void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
             auto firstChord = tupletInfo.chords.begin();
             if (firstChord == tupletInfo.chords.end() || firstChord->first != 0)
                   continue;
-            MidiChord &tupletChord = firstChord->second->second;
-            QList<MidiNote> &notes = tupletChord.notes;
+            auto &notes = firstChord->second->second.notes;
+            int onTime = firstChord->second->first;
             std::vector<int> removedIndexes;
             std::vector<int> leavedIndexes;
             for (int i = 0; i != notes.size(); ++i) {
@@ -428,9 +425,9 @@ void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
                               && notes.size() > (int)removedIndexes.size() + 1)
                         {
                         int tupletError = noteLenQuantError(
-                              tupletChord.onTime, note.len, tupletInfo.tupletQuantValue.ticks());
+                              onTime, note.len, tupletInfo.tupletQuantValue.ticks());
                         int regularError = noteLenQuantError(
-                              tupletChord.onTime, note.len, tupletInfo.regularQuantValue.ticks());
+                              onTime, note.len, tupletInfo.regularQuantValue.ticks());
                         if (tupletError > regularError) {
                               removedIndexes.push_back(i);
                               continue;
@@ -440,17 +437,16 @@ void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
                   }
             if (!removedIndexes.empty()) {
                   MidiChord newTupletChord;
-                  newTupletChord.onTime = tupletChord.onTime;
                   for (const auto &i: leavedIndexes)
-                        newTupletChord.notes.push_back(tupletChord.notes[i]);
+                        newTupletChord.notes.push_back(notes[i]);
 
                   QList<MidiNote> newNotes;
                   for (const auto &i: removedIndexes)
-                        newNotes.push_back(tupletChord.notes[i]);
-                  tupletChord.notes = newNotes;
+                        newNotes.push_back(notes[i]);
+                  notes = newNotes;
                               // set voice for new created non-tuplet chord
                   if (nonTupletVoice != -1)
-                        tupletChord.voice = nonTupletVoice;
+                        firstChord->second->second.voice = nonTupletVoice;
                   else {
                         int maxVoice = 0;
                         for (const auto &tupletInfo: tuplets) {
@@ -459,10 +455,10 @@ void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
                               if (tupletVoice > maxVoice)
                                     maxVoice = tupletVoice;
                               }
-                        tupletChord.voice = maxVoice + 1;
+                        firstChord->second->second.voice = maxVoice + 1;
                         }
                               // update tuplet chord
-                  firstChord->second = chords.insert({newTupletChord.onTime, newTupletChord});
+                  firstChord->second = chords.insert({onTime, newTupletChord});
                   }
             }
       }
@@ -554,9 +550,10 @@ bool hasIntersectionWithChord(
       {
       for (const auto &chordEvent: nonTupletChords) {
             MidiChord midiChord = chordEvent->second;
-            Quantize::quantizeChord(midiChord, regularRaster);
-            if (endTick > midiChord.onTime
-                        && startTick < midiChord.onTime + maxNoteLen(midiChord.notes))
+            int onTime = Quantize::quantizeOnTime(chordEvent->first, regularRaster);
+            for (auto &note: midiChord.notes)
+                  note.len = quantizeLen(note.len, regularRaster);
+            if (endTick > onTime && startTick < onTime + maxNoteLen(midiChord.notes))
                   return true;
             }
       return false;
@@ -647,13 +644,14 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
             if (lastMatch != tuplets.end()) {
                               // split first tuplet chord, that belong to 2 tuplets, into 2 voices
                   MidiChord &prevMidiChord = lastMatch->chords.begin()->second->second;
+                  int onTime = lastMatch->chords.begin()->first;
                   MidiChord newChord = prevMidiChord;
                               // erase all notes except the first one
                   auto beg = newChord.notes.begin();
                   newChord.notes.erase(++beg, newChord.notes.end());
                               // erase the first note
                   prevMidiChord.notes.erase(prevMidiChord.notes.begin());
-                  lastMatch->chords.begin()->second = chords.insert({newChord.onTime, newChord});
+                  lastMatch->chords.begin()->second = chords.insert({onTime, newChord});
                   if (prevMidiChord.notes.isEmpty()) {
                                     // normally this should not happen at all
                                     // because of filtering of tuplets
@@ -670,7 +668,7 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
       return nonTupletVoice;
       }
 
-Fraction findRasterForNote(int noteOnTime, int noteLen, const TupletInfo &tupletInfo)
+Fraction findRasterForTupletNote(int noteOnTime, int noteLen, const TupletInfo &tupletInfo)
       {
       Fraction raster;
       if (noteOnTime + noteLen <= tupletInfo.onTime + tupletInfo.len.ticks()) {
@@ -681,18 +679,6 @@ Fraction findRasterForNote(int noteOnTime, int noteLen, const TupletInfo &tuplet
             raster = tupletInfo.regularQuantValue;
             }
       return raster;
-      }
-
-void quantizeTupletChord(MidiChord &midiChord, int onTime, const TupletInfo &tupletInfo)
-      {
-      midiChord.onTime = onTime;
-      for (auto &note: midiChord.notes) {
-            Fraction raster = findRasterForNote(midiChord.onTime, note.len, tupletInfo);
-            int offTime = findNoteOffTime(midiChord.onTime, note.len, raster.ticks());
-            note.len = offTime - onTime;
-            }
-                  // notes in chord here may have different durations (note.len)
-                  // so we don't set the whole chord duration (midiChord.duration)
       }
 
 std::vector<TupletInfo> findTuplets(int startBarTick,

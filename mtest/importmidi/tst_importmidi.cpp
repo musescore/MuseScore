@@ -175,8 +175,8 @@ void isSingleNoteInTupletAllowed(int tupletNumber,
       MidiNote note;
       note.len = std::round(tupletLen.ticks() * noteLenInTupletLen);
       chord.notes.push_back(note);
-      chord.onTime = 10;
-      chords.insert({chord.onTime, chord});
+      int onTime = 10;
+      chords.insert({onTime, chord});
 
       std::map<int, std::multimap<int, MidiChord>::iterator> tupletChords;
       tupletChords.insert({tupletNoteNumber - 1, chords.begin()});
@@ -202,8 +202,8 @@ void isChordCountInTupletAllowed(int tupletNumber,
             MidiNote note;
             note.len = (tupletLen / tupletNumber).ticks(); // allowed
             chord.notes.push_back(note);
-            chord.onTime = (tupletLen / tupletNumber * i).ticks();
-            auto lastChordIt = chords.insert({chord.onTime, chord});
+            int onTime = (tupletLen / tupletNumber * i).ticks();
+            auto lastChordIt = chords.insert({onTime, chord});
             tupletChords.insert({i, lastChordIt});
             }
                   // tuplet error is less than regular error => allowed
@@ -227,8 +227,8 @@ void isTupletErrorAllowed(int tupletOnTimeSumError,
       MidiNote note;
       note.len = (tupletLen / tupletNumber).ticks();  // allowed
       chord.notes.push_back(note);
-      chord.onTime = 10;
-      chords.insert({chord.onTime, chord});
+      int onTime = 10;
+      chords.insert({onTime, chord});
 
       std::map<int, std::multimap<int, MidiChord>::iterator> tupletChords;
       tupletChords.insert({0, chords.begin()});
@@ -394,25 +394,22 @@ void TestImportMidi::findTupletApproximation()
 //--------------------------------------------------------------------------
       // tuplet voice separation
 
-MidiNote noteFactory(int onTime, int len, int pitch)
+MidiNote noteFactory(int len, int pitch)
       {
       MidiNote note;
-      note.onTime = onTime;
       note.len = len;
       note.pitch = pitch;
       return note;
       }
 
-MidiChord chordFactory(const Fraction &onTime, const Fraction &len,
-                       const std::vector<int> &pitches)
+MidiChord chordFactory(const Fraction &len, const std::vector<int> &pitches)
       {
       std::vector<MidiNote> notes;
       for (const auto &pitch: pitches)
-            notes.push_back(noteFactory(onTime.ticks(), len.ticks(), pitch));
+            notes.push_back(noteFactory(len.ticks(), pitch));
       MidiChord chord;
       if (notes.empty())
             return chord;
-      chord.onTime = notes.front().onTime;
       chord.duration = notes.front().len;
       for (const auto &note: notes)
             chord.notes.push_back(note);
@@ -430,49 +427,49 @@ void TestImportMidi::separateTupletVoices()
                   // triplet
       Fraction tripletLen = tupletLen;
       Fraction tripletNoteLen = tripletLen / 3;
-      MidiChord chord1 = chordFactory(tripletNoteLen * 0, tripletNoteLen, {76, 71, 67});
-      MidiChord chord2_3 = chordFactory(tripletNoteLen * 1, tripletNoteLen, {74});
-      MidiChord chord3_3 = chordFactory(tripletNoteLen * 2, tripletNoteLen, {77});
+      MidiChord chord1 = chordFactory(tripletNoteLen, {76, 71, 67});
+      MidiChord chord2_3 = chordFactory(tripletNoteLen, {74});
+      MidiChord chord3_3 = chordFactory(tripletNoteLen, {77});
                   // quintuplet
       Fraction quintupletLen = tupletLen;
       Fraction quintupletNoteLen = quintupletLen / 5;
-      MidiChord chord2_5 = chordFactory(quintupletNoteLen * 1, quintupletNoteLen, {60});
-      MidiChord chord3_5 = chordFactory(quintupletNoteLen * 2, quintupletNoteLen, {62});
-      MidiChord chord4_5 = chordFactory(quintupletNoteLen * 3, quintupletNoteLen, {58});
-      MidiChord chord5_5 = chordFactory(quintupletNoteLen * 4, quintupletNoteLen, {60});
+      MidiChord chord2_5 = chordFactory(quintupletNoteLen, {60});
+      MidiChord chord3_5 = chordFactory(quintupletNoteLen, {62});
+      MidiChord chord4_5 = chordFactory(quintupletNoteLen, {58});
+      MidiChord chord5_5 = chordFactory(quintupletNoteLen, {60});
                   // septuplet
       Fraction septupletLen = tupletLen * 2;
       Fraction septupletNoteLen = septupletLen / 7;
-      MidiChord chord2_7 = chordFactory(septupletNoteLen * 1, septupletNoteLen, {50});
-      MidiChord chord3_7 = chordFactory(septupletNoteLen * 2, septupletNoteLen, {52});
-      MidiChord chord4_7 = chordFactory(septupletNoteLen * 3, septupletNoteLen, {48});
-      MidiChord chord5_7 = chordFactory(septupletNoteLen * 4, septupletNoteLen, {51});
-      MidiChord chord6_7 = chordFactory(septupletNoteLen * 5, septupletNoteLen, {47});
-      MidiChord chord7_7 = chordFactory(septupletNoteLen * 6, septupletNoteLen, {47});
+      MidiChord chord2_7 = chordFactory(septupletNoteLen, {50});
+      MidiChord chord3_7 = chordFactory(septupletNoteLen, {52});
+      MidiChord chord4_7 = chordFactory(septupletNoteLen, {48});
+      MidiChord chord5_7 = chordFactory(septupletNoteLen, {51});
+      MidiChord chord6_7 = chordFactory(septupletNoteLen, {47});
+      MidiChord chord7_7 = chordFactory(septupletNoteLen, {47});
 
-      chords.insert({chord1.onTime, chord1});
-      chords.insert({chord2_3.onTime, chord2_3});
-      chords.insert({chord3_3.onTime, chord3_3});
-      chords.insert({chord2_5.onTime, chord2_5});
-      chords.insert({chord3_5.onTime, chord3_5});
-      chords.insert({chord4_5.onTime, chord4_5});
-      chords.insert({chord5_5.onTime, chord5_5});
-      chords.insert({chord2_7.onTime, chord2_7});
-      chords.insert({chord3_7.onTime, chord3_7});
-      chords.insert({chord4_7.onTime, chord4_7});
-      chords.insert({chord5_7.onTime, chord5_7});
-      chords.insert({chord6_7.onTime, chord6_7});
-      chords.insert({chord7_7.onTime, chord7_7});
+      chords.insert({0, chord1});
+      chords.insert({(tripletNoteLen * 1).ticks(), chord2_3});
+      chords.insert({(tripletNoteLen * 2).ticks(), chord3_3});
+      chords.insert({(quintupletNoteLen * 1).ticks(), chord2_5});
+      chords.insert({(quintupletNoteLen * 2).ticks(), chord3_5});
+      chords.insert({(quintupletNoteLen * 3).ticks(), chord4_5});
+      chords.insert({(quintupletNoteLen * 4).ticks(), chord5_5});
+      chords.insert({(septupletNoteLen * 1).ticks(), chord2_7});
+      chords.insert({(septupletNoteLen * 2).ticks(), chord3_7});
+      chords.insert({(septupletNoteLen * 3).ticks(), chord4_7});
+      chords.insert({(septupletNoteLen * 4).ticks(), chord5_7});
+      chords.insert({(septupletNoteLen * 5).ticks(), chord6_7});
+      chords.insert({(septupletNoteLen * 6).ticks(), chord7_7});
 
       MidiTuplet::TupletInfo tripletInfo;
-      tripletInfo.onTime = chord1.onTime;
+      tripletInfo.onTime = 0;
       tripletInfo.len = tripletLen;
       tripletInfo.chords.insert({0, chords.find((tripletNoteLen * 0).ticks())});
       tripletInfo.chords.insert({1, chords.find((tripletNoteLen * 1).ticks())});
       tripletInfo.chords.insert({2, chords.find((tripletNoteLen * 2).ticks())});
 
       MidiTuplet::TupletInfo quintupletInfo;
-      quintupletInfo.onTime = chord1.onTime;
+      quintupletInfo.onTime = 0;
       quintupletInfo.len = quintupletLen;
       quintupletInfo.chords.insert({0, chords.find((quintupletNoteLen * 0).ticks())});
       quintupletInfo.chords.insert({1, chords.find((quintupletNoteLen * 1).ticks())});
@@ -481,7 +478,7 @@ void TestImportMidi::separateTupletVoices()
       quintupletInfo.chords.insert({4, chords.find((quintupletNoteLen * 4).ticks())});
 
       MidiTuplet::TupletInfo septupletInfo;
-      septupletInfo.onTime = chord1.onTime;
+      septupletInfo.onTime = 0;
       septupletInfo.len = septupletLen;
       septupletInfo.chords.insert({0, chords.find((septupletNoteLen * 0).ticks())});
       septupletInfo.chords.insert({1, chords.find((septupletNoteLen * 1).ticks())});
