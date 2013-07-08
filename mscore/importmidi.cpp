@@ -256,7 +256,6 @@ void splitUnequalChords(QList<MTrack> &tracks)
                               if (newLen != len) {
                                     auto newChord = chord;
                                     newChord.notes.clear();
-                                    newChord.duration = len;
                                     for (int j = it - notes.begin(); j > 0; --j)
                                           newChord.notes.push_back(notes[j - 1]);
                                     newChordEvents.push_back({chordEvent.first, newChord});
@@ -266,8 +265,6 @@ void splitUnequalChords(QList<MTrack> &tracks)
                               }
                         ++it;
                         }
-                  if (!notes.empty())
-                        chord.duration = notes.first().len;
                   }
             for (const auto &event: newChordEvents)
                   chords.insert(event);
@@ -523,8 +520,10 @@ void setMusicNotesFromMidi(Score *score,
 int findMinDuration(const QList<MidiChord> &midiChords, int len)
       {
       for (const auto &chord: midiChords) {
-            if ((chord.duration < len) && (chord.duration != 0))
-                  len = chord.duration;
+            for (const auto &note: chord.notes) {
+                  if ((note.len < len) && (note.len != 0))
+                        len = note.len;
+                  }
             }
       return len;
       }
@@ -572,7 +571,8 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
       int track        = staff->idx() * VOICES + voice;
       Drumset* drumset = staff->part()->instr()->drumset();
       bool useDrumset  = staff->part()->instr()->useDrumset();
-                  // all midiChords here have the same onTime value
+                  // all midiChords here should have the same onTime value
+                  // and all notes in each midiChord should have the same duration
       while (!midiChords.isEmpty()) {
             int tick = startChordTick;
             int len  = nextChordTick - tick;
@@ -602,15 +602,14 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
                   MidiChord& midiChord = midiChords[k];
                   setMusicNotesFromMidi(score, midiChord.notes, startChordTick,
                                         len, chord, tick, drumset, useDrumset);
-                  if (midiChord.duration <= len) {
+                  if (!midiChord.notes.empty() && midiChord.notes.first().len <= len) {
                         midiChords.removeAt(k);
                         --k;
                         continue;
                         }
                   setTies(chord, score, midiChord.notes);
-                  midiChord.duration -= len;
                   for (auto &midiNote: midiChord.notes)
-                        midiNote.len = midiChord.duration;
+                        midiNote.len -= len;
                   }
             startChordTick += len;
             }
@@ -917,7 +916,6 @@ void createMTrackList(int& lastTick, TimeSigMap* sigmap, QList<MTrack>& tracks, 
                         n.len      = len;
 
                         MidiChord c;
-                        c.duration = len;
                         c.notes.push_back(n);
 
                         track.chords.insert({tick, c});
