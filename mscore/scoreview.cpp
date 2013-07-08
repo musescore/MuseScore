@@ -34,7 +34,7 @@
 #include "libmscore/pedal.h"
 #include "libmscore/volta.h"
 #include "libmscore/ottava.h"
-#include "libmscore/textline.h"
+#include "libmscore/noteline.h"
 #include "libmscore/trill.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/image.h"
@@ -62,7 +62,6 @@
 #include "libmscore/box.h"
 #include "libmscore/textframe.h"
 #include "texttools.h"
-#include "edittools.h"
 #include "libmscore/clef.h"
 #include "scoretab.h"
 #include "measureproperties.h"
@@ -79,7 +78,7 @@
 #include "libmscore/stafftype.h"
 
 #include "navigator.h"
-#include "inspector.h"
+#include "inspector/inspector.h"
 
 namespace Ms {
 
@@ -915,7 +914,8 @@ void ScoreView::setScore(Score* s)
       _foto->setScore(s);
       if (s) {
             s->setLayoutMode(LayoutPage);
-            s->doLayout();
+            s->setLayoutAll(true);
+            s->update();
             }
       }
 
@@ -972,7 +972,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       createElementPropertyMenu(obj, popup);
 
       popup->addSeparator();
-      a = popup->addAction(tr("Object Debugger"));
+      a = popup->addAction(tr("Debugger"));
       a->setData("list");
       a = popup->exec(pos);
       if (a == 0)
@@ -1165,11 +1165,6 @@ void ScoreView::updateGrips()
       if (curGrip == -1)
             curGrip = grips-1;
 
-      if (!editObject->isText()) {
-            QPointF pt(editObject->getGrip(curGrip));
-            mscore->editTools()->setEditPos(pt);
-            }
-
       QPointF anchor = editObject->gripAnchor(curGrip);
       if (!anchor.isNull())
             setDropAnchor(QLineF(anchor + pageOffset, grip[curGrip].center()));
@@ -1247,19 +1242,6 @@ void ScoreView::updateAll()
 
 //---------------------------------------------------------
 //   moveCursor
-//---------------------------------------------------------
-
-void ScoreView::moveCursor()
-      {
-      const InputState& is = _score->inputState();
-      int track = is.track() == -1 ? 0 : is.track();
-      Segment* segment = is.segment();
-      if (segment)
-            moveCursor(segment, track);
-      }
-
-//---------------------------------------------------------
-//   moveCursor
 //    move cursor during playback
 //---------------------------------------------------------
 
@@ -1316,9 +1298,10 @@ void ScoreView::moveCursor(int tick)
       // set cursor height for whole system
       //
       double y2 = 0.0;
+
       for (int i = 0; i < _score->nstaves(); ++i) {
             SysStaff* ss = system->staff(i);
-            if (!ss->show())
+            if (!ss->show() || !_score->staff(i)->show())
                   continue;
             y2 = ss->y() + ss->bbox().height();
             }
@@ -1332,8 +1315,18 @@ void ScoreView::moveCursor(int tick)
             adjustCanvasPosition(measure, true);
       }
 
-void ScoreView::moveCursor(Segment* segment, int track)
+//---------------------------------------------------------
+//   moveCursor
+//---------------------------------------------------------
+
+void ScoreView::moveCursor()
       {
+      const InputState& is = _score->inputState();
+      int track = is.track() == -1 ? 0 : is.track();
+      Segment* segment = is.segment();
+      if (!segment)
+            return;
+
       int voice = track == -1 ? 0 : track % VOICES;
       QColor c(MScore::selectColor[voice]);
       c.setAlpha(50);
@@ -1375,7 +1368,6 @@ void ScoreView::moveCursor(Segment* segment, int track)
             }
       else {
             Staff* staff    = _score->staff(staffIdx);
-//            double lineDist = staff->isTabStaff() ? 1.5 * _spatium : _spatium;
             double lineDist = staff->staffType()->lineDistance().val() * _spatium;
             int lines       = staff->lines();
             int strg        = _score->inputState().string();
@@ -1394,6 +1386,7 @@ void ScoreView::moveCursor(Segment* segment, int track)
             }
       _cursor->setRect(QRectF(x, y, w, h));
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
+      update();   //DEBUG
       }
 
 //---------------------------------------------------------
@@ -1523,7 +1516,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
 
       if (grips) {
             qreal lw = 2.0/vp.matrix().m11();
-            QPen pen(Qt::gray);
+            QPen pen(MScore::frameMarginColor);
             pen.setWidthF(lw);
             if (grips == 6) {       // HACK: this are grips of a slur
                   vp.setPen(pen);
@@ -1536,7 +1529,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             pen.setColor(MScore::defaultColor);
             vp.setPen(pen);
             for (int i = 0; i < grips; ++i) {
-                  vp.setBrush(((i == curGrip) && hasFocus()) ? QBrush(Qt::blue) : Qt::NoBrush);
+                  vp.setBrush(((i == curGrip) && hasFocus()) ? MScore::selectColor[0] : Qt::NoBrush);
                   vp.drawRect(grip[i]);
                   }
             if (editObject)      // if object is moved, it may not be covered by bsp
@@ -1568,6 +1561,12 @@ void ScoreView::drawBackground(QPainter* p, const QRectF& r) const
 
 void ScoreView::paintPageBorder(QPainter& p, Page* page)
       {
+      //add a black border to pages
+      QRectF r(page->canvasBoundingRect());
+      p.setBrush(Qt::NoBrush);
+      p.setPen(QPen(QColor(0,0,0,102), 1));
+      p.drawRect(r);
+
 #if 0
       QRectF r(page->bbox());
       qreal x1 = r.x();
@@ -1645,7 +1644,7 @@ void ScoreView::paintPageBorder(QPainter& p, Page* page)
       if (_score->showPageborders()) {
             // show page margins
             p.setBrush(Qt::NoBrush);
-            p.setPen(QColor(0, 0, 255, 50));
+            p.setPen(MScore::frameMarginColor);
             QRectF f(page->canvasBoundingRect());
             f.adjust(page->lm(), page->tm(), -page->rm(), -page->bm());
             p.drawRect(f);
@@ -2043,7 +2042,6 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
             p.translate(pos);
             Space sp = cr->space();
             QRectF r;
-printf("%f %f %f %f\n", -sp.lw(), y1, sp.rw(), y2);
             r.setCoords(-sp.lw(), y1, sp.rw(), y2);
             p.drawRect(r);
             p.translate(-pos);
@@ -2488,6 +2486,13 @@ void ScoreView::cmd(const QAction* a)
             cmdTuplet(8);
       else if (cmd == "nonuplet")
             cmdTuplet(9);
+      else if (cmd == "tuplet-dialog") {
+            _score->startCmd();
+            Tuplet* tuplet = mscore->tupletDialog();
+            if (tuplet)
+                  cmdCreateTuplet(_score->getSelectedChordRest(), tuplet);
+            _score->endCmd();
+            }
       else if (cmd == "repeat-sel")
             cmdRepeatSelection();
       else if (cmd == "voice-1")
@@ -2813,8 +2818,7 @@ void ScoreView::startNoteEntry()
 
       _score->select(el, SELECT_SINGLE, 0);
       _score->setInputState(el);
-      bool enable = el && (el->type() == Element::NOTE || el->type() == Element::REST);
-      mscore->enableInputToolbar(enable);
+      // bool enable = el && (el->type() == Element::NOTE || el->type() == Element::REST);
 
       _score->inputState().noteEntryMode = true;
       _score->inputState().rest = false;
@@ -2862,7 +2866,6 @@ void ScoreView::endNoteEntry()
             const QList<SpannerSegment*>& el = _score->inputState().slur->spannerSegments();
             if (!el.isEmpty())
                   el.front()->setSelected(false);
-            static_cast<ChordRest*>(_score->inputState().slur->endElement())->addSlurBack(_score->inputState().slur);
             _score->inputState().slur = 0;
             }
       setMouseTracking(false);
@@ -3036,7 +3039,8 @@ bool ScoreView::mousePress(QMouseEvent* ev)
 
 void ScoreView::mouseReleaseEvent(QMouseEvent* event)
       {
-      seq->stopNoteTimer();
+      if (seq)
+            seq->stopNoteTimer();
       QWidget::mouseReleaseEvent(event);
       }
 
@@ -3736,7 +3740,6 @@ void ScoreView::cmdAddSlur()
             const QList<SpannerSegment*>& el = is.slur->spannerSegments();
             if (!el.isEmpty())
                   el.front()->setSelected(false);
-            static_cast<ChordRest*>(is.slur->endElement())->addSlurBack(is.slur);
             is.slur = 0;
             return;
             }
@@ -3758,13 +3761,13 @@ void ScoreView::cmdAddSlur()
                         if (firstNote == lastNote)
                               lastNote = 0;
                         ChordRest* cr1 = firstNote->chord();
-                        ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1, false);
+                        ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
                         if (cr2 == 0)
                               cr2 = cr1;
-
                         Slur* slur = new Slur(_score);
-                        slur->setStartElement(cr1);
-                        slur->setEndElement(cr2);
+                        slur->setTick(cr1->tick());
+                        slur->setTick2(cr2->tick());
+                        slur->setTrack(cr1->track());
                         slur->setParent(0);
                         _score->undoAddElement(slur);
                         }
@@ -3828,8 +3831,9 @@ void ScoreView::cmdAddNoteLine()
       tl->setParent(firstNote);
       tl->setStartElement(firstNote);
       tl->setEndElement(lastNote);
-      tl->setAnchor(Spanner::ANCHOR_NOTE);
       tl->setDiagonal(true);
+      tl->setAnchor(Spanner::ANCHOR_NOTE);
+      tl->setTick(firstNote->chord()->tick());
       _score->startCmd();
       _score->undoAddElement(tl);
       _score->endCmd();
@@ -3844,14 +3848,37 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
       {
       _score->startCmd();
       ChordRest* cr1 = firstNote->chord();
-      ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1, false);
+      ChordRest* cr2;
+      if (cr1->isGrace())
+            cr2 = static_cast<Chord*>(cr1->parent());
+      else
+            cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
+
+      if (cr1->isGrace()) {
+            // slur from a gracenote
+            //
+            Q_ASSERT(cr1->type() == Element::CHORD);
+            Q_ASSERT(cr2->type() == Element::CHORD);
+            Slur* slur = new Slur(score());
+            slur->setAnchor(Spanner::ANCHOR_CHORD);
+
+            slur->setStartChord(static_cast<Chord*>(cr1));
+            slur->setEndChord(static_cast<Chord*>(cr2));
+            slur->setTrack(cr1->track());
+            slur->setParent(cr1);
+            score()->undoAddElement(slur);
+            _score->endCmd();
+            return;
+            }
 
       if (cr2 == 0)
             cr2 = cr1;
 
       Slur* slur = new Slur(_score);
-      slur->setStartElement(cr1);
-      slur->setEndElement(cr2);
+      slur->setAnchor(Spanner::ANCHOR_SEGMENT);
+      slur->setTick(cr1->tick());
+      slur->setTick2(cr2->tick());
+      slur->setTrack(cr1->track());
       slur->setParent(0);
       _score->undoAddElement(slur);
       slur->layout();
@@ -3870,8 +3897,6 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
                   el.front()->setSelected(true);
             else
                   qDebug("addSlur: no segment");
-            // set again when leaving slur mode:
-            static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
             _score->endCmd();
             }
       else {
@@ -4047,10 +4072,15 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
 
       if (ot)
             tuplet->setTuplet(ot);
+
+      cmdCreateTuplet(cr, tuplet);
+      }
+
+void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
+      {
       _score->cmdCreateTuplet(cr, tuplet);
 
       const QList<DurationElement*>& cl = tuplet->elements();
-
       int ne = cl.size();
       DurationElement* el = 0;
       if (ne && cl[0]->type() == Element::REST)
@@ -4063,7 +4093,7 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
                   sm->postEvent(new CommandEvent("note-input"));
                   qApp->processEvents();
                   }
-            _score->inputState().setDuration(baseLen);
+            _score->inputState().setDuration(tuplet->baseLen());
             mscore->updateInputState(_score);
             }
       }
@@ -4079,7 +4109,7 @@ void ScoreView::changeVoice(int voice)
       is->setTrack(track);
 
       if (is->noteEntryMode) {
-            is->setSegment(is->segment()->measure()->firstCRSegment());
+            is->setSegment(is->segment()->measure()->first(Segment::SegChordRest));
             score()->setUpdateAll(true);
             score()->end();
             mscore->setPos(is->segment()->tick());
@@ -4249,8 +4279,7 @@ void ScoreView::harmonyTab(bool back)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -4348,8 +4377,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -4420,8 +4448,7 @@ void ScoreView::harmonyTicksTab(int ticks)
       ((Harmony*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -4619,8 +4646,7 @@ void ScoreView::cmdAddChordName()
       startEdit(harmony);
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -4914,7 +4940,6 @@ void ScoreView::search(const QString& s)
 
 void ScoreView::searchPage(int n)
       {
-      printf("search page %d\n", n);
       if (n >= _score->npages())
             n = _score->npages() - 1;
       const Page* page = _score->pages()[n];
@@ -5072,8 +5097,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
       _score->setLayoutAll(true);
-//      _score->end2();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
-//      _score->end1();                         //          "           "
+//      _score->update();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
       }
 
 //---------------------------------------------------------

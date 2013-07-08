@@ -38,9 +38,6 @@ class LineSegment : public SpannerSegment {
       Q_OBJECT
 
    protected:
-      QPointF _p2;
-      QPointF _userOff2;
-
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);
@@ -48,7 +45,6 @@ class LineSegment : public SpannerSegment {
       virtual void setGrip(int grip, const QPointF& p);
       virtual QPointF getGrip(int) const;
       virtual QPointF gripAnchor(int) const;
-      virtual void layout() {}
 
    public:
       LineSegment(Score* s);
@@ -56,12 +52,6 @@ class LineSegment : public SpannerSegment {
       virtual LineSegment* clone() const = 0;
       virtual void draw(QPainter*) const = 0;
       SLine* line() const                         { return (SLine*)spanner(); }
-      const QPointF& userOff2() const             { return _userOff2;       }
-      void setUserOff2(const QPointF& o)          { _userOff2 = o;          }
-      void setUserXoffset2(qreal x)               { _userOff2.setX(x);      }
-      void setPos2(const QPointF& p)              { _p2 = p;                }
-      QPointF pos2() const                        { return _p2 + _userOff2; }
-      const QPointF& ipos2() const                { return _p2;             }
       virtual void reset();
       virtual void spatiumChanged(qreal, qreal);
       virtual QPointF pagePos() const;
@@ -101,8 +91,6 @@ class SLine : public Spanner {
 
       bool diagonal() const         { return _diagonal; }
       void setDiagonal(bool v)      { _diagonal = v;    }
-      int tick()  const;
-      int tick2() const;
 
       LineSegment* frontSegment() const   { return (LineSegment*)spannerSegments().front(); }
       LineSegment* backSegment() const    { return (LineSegment*)spannerSegments().back();  }

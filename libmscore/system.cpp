@@ -167,7 +167,7 @@ void System::layout(qreal xo1)
                         }
                   int span = lastStaff - firstStaff + 1;
                   //
-                  // do not show bracket, if it only spans one
+                  // do not show bracket if it only spans one
                   // system due to some invisible staves
                   //
                   if ((span > 1) || (s->bracketSpan(i) == span)) {
@@ -190,11 +190,10 @@ void System::layout(qreal xo1)
                               b->setLevel(i);
                               b->setBracketType(s->bracket(i));
                               b->setSpan(s->bracketSpan(i));
-                              score()->undoAddElement(b);
+                              add(b);
                               }
-                        else {
+                        else
                               _brackets.append(b);
-                              }
                         b->setFirstStaff(firstStaff);
                         b->setLastStaff(lastStaff);
                         bracketWidth[i] = qMax(bracketWidth[i], b->width());
@@ -210,9 +209,7 @@ void System::layout(qreal xo1)
                   }
             }
 
-      _brackets.append(bl);
-      foreach(Bracket* b, bl)
-            score()->undoRemoveElement(b);
+      qDeleteAll(bl);
 
       //---------------------------------------------------
       //  layout  SysStaff and StaffLines
@@ -457,6 +454,10 @@ void System::layout2()
 void System::clear()
       {
       ml.clear();
+      foreach(SpannerSegment* ss, _spannerSegments) {
+            if (ss->system() == this)
+                  ss->setParent(0);       // assume parent() is System
+            }
       _spannerSegments.clear();
       _vbox        = false;
       _firstSystem = false;
@@ -556,7 +557,7 @@ int System::y2staff(qreal y) const
 
 void System::add(Element* el)
       {
-// qDebug("System::add: %s", el->name());
+// qDebug("%p System::add: %p %s", this, el, el->name());
 
       el->setParent(this);
       switch(el->type()) {
@@ -583,8 +584,8 @@ void System::add(Element* el)
                         b->setLevel(level);
                         b->setSpan(1);
                         }
-                  b->staff()->setBracket(level,     b->bracketType());
-                  b->staff()->setBracketSpan(level, b->span());
+//                  b->staff()->setBracket(level,     b->bracketType());
+//                  b->staff()->setBracketSpan(level, b->span());
                   _brackets.append(b);
                   }
                   break;
@@ -604,14 +605,13 @@ void System::add(Element* el)
             case SLUR_SEGMENT:
             case PEDAL_SEGMENT:
                   {
-// qDebug("System::add: %p %s spanner %p %s", el, el->name(),
-//            ((SpannerSegment*)el)->spanner(), ((SpannerSegment*)el)->spanner()->name());
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
-                  if (!_spannerSegments.contains(ss))
-                        _spannerSegments.append(ss);
-                  else {
-                        // qDebug("System::add() spanner already there");
-                        }
+#ifndef NDEBUG
+                  if (_spannerSegments.contains(ss))
+                        qDebug("System::add() spanner already there");
+                  else
+#endif
+                  _spannerSegments.append(ss);
                   }
                   break;
             case BAR_LINE:
@@ -629,8 +629,9 @@ void System::add(Element* el)
 
 void System::remove(Element* el)
       {
-// qDebug("System::remove: %s", el->name());
+// qDebug("%p System::remove: %p %s", this, el, el->name());
 
+      el->setParent(0);
       switch (el->type()) {
             case INSTRUMENT_NAME:
                   _staves[el->staffIdx()]->instrumentNames.removeOne(static_cast<InstrumentName*>(el));
@@ -643,7 +644,7 @@ void System::remove(Element* el)
                   Bracket* b = static_cast<Bracket*>(el);
                   if (!_brackets.removeOne(b))
                         qDebug("System::remove: bracket not found");
-                  b->staff()->setBracket(b->level(), NO_BRACKET);
+//                  b->staff()->setBracket(b->level(), NO_BRACKET);
                   }
                   break;
             case MEASURE:
@@ -664,7 +665,7 @@ void System::remove(Element* el)
 //            ((SpannerSegment*)el)->spanner(), ((SpannerSegment*)el)->spanner()->name());
 
                   if (!_spannerSegments.removeOne(static_cast<SpannerSegment*>(el))) {
-//                        qDebug("System::remove: %p(%s) not found, score %p == %p", el, el->name(), score(), el->score());
+                        qDebug("System::remove: %p(%s) not found, score %p == %p", el, el->name(), score(), el->score());
                         Q_ASSERT(score() == el->score());
                         }
                   break;
@@ -783,7 +784,7 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
       {
       Lyrics* l = 0;
-      while ((s = s->next1(Segment::SegChordRestGrace))) {
+      while ((s = s->next1(Segment::SegChordRest))) {
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
             QList<Lyrics*>* nll = 0;
@@ -818,6 +819,7 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
 
       const TextStyle& ts = l->textStyle();
       qreal lmag          = qreal(ts.size()) / 11.0;
+      qreal staffMag = l->staff()->mag();
 
       if (l->ticks()) {
             // melisma
@@ -845,7 +847,7 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
                         line = new Line(l->score(), false);
                         l->add(line);
                         }
-                  line->setLineWidth(Spatium(0.1 * lmag));
+                  line->setLineWidth(Spatium(0.1 * lmag * staffMag));
                   line->setPos(p1);
                   if (sysIdx1 == sysIdx2) {
                         // single segment
@@ -891,8 +893,8 @@ qDebug("Lyrics: melisma end segment not implemented");
 
       // TODO: the next two values should be style parameters
       // TODO: as well as the 0.3 factor a few lines below
-      const qreal maxl = 0.5 * _spatium * lmag;   // lyrics hyphen length
-      const Spatium hlw(0.14 * lmag);              // hyphen line width
+      const qreal maxl = 0.5 * _spatium * lmag * staffMag;   // lyrics hyphen length
+      const Spatium hlw(0.14 * lmag * staffMag);              // hyphen line width
 
       Lyrics* nl = searchNextLyrics(ns, staffIdx, verse);
       if (!nl) {
@@ -915,7 +917,7 @@ qDebug("Lyrics: melisma end segment not implemented");
             size *= _spatium / (SPATIUM20 * PPI);    // <= (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * Mscore::DPI))
       else
             size *= MScore::DPI / PPI;
-      qreal y = -size * 0.3;                    // a conventional percentage of the whole font height
+      qreal y = -size * staffMag * 0.3;                    // a conventional percentage of the whole font height
 
       qreal x1 = x + l->pagePos().x();
       qreal x2 = nl->bbox().left() + nl->pagePos().x();
@@ -963,16 +965,33 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
             ++idx;
             }
       foreach(SpannerSegment* ss, _spannerSegments) {
-            int staffIdx;
-            if (ss->spanner()->type() == SLUR)
-                  staffIdx = ss->spanner()->startElement()->staffIdx();
-            else
-                  staffIdx = ss->spanner()->staffIdx();
+            int staffIdx = ss->spanner()->staffIdx();
             if (staffIdx == -1) {
                   qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->name(), ss->spanner());
                   staffIdx = 0;
                   }
-            if (all || score()->staff(staffIdx)->show())
+            bool v = true;
+            Spanner* spanner = ss->spanner();
+            if(spanner->anchor() == Spanner::ANCHOR_SEGMENT || spanner->anchor() == Spanner::ANCHOR_CHORD) {
+                  Element* se = spanner->startElement();
+                  Element* ee = spanner->endElement();
+                  bool v1 = true;
+                  if(se && (se->type() == Element::CHORD || se->type() == Element::REST)) {
+                        ChordRest* cr = static_cast<ChordRest*>(se);
+                        Measure* m    = cr->measure();
+                        MStaff* mstaff = m->mstaff(cr->staffIdx());
+                        v1 = mstaff->visible();
+                        }
+                  bool v2 = true;
+                  if(!v1 && ee && (ee->type() == Element::CHORD || ee->type() == Element::REST)) {
+                        ChordRest* cr = static_cast<ChordRest*>(ee);
+                        Measure* m    = cr->measure();
+                        MStaff* mstaff = m->mstaff(cr->staffIdx());
+                        v2 = mstaff->visible();
+                        }
+                  v = v1 || v2; // hide spanner if both chords are hidden
+                  }
+            if (all || (score()->staff(staffIdx)->show() && v) || (spanner->type() == Element::VOLTA))
                   func(data, ss);
             }
       }

@@ -326,6 +326,11 @@ QFont fontId2font(int fontId)
                   qFatal("illegal font id %d", fontId);
 
             f->setStyleStrategy(QFont::NoFontMerging);
+
+            // horizontal hinting is bad as note hooks do not attach to stems
+            // properly at some magnifications
+            f->setHintingPreference(QFont::PreferVerticalHinting);
+
 #ifdef USE_GLYPHS
             f->setPointSizeF(size);
 #else
@@ -665,6 +670,5 @@ void initSymbols(int idx)
 
             }
       }
-
 }
 

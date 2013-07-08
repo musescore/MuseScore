@@ -34,8 +34,6 @@
 
 namespace Ms {
 
-extern QString iconPath, iconGroup;
-
 //---------------------------------------------------------
 //   EditStyle
 //---------------------------------------------------------
@@ -119,6 +117,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setValues();
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
       connect(chordDescriptionFileButton, SIGNAL(clicked()), SLOT(selectChordDescriptionFile()));
+      connect(chordsStandard, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
+      connect(chordsJazz, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
+      connect(chordsCustom, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
 
       connect(hideEmptyStaves, SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
 
@@ -154,14 +155,15 @@ void EditStyle::buttonClicked(QAbstractButton* b)
 //---------------------------------------------------------
 
 void EditStyle::on_comboFBFont_currentIndexChanged(int index)
-{
-      qreal       size, lineHeight;
+      {
+      qreal size, lineHeight;
 
-      if(FiguredBass::fontData(index, 0, 0, &size, &lineHeight)) {
+      if (FiguredBass::fontData(index, 0, 0, &size, &lineHeight)) {
             doubleSpinFBSize->setValue(size);
             spinFBLineHeight->setValue((int)(lineHeight * 100.0));
+            }
       }
-}
+
 //---------------------------------------------------------
 //   apply
 //---------------------------------------------------------
@@ -171,8 +173,7 @@ void EditStyle::apply()
       getValues();
       cs->undo(new ChangeStyle(cs, lstyle));
       cs->setLayoutAll(true);
-      cs->end2();
-      cs->end();
+      cs->update();
       }
 
 //---------------------------------------------------------
@@ -240,15 +241,29 @@ void EditStyle::getValues()
       lstyle.set(ST_genCourtesyKeysig,       genCourtesyKeysig->isChecked());
       lstyle.set(ST_genCourtesyClef,         genCourtesyClef->isChecked());
 
-      lstyle.set(ST_useGermanNoteNames,      useGermanNoteNames->isChecked());
-
+      bool customChords = false;
+      if (chordsStandard->isChecked())
+            lstyle.set(ST_chordStyle, QString("std"));
+      else if (chordsJazz->isChecked())
+            lstyle.set(ST_chordStyle, QString("jazz"));
+      else {
+            lstyle.set(ST_chordStyle, QString("custom"));
+            customChords = true;
+            }
+      lstyle.set(ST_chordsXmlFile, chordsXmlFile->isChecked());
       if (lstyle.valueSt(ST_chordDescriptionFile) != chordDescriptionFile->text()) {
             ChordList* cl = new ChordList();
-            cl->read("chords.xml");
+            if (lstyle.valueB(ST_chordsXmlFile))
+                  cl->read("chords.xml");
             cl->read(chordDescriptionFile->text());
-            lstyle.setChordList(cl);
+            lstyle.setChordList(cl, customChords);
             lstyle.set(ST_chordDescriptionFile, chordDescriptionFile->text());
             }
+
+      lstyle.set(ST_useStandardNoteNames,    useStandardNoteNames->isChecked());
+      lstyle.set(ST_useGermanNoteNames,      useGermanNoteNames->isChecked());
+      lstyle.set(ST_useSolfeggioNoteNames,   useSolfeggioNoteNames->isChecked());
+      lstyle.set(ST_lowerCaseMinorChords,    lowerCaseMinorChords->isChecked());
 
       lstyle.set(ST_concertPitch,            concertPitch->isChecked());
       lstyle.set(ST_createMultiMeasureRests, multiMeasureRests->isChecked());
@@ -259,6 +274,7 @@ void EditStyle::getValues()
 
       lstyle.set(ST_accidentalNoteDistance,  Spatium(accidentalNoteDistance->value()));
       lstyle.set(ST_accidentalDistance,      Spatium(accidentalDistance->value()));
+      lstyle.set(ST_dotMag,                  dotMag->value() * 0.01);
       lstyle.set(ST_dotNoteDistance,         Spatium(noteDotDistance->value()));
       lstyle.set(ST_dotDotDistance,          Spatium(dotDotDistance->value()));
       lstyle.set(ST_stemWidth,               Spatium(stemWidth->value()));
@@ -386,7 +402,9 @@ void EditStyle::getValues()
 
       lstyle.set(ST_tabClef, clefTab1->isChecked() ? CLEF_TAB : CLEF_TAB2);
 
-      lstyle.set(ST_crossMeasureValues,         crossMeasureValues->isChecked());
+      lstyle.set(ST_crossMeasureValues,      crossMeasureValues->isChecked());
+      lstyle.set(ST_keySigNaturals,          radioKeySigNatNone->isChecked() ? NAT_NONE :
+                  (radioKeySigNatBefore->isChecked() ? NAT_BEFORE : NAT_AFTER) );
       }
 
 //---------------------------------------------------------
@@ -463,9 +481,26 @@ void EditStyle::setValues()
       genCourtesyKeysig->setChecked(lstyle.valueB(ST_genCourtesyKeysig));
       genCourtesyClef->setChecked(lstyle.valueB(ST_genCourtesyClef));
 
-      useGermanNoteNames->setChecked(lstyle.valueB(ST_useGermanNoteNames));
       QString s(lstyle.valueSt(ST_chordDescriptionFile));
       chordDescriptionFile->setText(s);
+      chordsXmlFile->setChecked(lstyle.valueB(ST_chordsXmlFile));
+      QString cstyle(lstyle.valueSt(ST_chordStyle));
+      if (cstyle == "std") {
+            chordsStandard->setChecked(true);
+            chordDescriptionGroup->setEnabled(false);
+            }
+      else if (cstyle == "jazz") {
+            chordsJazz->setChecked(true);
+            chordDescriptionGroup->setEnabled(false);
+            }
+      else {
+            chordsCustom->setChecked(true);
+            chordDescriptionGroup->setEnabled(true);
+            }
+      useStandardNoteNames->setChecked(lstyle.valueB(ST_useStandardNoteNames));
+      useGermanNoteNames->setChecked(lstyle.valueB(ST_useGermanNoteNames));
+      useSolfeggioNoteNames->setChecked(lstyle.valueB(ST_useSolfeggioNoteNames));
+      lowerCaseMinorChords->setChecked(lstyle.valueB(ST_lowerCaseMinorChords));
       concertPitch->setChecked(lstyle.valueB(ST_concertPitch));
 
       multiMeasureRests->setChecked(lstyle.valueB(ST_createMultiMeasureRests));
@@ -477,6 +512,7 @@ void EditStyle::setValues()
 
       accidentalNoteDistance->setValue(lstyle.valueS(ST_accidentalNoteDistance).val());
       accidentalDistance->setValue(lstyle.valueS(ST_accidentalDistance).val());
+      dotMag->setValue(lstyle.value(ST_dotMag).toDouble() * 100.0);
       noteDotDistance->setValue(lstyle.valueS(ST_dotNoteDistance).val());
       dotDotDistance->setValue(lstyle.valueS(ST_dotDotDistance).val());
       stemWidth->setValue(lstyle.valueS(ST_stemWidth).val());
@@ -608,6 +644,9 @@ void EditStyle::setValues()
       clefTab2->setChecked(lstyle.valueI(ST_tabClef) == CLEF_TAB2);
 
       crossMeasureValues->setChecked(lstyle.valueB(ST_crossMeasureValues));
+      radioKeySigNatNone->setChecked  (lstyle.valueB(ST_keySigNaturals) == NAT_NONE);
+      radioKeySigNatBefore->setChecked(lstyle.valueB(ST_keySigNaturals) == NAT_BEFORE);
+      radioKeySigNatAfter->setChecked (lstyle.valueB(ST_keySigNaturals) == NAT_AFTER);
       }
 
 //---------------------------------------------------------
@@ -620,6 +659,34 @@ void EditStyle::selectChordDescriptionFile()
       if (fn.isEmpty())
             return;
       chordDescriptionFile->setText(fn);
+      }
+
+//---------------------------------------------------------
+//   setChordStyle
+//---------------------------------------------------------
+
+void EditStyle::setChordStyle(bool checked)
+      {
+      if (!checked)
+            return;
+      if (chordsStandard->isChecked()) {
+            lstyle.set(ST_chordStyle, QString("std"));
+            chordDescriptionFile->setText("chords_std.xml");
+            lstyle.set(ST_chordsXmlFile, false);
+            chordsXmlFile->setChecked(false);
+            chordDescriptionGroup->setEnabled(false);
+            }
+      else if (chordsJazz->isChecked()) {
+            lstyle.set(ST_chordStyle, QString("jazz"));
+            chordDescriptionFile->setText("chords_jazz.xml");
+            lstyle.set(ST_chordsXmlFile, false);
+            chordsXmlFile->setChecked(false);
+            chordDescriptionGroup->setEnabled(false);
+            }
+      else {
+            lstyle.set(ST_chordStyle, QString("custom"));
+            chordDescriptionGroup->setEnabled(true);
+            }
       }
 
 //---------------------------------------------------------

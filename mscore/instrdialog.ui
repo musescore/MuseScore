@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>340</height>
+    <width>670</width>
+    <height>405</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,11 +47,17 @@
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
          <property name="uniformRowHeights">
           <bool>true</bool>
          </property>
          <property name="itemsExpandable">
           <bool>true</bool>
+         </property>
+         <property name="expandsOnDoubleClick">
+          <bool>false</bool>
          </property>
          <property name="columnCount">
           <number>1</number>
@@ -351,6 +357,23 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>search</tabstop>
+  <tabstop>clearSearch</tabstop>
+  <tabstop>instrumentList</tabstop>
+  <tabstop>addButton</tabstop>
+  <tabstop>removeButton</tabstop>
+  <tabstop>upButton</tabstop>
+  <tabstop>downButton</tabstop>
+  <tabstop>belowButton</tabstop>
+  <tabstop>linkedButton</tabstop>
+  <tabstop>partiturList</tabstop>
+  <tabstop>showMore</tabstop>
+  <tabstop>loadButton</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>okButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

@@ -23,8 +23,8 @@
 #include "colorutils.h"
 
 const qreal StyleHelper::_slabThickness = 0.45;
-const qreal StyleHelper::_shadowGain = 1.5;
-const qreal StyleHelper::_glowBias = 0.6;
+const qreal StyleHelper::_shadowGain    = 1.5;
+const qreal StyleHelper::_glowBias      = 0.6;
 
 //---------------------------------------------------------
 //   StyleHelper
@@ -46,8 +46,6 @@ StyleHelper::StyleHelper() {
 //---------------------------------------------------------
 
 void StyleHelper::reloadConfig() {
-//      _config->reparseConfiguration();
-//      _contrast = KGlobalSettings::contrastF(_config);
       _bgcontrast = qMin(1.0, 0.9 * _contrast / 0.7);
 
       _viewFocusBrush = StatefulBrush(ColorScheme::View, ColorScheme::FocusColor);
@@ -368,10 +366,12 @@ void StyleHelper::fillHole(QPainter& p, const QRect& rect, int size) const {
 //---------------------------------------------------------
 
 void StyleHelper::renderHole(QPainter* p, const QColor& base, const QRect& r,
-                             bool focus, bool hover, qreal opacity, AnimationMode animationMode,  TileSet::Tiles tiles, bool outline) const {
+   bool focus, bool hover,
+   qreal opacity, AnimationMode animationMode,  TileSet::Tiles tiles, bool outline) const
+      {
       if ( !r.isValid() )
             return;
-      if ( opacity >= 0 && ( animationMode & AnimationFocus ) ) {
+      if (opacity >= 0 && (animationMode & AnimationFocus) ) {
             // calculate proper glow color based on current settings and opacity
             const QColor glow( hover ?
                                ColorUtils::mix( viewHoverBrush().brush(QPalette::Active).color(), viewFocusBrush().brush(QPalette::Active).color(), opacity ) :
@@ -1822,7 +1822,8 @@ TileSet* StyleHelper::groove(const QColor& color, qreal shade, int size) const {
 //   mergePalettes
 //---------------------------------------------------------
 
-QPalette StyleHelper::mergePalettes( const QPalette& source, qreal ratio ) const {
+QPalette StyleHelper::mergePalettes( const QPalette& source, qreal ratio ) const
+      {
       QPalette out(source );
       out.setColor(QPalette::Background, ColorUtils::mix( source.color( QPalette::Active, QPalette::Background ), source.color( QPalette::Disabled, QPalette::Background ), 1.0 - ratio ) );
       out.setColor(QPalette::Highlight, ColorUtils::mix( source.color( QPalette::Active, QPalette::Highlight ), source.color( QPalette::Disabled, QPalette::Highlight ), 1.0 - ratio ) );

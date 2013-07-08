@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg xmlns:cc='http://creativecommons.org/ns#' xmlns:dc='http://purl.org/dc/elements/1.1/' sodipodi:docname='document-save-as.svg' height='24' id='svg7384' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:svg='http://www.w3.org/2000/svg' inkscape:version='0.48.4 r9939' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'>
+  <metadata id='metadata90'>
+    <rdf:RDF>
+      <cc:Work rdf:about=''>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage'/>
+        <dc:title>MuseScore Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview inkscape:bbox-nodes='false' inkscape:bbox-paths='true' bordercolor='#666666' borderopacity='1' inkscape:current-layer='actions' inkscape:cx='259.66497' inkscape:cy='-40.132294' fit-margin-bottom='6' fit-margin-left='6' fit-margin-right='6' fit-margin-top='6' gridtolerance='10' inkscape:guide-bbox='true' guidetolerance='10' id='namedview88' inkscape:object-nodes='false' inkscape:object-paths='false' objecttolerance='10' pagecolor='#222222' inkscape:pageopacity='1' inkscape:pageshadow='2' showborder='false' showgrid='false' showguides='true' inkscape:snap-bbox='true' inkscape:snap-bbox-midpoints='false' inkscape:snap-global='false' inkscape:snap-grids='true' inkscape:snap-nodes='false' inkscape:snap-others='false' inkscape:snap-to-guides='true' inkscape:window-height='1020' inkscape:window-maximized='0' inkscape:window-width='960' inkscape:window-x='0' inkscape:window-y='27' inkscape:zoom='1'>
+    <inkscape:grid empspacing='2' enabled='true' id='grid4866' originx='-114.00038px' originy='-222.00007px' snapvisiblegridlinesonly='true' spacingx='1px' spacingy='1px' type='xygrid' visible='true'/>
+  </sodipodi:namedview>
+  <title id='title9167'>MuseScore Icon Theme</title>
+  <defs id='defs7386'/>
+  <g inkscape:groupmode='layer' id='actions' inkscape:label='actions' style='display:inline' transform='translate(-149.00038,-122.99993)'>
+    
+    <path inkscape:connector-curvature='0' d='m 152.62538,144.99995 c -0.90819,0 -1.625,-0.7167 -1.625,-1.62495 l 0,-15.75 c 0,-0.9081 0.8736,-1.62495 1.625,-1.62495 l 1.375,0 0,5.4999 c 0,0.8229 0.6772,1.5 1.5,1.5 l 10,0 c 0.8228,0 1.5,-0.6771 1.5,-1.5 l 0,-5.4999 c 0,0 1.37268,0 1.375,0 0.83045,0.46875 2.24518,1.9671 2.625,2.625 l 0,14.74995 c 0,0.90825 -0.71682,1.62495 -1.625,1.62495 l -0.37541,0 4.1e-4,-0.9999 0,-7.59375 c 0,-0.7833 -0.62298,-1.40625 -1.40625,-1.40625 l -13.1875,0 c -0.78327,0 -1.40625,0.62295 -1.40625,1.40625 l 0,8.59365 z' id='path6137' sodipodi:nodetypes='sssscsssscccssccsssscs' style='fill:#ffffff;fill-opacity:1;stroke:none;display:inline'/>
+    <rect height='4' id='rect6139' rx='0' ry='0' style='fill:#ffffff;fill-opacity:1;stroke:none;display:inline' width='2' x='157.00035' y='126.99986'/>
+    <rect height='2' id='rect6141' rx='0' ry='0' style='fill:#ffffff;fill-opacity:1;stroke:none;display:inline' transform='scale(1,-1)' width='16' x='153.00037' y='-145.00005'/>
+    <rect height='1' id='rect6143' rx='0' ry='0' style='fill:#ffffff;fill-opacity:1;stroke:none;display:inline' transform='scale(1,-1)' width='12' x='155.00038' y='-140.99992'/>
+    <rect height='1' id='rect6145' rx='0' ry='0' style='fill:#ffffff;fill-opacity:1;stroke:none;display:inline' transform='scale(1,-1)' width='12' x='155.00038' y='-138.99986'/>
+  </g>
+</svg>

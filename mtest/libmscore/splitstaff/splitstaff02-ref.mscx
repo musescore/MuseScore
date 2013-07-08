@@ -83,8 +83,6 @@
           </Clef>
         <KeySig>
           <accidental>0</accidental>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -126,8 +124,6 @@
           </Clef>
         <KeySig>
           <accidental>0</accidental>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -157,7 +153,7 @@
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration z="1" n="1"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>

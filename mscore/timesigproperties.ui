@@ -78,7 +78,7 @@
            </sizepolicy>
           </property>
           <property name="title">
-           <string>GroupBox</string>
+           <string>Note Groups</string>
           </property>
          </widget>
         </item>

@@ -36,7 +36,7 @@ static SynthesizerState defaultState = {
             },
             },
       { "Fluid", {
-            { 0, "fluid.sf3" },
+            { 0, "FluidR3_GM2-2.sf3" },
             },
             },
 //      { "Zerberus", {
@@ -71,7 +71,7 @@ void MasterSynthesizer::init()
       QString s(dataPath + "/synthesizer.xml");
       QFile f(s);
       if (!f.open(QIODevice::ReadOnly)) {
-            qDebug("cannot read synthesizer settings <%s>", qPrintable(s));
+            // qDebug("cannot read synthesizer settings <%s>", qPrintable(s));
             setState(defaultState);
             return;
             }

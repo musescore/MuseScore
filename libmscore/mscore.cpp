@@ -42,6 +42,7 @@ int     MScore::_hRaster;
 QColor  MScore::selectColor[VOICES];
 QColor  MScore::defaultColor;
 QColor  MScore::layoutBreakColor;
+QColor  MScore::frameMarginColor;
 QColor  MScore::bgColor;
 QColor  MScore::dropColor;
 bool    MScore::warnPitchRange;
@@ -54,7 +55,7 @@ int     MScore::defaultPlayDuration;
 QString MScore::partStyle;
 QString MScore::lastError;
 bool    MScore::layoutDebug = false;
-int     MScore::division    = 480;
+int     MScore::division    = 480;   // pulses per quarter note (PPQ) // ticks per beat
 int     MScore::sampleRate  = 44100;
 int     MScore::mtcType;
 
@@ -112,10 +113,11 @@ void MScore::init()
       _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
-      selectColor[0].setRgb(0, 0, 255);     //blue
-      selectColor[1].setRgb(0, 150, 0);     //green
-      selectColor[2].setRgb(230, 180, 50);  //yellow
-      selectColor[3].setRgb(200, 0, 200);   //purple
+      selectColor[0].setNamedColor("#2456aa");     //blue
+      selectColor[1].setNamedColor("#5f8f00");     //green
+      selectColor[2].setNamedColor("#d79112");  //yellow
+      selectColor[3].setNamedColor("#75112b");   //purple
+
       defaultColor        = Qt::black;
       dropColor           = Qt::red;
       nudgeStep           = .1;       // in spatium units (default 0.1)
@@ -128,8 +130,9 @@ void MScore::init()
 
       lastError           = "";
 
-      layoutBreakColor    = Qt::gray;
-      bgColor.setRgb(0x76, 0x76, 0x6e);
+      layoutBreakColor    = QColor("#6abed3");
+      frameMarginColor    = QColor("#6abed3");
+      bgColor.setRgb(0xbf, 0xbf, 0xbf);
 
       _defaultStyle         = new MStyle();
       Ms::initStyle(_defaultStyle);
@@ -144,12 +147,12 @@ void MScore::init()
       //
 #if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
       static const char* fonts[] = {
-            "mscore-20.otf",
+            "mscore-20.ttf",
             "MuseJazz.ttf",
             "FreeSans.ttf",
             "FreeSerifMscore.ttf",
             "FreeSerifBold.ttf",
-            "gonville-20.otf",
+            "gonville-20.ttf",
             "mscoreTab.ttf",
             "mscore-BC.ttf"
             };

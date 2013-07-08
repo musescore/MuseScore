@@ -19,6 +19,10 @@
 
 using namespace Ms;
 
+//namespace Ms {
+//extern void dumpTags();
+//};
+
 //---------------------------------------------------------
 //   TestBechmark
 //---------------------------------------------------------
@@ -59,6 +63,7 @@ void TestBenchmark::benchmark3()
       QBENCHMARK {
             score->loadMsc(path, false);
             }
+//      Ms::dumpTags();
       }
 #if 0
 void TestBenchmark::benchmark1()

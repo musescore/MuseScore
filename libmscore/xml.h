@@ -35,7 +35,6 @@ class XmlReader : public QXmlStreamReader {
       // Score read context (for read optimizations):
       int _tick;
       int _track;
-      QHash<int, Spanner*> _spanner;
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
       QList<ClefList*> _clefListList;      // used reading 1.2 scores
@@ -48,7 +47,7 @@ class XmlReader : public QXmlStreamReader {
 
       void unknown() const;
 
-      void error(int, int);
+//      void error(int, int);
 
       // attribute helper routines:
       QString attribute(const char* s) const { return attributes().value(s).toString(); }
@@ -72,21 +71,16 @@ class XmlReader : public QXmlStreamReader {
       void setDocName(const QString& s) { docName = s; }
 
       int tick()  const           { return _tick;  }
+      int& rtick()                { return _tick;  }
       void setTick(int val)       { _tick = val; }
       int track() const           { return _track; }
       void setTrack(int val)      { _track = val; }
-
-      void addSpanner(Spanner* s);
-      void removeSpanner(Spanner* s);
-      Spanner* findSpanner(int) const;
-
       void addTuplet(Tuplet* s);
+      void addBeam(Beam* s)       { _beams.append(s); }
+
+      Beam* findBeam(int) const;
       Tuplet* findTuplet(int) const;
 
-      void addBeam(Beam* s)       { _beams.append(s); }
-      Beam* findBeam(int) const;
-
-      QHash<int,Spanner*>& spanner()   { return _spanner; }
       QList<Tuplet*>& tuplets()        { return _tuplets; }
       QList<Beam*>& beams()            { return _beams; }
       QList<ClefList*>& clefListList() { return _clefListList; }
@@ -144,7 +138,7 @@ class Xml : public QTextStream {
       void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
       void tag(const char* name, const QWidget*);
 
-      void writeHtml(const QString& s);
+      void writeHtml(QString s);
       void dump(int len, const unsigned char* p);
 
       static QString xmlString(const QString&);

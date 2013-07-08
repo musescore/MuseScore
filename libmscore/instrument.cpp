@@ -17,13 +17,11 @@
 #include "utils.h"
 #include "tablature.h"
 #include "instrtemplate.h"
-#include "synthesizer/msynthesizer.h"
 #include "mscore.h"
 
 namespace Ms {
 
 Instrument InstrumentList::defaultInstrument;
-extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
 //   write
@@ -139,22 +137,29 @@ Tablature* InstrumentData::tablature() const
       }
 
 //---------------------------------------------------------
-//   write
+//   StaffNameDoc::write
+//---------------------------------------------------------
+
+void StaffNameDoc::write(Xml& xml, const char* tag) const
+      {
+      if (!name.isEmpty()) {
+            xml.stag(QString("%1 pos=\"%2\"").arg(tag).arg(pos));
+            xml.writeHtml(name.toHtml());
+            xml.etag();
+            }
+      }
+
+//---------------------------------------------------------
+//   InstrumentData::write
 //---------------------------------------------------------
 
 void InstrumentData::write(Xml& xml) const
       {
       xml.stag("Instrument");
-      foreach(const StaffNameDoc& doc, _longNames) {
-            xml.stag(QString("longName pos=\"%1\"").arg(doc.pos));
-            xml.writeHtml(doc.name.toHtml());
-            xml.etag();
-            }
-      foreach(const StaffNameDoc& doc, _shortNames) {
-            xml.stag(QString("shortName pos=\"%1\"").arg(doc.pos));
-            xml.writeHtml(doc.name.toHtml());
-            xml.etag();
-            }
+      foreach(const StaffNameDoc& doc, _longNames)
+            doc.write(xml, "longName");
+      foreach(const StaffNameDoc& doc, _shortNames)
+            doc.write(xml, "shortName");
       xml.tag("trackName", _trackName);
       if (_minPitchP > 0)
             xml.tag("minPitchP", _minPitchP);
@@ -569,8 +574,6 @@ void MidiArticulation::read(XmlReader& e)
 
 void InstrumentData::updateVelocity(int* velocity, int /*channelIdx*/, const QString& name)
       {
-//      const Channel& c = _channel[channelIdx];
-//      foreach(const MidiArticulation& a, c.articulation) {
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
                   *velocity = *velocity * a.velocity / 100;
@@ -585,13 +588,8 @@ void InstrumentData::updateVelocity(int* velocity, int /*channelIdx*/, const QSt
 
 void InstrumentData::updateGateTime(int* gateTime, int /*channelIdx*/, const QString& name)
       {
-//      const Channel& c = _channel[channelIdx];
-//      foreach(const MidiArticulation& a, c.articulation) {
-
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
-// qDebug("updateGateTime found %d", a.gateTime);
-                  // *gateTime = *gateTime * a.gateTime / 100;
                   *gateTime = a.gateTime;
                   break;
                   }
@@ -1060,7 +1058,7 @@ const Instrument& InstrumentList::instrument(int tick) const
       {
       if (empty())
             return defaultInstrument;
-      ciInstrument i = upper_bound(tick);
+      auto i = upper_bound(tick);
       if (i == begin())
             return defaultInstrument;
       --i;
@@ -1075,7 +1073,7 @@ Instrument& InstrumentList::instrument(int tick)
       {
       if (empty())
             return defaultInstrument;
-      iInstrument i = upper_bound(tick);
+      auto i = upper_bound(tick);
       if (i == begin())
             return defaultInstrument;
       --i;
@@ -1088,9 +1086,7 @@ Instrument& InstrumentList::instrument(int tick)
 
 void InstrumentList::setInstrument(const Instrument& instr, int tick)
       {
-      std::pair<int, Instrument> instrument(tick, instr);
-      std::pair<iInstrument,bool> p = insert(instrument);
-      if (!p.second)
+      if (!insert({tick, instr}).second)
             (*this)[tick] = instr;
       }
 

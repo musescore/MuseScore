@@ -116,7 +116,6 @@
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="start" number="2"/>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -128,9 +127,9 @@
           </BarLine>
         </Measure>
       <Measure number="2">
+        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="stop" number="2"/>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>

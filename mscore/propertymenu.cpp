@@ -30,7 +30,6 @@
 #include "textproperties.h"
 #include "sectionbreakprop.h"
 #include "stafftextproperties.h"
-#include "slurproperties.h"
 #include "glissandoproperties.h"
 #include "fretproperties.h"
 #include "selinstrument.h"
@@ -197,7 +196,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             // if the time sig. is not generated (= not courtesy) and is in track 0
             // add the specific menu item
             QAction* a;
-            if (!ts->generated() && !_track) {
+            if (!ts->generated() && !_track && ts->measure() != score()->firstMeasure()) {
                   a = popup->addAction(ts->showCourtesySig()
                      ? QT_TRANSLATE_NOOP("TimeSig", "Hide Courtesy Time Signature")
                      : QT_TRANSLATE_NOOP("TimeSig", "Show Courtesy Time Signature") );
@@ -216,8 +215,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::CLEF) {
             genPropertyMenu1(e, popup);
+            Clef* clef = static_cast<Clef*>(e);
             // if the clef is not generated (= not courtesy) add the specific menu item
-            if (!e->generated()) {
+            if (!e->generated() && clef->measure() != score()->firstMeasure()) {
                   QAction* a = popup->addAction(static_cast<Clef*>(e)->showCourtesy()
                      ? QT_TRANSLATE_NOOP("Clef", "Hide courtesy clef")
                      : QT_TRANSLATE_NOOP("Clef", "Show courtesy clef") );
@@ -259,7 +259,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::KEYSIG) {
             genPropertyMenu1(e, popup);
             KeySig* ks = static_cast<KeySig*>(e);
-            if (!e->generated()) {
+            if (!e->generated() && ks->measure() != score()->firstMeasure()) {
                   QAction* a = popup->addAction(ks->showCourtesy()
                      ? QT_TRANSLATE_NOOP("KeySig", "Hide Courtesy Key Signature")
                      : QT_TRANSLATE_NOOP("KeySig", "Show Courtesy Key Signature") );
@@ -276,7 +276,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::SLUR_SEGMENT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Edit Mode"))->setData("edit");
-            popup->addAction(tr("Slur Properties..."))->setData("slur-props");
             }
       else if (e->type() == Element::REST) {
             genPropertyMenu1(e, popup);
@@ -566,18 +565,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         }
                   else
                         qDebug("no template selected?\n");
-                  }
-            }
-      else if (cmd == "slur-props") {
-            SlurSegment* ss = static_cast<SlurSegment*>(e);
-            SlurProperties sp(0);
-            sp.setLineType(ss->slurTie()->lineType());
-            int rv = sp.exec();
-            if (rv) {
-                  int lt = sp.getLineType();
-                  if (lt != ss->slurTie()->lineType()) {
-                        score()->undoChangeProperty(ss->slurTie(), P_LINE_TYPE, lt);
-                        }
                   }
             }
       else if (cmd == "articulation") {

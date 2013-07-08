@@ -58,6 +58,7 @@ void TestCopyPaste::initTestCase()
 
 //---------------------------------------------------------
 //   copypaste
+//    copy measure 2, paste into measure 4
 //---------------------------------------------------------
 
 void TestCopyPaste::copypaste(const char* idx)

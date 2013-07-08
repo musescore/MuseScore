@@ -17,7 +17,7 @@
 #include <math.h>
 
 class Channel;
-class Zone;
+struct Zone;
 class Sample;
 class Zerberus;
 

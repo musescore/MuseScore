@@ -61,8 +61,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             ((Lyrics*)editObject)->moveCursorToStart();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -79,7 +78,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       Segment* nextSegment = segment;
       if (back) {
             // search prev chord
-            while ((nextSegment = nextSegment->prev1(Segment::SegChordRest | Segment::SegGrace))) {
+            while ((nextSegment = nextSegment->prev1(Segment::SegChordRest))) {
                   Element* el = nextSegment->element(track);
                   if (el &&  el->type() == Element::CHORD)
                         break;
@@ -87,7 +86,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             }
       else {
             // search next chord
-            while ((nextSegment = nextSegment->next1(Segment::SegChordRest | Segment::SegGrace))) {
+            while ((nextSegment = nextSegment->next1(Segment::SegChordRest))) {
                   Element* el = nextSegment->element(track);
                   if (el &&  el->type() == Element::CHORD)
                         break;
@@ -108,7 +107,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                         if (oldLyrics)
                               break;
                         }
-                  segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
+                  segment = segment->prev1(Segment::SegChordRest);
                   }
             }
 
@@ -171,8 +170,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             ((Lyrics*)editObject)->moveCursorToStart();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -190,7 +188,7 @@ void ScoreView::lyricsMinus()
 
       // search next chord
       Segment* nextSegment = segment;
-      while ((nextSegment = nextSegment->next1(Segment::SegChordRest | Segment::SegGrace))) {
+      while ((nextSegment = nextSegment->next1(Segment::SegChordRest))) {
             Element* el = nextSegment->element(track);
             if (el &&  el->type() == Element::CHORD)
                   break;
@@ -204,13 +202,13 @@ void ScoreView::lyricsMinus()
       while (segment) {
             const QList<Lyrics*>* nll = segment->lyricsList(track);
             if (!nll) {
-                  segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
+                  segment = segment->prev1(Segment::SegChordRest);
                   continue;
                   }
             oldLyrics = nll->value(verse);
             if (oldLyrics)
                   break;
-            segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
+            segment = segment->prev1(Segment::SegChordRest);
             }
 
       _score->startCmd();
@@ -258,8 +256,7 @@ void ScoreView::lyricsMinus()
       ((Lyrics*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -278,7 +275,7 @@ void ScoreView::lyricsUnderscore()
 
       // search next chord
       Segment* nextSegment = segment;
-      while ((nextSegment = nextSegment->next1(Segment::SegChordRest | Segment::SegGrace))) {
+      while ((nextSegment = nextSegment->next1(Segment::SegChordRest))) {
             Element* el = nextSegment->element(track);
             if (el &&  el->type() == Element::CHORD)
                   break;
@@ -293,7 +290,7 @@ void ScoreView::lyricsUnderscore()
                   if (oldLyrics)
                         break;
                   }
-            segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
+            segment = segment->prev1(Segment::SegChordRest);
             }
 
       if (nextSegment == 0) {
@@ -348,8 +345,7 @@ void ScoreView::lyricsUnderscore()
       ((Lyrics*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -378,8 +374,7 @@ void ScoreView::lyricsReturn()
 
       adjustCanvasPosition(lyrics, false);
       _score->setLayoutAll(true);
-      _score->end2();
-      _score->end1();
+      _score->update();
       }
 
 //---------------------------------------------------------
@@ -405,7 +400,7 @@ void ScoreView::lyricsEndEdit()
                   if (oldLyrics)
                         break;
                   }
-            segment = segment->prev1(Segment::SegChordRest | Segment::SegGrace);
+            segment = segment->prev1(Segment::SegChordRest);
             }
 
 //      if (lyrics->isEmpty() && origL->isEmpty())

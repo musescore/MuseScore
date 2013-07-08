@@ -448,7 +448,7 @@ MidiTrack::~MidiTrack()
 
 void MidiTrack::insert(int tick, const MidiEvent& event)
       {
-      _events.insert(std::pair<int,MidiEvent>(tick, event));
+      _events.insert({tick, event});
       }
 
 //---------------------------------------------------------
@@ -824,8 +824,10 @@ void MidiTrack::mergeNoteOnOff()
 void MidiFile::separateChannel()
       {
       for (int i = 0; i < _tracks.size(); ++i) {
+
+            // create a list of channels used in current track
             QList<int> channel;
-            MidiTrack* mt = _tracks.at(i);
+            MidiTrack* mt = _tracks.at(i); // current track
             for(auto i : mt->events()) {
                   const MidiEvent& e = i.second;
                   if (e.isChannelEvent() && !channel.contains(e.channel()))
@@ -837,13 +839,16 @@ void MidiFile::separateChannel()
                   continue;
             qSort(channel);
 
-            // split
+            // -split
+
+            // insert additional tracks, assign to them found channels
             for (int ii = 1; ii < nn; ++ii) {
                   MidiTrack* t = new MidiTrack(this);
                   _tracks.insert(i + 1, t);
                   t->setOutChannel(channel[ii]);
                   }
 
+            // extract all different channel events from current track to inserted tracks
             for (auto ie = mt->events().begin(); ie != mt->events().end(); ) {
                   const MidiEvent& e = ie->second;
                   if (e.isChannelEvent()) {

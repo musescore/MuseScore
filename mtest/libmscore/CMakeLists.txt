@@ -11,11 +11,18 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
+#subdirs(
+#      hairpin note compat link measure beam split join splitstaff
+#      timesig layout element midi dynamic plugins copypaste tuplet
+#      repeat concertpitch keysig clef
+#      )
 subdirs(
       hairpin note compat link measure beam split join splitstaff
-      timesig layout element midi dynamic copypaste tuplet
-      repeat concertpitch keysig
+      timesig layout element midi dynamic plugins copypaste tuplet
+      repeat concertpitch keysig clef
       )
 
 # midi - does not work
-# plugins - postponed
+# link
+# layout
+

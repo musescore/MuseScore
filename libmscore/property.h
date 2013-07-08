@@ -143,6 +143,18 @@ enum P_ID {
       P_GROUPS,
       P_LINE_COLOR,
 
+      P_LASSO_POS,
+      P_LASSO_SIZE,
+
+      P_TIME_STRETCH,
+
+      P_TIMESIG,
+      P_TIMESIG_GLOBAL,
+
+      P_SPANNER_TICK,
+      P_SPANNER_TICK2,
+      P_USER_OFF2,
+
       P_END
       };
 
@@ -155,7 +167,9 @@ enum P_TYPE {
       T_SP_REAL,
       T_FRACTION,
       T_POINT,
+      T_POINT_MM,
       T_SIZE,
+      T_SIZE_MM,
       T_STRING,
       T_SCALE,
       T_COLOR,

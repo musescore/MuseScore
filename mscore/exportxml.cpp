@@ -423,8 +423,11 @@ int SlurHandler::findSlur(const Slur* s) const
 void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) starting at this chord
-      for (Spanner* sp = chord->spannerFor(); sp; sp = sp->next()) {
-            if (sp->type() != Element::SLUR)
+      int tick = chord->tick();
+      auto sl = chord->score()->spanner();
+      for (auto it = sl.lower_bound(tick); it != sl.upper_bound(tick); ++it) {
+            Spanner* sp = it->second;
+            if (sp->type() != Element::SLUR || sp->track() != chord->track())
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
             // check if on slur list (i.e. stop already seen)
@@ -479,8 +482,9 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
 void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
       {
       // search for slur(s) stopping at this chord but not on slur list yet
-      for (Spanner* sp = chord->spannerBack(); sp; sp = sp->next()) {
-            if (sp->type() != Element::SLUR)
+      for (auto it : chord->score()->spanner()) {
+            Spanner* sp = it.second;
+            if (sp->type() != Element::SLUR || sp->tick2() != chord->tick() || sp->track() != chord->track())
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
             // check if on slur list
@@ -498,9 +502,10 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
                         qDebug("no free slur slot");
                   }
             }
+
       // search slur list for already started slur(s) stopping at this chord
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (slur[i] && slur[i]->endElement() == chord) {
+            if (slur[i] && slur[i]->tick2() == chord->tick() && slur[i]->track() == chord->track()) {
                   if (started[i]) {
                         slur[i] = 0;
                         started[i] = false;
@@ -659,10 +664,11 @@ public:
 // TBD: must trill end be in the same staff as trill started ?
 // if so, no need to pass in strack and etrack (trill has a track)
 
-static void findTrillAnchors(const Trill* trill, const Segment* seg, Chord*& startChord, Chord*& stopChord)
+static void findTrillAnchors(const Trill* trill, Chord*& startChord, Chord*& stopChord)
       {
-      const int endTick = (static_cast<Segment*>(trill->endElement()))->tick();
-      const int strack = trill->track();
+      const Segment* seg = trill->startSegment();
+      const int endTick  = trill->tick2();
+      const int strack   = trill->track();
       // try to find chords in the same track:
       // find a track with suitable chords both for start and stop
       for (int i = 0; i < VOICES; ++i) {
@@ -712,26 +718,24 @@ static void findTrillAnchors(const Trill* trill, const Segment* seg, Chord*& sta
 static void findTrills(Measure* measure, int strack, int etrack, TrillHash& trillStart, TrillHash& trillStop)
       {
       // loop over all segments in this measure
-      for (Segment* seg = measure->first(); seg; seg = seg->next()) {
-            // loop over all spanners in this segment
-            for (Spanner* e = seg->spannerFor(); e; e = e->next()) {
+      for (auto it : measure->score()->spanner()) {
+            Spanner* e = it.second;
+            if (e->type() == Element::TRILL && strack <= e->track() && e->track() < etrack
+               && e->tick() >= measure->tick() && e->tick() < measure->tick())
+                  {
+                  // a trill is found starting in this segment, trill end time is known
+                  // determine notes to write trill start and stop
+                  const Trill* tr = static_cast<const Trill*>(e);
+                  Chord* startChord = 0;  // chord where trill starts
+                  Chord* stopChord = 0;   // chord where trill stops
 
-                  if (e->type() == Element::TRILL && strack <= e->track() && e->track() < etrack) {
+                  findTrillAnchors(tr, startChord, stopChord);
 
-                        // a trill is found starting in this segment, trill end time is known
-                        // determine notes to write trill start and stop
-                        const Trill* tr = static_cast<const Trill*>(e);
-                        Chord* startChord = 0;  // chord where trill starts
-                        Chord* stopChord = 0;   // chord where trill stops
-
-                        findTrillAnchors(tr, seg, startChord, stopChord);
-
-                        if (startChord && stopChord) {
-                              trillStart.insert(startChord, tr);
-                              trillStop.insert(stopChord, tr);
-                              }
+                  if (startChord && stopChord) {
+                        trillStart.insert(startChord, tr);
+                        trillStop.insert(stopChord, tr);
                         }
-                  } // foreach
+                  }
             }
       }
 
@@ -1221,13 +1225,15 @@ static QString tick2xml(const int ticks, int* dots)
 //   findVolta -- find volta starting in measure m
 //---------------------------------------------------------
 
-static Volta* findVolta(Measure* m, bool /*left*/)
+static Volta* findVolta(Measure* m, bool left)
       {
-      for (Spanner* el = m->spannerFor(); el; el = el->next()) {
+#if 0 // TODO-S
+      for (Spanner* el = left ? m->spannerFor() : m->spannerBack(); el; el = el->next()) {
             if (el->type() != Element::VOLTA)
                   continue;
             return (Volta*) el;
             }
+#endif
       return 0;
       }
 
@@ -2624,8 +2630,11 @@ static void partGroupStart(Xml& xml, int number, int bracket)
             case BRACKET_NORMAL:
                   br = "bracket";
                   break;
-            case BRACKET_AKKOLADE:
+            case BRACKET_BRACE:
                   br = "brace";
+                  break;
+            case BRACKET_SQUARE:
+                  br = "square";
                   break;
             default:
                   qDebug("bracket subtype %d not understood\n", bracket);
@@ -3683,6 +3692,7 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
 
 static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
+#if 0 // TODO-S
       if (seg->segmentType() == Segment::SegChordRest) {
             for (Spanner* e = seg->spannerFor(); e; e = e->next()) {
 
@@ -3716,6 +3726,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                         }
                   } // foreach
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -3726,6 +3737,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 
 static void spannerStop(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
+#if 0 // TODO-S
       if (seg->segmentType() == Segment::SegChordRest) {
             for (Spanner* e = seg->spannerBack(); e; e = e->next()) {
 
@@ -3759,6 +3771,7 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, int track, 
                         }
                   } // foreach
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -4457,7 +4470,7 @@ bool saveMxl(Score* score, const QString& name)
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      uz.addDirectory("META-INF");
+      //uz.addDirectory("META-INF");
       uz.addFile("META-INF/container.xml", cbuf.data());
 
       QBuffer dbuf;
@@ -4505,7 +4518,14 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             xml.etag();
 
             if (!h->xmlKind().isEmpty()) {
-                  xml.tag(QString("kind text=\"%1\"").arg(h->extensionName()), h->xmlKind());
+                  QString s = "kind";
+                  if (h->xmlText() != "")
+                        s += " text=\"" + h->xmlText() + "\"";
+                  if (h->xmlSymbols() == "yes")
+                        s += " use-symbols=\"yes\"";
+                  if (h->xmlParens() == "yes")
+                        s += " parentheses-degrees=\"yes\"";
+                  xml.tag(s, h->xmlKind());
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
                         foreach(QString tag, l) {
@@ -4562,7 +4582,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             //
             xml.stag("direction");
             xml.stag("direction-type");
-            xml.tag("words default-y=\"100\"", h->text());
+            xml.tag("words", h->text());
             xml.etag();
             xml.etag();
             }

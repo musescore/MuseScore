@@ -150,7 +150,7 @@ QRectF SimpleText::cursorRect() const
 
       qreal x = pt.x() + xo - 1;
       qreal y = pt.y() - fm.ascent();
-      qreal w = 2;
+      qreal w = fm.width(QChar('w')) * .14;
       qreal h = fm.ascent() + fm.descent() + 1;
 
       return QRectF(x, y, w, h);
@@ -169,7 +169,7 @@ void SimpleText::drawFrame(QPainter* painter) const
       if (!visible())
             color = Qt::gray;
       else if (selected())
-            color = Qt::blue;
+            color = MScore::selectColor[0];
       if (frameWidth().val() != 0.0) {
             QPen pen(color, frameWidth().val() * spatium());
             painter->setPen(pen);

@@ -13,7 +13,9 @@
 #include "arpeggio.h"
 #include "glissando.h"
 #include "chord.h"
+#include "ledgerline.h"
 #include "note.h"
+#include "notedot.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -60,7 +62,7 @@ void Glissando::layout()
       Segment* s = chord->segment();
       s = s->prev1();
       while (s) {
-            if ((s->segmentType() & (Segment::SegChordRestGrace)) && s->element(track()))
+            if ((s->segmentType() & (Segment::SegChordRest)) && s->element(track()))
                   break;
             s = s->prev1();
             }
@@ -73,6 +75,7 @@ void Glissando::layout()
             qDebug("no first note for glissando found, track %d", track());
             return;
             }
+      qreal _spatium = spatium();
       Note* anchor1 = static_cast<Chord*>(cr)->upNote();
 
       setPos(0.0, 0.0);
@@ -80,22 +83,42 @@ void Glissando::layout()
       QPointF cp1    = anchor1->pagePos();
       QPointF cp2    = anchor2->pagePos();
 
-      // construct line from notehead to notehead
-      qreal x1 = (anchor1->headWidth()) - (cp2.x() - cp1.x());
+      // line starting point
+      int dots = static_cast<Chord*>(cr)->dots();
+      LedgerLine * ledLin = static_cast<Chord*>(cr)->ledgerLines();
+      // if dots, from right of last dot (assume a standard dot with of 1/4 sp)
+      // if no dots, from right of ledger line, if any; from right of note head, if no ledger line
+      qreal x1 = (dots ? anchor1->dot(dots-1)->pos().x() + anchor1->dot(dots-1)->width()
+                  : (ledLin ? ledLin->pos().x() + ledLin->width() : anchor1->headWidth()) )
+            - (cp2.x() - cp1.x());              // make relative to end note
       qreal y1 = anchor1->pos().y();
+      // line end point: left of note head
       qreal x2 = anchor2->pos().x();
       qreal y2 = anchor2->pos().y();
 
+      // angle glissando between notes with the same pitch letter
+      if (anchor1->line() == anchor2->line()) {
+            int upDown = anchor2->pitch() - anchor1->pitch();
+            if (upDown != 0)
+                  upDown /= abs(upDown);
+            y1 += _spatium * 0.25 * upDown;
+            y2 -= _spatium * 0.25 * upDown;
+            }
+
       // on TAB's, adjust lower end point from string line height to base of note height (= ca. half line spacing)
       if (chord->staff()->isTabStaff()) {
-            qreal yOff = chord->staff()->lineDistance() * 0.5 * spatium();
+            qreal yOff = chord->staff()->lineDistance() * 0.5 * _spatium;
             if (anchor1->pitch() > anchor2->pitch())  // descending glissando:
                   y2 += yOff;                               // move ending point to base of note
             else                                      // ascending glissando:
                   y1 += yOff;                               // move starting point to base of note
             }
 
-      // shorten line so it doesn't go through accidential or arpeggio
+      // shorten line to avoid end note ledger line
+      ledLin=anchor2->chord()->ledgerLines();
+      if (ledLin)
+            x2 = ledLin->pos().x();
+      // shorten line so it doesn't go through end note accidental or arpeggio
       if (Accidental* a = anchor2->accidental()) {
             x2 = a->pos().x() + a->userOff().x();
             }
@@ -106,13 +129,13 @@ void Glissando::layout()
       QLineF fullLine(x1, y1, x2, y2);
 
       // shorten line on each side by offsets
-      qreal xo = spatium() * .5;
+      qreal xo = _spatium * .5;
       qreal yo = xo;   // spatium() * .5;
       QPointF p1 = fullLine.pointAt(xo / fullLine.length());
       QPointF p2 = fullLine.pointAt(1 - (yo / fullLine.length()));
 
       line = QLineF(p1, p2);
-      qreal lw = spatium() * .15 * .5;
+      qreal lw = _spatium * .15 * .5;
       QRectF r = QRectF(line.p1(), line.p2()).normalized();
       setbbox(r.adjusted(-lw, -lw, lw, lw));
       }
@@ -180,17 +203,22 @@ void Glissando::draw(QPainter* painter) const
             qreal mags = magS();
             QRectF b = symbols[score()->symIdx()][trillelementSym].bbox(mags);
             qreal w  = symbols[score()->symIdx()][trillelementSym].width(mags);
-            int n    = lrint(l / w);
-            symbols[score()->symIdx()][trillelementSym].draw(painter, mags, QPointF(0.0, b.height()*.5), n);
+            int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
+            qreal x  = (l - n*w) * 0.5;   // centre line in available space
+            symbols[score()->symIdx()][trillelementSym].draw(painter, mags, QPointF(x, b.height()*.5), n);
             }
       if (_showText) {
             const TextStyle& st = score()->textStyle(TEXT_STYLE_GLISSANDO);
             QFont f = st.fontPx(_spatium);
             QRectF r = QFontMetricsF(f).boundingRect(_text);
+            // if text longer than available space, skip it
             if (r.width() < l) {
+                  qreal yOffset = r.height() + r.y();       // find text descender height
+                  // raise text slightly above line and slightly more with WAVY than with STRAIGHT
+                  yOffset += _spatium * (glissandoType() == GlissandoType::WAVY ? 0.3 : 0.05);
                   painter->setFont(f);
-                  qreal x = (l - r.width()) * .5;
-                  painter->drawText(QPointF(x, -_spatium * .5), _text);
+                  qreal x = (l - r.width()) * 0.5;
+                  painter->drawText(QPointF(x, -yOffset), _text);
                   }
             }
       painter->restore();

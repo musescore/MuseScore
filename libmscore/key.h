@@ -105,6 +105,7 @@ class KeyList : public std::map<const int, KeySigEvent> {
    public:
       KeyList() {}
       KeySigEvent key(int tick) const;
+      int nextKeyTick(int tick) const;
       void read(XmlReader&, Score*);
       void write(Xml&, const char* name) const;
       };

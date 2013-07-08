@@ -121,7 +121,6 @@
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="start" number="2"/>
           <Note>
             <pitch>62</pitch>
             <tpc>16</tpc>
@@ -134,9 +133,9 @@
           <style>Tempo</style>
           <text>𝅘𝅥 = 100</text>
           </Tempo>
+        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="stop" number="2"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>

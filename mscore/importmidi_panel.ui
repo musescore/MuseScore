@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <property name="spacing">
@@ -37,29 +37,59 @@
      <property name="spacing">
       <number>0</number>
      </property>
+     <property name="leftMargin">
+      <number>4</number>
+     </property>
+     <item>
+      <widget class="QToolButton" name="toolButtonHideMidiPanel">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/close.png</normaloff>:/data/close.png</iconset>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>10</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="labelMidiImportPanel">
+      <widget class="QPushButton" name="pushButtonImport">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
-        <string>MIDI Import Panel</string>
+        <string>Apply</string>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/checkmark.svg</normaloff>:/data/icons/checkmark.svg</iconset>
        </property>
       </widget>
      </item>
@@ -73,29 +103,29 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>16</width>
+         <width>10</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonHideMidiImportPanel">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Close panel</string>
+      <widget class="QLabel" name="labalMidiFile">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="text">
-        <string/>
+        <string>MIDI file:</string>
        </property>
-       <property name="icon">
-        <iconset resource="musescore.qrc">
-         <normaloff>:/data/close_icon_small.png</normaloff>:/data/close_icon_small.png</iconset>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEditMidiFile">
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -106,189 +136,43 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="widgetMidiFile" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="minimumSize">
-       <size>
-        <width>300</width>
-        <height>0</height>
-       </size>
+      <property name="handleWidth">
+       <number>2</number>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="leftMargin">
-        <number>4</number>
+      <widget class="QTableView" name="tableViewTracks">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="topMargin">
-        <number>0</number>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
        </property>
-       <property name="rightMargin">
-        <number>0</number>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SingleSelection</enum>
        </property>
-       <property name="bottomMargin">
-        <number>0</number>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
        </property>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="leftMargin">
-          <number>4</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="labelMidiFile">
-           <property name="text">
-            <string>MIDI file:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButtonBrowseMidi">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Browse...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QPlainTextEdit" name="plainTextEditFile">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButtonImport">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Import</string>
-         </property>
-         <property name="icon">
-          <iconset resource="musescore.qrc">
-           <normaloff>:/data/next.png</normaloff>:/data/next.png</iconset>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QTabWidget" name="tabWidgetOptions">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tabTracksOptions">
-       <attribute name="title">
-        <string>Tracks</string>
-       </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QSplitter" name="splitter">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="handleWidth">
-           <number>2</number>
-          </property>
-          <widget class="QTableView" name="tableViewTracks">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="alternatingRowColors">
-            <bool>true</bool>
-           </property>
-           <property name="selectionMode">
-            <enum>QAbstractItemView::SingleSelection</enum>
-           </property>
-           <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectRows</enum>
-           </property>
-          </widget>
-          <widget class="QWidget" name="widget" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QLabel" name="labelOperation">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>22</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Specify track operations</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBoxLHRH">
-              <property name="text">
-               <string>LH/RH separation</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="verticalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>114</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-       </layout>
       </widget>
-      <widget class="QWidget" name="tabGeneralOptions">
-       <attribute name="title">
-        <string>General options</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3"/>
+      <widget class="QTreeView" name="treeViewOperations">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
       </widget>
      </widget>
     </widget>

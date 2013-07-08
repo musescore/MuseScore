@@ -136,6 +136,7 @@ class Note : public Element {
       int _string;
       mutable int _tpc;       ///< tonal pitch class
       mutable int _pitch;     ///< Note pitch as midi value (0 - 127).
+
       bool _ghost;            ///< ghost note (guitar: death note)
       bool _hidden;           ///< markes this note as the hidden one if there are
                               ///< overlapping notes; hidden notes are not played
@@ -170,8 +171,8 @@ class Note : public Element {
       NoteEventList _playEvents;
 
       int _lineOffset;        ///< Used during mouse dragging.
-      Spanner* _spannerFor;
-      Spanner* _spannerBack;
+      QList<Spanner*> _spannerFor;
+      QList<Spanner*> _spannerBack;
 
       virtual QRectF drag(const EditData& s);
       void endDrag();
@@ -186,6 +187,9 @@ class Note : public Element {
       ~Note();
       Note* clone() const      { return new Note(*this); }
       ElementType type() const { return NOTE; }
+
+      virtual qreal mag() const;
+
       QPointF pagePos() const;      ///< position in page coordinates
       QPointF canvasPos() const;    ///< position in page coordinates
       void layout();
@@ -258,8 +262,6 @@ class Note : public Element {
       void read(XmlReader&);
       void write(Xml& xml) const;
 
-      QPointF stemPos(bool upFlag) const;    ///< Point to connect stem.
-
       bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       Element* drop(const DropData&);
 
@@ -282,7 +284,6 @@ class Note : public Element {
       bool dotIsUp() const;               // actual dot position
 
       void reset();
-      void setMag(qreal val);
 
       MScore::ValueType veloType() const    { return _veloType;          }
       void setVeloType(MScore::ValueType v) { _veloType = v;             }
@@ -291,8 +292,6 @@ class Note : public Element {
 
       void setOnTimeOffset(int v);
       void setOffTimeOffset(int v);
-
-//      void setBend(Bend* b)               { _bend = b;    }
 
       int customizeVelocity(int velo) const;
       Q_INVOKABLE NoteDot* dot(int n)       { return _dots[n];           }
@@ -304,13 +303,13 @@ class Note : public Element {
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
       void setPlayEvents(const NoteEventList& l) { _playEvents = l;    }
 
-      Spanner* spannerFor() const                { return _spannerFor;         }
-      Spanner* spannerBack() const               { return _spannerBack;        }
+      QList<Spanner*> spannerFor() const         { return _spannerFor;         }
+      QList<Spanner*> spannerBack() const        { return _spannerBack;        }
 
-      void addSpannerBack(Spanner* e);
-      bool removeSpannerBack(Spanner* e);
-      void addSpannerFor(Spanner* e);
-      bool removeSpannerFor(Spanner* e);
+      void addSpannerBack(Spanner* e)            { _spannerBack.push_back(e);  }
+      bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
+      void addSpannerFor(Spanner* e)             { _spannerFor.push_back(e);         }
+      bool removeSpannerFor(Spanner* e)          { return _spannerFor.removeOne(e);  }
 
       void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
@@ -333,8 +332,9 @@ class Note : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
 
-      bool mark() const             { return _mark;   }
-      void setMark(bool v) const    { _mark = v;   }
+      bool mark() const               { return _mark;   }
+      void setMark(bool v) const      { _mark = v;   }
+      virtual void setScore(Score* s);
       };
 
 extern Sym* noteHeadSym(bool up, int group, int n);

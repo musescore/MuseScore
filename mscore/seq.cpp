@@ -196,10 +196,8 @@ void Seq::setScoreView(ScoreView* v)
 
       playlistChanged = true;
       _synti->reset();
-      if (cs) {
+      if (cs)
             initInstruments();
-            seek(cs->playPos());
-            }
       }
 
 //---------------------------------------------------------
@@ -588,6 +586,8 @@ void Seq::process(unsigned n, float* buffer)
       processMessages();
 
       if (state == TRANSPORT_PLAY) {
+            if(!cs)
+                  return;
             //
             // play events for one segment
             //
@@ -811,7 +811,7 @@ void Seq::seek(int utick)
 void Seq::seek(int utick, Segment* seg)
       {
       if (seg)
-            mscore->currentScoreView()->moveCursor(seg, -1);
+            mscore->currentScoreView()->moveCursor(seg->tick());
 
       cs->setPlayPos(utick);
       cs->setLayoutAll(false);
@@ -1130,6 +1130,7 @@ void Seq::heartBeatTimeout()
             --ppos;
       mutex.unlock();
 
+      QRectF r;
       for (;guiPos != events.cend(); ++guiPos) {
             if (guiPos->first > ppos->first)
                   break;
@@ -1140,7 +1141,7 @@ void Seq::heartBeatTimeout()
                         while (note1) {
                               note1->setMark(true);
                               markedNotes.append(note1);
-                              cs->addRefresh(note1->canvasBoundingRect());
+                              r |= note1->canvasBoundingRect();
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
                               }
 
@@ -1148,7 +1149,7 @@ void Seq::heartBeatTimeout()
                   else {
                         while (note1) {
                               note1->setMark(false);
-                              cs->addRefresh(note1->canvasBoundingRect());
+                              r |= note1->canvasBoundingRect();
                               markedNotes.removeOne(note1);
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
                               }
@@ -1165,7 +1166,7 @@ void Seq::heartBeatTimeout()
       PianorollEditor* pre = mscore->getPianorollEditor();
       if (pre && pre->isVisible())
             pre->heartBeat(this);
-      cs->update();
+      cv->update(cv->toPhysical(r));
       }
 
 //---------------------------------------------------------

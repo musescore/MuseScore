@@ -47,6 +47,7 @@ class Mixer;
 class Debugger;
 class MeasureListEditor;
 class Score;
+class Tuplet;
 class PageSettings;
 class PaletteBox;
 class Palette;
@@ -73,12 +74,10 @@ class Workspace;
 class AlbumManager;
 class WebPageDockWidget;
 class ChordList;
-class EditTempo;
 class Capella;
 class Inspector;
 class OmrPanel;
 class NScrollArea;
-class EditTools;
 class Sym;
 class MasterPalette;
 class PluginCreator;
@@ -224,7 +223,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ImportMidiPanel* importmidi_panel;
       QSplitter* mainWindow;
 
-      QMenu* menuDisplay;
+      QMenu* menuView;
       QMenu* openRecent;
 
       MagBox* mag;
@@ -238,7 +237,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QToolBar* transportTools;
       QToolBar* entryTools;
       TextTools* _textTools;
-      EditTools* _editTools;
       PianoTools* _pianoTools;
       WebPageDockWidget* _webPage;
       MediaDialog* _mediaDialog;
@@ -342,7 +340,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QNetworkAccessManager* networkManager;
       QAction* lastCmd;
       Shortcut* lastShortcut;
-      EditTempo* editTempo;
 
       QAction* metronomeAction;
       QAction* panAction;
@@ -498,7 +495,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool noScore() const { return scoreList.isEmpty(); }
 
       TextTools* textTools();
-      EditTools* editTools();
       void showDrumTools(Drumset*, Staff*);
       void updateDrumTools();
       void showWebPanel(bool on);
@@ -567,7 +563,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PaletteBox* getPaletteBox();
       void disableCommands(bool val) { inChordEditor = val; }
 
-      void tupletDialog();
+      Tuplet* tupletDialog();
       void selectSimilar(Element*, bool);
       void selectElementDialog(Element* e);
       void transpose();
@@ -594,7 +590,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveMp3(Score*, const QString& name);
       bool saveSvg(Score*, const QString& name);
       bool savePng(Score*, const QString& name);
-      bool saveLilypond(Score*, const QString& name);
+//      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
 
       void closeScore(Score* score);
@@ -610,8 +606,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool metronome() const         { return metronomeAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
-      void enableInputToolbar(bool enableInput);
       void loadFiles();
+      void showPanelIfMidiFile(const QString &file);
 
       static Palette* newTextPalette();
       static Palette* newTimePalette();
@@ -638,7 +634,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QQmlEngine* qml();
       PluginCreator* getPluginCreator()   { return pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
-};
+      void showMessage(const QString& s, int timeout);
+      };
 
 extern MuseScore* mscore;
 extern MuseScoreCore* mscoreCore;

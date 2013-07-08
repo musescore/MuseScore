@@ -323,6 +323,7 @@ Score* MuseScore::readScore(const QString& name)
             delete score;
             score = 0;
             }
+      showPanelIfMidiFile(name);
       return score;
       }
 
@@ -466,26 +467,49 @@ void MuseScore::newFile()
             // remove all notes & rests
             //
             score->deselectAll();
-            for (Segment* s = score->firstMeasure()->first(); s;) {
-                  Segment* ns = s->next1();
-                  if (s->segmentType() == Segment::SegChordRest && s->tick() == 0) {
-                        int tracks = s->elist().size();
-                        for (int track = 0; track < tracks; ++track) {
-                              delete s->element(track);
-                              s->setElement(track, 0);
+            if (score->firstMeasure()) {
+                  for (Segment* s = score->firstMeasure()->first(); s;) {
+                        Segment* ns = s->next1();
+                        if (s->segmentType() == Segment::SegChordRest && s->tick() == 0) {
+                              int tracks = s->elist().size();
+                              for (int track = 0; track < tracks; ++track) {
+                                    delete s->element(track);
+                                    s->setElement(track, 0);
+                                    }
+                              }
+                        else if (
+                           (s->segmentType() == Segment::SegChordRest)
+      //                     || (s->subtype() == Segment::SegClef)
+                           || (s->segmentType() == Segment::SegKeySig)
+                           || (s->segmentType() == Segment::SegBreath)
+                           ) {
+                              s->measure()->remove(s);
+                              delete s;
+                              }
+                        s = ns;
+                        }
+                  }
+            foreach(Excerpt* excerpt, score->excerpts()) {
+                  Score* exScore =  excerpt->score();
+                  if (exScore->firstMeasure()) {
+                        for (Segment* s = exScore->firstMeasure()->first(); s;) {
+                              Segment* ns = s->next1();
+                              if (s->segmentType() == Segment::SegChordRest && s->tick() == 0) {
+                                    int tracks = s->elist().size();
+                                    for (int track = 0; track < tracks; ++track) {
+                                          delete s->element(track);
+                                          s->setElement(track, 0);
+                                          }
+                                    }
+                              s->measure()->remove(s);
+                              if(s->measure()->segments()->size() == 0){
+                                    exScore->measures()->remove(s->measure(), s->measure());
+                                    delete s->measure();
+                                    }
+                              delete s;
+                              s = ns;
                               }
                         }
-                  else if (
-                     (s->segmentType() == Segment::SegChordRest)
-//                     || (s->subtype() == Segment::SegClef)
-                     || (s->segmentType() == Segment::SegKeySig)
-                     || (s->segmentType() == Segment::SegGrace)
-                     || (s->segmentType() == Segment::SegBreath)
-                     ) {
-                        s->measure()->remove(s);
-                        delete s;
-                        }
-                  s = ns;
                   }
             }
       //
@@ -545,7 +569,7 @@ void MuseScore::newFile()
                               // transpose key
                               //
                               KeySigEvent nKey = ks;
-                              if (part->instr()->transpose().chromatic && !newWizard->useTemplate()) {
+                              if (part->instr()->transpose().chromatic && !score->styleB(ST_concertPitch)) {
                                     int diff = -part->instr()->transpose().chromatic;
                                     nKey.setAccidentalType(transposeKey(nKey.accidentalType(), diff));
                                     }
@@ -587,15 +611,30 @@ void MuseScore::newFile()
       //
       // ceate linked staves
       //
+      QMap<Score*, QList<int>> scoremap;
       foreach(Staff* staff, score->staves()) {
             if (!staff->linkedStaves())
                   continue;
             foreach(Staff* lstaff, staff->linkedStaves()->staves()) {
                   if (staff != lstaff) {
-                        cloneStaff(staff, lstaff);
+                        if (staff->score() == lstaff->score())
+                              cloneStaff(staff, lstaff);
+                        else {
+                              //keep reference of staves in parts to clone them later
+                              QList<int> srcStaves = scoremap.value(lstaff->score());
+                              srcStaves.append(staff->score()->staffIdx(staff));
+                              scoremap.insert(lstaff->score(), srcStaves);
+                              }
                         }
                   }
             }
+       // clone staves for excerpts
+       auto it = scoremap.constBegin();
+       while (it != scoremap.constEnd()) {
+            cloneStaves(score, it.key(), it.value());
+            ++it;
+            }
+
       //
       // select first rest
       //
@@ -1592,10 +1631,12 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save as svg file *.svg
             rv = saveSvg(cs, fn);
             }
+#if 0
       else if (ext == "ly") {
             // save as lilypond file *.ly
             rv = saveLilypond(cs, fn);
             }
+#endif
 #ifdef HAS_AUDIOFILE
       else if (ext == "wav" || ext == "flac" || ext == "ogg")
             rv = saveAudio(cs, fn, ext);
@@ -1731,6 +1772,11 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   // silently ignore style file on error
                   if (f.open(QIODevice::ReadOnly))
                         score->style()->load(&f);
+                  }
+            else {
+                  if (score->style()->value(ST_chordsXmlFile).toBool())
+                        score->style()->chordList()->read("chords.xml");
+                  score->style()->chordList()->read(score->style()->valueSt(ST_chordDescriptionFile));
                   }
             uint n = sizeof(imports)/sizeof(*imports);
             uint i;

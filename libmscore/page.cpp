@@ -82,8 +82,8 @@ const PaperSize* getPaperSize(const QString& name)
             if (name == paperSizes[i].name)
                   return &paperSizes[i];
             }
-      qDebug("unknown paper size\n");
-      return &paperSizes[0];
+      qDebug("unknown paper size");
+      return &paperSizes[(sizeof paperSizes/sizeof(PaperSize)) - 2];
       }
 
 //---------------------------------------------------------
@@ -117,8 +117,9 @@ const PaperSize* getPaperSize(const qreal wi, const qreal hi)
                && sizeError(hi, paperSizes[i].w) < maxError)
                   return &paperSizes[i];
             }
-      qDebug("unknown paper size for %f x %f\n", wi, hi);
-      return &paperSizes[0];
+      qDebug("unknown paper size for %f x %f", wi, hi);
+      //return custom
+      return &paperSizes[(sizeof paperSizes/sizeof(PaperSize)) - 2];
       }
 
 //---------------------------------------------------------
@@ -467,7 +468,7 @@ QString PageFormat::name() const
 //      </page-layout>
 //---------------------------------------------------------
 
-void PageFormat::read(XmlReader& e)
+void PageFormat::read(XmlReader& e, Score* score)
       {
       qreal _oddRightMargin  = 0.0;
       qreal _evenRightMargin = 0.0;
@@ -515,8 +516,11 @@ void PageFormat::read(XmlReader& e)
                   _size.rheight() = e.readDouble() * 0.5 / PPI;
             else if (tag == "page-width")
                   _size.rwidth() = e.readDouble() * .5 / PPI;
-            else if (tag == "page-offset")            // obsolete, moved to Score
-                  e.readElementText();  // score->setPageNumberOffset(val.toInt());
+            else if (tag == "page-offset") {           // obsolete, moved to Score
+                  QString val(e.readElementText());
+                  if(score)
+                        score->setPageNumberOffset(val.toInt());
+                  }
             else
                   e.unknown();
             }
@@ -628,7 +632,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += QString("%1").arg(pageno);
                               break;
                         case 'n':
-                              d += QString("%1").arg(_score->pages().size());
+                              d += QString("%1").arg(_score->pages().size() + _score->pageNumberOffset());
                               break;
                         case 'f':
                               d += _score->name();

@@ -20,12 +20,12 @@
 #include "elementlayout.h"
 #include "articulation.h"
 #include "page.h"
+#include "chordlist.h"
 
 namespace Ms {
 
 class Xml;
 struct ChordDescription;
-class ChordList;
 
 //---------------------------------------------------------
 //   TextStyleData
@@ -88,7 +88,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
 class StyleData : public QSharedData {
    protected:
       QVector<StyleVal> _values;
-      mutable ChordList* _chordList;
+      ChordList _chordList;
       QList<TextStyle> _textStyles;
       PageFormat _pageFormat;
       qreal _spatium;
@@ -114,8 +114,8 @@ class StyleData : public QSharedData {
       bool isDefault(StyleIdx) const;
 
       const ChordDescription* chordDescription(int id) const;
-      ChordList* chordList() const;
-      void setChordList(ChordList*);      // Style gets ownership of ChordList
+      ChordList* chordList();
+      void setChordList(ChordList*, bool custom);     // Style gets ownership of ChordList
       const PageFormat* pageFormat() const           { return &_pageFormat; }
       void setPageFormat(const PageFormat& pf);
       friend class MStyle;

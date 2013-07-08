@@ -24,10 +24,8 @@
 #include "musescore.h"
 #include "preferences.h"
 #include "prefsdialog.h"
-// #include "msynth/synti.h"
 #include "seq.h"
 #include "libmscore/note.h"
-//#include "playpanel.h"
 #include "icons.h"
 #include "shortcutcapturedialog.h"
 #include "scoreview.h"
@@ -50,7 +48,6 @@ bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = fal
 
 extern bool useFactorySettings;
 extern bool externalStyle;
-extern QString iconGroup;
 
 static const char* appStyleFile;
 static int exportAudioSampleRates[2] = { 44100, 48000 };
@@ -112,12 +109,12 @@ void Preferences::init()
       // set fallback defaults:
 
       bgUseColor         = true;
-      fgUseColor         = false;
+      fgUseColor         = true;
       bgWallpaper        = QString();
       fgWallpaper        = ":/data/paper5.png";
-      fgColor.setRgb(255, 255, 255);
+      fgColor.setNamedColor("#f9f9f9");
       iconHeight         = 24;
-      iconWidth          = 30;
+      iconWidth          = 28;
 
       enableMidiInput    = true;
       playNotes          = true;
@@ -125,7 +122,6 @@ void Preferences::init()
       rPort              = "";
 
       showNavigator      = true;
-      showMidiImportPanel = false;
       showPlayPanel      = false;
       showWebPanel       = true;
       showStatusBar      = true;
@@ -263,7 +259,6 @@ void Preferences::write()
       s.setValue("lPort",              lPort);
       s.setValue("rPort",              rPort);
       s.setValue("showNavigator",      showNavigator);
-      s.setValue("showMidiImportPanel",      showMidiImportPanel);
       s.setValue("showPlayPanel",      showPlayPanel);
       s.setValue("showWebPanel",       showWebPanel);
       s.setValue("showStatusBar",      showStatusBar);
@@ -284,6 +279,7 @@ void Preferences::write()
       s.setValue("portMidiInput",   portMidiInput);
 
       s.setValue("layoutBreakColor",   MScore::layoutBreakColor);
+      s.setValue("frameMarginColor",   MScore::frameMarginColor);
       s.setValue("antialiasedDrawing", antialiasedDrawing);
       switch(sessionStart) {
             case EMPTY_SESSION:  s.setValue("sessionStart", "empty"); break;
@@ -415,7 +411,6 @@ void Preferences::read()
       rPort                   = s.value("rPort", rPort).toString();
 
       showNavigator   = s.value("showNavigator", showNavigator).toBool();
-      showMidiImportPanel   = s.value("showMidiImportPanel", showMidiImportPanel).toBool();
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
       showPlayPanel   = s.value("showPlayPanel", showPlayPanel).toBool();
       showWebPanel    = s.value("showWebPanel", showWebPanel).toBool();
@@ -433,6 +428,7 @@ void Preferences::read()
       portaudioDevice    = s.value("portaudioDevice", portaudioDevice).toInt();
       portMidiInput      = s.value("portMidiInput", portMidiInput).toString();
       MScore::layoutBreakColor   = s.value("layoutBreakColor", MScore::layoutBreakColor).value<QColor>();
+      MScore::frameMarginColor   = s.value("frameMarginColor", MScore::frameMarginColor).value<QColor>();
       antialiasedDrawing = s.value("antialiasedDrawing", antialiasedDrawing).toBool();
 
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
@@ -479,14 +475,12 @@ void Preferences::read()
       oscPort                = s.value("oscPort", oscPort).toInt();
       styleName              = s.value("style", styleName).toString();
       if (styleName == "dark") {
-            iconGroup = "icons-dark/";
             appStyleFile = ":/data/appstyle-dark.css";
             globalStyle  = STYLE_DARK;
             }
       else {
-            iconGroup = "icons-dark/";
-            appStyleFile = ":/data/appstyle.css";
-            globalStyle  = STYLE_NATIVE;
+            appStyleFile = ":/data/appstyle-light.css";
+            globalStyle  = STYLE_LIGHT;
             }
 
       singlePalette    = s.value("singlePalette",    singlePalette).toBool();
@@ -832,7 +826,6 @@ void PreferenceDialog::updateValues()
             }
 
       navigatorShow->setChecked(prefs.showNavigator);
-      midiImportShow->setChecked(prefs.showMidiImportPanel);
       playPanelShow->setChecked(prefs.showPlayPanel);
       webPanelShow->setChecked(prefs.showWebPanel);
 
@@ -1264,7 +1257,6 @@ void PreferenceDialog::apply()
             prefs.rPort = jackRPort->currentText();
             }
       prefs.showNavigator      = navigatorShow->isChecked();
-      prefs.showMidiImportPanel      = midiImportShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
       prefs.showWebPanel       = webPanelShow->isChecked();
       prefs.antialiasedDrawing = drawAntialiased->isChecked();
@@ -1407,16 +1399,14 @@ void PreferenceDialog::apply()
       prefs.useOsc  = oscServer->isChecked();
       prefs.oscPort = oscPort->value();
       if (styleName->currentIndex() == STYLE_DARK) {
-            iconGroup = "icons-dark/";
             appStyleFile = ":/data/appstyle-dark.css";
             prefs.styleName = "dark";
             prefs.globalStyle = STYLE_DARK;
             }
       else {
-            iconGroup = "icons/";
-            appStyleFile = ":/data/appstyle.css";
-            prefs.styleName = "native";
-            prefs.globalStyle = STYLE_NATIVE;
+            appStyleFile = ":/data/appstyle-light.css";
+            prefs.styleName = "light";
+            prefs.globalStyle = STYLE_LIGHT;
             }
 
       if (languageChanged) {

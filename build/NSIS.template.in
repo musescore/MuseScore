@@ -607,11 +607,12 @@ FunctionEnd
   !insertmacro MUI_LANGUAGE "Welsh"
   
   LangString createDesktopShortcut ${LANG_ENGLISH} "Create desktop shortcut"
-  LangString createDesktopShortcut ${LANG_FRENCH} "Cr�er un raccourci sur le bureau"
+  LangString createDesktopShortcut ${LANG_FRENCH} "Créer un raccourci sur le bureau"
   LangString createDesktopShortcut ${LANG_SPANISH} "Crear un acceso directo en el escritorio"
   LangString createDesktopShortcut ${LANG_DUTCH} "Snelkoppeling op bureablad aanmaken"
-  LangString createDesktopShortcut ${LANG_GERMAN} "Desktop-Verkn�pfung erstellen"
-
+  LangString createDesktopShortcut ${LANG_GERMAN} "Desktop-Verknüpfung erstellen"
+  LangString createDesktopShortcut ${LANG_TRADCHINESE} "建立桌面捷徑"
+  LangString createDesktopShortcut ${LANG_SIMPCHINESE} "创建桌面图标"
 ;--------------------------------
 ;Reserve Files
 

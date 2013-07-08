@@ -96,6 +96,7 @@ class Clef : public Element {
       virtual Clef* clone() const      { return new Clef(*this); }
       virtual ElementType type() const { return CLEF; }
       virtual void setSelected(bool f);
+      virtual qreal mag() const;
 
       Segment* segment() const         { return (Segment*)parent(); }
       Measure* measure() const         { return (Measure*)parent()->parent(); }

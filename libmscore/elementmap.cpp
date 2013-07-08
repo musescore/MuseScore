@@ -12,9 +12,7 @@
 
 #include "elementmap.h"
 #include "tupletmap.h"
-#include "slurmap.h"
 #include "tiemap.h"
-#include "spannermap.h"
 #include "slur.h"
 #include "chordrest.h"
 
@@ -31,35 +29,6 @@ Tuplet* TupletMap::findNew(Tuplet* o)
                   return t2.n;
             }
       return 0;
-      }
-
-//---------------------------------------------------------
-//   findNew
-//---------------------------------------------------------
-
-Slur* SlurMap::findNew(Slur* o)
-      {
-      foreach(const Slur2& s2, map) {
-            if (s2.o == o)
-                  return s2.n;
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
-//   check
-//---------------------------------------------------------
-
-void SlurMap::check()
-      {
-      foreach(const Slur2& s2, map) {
-            Slur* slur = s2.n;
-            if (slur->endElement() == 0) {
-                  qDebug("slur end element missing %p new %p", s2.o, s2.n);
-                  static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
-                  delete slur;
-                  }
-            }
       }
 
 }
