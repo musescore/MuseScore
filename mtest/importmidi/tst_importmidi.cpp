@@ -426,67 +426,53 @@ void TestImportMidi::separateTupletVoices()
 
                   // triplet
       Fraction tripletLen = tupletLen;
-      Fraction tripletNoteLen = tripletLen / 3;
-      MidiChord chord1 = chordFactory(tripletNoteLen, {76, 71, 67});
-      MidiChord chord2_3 = chordFactory(tripletNoteLen, {74});
-      MidiChord chord3_3 = chordFactory(tripletNoteLen, {77});
+      const int tripletNumber = 3;
+      Fraction tripletNoteLen = tripletLen / tripletNumber;
+
+      MidiChord firstChord = chordFactory(tripletNoteLen, {76, 71, 67});
+      chords.insert({0, firstChord});
+
+      std::vector<int> pitches = {74, 77};
+      for (int i = 1; i != tripletNumber; ++i) {
+            chords.insert({(tripletNoteLen * i).ticks(),
+                           chordFactory(tripletNoteLen, {pitches[i]})});
+            }
                   // quintuplet
       Fraction quintupletLen = tupletLen;
-      Fraction quintupletNoteLen = quintupletLen / 5;
-      MidiChord chord2_5 = chordFactory(quintupletNoteLen, {60});
-      MidiChord chord3_5 = chordFactory(quintupletNoteLen, {62});
-      MidiChord chord4_5 = chordFactory(quintupletNoteLen, {58});
-      MidiChord chord5_5 = chordFactory(quintupletNoteLen, {60});
+      const int quintupletNumber = 5;
+      Fraction quintupletNoteLen = quintupletLen / quintupletNumber;
+      pitches = {60, 62, 58, 60};
+      for (int i = 1; i != quintupletNumber; ++i) {
+            chords.insert({(quintupletNoteLen * i).ticks(),
+                           chordFactory(quintupletNoteLen, {pitches[i]})});
+            }
                   // septuplet
       Fraction septupletLen = tupletLen * 2;
-      Fraction septupletNoteLen = septupletLen / 7;
-      MidiChord chord2_7 = chordFactory(septupletNoteLen, {50});
-      MidiChord chord3_7 = chordFactory(septupletNoteLen, {52});
-      MidiChord chord4_7 = chordFactory(septupletNoteLen, {48});
-      MidiChord chord5_7 = chordFactory(septupletNoteLen, {51});
-      MidiChord chord6_7 = chordFactory(septupletNoteLen, {47});
-      MidiChord chord7_7 = chordFactory(septupletNoteLen, {47});
-
-      chords.insert({0, chord1});
-      chords.insert({(tripletNoteLen * 1).ticks(), chord2_3});
-      chords.insert({(tripletNoteLen * 2).ticks(), chord3_3});
-      chords.insert({(quintupletNoteLen * 1).ticks(), chord2_5});
-      chords.insert({(quintupletNoteLen * 2).ticks(), chord3_5});
-      chords.insert({(quintupletNoteLen * 3).ticks(), chord4_5});
-      chords.insert({(quintupletNoteLen * 4).ticks(), chord5_5});
-      chords.insert({(septupletNoteLen * 1).ticks(), chord2_7});
-      chords.insert({(septupletNoteLen * 2).ticks(), chord3_7});
-      chords.insert({(septupletNoteLen * 3).ticks(), chord4_7});
-      chords.insert({(septupletNoteLen * 4).ticks(), chord5_7});
-      chords.insert({(septupletNoteLen * 5).ticks(), chord6_7});
-      chords.insert({(septupletNoteLen * 6).ticks(), chord7_7});
+      const int septupletNumber = 7;
+      Fraction septupletNoteLen = septupletLen / septupletNumber;
+      pitches = {50, 52, 48, 51, 47, 47};
+      for (int i = 1; i != septupletNumber; ++i) {
+            chords.insert({(septupletNoteLen * i).ticks(),
+                           chordFactory(septupletNoteLen, {pitches[i]})});
+            }
 
       MidiTuplet::TupletInfo tripletInfo;
       tripletInfo.onTime = 0;
       tripletInfo.len = tripletLen;
-      tripletInfo.chords.insert({0, chords.find((tripletNoteLen * 0).ticks())});
-      tripletInfo.chords.insert({1, chords.find((tripletNoteLen * 1).ticks())});
-      tripletInfo.chords.insert({2, chords.find((tripletNoteLen * 2).ticks())});
+      for (int i = 0; i != 3; ++i)
+            tripletInfo.chords.insert({i, chords.find((tripletNoteLen * i).ticks())});
 
       MidiTuplet::TupletInfo quintupletInfo;
       quintupletInfo.onTime = 0;
       quintupletInfo.len = quintupletLen;
-      quintupletInfo.chords.insert({0, chords.find((quintupletNoteLen * 0).ticks())});
-      quintupletInfo.chords.insert({1, chords.find((quintupletNoteLen * 1).ticks())});
-      quintupletInfo.chords.insert({2, chords.find((quintupletNoteLen * 2).ticks())});
-      quintupletInfo.chords.insert({3, chords.find((quintupletNoteLen * 3).ticks())});
-      quintupletInfo.chords.insert({4, chords.find((quintupletNoteLen * 4).ticks())});
+      for (int i = 0; i != 5; ++i)
+            quintupletInfo.chords.insert({i, chords.find((quintupletNoteLen * i).ticks())});
 
       MidiTuplet::TupletInfo septupletInfo;
       septupletInfo.onTime = 0;
       septupletInfo.len = septupletLen;
-      septupletInfo.chords.insert({0, chords.find((septupletNoteLen * 0).ticks())});
-      septupletInfo.chords.insert({1, chords.find((septupletNoteLen * 1).ticks())});
-      septupletInfo.chords.insert({2, chords.find((septupletNoteLen * 2).ticks())});
-      septupletInfo.chords.insert({3, chords.find((septupletNoteLen * 3).ticks())});
-      septupletInfo.chords.insert({4, chords.find((septupletNoteLen * 4).ticks())});
-      septupletInfo.chords.insert({5, chords.find((septupletNoteLen * 5).ticks())});
-      septupletInfo.chords.insert({6, chords.find((septupletNoteLen * 6).ticks())});
+      for (int i = 0; i != 7; ++i)
+            septupletInfo.chords.insert({i, chords.find((septupletNoteLen * i).ticks())});
 
       std::vector<MidiTuplet::TupletInfo> tuplets;
       tuplets.push_back(tripletInfo);
