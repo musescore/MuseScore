@@ -14,7 +14,7 @@ namespace MidiTuplet {
 struct TupletData
       {
       int voice;
-      int onTime;
+      Fraction onTime;
       Fraction len;
       int tupletNumber;
       std::vector<DurationElement *> elements;
@@ -22,16 +22,16 @@ struct TupletData
 
 struct TupletInfo
       {
-      int onTime;
+      Fraction onTime;
       Fraction len;
       int tupletNumber;
       Fraction tupletQuantValue;
       Fraction regularQuantValue;
                   // <note index in tuplet, chord iterator>
-      std::map<int, std::multimap<int, MidiChord>::iterator> chords;
-      int tupletSumError = 0;
-      int regularSumError = 0;
-      int sumLengthOfRests = 0;
+      std::map<int, std::multimap<Fraction, MidiChord>::iterator> chords;
+      Fraction tupletSumError;
+      Fraction regularSumError;
+      Fraction sumLengthOfRests;
       };
 
 // conversion ratios from tuplet durations to regular durations
@@ -41,18 +41,19 @@ const std::map<int, Fraction>& tupletRatios();
 
 void filterTuplets(std::vector<TupletInfo> &tuplets);
 
-Fraction findRasterForTupletNote(int noteOnTime, int noteLen, const TupletInfo &tupletInfo);
+Fraction findRasterForTupletNote(const Fraction &noteOnTime, const Fraction &noteLen,
+                                 const TupletInfo &tupletInfo);
 
-std::vector<TupletInfo> findTuplets(int startBarTick,
-                                    int endBarTick,
+std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
+                                    const Fraction &endBarTick,
                                     const Fraction &barFraction,
-                                    std::multimap<int, MidiChord> &chords);
+                                    std::multimap<Fraction, MidiChord> &chords);
 
 std::vector<TupletData> findTupletsForDuration(int voice,
-                                               int barTick,
-                                               int durationOnTime,
-                                               int durationLen,
-                                               const std::multimap<int, TupletData> &tuplets);
+                                               const Fraction &barTick,
+                                               const Fraction &durationOnTime,
+                                               const Fraction &durationLen,
+                                               const std::multimap<Fraction, TupletData> &tuplets);
 
 } // namespace MidiTuplet
 } // namespace Ms

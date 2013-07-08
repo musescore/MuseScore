@@ -52,6 +52,7 @@ class DurationElement : public Element {
       virtual Beam* beam() const          { return 0;         }
       virtual int tick() const = 0;
       int actualTicks() const;
+      Fraction actualFraction() const;
 
       virtual Fraction duration() const   { return _duration; }
       Fraction globalDuration() const;

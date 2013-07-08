@@ -34,8 +34,8 @@ std::vector<Fraction> divisionsOfBarForTuplets(const Fraction &barFraction);
             // duration and all tuplets should belong to the same voice
 // nested tuplets are not allowed
 QList<std::pair<Fraction, TDuration> >
-toDurationList(int startTickInBar,
-               int endTickInBar,
+toDurationList(const Fraction &startTickInBar,
+               const Fraction &endTickInBar,
                const Fraction &barFraction,
                const std::vector<MidiTuplet::TupletData> &tupletsInBar,
                DurationType durationType,
