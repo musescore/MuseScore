@@ -54,7 +54,7 @@ enum {
 
 enum MuseScoreStyleType {
       STYLE_DARK,
-      STYLE_NATIVE
+      STYLE_LIGHT
       };
 
 // MusicXML export break values
@@ -92,7 +92,6 @@ struct Preferences {
       QString lPort;          // audio port left
       QString rPort;          // audio port right
       bool showNavigator;
-      bool showMidiImportPanel;
       bool showPlayPanel;
       bool showWebPanel;
       bool showStatusBar;

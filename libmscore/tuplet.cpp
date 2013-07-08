@@ -119,6 +119,7 @@ void Tuplet::layout()
             if (_number == 0) {
                   _number = new Text(score());
                   _number->setTextStyleType(TEXT_STYLE_TUPLET);
+                  _number->setTrack(track());
                   _number->setParent(this);
                   _number->setVisible(visible());
                   }
@@ -140,7 +141,7 @@ void Tuplet::layout()
       //
       if (_direction == MScore::AUTO) {
             int up = 1;
-            foreach(const DurationElement* e, _elements) {
+            foreach (const DurationElement* e, _elements) {
                   if (e->type() == CHORD) {
                         const Chord* c = static_cast<const Chord*>(e);
                         if (c->stemDirection() != MScore::AUTO)
@@ -156,17 +157,6 @@ void Tuplet::layout()
             }
       else
             _isUp = _direction == MScore::UP;
-
-      //
-      // set all elements to main direction
-      //
-      bool tupletContainsRest = false;
-      foreach(DurationElement* e, _elements) {
-            if (e->type() == REST) {
-                  tupletContainsRest = true;
-                  break;
-                  }
-            }
 
       const DurationElement* cr1 = _elements.front();
       while (cr1->type() == TUPLET) {
@@ -187,22 +177,20 @@ void Tuplet::layout()
       //   shall we draw a bracket?
       //
       if (_bracketType == AUTO_BRACKET) {
-            _hasBracket = tupletContainsRest;
-            if (!_hasBracket) {
-                  foreach(DurationElement* e, _elements) {
-                        if (e->type() == TUPLET) {
+            _hasBracket = false;
+            foreach (DurationElement* e, _elements) {
+                  if (e->type() == TUPLET || e->type() == REST) {
+                        _hasBracket = true;
+                        break;
+                        }
+                  else if (e->isChordRest()) {
+                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        //
+                        // maybe we should check for more than one beam
+                        //
+                        if (cr->beam() == 0) {
                               _hasBracket = true;
                               break;
-                              }
-                        else if (e->isChordRest()) {
-                              ChordRest* cr = static_cast<ChordRest*>(e);
-                              //
-                              // maybe we should check for more than one beam
-                              //
-                              if (cr->beam() == 0) {
-                                    _hasBracket = true;
-                                    break;
-                                    }
                               }
                         }
                   }
@@ -214,29 +202,38 @@ void Tuplet::layout()
       //
       //    calculate bracket start and end point p1 p2
       //
-      qreal headDistance = _spatium * .75;
-      if (_isUp) {
-            p1       = cr1->abbox().topLeft();
-            p1.ry() -= headDistance;
-            p2       = cr2->abbox().topRight();
-            p2.ry() -= headDistance;
 
+      qreal headDistance = _spatium * .75;
+      if (_isUp)
+            headDistance = -headDistance;
+
+      p1      = cr1->pagePos();
+      p2      = cr2->pagePos();
+      p2.rx() += score()->noteHeadWidth();
+      p1.ry() += headDistance;
+      p2.ry() += headDistance;
+
+      qreal xx1 = p1.x();
+      qreal xx2 = p2.x();
+
+      if (_isUp) {
             if (cr1->type() == CHORD) {
                   const Chord* chord1 = static_cast<const Chord*>(cr1);
                   Stem* stem = chord1->stem();
 
-                  if (stem && chord1->up()) {
-                        p1.setY(stem->abbox().y());
-                        if (chord1->beam())
-                              p1.setX(stem->abbox().x());
-                        }
-                  else if ((cr2->type() == CHORD) && stem && !chord1->up()) {
-                        const Chord* chord2 = static_cast<const Chord*>(cr2);
-                        Stem* stem2 = chord2->stem();
-                        if (stem2) {
-                              int l1 = chord1->upNote()->line();
-                              int l2 = chord2->upNote()->line();
-                              p1.ry() = stem2->abbox().top() + _spatium * .5 * (l1 - l2);
+                  if (stem) {
+                        xx1 = stem->abbox().x();
+                        if (chord1->up())
+                              p1.setY(stem->abbox().y());
+                        else if ((cr2->type() == CHORD) && !chord1->up()) {
+                              const Chord* chord2 = static_cast<const Chord*>(cr2);
+                              Stem* stem2 = chord2->stem();
+                              if (stem2) {
+                                    xx2 = stem2->abbox().x();
+                                    int l1 = chord1->upNote()->line();
+                                    int l2 = chord2->upNote()->line();
+                                    p1.ry() = stem2->abbox().top() + _spatium * .5 * (l1 - l2);
+                                    }
                               }
                         }
                   }
@@ -244,11 +241,8 @@ void Tuplet::layout()
             if (cr2->type() == CHORD) {
                   const Chord* chord2 = static_cast<const Chord*>(cr2);
                   Stem* stem = chord2->stem();
-                  if (stem && chord2->up()) {
+                  if (stem && chord2->up())
                         p2.setY(stem->abbox().top());
-                        if (chord2->beam())
-                              p2.setX(stem->abbox().x());
-                        }
                   else if ((cr1->type() == CHORD) && stem && !chord2->up()) {
                         const Chord* chord1 = static_cast<const Chord*>(cr1);
                         int l1 = chord1->upNote()->line();
@@ -299,37 +293,34 @@ void Tuplet::layout()
                   }
             }
       else {
-            p1 = cr1->abbox().bottomLeft();
-            p1.ry() += headDistance;
-
             if (cr1->type() == CHORD) {
                   const Chord* chord1 = static_cast<const Chord*>(cr1);
                   Stem* stem = chord1->stem();
-                  if (stem && !chord1->up()) {
-                        p1.setY(stem->abbox().bottom());
-                        if (chord1->beam())
-                              p1.setX(stem->abbox().x());
-                        }
-                  else if ((cr2->type() == CHORD) && stem && chord1->up()) {
-                        const Chord* chord2 = static_cast<const Chord*>(cr2);
-                        Stem* stem2 = chord2->stem();
-                        if (stem2) {
-                              int l1 = chord1->upNote()->line();
-                              int l2 = chord2->upNote()->line();
-                              p1.ry() = stem2->abbox().bottom() + _spatium * .5 * (l1 - l2);
+                  if (stem) {
+                        xx1 = stem->abbox().x();
+                        if (!chord1->up()) {
+                              p1.setY(stem->abbox().bottom());
+                              }
+                        else if ((cr2->type() == CHORD) && stem && chord1->up()) {
+                              const Chord* chord2 = static_cast<const Chord*>(cr2);
+                              Stem* stem2 = chord2->stem();
+                              if (stem2) {
+                                    xx2     = stem2->abbox().x();
+                                    int l1  = chord1->upNote()->line();
+                                    int l2  = chord2->upNote()->line();
+                                    p1.ry() = stem2->abbox().bottom() + _spatium * .5 * (l1 - l2);
+                                    }
                               }
                         }
                   }
 
-            p2 = cr2->abbox().bottomRight();
-            p2.ry() += headDistance;
 
             if (cr2->type() == CHORD) {
                   const Chord* chord2 = static_cast<const Chord*>(cr2);
                   Stem* stem = chord2->stem();
                   if (stem && !chord2->up()) {
-                        if (chord2->beam())
-                              p2.setX(stem->abbox().x());
+                        // if (chord2->beam())
+                        //      p2.setX(stem->abbox().x());
                         p2.setY(stem->abbox().bottom());
                         }
                   else if ((cr1->type() == CHORD) && stem && chord2->up()) {
@@ -388,6 +379,8 @@ void Tuplet::layout()
 
       p1 += _p1;
       p2 += _p2;
+      xx1 -= mp.x();
+      xx2 -= mp.x();
 
       // center number
       qreal x3 = 0.0;
@@ -395,12 +388,19 @@ void Tuplet::layout()
       qreal numberWidth = 0.0;
       if (_number) {
             _number->layout();
-            x3 = p1.x() + (p2.x() - p1.x()) * .5;
+            //
+            // for beamed tuplets, center number on beam
+            //
+            if (cr1->beam() && cr2->beam()) {
+                  qreal deltax = cr2->pagePos().x() - cr1->pagePos().x();
+                  x3 = xx1 + deltax * .5;
+                  }
+            else {
+                  qreal deltax = p2.x() - p1.x();
+                  x3 = p1.x() + deltax * .5;
+                  }
 
-            y3 = p1.y() + (p2.y() - p1.y()) * .5
-//               - _number->bbox().height() * .5
-               - (l1 + l2) * (_isUp ? 1.0 : -1.0);
-
+            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - (l1 + l2) * (_isUp ? 1.0 : -1.0);
             numberWidth = _number->bbox().width();
             _number->setPos(QPointF(x3, y3) - ipos());
             }
@@ -541,7 +541,7 @@ void Tuplet::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "direction")
-                  _direction = MScore::Direction(e.readInt());
+                  setProperty(P_DIRECTION, Ms::getProperty(P_DIRECTION, e));
             else if (tag == "numberType")
                   _numberType = e.readInt();
             else if (tag == "bracketType")
@@ -562,9 +562,10 @@ void Tuplet::read(XmlReader& e)
                   _number->read(e);
                   _number->setTextStyleType(TEXT_STYLE_TUPLET);
                   _number->setVisible(visible());     //?? override saved property
+                  _number->setTrack(track());
                   }
             else if (tag == "subtype")    // obsolete
-                  ;
+                  e.skipCurrentElement();
             else if (tag == "hasNumber")             // obsolete
                   _numberType = e.readInt() ? SHOW_NUMBER : NO_TEXT;
             else if (tag == "hasLine") {          // obsolete
@@ -732,6 +733,8 @@ void Tuplet::dump() const
 
 void Tuplet::setTrack(int val)
       {
+      if (_number)
+            _number->setTrack(val);
       Element::setTrack(val);
       }
 

@@ -39,6 +39,7 @@ SelectInstrument::SelectInstrument(const Instrument& instrument, QWidget* parent
       buildTemplateList();
       buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
       connect(showMore, SIGNAL(clicked()), SLOT(buildTemplateList()));
+      connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
       }
 
 //---------------------------------------------------------
@@ -48,6 +49,18 @@ SelectInstrument::SelectInstrument(const Instrument& instrument, QWidget* parent
 void SelectInstrument::buildTemplateList()
       {
       populateInstrumentList(instrumentList, showMore->isChecked());
+      }
+
+//---------------------------------------------------------
+//   expandOrCollapse
+//---------------------------------------------------------
+
+void SelectInstrument::expandOrCollapse(const QModelIndex &model)
+      {
+      if(instrumentList->isExpanded(model))
+            instrumentList->collapse(model);
+      else
+            instrumentList->expand(model);
       }
 
 //---------------------------------------------------------

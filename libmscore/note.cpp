@@ -142,8 +142,6 @@ Note::Note(Score* s)
       _pitch             = 0;
       _tuning            = 0.0;
       _accidental        = 0;
-      _spannerFor        = 0;
-      _spannerBack       = 0;
       _mirror            = false;
       _userMirror        = MScore::DH_AUTO;
       _small             = false;
@@ -206,8 +204,6 @@ Note::Note(const Note& n)
       _small             = n._small;
       _dotPosition       = n._dotPosition;
       _accidental        = 0;
-      _spannerFor        = 0;
-      _spannerBack       = 0;
 
       if (n._accidental)
             add(new Accidental(*(n._accidental)));
@@ -352,7 +348,7 @@ qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
             QFontMetricsF fm(f);
             QString s = tab->fretString(_fret, _ghost);
             val  = fm.width(s) * mags;
-      }
+            }
       else
             val = headWidth();
       return val;
@@ -412,13 +408,6 @@ void Note::addSpanner(Spanner* l)
       if (e)
             static_cast<Note*>(e)->addSpannerBack(l);
       addSpannerFor(l);
-      int n = l->spannerSegments().size();
-      for (int i = 0; i < n; ++i) {
-            SpannerSegment* ss = l->spannerSegments().at(i);
-            Q_ASSERT(ss->spanner() == l);
-            if (ss->system())
-                  ss->system()->add(ss);
-            }
       }
 
 //---------------------------------------------------------
@@ -434,12 +423,6 @@ void Note::removeSpanner(Spanner* l)
       if (!removeSpannerFor(l)) {
             qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->name(), l);
             // abort();
-            }
-      int n = l->spannerSegments().size();
-      for (int i = 0; i < n; ++i) {
-            SpannerSegment* ss = l->spannerSegments().at(i);
-            if (ss->system())
-                  ss->system()->remove(ss);
             }
       }
 
@@ -546,22 +529,6 @@ void Note::remove(Element* e)
                   qDebug("Note::remove() not impl. %s\n", e->name());
                   break;
             }
-      }
-
-//---------------------------------------------------------
-//   stemPos
-//    return in page coordinates the stem position for
-//    the normal note position (without user offset)
-//---------------------------------------------------------
-
-QPointF Note::stemPos(bool upFlag) const
-      {
-      QPointF pt(parent()->pagePos() + ipos());
-      if (_mirror)
-            upFlag = !upFlag;
-      if (upFlag)
-            pt.rx() += headWidth();
-      return pt;
       }
 
 //---------------------------------------------------------
@@ -696,11 +663,11 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_HEAD_TYPE);
       writeProperty(xml, P_VELO_TYPE);
 
-      for(Spanner* e = _spannerFor; e; e = e->next()) {
+      foreach (Spanner* e, _spannerFor) {
             e->setId(++xml.spannerId);
             e->write(xml);
             }
-      for(Spanner* e = _spannerBack; e; e = e->next())
+      foreach (Spanner* e, _spannerBack)
             xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
 
       _pitch = rpitch;
@@ -788,7 +755,7 @@ void Note::read(XmlReader& e)
                   if (ok) {
                         // on older scores, a note could have both a <userAccidental> tag and an <Accidental> tag
                         // if a userAccidental has some other property set (like for instance offset)
-                        // only costruct a new accidental, if the other tag has not been read yet
+                        // only construct a new accidental, if the other tag has not been read yet
                         // (<userAccidental> tag is only used in older scores: no need to check the score mscVersion)
                         if (!hasAccidental) {
                               _accidental = new Accidental(score());
@@ -800,44 +767,35 @@ void Note::read(XmlReader& e)
                         Accidental::AccidentalType at = Accidental::ACC_NONE;
                         switch(k) {
                               case 0: at = Accidental::ACC_NONE; break;
-                              case 1:
-                              case 11: at = Accidental::ACC_SHARP; break;
-                              case 2:
-                              case 12: at = Accidental::ACC_FLAT; break;
-                              case 3:
-                              case 13: at = Accidental::ACC_SHARP2; break;
-                              case 4:
-                              case 14: at = Accidental::ACC_FLAT2; break;
-                              case 5:
-                              case 15: at = Accidental::ACC_NATURAL; break;
+                              case 1: at = Accidental::ACC_SHARP; break;
+                              case 2: at = Accidental::ACC_FLAT; break;
+                              case 3: at = Accidental::ACC_SHARP2; break;
+                              case 4: at = Accidental::ACC_FLAT2; break;
+                              case 5: at = Accidental::ACC_NATURAL; break;
 
-                              case 6:  at = Accidental::ACC_SHARP; bracket = true; break;
-                              case 7:  at = Accidental::ACC_FLAT; bracket = true; break;
-                              case 8:  at = Accidental::ACC_SHARP2; bracket = true; break;
-                              case 9:  at = Accidental::ACC_FLAT2; bracket = true; break;
-                              case 10: at = Accidental::ACC_NATURAL; bracket = true; break;
+                              case 6: at = Accidental::ACC_FLAT_SLASH; break;
+                              case 7: at = Accidental::ACC_FLAT_SLASH2; break;
+                              case 8: at = Accidental::ACC_MIRRORED_FLAT2; break;
+                              case 9: at = Accidental::ACC_MIRRORED_FLAT; break;
+                              case 10: at = Accidental::ACC_MIRRIRED_FLAT_SLASH; break;
+                              case 11: at = Accidental::ACC_FLAT_FLAT_SLASH; break;
 
-                              case 16: at = Accidental::ACC_FLAT_SLASH; break;
-                              case 17: at = Accidental::ACC_FLAT_SLASH2; break;
-                              case 18: at = Accidental::ACC_MIRRORED_FLAT2; break;
-                              case 19: at = Accidental::ACC_MIRRORED_FLAT; break;
-                              case 20: at = Accidental::ACC_MIRRIRED_FLAT_SLASH; break;
-                              case 21: at = Accidental::ACC_FLAT_FLAT_SLASH; break;
+                              case 12: at = Accidental::ACC_SHARP_SLASH; break;
+                              case 13: at = Accidental::ACC_SHARP_SLASH2; break;
+                              case 14: at = Accidental::ACC_SHARP_SLASH3; break;
+                              case 15: at = Accidental::ACC_SHARP_SLASH4; break;
 
-                              case 22: at = Accidental::ACC_SHARP_SLASH; break;
-                              case 23: at = Accidental::ACC_SHARP_SLASH2; break;
-                              case 24: at = Accidental::ACC_SHARP_SLASH3; break;
-                              case 25: at = Accidental::ACC_SHARP_SLASH4; break;
-
-                              case 26: at = Accidental::ACC_SHARP_ARROW_UP; break;
-                              case 27: at = Accidental::ACC_SHARP_ARROW_DOWN; break;
-                              case 28: at = Accidental::ACC_SHARP_ARROW_BOTH; break;
-                              case 29: at = Accidental::ACC_FLAT_ARROW_UP; break;
-                              case 30: at = Accidental::ACC_FLAT_ARROW_DOWN; break;
-                              case 31: at = Accidental::ACC_FLAT_ARROW_BOTH; break;
-                              case 32: at = Accidental::ACC_NATURAL_ARROW_UP; break;
-                              case 33: at = Accidental::ACC_NATURAL_ARROW_DOWN; break;
-                              case 34: at = Accidental::ACC_NATURAL_ARROW_BOTH; break;
+                              case 16: at = Accidental::ACC_SHARP_ARROW_UP; break;
+                              case 17: at = Accidental::ACC_SHARP_ARROW_DOWN; break;
+                              case 18: at = Accidental::ACC_SHARP_ARROW_BOTH; break;
+                              case 19: at = Accidental::ACC_FLAT_ARROW_UP; break;
+                              case 20: at = Accidental::ACC_FLAT_ARROW_DOWN; break;
+                              case 21: at = Accidental::ACC_FLAT_ARROW_BOTH; break;
+                              case 22: at = Accidental::ACC_NATURAL_ARROW_UP; break;
+                              case 23: at = Accidental::ACC_NATURAL_ARROW_DOWN; break;
+                              case 24: at = Accidental::ACC_NATURAL_ARROW_BOTH; break;
+                              case 25: at = Accidental::ACC_SORI; break;
+                              case 26: at = Accidental::ACC_KORON; break;
                               }
                         _accidental->setAccidentalType(at);
                         _accidental->setHasBracket(bracket);
@@ -902,13 +860,15 @@ void Note::read(XmlReader& e)
                   }
             else if (tag == "endSpanner") {
                   int id = e.intAttribute("id");
-                  Spanner* e = score()->findSpanner(id);
-                  if (e) {
-                        e->setEndElement(this);
-                        addSpannerBack(e);
+                  Spanner* sp = score()->findSpanner(id);
+                  if (sp) {
+                        sp->setEndElement(this);
+                        addSpannerBack(sp);
                         }
                   else
                         qDebug("Note::read(): cannot find spanner %d", id);
+                  score()->removeSpanner(sp);
+                  e.readNext();
                   }
             else if (tag == "TextLine") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
@@ -916,9 +876,10 @@ void Note::read(XmlReader& e)
                   sp->read(e);
                   sp->setAnchor(Spanner::ANCHOR_NOTE);
                   sp->setStartElement(this);
+                  sp->setTick(e.tick());
                   addSpannerFor(sp);
                   sp->setParent(this);
-                  e.addSpanner(sp);
+                  score()->addSpanner(sp);
                   }
             else if (tag == "onTimeType")                   // obsolete
                   e.skipCurrentElement(); // _onTimeType = readValueType(e);
@@ -952,7 +913,7 @@ QRectF Note::drag(const EditData& data)
       bool tab = staff()->isTabStaff();
       qreal step = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
       _lineOffset = lrint(data.pos.y() / step);
-      score()->setLayout(chord()->measure());
+      score()->setLayoutAll(true);
       return bb.translated(chord()->pagePos());
       }
 
@@ -1045,6 +1006,7 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
+         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BRACKETS)
          || (type == SYMBOL)
          || (type == CLEF)
          || (type == BAR_LINE)
@@ -1175,6 +1137,16 @@ Element* Note::drop(const DropData& data)
                         case ICON_AUTOBEAM:
                               return ch->drop(data);
                               break;
+                        case ICON_BRACKETS:
+                              {
+                              Symbol* s = new Symbol(score(), leftparenSym);
+                              s->setParent(this);
+                              score()->undoAddElement(s);
+                              s = new Symbol(score(), rightparenSym);
+                              s->setParent(this);
+                              score()->undoAddElement(s);
+                              }
+                              break;
                         }
                   }
                   delete e;
@@ -1198,7 +1170,7 @@ Element* Note::drop(const DropData& data)
                   Segment* s = ch->segment();
                   s = s->next1();
                   while (s) {
-                        if ((s->segmentType() == Segment::SegChordRest || s->segmentType() == Segment::SegGrace) && s->element(track()))
+                        if ((s->segmentType() == Segment::SegChordRest) && s->element(track()))
                               break;
                         s = s->next1();
                         }
@@ -1319,7 +1291,8 @@ void Note::layout2()
                   // if stems beside staff, do nothing
                   }
             // if not TAB, look at note line
-            else onLine = (_line & 1) == 0;
+            else
+                  onLine = (_line & 1) == 0;
             // if on line, displace dots by half spatium up or down according to voice
             if (onLine) {
                   if (_dotPosition == MScore::AUTO)
@@ -1336,7 +1309,6 @@ void Note::layout2()
                   NoteDot* dot = _dots[i];
                   if (dot) {
                         dot->setPos(x + d + dd * i, y);
-                        dot->setMag(mag());
                         _dots[i]->adjustReadPos();
                         }
                   }
@@ -1348,8 +1320,14 @@ void Note::layout2()
                   continue;
             e->setMag(mag());
             e->layout();
-            if (e->type() == SYMBOL && static_cast<Symbol*>(e)->sym() == rightparenSym)
-                  e->setPos(headWidth(), 0.0);
+            if (e->type() == SYMBOL && static_cast<Symbol*>(e)->sym() == rightparenSym) {
+                  qreal w = headWidth();
+                  if (staff()->isTabStaff()) {
+                        StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+                        w = tabHeadWidth(tab);
+                        }
+                  e->setPos(w, 0.0);
+                  }
             }
       }
 
@@ -1395,8 +1373,8 @@ void Note::layout10(AccidentalState* as)
                   acci = _accidental->accidentalType();
                   if (acci == Accidental::ACC_SHARP || acci == Accidental::ACC_FLAT) {
                         // TODO - what about double flat and double sharp?
-                        // TODO - does this need to be key-aware?
-                        int ntpc = pitch2tpc(_pitch, KEY_C, acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
+                        KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
+                        int ntpc = pitch2tpc(_pitch, key.accidentalType(), acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
                         if (ntpc != _tpc) {
                               qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
 //                              setColor(QColor(255, 0, 0));
@@ -1434,16 +1412,14 @@ void Note::layout10(AccidentalState* as)
                         _accidental = 0;
                         }
                   }
-            if (tieBack())
-                  _line = tieBack()->startNote()->line();
-            else {
-                  //
-                  // calculate the real note line depending on clef
-                  //
-                  Staff* s = score()->staff(staffIdx() + chord()->staffMove());
-                  int tick = chord()->tick();
-                  _line    = relStep(_line, s->clef(tick));
-                  }
+
+            //
+            // calculate the real note line depending on clef
+            //
+            Staff* s = score()->staff(staffIdx() + chord()->staffMove());
+            int tick = chord()->tick();
+            _line    = relStep(_line, s->clef(tick));
+
             }
       }
 
@@ -1493,6 +1469,8 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
+      for (Spanner* sp : _spannerFor)
+            sp->scanElements(data, func, all);
 
       if (!dragMode && _accidental)
             func(data, _accidental);
@@ -1516,7 +1494,7 @@ void Note::setTrack(int val)
             foreach(SpannerSegment* seg, _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
-      for (Element* e : _el)
+      foreach (Element* e, _el)
             e->setTrack(val);
       if (_accidental)
             _accidental->setTrack(val);
@@ -1540,17 +1518,15 @@ void Note::reset()
       }
 
 //---------------------------------------------------------
-//   setMag
+//   mag
 //---------------------------------------------------------
 
-void Note::setMag(qreal val)
+qreal Note::mag() const
       {
-      val = val * (_small ? score()->styleD(ST_smallNoteMag) : 1.0);
-      Element::setMag(val);
-      if (_accidental)
-            _accidental->setMag(val);
-      for (Element* e : _el)
-            e->setMag(val);
+      qreal m = chord()->mag();
+      if (_small)
+            m *= score()->styleD(ST_smallNoteMag);
+      return m;
       }
 
 //---------------------------------------------------------
@@ -1560,7 +1536,6 @@ void Note::setMag(qreal val)
 void Note::setSmall(bool val)
       {
       _small = val;
-      setMag(parent() ? parent()->mag() : 1.0);
       }
 
 //---------------------------------------------------------
@@ -2006,68 +1981,14 @@ void Note::setOffTimeOffset(int)
       }
 
 //---------------------------------------------------------
-//   addSpannerBack
+//   setScore
 //---------------------------------------------------------
 
-void Note::addSpannerBack(Spanner* e)
+void Note::setScore(Score* s)
       {
-      e->setNext(_spannerBack);
-      _spannerBack = e;
+      Element::setScore(s);
+      if (_tieFor)
+            _tieFor->setScore(s);
       }
-
-//---------------------------------------------------------
-//   removeSpannerBack
-//---------------------------------------------------------
-
-bool Note::removeSpannerBack(Spanner* e)
-      {
-      Spanner* sp = _spannerBack;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerBack = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
-//   addSpannerFor
-//---------------------------------------------------------
-
-void Note::addSpannerFor(Spanner* e)
-      {
-      e->setNext(_spannerFor);
-      _spannerFor = e;
-      }
-
-//---------------------------------------------------------
-//   removeSpannerFor
-//---------------------------------------------------------
-
-bool Note::removeSpannerFor(Spanner* e)
-      {
-      Spanner* sp = _spannerFor;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerFor = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
-            }
-      return false;
-      }
-
 }
 

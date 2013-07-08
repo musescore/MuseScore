@@ -142,7 +142,7 @@ void Channel::setcc(int num, int value)
                   /* SontFont 2.01 NRPN Message (Sect. 9.6, p. 74)  */
                   if ((cc[NRPN_MSB] == 120) && (cc[NRPN_LSB] < 100)) {
                         float val = fluid_gen_scale_nrpn(nrpn_select, data);
-                        synth->log("%s: %d: Data = %d, value = %f", __FILE__, __LINE__, data, val);
+                        qDebug("%s: %d: Data = %d, value = %f", __FILE__, __LINE__, data, val);
                         synth->set_gen(channum, nrpn_select, val);
                         }
                   break;
@@ -164,7 +164,7 @@ void Channel::setcc(int num, int value)
                               nrpn_select += 10000;
                         else if (value < 100) {
                               nrpn_select += value;
-                              synth->log("%s: %d: NRPN Select = %d", __FILE__, __LINE__, nrpn_select);
+                              qDebug("%s: %d: NRPN Select = %d", __FILE__, __LINE__, nrpn_select);
                               }
                         }
                   break;

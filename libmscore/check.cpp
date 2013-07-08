@@ -69,7 +69,7 @@ void Score::checkScore()
       for (Segment* s = firstMeasure()->first(); s;) {
             Segment* ns = s->next1();
 
-            if (s->segmentType() & (Segment::SegChordRestGrace)) {
+            if (s->segmentType() & (Segment::SegChordRest)) {
                   bool empty = true;
                   foreach(Element* e, s->elist()) {
                         if (e) {

@@ -115,7 +115,6 @@ bool XmlReader::hasAttribute(const char* s) const
 QPointF XmlReader::readPoint()
       {
       Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
-      QPointF p;
 #ifndef NDEBUG
       if (!attributes().hasAttribute("x")) {
             QXmlStreamAttributes map = attributes();
@@ -132,10 +131,10 @@ QPointF XmlReader::readPoint()
             unknown();
             }
 #endif
-      p.setX(doubleAttribute("x", 0.0));
-      p.setY(doubleAttribute("y", 0.0));
+      qreal x = doubleAttribute("x", 0.0);
+      qreal y = doubleAttribute("y", 0.0);
       readNext();
-      return p;
+      return QPointF(x, y);
       }
 
 //---------------------------------------------------------
@@ -191,8 +190,8 @@ QRectF XmlReader::readRect()
 Fraction XmlReader::readFraction()
       {
       Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
-      qreal z = attribute("z", "0.0").toDouble();
-      qreal n = attribute("n", "0.0").toDouble();
+      int z = attribute("z", "0").toInt();
+      int n = attribute("n", "0").toInt();
       skipCurrentElement();
       return Fraction(z, n);
       }
@@ -210,32 +209,7 @@ void XmlReader::unknown() const
          qPrintable(docName), lineNumber(), columnNumber(),
          name().toUtf8().data());
       abort();
-      }
-
-//---------------------------------------------------------
-//   addSpanner
-//---------------------------------------------------------
-
-void XmlReader::addSpanner(Spanner* s)
-      {
-      _spanner.insert(s->id(), s);
-      }
-
-void XmlReader::removeSpanner(Spanner* s)
-      {
-      _spanner.remove(s->id());
-      }
-
-//---------------------------------------------------------
-//   findSpanner
-//---------------------------------------------------------
-
-Spanner* XmlReader::findSpanner(int id) const
-      {
-      auto i = _spanner.find(id);
-      if (i != _spanner.end())
-            return *i;
-      return 0;
+      // skipCurrentElement();
       }
 
 //---------------------------------------------------------
@@ -272,12 +246,14 @@ Tuplet* XmlReader::findTuplet(int id) const
 
 void XmlReader::addTuplet(Tuplet* s)
       {
+#ifndef NDEBUG
       Tuplet* t = findTuplet(s->id());
       if (t) {
             qDebug("Tuplet %d already read", s->id());
             delete s;
             return;
             }
+#endif
       _tuplets.append(s);
       }
 
@@ -634,8 +610,8 @@ QString Xml::xmlString(const QString& s)
       QString escaped;
       escaped.reserve(s.size());
       for (int i = 0; i < s.size(); ++i) {
-            QChar c = s.at(i);
-            switch(c.unicode()) {
+            ushort c = s.at(i).unicode();
+            switch(c) {
                   case '<':
                         escaped.append(QLatin1String("&lt;"));
                         break;
@@ -648,37 +624,16 @@ QString Xml::xmlString(const QString& s)
                   case '\"':
                         escaped.append(QLatin1String("&quot;"));
                         break;
-                  case 0x00:
-                  case 0x01:
-                  case 0x02:
-                  case 0x03:
-                  case 0x04:
-                  case 0x05:
-                  case 0x06:
-                  case 0x07:
-                  case 0x08:
-                  case 0x0B:
-                  case 0x0C:
-                  case 0x0E:
-                  case 0x0F:
-                  case 0x10:
-                  case 0x11:
-                  case 0x12:
-                  case 0x13:
-                  case 0x14:
-                  case 0x15:
-                  case 0x16:
-                  case 0x17:
-                  case 0x18:
-                  case 0x19:
-                  case 0x1A:
-                  case 0x1B:
-                  case 0x1C:
-                  case 0x1D:
-                  case 0x1E:
-                  case 0x1F:
-                        break;
                   default:
+                        // ignore invalid characters in xml 1.0
+#if 0
+                        if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) ||
+                           (c > 0xD7FF && c < 0xE000) ||
+                           (c > 0xFFFD))
+                              break;
+#endif
+                        if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D))
+                              break;
                         escaped += QChar(c);
                         break;
                   }
@@ -714,12 +669,11 @@ void Xml::dump(int len, const unsigned char* p)
       }
 
 //---------------------------------------------------------
-//   htmlToString
+//   htmlToStringg
 //---------------------------------------------------------
 
 void Xml::htmlToString(XmlReader& e, int level, QString* s)
       {
-// printf("  html <%s>\n", e.name().toUtf8().data());
       *s += QString("<%1").arg(e.name().toString());
       QXmlStreamAttributes map = e.attributes();
       int n = map.size();
@@ -731,26 +685,23 @@ void Xml::htmlToString(XmlReader& e, int level, QString* s)
       ++level;
       for (;;) {
             QXmlStreamReader::TokenType t = e.readNext();
-//            printf("    token %d\n", int(t));
             switch(t) {
                   case QXmlStreamReader::StartElement:
-//                        printf("         start <%s>\n", e.name().toUtf8().data());
                         htmlToString(e, level, s);
                         break;
                   case QXmlStreamReader::EndElement:
-//                        printf("         end <%s>\n", e.name().toUtf8().data());
                         *s += QString("</%1>").arg(e.name().toString());
                         --level;
                         return;
                   case QXmlStreamReader::Characters:
-//                        printf("         char <%s>\n", e.text().toUtf8().data());
                         if (!e.isWhitespace())
                               *s += e.text().toString();
                         break;
                   case QXmlStreamReader::Comment:
                         break;
+
                   default:
-//                        printf("      ?? %d\n", int(t));
+                        qDebug("htmlToString: read token: %s", qPrintable(e.tokenString()));
                         return;
                   }
             }
@@ -761,7 +712,6 @@ QString Xml::htmlToString(XmlReader& e)
       QString s;
       if (e.readNextStartElement()) {
             htmlToString(e, 0, &s);
-//            printf("====HTML<%s>====\n", qPrintable(s));
             e.skipCurrentElement();
             }
       return s;
@@ -771,8 +721,13 @@ QString Xml::htmlToString(XmlReader& e)
 //   writeHtml
 //---------------------------------------------------------
 
-void Xml::writeHtml(const QString& s)
+void Xml::writeHtml(QString s)
       {
+      for (int i = 0; i < s.size(); ++i) {
+            ushort c = s.at(i).unicode();
+            if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D)
+                  s[i] = '?';
+            }
       QStringList sl(s.split("\n"));
       //
       // remove first line from html (DOCTYPE...)

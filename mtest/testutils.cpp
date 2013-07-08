@@ -273,6 +273,7 @@ void MTest::initMTest()
       synti  = new MasterSynthesizer();
       mscore = new MScore;
       mscore->init();
+      preferences.shortestNote = MScore::division / 4; // midi quantization: 1/16
 
       root = TESTROOT "/mtest";
       loadInstrumentTemplates(":/instruments.xml");

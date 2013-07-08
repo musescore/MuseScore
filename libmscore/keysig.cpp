@@ -61,6 +61,15 @@ KeySig::KeySig(const KeySig& k)
       }
 
 //---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal KeySig::mag() const
+      {
+      return staff() ? staff()->mag() : 1.0;
+      }
+
+//---------------------------------------------------------
 //   setCustom
 //---------------------------------------------------------
 
@@ -91,7 +100,7 @@ void KeySig::layout()
       qreal _spatium = spatium();
       setbbox(QRectF());
 
-      if (staff() && staff()->isTabStaff()) {     // no key sigs on TAB staves
+      if (staff() && !staff()->genKeySig()) {     // no key sigs on TAB staves
             foreach(KeySym* ks, keySymbols)
                   delete ks;
             keySymbols.clear();
@@ -110,6 +119,7 @@ void KeySig::layout()
             delete ks;
       keySymbols.clear();
 
+      // determine current clef for this staff
       int clef = 0;
       if (staff())
             clef = staff()->clef(segment());
@@ -118,6 +128,7 @@ void KeySig::layout()
       int t2   = _sig.naturalType();
       qreal xo = 0.0;
 
+      // check ranges and compute masks for accidentals and naturals
       int accidentals = 0, naturals = 0;
       switch (qAbs(t1)) {
             case 7: accidentals = 0x7f; break;
@@ -149,41 +160,78 @@ void KeySig::layout()
       xo = 0.0;
       int coffset = t2 < 0 ? 7 : 0;
 
+      // remove redundant naturals
       if (!((t1 > 0) ^ (t2 > 0)))
             naturals &= ~accidentals;
 
-      if (_showNaturals) {
-	      for (int i = 0; i < 7; ++i) {
+      // manage display of naturals:
+      // naturals are shown if there is some natural AND naturals are on for this key sig
+      // AND style says they are not off
+      // OR key sig is CMaj/Amin (in which case they are always shown)
+      bool naturalsOn =
+            t2 != 0 && (_showNaturals
+            && (score()->styleI(ST_keySigNaturals) != NAT_NONE || t1 == 0) );
+      // naturals shoud go BEFORE accidentals if style says so
+      // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
+      bool prefixNaturals =
+            naturalsOn
+            && (score()->styleI(ST_keySigNaturals) == NAT_BEFORE || t1 * t2 < 0);
+      // naturals should go AFTER accidentals if they should not go before!
+      bool suffixNaturals = naturalsOn && !prefixNaturals;
+
+      // add prefixed naturals, if any
+      if (prefixNaturals) {
+            for (int i = 0; i < 7; ++i) {
                   if (naturals & (1 << i)) {
                         addLayout(naturalSym, xo, clefTable[clef].lines[i + coffset]);
-				xo += 1.0;
-				}
+                        xo += 1.0;
+                        }
                   }
             }
+      // add accidentals
+      static const qreal sspread = 1.0;
+      static const qreal fspread = 1.0;
       switch(t1) {
-            case 7:  addLayout(sharpSym, xo + 6.0, clefTable[clef].lines[6]);
-            case 6:  addLayout(sharpSym, xo + 5.0, clefTable[clef].lines[5]);
-            case 5:  addLayout(sharpSym, xo + 4.0, clefTable[clef].lines[4]);
-            case 4:  addLayout(sharpSym, xo + 3.0, clefTable[clef].lines[3]);
-            case 3:  addLayout(sharpSym, xo + 2.0, clefTable[clef].lines[2]);
-            case 2:  addLayout(sharpSym, xo + 1.0, clefTable[clef].lines[1]);
-            case 1:  addLayout(sharpSym, xo + 0.0, clefTable[clef].lines[0]);
+            case 7:  addLayout(sharpSym, xo + 6.0 * sspread, clefTable[clef].lines[6]);
+            case 6:  addLayout(sharpSym, xo + 5.0 * sspread, clefTable[clef].lines[5]);
+            case 5:  addLayout(sharpSym, xo + 4.0 * sspread, clefTable[clef].lines[4]);
+            case 4:  addLayout(sharpSym, xo + 3.0 * sspread, clefTable[clef].lines[3]);
+            case 3:  addLayout(sharpSym, xo + 2.0 * sspread, clefTable[clef].lines[2]);
+            case 2:  addLayout(sharpSym, xo + 1.0 * sspread, clefTable[clef].lines[1]);
+            case 1:  addLayout(sharpSym, xo,                 clefTable[clef].lines[0]);
                      break;
-            case -7: addLayout(flatSym, xo + 6.0, clefTable[clef].lines[13]);
-            case -6: addLayout(flatSym, xo + 5.0, clefTable[clef].lines[12]);
-            case -5: addLayout(flatSym, xo + 4.0, clefTable[clef].lines[11]);
-            case -4: addLayout(flatSym, xo + 3.0, clefTable[clef].lines[10]);
-            case -3: addLayout(flatSym, xo + 2.0, clefTable[clef].lines[9]);
-            case -2: addLayout(flatSym, xo + 1.0, clefTable[clef].lines[8]);
-            case -1: addLayout(flatSym, xo + 0.0, clefTable[clef].lines[7]);
+            case -7: addLayout(flatSym, xo + 6.0 * fspread, clefTable[clef].lines[13]);
+            case -6: addLayout(flatSym, xo + 5.0 * fspread, clefTable[clef].lines[12]);
+            case -5: addLayout(flatSym, xo + 4.0 * fspread, clefTable[clef].lines[11]);
+            case -4: addLayout(flatSym, xo + 3.0 * fspread, clefTable[clef].lines[10]);
+            case -3: addLayout(flatSym, xo + 2.0 * fspread, clefTable[clef].lines[9]);
+            case -2: addLayout(flatSym, xo + 1.0 * fspread, clefTable[clef].lines[8]);
+            case -1: addLayout(flatSym, xo,                 clefTable[clef].lines[7]);
             case 0:
                   break;
             default:
                   qDebug("illegal t1 key %d (t2=%d)\n", t1, t2);
                   break;
             }
-      setbbox(QRectF());
+      // add suffixed naturals, if any
+      if (suffixNaturals) {
+            xo += qAbs(t1);               // skip accidentals
+            if(t1 > 0) {                  // after sharps, add a little more space
+                  xo += 0.15;
+                  // if last sharp (t1) is above next natural (t1+1)...
+                  if (clefTable[clef].lines[t1] < clefTable[clef].lines[t1+1])
+                        xo += 0.2;        // ... add more space
+                  }
+            for (int i = 0; i < 7; ++i) {
+                  if (naturals & (1 << i)) {
+                        addLayout(naturalSym, xo, clefTable[clef].lines[i + coffset]);
+                        xo += 1.0;
+                        }
+                  }
+            }
 
+      // compute bbox
+      setbbox(QRectF());
       foreach(KeySym* ks, keySymbols) {
             ks->pos = ks->spos * _spatium;
             addbbox(symbols[score()->symIdx()][ks->sym].bbox(magS()).translated(ks->pos));
@@ -281,20 +329,22 @@ void KeySig::write(Xml& xml) const
       Element::writeProperties(xml);
       if (_sig.custom()) {
             xml.tag("custom", _sig.customType());
+            foreach(const KeySym* ks, keySymbols) {
+                  xml.stag("KeySym");
+                  xml.tag("sym", ks->sym);
+                  xml.tag("pos", ks->spos);
+                  xml.etag();
+                  }
             }
       else {
             xml.tag("accidental", _sig.accidentalType());
             if (_sig.naturalType())
                   xml.tag("natural", _sig.naturalType());
             }
-      foreach(const KeySym* ks, keySymbols) {
-            xml.stag("KeySym");
-            xml.tag("sym", ks->sym);
-            xml.tag("pos", ks->spos);
-            xml.etag();
-            }
-      xml.tag("showCourtesySig", _showCourtesy);
-      xml.tag("showNaturals",    _showNaturals);
+      if (!_showCourtesy)
+            xml.tag("showCourtesySig", _showCourtesy);
+      if (!_showNaturals)
+            xml.tag("showNaturals",    _showNaturals);
 	xml.etag();
       }
 
@@ -397,6 +447,68 @@ void KeySig::changeKeySigEvent(const KeySigEvent& t)
 int KeySig::tick() const
       {
       return segment() ? segment()->tick() : 0;
+      }
+
+//---------------------------------------------------------
+//   insertIntoKeySigChains
+//
+//    Adjusts the naturals of this key sig with respect to the previous
+//    and the naturals of the next with respect to this one
+//
+//    Note: staff(), tick() and track() should return sensible values!
+//---------------------------------------------------------
+
+void KeySig::insertIntoKeySigChain()
+      {
+      if (generated())
+            return;
+      Staff* stf = staff();
+      if (!stf)
+            return;
+      int tck = tick();
+      // locate previous key sig to set our delta naturals
+      KeySigEvent  oldKey = stf->key(tck-1);
+      setOldSig(oldKey.accidentalType());
+      // locate the following key sig, if any, to set into it the natural delta with this
+      int nextKeyTick = stf->nextKeyTick(tck);
+      Segment* nextKeySeg = 0;
+      if (nextKeyTick) {
+            nextKeySeg = score()->tick2segment(nextKeyTick, false, Segment::SegKeySig);
+            while(nextKeySeg && !nextKeySeg->element(track()))
+                  nextKeySeg = nextKeySeg->next1(Segment::SegKeySig);
+            }
+      if (nextKeySeg)
+            static_cast<KeySig*>(nextKeySeg->elist()[track()])->setOldSig(_sig.accidentalType());
+      }
+
+//---------------------------------------------------------
+//   removeFromKeySigChains
+//
+//    Adjusts the naturals of the next key sig with respect to the previous
+//
+//    Note: staff(), tick() and track() should return sensible values!
+//---------------------------------------------------------
+
+void KeySig::removeFromKeySigChain()
+      {
+      if (generated())
+            return;
+      Staff* stf = staff();
+      if (!stf)
+            return;
+      int tck = tick();
+      // locate previous and next key sig
+      KeySigEvent  oldKey = stf->key(tck-1);
+      // locate the following key sig, if any, to set into it the natural delta with this
+      int nextKeyTick = stf->nextKeyTick(tck);
+      Segment* nextKeySeg = 0;
+      if (nextKeyTick) {
+            nextKeySeg = score()->tick2segment(nextKeyTick, false, Segment::SegKeySig);
+            while(nextKeySeg && !nextKeySeg->element(track()))
+                  nextKeySeg = nextKeySeg->next1(Segment::SegKeySig);
+            }
+      if (nextKeySeg)
+            static_cast<KeySig*>(nextKeySeg->elist()[track()])->setOldSig(oldKey.accidentalType());
       }
 
 //---------------------------------------------------------

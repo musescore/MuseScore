@@ -245,6 +245,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdEnterRest();
       void cmdTuplet(int n, ChordRest*);
       void cmdTuplet(int);
+      void cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet);
       void cmdRepeatSelection();
       void cmdChangeEnharmonic(bool);
 
@@ -313,7 +314,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void startEdit(Element*, int startGrip);
       void startEdit(Element*);
 
-      void moveCursor(Segment*, int track);
+//      void moveCursor(Segment*, int track);
       void moveCursor(int tick);
       int cursorTick() const;
       void setCursorOn(bool);
@@ -394,7 +395,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool fotoScoreViewDragTest(QMouseEvent*);
       bool fotoScoreViewDragRectTest(QMouseEvent*);
       void doDragFotoRect(QMouseEvent*);
-      void fotoContextPopup(QMouseEvent*);
+      void fotoContextPopup(QContextMenuEvent*);
       bool fotoRectHit(const QPoint& p);
       void paintRect(bool printMode, QPainter& p, const QRectF& r, double mag);
       bool saveFotoAs(bool printMode, const QRectF&);

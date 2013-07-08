@@ -17,6 +17,7 @@ namespace Ms {
 
 class Xml;
 class XmlReader;
+class ChordList;
 
 //---------------------------------------------------------
 //   class HDegree
@@ -76,7 +77,8 @@ class HChord {
       int getKeys() const { return keys; }
       void print() const;
 
-      QString name(int tpc);
+      QString name(int tpc) const;
+      QString voicing() const;
       void add(const QList<HDegree>& degreeList);
       };
 
@@ -99,17 +101,68 @@ struct RenderAction {
       };
 
 //---------------------------------------------------------
+//   ChordToken
+//---------------------------------------------------------
+
+enum ChordTokenClass {
+      ALL, QUALITY, EXTENSION, MODIFIER, ALTERATION, ADJUST, MODE, SUSPENSION, ADDITION, SUBTRACTION
+      };
+
+class ChordToken {
+   public:
+      ChordTokenClass tokenClass;
+      QStringList names;
+      QList<RenderAction> renderList;
+      void read(XmlReader&);
+      void write(Xml&) const;
+      };
+
+//---------------------------------------------------------
 //   ParsedChord
 //---------------------------------------------------------
 
 class ParsedChord {
    public:
-      bool parse(QString);
-      bool operator==(const ParsedChord& c) { return (this->handle == c.handle); }
-      bool operator!=(const ParsedChord& c) { return !(*this == c); }
-      operator QString() { return handle; }
+      bool parse(const QString&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
+      QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&, const ChordList*);
+      const QList<RenderAction>& renderList(const ChordList*);
+      bool parseable() const                    { return _parseable; }
+      bool understandable() const               { return _understandable; }
+      const QString& name() const               { return _name; }
+      const QString& quality() const            { return _quality; }
+      const QString& extension() const          { return _extension; }
+      const QString& modifiers() const          { return _modifiers; }
+      const QString& xmlKind() const            { return _xmlKind; }
+      const QString& xmlText() const            { return _xmlText; }
+      const QString& xmlSymbols() const         { return _xmlSymbols; }
+      const QString& xmlParens() const          { return _xmlParens; }
+      const QStringList& xmlDegrees() const     { return _xmlDegrees; }
+      int keys() const                          { return chord.getKeys(); }
+      operator QString() const                  { return _handle; }
+      bool operator==(const ParsedChord& c) const     { return (this->_handle == c._handle); }
+      bool operator!=(const ParsedChord& c) const     { return !(*this == c); }
+      ParsedChord();
    private:
-      QString handle;
+      QString _name;
+      QString _handle;
+      QString _quality;
+      QString _extension;
+      QString _modifiers;
+      QStringList _modifierList;
+      QList<ChordToken> _tokenList;
+      QList<RenderAction> _renderList;
+      QString _xmlKind;
+      QString _xmlText;
+      QString _xmlSymbols;
+      QString _xmlParens;
+      QStringList _xmlDegrees;
+      QStringList major, minor, diminished, augmented, lower, raise, mod1, mod2, symbols;
+      HChord chord;
+      bool _parseable;
+      bool _understandable;
+      void configure(const ChordList*);
+      void correctXmlText(const QString& s = "");
+      void addToken(QString, ChordTokenClass);
       };
 
 //---------------------------------------------------------
@@ -121,15 +174,26 @@ struct ChordDescription {
       QStringList names;      // list of alternative chord names
                               // that will by recognized from keyboard entry (without root/base)
       QList<ParsedChord> parsedChords;
-                              // parsed forms of names
-      QString xmlKind;        // MusicXml description: kind
-      QStringList xmlDegrees; // MusicXml description: list of degrees (if any)
+                              // parsed forms of primary name (optionally also include parsed forms of other names)
+      QString xmlKind;        // MusicXml: kind
+      QString xmlText;        // MusicXml: kind text=
+      QString xmlSymbols;     // MusicXml: kind use-symbols=
+      QString xmlParens;      // MusicXml: kind parentheses-degrees=
+      QStringList xmlDegrees; // MusicXml: list of degrees (if any)
       HChord chord;           // C based chord
       QList<RenderAction> renderList;
+      bool generated;
+      bool renderListGenerated;
+      bool exportOk;
+      QString _quality;
 
    public:
+      ChordDescription(int, ChordList*);
+      ChordDescription(const QString&, ChordList*);
+      QString quality() const       { return _quality; }
+      void complete(ParsedChord* pc, const ChordList*);
       void read(XmlReader&);
-      void write(Xml&);
+      void write(Xml&) const;
       };
 
 //---------------------------------------------------------
@@ -139,6 +203,7 @@ struct ChordDescription {
 struct ChordSymbol {
       int fontIdx;
       QString name;
+      QString value;
       QChar code;
 
       ChordSymbol() { fontIdx = -1; }
@@ -165,14 +230,18 @@ class ChordList : public QMap<int, ChordDescription*> {
       QList<ChordFont> fonts;
       QList<RenderAction> renderListRoot;
       QList<RenderAction> renderListBase;
+      QList<ChordToken> chordTokenList;
+      static int privateID;
 
-      ChordList() {}
+      ChordList();
 
       virtual ~ChordList();
-      void write(Xml& xml);
+      void write(Xml& xml) const;
       void read(XmlReader&);
       bool read(const QString&);
-      bool write(const QString&);
+      bool write(const QString&) const;
+      bool loaded() const;
+      void unload();
       ChordSymbol symbol(const QString& s) const { return symbols.value(s); }
       };
 

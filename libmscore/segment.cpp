@@ -25,7 +25,6 @@
 #include "lyrics.h"
 #include "repeat.h"
 #include "staff.h"
-#include "spanner.h"
 #include "line.h"
 #include "hairpin.h"
 #include "ottava.h"
@@ -44,13 +43,17 @@ namespace Ms {
 
 const char* Segment::subTypeName() const
       {
-      switch(segmentType()) {
+      return subTypeName(_segmentType);
+      }
+
+const char* Segment::subTypeName(SegmentType t)
+      {
+      switch(t) {
             case SegClef:                 return "Clef";
             case SegKeySig:               return "Key Signature";
             case SegTimeSig:              return "Time Signature";
             case SegStartRepeatBarLine:   return "Begin Repeat";
             case SegBarLine:              return "BarLine";
-            case SegGrace:                return "Grace";
             case SegChordRest:            return "ChordRest";
             case SegBreath:               return "Breath";
             case SegEndBarLine:           return "EndBarLine";
@@ -69,6 +72,7 @@ void Segment::setElement(int track, Element* el)
       {
       if (el) {
             el->setParent(this);
+            printf("Segment::setElement %s segment %s\n", el->name(), subTypeName());
             _elist[track] = el;
             empty = false;
             }
@@ -106,20 +110,16 @@ Segment::Segment(Measure* m)
       setParent(m);
       init();
       empty = true;
-      _spannerFor = 0;
-      _spannerBack = 0;
       }
 
 Segment::Segment(Measure* m, SegmentType st, int t)
    : Element(m->score())
       {
       setParent(m);
-      setSegmentType(st);
+      _segmentType = st;
       setTick(t);
       init();
       empty = true;
-      _spannerFor = 0;
-      _spannerBack = 0;
       }
 
 //---------------------------------------------------------
@@ -129,13 +129,14 @@ Segment::Segment(Measure* m, SegmentType st, int t)
 Segment::Segment(const Segment& s)
    : Element(s)
       {
-      _spannerFor = 0;
-      _spannerBack = 0;
       _next = 0;
       _prev = 0;
 
-      empty = s.empty;           // cached value
-      _tick = s._tick;
+      empty               = s.empty;           // cached value
+      _segmentType        = s._segmentType;
+      _tick               = s._tick;
+      _extraLeadingSpace  = s._extraLeadingSpace;
+      _extraTrailingSpace = s._extraTrailingSpace;
 
       foreach (Element* e, s._annotations) {
             Element* ne = e->clone();
@@ -154,6 +155,13 @@ Segment::Segment(const Segment& s)
       _dotPosX = s._dotPosX;
       }
 
+void Segment::setSegmentType(SegmentType t)
+      {
+      if (_segmentType == SegClef && t == SegChordRest)
+            abort();
+      _segmentType = t;
+      }
+
 //---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
@@ -165,8 +173,6 @@ void Segment::setScore(Score* score)
             if (e)
                   e->setScore(score);
             }
-      for(Spanner* s = _spannerFor; s; s = s->next())
-            s->setScore(score);
       foreach(Element* e, _annotations)
             e->setScore(score);
       }
@@ -346,92 +352,22 @@ void Segment::removeStaff(int staff)
       }
 
 //---------------------------------------------------------
-//   addSpanner
-//---------------------------------------------------------
-
-void Segment::addSpanner(Spanner* l)
-      {
-      Element* e = l->endElement();
-      if (e)
-            static_cast<Segment*>(e)->addSpannerBack(l);
-      addSpannerFor(l);
-      foreach(SpannerSegment* ss, l->spannerSegments()) {
-            Q_ASSERT(ss->spanner() == l);
-            if (ss->system())
-                  ss->system()->add(ss);
-            }
-      }
-
-//---------------------------------------------------------
-//   removeSpanner
-//---------------------------------------------------------
-
-void Segment::removeSpanner(Spanner* l)
-      {
-      if (!static_cast<Segment*>(l->endElement())->removeSpannerBack(l)) {
-            qDebug("Segment(%p): cannot remove spannerBack %s %p", this, l->name(), l);
-            // abort();
-            }
-      if (!removeSpannerFor(l)) {
-            qDebug("Segment(%p): cannot remove spannerFor %s %p", this, l->name(), l);
-            // abort();
-            }
-      foreach(SpannerSegment* ss, l->spannerSegments()) {
-            if (ss->system())
-                  ss->system()->remove(ss);
-            }
-      }
-
-//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
 void Segment::add(Element* el)
       {
-// qDebug("%p segment add(%d, %d, %s %p)", this, tick(), el->track(), el->name(), el);
+      // qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
       el->setParent(this);
 
       int track = el->track();
-      if (track == -1) {
-            qDebug("element <%s> has invalid track -1", el->name());
-            abort();
-            }
-      int staffIdx = track / VOICES;
+      Q_ASSERT(track != -1);
 
-      switch(el->type()) {
+      switch (el->type()) {
             case REPEAT_MEASURE:
                   measure()->setRepeatFlags(measure()->repeatFlags() | RepeatMeasureFlag);
                   _elist[track] = el;
                   empty = false;
-                  break;
-
-            case HAIRPIN:
-                  addSpanner(static_cast<Spanner*>(el));
-                  score()->updateHairpin(static_cast<Hairpin*>(el));
-                  score()->setPlaylistDirty(true);
-                  break;
-
-            case OTTAVA:
-                  {
-                  addSpanner(static_cast<Spanner*>(el));
-                  Ottava* o   = static_cast<Ottava*>(el);
-                  Segment* es = static_cast<Segment*>(o->endElement());
-                  if (es) {
-                        int tick2   = es->tick();
-                        int shift   = o->pitchShift();
-                        Staff* st = o->staff();
-                        st->pitchOffsets().setPitchOffset(tick(), shift);
-                        st->pitchOffsets().setPitchOffset(tick2, 0);
-                        }
-                  score()->setPlaylistDirty(true);
-                  }
-                  break;
-
-            case VOLTA:
-            case TRILL:
-            case PEDAL:
-            case TEXTLINE:
-                  addSpanner(static_cast<Spanner*>(el));
                   break;
 
             case DYNAMIC:
@@ -471,12 +407,24 @@ void Segment::add(Element* el)
                   }
 
             case CLEF:
+                  Q_ASSERT(_segmentType == SegClef);
+                  if (_elist[track]) {
+                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
+                           el->name(), _elist[track]->name(),
+                           score()->sigmap()->pos(tick()), tick(), track, score());
+                        }
                   _elist[track] = el;
                   el->staff()->addClef(static_cast<Clef*>(el));
                   empty = false;
                   break;
 
             case TIMESIG:
+                  Q_ASSERT(segmentType() == SegTimeSig || segmentType() == SegTimeSigAnnounce);
+                  if (_elist[track]) {
+                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
+                           el->name(), _elist[track]->name(),
+                           score()->sigmap()->pos(tick()), tick(), track, score());
+                        }
                   _elist[track] = el;
                   el->staff()->addTimeSig(static_cast<TimeSig*>(el));
                   empty = false;
@@ -484,25 +432,26 @@ void Segment::add(Element* el)
 
             case CHORD:
             case REST:
+                  Q_ASSERT(_segmentType == SegChordRest);
                   if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
-                           el->name(), _elist[track]->name(),
+                        qDebug("%p Segment %s add(%s) there is already an %s at %s(%d) track %d. score %p",
+                           this, subTypeName(), el->name(), _elist[track]->name(),
                            score()->sigmap()->pos(tick()), tick(), track, score());
-                        ChordRest* cr = static_cast<ChordRest*>(el);
-                        ChordRest* cr1  = static_cast<ChordRest*>(_elist[track]);
-                        qDebug("   %d/%d -> %d/%d",
-                           cr->duration().numerator(), cr->duration().denominator(),
-                           cr1->duration().numerator(), cr1->duration().denominator());
                         return;
                         }
                   if (track % VOICES)
-                        measure()->mstaff(staffIdx)->hasVoices = true;
+                        measure()->mstaff(track / VOICES)->hasVoices = true;
 
                   // fall through
 
             case KEYSIG:
             case BAR_LINE:
             case BREATH:
+                  if (_elist[track]) {
+                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
+                           el->name(), _elist[track]->name(),
+                           score()->sigmap()->pos(tick()), tick(), track, score());
+                        }
                   _elist[track] = el;
                   empty = false;
                   break;
@@ -536,32 +485,6 @@ void Segment::remove(Element* el)
             case REPEAT_MEASURE:
                   measure()->setRepeatFlags(measure()->repeatFlags() & ~RepeatMeasureFlag);
                   _elist[track] = 0;
-                  break;
-
-            case OTTAVA:
-                  {
-                  Ottava* o   = static_cast<Ottava*>(el);
-                  Segment* es = static_cast<Segment*>(o->endElement());
-                  int tick2   = es->tick();
-                  Staff* st   = o->staff();
-                  st->pitchOffsets().remove(tick());
-                  st->pitchOffsets().remove(tick2);
-                  removeSpanner(static_cast<Spanner*>(el));
-                  score()->setPlaylistDirty(true);
-                  }
-                  break;
-
-            case HAIRPIN:
-                  score()->removeHairpin(static_cast<Hairpin*>(el));
-                  removeSpanner(static_cast<Spanner*>(el));
-                  score()->setPlaylistDirty(true);
-                  break;
-
-            case VOLTA:
-            case TRILL:
-            case PEDAL:
-            case TEXTLINE:
-                  removeSpanner(static_cast<Spanner*>(el));
                   break;
 
             case DYNAMIC:
@@ -741,7 +664,7 @@ void Segment::setTick(int t)
 
 const QList<Lyrics*>* Segment::lyricsList(int track) const
       {
-      if (!(segmentType() & (SegChordRestGrace))) {
+      if (!(segmentType() & (SegChordRest))) {
             if (MScore::debugMode)
                   qDebug("warning : lyricsList  bad segment type <%s><%s>", name(), subTypeName());
             return 0;
@@ -767,7 +690,6 @@ void Segment::swapElements(int i1, int i2)
             _elist[i2]->setTrack(i2);
       }
 
-
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -780,7 +702,6 @@ void Segment::write(Xml& xml) const
       if (_extraLeadingSpace.isZero() && _extraTrailingSpace.isZero())
             return;
       xml.stag(name());
-      xml.tag("subtype", _segmentType);
       xml.tag("leadingSpace", _extraLeadingSpace.val());
       xml.tag("trailingSpace", _extraTrailingSpace.val());
       xml.etag();
@@ -796,7 +717,7 @@ void Segment::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "subtype")
-                  _segmentType = SegmentType(e.readInt());
+                  e.skipCurrentElement();
             else if (tag == "leadingSpace")
                   _extraLeadingSpace = Spatium(e.readDouble());
             else if (tag == "trailingSpace")
@@ -905,66 +826,6 @@ bool Segment::operator>(const Segment& s) const
       }
 
 //---------------------------------------------------------
-//   addSpannerBack
-//---------------------------------------------------------
-
-void Segment::addSpannerBack(Spanner* e)
-      {
-      e->setNext(_spannerBack);
-      _spannerBack = e;
-      }
-
-//---------------------------------------------------------
-//   removeSpannerBack
-//---------------------------------------------------------
-
-bool Segment::removeSpannerBack(Spanner* e)
-      {
-      Spanner* sp = _spannerBack;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerBack = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
-//   addSpannerFor
-//---------------------------------------------------------
-
-void Segment::addSpannerFor(Spanner* e)
-      {
-      e->setNext(_spannerFor);
-      _spannerFor = e;
-      }
-
-bool Segment::removeSpannerFor(Spanner* e)
-      {
-      Spanner* sp = _spannerFor;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerFor = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
 //   findAnnotationOrElement
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------
@@ -993,6 +854,5 @@ void Segment::removeAnnotation(Element* e)
                   }
             }
       }
-
 }
 

@@ -80,6 +80,7 @@
 #include "image.h"
 #include "marker.h"
 #include "jump.h"
+#include "noteline.h"
 
 namespace Ms {
 
@@ -159,6 +160,7 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "Pedal"),
       QT_TRANSLATE_NOOP("elementName", "Trill"),
       QT_TRANSLATE_NOOP("elementName", "TextLine"),
+      QT_TRANSLATE_NOOP("elementName", "NoteLine"),
       QT_TRANSLATE_NOOP("elementName", "Segment"),
       QT_TRANSLATE_NOOP("elementName", "System"),
       QT_TRANSLATE_NOOP("elementName", "Compound"),
@@ -232,8 +234,7 @@ void Element::spatiumChanged(qreal oldValue, qreal newValue)
 qreal Element::spatium() const
       {
       Staff* s = staff();
-      qreal v = _score->spatium();
-      return s ? v * s->mag() : v;
+      return s ? s->spatium() : _score->spatium();
       }
 
 //---------------------------------------------------------
@@ -242,7 +243,7 @@ qreal Element::spatium() const
 
 qreal Element::magS() const
       {
-      return _mag * (_score->spatium() /(MScore::DPI * SPATIUM20));
+      return mag() * (_score->spatium() /(MScore::DPI * SPATIUM20));
       }
 
 //---------------------------------------------------------
@@ -442,7 +443,12 @@ QColor Element::curColor() const
 
       if (flag(ELEMENT_DROP_TARGET))
             return MScore::dropColor;
-      if (_selected) {
+      bool marked = false;
+      if (type() == Element::NOTE) {
+         const Note* note = static_cast<const Note*>(this);
+         marked = note->mark();
+         }
+      if (_selected || marked ) {
             if (track() == -1)
                   return MScore::selectColor[0];
             else
@@ -669,10 +675,12 @@ bool Element::readProperties(XmlReader& e)
 
       if (tag == "track")
             setTrack(e.readInt());
+      else if (tag == "color")
+            _color = e.readColor();
       else if (tag == "visible")
             _visible = e.readInt();
-      else if (tag == "pos")
-            _readPos = e.readPoint() * spatium();
+      else if (tag == "selected") // obsolete
+            e.readInt();
       else if (tag == "userOff")
             _userOff = e.readPoint();
       else if (tag == "color")
@@ -702,7 +710,7 @@ bool Element::readProperties(XmlReader& e)
             }
       else if (tag == "tick") {
             int val = e.readInt();
-            if (type() != SYMBOL)   // hack for 1.2
+            if (val >= 0 && type() != SYMBOL && type() != TEMPO_TEXT && (type() != GLISSANDO || score()->mscVersion() > 114))   // hack for 1.2
                   e.setTick(score()->fileDivision(val));
             }
       else if (tag == "offset") {         // ??obsolete -> used for volta
@@ -1238,6 +1246,7 @@ Element* Element::create(ElementType type, Score* score)
             case VOLTA:             return new Volta(score);
             case OTTAVA:            return new Ottava(score);
             case TEXTLINE:          return new TextLine(score);
+            case NOTELINE:          return new NoteLine(score);
             case TRILL:             return new Trill(score);
             case PEDAL:             return new Pedal(score);
             case HAIRPIN:           return new Hairpin(score);
@@ -1538,7 +1547,7 @@ bool Element::isDurationElement() const
 bool Element::isSLine() const
       {
       return type() == HAIRPIN || type() == OTTAVA || type() == PEDAL
-         || type() == TRILL || type() == VOLTA || type() == TEXTLINE;
+         || type() == TRILL || type() == VOLTA || type() == TEXTLINE || type() == NOTELINE;
       }
 
 //---------------------------------------------------------
@@ -1560,22 +1569,6 @@ bool Element::isText() const
          || type() == FIGURED_BASS
          || type() == TEMPO_TEXT;
       }
-
-//---------------------------------------------------------
-//   parentChordRest
-//---------------------------------------------------------
-
-#if 0
-Element* Element::parentChordRest()
-      {
-      if (isChordRest())
-            return this;
-      else if (_parent)
-            return _parent->parentChordRest();
-      else
-            return 0;
-      }
-#endif
 
 //---------------------------------------------------------
 //   findMeasure

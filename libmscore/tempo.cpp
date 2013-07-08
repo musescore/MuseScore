@@ -157,7 +157,7 @@ void TempoMap::del(int tick)
       auto e = find(tick);
       if (e == end()) {
             qDebug("TempoMap::del event at (%d): not found", tick);
-            abort();
+            // abort();
             return;
             }
       erase(e);

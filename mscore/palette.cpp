@@ -302,7 +302,9 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             else {
                   int track1 = sel.staffStart() * VOICES;
                   int track2 = sel.staffEnd() * VOICES;
-                  for (Segment* s = sel.startSegment(); s && s != sel.endSegment(); s = s->next1()) {
+                  Segment* startSegment = sel.startSegment();
+                  Segment* endSegment = sel.endSegment(); //keep it, it could change during the loop
+                  for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                         for (int track = track1; track < track2; ++track) {
                               Element* e = s->element(track);
                               if (e == 0)
@@ -312,8 +314,11 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                                     foreach(Note* n, chord->notes())
                                           applyDrop(score, viewer, n, element);
                                     }
-                              else
-                                    applyDrop(score, viewer, e, element);
+                              else {
+                                    // do not apply articulation to barline in a range selection
+                                    if(e->type() != Element::BAR_LINE || element->type() != Element::ARTICULATION)
+                                          applyDrop(score, viewer, e, element);
+                                    }
                               }
                         }
                   }
@@ -525,8 +530,10 @@ void Palette::paintEvent(QPaintEvent* event)
       p.setRenderHint(QPainter::Antialiasing, true);
 
       QColor bgColor(0xf6, 0xf0, 0xda);
+      if (preferences.fgUseColor)
+         bgColor = preferences.fgColor;
 #if 1
-      p.setBrush(QColor(0xf6, 0xf0, 0xda));
+      p.setBrush(bgColor);
       p.drawRoundedRect(0, 0, width()-3, height(), 2, 2);
 #else
       p.fillRect(event->rect(), QColor(0xf6, 0xf0, 0xda));
@@ -1064,8 +1071,8 @@ void Palette::write(const QString& p)
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      f.addDirectory("META-INF");
-      f.addDirectory("Pictures");
+      //f.addDirectory("META-INF");
+      //f.addDirectory("Pictures");
       f.addFile("META-INF/container.xml", cbuf.data());
 
       // save images

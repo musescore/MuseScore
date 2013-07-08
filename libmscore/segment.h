@@ -47,11 +47,6 @@ class System;
 
  Segments are children of Measures and store Clefs, KeySigs, TimeSigs,
  BarLines and ChordRests.
-
- special case SegGrace:
-      - tick()                 is play position of acciaccatura and appoggiatura notes
-      - tick() - tickOffset()  is logical position, relevant for layout
-                               (logicl position is the tick position of the next main note)
 */
 
 class Segment : public Element {
@@ -61,19 +56,18 @@ class Segment : public Element {
 
    public:
       enum SegmentType {
+            SegInvalid            = 0x0,
             SegClef               = 0x1,
             SegKeySig             = 0x2,
             SegTimeSig            = 0x4,
             SegStartRepeatBarLine = 0x8,
             SegBarLine            = 0x10,
-            SegGrace              = 0x20,
-            SegChordRest          = 0x40,
-            SegBreath             = 0x80,
-            SegEndBarLine         = 0x100,
-            SegTimeSigAnnounce    = 0x200,
-            SegKeySigAnnounce     = 0x400,
+            SegChordRest          = 0x20,
+            SegBreath             = 0x40,
+            SegEndBarLine         = 0x80,
+            SegTimeSigAnnounce    = 0x100,
+            SegKeySigAnnounce     = 0x200,
             SegAll                = 0xfff,
-            SegChordRestGrace     = SegChordRest | SegGrace
             };
       typedef QFlags<SegmentType> SegmentTypes;
 
@@ -90,17 +84,12 @@ class Segment : public Element {
       Spatium _extraTrailingSpace;
       QList<qreal>   _dotPosX;     ///< size = staves
 
-      Spanner* _spannerFor;
-      Spanner* _spannerBack;
-
       std::vector<Element*> _annotations;
 
       QList<Element*> _elist;      ///< Element storage, size = staves * VOICES.
 
       void init();
       void checkEmpty() const;
-      void addSpanner(Spanner*);
-      void removeSpanner(Spanner*);
 
    public:
       Segment(Measure* m = 0);
@@ -151,15 +140,15 @@ class Segment : public Element {
 
       void sortStaves(QList<int>& dst);
       const char* subTypeName() const;
+      static const char* subTypeName(SegmentType);
       static SegmentType segmentType(ElementType type);
       SegmentType segmentType() const            { return _segmentType; }
-      void setSegmentType(SegmentType t)         { _segmentType = t; }
+      void setSegmentType(SegmentType t);
 
       void removeGeneratedElements();
       bool isEmpty() const                       { return empty; }
       void fixStaffIdx();
       bool isChordRest() const                   { return _segmentType == SegChordRest; }
-      bool isGrace() const                       { return _segmentType == SegGrace; }
       void setTick(int);
       int tick() const;
       int rtick() const                          { return _tick; } // tickposition relative to measure start
@@ -167,17 +156,9 @@ class Segment : public Element {
 
       bool splitsTuplet() const;
 
-      Spanner* spannerFor() const                { return _spannerFor;         }
-      Spanner* spannerBack() const               { return _spannerBack;        }
-      void addSpannerBack(Spanner* e);
-      bool removeSpannerBack(Spanner* e);
-      void addSpannerFor(Spanner* e);
-      bool removeSpannerFor(Spanner* e);
-
       const std::vector<Element*>& annotations() const { return _annotations;        }
       void removeAnnotation(Element* e);
       bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
-
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
       void setDotPosX(int staffIdx, qreal val)   { _dotPosX[staffIdx] = val;   }
@@ -186,8 +167,8 @@ class Segment : public Element {
       void setExtraLeadingSpace(Spatium v)       { _extraLeadingSpace = v;     }
       Spatium extraTrailingSpace() const         { return _extraTrailingSpace; }
       void setExtraTrailingSpace(Spatium v)      { _extraTrailingSpace = v;    }
-      bool written() const                       { return _written;            }
-      void setWritten(bool val)                  { _written = val;             }
+      bool written() const                       { return _written; }
+      void setWritten(bool val)                  { _written = val; }
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
 

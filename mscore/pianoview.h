@@ -62,6 +62,7 @@ class PianoView : public QGraphicsView {
       Pos pix2pos(int x) const;
       int pos2pix(const Pos& p) const;
       void createLocators();
+      void addChord(Chord* chord);
 
    protected:
       virtual void wheelEvent(QWheelEvent* event);

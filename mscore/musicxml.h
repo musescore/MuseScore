@@ -231,6 +231,7 @@ class MusicXml {
       void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, int& currentVoice, QDomElement node);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       int xmlClef(QDomElement, int staffIdx, Measure*);
+      void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion);
 
 public:
       MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1);

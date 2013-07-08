@@ -103,9 +103,8 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="2">
         <endRepeat>2</endRepeat>
-        <Volta id="2">
+        <Volta id="0">
           <subtype>1</subtype>
-          <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
@@ -113,7 +112,6 @@ p, li { white-space: pre-wrap; }
             </beginText>
           <endings>1</endings>
           </Volta>
-        <endSpanner id="2"/>
         <Chord>
           <durationType>whole</durationType>
           <Note>
@@ -123,9 +121,8 @@ p, li { white-space: pre-wrap; }
           </Chord>
         </Measure>
       <Measure number="3">
-        <Volta id="3">
+        <Volta id="0">
           <subtype>0</subtype>
-          <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
@@ -133,7 +130,6 @@ p, li { white-space: pre-wrap; }
             </beginText>
           <endings>2</endings>
           </Volta>
-        <endSpanner id="3"/>
         <Chord>
           <durationType>whole</durationType>
           <Note>

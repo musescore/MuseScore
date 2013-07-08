@@ -44,6 +44,8 @@ class Rest : public ChordRest {
       virtual Rest* clone() const      { return new Rest(*this); }
       virtual ElementType type() const { return REST; }
 
+      virtual Measure* measure() const { return parent() ? (Measure*)(parent()->parent()) : 0; }
+      virtual qreal mag() const;
       virtual void draw(QPainter*) const;
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);

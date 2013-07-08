@@ -36,6 +36,7 @@ class Stem;
 class Chord;
 class StemSlash;
 class LedgerLine;
+class AccidentalState;
 
 enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 
@@ -59,18 +60,20 @@ class Chord : public ChordRest {
 
       Stem*      _stem;
       Hook*      _hook;
-      StemSlash* _stemSlash;
+      StemSlash* _stemSlash;        // for acciacatura
 
-      MScore::Direction  _stemDirection;
       Arpeggio*  _arpeggio;
       Tremolo*   _tremolo;
-      TremoloChordType _tremoloChordType;
       Glissando* _glissando;
-      ElementList _el;              ///< chordline
+      ElementList _el;              ///< chordline, slur
+      std::vector<Chord*> _graceNotes;
+      int _graceIndex;              ///< if this is a grace note, index in parent list
 
-      NoteType   _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
-      bool       _noStem;
-      bool       _userPlayEvents;   ///< play events were modified by user
+      MScore::Direction  _stemDirection;
+      TremoloChordType   _tremoloChordType;
+      NoteType           _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
+      bool               _noStem;
+      bool               _userPlayEvents;   ///< play events were modified by user
 
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
@@ -78,6 +81,8 @@ class Chord : public ChordRest {
       void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible, qreal hw);
       void addLedgerLines(qreal x, int move);
       void processSiblings(std::function<void(Element*)> func);
+      void layoutPitched();
+      void layoutTablature();
 
    public:
       Chord(Score* s = 0);
@@ -90,6 +95,7 @@ class Chord : public ChordRest {
 
       virtual void setScore(Score* s);
       virtual ElementType type() const { return CHORD; }
+      virtual qreal mag() const;
 
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
@@ -131,6 +137,11 @@ class Chord : public ChordRest {
       StemSlash* stemSlash() const           { return _stemSlash; }
       void setStemSlash(StemSlash* s);
 
+      const std::vector<Chord*>& graceNotes() const { return _graceNotes; }
+      std::vector<Chord*>& graceNotes()             { return _graceNotes; }
+      int graceIndex() const                        { return _graceIndex; }
+      void setGraceIndex(int val)                   { _graceIndex = val;  }
+
       virtual QPointF stemPos() const;        ///< page coordinates
       virtual qreal stemPosX() const;         ///< page coordinates
       QPointF stemPosBeam() const;            ///< page coordinates
@@ -143,6 +154,7 @@ class Chord : public ChordRest {
       Note* selectedNote() const;
       virtual void layout();
       void layout2();
+      void layout10(AccidentalState*);
 
       void readNote(XmlReader& node);
 
@@ -165,7 +177,6 @@ class Chord : public ChordRest {
       bool userPlayEvents() const     { return _userPlayEvents; }
       void setUserPlayEvents(bool v)  { _userPlayEvents = v; }
 
-      virtual void setMag(qreal val);
       void pitchChanged();
       TremoloChordType tremoloChordType() const      { return _tremoloChordType; }
       void setTremoloChordType(TremoloChordType t)   { _tremoloChordType = t; }
@@ -182,6 +193,9 @@ class Chord : public ChordRest {
       virtual QVariant propertyDefault(P_ID) const;
 
       virtual void reset();
+
+      virtual Segment* segment() const;
+      virtual Measure* measure() const;
       };
 
 

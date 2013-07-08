@@ -48,10 +48,20 @@ static int pitch2y(int pitch)
 PianoItem::PianoItem(Note* n, NoteEvent* e)
    : QGraphicsRectItem(0), _note(n), event(e)
       {
+      Chord* chord = n->chord();
+      int tieLen, ticks;
+      if (chord->isGrace()) {
+            chord = static_cast<Chord*>(chord->parent());
+            tieLen = 0;
+            ticks = chord->duration().ticks();
+            }
+      else {
+            ticks = chord->duration().ticks();
+            tieLen = n->playTicks() - ticks;
+            }
       setFlags(flags() | QGraphicsItem::ItemIsSelectable);
       int pitch = n->pitch() + e->pitch();
-      int ticks = n->playTicks();
-      int len   = ticks * e->len() / 1000;
+      int len   = ticks * e->len() / 1000 + tieLen;
       setRect(0, 0, len, keyHeight/2);
       setBrush(QBrush());
       setSelected(_note->selected());
@@ -480,6 +490,22 @@ void PianoView::setStaff(Staff* s, Pos* l)
       }
 
 //---------------------------------------------------------
+//   addChord
+//---------------------------------------------------------
+
+void PianoView::addChord(Chord* chord)
+      {
+      for (Chord* c : chord->graceNotes())
+            addChord(c);
+      for (Note* note : chord->notes()) {
+            if (note->tieBack())
+                  continue;
+            for (NoteEvent& e : note->playEvents())
+                  scene()->addItem(new PianoItem(note, &e));
+            }
+      }
+
+//---------------------------------------------------------
 //   updateNotes
 //---------------------------------------------------------
 
@@ -494,21 +520,13 @@ void PianoView::updateNotes()
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
 
-      Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+      Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* s = staff->score()->firstSegment(st); s; s = s->next1(st)) {
             for (int track = startTrack; track < endTrack; ++track) {
                   Chord* chord = static_cast<Chord*>(s->element(track));
                   if (chord == 0 || chord->type() != Element::CHORD)
                         continue;
-                  foreach(Note* note, chord->notes()) {
-                        if (note->tieBack())
-                              continue;
-                        int n = note->playEvents().size();
-                        for (int i = 0; i < n; ++i) {
-                              NoteEvent* e = &note->playEvents()[i];
-                              scene()->addItem(new PianoItem(note, e));
-                              }
-                        }
+                  addChord(chord);
                   }
             }
       for (int i = 0; i < 3; ++i)

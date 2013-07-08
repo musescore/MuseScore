@@ -28,7 +28,7 @@
 #include "libmscore/image.h"
 #include "libmscore/mscore.h"
 #include "svggenerator.h"
-#include "inspector.h"
+#include "inspector/inspector.h"
 
 namespace Ms {
 
@@ -203,7 +203,7 @@ class FotoContextTransition : public QEventTransition
             return canvas->fotoRectHit(me->pos());
             }
       virtual void onTransition(QEvent* e) {
-            QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(e)->event());
+            QContextMenuEvent* me = static_cast<QContextMenuEvent*>(static_cast<QStateMachine::WrappedEvent*>(e)->event());
             canvas->fotoContextPopup(me);
             }
    public:
@@ -405,6 +405,7 @@ void ScoreView::doDragFoto(QMouseEvent* ev)
       mscore->statusBar()->showMessage(QString("%1 x %2").arg(sz.width()).arg(sz.height()), 3000);
 
       update();
+      mscore->showMessage("drag", 2000);
       }
 
 //---------------------------------------------------------
@@ -545,10 +546,33 @@ void ScoreView::doDragFotoRect(QMouseEvent* ev)
       }
 
 //---------------------------------------------------------
+//   MenuEntry
+//---------------------------------------------------------
+
+struct MenuEntry {
+      const char* text;
+      const char* label;
+      };
+
+static const MenuEntry resizeEntry[4] {
+      { "Resize to A", "resizeA" },
+      { "Resize to B", "resizeB" },
+      { "Resize to C", "resizeC" },
+      { "Resize to D", "resizeD" }
+      };
+
+static const MenuEntry setSizeEntry[4] {
+      { "Set size A", "setA" },
+      { "Set size B", "setB" },
+      { "Set size C", "setC" },
+      { "Set size D", "setD" }
+      };
+
+//---------------------------------------------------------
 //   fotoContextPopup
 //---------------------------------------------------------
 
-void ScoreView::fotoContextPopup(QMouseEvent* ev)
+void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       {
       QPoint pos(ev->globalPos());
       QMenu* popup = new QMenu(this);
@@ -569,10 +593,24 @@ void ScoreView::fotoContextPopup(QMouseEvent* ev)
       bgAction->setData("set-bg");
 
       popup->addSeparator();
-      a = new QAction(*icons[fileSave_ICON], tr("Save As (print mode)..."), this);
+      for (int i = 0; i < 4; ++i) {
+            a = new QAction(resizeEntry[i].text, this);
+            a->setData(resizeEntry[i].label);
+            popup->addAction(a);
+            }
+      QMenu* setSize = new QMenu(tr("Set Standard Size..."));
+      for (int i = 0; i < 4; ++i) {
+            a = new QAction(setSizeEntry[i].text, this);
+            a->setData(setSizeEntry[i].label);
+            setSize->addAction(a);
+            }
+      popup->addMenu(setSize);
+
+      popup->addSeparator();
+      a = new QAction(tr("Save As (print mode)..."), this);
       a->setData("print");
       popup->addAction(a);
-      a = new QAction(*icons[fileSave_ICON], tr("Save As (screenshot mode)..."), this);
+      a = new QAction(tr("Save As (screenshot mode)..."), this);
       a->setData("screenshot");
       popup->addAction(a);
 
@@ -622,6 +660,19 @@ void ScoreView::fotoContextPopup(QMouseEvent* ev)
                   preferences.pngResolution = resolution;
                   preferences.dirty = true;
                   }
+            }
+      else if (cmd.startsWith("resize")) {
+            QString size = QSettings().value(QString("fotoSize%1").arg(cmd[6]), "50x40").toString();
+            qreal w = size.split("x")[0].toDouble();
+            qreal h = size.split("x")[1].toDouble();
+            _foto->setSize(w * MScore::DPMM, h * MScore::DPMM);
+            updateGrips();
+            }
+      else if (cmd.startsWith("set")) {
+            qreal w   = _foto->rect().width() / MScore::DPMM;
+            qreal h   = _foto->rect().height() / MScore::DPMM;
+            QString val(QString("%1x%2").arg(w).arg(h));
+            QSettings().setValue(QString("fotoSize%1").arg(cmd[3]), val);
             }
       if (bgAction->isChecked() != preferences.pngTransparent) {
             preferences.pngTransparent = bgAction->isChecked();

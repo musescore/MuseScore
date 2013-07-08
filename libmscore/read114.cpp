@@ -123,8 +123,13 @@ static const StyleVal style114[] = {
       StyleVal(ST_genCourtesyTimesig, true),
       StyleVal(ST_genCourtesyKeysig, true),
 
+      StyleVal(ST_useStandardNoteNames, true),
       StyleVal(ST_useGermanNoteNames, false),
+      StyleVal(ST_useSolfeggioNoteNames, false),
       StyleVal(ST_chordDescriptionFile, QString("stdchords.xml")),
+      StyleVal(ST_chordStyle, QString("custom")),
+      StyleVal(ST_chordsXmlFile, true),
+
       StyleVal(ST_concertPitch, false),
       StyleVal(ST_createMultiMeasureRests, false),
       StyleVal(ST_minEmptyMeasures, 2),
@@ -182,7 +187,8 @@ static const StyleVal style114[] = {
       StyleVal(ST_ArpeggioLineWidth, Spatium(.18)),
       StyleVal(ST_ArpeggioHookLen, Spatium(.8)),
       StyleVal(ST_FixMeasureNumbers, 0),
-      StyleVal(ST_FixMeasureWidth, false)
+      StyleVal(ST_FixMeasureWidth, false),
+      StyleVal(ST_keySigNaturals, NAT_BEFORE)
       };
 
 
@@ -223,7 +229,7 @@ void Staff::read114(XmlReader& e, ClefList& _clefList)
             else if (tag == "cleflist")
                   _clefList.read(e, _score);
             else if (tag == "keylist")
-                  _keymap->read(e, _score);
+                  _keymap.read(e, _score);
             else if (tag == "bracket") {
                   BracketItem b;
                   b._bracket = BracketType(e.intAttribute("type", -1));
@@ -344,8 +350,6 @@ Score::FileError Score::read114(XmlReader& e)
                   _synthesizerState.read(e);
             else if (tag == "Spatium")
                   _style.setSpatium (e.readDouble() * MScore::DPMM);
-            else if (tag == "page-offset")
-                  setPageNumberOffset(e.readInt());
             else if (tag == "Division")
                   _fileDivision = e.readInt();
             else if (tag == "showInvisible")
@@ -370,6 +374,8 @@ Score::FileError Score::read114(XmlReader& e)
                   // Change 1.2 Poet to Lyricist
                   if (s.name() == "Poet")
                         s.setName("Lyricist");
+                  if (s.name() == "Lyrics odd lines" || s.name() == "Lyrics even lines")
+                        s.setAlign((s.align() & ~ ALIGN_VMASK) | Align(ALIGN_BASELINE));
 
                   _style.setTextStyle(s);
                   }
@@ -377,7 +383,7 @@ Score::FileError Score::read114(XmlReader& e)
                   if (_layoutMode != LayoutFloat && _layoutMode != LayoutSystem) {
                         PageFormat pf;
                         pf.copy(*pageFormat());
-                        pf.read(e);
+                        pf.read(e, this);
                         setPageFormat(pf);
                         }
                   else
@@ -411,7 +417,7 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
                   slur->read(e);
-                  e.addSpanner(slur);
+                  addSpanner(slur);
                   }
             else if ((tag == "HairPin")
                 || (tag == "Ottava")
@@ -425,19 +431,17 @@ Score::FileError Score::read114(XmlReader& e)
                         s->setTrack(e.track());
                   else
                         e.setTrack(s->track());       // update current track
-                  if (s->__tick1() == -1)
-                        s->__setTick1(e.tick());
+                  if (s->tick() == -1)
+                        s->setTick(e.tick());
                   else
-                        e.setTick(s->__tick1());      // update current tick
-                  if (s->__tick2() == -1) {
+                        e.setTick(s->tick());      // update current tick
+                  if (s->tickLen() == -1) {
                         delete s;
-                        qDebug("invalid spanner %s tick2: %d\n",
-                           s->name(), s->__tick2());
+                        qDebug("invalid spanner %s tickLen: %d\n",
+                           s->name(), s->tickLen());
                         }
                   else
-                        e.addSpanner(s);
-                  // qDebug("Spanner <%s> %d %d track %d", s->name(),
-                  //   s->__tick1(), s->__tick2(), s->track());
+                        addSpanner(s);
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -456,6 +460,9 @@ Score::FileError Score::read114(XmlReader& e)
                   e.unknown();
             }
 
+      if (e.error() != QXmlStreamReader::NoError)
+            return FILE_BAD_FORMAT;
+
       int n = nstaves();
       for (int idx = 0; idx < n; ++idx) {
             Staff* s = _staves[idx];
@@ -473,6 +480,8 @@ Score::FileError Score::read114(XmlReader& e)
                   int tick = i.key();
                   ClefType clefId = i.value()._concertClef;
                   Measure* m = tick2measure(tick);
+                  if (!m)
+                        continue;
                   if ((tick == m->tick()) && m->prevMeasure())
                         m = m->prevMeasure();
                   Segment* seg = m->getSegment(Segment::SegClef, tick);
@@ -515,7 +524,8 @@ Score::FileError Score::read114(XmlReader& e)
             }
       qDeleteAll(e.clefListList());
 
-      foreach(Spanner* s, e.spanner()) {
+      for (std::pair<int,Spanner*> p : spanner()) {
+            Spanner* s = p.second;
             if (s->type() == Element::OTTAVA
                || (s->type() == Element::TEXTLINE)
                || (s->type() == Element::VOLTA)
@@ -527,71 +537,10 @@ Score::FileError Score::read114(XmlReader& e)
                   tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
                   }
 
-            if (s->type() == Element::SLUR) {
-                  Slur* slur = static_cast<Slur*>(s);
-
-                  if (!slur->startElement() || !slur->endElement()) {
-                        qDebug("incomplete Slur");
-                        if (slur->startElement()) {
-                              qDebug("  front %d", static_cast<ChordRest*>(slur->startElement())->tick());
-                              static_cast<ChordRest*>(slur->startElement())->removeSlurFor(slur);
-                              }
-                        if (slur->endElement()) {
-                              qDebug("  back %d", static_cast<ChordRest*>(slur->endElement())->tick());
-                              static_cast<ChordRest*>(slur->endElement())->removeSlurBack(slur);
-                              }
-                        }
-                  else {
-                        ChordRest* cr1 = (ChordRest*)(slur->startElement());
-                        ChordRest* cr2 = (ChordRest*)(slur->endElement());
-                        if (cr1->tick() > cr2->tick()) {
-                              qDebug("Slur invalid start-end tick %d-%d", cr1->tick(), cr2->tick());
-                              slur->setStartElement(cr2);
-                              slur->setEndElement(cr1);
-                              }
-                        int n1 = 0;
-                        int n2 = 0;
-                        for (Spanner* s = cr1->spannerFor(); s; s = s->next()) {
-                              if (s == slur)
-                                    ++n1;
-                              }
-                        for (Spanner* s = cr2->spannerBack(); s; s = s->next()) {
-                              if (s == slur)
-                                    ++n2;
-                              }
-                        if (n1 != 1 || n2 != 1) {
-                              qDebug("Slur references bad: %d %d", n1, n2);
-                              }
-                        }
-                  }
-            else {
-                  Segment* s1 = tick2segment(s->__tick1());
-                  Segment* s2 = tick2segment(s->__tick2());
-                  if (s1 == 0 || s2 == 0) {
-                        qDebug("cannot place %s at tick %d - %d",
-                           s->name(), s->__tick1(), s->__tick2());
-                        continue;
-                        }
+            if (s->type() != Element::SLUR) {
                   if (s->type() == Element::VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
                         volta->setAnchor(Spanner::ANCHOR_MEASURE);
-                        volta->setStartMeasure(s1->measure());
-                        Measure* m2 = s2->measure();
-                        if (s2->tick() == m2->tick())
-                              m2 = m2->prevMeasure();
-                        volta->setEndMeasure(m2);
-                        s1->measure()->add(s);
-                        int n = volta->spannerSegments().size();
-                        if (n) {
-                              // volta->setYoff(-styleS(ST_voltaHook).val());
-                              // LineSegment* ls = volta->segmentAt(0);
-                              // ls->setReadPos(QPointF());
-                              }
-                        }
-                  else {
-                        s->setStartElement(s1);
-                        s->setEndElement(s2);
-                        s1->add(s);
                         }
                   }
 
@@ -606,6 +555,7 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             }
+
       connectTies();
 
       //
@@ -673,11 +623,17 @@ Score::FileError Score::read114(XmlReader& e)
             style()->set(ST_voltaY, Spatium(-2.0));
       if (styleB(ST_hideEmptyStaves) == true) // http://musescore.org/en/node/16228
             style()->set(ST_dontHideStavesInFirstSystem, false);
+      if (styleB(ST_useGermanNoteNames))
+            style()->set(ST_useStandardNoteNames, false);
 
       _showOmr = false;
 
       // create excerpts
-      foreach(Excerpt* excerpt, _excerpts) {
+      foreach (Excerpt* excerpt, _excerpts) {
+            if (excerpt->parts().isEmpty()) {         // ignore empty parts
+                  _excerpts.removeOne(excerpt);
+                  continue;
+                  }
             Score* nscore = Ms::createExcerpt(excerpt->parts());
             if (nscore) {
                   nscore->setParentScore(this);

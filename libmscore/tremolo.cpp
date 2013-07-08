@@ -218,15 +218,12 @@ void Tremolo::layout()
       _chord2->setTremolo(this);
       _chord2->setTremoloChordType(TremoloSecondNote);
 
-      Note* note = _chord2->up() ? _chord2->upNote() : _chord2->downNote();
-      int x2     = note->stemPos(_chord2->up()).x();
-
-      note    = _chord1->up() ? _chord1->upNote() : _chord1->downNote();
-      int x1  = note->stemPos(_chord1->up()).x();
+      int x2  = _chord2->stemPosBeam().x();
+      int x1  = _chord1->stemPosBeam().x();
 
       // qreal x2     = _chord2->_chord2->up()stemPos(_chord2->up(), true).x();
       // qreal x1     = _chord1->stemPos(_chord1->up(), true).x();
-      x             = x1 - _chord1->pagePos().x() + (x2 - x1 + note->headWidth()) * .5;
+      x             = x1 - _chord1->pagePos().x() + (x2 - x1 + _chord1->upNote()->headWidth()) * .5;
       setPos(x, y);
       }
 

@@ -96,6 +96,7 @@ StyleType styleTypes[] = {
       StyleType("beamMinSlope",            ST_DOUBLE),
       StyleType("beamMaxSlope",            ST_DOUBLE),
       StyleType("maxBeamTicks",            ST_INT),
+      StyleType("dotMag",                  ST_DOUBLE),
       StyleType("dotNoteDistance",         ST_SPATIUM),
       StyleType("dotRestDistance",         ST_SPATIUM),
       StyleType("dotDotDistance",          ST_SPATIUM),
@@ -137,7 +138,12 @@ StyleType styleTypes[] = {
       StyleType("genCourtesyTimesig",      ST_BOOL),
       StyleType("genCourtesyKeysig",       ST_BOOL),
       StyleType("genCourtesyClef",         ST_BOOL),
+      StyleType("useStandardNoteNames",    ST_BOOL),
       StyleType("useGermanNoteNames",      ST_BOOL),
+      StyleType("useSolfeggioNoteNames",   ST_BOOL),
+      StyleType("lowerCaseMinorChords",    ST_BOOL),
+      StyleType("chordStyle",              ST_STRING),
+      StyleType("chordsXmlFile",           ST_BOOL),
       StyleType("chordDescriptionFile",    ST_STRING),
       StyleType("concertPitch",            ST_BOOL),            // display transposing instruments in concert pitch
       StyleType("createMultiMeasureRests", ST_BOOL),
@@ -212,7 +218,8 @@ StyleType styleTypes[] = {
       StyleType("tremoloDistance",         ST_SPATIUM),
 
       StyleType("linearStretch",           ST_DOUBLE),
-      StyleType("crossMeasureValues",      ST_BOOL)
+      StyleType("crossMeasureValues",      ST_BOOL),
+      StyleType("keySigNaturals",          ST_INT)
       };
 
 static const QString ff("FreeSerifMscore");
@@ -335,10 +342,7 @@ void initStyle(MStyle* s)
 
       AS(TextStyle(
          TR( "Chordname"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true,
-         Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
-         false, QColor(Qt::black), QColor(255, 255, 255, 0),            // default params
-         TextStyle::HIDE_IN_EDITOR));                                   // don't show in Style Editor
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true));
 
       AS(TextStyle(
          TR( "Rehearsal Mark"), ff,  14, true, false, false,
@@ -490,6 +494,7 @@ StyleData::StyleData()
 
             StyleVal(ST_beamMaxSlope,         qreal(0.2)),
             StyleVal(ST_maxBeamTicks,         MScore::division),
+            StyleVal(ST_dotMag,         qreal(1.0)),
             StyleVal(ST_dotNoteDistance,      Spatium(0.35)),
             StyleVal(ST_dotRestDistance,      Spatium(0.25)),
             StyleVal(ST_dotDotDistance,       Spatium(0.5)),
@@ -530,8 +535,13 @@ StyleData::StyleData()
             StyleVal(ST_genCourtesyKeysig, true),
             StyleVal(ST_genCourtesyClef, true),
 
+            StyleVal(ST_useStandardNoteNames, true),
             StyleVal(ST_useGermanNoteNames, false),
-            StyleVal(ST_chordDescriptionFile, QString("stdchords.xml")),
+            StyleVal(ST_useSolfeggioNoteNames, false),
+            StyleVal(ST_lowerCaseMinorChords, false),
+            StyleVal(ST_chordStyle, QString("std")),
+            StyleVal(ST_chordsXmlFile, false),
+            StyleVal(ST_chordDescriptionFile, QString("chords_std.xml")),
             StyleVal(ST_concertPitch, false),
             StyleVal(ST_createMultiMeasureRests, false),
             StyleVal(ST_minEmptyMeasures, 2),
@@ -603,14 +613,14 @@ StyleData::StyleData()
             StyleVal(ST_tremoloDistance, Spatium(0.8)),
 
             StyleVal(ST_linearStretch, qreal(1.5)),
-            StyleVal(ST_crossMeasureValues, false)
+            StyleVal(ST_crossMeasureValues, false),
+            StyleVal(ST_keySigNaturals, NAT_NONE),
             };
 
       for (int idx = 0; idx < ST_STYLES; ++idx)
             _values[idx] = values[idx];
 
 // _textStyles.append(TextStyle(defaultTextStyles[i]));
-      _chordList = 0;
       _spatium = SPATIUM20 * MScore::DPI;
       _articulationAnchor[Articulation_Fermata]         = A_TOP_STAFF;
       _articulationAnchor[Articulation_Shortfermata]    = A_TOP_STAFF;
@@ -653,11 +663,8 @@ StyleData::StyleData()
 StyleData::StyleData(const StyleData& s)
    : QSharedData(s)
       {
-      _values = s._values;
-      if (s._chordList)
-            _chordList = new ChordList(*(s._chordList));
-      else
-            _chordList = 0;
+      _values          = s._values;
+      _chordList       = s._chordList;
       _customChordList = s._customChordList;
       _textStyles      = s._textStyles;
       _pageFormat.copy(s._pageFormat);
@@ -672,7 +679,6 @@ StyleData::StyleData(const StyleData& s)
 
 StyleData::~StyleData()
       {
-      delete _chordList;
       }
 
 //---------------------------------------------------------
@@ -965,6 +971,8 @@ bool TextStyleData::readProperties(XmlReader& e)
 
 void StyleData::load(XmlReader& e)
       {
+      QString oldChordDescriptionFile = value(ST_chordDescriptionFile).toString();
+      bool chordListTag = false;
       while (e.readNextStartElement()) {
             QString tag = e.name().toString();
 
@@ -980,10 +988,10 @@ void StyleData::load(XmlReader& e)
             else if (tag == "displayInConcertPitch")
                   set(StyleVal(ST_concertPitch, bool(e.readInt())));
             else if (tag == "ChordList") {
-                  delete _chordList;
-                  _chordList = new ChordList;
-                  _chordList->read(e);
+                  _chordList.clear();
+                  _chordList.read(e);
                   _customChordList = true;
+                  chordListTag = true;
                   }
             else if (tag == "pageFillLimit")   // obsolete
                   e.skipCurrentElement();
@@ -1047,6 +1055,33 @@ void StyleData::load(XmlReader& e)
                         }
                   }
             }
+
+      // if we just specified a new chord description file
+      // and didn't encounter a ChordList tag
+      // then load the chord description file
+      QString newChordDescriptionFile = value(ST_chordDescriptionFile).toString();
+      if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
+            if (!newChordDescriptionFile.startsWith("chords_") && value(ST_chordStyle).toString() == "std") {
+                  // should not normally happen,
+                  // but treat as "old" (114) score just in case
+                  set(StyleVal(ST_chordStyle, QString("custom")));
+                  set(StyleVal(ST_chordsXmlFile, true));
+                  qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
+                  }
+            if (value(ST_chordStyle).toString() == "custom")
+                  _customChordList = true;
+            else
+                  _customChordList = false;
+            _chordList.unload();
+            }
+
+      // make sure we have a chordlist
+      if (!_chordList.loaded() && !chordListTag) {
+            if (value(ST_chordsXmlFile).toBool())
+                  _chordList.read("chords.xml");
+            _chordList.read(newChordDescriptionFile);
+            }
+
       //
       //  Compatibility with old scores/styles:
       //  translate old frameWidthMM and paddingWidthMM
@@ -1113,9 +1148,9 @@ void StyleData::save(Xml& xml, bool optimize) const
             }
       for (int i = TEXT_STYLES; i < _textStyles.size(); ++i)
             _textStyles[i].write(xml);
-      if (_customChordList && _chordList) {
+      if (_customChordList && !_chordList.isEmpty()) {
             xml.stag("ChordList");
-            _chordList->write(xml);
+            _chordList.write(xml);
             xml.etag();
             }
       for (int i = 0; i < ARTICULATIONS; ++i) {
@@ -1135,32 +1170,26 @@ void StyleData::save(Xml& xml, bool optimize) const
 
 const ChordDescription* StyleData::chordDescription(int id) const
       {
-      return chordList()->value(id);
+      return _chordList.value(id);
       }
 
 //---------------------------------------------------------
 //   chordList
 //---------------------------------------------------------
 
-ChordList* StyleData::chordList()  const
+ChordList* StyleData::chordList()
       {
-      if (_chordList == 0) {
-            _chordList = new ChordList();
-            _chordList->read("chords.xml");
-            _chordList->read(value(ST_chordDescriptionFile).toString());
-            }
-      return _chordList;
+      return &_chordList;
       }
 
 //---------------------------------------------------------
 //   setChordList
 //---------------------------------------------------------
 
-void StyleData::setChordList(ChordList* cl)
+void StyleData::setChordList(ChordList* cl, bool custom)
       {
-      delete _chordList;
-      _chordList = cl;
-      _customChordList = true;      // TODO: check
+      _chordList = *cl;
+      _customChordList = custom;
       }
 
 //---------------------------------------------------------
@@ -1287,7 +1316,7 @@ const ChordDescription* MStyle::chordDescription(int id) const
 //   chordList
 //---------------------------------------------------------
 
-ChordList* MStyle::chordList() const
+ChordList* MStyle::chordList()
       {
       return d->chordList();
       }
@@ -1296,9 +1325,9 @@ ChordList* MStyle::chordList() const
 //   setChordList
 //---------------------------------------------------------
 
-void MStyle::setChordList(ChordList* cl)
+void MStyle::setChordList(ChordList* cl, bool custom)
       {
-      d->setChordList(cl);
+      d->setChordList(cl, custom);
       }
 
 //---------------------------------------------------------

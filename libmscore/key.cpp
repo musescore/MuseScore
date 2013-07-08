@@ -169,6 +169,8 @@ void AccidentalState::init(const KeySigEvent& ks)
 
 //---------------------------------------------------------
 //   key
+//
+//    locates the key sig currently in effect at tick
 //---------------------------------------------------------
 
 KeySigEvent KeyList::key(int tick) const
@@ -181,6 +183,23 @@ KeySigEvent KeyList::key(int tick) const
             return KeySigEvent();
       --i;
       return i->second;
+      }
+
+//---------------------------------------------------------
+//   nextKeyTick
+//
+//    return the tick at which the key sig after tick is located
+//    return 0, if no such a key sig
+//---------------------------------------------------------
+
+int KeyList::nextKeyTick(int tick) const
+      {
+      if (empty())
+            return 0;
+      auto i = upper_bound(tick+1);
+      if (i == end())
+            return 0;
+      return i->first;
       }
 
 //---------------------------------------------------------

@@ -371,7 +371,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                         {
                         dragElement->setScore(score());
                         Spanner* spanner = static_cast<Spanner*>(dragElement);
-                        score()->cmdAddSpanner(spanner, pos, dragOffset);
+                        score()->cmdAddSpanner(spanner, pos);
                         event->acceptProposedAction();
                         }
                         break;
@@ -493,27 +493,15 @@ void ScoreView::dropEvent(QDropEvent* event)
                   _score->startCmd();
                   QString str(u.toLocalFile());
                   s->load(str);
-if (MScore::debugMode)
-      qDebug("drop image <%s> <%s>", qPrintable(str), qPrintable(str));
+                  qDebug("drop image <%s> <%s>", qPrintable(str), qPrintable(str));
 
                   Element* el = elementAt(pos);
-                  if (el && (el->type() == Element::NOTE || el->type() == Element::REST)) {
-                        s->setTrack(el->track());
-                        if (el->type() == Element::NOTE) {
-                              Note* note = (Note*)el;
-                              // s->setTick(note->chord()->tick());
-                              s->setParent(note->chord()->segment()->measure());
+                  if (el) {
+                        if (el->acceptDrop(this, pos, s)) {
+                              dropData.element = s;
+                              el->drop(dropData);
                               }
-                        else  {
-                              Rest* rest = (Rest*)el;
-                              // s->setTick(rest->tick());
-                              s->setParent(rest->segment()->measure());
-                              }
-                        score()->undoAddElement(s);
                         }
-                  else
-                        score()->cmdAddBSymbol(s, pos, dragOffset);
-
                   event->acceptProposedAction();
                   score()->endCmd();
                   mscore->endCmd();

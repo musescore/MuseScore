@@ -950,7 +950,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
 //   readPageFormat
 //---------------------------------------------------------
 
-static void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
+void MusicXml::readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
       {
       qreal _oddRightMargin  = 0.0;
       qreal _evenRightMargin = 0.0;
@@ -990,10 +990,16 @@ static void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
                         pf->setEvenBottomMargin(bm);
                         }
                   }
-            else if (tag == "page-height")
+            else if (tag == "page-height") {
                   size.rheight() = val.toDouble() * conversion;
-            else if (tag == "page-width")
+                  // set pageHeight and pageWidth for use by doCredits()
+                  pageHeight = static_cast<int>(val.toDouble() + 0.5);
+                  }
+            else if (tag == "page-width") {
                   size.rwidth() = val.toDouble() * conversion;
+                  // set pageHeight and pageWidth for use by doCredits()
+                  pageWidth = static_cast<int>(val.toDouble() + 0.5);
+                  }
             else
                   domError(e);
             }
@@ -1089,7 +1095,6 @@ void MusicXml::scorePartwise(QDomElement ee)
                   // IMPORT_LAYOUT
                   double millimeter = score->spatium()/10.0;
                   double tenths = 1.0;
-                  QDomElement pageLayoutElement;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         QString tag(ee.tagName());
                         if (tag == "scaling") {
@@ -1107,18 +1112,10 @@ void MusicXml::scorePartwise(QDomElement ee)
                                     score->setSpatium(_spatium);
                               }
                         else if (tag == "page-layout") {
-                              // set pageHeight and pageWidth for use by doCredits()
-                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                                    QString tag(eee.tagName());
-                                    QString val(eee.text());
-                                    int i = static_cast<int>(val.toDouble() + 0.5);
-                                    if (tag == "page-height")
-                                          pageHeight = i;
-                                    else if (tag == "page-width")
-                                          pageWidth = i;
-                                    }
-                              // remember ee for PageFormat::readMusicXML call
-                              pageLayoutElement = ee;
+                              PageFormat pf;
+                              readPageFormat(&pf, ee, millimeter / (tenths * INCH));
+                              if (preferences.musicxmlImportLayout)
+                                    score->setPageFormat(pf);
                               }
                         else if (tag == "system-layout") {
                               for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
@@ -1160,11 +1157,6 @@ void MusicXml::scorePartwise(QDomElement ee)
                               domError(ee);
                         }
 
-                  if (preferences.musicxmlImportLayout) {
-                        PageFormat pf;
-                        readPageFormat(&pf, pageLayoutElement, millimeter / (tenths * INCH));
-                        score->setPageFormat(pf);
-                        }
                   score->setDefaultsRead(true); // TODO only if actually succeeded ?
                   // IMPORT_LAYOUT END
                   }
@@ -1263,13 +1255,13 @@ static void partGroupStart(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, in
       if (s == "")
             ;  //ignore
       else if (s == "brace")
-            bracketType = BRACKET_AKKOLADE;
+            bracketType = BRACKET_BRACE;
       else if (s == "bracket")
             bracketType = BRACKET_NORMAL;
       else if (s == "line")
             bracketType = BRACKET_NORMAL;
       else if (s == "square")
-            bracketType = BRACKET_NORMAL;
+            bracketType = BRACKET_SQUARE;
       else {
             qDebug("part-group symbol=%s not supported", s.toLatin1().data());
             return;
@@ -1673,30 +1665,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             int tick1 = i.value().first;
             int tick2 = i.value().second;
             // qDebug("wedge %p tick1 %d tick2 %d", sp, tick1, tick2);
-            Segment* seg1 = score->tick2segment(tick1);
-            Segment* seg2 = score->tick2segment(tick2);
-            // qDebug(" seg1 %p seg2 %p", seg1, seg2);
-            if (seg1 && seg2) {
-                  sp->setStartElement(seg1);
-                  seg1->add(sp);
-                  sp->setEndElement(seg2);
-                  seg2->addSpannerBack(sp);
-                  if (sp->type() == Element::OTTAVA) {
-                        Ottava* o = static_cast<Ottava*>(sp);
-                        int shift = o->pitchShift();
-                        Staff* st = o->staff();
-                        st->pitchOffsets().setPitchOffset(tick1, shift);
-                        st->pitchOffsets().setPitchOffset(tick2, 0);
-                        }
-                  else if (sp->type() == Element::HAIRPIN) {
-                        Hairpin* hp = static_cast<Hairpin*>(sp);
-                        score->updateHairpin(hp);
-                        }
-                  }
-            else {
-                  qDebug("Can't find segments to attach spanner (wedge) to: tick1=%d tick2=%d seg1=%p seg2=%p",
-                         tick1, tick2, seg1, seg2);
-                  }
+            sp->setTick(tick1);
+            sp->setTick2(tick2);
+            sp->score()->addElement(sp);
             ++i;
             }
       spanners.clear();
@@ -2124,15 +2095,14 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                           // LVIFIX TODO also support endings "1 - 3"
                                           volta->endings().clear();
                                           volta->endings().append(iEndingNumbers);
-                                          volta->setStartElement(measure);
+                                          volta->setTick(measure->tick());
                                           measure->add(volta);
                                           lastVolta = volta;
                                           }
                                     else if (endingType == "stop") {
                                           if (lastVolta) {
                                                 lastVolta->setVoltaType(VoltaType::CLOSED);
-                                                lastVolta->setEndElement(measure);
-                                                measure->addSpannerBack(lastVolta);
+                                                lastVolta->setTick2(measure->tick());
                                                 lastVolta = 0;
                                                 }
                                           else {
@@ -2142,8 +2112,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                     else if (endingType == "discontinue") {
                                           if (lastVolta) {
                                                 lastVolta->setVoltaType(VoltaType::OPEN);
-                                                lastVolta->setEndElement(measure);
-                                                measure->addSpannerBack(lastVolta);
+                                                lastVolta->setTick2(measure->tick());
                                                 lastVolta = 0;
                                                 }
                                           else {
@@ -3110,7 +3079,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         tuplets.resize(staves * VOICES);
                   Staff* st = part->staff(0);
                   if (st && staves == 2) {
-                        st->setBracket(0, BRACKET_AKKOLADE);
+                        st->setBracket(0, BRACKET_BRACE);
                         st->setBracketSpan(0, 2);
                         st->setBarLineSpan(2); //seems to be default in musicXML
                         }
@@ -4090,8 +4059,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                           slur[slurNo]->setLineType(1);
                                     else if (lineType == "dashed")
                                           slur[slurNo]->setLineType(2);
-                                    cr->addSlurFor(slur[slurNo]);
-                                    slur[slurNo]->setStartElement(cr);
+                                    slur[slurNo]->setTick(cr->tick());
                                     }
                               else
                                     endSlur = true;
@@ -4104,22 +4072,19 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               // slur[slurNo]->setTrack((staff + relStaff) * VOICES);
                               // score->add(slur[slurNo]);
                               if (endSlur) {
-                                    cr->addSlurFor(slur[slurNo]);
-                                    slur[slurNo]->setStartElement(cr);
+                                    slur[slurNo]->setTick(cr->tick());
                                     slur[slurNo] = 0;
                                     }
                               }
                         else if (slurType == "stop") {
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
-                                    cr->addSlurBack(slur[slurNo]);
-                                    slur[slurNo]->setEndElement(cr);
+                                    slur[slurNo]->setTick2(cr->tick());
                                     // slur[slurNo]->setEnd(tick, trk + voice);
                                     }
                               else {
                                     // slur[slurNo]->setEnd(tick, trk + voice);
-                                    cr->addSlurBack(slur[slurNo]);
-                                    slur[slurNo]->setEndElement(cr);
+                                    slur[slurNo]->setTick2(cr->tick());
                                     slur[slurNo] = 0;
                                     }
                               }
@@ -4811,7 +4776,10 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             // if (grace)
             //       qDebug(" grace: nrOfGraceSegsReq: %d", nrOfGraceSegsReq(pn));
             int gl = nrOfGraceSegsReq(pn);
-            cr = measure->findChord(loc_tick, track, grace);
+            // TODO-S  cr = measure->findChord(loc_tick, track, grace);
+            // implementation of grace notes has changed
+
+            cr = measure->findChord(loc_tick, track);
             if (cr == 0) {
                   // Segment::SegmentType st = Segment::SegChordRest;
                   cr = new Chord(score);
@@ -4848,9 +4816,12 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                         }
                   cr->setDots(dots);
                   cr->setDuration(cr->durationType().fraction());
-                  // qDebug(" cr->tick()=%d ", cr->tick());
-                  Segment* s = measure->getGraceSegment(loc_tick, gl);
-                  s->add(cr);
+                  //qDebug(" cr->tick()=%d ", cr->tick());
+//TODO-S  deal with grace notes
+                  if(gl == 0) {
+                        Segment* s = measure->getSegment(cr, loc_tick);
+                        s->add(cr);
+                        }
                   }
             cr->setStaffMove(move);
 
@@ -5055,7 +5026,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       QString printFrame(e.attribute("print-frame"));
       QString printStyle(e.attribute("print-style"));
 
-      QString kind, kindText;
+      QString kind, kindText, symbols, parens;
       QList<HDegree> degreeList;
 
       if (harmony) {
@@ -5096,6 +5067,8 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                   //             print-style, halign, valign
 
                   kindText = e.attribute("text");
+                  symbols = e.attribute("use-symbols");
+                  parens = e.attribute("parentheses-degrees");
                   kind = e.text();
                   }
             else if (tag == "inversion") {
@@ -5172,39 +5145,52 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
 
       //TODO-WS ha->setTick(tick);
 
-      const ChordDescription* d = ha->fromXml(kind, degreeList);
-      if (d == 0) {
-            QString degrees;
-            foreach(const HDegree &d, degreeList) {
-                  if (!degrees.isEmpty())
-                        degrees += " ";
-                  degrees += d.text();
-                  }
-            qDebug("unknown chord txt: <%s> kind: <%s> degrees: %s",
-                   qPrintable(kindText), qPrintable(kind), qPrintable(degrees));
-
-            // Strategy II: lookup "kind", merge in degree list and try to find
-            //    harmony in list
-
-            d = ha->fromXml(kind);
-            if (d) {
-                  ha->setId(d->id);
-                  foreach(const HDegree &d, degreeList)
-                  ha->addDegree(d);
-                  ha->resolveDegreeList();
-                  ha->render();
-                  }
-            else {
-                  qDebug("'kind: <%s> not found in harmony data base", qPrintable(kind));
-                  QString s = tpc2name(ha->rootTpc(), score->style(ST_useGermanNoteNames).toBool()) + kindText;
-                  ha->setText(s);
-                  }
-            }
-      else {
+      const ChordDescription* d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
+      if (d) {
             ha->setId(d->id);
-            // ha->resolveDegreeList();
+            ha->setTextName(d->names.front());
             ha->render();
             }
+#if 0
+      else {
+            // This code won't be hit if MusicXML was at all straightforward,
+            // as fromXml() is normally able to construct a chord description by itself.
+            // The following is retained from previous revisions as a fallback,
+            // in case fromXml fails but there is a match to be found in the tags from the chord list.
+            d = ha->fromXml(kind, degreeList);
+            if (d == 0) {
+                  QString degrees;
+                  foreach(const HDegree &d, degreeList) {
+                        if (!degrees.isEmpty())
+                              degrees += " ";
+                        degrees += d.text();
+                        }
+                  qDebug("unknown chord txt: <%s> kind: <%s> degrees: %s",
+                         qPrintable(kindText), qPrintable(kind), qPrintable(degrees));
+                  // Strategy II: lookup "kind", merge in degree list and try to find
+                  //    harmony in list
+
+                  d = ha->fromXml(kind);
+                  if (d) {
+                        ha->setId(d->id);
+                        foreach(const HDegree &d, degreeList)
+                              ha->addDegree(d);
+                        ha->resolveDegreeList();
+                        ha->render();
+                        }
+                  else {
+                        qDebug("'kind: <%s> not found in harmony data base", qPrintable(kind));
+                        QString s = tpc2name(ha->rootTpc(), score->style(ST_useGermanNoteNames).toBool()) + kindText;
+                        ha->setText(s);
+                        }
+                  }
+            else {
+                  ha->setId(d->id);
+                  // ha->resolveDegreeList();
+                  ha->render();
+                  }
+            }
+#endif
       ha->setVisible(printObject == "yes");
 
       // TODO-LV: do this only if ha points to a valid harmony

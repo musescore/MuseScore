@@ -63,7 +63,7 @@ static const PropertyData propertyList[] = {
       { P_BARLINE_SPAN,        false, "",              T_INT   },
       { P_BARLINE_SPAN_FROM,   false, 0,               T_INT   },
       { P_BARLINE_SPAN_TO,     false, 0,               T_INT   },
-      { P_USER_OFF,            false, 0,               T_POINT },
+      { P_USER_OFF,            false, "userOff",       T_POINT },
       { P_FRET,                false, "fret",          T_INT   },
 
       { P_STRING,              false, "string",        T_INT   },
@@ -151,7 +151,19 @@ static const PropertyData propertyList[] = {
       { P_GROUPS,              false, 0,               T_GROUPS },
       { P_LINE_COLOR,          false, 0,               T_COLOR  },
 
-      { P_END,                 false, "",              T_INT    }
+      { P_LASSO_POS,           false, 0,               T_POINT_MM },
+      { P_LASSO_SIZE,          false, 0,               T_SIZE_MM  },
+
+      { P_TIME_STRETCH,        false, 0,               T_REAL     },
+
+      { P_TIMESIG,             false, 0,               T_FRACTION },
+      { P_TIMESIG_GLOBAL,      false, 0,               T_FRACTION },
+
+      { P_SPANNER_TICK,        true,  "tick",          T_INT      },
+      { P_SPANNER_TICK2,       true,  "tick2",         T_INT      },
+      { P_USER_OFF2,           false, "userOff2",      T_POINT    },
+
+      { P_END,                 false, "",              T_INT      }
       };
 
 //---------------------------------------------------------
@@ -160,6 +172,8 @@ static const PropertyData propertyList[] = {
 
 P_TYPE propertyType(P_ID id)
       {
+      if (id == P_LASSO_SIZE)
+            printf("lasso size type ist %d\n", propertyList[id].type);
       return propertyList[id].type;
       }
 
@@ -182,7 +196,7 @@ const char* propertyName(P_ID id)
       }
 
 //---------------------------------------------------------
-// getProperty
+//    getProperty
 //---------------------------------------------------------
 
 QVariant getProperty(P_ID id, XmlReader& e)
@@ -267,6 +281,9 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   g.read(e);
                   return QVariant::fromValue(g);
                   }
+            case T_POINT_MM:
+            case T_SIZE_MM:
+                  return QVariant();
             }
       return QVariant();
       }

@@ -790,7 +790,7 @@ qDebug("BeginRepeat=============================================\n");
             Staff* staff = score->staff(i);
             int patch = channelDefaults[midiChannel].patch;
             ClefType clefId = CLEF_G;
-            if (c & 0x1) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
@@ -808,7 +808,7 @@ qDebug("BeginRepeat=============================================\n");
 
 
             Channel& ch = instr->channel(0);
-            if (c & 1) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }
@@ -1270,7 +1270,7 @@ qDebug("BeginRepeat=============================================\n");
             Staff* staff = score->staff(i);
             int patch = channelDefaults[midiChannel].patch;
             ClefType clefId = CLEF_G;
-            if (c & 0x1) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
@@ -1287,7 +1287,7 @@ qDebug("BeginRepeat=============================================\n");
             segment->add(clef);
 
             Channel& ch = instr->channel(0);
-            if (c & 1) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }
@@ -1788,7 +1788,7 @@ void GuitarPro4::read(QFile* fp)
             Staff* staff = score->staff(i);
             int patch = channelDefaults[midiChannel].patch;
             ClefType clefId = CLEF_G;
-            if (c & 0x1) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
@@ -1806,7 +1806,7 @@ void GuitarPro4::read(QFile* fp)
 
 
             Channel& ch = instr->channel(0);
-            if (c & 1) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }
@@ -1923,17 +1923,15 @@ void GuitarPro4::read(QFile* fp)
                               Slur* slur = new Slur(score);
                               slur->setParent(0);
                               slur->setTrack(staffIdx * VOICES);
-                              slur->setStartElement(cr);
-                              slur->setEndElement(cr);
+                              slur->setTick(cr->tick());
+                              slur->setTick2(cr->tick());
                               slurs[staffIdx] = slur;
                               }
                         else if (slurs[staffIdx] && !hasSlur) {
                               // TODO: check slur
                               Slur* s = slurs[staffIdx];
                               slurs[staffIdx] = 0;
-                              s->setEndElement(cr);
-                              static_cast<Chord*>(s->startElement())->addSlurFor(s);
-                              static_cast<Chord*>(s->endElement())->addSlurBack(s);
+                              s->setTick2(cr->tick());
                               }
                         else if (slurs[staffIdx] && hasSlur) {
                               }
@@ -2478,7 +2476,7 @@ void GuitarPro5::readTracks()
             //
             int patch = channelDefaults[midiChannel].patch;
             ClefType clefId = CLEF_G;
-            if (c & 0x1) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = CLEF_PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
@@ -2496,7 +2494,7 @@ void GuitarPro5::readTracks()
 
 
             Channel& ch = instr->channel(0);
-            if (c & 1) {
+            if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }
@@ -2751,7 +2749,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             pscore->style()->set(ST_createMultiMeasureRests, true);
 
             QList<int> stavesMap;
-            Part* p = new Part(pscore);
+            Part*   p = new Part(pscore);
             p->setInstrument(*part->instr());
 
             Staff* staff = part->staves()->front();
@@ -2767,22 +2765,20 @@ Score::FileError importGTP(Score* score, const QString& name)
             p->staves()->append(s);
             pscore->staves().append(s);
             stavesMap.append(score->staffIdx(staff));
+            cloneStaves(score, pscore, stavesMap);
+
             if (part->staves()->front()->staffType()->group() == PITCHED_STAFF) {
-                  s = new Staff(pscore, p, 1);
-                  s->setUpdateKeymap(true);
+                  p->setStaves(2);
+                  Staff* s1 = p->staff(1);
+                  s1->setUpdateKeymap(true);
                   StaffTypeTablature* st = static_cast<StaffTypeTablature*>(pscore->staffType(TAB_STAFF_TYPE));
                   st->setSlashStyle(true);
-
-                  s->setStaffType(st);
-                  s->linkTo(staff);
-                  p->staves()->append(s);
-                  pscore->staves().append(s);
-                  stavesMap.append(score->staffIdx(staff));
+                  s1->setStaffType(st);
+                  s1->linkTo(s);
+                  cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BRACKET_NORMAL, 2));
                   }
             pscore->appendPart(p);
-
-            cloneStaves(score, pscore, stavesMap);
 
             pscore->setName(part->partName());
             Excerpt* excerpt = new Excerpt(pscore);
@@ -2829,7 +2825,15 @@ Score::FileError importGTP(Score* score, const QString& name)
       score->setSaved(false);
       score->setCreated(true);
       delete gp;
+
+      score->setPlaylistDirty(true);
       score->rebuildMidiMapping();
+      score->updateChannel();
+      score->updateNotes();
+
+      score->setLayoutAll(true);
+      score->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
+      score->doLayout();
       return Score::FILE_NO_ERROR;
       }
 }

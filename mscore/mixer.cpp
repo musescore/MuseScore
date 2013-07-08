@@ -44,7 +44,6 @@ PartEdit::PartEdit(QWidget* parent)
       connect(reverb,   SIGNAL(valueChanged(double,int)), SLOT(reverbChanged(double)));
       connect(mute,     SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
       connect(solo,     SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
-      connect(drumset,  SIGNAL(toggled(bool)),            SLOT(drumsetToggled(bool)));
       }
 
 //---------------------------------------------------------
@@ -72,7 +71,7 @@ void PartEdit::setPart(Part* p, Channel* a)
                   break;
                   }
             }
-      drumset->setChecked(p->instr()->useDrumset());
+      drumset->setVisible(p->instr()->useDrumset());
       }
 
 //---------------------------------------------------------
@@ -305,22 +304,6 @@ void PartEdit::soloToggled(bool val)
                   emit soloChanged(false);
                 }
             }
-      }
-
-//---------------------------------------------------------
-//   drumsetToggled
-//---------------------------------------------------------
-
-void PartEdit::drumsetToggled(bool val)
-      {
-      part->instr()->setUseDrumset(val);
-      patch->clear();
-      const QList<MidiPatch*> pl = synti->getPatchInfo();
-      foreach(MidiPatch* p, pl) {
-            if (val == p->drum)
-                  patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));
-            }
-      patch->setCurrentIndex(channel->program);
       }
 
 //---------------------------------------------------------

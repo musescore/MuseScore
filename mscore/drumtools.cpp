@@ -113,6 +113,7 @@ void DrumTools::updateDrumset()
             Chord* chord = new Chord(gscore);
             chord->setDurationType(TDuration::V_QUARTER);
             chord->setStemDirection(dir);
+            chord->setUp(up);
             chord->setTrack(voice);
             Note* note = new Note(gscore);
             note->setParent(chord);
@@ -126,7 +127,7 @@ void DrumTools::updateDrumset()
             Stem* stem = new Stem(gscore);
             stem->setLen((up ? -3.0 : 3.0) * _spatium);
             chord->setStem(stem);
-            stem->setPos(note->stemPos(up));
+            stem->setPos(chord->stemPos());
             int sc = drumset->shortcut(pitch);
             QString shortcut;
             if (sc)

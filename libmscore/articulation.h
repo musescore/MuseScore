@@ -61,6 +61,7 @@ class Articulation : public Element {
       QString _channelName;
       ArticulationAnchor _anchor;
       bool _up;
+      qreal _timeStretch;      // for fermata
 
       virtual void draw(QPainter*) const;
 
@@ -70,6 +71,8 @@ class Articulation : public Element {
 
       virtual Articulation* clone() const   { return new Articulation(*this); }
       virtual ElementType type() const      { return ARTICULATION; }
+
+      virtual qreal mag() const             { return parent() ? parent()->mag(): 1.0; }
 
       void setArticulationType(ArticulationType);
       ArticulationType articulationType() const { return _articulationType; }
@@ -86,6 +89,7 @@ class Articulation : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant propertyDefault(P_ID) const;
 
       QString subtypeUserName() const;
 
@@ -104,12 +108,13 @@ class Articulation : public Element {
       ArticulationAnchor anchor() const     { return _anchor;      }
       void setAnchor(ArticulationAnchor v)  { _anchor = v;         }
 
+      qreal timeStretch() const             { return _timeStretch; }
+      void setTimeStretch(qreal val)        { _timeStretch = val;  }
+
       QString channelName() const           { return _channelName; }
       void setChannelName(const QString& s) { _channelName = s;    }
 
       const ArticulationInfo* articulationInfo() const { return &articulationList[articulationType()]; }
-
-      qreal timeStretch() const;
 
       static QString idx2name(int idx);
       };

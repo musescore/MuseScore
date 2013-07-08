@@ -806,7 +806,6 @@ void MgStyle::polish(QWidget* widget) {
 #ifndef Q_OS_MAC
             widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
-//WS            widget->setContentsMargins(3, 3, 3, 3);
             widget->setContentsMargins(3, 3, 3, 3);
             widget->installEventFilter(this);
             }
@@ -1642,7 +1641,12 @@ bool MgStyle::drawIndicatorHeaderArrowPrimitive( const QStyleOption* option, QPa
       return true;
       }
 
-bool MgStyle::drawPanelButtonCommandPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const {
+//---------------------------------------------------------
+//   drawPanelButtonCommandPrimitive
+//---------------------------------------------------------
+
+bool MgStyle::drawPanelButtonCommandPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
+      {
       const State& flags( option->state );
       const bool enabled( flags & State_Enabled );
       const bool mouseOver( enabled && (flags & State_MouseOver) );
@@ -1749,7 +1753,8 @@ bool MgStyle::drawPanelButtonCommandPrimitive( const QStyleOption* option, QPain
 //   drawPanelButtonToolPrimitive
 //---------------------------------------------------------
 
-bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
+bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const
+      {
       /*
       For toolbutton in TabBars, corresponding to expanding arrows, no frame is drawn
       However one needs to draw the window background, because the button rect might
@@ -1760,10 +1765,9 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
       if (qobject_cast<const Ms::PaletteBoxButton*>(widget))
             isInTabBar = true;
 
-      if ( isInTabBar ) {
-
-            const QPalette& palette( option->palette );
-            QRect r( option->rect );
+      if (isInTabBar) {
+            const QPalette& palette(option->palette);
+            QRect r(option->rect);
 
             // adjust rect depending on shape
             if (qobject_cast<const QTabBar*>( widget->parent())) {
@@ -1865,7 +1869,6 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
             const QToolButton* t = qobject_cast<const QToolButton*>( widget );
             if ( t && t->popupMode() == QToolButton::MenuButtonPopup ) {
                   if ( reverseLayout ) {
-
                         tiles = TileSet::Bottom | TileSet::Top | TileSet::Right;
                         slitRect.adjust( -4, 0, 0, 0 );
 
@@ -1908,37 +1911,24 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
             slitRect.adjust( -1, -1, 0, 0 );
 
       // normal (auto-raised) toolbuttons
-      if ( flags & (State_Sunken | State_On) ) {
-            if ( enabled && hoverAnimated ) {
-
-                  _helper.renderHole( painter, palette.color(QPalette::Window), slitRect, hasFocus, mouseOver, hoverOpacity, AnimationHover, TileSet::Ring );
-
+      if (flags & (State_Sunken | State_On)) {
+            // painter->setBrush(palette.color(QPalette::Base));           // button Background
+            painter->setBrush(widget->palette().color(QPalette::Base));           // button Background
+            painter->setPen(Qt::NoPen);
+            _helper.fillHole(*painter, slitRect.adjusted(-2, -2, 4, 4));
+            QColor color(palette.color(QPalette::Window));
+            if (enabled && hoverAnimated )
+                  _helper.renderHole(painter, color, slitRect, hasFocus, mouseOver, hoverOpacity, AnimationHover, TileSet::Ring);
+            else if (toolBarAnimated ) {
+                  if (enabled && animatedRect.isNull() && current)
+                        _helper.renderHole(painter, color, slitRect, hasFocus, mouseOver, toolBarOpacity, AnimationHover, TileSet::Ring);
+                  else
+                        _helper.renderHole(painter, color, slitRect, false, false);
                   }
-            else if ( toolBarAnimated ) {
-
-                  if ( enabled && animatedRect.isNull() && current  ) {
-
-                        _helper.renderHole( painter, palette.color(QPalette::Window), slitRect, hasFocus, mouseOver, toolBarOpacity, AnimationHover, TileSet::Ring );
-
-                        }
-                  else {
-
-                        _helper.renderHole( painter, palette.color(QPalette::Window), slitRect, false, false);
-
-                        }
-
-                  }
-            else if ( toolBarTimerActive && current ) {
-
-                  _helper.renderHole( painter, palette.color(QPalette::Window), slitRect, hasFocus, true );
-
-                  }
-            else {
-
-                  _helper.renderHole( painter, palette.color(QPalette::Window), slitRect, hasFocus, mouseOver);
-
-                  }
-
+            else if (toolBarTimerActive && current )
+                  _helper.renderHole(painter, color, slitRect, hasFocus, true);
+            else
+                  _helper.renderHole(painter, color, slitRect, hasFocus, mouseOver);
             }
       else {
 
@@ -3312,8 +3302,10 @@ void MgStyle::renderDialSlab( QPainter* painter, const QRect& r, const QColor& c
 //   renderButtonSlab
 //---------------------------------------------------------
 
-void MgStyle::renderButtonSlab(QPainter* painter, QRect r, const QColor& color, StyleOptions options,
-                               qreal opacity, AnimationMode mode, TileSet::Tiles tiles) const {
+void MgStyle::renderButtonSlab(QPainter* painter, QRect r, const QColor& color,
+   StyleOptions options, qreal opacity, AnimationMode mode,
+   TileSet::Tiles tiles) const
+      {
       if ( (r.width() <= 0) || (r.height() <= 0))
             return;
 
@@ -3325,13 +3317,13 @@ void MgStyle::renderButtonSlab(QPainter* painter, QRect r, const QColor& color, 
             r.adjust( -1, 0, 1, 1 );
 
       // fill
-      if ( !(options & NoFill)) {
+
+      if (!(options & NoFill)) {
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing);
             painter->setPen(Qt::NoPen);
 
-            if ( _helper.calcShadowColor(color).value() > color.value() && (options & Sunken) ) {
-
+            if (_helper.calcShadowColor(color).value() > color.value() && (options & Sunken)) {
                   QLinearGradient innerGradient(0, r.top(), 0, r.bottom() + r.height());
                   innerGradient.setColorAt(0.0, color);
                   innerGradient.setColorAt(1.0, _helper.calcLightColor(color));
@@ -3339,8 +3331,6 @@ void MgStyle::renderButtonSlab(QPainter* painter, QRect r, const QColor& color, 
 
                   }
             else if (options & Sunken) {
-
-
                   QLinearGradient innerGradient(0, r.top() - r.height(), 0, r.bottom());
                   innerGradient.setColorAt(0.0, _helper.calcLightColor(color));
                   innerGradient.setColorAt(1.0, color);
@@ -3353,17 +3343,15 @@ void MgStyle::renderButtonSlab(QPainter* painter, QRect r, const QColor& color, 
                   innerGradient.setColorAt(0.0, _helper.calcLightColor(color));
                   innerGradient.setColorAt(0.6, color );
                   painter->setBrush(innerGradient);
-
                   }
-
             _helper.fillSlab(*painter, r);
             painter->restore();
-
             }
 
       // edges
       // for slabs, hover takes precedence over focus (other way around for holes)
       // but in any case if the button is sunken we don't show focus nor hover
+
       TileSet* tile;
       if ( options & Sunken) {
             tile = _helper.slabSunken(color, 0.0);
@@ -8296,7 +8284,8 @@ QRect MgStyle::tabBarTabButtonRect( SubElement element, const QStyleOption* opti
 //   configurationChanged
 //---------------------------------------------------------
 
-void MgStyle::configurationChanged() {
+void MgStyle::configurationChanged()
+      {
       _helper.reloadConfig();
 
       // reset config
@@ -8309,11 +8298,6 @@ void MgStyle::configurationChanged() {
       // reinitialize engines
       animations().setupEngines();
       transitions().setupEngines();
-//TODO      windowManager().initialize();
-
-      // widget explorer
-//      widgetExplorer().setEnabled(MgStyleConfigData::widgetExplorerEnabled);
-//      widgetExplorer().setDrawWidgetRects(MgStyleConfigData::drawWidgetRects);
 
       // scrollbar button dimentions.
       /* it has to be reinitialized here because scrollbar width might have changed */

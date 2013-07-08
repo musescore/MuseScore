@@ -37,7 +37,6 @@ class System;
 class Note;
 class Spacer;
 class TieMap;
-class SpannerMap;
 class AccidentalState;
 class Spanner;
 class Part;
@@ -108,9 +107,6 @@ class Measure : public MeasureBase {
 
       QList<MStaff*>  staves;
 
-      Spanner* _spannerFor;
-      Spanner* _spannerBack;
-
       int    _no;             ///< Measure number, counting from zero
       int    _noOffset;       ///< Offset to measure number
       MeasureNumberMode _noMode;
@@ -143,6 +139,7 @@ class Measure : public MeasureBase {
 
       void push_back(Segment* e);
       void push_front(Segment* e);
+      void layoutCR0(ChordRest* cr, qreal m);
 
    public:
       Measure(Score* = 0);
@@ -151,7 +148,7 @@ class Measure : public MeasureBase {
       virtual Measure* clone() const   { return new Measure(*this); }
       virtual ElementType type() const { return MEASURE; }
       virtual void setScore(Score* s);
-      Measure* cloneMeasure(Score*, TieMap*, SpannerMap*);
+      Measure* cloneMeasure(Score*, TieMap*);
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
@@ -194,6 +191,7 @@ class Measure : public MeasureBase {
       Fraction len() const                 { return _len;         }
       Fraction stretchedLen(Staff*) const;
       void setLen(const Fraction& f)       { _len = f;            }
+      // actual length of measure in ticks
       virtual int ticks() const            { return _len.ticks(); }
 
       int size() const                     { return _segments.size();        }
@@ -201,7 +199,6 @@ class Measure : public MeasureBase {
       Segment* first(Segment::SegmentTypes t) const { return _segments.first(t);      }
 
       Q_INVOKABLE Segment* last() const    { return _segments.last(); }
-      Segment* firstCRSegment() const      { return _segments.firstCRSegment(); }
       void remove(Segment* s);
       SegmentList* segments()              { return &_segments; }
 
@@ -212,7 +209,7 @@ class Measure : public MeasureBase {
       void layout(qreal width);
       void layout2();
 
-      Chord* findChord(int tick, int track, int gl);
+      Chord* findChord(int tick, int track);
       ChordRest* findChordRest(int tick, int track);
       int snap(int tick, const QPointF p) const;
       int snapNote(int tick, const QPointF p, int staff) const;
@@ -229,7 +226,7 @@ class Measure : public MeasureBase {
       void insertStaves(int s, int e);
 
       qreal tick2pos(int) const;
-      Segment* tick2segment(int, bool grace = false) const;
+      Segment* tick2segment(int) const;
 
       void sortStaves(QList<int>& dst);
 
@@ -243,12 +240,11 @@ class Measure : public MeasureBase {
       Segment* undoGetSegment(Segment::SegmentType st, int tick);
       Segment* getSegment(Element* el, int tick);
       Segment* getSegment(Segment::SegmentType st, int tick);
-      Segment* getGraceSegment(int tick, int gl);
       Segment* findSegment(Segment::SegmentType st, int t);
 
       bool createEndBarLines();
 
-      void setEndBarLineType(BarLineType val, bool g, bool visible = true, QColor color = Qt::black);
+      void setEndBarLineType(BarLineType val, bool g, bool visible = true, QColor color = QColor());
       BarLineType endBarLineType() const        { return _endBarLineType; }
 
       void setMmEndBarLineType(BarLineType v)   { _mmEndBarLineType = v;    }
@@ -292,13 +288,6 @@ class Measure : public MeasureBase {
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }
       QRectF staffabbox(int staffIdx) const;
-
-      Spanner* spannerFor() const    { return _spannerFor;        }
-      Spanner* spannerBack() const   { return _spannerBack;       }
-      void addSpannerBack(Spanner*);
-      bool removeSpannerBack(Spanner*);
-      void addSpannerFor(Spanner*);
-      bool removeSpannerFor(Spanner*);
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

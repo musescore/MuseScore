@@ -1,10 +1,9 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/split/split6.mscx split6-ref.mscx
-cp ../../../build.debug/mtest/libmscore/split/split5.mscx split5-ref.mscx
-cp ../../../build.debug/mtest/libmscore/split/split4.mscx split4-ref.mscx
-cp ../../../build.debug/mtest/libmscore/split/split3.mscx split3-ref.mscx
-cp ../../../build.debug/mtest/libmscore/split/split2.mscx split2-ref.mscx
-cp ../../../build.debug/mtest/libmscore/split/split1.mscx split1-ref.mscx
-cp ../../../build.debug/mtest/libmscore/split/split.mscx split-ref.mscx
+cp ../../../build.debug/mtest/libmscore/split/split06.mscx split06-ref.mscx
+cp ../../../build.debug/mtest/libmscore/split/split05.mscx split05-ref.mscx
+cp ../../../build.debug/mtest/libmscore/split/split04.mscx split04-ref.mscx
+cp ../../../build.debug/mtest/libmscore/split/split03.mscx split03-ref.mscx
+cp ../../../build.debug/mtest/libmscore/split/split02.mscx split02-ref.mscx
+cp ../../../build.debug/mtest/libmscore/split/split01.mscx split01-ref.mscx
 

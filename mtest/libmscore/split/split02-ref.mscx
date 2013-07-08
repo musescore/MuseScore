@@ -105,7 +105,6 @@
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="start" number="2"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -127,9 +126,9 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
-          <Slur type="stop" number="2"/>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>

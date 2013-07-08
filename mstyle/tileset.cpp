@@ -116,7 +116,8 @@ inline bool bits(TileSet::Tiles flags, TileSet::Tiles testFlags) {
 //   render
 //---------------------------------------------------------
 
-void TileSet::render(const QRect& r, QPainter* p, Tiles t) const {
+void TileSet::render(const QRect& r, QPainter* p, Tiles t) const
+      {
       // check initialization
       if (_pixmaps.size() < 9)
             return;

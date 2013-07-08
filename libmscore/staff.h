@@ -92,9 +92,9 @@ class Staff : public QObject {
 
       ClefTypeList _initialClef;    // used by new score wizard
 
-      std::map<int,Clef*> clefs;
+      std::multimap<int, Clef*> clefs;
       std::map<int,TimeSig*> timesigs;
-      KeyList* _keymap;
+      KeyList _keymap;
 
       QList <BracketItem> _brackets;
       int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
@@ -157,8 +157,9 @@ class Staff : public QObject {
       TimeSig* timeSig(int tick) const;
       const Groups& group(int tick) const;
 
-      KeyList* keymap() const        { return _keymap;      }
+      KeyList* keymap()                   { return &_keymap;      }
       KeySigEvent key(int tick) const;
+      int nextKeyTick(int tick) const;
       void setKey(int tick, int st);
       void setKey(int tick, const KeySigEvent& st);
       void removeKey(int tick);
@@ -189,6 +190,7 @@ class Staff : public QObject {
       StaffType* staffType() const     { return _staffType;      }
       void setStaffType(StaffType* st);
       StaffGroup staffGroup() const    { return _staffType->group(); }
+      bool isPitchedStaff() const      { return staffGroup() == PITCHED_STAFF; }
       bool isTabStaff() const          { return staffGroup() == TAB_STAFF; }
       bool isDrumStaff() const         { return staffGroup() == PERCUSSION_STAFF; }
 
@@ -204,6 +206,8 @@ class Staff : public QObject {
       qreal userDist() const        { return _userDist;  }
       void setUserDist(qreal val)   { _userDist = val;  }
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+      bool genKeySig();
+      bool showLedgerLines();
       };
 
 }     // namespace Ms

@@ -49,26 +49,26 @@ class ChordRest : public DurationElement {
       Q_PROPERTY(int      durationType  READ durationTypeTicks WRITE setDurationType);
       Q_PROPERTY(BeamMode beamMode      READ beamMode          WRITE undoSetBeamMode);
 
+//      QList<Element*> _annotations;
+
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
-
-      Spanner* _spannerFor;
-      Spanner* _spannerBack;
-      QList<Element*> _annotations;
 
    protected:
       QList<Articulation*> _articulations;
       Beam* _beam;
+      QList<Lyrics*> _lyricsList;
+      TabDurationSymbol* _tabDur;         // stores a duration symbol in tablature staves
+
       BeamMode _beamMode;
       bool _up;                           // actual stem direction
       bool _small;
       Space _space;                       // cached value from layout
-      QList<Lyrics*> _lyricsList;
-      TabDurationSymbol* _tabDur;         // stores a duration symbol in tablature staves
 
       // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
       int _crossMeasure;            ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
       TDuration _crossMeasureTDur;  ///< the total Duration type of the combined notes
+
 
    public:
       ChordRest(Score*);
@@ -78,8 +78,8 @@ class ChordRest : public DurationElement {
       virtual ElementType type() const = 0;
       virtual Element* drop(const DropData&);
 
-      Segment* segment() const                   { return (Segment*)parent(); }
-      virtual Measure* measure() const           { return parent() ? (Measure*)(parent()->parent()) : 0; }
+      virtual Segment* segment() const           { return (Segment*)parent(); }
+      virtual Measure* measure() const = 0;
 
       virtual void read(XmlReader&) = 0;
       void writeProperties(Xml& xml) const;
@@ -113,27 +113,12 @@ class ChordRest : public DurationElement {
       bool small() const                        { return _small; }
       void setSmall(bool val);
 
-      virtual void setMag(qreal val);
-
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
 
-      Spanner* spannerFor() const               { return _spannerFor;         }
-      Spanner* spannerBack() const              { return _spannerBack;        }
-
-      void addSlurFor(Slur* s)                  { addSpannerFor((Spanner*)s);  }
-      void addSlurBack(Slur* s)                 { addSpannerBack((Spanner*)s);    }
-      bool removeSlurFor(Slur* s)               { return removeSpannerFor((Spanner*)s);  }
-      bool removeSlurBack(Slur* s)              { return removeSpannerBack((Spanner*)s); }
-
-      void addSpannerFor(Spanner*);
-      void addSpannerBack(Spanner*);
-      bool removeSpannerFor(Spanner*);
-      bool removeSpannerBack(Spanner*);
-
-      const QList<Element*>& annotations() const { return _annotations;        }
-      QList<Element*>& annotations()             { return _annotations;        }
-      void removeAnnotation(Element* e)          { _annotations.removeOne(e);  }
+//      const QList<Element*>& annotations() const { return _annotations;        }
+//      QList<Element*>& annotations()             { return _annotations;        }
+//      void removeAnnotation(Element* e)          { _annotations.removeOne(e);  }
 
       void layoutArticulations();
 
@@ -170,6 +155,8 @@ class ChordRest : public DurationElement {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      bool isGrace() const;
+      void writeBeam(Xml& xml);
       };
 
 

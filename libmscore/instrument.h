@@ -47,6 +47,7 @@ struct StaffNameDoc {
       StaffNameDoc(const QTextDocumentFragment& s, int p=0) : name(s), pos(p) {}
       StaffNameDoc(const QString& s, int p=0) : name(QTextDocumentFragment::fromPlainText(s)), pos(p) {}
       bool operator==(const StaffNameDoc&) const;
+      void write(Xml& xml, const char* name) const;
       };
 
 //---------------------------------------------------------
@@ -189,9 +190,6 @@ class Instrument {
 //---------------------------------------------------------
 //   InstrumentList
 //---------------------------------------------------------
-
-typedef std::map<const int, Instrument>::iterator iInstrument;
-typedef std::map<const int, Instrument>::const_iterator ciInstrument;
 
 class InstrumentList : public std::map<const int, Instrument> {
       static Instrument defaultInstrument;

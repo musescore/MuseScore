@@ -24,7 +24,6 @@ namespace Ms {
 
 void PedalSegment::layout()
       {
-      rypos() = 0.0;
       TextLineSegment::layout1();
       if (parent())     // for palette
             rypos() += score()->styleS(ST_pedalY).val() * spatium();
@@ -56,6 +55,8 @@ void Pedal::read(XmlReader& e)
             setBeginSymbol(noSym);
             setEndHook(false);
             }
+      if (e.name() == "subtype")          // obsolete
+            e.skipCurrentElement();
       TextLine::read(e);
       }
 
