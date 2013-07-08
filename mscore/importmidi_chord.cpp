@@ -3,11 +3,11 @@
 
 namespace Ms {
 
-std::multimap<int, MidiChord>::iterator
-findFirstChordInRange(int startRangeTick,
-                      int endRangeTick,
-                      const std::multimap<int, MidiChord>::iterator &startChordIt,
-                      const std::multimap<int, MidiChord>::iterator &endChordIt)
+std::multimap<Fraction, MidiChord>::iterator
+findFirstChordInRange(const Fraction &startRangeTick,
+                      const Fraction &endRangeTick,
+                      const std::multimap<Fraction, MidiChord>::iterator &startChordIt,
+                      const std::multimap<Fraction, MidiChord>::iterator &endChordIt)
       {
       auto it = startChordIt;
       for (; it != endChordIt; ++it) {
@@ -20,10 +20,10 @@ findFirstChordInRange(int startRangeTick,
       return it;
       }
 
-std::multimap<int, MidiChord>::iterator
-findEndChordInRange(int endRangeTick,
-                    const std::multimap<int, MidiChord>::iterator &startChordIt,
-                    const std::multimap<int, MidiChord>::iterator &endChordIt)
+std::multimap<Fraction, MidiChord>::iterator
+findEndChordInRange(const Fraction &endRangeTick,
+                    const std::multimap<Fraction, MidiChord>::iterator &startChordIt,
+                    const std::multimap<Fraction, MidiChord>::iterator &endChordIt)
       {
       auto it = startChordIt;
       for (; it != endChordIt; ++it) {

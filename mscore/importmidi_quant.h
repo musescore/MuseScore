@@ -6,6 +6,7 @@ namespace Ms {
 
 class MidiChord;
 class TimeSigMap;
+class Fraction;
 
 namespace MidiTuplet {
 struct TupletData;
@@ -13,24 +14,26 @@ struct TupletData;
 
 namespace Quantize {
 
-void applyAdaptiveQuant(std::multimap<int, MidiChord> &, const TimeSigMap *, int);
+void applyAdaptiveQuant(std::multimap<Fraction, MidiChord> &,
+                        const TimeSigMap *,
+                        const Fraction &);
 
-void applyGridQuant(std::multimap<int, MidiChord> &chords,
-                    const TimeSigMap* sigmap,
-                    int lastTick);
+void applyGridQuant(std::multimap<Fraction, MidiChord> &chords,
+                    const TimeSigMap *sigmap,
+                    const Fraction &lastTick);
 
-void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tupletEvents,
-                              std::multimap<int, MidiChord> &inputChords,
-                              const TimeSigMap* sigmap,
-                              int lastTick);
+void quantizeChordsAndTuplets(std::multimap<Fraction, MidiTuplet::TupletData> &tupletEvents,
+                              std::multimap<Fraction, MidiChord> &inputChords,
+                              const TimeSigMap *sigmap,
+                              const Fraction &lastTick);
 
-int fixedQuantRaster();
+Fraction fixedQuantRaster();
 
-int quantizeOnTime(int onTime, int raster);
+Fraction quantizeValue(const Fraction &value, const Fraction &raster);
 
-int findQuantRaster(const std::multimap<int, MidiChord>::iterator &startBarChordIt,
-                    const std::multimap<int, MidiChord>::iterator &endChordIt,
-                    int endBarTick);
+Fraction findQuantRaster(const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
+                    const std::multimap<Fraction, MidiChord>::iterator &endChordIt,
+                    const Fraction &endBarTick);
 
 } // namespace Quantize
 } // namespace Ms
