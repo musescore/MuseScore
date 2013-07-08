@@ -1953,13 +1953,20 @@ void Measure::read(XmlReader& e, int staffIdx)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
+                  // Note: segment points to the last read segment before this clef.
+                  // This test is only a shot in the dark, as it fails if staves have different chord
+                  // durations, but does no harm
                   if (segment && segment->next() && segment->next()->segmentType() == Segment::SegClef)
                         segment = segment->next();
-                  else if (segment && segment != first()) {
-                        Segment* ns = segment->next();
-                        segment = new Segment(this, Segment::SegClef, e.tick());
-                        _segments.insert(segment, ns);
-                        }
+                  // This test is WRONG! The next segment is the right place to add a new Clef segment
+                  // ONLY if no other staff has more chords while the current staff chord is lasting;
+                  // whether the clef is at the beginning, the middle or the end of a measure,
+                  // locate a Clef segment at the right tick (or create a new one, if none)
+//                  else if (segment && segment != first()) {
+//                        Segment* ns = segment->next();
+//                        segment = new Segment(this, Segment::SegClef, e.tick());
+//                        _segments.insert(segment, ns);
+//                        }
                   else {
                         segment = getSegment(Segment::SegClef, e.tick());
                         }
