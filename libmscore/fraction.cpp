@@ -54,7 +54,7 @@ void Fraction::reduce()
       {
       int tmp = gcd(_numerator, _denominator);
       _numerator /= tmp;
-      _denominator  /= tmp;
+      _denominator /= tmp;
       }
 
 //---------------------------------------------------------
@@ -76,17 +76,7 @@ Fraction Fraction::absValue() const
       return Fraction(std::abs(_numerator), std::abs(_denominator));
       }
 
-//---------------------------------------------------------
-//   operator+=
-//---------------------------------------------------------
-
-Fraction& Fraction::operator+=(const Fraction& val)
-      {
-      const int tmp = lcm(_denominator, val._denominator);
-      _numerator = _numerator * (tmp / _denominator) + val._numerator * (tmp / val._denominator);
-      _denominator = tmp;
-      return *this;
-      }
+// --- comparison --- //
 
 bool Fraction::operator<(const Fraction& val) const
       {
@@ -127,14 +117,32 @@ bool Fraction::operator!=(const Fraction& val) const
       }
 
 //---------------------------------------------------------
+//   operator+=
+//---------------------------------------------------------
+
+Fraction& Fraction::operator+=(const Fraction& val)
+      {
+      reduce();  // here and after: this is necessary to prevent overflow of int multiplication
+      Fraction value = val.reduced();
+      const int tmp = lcm(_denominator, value._denominator);
+      _numerator = _numerator * (tmp / _denominator) + value._numerator * (tmp / value._denominator);
+      _denominator = tmp;
+      reduce();
+      return *this;
+      }
+
+//---------------------------------------------------------
 //   operator-=
 //---------------------------------------------------------
 
 Fraction& Fraction::operator-=(const Fraction& val)
       {
-      const unsigned tmp = lcm(_denominator, val._denominator);
-      _numerator = _numerator * (tmp / _denominator) - val._numerator * (tmp / val._denominator);
+      reduce();
+      Fraction value = val.reduced();
+      const unsigned tmp = lcm(_denominator, value._denominator);
+      _numerator = _numerator * (tmp / _denominator) - value._numerator * (tmp / value._denominator);
       _denominator  = tmp;
+      reduce();
       return *this;
       }
 
@@ -144,14 +152,19 @@ Fraction& Fraction::operator-=(const Fraction& val)
 
 Fraction& Fraction::operator*=(const Fraction& val)
       {
-      _numerator *= val._numerator;
-      _denominator  *= val._denominator;
+      reduce();
+      Fraction value = val.reduced();
+      _numerator *= value._numerator;
+      _denominator  *= value._denominator;
+      reduce();
       return *this;
       }
 
 Fraction& Fraction::operator*=(int val)
       {
+      reduce();
       _numerator *= val;
+      reduce();
       return *this;
       }
 
@@ -161,15 +174,20 @@ Fraction& Fraction::operator*=(int val)
 
 Fraction& Fraction::operator/=(const Fraction& val)
       {
-      _numerator *= val._denominator;
-      _denominator  *= val._numerator;
+      reduce();
+      Fraction value = val.reduced();
+      _numerator *= value._denominator;
+      _denominator  *= value._numerator;
+      reduce();
       return *this;
       }
 
 Fraction& Fraction::operator/=(int val)
       {
-      _denominator  *= val;
+      reduce();
+      _denominator *= val;
       return *this;
+      reduce();
       }
 
 //---------------------------------------------------------

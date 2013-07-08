@@ -170,8 +170,8 @@ TupletInfo findTupletApproximation(const Fraction &tupletLen,
       {
       TupletInfo tupletInfo;
       tupletInfo.tupletNumber = tupletNumber;
-      tupletInfo.onTime = startTupletTime.reduced();
-      tupletInfo.len = tupletLen.reduced();
+      tupletInfo.onTime = startTupletTime;
+      tupletInfo.len = tupletLen;
       tupletInfo.tupletQuantValue = tupletLen / tupletNumber;
       while (tupletInfo.tupletQuantValue / 2 >= raster)
             tupletInfo.tupletQuantValue /= 2;
@@ -187,31 +187,31 @@ TupletInfo findTupletApproximation(const Fraction &tupletLen,
                   continue;   // no chord fits to this tuplet note position
                         // chord can be in tuplet
             tupletInfo.chords.insert({k, bestChord.first});
-            tupletInfo.tupletSumError += bestChord.second.reduced();
+            tupletInfo.tupletSumError += bestChord.second;
                         // for next tuplet note we start from the next chord
                         // because chord for the next tuplet note cannot be earlier
             startTupletChordIt = bestChord.first;
             ++startTupletChordIt;
                         // find chord quant error for a regular grid
             Fraction regularError = findOnTimeRegularError(bestChord.first->first, raster);
-            tupletInfo.regularSumError += regularError.reduced();
+            tupletInfo.regularSumError += regularError;
             }
 
       Fraction beg = tupletInfo.onTime;
-      Fraction tupletEndTime = (tupletInfo.onTime + tupletInfo.len).reduced();
+      Fraction tupletEndTime = (tupletInfo.onTime + tupletInfo.len);
       for (const auto &chord: tupletInfo.chords) {
             const MidiChord &midiChord = chord.second->second;
             const Fraction &chordOnTime = chord.second->first;
                         // approximate length of gaps between successive chords,
                         // quantization is not taken into account
             if (beg < chordOnTime)
-                  tupletInfo.sumLengthOfRests += (chordOnTime - beg).reduced();
+                  tupletInfo.sumLengthOfRests += (chordOnTime - beg);
             beg = chordOnTime + maxNoteLen(midiChord.notes);
             if (beg >= tupletInfo.onTime + tupletInfo.len)
                   break;
             }
       if (beg < tupletEndTime)
-            tupletInfo.sumLengthOfRests += (tupletEndTime - beg).reduced();
+            tupletInfo.sumLengthOfRests += (tupletEndTime - beg);
 
       return tupletInfo;
       }
@@ -273,11 +273,11 @@ bool areTupletChordsInUse(
 
 // result: <average quant error, total tuplet note count, sum length of rests inside all tuplets>
 
-std::tuple<Fraction, int, Fraction>
+std::tuple<double, int, Fraction>
 validateTuplets(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
-            return std::make_tuple(Fraction(), 0, Fraction());
+            return std::make_tuple(0.0, 0, Fraction());
                   // structure of map: <chord ID, count of use of first tuplet chord with this tick>
       std::map<std::pair<const Fraction, MidiChord> *, int> usedFirstTupletNotes;
                   // chord IDs of already used chords
@@ -317,14 +317,15 @@ validateTuplets(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
       for (const auto &chordIt: excludedChords)
             sumError += findOnTimeRegularError(chordIt->first, regularRaster);
 
-      return std::make_tuple(sumError / sumNoteCount, sumNoteCount, sumLengthOfRests);
+      return std::make_tuple(sumError.ticks() * 1.0 / sumNoteCount,
+                             sumNoteCount, sumLengthOfRests);
       }
 
 // try different permutations of tuplet indexes to minimize error
 
 void minimizeQuantError(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
       {
-      std::tuple<Fraction, int, Fraction> minResult;
+      std::tuple<double, int, Fraction> minResult;
       std::list<int> bestIndexes;
                   // number of permutations grows as n!
                   // 8! = 40320 - quite many; 9! = 362880 - many
