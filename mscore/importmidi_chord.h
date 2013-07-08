@@ -17,7 +17,6 @@ class MidiNote {
 class MidiChord {
    public:
       int voice = 0;
-      int onTime;
       int duration;
       QList<MidiNote> notes;
       };
