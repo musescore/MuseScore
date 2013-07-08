@@ -117,7 +117,6 @@
             <tpc>19</tpc>
             </Note>
           </Chord>
-        <tick>2400</tick>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -133,8 +132,8 @@
             </Note>
           </Chord>
         <Beam id="1">
-          <l1>-5</l1>
-          <l2>-4</l2>
+          <l1>-2</l1>
+          <l2>-1</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -145,7 +144,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>3360</tick>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
@@ -155,7 +153,6 @@
             <tpc>19</tpc>
             </Note>
           </Chord>
-        <tick>3360</tick>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -218,7 +215,6 @@
             <tpc>19</tpc>
             </Note>
           </Chord>
-        <tick>6240</tick>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -234,8 +230,8 @@
             </Note>
           </Chord>
         <Beam id="2">
-          <l1>-5</l1>
-          <l2>-4</l2>
+          <l1>-2</l1>
+          <l2>-1</l2>
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
@@ -246,7 +242,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <tick>7200</tick>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>2</Beam>
@@ -256,7 +251,6 @@
             <tpc>19</tpc>
             </Note>
           </Chord>
-        <tick>7200</tick>
         <Chord>
           <durationType>quarter</durationType>
           <Note>

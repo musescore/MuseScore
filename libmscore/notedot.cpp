@@ -69,10 +69,20 @@ void NoteDot::read(XmlReader& e)
       while (e.readNextStartElement()) {
             if (e.name() == "name")    // obsolete
                   e.readElementText();
+            else if (e.name() == "subtype")     // obsolete
+                  e.readElementText();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
       }
 
+//---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal NoteDot::mag() const
+      {
+      return parent()->mag() * score()->styleD(ST_dotMag);
+      }
 }
 

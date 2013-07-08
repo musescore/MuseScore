@@ -46,18 +46,6 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /><!--EndFragment--></p></body></html>
-          </longName>
-        <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /><!--EndFragment--></p></body></html>
-          </shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -92,8 +80,6 @@ p, li { white-space: pre-wrap; }
           </Clef>
         <KeySig>
           <accidental>0</accidental>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -131,16 +117,6 @@ p, li { white-space: pre-wrap; }
       <Measure number="2">
         <KeySig>
           <accidental>2</accidental>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Chord>
           <durationType>whole</durationType>

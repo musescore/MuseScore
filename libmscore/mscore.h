@@ -122,7 +122,7 @@ enum ArticulationType {
 //---------------------------------------------------------
 
 enum BracketType {
-      BRACKET_NORMAL, BRACKET_AKKOLADE, BRACKET_SIMPLE, NO_BRACKET = -1
+      BRACKET_NORMAL, BRACKET_BRACE, BRACKET_SQUARE, NO_BRACKET = -1
       };
 
 //---------------------------------------------------------
@@ -217,6 +217,16 @@ enum AccidentalVal {
       NATURAL = 0,
       FLAT    = -1,
       FLAT2   = -2
+      };
+
+//---------------------------------------------------------
+//    KeySigNaturals (positions of naturals in key sig. changes)
+//---------------------------------------------------------
+
+enum KeySigNatural {
+      NAT_NONE   = 0,             // no naturals, except for change to CMaj/Amin
+      NAT_BEFORE = 1,             // naturals before accidentals
+      NAT_AFTER  = 2              // naturals after accidentals (but always before if going sharps <=> flats)
       };
 
 //---------------------------------------------------------
@@ -334,7 +344,8 @@ enum {
       ICON_GRACE8B,
       ICON_SBEAM, ICON_MBEAM, ICON_NBEAM, ICON_BEAM32, ICON_BEAM64, ICON_AUTOBEAM,
       ICON_FBEAM1, ICON_FBEAM2,
-      ICON_VFRAME, ICON_HFRAME, ICON_TFRAME, ICON_FFRAME, ICON_MEASURE
+      ICON_VFRAME, ICON_HFRAME, ICON_TFRAME, ICON_FFRAME, ICON_MEASURE,
+      ICON_BRACKETS
       };
 
 //---------------------------------------------------------
@@ -373,6 +384,7 @@ class MScore : public QObject {
       static QColor defaultColor;
       static QColor dropColor;
       static QColor layoutBreakColor;
+      static QColor frameMarginColor;
       static QColor bgColor;
       static bool warnPitchRange;
 

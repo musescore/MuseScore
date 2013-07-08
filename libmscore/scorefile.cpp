@@ -25,6 +25,7 @@
 #include "page.h"
 #include "part.h"
 #include "staff.h"
+#include "system.h"
 #include "keysig.h"
 #include "clef.h"
 #include "text.h"
@@ -405,11 +406,11 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      uz.addDirectory("META-INF");
+      //uz.addDirectory("META-INF");
       uz.addFile("META-INF/container.xml", cbuf.data());
 
       // save images
-      uz.addDirectory("Pictures");
+      //uz.addDirectory("Pictures");
       foreach(ImageStoreItem* ip, imageStore) {
             if (!ip->isUsed(this))
                   continue;
@@ -599,6 +600,7 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       e.setDocName(info.completeBaseName());
 
       FileError retval = read1(e, ignoreVersionError);
+      _noteHeadWidth = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
 
 #ifdef OMR
       //
@@ -648,7 +650,9 @@ Score::FileError Score::loadMsc(QString name, bool ignoreVersionError)
             }
 
       XmlReader xml(&f);
-      return read1(xml, ignoreVersionError);
+      FileError retval = read1(xml, ignoreVersionError);
+      _noteHeadWidth = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
+      return retval;
       }
 
 //---------------------------------------------------------
@@ -736,8 +740,10 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
                               }
                         else if (tag == "programRevision")
                               _mscoreRevision = e.readInt();
-                        else if (tag == "Score")
-                              read(e);
+                        else if (tag == "Score") {
+                              if (!read(e))
+                                    return FILE_BAD_FORMAT;
+                              }
                         else if (tag == "Revision") {
                               Revision* revision = new Revision;
                               revision->read(e);
@@ -894,10 +900,16 @@ bool Score::read(XmlReader& e)
                   part->read(e);
                   _parts.push_back(part);
                   }
-            else if (tag == "Slur") {
-                  Slur* slur = new Slur(this);
-                  slur->read(e);
-                  e.addSpanner(slur);
+            else if ((tag == "HairPin")
+                || (tag == "Ottava")
+                || (tag == "TextLine")
+                || (tag == "Volta")
+                || (tag == "Trill")
+                || (tag == "Slur")
+                || (tag == "Pedal")) {
+                  Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
+                  s->read(e);
+                  addSpanner(s);
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -944,76 +956,10 @@ bool Score::read(XmlReader& e)
             else
                   e.unknown();
             }
+      if (e.error() != QXmlStreamReader::NoError)
+            return false;
 
-      // check slurs
-      foreach(Spanner* s, e.spanner()) {
-            if (!s->startElement() || !s->endElement()) {
-                  qDebug("remove incomplete Spanner %s", s->name());
-                  switch (s->anchor()) {
-                        case Spanner::ANCHOR_SEGMENT: {
-                              if (s->startElement()) {
-                                    Segment* seg = static_cast<Segment*>(s->startElement());
-                                    seg->removeSpannerFor(s);
-                                    }
-                              if (s->endElement()) {
-                                    Segment* seg = static_cast<Segment*>(s->endElement());
-                                    seg->removeSpannerBack(s);
-                                    }
-                              Segment* seg = static_cast<Segment*>(s->parent());
-                              if (seg->isEmpty())
-                                    seg->measure()->remove(seg);
-                              delete s;
-                              }
-                              break;
-                        case Spanner::ANCHOR_CHORD:
-                              if (s->startElement()) {
-                                    ChordRest* cr = static_cast<ChordRest*>(s->startElement());
-                                    cr->removeSpannerFor(s);
-                                    }
-                              if (s->endElement()) {
-                                    ChordRest* cr = static_cast<ChordRest*>(s->endElement());
-                                    cr->removeSpannerBack(s);
-                                    }
-                              e.removeSpanner(s);
-                              delete s;
-                              break;
-
-                        case Spanner::ANCHOR_NOTE:
-                        case Spanner::ANCHOR_MEASURE:
-                              break;
-                        }
-                  continue;
-                  }
-            if (s->type() != Element::SLUR)
-                  continue;
-
-            Slur* slur = static_cast<Slur*>(s);
-
-            ChordRest* cr1 = (ChordRest*)(slur->startElement());
-            ChordRest* cr2 = (ChordRest*)(slur->endElement());
-            if (cr1->tick() > cr2->tick()) {
-                  qDebug("Slur invalid start-end tick %d-%d\n", cr1->tick(), cr2->tick());
-                  slur->setStartElement(cr2);
-                  slur->setEndElement(cr1);
-                  }
-#if 1 // DEBUG
-            int n1 = 0;
-            int n2 = 0;
-            for (Spanner* s = cr1->spannerFor(); s; s = s->next()) {
-                  if (s == slur)
-                        ++n1;
-                  }
-            for (Spanner* s = cr2->spannerBack(); s; s = s->next()) {
-                  if (s == slur)
-                        ++n2;
-                  }
-            if (n1 != 1 || n2 != 1)
-                  qDebug("Slur references bad: %d %d", n1, n2);
-#endif
-            }
       connectTies();
-
-      searchSelectedElements();
 
       _fileDivision = MScore::division;
 
@@ -1200,7 +1146,7 @@ qDebug("createRevision\n");
 //---------------------------------------------------------
 
 void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
-   Segment* fs, Segment* ls, bool writeSystemElements)
+   Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
       for (int track = strack; track < etrack; ++track) {
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
@@ -1211,7 +1157,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                   // special case: - barline span > 1
                   //               - part (excerpt) staff starts after
                   //                 barline element
-                  bool needTick = segment->tick() != xml.curTick;
+                  bool needTick = (needFirstTick && segment == fs) || (segment->tick() != xml.curTick);
                   if ((segment->segmentType() == Segment::SegEndBarLine)
                      && (e == 0)
                      && writeSystemElements
@@ -1237,28 +1183,33 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                               }
                         e->write(xml);
                         }
-                  for (Spanner* e = segment->spannerFor(); e; e = e->next()) {
-                        if (e->track() == track && !e->generated()) {
-                              if (needTick) {
-                                    xml.tag("tick", segment->tick() - xml.tickDiff);
-                                    xml.curTick = segment->tick();
-                                    needTick = false;
+                  if (segment->segmentType() & (Segment::SegChordRest)) {
+                        for (auto i : _spanner.map()) {     // TODO: dont search whole list
+                              Spanner* s = i.second;
+                              if (s->track() != track || s->generated())
+                                    continue;
+
+                              if (s->tick() == segment->tick() && (!clip || s->tick2() < ls->tick())) {
+                                    if (needTick) {
+                                          xml.tag("tick", segment->tick() - xml.tickDiff);
+                                          xml.curTick = segment->tick();
+                                          needTick = false;
+                                          }
+                                    s->setId(++xml.spannerId);
+                                    s->write(xml);
                                     }
-                              e->setId(++xml.spannerId);
-                              e->write(xml);
+                              if (s->tick2() == segment->tick() && (!clip || s->tick() >= fs->tick())) {
+                                    if (needTick) {
+                                          xml.tag("tick", segment->tick() - xml.tickDiff);
+                                          xml.curTick = segment->tick();
+                                          needTick = false;
+                                          }
+                                    Q_ASSERT(s->id() != -1);
+                                    xml.tagE(QString("endSpanner id=\"%1\"").arg(s->id()));
+                                    }
                               }
                         }
-                  for (Spanner* e = segment->spannerBack(); e; e = e->next()) {
-                        if (e->track() == track && !e->generated()) {
-                              if (needTick) {
-                                    xml.tag("tick", segment->tick() - xml.tickDiff);
-                                    xml.curTick = segment->tick();
-                                    needTick = false;
-                                    }
-                              Q_ASSERT(e->id() != -1);
-                              xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
-                              }
-                        }
+
                   if (!e)
                         continue;
 
@@ -1282,35 +1233,8 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         }
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
-                        Beam* beam = cr->beam();
-#ifndef NDEBUG
-                        if (beam && beam->elements().front() == cr && (MScore::testMode || !beam->generated())) {
-                              beam->setId(xml.beamId++);
-                              beam->write(xml);
-                              }
-#else
-                        if (beam && !beam->generated() && beam->elements().front() == cr) {
-                              beam->setId(xml.beamId++);
-                              beam->write(xml);
-                              }
-#endif
+                        cr->writeBeam(xml);
                         cr->writeTuplet(xml);
-                        for (Spanner* slur = cr->spannerFor(); slur; slur = slur->next()) {
-                              if (!xml.spanner().contains(slur)) {
-                                    Q_ASSERT(slur->type() == Element::SLUR);
-                                    slur->setId(xml.spannerId++);
-                                    slur->write(xml);
-                                    xml.addSpanner(slur);
-                                    }
-                              }
-                        for (Spanner* slur = cr->spannerBack(); slur; slur = slur->next()) {
-                              if (!xml.spanner().contains(slur)) {
-                                    Q_ASSERT(slur->type() == Element::SLUR);
-                                    slur->setId(xml.spannerId++);
-                                    slur->write(xml);
-                                    xml.addSpanner(slur);
-                                    }
-                              }
                         }
                   if ((segment->segmentType() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
                         xml.stag("BarLine");

@@ -119,25 +119,25 @@ void Staff::cleanupBrackets()
       int index = idx();
       int n = _score->nstaves();
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket != NO_BRACKET) {
-                  int span = _brackets[i]._bracketSpan;
-                  if (span > (n - index)) {
-                        span = n - index;
-                        _brackets[i]._bracketSpan = span;
-                        }
+            if (_brackets[i]._bracket == NO_BRACKET)
+                  continue;
+            int span = _brackets[i]._bracketSpan;
+            if (span > (n - index)) {
+                  span = n - index;
+                  _brackets[i]._bracketSpan = span;
                   }
             }
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket != NO_BRACKET) {
-                  int span = _brackets[i]._bracketSpan;
-                  if (span <= 1)
-                        _brackets[i] = BracketItem();
-                  else {
-                        // delete all other brackets with same span
-                        for (int k = i + 1; k < _brackets.size(); ++k) {
-                              if (span == _brackets[k]._bracketSpan)
-                                    _brackets[k] = BracketItem();
-                              }
+            if (_brackets[i]._bracket == NO_BRACKET)
+                  continue;
+            int span = _brackets[i]._bracketSpan;
+            if (span <= 1)
+                  _brackets[i] = BracketItem();
+            else {
+                  // delete all other brackets with same span
+                  for (int k = i + 1; k < _brackets.size(); ++k) {
+                        if (span == _brackets[k]._bracketSpan)
+                              _brackets[k] = BracketItem();
                         }
                   }
             }
@@ -161,8 +161,7 @@ Staff::Staff(Score* s)
       _score          = s;
       _rstaff         = 0;
       _part           = 0;
-      _keymap         = new KeyList;
-      (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
+      _keymap[0]      = KeySigEvent(0);                  // default to C major
       _staffType      = _score->staffType(PITCHED_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
@@ -180,8 +179,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _score          = s;
       _rstaff         = rs;
       _part           = p;
-      _keymap         = new KeyList;
-      (*_keymap)[0]   = KeySigEvent(0);                  // default to C major
+      _keymap[0]      = KeySigEvent(0);                  // default to C major
       _staffType      = _score->staffType(PITCHED_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
@@ -205,7 +203,6 @@ Staff::~Staff()
             if (_linkedStaves->isEmpty())
                   delete _linkedStaves;
             }
-      delete _keymap;
       }
 
 //---------------------------------------------------------
@@ -298,15 +295,6 @@ const Groups& Staff::group(int tick) const
       }
 
 //---------------------------------------------------------
-//   clefsGreater
-//---------------------------------------------------------
-
-static bool clefsGreater(const Clef* a, const Clef* b)
-      {
-      return a->segment()->tick() < b->segment()->tick();
-      }
-
-//---------------------------------------------------------
 //   addClef
 //---------------------------------------------------------
 
@@ -320,16 +308,7 @@ void Staff::addClef(Clef* clef)
       if (clef->segment()->measure() == 0)
             abort();
       int tick = clef->segment()->tick();
-      clefs[tick] = clef;
-      }
-
-//---------------------------------------------------------
-//   timesigsGreater
-//---------------------------------------------------------
-
-static bool timesigsGreater(const TimeSig* a, const TimeSig* b)
-      {
-      return a->segment()->tick() < b->segment()->tick();
+      clefs.insert(std::pair<int,Clef*>(tick, clef));
       }
 
 //---------------------------------------------------------
@@ -347,8 +326,17 @@ void Staff::addTimeSig(TimeSig* timesig)
 
 void Staff::removeClef(Clef* clef)
       {
+      if (clef->generated())
+            return;
       int tick = clef->segment()->tick();
-      clefs.erase(tick);
+      for (auto i = clefs.lower_bound(tick); i != clefs.upper_bound(tick); ++i) {
+            if (i->second == clef) {
+                  clefs.erase(i);
+                  return;
+                  }
+            }
+      qDebug("Staff::removeClef: Clef at %d not found", tick);
+      // abort();
       }
 
 //---------------------------------------------------------
@@ -363,11 +351,25 @@ void Staff::removeTimeSig(TimeSig* timesig)
 
 //---------------------------------------------------------
 //   Staff::key
+//
+//    locates the key sig currently in effect at tick
 //---------------------------------------------------------
 
 KeySigEvent Staff::key(int tick) const
       {
-      return _keymap->key(tick);
+      return _keymap.key(tick);
+      }
+
+//---------------------------------------------------------
+//   Staff::nextKeyTick
+//
+//    return the tick at which the key sig after tick is located
+//    return 0, if no such a key sig
+//---------------------------------------------------------
+
+int Staff::nextKeyTick(int tick) const
+      {
+      return _keymap.nextKeyTick(tick);
       }
 
 //---------------------------------------------------------
@@ -442,7 +444,7 @@ void Staff::read(XmlReader& e)
             else if (tag == "invisible")
                   setInvisible(e.readInt());
             else if (tag == "keylist")
-                  _keymap->read(e, _score);
+                  _keymap.read(e, _score);
             else if (tag == "bracket") {
                   BracketItem b;
                   b._bracket     = BracketType(e.intAttribute("type", -1));
@@ -485,7 +487,7 @@ void Staff::read(XmlReader& e)
                         }
                   else {
                         int idx = score()->staffIdx(this);
-                        if (v < idx)
+                        if (v >= 0 && v < idx)
                               linkTo(score()->staff(v));
                         }
                   }
@@ -535,7 +537,7 @@ void Staff::setKey(int tick, int st)
 
 void Staff::setKey(int tick, const KeySigEvent& st)
       {
-      (*_keymap)[tick] = st;
+      _keymap[tick] = st;
       }
 
 //---------------------------------------------------------
@@ -544,7 +546,7 @@ void Staff::setKey(int tick, const KeySigEvent& st)
 
 void Staff::removeKey(int tick)
       {
-      _keymap->erase(tick);
+      _keymap.erase(tick);
       }
 
 //---------------------------------------------------------
@@ -828,6 +830,34 @@ void Staff::setInitialClef(const ClefTypeList& cl)
 void Staff::setInitialClef(ClefType ct)
       {
       _initialClef = ClefTypeList(ct, ct);
+      }
+
+bool Staff::genKeySig()
+      {
+      switch(_staffType->group()) {
+            case TAB_STAFF:
+                  return false;
+            case PITCHED_STAFF:
+                  return static_cast<StaffTypePitched*>(_staffType)->genKeysig();
+            case PERCUSSION_STAFF:
+                  return static_cast<StaffTypePercussion*>(_staffType)->genKeysig();
+            default:
+                  return true;
+            }
+      }
+
+bool Staff::showLedgerLines()
+      {
+      switch(_staffType->group()) {
+            case TAB_STAFF:
+                  return false;
+            case PITCHED_STAFF:
+                  return static_cast<StaffTypePitched*>(_staffType)->showLedgerLines();
+            case PERCUSSION_STAFF:
+                  return static_cast<StaffTypePercussion*>(_staffType)->showLedgerLines();
+            default:
+                  return true;
+            }
       }
 
 }

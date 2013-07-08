@@ -98,24 +98,23 @@ void SlurSegment::draw(QPainter* painter) const
             return;
 
       QPen pen(curColor());
-      if (slurTie()->lineType() == 0) {
-            painter->setBrush(QBrush(QColor(curColor())));
-            pen.setCapStyle(Qt::RoundCap);
-            pen.setJoinStyle(Qt::RoundJoin);
-            qreal lw = point(score()->styleS(ST_SlurEndWidth));
-            pen.setWidthF(lw);
-            }
-      else if (slurTie()->lineType() == 1) {
-            painter->setBrush(Qt::NoBrush);
-            qreal lw = point(score()->styleS(ST_SlurDottedWidth));
-            pen.setWidthF(lw);
-            pen.setStyle(Qt::DotLine);
-            }
-      else if (slurTie()->lineType() == 2) {
-            painter->setBrush(Qt::NoBrush);
-            qreal lw = point(score()->styleS(ST_SlurDottedWidth));
-            pen.setWidthF(lw);
-            pen.setStyle(Qt::DashLine);
+      switch (slurTie()->lineType()) {
+            case 0:
+                  painter->setBrush(QBrush(QColor(curColor())));
+                  pen.setCapStyle(Qt::RoundCap);
+                  pen.setJoinStyle(Qt::RoundJoin);
+                  pen.setWidthF(point(score()->styleS(ST_SlurEndWidth)));
+                  break;
+            case 1:
+                  painter->setBrush(Qt::NoBrush);
+                  pen.setWidthF(point(score()->styleS(ST_SlurDottedWidth)));
+                  pen.setStyle(Qt::DotLine);
+                  break;
+            case 2:
+                  painter->setBrush(Qt::NoBrush);
+                  pen.setWidthF(point(score()->styleS(ST_SlurDottedWidth)));
+                  pen.setStyle(Qt::DashLine);
+                  break;
             }
       painter->setPen(pen);
       painter->drawPath(path);
@@ -159,15 +158,15 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             return false;
 
       ChordRest* cr = 0;
-      Element* e    = curGrip == 0 ? sl->startElement() : sl->endElement();
-      Element* e1   = curGrip == 0 ? sl->endElement() : sl->startElement();
+      ChordRest* e  = curGrip == 0 ? sl->startCR() : sl->endCR();
+      ChordRest* e1 = curGrip == 0 ? sl->endCR() : sl->startCR();
 
       if (key == Qt::Key_Left)
-            cr = prevChordRest((ChordRest*)e, false);
+            cr = prevChordRest(e);
       else if (key == Qt::Key_Right)
-            cr = nextChordRest((ChordRest*)e, false);
+            cr = nextChordRest(e);
 
-      if (cr == 0 || cr == (ChordRest*)e1)
+      if (cr == 0 || cr == e1)
             return true;
       changeAnchor(viewer, curGrip, cr);
       return true;
@@ -181,14 +180,12 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, ChordRest* cr
       {
       Slur* sl = static_cast<Slur*>(slurTie());
       if (curGrip == 0) {
-            ((ChordRest*)sl->startElement())->removeSlurFor(sl);
             sl->setStartElement(cr);
-            cr->addSlurFor(sl);
+            sl->setTick(cr->tick());
             }
       else {
-            ((ChordRest*)sl->endElement())->removeSlurBack(sl);
             sl->setEndElement(cr);
-            cr->addSlurBack(sl);
+            sl->setTick2(cr->tick());
             }
 
       int segments  = sl->spannerSegments().size();
@@ -303,8 +300,8 @@ void SlurSegment::editDrag(const EditData& ed)
                ) {
                   if (e && e->type() == NOTE) {
                         Chord* chord = static_cast<Note*>(e)->chord();
-                        if ((ed.curGrip == GRIP_END && chord != slur->endElement())
-                           || (ed.curGrip == GRIP_START && chord != slur->startElement())) {
+                        if ((ed.curGrip == GRIP_END && chord != slur->endCR())
+                           || (ed.curGrip == GRIP_START && chord != slur->startCR())) {
                               changeAnchor(ed.view, ed.curGrip, chord);
                               QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
                               ups[ed.curGrip].off = p1 / _spatium;
@@ -393,13 +390,10 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
 
       QPointF p2 = pp2 - pp1;
       if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
-            qDebug("zero slur");
-abort();
-            Measure* m1 = startChord()->segment()->measure();
-            Measure* m2 = endChord()->segment()->measure();
-            Page* page = m1->system()->page();
-            qDebug("   at tick %d in measure %d-%d page %d",
-               m1->tick(), m1->no(), m2->no(), page->no());
+            Measure* m1 = startCR()->segment()->measure();
+            Measure* m2 = endCR()->segment()->measure();
+            qDebug("zero slur id%d at tick %d(%d) track %d in measure %d-%d",
+               id(), m1->tick(), tick(), track(), m1->no(), m2->no());
             return;
             }
 
@@ -450,7 +444,7 @@ abort();
       QPointF p3o = p6o + t.map(ss->ups[GRIP_BEZIER1].off * _spatium);
       QPointF p4o = p6o + t.map(ss->ups[GRIP_BEZIER2].off * _spatium);
 
-      if(!p6o.isNull()) {
+      if (!p6o.isNull()) {
             QPointF p6i = t.inverted().map(p6o) / _spatium;
             ss->ups[GRIP_BEZIER1].off += p6i ;
             ss->ups[GRIP_BEZIER2].off += p6i;
@@ -625,7 +619,6 @@ SlurTie::SlurTie(Score* s)
       {
       _slurDirection = MScore::AUTO;
       _up            = true;
-//      _len           = 0;
       _lineType      = 0;     // default is solid
       }
 
@@ -634,9 +627,7 @@ SlurTie::SlurTie(const SlurTie& t)
       {
       _up            = t._up;
       _slurDirection = t._slurDirection;
-//      _len           = t._len;
       _lineType      = t._lineType;
-      // delSegments    = t.delSegments;
       }
 
 //---------------------------------------------------------
@@ -672,38 +663,84 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
 
 //---------------------------------------------------------
 //   slurPos
+//    Calculate position of start- and endpoint of slur
+//    relative to System() position.
+//---------------------------------------------------------
+
+void Slur::slurPosChord(SlurPos* sp)
+      {
+      Note* _startNote = startChord()->downNote();
+      Note* _endNote   = endChord()->downNote();
+      qreal hw         = _startNote->headWidth();
+      qreal __up       = _up ? -1.0 : 1.0;
+      qreal _spatium = spatium();
+
+      sp->system1 = endChord()->measure()->system();
+      sp->system2 = sp->system1;
+      QPointF pp(sp->system1->pagePos());
+
+      qreal xo;
+      qreal yo;
+
+      //------p1
+      if (_up) {
+            xo = _startNote->x() + hw * 1.12;
+            yo = _startNote->pos().y() + hw * .3 * __up;
+            }
+      else {
+            xo = _startNote->x() + hw * 0.4;
+            yo = _startNote->pos().y() + _spatium * .75 * __up;
+            }
+      sp->p1 = startChord()->pagePos() - pp + QPointF(xo, yo);
+
+      //------p2
+      if ((endChord()->notes().size() > 1) || (endChord()->stem() && !endChord()->up() && !_up)) {
+            xo = _endNote->x() - hw * 0.12;
+            yo = _endNote->pos().y() + hw * .3 * __up;
+            }
+      else {
+            xo = _endNote->x() + hw * 0.15;
+            yo = _endNote->pos().y() + _spatium * .75 * __up;
+            }
+      sp->p2 = endChord()->pagePos() - pp + QPointF(xo, yo);
+      }
+
+//---------------------------------------------------------
+//   slurPos
 //    calculate position of start- and endpoint of slur
 //    relative to System() position
 //---------------------------------------------------------
 
 void Slur::slurPos(SlurPos* sp)
       {
+      if (anchor() == ANCHOR_CHORD) {
+            slurPosChord(sp);
+            return;
+            }
       qreal _spatium = spatium();
-      Element* e1 = startElement();
-      Element* e2 = endElement();
 
-      if (e2 == 0) {
-            sp->p1 = e1->pagePos();
-            sp->p1.rx() += e1->width();
+      if (endCR() == 0) {
+            sp->p1 = startCR()->pagePos();
+            sp->p1.rx() += startCR()->width();
             sp->p2 = sp->p1;
             sp->p2.rx() += 5 * _spatium;
-            sp->system1 = static_cast<ChordRest*>(e1)->measure()->system();
+            sp->system1 = startCR()->measure()->system();
             sp->system2 = sp->system1;
             return;
             }
 
-      ChordRest* scr   = static_cast<ChordRest*>(e1);
-      ChordRest* ecr   = static_cast<ChordRest*>(e2);
+      ChordRest* scr   = startCR();
+      ChordRest* ecr   = endCR();
       Chord* sc   = 0;
       Note* note1 = 0;
-      if(e1->type() == CHORD) {
-            sc = static_cast<Chord*>(e1);
+      if (startCR()->type() == CHORD) {
+            sc = static_cast<Chord*>(startCR());
             note1 = _up ? sc->upNote() : sc->downNote();
             }
       Chord* ec = 0;
       Note* note2 = 0;
-      if(e2->type() == CHORD) {
-            ec   = static_cast<Chord*>(e2);
+      if (endCR()->type() == CHORD) {
+            ec   = static_cast<Chord*>(endCR());
             note2 = _up ? ec->upNote() : ec->downNote();
             }
 
@@ -730,7 +767,7 @@ void Slur::slurPos(SlurPos* sp)
             }
 
       qreal __up = _up ? -1.0 : 1.0;
-      qreal hw   = note1?note1->headWidth():e1->width();
+      qreal hw   = note1 ? note1->headWidth() : startCR()->width();
       switch (sa1) {
             case SA_STEM: //sc can't be null
                   sp->p1 += sc->stemPosBeam() - sc->pagePos() + sc->stem()->p2();
@@ -758,9 +795,9 @@ void Slur::slurPos(SlurPos* sp)
       if (note1)
             yo = note1->pos().y();
       else if(_up)
-            yo = e1->bbox().top();
+            yo = startCR()->bbox().top();
       else
-            yo = e1->bbox().top() + e1->height();
+            yo = startCR()->bbox().top() + startCR()->height();
       yo += _spatium * .9 * __up;
       xo = hw * .5;
 
@@ -784,7 +821,7 @@ void Slur::slurPos(SlurPos* sp)
                         Note* n2  = 0;
                         if(ec)
                               n2 = ec->up() ? ec->downNote() : ec->upNote();
-                        qreal yd  = (n2?n2->pos().y():e2->pos().y()) - n1->pos().y();
+                        qreal yd  = (n2 ? n2->pos().y() : endCR()->pos().y()) - n1->pos().y();
 
                         yd *= .5;
 
@@ -814,9 +851,9 @@ void Slur::slurPos(SlurPos* sp)
       if (note2)
             yo = note2->pos().y();
       else if(_up)
-            yo = e2->bbox().top();
+            yo = endCR()->bbox().top();
       else
-            yo = e2->bbox().top() + e2->height();
+            yo = endCR()->bbox().top() + endCR()->height();
       yo += _spatium * .9 * __up;
 
       if (stem2) { //ec can't be null
@@ -847,7 +884,7 @@ void Slur::slurPos(SlurPos* sp)
                   if(sc)
                         sc->up() ? sc->downNote() : sc->upNote();
                   Note* n2 = ec->up() ? ec->downNote() : ec->upNote();
-                  qreal yd = n2->pos().y() - (n1?n1->pos().y():e1->pos().y());
+                  qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
 
                   yd *= .5;
 
@@ -880,12 +917,11 @@ void Slur::slurPos(SlurPos* sp)
 
 void Tie::slurPos(SlurPos* sp)
       {
-      Note* note1 = static_cast<Note*>(startElement());
-      qreal hw   = note1->headWidth();
+      qreal hw   = startNote()->headWidth();
       qreal __up = _up ? -1.0 : 1.0;
       qreal _spatium = spatium();
 
-      Chord* sc   = note1->chord();
+      Chord* sc   = startNote()->chord();
       sp->system1 = sc->measure()->system();
 
       qreal xo;
@@ -893,28 +929,27 @@ void Tie::slurPos(SlurPos* sp)
 
       //------p1
       if ((sc->notes().size() > 1) || (sc->stem() && (sc->up() == _up))) {
-            xo = note1->x() + hw * 1.12;
-            yo = note1->pos().y() + hw * .3 * __up;
+            xo = startNote()->x() + hw * 1.12;
+            yo = startNote()->pos().y() + hw * .3 * __up;
             }
       else {
-            xo = note1->x() + hw * 0.85;
-            yo = note1->pos().y() + _spatium * .75 * __up;
+            xo = startNote()->x() + hw * 0.85;
+            yo = startNote()->pos().y() + _spatium * .75 * __up;
             }
       sp->p1 = sc->pagePos() - sp->system1->pagePos() + QPointF(xo, yo);
 
       //------p2
-      Note* note2 = static_cast<Note*>(endElement());
-      if (note2 == 0) {
+      if (endNote() == 0) {
             sp->p2 = sp->p1 + QPointF(_spatium * 3, 0.0);
             sp->system2 = sp->system1;
             return;
             }
-      Chord* ec   = note2->chord();
+      Chord* ec   = endNote()->chord();
       sp->system2 = ec->measure()->system();
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
-            xo = note2->x() - hw * 0.12;
+            xo = endNote()->x() - hw * 0.12;
       else
-            xo = note2->x() + hw * 0.15;
+            xo = endNote()->x() + hw * 0.15;
       sp->p2 = ec->pagePos() - sp->system2->pagePos() + QPointF(xo, yo);
       }
 
@@ -1017,6 +1052,68 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant SlurTie::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_LINE_TYPE:
+                  return 0;
+            case P_SLUR_DIRECTION:
+                  return MScore::AUTO;
+            default:
+                  return Spanner::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant SlurSegment::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_LINE_TYPE:
+            case P_SLUR_DIRECTION:
+                  return slurTie()->getProperty(propertyId);
+            default:
+                  return SpannerSegment::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_LINE_TYPE:
+            case P_SLUR_DIRECTION:
+                  return slurTie()->setProperty(propertyId, v);
+            default:
+                  return SpannerSegment::setProperty(propertyId, v);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant SlurSegment::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_LINE_TYPE:
+            case P_SLUR_DIRECTION:
+                  return slurTie()->propertyDefault(id);
+            default:
+                  return SpannerSegment::propertyDefault(id);
+            }
+      }
+
+//---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 
@@ -1038,8 +1135,7 @@ Slur::Slur(Score* s)
    : SlurTie(s)
       {
       setId(-1);
-      _track2 = 0;
-      setAnchor(ANCHOR_CHORD);
+      setAnchor(ANCHOR_SEGMENT);
       }
 
 //---------------------------------------------------------
@@ -1056,7 +1152,9 @@ Slur::~Slur()
 
 void Slur::write(Xml& xml) const
       {
-      xml.stag(QString("Slur id=\"%1\"").arg(id() + 1));
+      xml.stag(QString("Slur id=\"%1\"").arg(id()));
+      if (track())
+            xml.tag("track", track());
       SlurTie::writeProperties(xml);
       xml.etag();
       }
@@ -1071,12 +1169,12 @@ void Slur::read(XmlReader& e)
       setId(e.intAttribute("id"));
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "track2")
-                  _track2 = e.readInt();
+            if (tag == "track2")                // obsolete
+                  e.readInt();
             else if (tag == "startTrack")       // obsolete
                   setTrack(e.readInt());
             else if (tag == "endTrack")         // obsolete
-                  setTrack2(e.readInt());
+                  e.readInt();
             else if (!SlurTie::readProperties(e))
                   e.unknown();
             }
@@ -1126,9 +1224,13 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 
 void Slur::layout()
       {
+      if (anchor() == ANCHOR_CHORD) {
+            layoutChord();
+            return;
+            }
       qreal _spatium = spatium();
 
-      if (score() == gscore || !startElement()) {
+      if (score() == gscore || tick() == -1) {
             //
             // when used in a palette, slur has no parent and
             // tick and tick2 has no meaning so no layout is
@@ -1144,9 +1246,19 @@ void Slur::layout()
                   s = frontSegment();
                   }
             s->setSpannerSegmentType(SEGMENT_SINGLE);
-//            _len = _spatium * 6;
             s->layout(QPointF(0, 0), QPointF(_spatium * 6, 0));
             setbbox(frontSegment()->bbox());
+            return;
+            }
+
+      if (anchor() == Spanner::ANCHOR_SEGMENT) {
+            computeStartElement();
+            computeEndElement();
+            }
+
+      if (startCR() == 0 || endCR() == 0) {
+            qDebug("Slur::layout(): id %d  track %d %p %p %d-%d null anchor",
+               id(), track(), startCR(), endCR(), tick(), tick2());
             return;
             }
       switch (_slurDirection) {
@@ -1162,39 +1274,36 @@ void Slur::layout()
                   // assumption:
                   // slurs have only chords or rests as start/end elements
                   //
-                  ChordRest* cr1 = static_cast<ChordRest*>(startElement());
-                  ChordRest* cr2 = static_cast<ChordRest*>(endElement());
-
-                  if (cr1 == 0 || cr2 == 0) {
+                  if (startCR() == 0 || endCR() == 0) {
                         _up = true;
                         break;
                         }
-                  Measure* m1    = cr1->measure();
+                  Measure* m1    = startCR()->measure();
 
-                  Chord* c1 = (cr1->type() == CHORD) ? static_cast<Chord*>(cr1) : 0;
-                  Chord* c2 = (cr2->type() == CHORD) ? static_cast<Chord*>(cr2) : 0;
+                  Chord* c1 = (startCR()->type() == CHORD) ? static_cast<Chord*>(startCR()) : 0;
+                  Chord* c2 = (endCR()->type() == CHORD) ? static_cast<Chord*>(endCR()) : 0;
 
-                  _up = !(cr1->up());
+                  _up = !(startCR()->up());
 
-                  if ((cr2->tick() - cr1->tick()) > m1->ticks()) {
+                  if ((endCR()->tick() - startCR()->tick()) > m1->ticks()) {
                         // long slurs are always above
                         _up = true;
                         }
                   else
-                        _up = !(cr1->up());
+                        _up = !(startCR()->up());
 
                   if (c1 && c2 && isDirectionMixture(c1, c2) && (c1->noteType() == NOTE_NORMAL)) {
                         // slurs go above if start and end note have different stem directions,
                         // but grace notes are exceptions
                         _up = true;
                         }
-                  else if (m1->mstaff(cr1->staffIdx())->hasVoices && c1 && c1->noteType() == NOTE_NORMAL) {
+                  else if (m1->mstaff(startCR()->staffIdx())->hasVoices && c1 && c1->noteType() == NOTE_NORMAL) {
                         // in polyphonic passage, slurs go on the stem side
-                        _up = cr1->up();
+                        _up = startCR()->up();
                         }
                   else if (c1 && c2 && chordsHaveTie(c1, c2)) {
                         // could confuse slur with tie, put slur on stem side
-                        _up = cr1->up();
+                        _up = startCR()->up();
                         }
                   }
                   break;
@@ -1255,7 +1364,7 @@ void Slur::layout()
                   segment->setSpannerSegmentType(SEGMENT_MIDDLE);
                   qreal x1 = firstNoteRestSegmentX(system) - _spatium;
                   qreal x2 = system->bbox().width();
-                  qreal y  = system->staff(startElement()->staffIdx())->y();
+                  qreal y  = system->staff(staffIdx())->y();
                   segment->layout(QPointF(x1, y), QPointF(x2, y));
                   }
             // case 4: end segment
@@ -1370,8 +1479,7 @@ void SlurTie::fixupSegments(unsigned nsegs)
       else if (nsegs < onsegs) {
             for (unsigned i = nsegs; i < onsegs; ++i) {
                   SlurSegment* s = takeLastSegment();
-                  if (s->system())
-                        s->system()->remove(s);
+                  s->setSystem(0);
                   delSegments.enqueue(s);  // cannot delete: used in SlurSegment->edit()
                   }
             }
@@ -1388,8 +1496,8 @@ void Tie::layout()
       //
       //    show short bow
       //
-      if (startElement() == 0 || endElement() == 0) {
-            if (startElement() == 0) {
+      if (startNote() == 0 || endNote() == 0) {
+            if (startNote() == 0) {
                   qDebug("Tie::layout(): no start note");
                   return;
                   }
@@ -1466,6 +1574,101 @@ void Tie::layout()
             _up = _slurDirection == MScore::UP ? true : false;
 
       qreal w   = startNote()->headWidth();
+      qreal xo1 = w * 1.12;
+      qreal h   = w * 0.3;
+      qreal yo  = _up ? -h : h;
+
+      QPointF off1(xo1, yo);
+      QPointF off2(0.0, yo);
+
+      QPointF ppos(pagePos());
+
+      // TODO: cleanup
+
+      SlurPos sPos;
+      slurPos(&sPos);
+
+      // p1, p2, s1, s2
+
+      QList<System*>* systems = score()->systems();
+      setPos(0, 0);
+
+      //---------------------------------------------------------
+      //   count number of segments, if no change, all
+      //    user offsets (drags) are retained
+      //---------------------------------------------------------
+
+      int sysIdx1 = systems->indexOf(sPos.system1);
+      if (sysIdx1 == -1) {
+            qDebug("system not found");
+            foreach(System* s, *systems)
+                  qDebug("   search %p in %p", sPos.system1, s);
+            return;
+            }
+
+      int sysIdx2     = systems->indexOf(sPos.system2);
+      if (sysIdx2 < 0)
+            sysIdx2 = sysIdx1;
+      unsigned nsegs  = sysIdx2 - sysIdx1 + 1;
+      fixupSegments(nsegs);
+
+      int i = 0;
+      for (uint ii = 0; ii < nsegs; ++ii) {
+            System* system = (*systems)[sysIdx1++];
+            if (system->isVbox())
+                  continue;
+            SlurSegment* segment = segmentAt(i);
+            segment->setSystem(system);
+
+            // case 1: one segment
+            if (sPos.system1 == sPos.system2) {
+                  segment->layout(sPos.p1, sPos.p2);
+                  segment->setSpannerSegmentType(SEGMENT_SINGLE);
+                  }
+            // case 2: start segment
+            else if (i == 0) {
+                  qreal x = system->bbox().width();
+                  segment->layout(sPos.p1, QPointF(x, sPos.p1.y()));
+                  segment->setSpannerSegmentType(SEGMENT_BEGIN);
+                  }
+            // case 4: end segment
+            else {
+                  qreal x = firstNoteRestSegmentX(system) - 2 * _spatium;
+
+                  segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
+                  segment->setSpannerSegmentType(SEGMENT_END);
+                  }
+            ++i;
+            }
+      }
+
+//---------------------------------------------------------
+//   layoutChord
+//---------------------------------------------------------
+
+void Slur::layoutChord()
+      {
+      qreal _spatium = spatium();
+
+      //
+      //    show short bow
+      //
+      if (startChord() == 0 || endChord() == 0) {
+            qDebug("no start/end chord");
+            return;
+            }
+
+      Chord* c1 = startChord();
+      Chord* c2 = endChord();
+      Note* startNote = c1->upNote();
+      // Note* endNote = c2->upNote();
+
+      if (_slurDirection == MScore::AUTO)
+            _up = false;
+      else
+            _up = _slurDirection == MScore::UP ? true : false;
+
+      qreal w   = startNote->headWidth();
       qreal xo1 = w * 1.12;
       qreal h   = w * 0.3;
       qreal yo  = _up ? -h : h;

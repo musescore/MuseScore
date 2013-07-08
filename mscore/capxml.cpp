@@ -848,7 +848,16 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
             else if (tag == "instrument") {
                   sl->name = e.attribute("name");
                   sl->abbrev = e.attribute("abbrev");
-                  e.readNext();
+                  // elements name and abbrev overrule attributes name and abbrev
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "name")
+                              sl->name = e.readElementText();
+                        else if (tag == "abbrev")
+                              sl->abbrev = e.readElementText();
+                        else
+                              e.unknown();
+                        }
                   }
             else if (tag == "sound") {
                   sl->sound = e.intAttribute("instr", 0);

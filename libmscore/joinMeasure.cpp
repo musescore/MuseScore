@@ -29,7 +29,7 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       ScoreRange range;
       range.read(m1->first(), m2->last(), 0, nstaves() * VOICES);
 
-      undo(new RemoveMeasures(m1, m2));
+      undoRemoveMeasures(m1, m2);
       Measure* m = static_cast<Measure*>(insertMeasure(Element::MEASURE, m2->next(), true));
       fixTicks();
 
@@ -46,7 +46,6 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
 
       endCmd();
       }
-
 
 }
 

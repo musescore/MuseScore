@@ -32,6 +32,7 @@ class NoteDot : public Element {
       virtual ElementType type() const { return NOTEDOT; }
       int idx() const                  { return _idx; }
       void setIdx(int val)             { _idx = val; }
+      virtual qreal mag() const;
 
       virtual void draw(QPainter*) const;
       virtual void write(Xml& xml) const;

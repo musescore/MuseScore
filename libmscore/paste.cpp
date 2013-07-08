@@ -122,7 +122,7 @@ void Score::cmdPaste(MuseScoreView* view)
                   }
 
             QByteArray data(ms->data(mimeStaffListFormat));
-// qDebug("paste <%s>", data.data());
+ qDebug("paste <%s>", data.data());
             XmlReader e(data);
             pasteStaff(e, cr);
             }
@@ -143,15 +143,16 @@ void Score::cmdPaste(MuseScoreView* view)
 
 void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       {
-      static const Segment::SegmentTypes st = Segment::SegChordRest;
-      for (Segment* s = firstMeasure()->first(st); s; s = s->next1(st)) {
-            for (Spanner* e = s->spannerFor(); e; e = e->next())
-                  e->setId(-1);
-            }
+      for (auto i :_spanner.map())
+            i.second->setId(-1);
+
+      QList<Chord*> graceNotes;
       int dstStaffStart = dst->staffIdx();
       int dstTick = dst->tick();
-
+      bool done = false;
       while (e.readNextStartElement()) {
+            if (done)
+                  break;
             if (e.name() != "StaffList") {
                   e.unknown();
                   break;
@@ -163,37 +164,35 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
             int staves        = e.intAttribute("staves", 0);
             e.setTick(tickStart);
 
-            QSet<int> blackList;
-            for (int i = 0; i < staves; ++i) {
-                  int staffIdx = i + dstStaffStart;
-                  if (staffIdx >= nstaves())
-                        break;
-                  if (!makeGap1(dst->tick(), staffIdx, Fraction::fromTicks(tickLen))) {
-qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
-                        blackList.insert(staffIdx);
-                        }
-                  }
             bool pasted = false;
             while (e.readNextStartElement()) {
+                  if (done)
+                        break;
                   if (e.name() != "Staff") {
                         e.unknown();
                         break;
                         }
                   int srcStaffIdx = e.attribute("id", "0").toInt();
-                  if (blackList.contains(srcStaffIdx)) {
-                        e.skipCurrentElement();
-                        continue;
-                        }
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
-                  if (dstStaffIdx >= nstaves())
+                  if (dstStaffIdx >= nstaves()) {
+                        done = true; // break main loop, nothing more to paste
                         break;
+                        }
                   e.tuplets().clear();
                   while (e.readNextStartElement()) {
                         pasted = true;
                         const QStringRef& tag(e.name());
 
-                        if (tag == "tick")
-                              e.setTick(e.readInt());
+                        if (tag == "tick") {
+                              int tick = e.readInt();
+                              e.setTick(tick);
+                              int shift = tick - tickStart;
+                              if (!makeGap1(dstTick + shift, dstStaffIdx, Fraction::fromTicks(tickLen - shift))) {
+                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
+                                    done = true; // break main loop, cannot make gap
+                                    break;
+                                    }
+                              }
                         else if (tag == "Tuplet") {
                               Tuplet* tuplet = new Tuplet(this);
                               tuplet->setTrack(e.track());
@@ -204,12 +203,6 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               tuplet->setTick(tick);
                               e.addTuplet(tuplet);
                               }
-                        else if (tag == "Slur") {
-                              Slur* slur = new Slur(this);
-                              slur->read(e);
-                              slur->setTrack(dstStaffIdx * VOICES);
-                              e.addSpanner(slur);
-                              }
                         else if (tag == "Chord" || tag == "Rest" || tag == "RepeatMeasure") {
                               ChordRest* cr = static_cast<ChordRest*>(Element::name2Element(tag, this));
                               cr->setTrack(e.track());
@@ -219,43 +212,50 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               int track = dstStaffIdx * VOICES + voice;
                               cr->setTrack(track);
                               int tick = e.tick() - tickStart + dstTick;
-                              e.setTick(e.tick() + cr->actualTicks());
-                              pasteChordRest(cr, tick);
+                              if (cr->isGrace())
+                                    graceNotes.push_back(static_cast<Chord*>(cr));
+                              else {
+                                    e.setTick(e.tick() + cr->actualTicks());
+                                    if (cr->type() == Element::CHORD) {
+                                          Chord* chord = static_cast<Chord*>(cr);
+                                          for (int i = 0; i < graceNotes.size(); ++i) {
+                                                Chord* gc = graceNotes[i];
+                                                gc->setGraceIndex(i);
+                                                chord->add(gc);
+                                                }
+                                          graceNotes.clear();
+                                          }
+                                    pasteChordRest(cr, tick);
+                                    }
                               }
                         else if (tag == "HairPin"
                            || tag == "Pedal"
                            || tag == "Ottava"
                            || tag == "Trill"
                            || tag == "TextLine"
+                           || tag == "Slur"
                            || tag == "Volta") {
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->setTrack(dstStaffIdx * VOICES);
+                              sp->setAnchor(Spanner::ANCHOR_SEGMENT);
                               sp->read(e);
-                              int tick = e.tick() - tickStart + dstTick;
-                              Measure* m = tick2measure(tick);
-                              Segment* segment = m->undoGetSegment(Segment::SegChordRest, tick);
-                              sp->setStartElement(segment);
-                              sp->setParent(segment);
-                              e.addSpanner(sp);
+                              sp->setTick(e.tick() - tickStart + dstTick);
+                              addSpanner(sp);
                               }
                         else if (tag == "endSpanner") {
                               int id = e.intAttribute("id");
-                              Spanner* spanner = e.findSpanner(id);
+                              Spanner* spanner = findSpanner(id);
                               if (spanner) {
-                                    e.removeSpanner(spanner);
-                                    int tick = e.tick() - tickStart + dstTick;
-                                    Measure* m = tick2measure(tick);
-                                    Segment* seg = m->undoGetSegment(Segment::SegChordRest, tick);
-                                    spanner->setEndElement(seg);
-                                    seg->addSpannerBack(spanner);
+                                    // e.spanner().removeOne(spanner);
+                                    spanner->setTick2(e.tick() - tickStart + dstTick);
+                                    removeSpanner(spanner);
                                     undoAddElement(spanner);
                                     if (spanner->type() == Element::OTTAVA) {
                                           Ottava* o = static_cast<Ottava*>(spanner);
                                           int shift = o->pitchShift();
                                           Staff* st = o->staff();
-                                          int tick1 = static_cast<Segment*>(o->startElement())->tick();
-                                          st->pitchOffsets().setPitchOffset(tick1, shift);
-                                          st->pitchOffsets().setPitchOffset(tick, 0);
+                                          st->pitchOffsets().setPitchOffset(o->tick(), shift);
+                                          st->pitchOffsets().setPitchOffset(o->tick2(), 0);
                                           }
                                     else if (spanner->type() == Element::HAIRPIN) {
                                           Hairpin* hp = static_cast<Hairpin*>(spanner);
@@ -264,7 +264,6 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                                     }
                               e.readNext();
                               }
-
                         else if (tag == "Lyrics") {
                               Lyrics* lyrics = new Lyrics(this);
                               lyrics->setTrack(e.track());
@@ -286,13 +285,11 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                               harmony->setTrack(e.track());
                               harmony->read(e);
                               harmony->setTrack(dstStaffIdx * VOICES);
-                              //transpose
+                              // transpose
                               Part* partDest = staff(dstStaffIdx)->part();
-                              Part* partSrc = staff(srcStaffIdx)->part();
-                              Interval intervalDest = partDest->instr()->transpose();
-                              Interval intervalSrc = partSrc->instr()->transpose();
-                              Interval interval = Interval(intervalSrc.diatonic - intervalDest.diatonic, intervalSrc.chromatic - intervalDest.chromatic);
-                              if (!styleB(ST_concertPitch)) {
+                              Interval interval = partDest->instr()->transpose();
+                              if (!styleB(ST_concertPitch) && !interval.isZero()) {
+                                    interval.flip();
                                     int rootTpc = transposeTpc(harmony->rootTpc(), interval, false);
                                     int baseTpc = transposeTpc(harmony->baseTpc(), interval, false);
                                     undoTransposeHarmony(harmony, rootTpc, baseTpc);
@@ -395,42 +392,8 @@ qDebug("cannot make gap in staff %d at tick %d", staffIdx, dst->tick());
                         _selection.setState(SEL_RANGE);
                   }
             }
-      foreach(Spanner* sp, e.spanner()) {
-            printf("  %s %p %p\n", sp->name(), sp->startElement(), sp->endElement());
-            if (sp->startElement() == 0 || sp->endElement() == 0) {
-                  // spanner is not copied complete, lets remove it:
-                  printf("    remove\n");
-                  switch(sp->anchor()) {
-                        case Spanner::ANCHOR_SEGMENT:
-                              if (sp->startElement())
-                                    static_cast<Segment*>(sp->startElement())->removeSpannerFor(sp);
-                              else if (sp->endElement())
-                                    static_cast<Segment*>(sp->endElement())->removeSpannerBack(sp);
-                              break;
-                        case Spanner::ANCHOR_MEASURE:
-                              if (sp->startElement())
-                                    static_cast<Measure*>(sp->startElement())->removeSpannerFor(sp);
-                              else if (sp->endElement())
-                                    static_cast<Measure*>(sp->endElement())->removeSpannerBack(sp);
-                              break;
-                              break;
-                        case Spanner::ANCHOR_CHORD:
-                              if (sp->startElement())
-                                    static_cast<ChordRest*>(sp->startElement())->removeSpannerFor(sp);
-                              else if (sp->endElement())
-                                    static_cast<ChordRest*>(sp->endElement())->removeSpannerBack(sp);
-                              break;
-                        case Spanner::ANCHOR_NOTE:
-                              if (sp->startElement())
-                                    static_cast<Note*>(sp->startElement())->removeSpannerFor(sp);
-                              else if (sp->endElement())
-                                    static_cast<Note*>(sp->endElement())->removeSpannerBack(sp);
-                              break;
-                        }
-                  delete sp;
-                  }
-            }
-      connectTies();
+      foreach (Score* s, scoreList())     // for all parts
+            s->connectTies();
       }
 
 //---------------------------------------------------------
@@ -466,11 +429,11 @@ void Score::pasteChordRest(ChordRest* cr, int tick)
             }
 
       Measure* measure = tick2measure(tick);
-      bool isGrace = (cr->type() == Element::CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL);
-      int measureEnd = measure->tick() + measure->ticks();
-      if (tick >= measureEnd)       // end of score
+      if (!measure)
             return;
 
+      int measureEnd = measure->endTick();
+      bool isGrace = (cr->type() == Element::CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL);
       if (!isGrace && (tick + cr->actualTicks() > measureEnd)) {
             if (cr->type() == Element::CHORD) {
                   // split Chord

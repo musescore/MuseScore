@@ -79,3 +79,11 @@ QGroupBox::title {
       subcontrol-position: top left;
       padding: 5px 5px;
       }
+
+QHeaderView {
+      color:white;
+}
+
+QListView {
+      color:white;
+}

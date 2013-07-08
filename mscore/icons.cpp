@@ -29,7 +29,7 @@
 
 namespace Ms {
 
-extern QString iconPath, iconGroup;
+extern QString iconPath;
 QIcon* icons[ICONS];
 
 //---------------------------------------------------------
@@ -124,18 +124,18 @@ static const char* iconNames[] = {
       "go-home.svg",
       "go-previous.svg",
       "go-next.svg",
-      "view-refresh.svg"
+      "view-refresh.svg",
+      "brackets.svg"
       };
 
 void genIcons()
       {
-// qDebug("genIcons <%s>\n", qPrintable(iconPath + iconGroup));
       for (int i = 0; i < voice1_ICON; ++i) {
             QIcon* icon = new QIcon(new MIconEngine);
-            icon->addFile(iconPath + iconGroup + iconNames[i]);
+            icon->addFile(iconPath + iconNames[i]);
             icons[i] = icon;
             if (icons[i]->isNull() || icons[i]->pixmap(12).isNull()) {
-                  qDebug("cannot load Icon <%s>\n", qPrintable(iconPath + iconGroup + iconNames[i]));
+                  qDebug("cannot load Icon <%s>\n", qPrintable(iconPath + iconNames[i]));
                   }
             }
 

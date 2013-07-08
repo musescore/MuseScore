@@ -24,6 +24,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/drumset.h"
 #include "libmscore/utils.h"
+#include "libmscore/chordlist.h"
 #include "libmscore/harmony.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/key.h"
@@ -379,6 +380,8 @@ Score::FileError importBB(Score* score, const QString& name)
             qDebug("cannot open file <%s>\n", qPrintable(name));
             return Score::FILE_OPEN_ERROR;
             }
+      score->style()->set(StyleVal(ST_chordsXmlFile, true));
+      score->style()->chordList()->read("chords.xml");
       *(score->sigmap()) = bb.siglist();
 
       QList<BBTrack*>* tracks = bb.tracks();
@@ -490,6 +493,7 @@ Score::FileError importBB(Score* score, const QString& name)
             else
                   h->setBaseTpc(INVALID_TPC);
             h->setId(c.extension);
+            h->getDescription();
             h->render();
             s->add(h);
             }

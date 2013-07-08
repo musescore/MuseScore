@@ -46,7 +46,6 @@
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
-#include "rendermidi.h"
 
 namespace Ms {
 
@@ -80,7 +79,7 @@ void Score::updateChannel()
                   }
             }
 
-      for (Segment* s = fm->first(Segment::SegChordRestGrace); s; s = s->next1(Segment::SegChordRestGrace)) {
+      for (Segment* s = fm->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
             foreach(Staff* st, _staves) {
                   int strack = st->idx() * VOICES;
                   int etrack = strack + VOICES;
@@ -101,8 +100,8 @@ void Score::updateChannel()
                               }
                         }
                   }
+            }
       }
-}
 
 //---------------------------------------------------------
 //   playNote
@@ -130,17 +129,29 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             return;
 
       int pitch = note->ppitch();
-      int tick1 = note->chord()->tick() + tickOffset;
 
-      int ticks = note->playTicks();
-      foreach(const NoteEvent& e, note->playEvents()) {
+      Chord* chord = note->chord();
+      int tieLen;
+      int ticks;
+      if (chord->isGrace()) {
+            chord = static_cast<Chord*>(chord->parent());
+            tieLen = 0;
+            ticks = chord->duration().ticks();
+            }
+      else {
+            ticks = chord->duration().ticks();
+            tieLen = note->playTicks() - ticks;
+            }
+      int tick1 = chord->tick() + tickOffset;
+
+      foreach (const NoteEvent& e, note->playEvents()) {
             int p = pitch + e.pitch();
             if (p < 0)
                   p = 0;
             else if (p > 127)
                   p = 127;
             int on  = tick1 + (ticks * e.ontime())/1000;
-            int off = on + (ticks * e.len())/1000 - 1;
+            int off = on + (ticks * e.len())/1000 - 1 + tieLen;
             playNote(events, note, channel, p, velo, on, off);
             }
 #if 0
@@ -241,7 +252,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
       int firstStaffIdx = staff->idx();
       int nextStaffIdx  = firstStaffIdx + 1;
 
-      Segment::SegmentTypes st = Segment::SegChordRestGrace;
+      Segment::SegmentTypes st = Segment::SegChordRest;
       int strack = firstStaffIdx * VOICES;
       int etrack = nextStaffIdx * VOICES;
 
@@ -261,9 +272,13 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   Staff* staff = chord->staff();
                   int velocity = staff->velocities().velo(seg->tick());
                   Instrument* instr = chord->staff()->part()->instr(tick);
-
                   int channel = instr->channel(chord->upNote()->subchannel()).channel;
-                  foreach(const Note* note, chord->notes())
+
+                  for (Chord* c : chord->graceNotes()) {
+                        for (const Note* note : c->notes())
+                              collectNote(events, channel, note, velocity, tickOffset);
+                        }
+                  foreach (const Note* note, chord->notes())
                         collectNote(events, channel, note, velocity, tickOffset);
                   }
             }
@@ -307,28 +322,6 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               }
                         }
                   }
-            for(Spanner* e = s->spannerFor(); e; e = e->next()) {
-                  if (e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
-                        continue;
-                  if (e->type() == Element::PEDAL) {
-                        Segment* s1 = static_cast<Segment*>(e->startElement());
-                        Segment* s2 = static_cast<Segment*>(e->endElement());
-                        if (s2 == 0) {
-                              qDebug("CollectMeasureEvents: spanner %s: no end element at measure %d, staff %d",
-                                 e->name(), s1->measure()->no(), e->staffIdx());
-                              continue;
-                              }
-                        Staff* staff = e->staff();
-
-                        int channel = staff->channel(s1->tick(), 0);
-
-                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
-                        events->insert(std::pair<int,NPlayEvent>(s1->tick() + tickOffset, event));
-
-                        event.setValue(0);
-                        events->insert(std::pair<int,NPlayEvent>(s2->tick() + tickOffset - 1, event));
-                        }
-                  }
             }
       }
 
@@ -367,14 +360,10 @@ void Score::updateRepeatList(bool expandRepeats)
 void Score::updateHairpin(Hairpin* h)
       {
       Staff* st = h->staff();
-      int tick  = h->segment()->tick();
+      int tick  = h->tick();
       int velo  = st->velocities().velo(tick);
       int incr  = h->veloChange();
-
-      Segment* es = static_cast<Segment*>(h->endElement());
-      if (!es || es->parent() == 0)
-            return;
-      int tick2 = es->tick() - 1;
+      int tick2 = h->tick2() - 1;
 
       //
       // If velocity increase/decrease is zero, then assume
@@ -393,7 +382,7 @@ void Score::updateHairpin(Hairpin* h)
       else if (endVelo < 1)
             endVelo = 1;
 
-      switch(h->dynRange()) {
+      switch (h->dynRange()) {
             case Element::DYNAMIC_STAFF:
                   st->velocities().setVelo(tick,  VeloEvent(VELO_RAMP, velo));
                   st->velocities().setVelo(tick2, VeloEvent(VELO_FIX, endVelo));
@@ -420,11 +409,8 @@ void Score::updateHairpin(Hairpin* h)
 void Score::removeHairpin(Hairpin* h)
       {
       Staff* st = h->staff();
-      int tick  = h->segment()->tick();
-      Segment* es = static_cast<Segment*>(h->endElement());
-      if (!es)
-            return;
-      int tick2 = es->tick() - 1;
+      int tick  = h->tick();
+      int tick2 = h->tick2() - 1;
 
       switch(h->dynRange()) {
             case Element::DYNAMIC_STAFF:
@@ -497,14 +483,6 @@ void Score::updateVelo()
                                     break;
                               }
                         }
-                  for (Spanner* e = s->spannerFor(); e; e = e->next()) {
-                        if (e->staffIdx() != staffIdx)
-                              continue;
-                        if (e->type() == Element::HAIRPIN) {
-                              Hairpin* h = static_cast<Hairpin*>(e);
-                              updateHairpin(h);
-                              }
-                        }
                   }
             }
       }
@@ -536,49 +514,14 @@ void Score::renderStaff(EventMap* events, Staff* staff)
       }
 
 //---------------------------------------------------------
-//   gateTime
-//---------------------------------------------------------
-
-static int gateTime(Chord* chord)
-      {
-      QList<Slur*> slurs;
-      int track = chord->track();
-      int gateTime = 100;
-      Score* score = chord->score();
-      for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-            const Segment::SegmentTypes st = Segment::SegChordRestGrace;
-            for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                  ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-                  if (cr == 0)
-                        continue;
-                  for (Spanner* spanner = cr->spannerFor(); spanner; spanner = spanner->next()) {
-                        if (spanner->type() == Element::SLUR)
-                              slurs.append(static_cast<Slur*>(spanner));
-                        }
-                  for (Spanner* spanner = cr->spannerBack(); spanner; spanner = spanner->next()) {
-                        if (spanner->type() == Element::SLUR)
-                              slurs.removeOne(static_cast<Slur*>(spanner));
-                        }
-                  if (cr == chord) {
-                        if (slurs.isEmpty()) {
-                              Instrument* instr = cr->staff()->part()->instr(seg->tick());
-                              int channel = 0;
-                              instr->updateGateTime(&gateTime, channel, "");
-                              }
-                        break;
-                        }
-                  }
-            }
-      return gateTime;
-      }
-
-//---------------------------------------------------------
 //   renderChord
+//    ontime in 1/1000 of duration
 //---------------------------------------------------------
 
 static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       {
       QList<NoteEventList> ell;
+
       if (chord->notes().isEmpty())
             return ell;
       Segment* seg = chord->segment();
@@ -596,7 +539,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             int n = 1 << tremolo->lines();
             int l = 1000 / n;
             if (chord->tremoloChordType() == TremoloFirstNote) {
-                  Segment::SegmentTypes st = Segment::SegChordRestGrace;
+                  Segment::SegmentTypes st = Segment::SegChordRest;
                   Segment* seg2 = seg->next(st);
                   int track = chord->track();
                   while (seg2 && !seg2->element(track))
@@ -722,32 +665,52 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       return ell;
       }
 
-QList<NoteEventList> renderChord(Chord* chord)
-      {
-      return renderChord(chord, gateTime(chord), 0);
-      }
-
 //---------------------------------------------------------
 //   createPlayEvents
 //    create default play events
 //---------------------------------------------------------
 
-static void createPlayEvents(Chord* chord, int gateTime, const QList<Chord*>& graceNotes)
+void Score::createPlayEvents(Chord* chord)
       {
-      int n = graceNotes.size();
+      int gateTime = 100;
+
+      int tick = chord->tick();
+      Slur* slur = 0;
+      for (auto sp : _spanner.map()) {
+            if (sp.second->type() != Element::SLUR || sp.second->track() != chord->track())
+                  continue;
+            Slur* s = static_cast<Slur*>(sp.second);
+            if (tick >= s->tick() && tick < s->tick2()) {
+                  slur = s;
+                  break;
+                  }
+            }
+      // gateTime is 100% for slured notes
+      if (!slur) {
+            Instrument* instr = chord->staff()->part()->instr(tick);
+            instr->updateGateTime(&gateTime, 0, "");
+            }
+
+      int n = chord->graceNotes().size();
       int ontime = 0;
       if (n) {
             //
-            //    render chords with grace notes
+            //  render grace notes:
+            //  simplified implementation:
+            //  - grace notes start on the beat of the main note
+            //  - duration: acciacatura: 0.128 * duration of main note
+            //              appoggiatura: 0.5  * duration of main note
+            //  - the duration is divided by the number of grace notes
+            //  - the grace note duration as notated does not matter
             //
-            ontime = (graceNotes[0]->noteType() ==  NOTE_ACCIACCATURA) ? 128 : 500;
-            qreal scale = (qreal)graceNotes[0]->duration().denominator() / (qreal)chord->duration().denominator();
-            int graceDuration = (ontime * scale)/ n;
+            Chord* graceChord = chord->graceNotes()[0];
+            ontime      = (graceChord->noteType() ==  NOTE_ACCIACCATURA) ? 128 : 500;
+            int graceDuration = ontime / n;
 
             int on = 0;
             for (int i = 0; i < n; ++i) {
                   QList<NoteEventList> el;
-                  Chord* gc = graceNotes[i];
+                  Chord* gc = chord->graceNotes().at(i);
                   int nn = gc->notes().size();
                   for (int ii = 0; ii < nn; ++ii) {
                         NoteEventList nel;
@@ -777,65 +740,22 @@ static void createPlayEvents(Chord* chord, int gateTime, const QList<Chord*>& gr
             }
       }
 
-void createPlayEvents(Chord* chord)
-      {
-      QList<Chord*> gl;       // list of grace chords
-      Segment* s = chord->segment();
-      while (s->prev()) {
-            s = s->prev();
-            if (s->segmentType() != Segment::SegGrace)
-                  break;
-            Element* cr = s->element(chord->track());
-            if (cr && cr->type() == Element::CHORD)
-                  gl.prepend(static_cast<Chord*>(cr));
-            }
-      createPlayEvents(chord, gateTime(chord), gl);
-      }
-
-static void createPlayEvents(Measure* m, int track, QList<Slur*>* slurs)
-      {
-      // skip linked staves, except primary
-      if (!m->score()->staff(track / VOICES)->primaryStaff())
-            return;
-      QList<Chord*> graceNotes;
-      const Segment::SegmentTypes st = Segment::SegChordRestGrace;
-      for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-            ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-            if (cr == 0)
-                  continue;
-            for (Spanner* spanner = cr->spannerFor(); spanner; spanner = spanner->next()) {
-                  if (spanner->type() == Element::SLUR)
-                        slurs->append(static_cast<Slur*>(spanner));
-                  }
-            for (Spanner* spanner = cr->spannerBack(); spanner; spanner = spanner->next()) {
-                  if (spanner->type() == Element::SLUR)
-                        slurs->removeOne(static_cast<Slur*>(spanner));
-                  }
-            if (cr->type() != Element::CHORD)
-                  continue;
-            Chord* chord = static_cast<Chord*>(cr);
-            if (chord->noteType() != NOTE_NORMAL) {
-                  graceNotes.append(chord);
-                  continue;
-                  }
-            int gateTime = 100;
-            if (slurs->isEmpty()) {
-                  Instrument* instr = cr->staff()->part()->instr(seg->tick());
-                  int channel = 0;
-                  instr->updateGateTime(&gateTime, channel, "");
-                  }
-            createPlayEvents(chord, gateTime, graceNotes);
-            graceNotes.clear();
-            }
-      }
-
 void Score::createPlayEvents()
       {
-      QList<Slur*> slurs;
       int etrack = nstaves() * VOICES;
       for (int track = 0; track < etrack; ++track) {
-            for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
-                  Ms::createPlayEvents(m, track, &slurs);
+            for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+                  // skip linked staves, except primary
+                  if (!m->score()->staff(track / VOICES)->primaryStaff())
+                        continue;
+                  const Segment::SegmentTypes st = Segment::SegChordRest;
+                  for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+                        Chord* chord = static_cast<Chord*>(seg->element(track));
+                        if (chord == 0 || chord->type() != Element::CHORD)
+                              continue;
+                        createPlayEvents(chord);
+                        }
+                  }
             }
       }
 
@@ -861,6 +781,10 @@ void Score::renderMidi(EventMap* events)
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
+
+            //
+            //    add metronome tick events
+            //
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                   Fraction ts = sigmap()->timesig(m->tick()).timesig();
 
@@ -873,6 +797,28 @@ void Score::renderMidi(EventMap* events)
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;
+                  }
+            //
+            // create sustain pedal events
+            //
+            int utick1 = rs->utick;
+            int utick2 = utick1 + rs->len;
+
+            for (std::pair<int,Spanner*> sp : _spanner.map()) {
+                  Spanner* s = sp.second;
+                  if (s->type() != Element::PEDAL)
+                        continue;
+
+                  int channel = s->staff()->channel(s->tick(), 0);
+                  if (s->tick() >= utick1 && s->tick() < utick2) {
+                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
+                        events->insert(std::pair<int,NPlayEvent>(s->tick() + tickOffset, event));
+                        }
+
+                  if (s->tick2() >= utick1 && s->tick2() < utick2) {
+                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
+                        events->insert(std::pair<int,NPlayEvent>(s->tick2() + tickOffset, event));
+                        }
                   }
             }
       }

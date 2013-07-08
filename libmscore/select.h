@@ -77,7 +77,6 @@ class Selection {
       SelState state() const           { return _state; }
       void setState(SelState s);
 
-      void searchSelectedElements();
       const QList<Element*>& elements() const { return _el; }
       bool isSingle() const                   { return (_state == SEL_LIST) && (_el.size() == 1); }
       QList<Note*> noteList(int track = -1) const;
@@ -114,7 +113,6 @@ class Selection {
       void setStaffEnd(int v)           { _staffEnd = v;    }
       void setActiveTrack(int v)        { _activeTrack = v; }
       bool canCopy() const;
-      void reconstructElementList();
       void updateSelectedElements();
       bool measureRange(Measure** m1, Measure** m2) const;
       };

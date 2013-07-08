@@ -16,8 +16,7 @@
 #include "musescore.h"
 #include "textpalette.h"
 #include "texttools.h"
-#include "edittools.h"
-#include "inspector.h"
+#include "inspector/inspector.h"
 
 #include "libmscore/barline.h"
 #include "libmscore/utils.h"
@@ -69,21 +68,7 @@ void ScoreView::startEdit()
       setFocus();
       if (!_score->undo()->active())
             _score->startCmd();
-
-      if (editObject->isSegment()) {        // if spanner segment
-            SpannerSegment* ss = (SpannerSegment*)editObject;
-            Spanner* spanner   = ss->spanner();
-            Spanner* clone     = static_cast<Spanner*>(spanner->clone());
-            clone->setLinks(spanner->links());
-            int idx            = spanner->spannerSegments().indexOf(ss);
-            editObject         = clone->spannerSegments()[idx];
-
-            editObject->startEdit(this, startMove);
-            _score->undoChangeElement(spanner, clone);
-            _score->rebuildBspTree();
-            }
-      else
-            editObject->startEdit(this, startMove);
+      editObject->startEdit(this, startMove);
       curGrip = -1;
       updateGrips();
       _score->end();
@@ -107,83 +92,6 @@ void ScoreView::endEdit()
       if (mscore->getInspector())
             mscore->getInspector()->setElement(0);
 
-      if (editObject->isSegment()) {
-#if 0
-            Spanner* spanner  = static_cast<SpannerSegment*>(editObject)->spanner();
-            Spanner* original = static_cast<SpannerSegment*>(origEditObject)->spanner();
-
-            bool colorChanged = editObject->color() != origEditObject->color();
-            if (!spanner->isEdited(original) && !colorChanged) {
-                  UndoStack* undo = _score->undo();
-                  undo->current()->unwind();
-                  _score->select(editObject);
-                  _score->addRefresh(editObject->canvasBoundingRect());
-                  _score->addRefresh(origEditObject->canvasBoundingRect());
-                  _score->deselect(editObject);
-                  _score->select(origEditObject);
-                  delete spanner;
-                  origEditObject = 0;
-                  editObject = 0;
-                  grips = 0;
-                  _score->endCmd();
-                  mscore->endCmd();
-                  return;
-                  }
-            // handle linked elements
-            LinkedElements* le = original->links();
-            Element* se = spanner->startElement();
-            Element* ee = spanner->endElement();
-            if (le && (se != original->startElement() || ee != original->endElement())) {
-                  //
-                  // apply anchor changes
-                  // to linked elements
-                  //
-                  foreach(Element* e, *le) {
-                        if (e == spanner)
-                              continue;
-                        Spanner* lspanner = static_cast<Spanner*>(e);
-                        Element* lse = 0;
-                        Element* lee = 0;
-                        Score* sc = lspanner->score();
-
-                        if (se->type() == Element::NOTE || se->type() == Element::CHORD) {
-                              foreach(Element* e, *se->links()) {
-                                    if (e->score() == sc && e->staffIdx() == se->staffIdx()) {
-                                          lse = e;
-                                          break;
-                                          }
-                                    }
-                              foreach(Element* e, *ee->links()) {
-                                    if (e->score() == sc && e->staffIdx() == ee->staffIdx()) {
-                                          lee = e;
-                                          break;
-                                          }
-                                    }
-                              }
-                        else if (se->type() == Element::SEGMENT) {
-                              int tick   = static_cast<Segment*>(se)->tick();
-                              Measure* m = sc->tick2measure(tick);
-                              lse        = m->findSegment(Segment::SegChordRest, tick);
-
-                              int tick2  = static_cast<Segment*>(ee)->tick();
-                              m          = sc->tick2measure(tick2);
-                              lee        = m->findSegment(Segment::SegChordRest, tick2);
-                              }
-                        else if (se->type() == Element::MEASURE) {
-                              Measure* measure = static_cast<Measure*>(se);
-                              int tick         = measure->tick();
-                              lse              = sc->tick2measure(tick);
-
-                              measure          = static_cast<Measure*>(ee);
-                              tick             = measure->tick();
-                              lee              = sc->tick2measure(tick);
-                              }
-                        Q_ASSERT(lse && lee);
-                        score()->undo(new ChangeSpannerAnchor(lspanner, lse, lee));
-                        }
-                  }
-#endif
-            }
       _score->addRefresh(editObject->canvasBoundingRect());
 
       int tp = editObject->type();

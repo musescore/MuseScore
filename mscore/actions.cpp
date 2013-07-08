@@ -1056,7 +1056,7 @@ Shortcut Shortcut::sc[] = {
           quartrest_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "sharp2",
          QT_TRANSLATE_NOOP("action","Double sharp"),
@@ -1065,7 +1065,7 @@ Shortcut Shortcut::sc[] = {
           sharpsharp_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "sharp",
          QT_TRANSLATE_NOOP("action","Sharp"),
@@ -1074,7 +1074,7 @@ Shortcut Shortcut::sc[] = {
           sharp_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "nat",
          QT_TRANSLATE_NOOP("action","Natural"),
@@ -1083,7 +1083,7 @@ Shortcut Shortcut::sc[] = {
           natural_ICON
          ),
        Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "flat",
          QT_TRANSLATE_NOOP("action","Flat"),
@@ -1092,7 +1092,7 @@ Shortcut Shortcut::sc[] = {
           flat_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "flat2",
          QT_TRANSLATE_NOOP("action","Double flat"),
@@ -1161,37 +1161,37 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "voice-1",
+         QT_TRANSLATE_NOOP("action","1"),
          QT_TRANSLATE_NOOP("action","Voice 1"),
-         QT_TRANSLATE_NOOP("action","Voice 1"),
-         QT_TRANSLATE_NOOP("action","Voice 1"),
-          voice1_ICON
+         QT_TRANSLATE_NOOP("action","Voice 1")
+//          voice1_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "voice-2",
+         QT_TRANSLATE_NOOP("action","2"),
          QT_TRANSLATE_NOOP("action","Voice 2"),
-         QT_TRANSLATE_NOOP("action","Voice 2"),
-         QT_TRANSLATE_NOOP("action","Voice 2"),
-          voice2_ICON
+         QT_TRANSLATE_NOOP("action","Voice 2")
+//          voice2_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "voice-3",
+         QT_TRANSLATE_NOOP("action","3"),
          QT_TRANSLATE_NOOP("action","Voice 3"),
-         QT_TRANSLATE_NOOP("action","Voice 3"),
-         QT_TRANSLATE_NOOP("action","Voice 3"),
-          voice3_ICON
+         QT_TRANSLATE_NOOP("action","Voice 3")
+//          voice3_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "voice-4",
+         QT_TRANSLATE_NOOP("action","4"),
          QT_TRANSLATE_NOOP("action","Voice 4"),
-         QT_TRANSLATE_NOOP("action","Voice 4"),
-         QT_TRANSLATE_NOOP("action","Voice 4"),
-          voice4_ICON
+         QT_TRANSLATE_NOOP("action","Voice 4")
+//          voice4_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -1766,7 +1766,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "edit-harmony",
-         QT_TRANSLATE_NOOP("action","Chords..."),
+         QT_TRANSLATE_NOOP("action","Chordnames..."),
          QT_TRANSLATE_NOOP("action","Edit chord style")
          ),
       Shortcut(
@@ -1791,13 +1791,13 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Synthesizer")
          ),
       Shortcut(
-         STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
          A_CMD,
          "double-duration",
          QT_TRANSLATE_NOOP("action","Double duration")
          ),
       Shortcut(
-         STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
          A_CMD,
          "half-duration",
          QT_TRANSLATE_NOOP("action","Half duration")
@@ -2360,28 +2360,35 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Advance of a 1/64 note (F.B./Harm. only)")
          ),
       Shortcut(
-      STATE_HARMONY_FIGBASS_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "prev-measure-TEXT",
          QT_TRANSLATE_NOOP("action","Previous measure (F.B./Harm.)")
          ),
       Shortcut(
-      STATE_HARMONY_FIGBASS_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "next-measure-TEXT",
          QT_TRANSLATE_NOOP("action","Next measure (F.B./Harm.)")
          ),
       Shortcut(
-      STATE_HARMONY_FIGBASS_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "prev-beat-TEXT",
          QT_TRANSLATE_NOOP("action","Previous beat (Harmony)")
          ),
       Shortcut(
-      STATE_HARMONY_FIGBASS_EDIT,
+         STATE_HARMONY_FIGBASS_EDIT,
          0,
          "next-beat-TEXT",
          QT_TRANSLATE_NOOP("action","Next beat (Harmony)")
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         A_CMD,
+         "add-brackets",
+         QT_TRANSLATE_NOOP("action","add brackets to notehead"),
+         brackets_ICON
          ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)

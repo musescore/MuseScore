@@ -285,7 +285,7 @@ void Image::draw(QPainter* painter) const
             }
       if (selected() && !(score() && score()->printing())) {
             painter->setBrush(Qt::NoBrush);
-            painter->setPen(Qt::blue);
+            painter->setPen(MScore::selectColor[0]);
             painter->drawRect(bbox());
             }
       }
@@ -438,6 +438,10 @@ bool Image::load(const QString& ss)
       _linkPath = fi.canonicalFilePath();
       _storeItem = imageStore.add(_linkPath, ba);
       _storeItem->reference(this);
+      if (path.endsWith(".svg"))
+            setImageType(IMAGE_SVG);
+      else
+            setImageType(IMAGE_RASTER);
       return true;
       }
 
@@ -490,7 +494,6 @@ void Image::updateGrips(int* grips, QRectF* grip) const
 
 void Image::layout()
       {
-      qDebug("Image::layout: %d", imageType);
       if (imageType == IMAGE_SVG && !svgDoc) {
             if (_storeItem) {
                   svgDoc = new QSvgRenderer(_storeItem->buffer());

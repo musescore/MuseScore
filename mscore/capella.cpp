@@ -76,6 +76,7 @@ static void addDynamic(Score* score, Segment* s, int track, const char* name)
       s->add(d);
       }
 
+#if 0 // TODO-S
 //---------------------------------------------------------
 //   levelofGraceSeg
 //---------------------------------------------------------
@@ -91,6 +92,7 @@ static int levelofGraceSeg(Measure* m,int tick)
             }
       return nGraces;
       }
+#endif
 
 //---------------------------------------------------------
 //   SetCapGraceDuration
@@ -397,11 +399,13 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         TDuration d;
                         d.setVal(ticks);
                         Measure* m = score->getCreateMeasure(tick);
-                        int gl = levelofGraceSeg(m,tick);
+
+//TODO-S                        int gl = levelofGraceSeg(m,tick);
                         bool isgracenote = (!(o->invisible) && (ticks==0));
-                        Segment* s = (isgracenote) ? m->getGraceSegment(tick, gl) : m->getSegment(Segment::SegChordRest, tick);
-                        if (isgracenote)
-                              s = m->getGraceSegment(tick,1);
+//                        Segment* s = (isgracenote) ? m->getGraceSegment(tick, gl) : m->getSegment(Segment::SegChordRest, tick);
+                        Segment* s = m->getSegment(Segment::SegChordRest, tick);
+//                        if (isgracenote)
+//                              s = m->getGraceSegment(tick,1);
                         if (o->count) {
                               if (tuplet == 0) {
                                     tupletCount = o->count;
@@ -703,10 +707,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     else {
                                           Slur* slur = new Slur(score);
                                           qDebug("tick %d track %d cr1 %p cr2 %p -> slur %p", tick, track, cr1, cr2, slur);
-                                          cr1->addSlurFor(slur);
-                                          slur->setStartElement(cr1);
-                                          cr2->addSlurBack(slur);
-                                          slur->setEndElement(cr2);
+                                          slur->setTick(cr1->tick());
+                                          slur->setTick2(cr2->tick());
                                           }
                                     }
                               }
@@ -747,10 +749,9 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                           volta->setVoltaType(VoltaType::CLOSED);
                                     else
                                           volta->setVoltaType(VoltaType::OPEN);
-                                    volta->setStartElement(cr1->measure());
+                                    volta->setTick(cr1->measure()->tick());
                                     cr1->measure()->add(volta);
-                                    volta->setEndElement(cr2->measure());
-                                    cr2->measure()->addSpannerBack(volta);
+                                    volta->setTick2(cr2->measure()->tick());
                                     }
                               }
                               break;
@@ -813,7 +814,6 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       {
       if (cap->systems.isEmpty())
             return;
-      qDebug("==================convert-capella");
 
       score->style()->set(ST_measureSpacing, 1.0);
       score->setSpatium(cap->normalLineDist * MScore::DPMM);
@@ -909,7 +909,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   qDebug("bad bracket 'from' value");
                   continue;
                   }
-            staff->setBracket(0, cb.curly ? BRACKET_AKKOLADE : BRACKET_NORMAL);
+            staff->setBracket(0, cb.curly ? BRACKET_BRACE : BRACKET_NORMAL);
             staff->setBracketSpan(0, cb.to - cb.from + 1);
             }
 
@@ -1021,6 +1021,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             }
       // score->connectSlurs();
+      score->fixTicks();
       }
 
 //---------------------------------------------------------

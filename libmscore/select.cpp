@@ -294,6 +294,7 @@ void Selection::updateSelectedElements()
                               continue;
                         _el.append(e);
                         }
+#if 0 // TODO-S
                   for(Spanner* sp = s->spannerFor(); sp; sp = sp->next()) {
                         if (sp->track() < startTrack || sp->track() >= endTrack)
                               continue;
@@ -306,12 +307,14 @@ void Selection::updateSelectedElements()
                               qDebug("1spanner element type %s\n", sp->endElement()->name());
                               }
                         }
+#endif
                   }
             // for each measure in the selection, check if it contains spanners within our selection
             Measure* sm = _startSegment->measure();
             Measure* em = _endSegment ? _endSegment->measure()->nextMeasure() : 0;
-            int endTick = _endSegment ? _endSegment->tick() : score()->lastMeasure()->endTick();
+            // int endTick = _endSegment ? _endSegment->tick() : score()->lastMeasure()->endTick();
             for (Measure* m = sm; m && m != em; m = m->nextMeasure()) {
+#if 0 // TODO-S
                   for(Spanner* sp = m->spannerFor(); sp; sp = sp->next()) {
                         // ignore spanners belonging to other tracks
                         if (sp->track() < startTrack || sp->track() >= endTrack)
@@ -331,6 +334,7 @@ void Selection::updateSelectedElements()
                               qDebug("2spanner element type %s\n", sp->endElement()->name());
                               }
                         }
+#endif
                   }
             }
       update();
@@ -350,38 +354,6 @@ void Selection::setRange(Segment* a, Segment* b, int c, int d)
       _staffStart    = c;
       _staffEnd      = d;
       setState(SEL_RANGE);
-      }
-
-//---------------------------------------------------------
-//   searchSelectedElements
-//    "ElementList selected"
-//---------------------------------------------------------
-
-/**
- Rebuild list of selected Elements.
-*/
-static void collectSelectedElements(void* data, Element* e)
-      {
-      QList<const Element*>* l = static_cast<QList<const Element*>*>(data);
-      if (e->selected())
-            l->append(e);
-      }
-
-void Selection::searchSelectedElements()
-      {
-      _el.clear();
-      _score->scanElements(&_el, collectSelectedElements, true);
-      updateState();
-      }
-
-//---------------------------------------------------------
-//   reconstructElementList
-///    reconstruct list of selected elements after undo/redo
-//---------------------------------------------------------
-
-void Selection::reconstructElementList()
-      {
-      searchSelectedElements();
       }
 
 //---------------------------------------------------------
@@ -505,7 +477,7 @@ QByteArray Selection::staffMimeData() const
             xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
             int startTrack = staffIdx * VOICES;
             int endTrack   = startTrack + VOICES;
-            score()->writeSegments(xml, 0, startTrack, endTrack, seg1, seg2, false);
+            score()->writeSegments(xml, 0, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
             }
 
@@ -533,7 +505,7 @@ QList<Note*> Selection::noteList(int selTrack) const
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
                   for (Segment* seg = _startSegment; seg && seg != _endSegment; seg = seg->next1()) {
-                        if (!(seg->segmentType() & (Segment::SegChordRestGrace)))
+                        if (!(seg->segmentType() & (Segment::SegChordRest)))
                               continue;
                         for (int track = startTrack; track < endTrack; ++track) {
                               Element* e = seg->element(track);

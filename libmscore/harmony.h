@@ -14,10 +14,12 @@
 #define __HARMONY_H__
 
 #include "text.h"
+#include "pitchspelling.h"
 
 namespace Ms {
 
 struct ChordDescription;
+class ParsedChord;
 
 //---------------------------------------------------------
 //   TextSegment
@@ -46,7 +48,7 @@ struct TextSegment {
 //   @P rootTpc int     root note as "tonal pitch class"
 //   @P baseTpc int     bass note as "tonal pitch class"
 //
-///    root note and bass note are notatated as
+///    root note and bass note are notated as
 ///    "tonal pitch class":
 ///
 ///           bb   b   -   #  ##
@@ -71,17 +73,28 @@ class Harmony : public Text {
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
                                           // or notation of base note in chord
-      int _id;
-      QString _userName;
+      int _id;                            // >0 = id of matched chord from chord list, if applicable
+                                          // -1 = invalid chord
+                                          // <-10000 = private id of generated chord or matched chord with no id
+      QString _userName;                  // name as typed by user if applicable
+      QString _textName;                  // name recognized from chord list, read from score file, or constructed from imported source
+      ParsedChord* _parsedForm;           // parsed form of chord
 
       QList<HDegree> _degreeList;
       QList<QFont> fontList;              // temp values used in render()
       QList<TextSegment*> textList;       // rendered chord
 
+      bool _leftParen, _rightParen;       // include opening and/or closing parenthesis
+
       mutable QRectF _tbbox;
 
+      NoteSpellingType _rootSpelling, _baseSpelling;
+      bool _rootLowerCase, _baseLowerCase;
+
+      void determineRootBaseSpelling();
       virtual void draw(QPainter*) const;
-      void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc);
+      void render(const QString&, qreal&, qreal&);
+      void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType spelling = STANDARD, bool lowerCase = false);
 
    public:
       Harmony(Score* = 0);
@@ -93,7 +106,16 @@ class Harmony : public Text {
       void setId(int d)                        { _id = d; }
       int id() const                           { return _id;           }
 
+      bool leftParen() const                   { return _leftParen;    }
+      bool rightParen() const                  { return _rightParen;   }
+
       const ChordDescription* descr() const;
+      const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;
+      const ChordDescription* getDescription();
+      const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
+      const ChordDescription* generateDescription();
+
+      void determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& rootLowerCase, NoteSpellingType& baseSpelling, bool& baseLowerCase);
 
       virtual void layout();
 
@@ -107,10 +129,14 @@ class Harmony : public Text {
       virtual void endEdit();
 
       QString hUserName() const                { return _userName;     }
+      QString hTextName() const                { return _textName;     }
       int baseTpc() const                      { return _baseTpc;      }
       void setBaseTpc(int val)                 { _baseTpc = val;       }
       int rootTpc() const                      { return _rootTpc;      }
       void setRootTpc(int val)                 { _rootTpc = val;       }
+      void setTextName(const QString& s)       { _textName = s;        }
+      QString rootName();
+      QString baseName();
       void addDegree(const HDegree& d);
       int numberOfDegrees() const;
       HDegree degree(int i) const;
@@ -119,15 +145,17 @@ class Harmony : public Text {
 
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
-      QString harmonyName() const;
+      QString harmonyName();
       void render(const TextStyle* ts = 0);
 
-      bool parseHarmony(const QString& s, int* root, int* base);
+      const ChordDescription* parseHarmony(const QString& s, int* root, int* base, bool syntaxOnly = false);
 
-      // extension name is used by MusicXml export as <kind text="name">xmlKind</>
+      const QString& extensionName() const;
 
-      QString extensionName() const;
       QString xmlKind() const;
+      QString xmlText() const;
+      QString xmlSymbols() const;
+      QString xmlParens() const;
       QStringList xmlDegrees() const;
 
       void resolveDegreeList();
@@ -135,7 +163,8 @@ class Harmony : public Text {
       virtual bool isEmpty() const;
       virtual qreal baseLine() const;
 
-      const ChordDescription* fromXml(const QString& s,  const QList<HDegree>&);
+      const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&);
+      const ChordDescription* fromXml(const QString& s, const QList<HDegree>&);
       const ChordDescription* fromXml(const QString& s);
       virtual void spatiumChanged(qreal oldValue, qreal newValue);
       virtual QLineF dragAnchor() const;

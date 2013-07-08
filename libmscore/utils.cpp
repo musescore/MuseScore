@@ -49,9 +49,10 @@ Measure* Score::tick2measure(int tick) const
                   return lm;
             lm = m;
             }
-      if (lm && (tick >= lm->tick()) && (tick <= (lm->tick() + lm->ticks())))
+      // check last measure
+      if (lm && (tick >= lm->tick()) && (tick <= lm->endTick()))
             return lm;
-      qDebug("-tick2measure %d not found", tick);
+      qDebug("-tick2measure %d (max %d) not found", tick, lm ? lm->tick() : -1);
       return 0;
       }
 
@@ -86,7 +87,7 @@ Segment* Score::tick2segment(int tick, bool first, Segment::SegmentTypes st) con
             int t1 = segment->tick();
             Segment* nsegment = segment->next(st);
             int t2 = nsegment ? nsegment->tick() : INT_MAX;
-            if (((tick == t1) && first) || ((tick == t1) && (tick < t2)))
+            if ((tick == t1) && (first || (tick < t2)))
                   return segment;
             segment = nsegment;
             }
@@ -110,13 +111,10 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
             return 0;
             }
       // loop over all segments
-      for (Segment* segment = m->first(); segment; segment = segment->next()) {
-            Element* el = segment->element(track);
-            if (!el)
+      for (Segment* segment = m->first(Segment::SegChordRest); segment; segment = segment->next(Segment::SegChordRest)) {
+            ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
+            if (!cr)
                   continue;
-            if (!el->isChordRest())
-                  continue;
-            ChordRest* cr = static_cast<ChordRest*>(el);
             // TODO LVI: check if following is correct, see exceptions in
             // ExportMusicXml::chord() and ExportMusicXml::rest()
             int endTick = cr->tick() + cr->actualTicks();
@@ -129,6 +127,29 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
                   // endTick > tick (beyond the tick we are looking for)
                   return 0;
                   }
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   tick2nearestSegment
+//---------------------------------------------------------
+
+Segment* Score::tick2nearestSegment(int tick) const
+      {
+      Measure* m = tick2measure(tick);
+      if (m == 0) {
+            qDebug("tick2nearestSegment(): not found tick %d\n", tick);
+            return 0;
+            }
+      // loop over all segments
+      Segment* ps = 0;
+      for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
+            if (tick < s->tick())
+                  return ps;
+            else if (tick == s->tick())
+                  return s;
+            ps = s;
             }
       return 0;
       }
@@ -582,28 +603,18 @@ Note* searchTieNote(Note* note)
       Part* part   = chord->staff()->part();
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
-      int tick     = seg->tick() + chord->globalDuration().ticks();
-
-//      printf("searchTieNote %d-%d  %d - %d\n", strack, etrack, seg->tick(), tick);
 
       while ((seg = seg->next1(Segment::SegChordRest))) {
-            if (seg->tick() < tick)
-                  continue;
-            // if (seg->tick() > tick)
-            //      break;
             for (int track = strack; track < etrack; ++track) {
-                  ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-                  if (cr == 0 || cr->type() != Element::CHORD)
+                  Chord* c = static_cast<Chord*>(seg->element(track));
+                  if (c == 0 || c->type() != Element::CHORD)
                         continue;
-                  int staffIdx = cr->staffIdx() + cr->staffMove();
+                  int staffIdx = c->staffIdx() + c->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
                         continue;
-                  Chord* c = static_cast<Chord*>(cr);
-                  int n = c->notes().size();
-                  for (int i = 0; i < n; ++i) {
-                        Note* n = c->notes().at(i);
+                  for (Note* n : c->notes()) {
                         if (n->pitch() == note->pitch()) {
-                              if (note2 == 0 || cr->track() == chord->track())
+                              if (note2 == 0 || c->track() == chord->track())
                                     note2 = n;
                               }
                         }

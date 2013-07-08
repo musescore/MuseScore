@@ -33,21 +33,37 @@ namespace Ms {
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
+ChordRest* nextChordRest(ChordRest* cr)
       {
       if (!cr)
             return 0;
+      if (cr->isGrace()) {
+            // cr is a grace note
+            Chord* c  = static_cast<Chord*>(cr);
+            Chord* pc = static_cast<Chord*>(cr->parent());
+            auto i = std::find(pc->graceNotes().begin(), pc->graceNotes().end(), c);
+            if (i == pc->graceNotes().end())
+                  return 0;
+            ++i;
+            if (i != pc->graceNotes().end())
+                  return *i;
+            return pc;
+            }
       int track = cr->track();
       Segment::SegmentTypes st = Segment::SegChordRest;
-      if (!skipGrace)
-            st |= Segment::SegGrace;
 
       for (Segment* seg = cr->segment()->next1(st); seg; seg = seg->next1(st)) {
             if (seg->measure()->multiMeasure() < 0)
                   continue;
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
-            if (e)
+            if (e) {
+                  if (e->type() == Element::CHORD) {
+                        Chord* c = static_cast<Chord*>(e);
+                        if (!c->graceNotes().empty())
+                              return c->graceNotes().front();
+                        }
                   return e;
+                  }
             }
       return 0;
       }
@@ -57,14 +73,31 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
 //    return previous Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
+ChordRest* prevChordRest(ChordRest* cr)
       {
       if (!cr)
             return 0;
+      if (cr->isGrace()) {
+            // cr is a grace note
+            Chord* c  = static_cast<Chord*>(cr);
+            Chord* pc = static_cast<Chord*>(cr->parent());
+            auto i = std::find(pc->graceNotes().begin(), pc->graceNotes().end(), c);
+            if (i == pc->graceNotes().end())
+                  return 0;
+            if (i == pc->graceNotes().begin())
+                  cr = pc;
+            else
+                  return *--i;
+            }
+      else {
+            if (cr->type() == Element::CHORD) {
+                  Chord* c = static_cast<Chord*>(cr);
+                  if (!c->graceNotes().empty())
+                        return c->graceNotes().back();
+                  }
+            }
       int track = cr->track();
       Segment::SegmentTypes st = Segment::SegChordRest;
-      if (!skipGrace)
-            st |= Segment::SegGrace;
       for (Segment* seg = cr->segment()->prev1(st); seg; seg = seg->prev1(st)) {
             if (seg->measure()->multiMeasure() < 0)
                   continue;
@@ -251,7 +284,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior)
 
       Measure* measure = static_cast<Measure*>(mb);
 
-      int endTick = element->measure()->last()->nextChordRest(element->track(), true)->tick();
+      int endTick = element->measure()->last()->nextChordRest(element->track())->tick();
       bool last = false;
 
       if (selection().state() == SEL_RANGE) {

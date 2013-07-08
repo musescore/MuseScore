@@ -25,6 +25,7 @@
 #include "libmscore/score.h"
 #include "textpalette.h"
 #include "libmscore/mscore.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -57,6 +58,7 @@ TextTools::TextTools(QWidget* parent)
       setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
 
       QToolBar* tb = new QToolBar(tr("Text Edit"));
+      tb->setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
 
       textStyles = new QComboBox;
       tb->addWidget(textStyles);

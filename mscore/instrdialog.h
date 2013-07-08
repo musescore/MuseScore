@@ -125,6 +125,7 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentDialogBase {
       void on_saveButton_clicked();
       void on_loadButton_clicked();
       void buildTemplateList();
+      void expandOrCollapse(const QModelIndex &);
       virtual void accept();
 
       void on_search_textChanged(const QString &searchPhrase);

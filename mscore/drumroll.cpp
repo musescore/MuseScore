@@ -28,7 +28,6 @@
 #include "libmscore/staff.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
-#include "voiceselector.h"
 #include "libmscore/note.h"
 #include "awl/pitchlabel.h"
 #include "awl/pitchedit.h"
@@ -79,8 +78,15 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       //-------------
       tb = addToolBar(tr("toolbar2"));
       layout->addWidget(tb, 1, 0, 1, 2);
-      VoiceSelector* vs = new VoiceSelector;
-      tb->addWidget(vs);
+
+      static const char* sl3[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
+      QActionGroup* voiceGroup = new QActionGroup(this);
+      for (const char* s : sl3) {
+            QAction* a = getAction(s);
+            a->setCheckable(true);
+            voiceGroup->addAction(a);
+            tb->addAction(getAction(s));
+            }
 
       tb->addSeparator();
       tb->addWidget(new QLabel(tr("Cursor:")));

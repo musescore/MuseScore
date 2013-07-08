@@ -61,18 +61,6 @@
         </Staff>
       <trackName>unnamed1</trackName>
       <Instrument>
-        <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /><!--EndFragment--></p></body></html>
-          </longName>
-        <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /><!--EndFragment--></p></body></html>
-          </shortName>
         <trackName></trackName>
         <Channel name="normal">
           <program value="1"/>
@@ -90,20 +78,6 @@ p, li { white-space: pre-wrap; }
           </Clef>
         <KeySig>
           <accidental>3</accidental>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="2" y="-0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -191,24 +165,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>4</accidental>
           <natural>3</natural>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="3" y="1"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="2" y="-0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="3">
           <l1>8</l1>
@@ -291,28 +247,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>5</accidental>
           <natural>4</natural>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="4" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="3" y="1"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="2" y="-0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="5">
           <l1>8</l1>
@@ -395,32 +329,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>6</accidental>
           <natural>5</natural>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="5" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="4" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="3" y="1"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="2" y="-0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="7">
           <l1>8</l1>
@@ -503,36 +411,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>7</accidental>
           <natural>6</natural>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="6" y="2"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="5" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="4" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="3" y="1"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="2" y="-0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>32</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="9">
           <l1>8</l1>
@@ -615,44 +493,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>-2</accidental>
           <natural>7</natural>
-          <KeySym>
-            <sym>40</sym>
-            <pos x="0" y="0"/>
-            </KeySym>
-          <KeySym>
-            <sym>40</sym>
-            <pos x="1" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>40</sym>
-            <pos x="2" y="-0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>40</sym>
-            <pos x="3" y="1"/>
-            </KeySym>
-          <KeySym>
-            <sym>40</sym>
-            <pos x="4" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>40</sym>
-            <pos x="5" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>40</sym>
-            <pos x="6" y="2"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="8" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="7" y="2"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="11">
           <l1>8</l1>
@@ -735,20 +575,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>-3</accidental>
           <natural>-2</natural>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="2" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="1" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="0" y="2"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="13">
           <l1>8</l1>
@@ -831,24 +657,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>-4</accidental>
           <natural>-3</natural>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="3" y="1"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="2" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="1" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="0" y="2"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="15">
           <l1>8</l1>
@@ -931,28 +739,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>-5</accidental>
           <natural>-4</natural>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="4" y="3"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="3" y="1"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="2" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="1" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="0" y="2"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="17">
           <l1>8</l1>
@@ -1035,32 +821,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>-6</accidental>
           <natural>-5</natural>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="5" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="4" y="3"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="3" y="1"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="2" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="1" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="0" y="2"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="19">
           <l1>8</l1>
@@ -1147,36 +907,6 @@ p, li { white-space: pre-wrap; }
         <KeySig>
           <accidental>-7</accidental>
           <natural>-6</natural>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="6" y="3.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="5" y="1.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="4" y="3"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="3" y="1"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="2" y="2.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="1" y="0.5"/>
-            </KeySym>
-          <KeySym>
-            <sym>44</sym>
-            <pos x="0" y="2"/>
-            </KeySym>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <Beam id="21">
           <l1>8</l1>

@@ -30,6 +30,7 @@
 #include "segment.h"
 #include "accidental.h"
 #include "note.h"
+#include "spannermap.h"
 
 class QPainter;
 
@@ -93,6 +94,7 @@ class UndoCommand;
 class Cursor;
 struct PageContext;
 class BarLine;
+class Bracket;
 
 extern bool showRubberBand;
 
@@ -244,7 +246,6 @@ class Score : public QObject {
    private:
       int _linkId;
       Score* _parentScore;          // set if score is an excerpt (part)
-      QReadWriteLock _layoutLock;
       QList<MuseScoreView*> viewer;
 
       QString _mscoreVersion;
@@ -262,6 +263,7 @@ class Score : public QObject {
       int _pageNumberOffset;        ///< Offset for page numbers.
 
       MeasureBaseList _measures;          // here are the notes
+      SpannerMap _spanner;
       //
       // generated objects during layout:
       //
@@ -295,7 +297,6 @@ class Score : public QObject {
       //   determine what to layout and what to repaint:
 
       QRectF refresh;
-      Measure* startLayout;   ///< start a relayout at this measure
       LayoutFlags layoutFlags;
 
       bool _updateAll;
@@ -353,6 +354,8 @@ class Score : public QObject {
       bool _showOmr;
       PlayMode _playMode;
 
+      qreal _noteHeadWidth;
+
       //------------------
 
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false);
@@ -403,8 +406,8 @@ class Score : public QObject {
 
       void layoutStage2();
       void layoutStage3();
+      void beamGraceNotes(Chord*);
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
-      void reLayout(Measure*);
 
       void hideEmptyStaves(System* system, bool isFirstSystem);
 
@@ -421,8 +424,10 @@ class Score : public QObject {
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);
       void createPlayEvents();
+      void insertTime(int tickPos, int tickLen);
 
    protected:
+      void createPlayEvents(Chord*);
       SynthesizerState _synthesizerState;
 
    public:
@@ -476,7 +481,7 @@ class Score : public QObject {
          Segment**, QPointF* offset) const;
 
       void undoAddElement(Element* element);
-      void undoAddGrace(Chord* c, Segment* s, bool behind);
+//      void undoAddGrace(Chord* c, Segment* s, bool behind);
       void undoAddCR(ChordRest* element, Measure*, int tick);
       void undoRemoveElement(Element* element);
       void undoChangeElement(Element* oldElement, Element* newElement);
@@ -508,8 +513,12 @@ class Score : public QObject {
       void undoChangeBarLine(Measure* m, BarLineType);
       void undoSwapCR(ChordRest* cr1, ChordRest* cr2);
       void undoChangeProperty(Element*, P_ID, const QVariant& v);
+      void undoPropertyChanged(Element*, P_ID, const QVariant& v);
       UndoStack* undo() const;
       void undo(UndoCommand* cmd) const;
+      void undoRemoveMeasures(Measure*, Measure*);
+      void undoAddBracket(Staff* staff, int level, BracketType type, int span);
+      void undoRemoveBracket(Bracket*);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
 
@@ -526,8 +535,6 @@ class Score : public QObject {
       ChordRest* addClone(ChordRest* cr, int tick, const TDuration& d);
       Rest* setRest(int tick,  int track, Fraction, bool useDots, Tuplet* tuplet);
 
-      void searchSelectedElements();
-
       void upDown(bool up, UpDownMode);
       ChordRest* searchNote(int tick, int track) const;
 
@@ -539,8 +546,7 @@ class Score : public QObject {
       void addElement(Element*);
       void removeElement(Element*);
 
-      void cmdAddSpanner(Spanner* e, const QPointF& pos, const QPointF& dragOffset);
-      void cmdAddBSymbol(BSymbol*, const QPointF&, const QPointF&);
+      void cmdAddSpanner(Spanner* e, const QPointF& pos);
 
       Note* addNote(Chord*, int pitch);
       Note* addNote(Chord*, NoteVal &noteVal);
@@ -558,7 +564,6 @@ class Score : public QObject {
       void endCmd();          // end undoable command
       void end();             // layout & update canvas
       void end1();
-      void end2();
       void update();
 
       void cmdRemoveTimeSig(TimeSig*);
@@ -619,6 +624,7 @@ class Score : public QObject {
       MeasureBase* tick2measureBase(int tick) const;
       Segment* tick2segment(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll) const;
       Segment* tick2segmentEnd(int track, int tick) const;
+      Segment* tick2nearestSegment(int tick) const;
       void fixTicks();
       bool addArticulation(Element*, Articulation* atr);
 
@@ -691,8 +697,6 @@ class Score : public QObject {
       QList<Excerpt*>& excerpts()             { return _excerpts; }
       const QList<Excerpt*>& excerpts() const { return _excerpts; }
 
-      void setLayout(Measure* m);
-
       int midiPort(int idx) const;
       int midiChannel(int idx) const;
       QList<MidiMapping>* midiMapping()       { return &_midiMapping;          }
@@ -750,7 +754,7 @@ class Score : public QObject {
       void cmdMirrorNoteHead();
 
       qreal spatium() const                    { return style()->spatium();    }
-      void setSpatium(qreal v)                 { style()->setSpatium(v);       }
+      void setSpatium(qreal v);
       const PageFormat* pageFormat() const     { return style()->pageFormat(); }
       void setPageFormat(const PageFormat& pf) { style()->setPageFormat(pf);   }
       qreal loWidth() const;
@@ -818,6 +822,8 @@ class Score : public QObject {
       Page* getEmptyPage();
 
       void layoutChords1(Segment* segment, int staffIdx);
+      void layoutChords1(QList<Note*>& notes, int voices, Staff*, Segment*);
+
       SynthesizerState& synthesizerState()     { return _synthesizerState; }
       void setSynthesizerState(const SynthesizerState& s);
 
@@ -842,8 +848,7 @@ class Score : public QObject {
       void createRevision();
       QByteArray readCompressedToBuffer();
       QByteArray readToBuffer();
-      void writeSegments(Xml& xml, const Measure*, int strack, int etrack, Segment* first, Segment* last, bool);
-      Spanner* findSpanner(int id) const;
+      void writeSegments(Xml& xml, const Measure*, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
 
       const QMap<QString, QString> metaTags() const           { return _metaTags; }
       QMap<QString, QString>& metaTags()                      { return _metaTags; }
@@ -895,7 +900,6 @@ class Score : public QObject {
       LayoutMode layoutMode() const         { return _layoutMode; }
       void setLayoutMode(LayoutMode lm);
 
-      QReadWriteLock* layoutLock() { return &_layoutLock; }
       void doLayoutSystems();
       void doLayoutPages();
       Tuplet* searchTuplet(XmlReader& e, int id);
@@ -920,12 +924,24 @@ class Score : public QObject {
       Q_INVOKABLE void appendPart(const QString&);
       Q_INVOKABLE void appendMeasures(int);
       Q_INVOKABLE void addText(const QString&, const QString&);
-      Q_INVOKABLE Ms::Cursor* newCursor();
-      qreal computeMinWidth(Segment* fs) const;
+      Q_INVOKABLE Cursor* newCursor();
+      qreal computeMinWidth(Segment* fs);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
 
+      qreal noteHeadWidth() const            { return _noteHeadWidth; }
+
+      std::multimap<int, Spanner*>& spanner()             { return _spanner.map(); }
+      const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
+      Spanner* findSpanner(int id) const;
+      bool isSpannerStartEnd(int tick, int track) const;
+      void removeSpanner(Spanner*);
+      void addSpanner(Spanner*);
+
+      ChordRest* findCR(int tick, int track) const;
+
       friend class ChangeSynthesizerState;
+      friend class Chord;
       };
 
 extern Score* gscore;

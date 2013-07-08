@@ -140,8 +140,8 @@ void Symbol::read(XmlReader& e)
                   image->read(e);
                   add(image);
                   }
-            else if (tag == "small" || tag == "subtype")
-                  ;
+            else if (tag == "small" || tag == "subtype")    // obsolete
+                  e.skipCurrentElement();
             else if (!BSymbol::readProperties(e))
                   e.unknown();
             }
@@ -160,7 +160,8 @@ QLineF BSymbol::dragAnchor() const
       if (parent() && parent()->type() == SEGMENT) {
             System* system = segment()->measure()->system();
             qreal y        = system->staff(staffIdx())->y() + system->y();
-            QPointF anchor(segment()->pageX(), y);
+//            QPointF anchor(segment()->pageX(), y);
+            QPointF anchor(segment()->canvasPos().x(), y);
             return QLineF(canvasPos(), anchor);
             }
       else {
@@ -244,6 +245,7 @@ void FSymbol::draw(QPainter* painter) const
             }
       else
             s = QChar(_code);
+      painter->setPen(curColor());
       painter->drawText(QPointF(0, 0), s);
       }
 

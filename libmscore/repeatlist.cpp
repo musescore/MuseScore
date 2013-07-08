@@ -28,17 +28,17 @@ namespace Ms {
 
 Volta* Score::searchVolta(int tick) const
       {
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for(Spanner* e = m->spannerFor(); e; e = e->next()) {
-                  if (e->type() != Element::VOLTA)
-                        continue;
-                  Volta* volta = static_cast<Volta*>(e);
-                  int tick1 = volta->startMeasure()->tick();
-                  int tick2 = volta->endMeasure()->endTick();
-// qDebug("spanner %s %d - %d %d\n", e->name(), tick, tick1, tick2);
-                  if (tick >= tick1 && tick < tick2)
-                        return static_cast<Volta*>(e);
-                  }
+      for (const std::pair<int,Spanner*>& p : _spanner.map()) {
+            Spanner* s = p.second;
+            if (s->type() != Element::VOLTA)
+                  continue;
+            Volta* volta = static_cast<Volta*>(s);
+            int tick1 = volta->tick();
+            Measure* m = tick2measure(volta->tick2());
+            int tick2 = m->endTick();
+// qDebug("spanner %s %d - %d %d\n", s->name(), tick, tick1, tick2);
+            if (tick >= tick1 && tick < tick2)
+                  return volta;
             }
       return 0;
       }
@@ -166,6 +166,8 @@ int RepeatList::utick2tick(int tick) const
       unsigned n = size();
       if (n == 0)
             return tick;
+      if (tick < 0)
+            return 0;
       unsigned ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
       for (unsigned i = ii; i < n; ++i) {
             if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i+1)->utick))) {

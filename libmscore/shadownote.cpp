@@ -57,17 +57,17 @@ void ShadowNote::draw(QPainter* painter) const
 
       qreal ms = spatium();
 
-      qreal x1 = sym->width(magS())*.5 - ms;
-      qreal x2 = x1 + 2 * ms;
+      qreal x1 = sym->width(magS())*.5 - (ms * mag());
+      qreal x2 = x1 + 2 * ms * mag();
 
       ms *= .5;
       if (_line < 100 && _line > -100 && !ps.rest) {
             for (int i = -2; i >= _line; i -= 2) {
-                  qreal y = ms * (i - _line);
+                  qreal y = ms * mag() * (i - _line);
                   painter->drawLine(QLineF(x1, y, x2, y));
                   }
             for (int i = 10; i <= _line; i += 2) {
-                  qreal y = ms * (i - _line);
+                  qreal y = ms * mag() * (i - _line);
                   painter->drawLine(QLineF(x1, y, x2, y));
                   }
             }

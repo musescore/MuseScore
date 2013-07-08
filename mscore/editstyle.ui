@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>748</width>
+    <width>875</width>
     <height>565</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QListWidget" name="pageList">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -147,6 +147,12 @@
      </property>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="standardButtons">
         <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
@@ -157,7 +163,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>4</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -217,14 +223,14 @@
           <item>
            <widget class="QCheckBox" name="concertPitch">
             <property name="text">
-             <string>Display in Concert Pitch</string>
+             <string>Display in concert pitch</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QGroupBox" name="multiMeasureRests">
             <property name="title">
-             <string>Create Multi Measure Rests</string>
+             <string>Create multi measure rests</string>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -261,7 +267,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="label_15">
                  <property name="text">
-                  <string>Minimum Number of empty measures:</string>
+                  <string>Minimum number of empty measures:</string>
                  </property>
                 </widget>
                </item>
@@ -276,7 +282,7 @@
           <item>
            <widget class="QCheckBox" name="hideEmptyStaves">
             <property name="text">
-             <string>Hide Empty Staves</string>
+             <string>Hide empty staves</string>
             </property>
            </widget>
           </item>
@@ -290,7 +296,7 @@
           <item>
            <widget class="QCheckBox" name="crossMeasureValues">
             <property name="text">
-             <string>Display note values across measure bar (EXPERIMENTAL, early music ony!)</string>
+             <string>Display note values across measure bar (EXPERIMENTAL, early music only!)</string>
             </property>
            </widget>
           </item>
@@ -504,7 +510,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Min. System distance</string>
+             <string>Min. system distance</string>
             </property>
            </widget>
           </item>
@@ -813,7 +819,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Max. System distance</string>
+             <string>Max. system distance</string>
             </property>
            </widget>
           </item>
@@ -874,7 +880,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Header Text</string>
+          <string>Header text</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -894,7 +900,7 @@
                <string>show header also on first page</string>
               </property>
               <property name="text">
-               <string>show first</string>
+               <string>Show first</string>
               </property>
              </widget>
             </item>
@@ -904,14 +910,14 @@
                <string>use odd even page header</string>
               </property>
               <property name="text">
-               <string>odd/even</string>
+               <string>Odd/Even</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="headerStyled">
               <property name="text">
-               <string>styled</string>
+               <string>Styled</string>
               </property>
              </widget>
             </item>
@@ -935,7 +941,7 @@
             <item row="0" column="1">
              <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>left</string>
+               <string>Left</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -945,7 +951,7 @@
             <item row="0" column="3">
              <widget class="QLabel" name="label_6">
               <property name="text">
-               <string>middle</string>
+               <string>Middle</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -955,7 +961,7 @@
             <item row="0" column="5">
              <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>right</string>
+               <string>Right</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -965,7 +971,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="label_67">
               <property name="text">
-               <string>even</string>
+               <string>Even</string>
               </property>
              </widget>
             </item>
@@ -1068,7 +1074,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="label_66">
               <property name="text">
-               <string>odd</string>
+               <string>Odd</string>
               </property>
              </widget>
             </item>
@@ -1174,7 +1180,7 @@
           <string/>
          </property>
          <property name="title">
-          <string>Footer Text</string>
+          <string>Footer text</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1194,7 +1200,7 @@
                <string>show footer also on first page</string>
               </property>
               <property name="text">
-               <string>show first</string>
+               <string>Show first</string>
               </property>
              </widget>
             </item>
@@ -1204,14 +1210,14 @@
                <string>use odd even page footer</string>
               </property>
               <property name="text">
-               <string>odd/even</string>
+               <string>Odd/Even</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="footerStyled">
               <property name="text">
-               <string>styled</string>
+               <string>Styled</string>
               </property>
              </widget>
             </item>
@@ -1245,7 +1251,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="label_80">
               <property name="text">
-               <string>even</string>
+               <string>Even</string>
               </property>
              </widget>
             </item>
@@ -1262,7 +1268,7 @@
             <item row="0" column="3">
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>middle</string>
+               <string>Middle</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1312,7 +1318,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="label_65">
               <property name="text">
-               <string>odd</string>
+               <string>Odd</string>
               </property>
              </widget>
             </item>
@@ -1335,7 +1341,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>left</string>
+               <string>Left</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1395,7 +1401,7 @@
             <item row="0" column="5">
              <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>right</string>
+               <string>Right</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1444,7 +1450,7 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="0">
         <widget class="QGroupBox" name="showMeasureNumber">
          <property name="title">
-          <string>Measure Numbers</string>
+          <string>Measure numbers</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1462,28 +1468,28 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QCheckBox" name="showFirstMeasureNumber">
             <property name="text">
-             <string>show first</string>
+             <string>Show first</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="showAllStaffsMeasureNumber">
             <property name="text">
-             <string>all staffs</string>
+             <string>All staves</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
            <widget class="QRadioButton" name="showEverySystemMeasureNumber">
             <property name="text">
-             <string>every system</string>
+             <string>Every system</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QRadioButton" name="showIntervalMeasureNumber">
             <property name="text">
-             <string>interval</string>
+             <string>Interval</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1527,7 +1533,7 @@ p, li { white-space: pre-wrap; }
             <item row="1" column="0">
              <widget class="QLabel" name="label_52">
               <property name="text">
-               <string>System Bracket Distance:</string>
+               <string>System bracket distance:</string>
               </property>
              </widget>
             </item>
@@ -1559,14 +1565,14 @@ p, li { white-space: pre-wrap; }
             <item row="3" column="0">
              <widget class="QLabel" name="label_90">
               <property name="text">
-               <string>Akkolade Distance:</string>
+               <string>Brace distance:</string>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="label_29">
               <property name="text">
-               <string>Fix Number of Measures/System:</string>
+               <string>Fix number of measures/system:</string>
               </property>
              </widget>
             </item>
@@ -1576,7 +1582,7 @@ p, li { white-space: pre-wrap; }
             <item row="5" column="0">
              <widget class="QCheckBox" name="fixMeasureWidth">
               <property name="text">
-               <string>Fix Measure Width</string>
+               <string>Fix measure width</string>
               </property>
              </widget>
             </item>
@@ -1599,14 +1605,14 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_91">
               <property name="text">
-               <string>System Bracket Width:</string>
+               <string>System bracket width:</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_92">
               <property name="text">
-               <string>Akkolade Width:</string>
+               <string>Brace width:</string>
               </property>
              </widget>
             </item>
@@ -1664,7 +1670,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout">
+           <layout class="QGridLayout" name="gridLayout_99">
             <property name="verticalSpacing">
              <number>0</number>
             </property>
@@ -2304,7 +2310,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QGroupBox" name="shortenStem">
             <property name="title">
-             <string>shorten stems</string>
+             <string>Shorten stems</string>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -2401,14 +2407,14 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="label_43">
               <property name="text">
                <string>Accidental distance</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item row="3" column="1">
              <widget class="QDoubleSpinBox" name="accidentalDistance">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -2424,14 +2430,14 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item row="5" column="0">
              <widget class="QLabel" name="label_22">
               <property name="text">
                <string>Note dot distance</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="5" column="1">
              <widget class="QDoubleSpinBox" name="noteDotDistance">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -2447,14 +2453,14 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="6" column="0">
              <widget class="QLabel" name="label_23">
               <property name="text">
                <string>Dot dot distance</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="6" column="1">
              <widget class="QDoubleSpinBox" name="dotDotDistance">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -2470,14 +2476,14 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
+            <item row="8" column="0">
              <widget class="QLabel" name="label_24">
               <property name="text">
                <string>Ledger line width</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
+            <item row="8" column="1">
              <widget class="QDoubleSpinBox" name="ledgerLineWidth">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -2493,14 +2499,14 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="9" column="0">
              <widget class="QLabel" name="label_34">
               <property name="text">
                <string>Ledger line length</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
+            <item row="9" column="1">
              <widget class="QDoubleSpinBox" name="ledgerLineLength">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -2516,14 +2522,14 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
+            <item row="7" column="0">
              <widget class="QLabel" name="label_100">
               <property name="text">
                <string>Stem width</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
+            <item row="7" column="1">
              <widget class="QDoubleSpinBox" name="stemWidth">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -2536,6 +2542,32 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="singleStep">
                <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_101">
+              <property name="text">
+               <string>Dot size</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QSpinBox" name="dotMag">
+              <property name="suffix">
+               <string>%</string>
+              </property>
+              <property name="minimum">
+               <number>50</number>
+              </property>
+              <property name="maximum">
+               <number>200</number>
+              </property>
+              <property name="singleStep">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>100</number>
               </property>
              </widget>
             </item>
@@ -2573,20 +2605,20 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QGroupBox" name="groupBox_18">
             <property name="title">
-             <string>Default TAB Clef</string>
+             <string>Default TAB clef</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_29">
              <item>
               <widget class="QRadioButton" name="clefTab1">
                <property name="text">
-                <string>Clef1</string>
+                <string>Clef 1</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="clefTab2">
                <property name="text">
-                <string>Clef2</string>
+                <string>Clef 2</string>
                </property>
               </widget>
              </item>
@@ -2855,7 +2887,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_30">
               <property name="text">
-               <string>line width at end</string>
+               <string>Line width at end</string>
               </property>
              </widget>
             </item>
@@ -2878,7 +2910,7 @@ p, li { white-space: pre-wrap; }
             <item row="1" column="0">
              <widget class="QLabel" name="label_31">
               <property name="text">
-               <string>line width middle</string>
+               <string>Line width middle</string>
               </property>
              </widget>
             </item>
@@ -2901,7 +2933,7 @@ p, li { white-space: pre-wrap; }
             <item row="2" column="0">
              <widget class="QLabel" name="label_32">
               <property name="text">
-               <string>bow</string>
+               <string>Bow</string>
               </property>
              </widget>
             </item>
@@ -2924,7 +2956,7 @@ p, li { white-space: pre-wrap; }
             <item row="3" column="0">
              <widget class="QLabel" name="label_33">
               <property name="text">
-               <string>dotted line width</string>
+               <string>Dotted line width</string>
               </property>
              </widget>
             </item>
@@ -3237,7 +3269,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_95">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3342,7 +3374,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_40">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3421,7 +3453,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_81">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3454,7 +3486,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_96">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3525,7 +3557,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_97">
             <property name="text">
-             <string>default Y-position:</string>
+             <string>Default Y-position:</string>
             </property>
            </widget>
           </item>
@@ -3576,137 +3608,263 @@ p, li { white-space: pre-wrap; }
          <property name="flat">
           <bool>false</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout_15">
-          <item row="1" column="0" colspan="3">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QLabel" name="label_54">
-              <property name="text">
-               <string>Chord description file</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="chordDescriptionFile"/>
-            </item>
-            <item>
-             <widget class="QToolButton" name="chordDescriptionFileButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_17">
-            <property name="text">
-             <string>default Y-position:</string>
+         <layout class="QVBoxLayout" name="verticalLayout_36">
+          <item>
+           <widget class="QGroupBox" name="groupBox_25">
+            <property name="title">
+             <string>Appearance</string>
             </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QRadioButton" name="chordsStandard">
+               <property name="text">
+                <string>Standard</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="chordsJazz">
+               <property name="text">
+                <string>Jazz</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="chordsCustom">
+               <property name="text">
+                <string>Custom</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_13">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="useGermanNoteNames">
-            <property name="text">
-             <string>Use German names</string>
+          <item>
+           <widget class="QGroupBox" name="chordDescriptionGroup">
+            <property name="title">
+             <string/>
             </property>
+            <property name="checkable">
+             <bool>false</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <layout class="QGridLayout" name="chordDescriptionLayout">
+             <item row="0" column="2">
+              <widget class="QToolButton" name="chordDescriptionFileButton">
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="chordDescriptionFile"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_54">
+               <property name="text">
+                <string>Chord description file</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QCheckBox" name="chordsXmlFile">
+               <property name="text">
+                <string>Load chords.xml</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="5" column="0">
-           <spacer name="verticalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+          <item>
+           <widget class="QGroupBox" name="groupBox_23">
+            <property name="title">
+             <string>Root / bass spelling</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>303</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="harmonyY">
-            <property name="suffix">
-             <string extracomment="spatium unit">sp</string>
-            </property>
-            <property name="minimum">
-             <double>-10000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>10000.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.500000000000000</double>
-            </property>
-            <property name="value">
-             <double>-4.000000000000000</double>
-            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_37">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QRadioButton" name="useStandardNoteNames">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, Bb, B, C, C#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>Standard</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="useGermanNoteNames">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, B, H, C, Cis, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>German</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="useSolfeggioNoteNames">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La, Sib, Si, Do, Do#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>Solfeggio</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_12">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="lowerCaseMinorChords">
+               <property name="text">
+                <string>Lower case minor chords</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="2" column="2">
-           <spacer name="horizontalSpacer_11">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+          <item>
+           <widget class="QGroupBox" name="groupBox_24">
+            <property name="title">
+             <string>Positioning</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_79">
-            <property name="text">
-             <string>distance to fret diagram:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="harmonyFretDist">
-            <property name="suffix">
-             <string extracomment="spatium unit">sp</string>
-            </property>
-            <property name="minimum">
-             <double>-10000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>10000.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>1.500000000000000</double>
-            </property>
-            <property name="value">
-             <double>-1.500000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_100">
-            <property name="text">
-             <string>minimum chord spacing:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QDoubleSpinBox" name="minHarmonyDistance">
-            <property name="suffix">
-             <string>sp</string>
-            </property>
-            <property name="minimum">
-             <double>-10.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>10.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value">
-             <double>0.500000000000000</double>
-            </property>
+            <layout class="QGridLayout" name="gridLayout_15">
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="harmonyY">
+               <property name="suffix">
+                <string extracomment="spatium unit">sp</string>
+               </property>
+               <property name="minimum">
+                <double>-10000.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>10000.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.500000000000000</double>
+               </property>
+               <property name="value">
+                <double>-2.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_79">
+               <property name="text">
+                <string>Distance to fret diagram:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="harmonyFretDist">
+               <property name="suffix">
+                <string extracomment="spatium unit">sp</string>
+               </property>
+               <property name="minimum">
+                <double>-10000.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>10000.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>1.500000000000000</double>
+               </property>
+               <property name="value">
+                <double>-1.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <spacer name="horizontalSpacer_11">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_1001">
+               <property name="text">
+                <string>Minimum chord spacing:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="minHarmonyDistance">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>-10.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_17">
+               <property name="text">
+                <string>Default Y-position:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
@@ -3972,7 +4130,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_35">
               <property name="text">
-               <string>note head distance</string>
+               <string>Note head distance</string>
               </property>
              </widget>
             </item>
@@ -3999,7 +4157,7 @@ p, li { white-space: pre-wrap; }
             <item row="2" column="0">
              <widget class="QLabel" name="label_41">
               <property name="text">
-               <string>articulation distance</string>
+               <string>Articulation distance</string>
               </property>
              </widget>
             </item>
@@ -4016,7 +4174,7 @@ p, li { white-space: pre-wrap; }
             <item row="1" column="0">
              <widget class="QLabel" name="label_37">
               <property name="text">
-               <string>staff distance</string>
+               <string>Staff distance</string>
               </property>
              </widget>
             </item>
@@ -4093,6 +4251,9 @@ p, li { white-space: pre-wrap; }
          <layout class="QVBoxLayout" name="verticalLayout_31">
           <item>
            <widget class="QTableWidget" name="tableWidget">
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>150</number>
+            </attribute>
             <column>
              <property name="text">
               <string>Accidental</string>
@@ -4113,6 +4274,36 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
+       <item>
+        <widget class="QGroupBox" name="keySigNaturalsGroup">
+         <property name="title">
+          <string>Naturals in key signatures</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_35">
+          <item>
+           <widget class="QRadioButton" name="radioKeySigNatNone">
+            <property name="text">
+             <string>Only for change to C Maj / A min</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioKeySigNatBefore">
+            <property name="text">
+             <string>Before change to less sharps / flats</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioKeySigNatAfter">
+            <property name="text">
+             <string>After change to less sharps / flats (but before change sharps &lt;=&gt; flats)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="Seite17">
@@ -4123,7 +4314,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Stem Direction in Multi-Voice Context</string>
+          <string>Stem direction in multi-voice context</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -4317,6 +4508,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>timesigLeftMargin</tabstop>
   <tabstop>clefKeyRightMargin</tabstop>
   <tabstop>clefBarlineDistance</tabstop>
+  <tabstop>staffLineWidth</tabstop>
   <tabstop>showRepeatBarTips</tabstop>
   <tabstop>showStartBarlineSingle</tabstop>
   <tabstop>showStartBarlineMultiple</tabstop>
@@ -4332,6 +4524,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>accidentalDistance</tabstop>
   <tabstop>noteDotDistance</tabstop>
   <tabstop>dotDotDistance</tabstop>
+  <tabstop>stemWidth</tabstop>
   <tabstop>ledgerLineWidth</tabstop>
   <tabstop>ledgerLineLength</tabstop>
   <tabstop>clefTab1</tabstop>
@@ -4364,11 +4557,19 @@ p, li { white-space: pre-wrap; }
   <tabstop>ottavaLineWidth</tabstop>
   <tabstop>pedalY</tabstop>
   <tabstop>trillY</tabstop>
-  <tabstop>useGermanNoteNames</tabstop>
+  <tabstop>chordsStandard</tabstop>
+  <tabstop>chordsJazz</tabstop>
+  <tabstop>chordsCustom</tabstop>
   <tabstop>chordDescriptionFile</tabstop>
   <tabstop>chordDescriptionFileButton</tabstop>
+  <tabstop>chordsXmlFile</tabstop>
+  <tabstop>useStandardNoteNames</tabstop>
+  <tabstop>useGermanNoteNames</tabstop>
+  <tabstop>useSolfeggioNoteNames</tabstop>
+  <tabstop>lowerCaseMinorChords</tabstop>
   <tabstop>harmonyY</tabstop>
   <tabstop>harmonyFretDist</tabstop>
+  <tabstop>minHarmonyDistance</tabstop>
   <tabstop>comboFBFont</tabstop>
   <tabstop>doubleSpinFBSize</tabstop>
   <tabstop>doubleSpinFBVertPos</tabstop>
@@ -4382,13 +4583,16 @@ p, li { white-space: pre-wrap; }
   <tabstop>propertyDistance</tabstop>
   <tabstop>articulationTable</tabstop>
   <tabstop>tableWidget</tabstop>
+  <tabstop>radioKeySigNatNone</tabstop>
+  <tabstop>radioKeySigNatBefore</tabstop>
+  <tabstop>radioKeySigNatAfter</tabstop>
   <tabstop>voice1Up</tabstop>
-  <tabstop>voice2Up</tabstop>
-  <tabstop>voice3Up</tabstop>
-  <tabstop>voice4Up</tabstop>
   <tabstop>voice1Down</tabstop>
+  <tabstop>voice2Up</tabstop>
   <tabstop>voice2Down</tabstop>
+  <tabstop>voice3Up</tabstop>
   <tabstop>voice3Down</tabstop>
+  <tabstop>voice4Up</tabstop>
   <tabstop>voice4Down</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>

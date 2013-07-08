@@ -94,12 +94,12 @@ void Stem::layout()
                   }
             else {                              // non-TAB
                   // move stem start to note attach point
-              Note* n  = up() ? chord()->downNote() : chord()->upNote();
-              const Sym& sym = symbols[score()->symIdx()][n->noteHead()];
-              if (n->mirror())
-                    _up *= -1;
-              y1 -= sym.attach(n->magS()).y() * _up;
-              }
+                  Note* n  = up() ? chord()->downNote() : chord()->upNote();
+                  const Sym& sym = symbols[score()->symIdx()][n->noteHead()];
+                  if (n->mirror())
+                        _up *= -1;
+                  y1 -= sym.attach(n->magS()).y() * _up;
+                  }
             }
 
       line.setLine(0.0, y1, 0.0, l);
@@ -137,7 +137,7 @@ void Stem::spatiumChanged(qreal oldValue, qreal newValue)
 void Stem::draw(QPainter* painter) const
       {
       // hide if second chord of a cross-measure pair
-      if(chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
+      if (chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
             return;
 
       Staff* st = staff();
@@ -286,7 +286,7 @@ Element* Stem::drop(const DropData& data)
       switch(e->type()) {
             case TREMOLO:
                   e->setParent(ch);
-                  score()->setLayout(ch->measure());
+                  score()->setLayoutAll(true);
                   score()->undoAddElement(e);
                   return e;
             default:

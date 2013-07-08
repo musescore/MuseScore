@@ -29,7 +29,6 @@
 #include "libmscore/hairpin.h"
 #include "scoreview.h"
 #include "musescore.h"
-#include "edittempo.h"
 #include "libmscore/select.h"
 #include "libmscore/tempo.h"
 #include "libmscore/segment.h"
@@ -472,6 +471,13 @@ Palette* MuseScore::newNoteHeadsPalette()
             nh->setSym(sym);
             sp->append(nh, qApp->translate("symbol", Sym::id2name(sym)));
             }
+      Icon* ik = new Icon(gscore);
+      ik->setIconType(ICON_BRACKETS);
+      Shortcut* s = Shortcut::getShortcut("add-brackets");
+      QAction* action = s->action();
+      QIcon icon(action->icon());
+      ik->setAction("add-brackets", icon);
+      sp->append(ik, s->help());
       return sp;
       }
 
@@ -520,13 +526,13 @@ Palette* MuseScore::newBracketsPalette()
       Bracket* b1 = new Bracket(gscore);
       b1->setBracketType(BRACKET_NORMAL);
       Bracket* b2 = new Bracket(gscore);
-      b2->setBracketType(BRACKET_AKKOLADE);
+      b2->setBracketType(BRACKET_BRACE);
       Bracket* b3 = new Bracket(gscore);
-      b3->setBracketType(BRACKET_SIMPLE);
+      b3->setBracketType(BRACKET_SQUARE);
 
-      sp->append(b1, tr("Square bracket"));
-      sp->append(b2, tr("Curly bracket"));
-      sp->append(b3, tr("Simple bracket"));
+      sp->append(b1, tr("Bracket"));
+      sp->append(b2, tr("Brace"));
+      sp->append(b3, tr("Square"));
 
       return sp;
       }
@@ -1019,8 +1025,8 @@ void MuseScore::populatePalette()
 
 QMenu* MuseScore::genCreateMenu(QWidget* parent)
       {
-      QMenu* popup = new QMenu(tr("&Create"), parent);
-      popup->setObjectName("Create");
+      QMenu* popup = new QMenu(tr("&Insert"), parent);
+      popup->setObjectName("Insert");
 
       popup->addAction(getAction("instruments"));
 
@@ -1074,19 +1080,13 @@ void MuseScore::addTempo()
       ChordRest* cr = cs->getSelectedChordRest();
       if (!cr)
             return;
-      if (editTempo == 0)
-            editTempo = new EditTempo(0);
-      int rv = editTempo->exec();
-      if (rv == 1) {
-            double bps = editTempo->bpm() / 60.0;
-            TempoText* tt = new TempoText(cs);
-            tt->setParent(cr->segment());
-            tt->setTrack(cr->track());
-            tt->setText(editTempo->text());
-            tt->setTempo(bps);
-            cs->undoAddElement(tt);
-            cs->addRefresh(tt->abbox());  // ??
-            }
+      double bps = 120.0;
+      TempoText* tt = new TempoText(cs);
+      tt->setParent(cr->segment());
+      tt->setTrack(cr->track());
+      tt->setText(tr("tempo"));
+      tt->setTempo(bps);
+      cs->undoAddElement(tt);
       }
 }
 

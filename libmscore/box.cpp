@@ -70,11 +70,22 @@ void Box::draw(QPainter* painter) const
             return;
       if (selected() || editMode || dropTarget() || score()->showFrames()) {
             qreal w = 2.0 / painter->transform().m11();
-            painter->setPen(QPen(
-               (selected() || editMode || dropTarget()) ? Qt::blue : Qt::gray, w));
-            painter->setBrush(Qt::NoBrush);
+
+            QPainterPathStroker stroker;
+            stroker.setWidth(w);
+            stroker.setJoinStyle(Qt::MiterJoin);
+            stroker.setCapStyle(Qt::SquareCap);
+
+            QVector<qreal> dashes ;
+            dashes.append(1);
+            dashes.append(3);
+            stroker.setDashPattern(dashes);
+            QPainterPath path;
             w *= .5;
-            painter->drawRect(bbox().adjusted(w, w, -w, -w));
+            path.addRect(bbox().adjusted(w, w, -w, -w));
+            QPainterPath stroke = stroker.createStroke(path);
+            painter->setBrush(Qt::NoBrush);
+            painter->fillPath(stroke, (selected() || editMode || dropTarget()) ? MScore::selectColor[0] : MScore::frameMarginColor);
             }
       }
 
@@ -424,6 +435,8 @@ bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
             case LAYOUT_BREAK:
             case TEXT:
             case STAFF_TEXT:
+            case IMAGE:
+            case SYMBOL:
                   return true;
             case ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
@@ -539,7 +552,7 @@ QRectF HBox::drag(const EditData& data)
 void HBox::endEditDrag()
       {
       score()->setLayoutAll(true);
-      score()->end2();
+      score()->update();
       }
 
 //---------------------------------------------------------

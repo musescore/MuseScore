@@ -70,6 +70,7 @@
 #include <QTextFrameFormat>
 #include <QClipboard>
 #include <QPlainTextEdit>
+#include <QStyledItemDelegate>
 
 #include <QDateTimeEdit>
 #include <QInputDialog>

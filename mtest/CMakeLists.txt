@@ -37,6 +37,8 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/capxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_operations.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_meter.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
@@ -84,7 +86,7 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore musicxml importmidi capella biab)
+subdirs (libmscore importmidi capella biab musicxml)
 
 if (OMR)
 subdirs(omr)

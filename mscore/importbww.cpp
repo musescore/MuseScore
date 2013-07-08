@@ -258,7 +258,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
                   volta->endings().append(2);
                   ending = 2;
                   }
-            volta->setStartElement(currentMeasure);
+            volta->setTick(currentMeasure->tick());
             currentMeasure->add(volta);
             lastVolta = volta;
             }
@@ -305,8 +305,8 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
                         lastVolta->setVoltaType(Ms::VoltaType::CLOSED);
                   else
                         lastVolta->setVoltaType(Ms::VoltaType::OPEN);
-                  lastVolta->setEndElement(currentMeasure);
-                  currentMeasure->addSpannerBack(lastVolta);
+                  lastVolta->setTick2(currentMeasure->tick());
+//                  currentMeasure->addSpannerBack(lastVolta);
                   lastVolta = 0;
                   }
             else {

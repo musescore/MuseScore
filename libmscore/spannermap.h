@@ -13,25 +13,39 @@
 #ifndef __SPANNERMAP_H__
 #define __SPANNERMAP_H__
 
-#include "elementmap.h"
+
+#include "thirdparty/intervaltree/IntervalTree.h"
 
 namespace Ms {
 
 class Spanner;
-class Element;
 
 //---------------------------------------------------------
 //   SpannerMap
 //---------------------------------------------------------
 
-class SpannerMap : public ElementMap {
+class SpannerMap : std::multimap<int, Spanner*> {
+      mutable bool dirty;
+      mutable IntervalTree<Spanner*> tree;
+      std::vector< ::Interval<Spanner*> > results;
+
+      void update() const;
+
    public:
-      SpannerMap() {}
-      Spanner* findNew(Spanner* o) const { return (Spanner*)(ElementMap::findNew((Element*)o)); }
-      void add(Spanner* _o, Spanner* _n) { ElementMap::add((Element*)_o, (Element*)_n); }
+      SpannerMap();
+      const std::vector< ::Interval<Spanner*> >& findContained(int start, int stop);
+      const std::vector< ::Interval<Spanner*> >& findOverlapping(int start, int stop);
+      std::multimap<int, Spanner*>& map()             { return *this; }
+      const std::multimap<int, Spanner*>& map() const { return *this; }
+      std::multimap<int,Spanner*>::const_reverse_iterator crbegin() const { return std::multimap<int, Spanner*>::crbegin(); }
+      std::multimap<int,Spanner*>::const_reverse_iterator crend() const   { return std::multimap<int, Spanner*>::crend(); }
+      std::multimap<int,Spanner*>::const_iterator cbegin() const { return std::multimap<int, Spanner*>::cbegin(); }
+      std::multimap<int,Spanner*>::const_iterator cend() const  { return std::multimap<int, Spanner*>::cend(); }
+      void addSpanner(Spanner* s);
+      bool removeSpanner(Spanner* s);
       };
 
-
 }     // namespace Ms
+
 #endif
 

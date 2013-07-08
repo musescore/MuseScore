@@ -216,6 +216,7 @@ enum StyleIdx {
 
       ST_beamMaxSlope,
       ST_maxBeamTicks,
+      ST_dotMag,
       ST_dotNoteDistance,
       ST_dotRestDistance,
       ST_dotDotDistance,
@@ -255,9 +256,12 @@ enum StyleIdx {
       ST_genCourtesyKeysig,
       ST_genCourtesyClef,
 
-      // 75
+      ST_useStandardNoteNames,
       ST_useGermanNoteNames,
-      //
+      ST_useSolfeggioNoteNames,
+      ST_lowerCaseMinorChords,
+      ST_chordStyle,
+      ST_chordsXmlFile,
       ST_chordDescriptionFile,
       ST_concertPitch,
       ST_createMultiMeasureRests,
@@ -267,8 +271,6 @@ enum StyleIdx {
       ST_dontHideStavesInFirstSystem,
       ST_stemDir1,
       ST_stemDir2,
-
-      // 84
       ST_stemDir3,
       ST_stemDir4,
       ST_gateTime,
@@ -329,6 +331,7 @@ enum StyleIdx {
 
       ST_linearStretch,
       ST_crossMeasureValues,
+      ST_keySigNaturals,
 
       ST_STYLES
       };
@@ -387,8 +390,8 @@ class MStyle {
 
       bool isDefault(StyleIdx idx) const;
       const ChordDescription* chordDescription(int id) const;
-      ChordList* chordList() const;
-      void setChordList(ChordList*);      // Style gets ownership of ChordList
+      ChordList* chordList();
+      void setChordList(ChordList*, bool custom = true);    // Style gets ownership of ChordList
 
       const TextStyle& textStyle(int) const;
       const TextStyle& textStyle(const QString& name) const;

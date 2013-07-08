@@ -32,6 +32,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
 include (UsePkgConfig1)
 include (TargetDoc)
 include (FindPulseAudio)
+include (FindLame)
 include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
@@ -253,6 +254,55 @@ else (MINGW)
     endif (APPLE)
 endif (MINGW)
 
+
+if (APPLE)
+   if(SOUNDFONT3)
+      ##
+      ## libvorbis
+      ##
+
+      PKGCONFIG (vorbis 1.3.3 VORBIS_INCDIR VORBIS_LIBDIR VORBIS_LIB VORBIS_CPP)
+      if (VORBIS_INCDIR)
+          message("libvorbis detected ${VORBIS_INCDIR} ${VORBIS_LIBDIR} ${VORBIS_LIB}")
+      else (VORBIS_INCDIR)
+          message("libvorbis not found\n")
+      endif (VORBIS_INCDIR)
+
+
+      ##
+      ## libogg
+      ##
+
+      PKGCONFIG (ogg 1.3.0 OGG_INCDIR OGG_LIBDIR OGG_LIB OGG_CPP)
+      if (OGG_INCDIR)
+          message("libogg detected ${OGG_INCDIR} ${OGG_LIBDIR} ${OGG_LIB}")
+      else (OGG_INCDIR)
+          message("libogg not found\n")
+      endif (OGG_INCDIR)
+   endif(SOUNDFONT3)
+
+   if(HAS_AUDIOFILE)
+      ##
+      ## libsndfile
+      ##
+
+      PKGCONFIG (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
+      if (SNDFILE_INCDIR)
+          message("libsndfile detected ${SNDFILE_INCDIR} ${SNDFILE_LIBDIR} ${SNDFILE_LIB}")
+      else (SNDFILE_INCDIR)
+         message("libsndfile not found\n")
+      endif (SNDFILE_INCDIR)
+   endif(HAS_AUDIOFILE)
+else(APPLE)
+   if(MINGW)
+      set(SNDFILE_LIB sndfile-1)
+   else(MINGW)
+      set(SNDFILE_LIB sndfile)
+   endif(MINGW)
+   set(OGG_LIB ogg)
+   set(VORBIS_LIB vorbis)
+endif(APPLE)
+
 ##
 ## QtSingleApplication
 ##
@@ -313,7 +363,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 ## add subdirs
 ##
 subdirs(
-      mscore  awl bww2mxml share midi fluid mstyle libmscore synthesizer
+      mscore  awl bww2mxml share midi audiofile fluid mstyle libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff
       )
 
@@ -351,6 +401,10 @@ include_directories(
    ${ALSA_INCDIR}
    ${JACK_INCDIR}
    ${PORTAUDIO_INCDIR}
+   ${OGG_INCDIR}
+   ${VORBIS_INCDIR}
+   ${SNDFILE_INCDIR}
+   ${LAME_INCLUDE_DIR}
 )
 
 ##

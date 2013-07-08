@@ -65,15 +65,12 @@ Articulation* ChordRest::hasArticulation(const Articulation* aa)
 ChordRest::ChordRest(Score* s)
    : DurationElement(s)
       {
-      _beam         = 0;
-      _small        = false;
-      _beamMode     = BeamMode::AUTO;
-      _up           = true;
-      _staffMove    = 0;
-      _tabDur       = 0;
-      _spannerFor   = 0;
-      _spannerBack  = 0;
-      _crossMeasure = 0;
+      _beam        = 0;
+      _small       = false;
+      _beamMode    = BeamMode::AUTO;
+      _up          = true;
+      _staffMove   = 0;
+      _tabDur      = 0;
       }
 
 ChordRest::ChordRest(const ChordRest& cr)
@@ -105,9 +102,6 @@ ChordRest::ChordRest(const ChordRest& cr)
             nl->setTrack(track());
             _lyricsList.append(nl);
             }
-      _spannerFor  = 0;
-      _spannerBack = 0;
-      _crossMeasure = cr._crossMeasure;
       }
 
 //---------------------------------------------------------
@@ -116,11 +110,11 @@ ChordRest::ChordRest(const ChordRest& cr)
 
 ChordRest::~ChordRest()
       {
-      foreach(Articulation* a,  _articulations)
+      foreach (Articulation* a,  _articulations)
             delete a;
-      foreach(Lyrics* l, _lyricsList)
+      foreach (Lyrics* l, _lyricsList)
             delete l;
-      if(_tabDur)
+      if (_tabDur)
             delete _tabDur;
       }
 
@@ -130,7 +124,8 @@ ChordRest::~ChordRest()
 
 void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      if (_beam && (_beam->elements().front() == this))
+      if (_beam && (_beam->elements().front() == this)
+       && !measure()->slashStyle(staffIdx()))
             _beam->scanElements(data, func, all);
       foreach(Articulation* a, _articulations)
             func(data, a);
@@ -188,21 +183,6 @@ void ChordRest::writeProperties(Xml& xml) const
             xml.fTag("duration", duration());
       foreach(const Articulation* a, _articulations)
             a->write(xml);
-      //
-      // ignore spanner with id==-1 as they are outside of the write range
-      //
-      for (Spanner* s = _spannerFor; s; s = s->next()) {
-            if (s->id() != -1)
-                  xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(s->id()+1));
-            else
-                  qDebug("ChordRest: spannerFor->id == -1");
-            }
-      for (Spanner* s = _spannerBack; s; s = s->next()) {
-            if (s->id() != -1)
-                  xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(s->id()+1));
-            else
-                  qDebug("ChordRest: spannerBack->id == -1");
-            }
 #ifndef NDEBUG
       if (_beam && (MScore::testMode || !_beam->generated()))
             xml.tag("Beam", _beam->id());
@@ -214,10 +194,12 @@ void ChordRest::writeProperties(Xml& xml) const
             if (lyrics)
                   lyrics->write(xml);
             }
-      Fraction t(globalDuration());
-      if (staff())
-            t *= staff()->timeStretch(xml.curTick);
-      xml.curTick += t.ticks();
+      if (!isGrace()) {
+            Fraction t(globalDuration());
+            if (staff())
+                  t *= staff()->timeStretch(xml.curTick);
+            xml.curTick += t.ticks();
+            }
       }
 
 //---------------------------------------------------------
@@ -228,7 +210,34 @@ bool ChordRest::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "BeamMode") {
+      if (tag == "durationType") {
+            setDurationType(e.readElementText());
+            if (actualDurationType().type() != TDuration::V_MEASURE) {
+                  if ((type() == REST) &&
+                              // for backward compatibility, convert V_WHOLE rests to V_MEASURE
+                              // if long enough to fill a measure.
+                              // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
+                              // (see Fraction() constructor in fraction.h; this happens for instance
+                              // when pasting selection from clipboard): they should not be converted
+                              duration().numerator() != 0 &&
+                              // rest durations are initialized to full measure duration when
+                              // created upon reading the <Rest> tag (see Measure::read() )
+                              // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
+                              (actualDurationType()==TDuration::V_WHOLE && duration() <= Fraction(4, 4)) ) {
+                        // old pre 2.0 scores: convert
+                        setDurationType(TDuration::V_MEASURE);
+                        }
+                  else  // not from old score: set duration fraction from duration type
+                        setDuration(actualDurationType().fraction());
+                  }
+            else {
+                  if (score()->mscVersion() < 115) {
+                        SigEvent event = score()->sigmap()->timesig(e.tick());
+                        setDuration(event.timesig());
+                        }
+                  }
+            }
+      else if (tag == "BeamMode") {
             QString val(e.readElementText());
             BeamMode bm = BeamMode::AUTO;
             if (val == "auto")
@@ -274,50 +283,34 @@ bool ChordRest::readProperties(XmlReader& e)
             _small = e.readInt();
       else if (tag == "Slur") {
             int id = e.intAttribute("number");
-            QString type(e.attribute("type"));
-            Slur* slur = static_cast<Slur*>(e.findSpanner(id));
-            if (!slur)
+            Spanner* spanner = score()->findSpanner(id);
+            if (!spanner)
                   qDebug("ChordRest::read(): Slur id %d not found", id);
             else {
-                  if (type == "start") {
+                  QString atype(e.attribute("type"));
+                  Slur* slur = static_cast<Slur*>(spanner);
+                  if (atype == "start") {
+                        slur->setTick(e.tick());
+                        slur->setTrack(e.track());
                         slur->setStartElement(this);
-                        addSlurFor(slur);
+                        slur->setAnchor(Spanner::ANCHOR_SEGMENT);
                         }
-                  else if (type == "stop") {
+                  else if (atype == "stop") {
+                        slur->setTick2(e.tick());
                         slur->setEndElement(this);
-                        addSlurBack(slur);
+                        Chord* start = static_cast<Chord*>(slur->startElement());
+                        if (start)
+                              slur->setTrack(start->track());
+                        if (start && start->type() == CHORD && start->noteType() != NOTE_NORMAL) {
+                              start->add(slur);
+                              slur->setAnchor(Spanner::ANCHOR_CHORD);
+                              score()->removeSpanner(slur);
+                              }
                         }
                   else
-                        qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(type));
+                        qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(atype));
                   }
             e.readNext();
-            }
-      else if (tag == "durationType") {
-            setDurationType(e.readElementText());
-            if (actualDurationType().type() != TDuration::V_MEASURE) {
-                  if ((type() == REST) &&
-                              // for backward compatibility, convert V_WHOLE rests to V_MEASURE
-                              // if long enough to fill a measure.
-                              // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
-                              // (see Fraction() constructor in fraction.h; this happens for instance
-                              // when pasting selection from clipboard): they should not be converted
-                              duration().numerator() != 0 &&
-                              // rest durations are initialized to full measure duration when
-                              // created upon reading the <Rest> tag (see Measure::read() )
-                              // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                              (actualDurationType()==TDuration::V_WHOLE && duration() <= Fraction(4, 4)) ) {
-                        // old pre 2.0 scores: convert
-                        setDurationType(TDuration::V_MEASURE);
-                        }
-                  else  // not from old score: set duration fraction from duration type
-                        setDuration(actualDurationType().fraction());
-                  }
-            else {
-                  if (score()->mscVersion() < 115) {
-                        SigEvent event = score()->sigmap()->timesig(e.tick());
-                        setDuration(event.timesig());
-                        }
-                  }
             }
       else if (tag == "duration")
             setDuration(e.readFraction());
@@ -359,24 +352,7 @@ bool ChordRest::readProperties(XmlReader& e)
 
 void ChordRest::setSmall(bool val)
       {
-      _small   = val;
-      qreal m = 1.0;
-      if (_small)
-            m = score()->styleD(ST_smallNoteMag);
-      if (staff()->small())
-            m *= score()->styleD(ST_smallStaffMag);
-      setMag(m);
-      }
-
-//---------------------------------------------------------
-//   setMag
-//---------------------------------------------------------
-
-void ChordRest::setMag(qreal val)
-      {
-      Element::setMag(val);
-      foreach(Articulation* a, _articulations)
-            a->setMag(val);
+      _small = val;
       }
 
 //---------------------------------------------------------
@@ -578,6 +554,7 @@ void ChordRest::layoutArticulations()
       bool botGap = false;
       bool topGap = false;
 
+#if 0 // TODO-S: optimize
       for (Spanner* sp = _spannerFor; sp; sp = sp->next()) {
             if (sp->type() != SLUR)
                   continue;
@@ -596,6 +573,7 @@ void ChordRest::layoutArticulations()
             else
                   botGap = true;
             }
+#endif
       if (botGap)
             chordBotY += _spatium;
       if (topGap)
@@ -678,78 +656,6 @@ void ChordRest::layoutArticulations()
                   }
             a->adjustReadPos();
             }
-      }
-
-//---------------------------------------------------------
-//   addSpannerBack
-//---------------------------------------------------------
-
-void ChordRest::addSpannerBack(Spanner* e)
-      {
-      for (Spanner* spanner = _spannerBack; spanner; spanner = spanner->next()) {
-            if (spanner == e) {
-                  qDebug("ChordRest::addSpannerBack: spanner already in list");
-                  return;
-                  }
-            }
-      e->setNext(_spannerBack);
-      _spannerBack = e;
-      }
-
-//---------------------------------------------------------
-//   removeSpannerBack
-//---------------------------------------------------------
-
-bool ChordRest::removeSpannerBack(Spanner* e)
-      {
-      Spanner* sp = _spannerBack;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerBack = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
-//   addSpannerFor
-//---------------------------------------------------------
-
-void ChordRest::addSpannerFor(Spanner* e)
-      {
-      for (Spanner* spanner = _spannerFor; spanner; spanner = spanner->next()) {
-            if (spanner == e) {
-                  qDebug("ChordRest::addSpannerFor: spanner already in list");
-                  return;
-                  }
-            }
-      e->setNext(_spannerFor);
-      _spannerFor = e;
-      }
-
-bool ChordRest::removeSpannerFor(Spanner* e)
-      {
-      Spanner* sp = _spannerFor;
-      Spanner* prev = 0;
-      while (sp) {
-            if (sp == e) {
-                  if (prev)
-                        prev->setNext(sp->next());
-                  else
-                        _spannerFor = sp->next();
-                  return true;
-                  }
-            prev = sp;
-            sp = sp->next();
-            }
-      return false;
       }
 
 //---------------------------------------------------------
@@ -836,7 +742,7 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   Text* f = static_cast<Text*>(e);
                   int st = f->textStyleType();
-                  if (st != TEXT_STYLE_UNKNOWN)
+                  if (st >= TEXT_STYLE_DEFAULT)
                         f->setTextStyleType(st);
                   }
                   score()->undoAddElement(e);
@@ -850,9 +756,8 @@ Element* ChordRest::drop(const DropData& data)
                   fb->setTrack( (track() / VOICES) * VOICES );
                   fb->setTicks( duration().ticks() );
                   fb->setOnNote(true);
-                  /* FiguredBass * fbNew =*/ FiguredBass::addFiguredBassToSegment(segment(),
+                  FiguredBass::addFiguredBassToSegment(segment(),
                         fb->track(), fb->ticks(), &bNew);
-                  // fbNew = fb;
                   if (bNew)
                         score()->undoAddElement(e);
                   return e;
@@ -988,15 +893,10 @@ void ChordRest::add(Element* e)
                   {
                   Articulation* a = static_cast<Articulation*>(e);
                   _articulations.push_back(a);
-                  if (a->timeStretch() > 0.0) {
-                        qreal otempo = score()->tempo(tick());
-                        qreal ntempo = otempo / a->timeStretch();
-                        score()->setTempo(tick(), ntempo);
-                        score()->setTempo(tick() + actualTicks(), otempo);
-                        }
+                  if (a->timeStretch() != 1.0)
+                        score()->fixTicks();          // update tempo map
                   }
                   break;
-//            case FIGURED_BASS:
             case LYRICS:
                   {
                   Lyrics* l = static_cast<Lyrics*>(e);
@@ -1027,10 +927,8 @@ void ChordRest::remove(Element* e)
                   Articulation* a = static_cast<Articulation*>(e);
                   if (!_articulations.removeOne(a))
                         qDebug("ChordRest::remove(): articulation not found");
-                  if (a->timeStretch() > 0.0) {
-                        score()->removeTempo(tick());
-                        score()->removeTempo(tick() + actualTicks());
-                        }
+                  if (a->timeStretch() != 1.0)
+                        score()->fixTicks();           // update tempo map
                   }
                   break;
             case LYRICS:
@@ -1062,10 +960,9 @@ void ChordRest::removeDeleteBeam()
       {
       if (_beam) {
             Beam* b = _beam;
-            b->remove(this);  // this sets _beam to zero
+            _beam->remove(this);
             if (b->isEmpty())
-                  delete b;
-            Q_ASSERT(_beam == 0);
+                  score()->undoRemoveElement(b);
             }
       }
 
@@ -1118,6 +1015,35 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
             default:          return DurationElement::propertyDefault(propertyId);
             }
       score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   isGrace
+//---------------------------------------------------------
+
+bool ChordRest::isGrace() const
+      {
+      return type() == Element::CHORD && ((Chord*)this)->noteType() != NOTE_NORMAL;
+      }
+
+//---------------------------------------------------------
+//   writeBeam
+//---------------------------------------------------------
+
+void ChordRest::writeBeam(Xml& xml)
+      {
+      Beam* b = beam();
+#ifndef NDEBUG
+      if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {
+            b->setId(xml.beamId++);
+            b->write(xml);
+            }
+#else
+      if (b && !b->generated() && b->elements().front() == this) {
+            b->setId(xml.beamId++);
+            b->write(xml);
+            }
+#endif
       }
 
 }
