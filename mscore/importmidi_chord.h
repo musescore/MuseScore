@@ -10,7 +10,6 @@ class MidiNote {
    public:
       int pitch;
       int velo;
-      int onTime;
       int len;
       Tie* tie = nullptr;
       };

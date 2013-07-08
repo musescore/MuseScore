@@ -98,11 +98,11 @@ void removeOverlappingNotes(QList<MTrack> &tracks)
                               for (auto &note2: secondChord.notes) {
                                     if (note2.pitch != note1.pitch)
                                           continue;
-                                    if (note2.onTime >= (note1.onTime + note1.len))
+                                    if (secondChord.onTime >= (firstChord.onTime + note1.len))
                                           continue;
                                     qDebug("Midi import: overlapping events: %d+%d %d+%d",
-                                           note1.onTime, note1.len, note2.onTime, note2.len);
-                                    note1.len = note2.onTime - note1.onTime;
+                                           firstChord.onTime, note1.len, secondChord.onTime, note2.len);
+                                    note1.len = secondChord.onTime - firstChord.onTime;
                                     overlapFound = true;
                                     break;
                                     }
@@ -110,7 +110,7 @@ void removeOverlappingNotes(QList<MTrack> &tracks)
                                     break;
                               }
                         if (note1.len <= 0) {
-                              qDebug("Midi import: duration <= 0: drop note at %d", note1.onTime);
+                              qDebug("Midi import: duration <= 0: drop note at %d", firstChord.onTime);
                               continue;
                               }
                         }
@@ -161,18 +161,18 @@ void collectChords(QList<MTrack> &tracks, int minNoteDuration)
             for (auto it = chords.begin(); it != chords.end(); ) {
                   const auto &note = it->second.notes[0];
 
-                  if (note.onTime <= startTime + curThreshTime) {
+                  if (it->second.onTime <= startTime + curThreshTime) {
                         if (!useDrumset || (drumset->isValid(note.pitch)
                                             && drumset->voice(note.pitch) == it->second.voice)) {
-                              beg = std::max(beg, note.onTime);
-                              end = std::min(end, note.onTime + note.len);
+                              beg = std::max(beg, it->second.onTime);
+                              end = std::min(end, it->second.onTime + note.len);
                               tol = std::min(tol, note.len);
                               if (end - beg >= tol) {
                                                 // add current note to the previous chord
                                     auto prev = it;
                                     --prev;
                                     prev->second.notes.push_back(note);
-                                    if (note.onTime >= startTime + curThreshTime - fudgeTime)
+                                    if (it->second.onTime >= startTime + curThreshTime - fudgeTime)
                                           curThreshTime += threshExtTime;
                                     it = chords.erase(it);
                                     continue;
@@ -188,9 +188,9 @@ void collectChords(QList<MTrack> &tracks, int minNoteDuration)
                                     it->second.voice = drumset->voice(pitch);
                                     }
                               }
-                        startTime = note.onTime;
-                        beg = note.onTime;
-                        end = note.onTime + note.len;
+                        startTime = it->second.onTime;
+                        beg = startTime;
+                        end = startTime + note.len;
                         tol = threshTime;
                         if (curThreshTime != threshTime)
                               curThreshTime = threshTime;
@@ -478,6 +478,7 @@ void MTrack::fillGapWithRests(Score* score, int voice, int startChordTick,
 
 void setMusicNotesFromMidi(Score *score,
                            const QList<MidiNote> &midiNotes,
+                           int onTime,
                            int len,
                            Chord *chord,
                            int tick,
@@ -497,7 +498,7 @@ void setMusicNotesFromMidi(Score *score,
             note->setVeloOffset(mn.velo);
 
             NoteEventList el;
-            int ron  = (mn.onTime - tick) * 1000 / actualTicks;
+            int ron  = (onTime - tick) * 1000 / actualTicks;
             int rlen = len * 1000 / actualTicks;
             el.append(NoteEvent(0, ron, rlen));
             note->setPlayEvents(el);
@@ -597,8 +598,8 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
 
             for (int k = 0; k < midiChords.size(); ++k) {
                   MidiChord& midiChord = midiChords[k];
-                  setMusicNotesFromMidi(score, midiChord.notes, len, chord, tick,
-                                        drumset, useDrumset);
+                  setMusicNotesFromMidi(score, midiChord.notes, midiChord.onTime,
+                                        len, chord, tick, drumset, useDrumset);
                   if (midiChord.duration <= len) {
                         midiChords.removeAt(k);
                         --k;
@@ -609,10 +610,8 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords, int voice,
                   midiChord.onTime   = midiChord.onTime + len;
                   midiChord.duration = midiChord.duration - len;
 
-                  for (auto &midiNote: midiChord.notes) {
-                        midiNote.onTime = midiChord.onTime;
+                  for (auto &midiNote: midiChord.notes)
                         midiNote.len = midiChord.duration;
-                        }
                   }
             startChordTick += len;
             }
@@ -916,7 +915,6 @@ void createMTrackList(int& lastTick, TimeSigMap* sigmap, QList<MTrack>& tracks, 
                         MidiNote  n;
                         n.pitch    = pitch;
                         n.velo     = e.velo();
-                        n.onTime   = tick;
                         n.len      = len;
 
                         MidiChord c;
