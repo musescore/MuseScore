@@ -20,7 +20,7 @@ void applyGridQuant(std::multimap<int, MidiChord> &chords,
                     int lastTick);
 
 void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tupletEvents,
-                              std::multimap<int, MidiChord> &chords,
+                              std::multimap<int, MidiChord> &inputChords,
                               const TimeSigMap* sigmap,
                               int lastTick);
 

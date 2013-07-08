@@ -127,10 +127,8 @@ void quantizeChord(MidiChord &chord, int raster)
       {
       int raster2 = raster >> 1;
       chord.onTime = ((chord.onTime + raster2) / raster) * raster;
-      for (auto &note: chord.notes) {
-            note.onTime = chord.onTime;
+      for (auto &note: chord.notes)
             note.len = quantizeLen(note.len, raster);
-            }
       }
 
 void doGridQuantizationOfBar(std::multimap<int, MidiChord> &quantizedChords,
@@ -190,7 +188,7 @@ void applyGridQuant(std::multimap<int, MidiChord> &chords,
 // input chords - sorted by onTime value, onTime values don't repeat
 
 void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tupletEvents,
-                              std::multimap<int, MidiChord> &chords,
+                              std::multimap<int, MidiChord> &inputChords,
                               const TimeSigMap* sigmap,
                               int lastTick)
       {
@@ -201,7 +199,7 @@ void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tuplet
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
             int endBarTick = sigmap->bar2tick(i, 0);
             Fraction barFraction = sigmap->timesig(startBarTick).timesig();
-            auto tuplets = MidiTuplet::findTuplets(startBarTick, endBarTick, barFraction, chords);
+            auto tuplets = MidiTuplet::findTuplets(startBarTick, endBarTick, barFraction, inputChords);
 
             for (auto &tupletInfo: tuplets) {
                   auto &infoChords = tupletInfo.chords;
@@ -228,9 +226,9 @@ void quantizeChordsAndTuplets(std::multimap<int, MidiTuplet::TupletData> &tuplet
             startBarTick = endBarTick;
             }
                   // quantize non-tuplet (remaining) chords with ordinary grid
-      applyGridQuant(chords, quantizedChords, lastTick, sigmap, tupletChords);
+      applyGridQuant(inputChords, quantizedChords, lastTick, sigmap, tupletChords);
 
-      std::swap(chords, quantizedChords);
+      std::swap(inputChords, quantizedChords);
       }
 
 } // namespace Quantize

@@ -428,9 +428,9 @@ void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
                               && notes.size() > (int)removedIndexes.size() + 1)
                         {
                         int tupletError = noteLenQuantError(
-                                          note.onTime, note.len, tupletInfo.tupletQuantValue.ticks());
+                              tupletChord.onTime, note.len, tupletInfo.tupletQuantValue.ticks());
                         int regularError = noteLenQuantError(
-                                          note.onTime, note.len, tupletInfo.regularQuantValue.ticks());
+                              tupletChord.onTime, note.len, tupletInfo.regularQuantValue.ticks());
                         if (tupletError > regularError) {
                               removedIndexes.push_back(i);
                               continue;
@@ -687,9 +687,8 @@ void quantizeTupletChord(MidiChord &midiChord, int onTime, const TupletInfo &tup
       {
       midiChord.onTime = onTime;
       for (auto &note: midiChord.notes) {
-            Fraction raster = findRasterForNote(note.onTime, note.len, tupletInfo);
-            int offTime = findNoteOffTime(note.onTime, note.len, raster.ticks());
-            note.onTime = onTime;
+            Fraction raster = findRasterForNote(midiChord.onTime, note.len, tupletInfo);
+            int offTime = findNoteOffTime(midiChord.onTime, note.len, raster.ticks());
             note.len = offTime - onTime;
             }
                   // notes in chord here may have different durations (note.len)
