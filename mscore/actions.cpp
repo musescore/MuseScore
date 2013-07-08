@@ -1056,7 +1056,7 @@ Shortcut Shortcut::sc[] = {
           quartrest_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "sharp2",
          QT_TRANSLATE_NOOP("action","Double sharp"),
@@ -1065,7 +1065,7 @@ Shortcut Shortcut::sc[] = {
           sharpsharp_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "sharp",
          QT_TRANSLATE_NOOP("action","Sharp"),
@@ -1074,7 +1074,7 @@ Shortcut Shortcut::sc[] = {
           sharp_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "nat",
          QT_TRANSLATE_NOOP("action","Natural"),
@@ -1083,7 +1083,7 @@ Shortcut Shortcut::sc[] = {
           natural_ICON
          ),
        Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "flat",
          QT_TRANSLATE_NOOP("action","Flat"),
@@ -1092,7 +1092,7 @@ Shortcut Shortcut::sc[] = {
           flat_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          A_CMD,
          "flat2",
          QT_TRANSLATE_NOOP("action","Double flat"),
