@@ -360,8 +360,8 @@ if (MINGW)
 
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
+
    install_files ( /bin .dll
-      ${CROSS}/bin/libgcc_s_sjlj-1.dll
       ${CROSS}/bin/libstdc++-6.dll
       ${CROSS}/bin/libwinpthread-1.dll
       ${CROSS}/lib/portaudio.dll
@@ -387,12 +387,10 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Multimedia.dll
       ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
       ${CROSSQT}/bin/Qt5OpenGL.dll
-      ${CROSSQT}/bin/icuin49.dll
-      ${CROSSQT}/bin/icuuc49.dll
-      ${CROSSQT}/bin/icudt49.dll
-      ${CROSSQT}/bin/libGLESv2.dll
-      ${CROSSQT}/bin/libEGL.dll
-      ${CROSSQT}/bin/D3DCompiler_43.dll
+      ${CROSSQT}/bin/Qt5Sensors.dll
+      ${CROSSQT}/bin/icuin51.dll
+      ${CROSSQT}/bin/icuuc51.dll
+      ${CROSSQT}/bin/icudt51.dll     
       )
    install_files ( /bin/iconengines .dll
       ${CROSSQT}/plugins/iconengines/qsvgicon.dll
