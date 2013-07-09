@@ -19,7 +19,8 @@ const std::map<int, Fraction>& tupletRatios()
             {3, Fraction({3, 2})},
             {4, Fraction({4, 3})},
             {5, Fraction({5, 4})},
-            {7, Fraction({7, 8})}
+            {7, Fraction({7, 8})},
+            {9, Fraction({9, 8})}
             };
       return ratios;
       }
@@ -91,6 +92,8 @@ std::vector<int> findTupletNumbers(const Fraction &divLen, const Fraction &barFr
                   tupletNumbers.push_back(5);
             if (operations.tuplets.septuplets)
                   tupletNumbers.push_back(7);
+            if (operations.tuplets.nonuplets)
+                  tupletNumbers.push_back(9);
             }
       return tupletNumbers;
       }

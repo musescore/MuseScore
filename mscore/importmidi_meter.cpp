@@ -412,6 +412,8 @@ toDurationList(const Fraction &startTickInBar,
                         auto it = MidiTuplet::tupletRatios().find(tupletNumber);
                         if (it != MidiTuplet::tupletRatios().end())
                               node->tupletRatio = it->second;
+                        else
+                              qDebug("Tuplet ratio not found for tuplet number: %d", tupletNumber);
                         }
                   }
                         // don't split node if its duration is less than minDuration
