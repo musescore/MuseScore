@@ -649,6 +649,8 @@ void MTrack::createTuplets(int track, Score *score)
             auto ratioIt = MidiTuplet::tupletRatios().find(tupletData.tupletNumber);
             Fraction tupletRatio = (ratioIt != MidiTuplet::tupletRatios().end())
                         ? ratioIt->second : Fraction(2, 2);
+            if (ratioIt == MidiTuplet::tupletRatios().end())
+                  qDebug("Tuplet ratio not found for tuplet number: %d", tupletData.tupletNumber);
             tuplet->setRatio(tupletRatio);
 
             tuplet->setDuration(tupletData.len);
