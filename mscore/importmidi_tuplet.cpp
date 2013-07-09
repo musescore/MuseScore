@@ -4,6 +4,7 @@
 #include "importmidi_meter.h"
 #include "importmidi_quant.h"
 #include "libmscore/mscore.h"
+#include "preferences.h"
 
 #include <set>
 
@@ -46,9 +47,19 @@ bool isTupletAllowed(int tupletNumber,
             }
                   // for all tuplets
       int minAllowedNoteCount = tupletNumber / 2 + tupletNumber / 4;
-      if ((int)tupletChords.size() < minAllowedNoteCount
-                  || tupletOnTimeSumError >= regularSumError) {
+      if ((int)tupletChords.size() < minAllowedNoteCount)
             return false;
+                  // allow duplets and quadruplets with the zero error == regular error
+      if (tupletNumber == 2 || tupletNumber == 4) {
+            if (tupletOnTimeSumError > regularSumError)
+                  return false;
+            else if (tupletOnTimeSumError == regularSumError
+                     && tupletOnTimeSumError > Fraction(0))
+                  return false;
+            }
+      else {
+            if (tupletOnTimeSumError >= regularSumError)
+                  return false;
             }
                   // only notes with len >= (half tuplet note len) allowed
       Fraction tupletNoteLen = tupletLen / tupletNumber;
@@ -64,11 +75,23 @@ bool isTupletAllowed(int tupletNumber,
 
 std::vector<int> findTupletNumbers(const Fraction &divLen, const Fraction &barFraction)
       {
+      auto operations = preferences.midiImportOperations.currentTrackOperations();
       std::vector<int> tupletNumbers;
-      if (Meter::isCompound(barFraction) && divLen == Meter::beatLength(barFraction))
-            tupletNumbers = {2, 4};       // duplets and quadruplets
-      else
-            tupletNumbers = {3, 5, 7};
+
+      if (Meter::isCompound(barFraction) && divLen == Meter::beatLength(barFraction)) {
+            if (operations.tuplets.duplets)
+                  tupletNumbers.push_back(2);
+            if (operations.tuplets.quadruplets)
+                  tupletNumbers.push_back(4);
+            }
+      else {
+            if (operations.tuplets.triplets)
+                  tupletNumbers.push_back(3);
+            if (operations.tuplets.quintuplets)
+                  tupletNumbers.push_back(5);
+            if (operations.tuplets.septuplets)
+                  tupletNumbers.push_back(7);
+            }
       return tupletNumbers;
       }
 
@@ -415,11 +438,12 @@ Fraction noteLenQuantError(const Fraction &noteOnTime, const Fraction &noteLen,
 // that is greater for tuplet quantum rather than for regular quantum,
 // are removed from tuplet, except that was the last note
 
-void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
-                                  std::multimap<Fraction, MidiChord> &chords,
-                                  int nonTupletVoice)
+void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
+                          std::multimap<Fraction, MidiChord> &chords,
+                          int nonTupletVoice)
       {
-      for (TupletInfo &tupletInfo: tuplets) {
+      for (auto it = tuplets.begin(); it != tuplets.end(); ) {
+            TupletInfo &tupletInfo = *it;
             auto firstChord = tupletInfo.chords.begin();
             if (firstChord == tupletInfo.chords.end() || firstChord->first != 0)
                   continue;
@@ -429,16 +453,26 @@ void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
             std::vector<int> leavedIndexes;
             for (int i = 0; i != notes.size(); ++i) {
                   const auto &note = notes[i];
-                  if (note.len <= tupletInfo.len
-                              && notes.size() > (int)removedIndexes.size() + 1)
-                        {
-                        Fraction tupletError = noteLenQuantError(
-                              onTime, note.len, tupletInfo.tupletQuantValue);
-                        Fraction regularError = noteLenQuantError(
-                              onTime, note.len, tupletInfo.regularQuantValue);
-                        if (tupletError > regularError) {
-                              removedIndexes.push_back(i);
-                              continue;
+                  if (note.len <= tupletInfo.len) {
+                              // remove notes with big offTime quant error;
+                              // and here is a tuning for clearer tuplet processing:
+                              //    if tuplet has only one (first) chord -
+                              //        we can remove all notes and erase tuplet;
+                              //    if tuplet has multiple chords -
+                              //        we should leave at least one note in the first chord
+                        if ((tupletInfo.chords.size() == 1
+                                    && notes.size() > (int)removedIndexes.size())
+                                 || (tupletInfo.chords.size() > 1
+                                    && notes.size() > (int)removedIndexes.size() + 1))
+                              {
+                              Fraction tupletError = noteLenQuantError(
+                                                onTime, note.len, tupletInfo.tupletQuantValue);
+                              Fraction regularError = noteLenQuantError(
+                                                onTime, note.len, tupletInfo.regularQuantValue);
+                              if (tupletError > regularError) {
+                                    removedIndexes.push_back(i);
+                                    continue;
+                                    }
                               }
                         }
                   leavedIndexes.push_back(i);
@@ -452,7 +486,7 @@ void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
                   for (const auto &i: removedIndexes)
                         newNotes.push_back(notes[i]);
                   notes = newNotes;
-                              // set voice for new created non-tuplet chord
+                              // set voice for non-tuplet chord
                   if (nonTupletVoice != -1)
                         firstChord->second->second.voice = nonTupletVoice;
                   else {
@@ -466,8 +500,17 @@ void removeFirstNotesWithBigError(std::vector<TupletInfo> &tuplets,
                         firstChord->second->second.voice = maxVoice + 1;
                         }
                               // update tuplet chord
-                  firstChord->second = chords.insert({onTime, newTupletChord});
+                  if (!newTupletChord.notes.empty())
+                        firstChord->second = chords.insert({onTime, newTupletChord});
+                  else {
+                        tupletInfo.chords.erase(0);  // erase first (index 0) empty chord in tuplet
+                        if (tupletInfo.chords.empty()) {
+                              it = tuplets.erase(it);  // remove tuplet without chords
+                              continue;
+                              }
+                        }
                   }
+            ++it;
             }
       }
 
@@ -691,6 +734,29 @@ Fraction findRasterForTupletNote(const Fraction &noteOnTime,
       return raster;
       }
 
+void optimizeVoices(std::multimap<Fraction, MidiChord>::iterator startBarChordIt,
+                    std::multimap<Fraction, MidiChord>::iterator endBarChordIt)
+      {
+      int shift = 0;
+      for (int voice = 0; voice < VOICES; ++voice) {
+            bool voiceInUse = false;
+            for (auto it = startBarChordIt; it != endBarChordIt; ++it) {
+                  if (it->second.voice == voice) {
+                        voiceInUse = true;
+                        break;
+                        }
+                  }
+            if (shift > 0) {
+                  for (auto it = startBarChordIt; it != endBarChordIt; ++it) {
+                        if (it->second.voice == voice)
+                              it->second.voice -= shift;
+                        }
+                  }
+            if (!voiceInUse)
+                  ++shift;
+            }
+      }
+
 std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
                                     const Fraction &endBarTick,
                                     const Fraction &barFraction,
@@ -698,6 +764,10 @@ std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
       {
       std::vector<TupletInfo> tuplets;
       if (chords.empty() || startBarTick >= endBarTick)     // invalid cases
+            return tuplets;
+
+      auto operations = preferences.midiImportOperations.currentTrackOperations();
+      if (!operations.tuplets.doSearch)
             return tuplets;
 
       Fraction tol = Quantize::fixedQuantRaster() / 2;
@@ -751,7 +821,8 @@ std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
       filterTuplets(tuplets);
       int nonTupletVoice = separateTupletVoices(tuplets, startBarChordIt, endBarChordIt,
                                                 chords, endBarTick);
-      removeFirstNotesWithBigError(tuplets, chords, nonTupletVoice);
+      minimizeOffTimeError(tuplets, chords, nonTupletVoice);
+      optimizeVoices(startBarChordIt, endBarChordIt);
 
       return tuplets;
       }

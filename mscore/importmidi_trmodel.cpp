@@ -77,6 +77,24 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::USE_DOTS:
                   trackData.opers.useDots = operValue.toBool();
                   break;
+            case MidiOperation::Type::TUPLET_SEARCH:
+                  trackData.opers.tuplets.doSearch = operValue.toBool();
+                  break;
+            case MidiOperation::Type::TUPLET_2:
+                  trackData.opers.tuplets.duplets = operValue.toBool();
+                  break;
+            case MidiOperation::Type::TUPLET_3:
+                  trackData.opers.tuplets.triplets = operValue.toBool();
+                  break;
+            case MidiOperation::Type::TUPLET_4:
+                  trackData.opers.tuplets.quadruplets = operValue.toBool();
+                  break;
+            case MidiOperation::Type::TUPLET_5:
+                  trackData.opers.tuplets.quintuplets = operValue.toBool();
+                  break;
+            case MidiOperation::Type::TUPLET_7:
+                  trackData.opers.tuplets.septuplets = operValue.toBool();
+                  break;
             case MidiOperation::Type::DO_IMPORT:
                   break;
             }
@@ -158,6 +176,53 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.useDots != opers.opers.useDots) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::USE_DOTS);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::TUPLET_SEARCH
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.tuplets.doSearch != opers.opers.tuplets.doSearch) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::TUPLET_SEARCH);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::TUPLET_2
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.tuplets.duplets != opers.opers.tuplets.duplets) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::TUPLET_2);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::TUPLET_3
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.tuplets.triplets != opers.opers.tuplets.triplets) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::TUPLET_3);
+                        break;
+                        }
+                  }
+            // MidiOperation::Type::TUPLET_4
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.tuplets.quadruplets != opers.opers.tuplets.quadruplets) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::TUPLET_4);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::TUPLET_5
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.tuplets.quintuplets != opers.opers.tuplets.quintuplets) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::TUPLET_5);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::TUPLET_7
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.tuplets.septuplets != opers.opers.tuplets.septuplets) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::TUPLET_7);
                         break;
                         }
                   }
