@@ -6,6 +6,18 @@
 
 namespace Ms {
 
+// operation types are in importmidi_operation.h
+
+struct SearchTuplets
+      {
+      bool doSearch = true;
+      bool duplets = true;
+      bool triplets = true;
+      bool quadruplets = true;
+      bool quintuplets = true;
+      bool septuplets = true;
+      };
+
 struct Quantization
       {
       MidiOperation::QuantValue value = MidiOperation::QuantValue::FROM_PREFERENCES;
@@ -28,6 +40,7 @@ struct TrackOperations
       Quantization quantize;
       bool useDots = true;
       LHRHSeparation LHRH;
+      SearchTuplets tuplets;
       };
 
 struct TrackMeta
