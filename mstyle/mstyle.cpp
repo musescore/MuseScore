@@ -7087,7 +7087,8 @@ bool MgStyle::drawToolBoxTabShapeControl( const QStyleOption* option, QPainter* 
 //   drawToolButtonLabelControl
 //---------------------------------------------------------
 
-bool MgStyle::drawToolButtonLabelControl(const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
+bool MgStyle::drawToolButtonLabelControl(const QStyleOption* option, QPainter* painter, const QWidget* widget) const
+      {
       // need to customize palettes to deal with autoraised buttons
       const State& flags( option->state );
       const bool autoRaised(flags & State_AutoRaise);
@@ -7101,7 +7102,8 @@ bool MgStyle::drawToolButtonLabelControl(const QStyleOption* option, QPainter* p
             return true;
 
       QStyleOptionToolButton localOption(*toolButtonOpt);
-      localOption.palette.setColor(QPalette::ButtonText, option->palette.color(QPalette::WindowText));
+      QColor color(option->palette.color(QPalette::WindowText));
+      localOption.palette.setColor(QPalette::ButtonText, color);
 
       QCommonStyle::drawControl(CE_ToolButtonLabel, &localOption, painter, widget);
       return true;

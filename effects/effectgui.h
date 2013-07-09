@@ -33,6 +33,7 @@ class EffectGui : public QQuickView {
 
    public:
       EffectGui(Effect*);
+      ~EffectGui();
       void init(QUrl& url);
       Effect* effect() const    { return _effect; }
       virtual void updateValues();
