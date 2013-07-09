@@ -293,14 +293,14 @@ void PluginCreator::runClicked()
       view->setResizeMode(QQuickView::SizeViewToRootObject);
       // view->setResizeMode(QQuickView::SizeRootObjectToView);
 //      QGraphicsObject* go = qobject_cast<QGraphicsObject*>(item);
-//TODO-QML      view->scene()->addItem(go);
+//      view->scene()->addItem(go);
 
       view->show();
 
       if (item->pluginType() == "dock") {
             dock = new QDockWidget("Plugin", 0);
             dock->setAttribute(Qt::WA_DeleteOnClose);
-//TODO-QML            dock->setWidget(QWidget::createWindowContainer(view));
+            dock->setWidget(QWidget::createWindowContainer(view));
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
             if (item->dockArea() == "left")
                   area = Qt::LeftDockWidgetArea;

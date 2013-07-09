@@ -357,7 +357,7 @@ void MuseScore::pluginTriggered(int idx)
       if (p->pluginType() == "dock") {
             QDockWidget* dock = new QDockWidget("Plugin", 0);
             dock->setAttribute(Qt::WA_DeleteOnClose);
-//TODO-QML            dock->setWidget(QWidget::createWindowContainer(view));
+            dock->setWidget(QWidget::createWindowContainer(view));
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
             if (p->dockArea() == "left")
                   area = Qt::LeftDockWidgetArea;
