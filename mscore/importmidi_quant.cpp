@@ -86,6 +86,9 @@ Fraction userQuantNoteToTicks(MidiOperation::QuantValue quantNote)
             case MidiOperation::QuantValue::N_64:
                   userQuantValue = division / 16;
                   break;
+            case MidiOperation::QuantValue::N_128:
+                  userQuantValue = division / 32;
+                  break;
             case MidiOperation::QuantValue::FROM_PREFERENCES:
             default:
                   break;
