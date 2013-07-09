@@ -2705,6 +2705,11 @@ void MuseScore::about()
 AboutBoxDialog::AboutBoxDialog()
       {
       setupUi(this);
+      if (preferences.globalStyle == STYLE_DARK)
+            museLogo->setPixmap(QPixmap(":/data/musescore_logo_full1.png"));
+      else
+            museLogo->setPixmap(QPixmap(":/data/musescore_logo_full.png"));
+
 #ifdef MSCORE_UNSTABLE
       versionLabel->setText(tr("Unstable Prerelease for Version: ") + VERSION);
 #else
