@@ -298,6 +298,8 @@ void Navigator::paintEvent(QPaintEvent* ev)
       QRect r(ev->rect());
       p.fillRect(r, Qt::gray);
 
+//      printf("navigator paint %d %d\n", r.width(), r.height());
+
       if (!_score)
             return;
 
