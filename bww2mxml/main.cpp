@@ -19,7 +19,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include <iostream>
+// #include <iostream>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QFile>
@@ -31,7 +31,7 @@
 
 void usage()
 {
-  std::cerr << "usage bww2mxml [infile [outfile]]" << std::endl;
+  //WS std::cerr << "usage bww2mxml [infile [outfile]]" << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -55,8 +55,8 @@ int main(int argc, char *argv[])
     inFile.setFileName(args.at(1));
     if (!inFile.open(QIODevice::ReadOnly))
     {
-      std::cerr << "Cannot open file '" << qPrintable(args.at(1)) << "' for reading: "
-          << qPrintable(inFile.errorString()) << std::endl;
+//WS      std::cerr << "Cannot open file '" << qPrintable(args.at(1)) << "' for reading: "
+//          << qPrintable(inFile.errorString()) << std::endl;
       return 2;
     }
   }
@@ -68,8 +68,8 @@ int main(int argc, char *argv[])
     outFile.setFileName(args.at(2));
     if (!outFile.open(QIODevice::WriteOnly))
     {
-      std::cerr << "Cannot open file '" << qPrintable(args.at(2)) << "' for writing: "
-          << qPrintable(outFile.errorString()) << std::endl;
+//      std::cerr << "Cannot open file '" << qPrintable(args.at(2)) << "' for writing: "
+//          << qPrintable(outFile.errorString()) << std::endl;
       return 2;
     }
   }
