@@ -26,7 +26,7 @@
  uinterrupted sequences of notes.
  */
 
-#include <iostream>
+// #include <iostream>
 
 #include <QtCore/QStringList>
 #include <QtCore/QtDebug>
@@ -568,11 +568,13 @@ namespace Bww {
 
   void Parser::errorHandler(QString s)
   {
+#if 0 // WS
     std::cerr << "Parse error line "
         << lex.symLineNumber() + 1
         << ": "
         << qPrintable(s)
         << std::endl;
+#endif
   }
 
   /**
