@@ -21,7 +21,14 @@ struct MidiOperation
             LHRH_SPLIT_OCTAVE,
             LHRH_SPLIT_NOTE,
 
-            USE_DOTS
+            USE_DOTS,
+
+            TUPLET_SEARCH,
+            TUPLET_2,
+            TUPLET_3,
+            TUPLET_4,
+            TUPLET_5,
+            TUPLET_7
       } type;
 
       QVariant value;

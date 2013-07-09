@@ -21,6 +21,12 @@ struct Controller {
       Node *quantValue = nullptr;
       Node *quantReduce = nullptr;
       Node *quantHuman = nullptr;
+      Node *searchTuplets = nullptr;
+      Node *duplets = nullptr;
+      Node *triplets = nullptr;
+      Node *quadruplets = nullptr;
+      Node *quintuplets = nullptr;
+      Node *septuplets = nullptr;
 
       int trackCount = 0;
       bool updateNodeDependencies(Node *node, bool force_update);
@@ -73,6 +79,64 @@ OperationsModel::OperationsModel()
       useDots->oper.value = TrackOperations().useDots;
       useDots->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(useDots));
+
+
+      // ------------- tuplets --------------
+
+      Node *searchTuplets = new Node;
+      searchTuplets->name = "Search tuplets";
+      searchTuplets->oper.type = MidiOperation::Type::TUPLET_SEARCH;
+      searchTuplets->oper.value = TrackOperations().tuplets.doSearch;
+      searchTuplets->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(searchTuplets));
+      controller->searchTuplets = searchTuplets;
+
+
+      Node *duplets = new Node;
+      duplets->name = "Duplets (2)";
+      duplets->oper.type = MidiOperation::Type::TUPLET_2;
+      duplets->oper.value = TrackOperations().tuplets.duplets;
+      duplets->parent = searchTuplets;
+      searchTuplets->children.push_back(std::unique_ptr<Node>(duplets));
+      controller->duplets = duplets;
+
+
+      Node *triplets = new Node;
+      triplets->name = "Triplets (3)";
+      triplets->oper.type = MidiOperation::Type::TUPLET_3;
+      triplets->oper.value = TrackOperations().tuplets.triplets;
+      triplets->parent = searchTuplets;
+      searchTuplets->children.push_back(std::unique_ptr<Node>(triplets));
+      controller->triplets = triplets;
+
+
+      Node *quadruplets = new Node;
+      quadruplets->name = "Quadruplets (4)";
+      quadruplets->oper.type = MidiOperation::Type::TUPLET_4;
+      quadruplets->oper.value = TrackOperations().tuplets.quadruplets;
+      quadruplets->parent = searchTuplets;
+      searchTuplets->children.push_back(std::unique_ptr<Node>(quadruplets));
+      controller->quadruplets = quadruplets;
+
+
+      Node *quintuplets = new Node;
+      quintuplets->name = "Quintuplets (5)";
+      quintuplets->oper.type = MidiOperation::Type::TUPLET_5;
+      quintuplets->oper.value = TrackOperations().tuplets.quintuplets;
+      quintuplets->parent = searchTuplets;
+      searchTuplets->children.push_back(std::unique_ptr<Node>(quintuplets));
+      controller->quintuplets = quintuplets;
+
+
+      Node *septuplets = new Node;
+      septuplets->name = "Septuplets (7)";
+      septuplets->oper.type = MidiOperation::Type::TUPLET_7;
+      septuplets->oper.value = TrackOperations().tuplets.septuplets;
+      septuplets->parent = searchTuplets;
+      searchTuplets->children.push_back(std::unique_ptr<Node>(septuplets));
+      controller->septuplets = septuplets;
+
+      // ------------------------------------
 
 
       Node *doLHRH = new Node;
@@ -354,9 +418,23 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                         node->oper.value = (int)opers.opers.LHRH.splitPitchOctave; break;
                   case MidiOperation::Type::LHRH_SPLIT_NOTE:
                         node->oper.value = (int)opers.opers.LHRH.splitPitchNote; break;
+
                   case MidiOperation::Type::USE_DOTS:
                         node->oper.value = opers.opers.useDots; break;
                   case MidiOperation::Type::DO_IMPORT: break;
+
+                  case MidiOperation::Type::TUPLET_SEARCH:
+                        node->oper.value = opers.opers.tuplets.doSearch; break;
+                  case MidiOperation::Type::TUPLET_2:
+                        node->oper.value = opers.opers.tuplets.duplets; break;
+                  case MidiOperation::Type::TUPLET_3:
+                        node->oper.value = opers.opers.tuplets.triplets; break;
+                  case MidiOperation::Type::TUPLET_4:
+                        node->oper.value = opers.opers.tuplets.quadruplets; break;
+                  case MidiOperation::Type::TUPLET_5:
+                        node->oper.value = opers.opers.tuplets.quintuplets; break;
+                  case MidiOperation::Type::TUPLET_7:
+                        node->oper.value = opers.opers.tuplets.septuplets; break;
                   }
             }
       for (const auto &nodePtr: node->children)
@@ -429,13 +507,28 @@ bool Controller::updateNodeDependencies(Node *node, bool force_update)
                   quantReduce->visible = (value != MidiOperation::QuantValue::SHORTEST_IN_BAR);
             result = true;
             }
-      if (quantHuman) {
-            bool oneTrack = (trackCount == 1);
-            if (oneTrack != quantHuman->visible) {
-                  quantHuman->visible = oneTrack;
-                  result = true;
-                  }
+      if (searchTuplets && (force_update || node == searchTuplets)) {
+            auto value = searchTuplets->oper.value.toBool();
+            if (duplets)
+                  duplets->visible = value;
+            if (triplets)
+                  triplets->visible = value;
+            if (quadruplets)
+                  quadruplets->visible = value;
+            if (quintuplets)
+                  quintuplets->visible = value;
+            if (septuplets)
+                  septuplets->visible = value;
+            result = true;
             }
+
+//      if (quantHuman) {
+//            bool oneTrack = (trackCount == 1);
+//            if (oneTrack != quantHuman->visible) {
+//                  quantHuman->visible = oneTrack;
+//                  result = true;
+//                  }
+//            }
 
       return result;
       }
