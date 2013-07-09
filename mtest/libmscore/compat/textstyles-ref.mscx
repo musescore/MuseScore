@@ -362,69 +362,66 @@
       <ChordList>
         <font id="0" family="MuseJazz">
           <mag>1</mag>
-          <sym name="circle" code="0xe18e"/>
-          <sym name="ma" code="0xe180"/>
-          <sym name="dim" code="0xe184"/>
-          <sym name="s11" code="0xe182"/>
-          <sym name="s13" code="0xe183"/>
-          <sym name="mi" code="0xe181"/>
-          <sym name="minus" code="0x2d"/>
-          <sym name="#" code="0xe10c"/>
-          <sym name="(" code="0x28"/>
-          <sym name=")" code="0x29"/>
-          <sym name="s#" code="0xe189"/>
-          <sym name="triangle" code="0xe18a"/>
-          <sym name="+" code="0xe186"/>
           <sym name="s0" code="0xe190"/>
           <sym name="s1" code="0xe191"/>
           <sym name="s2" code="0xe192"/>
+          <sym name="mi" code="0xe181"/>
           <sym name="s3" code="0xe193"/>
           <sym name="s4" code="0xe194"/>
           <sym name="s5" code="0xe195"/>
+          <sym name="oslash" code="0xe18f"/>
           <sym name="s6" code="0xe196"/>
-          <sym name="s7" code="0xe197"/>
-          <sym name="s8" code="0xe198"/>
-          <sym name="s9" code="0xe199"/>
           <sym name="notea" value="a"/>
+          <sym name="s7" code="0xe197"/>
           <sym name="noteb" value="b"/>
+          <sym name="s8" code="0xe198"/>
           <sym name="notec" value="c"/>
+          <sym name="s9" code="0xe199"/>
+          <sym name="circle" code="0xe18e"/>
           <sym name="noted" value="d"/>
           <sym name="notee" value="e"/>
           <sym name="notef" value="f"/>
           <sym name="noteg" value="g"/>
           <sym name="noteh" value="h"/>
+          <sym name="s11" code="0xe182"/>
+          <sym name="s13" code="0xe183"/>
           <sym name="b" code="0xe10d"/>
           <sym name="sb" code="0xe188"/>
-          <sym name="sus4" code="0xe18d"/>
-          <sym name="degree" code="0xe187"/>
+          <sym name="minus" code="0x2d"/>
           <sym name="sus" code="0xe185"/>
-          <sym name="oslash" code="0xe18f"/>
+          <sym name="#" code="0xe10c"/>
+          <sym name="triangle" code="0xe18a"/>
+          <sym name="(" code="0x28"/>
+          <sym name=")" code="0x29"/>
+          <sym name="+" code="0xe186"/>
+          <sym name="dim" code="0xe184"/>
+          <sym name="sus4" code="0xe18d"/>
+          <sym name="s#" code="0xe189"/>
+          <sym name="degree" code="0xe187"/>
+          <sym name="ma" code="0xe180"/>
           </font>
         <font id="1" family="MuseJazz">
           <mag>1.25</mag>
+          <sym name="7" code="0xe197"/>
+          <sym name="8" code="0xe198"/>
+          <sym name="9" code="0xe199"/>
           <sym name="add11" code="0xe18c"/>
           <sym name="11" code="0xe182"/>
-          <sym name="0" code="0xe190"/>
           <sym name="13" code="0xe183"/>
+          <sym name="add" code="0xe18b"/>
+          <sym name="0" code="0xe190"/>
           <sym name="1" code="0xe191"/>
           <sym name="2" code="0xe192"/>
           <sym name="3" code="0xe193"/>
           <sym name="4" code="0xe194"/>
           <sym name="5" code="0xe195"/>
           <sym name="6" code="0xe196"/>
-          <sym name="7" code="0xe197"/>
-          <sym name="8" code="0xe198"/>
-          <sym name="9" code="0xe199"/>
-          <sym name="add" code="0xe18b"/>
           </font>
         <font id="2" family="MuseJazz">
           <mag>0.8</mag>
-          <sym name="es" value="es"/>
-          <sym name="s(" code="0x28"/>
-          <sym name="s)" code="0x29"/>
-          <sym name="letterb" code="0x62"/>
           <sym name="notemi" value="mi"/>
           <sym name="is" value="is"/>
+          <sym name="es" value="es"/>
           <sym name="a" code="0x61"/>
           <sym name="c" code="0x63"/>
           <sym name="d" code="0x64"/>
@@ -448,9 +445,12 @@
           <sym name="v" code="0x76"/>
           <sym name="w" code="0x77"/>
           <sym name="x" code="0x78"/>
-          <sym name="striangle" code="0xe18a"/>
           <sym name="y" code="0x79"/>
           <sym name="z" code="0x7a"/>
+          <sym name="letterb" code="0x62"/>
+          <sym name="s(" code="0x28"/>
+          <sym name="s)" code="0x29"/>
+          <sym name="striangle" code="0xe18a"/>
           </font>
         <font id="3" family="MuseJazz">
           <mag>0.55</mag>
