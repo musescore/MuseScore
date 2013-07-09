@@ -49,7 +49,6 @@ bool useALSA = false, useJACK = false, usePortaudio = false, usePulseAudio = fal
 extern bool useFactorySettings;
 extern bool externalStyle;
 
-static const char* appStyleFile;
 static int exportAudioSampleRates[2] = { 44100, 48000 };
 
 //---------------------------------------------------------
@@ -74,21 +73,6 @@ static PeriodItem updatePeriods[] = {
       PeriodItem(2*30*24, QT_TRANSLATE_NOOP("preferences","Every 2 months")),
       PeriodItem(-1,      QT_TRANSLATE_NOOP("preferences","Never")),
       };
-
-//---------------------------------------------------------
-//   appStyleSheet
-//---------------------------------------------------------
-
-QString appStyleSheet()
-      {
-      QString s;
-      QFile f(appStyleFile);
-      if (f.open(QIODevice::ReadOnly)) {
-            s = f.readAll();
-            f.close();
-            }
-      return s;
-      }
 
 //---------------------------------------------------------
 //   Preferences
@@ -193,7 +177,6 @@ void Preferences::init()
 
       useOsc                  = false;
       oscPort                 = 5282;
-      appStyleFile            = ":/data/appstyle-dark.css";
       singlePalette           = false;
 
       styleName               = "dark";   // ??
@@ -474,14 +457,10 @@ void Preferences::read()
       useOsc                 = s.value("useOsc", useOsc).toBool();
       oscPort                = s.value("oscPort", oscPort).toInt();
       styleName              = s.value("style", styleName).toString();
-      if (styleName == "dark") {
-            appStyleFile = ":/data/appstyle-dark.css";
+      if (styleName == "dark")
             globalStyle  = STYLE_DARK;
-            }
-      else {
-            appStyleFile = ":/data/appstyle-light.css";
+      else
             globalStyle  = STYLE_LIGHT;
-            }
 
       singlePalette    = s.value("singlePalette",    singlePalette).toBool();
 
@@ -1399,12 +1378,10 @@ void PreferenceDialog::apply()
       prefs.useOsc  = oscServer->isChecked();
       prefs.oscPort = oscPort->value();
       if (styleName->currentIndex() == STYLE_DARK) {
-            appStyleFile = ":/data/appstyle-dark.css";
             prefs.styleName = "dark";
             prefs.globalStyle = STYLE_DARK;
             }
       else {
-            appStyleFile = ":/data/appstyle-light.css";
             prefs.styleName = "light";
             prefs.globalStyle = STYLE_LIGHT;
             }
@@ -1418,7 +1395,6 @@ void PreferenceDialog::apply()
             prefs.readDefaultStyle();
             }
 
-      qApp->setStyleSheet(appStyleSheet());
       genIcons();
 
       mscore->setIconSize(QSize(prefs.iconWidth, prefs.iconHeight));

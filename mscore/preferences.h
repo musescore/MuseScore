@@ -204,7 +204,6 @@ class ShortcutItem : public QTreeWidgetItem {
       };
 
 extern Preferences preferences;
-extern QString appStyleSheet();
 extern bool useALSA, useJACK, usePortaudio, usePulseAudio;
 
 } // namespace Ms
