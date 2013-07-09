@@ -27,6 +27,7 @@ struct Controller {
       Node *quadruplets = nullptr;
       Node *quintuplets = nullptr;
       Node *septuplets = nullptr;
+      Node *nonuplets = nullptr;
 
       int trackCount = 0;
       bool updateNodeDependencies(Node *node, bool force_update);
@@ -135,6 +136,15 @@ OperationsModel::OperationsModel()
       septuplets->parent = searchTuplets;
       searchTuplets->children.push_back(std::unique_ptr<Node>(septuplets));
       controller->septuplets = septuplets;
+
+
+      Node *nonuplets = new Node;
+      nonuplets->name = "Nonuplets (9)";
+      nonuplets->oper.type = MidiOperation::Type::TUPLET_9;
+      nonuplets->oper.value = TrackOperations().tuplets.nonuplets;
+      nonuplets->parent = searchTuplets;
+      searchTuplets->children.push_back(std::unique_ptr<Node>(nonuplets));
+      controller->nonuplets = nonuplets;
 
       // ------------------------------------
 
@@ -435,6 +445,8 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                         node->oper.value = opers.opers.tuplets.quintuplets; break;
                   case MidiOperation::Type::TUPLET_7:
                         node->oper.value = opers.opers.tuplets.septuplets; break;
+                  case MidiOperation::Type::TUPLET_9:
+                        node->oper.value = opers.opers.tuplets.nonuplets; break;
                   }
             }
       for (const auto &nodePtr: node->children)
@@ -519,6 +531,8 @@ bool Controller::updateNodeDependencies(Node *node, bool force_update)
                   quintuplets->visible = value;
             if (septuplets)
                   septuplets->visible = value;
+            if (nonuplets)
+                  nonuplets->visible = value;
             result = true;
             }
 

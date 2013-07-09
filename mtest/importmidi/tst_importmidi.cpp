@@ -315,10 +315,11 @@ void TestImportMidi::findTupletNumbers()
       Fraction barFraction(4, 4);
       Fraction divLen = barFraction / 4;
       auto numbers = MidiTuplet::findTupletNumbers(divLen, barFraction);
-      QVERIFY(numbers.size() == 3);
+      QVERIFY(numbers.size() == 4);
       QCOMPARE(numbers[0], 3);
       QCOMPARE(numbers[1], 5);
       QCOMPARE(numbers[2], 7);
+      QCOMPARE(numbers[3], 9);
       }
       {
       Fraction barFraction(6, 8);
