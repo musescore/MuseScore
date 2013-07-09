@@ -384,13 +384,8 @@ Score* TestParts::doAddFingering()
             e->score()->doLayout();
 
       Measure* m   = score->firstMeasure();
-<<<<<<< HEAD
-      Segment* s   = m->tick2segment(480, false);
-      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
-=======
       Segment* s   = m->tick2segment(480);
       Chord* chord = static_cast<Chord*>(s->element(0));
->>>>>>> master
       Note* note   = chord->upNote();
       DropData dd;
       dd.view = 0;
