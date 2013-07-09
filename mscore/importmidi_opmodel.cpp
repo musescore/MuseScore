@@ -51,6 +51,7 @@ OperationsModel::OperationsModel()
       quantValue->values.push_back("1/16");
       quantValue->values.push_back("1/32");
       quantValue->values.push_back("1/64");
+      quantValue->values.push_back("1/128");
       quantValue->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(quantValue));
       controller->quantValue = quantValue;

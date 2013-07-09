@@ -41,7 +41,8 @@ struct MidiOperation
             N_8,
             N_16,
             N_32,
-            N_64
+            N_64,
+            N_128
             };
 
       enum class LHRHMethod {
