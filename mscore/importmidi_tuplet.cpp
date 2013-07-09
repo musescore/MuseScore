@@ -746,7 +746,7 @@ void optimizeVoices(std::multimap<Fraction, MidiChord>::iterator startBarChordIt
                         break;
                         }
                   }
-            if (shift > 0) {
+            if (shift > 0 && voiceInUse) {
                   for (auto it = startBarChordIt; it != endBarChordIt; ++it) {
                         if (it->second.voice == voice)
                               it->second.voice -= shift;
