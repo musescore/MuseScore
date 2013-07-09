@@ -4669,7 +4669,6 @@ int main(int argc, char* av[])
                   case STYLE_DARK: {
                         MgStyle* st = new MgStyle;
                         QApplication::setStyle(st);
-                        qApp->setStyleSheet(appStyleSheet());
                         QPalette p(QApplication::palette());
                         QSettings s;
                         p.setColor(QPalette::Window,        QColor(s.value("WindowColor",        "#525252").toString()));
@@ -4684,6 +4683,7 @@ int main(int argc, char* av[])
 
                         QPalette palette = QToolTip::palette();
                         palette.setBrush(QPalette::ToolTipBase, QBrush(QColor(s.value("ToolTipBaseColor", "#808080").toString())));
+                        palette.setColor(QPalette::ToolTipText, QColor(s.value("ToolTipTextColor",   "#000000").toString()));
                         QToolTip::setPalette(palette);
 
                         break;
@@ -4691,7 +4691,6 @@ int main(int argc, char* av[])
                   case STYLE_LIGHT:
                         MgStyle* st = new MgStyle;
                         QApplication::setStyle(st);
-                        qApp->setStyleSheet(appStyleSheet());
                         QPalette p(QApplication::palette());
                         QSettings s;
                         p.setColor(QPalette::Window,        QColor(s.value("WindowColor",        "#e3e3e3").toString()));
@@ -4704,11 +4703,11 @@ int main(int argc, char* av[])
                         p.setColor(QPalette::BrightText,    QColor(s.value("BrightTextColor",    "#000000").toString()));
                         QApplication::setPalette(p);
 
-                        QPalette palette = QToolTip::palette();
-                        palette.setBrush(QPalette::ToolTipBase, QBrush(QColor(s.value("ToolTipBaseColor", "#ff1d9").toString())));
+                        QPalette palette(p); //  = QToolTip::palette();
+                        palette.setBrush(QPalette::ToolTipBase, QBrush(QColor(s.value("ToolTipBaseColor", "#fff1d9").toString())));
+                        palette.setColor(QPalette::ToolTipText, QColor(s.value("ToolTipTextColor",   "#000000").toString()));
                         QToolTip::setPalette(palette);
 
-                        break;
                         break;
                   }
             seq            = new Seq();

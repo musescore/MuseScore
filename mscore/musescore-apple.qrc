@@ -27,8 +27,6 @@
       <file>data/cancel.png</file>
       <file>revision.h</file>
       <file>data/musescore_logo_full1.png</file>
-      <file alias="data/appstyle-dark.css">../share/styles/appstyle-mac-dark.css</file>
-      <file alias="data/appstyle-light.css">../share/styles/appstyle-mac-light.css</file>
 
       <file>data/greendot.svg</file>
       <file>data/darkgreendot.svg</file>
