@@ -531,7 +531,7 @@ MuseScore::MuseScore()
       QLayout* envlayout = new QVBoxLayout;
       envlayout->setMargin(0);
       envlayout->setSpacing(0);
-      envelope->setLayout(envlayout);
+//      envelope->setLayout(envlayout);
       envelope->addWidget(mainWindow);
 
       importmidi_panel = new ImportMidiPanel(this);
