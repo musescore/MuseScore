@@ -86,7 +86,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Save a copy of the score in addition to the current file")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
          A_SCORE,
          "file-export",
          QT_TRANSLATE_NOOP("action","Export..."),
