@@ -347,15 +347,8 @@ void Beam::layoutGraceNotes()
       maxMove = -1000;
       isGrace = true;
 
-      int upCount = 0;
-      int mUp     = 0;
-      int mDown   = 0;
-      int upDnLimit = staff()->lines() - 1;     // was '4' hard-coded in following code
-
       foreach (ChordRest* cr, _elements) {
             c2 = static_cast<Chord*>(cr);
-            if (c2->line() != upDnLimit)
-                  upCount += c2->up() ? 1 : -1;
             if (c1 == 0)
                   c1 = c2;
             int i = c2->staffMove();
@@ -363,12 +356,6 @@ void Beam::layoutGraceNotes()
                   minMove = i;
             if (i > maxMove)
                   maxMove = i;
-            int line = c2->upLine();
-            if ((line - upDnLimit) > mUp)
-                  mUp = line - upDnLimit;
-            line = c2->downLine();
-            if (upDnLimit - line > mDown)
-                  mDown = upDnLimit - line;
             if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
                   maxDuration = cr->durationType();
             }
@@ -1123,7 +1110,8 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
       Bm bm;
       if (beamLevels == 1) {
             bm = beamMetric1(_up, l1 / 2, l2 / 2);
-            if (grace) {
+
+            if (grace && bm.l) {
                   if (bm.l > 0)
                         bm.l -= 3;
                   else
