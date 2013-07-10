@@ -13,7 +13,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-import QtQuick 1.1
+import QtQuick 2.0
 import MuseScore 1.0
 
 MuseScore {
@@ -55,7 +55,7 @@ MuseScore {
 
               for (var i = 0; i < notes.length; i++) {
                 if ( i > 0 )
-                   text.text += ",";           
+                   text.text += ",";
 
                 switch (notes[i].tpc) {
                   case -1: text.text += qsTr("Fbb"); break;
@@ -99,7 +99,7 @@ MuseScore {
                 } // end switch tpc
 
 // change below false to true for courtesy- and microtonal accidentals
-// you might need to come up with suitable translations 
+// you might need to come up with suitable translations
 // only #, b, natural and possibly also ## seem to be available in UNICODE
                 if (false) {
                   switch (notes[i].userAccidental) {
