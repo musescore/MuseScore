@@ -102,7 +102,6 @@ extern Ms::Synthesizer* createZerberus();
 
 namespace Ms {
 
-
 MuseScore* mscore;
 MuseScoreCore* mscoreCore;
 MasterSynthesizer* synti;
@@ -4473,8 +4472,7 @@ int main(int argc, char* av[])
 #ifdef Q_OS_MAC
       MuseScoreApplication* app = new MuseScoreApplication("mscore-dev", argc, av);
 #else
-//      QtSingleApplication* app = new QtSingleApplication("mscore-dev", argc, av);
-      QApplication* app = new QApplication(argc, av);
+      QtSingleApplication* app = new QtSingleApplication("mscore-dev", argc, av);
 #endif
 
       QCoreApplication::setOrganizationName("MuseScore");
@@ -4598,7 +4596,6 @@ int main(int argc, char* av[])
       mscoreGlobalShare = getSharePath();
       iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
-#if 0 // TODO
       if (!converterMode) {
             if (!argv.isEmpty()) {
                   int ok = true;
@@ -4617,7 +4614,6 @@ int main(int argc, char* av[])
                       return 0;
                       }
             }
-#endif
 
 /**/
       if (dataPath.isEmpty())
@@ -4800,7 +4796,7 @@ int main(int argc, char* av[])
                mscore, SLOT(handleMessage(const QString&)));
 
             mscore->showWebPanel(preferences.showWebPanel);
-//TODO            static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
+            static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
             // count filenames specified on the command line
             // these are the non-empty strings remaining in argv
             foreach(const QString& name, argv) {
