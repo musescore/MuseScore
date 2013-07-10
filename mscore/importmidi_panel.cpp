@@ -167,6 +167,7 @@ void ImportMidiPanel::setMidiFile(const QString &file)
             return;
       midiFile = file;
       ui->lineEditMidiFile->setText(QFileInfo(file).fileName());
+      ui->lineEditMidiFile->setToolTip(midiFile);
       updateUiOnTimer();
       if (isMidiFileExists) {
             QList<TrackMeta> tracksMeta(extractMidiTracksMeta(file));
