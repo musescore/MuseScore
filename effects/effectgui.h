@@ -21,7 +21,7 @@ class Effect;
 //   EffectGui
 //---------------------------------------------------------
 
-class EffectGui : public QWidget {
+class EffectGui : public QQuickView {
       Q_OBJECT
       Effect* _effect;
 
@@ -32,7 +32,7 @@ class EffectGui : public QWidget {
       void valueChanged(const QString& name, qreal);
 
    public:
-      EffectGui(Effect*, QWidget* parent = 0);
+      EffectGui(Effect*);
       void init(QUrl& url);
       Effect* effect() const    { return _effect; }
       virtual void updateValues();

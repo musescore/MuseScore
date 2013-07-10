@@ -664,13 +664,13 @@ bool MgStyle::isVerticalTab( const QTabBar::Shape& shape ) const {
 //---------------------------------------------------------
 
 void MgStyle::polish(QWidget* widget) {
+
       if (!widget)
             return;
 
       // register widget to animations
       animations().registerWidget(widget);
       transitions().registerWidget(widget);
-//      windowManager().registerWidget(widget);
       frameShadowFactory().registerWidget(widget, _helper);
 
       // scroll areas
@@ -743,7 +743,6 @@ void MgStyle::polish(QWidget* widget) {
       else if ( qobject_cast<QAbstractButton*>(widget) && qobject_cast<QToolBox*>( widget->parent() ) ) {
             widget->setAttribute(Qt::WA_Hover);
             }
-
       /*
       add extra margins for widgets in toolbars
       this allows to preserve alignment with respect to actions
@@ -771,7 +770,7 @@ void MgStyle::polish(QWidget* widget) {
       else if (qobject_cast<QToolBar*>(widget)) {
             widget->setBackgroundRole(QPalette::NoRole);
 #ifndef Q_OS_MAC
-            widget->setAttribute(Qt::WA_TranslucentBackground);
+//WS            widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
             widget->installEventFilter(this);
 #ifdef Q_OS_WIN
@@ -804,11 +803,12 @@ void MgStyle::polish(QWidget* widget) {
       else if ( qobject_cast<QDockWidget*>(widget)) {
             widget->setBackgroundRole(QPalette::NoRole);
 #ifndef Q_OS_MAC
-            widget->setAttribute(Qt::WA_TranslucentBackground);
+//WS            widget->setAttribute(Qt::WA_TranslucentBackground);
 #endif
             widget->setContentsMargins(3, 3, 3, 3);
             widget->installEventFilter(this);
             }
+
       else if ( qobject_cast<QMdiSubWindow*>(widget) ) {
             widget->setAutoFillBackground( false );
             widget->installEventFilter( this );
@@ -844,11 +844,6 @@ void MgStyle::polish(QWidget* widget) {
             widget->setWindowFlags(widget->windowFlags() | Qt::FramelessWindowHint);
 #endif
             }
-      else if ( qobject_cast<QFrame*>( widget ) && widget->parent() && widget->parent()->inherits( "KTitleWidget" ) ) {
-            widget->setAutoFillBackground( false );
-            widget->setBackgroundRole( QPalette::Window );
-            }
-
       // base class polishing
       QCommonStyle::polish(widget);
       }
@@ -863,7 +858,6 @@ void MgStyle::unpolish(QWidget* widget) {
       animations().unregisterWidget(widget);
       transitions().unregisterWidget(widget);
 
-//      windowManager().unregisterWidget( widget );
       frameShadowFactory().unregisterWidget( widget );
 
       // event filters
