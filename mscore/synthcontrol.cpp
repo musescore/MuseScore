@@ -59,17 +59,16 @@ SynthControl::SynthControl(QWidget* parent)
       effectA->clear();
       for (Effect* e : synti->effectList(0)) {
             effectA->addItem(tr(e->name()));
-            effectStackA->addWidget(QWidget::createWindowContainer(e->gui()));
+            effectStackA->addWidget(QWidget::createWindowContainer(e->gui(), this));
             connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
             }
 
       effectB->clear();
       for (Effect* e : synti->effectList(1)) {
             effectB->addItem(tr(e->name()));
-            effectStackB->addWidget(QWidget::createWindowContainer(e->gui()));
+            effectStackB->addWidget(QWidget::createWindowContainer(e->gui(), this));
             connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
             }
-
       if (!useFactorySettings) {
             QSettings settings;
             settings.beginGroup("SynthControl");

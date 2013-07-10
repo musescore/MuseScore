@@ -46,7 +46,6 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <fstream>
-#include <iostream>
 #include <string>
 
 QString rtf2html(const QString& iString)
@@ -559,10 +558,10 @@ QString rtf2html(const QString& iString)
             return oString;
             }
       catch (std::exception &e) {
-            std::cerr<<"Error: "<<e.what()<<std::endl;
+            qDebug()<<"Error: "<<e.what();
             }
       catch (...) {
-            std::cerr<<"Something really bad happened!";
+            qDebug()<<"Something really bad happened!";
             }
       return "";
       }
