@@ -370,9 +370,13 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
 void Score::beamGraceNotes(Chord* mainNote)
       {
       // TODO: support beam mode
-      foreach (ChordRest* cr, mainNote->graceNotes())
+      bool beam = false;
+      foreach (ChordRest* cr, mainNote->graceNotes()) {
+            if (cr->durationType().hooks() > 0)
+                  beam = true;
             cr->removeDeleteBeam();
-      if (mainNote->graceNotes().size() < 2)
+            }
+      if (mainNote->graceNotes().size() < 2 || !beam)
             return;
       Beam* b = new Beam(this);
       b->setTrack(mainNote->track());
