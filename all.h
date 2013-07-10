@@ -155,6 +155,7 @@
 #include <QQmlEngine>
 #include <QQmlComponent>
 #include <QQuickItem>
+#include <QQuickPaintedItem>
 #include <QQuickView>
 #endif
 

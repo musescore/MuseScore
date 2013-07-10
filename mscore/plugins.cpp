@@ -384,10 +384,8 @@ void MuseScore::pluginTriggered(int idx)
 //---------------------------------------------------------
 
 MsScoreView::MsScoreView(QQuickItem* parent)
-   : QQuickItem(parent)
+   : QQuickPaintedItem(parent)
       {
-//      setFlag(QGraphicsItem::ItemHasNoContents, false);
-//      setCacheMode(QGraphicsItem::ItemCoordinateCache);
       setAcceptedMouseButtons(Qt::LeftButton);
       score = 0;
       }
@@ -481,7 +479,7 @@ void MsScoreView::setScore(Score* s)
 //   paint
 //---------------------------------------------------------
 
-void MsScoreView::paint(QPainter* p, const QStyleOptionGraphicsItem*, QWidget*)
+void MsScoreView::paint(QPainter* p)
       {
       p->setRenderHint(QPainter::Antialiasing, true);
       p->setRenderHint(QPainter::TextAntialiasing, true);
