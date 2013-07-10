@@ -10,34 +10,27 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __EFFECTGUI_H__
-#define __EFFECTGUI_H__
+#ifndef __NOEFFECTGUI_H__
+#define __NOEFFECTGUI_H__
+
+#include "effects/effectgui.h"
 
 namespace Ms {
 
-class Effect;
+class NoEffect;
 
 //---------------------------------------------------------
-//   EffectGui
+//   gui
 //---------------------------------------------------------
 
-class EffectGui : public QWidget {
+class NoEffectGui : public EffectGui {
       Q_OBJECT
-      Effect* _effect;
-
-   signals:
-      void valueChanged();
-
-   public slots:
-      void valueChanged(const QString& name, qreal);
 
    public:
-      EffectGui(Effect*, QWidget* parent = 0);
-      void init(QUrl& url);
-      Effect* effect() const    { return _effect; }
-      virtual void updateValues();
+      NoEffectGui(NoEffect*, QWidget* parent = 0);
       };
-
 }
+
 #endif
+
 

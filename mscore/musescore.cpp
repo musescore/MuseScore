@@ -4473,14 +4473,15 @@ int main(int argc, char* av[])
 #ifdef Q_OS_MAC
       MuseScoreApplication* app = new MuseScoreApplication("mscore-dev", argc, av);
 #else
-      QtSingleApplication* app = new QtSingleApplication("mscore-dev", argc, av);
+//      QtSingleApplication* app = new QtSingleApplication("mscore-dev", argc, av);
+      QApplication* app = new QApplication(argc, av);
 #endif
 
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
       Q_INIT_RESOURCE(zita);
-      Q_INIT_RESOURCE(noeffect);
+//      Q_INIT_RESOURCE(noeffect);
 //      Q_INIT_RESOURCE(freeverb);
 
 #ifndef Q_OS_MAC
@@ -4597,6 +4598,7 @@ int main(int argc, char* av[])
       mscoreGlobalShare = getSharePath();
       iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
+#if 0 // TODO
       if (!converterMode) {
             if (!argv.isEmpty()) {
                   int ok = true;
@@ -4615,6 +4617,7 @@ int main(int argc, char* av[])
                       return 0;
                       }
             }
+#endif
 
 /**/
       if (dataPath.isEmpty())
@@ -4797,7 +4800,7 @@ int main(int argc, char* av[])
                mscore, SLOT(handleMessage(const QString&)));
 
             mscore->showWebPanel(preferences.showWebPanel);
-            static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
+//TODO            static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
             // count filenames specified on the command line
             // these are the non-empty strings remaining in argv
             foreach(const QString& name, argv) {
