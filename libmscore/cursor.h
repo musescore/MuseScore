@@ -66,7 +66,7 @@ class Cursor : public QObject {
       Cursor(Score*, bool);
 
       Score* score() const                    { return _score;    }
-      void setScore(Score* s)                 { _score = s; }
+      void setScore(Score* s);
 
       int track() const                       { return _track;    }
       void setTrack(int v);

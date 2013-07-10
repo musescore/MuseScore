@@ -21,11 +21,10 @@ namespace Ms {
 //---------------------------------------------------------
 
 EffectGui::EffectGui(Effect* e)
-   : QQuickView(0)
+   : QQuickView()
       {
       _effect = e;
       setResizeMode(QQuickView::SizeViewToRootObject);
-//      setFocusPolicy(Qt::StrongFocus);
       }
 
 //---------------------------------------------------------
@@ -36,7 +35,6 @@ EffectGui::~EffectGui()
       {
       printf("destructor EffectGui %p\n", this);
       }
-
 
 //---------------------------------------------------------
 //   init
@@ -76,8 +74,9 @@ void EffectGui::valueChanged(const QString& msg, qreal val)
 void EffectGui::updateValues()
       {
       if (rootObject()) {
-            if (!QMetaObject::invokeMethod(rootObject(), "updateValues",
-               Qt::DirectConnection)) {
+//            if (!QMetaObject::invokeMethod(rootObject(), "updateValues",
+//               Qt::DirectConnection)) {
+            if (!QMetaObject::invokeMethod(rootObject(), "updateValues")) {
                   qDebug("EffectGui::updateValues: failed");
                   }
             }

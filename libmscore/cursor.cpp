@@ -32,11 +32,18 @@ namespace Ms {
 Cursor::Cursor(Score* s)
    : QObject(0)
       {
-      _score                 = s;
-      _track                 = 0;
-      _segment               = 0;
-      _score->inputState().setTrack(_track);
-      _score->inputState().setSegment(_segment);
+      _track   = 0;
+      _segment = 0;
+      setScore(s);
+      }
+
+void Cursor::setScore(Score* s)
+      {
+      _score = s;
+      if (_score) {
+            _score->inputState().setTrack(_track);
+            _score->inputState().setSegment(_segment);
+            }
       }
 
 //---------------------------------------------------------
