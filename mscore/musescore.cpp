@@ -225,6 +225,10 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       unloadPlugins();
       QList<Score*> removeList;
       foreach(Score* score, scoreList) {
+            int idcur = scoreList.indexOf(score);
+            setCurrentView(0,idcur);
+            tab1->setExcerpt(0);
+            setCurrentView(0,idcur);
             if (score->created() && !score->dirty())
                   removeList.append(score);
             else {
@@ -1886,6 +1890,9 @@ void MuseScore::removeTab(int i)
 
       QString tmpName = score->tmpName();
 
+      setCurrentView(0,i);
+      tab1->setExcerpt(0);
+      setCurrentView(0,i);
       if (checkDirty(score))
             return;
       if (seq && seq->score() == score) {

@@ -224,8 +224,9 @@ bool MuseScore::checkDirty(Score* s)
                QMessageBox::Save);
             if (n == QMessageBox::Save) {
                   if (s->isSavable()) {
-                        if (!s->saveFile())
-                              return true;
+                        saveFile();
+                        //if (!s->saveFile())
+                        //      return true;
                         }
                   else {
                         if (!saveAs(s, false))
