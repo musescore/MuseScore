@@ -365,19 +365,19 @@ void MuseScore::pluginTriggered(int idx)
                   area = Qt::TopDockWidgetArea;
             else if (p->dockArea() == "bottom")
                   area = Qt::BottomDockWidgetArea;
-            addDockWidget(area, dock);
             QWidget* w = QWidget::createWindowContainer(view);
-            printf("widget winId %lld handle %p\n", w->winId(), w->windowHandle());
             dock->setWidget(w);
+            addDockWidget(area, dock);
             connect(engine, SIGNAL(quit()), dock, SLOT(close()));
             }
       else {
             connect(engine, SIGNAL(quit()), view, SLOT(close()));
+            view->show();
             }
-      view->show();
+
       if (cs)
             cs->startCmd();
-//      p->runPlugin();
+      p->runPlugin();
       if (cs)
             cs->endCmd();
       endCmd();
