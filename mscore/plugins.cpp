@@ -348,16 +348,16 @@ bool MuseScore::loadPlugin(const QString& filename)
 void MuseScore::pluginTriggered(int idx)
       {
       QString pp = plugins[idx];
-      QQuickView* view = new QQuickView;
-      view->setResizeMode(QQuickView::SizeViewToRootObject);
+
+      QQuickView* view = new QQuickView();
       view->setSource(QUrl::fromLocalFile(pp));
-      connect((QObject*)view->engine(), SIGNAL(quit()), view, SLOT(close()));
-      view->show();
+      view->setResizeMode(QQuickView::SizeViewToRootObject);
       QmlPlugin* p = (QmlPlugin*)(view->rootObject());
+      QQmlEngine* engine = view->engine();
+
       if (p->pluginType() == "dock") {
             QDockWidget* dock = new QDockWidget("Plugin", 0);
             dock->setAttribute(Qt::WA_DeleteOnClose);
-            dock->setWidget(QWidget::createWindowContainer(view));
             Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
             if (p->dockArea() == "left")
                   area = Qt::LeftDockWidgetArea;
@@ -366,14 +366,18 @@ void MuseScore::pluginTriggered(int idx)
             else if (p->dockArea() == "bottom")
                   area = Qt::BottomDockWidgetArea;
             addDockWidget(area, dock);
-            connect((QObject*)view->engine(), SIGNAL(quit()), dock, SLOT(close()));
+            QWidget* w = QWidget::createWindowContainer(view);
+            printf("widget winId %lld handle %p\n", w->winId(), w->windowHandle());
+            dock->setWidget(w);
+            connect(engine, SIGNAL(quit()), dock, SLOT(close()));
             }
       else {
-            connect((QObject*)view->engine(), SIGNAL(quit()), view, SLOT(close()));
+            connect(engine, SIGNAL(quit()), view, SLOT(close()));
             }
+      view->show();
       if (cs)
             cs->startCmd();
-      p->runPlugin();
+//      p->runPlugin();
       if (cs)
             cs->endCmd();
       endCmd();

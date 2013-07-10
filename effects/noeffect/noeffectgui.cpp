@@ -10,48 +10,39 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "effectgui.h"
-#include "effect.h"
-#include <QQmlContext>
+#include "noeffect.h"
+#include "noeffectgui.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   EffectGui
+//   gui
 //---------------------------------------------------------
 
-EffectGui::EffectGui(Effect* e, QWidget* parent)
-   : QWidget(parent)
+EffectGui* NoEffect::gui()
       {
-      _effect = e;
+      if (_gui)
+            return _gui;
+      _gui = new NoEffectGui(this);
+      _gui->setGeometry(0, 0, 644, 79);
+      return _gui;
       }
 
 //---------------------------------------------------------
-//   init
+//   NoEffectGui
 //---------------------------------------------------------
 
-void EffectGui::init(QUrl& url)
+NoEffectGui::NoEffectGui(NoEffect* effect, QWidget* parent)
+   : EffectGui(effect, parent)
       {
+
       }
 
-//---------------------------------------------------------
-//   valueChanged
-//---------------------------------------------------------
 
-void EffectGui::valueChanged(const QString& msg, qreal val)
-      {
-      if (_effect->value(msg) != val) {
-            _effect->setValue(msg, val);
-            emit valueChanged();
-            }
-      }
 
-//---------------------------------------------------------
-//   updateValues
-//---------------------------------------------------------
 
-void EffectGui::updateValues()
-      {
-      }
+
+
+
 }
 
