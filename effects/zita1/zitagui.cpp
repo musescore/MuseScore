@@ -29,6 +29,5 @@ EffectGui* ZitaReverb::gui()
       _gui->init(url);
       return _gui;
       }
-
 }
 
