@@ -40,8 +40,6 @@ QmlPlugin::~QmlPlugin()
 
 Score* QmlPlugin::curScore() const
       {
-      printf("QmlPlugin::curScore(): %p %p %s\n", msc, msc->currentScore(),
-            qPrintable(msc->currentScore() ? msc->currentScore()->name() : "(None)"));
       return msc->currentScore();
       }
 

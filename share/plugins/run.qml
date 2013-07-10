@@ -22,7 +22,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-import QtQuick 1.0
+import QtQuick 2.0
 import MuseScore 1.0
 
 MuseScore {

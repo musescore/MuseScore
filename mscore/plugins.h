@@ -15,7 +15,6 @@
 
 #include "config.h"
 #ifdef SCRIPT_INTERFACE
-// #include "musescore.h"
 #include "libmscore/element.h"
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
@@ -80,7 +79,7 @@ class MsProcess : public QProcess {
 //   @P scale qreal     scaling factor
 //---------------------------------------------------------
 
-class MsScoreView : public QQuickItem, public MuseScoreView {
+class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       Q_OBJECT
       Q_PROPERTY(QColor color READ color WRITE setColor)
       Q_PROPERTY(qreal  scale READ scale WRITE setScale)
@@ -109,7 +108,7 @@ class MsScoreView : public QQuickItem, public MuseScoreView {
       virtual void startEdit(Element*, int)     {}
       virtual Element* elementNear(QPointF)     { return 0; }
 
-      virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
+      virtual void paint(QPainter*);
 
       virtual void setCursor(const QCursor&)    {}
       virtual QCursor cursor() const            { return QCursor(); }

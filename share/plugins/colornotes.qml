@@ -36,7 +36,6 @@ MuseScore {
         }
 
       function applyToNotesInSelection(func) {
-            // var cursor     = curScore.newCursor();
             cursor.rewind(1);
             var startStaff  = cursor.staffIdx;
             cursor.rewind(2);
