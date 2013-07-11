@@ -61,7 +61,26 @@ VOLUME=$(mount |grep ${DEV} | cut -f 3 -d ' ')
 # copy in the application bundle
 cp -Rp ${APP_PATH} ${VOLUME}/${APPNAME}.app
  
-# fix the libs
+# fix the libs, qt5.1 has double slashes...
+BIN_FILE=${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
+for P in `otool -L $BIN_FILE | awk '{print $1}'` 
+do 
+    if [[ "$P" == *//* ]] 
+    then 
+        PSLASH=$(echo $P | sed 's,//,/,g')
+        install_name_tool -change $P $PSLASH $BIN_FILE
+        for P1 in `otool -L $PSLASH | awk '{print $1}'`
+        do
+            if [[ "$P1" == *//* ]] 
+            then 
+                PSLASH1=$(echo $P1 | sed 's,//,/,g')
+                install_name_tool -change $P1 $PSLASH1 $PSLASH
+            fi
+        done
+    fi 
+done
+#homebrew libs may not be writable force it?
+chmod -R +w /usr/local/Cellar/
 macdeployqt ${VOLUME}/${APPNAME}.app
 
 mv ${VOLUME}/${APPNAME}.app  ${VOLUME}/${LONG_NAME}.app 
