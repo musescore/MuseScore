@@ -30,9 +30,12 @@ MuseScore {
       version:  "2.0"
       description: "This demo plugin runs an external command. Probably this will only work on linux.";
 
+      QProcess {
+        id: proc
+        }
+
       onRun: {
             console.log("run ls");
-            var proc = newQProcess();
             proc.start("/bin/ls");
             var val = proc.waitForFinished(30000);
             if (val)
