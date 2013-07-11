@@ -164,7 +164,6 @@ QQmlEngine* MuseScore::qml()
                "Element", tr("you cannot create an element"));
 
             //-----------virtual classes
-//            qmlRegisterType<Element>();
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
@@ -401,7 +400,6 @@ MsScoreView::MsScoreView(QQuickItem* parent)
 FileIO::FileIO(QObject *parent) :
     QObject(parent)
       {
-
       }
 
 QString FileIO::read()
