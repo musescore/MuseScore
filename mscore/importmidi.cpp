@@ -125,6 +125,7 @@ void removeOverlappingNotes(QList<MTrack> &tracks)
 // based on quickthresh algorithm
 //
 // http://www.cycling74.com/docs/max5/refpages/max-ref/quickthresh.html
+// (link date 9 July 2013)
 //
 // here are default values for audio, in milliseconds
 // for midi there will be another values, in ticks

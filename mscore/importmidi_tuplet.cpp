@@ -312,7 +312,7 @@ validateTuplets(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
                   // select tuplets with min average error
       for (auto it = indexes.begin(); it != indexes.end(); ) {
             const auto &tupletChords = tuplets[*it].chords;
-                        // check for chords notes already used in another tuplets
+                        // check for chord notes that are already in use in another tuplets
             if (tupletChords.empty()
                         || areTupletChordsInUse(usedFirstTupletNotes, usedChords, tupletChords)) {
                   for (const auto &chord: tupletChords)
@@ -349,31 +349,42 @@ validateTuplets(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
 
 // try different permutations of tuplet indexes to minimize error
 
-void minimizeQuantError(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
+std::list<int>
+minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
+                   const std::vector<TupletInfo> &tuplets)
       {
       std::tuple<double, int, Fraction> minResult;
+      std::vector<int> iIndexGroups;  // indexes of elements in indexGroups
+      for (int i = 0; i != (int)indexGroups.size(); ++i)
+            iIndexGroups.push_back(i);
       std::list<int> bestIndexes;
                   // number of permutations grows as n!
                   // 8! = 40320 - quite many; 9! = 362880 - many
-                  // so set reasonable max limit to prevent hanging of our program
+                  // so set reasonable max limit to prevent the hang of our program
       const int PERMUTATION_LIMIT = 50000;
       int counter = 0;
       do {
-            auto filteredIndexes = indexes;
-            auto result = validateTuplets(filteredIndexes, tuplets);
+            std::list<int> indexesToValidate;
+            for (const auto &i: iIndexGroups) {
+                  const auto &group = indexGroups[i];
+                  for (const auto &ii: group)
+                  indexesToValidate.push_back(ii);
+                  }
+
+            auto result = validateTuplets(indexesToValidate, tuplets);
             if (counter == 0) {
                   minResult = result;
-                  bestIndexes = filteredIndexes;
+                  bestIndexes = indexesToValidate;
                   }
             else if (result < minResult) {
                   minResult = result;
-                  bestIndexes = filteredIndexes;
+                  bestIndexes = indexesToValidate;
                   }
             ++counter;
             } while (counter < PERMUTATION_LIMIT &&
-                     std::next_permutation(indexes.begin(), indexes.end()));
+                     std::next_permutation(iIndexGroups.begin(), iIndexGroups.end()));
 
-      std::swap(indexes, bestIndexes);
+      return bestIndexes;
       }
 
 bool haveCommonChords(int i, int j, const std::vector<TupletInfo> &tuplets)
@@ -387,41 +398,89 @@ bool haveCommonChords(int i, int j, const std::vector<TupletInfo> &tuplets)
       return false;
       }
 
+std::list<int> findTupletsWithCommonChords(std::list<int> &restTuplets,
+                                           const std::vector<TupletInfo> &tuplets)
+      {
+      std::list<int> tupletGroup;
+      if (restTuplets.empty())
+            return tupletGroup;
+
+      QQueue<int> q;
+      auto it = restTuplets.begin();
+      tupletGroup.push_back(*it);
+      q.enqueue(*it);
+      it = restTuplets.erase(it);
+
+      while (!q.isEmpty() && !restTuplets.empty()) {
+            int index = q.dequeue();
+            while (it != restTuplets.end()) {
+                  if (haveCommonChords(index, *it, tuplets)) {
+                        tupletGroup.push_back(*it);
+                        q.enqueue(*it);
+                        it = restTuplets.erase(it);
+                        continue;
+                        }
+                  ++it;
+                  }
+            }
+
+      return tupletGroup;
+      }
+
+std::vector<int> findTupletsWithNoCommonChords(std::list<int> &commonTuplets,
+                                               const std::vector<TupletInfo> &tuplets)
+      {
+      std::vector<int> uncommonTuplets;
+      if (commonTuplets.empty())
+            return uncommonTuplets;
+                  // add first tuplet, no need to check
+      auto it = commonTuplets.begin();
+      uncommonTuplets.push_back(*it);
+      it = commonTuplets.erase(it);
+
+      while (it != commonTuplets.end()) {
+            bool haveCommon = false;
+            for (const auto &i: uncommonTuplets) {
+                  if (haveCommonChords(i, *it, tuplets)) {
+                        haveCommon = true;
+                        break;
+                        }
+                  }
+            if (!haveCommon) {
+                  uncommonTuplets.push_back(*it);
+                  it = commonTuplets.erase(it);
+                  continue;
+                  }
+            ++it;
+            }
+
+      return uncommonTuplets;
+      }
+
 // first chord in tuplet may belong to other tuplet at the same time
 // in the case if there are enough notes in this first chord
-// to be splitted to different voices
+// to be splitted into different voices
 
 void filterTuplets(std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
             return;
+      std::list<int> bestTuplets;
       std::list<int> restTuplets;
       for (int i = 0; i != (int)tuplets.size(); ++i)
             restTuplets.push_back(i);
-      std::list<int> bestTuplets;
 
       while (!restTuplets.empty()) {
-            QQueue<int> q;
-            std::list<int> tupletGroup;
-            auto it = restTuplets.begin();
-            tupletGroup.push_back(*it);
-            q.enqueue(*it);
-            it = restTuplets.erase(it);
-
-            while (!q.isEmpty() && !restTuplets.empty()) {
-                  int index = q.dequeue();
-                  while (it != restTuplets.end()) {
-                        if (haveCommonChords(index, *it, tuplets)) {
-                              tupletGroup.push_back(*it);
-                              q.enqueue(*it);
-                              it = restTuplets.erase(it);
-                              continue;
-                              }
-                        ++it;
-                        }
+            std::list<int> commonTuplets
+                        = findTupletsWithCommonChords(restTuplets, tuplets);
+            std::vector<std::vector<int>> tupletGroupsToTest;
+            while (!commonTuplets.empty()) {
+                  std::vector<int> uncommonTuplets
+                              = findTupletsWithNoCommonChords(commonTuplets, tuplets);
+                  tupletGroupsToTest.push_back(uncommonTuplets);
                   }
-            minimizeQuantError(tupletGroup, tuplets);
-            bestTuplets.insert(bestTuplets.end(), tupletGroup.begin(), tupletGroup.end());
+            std::list<int> bestIndexes = minimizeQuantError(tupletGroupsToTest, tuplets);
+            bestTuplets.insert(bestTuplets.end(), bestIndexes.begin(), bestIndexes.end());
             }
       std::vector<TupletInfo> newTuplets;
       for (const auto &i: bestTuplets)
