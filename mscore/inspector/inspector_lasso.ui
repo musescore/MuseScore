@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>335</width>
+    <width>343</width>
     <height>93</height>
    </rect>
   </property>
@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -57,7 +66,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Position:</string>
+        <string>Position</string>
        </property>
       </widget>
      </item>
@@ -140,7 +149,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="musescore.qrc"/>
+  <include location="../musescore.qrc"/>
  </resources>
  <connections/>
 </ui>

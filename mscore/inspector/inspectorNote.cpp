@@ -116,13 +116,13 @@ InspectorNote::InspectorNote(QWidget* parent)
       dot3->setText(tr("Dot3"));
       dot3->setEnabled(false);
       hbox->addWidget(dot3);
+      _layout->addLayout(hbox);
+
+      hbox = new QHBoxLayout;
       hook = new QToolButton(this);
       hook->setText(tr("Hook"));
       hook->setEnabled(false);
       hbox->addWidget(hook);
-      _layout->addLayout(hbox);
-
-      hbox = new QHBoxLayout;
       stem = new QToolButton(this);
       stem->setText(tr("Stem"));
       stem->setEnabled(false);

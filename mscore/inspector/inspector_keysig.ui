@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -54,7 +63,7 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <item row="1" column="2">
+     <item row="1" column="1">
       <widget class="QToolButton" name="resetShowCourtesy">
        <property name="toolTip">
         <string>reset value</string>
@@ -63,7 +72,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="musescore.qrc">
+        <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
@@ -75,34 +84,20 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QCheckBox" name="showCourtesy">
        <property name="text">
         <string>Show Courtesy</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QCheckBox" name="showCourtesy">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_2">
+      <widget class="QCheckBox" name="showNaturals">
        <property name="text">
-        <string>Show Naturals</string>
+        <string>Show Natural</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QCheckBox" name="showNaturals">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
       <widget class="QToolButton" name="resetShowNaturals">
        <property name="toolTip">
         <string>reset value</string>
@@ -111,7 +106,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="musescore.qrc">
+        <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
@@ -127,7 +122,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="musescore.qrc"/>
+  <include location="../musescore.qrc"/>
  </resources>
  <connections/>
 </ui>

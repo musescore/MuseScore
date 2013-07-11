@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -54,14 +63,20 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <item row="0" column="1" colspan="2">
+     <item row="0" column="0" colspan="2">
       <widget class="QCheckBox" name="showCourtesy">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string/>
+        <string>Show Courtesy</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item row="0" column="2">
       <widget class="QToolButton" name="resetShowCourtesy">
        <property name="toolTip">
         <string>reset value</string>
@@ -70,7 +85,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="musescore.qrc">
+        <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
@@ -81,19 +96,12 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Show Courtesy</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="musescore.qrc"/>
+  <include location="../musescore.qrc"/>
  </resources>
  <connections/>
 </ui>
