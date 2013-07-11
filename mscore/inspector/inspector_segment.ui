@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>206</width>
+    <width>168</width>
     <height>97</height>
    </rect>
   </property>
@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -51,20 +60,29 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
+     <property name="horizontalSpacing">
+      <number>2</number>
+     </property>
+     <property name="verticalSpacing">
       <number>0</number>
      </property>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string>Trailing space:</string>
+        <string>Trailing</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="leadingSpace">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -86,7 +104,7 @@
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="trailingSpace">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -107,8 +125,14 @@
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string>Leading space:</string>
+        <string>Leading</string>
        </property>
       </widget>
      </item>
@@ -121,7 +145,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="musescore.qrc">
+        <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
@@ -141,7 +165,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="musescore.qrc">
+        <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
        </property>
        <property name="iconSize">
@@ -157,7 +181,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="musescore.qrc"/>
+  <include location="../musescore.qrc"/>
  </resources>
  <connections/>
 </ui>

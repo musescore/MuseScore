@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>199</width>
-    <height>124</height>
+    <width>219</width>
+    <height>127</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -55,7 +64,7 @@
       <number>0</number>
      </property>
      <property name="verticalSpacing">
-      <number>-1</number>
+      <number>6</number>
      </property>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="rightGap">
@@ -82,7 +91,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Width:</string>
+        <string>Width</string>
        </property>
       </widget>
      </item>
@@ -130,14 +139,14 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Left Gap:</string>
+        <string>Left Gap</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Right Gap:</string>
+        <string>Right Gap</string>
        </property>
       </widget>
      </item>
