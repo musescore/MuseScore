@@ -1714,10 +1714,8 @@ void Chord::layoutTablature()
                   setStem(new Stem(score()));
             _stem->setPos(tab->chordStemPos(this) * _spatium);
             if (_hook) {
-                  if (beam()) {
-                        delete _hook;
-                        _hook = 0;
-                        }
+                  if (beam())
+                        score()->undoRemoveElement(_hook);
                   else {
                         _hook->layout();
                         if (rrr < stemX + _hook->width())
