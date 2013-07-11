@@ -408,12 +408,15 @@ void Score::layoutStage2()
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
                         continue;
-                  if (cr->type() == Element::CHORD)
-                        beamGraceNotes(static_cast<Chord*>(cr));
-                  // set up for cross-measure values as soon as possible
-                  // to have all computations (stems, hooks, ...) consistent with it
-                  if (cr->type() == Element::CHORD && segment->segmentType() == Segment::SegChordRest)
-                        ((Chord*)cr)->crossMeasureSetup(crossMeasure);
+                  if (cr->type() == Element::CHORD) {
+                        Chord* chord = static_cast<Chord*>(cr);
+                        beamGraceNotes(chord);
+
+                        // set up for cross-measure values as soon as possible
+                        // to have all computations (stems, hooks, ...) consistent with it
+                        if (!chord->isGrace())
+                              chord->crossMeasureSetup(crossMeasure);
+                        }
 
                   bm = Groups::endBeam(cr);
 
@@ -455,7 +458,7 @@ void Score::layoutStage2()
                   if (beam) {
                         bool beamEnd = bm == BeamMode::BEGIN;
                         if (!beamEnd) {
-                              cr->removeDeleteBeam();
+                              cr->removeDeleteBeam(true);
                               beam->add(cr);
                               cr = 0;
                               beamEnd = (bm == BeamMode::END);
@@ -487,10 +490,10 @@ void Score::layoutStage2()
                                     beam = new Beam(this);
                                     beam->setGenerated(true);
                                     beam->setTrack(track);
-                                    a1->removeDeleteBeam();
+                                    a1->removeDeleteBeam(true);
                                     beam->add(a1);
                                     }
-                              cr->removeDeleteBeam();
+                              cr->removeDeleteBeam(true);
                               beam->add(cr);
                               a1 = 0;
                               }
@@ -498,9 +501,8 @@ void Score::layoutStage2()
                   }
             if (beam)
                   beam->layout1();
-            else if (a1) {
+            else if (a1)
                   a1->removeDeleteBeam();
-                  }
             }
       }
 

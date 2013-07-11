@@ -146,7 +146,7 @@ class ChordRest : public DurationElement {
       Lyrics* lyrics(int no)                   { return _lyricsList.value(no); }
       virtual void add(Element*);
       virtual void remove(Element*);
-      void removeDeleteBeam();
+      void removeDeleteBeam(bool beamed = false);
 
       int crossMeasure() const            { return _crossMeasure; }
       void setCrossMeasure(int val)       { _crossMeasure = val;  }

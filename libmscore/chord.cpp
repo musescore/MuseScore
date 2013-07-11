@@ -1167,7 +1167,6 @@ void Chord::layoutStem1()
       //-----------------------------------------
 
       bool hasStem = durationType().hasStem() && !(_noStem || measure()->slashStyle(istaff));
-      int hookIdx  = durationType().hooks();
 
       if (hasStem) {
             if (!_stem)
@@ -1182,11 +1181,19 @@ void Chord::layoutStem1()
             }
       else
             setStemSlash(0);
+      }
 
+//---------------------------------------------------------
+//   layoutHook1
+//---------------------------------------------------------
+
+void Chord::layoutHook1()
+      {
       //-----------------------------------------
       //  process hook
       //-----------------------------------------
 
+      int hookIdx  = durationType().hooks();
       if (hookIdx) {
             if (!up())
                   hookIdx = -hookIdx;
