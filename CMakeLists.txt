@@ -26,7 +26,10 @@ include (${PROJECT_SOURCE_DIR}/build/ECMQt4To5Porting.cmake)
 include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
 
 cmake_policy(SET CMP0003 NEW)
-cmake_policy(SET CMP0020 OLD)
+
+if(POLICY CMP0020)
+      cmake_policy(SET CMP0020 OLD)
+endif(POLICY CMP0020)
 
 #include modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
