@@ -29,7 +29,7 @@ class TestPlugins : public QObject, public MTest
       Q_OBJECT
 
       Score* score;
-      QDeclarativeEngine engine;
+      QQmlEngine engine;
 
    private slots:
       void initTestCase();
@@ -56,13 +56,13 @@ void TestPlugins::initTestCase()
 void TestPlugins::plugins01()
       {
       QString path = root + DIR + "plugins01.qml";
-      QDeclarativeComponent component(&engine,
+      QQmlComponent component(&engine,
          QUrl::fromLocalFile(path));
       QObject* object = component.create();
       QVERIFY(object != 0);
       if (object == 0) {
             qDebug("creating component <%s> failed", qPrintable(path));
-            foreach(QDeclarativeError e, component.errors())
+            foreach(QQmlError e, component.errors())
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
             }
       else {
@@ -82,13 +82,13 @@ void TestPlugins::plugins01()
 void TestPlugins::plugins02()
       {
       QString path = root + DIR + "plugins02.qml";
-      QDeclarativeComponent component(&engine,
+      QQmlComponent component(&engine,
          QUrl::fromLocalFile(path));
       QObject* object = component.create();
       QVERIFY(object != 0);
       if (object == 0) {
             qDebug("creating component <%s> failed", qPrintable(path));
-            foreach(QDeclarativeError e, component.errors())
+            foreach(QQmlError e, component.errors())
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
             }
       else {
