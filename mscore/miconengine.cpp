@@ -118,15 +118,31 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                   QFile f(svgFile);
                   f.open(QIODevice::ReadOnly);
                   QByteArray ba = f.readAll();
-                  if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT) {
-                        if (state == QIcon::On)
-                              ba.replace("fill:#ffffff", "fill:#2463aa");
-                        else
-                              ba.replace("fill:#ffffff", "fill:#000000");
+                  if (mode == QIcon::Disabled) {
+                        if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT) {
+                              if (state == QIcon::On)
+                                    ba.replace("fill:#ffffff", "fill:#2463aa");
+                              else
+                                    ba.replace("fill:#ffffff", "fill:#a0a0a0");
+                              }
+                        else {
+                              if (state == QIcon::On)
+                                    ba.replace("fill:#ffffff", "fill:#4874b6");
+                              else
+                                    ba.replace("fill:#ffffff", "fill:#808080");
+                              }
                         }
                   else {
-                        if (state == QIcon::On)
-                              ba.replace("fill:#ffffff", "fill:#78b4e6");
+                        if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT) {
+                              if (state == QIcon::On)
+                                    ba.replace("fill:#ffffff", "fill:#2463aa");
+                              else
+                                    ba.replace("fill:#ffffff", "fill:#000000");
+                              }
+                        else {
+                              if (state == QIcon::On)
+                                    ba.replace("fill:#ffffff", "fill:#78b4e6");
+                              }
                         }
                   renderer->load(ba);
                   }

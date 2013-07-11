@@ -50,7 +50,7 @@ Item {
                 dx = dy;
 
             var v = rotary.value
-            v = v + dx * .01;
+            v = v - dx * .01;
             if (v < 0)
                 v = 0
             else if (v > 1.0)
@@ -58,6 +58,17 @@ Item {
             rotary.value = v
             xOrg = mouse.x
             yOrg = mouse.y
+            }
+        onWheel: {
+            var v = rotary.value
+            console.log("wheel ")
+            console.log(wheel.angleDelta.y)
+            v = v - wheel.angleDelta.y * .0005;
+            if (v < 0)
+                v = 0
+            else if (v > 1.0)
+                v = 1.0
+            rotary.value = v
             }
         }
     }
