@@ -65,12 +65,13 @@ Articulation* ChordRest::hasArticulation(const Articulation* aa)
 ChordRest::ChordRest(Score* s)
    : DurationElement(s)
       {
+      _staffMove   = 0;
       _beam        = 0;
-      _small       = false;
+      _tabDur      = 0;
       _beamMode    = BeamMode::AUTO;
       _up          = true;
-      _staffMove   = 0;
-      _tabDur      = 0;
+      _small       = false;
+      _crossMeasure = CROSSMEASURE_UNKNOWN;
       }
 
 ChordRest::ChordRest(const ChordRest& cr)
@@ -78,6 +79,7 @@ ChordRest::ChordRest(const ChordRest& cr)
       {
       _durationType = cr._durationType;
       _staffMove    = cr._staffMove;
+      _beam         = 0;
       _tabDur       = 0;  // tab sur. symb. depends upon context: can't be
                           // simply copied from another CR
 
@@ -88,11 +90,11 @@ ChordRest::ChordRest(const ChordRest& cr)
             _articulations.append(na);
             }
 
-      _beam      = 0;
-      _beamMode  = cr._beamMode;
-      _up        = cr._up;
-      _small     = cr._small;
-      _space     = cr._space;
+      _beamMode     = cr._beamMode;
+      _up           = cr._up;
+      _small        = cr._small;
+      _crossMeasure = cr._crossMeasure;
+      _space        = cr._space;
 
       foreach(Lyrics* l, cr._lyricsList) {        // make deep copy
             if (l == 0)
