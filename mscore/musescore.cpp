@@ -3022,8 +3022,7 @@ void MuseScore::writeSessionFile(bool cleanExit)
             xml.stag("Score");
             xml.tag("created", score->created());
             xml.tag("dirty", score->dirty());
-// qDebug("  %d <%s>", score->dirty(), qPrintable(score->fileInfo()->absoluteFilePath()));
-            if (score->tmpName().isEmpty()) {
+            if (cleanExit || score->tmpName().isEmpty()) {
                   xml.tag("path", score->fileInfo()->absoluteFilePath());
                   }
             else {
@@ -4714,7 +4713,13 @@ int main(int argc, char* av[])
 
                         break;
                   }
-            qApp->setStyleSheet(" QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px; }");
+            qApp->setStyleSheet(
+                  "*:disabled {\n"
+                  "   color: gray\n"
+                  "}\n"
+                  "QGroupBox::title {\n"
+                  "   subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;\n"
+                  "   }");
             seq            = new Seq();
             MScore::seq    = seq;
             Driver* driver = driverFactory(seq, audioDriver);

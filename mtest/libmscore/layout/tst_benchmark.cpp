@@ -37,8 +37,8 @@ class TestBenchmark : public QObject, public MTest
    private slots:
       void initTestCase();
       void benchmark3();
-//      void benchmark1();
-//      void benchmark2();
+      void benchmark1();
+      void benchmark2();
       };
 
 //---------------------------------------------------------
@@ -65,7 +65,7 @@ void TestBenchmark::benchmark3()
             }
 //      Ms::dumpTags();
       }
-#if 0
+
 void TestBenchmark::benchmark1()
       {
       score = readScore(DIR + "goldberg.mscx");
@@ -81,7 +81,6 @@ void TestBenchmark::benchmark2()
             score->doLayout();
             }
       }
-#endif
 
 QTEST_MAIN(TestBenchmark)
 #include "tst_benchmark.moc"

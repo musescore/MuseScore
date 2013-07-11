@@ -3966,151 +3966,151 @@ spatium unit</extracomment>
     <name>InspectorNote</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation type="unfinished">Note</translation>
+        <translation>Note</translation>
     </message>
     <message>
         <source>Tuning Offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Stimmung</translation>
     </message>
     <message>
         <source>Velocity</source>
-        <translation type="unfinished">Anschlag</translation>
+        <translation>Anschlag</translation>
     </message>
     <message>
         <source>Mirror Head</source>
-        <translation type="unfinished"></translation>
+        <translation>gespiegelt</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">automatisch</translation>
+        <translation>automatisch</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>oben</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>unten</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished">Wert zurücksetzen</translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>cross</source>
-        <translation type="unfinished">Kreuz</translation>
+        <translation>Kreuz</translation>
     </message>
     <message>
         <source>diamond</source>
-        <translation type="unfinished">Karo</translation>
+        <translation>Karo</translation>
     </message>
     <message>
         <source>triangle</source>
-        <translation type="unfinished">Dreieck</translation>
+        <translation>Dreieck</translation>
     </message>
     <message>
         <source>slash</source>
-        <translation type="unfinished">Schrägstrich</translation>
+        <translation>Schrägstrich</translation>
     </message>
     <message>
         <source>xcircle</source>
-        <translation type="unfinished">Kreuzkreis</translation>
+        <translation>Kreuzkreis</translation>
     </message>
     <message>
         <source>do</source>
-        <translation type="unfinished">do</translation>
+        <translation>do</translation>
     </message>
     <message>
         <source>re</source>
-        <translation type="unfinished">re</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>mi</source>
-        <translation type="unfinished">mi</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <source>fa</source>
-        <translation type="unfinished">fa</translation>
+        <translation>fa</translation>
     </message>
     <message>
         <source>sol</source>
-        <translation type="unfinished">sol</translation>
+        <translation>sol</translation>
     </message>
     <message>
         <source>la</source>
-        <translation type="unfinished">la</translation>
+        <translation>la</translation>
     </message>
     <message>
         <source>ti</source>
-        <translation type="unfinished">ti</translation>
+        <translation>ti</translation>
     </message>
     <message>
         <source>alt. brevis</source>
-        <translation type="unfinished">alt. Brevis</translation>
+        <translation>alt. Brevis</translation>
     </message>
     <message>
         <source>Whole</source>
-        <translation type="unfinished"></translation>
+        <translation>Ganze</translation>
     </message>
     <message>
         <source>Half</source>
-        <translation type="unfinished"></translation>
+        <translation>Halbe</translation>
     </message>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Viertel</translation>
     </message>
     <message>
         <source>Breve</source>
-        <translation type="unfinished"></translation>
+        <translation>Breve</translation>
     </message>
     <message>
         <source>Offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Versatz</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished">Benutzer</translation>
+        <translation>Benutzer</translation>
     </message>
     <message>
         <source>Note Head Type</source>
-        <translation type="unfinished">Notenkopftyp</translation>
+        <translation>Kopftyp</translation>
     </message>
     <message>
         <source>Note Head Group</source>
-        <translation type="unfinished">Notenkopfgruppe</translation>
+        <translation>Kopfgruppe</translation>
     </message>
     <message>
         <source>Dot Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktposition</translation>
     </message>
     <message>
         <source>Velocity Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Anschlagtyp</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished">Links</translation>
+        <translation>Links</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechts</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation type="unfinished">Klein</translation>
+        <translation>Klein</translation>
     </message>
 </context>
 <context>
@@ -4400,63 +4400,63 @@ spatium unit</extracomment>
     <name>InspectorTuplet</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation type="unfinished">Tupel</translation>
+        <translation>Tupel</translation>
     </message>
     <message>
         <source>reset value</source>
-        <translation type="unfinished">Wert zurücksetzen</translation>
+        <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Nummer</translation>
+        <translation>Nummer</translation>
     </message>
     <message>
         <source>Relation</source>
-        <translation type="unfinished"></translation>
+        <translation>Verhältnis</translation>
     </message>
     <message>
         <source>Nothing</source>
-        <translation type="unfinished"></translation>
+        <translation>nichts</translation>
     </message>
     <message>
         <source>Number Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Nummertyp</translation>
     </message>
     <message>
         <source>Bracket Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Klammertype</translation>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>automatisch</translation>
     </message>
     <message>
         <source>Bracket</source>
-        <translation type="unfinished">Klammer</translation>
+        <translation>Klammer</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished">Richtung</translation>
+        <translation>Richtung</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">automatisch</translation>
+        <translation>automatisch</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>hoch</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>tief</translation>
     </message>
 </context>
 <context>
@@ -5021,8 +5021,8 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses 
-the freely available LAME library.  You must obtain %1 
+        <source>MuseScore does not export MP3 files directly, but instead uses
+the freely available LAME library.  You must obtain %1
 separately, and then locate the file for MuseScore.
 You only need to do this once.
 
@@ -13622,8 +13622,8 @@ fehlgeschlagen: </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The following file is locked: 
-%1 
+        <source>The following file is locked:
+%1
 
 Try saving to a different location.</source>
         <translation type="unfinished"></translation>
