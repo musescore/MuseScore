@@ -362,6 +362,7 @@ if (MINGW)
 
 
    install_files ( /bin .dll
+      ${CROSS}/bin/libgcc_s_dw2-1.dll
       ${CROSS}/bin/libstdc++-6.dll
       ${CROSS}/bin/libwinpthread-1.dll
       ${CROSS}/lib/portaudio.dll
