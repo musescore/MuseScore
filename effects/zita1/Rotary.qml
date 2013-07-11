@@ -61,8 +61,6 @@ Item {
             }
         onWheel: {
             var v = rotary.value
-            console.log("wheel ")
-            console.log(wheel.angleDelta.y)
             v = v - wheel.angleDelta.y * .0005;
             if (v < 0)
                 v = 0

@@ -108,6 +108,7 @@ class Chord : public ChordRest {
       LedgerLine* ledgerLines()           { return _ledgerLines; }
 
       void layoutStem1();
+      void layoutHook1();     // create hook if required
       void layoutStem();
       void layoutArpeggio2();
 

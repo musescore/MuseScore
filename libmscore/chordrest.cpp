@@ -952,17 +952,22 @@ void ChordRest::remove(Element* e)
 
 //---------------------------------------------------------
 //   removeDeleteBeam
-//    remove ChordRest from beam
-//    delete beam if empty
+//      beamed - the chordrest is beamed (will get a (new) beam)
+//          remove ChordRest from beam
+//          delete beam if empty
 //---------------------------------------------------------
 
-void ChordRest::removeDeleteBeam()
+void ChordRest::removeDeleteBeam(bool beamed)
       {
       if (_beam) {
             Beam* b = _beam;
             _beam->remove(this);
             if (b->isEmpty())
                   score()->undoRemoveElement(b);
+            }
+      else {
+            if (!beamed && type() == CHORD)
+                  static_cast<Chord*>(this)->layoutHook1();
             }
       }
 
