@@ -15,15 +15,15 @@ void TracksModel::reset(const QList<TrackMeta> &tracksMeta)
       beginResetModel();
       trackCount_ = tracksMeta.size();
       tracksData_.clear();
+      int i = 0;
       for (const auto &meta: tracksMeta) {
             QString trackName = meta.trackName.isEmpty()
                         ? "-" : meta.trackName;
             QString instrumentName = meta.instrumentName.isEmpty()
                         ? "-" : meta.instrumentName;
-            tracksData_.push_back({
-                                   {trackName, instrumentName},
-                                   TrackOperations() // initialized by default values - see ctor
-                                   });
+            TrackOperations ops;     // initialized by default values - see ctor
+            ops.trackIndex = i++;
+            tracksData_.push_back({{trackName, instrumentName}, ops});
             }
       endResetModel();
       }
@@ -404,11 +404,6 @@ TrackData TracksModel::trackData(int trackIndex) const
       if (isTrackIndexValid(trackIndex))
             return tracksData_[trackIndex];
       return TrackData();
-      }
-
-int TracksModel::trackCount() const
-      {
-      return trackCount_;
       }
 
 TrackData* TracksModel::trackDataFromIndex(const QModelIndex &index)

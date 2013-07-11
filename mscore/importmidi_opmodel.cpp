@@ -58,7 +58,7 @@ OperationsModel::OperationsModel()
 
 
       Node *reduceToShorter = new Node;
-      reduceToShorter->name = "Reduce to shortest (untied) notes in bar";
+      reduceToShorter->name = "Reduce to shortest notes in bar";
       reduceToShorter->oper.type = MidiOperation::Type::QUANT_REDUCE;
       reduceToShorter->oper.value = Quantization().reduceToShorterNotesInBar;
       reduceToShorter->parent = quantValue;
