@@ -212,8 +212,8 @@ else (APPLE)
 endif (APPLE)
 
 add_executable ( ${ExecutableName}
-      mops.cpp                            # HACK! first file disappears during linking as CMake generates
-                                          # something like:    gcc ... -L mops.o ...
+#      mops.cpp                            # HACK! first file disappears during linking as CMake generates
+#                                          # something like:    gcc ... -L mops.o ...
       ${qrc_files}
       ${ui_headers}
       ${mocs}
@@ -390,7 +390,7 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Sensors.dll
       ${CROSSQT}/bin/icuin51.dll
       ${CROSSQT}/bin/icuuc51.dll
-      ${CROSSQT}/bin/icudt51.dll     
+      ${CROSSQT}/bin/icudt51.dll
       )
    install_files ( /bin/iconengines .dll
       ${CROSSQT}/plugins/iconengines/qsvgicon.dll
