@@ -1,20 +1,13 @@
 FONTLOG for the Bravura font
 ============================
 
-This file provides detailed information on the Bravura Font Software.
-This information should be distributed along with the Bravura fonts
-and any derivative works.
+This file provides detailed information on the Bravura Font Software. This information should be distributed along with the Bravura fonts and any derivative works.
 
 Basic Font Information
 ----------------------
-Bravura is a Unicode typeface designed by Steinberg for its
-in-development music notation and scoring application.
+Bravura is a Unicode typeface designed by Steinberg for its in-development music notation and scoring application.
 
-It is compliant with version 0.4 of the Standard Music Font Layout
-(SMuFL), a community-driven standard for how music symbols should be
-laid out in the Unicode Private Use Area (PUA) in the Basic
-Multilingual Plane (BMP) for compatibility between different scoring
-applications.
+It is compliant with version 0.5 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
 More information about Steinberg's scoring application can be found at:
 
@@ -30,3 +23,59 @@ Changelog
 22 May 2013 (Daniel Spreadbury) Bravura version 0.1
 - Initial pre-release to coincide with 2013 Music Encoding Conference
 
+5 July 2013 (Daniel Spreadbury) Bravura version 0.2
+- Bravura 0.2 is designed to be compatible with SMuFL 0.5
+- Thanks to Mark Johnson and Emil Wojtacki for contributing a number of glyphs to the font
+- Many existing code points have been changed, as a result of hundreds of new glyphs being added, plus a number of new ranges.
+- Added long (U+E008) and very long (U+E009) system dividers for very large scores.
+- Added heavy (U+E034), double heavy (U+E035) and dotted (U+E037) barlines.
+- Added square coda (U+E047) and small repeat signs for repeats within bars (U+E04A, U+E04B).
+- Added recommended stylistic alternates for segno (U+E045) and coda (U+E046) for the appearance preferred by Japanese publishers.
+- Added quindicesima bassa G clef (U+E061) and F clef (U+E070), G clef combined with C clef (U+E066), G clefs designed to be ligated with numbers below and above to show the transposition of an instrument (U+E067, U+E068), plus recommended ligatures for G and F clefs with numbers above and below; also added G, C and F clefs with arrows up and down, which may be used either as alternatives for octave clefs or to represent the extremes of register on an instrument (U+E069, U+E06A, U+E06C, U+E06D, U+E074, U+E075), and semi-pitched percussion clefs (U+E078, U+E079), plus a bridge clef (U+E085).
+- Removed “tall” versions of 6- and 4-string tab clefs, and instead made them recommended stylistic alternates, together with versions that use letterforms with serifs.
+- Added +, -, X (multiply), comma, parentheses glyphs for time signatures (U+E09C–U+E0A6), plus basic fractions (U+E0A7–U+E0AB), and Penderecki-style open time signature (U+E0AD).
+- Added specific noteheads for double whole note (U+E100) and whole note (U+E101) to the noteheads range rather than relying on the glyphs in the pre-composed notes range.
+- Added shaped noteheads for specific note values (double whole note, whole note, half note, and quarter note and shorter); also added large up- and down-pointing triangles for highest/lowest notes played by an instrument (U+E102–U+E109).
+- Added large slashed circular noteheads (U+E136–U+E139) as used by Stockhausen for notating gong/tam-tam hits.
+- Added combining glyphs for note clusters of specific note values (U+E154–U+E171).
+- Added noteheads with solfège and chromatic note names embedded within them, as seen in “EZ-Play” educational scores (U+E180–U+E1D9).
+- Added specific range of noteheads for sacred harp shape note singing (U+E1E0–U+E1EF).
+- Added pre-composed 1024th notes (U+E214–U+E215), tails (U+E28E–U+E28F) and rest (U+E52C).
+- Added range for typing simple beamed groups of notes in text-based applications, (U+E220–U+E233). Designed to be used in conjunction with pre-composed notes (U+E200–U+E216), and allowing beamed groups with rhythmic values between 8th notes and 64th notes, plus ties and triplets.
+- Added combining stems for multiphonics, damp, sussurando, Saunders vibrato pulse accent (U+E248–U+E24D).
+- Added four- and five-stroke tremolos (U+E263–U+E264, U+E268–U+E269) plus Wieniawski-style unmeasured tremolo glyphs (U+E26C–U+26D).
+- Added stylistic alternates for flags (U+E280–U+E28F): straight flags; and shorter stem-up flags to avoid collisions with augmentation dots.
+- Separated accidentals into several discrete ranges based around the various accidental systems, including 12-edo, 24-edo, the system of up- and down-pointing arrows favoured by Gould, Stein-Zimmermann (also known as Tartini-Couper), Maneri-Sims, Ben Johnston, Marc Sabat and Wolfgang von Schweinitz’s Extended Helmholtz-Ellis Just Intonation Pitch Notation. A range has also been reserved for George Secor and Dave Keenan’s Sagittal system of accidentals (U+E360–U+E47F).
+- Added accidentals used in Turkish folk music (U+E4C8–U+E4CF).
+- Added Persian accidentals (U+E4D0–U+E4D1).
+- Added staccatissimo wedge (U+E4E5–U+E4E6) and stroke (U+E4E7–U+E4E8) glyphs.
+- Added very short (U+E502–U+E503) and very long (U+E508–U+E509) fermatas, plus short caesura (U+E50D).
+- Added left and right halves of multirest H-bars (U+E52E–U+E52F) and old-style quarter rest as seen in e.g. Novello editions (U+E530).
+- Added ventiduesima (three octaves, “22”) glyphs to octaves range (U+E557–U+E559).
+- Added precomposed glyphs for common dynamics (U+E567–U+E57B) and niente circle for hairpins (U+E57E).
+- Added schleifer (long mordent, U+E5AA) and Haydn ornament (U+E5D1).
+- Added additional brass techniques, including short, medium and long versions of lift, doit, lip fall, smooth fall, rough fall, plus jazz turn (U+E5E0–U+E5FB).
+- Added range of glyphs for embouchure tightness (U+E61B–U+E623), reed position (U+E624–U+E626), multiphonics (U+E627–U+E629), and stylistic alternates for double- and triple-tonguing with no slurs.
+- Added further overpressure glyphs (U+E64B–U+E64D), plus jété, fouetté, Rebecca Saunders’s “vibrato pulse” accent and thumb position (U+E64E–U+E652) to string techniques range.
+- Added plectrum pictogram (U+E669) and combining damp glyph for note stems (U+E66A) to plucked techniques range.
+- Added arrows for breathing and intonation, plus combining sussurando glyph for note stems (U+E687–U+E68B), to vocal techniques range.
+- Added pedal pictograms, sostenuto pedal symbols, and half-pedal marks (U+E6A5–U+E6AC) to keyboard techniques range.
+- Added pictograms for metal rod (U+E6CF) and tuning key (U+E6D0) to harp techniques range.
+- Added Smith Brindle’s pictograms for tuned percussion instruments (U+E6E5–U+E6E8).
+- Added pictogram for Indian table (U+E720), plus stylistic alternate for tambourine (U+E718) as used by Stockhausen.
+- Added pictogram for football rattle (U+E735), plus Smith Brindle’s pictogram for castanets (U+E738) as a stylistic alternate.
+- Added pictogram for handbell (U+E765), plus stylistic alternates for cow bell (from Berio) and sleigh bell (from Smith Brindle).
+- Added pictogram for Chinese cymbal (U+E776).
+- Added pictogram for tam-tam with beater from Smith Brindle (U+E791).
+- Added pictogram for maracas (U+E7A2), rainstick (U+E7A7), plus stylistic alternate for maraca from Smith Brindle (U+E7A1).
+- Added pictogram for megaphone (U+E7B9).
+- Added soft and hard glockenspiel beaters (U+E7F0–U+E7F7), superball beaters (U+E81C–U+E81F), wound beaters with hard and soft cores (U+E821–U+E828), plus soft, medium and hard gum beaters (U+E829–U+E834).
+- Added pluck lift (U+E887) to handbells range.
+- Added “Theme” indicators to analytics range (U+E8E4–U+E8E9).
+- Added minor (minus sign) glyph (U+E904) to chord symbols range.
+- Added mensural proportion glyphs (U+E9DB–U+E9DF).
+- Added combining raise and lower glyphs (U+EA2C–U+EA2D) to figured bass range.
+- Added repetition, angle brackets, and prefix + and ring glyphs to function symbols range (U+EA63–U+EA68).
+- Added new range for multi-segment lines, including moving all of the various “wiggle” glyphs (for trill, glissando, arpeggiando, vibrato, etc.) plus the 11 ornament strokes from the Unicode Musical Symbols range into this range, and adding further glyphs for variable speed trills, alternate arpeggiato ending glyphs, wavy lines, squaretooth and sawtooth lines, group glissando, circular motion, and variable speed and intensity of vibrato (U+EA80–U+EAD0).
+- Added new range of pictograms for electronic music, including microphone, loudspeaker, transport controls, volume level and MIDI controller level (U+EAE0–U+EAF5).
+- Added new “do not copy” glyphs (U+EB02–U+EB03), eyeglasses (U+EB04) and choral divide arrows (U+EB05–U+EB07) glyphs to the miscellaneous symbols range.

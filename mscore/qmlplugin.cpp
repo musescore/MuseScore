@@ -76,7 +76,7 @@ Score* QmlPlugin::readScore(const QString& name)
 //   newElement
 //---------------------------------------------------------
 
-Element* QmlPlugin::newElement(int t)
+Ms::Element* QmlPlugin::newElement(int t)
       {
       Score* score = curScore();
       if (score == 0)
