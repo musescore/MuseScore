@@ -99,11 +99,11 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       QString t = np.absolutePath() + "/translations/locale_" + MuseScore::getLocaleISOCode().left(2) + ".qm";
       QTranslator* translator = new QTranslator;
       if (!translator->load(t)) {
-            qDebug("cannot load qml translations <%s>", qPrintable(t));
+//            qDebug("cannot load qml translations <%s>", qPrintable(t));
             delete translator;
             }
       else {
-            qDebug("load qml translations <%s>", qPrintable(t));
+//            qDebug("load qml translations <%s>", qPrintable(t));
             qApp->installTranslator(translator);
             }
 
