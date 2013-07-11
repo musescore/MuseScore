@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>376</width>
-    <height>137</height>
+    <width>208</width>
+    <height>143</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -102,26 +102,29 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Offset Y:</string>
+        <string>Offset Y</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
       <widget class="QDoubleSpinBox" name="offsetX">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="prefix">
+        <string notr="true"/>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
        </property>
        <property name="minimum">
-        <double>-10000.000000000000000</double>
+        <double>-100.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>10000.000000000000000</double>
+        <double>100.000000000000000</double>
        </property>
        <property name="singleStep">
         <double>0.500000000000000</double>
@@ -143,14 +146,14 @@
         </size>
        </property>
        <property name="text">
-        <string>Color:</string>
+        <string>Color</string>
        </property>
       </widget>
      </item>
      <item row="3" column="3">
       <widget class="QToolButton" name="resetX">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -173,7 +176,7 @@
      <item row="4" column="1">
       <widget class="QDoubleSpinBox" name="offsetY">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -182,10 +185,10 @@
         <string extracomment="spatium unit">sp</string>
        </property>
        <property name="minimum">
-        <double>-10000.000000000000000</double>
+        <double>-10.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>10000.000000000000000</double>
+        <double>10.000000000000000</double>
        </property>
        <property name="singleStep">
         <double>0.500000000000000</double>
@@ -195,7 +198,7 @@
      <item row="4" column="3">
       <widget class="QToolButton" name="resetY">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -230,14 +233,14 @@
         </size>
        </property>
        <property name="text">
-        <string>Offset X:</string>
+        <string>Offset X</string>
        </property>
       </widget>
      </item>
      <item row="1" column="3">
       <widget class="QToolButton" name="resetVisible">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -260,7 +263,7 @@
      <item row="2" column="3">
       <widget class="QToolButton" name="resetColor">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -311,7 +314,7 @@
      <item row="2" column="1" colspan="2">
       <widget class="Awl::ColorLabel" name="color">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -330,7 +333,7 @@
      <item row="1" column="0" colspan="3">
       <widget class="QCheckBox" name="visible">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>

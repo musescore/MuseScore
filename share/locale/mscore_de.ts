@@ -11,7 +11,7 @@
         <source>Copy revision number</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -30,7 +30,7 @@ p, li { white-space: pre-wrap; }
         <source>About MusicXML</source>
         <translation>Über MusicXML</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -45,7 +45,7 @@ p, li { white-space: pre-wrap; }
         <source>The MusicXML Public License:</source>
         <translation>Die MusicXML Lizenz</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -2130,7 +2130,7 @@ spatium unit</extracomment>
         <source>Select:</source>
         <translation>Auswählen:</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>« Full Configuration</source>
         <translation>Komplette Konfiguration</translation>
     </message>
@@ -2138,7 +2138,7 @@ spatium unit</extracomment>
         <source>Upside Down</source>
         <translation>Kopf nach unten</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Quick Presets »</source>
         <translation>Schnelle Einstellungen</translation>
     </message>
@@ -2720,7 +2720,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rechts</translation>
     </message>
     <message>
         <source>Even</source>
@@ -2984,11 +2984,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">oben</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">unten</translation>
     </message>
     <message>
         <source>Style</source>
@@ -3105,29 +3105,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Lower case minor chords</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>EditTempoBase</name>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Abbrechen</translation>
-    </message>
-    <message>
-        <source>BPM:</source>
-        <translation>BPM:</translation>
-    </message>
-    <message>
-        <source>Text:</source>
-        <translation>Text:</translation>
-    </message>
-    <message>
-        <source>MuseScore: Tempo Text</source>
-        <translation>MuseScore: Tempotext</translation>
     </message>
 </context>
 <context>
@@ -3305,14 +3282,6 @@ p, li { white-space: pre-wrap; }
         <translation>Artikulation</translation>
     </message>
     <message>
-        <source>Direction:</source>
-        <translation>Richtung:</translation>
-    </message>
-    <message>
-        <source>Anchor:</source>
-        <translation>Anker:</translation>
-    </message>
-    <message>
         <source>Top Staff</source>
         <translation>Oberste Zeile</translation>
     </message>
@@ -3349,8 +3318,16 @@ p, li { white-space: pre-wrap; }
         <translation>...</translation>
     </message>
     <message>
-        <source>Time Stretch:</source>
-        <translation>Zeitdehnung</translation>
+        <source>Direction</source>
+        <translation type="unfinished">Richtung</translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation type="unfinished">Anker</translation>
+    </message>
+    <message>
+        <source>Time Stretch</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3396,16 +3373,16 @@ p, li { white-space: pre-wrap; }
         <translation>gepunktet</translation>
     </message>
     <message>
-        <source>Type:</source>
-        <translation>Typ:</translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
         <translation>...</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Typ</translation>
     </message>
 </context>
 <context>
@@ -3432,11 +3409,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Grow Right</source>
-        <translation>nach rechts wachsen</translation>
+        <translation>rechts spreizen</translation>
     </message>
     <message>
         <source>Grow Left</source>
-        <translation>nach links wachsen</translation>
+        <translation>links spreizen</translation>
     </message>
     <message>
         <source>Direction</source>
@@ -3456,7 +3433,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>User Position</source>
-        <translation>Anwenderposition</translation>
+        <translation>man. Pos.</translation>
     </message>
     <message>
         <source>Local Relayout</source>
@@ -3479,7 +3456,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Stem direction</source>
-        <translation>Notenhalsrichtung</translation>
+        <translation>Halsrichtung</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3494,23 +3471,15 @@ p, li { white-space: pre-wrap; }
         <translation>Tief</translation>
     </message>
     <message>
-        <source>Offset Y:</source>
-        <translation>Offset Y:</translation>
-    </message>
-    <message>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
 spatium unit</extracomment>
-        <translation>Sp</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <source>reset value</source>
         <translation>Wert zurücksetzen</translation>
-    </message>
-    <message>
-        <source>Offset X:</source>
-        <translation>Offset X:</translation>
     </message>
     <message>
         <source>Small</source>
@@ -3519,6 +3488,14 @@ spatium unit</extracomment>
     <message>
         <source>Stemless</source>
         <translation>Halslos</translation>
+    </message>
+    <message>
+        <source>Offset Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Offset X</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3555,10 +3532,6 @@ spatium unit</extracomment>
         <translation>Dynamik</translation>
     </message>
     <message>
-        <source>Dynamic Range:</source>
-        <translation>Dynamikbereich:</translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation>Wert zurücksetzen</translation>
     </message>
@@ -3582,6 +3555,10 @@ spatium unit</extracomment>
         <source>SYstem</source>
         <translation>System</translation>
     </message>
+    <message>
+        <source>Dynamic Range</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InspectorElement</name>
@@ -3592,10 +3569,6 @@ spatium unit</extracomment>
     <message>
         <source>Element</source>
         <translation>Element</translation>
-    </message>
-    <message>
-        <source>Offset Y:</source>
-        <translation>Offset Y:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3609,16 +3582,20 @@ spatium unit</extracomment>
         <translation>...</translation>
     </message>
     <message>
-        <source>Offset X:</source>
-        <translation>Offset X:</translation>
-    </message>
-    <message>
-        <source>Color:</source>
-        <translation>Farbe:</translation>
-    </message>
-    <message>
         <source>Visible</source>
         <translation>Sichtbar</translation>
+    </message>
+    <message>
+        <source>Offset Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Farbe</translation>
+    </message>
+    <message>
+        <source>Offset X</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3690,19 +3667,7 @@ spatium unit</extracomment>
         <extracomment>spatium unit
 ----------
 spatium unit</extracomment>
-        <translation>Sp</translation>
-    </message>
-    <message>
-        <source>Width:</source>
-        <translation>Breite:</translation>
-    </message>
-    <message>
-        <source>Left Gap:</source>
-        <translation>Lücke links:</translation>
-    </message>
-    <message>
-        <source>Right Gap:</source>
-        <translation>Lücke rechts:</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <source>reset value</source>
@@ -3715,6 +3680,18 @@ spatium unit</extracomment>
     <message>
         <source>Horizontal Frame</source>
         <translation>Horizontaler Rahmen</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation type="unfinished">Breite</translation>
+    </message>
+    <message>
+        <source>Left Gap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Gap</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3736,24 +3713,12 @@ spatium unit</extracomment>
         <translation>Diminuendo-Gabel</translation>
     </message>
     <message>
-        <source>Subtype:</source>
-        <translation>Subtyp</translation>
-    </message>
-    <message>
-        <source>Dynamic Range:</source>
-        <translation>Dynamikbereich</translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Velo. change:</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Staff</source>
@@ -3766,6 +3731,18 @@ spatium unit</extracomment>
     <message>
         <source>SYstem</source>
         <translation type="unfinished">System</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Typ</translation>
+    </message>
+    <message>
+        <source>Dynamic Range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Velo. change</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3795,16 +3772,16 @@ spatium unit</extracomment>
         <translation>Größe</translation>
     </message>
     <message>
-        <source>Scale:</source>
-        <translation type="unfinished">Maßstab:</translation>
-    </message>
-    <message>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
         <source>Size in Spatium Units</source>
         <translation>Größe in Spatien</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3857,7 +3834,7 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show Naturals</source>
+        <source>Show Natural</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3872,16 +3849,16 @@ spatium unit</extracomment>
         <translation type="unfinished">Lasso</translation>
     </message>
     <message>
-        <source>Position:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>mm</source>
         <translation type="unfinished">mm</translation>
     </message>
     <message>
         <source>Size</source>
         <translation type="unfinished">Größe</translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation type="unfinished">Position</translation>
     </message>
 </context>
 <context>
@@ -3971,10 +3948,6 @@ spatium unit</extracomment>
     <message>
         <source>Note</source>
         <translation>Note</translation>
-    </message>
-    <message>
-        <source>Tuning Offset</source>
-        <translation>Stimmung</translation>
     </message>
     <message>
         <source>Velocity</source>
@@ -4085,20 +4058,8 @@ spatium unit</extracomment>
         <translation>Benutzer</translation>
     </message>
     <message>
-        <source>Note Head Type</source>
-        <translation>Kopftyp</translation>
-    </message>
-    <message>
-        <source>Note Head Group</source>
-        <translation>Kopfgruppe</translation>
-    </message>
-    <message>
         <source>Dot Position</source>
-        <translation>Punktposition</translation>
-    </message>
-    <message>
-        <source>Velocity Type</source>
-        <translation>Anschlagtyp</translation>
+        <translation>Punktpos.</translation>
     </message>
     <message>
         <source>Left</source>
@@ -4109,8 +4070,24 @@ spatium unit</extracomment>
         <translation>Rechts</translation>
     </message>
     <message>
-        <source>Small</source>
-        <translation>Klein</translation>
+        <source>Tuning</source>
+        <translation type="unfinished">Stimmung</translation>
+    </message>
+    <message>
+        <source>Head Type</source>
+        <translation>Kopftyp</translation>
+    </message>
+    <message>
+        <source>Head Group</source>
+        <translation>Kopfgruppe</translation>
+    </message>
+    <message>
+        <source>Velo. Type</source>
+        <translation type="unfinished">Anschlagtyp</translation>
+    </message>
+    <message>
+        <source>Small </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4186,19 +4163,11 @@ spatium unit</extracomment>
         <translation type="unfinished">Segment</translation>
     </message>
     <message>
-        <source>Trailing space:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
 spatium unit</extracomment>
         <translation type="unfinished">sp</translation>
-    </message>
-    <message>
-        <source>Leading space:</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>reset value</source>
@@ -4207,6 +4176,14 @@ spatium unit</extracomment>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Trailing</source>
+        <translation>Nachlauf</translation>
+    </message>
+    <message>
+        <source>Leading</source>
+        <translation>Vorlauf</translation>
     </message>
 </context>
 <context>
@@ -4255,10 +4232,6 @@ spatium unit</extracomment>
         <translation type="unfinished">Abstandhalter</translation>
     </message>
     <message>
-        <source>Height:</source>
-        <translation type="unfinished">Höhe:</translation>
-    </message>
-    <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation type="unfinished">sp</translation>
@@ -4266,6 +4239,10 @@ spatium unit</extracomment>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4310,16 +4287,16 @@ spatium unit</extracomment>
         <translation>Text-Linie</translation>
     </message>
     <message>
-        <source>Line Color:</source>
-        <translation>Linienfarbe:</translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Line Color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4470,20 +4447,12 @@ spatium unit</extracomment>
         <translation>Vertikaler Rahmen</translation>
     </message>
     <message>
-        <source>Right Margin:</source>
-        <translation>rechter Rand</translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation>Wert zurücksetzen</translation>
     </message>
     <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Bottom Margin:</source>
-        <translation>unterer Rand</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4497,24 +4466,32 @@ spatium unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>Top Gap:</source>
-        <translation>Lücke oben:</translation>
+        <source>Right Margin</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Height:</source>
-        <translation>Höhe:</translation>
+        <source>Bottom Margin</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Top Margin:</source>
-        <translation>oberer Rand</translation>
+        <source>Top Gap</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Left Margin:</source>
-        <translation>linker Rand</translation>
+        <source>Height</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bottom Gap:</source>
-        <translation>Lücke unten</translation>
+        <source>Top Margin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Margin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bottom Gap</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5001,11 +4978,11 @@ spatium unit</extracomment>
         <source>Below</source>
         <translation type="unfinished">Unter</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>90°</source>
         <translation type="unfinished">90°</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>45°</source>
         <translation type="unfinished">45°</translation>
     </message>
@@ -6841,6 +6818,10 @@ please choose a different name:</source>
         <source>&amp;Insert</source>
         <translation type="unfinished">E&amp;infügen</translation>
     </message>
+    <message>
+        <source>tempo</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7956,7 +7937,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Breaks &amp;&amp; Spacer</source>
-        <translation type="unfinished">Umbrüche &amp;&amp; Abstandhalter</translation>
+        <translation>Umbrüche &amp;&amp; Abstände</translation>
     </message>
     <message>
         <source>Fingering</source>
@@ -8676,11 +8657,11 @@ in Pixel (größerer Wert gleich größerer Radius)</translation>
         <source>Auto-correction</source>
         <translation>Autokorrektur</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Replace 1/2 with fraction character ½</source>
         <translation>1/2 durch ½ ersetzten</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Replace (C) with copyright symbol © (Only applies to text in the copyright section)</source>
         <translation>(C) durch Copyright-Symbol © ersetzen (Nur für Urheberrecht-Text)</translation>
     </message>
@@ -9536,17 +9517,17 @@ dena 8</source>
 8</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Rohrflöte
 8</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Dulzflöte
 4</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Quintflöte
 2 2/3</source>
         <translation type="unfinished"></translation>
@@ -9671,17 +9652,17 @@ altera</source>
 8</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Flöte
 8</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Flöte
 4</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Flöte
 2</source>
         <translation type="unfinished"></translation>
@@ -9976,7 +9957,7 @@ altera</source>
     </message>
     <message>
         <source>Offset</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Versatz</translation>
     </message>
     <message>
         <source>X:</source>

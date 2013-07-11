@@ -11,7 +11,7 @@
         <source>Copy revision number</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -30,7 +30,7 @@ p, li { white-space: pre-wrap; }
         <source>About MusicXML</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -45,7 +45,7 @@ p, li { white-space: pre-wrap; }
         <source>The MusicXML Public License:</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -2140,7 +2140,7 @@ spatium unit</extracomment>
         <source>Select:</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>« Full Configuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2148,7 +2148,7 @@ spatium unit</extracomment>
         <source>Upside Down</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Quick Presets »</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3119,30 +3119,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>EditTempoBase</name>
-    <message>
-        <source>MuseScore: Tempo Text</source>
-        <translation>MuseScore: Κείμενο Tempo</translation>
-    </message>
-    <message>
-        <source>BPM:</source>
-        <translatorcomment>ή χτύποι ανά λεπτό;</translatorcomment>
-        <translation>Χτύποι ανά λεπτό (χαλ):</translation>
-    </message>
-    <message>
-        <source>Text:</source>
-        <translation>Κείμενο:</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Άκυρο</translation>
-    </message>
-</context>
-<context>
     <name>ExcerptsDialog</name>
     <message>
         <source>MuseScore: Parts</source>
@@ -3318,14 +3294,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Άρθρωση</translation>
     </message>
     <message>
-        <source>Direction:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Anchor:</source>
-        <translation type="unfinished">Άγκυρα:</translation>
-    </message>
-    <message>
         <source>Top Staff</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3362,7 +3330,15 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">...</translation>
     </message>
     <message>
-        <source>Time Stretch:</source>
+        <source>Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Anchor</source>
+        <translation type="unfinished">Άγκυρα</translation>
+    </message>
+    <message>
+        <source>Time Stretch</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3409,16 +3385,16 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Type:</source>
-        <translation type="unfinished">Τύπος:</translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Τύπος</translation>
     </message>
 </context>
 <context>
@@ -3507,10 +3483,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Κάτω</translation>
     </message>
     <message>
-        <source>Offset Y:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -3522,16 +3494,20 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Offset X:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation type="unfinished">Μικρό μέγεθος</translation>
     </message>
     <message>
         <source>Stemless</source>
         <translation type="unfinished">Χωρίς γραμμή φθογγόσημου</translation>
+    </message>
+    <message>
+        <source>Offset Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Offset X</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3568,10 +3544,6 @@ spatium unit</extracomment>
         <translation type="unfinished">Δυναμική</translation>
     </message>
     <message>
-        <source>Dynamic Range:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3595,6 +3567,10 @@ spatium unit</extracomment>
         <source>SYstem</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Dynamic Range</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InspectorElement</name>
@@ -3605,10 +3581,6 @@ spatium unit</extracomment>
     <message>
         <source>Element</source>
         <translation type="unfinished">Στοιχείο</translation>
-    </message>
-    <message>
-        <source>Offset Y:</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>sp</source>
@@ -3622,16 +3594,20 @@ spatium unit</extracomment>
         <translation type="unfinished">...</translation>
     </message>
     <message>
-        <source>Offset X:</source>
+        <source>Visible</source>
+        <translation type="unfinished">Ορατό</translation>
+    </message>
+    <message>
+        <source>Offset Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Color:</source>
-        <translation type="unfinished">Χρώμα:</translation>
+        <source>Color</source>
+        <translation type="unfinished">Χρώμα</translation>
     </message>
     <message>
-        <source>Visible</source>
-        <translation type="unfinished">Ορατό</translation>
+        <source>Offset X</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3706,18 +3682,6 @@ spatium unit</extracomment>
         <translation type="unfinished">sp</translation>
     </message>
     <message>
-        <source>Width:</source>
-        <translation type="unfinished">Πλάτος:</translation>
-    </message>
-    <message>
-        <source>Left Gap:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right Gap:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3727,6 +3691,18 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Horizontal Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Gap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Gap</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3749,24 +3725,12 @@ spatium unit</extracomment>
         <translation type="unfinished">decrescendo</translation>
     </message>
     <message>
-        <source>Subtype:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dynamic Range:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
-    </message>
-    <message>
-        <source>Velo. change:</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Staff</source>
@@ -3778,6 +3742,18 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>SYstem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Τύπος</translation>
+    </message>
+    <message>
+        <source>Dynamic Range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Velo. change</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3808,15 +3784,15 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Scale:</source>
-        <translation type="unfinished">Κλιμάκωση:</translation>
-    </message>
-    <message>
         <source>%</source>
         <translation type="unfinished">%</translation>
     </message>
     <message>
         <source>Size in Spatium Units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3870,7 +3846,7 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show Naturals</source>
+        <source>Show Natural</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3885,15 +3861,15 @@ spatium unit</extracomment>
         <translation type="unfinished">Λάσο</translation>
     </message>
     <message>
-        <source>Position:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Position</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3984,10 +3960,6 @@ spatium unit</extracomment>
     <message>
         <source>Note</source>
         <translation type="unfinished">Φθογγόσημο</translation>
-    </message>
-    <message>
-        <source>Tuning Offset</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Velocity</source>
@@ -4098,19 +4070,7 @@ spatium unit</extracomment>
         <translation type="unfinished">Χρήστης</translation>
     </message>
     <message>
-        <source>Note Head Type</source>
-        <translation type="unfinished">Τύπος Κεφαλής Νότας</translation>
-    </message>
-    <message>
-        <source>Note Head Group</source>
-        <translation type="unfinished">Ομάδα Κεφαλών Νοτών</translation>
-    </message>
-    <message>
         <source>Dot Position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Velocity Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4122,8 +4082,24 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Small</source>
-        <translation type="unfinished">Μικρό μέγεθος</translation>
+        <source>Tuning</source>
+        <translation type="unfinished">Κούρδισμα</translation>
+    </message>
+    <message>
+        <source>Head Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Head Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Velo. Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Small </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4199,19 +4175,11 @@ spatium unit</extracomment>
         <translation type="unfinished">Τμήμα</translation>
     </message>
     <message>
-        <source>Trailing space:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
 spatium unit</extracomment>
         <translation type="unfinished">sp</translation>
-    </message>
-    <message>
-        <source>Leading space:</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>reset value</source>
@@ -4220,6 +4188,14 @@ spatium unit</extracomment>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Trailing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leading</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4268,10 +4244,6 @@ spatium unit</extracomment>
         <translation type="unfinished">Διαχωριστικό</translation>
     </message>
     <message>
-        <source>Height:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation type="unfinished">sp</translation>
@@ -4279,6 +4251,10 @@ spatium unit</extracomment>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4323,16 +4299,16 @@ spatium unit</extracomment>
         <translation type="unfinished">Γραμμή Κειμένου</translation>
     </message>
     <message>
-        <source>Line Color:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Line Color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4483,20 +4459,12 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Right Margin:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>reset value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>...</source>
         <translation type="unfinished">...</translation>
-    </message>
-    <message>
-        <source>Bottom Margin:</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>mm</source>
@@ -4510,23 +4478,31 @@ spatium unit</extracomment>
         <translation type="unfinished">sp</translation>
     </message>
     <message>
-        <source>Top Gap:</source>
+        <source>Right Margin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Height:</source>
+        <source>Bottom Margin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Top Margin:</source>
+        <source>Top Gap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Left Margin:</source>
+        <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bottom Gap:</source>
+        <source>Top Margin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Margin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bottom Gap</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5014,11 +4990,11 @@ spatium unit</extracomment>
         <source>Below</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>90°</source>
         <translation type="unfinished">90°</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>45°</source>
         <translation type="unfinished">45°</translation>
     </message>
@@ -6854,6 +6830,10 @@ please choose a different name:</source>
         <source>&amp;Insert</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>tempo</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -8685,11 +8665,11 @@ failed: </source>
         <source>Auto-correction</source>
         <translation>Αυτόματη Διόρθωση</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Replace 1/2 with fraction character ½</source>
         <translation>Αντικατάσταση του 1/2 με χαρακτήρα κλάσματος ½</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Replace (C) with copyright symbol © (Only applies to text in the copyright section)</source>
         <translation>Αντικατάσταση του (C) με το σύμβολο περί πνευματικών δικαιωμάτων  © (Ισχύει μόνο για το κείμενο στο τμήμα πνευματικών δικαιωμάτων)</translation>
     </message>
@@ -9544,17 +9524,17 @@ dena 8</source>
 8</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Rohrflöte
 8</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Dulzflöte
 4</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Quintflöte
 2 2/3</source>
         <translation type="unfinished"></translation>
@@ -9679,17 +9659,17 @@ altera</source>
 8</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Flöte
 8</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Flöte
 4</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>Flöte
 2</source>
         <translation type="unfinished"></translation>
