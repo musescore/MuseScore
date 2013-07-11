@@ -30,7 +30,9 @@ class TracksModel : public QAbstractTableModel
       void setOperation(int row, MidiOperation::Type operType, const QVariant &operValue);
       TrackData trackData(int trackIndex) const;
       DefinedTrackOperations trackOperations(int row) const;
-      int trackCount() const;
+      int trackCount() const { return trackCount_; }
+      int rowFromTrackIndex(int trackIndex) const;
+      int trackIndexFromRow(int row) const;
 
       int rowCount(const QModelIndex &/*parent*/) const;
       int columnCount(const QModelIndex &/*parent*/) const;
@@ -47,8 +49,6 @@ class TracksModel : public QAbstractTableModel
       void setTrackOperation(int trackIndex, MidiOperation::Type operType, const QVariant &operValue);
       void setOperationForAllTracks(MidiOperation::Type operType, const QVariant &operValue);
       Qt::CheckState areAllTracksForImport() const;
-      int rowFromTrackIndex(int trackIndex) const;
-      int trackIndexFromRow(int row) const;
       TrackData* trackDataFromIndex(const QModelIndex &index);
       bool isMappingRowToTrackValid(int row) const;
       bool isColumnValid(int column) const;

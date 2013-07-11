@@ -41,6 +41,7 @@ struct LHRHSeparation
       // bool and enum-like elementary operations (itself and inside structs) allowed
 struct TrackOperations
       {
+      int trackIndex = 0;
       bool doImport = true;
       Quantization quantize;
       bool useDots = true;
@@ -77,6 +78,7 @@ class MidiImportOperations
       int currentTrack() const { return currentTrack_; }
       TrackOperations currentTrackOperations() const;
       TrackOperations trackOperations(int trackIndex) const;
+      int count() const { return operations_.size(); }
 
    private:
       QList<TrackOperations> operations_;

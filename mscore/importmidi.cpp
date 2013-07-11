@@ -890,7 +890,7 @@ void splitIntoLRHands_HandWidth(QList<MTrack> &tracks, int &trackIndex)
 void splitIntoLeftRightHands(QList<MTrack> &tracks)
       {
       for (int i = 0; i < tracks.size(); ++i) {
-            const auto &operations = preferences.midiImportOperations.trackOperations(i);
+            auto operations = preferences.midiImportOperations.trackOperations(i);
             if (!operations.LHRH.doIt)
                   continue;
             switch (operations.LHRH.method) {
@@ -902,6 +902,19 @@ void splitIntoLeftRightHands(QList<MTrack> &tracks)
                         break;
                   }
             }
+      }
+
+void reorderTracks(QList<MTrack> &tracks)
+      {
+      const auto &operations = preferences.midiImportOperations;
+      if (operations.count() == 0)
+            return;
+      QList<MTrack> newTracks;
+      for (int i = 0; i != tracks.size(); ++i) {
+            auto op = operations.trackOperations(i);
+            newTracks.push_back(tracks[op.trackIndex]);
+            }
+      std::swap(tracks, newTracks);
       }
 
 void createMTrackList(Fraction &lastTick, TimeSigMap *sigmap,
@@ -1139,6 +1152,7 @@ void convertMidi(Score *score, MidiFile *mf)
 
       mf->separateChannel();
       createMTrackList(lastTick, sigmap, tracks, mf);
+      reorderTracks(tracks);
       collectChords(tracks, Fraction::fromTicks(MScore::division) / 32);     // tol = 1/128 note
       quantizeAllTracks(tracks, sigmap, lastTick);
       removeOverlappingNotes(tracks);
