@@ -26,6 +26,7 @@ include (${PROJECT_SOURCE_DIR}/build/ECMQt4To5Porting.cmake)
 include (${PROJECT_SOURCE_DIR}/build/FindQt5Transitional.cmake)
 
 cmake_policy(SET CMP0003 NEW)
+cmake_policy(SET CMP0020 OLD)
 
 #include modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
@@ -100,7 +101,7 @@ if (APPLE)
    set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -fPIC -stdlib=libc++ -O2 -DNDEBUG")
 else (APPLE)
    if (MINGW)
-      set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -fPIE -g")
+      set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -g")
       set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -O2 -DNDEBUG")
    else (MINGW)
       set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -fPIC -fPIE -g")
