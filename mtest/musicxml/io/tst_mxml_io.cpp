@@ -79,6 +79,7 @@ private slots:
 //      void grace2() { mxmlIoTest("testGrace2"); }
       void harmony1() { mxmlIoTest("testHarmony1"); }
       void harmony2() { mxmlIoTest("testHarmony2"); }
+      void harmony4() { mxmlIoTest("testHarmony4"); }
       void hello() { mxmlIoTest("testHello"); }
       void helloReadCompr() { mxmlReadTestCompr("testHello"); }
       void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
