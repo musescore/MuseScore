@@ -1042,9 +1042,18 @@ void createMeasures(Fraction &lastTick, Score *score)
             int tick = score->sigmap()->bar2tick(i, 0);
             measure->setTick(tick);
             Fraction ts(score->sigmap()->timesig(tick).timesig());
-            measure->setTimesig(ts);
+            Fraction nominalTs = ts;
+            if (i == 0 && bars > 1) {
+                  const int secondBarIndex = 1;
+                  int secondBarTick = score->sigmap()->bar2tick(secondBarIndex, 0);
+                  Fraction secondTs(score->sigmap()->timesig(secondBarTick).timesig());
+                  if (ts < secondTs) {    // the first measure is a pickup measure
+                        nominalTs = secondTs;
+                        measure->setIrregular(true);
+                        }
+                  }
+            measure->setTimesig(nominalTs);
             measure->setLen(ts);
-
             score->add(measure);
             }
       score->fixTicks();
@@ -1081,6 +1090,12 @@ void setTrackInfo(MidiFile *mf, MTrack &mt)
             }
       }
 
+Measure* barFromIndex(const Score *score, int barIndex)
+      {
+      int tick = score->sigmap()->bar2tick(barIndex, 0);
+      return score->tick2measure(tick);
+      }
+
 void createTimeSignatures(Score *score)
       {
       for (auto is = score->sigmap()->begin(); is != score->sigmap()->end(); ++is) {
@@ -1089,13 +1104,30 @@ void createTimeSignatures(Score *score)
             Measure* m = score->tick2measure(tick);
             if (!m)
                   continue;
+
+            Fraction newTimeSig = se.timesig();
+            if (is == score->sigmap()->begin()) {
+                  auto next = is;
+                  ++next;
+                  if (next != score->sigmap()->end()) {
+                        Measure* mm = score->tick2measure(next->first);
+                        if (m && mm && m == barFromIndex(score, 0) && mm == barFromIndex(score, 1)
+                                    && m->timesig() == mm->timesig() && newTimeSig != mm->timesig())
+                              {
+                                          // it's a pickup measure - change timesig to nominal value
+                                    newTimeSig = mm->timesig();
+                              }
+                        }
+                  }
             for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                   TimeSig* ts = new TimeSig(score);
-                  ts->setSig(se.timesig());
+                  ts->setSig(newTimeSig);
                   ts->setTrack(staffIdx * VOICES);
                   Segment* seg = m->getSegment(ts, tick);
                   seg->add(ts);
                   }
+            if (newTimeSig != se.timesig())   // was a pickup measure - skip next timesig
+                  ++is;
             }
       }
 
