@@ -1953,15 +1953,28 @@ void Measure::read(XmlReader& e, int staffIdx)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-                  if (segment && segment->next() && segment->next()->segmentType() == Segment::SegClef)
-                        segment = segment->next();
-                  else if (segment && segment != first()) {
-                        Segment* ns = segment->next();
-                        segment = new Segment(this, Segment::SegClef, e.tick());
-                        _segments.insert(segment, ns);
-                        }
-                  else {
+
+                  // there may be more than one clef segment for same tick position
+                  if (!segment)
                         segment = getSegment(Segment::SegClef, e.tick());
+                  else {
+                        Segment* ns = 0;
+                        if (segment->next()) {
+                              ns = segment->next();
+                              while (ns && ns->tick() < e.tick())
+                                    ns = ns->next();
+                              }
+                        segment = 0;
+                        for (Segment* s = ns; s && s->tick() == e.tick(); s = s->next()) {
+                              if (s->segmentType() == Segment::SegClef) {
+                                    segment = s;
+                                    break;
+                                    }
+                              }
+                        if (!segment) {
+                              segment = new Segment(this, Segment::SegClef, e.tick());
+                              _segments.insert(segment, ns);
+                              }
                         }
                   segment->add(clef);
                   }
