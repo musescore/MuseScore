@@ -287,7 +287,7 @@ bool areTupletChordsInUse(
                         }
                   }
             ++i;
-      }
+            }
       for ( ; i != tupletChords.end(); ++i) {
             if (usedChords.find(&*(i->second)) != usedChords.end()) {
                               // the chord note is in use - cannot use this chord again
@@ -482,6 +482,7 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
             std::list<int> bestIndexes = minimizeQuantError(tupletGroupsToTest, tuplets);
             bestTuplets.insert(bestTuplets.end(), bestIndexes.begin(), bestIndexes.end());
             }
+
       std::vector<TupletInfo> newTuplets;
       for (const auto &i: bestTuplets)
             newTuplets.push_back(tuplets[i]);
@@ -608,8 +609,8 @@ int averagePitch(const std::vector<std::multimap<Fraction, MidiChord>::iterator>
       return sumPitch / noteCounter;
       }
 
-void sortNotesByPitch(std::multimap<Fraction, MidiChord>::iterator startBarChordIt,
-                      std::multimap<Fraction, MidiChord>::iterator endBarChordIt)
+void sortNotesByPitch(const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
+                      const std::multimap<Fraction, MidiChord>::iterator &endBarChordIt)
       {
       struct {
             bool operator()(const MidiNote &n1, const MidiNote &n2)
@@ -637,8 +638,8 @@ void sortTupletsByAveragePitch(std::vector<TupletInfo> &tuplets)
 
 std::vector<std::multimap<Fraction, MidiChord>::iterator>
 findNonTupletChords(const std::vector<TupletInfo> &tuplets,
-                    std::multimap<Fraction, MidiChord>::iterator startBarChordIt,
-                    std::multimap<Fraction, MidiChord>::iterator endBarChordIt)
+                    const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
+                    const std::multimap<Fraction, MidiChord>::iterator &endBarChordIt)
       {
       std::set<std::pair<const Fraction, MidiChord> *> tupletChords;
       for (const auto &tupletInfo: tuplets) {
@@ -696,8 +697,9 @@ int findNonTupletVoice(const std::vector<std::multimap<Fraction, MidiChord>::ite
       return voice;
       }
 
-void setVoiceOfNonTupletChords(std::vector<std::multimap<Fraction, MidiChord>::iterator> &nonTuplets,
-                               int voice)
+void setVoiceOfNonTupletChords(
+            const std::vector<std::multimap<Fraction, MidiChord>::iterator> &nonTuplets,
+            int voice)
       {
       if (voice < 0)
             return;
@@ -709,8 +711,8 @@ void setVoiceOfNonTupletChords(std::vector<std::multimap<Fraction, MidiChord>::i
 // result - voice of non-tuplet chords or -1 if there are no non-tuplet chords
 
 int separateTupletVoices(std::vector<TupletInfo> &tuplets,
-                         std::multimap<Fraction, MidiChord>::iterator startBarChordIt,
-                         std::multimap<Fraction, MidiChord>::iterator endBarChordIt,
+                         const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
+                         const std::multimap<Fraction, MidiChord>::iterator &endBarChordIt,
                          std::multimap<Fraction, MidiChord> &chords,
                          const Fraction &endBarTick)
       {
