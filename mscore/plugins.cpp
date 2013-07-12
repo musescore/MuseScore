@@ -138,7 +138,7 @@ QQmlEngine* MuseScore::qml()
             qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
             qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
             qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
-            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
+            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Ms::Segment");
             qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
             qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
             qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
