@@ -259,11 +259,8 @@ void MuseScore::closeEvent(QCloseEvent* ev)
             curScore = 0;
       settings.setValue("currentScore", curScore);
 
-      int idx = 0;
-      foreach(Score* s, scoreList) {
-            settings.setValue(QString("score-%1").arg(idx), s->fileInfo()->absoluteFilePath());
-            ++idx;
-            }
+      for (int idx = 0; idx < scoreList.size(); ++idx)
+            settings.setValue(QString("score-%1").arg(idx), scoreList[idx]->fileInfo()->absoluteFilePath());
 
       settings.setValue("lastSaveCopyDirectory", lastSaveCopyDirectory);
       settings.setValue("lastSaveDirectory", lastSaveDirectory);
@@ -279,8 +276,10 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       if (pluginCreator)
             pluginCreator->writeSettings();
 #endif
+      if (synthControl)
+            synthControl->writeSettings();
 
-      if(seq) {
+      if (seq) {
             seq->stopWait();
             seq->exit();
             }
