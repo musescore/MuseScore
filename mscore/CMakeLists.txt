@@ -385,8 +385,6 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Sql.dll
       ${CROSSQT}/bin/Qt5V8.dll
       ${CROSSQT}/bin/Qt5PrintSupport.dll
-      ${CROSSQT}/bin/Qt5Multimedia.dll
-      ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
       ${CROSSQT}/bin/Qt5OpenGL.dll
       ${CROSSQT}/bin/Qt5Sensors.dll
       ${CROSSQT}/bin/icuin51.dll
@@ -401,6 +399,9 @@ if (MINGW)
       ${CROSSQT}/plugins/imageformats/qmng.dll
       ${CROSSQT}/plugins/imageformats/qsvg.dll
       ${CROSSQT}/plugins/imageformats/qtiff.dll
+      )
+   install_files ( /bin/platforms .dll
+      ${CROSSQT}/plugins/platforms/qwindows.dll
       )
 
 else (MINGW)
