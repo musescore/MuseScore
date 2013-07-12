@@ -72,7 +72,7 @@ SynthControl::SynthControl(QWidget* parent)
       if (!useFactorySettings) {
             QSettings settings;
             settings.beginGroup("SynthControl");
-            resize(settings.value("size", QSize(600, 268)).toSize());
+            resize(settings.value("size", QSize(746, 268)).toSize());
             move(settings.value("pos", QPoint(10, 10)).toPoint());
             settings.endGroup();
             }
@@ -333,6 +333,19 @@ void SynthControl::setDirty()
       saveButton->setEnabled(true);
       storeButton->setEnabled(true);
       recallButton->setEnabled(true);
+      }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void SynthControl::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup("SynthControl");
+      settings.setValue("size", size());
+      settings.setValue("pos", pos());
+      settings.endGroup();
       }
 }
 

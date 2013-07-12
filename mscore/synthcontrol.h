@@ -64,6 +64,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void setMeter(float, float, float, float);
       void stop();
       void setScore(Score* s) { _score = s; }
+      void writeSettings();
       };
 }
 
