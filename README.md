@@ -1,6 +1,7 @@
 Links
 * [MuseScore Homepage](http://musescore.org)
 * [MuseScore Git workflow instructions](http://musescore.org/en/developers-handbook/git-workflow).
+* [How to compile MuseScore?](http://musescore.org/en/developers-handbook/compilation).
 * Build status: [![Build Status](https://secure.travis-ci.org/musescore/MuseScore.png)](http://travis-ci.org/musescore/MuseScore)
 
 Packages
