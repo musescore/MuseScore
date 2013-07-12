@@ -1859,6 +1859,10 @@ void Beam::editDrag(const EditData& ed)
       else
             layout1();
       layout();
+      for (ChordRest* cr : _elements) {
+            if (cr->tuplet())
+                  cr->tuplet()->layout();
+            }
       }
 
 //---------------------------------------------------------
