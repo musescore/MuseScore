@@ -22,7 +22,7 @@ Licence:
       details.
 
 Requirements:
-      - qt4 gui lib version >= qt5.1.x
+      - Qt version >= qt5.1.x
 
         Note that many linux distributions split packages into a user
         and developer package and that you need to install both.
