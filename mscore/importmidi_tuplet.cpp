@@ -848,7 +848,7 @@ std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
       for (const auto &divLen: divLengths) {
             auto tupletNumbers = findTupletNumbers(divLen, barFraction);
             auto div = barFraction / divLen;
-            int divCount = std::round(div.numerator() * 1.0 / div.denominator());
+            int divCount = qRound(div.numerator() * 1.0 / div.denominator());
 
             for (int i = 0; i != divCount; ++i) {
                   Fraction startDivTime = startBarTick + divLen * i;
