@@ -42,7 +42,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <harmony>
+      <harmony print-frame="no">
         <root>
           <root-step text="">C</root-step>
           </root>
