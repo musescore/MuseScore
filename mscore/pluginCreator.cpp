@@ -430,7 +430,7 @@ void PluginCreator::newPlugin()
       path    = tr("untitled");
       created = true;
       QString s(
-         "import QtQuick 1.0\n"
+         "import QtQuick 2.0\n"
          "import MuseScore 1.0\n"
          "\n"
          "MuseScore {\n"

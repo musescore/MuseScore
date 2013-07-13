@@ -60,8 +60,8 @@ class MeasureBase : public Element {
       MeasureBase* prev() const              { return _prev;   }
       void setPrev(MeasureBase* e)           { _prev = e;      }
 
-      Q_INVOKABLE Measure* nextMeasure() const;
-      Q_INVOKABLE Measure* prevMeasure() const;
+      Q_INVOKABLE Ms::Measure* nextMeasure() const;
+      Q_INVOKABLE Ms::Measure* prevMeasure() const;
 
       virtual int ticks() const              { return 0;       }
       virtual void write(Xml&, int, bool) const = 0;

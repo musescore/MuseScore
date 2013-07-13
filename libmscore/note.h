@@ -225,7 +225,7 @@ class Note : public Element {
       void undoSetTpc(int v);
       void setTpcFromPitch();
 
-      Q_INVOKABLE Accidental* accidental() const    { return _accidental; }
+      Q_INVOKABLE Ms::Accidental* accidental() const    { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }
 
       int line() const                { return _line + _lineOffset;   }
@@ -249,8 +249,8 @@ class Note : public Element {
       bool small() const              { return _small;   }
       void setSmall(bool val);
 
-      Q_INVOKABLE Tie* tieFor() const  { return _tieFor;  }
-      Q_INVOKABLE Tie* tieBack() const { return _tieBack; }
+      Q_INVOKABLE Ms::Tie* tieFor() const  { return _tieFor;  }
+      Q_INVOKABLE Ms::Tie* tieBack() const { return _tieBack; }
       void setTieFor(Tie* t)          { _tieFor = t;     }
       void setTieBack(Tie* t)         { _tieBack = t;    }
 
@@ -294,7 +294,7 @@ class Note : public Element {
       void setOffTimeOffset(int v);
 
       int customizeVelocity(int velo) const;
-      Q_INVOKABLE NoteDot* dot(int n)       { return _dots[n];           }
+      Q_INVOKABLE Ms::NoteDot* dot(int n)       { return _dots[n];           }
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(NoteVal);
