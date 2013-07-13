@@ -8087,7 +8087,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Content Offset</source>
-        <translation>Offset Inhalt</translation>
+        <translation>Versatz</translation>
     </message>
     <message>
         <source>x:</source>
@@ -8099,23 +8099,23 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Cell Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften Zelle</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished">Name:</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <source>Content scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Maßstab</translation>
     </message>
     <message>
         <source>sp</source>
-        <translation type="unfinished">sp</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <source>draw Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>zeige Notenzeile</translation>
     </message>
 </context>
 <context>
