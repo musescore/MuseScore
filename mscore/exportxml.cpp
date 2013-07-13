@@ -4580,7 +4580,10 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             // export an unrecognized Chord
             // which may contain arbitrary text
             //
-            xml.stag(QString("harmony").append(relative));
+            if (h->hasFrame())
+                  xml.stag(QString("harmony print-frame=\"yes\"").append(relative));
+            else
+                  xml.stag(QString("harmony print-frame=\"no\"").append(relative));
             xml.stag("root");
             xml.tag("root-step text=\"\"", "C");
             xml.etag();       // root
