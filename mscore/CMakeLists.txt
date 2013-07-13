@@ -360,8 +360,7 @@ if (MINGW)
 
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
-
-   install_files ( /bin .dll
+   install( FILES
       ${CROSS}/bin/libgcc_s_dw2-1.dll
       ${CROSS}/bin/libstdc++-6.dll
       ${CROSS}/bin/libwinpthread-1.dll
@@ -390,19 +389,31 @@ if (MINGW)
       ${CROSSQT}/bin/icuin51.dll
       ${CROSSQT}/bin/icuuc51.dll
       ${CROSSQT}/bin/icudt51.dll
-      )
-   install_files ( /bin/iconengines .dll
+      DESTINATION bin)
+
+    install(FILES
       ${CROSSQT}/plugins/iconengines/qsvgicon.dll
-      )
-   install_files ( /bin/imageformats .dll
+      DESTINATION bin/iconengines)
+
+    install(FILES
       ${CROSSQT}/plugins/imageformats/qjpeg.dll
       ${CROSSQT}/plugins/imageformats/qmng.dll
       ${CROSSQT}/plugins/imageformats/qsvg.dll
       ${CROSSQT}/plugins/imageformats/qtiff.dll
-      )
-   install_files ( /bin/platforms .dll
+      DESTINATION bin/imageformats)
+
+    install(FILES
       ${CROSSQT}/plugins/platforms/qwindows.dll
-      )
+      DESTINATION bin/platforms)
+
+    install(DIRECTORY
+      ${CROSSQT}/qml
+      DESTINATION .
+      REGEX ".*QtWebkit.*" EXCLUDE
+      REGEX ".*QtTest.*" EXCLUDE
+      REGEX ".*QtSensors.*" EXCLUDE
+      REGEX ".*QtGraphicalEffects.*" EXCLUDE
+      REGEX ".*QtMultimedia.*" EXCLUDE)
 
 else (MINGW)
    target_link_libraries(mscore
