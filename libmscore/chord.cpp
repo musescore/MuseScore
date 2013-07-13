@@ -292,6 +292,7 @@ QPointF Chord::stemPos() const
             qreal nhw = score()->noteHeadWidth();
             if (_noteType != NOTE_NORMAL)
                   nhw *= score()->styleD(ST_graceNoteMag);
+            nhw    *= mag();
             p.rx() += nhw;
             p.ry() += downNote()->pos().y();
             }
