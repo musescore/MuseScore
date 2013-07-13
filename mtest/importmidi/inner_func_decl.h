@@ -38,8 +38,8 @@ TupletInfo findTupletApproximation(const Fraction &tupletLen,
                                    const std::multimap<Fraction, MidiChord>::iterator &endChordIt);
 
 int separateTupletVoices(std::vector<TupletInfo> &tuplets,
-                         std::multimap<Fraction, MidiChord>::iterator startBarChordIt,
-                         std::multimap<Fraction, MidiChord>::iterator endBarChordIt,
+                         const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
+                         const std::multimap<Fraction, MidiChord>::iterator &endBarChordIt,
                          std::multimap<Fraction, MidiChord> &chords,
                          const Fraction &endBarTick);
 
