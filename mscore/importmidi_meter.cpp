@@ -208,7 +208,7 @@ Meter::MaxLevel maxLevelBetween(const Fraction &startTickInDivision,
                   level.lastPos = maxEndRaster;
                   Fraction maxStartRaster = divLen * (startTickInDivision.ticks() / divLen.ticks());
                   Fraction count = (maxEndRaster - maxStartRaster) / divLen;
-                  level.levelCount = std::round(count.numerator() * 1.0 / count.denominator());
+                  level.levelCount = qRound(count.numerator() * 1.0 / count.denominator());
                   level.level = divLengthInfo.level;
                   break;
                   }
