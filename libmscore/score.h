@@ -772,7 +772,7 @@ class Score : public QObject {
       int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
-      Q_INVOKABLE Ms::Segment* firstSegment(Segment::SegmentTypes s = Segment::SegAll) const;
+      Q_INVOKABLE Ms::Segment* firstSegment(Ms::Segment::SegmentTypes s = Segment::SegAll) const;
       Q_INVOKABLE Ms::Segment* lastSegment() const;
 
       void connectTies();
