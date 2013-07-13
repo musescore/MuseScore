@@ -8,8 +8,10 @@ namespace Ms {
 
 // operation types are in importmidi_operation.h
 
-// to add an operation one need to add code also to
-// importmidi_operation.h, importmidi_opmodel.cpp, importmidi_trmodel.cpp (2 places),
+// to add an operation one need to add code also to:
+//   - importmidi_operation.h,
+//   - importmidi_opmodel.cpp (2 places),
+//   - importmidi_trmodel.cpp (2 places),
 // and - other importmidi files where algorithm requires it
 
 struct SearchTuplets
@@ -47,6 +49,7 @@ struct TrackOperations
       bool useDots = true;
       LHRHSeparation LHRH;
       SearchTuplets tuplets;
+      bool useMultipleVoices = true;
       };
 
 struct TrackMeta
