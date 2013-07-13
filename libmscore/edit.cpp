@@ -1727,7 +1727,7 @@ printf("insertMeasure\n");
             MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
             MeasureBase* im = idx != -1 ? score->measure(idx) : 0;
             // insert before im, append if im = 0
-
+            measure = mb;
             mb->setTick(tick);
             if (score == this)
                   omb = mb;
