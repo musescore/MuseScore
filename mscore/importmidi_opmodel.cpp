@@ -499,7 +499,7 @@ bool Controller::updateNodeDependencies(Node *node, bool force_update)
                               LHRHPitchNote->visible = false;
                         result = true;
                         break;
-                  case MidiOperation::LHRHMethod::FIXED_PITCH:
+                  case MidiOperation::LHRHMethod::SPECIFIED_PITCH:
                         if (LHRHPitchOctave)
                               LHRHPitchOctave->visible = true;
                         if (LHRHPitchNote)
