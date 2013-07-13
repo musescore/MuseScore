@@ -107,7 +107,7 @@ class QmlPlugin : public QQuickItem {
       Q_INVOKABLE Ms::Element* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
       Q_INVOKABLE Ms::MsProcess* newQProcess();
-      Q_INVOKABLE bool writeScore(Score*, const QString& name, const QString& ext);
+      Q_INVOKABLE bool writeScore(Ms::Score*, const QString& name, const QString& ext);
       Q_INVOKABLE Ms::Score* readScore(const QString& name);
       };
 

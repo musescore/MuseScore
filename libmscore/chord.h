@@ -149,8 +149,8 @@ class Chord : public ChordRest {
 
       Hook* hook() const                     { return _hook; }
 
-      Q_INVOKABLE virtual void add(Element*);
-      Q_INVOKABLE virtual void remove(Element*);
+      Q_INVOKABLE virtual void add(Ms::Element*);
+      Q_INVOKABLE virtual void remove(Ms::Element*);
 
       Note* selectedNote() const;
       virtual void layout();

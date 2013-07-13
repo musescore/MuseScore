@@ -502,7 +502,7 @@ class Element : public QObject {
       void setStartDragPosition(const QPointF& v) { _startDragPosition = v; }
 
       static const char* name(ElementType type);
-      Q_INVOKABLE static Ms::Element* create(ElementType type, Score*);
+      Q_INVOKABLE static Ms::Element* create(Ms::Element::ElementType type, Score*);
       static ElementType name2type(const QStringRef&);
       static Element* name2Element(const QStringRef&, Score*);
 
