@@ -167,6 +167,12 @@ QQmlEngine* MuseScore::qml()
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
+#ifdef Q_OS_WIN
+            QStringList importPaths;
+            QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
+            importPaths.append(dir.absolutePath());
+            _qml->setImportPathList(importPaths);
+#endif
             }
       return _qml;
       }
