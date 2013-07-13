@@ -305,7 +305,7 @@ class Element : public QObject {
       Element(const Element&);
       virtual ~Element();
       Element &operator=(const Element&);
-      Q_INVOKABLE virtual Element* clone() const = 0;
+      Q_INVOKABLE virtual Ms::Element* clone() const = 0;
       virtual Element* linkedClone();
       QList<Element*> linkList() const;
 
@@ -502,7 +502,7 @@ class Element : public QObject {
       void setStartDragPosition(const QPointF& v) { _startDragPosition = v; }
 
       static const char* name(ElementType type);
-      Q_INVOKABLE static Element* create(ElementType type, Score*);
+      Q_INVOKABLE static Ms::Element* create(ElementType type, Score*);
       static ElementType name2type(const QStringRef&);
       static Element* name2Element(const QStringRef&, Score*);
 

@@ -102,24 +102,24 @@ class Segment : public Element {
 
       virtual void setScore(Score*);
 
-      Q_INVOKABLE Segment* next() const             { return _next;   }
+      Q_INVOKABLE Ms::Segment* next() const             { return _next;   }
       Segment* next(SegmentTypes) const;
 
       void setNext(Segment* e)          { _next = e;      }
-      Q_INVOKABLE Segment* prev() const { return _prev;   }
+      Q_INVOKABLE Ms::Segment* prev() const { return _prev;   }
       Segment* prev(SegmentTypes) const;
       void setPrev(Segment* e)          { _prev = e;      }
 
-      Q_INVOKABLE Segment* next1() const;
+      Q_INVOKABLE Ms::Segment* next1() const;
       Segment* next1(SegmentTypes) const;
-      Q_INVOKABLE Segment* prev1() const;
+      Q_INVOKABLE Ms::Segment* prev1() const;
       Segment* prev1(SegmentTypes) const;
 
       Segment* nextCR(int track = -1) const;
 
       ChordRest* nextChordRest(int track, bool backwards = false) const;
 
-      Q_INVOKABLE Element* element(int track) const    { return _elist.value(track);  }
+      Q_INVOKABLE Ms::Element* element(int track) const    { return _elist.value(track);  }
       const QList<Element*>& elist() const { return _elist; }
 
       void removeElement(int track);
