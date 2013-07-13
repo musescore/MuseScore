@@ -311,11 +311,12 @@ void PluginCreator::runClicked()
             addDockWidget(area, dock);
             }
       view->raise();
-      dock->widget()->setAttribute(Qt::WA_DeleteOnClose);
       connect(qml,  SIGNAL(quit()),      SLOT(closePlugin()));
       connect(view, SIGNAL(destroyed()), SLOT(closePlugin()));
-      if (dock)
+      if (dock) {
             connect(dock, SIGNAL(destroyed()), SLOT(closePlugin()));
+            dock->widget()->setAttribute(Qt::WA_DeleteOnClose);
+            }
 
       if (mscore->currentScore())
             mscore->currentScore()->startCmd();
