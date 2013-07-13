@@ -897,7 +897,7 @@ void splitIntoLeftRightHands(QList<MTrack> &tracks)
                   case MidiOperation::LHRHMethod::HAND_WIDTH:
                         splitIntoLRHands_HandWidth(tracks, i);
                         break;
-                  case MidiOperation::LHRHMethod::FIXED_PITCH:
+                  case MidiOperation::LHRHMethod::SPECIFIED_PITCH:
                         splitIntoLRHands_FixedPitch(tracks, i);
                         break;
                   }

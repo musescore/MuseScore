@@ -47,7 +47,7 @@ struct MidiOperation
 
       enum class LHRHMethod {
             HAND_WIDTH = 0,
-            FIXED_PITCH
+            SPECIFIED_PITCH
             };
 
       enum class Octave {
