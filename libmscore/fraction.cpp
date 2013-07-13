@@ -74,7 +74,7 @@ Fraction Fraction::reduced() const
 
 Fraction Fraction::absValue() const
       {
-      return Fraction(std::abs(_numerator), std::abs(_denominator));
+      return Fraction(qAbs(_numerator), qAbs(_denominator));
       }
 
 // --- comparison --- //
