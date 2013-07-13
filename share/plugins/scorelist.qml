@@ -11,8 +11,10 @@ MuseScore {
     height: 75
     onRun: {
         console.log("hello scorelist");
-        for (var i = 0; i < scores.length; i++)
+        for (var i = 0; i < scores.length; i++) {
             console.log(scores[i].name);
+            scoreList.text = scoreList.text + scores[i].name + '\n';
+            }
         }
 
     Rectangle {
@@ -20,9 +22,10 @@ MuseScore {
         anchors.fill: parent
 
         Text {
+            id:scoreList
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text: "Hello Notelist"
+            text: ""
             }
 
         MouseArea {
