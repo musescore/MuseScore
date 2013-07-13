@@ -866,5 +866,5 @@ void MidiFile::separateChannel()
             i += nn - 1;
             }
       }
-}
 
+} // namespace Ms

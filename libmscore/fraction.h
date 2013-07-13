@@ -41,6 +41,7 @@ class Fraction {
       bool isValid() const       { return _denominator != 0;    }
       void reduce();
       Fraction reduced() const;
+      Fraction absValue() const;
 
       // check if two fractions are identical (numerator & denominator)
       // == operator checks for equal value:

@@ -38,17 +38,6 @@ ImportMidiPanel::~ImportMidiPanel()
       delete ui;
       }
 
-void ImportMidiPanel::updateUiOnTimer()
-      {
-      bool change = false;
-      if (isMidiFileExists != QFileInfo(midiFile).exists()) {
-            isMidiFileExists = !isMidiFileExists;
-            change = true;
-            }
-      if (change)
-            updateUi();
-      }
-
 void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
       {
       if (currentIndex.isValid()) {
@@ -62,7 +51,7 @@ void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
 
 void ImportMidiPanel::onOperationChanged(const QModelIndex &index)
       {
-      Operation::Type operType = (Operation::Type)index.data(OperationTypeRole).toInt();
+      MidiOperation::Type operType = (MidiOperation::Type)index.data(OperationTypeRole).toInt();
       const QModelIndex &currentIndex = ui->tableViewTracks->currentIndex();
       tracksModel->setOperation(currentIndex.row(), operType, index.data(DataRole));
       ui->treeViewOperations->expandAll();
@@ -89,8 +78,10 @@ class CustomHorizHeaderView : public QHeaderView
 
 void ImportMidiPanel::tweakUi()
       {
-      connect(updateUiTimer, SIGNAL(timeout()), this, SLOT(updateUiOnTimer()));
+      connect(updateUiTimer, SIGNAL(timeout()), this, SLOT(updateUi()));
       connect(ui->pushButtonImport, SIGNAL(clicked()), SLOT(importMidi()));
+      connect(ui->pushButtonUp, SIGNAL(clicked()), SLOT(moveTrackUp()));
+      connect(ui->pushButtonDown, SIGNAL(clicked()), SLOT(moveTrackDown()));
       connect(ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
 
       QItemSelectionModel *sm = ui->tableViewTracks->selectionModel();
@@ -112,7 +103,7 @@ void ImportMidiPanel::tweakUi()
                                                              QHeaderView::ResizeToContents);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::INSTRUMENT,
                                                              QHeaderView::Stretch);
-      ui->treeViewOperations->header()->resizeSection(0, 230);
+      ui->treeViewOperations->header()->resizeSection(0, 285);
       }
 
 bool ImportMidiPanel::canImportMidi() const
@@ -128,17 +119,59 @@ void ImportMidiPanel::hidePanel()
             }
       }
 
+bool ImportMidiPanel::canMoveTrackUp(int visualIndex)
+      {
+      return tracksModel->trackCount() > 1 && visualIndex > 1;
+      }
+
+bool ImportMidiPanel::canMoveTrackDown(int visualIndex)
+      {
+      return tracksModel->trackCount() > 1
+                  && visualIndex < tracksModel->trackCount() && visualIndex > 0;
+      }
+
+int ImportMidiPanel::currentVisualIndex()
+      {
+      auto selectedRows = ui->tableViewTracks->selectionModel()->selectedRows();
+      int curRow = -1;
+      if (!selectedRows.isEmpty())
+            curRow = ui->tableViewTracks->selectionModel()->selectedRows()[0].row();
+      int visIndex = ui->tableViewTracks->verticalHeader()->visualIndex(curRow);
+
+      return visIndex;
+      }
+
+void ImportMidiPanel::moveTrackUp()
+      {
+      int visIndex = currentVisualIndex();
+      if (canMoveTrackUp(visIndex))
+            ui->tableViewTracks->verticalHeader()->moveSection(visIndex, visIndex - 1);
+      }
+
+void ImportMidiPanel::moveTrackDown()
+      {
+      int visIndex = currentVisualIndex();
+      if (canMoveTrackDown(visIndex))
+            ui->tableViewTracks->verticalHeader()->moveSection(visIndex, visIndex + 1);
+      }
+
 void ImportMidiPanel::updateUi()
       {
+      if (isMidiFileExists != QFileInfo(midiFile).exists())
+            isMidiFileExists = !isMidiFileExists;
       if (isMidiFileExists) {
             ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: black;}");
             ui->lineEditMidiFile->setToolTip(midiFile);
             }
-      else {  // midi file not exists
+      else {            // midi file does not exist
             ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: red;}");
             ui->lineEditMidiFile->setToolTip(tr("MIDI file not found"));
             }
       ui->pushButtonImport->setEnabled(canImportMidi());
+
+      int visualIndex = currentVisualIndex();
+      ui->pushButtonUp->setEnabled(canMoveTrackUp(visualIndex));
+      ui->pushButtonDown->setEnabled(canMoveTrackDown(visualIndex));
       }
 
 void ImportMidiPanel::importMidi()
@@ -148,7 +181,10 @@ void ImportMidiPanel::importMidi()
       preferences.midiImportOperations.clear();
       int trackCount = tracksModel->trackCount();
       for (int i = 0; i != trackCount; ++i) {
-            TrackData data(tracksModel->trackData(i));
+            int visIndex = tracksModel->rowFromTrackIndex(i);
+            int logIndex = ui->tableViewTracks->verticalHeader()->logicalIndex(visIndex);
+            int trackIndex = tracksModel->trackIndexFromRow(logIndex);
+            TrackData data(tracksModel->trackData(trackIndex));
             preferences.midiImportOperations.appendTrackOperations(data.opers);
             }
       mscore->openScore(midiFile);
@@ -167,10 +203,11 @@ void ImportMidiPanel::setMidiFile(const QString &file)
             return;
       midiFile = file;
       ui->lineEditMidiFile->setText(QFileInfo(file).fileName());
-      updateUiOnTimer();
+      updateUi();
       if (isMidiFileExists) {
             QList<TrackMeta> tracksMeta(extractMidiTracksMeta(file));
             tracksModel->reset(tracksMeta);
+            operationsModel->reset(tracksMeta.size());
             ui->tableViewTracks->selectRow(0);
             }
       }

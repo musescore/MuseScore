@@ -40,33 +40,15 @@
 #include "libmscore/pitchspelling.h"
 #include "preferences.h"
 #include "importmidi_meter.h"
+#include "importmidi_chord.h"
+#include "importmidi_quant.h"
+#include "importmidi_tuplet.h"
+#include "libmscore/tuplet.h"
+
 
 namespace Ms {
 
 extern Preferences preferences;
-
-//---------------------------------------------------------
-//   MidiNote
-//---------------------------------------------------------
-
-class MidiNote {
-   public:
-      int pitch, velo;
-      int onTime, len;
-      Tie* tie = 0;
-      };
-
-//---------------------------------------------------------
-//   MidiChord
-//---------------------------------------------------------
-
-class MidiChord {
-   public:
-      int voice = 0;
-      int onTime;
-      int duration;
-      QList<MidiNote> notes;
-      };
 
 //---------------------------------------------------------
 //   MTrack
@@ -80,253 +62,239 @@ class MTrack {
       QString name;
       bool hasKey = false;
 
-      std::multimap<int, MidiChord> chords;
+      std::multimap<Fraction, MidiChord> chords;
+      std::multimap<Fraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
 
-      void convertTrack(int lastTick);
-      void findChords();
-      void cleanup(int lastTick, TimeSigMap*);
-      void quantize(int startBarTick, int endBarTick, std::multimap<int, MidiChord>& dst);
-      void processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, int tick);
+      void convertTrack(const Fraction &lastTick);
+      void processPendingNotes(QList<MidiChord>& midiChords, int voice,
+                               const Fraction &startChordTickFrac, const Fraction &nextChordTick);
       void processMeta(int tick, const MidiEvent& mm);
-
-   private:
-      std::multimap<int, MidiChord>::iterator findStartChord(int startBarTick);
-      int findShortestNoteDurationInBar(const std::multimap<int, MidiChord>::iterator &start, int endBarTick);
-      void quantizeToDurationList(const std::multimap<int, MidiChord>::iterator &startChordIter,
-                                  int mintick, int endBarTick, std::multimap<int, MidiChord>& dst);
+      void fillGapWithRests(Score *score, int voice, const Fraction &startChordTickFrac,
+                            const Fraction &restLength, int track);
+      QList<std::pair<Fraction, TDuration> >
+            toDurationList(const Measure *measure, int voice, const Fraction &startTick,
+                           const Fraction &len, Meter::DurationType durationType);
+      void addElementToTuplet(int voice, const Fraction &onTime,
+                              const Fraction &len, DurationElement *el);
+      void createTuplets(int track, Score *score);
       };
 
 
-int MTrack::findShortestNoteDurationInBar(const std::multimap<int, MidiChord>::iterator &start, int endBarTick)
+// remove overlapping notes with the same pitch
+
+void removeOverlappingNotes(QList<MTrack> &tracks)
       {
-      int division = MScore::division;
-      int minDuration = division;
-
-      // find shortest note in measure
-      //
-      for (auto i = start; i != chords.end(); ++i) {
-            if (i->first >= endBarTick)
-                  break;
-            minDuration = qMin(minDuration, i->second.duration);
-            }
-      //
-      // determine suitable quantization value based
-      // on shortest note in measure
-      //
-      int div = division;
-      if (minDuration <= division / 16)        // minimum duration is 1/64
-            div = division / 16;
-      else if (minDuration <= division / 8)
-            div = division / 8;
-      else if (minDuration <= division / 4)
-            div = division / 4;
-      else if (minDuration <= division / 2)
-            div = division / 2;
-      else if (minDuration <= division)
-            div = division;
-      else if (minDuration <= division * 2)
-            div = division * 2;
-      else if (minDuration <= division * 4)
-            div = division * 4;
-      else if (minDuration <= division * 8)
-            div = division * 8;
-      if (div == (division / 16))
-            minDuration = div;
-      else
-            minDuration = quantizeLen(minDuration, div >> 1);    //closest
-
-      return minDuration;
-      }
-
-int userQuantNoteToTicks(Operation::QuantValue quantNote)
-      {
-      int division = MScore::division;
-      int userQuantValue = preferences.shortestNote;
-      // specified quantization value
-      switch (quantNote) {
-            case Operation::N_4:
-                  userQuantValue = division;
-                  break;
-//            case Operation::N_4_triplet:
-//                  userQuantValue = division * 2 / 3;
-//                  break;
-            case Operation::N_8:
-                  userQuantValue = division / 2;
-                  break;
-//            case Operation::N_8_triplet:
-//                  userQuantValue = division / 3;
-//                  break;
-            case Operation::N_16:
-                  userQuantValue = division / 4;
-                  break;
-//            case Operation::N_16_triplet:
-//                  userQuantValue = division / 6;
-//                  break;
-            case Operation::N_32:
-                  userQuantValue = division / 8;
-                  break;
-//            case Operation::N_32_triplet:
-//                  userQuantValue = division / 12;
-//                  break;
-            case Operation::N_64:
-                  userQuantValue = division / 16;
-                  break;
-            case Operation::FROM_PREFERENCES:
-            default:
-                  userQuantValue = preferences.shortestNote;
-                  break;
-            }
-
-      return userQuantValue;
-      }
-
-std::multimap<int, MidiChord>::iterator MTrack::findStartChord(int startBarTick)
-      {
-      auto i = chords.begin();
-      for (; i != chords.end(); ++i) {
-            if (i->first >= startBarTick)
-                  break;
-            }
-      return i;
-      }
-
-void MTrack::quantizeToDurationList(const std::multimap<int, MidiChord>::iterator& startChordIter,
-                                    int mintick, int endBarTick, std::multimap<int, MidiChord>& dst)
-      {
-      int raster  = mintick;
-      int raster2 = raster >> 1;
-      for (auto i = startChordIter; i != chords.end(); ++i) {
-            if (i->first >= endBarTick)
-                  break;
-            MidiChord e = i->second;
-            e.onTime    = ((e.onTime + raster2) / raster) * raster;
-            e.duration  = quantizeLen(e.duration, raster);
-            dst.insert({e.onTime, e});
+      for (auto &track: tracks) {
+            auto &chords = track.chords;
+            for (auto it = chords.begin(); it != chords.end(); ++it) {
+                  auto &firstChord = it->second;
+                  const auto &firstOnTime = it->first;
+                  for (auto &note1: firstChord.notes) {
+                        auto ii = it;
+                        ++ii;
+                        bool overlapFound = false;
+                        for (; ii != chords.end(); ++ii) {
+                              auto &secondChord = ii->second;
+                              const auto &secondOnTime = ii->first;
+                              for (auto &note2: secondChord.notes) {
+                                    if (note2.pitch != note1.pitch)
+                                          continue;
+                                    if (secondOnTime >= (firstOnTime + note1.len))
+                                          continue;
+                                    qDebug("Midi import: overlapping events: %d+%d %d+%d",
+                                           firstOnTime.ticks(), note1.len.ticks(),
+                                           secondOnTime.ticks(), note2.len.ticks());
+                                    note1.len = secondOnTime - firstOnTime;
+                                    overlapFound = true;
+                                    break;
+                                    }
+                              if (overlapFound)
+                                    break;
+                              }
+                        if (note1.len <= Fraction(0)) {
+                              qDebug("Midi import: duration <= 0: drop note at %d",
+                                     firstOnTime.ticks());
+                              continue;
+                              }
+                        }
+                  } // for note1
             }
       }
 
-//---------------------------------------------------------
-//   quantize
-//---------------------------------------------------------
 
-void MTrack::quantize(int startBarTick, int endBarTick, std::multimap<int, MidiChord>& dst)
-      {
-      auto startChordIter = findStartChord(startBarTick);
-      auto operations = preferences.midiImportOperations.currentTrackOperations();
-      int mintick;
-
-      if (operations.quantize.value == Operation::SHORTEST_IN_BAR)
-            mintick = findShortestNoteDurationInBar(startChordIter, endBarTick);
-      else {
-            int userQuantValue = userQuantNoteToTicks(operations.quantize.value);
-            // if user value larger than the smallest note in bar
-            // then use the smallest note to keep faster events
-            if (operations.quantize.reduceToShorterNotesInBar) {
-                  mintick = findShortestNoteDurationInBar(startChordIter, endBarTick);
-                  mintick = qMin(userQuantValue, mintick);
-                  }
-            else
-                  mintick = userQuantValue;
-            }
-      quantizeToDurationList(startChordIter, mintick, endBarTick, dst);
-      }
-
-//---------------------------------------------------------
-//   cleanup
-//    - quantize
-//    - remove overlaps
-//    - replace old chords by quantized ones
+// based on quickthresh algorithm
 //
-//   Note that chords here consist of a single note
-//     because notes are not united into chords yet
-//---------------------------------------------------------
+// http://www.cycling74.com/docs/max5/refpages/max-ref/quickthresh.html
+// (link date 9 July 2013)
+//
+// here are default values for audio, in milliseconds
+// for midi there will be another values, in ticks
 
-void MTrack::cleanup(int lastTick, TimeSigMap* sigmap)
+// all notes received in the left inlet within this time period are collected into a chord
+// threshTime = 40 ms
+
+// if there are any incoming values within this amount of time
+// at the end of the base thresh time,
+// the threshold is extended to allow more notes to be added to the chord
+// fudgeTime = 10 ms
+
+// this is an extension value of the base thresh time, which is used if notes arrive
+// in the object's inlet in the "fudge" time zone
+// threshExtTime = 20 ms
+
+void collectChords(QList<MTrack> &tracks, const Fraction &minNoteDuration)
       {
-      std::multimap<int, MidiChord> dl; // duration list
-
-      //    quantize every measure
-      //    and fill the duration list with quantized chords
-      //
-      int startBarTick = 0;
-      for (int i = 1;; ++i) { // iterate over all measures by indexes
-            int endBarTick = sigmap->bar2tick(i, 0);
-            quantize(startBarTick, endBarTick, dl);
-            if (endBarTick > lastTick)
-                  break;
-            startBarTick = endBarTick;
-            }
-
-      // remove overlapping notes with the same pitch
-      //
-      for (auto i = dl.begin(); i != dl.end(); ++i) {
-            const MidiChord& e = i->second;
-            auto ii = i;
-            ++ii;
-            for (; ii != dl.end(); ++ii) {
-                  const MidiChord& ee = ii->second;
-                  // check the first and the only note in chord
-                  if (ee.notes[0].pitch != e.notes[0].pitch)
-                        continue;
-                  if (ee.onTime >= (e.onTime + e.duration))
-                        break;
-                  qDebug("MidiTrack::cleanup: overlapping events: %d+%d %d+%d",
-                     e.onTime, e.duration,
-                     ee.onTime, ee.duration);
-                  i->second.duration = ee.onTime - e.onTime;
-                  break;
-                  }
-            if (e.duration <= 0) {
-                  qDebug("MidiTrack::cleanup: duration <= 0: drop note at %d", e.onTime);
+      for (auto &track: tracks) {
+            auto &chords = track.chords;
+            if (chords.empty())
                   continue;
+
+            Drumset* drumset = track.mtrack->drumTrack() ? smDrumset : 0;
+
+            Fraction threshTime = minNoteDuration / 2;
+            Fraction fudgeTime = threshTime / 4;
+            Fraction threshExtTime = threshTime / 2;
+
+            Fraction startTime(-1, 1);    // invalid
+            Fraction curThreshTime(-1, 1);
+            bool useDrumset = false;
+                        // if intersection of note durations is less than min(minNoteDuration, threshTime)
+                        // then this is not a chord
+            Fraction tol(-1, 1);       // invalid
+            Fraction beg(-1, 1);
+            Fraction end(-1, 1);
+                        // chords here consist of a single note
+                        // because notes are not united into chords yet
+            for (auto it = chords.begin(); it != chords.end(); ) {
+                  const auto &note = it->second.notes[0];
+                              // this should not be executed when it == chords.begin()
+                  if (it->first <= startTime + curThreshTime) {
+                        if (!useDrumset || (drumset->isValid(note.pitch)
+                                            && drumset->voice(note.pitch) == it->second.voice)) {
+                              if (it->first > beg)
+                                    beg = it->first;
+                              if (it->first + note.len < end)
+                                    end = it->first + note.len;
+                              if (note.len < tol)
+                                    tol = note.len;
+                              if (end - beg >= tol) {
+                                                // add current note to the previous chord
+                                    auto prev = it;
+                                    --prev;
+                                    prev->second.notes.push_back(note);
+                                    if (it->first >= startTime + curThreshTime - fudgeTime)
+                                          curThreshTime += threshExtTime;
+                                    it = chords.erase(it);
+                                    continue;
+                                    }
+                              }
+                        }
+                  else {
+                        useDrumset = false;
+                        if (drumset) {
+                              int pitch = note.pitch;
+                              if (drumset->isValid(pitch)) {
+                                    useDrumset = true;
+                                    it->second.voice = drumset->voice(pitch);
+                                    }
+                              }
+                        startTime = it->first;
+                        beg = startTime;
+                        end = startTime + note.len;
+                        tol = threshTime;
+                        if (curThreshTime != threshTime)
+                              curThreshTime = threshTime;
+                        }
+                  ++it;
                   }
             }
-      chords = dl;
       }
 
-//---------------------------------------------------------
-//   findChords
-//     with some tolerance
-//---------------------------------------------------------
-
-void MTrack::findChords()
+void sortNotesByPitch(std::multimap<Fraction, MidiChord> &chords)
       {
-      Drumset* drumset = mtrack->drumTrack() ? smDrumset : 0;
-      const int jitter       = 3;   // tick tolerance for note on/off
+      struct {
+            bool operator()(const MidiNote &note1, const MidiNote &note2)
+                  {
+                  return note1.pitch < note2.pitch;
+                  }
+            } pitchSort;
 
-      for (auto i = chords.begin(); i != chords.end(); ++i) {
-            const MidiChord& e = i->second;
-            int ontime   = i->first;
-            int offtime  = ontime + e.duration;
+      for (auto &chordEvent: chords) {
+                        // in each chord sort notes by pitches
+            auto &notes = chordEvent.second.notes;
+            qSort(notes.begin(), notes.end(), pitchSort);
+            }
+      }
 
-            bool useDrumset = false;
-            if (drumset) {
-                  int pitch = e.notes[0].pitch;
-                  if (drumset->isValid(pitch)) {
-                        useDrumset = true;
-                        i->second.voice = drumset->voice(pitch);
+void sortNotesByLength(std::multimap<Fraction, MidiChord> &chords)
+      {
+      struct {
+            bool operator()(const MidiNote &note1, const MidiNote &note2)
+                  {
+                  return note1.len < note2.len;
+                  }
+            } lenSort;
+
+      for (auto &chordEvent: chords) {
+                        // in each chord sort notes by pitches
+            auto &notes = chordEvent.second.notes;
+            qSort(notes.begin(), notes.end(), lenSort);
+            }
+      }
+
+// find notes of each chord that have different durations
+// and separate them into different chords
+// so all chords will have notes with equal lengths
+
+void splitUnequalChords(QList<MTrack> &tracks)
+      {
+      for (auto &track: tracks) {
+            std::vector<std::pair<Fraction, MidiChord>> newChordEvents;
+            auto &chords = track.chords;
+            sortNotesByLength(chords);
+            for (auto &chordEvent: chords) {
+                  auto &chord = chordEvent.second;
+                  auto &notes = chord.notes;
+                  Fraction len;
+                  for (auto it = notes.begin(); it != notes.end(); ) {
+                        if (it == notes.begin())
+                              len = it->len;
+                        else {
+                              Fraction newLen = it->len;
+                              if (newLen != len) {
+                                    auto newChord = chord;
+                                    newChord.notes.clear();
+                                    for (int j = it - notes.begin(); j > 0; --j)
+                                          newChord.notes.push_back(notes[j - 1]);
+                                    newChordEvents.push_back({chordEvent.first, newChord});
+                                    it = notes.erase(notes.begin(), it);
+                                    continue;
+                                    }
+                              }
+                        ++it;
                         }
                   }
-            auto k = i;
-            ++k;
-            for (; k != chords.end();) {
-                  if (k->first - jitter > ontime)
-                        break;
-                  int on2  = k->first;
-                  int off2 = k->first + k->second.duration;
-                  if (qAbs(on2 - ontime) > jitter || qAbs(off2 - offtime) > jitter) {
-                        ++k;
-                        continue;
-                        }
-                  int pitch = k->second.notes[0].pitch;
-                  if (!useDrumset
-                     || (drumset->isValid(pitch) && drumset->voice(pitch) == e.voice)
-                     ) {
-                        i->second.notes.append(k->second.notes[0]);
-                        k = chords.erase(k);
-                        }
-                  else
-                        ++k;
+            for (const auto &event: newChordEvents)
+                  chords.insert(event);
+            }
+      }
+
+
+void quantizeAllTracks(QList<MTrack>& tracks, TimeSigMap* sigmap, const Fraction &lastTick)
+      {
+      auto &opers = preferences.midiImportOperations;
+      if (tracks.size() == 1 && opers.trackOperations(0).quantize.humanPerformance) {
+            opers.setCurrentTrack(0);
+            Quantize::applyAdaptiveQuant(tracks[0].chords, sigmap, lastTick);
+            Quantize::applyGridQuant(tracks[0].chords, sigmap, lastTick);
+            }
+      else {
+            for (int i = 0; i < tracks.size(); ++i) {
+                              // pass current track index through MidiImportOperations
+                              // for further usage
+                  opers.setCurrentTrack(i);
+                  Quantize::quantizeChordsAndTuplets(tracks[i].tuplets, tracks[i].chords,
+                                                     sigmap, lastTick);
                   }
             }
       }
@@ -433,204 +401,317 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             }
       }
 
-//---------------------------------------------------------
-//   fillGapsWithRests
-//    check for gap and fill with rest
-//---------------------------------------------------------
-
-void fillGapsWithRests(Score* score, int ctick, int restLen, int track)
+QList<std::pair<Fraction, TDuration> >
+MTrack::toDurationList(const Measure *measure,
+                       int voice,
+                       const Fraction &startTick,
+                       const Fraction &len,
+                       Meter::DurationType durationType)
       {
       bool useDots = preferences.midiImportOperations.currentTrackOperations().useDots;
+                  // find tuplets over which duration is go
+      std::vector<MidiTuplet::TupletData> tupletData
+                  = MidiTuplet::findTupletsForDuration(voice, Fraction::fromTicks(measure->tick()),
+                                                       startTick, len, tuplets);
+      Fraction startTickInBar = startTick - Fraction::fromTicks(measure->tick());
+      Fraction endTickInBar = startTickInBar + len;
+      return Meter::toDurationList(startTickInBar, endTickInBar,
+                                   measure->timesig(), tupletData,
+                                   durationType, useDots);
+      }
+
+Fraction splitDurationOnBarBoundary(const Fraction &len, const Fraction &onTime,
+                                    const Measure* measure)
+      {
+      Fraction barLimit = Fraction::fromTicks(measure->tick() + measure->ticks());
+      if (onTime + len > barLimit)
+            return barLimit - onTime;
+      return len;
+      }
+
+// fill the gap between successive chords with rests
+
+void MTrack::fillGapWithRests(Score* score, int voice,
+                              const Fraction &startChordTickFrac,
+                              const Fraction &restLength, int track)
+      {
+      Fraction startChordTick = startChordTickFrac;
+      Fraction restLen = restLength;
       while (restLen > 0) {
-            int len = restLen;
-            Measure* measure = score->tick2measure(ctick);
-            if (ctick >= measure->tick() + measure->ticks()) {
-                  qDebug("tick2measure: %d end of score?", ctick);
-                  ctick += restLen;
-                  restLen = 0;
+            Fraction len = restLen;
+            Measure* measure = score->tick2measure(startChordTick.ticks());
+            if (startChordTick >= Fraction::fromTicks(measure->tick() + measure->ticks())) {
+                  qDebug("tick2measure: %d end of score?", startChordTick.ticks());
+                  startChordTick += restLen;
+                  restLen = Fraction(0);
                   break;
                   }
-            // split rest on measure boundary
-            if ((ctick + len) > measure->tick() + measure->ticks())
-                  len = measure->tick() + measure->ticks() - ctick;
-            if (len >= measure->ticks()) {
-                  len = measure->ticks();
-                  TDuration d(TDuration::V_MEASURE);
-                  Rest* rest = new Rest(score, d);
-                  rest->setDuration(measure->len());
-                  rest->setTrack(track);
-                  Segment* s = measure->getSegment(rest, ctick);
-                  s->add(rest);
+            len = splitDurationOnBarBoundary(len, startChordTick, measure);
+
+            if (len >= Fraction::fromTicks(measure->ticks())) {
+                              // rest to the whole measure
+                  len = Fraction::fromTicks(measure->ticks());
+                  if (voice == 0) {
+                        TDuration duration(TDuration::V_MEASURE);
+                        Rest* rest = new Rest(score, duration);
+                        rest->setDuration(measure->len());
+                        rest->setTrack(track);
+                        Segment* s = measure->getSegment(rest, startChordTick.ticks());
+                        s->add(rest);
+                        }
                   restLen -= len;
-                  ctick   += len;
+                  startChordTick += len;
                   }
             else {
-                  QList<TDuration> dl = Meter::toDurationList(ctick - measure->tick(),
-                                                              ctick + len - measure->tick(),
-                                                              measure->timesig(),
-                                                              Meter::DurationType::REST,
-                                                              useDots);
+                  auto dl = toDurationList(measure, voice, startChordTick, len,
+                                           Meter::DurationType::REST);
                   if (dl.isEmpty()) {
-                        qDebug("cannot create duration list for len %d", len);
-                        restLen = 0;      // fake
+                        qDebug("cannot create duration list for len %d", len.ticks());
+                        restLen = Fraction(0);      // fake
                         break;
                         }
-                  foreach (TDuration d, dl) {
-                        Rest* rest = new Rest(score, d);
-                        rest->setDuration(d.fraction());
+                  for (const auto &durationPair: dl) {
+                        const TDuration &duration = durationPair.second;
+                        const Fraction &tupletRatio = durationPair.first;
+                        len = duration.fraction() / tupletRatio;
+                        Rest* rest = new Rest(score, duration);
+                        rest->setDuration(duration.fraction());
                         rest->setTrack(track);
-                        Segment* s = measure->getSegment(Segment::SegChordRest, ctick);
+                        Segment* s = measure->getSegment(Segment::SegChordRest,
+                                                         startChordTick.ticks());
                         s->add(rest);
-                        restLen -= d.ticks();
-                        ctick   += d.ticks();
+                        addElementToTuplet(voice, startChordTick, len, rest);
+                        restLen -= len;
+                        startChordTick += len;
                         }
+                  }
+
+            }
+      }
+
+void setMusicNotesFromMidi(Score *score,
+                           const QList<MidiNote> &midiNotes,
+                           const Fraction &onTime,
+                           const Fraction &len,
+                           Chord *chord,
+                           const Fraction &tick,
+                           const Drumset *drumset,
+                           bool useDrumset)
+      {
+      Fraction actualFraction = chord->actualFraction();
+
+      for (int i = 0; i < midiNotes.size(); ++i) {
+            const MidiNote& mn = midiNotes[i];
+            Note* note = new Note(score);
+
+            // TODO - does this need to be key-aware?
+            note->setPitch(mn.pitch, pitch2tpc(mn.pitch, KEY_C, PREFER_NEAREST));
+            chord->add(note);
+            note->setVeloType(MScore::USER_VAL);
+            note->setVeloOffset(mn.velo);
+
+            NoteEventList el;
+            Fraction f = (onTime - tick) / actualFraction * 1000;
+            int ron = f.numerator() / f.denominator();
+            f = len / actualFraction * 1000;
+            int rlen = f.numerator() / f.denominator();
+
+            el.append(NoteEvent(0, ron, rlen));
+            note->setPlayEvents(el);
+
+            if (useDrumset) {
+                  if (!drumset->isValid(mn.pitch))
+                        qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
+                  else
+                        chord->setStemDirection(drumset->stemDirection(mn.pitch));
+                  }
+
+            if (midiNotes[i].tie) {
+                  midiNotes[i].tie->setEndNote(note);
+                  midiNotes[i].tie->setTrack(note->track());
+                  note->setTieBack(midiNotes[i].tie);
                   }
             }
       }
 
-//---------------------------------------------------------
-//   processPendingNotes
-//---------------------------------------------------------
+Fraction findMinDuration(const QList<MidiChord> &midiChords, const Fraction &length)
+      {
+      Fraction len = length;
+      for (const auto &chord: midiChords) {
+            for (const auto &note: chord.notes) {
+                  if ((note.len < len) && (note.len != 0))
+                        len = note.len;
+                  }
+            }
+      return len;
+      }
 
-void MTrack::processPendingNotes(QList<MidiChord>& notes, int voice, int ctick, int t)
+void setTies(Chord *chord, Score *score, QList<MidiNote> &midiNotes)
+      {
+      for (int i = 0; i < midiNotes.size(); ++i) {
+            const MidiNote &midiNote = midiNotes[i];
+            Note *note = chord->findNote(midiNote.pitch);
+            midiNotes[i].tie = new Tie(score);
+            midiNotes[i].tie->setStartNote(note);
+            note->setTieFor(midiNotes[i].tie);
+            }
+      }
+
+void MTrack::addElementToTuplet(int voice, const Fraction &onTime,
+                                const Fraction &len, DurationElement *el)
+      {
+      if (tuplets.empty())
+            return;
+      auto it = tuplets.lower_bound(onTime);
+      if (it == tuplets.end())
+            it = tuplets.begin();
+      if (it != tuplets.begin())
+            --it;
+      for ( ; it != tuplets.end(); ++it) {
+            auto &tupletData = it->second;
+            if (tupletData.voice != voice)
+                  continue;
+            if (onTime >= tupletData.onTime
+                        && onTime + len <= tupletData.onTime + tupletData.len) {
+                              // add chord/rest to the tuplet
+                  tupletData.elements.push_back(el);
+                  break;
+                  }
+            }
+      }
+
+// convert midiChords with the same onTime value to music notation
+// and fill the remaining empty duration with rests
+
+void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
+                                 int voice,
+                                 const Fraction &startChordTickFrac,
+                                 const Fraction &nextChordTick)
       {
       Score* score     = staff->score();
       int track        = staff->idx() * VOICES + voice;
       Drumset* drumset = staff->part()->instr()->drumset();
       bool useDrumset  = staff->part()->instr()->useDrumset();
-      bool useDots = preferences.midiImportOperations.currentTrackOperations().useDots;
-
-      while (!notes.isEmpty()) {
-            int tick = notes[0].onTime;
-            int len  = t - tick;
-            if (len <= 0)
+                  // all midiChords here should have the same onTime value
+                  // and all notes in each midiChord should have the same duration
+      Fraction startChordTick = startChordTickFrac;
+      while (!midiChords.isEmpty()) {
+            Fraction tick = startChordTick;
+            Fraction len = nextChordTick - tick;
+            if (len <= Fraction(0))
                   break;
-            foreach (const MidiChord& c, notes) {
-                  if ((c.duration < len) && (c.duration != 0))
-                        len = c.duration;
-                  }
-            Measure* measure = score->tick2measure(tick);
-            // split notes on measure boundary
-            if ((tick + len) > measure->tick() + measure->ticks())
-                  len = measure->tick() + measure->ticks() - tick;
+            len = findMinDuration(midiChords, len);
+            Measure* measure = score->tick2measure(tick.ticks());
+            len = splitDurationOnBarBoundary(len, tick, measure);
 
-            QList<TDuration> dl = Meter::toDurationList(tick - measure->tick(),
-                                                        tick + len - measure->tick(),
-                                                        measure->timesig(),
-                                                        Meter::DurationType::NOTE,
-                                                        useDots);
-
+            auto dl = toDurationList(measure, voice, tick, len, Meter::DurationType::NOTE);
             if (dl.isEmpty())
                   break;
-            TDuration d = dl[0];
-            len = d.ticks();
+            const TDuration &d = dl[0].second;
+            const Fraction &tupletRatio = dl[0].first;
+            len = d.fraction() / tupletRatio;
 
             Chord* chord = new Chord(score);
             chord->setTrack(track);
             chord->setDurationType(d);
             chord->setDuration(d.fraction());
-            Segment* s = measure->getSegment(chord, tick);
+            Segment* s = measure->getSegment(chord, tick.ticks());
             s->add(chord);
             chord->setUserPlayEvents(true);
+            addElementToTuplet(voice, tick, len, chord);
 
-            int actualTicks = chord->actualTicks();
-            for (int k = 0; k < notes.size(); ++k) {
-                  MidiChord& n = notes[k];
-                  const QList<MidiNote>& nl = n.notes;
-                  for (int i = 0; i < nl.size(); ++i) {
-                        const MidiNote& mn = nl[i];
-                        Note* note = new Note(score);
-
-                        // TODO - does this need to be key-aware?
-                        note->setPitch(mn.pitch, pitch2tpc(mn.pitch, KEY_C, PREFER_NEAREST));
-                        chord->add(note);
-                        note->setVeloType(MScore::USER_VAL);
-                        note->setVeloOffset(mn.velo);
-
-                        NoteEventList el;
-                        int ron  = (mn.onTime - tick) * 1000 / actualTicks;
-                        int rlen = mn.len * 1000 / actualTicks;
-                        el.append(NoteEvent(0, ron, rlen));
-                        note->setPlayEvents(el);
-
-                        if (useDrumset) {
-                              if (!drumset->isValid(mn.pitch))
-                                    qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
-                              else
-                                    chord->setStemDirection(drumset->stemDirection(mn.pitch));
-                              }
-
-                        if (n.notes[i].tie) {
-                              n.notes[i].tie->setEndNote(note);
-                              n.notes[i].tie->setTrack(note->track());
-                              note->setTieBack(n.notes[i].tie);
-                              }
-                        }
-                  if (n.duration <= len) {
-                        notes.removeAt(k);
+            for (int k = 0; k < midiChords.size(); ++k) {
+                  MidiChord& midiChord = midiChords[k];
+                  setMusicNotesFromMidi(score, midiChord.notes, startChordTick,
+                                        len, chord, tick, drumset, useDrumset);
+                  if (!midiChord.notes.empty() && midiChord.notes.first().len <= len) {
+                        midiChords.removeAt(k);
                         --k;
                         continue;
                         }
-
-                  for (int i = 0; i < nl.size(); ++i) {
-                        const MidiNote& mn = nl[i];
-                        Note* note = chord->findNote(mn.pitch);
-                  n.notes[i].tie = new Tie(score);
-                        n.notes[i].tie->setStartNote(note);
-                    note->setTieFor(n.notes[i].tie);
-                        }
-
-                  n.onTime   = n.onTime + len;
-                  n.duration = n.duration - len;
+                  setTies(chord, score, midiChord.notes);
+                  for (auto &midiNote: midiChord.notes)
+                        midiNote.len -= len;
                   }
-
-            ctick += len;
+            startChordTick += len;
             }
-      if (voice == 0)
-            fillGapsWithRests(score, ctick, t - ctick, track);
+      fillGapWithRests(score, voice, startChordTick,
+                       nextChordTick - startChordTick, track);
       }
 
-//---------------------------------------------------------
-//   convertTrack
-//---------------------------------------------------------
+void MTrack::createTuplets(int track, Score *score)
+      {
+      for (const auto &tupletEvent: tuplets) {
+            const auto &tupletData = tupletEvent.second;
+            if (tupletData.elements.empty())
+                  continue;
 
-void MTrack::convertTrack(int lastTick)
+            Tuplet* tuplet = new Tuplet(score);
+            auto ratioIt = MidiTuplet::tupletRatios().find(tupletData.tupletNumber);
+            Fraction tupletRatio = (ratioIt != MidiTuplet::tupletRatios().end())
+                        ? ratioIt->second : Fraction(2, 2);
+            if (ratioIt == MidiTuplet::tupletRatios().end())
+                  qDebug("Tuplet ratio not found for tuplet number: %d", tupletData.tupletNumber);
+            tuplet->setRatio(tupletRatio);
+
+            tuplet->setDuration(tupletData.len);
+            TDuration baseLen(tupletData.len / tupletRatio.denominator());
+            tuplet->setBaseLen(baseLen);
+
+            tuplet->setTrack(track);
+            tuplet->setTick(tupletData.onTime.ticks());
+            Measure* measure = score->tick2measure(tupletData.onTime.ticks());
+            tuplet->setParent(measure);
+
+            for (DurationElement *el: tupletData.elements) {
+                  tuplet->add(el);
+                  el->setTuplet(tuplet);
+                  }
+            }
+      }
+
+void MTrack::convertTrack(const Fraction &lastTick)
       {
       Score* score     = staff->score();
-      int key          = 0;  // TODO-LIB findKey(mtrack, score->sigmap());
+      int key          = 0;                      // TODO-LIB findKey(mtrack, score->sigmap());
       int track        = staff->idx() * VOICES;
-      int voices       = 1; // mtrack->separateVoices(2);
+      int voices       = VOICES;
 
       for (int voice = 0; voice < voices; ++voice) {
-            QList<MidiChord> notes;
-            int ctick = 0;
+                        // startChordTick is onTime value of all simultaneous notes
+                        // chords here are consist of notes with equal durations
+                        // several chords may have the same onTime value
+            Fraction startChordTick;
+            QList<MidiChord> midiChords;
 
-            for (auto i = chords.begin(); i != chords.end();) {
-                  const MidiChord& e = i->second;
-                  if (e.voice != voice) {
-                        ++i;
+            for (auto it = chords.begin(); it != chords.end();) {
+                  const Fraction &nextChordTick = it->first;
+                  const MidiChord& midiChord = it->second;
+                  if (midiChord.voice != voice) {
+                        ++it;
                         continue;
                         }
-                  processPendingNotes(notes, voice, ctick, i->first);
-
-                  //
-                  // collect all notes on current
-                  // tick position
-                  //
-                  ctick = i->first;       // debug
-                  for (;i != chords.end(); ++i) {
-                        const MidiChord& e = i->second;
-                        if (i->first != ctick)
+                  processPendingNotes(midiChords, voice, startChordTick, nextChordTick);
+                              // now 'midiChords' list is empty
+                              // so - fill it:
+                              // collect all midiChords on current tick position
+                  startChordTick = nextChordTick;       // debug
+                  for (;it != chords.end(); ++it) {
+                        const MidiChord& midiChord = it->second;
+                        if (it->first != startChordTick)
                               break;
-                        if (e.voice != voice)
+                        if (midiChord.voice != voice)
                               continue;
-                        notes.append(e);
+                        midiChords.append(midiChord);
                         }
-                  if (notes.isEmpty())
+                  if (midiChords.isEmpty())
                         break;
                   }
-            processPendingNotes(notes, voice, ctick, lastTick);
+                        // process last chords at the end of the score
+            processPendingNotes(midiChords, voice, startChordTick, lastTick);
             }
+
+      createTuplets(track, score);
 
       KeyList* km = staff->keymap();
       if (!hasKey && !mtrack->drumTrack()) {
@@ -638,9 +719,9 @@ void MTrack::convertTrack(int lastTick)
             ks.setAccidentalType(key);
             (*km)[0] = ks;
             }
-      for (auto i = km->begin(); i != km->end(); ++i) {
-            int tick = i->first;
-            KeySigEvent key  = i->second;
+      for (auto it = km->begin(); it != km->end(); ++it) {
+            int tick = it->first;
+            KeySigEvent key  = it->second;
             KeySig* ks = new KeySig(score);
             ks->setTrack(track);
             ks->setGenerated(false);
@@ -705,10 +786,6 @@ void MTrack::convertTrack(int lastTick)
       mf->move(-tick);
 #endif
 
-//---------------------------------------------------------
-//   metaTimeSignature
-//---------------------------------------------------------
-
 Fraction metaTimeSignature(const MidiEvent& e)
       {
       const unsigned char* data = e.edata();
@@ -720,124 +797,128 @@ Fraction metaTimeSignature(const MidiEvent& e)
       return Fraction(z, n);
       }
 
-void splitIntoLRHands_FixedPitch(QList<MTrack> &tracks, int trackIndex)
+void insertNewLeftHandTrack(QList<MTrack> &tracks,
+                            int &trackIndex,
+                            const std::multimap<Fraction, MidiChord> &leftHandChords)
+      {
+      auto leftHandTrack = tracks[trackIndex];
+      leftHandTrack.chords = leftHandChords;
+      tracks.insert(trackIndex + 1, leftHandTrack);
+                  // synchronize operations length and tracks list length
+      preferences.midiImportOperations.duplicateTrackOperations(trackIndex);
+      ++trackIndex;
+      }
+
+void addNewLeftHandChord(std::multimap<Fraction, MidiChord> &leftHandChords,
+                         const QList<MidiNote> &leftHandNotes,
+                         const std::multimap<Fraction, MidiChord>::iterator &i)
+      {
+      MidiChord leftHandChord = i->second;
+      leftHandChord.notes = leftHandNotes;
+      leftHandChords.insert({i->first, leftHandChord});
+      }
+
+void splitIntoLRHands_FixedPitch(QList<MTrack> &tracks, int &trackIndex)
       {
       auto &srcTrack = tracks[trackIndex];
-      auto operations = preferences.midiImportOperations.trackOperations(trackIndex);
-      int splitPitch = 12 * (int)operations.LHRH.splitPitchOctave
-                  + (int)operations.LHRH.splitPitchNote;
-      if (srcTrack.minPitch < splitPitch) {
-            MTrack dstTrack;
-            dstTrack.mtrack = tracks[0].mtrack;
-            for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end();) {
-                  if (i->second.notes[0].pitch < splitPitch) {
-                        dstTrack.chords.insert({i->first, i->second});
-                        i = srcTrack.chords.erase(i);
+      auto trackOpers = preferences.midiImportOperations.trackOperations(trackIndex);
+      int splitPitch = 12 * (int)trackOpers.LHRH.splitPitchOctave
+                  + (int)trackOpers.LHRH.splitPitchNote;
+      std::multimap<Fraction, MidiChord> leftHandChords;
+
+      for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ++i) {
+            auto &notes = i->second.notes;
+            QList<MidiNote> leftHandNotes;
+            for (auto j = notes.begin(); j != notes.end(); ) {
+                  auto &note = *j;
+                  if (note.pitch < splitPitch) {
+                        leftHandNotes.push_back(note);
+                        j = notes.erase(j);
                         continue;
                         }
-                  ++i;
+                  ++j;
                   }
-            if (!dstTrack.chords.empty())
-                  tracks.push_back(dstTrack);
+            if (!leftHandNotes.empty())
+                  addNewLeftHandChord(leftHandChords, leftHandNotes, i);
             }
+      if (!leftHandChords.empty())
+            insertNewLeftHandTrack(tracks, trackIndex, leftHandChords);
       }
 
 void splitIntoLRHands_HandWidth(QList<MTrack> &tracks, int &trackIndex)
       {
       auto &srcTrack = tracks[trackIndex];
-      auto &operations = preferences.midiImportOperations;
-
-      std::multimap<int, MidiChord> leftHandChords;
-      std::multimap<int, MidiChord> rightHandChords;
-      std::vector<std::multimap<int, MidiChord>::iterator> chordGroup;
-
+      sortNotesByPitch(srcTrack.chords);
       const int OCTAVE = 12;
-      int currentTime = 0;
-
-      // chords after MIDI import are sorted by onTime values
+      std::multimap<Fraction, MidiChord> leftHandChords;
+                  // chords after MIDI import are sorted by onTime values
       for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ++i) {
-            // find chords with equal onTime values and put then into chordGroup
-            if (chordGroup.empty())
-                  currentTime = i->second.onTime;
-            chordGroup.push_back(i);
-            std::multimap<int, MidiChord>::iterator next = i;
-            ++next;
-            if ((next != srcTrack.chords.end() && next->second.onTime != currentTime)
-                        || (next == srcTrack.chords.end())) {
-                  // *i is the last element in group - process current group
-                  struct {
-                        bool operator()(const std::multimap<int, MidiChord>::iterator &iter1,
-                                        const std::multimap<int, MidiChord>::iterator &iter2)
-                              {
-                              return iter1->second.notes[0].pitch < iter2->second.notes[0].pitch;
+            auto &notes = i->second.notes;
+            QList<MidiNote> leftHandNotes;
+            int minPitch = notes.front().pitch;
+            int maxPitch = notes.back().pitch;
+            if (maxPitch - minPitch > OCTAVE) {
+                              // need both hands
+                              // assign all chords in range [minPitch .. minPitch + OCTAVE] to left hand
+                              // and assign all other chords to right hand
+                  for (auto j = notes.begin(); j != notes.end(); ) {
+                        auto &note = *j;
+                        if (note.pitch <= minPitch + OCTAVE) {
+                              leftHandNotes.push_back(note);
+                              j = notes.erase(j);
+                              continue;
                               }
-                        } lessThan;
-                  std::sort(chordGroup.begin(), chordGroup.end(), lessThan);
-
-                  int minPitch = chordGroup.front()->second.notes[0].pitch;
-                  int maxPitch = chordGroup.back()->second.notes[0].pitch;
-                  if (maxPitch - minPitch > OCTAVE) {
-                        // need both hands
-                        // assign all chords in range [minPitch .. minPitch + OCTAVE] to left hand
-                        // and assign all other chords to right hand
-                        for (const auto &chordIter: chordGroup) {
-                              if (chordIter->second.notes[0].pitch <= minPitch + OCTAVE)
-                                    leftHandChords.insert({chordIter->first, chordIter->second});
-                              else
-                                    rightHandChords.insert({chordIter->first, chordIter->second});
-                              }
+                        ++j;
                         // maybe todo later: if range of right-hand chords > OCTAVE => assign all bottom right-hand
                         // chords to another, third track
                         }
-                  else { // check - use two hands or one hand will be enough (right or left?)
-                        // assign top chord for right hand, all the rest - to left hand
-                        rightHandChords.insert({chordGroup.back()->first, chordGroup.back()->second});
-                        for (auto p = chordGroup.begin(); p != chordGroup.end() - 1; ++p)
-                              leftHandChords.insert({(*p)->first, (*p)->second});
-                        }
-                  // reset group for next iteration
-                  chordGroup.clear();
                   }
+            else {            // check - use two hands or one hand will be enough (right or left?)
+                              // assign top chord for right hand, all the rest - to left hand
+                  while (notes.size() > 1) {
+                        leftHandNotes.push_back(notes.front());
+                        notes.erase(notes.begin());
+                        }
+                  }
+            if (!leftHandNotes.empty())
+                  addNewLeftHandChord(leftHandChords, leftHandNotes, i);
             }
-      if (!rightHandChords.empty())
-            srcTrack.chords = rightHandChords;
-      if (!leftHandChords.empty()) {
-            MTrack leftHandTrack = srcTrack;
-            leftHandTrack.chords = leftHandChords;
-            tracks.insert(trackIndex + 1, leftHandTrack);
-            // synchronize operations length and tracks list length
-            operations.duplicateTrackOperations(trackIndex);
-            ++trackIndex;
-            }
+      if (!leftHandChords.empty())
+            insertNewLeftHandTrack(tracks, trackIndex, leftHandChords);
       }
-
-//---------------------------------------------------
-//  heuristic to handle a one track piano:
-//    split into left hand/right hand
-//---------------------------------------------------
 
 void splitIntoLeftRightHands(QList<MTrack> &tracks)
       {
       for (int i = 0; i < tracks.size(); ++i) {
-            const auto &operations = preferences.midiImportOperations.trackOperations(i);
+            auto operations = preferences.midiImportOperations.trackOperations(i);
             if (!operations.LHRH.doIt)
                   continue;
             switch (operations.LHRH.method) {
-                  case Operation::HAND_WIDTH:
+                  case MidiOperation::LHRHMethod::HAND_WIDTH:
                         splitIntoLRHands_HandWidth(tracks, i);
                         break;
-                  case Operation::SPECIFIED_PITCH:
+                  case MidiOperation::LHRHMethod::FIXED_PITCH:
                         splitIntoLRHands_FixedPitch(tracks, i);
                         break;
                   }
             }
       }
 
-//---------------------------------------------------------
-//   createMTrackList
-//---------------------------------------------------------
+void reorderTracks(QList<MTrack> &tracks)
+      {
+      const auto &operations = preferences.midiImportOperations;
+      if (operations.count() == 0)
+            return;
+      QList<MTrack> newTracks;
+      for (int i = 0; i != tracks.size(); ++i) {
+            auto op = operations.trackOperations(i);
+            newTracks.push_back(tracks[op.trackIndex]);
+            }
+      std::swap(tracks, newTracks);
+      }
 
-void createMTrackList(int& lastTick, TimeSigMap* sigmap, QList<MTrack>& tracks, MidiFile* mf)
+void createMTrackList(Fraction &lastTick, TimeSigMap *sigmap,
+                      QList<MTrack> &tracks, MidiFile *mf)
       {
       sigmap->clear();
       sigmap->add(0, Fraction(4, 4));   // default time signature
@@ -849,48 +930,42 @@ void createMTrackList(int& lastTick, TimeSigMap* sigmap, QList<MTrack>& tracks, 
             MTrack track;
             track.mtrack = t;
             int events = 0;
-
-            //  - create time signature list from meta events
-            //  - create MidiChord list
-            //  - extract some information from track: program, min/max pitch
-
+                        //  - create time signature list from meta events
+                        //  - create MidiChord list
+                        //  - extract some information from track: program, min/max pitch
             for (auto i : t->events()) {
                   const MidiEvent& e = i.second;
-                  //
-                  // change division to MScore::division
-                  //
-                  int tick = (i.first * MScore::division + mf->division()/2) / mf->division();
-
-                  //
-                  // remove time signature events
-                  //
+                              // change division to MScore::division
+                  Fraction tick = Fraction::fromTicks((i.first * MScore::division + mf->division()/2)
+                                                      / mf->division());
+                              // remove time signature events
                   if ((e.type() == ME_META) && (e.metaType() == META_TIME_SIGNATURE))
-                        sigmap->add(tick, metaTimeSignature(e));
+                        sigmap->add(tick.ticks(), metaTimeSignature(e));
                   else if (e.type() == ME_NOTE) {
                         ++events;
                         int pitch = e.pitch();
-                        int len = (e.len() * MScore::division + mf->division()/2) / mf->division();
+                        Fraction len = Fraction::fromTicks((e.len() * MScore::division + mf->division()/2)
+                                                           / mf->division());
                         track.maxPitch = qMax(pitch, track.maxPitch);
                         track.minPitch = qMin(pitch, track.minPitch);
                         track.medPitch += pitch;
-                        lastTick = qMax(lastTick, tick + len);
+                        if (tick + len > lastTick)
+                              lastTick = tick + len;
 
                         MidiNote  n;
                         n.pitch    = pitch;
                         n.velo     = e.velo();
-                        n.onTime   = tick;
                         n.len      = len;
 
                         MidiChord c;
-                        c.onTime = tick;
-                        c.duration = len;
                         c.notes.push_back(n);
 
                         track.chords.insert({tick, c});
                         }
                   else if (e.type() == ME_PROGRAM)
                         track.program = e.dataB();
-                  lastTick = qMax(lastTick, tick);
+                  if (tick > lastTick)
+                        lastTick = tick;
                   }
             if (events != 0) {
                   auto trackOperations
@@ -912,7 +987,7 @@ void createMTrackList(int& lastTick, TimeSigMap* sigmap, QList<MTrack>& tracks, 
 //   for other track types set G or F clef
 //---------------------------------------------------------
 
-void createInstruments(Score* score, QList<MTrack>& tracks)
+void createInstruments(Score *score, QList<MTrack> &tracks)
       {
       int ntracks = tracks.size();
       for (int idx = 0; idx < ntracks; ++idx) {
@@ -924,7 +999,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
             track.staff = s;
 
             if (track.mtrack->drumTrack()) {
-                  // drum track
+                              // drum track
                   s->setInitialClef(CLEF_PERC);
                   part->instr()->setDrumset(smDrumset);
                   }
@@ -932,8 +1007,8 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
                   if ((idx < (ntracks-1))
                               && (tracks.at(idx+1).mtrack->outChannel() == track.mtrack->outChannel())
                               && (track.program == 0)) {
-                        // assume that the current track and the next track
-                        // form a piano part
+                                    // assume that the current track and the next track
+                                    // form a piano part
                         Staff* ss = new Staff(score, part, 1);
                         part->insertStaff(ss);
                         score->staves().push_back(ss);
@@ -946,7 +1021,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
                         tracks[idx].staff = ss;
                         }
                   else {
-                        // other track type
+                                    // other track type
                         ClefType ct = track.medPitch < 58 ? CLEF_F : CLEF_G;
                         s->setInitialClef(ct);
                         }
@@ -955,25 +1030,34 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
             }
       }
 
-void createMeasures(int& lastTick, Score* score)
+void createMeasures(Fraction &lastTick, Score *score)
       {
       int bars, beat, tick;
-      score->sigmap()->tickValues(lastTick, &bars, &beat, &tick);
+      score->sigmap()->tickValues(lastTick.ticks(), &bars, &beat, &tick);
       if (beat > 0 || tick > 0)
-            ++bars; // convert bar index to number of bars
+            ++bars;           // convert bar index to number of bars
 
       for (int i = 0; i < bars; ++i) {
             Measure* measure  = new Measure(score);
             int tick = score->sigmap()->bar2tick(i, 0);
             measure->setTick(tick);
             Fraction ts(score->sigmap()->timesig(tick).timesig());
-            measure->setTimesig(ts);
+            Fraction nominalTs = ts;
+            if (i == 0 && bars > 1) {
+                  const int secondBarIndex = 1;
+                  int secondBarTick = score->sigmap()->bar2tick(secondBarIndex, 0);
+                  Fraction secondTs(score->sigmap()->timesig(secondBarTick).timesig());
+                  if (ts < secondTs) {    // the first measure is a pickup measure
+                        nominalTs = secondTs;
+                        measure->setIrregular(true);
+                        }
+                  }
+            measure->setTimesig(nominalTs);
             measure->setLen(ts);
-
             score->add(measure);
             }
       score->fixTicks();
-      lastTick = score->lastMeasure()->endTick();
+      lastTick = Fraction::fromTicks(score->lastMeasure()->endTick());
       }
 
 QString instrumentName(int type, int program)
@@ -989,10 +1073,10 @@ QString instrumentName(int type, int program)
       return MidiInstrument::instrName(type, hbank, lbank, program);
       }
 
-void setTrackInfo(MidiFile* mf, MTrack& mt)
+void setTrackInfo(MidiFile *mf, MTrack &mt)
       {
       if (mt.staff->isTop()) {
-            Part* part  = mt.staff->part();
+            Part *part  = mt.staff->part();
             if (mt.name.isEmpty()) {
                   QString name = instrumentName(mf->midiType(), mt.program);
                   if (!name.isEmpty())
@@ -1006,84 +1090,77 @@ void setTrackInfo(MidiFile* mf, MTrack& mt)
             }
       }
 
-void createTimeSignatures(Score* score)
+Measure* barFromIndex(const Score *score, int barIndex)
+      {
+      int tick = score->sigmap()->bar2tick(barIndex, 0);
+      return score->tick2measure(tick);
+      }
+
+void createTimeSignatures(Score *score)
       {
       for (auto is = score->sigmap()->begin(); is != score->sigmap()->end(); ++is) {
             const SigEvent& se = is->second;
-            int tick    = is->first;
-            Measure* m  = score->tick2measure(tick);
+            int tick = is->first;
+            Measure* m = score->tick2measure(tick);
             if (!m)
                   continue;
+
+            Fraction newTimeSig = se.timesig();
+            if (is == score->sigmap()->begin()) {
+                  auto next = is;
+                  ++next;
+                  if (next != score->sigmap()->end()) {
+                        Measure* mm = score->tick2measure(next->first);
+                        if (m && mm && m == barFromIndex(score, 0) && mm == barFromIndex(score, 1)
+                                    && m->timesig() == mm->timesig() && newTimeSig != mm->timesig())
+                              {
+                                          // it's a pickup measure - change timesig to nominal value
+                                    newTimeSig = mm->timesig();
+                              }
+                        }
+                  }
             for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                   TimeSig* ts = new TimeSig(score);
-                  ts->setSig(se.timesig());
+                  ts->setSig(newTimeSig);
                   ts->setTrack(staffIdx * VOICES);
                   Segment* seg = m->getSegment(ts, tick);
                   seg->add(ts);
                   }
+            if (newTimeSig != se.timesig())   // was a pickup measure - skip next timesig
+                  ++is;
             }
       }
 
-void createNotes(int lastTick, QList<MTrack>& tracks, MidiFile* mf)
+void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiFile *mf)
       {
       for (int i = 0; i < tracks.size(); ++i) {
-            MTrack& mt = tracks[i];
+            MTrack &mt = tracks[i];
 
             for (auto ie : mt.mtrack->events()) {
-                  const MidiEvent& e = ie.second;
+                  const MidiEvent &e = ie.second;
                   if ((e.type() == ME_META) && (e.metaType() != META_LYRIC))
                         mt.processMeta(ie.first, e);
                   }
-
             setTrackInfo(mf, mt);
-            mt.findChords();
-
-            // pass current track index to the convertTrack function
-            //   through MidiImportOperations
+                        // pass current track index to the convertTrack function
+                        //   through MidiImportOperations
             preferences.midiImportOperations.setCurrentTrack(i);
             mt.convertTrack(lastTick);
 
             for (auto ie : mt.mtrack->events()) {
-                  const MidiEvent& e = ie.second;
+                  const MidiEvent &e = ie.second;
                   if ((e.type() == ME_META) && (e.metaType() == META_LYRIC))
                         mt.processMeta(ie.first, e);
                   }
             }
       }
 
-void quantizeAndCleanup(int lastTick, TimeSigMap* sigmap, QList<MTrack>& tracks)
-      {
-      for (int i = 0; i < tracks.size(); ++i) {
-            // pass current track index to the cleanup function
-            //   through MidiImportOperations
-            preferences.midiImportOperations.setCurrentTrack(i);
-            tracks[i].cleanup(lastTick, sigmap);   // quantize
-            }
-      }
-
-void convertMidi(Score* score, MidiFile* mf)
-      {
-      QList<MTrack> tracks;
-      int lastTick = 0;
-      auto sigmap = score->sigmap();
-
-      mf->separateChannel();
-      createMTrackList(lastTick, sigmap, tracks, mf);
-      quantizeAndCleanup(lastTick, sigmap, tracks);
-      splitIntoLeftRightHands(tracks);
-      createInstruments(score, tracks);
-      createMeasures(lastTick, score);
-      createNotes(lastTick, tracks, mf);
-      createTimeSignatures(score);
-      score->connectTies();
-      }
-
-QList<TrackMeta> getTracksMeta(QList<MTrack>& tracks, MidiFile* mf)
+QList<TrackMeta> getTracksMeta(QList<MTrack> &tracks, MidiFile *mf)
 {
       QList<TrackMeta> tracksMeta;
       for (int i = 0; i < tracks.size(); ++i) {
-            MTrack& mt = tracks[i];
-            MidiTrack* track = mt.mtrack;
+            MTrack &mt = tracks[i];
+            MidiTrack *track = mt.mtrack;
 
             for (auto ie : track->events()) {
                   const MidiEvent& e = ie.second;
@@ -1099,7 +1176,29 @@ QList<TrackMeta> getTracksMeta(QList<MTrack>& tracks, MidiFile* mf)
       return tracksMeta;
       }
 
-QList<TrackMeta> extractMidiTracksMeta(const QString& fileName)
+void convertMidi(Score *score, MidiFile *mf)
+      {
+      QList<MTrack> tracks;
+      Fraction lastTick;
+      auto sigmap = score->sigmap();
+
+      mf->separateChannel();
+      createMTrackList(lastTick, sigmap, tracks, mf);
+      reorderTracks(tracks);
+      collectChords(tracks, Fraction::fromTicks(MScore::division) / 32);     // tol = 1/128 note
+      quantizeAllTracks(tracks, sigmap, lastTick);
+      removeOverlappingNotes(tracks);
+      splitIntoLeftRightHands(tracks);
+      splitUnequalChords(tracks);
+
+      createInstruments(score, tracks);
+      createMeasures(lastTick, score);
+      createNotes(lastTick, tracks, mf);
+      createTimeSignatures(score);
+      score->connectTies();
+      }
+
+QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
       {
       if (fileName.isEmpty())
             return QList<TrackMeta>();
@@ -1118,11 +1217,10 @@ QList<TrackMeta> extractMidiTracksMeta(const QString& fileName)
 
       Score mockScore;
       QList<MTrack> tracks;
-      int lastTick = 0;
+      Fraction lastTick;
 
       mf.separateChannel();
       createMTrackList(lastTick, mockScore.sigmap(), tracks, &mf);
-      quantizeAndCleanup(lastTick, mockScore.sigmap(), tracks);
       return getTracksMeta(tracks, &mf);
       }
 
@@ -1131,7 +1229,7 @@ QList<TrackMeta> extractMidiTracksMeta(const QString& fileName)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError importMidi(Score* score, const QString& name)
+Score::FileError importMidi(Score *score, const QString &name)
       {
       if (name.isEmpty())
             return Score::FILE_NOT_FOUND;
