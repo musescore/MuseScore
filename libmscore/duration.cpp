@@ -70,6 +70,11 @@ int DurationElement::actualTicks() const
       return Fraction(staff()->timeStretch(tick()) * globalDuration()).ticks();
       }
 
+Fraction DurationElement::actualFraction() const
+      {
+      return Fraction(staff()->timeStretch(tick()) * globalDuration());
+      }
+
 //---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------

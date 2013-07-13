@@ -6,27 +6,47 @@
 
 namespace Ms {
 
+// operation types are in importmidi_operation.h
+
+// to add an operation one need to add code also to
+// importmidi_operation.h, importmidi_opmodel.cpp, importmidi_trmodel.cpp (2 places),
+// and - other importmidi files where algorithm requires it
+
+struct SearchTuplets
+      {
+      bool doSearch = true;
+      bool duplets = true;
+      bool triplets = true;
+      bool quadruplets = true;
+      bool quintuplets = true;
+      bool septuplets = true;
+      bool nonuplets = true;
+      };
+
 struct Quantization
       {
-      Operation::QuantValue value = Operation::FROM_PREFERENCES;
+      MidiOperation::QuantValue value = MidiOperation::QuantValue::FROM_PREFERENCES;
       bool reduceToShorterNotesInBar = true;
+      bool humanPerformance = false;
       };
 
 struct LHRHSeparation
       {
       bool doIt = false;
-      Operation::LHRHMethod method = Operation::HAND_WIDTH;
-      Operation::LHRHOctave splitPitchOctave = Operation::C4;
-      Operation::LHRHNote splitPitchNote = Operation::E;
+      MidiOperation::LHRHMethod method = MidiOperation::LHRHMethod::HAND_WIDTH;
+      MidiOperation::Octave splitPitchOctave = MidiOperation::Octave::C4;
+      MidiOperation::Note splitPitchNote = MidiOperation::Note::E;
       };
 
-// bool and enum-like elementary operations (itself and inside structs) allowed
+      // bool and enum-like elementary operations (itself and inside structs) allowed
 struct TrackOperations
       {
+      int trackIndex = 0;
       bool doImport = true;
       Quantization quantize;
       bool useDots = true;
       LHRHSeparation LHRH;
+      SearchTuplets tuplets;
       };
 
 struct TrackMeta
@@ -43,7 +63,7 @@ struct TrackData
 
 struct DefinedTrackOperations
       {
-      QSet<Operation::Type> undefinedOpers;
+      QSet<int> undefinedOpers;
       TrackOperations opers;
       };
 
@@ -58,6 +78,7 @@ class MidiImportOperations
       int currentTrack() const { return currentTrack_; }
       TrackOperations currentTrackOperations() const;
       TrackOperations trackOperations(int trackIndex) const;
+      int count() const { return operations_.size(); }
 
    private:
       QList<TrackOperations> operations_;
@@ -69,7 +90,7 @@ class MidiImportOperations
 } // namespace Ms
 
 
-Q_DECLARE_METATYPE(Ms::Operation)
+Q_DECLARE_METATYPE(Ms::MidiOperation)
 Q_DECLARE_METATYPE(Ms::TrackData)
 
 

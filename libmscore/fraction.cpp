@@ -13,6 +13,7 @@
 #include "fraction.h"
 #include "mscore.h"
 
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -54,7 +55,7 @@ void Fraction::reduce()
       {
       int tmp = gcd(_numerator, _denominator);
       _numerator /= tmp;
-      _denominator  /= tmp;
+      _denominator /= tmp;
       }
 
 //---------------------------------------------------------
@@ -68,16 +69,15 @@ Fraction Fraction::reduced() const
       }
 
 //---------------------------------------------------------
-//   operator+=
+//   absValue
 //---------------------------------------------------------
 
-Fraction& Fraction::operator+=(const Fraction& val)
+Fraction Fraction::absValue() const
       {
-      const int tmp = lcm(_denominator, val._denominator);
-      _numerator = _numerator * (tmp / _denominator) + val._numerator * (tmp / val._denominator);
-      _denominator = tmp;
-      return *this;
+      return Fraction(std::abs(_numerator), std::abs(_denominator));
       }
+
+// --- comparison --- //
 
 bool Fraction::operator<(const Fraction& val) const
       {
@@ -115,6 +115,18 @@ bool Fraction::operator!=(const Fraction& val) const
       const int v = lcm(_denominator, val._denominator);
       return (_numerator * (v / _denominator)) != (val._numerator * (v / val._denominator));
 //      return (_numerator != val._numerator) || (_denominator != val._denominator);
+      }
+
+//---------------------------------------------------------
+//   operator+=
+//---------------------------------------------------------
+
+Fraction& Fraction::operator+=(const Fraction& val)
+      {
+      const int tmp = lcm(_denominator, val._denominator);
+      _numerator = _numerator * (tmp / _denominator) + val._numerator * (tmp / val._denominator);
+      _denominator = tmp;
+      return *this;
       }
 
 //---------------------------------------------------------
@@ -159,7 +171,7 @@ Fraction& Fraction::operator/=(const Fraction& val)
 
 Fraction& Fraction::operator/=(int val)
       {
-      _denominator  *= val;
+      _denominator *= val;
       return *this;
       }
 

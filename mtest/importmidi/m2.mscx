@@ -118,7 +118,7 @@
               <Event>
                 <pitch>0</pitch>
                 <ontime>0</ontime>
-                <len>2000</len>
+                <len>1000</len>
                 </Event>
               </Events>
             <pitch>72</pitch>
@@ -135,8 +135,8 @@
             <Events>
               <Event>
                 <pitch>0</pitch>
-                <ontime>-1000</ontime>
-                <len>2000</len>
+                <ontime>0</ontime>
+                <len>1000</len>
                 </Event>
               </Events>
             <pitch>72</pitch>
@@ -152,7 +152,7 @@
               <Event>
                 <pitch>0</pitch>
                 <ontime>0</ontime>
-                <len>958</len>
+                <len>1000</len>
                 </Event>
               </Events>
             <pitch>72</pitch>

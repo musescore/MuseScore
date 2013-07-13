@@ -18,3 +18,4 @@ build.qt5
 /.project
 mscore/revision.h
 .DS_Store
+CMakeLists.txt.user.*

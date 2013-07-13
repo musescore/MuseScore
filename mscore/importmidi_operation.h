@@ -7,43 +7,50 @@ namespace Ms {
 // all enums below should have default indexes like 0, 1, 2...
 // text names for enum items are in OperationsModel class
 
-struct Operation
+struct MidiOperation
       {
-      enum Type {
+      enum class Type {
             DO_IMPORT = 0,
+
             QUANT_VALUE,
             QUANT_REDUCE,
+            QUANT_HUMAN,
 
             DO_LHRH_SEPARATION,
             LHRH_METHOD,
             LHRH_SPLIT_OCTAVE,
             LHRH_SPLIT_NOTE,
 
-            USE_DOTS
+            USE_DOTS,
+
+            TUPLET_SEARCH,
+            TUPLET_2,
+            TUPLET_3,
+            TUPLET_4,
+            TUPLET_5,
+            TUPLET_7,
+            TUPLET_9
       } type;
 
       QVariant value;
 
-      enum QuantValue {
+      enum class QuantValue {
             SHORTEST_IN_BAR = 0,
             FROM_PREFERENCES,
             N_4,
-//            N_4_triplet,
             N_8,
-//            N_8_triplet,
             N_16,
-//            N_16_triplet,
             N_32,
-//            N_32_triplet,
-            N_64
-            };
-//#undef FIXED_PITCH
-      enum LHRHMethod {
-            HAND_WIDTH = 0,
-            SPECIFIED_PITCH
+            N_64,
+            N_128
             };
 
-      enum LHRHOctave {
+      enum class LHRHMethod {
+            HAND_WIDTH = 0,
+            FIXED_PITCH
+            };
+
+      enum class Octave {
             C_1 = 0,
             C0,
             C1,
@@ -57,7 +64,7 @@ struct Operation
             C9
             };
 
-      enum LHRHNote {
+      enum class Note {
             C = 0,
             Cis,
             D,
