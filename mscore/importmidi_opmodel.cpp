@@ -66,13 +66,13 @@ OperationsModel::OperationsModel()
       controller->quantReduce = reduceToShorter;
 
 
-      Node *humanPerformance = new Node;
-      humanPerformance->name = "Human performance";
-      humanPerformance->oper.type = MidiOperation::Type::QUANT_HUMAN;
-      humanPerformance->oper.value = Quantization().humanPerformance;
-      humanPerformance->parent = quantValue;
-      quantValue->children.push_back(std::unique_ptr<Node>(humanPerformance));
-      controller->quantHuman = humanPerformance;
+//      Node *humanPerformance = new Node;
+//      humanPerformance->name = "Human performance";
+//      humanPerformance->oper.type = MidiOperation::Type::QUANT_HUMAN;
+//      humanPerformance->oper.value = Quantization().humanPerformance;
+//      humanPerformance->parent = quantValue;
+//      quantValue->children.push_back(std::unique_ptr<Node>(humanPerformance));
+//      controller->quantHuman = humanPerformance;
 
 
       Node *useDots = new Node;

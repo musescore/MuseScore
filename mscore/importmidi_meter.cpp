@@ -193,20 +193,20 @@ int levelOfTick(const Fraction &tick, const std::vector<DivisionInfo> &divsInfo)
       return 0;
       }
 
-Meter::MaxLevel maxLevelBetween(const Fraction &startTickInDivision,
-                                const Fraction &endTickInDivision,
-                                const DivisionInfo &divInfo)
+Meter::MaxLevel maxLevelBetween(const Fraction &startTickInBar,
+                                const Fraction &endTickInBar,
+                                const std::vector<DivLengthInfo> &divLengths)
       {
       Meter::MaxLevel level;
-      for (const auto &divLengthInfo: divInfo.divLengths) {
+      for (const auto &divLengthInfo: divLengths) {
             const auto &divLen = divLengthInfo.len;
-            Fraction maxEndRaster = divLen * (endTickInDivision.ticks() / divLen.ticks());
-            if (maxEndRaster == endTickInDivision)
+            Fraction maxEndRaster = divLen * (endTickInBar.ticks() / divLen.ticks());
+            if (maxEndRaster == endTickInBar)
                   maxEndRaster -= divLen;
-            if (startTickInDivision < maxEndRaster) {
+            if (startTickInBar < maxEndRaster) {
                               // max level is found
                   level.lastPos = maxEndRaster;
-                  Fraction maxStartRaster = divLen * (startTickInDivision.ticks() / divLen.ticks());
+                  Fraction maxStartRaster = divLen * (startTickInBar.ticks() / divLen.ticks());
                   Fraction count = (maxEndRaster - maxStartRaster) / divLen;
                   level.levelCount = qRound(count.numerator() * 1.0 / count.denominator());
                   level.level = divLengthInfo.level;
@@ -240,13 +240,14 @@ Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
                         }
                   if (startTickInBar == divInfo.onTime
                               && endTickInBar == divInfo.onTime + divInfo.len) {
-                        level = maxLevelBetween(startTickInBar - divInfo.onTime,
-                                                endTickInBar - divInfo.onTime, divInfo);
+                        level = maxLevelBetween(startTickInBar, endTickInBar, divInfo.divLengths);
                         break;
                         }
                   }
-            else
-                  level = maxLevelBetween(startTickInBar, endTickInBar, divInfo);
+            else {
+                  level = maxLevelBetween(startTickInBar, endTickInBar, divInfo.divLengths);
+                  break;
+                  }
             }
       return level;
       }
@@ -371,7 +372,7 @@ void treeToDurationList(Node *node,
 
 // duration start/end should be quantisized, quantum >= 1/128 note
 // pair here represents the tuplet ratio of duration and the duration itself
-// for regular (non-tuplet) durations fraction.numerator/fraction.denominator == 1
+// for regular (non-tuplet) durations fraction.numerator == fraction.denominator
 
 QList<std::pair<Fraction, TDuration> >
 toDurationList(const Fraction &startTickInBar,
@@ -405,7 +406,7 @@ toDurationList(const Fraction &startTickInBar,
             Node *node = nodesToProcess.dequeue();
                         // if node duration is completely inside some tuplet
                         // then assign to the node tuplet-to-regular-duration conversion coefficient
-            if (node->tupletRatio.numerator() / node->tupletRatio.denominator() == 1) {
+            if (node->tupletRatio.numerator() == node->tupletRatio.denominator()) {
                   int tupletNumber = tupletNumberForDuration(node->startPos,
                                                              node->endPos, tupletsInBar);
                   if (tupletNumber != -1) {
