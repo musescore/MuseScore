@@ -39,6 +39,9 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_operations.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_meter.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_quant.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_chord.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp

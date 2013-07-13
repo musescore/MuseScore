@@ -25,16 +25,20 @@ class ImportMidiPanel : public QWidget
       static bool isMidiFile(const QString &file);
       void setMidiFile(const QString &file);
 
-   private slots:
-      void updateUiOnTimer();
+private slots:
+      void updateUi();
       void onCurrentTrackChanged(const QModelIndex &currentIndex);
       void onOperationChanged(const QModelIndex &index);
       void importMidi();
       void hidePanel();
+      void moveTrackUp();
+      void moveTrackDown();
+      bool canMoveTrackUp(int visualIndex);
+      bool canMoveTrackDown(int visualIndex);
+      int currentVisualIndex();
 
    private:
       void tweakUi();
-      void updateUi();
       bool canImportMidi() const;
 
       Ui::ImportMidiPanel *ui;
