@@ -1023,13 +1023,15 @@ void Chord::read(XmlReader& e)
                   }
             }
       // hack:
+#if 0
       if (_notes.size() == 1 && readPos().isNull()) {
             Note* note = _notes.front();
             if (!note->readPos().isNull()) {
-                  setReadPos(QPointF(note->readPos().x(), 0.0));
+                  setUserOff(QPointF(note->readPos().x(), 0.0));
                   note->setReadPos(QPointF(0.0, note->readPos().y()));
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -1764,7 +1766,6 @@ void Chord::layoutTablature()
                   _tabDur = 0;
                   }
             }                 // end of if(duration_symbols)
-      adjustReadPos();
 
       if (_arpeggio) {
             qreal headHeight = upnote->headHeight();

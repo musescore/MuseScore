@@ -719,8 +719,10 @@ bool Element::readProperties(XmlReader& e)
             setUserOff(pt);
             // _readPos = QPointF();
             }
-      else if (tag == "pos")
+      else if (tag == "pos") {
             _readPos = e.readPoint() * spatium();
+            printf("readProperties pos %f %f\n", _readPos.x(), _readPos.y());
+            }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
       else if (tag == "tag") {

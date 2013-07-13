@@ -341,6 +341,8 @@ bool ChordRest::readProperties(XmlReader& e)
             element->read(e);
             add(element);
             }
+      else if (tag == "pos")
+            setUserOff(e.readPoint() * spatium());
       else if (DurationElement::readProperties(e))
             return true;
       else
