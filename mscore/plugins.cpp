@@ -131,6 +131,12 @@ QQmlEngine* MuseScore::qml()
       if (_qml == 0) {
             //-----------some qt bindings
             _qml = new QQmlEngine;
+#ifdef Q_OS_WIN
+            QStringList importPaths;
+            QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
+            importPaths.append(dir.absolutePath());
+            _qml->setImportPathList(importPaths);
+#endif
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
             qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
@@ -138,7 +144,7 @@ QQmlEngine* MuseScore::qml()
             qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
             qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
             qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
-            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Ms::Segment");
+            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
             qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
             qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
             qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
@@ -167,12 +173,7 @@ QQmlEngine* MuseScore::qml()
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
-#ifdef Q_OS_WIN
-            QStringList importPaths;
-            QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-            importPaths.append(dir.absolutePath());
-            _qml->setImportPathList(importPaths);
-#endif
+
             }
       return _qml;
       }
@@ -354,7 +355,7 @@ void MuseScore::pluginTriggered(int idx)
       {
       QString pp = plugins[idx];
 
-      QQuickView* view = new QQuickView();
+      QQuickView* view = new QQuickView(qml(), 0);
       view->setSource(QUrl::fromLocalFile(pp));
       view->setResizeMode(QQuickView::SizeViewToRootObject);
       QmlPlugin* p = (QmlPlugin*)(view->rootObject());

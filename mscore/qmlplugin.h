@@ -103,12 +103,12 @@ class QmlPlugin : public QQuickItem {
       Score* curScore() const;
       QQmlListProperty<Score> scores();
 
-      Q_INVOKABLE Score* newScore(const QString& name, const QString& part, int measures);
-      Q_INVOKABLE Element* newElement(int);
+      Q_INVOKABLE Ms::Score* newScore(const QString& name, const QString& part, int measures);
+      Q_INVOKABLE Ms::Element* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
-      Q_INVOKABLE MsProcess* newQProcess();
+      Q_INVOKABLE Ms::MsProcess* newQProcess();
       Q_INVOKABLE bool writeScore(Score*, const QString& name, const QString& ext);
-      Q_INVOKABLE Score* readScore(const QString& name);
+      Q_INVOKABLE Ms::Score* readScore(const QString& name);
       };
 
 #endif

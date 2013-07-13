@@ -767,13 +767,13 @@ class Score : public QObject {
       bool checkHasMeasures() const;
       MeasureBase* first() const;
       MeasureBase* last()  const;
-      Q_INVOKABLE Measure* firstMeasure() const;
-      Q_INVOKABLE Measure* lastMeasure() const;
+      Q_INVOKABLE Ms::Measure* firstMeasure() const;
+      Q_INVOKABLE Ms::Measure* lastMeasure() const;
       int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
-      Q_INVOKABLE Segment* firstSegment(Segment::SegmentTypes s = Segment::SegAll) const;
-      Q_INVOKABLE Segment* lastSegment() const;
+      Q_INVOKABLE Ms::Segment* firstSegment(Segment::SegmentTypes s = Segment::SegAll) const;
+      Q_INVOKABLE Ms::Segment* lastSegment() const;
 
       void connectTies();
 
@@ -924,7 +924,7 @@ class Score : public QObject {
       Q_INVOKABLE void appendPart(const QString&);
       Q_INVOKABLE void appendMeasures(int);
       Q_INVOKABLE void addText(const QString&, const QString&);
-      Q_INVOKABLE Cursor* newCursor();
+      Q_INVOKABLE Ms::Cursor* newCursor();
       qreal computeMinWidth(Segment* fs);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
       Sym& sym(int id) { return symbols[symIdx()][id]; }
