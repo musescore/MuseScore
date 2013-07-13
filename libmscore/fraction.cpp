@@ -14,10 +14,6 @@
 #include "mscore.h"
 
 
-namespace {
-const int SIZE_LIMIT = 100;    // if numerator or denominator greater - try to reduce fraction
-}
-
 namespace Ms {
 
 //---------------------------------------------------------
@@ -121,26 +117,14 @@ bool Fraction::operator!=(const Fraction& val) const
 //      return (_numerator != val._numerator) || (_denominator != val._denominator);
       }
 
-// this helps to decrease the risk of overflow of int multiplication
-
-void reduceIfBigFraction(Fraction &f)
-      {
-      if (f.numerator() > SIZE_LIMIT || f.denominator() > SIZE_LIMIT)
-            f.reduce();
-      }
-
 //---------------------------------------------------------
 //   operator+=
 //---------------------------------------------------------
 
 Fraction& Fraction::operator+=(const Fraction& val)
       {
-      reduceIfBigFraction(*this);
-      Fraction value = val;
-      reduceIfBigFraction(value);
-
-      const int tmp = lcm(_denominator, value._denominator);
-      _numerator = _numerator * (tmp / _denominator) + value._numerator * (tmp / value._denominator);
+      const int tmp = lcm(_denominator, val._denominator);
+      _numerator = _numerator * (tmp / _denominator) + val._numerator * (tmp / val._denominator);
       _denominator = tmp;
       return *this;
       }
@@ -151,12 +135,8 @@ Fraction& Fraction::operator+=(const Fraction& val)
 
 Fraction& Fraction::operator-=(const Fraction& val)
       {
-      reduceIfBigFraction(*this);
-      Fraction value = val;
-      reduceIfBigFraction(value);
-
-      const unsigned tmp = lcm(_denominator, value._denominator);
-      _numerator = _numerator * (tmp / _denominator) - value._numerator * (tmp / value._denominator);
+      const unsigned tmp = lcm(_denominator, val._denominator);
+      _numerator = _numerator * (tmp / _denominator) - val._numerator * (tmp / val._denominator);
       _denominator  = tmp;
       return *this;
       }
@@ -167,19 +147,13 @@ Fraction& Fraction::operator-=(const Fraction& val)
 
 Fraction& Fraction::operator*=(const Fraction& val)
       {
-      reduceIfBigFraction(*this);
-      Fraction value = val;
-      reduceIfBigFraction(value);
-
-      _numerator *= value._numerator;
-      _denominator  *= value._denominator;
+      _numerator *= val._numerator;
+      _denominator  *= val._denominator;
       return *this;
       }
 
 Fraction& Fraction::operator*=(int val)
       {
-      reduceIfBigFraction(*this);
-
       _numerator *= val;
       return *this;
       }
@@ -190,19 +164,13 @@ Fraction& Fraction::operator*=(int val)
 
 Fraction& Fraction::operator/=(const Fraction& val)
       {
-      reduceIfBigFraction(*this);
-      Fraction value = val;
-      reduceIfBigFraction(value);
-
-      _numerator *= value._denominator;
-      _denominator  *= value._numerator;
+      _numerator *= val._denominator;
+      _denominator  *= val._numerator;
       return *this;
       }
 
 Fraction& Fraction::operator/=(int val)
       {
-      reduceIfBigFraction(*this);
-
       _denominator *= val;
       return *this;
       }
