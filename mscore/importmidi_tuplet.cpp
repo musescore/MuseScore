@@ -274,13 +274,17 @@ bool areTupletChordsInUse(
       if (tupletChords.empty())
             return false;
 
+      auto operations = preferences.midiImportOperations.currentTrackOperations();
+
       auto i = tupletChords.begin();
       int tupletNoteIndex = i->first;
       if (tupletNoteIndex == 0) {
                         // check are first tuplet notes all in use (1 note - 1 voice)
             auto ii = usedFirstTupletNotes.find(&*(i->second));
             if (ii != usedFirstTupletNotes.end()) {
-                  if (ii->second >= i->second->second.notes.size()
+                  if (!operations.useMultipleVoices && ii->second > 1)
+                        return true;
+                  else if (ii->second >= i->second->second.notes.size()
                               || ii->second >= VOICES) {
                               // need to choose next tuplet candidate - no more available voices
                         return true;
@@ -883,10 +887,13 @@ std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
                   }
             }
       filterTuplets(tuplets);
-      int nonTupletVoice = separateTupletVoices(tuplets, startBarChordIt, endBarChordIt,
-                                                chords, endBarTick);
-      minimizeOffTimeError(tuplets, chords, nonTupletVoice);
-      optimizeVoices(startBarChordIt, endBarChordIt);
+
+      if (operations.useMultipleVoices) {
+            int nonTupletVoice = separateTupletVoices(tuplets, startBarChordIt, endBarChordIt,
+                                                      chords, endBarTick);
+            minimizeOffTimeError(tuplets, chords, nonTupletVoice);
+            optimizeVoices(startBarChordIt, endBarChordIt);
+            }
 
       return tuplets;
       }
