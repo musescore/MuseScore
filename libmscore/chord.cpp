@@ -270,6 +270,7 @@ qreal Chord::stemPosX() const
             qreal nhw = score()->noteHeadWidth();
             if (_noteType != NOTE_NORMAL)
                  nhw *= score()->styleD(ST_graceNoteMag);
+            nhw *= mag();
             x += nhw;
             }
       return x;
@@ -1151,58 +1152,59 @@ void Chord::setScore(Score* s)
 
 //---------------------------------------------------------
 //   layoutStem1
-///   Layout chord stem and hook.
+///   Layout _stem and _stemSlash
 //
-//    called before layout spacing of notes
-//    set hook if necessary to get right note width for next
-//       pass
+//    Called before layout spacing of notes.
+//    Create stem if necessary.
 //---------------------------------------------------------
 
 void Chord::layoutStem1()
       {
-      int istaff = staffIdx();
-
-      //-----------------------------------------
-      //  process stem
-      //-----------------------------------------
-
-      bool hasStem = durationType().hasStem() && !(_noStem || measure()->slashStyle(istaff));
+      bool hasStem = durationType().hasStem() && !(_noStem || measure()->slashStyle(staffIdx()));
 
       if (hasStem) {
-            if (!_stem)
-                  setStem(new Stem(score()));
+            if (!_stem) {
+                  Stem* stem = new Stem(score());
+                  stem->setParent(this);
+                  stem->setGenerated(true);
+                  score()->undoAddElement(stem);
+                  }
             }
-      else
-            setStem(0);
+      else if (_stem)
+            score()->undoRemoveElement(_stem);
 
       if (hasStem && (_noteType == NOTE_ACCIACCATURA)) {
-            if (_stemSlash == 0)
-                  add(new StemSlash(score()));
+            if (_stemSlash == 0) {
+                  StemSlash* slash = new StemSlash(score());
+                  slash->setParent(this);
+                  slash->setGenerated(true);
+                  score()->undoAddElement(slash);
+                  }
             }
-      else
-            setStemSlash(0);
+      else if (_stemSlash)
+            score()->undoRemoveElement(_stemSlash);
       }
 
 //---------------------------------------------------------
 //   layoutHook1
+///   Layout hook
+//
+//    Called before layout spacing of notes.
+//    Create hook if necessary to get right note width for next
+//    pass.
 //---------------------------------------------------------
 
 void Chord::layoutHook1()
       {
-      //-----------------------------------------
-      //  process hook
-      //-----------------------------------------
-
       int hookIdx  = durationType().hooks();
       if (hookIdx) {
-            if (!up())
-                  hookIdx = -hookIdx;
             if (!_hook) {
                   Hook* hook = new Hook(score());
                   hook->setParent(this);
+                  hook->setGenerated(true);
                   score()->undoAddElement(hook);
                   }
-            _hook->setHookType(hookIdx);
+            _hook->setHookType(up() ? hookIdx : -hookIdx);
             }
       else if (_hook)
             score()->undoRemoveElement(_hook);
