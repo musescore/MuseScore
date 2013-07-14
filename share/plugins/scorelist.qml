@@ -6,6 +6,7 @@ MuseScore {
     menuPath: "Plugins.scorelist"
     version:  "2.0"
     description: "This test plugin interates through the score list."
+    pluginType: "dialog"
 
     width:  150
     height: 75
