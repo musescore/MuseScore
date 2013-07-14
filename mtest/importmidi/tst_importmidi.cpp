@@ -27,6 +27,8 @@
 #include "inner_func_decl.h"
 #include "mscore/importmidi_chord.h"
 #include "mscore/importmidi_tuplet.h"
+#include "mscore/importmidi_meter.h"
+#include "mscore/importmidi_inner.h"
 
 
 namespace Ms {
@@ -63,6 +65,10 @@ class TestImportMidi : public QObject, public MTest
       void findOnTimeRegularError();
       void findTupletApproximation();
       void separateTupletVoices();
+
+      // metric bar analysis
+      void metricDivisionsOfTuplet();
+      void maxLevelBetween();
       };
 
 //---------------------------------------------------------
@@ -532,6 +538,80 @@ void TestImportMidi::separateTupletVoices()
             const MidiChord &midiChord = chord.second->second;
             QCOMPARE(midiChord.voice, 2);
             }
+      }
+
+
+//---------------------------------------------------------
+//  metric bar analysis
+//---------------------------------------------------------
+
+void TestImportMidi::metricDivisionsOfTuplet()
+      {
+      MidiTuplet::TupletData tupletData;
+      tupletData.voice = 0;
+      tupletData.len = Fraction::fromTicks(480);
+      tupletData.onTime = Fraction::fromTicks(480);
+      tupletData.tupletNumber = 3;
+      int tupletStartLevel = -3;
+      Meter::DivisionInfo tupletDivInfo = Meter::metricDivisionsOfTuplet(tupletData, tupletStartLevel);
+
+      QCOMPARE(tupletDivInfo.isTuplet, true);
+      QCOMPARE(tupletDivInfo.len, Fraction::fromTicks(480));
+      QCOMPARE(tupletDivInfo.onTime, Fraction::fromTicks(480));
+      QVERIFY(tupletDivInfo.divLengths.size() == 5);
+
+      QCOMPARE(tupletDivInfo.divLengths[0].len, tupletData.len);
+      QCOMPARE(tupletDivInfo.divLengths[0].level, Meter::TUPLET_BOUNDARY_LEVEL);
+
+      QCOMPARE(tupletDivInfo.divLengths[1].len, tupletData.len / tupletData.tupletNumber);
+      QCOMPARE(tupletDivInfo.divLengths[1].level, tupletStartLevel);
+
+      QCOMPARE(tupletDivInfo.divLengths[2].len, tupletData.len / (2 * tupletData.tupletNumber));
+      QCOMPARE(tupletDivInfo.divLengths[2].level, tupletStartLevel - 1);
+
+      QCOMPARE(tupletDivInfo.divLengths[3].len, tupletData.len / (4 * tupletData.tupletNumber));
+      QCOMPARE(tupletDivInfo.divLengths[3].level, tupletStartLevel - 2);
+
+      QCOMPARE(tupletDivInfo.divLengths[4].len, tupletData.len / (8 * tupletData.tupletNumber));
+      QCOMPARE(tupletDivInfo.divLengths[4].level, tupletStartLevel - 3);
+      }
+
+void TestImportMidi::maxLevelBetween()
+      {
+      Fraction barFraction = Fraction(4, 4);
+      Fraction startTickInBar = Fraction::fromTicks(240);
+      Fraction endTickInBar = Fraction::fromTicks(500);
+
+      Meter::DivisionInfo regularDivInfo = Meter::metricDivisionsOfBar(barFraction);
+      QVERIFY(regularDivInfo.divLengths.size() == 8);
+
+      Meter::MaxLevel level = Meter::maxLevelBetween(startTickInBar, endTickInBar, regularDivInfo);
+      QCOMPARE(level.level, -2);
+      QCOMPARE(level.lastPos, Fraction::fromTicks(480));
+      QCOMPARE(level.levelCount, 1);
+
+      startTickInBar = Fraction::fromTicks(499);
+      level = Meter::maxLevelBetween(startTickInBar, endTickInBar, regularDivInfo);
+      QCOMPARE(level.level, 0);
+      QCOMPARE(level.lastPos, Fraction(-1, 1));
+      QCOMPARE(level.levelCount, 0);
+
+      MidiTuplet::TupletData tupletData;
+      tupletData.voice = 0;
+      tupletData.len = Fraction::fromTicks(480);
+      tupletData.onTime = Fraction::fromTicks(480);
+      tupletData.tupletNumber = 3;
+
+      int tupletStartLevel = -3;
+      Meter::DivisionInfo tupletDivInfo = Meter::metricDivisionsOfTuplet(tupletData, tupletStartLevel);
+      QVERIFY(tupletDivInfo.divLengths.size() == 5);
+
+      startTickInBar = tupletData.onTime;
+      endTickInBar = startTickInBar + tupletData.len;
+      level = Meter::maxLevelBetween(startTickInBar, endTickInBar, tupletDivInfo);
+      QCOMPARE(level.level, -3);
+      QCOMPARE(level.lastPos, tupletData.onTime + tupletData.len * 2 / tupletData.tupletNumber);
+      QCOMPARE(level.levelCount, 2);
       }
 
 
