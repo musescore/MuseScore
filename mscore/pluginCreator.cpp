@@ -289,11 +289,9 @@ void PluginCreator::runClicked()
       run->setEnabled(false);
 
       item = qobject_cast<QmlPlugin*>(obj);
-      view = new QQuickView;
+      view = new QQuickView(qml, 0);
       view->setResizeMode(QQuickView::SizeViewToRootObject);
-      // view->setResizeMode(QQuickView::SizeRootObjectToView);
-//      QGraphicsObject* go = qobject_cast<QGraphicsObject*>(item);
-//      view->scene()->addItem(go);
+      item->setParentItem(view->contentItem());
 
       view->show();
 
