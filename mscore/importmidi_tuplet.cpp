@@ -5,6 +5,7 @@
 #include "importmidi_quant.h"
 #include "libmscore/mscore.h"
 #include "preferences.h"
+#include "importmidi_inner.h"
 
 #include <set>
 
