@@ -969,10 +969,8 @@ void ChordRest::removeDeleteBeam(bool beamed)
             if (b->isEmpty())
                   score()->undoRemoveElement(b);
             }
-      else {
-            if (!beamed && type() == CHORD)
-                  static_cast<Chord*>(this)->layoutHook1();
-            }
+      if (!beamed && type() == CHORD)
+            static_cast<Chord*>(this)->layoutHook1();
       }
 
 //---------------------------------------------------------
