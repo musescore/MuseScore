@@ -25,18 +25,6 @@ class Staff;
 class Tablature;
 
 //---------------------------------------------------------
-//   InstrumentGenre
-//---------------------------------------------------------
-
-class InstrumentGenre {
-   public:
-      QString id;
-      InstrumentTemplate* instrumentTemplate;
-
-      InstrumentGenre() { id = ""; }
-      };
-
-//---------------------------------------------------------
 //   InstrumentTemplate
 //---------------------------------------------------------
 
@@ -79,14 +67,10 @@ class InstrumentTemplate {
 
       bool extended;          // belongs to extended instrument set if true
 
-//      InstrumentGenre instrumentGenres;
-
       InstrumentTemplate();
       InstrumentTemplate(const InstrumentTemplate&);
       ~InstrumentTemplate();
       void init(const InstrumentTemplate&);
-      void linkGenre(const QString &);
-      void addGenre(QList<InstrumentGenre *>);
 
       void setPitchRange(const QString& s, char* a, char* b) const;
       void write(Xml& xml) const;
@@ -132,7 +116,6 @@ struct InstrumentSection {      // : public InstrumentGroup {
       InstrumentSection() { extended = false; }
       };
 
-extern QList<InstrumentGenre*> instrumentGenres;
 extern QList<InstrumentSection*> instrumentSections;
 extern QList<InstrumentGroup*> instrumentGroups;
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
@@ -141,8 +124,8 @@ extern InstrumentTemplate* searchTemplate(const QString& name);
 
 }     // namespace Ms
 
-extern InstrumentType* searchInstrumentType(const QString& name);
-extern InstrumentGroup * searchInstrumentGroup(const QString& name);
+// extern InstrumentSection* searchInstrumentSection(const QString& name);
+// extern InstrumentGroup* searchInstrumentGroup(const QString& name);
 
 
 // extern InstrumentGroup * searchInstrumentGroup(const QString& name);

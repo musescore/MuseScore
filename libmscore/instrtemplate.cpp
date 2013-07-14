@@ -24,7 +24,6 @@ namespace Ms {
 
 QList<InstrumentSection*> instrumentSections;
 QList<InstrumentGroup*> instrumentGroups;
-QList<InstrumentGenre*> instrumentGenres;
 QList<MidiArticulation> articulation;                // global articulations
 
 //---------------------------------------------------------
@@ -68,25 +67,6 @@ static int readStaffIdx(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   searchGenre
-//---------------------------------------------------------
-
-static int searchGenre(const QString& genre)
-      {
-      int i = 0;
-      foreach(InstrumentGroup * iG, instrumentGroups) {
-            foreach(InstrumentGenre* ig, instrumentGenres) {
-                  if (ig->id == genre) {
-                        return i;
-                  } else {
-                        i++;
-                        }
-                  }
-            }
-      return -1;
-      }
-
-//---------------------------------------------------------
 //   readInstrumentSection
 //---------------------------------------------------------
 
@@ -94,13 +74,13 @@ void InstrumentSection::read(XmlReader& e)
       {
       id       = e.attribute("id");
       name     = e.attribute("name");
-//      extended = e.intAttribute("extended", 0);
+      extended = e.intAttribute("extended", 0);
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "instrument-group" || tag == "InstrumentGroup") {
                 QString id = e.attribute("id");
-                InstrumentGroup* g = searchInstrumentGroup(id);
+                InstrumentGroup * g = searchInstrumentGroup(id);
                 if (g == 0) {
                       g = new InstrumentGroup;
                       instrumentGroups.append(g);
@@ -131,9 +111,10 @@ void InstrumentGroup::read(XmlReader& e)
       extended = e.intAttribute("extended", 0);
 
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
+           const QStringRef& tag(e.name());
             if (tag == "instrument" || tag == "Instrument") {
                   QString id = e.attribute("id");
+                  id = e.attribute("id");
                   InstrumentTemplate* t = searchTemplate(id);
                   if (t == 0) {
                         t = new InstrumentTemplate;
@@ -141,7 +122,6 @@ void InstrumentGroup::read(XmlReader& e)
                         instrumentTemplates.append(t);
                         }
                   t->read(e);
-  //                groupId = id;
                   }
             else if (tag == "ref") {
                   InstrumentTemplate* ttt = searchTemplate(e.readElementText());
@@ -428,6 +408,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   QString val(e.readElementText());
                   bool ok;
                   int i = val.toInt(&ok);
+                  i = val.toInt(&ok);
                   ClefType ct = ok ? ClefType(i) : Clef::clefType(val);
                   clefTypes[idx]._concertClef = ct;
                   clefTypes[idx]._transposingClef = ct;
@@ -437,6 +418,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   QString val(e.readElementText());
                   bool ok;
                   int i = val.toInt(&ok);
+                  i = val.toInt(&ok);
                   clefTypes[idx]._concertClef = ok ? ClefType(i) : Clef::clefType(val);
                   }
             else if (tag == "transposingClef") {
@@ -509,6 +491,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   a.read(e);
                   int n = articulation.size();
                   int i;
+                  n = articulation.size();
                   for(i = 0; i < n; ++i) {
                         if (articulation[i].name == a.name) {
                               articulation[i] = a;
@@ -540,6 +523,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   }
             else if (tag == "init") {
                   QString val(e.readElementText());
+                  val = e.readElementText();
                   InstrumentTemplate* ttt = searchTemplate(val);
                   if (ttt)
                         init(*ttt);
@@ -550,10 +534,6 @@ void InstrumentTemplate::read(XmlReader& e)
             else if (tag == "musicXMLid")
                   musicXMLid = e.readElementText();
 
-            else if (tag == "genre") {
-                  QString val(e.readElementText());
-                  linkGenre(val);
-                  }
             else
                   e.unknown();
             }
@@ -561,6 +541,7 @@ void InstrumentTemplate::read(XmlReader& e)
       // check bar line spans
       //
       int barLine = 0;
+      barLine = 0;
       for (int i = 0; i < staves; ++i) {
             int bls = barlineSpan[i];
             if (barLine) {
@@ -748,53 +729,5 @@ InstrumentTemplate* searchTemplate(const QString& name)
                   }
             }
       return 0;
-      }
-
-}
-
-//---------------------------------------------------------
-// addGenre
-//      Add this template to the end of the supplied genre lists it belongs to
-//      THIS ISN'T RIGHT
-//---------------------------------------------------------
-
-void InstrumentTemplate::addGenre(QList<InstrumentGenre *> genre)
-//void addGenre(QList<InstrumentGenre *> genre)
-      {
-
-      }
-
-//---------------------------------------------------------
-//   linkGenre
-//      link the current instrument template to the genre list specified by "genre"
-//      Each genre is a linked list of instrument templates
-//      The head of the list is in the instrument group to which this instrument template belongs
-//---------------------------------------------------------
-
-
-void InstrumentTemplate::linkGenre(const QString& genre)
-//void linkGenre(const QString& genre)
-      {
-/*      InstrumentTemplate *tt;
-      int ig                = searchGenre(genre);
-      InstrumentGroup *igp  = searchInstrumentGroup(instrumentGroups.at(ig));
-      InstrumentGenre *g;
-
-      if (ig < 0) {
-            g = new InstrumentGenre;
-            g->id = genre;
-            instrumentGroups.genre.append(genre);
-            ig = instrumentGroups.genre.size();
-            }
-      else {
-            g = instrumentGenres.at(ig);
-            }
-
-            // Follow the links to the last instrument template in the genre
-      for(tt = g.instrumentTemplate; ; !is_null(tt)) {
-            tt = g->instrumentTemplate.genre.at(ig).instrumentTemplate;
-            }
-
-      tt->instrumentTemplate = this; */
       }
 }
