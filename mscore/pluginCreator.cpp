@@ -289,32 +289,33 @@ void PluginCreator::runClicked()
       run->setEnabled(false);
 
       item = qobject_cast<QmlPlugin*>(obj);
-      view = new QQuickView(qml, 0);
-      view->setResizeMode(QQuickView::SizeViewToRootObject);
-      item->setParentItem(view->contentItem());
 
-      view->show();
+      if (item->pluginType() == "dock" || item->pluginType() == "dialog") {
+            view = new QQuickView(qml, 0);
+            view->setResizeMode(QQuickView::SizeViewToRootObject);
+            item->setParentItem(view->contentItem());
+            view->show();
 
-      if (item->pluginType() == "dock") {
-            dock = new QDockWidget("Plugin", 0);
-            dock->setAttribute(Qt::WA_DeleteOnClose);
-            dock->setWidget(QWidget::createWindowContainer(view));
-            Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
-            if (item->dockArea() == "left")
-                  area = Qt::LeftDockWidgetArea;
-            else if (item->dockArea() == "top")
-                  area = Qt::TopDockWidgetArea;
-            else if (item->dockArea() == "bottom")
-                  area = Qt::BottomDockWidgetArea;
-            addDockWidget(area, dock);
+            if (item->pluginType() == "dock") {
+                  dock = new QDockWidget("Plugin", 0);
+                  dock->setAttribute(Qt::WA_DeleteOnClose);
+                  dock->setWidget(QWidget::createWindowContainer(view));
+                  Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
+                  if (item->dockArea() == "left")
+                        area = Qt::LeftDockWidgetArea;
+                  else if (item->dockArea() == "top")
+                        area = Qt::TopDockWidgetArea;
+                  else if (item->dockArea() == "bottom")
+                        area = Qt::BottomDockWidgetArea;
+                  addDockWidget(area, dock);
+                  connect(dock, SIGNAL(destroyed()), SLOT(closePlugin()));
+                  dock->widget()->setAttribute(Qt::WA_DeleteOnClose);
+                  }
+            view->raise();
+            connect(view, SIGNAL(destroyed()), SLOT(closePlugin()));
             }
-      view->raise();
+
       connect(qml,  SIGNAL(quit()),      SLOT(closePlugin()));
-      connect(view, SIGNAL(destroyed()), SLOT(closePlugin()));
-      if (dock) {
-            connect(dock, SIGNAL(destroyed()), SLOT(closePlugin()));
-            dock->widget()->setAttribute(Qt::WA_DeleteOnClose);
-            }
 
       if (mscore->currentScore())
             mscore->currentScore()->startCmd();
