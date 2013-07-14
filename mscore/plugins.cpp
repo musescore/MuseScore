@@ -355,30 +355,43 @@ void MuseScore::pluginTriggered(int idx)
       {
       QString pp = plugins[idx];
 
-      QQuickView* view = new QQuickView(qml(), 0);
-      view->setSource(QUrl::fromLocalFile(pp));
-      view->setResizeMode(QQuickView::SizeViewToRootObject);
-      QmlPlugin* p = (QmlPlugin*)(view->rootObject());
-      QQmlEngine* engine = view->engine();
+      QQmlEngine* engine = qml();
 
-      if (p->pluginType() == "dock") {
-            QDockWidget* dock = new QDockWidget("Plugin", 0);
-            dock->setAttribute(Qt::WA_DeleteOnClose);
-            Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
-            if (p->dockArea() == "left")
-                  area = Qt::LeftDockWidgetArea;
-            else if (p->dockArea() == "top")
-                  area = Qt::TopDockWidgetArea;
-            else if (p->dockArea() == "bottom")
-                  area = Qt::BottomDockWidgetArea;
-            QWidget* w = QWidget::createWindowContainer(view);
-            dock->setWidget(w);
-            addDockWidget(area, dock);
-            connect(engine, SIGNAL(quit()), dock, SLOT(close()));
+      QQmlComponent component(engine);
+      component.loadUrl(QUrl::fromLocalFile(pp));
+      QObject* obj = component.create();
+      if (obj == 0) {
+            foreach(QQmlError e, component.errors())
+                  qDebug("   line %d: %s\n", e.line(), qPrintable(e.description()));
+            return;
             }
-      else {
-            connect(engine, SIGNAL(quit()), view, SLOT(close()));
+
+      QmlPlugin* p = qobject_cast<QmlPlugin*>(obj);
+
+      if (p->pluginType() == "dock" || p->pluginType() == "dialog") {
+            QQuickView* view = new QQuickView(engine, 0);
+            view->setResizeMode(QQuickView::SizeViewToRootObject);
+            p->setParentItem(view->contentItem());
             view->show();
+            if (p->pluginType() == "dock") {
+                  QDockWidget* dock = new QDockWidget("Plugin", 0);
+                  dock->setAttribute(Qt::WA_DeleteOnClose);
+                  Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
+                  if (p->dockArea() == "left")
+                        area = Qt::LeftDockWidgetArea;
+                  else if (p->dockArea() == "top")
+                        area = Qt::TopDockWidgetArea;
+                  else if (p->dockArea() == "bottom")
+                        area = Qt::BottomDockWidgetArea;
+                  QWidget* w = QWidget::createWindowContainer(view);
+                  dock->setWidget(w);
+                  addDockWidget(area, dock);
+                  connect(engine, SIGNAL(quit()), dock, SLOT(close()));
+                  }
+            else {
+                  connect(engine, SIGNAL(quit()), view, SLOT(close()));
+                  view->show();
+                  }
             }
 
       if (cs)
