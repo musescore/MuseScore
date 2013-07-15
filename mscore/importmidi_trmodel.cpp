@@ -257,15 +257,25 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
 
 int TracksModel::rowFromTrackIndex(int trackIndex) const
       {
-      // first row reserved for all tracks if track count > 1
+                  // first row reserved for all tracks if track count > 1
       return (trackCount_ > 1) ? trackIndex + 1 : trackIndex;
       }
 
 int TracksModel::trackIndexFromRow(int row) const
       {
-      // first row reserved for all tracks if track count > 1
-      // return -1 if row is all tracks row
+                  // first row reserved for all tracks if track count > 1
+                  // return -1 if row is all tracks row
       return (trackCount_ > 1) ? row - 1 : row;
+      }
+
+int TracksModel::numberOfTracksForImport() const
+      {
+      int count = 0;
+      for (int i = 0; i != trackCount_; ++i) {
+            if (tracksData_[i].opers.doImport)
+                  ++count;
+            }
+      return count;
       }
 
 int TracksModel::rowCount(const QModelIndex &/*parent*/) const
