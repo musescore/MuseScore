@@ -77,6 +77,9 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::USE_DOTS:
                   trackData.opers.useDots = operValue.toBool();
                   break;
+            case MidiOperation::Type::USE_MULTIPLE_VOICES:
+                  trackData.opers.useMultipleVoices = operValue.toBool();
+                  break;
             case MidiOperation::Type::TUPLET_SEARCH:
                   trackData.opers.tuplets.doSearch = operValue.toBool();
                   break;
@@ -179,6 +182,14 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.useDots != opers.opers.useDots) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::USE_DOTS);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::USE_MULTIPLE_VOICES
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.useDots != opers.opers.useMultipleVoices) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::USE_MULTIPLE_VOICES);
                         break;
                         }
                   }

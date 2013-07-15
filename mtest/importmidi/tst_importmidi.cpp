@@ -27,6 +27,9 @@
 #include "inner_func_decl.h"
 #include "mscore/importmidi_chord.h"
 #include "mscore/importmidi_tuplet.h"
+#include "mscore/importmidi_meter.h"
+#include "mscore/importmidi_inner.h"
+#include "mscore/preferences.h"
 
 
 namespace Ms {
@@ -63,6 +66,62 @@ class TestImportMidi : public QObject, public MTest
       void findOnTimeRegularError();
       void findTupletApproximation();
       void separateTupletVoices();
+
+      // metric bar analysis
+      void metricDivisionsOfTuplet();
+      void maxLevelBetween();
+
+      // test scores for meter (duration subdivision)
+      void meterTimeSig4_4() { mf("meter_4-4"); }
+      void metertimeSig9_8() { mf("meter_9-8"); }
+      void metertimeSig12_8() { mf("meter_12-8"); }
+      void meterCentralLongNote() { mf("meter_central_long_note"); }
+      void meterCentralLongRest() { mf("meter_central_long_rest"); }
+      void meterChordExample() { mf("meter_chord_example"); }
+      void meterDotsExample1() { mf("meter_dots_example1"); }
+      void meterDotsExample2() { mf("meter_dots_example2"); }
+      void meterDotsExample3() { mf("meter_dots_example3"); }
+      void meterHalfRest3_4() { mf("meter_half_rest_3-4"); }
+      void meterFirst2_8thRestsCompound() { mf("meter_first_2_8th_rests_compound"); }
+      void meterLastQuarterRestCompound() { mf("meter_last_quarter_rest_compound"); }
+      void meterRests() { mf("meter_rests"); }
+      void meterTwoBeatsOver() { mf("meter_two_beats_over"); }
+
+      // test scores for tuplets
+      void tuplet2Voices3_5Tuplets()
+            {
+                        // requires 1/32 quantization
+            int defaultQuant = preferences.shortestNote;
+            preferences.shortestNote = MScore::division / 8; // midi quantization: 1/32
+            mf("tuplet_2_voices_3_5_tuplets");
+            preferences.shortestNote = defaultQuant;
+            }
+      void tuplet2VoicesTupletNon() { mf("tuplet_2_voices_tuplet_non"); }
+      void tuplet3_5_7tuplets() { mf("tuplet_3_5_7_tuplets"); }
+      void tuplet5_5TupletsRests() { mf("tuplet_5_5_tuplets_rests"); }
+      void tuplet3_4() { mf("tuplet_3-4"); }
+      void tupletDuplet() { mf("tuplet_duplet"); }
+      void tupletMars() { mf("tuplet_mars"); }
+      void tupletNonuplet3_4()
+            {
+                        // requires 1/64 quantization
+            int defaultQuant = preferences.shortestNote;
+            preferences.shortestNote = MScore::division / 16; // midi quantization: 1/64
+            mf("tuplet_nonuplet_3-4");
+            preferences.shortestNote = defaultQuant;
+            }
+      void tupletNonuplet4_4()
+            {
+                        // requires 1/64 quantization
+            int defaultQuant = preferences.shortestNote;
+            preferences.shortestNote = MScore::division / 16; // midi quantization: 1/64
+            mf("tuplet_nonuplet_4-4");
+            preferences.shortestNote = defaultQuant;
+            }
+      void tupletQuadruplet() { mf("tuplet_quadruplet"); }
+      void tupletSeptuplet() { mf("tuplet_septuplet"); }
+      void tupletTripletsMixed() { mf("tuplet_triplets_mixed"); }
+      void tupletTriplet() { mf("tuplet_triplet"); }
       };
 
 //---------------------------------------------------------
@@ -325,9 +384,9 @@ void TestImportMidi::findTupletNumbers()
       Fraction barFraction(6, 8);
       Fraction divLen = barFraction / 2;
       auto numbers = MidiTuplet::findTupletNumbers(divLen, barFraction);
-      QVERIFY(numbers.size() == 2);
-      QCOMPARE(numbers[0], 2);
-      QCOMPARE(numbers[1], 4);
+      QVERIFY(numbers.size() == 1);
+      QCOMPARE(numbers[0], 4);
+                  // duplets are turned off by default
       }
       }
 
@@ -532,6 +591,80 @@ void TestImportMidi::separateTupletVoices()
             const MidiChord &midiChord = chord.second->second;
             QCOMPARE(midiChord.voice, 2);
             }
+      }
+
+
+//---------------------------------------------------------
+//  metric bar analysis
+//---------------------------------------------------------
+
+void TestImportMidi::metricDivisionsOfTuplet()
+      {
+      MidiTuplet::TupletData tupletData;
+      tupletData.voice = 0;
+      tupletData.len = Fraction::fromTicks(480);
+      tupletData.onTime = Fraction::fromTicks(480);
+      tupletData.tupletNumber = 3;
+      int tupletStartLevel = -3;
+      Meter::DivisionInfo tupletDivInfo = Meter::metricDivisionsOfTuplet(tupletData, tupletStartLevel);
+
+      QCOMPARE(tupletDivInfo.isTuplet, true);
+      QCOMPARE(tupletDivInfo.len, Fraction::fromTicks(480));
+      QCOMPARE(tupletDivInfo.onTime, Fraction::fromTicks(480));
+      QVERIFY(tupletDivInfo.divLengths.size() == 5);
+
+      QCOMPARE(tupletDivInfo.divLengths[0].len, tupletData.len);
+      QCOMPARE(tupletDivInfo.divLengths[0].level, Meter::TUPLET_BOUNDARY_LEVEL);
+
+      QCOMPARE(tupletDivInfo.divLengths[1].len, tupletData.len / tupletData.tupletNumber);
+      QCOMPARE(tupletDivInfo.divLengths[1].level, tupletStartLevel);
+
+      QCOMPARE(tupletDivInfo.divLengths[2].len, tupletData.len / (2 * tupletData.tupletNumber));
+      QCOMPARE(tupletDivInfo.divLengths[2].level, tupletStartLevel - 1);
+
+      QCOMPARE(tupletDivInfo.divLengths[3].len, tupletData.len / (4 * tupletData.tupletNumber));
+      QCOMPARE(tupletDivInfo.divLengths[3].level, tupletStartLevel - 2);
+
+      QCOMPARE(tupletDivInfo.divLengths[4].len, tupletData.len / (8 * tupletData.tupletNumber));
+      QCOMPARE(tupletDivInfo.divLengths[4].level, tupletStartLevel - 3);
+      }
+
+void TestImportMidi::maxLevelBetween()
+      {
+      Fraction barFraction = Fraction(4, 4);
+      Fraction startTickInBar = Fraction::fromTicks(240);
+      Fraction endTickInBar = Fraction::fromTicks(500);
+
+      Meter::DivisionInfo regularDivInfo = Meter::metricDivisionsOfBar(barFraction);
+      QVERIFY(regularDivInfo.divLengths.size() == 8);
+
+      Meter::MaxLevel level = Meter::maxLevelBetween(startTickInBar, endTickInBar, regularDivInfo);
+      QCOMPARE(level.level, -2);
+      QCOMPARE(level.lastPos, Fraction::fromTicks(480));
+      QCOMPARE(level.levelCount, 1);
+
+      startTickInBar = Fraction::fromTicks(499);
+      level = Meter::maxLevelBetween(startTickInBar, endTickInBar, regularDivInfo);
+      QCOMPARE(level.level, 0);
+      QCOMPARE(level.lastPos, Fraction(-1, 1));
+      QCOMPARE(level.levelCount, 0);
+
+      MidiTuplet::TupletData tupletData;
+      tupletData.voice = 0;
+      tupletData.len = Fraction::fromTicks(480);
+      tupletData.onTime = Fraction::fromTicks(480);
+      tupletData.tupletNumber = 3;
+
+      int tupletStartLevel = -3;
+      Meter::DivisionInfo tupletDivInfo = Meter::metricDivisionsOfTuplet(tupletData, tupletStartLevel);
+      QVERIFY(tupletDivInfo.divLengths.size() == 5);
+
+      startTickInBar = tupletData.onTime;
+      endTickInBar = startTickInBar + tupletData.len;
+      level = Meter::maxLevelBetween(startTickInBar, endTickInBar, tupletDivInfo);
+      QCOMPARE(level.level, -3);
+      QCOMPARE(level.lastPos, tupletData.onTime + tupletData.len * 2 / tupletData.tupletNumber);
+      QCOMPARE(level.levelCount, 2);
       }
 
 
