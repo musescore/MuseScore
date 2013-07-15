@@ -1037,7 +1037,8 @@ qDebug("cmdRemoveStaves %d-%d", sStaff, eStaff);
             qDebug(" seg %d <%s>", s->tick(), s->subTypeName());
             for (int track = eTrack - 1; track >= sTrack; --track) {
                   Element* el = s->element(track);
-                  if (el && !el->generated()) {
+//                  if (el && !el->generated()) {
+                  if (el) {
                         qDebug("  remove %s track %d", el->name(), track);
                         _score->undoRemoveElement(el);
                         }
