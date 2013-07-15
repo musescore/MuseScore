@@ -94,7 +94,7 @@ p, li { white-space: pre-wrap; }
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="1" n="1"/>
+          <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="2">

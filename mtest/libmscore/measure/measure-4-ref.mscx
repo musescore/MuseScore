@@ -128,7 +128,7 @@ p, li { white-space: pre-wrap; }
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="1" n="1"/>
+          <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="3">
