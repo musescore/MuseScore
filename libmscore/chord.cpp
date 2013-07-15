@@ -1079,9 +1079,10 @@ qreal Chord::centerX() const
 
 void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      if (_hook && !measure()->slashStyle(staffIdx()))
+      bool slash = measure() && measure()->slashStyle(staffIdx());
+      if (_hook && !slash)
             func(data, _hook );
-      if (_stem && !measure()->slashStyle(staffIdx()))
+      if (_stem && !slash)
             func(data, _stem);
       if (_stemSlash)
             func(data, _stemSlash);
@@ -1091,7 +1092,7 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _tremolo);
       if (_glissando)
             func(data, _glissando);
-      if(staff()->showLedgerLines())
+      if (staff() && staff()->showLedgerLines())
             for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
                   func(data, ll);
       int n = _notes.size();
