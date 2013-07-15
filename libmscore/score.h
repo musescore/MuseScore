@@ -481,7 +481,6 @@ class Score : public QObject {
          Segment**, QPointF* offset) const;
 
       void undoAddElement(Element* element);
-//      void undoAddGrace(Chord* c, Segment* s, bool behind);
       void undoAddCR(ChordRest* element, Measure*, int tick);
       void undoRemoveElement(Element* element);
       void undoChangeElement(Element* oldElement, Element* newElement);

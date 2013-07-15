@@ -60,7 +60,6 @@ StaffListItem::StaffListItem(PartListItem* li)
       staffIdx = 0;
       setLinked(false);
       setClef(ClefTypeList(CLEF_G, CLEF_G));
-//      setFlags(flags() | Qt::ItemIsUserCheckable);
       _staffTypeCombo = 0;
       initStaffTypeCombo();
       }
@@ -75,8 +74,11 @@ StaffListItem::StaffListItem()
       setClef(ClefTypeList(CLEF_G, CLEF_G));
       setLinked(false);
       _staffTypeCombo = 0;
-//      initStaffTypeCombo();                   // no! can't set widgets into this, until this is inserted in the tree hierarchy
       }
+
+//---------------------------------------------------------
+//   initStaffTypeCombo
+//---------------------------------------------------------
 
 void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       {
@@ -100,7 +102,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
             canUseTabs = tab && tab->strings() > 0;
             canUsePerc = part->it ? part->it->useDrumset :
                         ( (part->part && part->part->instr(0)) ? part->part->instr(0)->useDrumset() : false);
-      }
+            }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
       foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList)
