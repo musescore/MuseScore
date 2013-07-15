@@ -208,6 +208,7 @@ void EditStyle::getValues()
       lstyle.set(ST_measureSpacing,          measureSpacing->value());
       lstyle.set(ST_minNoteDistance,         Spatium(minNoteDistance->value()));
       lstyle.set(ST_barNoteDistance,         Spatium(barNoteDistance->value()));
+      lstyle.set(ST_barAccidentalDistance,   Spatium(barAccidentalDistance->value()));
       lstyle.set(ST_noteBarDistance,         Spatium(noteBarDistance->value()));
       lstyle.set(ST_showMeasureNumber,       showMeasureNumber->isChecked());
       lstyle.set(ST_showMeasureNumberOne,    showFirstMeasureNumber->isChecked());
@@ -439,6 +440,7 @@ void EditStyle::setValues()
       measureSpacing->setValue(lstyle.value(ST_measureSpacing).toDouble());
       minNoteDistance->setValue(lstyle.valueS(ST_minNoteDistance).val());
       barNoteDistance->setValue(lstyle.valueS(ST_barNoteDistance).val());
+      barAccidentalDistance->setValue(lstyle.valueS(ST_barAccidentalDistance).val());
       noteBarDistance->setValue(lstyle.valueS(ST_noteBarDistance).val());
 
       showMeasureNumber->setChecked(lstyle.valueB(ST_showMeasureNumber));

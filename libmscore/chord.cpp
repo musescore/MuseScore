@@ -1554,7 +1554,7 @@ void Chord::layoutPitched()
 
             Accidental* accidental = note->accidental();
             if (accidental) {
-                  qreal x = accidental->x() + note->x() - minNoteDistance;
+                  qreal x = accidental->x() + note->x();
                   if (-x > lll)
                         lll = -x;
                   }
@@ -1619,7 +1619,6 @@ void Chord::layoutPitched()
             }
 
       _space.setLw(lll);
-//      _space.setRw(rrr + ipos().x()); // does not work with grace notes
       _space.setRw(rrr);
 
       int n = _graceNotes.size();

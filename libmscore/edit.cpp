@@ -1721,8 +1721,6 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
       else
             scorelist.append(this);
 
-printf("insertMeasure\n");
-
       foreach(Score* score, scorelist) {
             MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
             MeasureBase* im = idx != -1 ? score->measure(idx) : 0;
