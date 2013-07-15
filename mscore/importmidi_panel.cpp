@@ -108,7 +108,7 @@ void ImportMidiPanel::tweakUi()
 
 bool ImportMidiPanel::canImportMidi() const
       {
-      return (QFileInfo(midiFile).exists());
+      return QFileInfo(midiFile).exists() && tracksModel->numberOfTracksForImport();
       }
 
 void ImportMidiPanel::hidePanel()
