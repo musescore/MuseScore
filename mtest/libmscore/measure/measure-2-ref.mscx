@@ -161,7 +161,7 @@ p, li { white-space: pre-wrap; }
         <Rest>
           <lid>178</lid>
           <durationType>measure</durationType>
-          <duration z="1" n="2"/>
+          <duration z="2" n="4"/>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -270,7 +270,7 @@ p, li { white-space: pre-wrap; }
         <Rest>
           <lid>179</lid>
           <durationType>measure</durationType>
-          <duration z="1" n="2"/>
+          <duration z="2" n="4"/>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -316,7 +316,7 @@ p, li { white-space: pre-wrap; }
         <Rest>
           <lid>180</lid>
           <durationType>measure</durationType>
-          <duration z="1" n="2"/>
+          <duration z="2" n="4"/>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -491,7 +491,7 @@ p, li { white-space: pre-wrap; }
           <Rest>
             <lid>178</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="2"/>
+            <duration z="2" n="4"/>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -601,7 +601,7 @@ p, li { white-space: pre-wrap; }
           <Rest>
             <lid>179</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="2"/>
+            <duration z="2" n="4"/>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -752,7 +752,7 @@ p, li { white-space: pre-wrap; }
           <Rest>
             <lid>180</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="2"/>
+            <duration z="2" n="4"/>
             </Rest>
           </Measure>
         <Measure number="2">
