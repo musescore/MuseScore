@@ -33,6 +33,7 @@ class TracksModel : public QAbstractTableModel
       int trackCount() const { return trackCount_; }
       int rowFromTrackIndex(int trackIndex) const;
       int trackIndexFromRow(int row) const;
+      int numberOfTracksForImport() const;
 
       int rowCount(const QModelIndex &/*parent*/) const;
       int columnCount(const QModelIndex &/*parent*/) const;
