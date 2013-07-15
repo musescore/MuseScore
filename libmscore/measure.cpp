@@ -1987,7 +1987,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment->add(ts);
                   timeStretch = ts->stretch().reduced();
 
-                  _timesig = (ts->sig() * timeStretch).reduced();
+                  _timesig = ts->sig() * timeStretch;
 
                   if (score()->mscVersion() > 114) {
                         if (irregular) {
