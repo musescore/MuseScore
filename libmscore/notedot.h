@@ -17,6 +17,8 @@
 
 namespace Ms {
 
+class Note;
+
 //---------------------------------------------------------
 //   @@ NoteDot
 //---------------------------------------------------------
@@ -38,6 +40,8 @@ class NoteDot : public Element {
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       virtual void layout();
+
+      Note* note() const { return (Note*)parent(); }
       };
 
 
