@@ -582,7 +582,7 @@ void Note::draw(QPainter* painter) const
 
       else {
             // skip drawing, if second note of a cross-measure value
-            if(chord()->crossMeasure() == CROSSMEASURE_SECOND)
+            if (chord()->crossMeasure() == CROSSMEASURE_SECOND)
                   return;
             //
             // warn if pitch extends usable range of instrument
