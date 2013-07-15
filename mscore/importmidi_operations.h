@@ -17,7 +17,7 @@ namespace Ms {
 struct SearchTuplets
       {
       bool doSearch = true;
-      bool duplets = true;
+      bool duplets = false;
       bool triplets = true;
       bool quadruplets = true;
       bool quintuplets = true;
