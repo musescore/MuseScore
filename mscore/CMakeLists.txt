@@ -415,7 +415,8 @@ if (MINGW)
       REGEX ".*QtTest.*" EXCLUDE
       REGEX ".*QtSensors.*" EXCLUDE
       REGEX ".*QtGraphicalEffects.*" EXCLUDE
-      REGEX ".*QtMultimedia.*" EXCLUDE)
+      REGEX ".*QtMultimedia.*" EXCLUDE
+      REGEX ".*d\\.dll" EXCLUDE)
 
 else (MINGW)
    target_link_libraries(mscore
