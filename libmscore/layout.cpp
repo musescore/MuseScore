@@ -191,14 +191,12 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
                               note->setHidden(false);
                         }
                   else {
-                        if ((line > ll) || !chord->up()) {
-                              note->chord()->rxpos() = note->headWidth() - note->point(styleS(ST_stemWidth));
-                              note->rxpos() = 0.0;
-                              }
-                        else {
-                              notes[idx-incIdx]->chord()->rxpos() = note->headWidth() - note->point(styleS(ST_stemWidth));
-                              note->rxpos() = 0.0;
-                              }
+                        qreal x = note->headWidth() - note->point(styleS(ST_stemWidth));
+                        if ((line > ll) || !chord->up())
+                              note->chord()->rxpos() = x;
+                        else
+                              notes[idx-incIdx]->chord()->rxpos() = x;
+                        note->rxpos() = 0.0;
                         }
                   }
             if (note->userMirror() == MScore::DH_AUTO) {
@@ -262,10 +260,12 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
                         x = stemX - hw + stemWidth5 * 2;
                   }
             else {
+                  // center whole note
+                  qreal xd = (note->headWidth() - noteHeadWidth()) * .5;
                   if (_up)
-                        x = stemX - hw;
+                        x = stemX - hw + xd;
                   else
-                        x = 0.0;
+                        x = -xd;
                   }
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
