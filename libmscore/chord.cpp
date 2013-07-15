@@ -1512,7 +1512,6 @@ void Chord::layoutPitched()
             delete _ledgerLines;
             _ledgerLines = l;
             }
-      setDotPosX(-1000.0);
 
       qreal lll    = 0.0;         // space to leave at left of chord
       qreal rrr    = 0.0;         // space to leave at right of chord
@@ -1552,8 +1551,6 @@ void Chord::layoutPitched()
                   lll = -x1;
             if (x2 > rrr)
                   rrr = x2;
-            if (x2 > dotPosX())
-                  setDotPosX(x2);
 
             Accidental* accidental = note->accidental();
             if (accidental) {
@@ -1702,7 +1699,6 @@ void Chord::layoutTablature()
             lll = stemX - halfHeadWidth;
       if (rrr < stemX + halfHeadWidth)
             rrr = stemX + halfHeadWidth;
-      setDotPosX(rrr);
       // if tab type is stemless or chord is stemless (possible when imported from MusicXML)
       // or duration longer than half (if halves have stems) or duration longer than crochet
       // remove stems
@@ -2029,17 +2025,6 @@ qreal Chord::dotPosX() const
       if (parent())
             return segment()->dotPosX(staffIdx());
       return -1000.0;
-      }
-
-//---------------------------------------------------------
-//   setDotPosX
-//---------------------------------------------------------
-
-void Chord::setDotPosX(qreal val)
-      {
-// TODO: done in Score->layoutChords1()
-//      if (parent())
-//            segment()->setDotPosX(staffIdx(), val);
       }
 
 //---------------------------------------------------------

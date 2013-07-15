@@ -66,6 +66,7 @@
 #include "scoretab.h"
 #include "measureproperties.h"
 #include "libmscore/pitchspelling.h"
+#include "libmscore/notedot.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/tuplet.h"
@@ -5163,6 +5164,26 @@ static bool elementLower(const Element* e1, const Element* e2)
       {
       if (!e1->selectable())
             return false;
+      if (e1->z() == e2->z()) {
+            if (e1->type() == e2->type()) {
+                  if (e1->type() == Element::NOTEDOT) {
+                        const NoteDot* n1 = static_cast<const NoteDot*>(e1);
+                        const NoteDot* n2 = static_cast<const NoteDot*>(e2);
+                        if (n1->note()->hidden())
+                              return n2;
+                        else
+                              return n1;
+                        }
+                  else if (e1->type() == Element::NOTE) {
+                        const Note* n1 = static_cast<const Note*>(e1);
+                        const Note* n2 = static_cast<const Note*>(e2);
+                        if (n1->hidden())
+                              return n2;
+                        else
+                              return n1;
+                        }
+                  }
+            }
       return e1->z() < e2->z();
       }
 
@@ -5214,7 +5235,7 @@ Element* ScoreView::elementNear(QPointF p)
       foreach(const Element* e, ll)
             qDebug("  %s selected %d z %d", e->name(), e->selected(), e->z());
 #endif
-      Element* e = const_cast<Element*>(ll.at(0));
+      Element* e = ll.at(0);
       return e;
       }
 
