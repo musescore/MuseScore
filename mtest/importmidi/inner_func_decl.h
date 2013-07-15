@@ -43,7 +43,19 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
                          std::multimap<Fraction, MidiChord> &chords,
                          const Fraction &endBarTick);
 
-} // namespace Quantize
+} // namespace MidiTuplet
+
+namespace Meter {
+
+struct MaxLevel;
+struct DivisionInfo;
+
+Meter::MaxLevel maxLevelBetween(const Fraction &startTickInBar,
+                                const Fraction &endTickInBar,
+                                const DivisionInfo &divInfo);
+
+} // namespace Meter
+
 } // namespace Ms
 
 #endif // INNER_FUNC_DECL_H

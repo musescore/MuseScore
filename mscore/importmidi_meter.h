@@ -28,6 +28,12 @@ bool isQuadruple(const Fraction &barFraction);
 
 Fraction beatLength(const Fraction &barFraction);
 
+struct DivisionInfo;
+
+DivisionInfo metricDivisionsOfBar(const Fraction &barFraction);
+DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData &tuplet,
+                                     int tupletStartLevel);
+
             // division lengths of bar, each can be a tuplet length
 std::vector<Fraction> divisionsOfBarForTuplets(const Fraction &barFraction);
 
