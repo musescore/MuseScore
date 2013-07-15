@@ -541,7 +541,8 @@ class Element : public QObject {
 //   ElementList
 //---------------------------------------------------------
 
-class ElementList : public std::list<Element*> {
+// class ElementList : public std::list<Element*> {
+class ElementList : public QList<Element*> {
    public:
       ElementList() {}
       bool remove(Element*);

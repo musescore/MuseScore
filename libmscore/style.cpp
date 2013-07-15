@@ -82,6 +82,7 @@ StyleType styleTypes[] = {
 
       StyleType("minNoteDistance",         ST_SPATIUM),
       StyleType("barNoteDistance",         ST_SPATIUM),
+      StyleType("barAccidentalDistance",   ST_SPATIUM),
       StyleType("noteBarDistance",         ST_SPATIUM),
       StyleType("measureSpacing",          ST_DOUBLE),
       StyleType("staffLineWidth",          ST_SPATIUM),
@@ -478,6 +479,7 @@ StyleData::StyleData()
             StyleVal(ST_beginRepeatLeftMargin,Spatium(1.0)),
             StyleVal(ST_minNoteDistance,Spatium(0.25)),           // 0.4
             StyleVal(ST_barNoteDistance,Spatium(1.2)),
+            StyleVal(ST_barAccidentalDistance,Spatium(.3)),
             StyleVal(ST_noteBarDistance,Spatium(1.0)),
 
             //43

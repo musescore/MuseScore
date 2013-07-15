@@ -2458,9 +2458,25 @@ qreal Score::computeMinWidth(Segment* fs)
                                     continue;
                               found = true;
                               if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine)) {
-                                    qreal sp        = styleS(ST_barNoteDistance).val() * _spatium;
-                                    sp += elsp;
-                                    minDistance     = qMax(minDistance, sp);
+                                    // check for accidentals in chord
+                                    bool accidental = false;
+                                    if (cr->type() == Element::CHORD) {
+                                          Chord* c = static_cast<Chord*>(cr);
+                                          if (!c->graceNotes().empty())
+                                                accidental = true;
+                                          else {
+                                                for (Note* note : c->notes()) {
+                                                      if (note->accidental()) {
+                                                            accidental = true;
+                                                            break;
+                                                            }
+                                                      }
+                                                }
+                                          }
+                                    StyleIdx si = accidental ? ST_barAccidentalDistance : ST_barNoteDistance;
+                                    qreal sp    = styleS(si).val() * _spatium;
+                                    sp         += elsp;
+                                    minDistance = qMax(minDistance, sp);
                                     stretchDistance = sp * .7;
                                     }
                               else if (pt & (Segment::SegChordRest)) {
