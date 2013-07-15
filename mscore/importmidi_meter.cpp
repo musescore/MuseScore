@@ -291,7 +291,8 @@ bool is23EndOfBeatInCompoundMeter(const Fraction &startTickInBar,
 
 bool isHalfDuration(const Fraction &f)
       {
-      return f.numerator() == 1 && f.denominator() == 2;
+      Fraction ff = f.reduced();
+      return ff.numerator() == 1 && ff.denominator() == 2;
       }
 
 // 3/4: if half rest starts from beg of bar or ends on bar end
@@ -301,10 +302,10 @@ bool isHalfRestOn34(const Fraction &startTickInBar,
                     const Fraction &endTickInBar,
                     const Fraction &barFraction)
       {
-      if (endTickInBar - startTickInBar <= Fraction())
+      if (endTickInBar - startTickInBar <= Fraction(0))
             return false;
       if (barFraction.numerator() == 3 && barFraction.denominator() == 4
-                  && (startTickInBar == Fraction() || endTickInBar == barFraction)
+                  && (startTickInBar == Fraction(0) || endTickInBar == barFraction)
                   && isHalfDuration(endTickInBar - startTickInBar))
             return true;
       return false;
