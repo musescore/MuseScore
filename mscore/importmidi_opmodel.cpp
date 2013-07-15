@@ -66,13 +66,13 @@ OperationsModel::OperationsModel()
       controller->quantReduce = reduceToShorter;
 
 
-      Node *humanPerformance = new Node;
-      humanPerformance->name = "Human performance";
-      humanPerformance->oper.type = MidiOperation::Type::QUANT_HUMAN;
-      humanPerformance->oper.value = Quantization().humanPerformance;
-      humanPerformance->parent = quantValue;
-      quantValue->children.push_back(std::unique_ptr<Node>(humanPerformance));
-      controller->quantHuman = humanPerformance;
+//      Node *humanPerformance = new Node;
+//      humanPerformance->name = "Human performance";
+//      humanPerformance->oper.type = MidiOperation::Type::QUANT_HUMAN;
+//      humanPerformance->oper.value = Quantization().humanPerformance;
+//      humanPerformance->parent = quantValue;
+//      quantValue->children.push_back(std::unique_ptr<Node>(humanPerformance));
+//      controller->quantHuman = humanPerformance;
 
 
       Node *useDots = new Node;
@@ -81,6 +81,13 @@ OperationsModel::OperationsModel()
       useDots->oper.value = TrackOperations().useDots;
       useDots->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(useDots));
+
+      Node *useMultipleVoices = new Node;
+      useMultipleVoices->name = "Multiple voices";
+      useMultipleVoices->oper.type = MidiOperation::Type::USE_MULTIPLE_VOICES;
+      useMultipleVoices->oper.value = TrackOperations().useMultipleVoices;
+      useMultipleVoices->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(useMultipleVoices));
 
 
       // ------------- tuplets --------------
@@ -414,6 +421,8 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
             node->oper.value = QVariant();
       else {
             switch (node->oper.type) {
+                  case MidiOperation::Type::DO_IMPORT: break;
+
                   case MidiOperation::Type::QUANT_VALUE:
                         node->oper.value = (int)opers.opers.quantize.value; break;
                   case MidiOperation::Type::QUANT_REDUCE:
@@ -432,7 +441,9 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
 
                   case MidiOperation::Type::USE_DOTS:
                         node->oper.value = opers.opers.useDots; break;
-                  case MidiOperation::Type::DO_IMPORT: break;
+
+                  case MidiOperation::Type::USE_MULTIPLE_VOICES:
+                        node->oper.value = opers.opers.useMultipleVoices; break;
 
                   case MidiOperation::Type::TUPLET_SEARCH:
                         node->oper.value = opers.opers.tuplets.doSearch; break;

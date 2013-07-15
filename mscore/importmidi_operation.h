@@ -22,6 +22,7 @@ struct MidiOperation
             LHRH_SPLIT_NOTE,
 
             USE_DOTS,
+            USE_MULTIPLE_VOICES,
 
             TUPLET_SEARCH,
             TUPLET_2,
