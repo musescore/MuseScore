@@ -21,14 +21,10 @@ MuseScore {
    description: qsTr("This plugin names notes")
    menuPath: "Plugins.Notes." + qsTr("Note Names") // this does not work, why?
 
-    Cursor {
-        id: cursor
-        score: curScore
-        }
    onRun: {
       if (typeof curScore === 'undefined')
         Qt.quit();
-
+      var cursor = curScore.newCursor();
       cursor.rewind(1);
       var startStaff = cursor.staffIdx;
       cursor.rewind(2);

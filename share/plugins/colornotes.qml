@@ -30,12 +30,8 @@ MuseScore {
       // Apply the given function to all notes in selection
       // or, if nothing is selected, in the entire score
 
-      Cursor {
-        id:    cursor
-        score: curScore
-        }
-
       function applyToNotesInSelection(func) {
+            var cursor = curScore.newCursor();
             cursor.rewind(1);
             var startStaff  = cursor.staffIdx;
             cursor.rewind(2);
