@@ -170,7 +170,6 @@ class Chord : public ChordRest {
       void computeUp();
 
       qreal dotPosX() const;
-      void setDotPosX(qreal val);
 
       bool noStem() const             { return _noStem;  }
       void setNoStem(bool val)        { _noStem = val;   }
