@@ -246,7 +246,7 @@ void Note::setPitch(int val)
       for (int i = 0; i < _playEvents.size(); ++i)
             _playEvents[i].setPitch(pitchOffset);
       if (chord())
-            chord()->pitchChanged();
+            chord()->lineChanged();
       }
 
 void Note::setPitch(int a, int b)
@@ -1546,6 +1546,8 @@ void Note::setLine(int n)
       {
       _line = n;
       rypos() = _line * spatium() * .5;
+      if (chord())
+            chord()->lineChanged();
       }
 
 //---------------------------------------------------------

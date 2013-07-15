@@ -1926,14 +1926,14 @@ Note* Chord::findNote(int pitch) const
 
 static bool noteLessThan(const Note* n1, const Note* n2)
       {
-      return n1->pitch() <= n2->pitch();
+      return n1->line() > n2->line();
       }
 
 //---------------------------------------------------------
 //   pitchChanged
 //---------------------------------------------------------
 
-void Chord::pitchChanged()
+void Chord::lineChanged()
       {
       qSort(_notes.begin(), _notes.end(), noteLessThan);
       }

@@ -55,7 +55,7 @@ class Chord : public ChordRest {
       Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
       Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
 
-      QList<Note*> _notes;          // sorted to increasing pitch
+      QList<Note*> _notes;          // sorted to decreasing line step
       LedgerLine*  _ledgerLines;    // single linked list
 
       Stem*      _stem;
@@ -177,7 +177,7 @@ class Chord : public ChordRest {
       bool userPlayEvents() const     { return _userPlayEvents; }
       void setUserPlayEvents(bool v)  { _userPlayEvents = v; }
 
-      void pitchChanged();
+      void lineChanged();
       TremoloChordType tremoloChordType() const      { return _tremoloChordType; }
       void setTremoloChordType(TremoloChordType t)   { _tremoloChordType = t; }
 
