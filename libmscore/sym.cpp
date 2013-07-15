@@ -667,7 +667,6 @@ void initSymbols(int idx)
                         symbols[idx][i] = symbols[0][i];
                         }
                   }
-
             }
       }
 }
