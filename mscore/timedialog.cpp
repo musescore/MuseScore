@@ -45,11 +45,11 @@ TimeDialog::TimeDialog(QWidget* parent)
       sp = MuseScore::newTimePalette();
       sp->setReadOnly(false);
       sp->setSelectable(true);
-      sp->setSelected(2);
 
       connect(zNominal,  SIGNAL(valueChanged(int)), SLOT(zChanged(int)));
       connect(nNominal,  SIGNAL(currentIndexChanged(int)), SLOT(nChanged(int)));
       connect(sp,        SIGNAL(boxClicked(int)),   SLOT(paletteChanged(int)));
+      connect(sp,        SIGNAL(changed()),         SLOT(setDirty()));
       connect(addButton, SIGNAL(clicked()),         SLOT(addClicked()));
 
       PaletteScrollArea* timePalette = new PaletteScrollArea(sp);
@@ -60,13 +60,12 @@ TimeDialog::TimeDialog(QWidget* parent)
 
       _dirty = false;
 
-      if (!useFactorySettings) {
-            QFile f(dataPath + "/" + "timesigs.xml");
-            if (f.exists() && sp->read(&f))
-                  return;
+      if (useFactorySettings || !sp->read(dataPath + "/" + "timesigs")) {
+            Fraction sig(4,4);
+            groups->setSig(sig, Groups::endings(sig));
             }
-      Fraction sig(4,4);
-      groups->setSig(sig, Groups::endings(sig));
+      sp->setSelected(2);
+      paletteChanged(2);
       }
 
 //---------------------------------------------------------
@@ -78,7 +77,6 @@ void TimeDialog::addClicked()
       TimeSig* ts = new TimeSig(gscore);
       ts->setSig(Fraction(zNominal->value(), denominator()));
       ts->setGroups(groups->groups());
-printf("setGroups %zd\n", groups->groups().size());
 
       // check for special text
       if ((QString("%1").arg(zNominal->value()) != zText->text())
@@ -100,7 +98,8 @@ void TimeDialog::save()
       {
       QDir dir;
       dir.mkpath(dataPath);
-      sp->write(dataPath + "/" + "timesigs.xml");
+      sp->write(dataPath + "/" + "timesigs");
+      printf("TimeDialog::save(): %s\n", qPrintable(dataPath+"/" + "timesigs"));
       }
 
 //---------------------------------------------------------
@@ -170,10 +169,22 @@ int TimeDialog::denominator() const
 void TimeDialog::paletteChanged(int idx)
       {
       TimeSig* e = static_cast<TimeSig*>(sp->element(idx));
-      if (e->type() != Element::TIMESIG) {
-            qDebug("not timesig: <%s>\n", e->name());
+      if (!e || e->type() != Element::TIMESIG) {
+            zNominal->setEnabled(false);
+            nNominal->setEnabled(false);
+            zText->setEnabled(false);
+            nText->setEnabled(false);
+            groups->setEnabled(false);
+            addButton->setEnabled(false);
             return;
             }
+      zNominal->setEnabled(true);
+      nNominal->setEnabled(true);
+      zText->setEnabled(true);
+      nText->setEnabled(true);
+      groups->setEnabled(true);
+      addButton->setEnabled(true);
+
       Fraction sig(e->sig());
       Groups g = e->groups();
       if (g.empty())
@@ -184,5 +195,6 @@ void TimeDialog::paletteChanged(int idx)
       zText->setText(e->numeratorString());
       nText->setText(e->denominatorString());
       }
+
 }
 

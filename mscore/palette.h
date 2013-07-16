@@ -160,7 +160,7 @@ class Palette : public QWidget {
       Element* element(int idx);
       void setDrawGrid(bool val)     { _drawGrid = val; }
       bool drawGrid() const          { return _drawGrid; }
-      void read(const QString& path);
+      bool read(const QString& path);
       void write(const QString& path);
       void read(XmlReader&);
       void write(Xml&) const;
