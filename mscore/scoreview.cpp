@@ -2030,6 +2030,7 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
 static void drawDebugInfo(QPainter& p, const Element* _e)
       {
       const Element* e = _e;
+#if 0
       if (e->type() == Element::NOTE) {
             e = e->parent();
             const ChordRest* cr = static_cast<const ChordRest*>(e);
@@ -2048,7 +2049,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
             p.translate(-pos);
             return;
             }
-
+#endif
       //
       //  draw bounding box rectangle for all
       //  selected Elements
@@ -2057,13 +2058,13 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
       p.translate(pos);
       p.setBrush(Qt::NoBrush);
 
-      p.setPen(Qt::red);
+      p.setPen(QPen(Qt::red, 0.0));
       p.drawPath(e->shape());
 
       // p.setPen(Qt::red);
       // p.drawRect(e->bbox());
 
-      p.setPen(Qt::red);
+      p.setPen(QPen(Qt::red, 0.0));
       qreal w = 5.0 / p.matrix().m11();
       qreal h = w;
       qreal x = 0; // e->bbox().x();
@@ -2079,7 +2080,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
             else if (e->type() == Element::CLEF)
                   ee = static_cast<const Clef*>(e)->segment();
 
-            p.setPen(Qt::green);
+            p.setPen(QPen(Qt::green, 0.0));
 
             p.drawRect(ee->pageBoundingRect());
 
