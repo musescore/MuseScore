@@ -261,12 +261,20 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
                         x = stemX - hw + stemWidth5 * 2;
                   }
             else {
-                  // center whole note
-                  qreal xd = (note->headWidth() - noteHeadWidth()) * .5;
-                  if (_up)
-                        x = stemX - hw + xd;
-                  else
-                        x = -xd;
+                  if (chord->durationType().headType() == Note::HEAD_WHOLE) {
+                        // center whole note
+                        qreal xd = (note->headWidth() - hw) * .5;
+                        if (_up)
+                              x = stemX - hw + xd;
+                        else
+                              x = -xd;
+                        }
+                  else {
+                        if (_up)
+                              x = stemX - hw;
+                        else
+                              x = 0.0;
+                        }
                   }
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
