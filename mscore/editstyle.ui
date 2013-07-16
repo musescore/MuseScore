@@ -2148,8 +2148,14 @@ p, li { white-space: pre-wrap; }
               <property name="text">
                <string>Barline to accidental distance</string>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
               <property name="wordWrap">
                <bool>false</bool>
+              </property>
+              <property name="indent">
+               <number>5</number>
               </property>
              </widget>
             </item>
