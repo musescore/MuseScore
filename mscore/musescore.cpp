@@ -278,7 +278,8 @@ void MuseScore::closeEvent(QCloseEvent* ev)
 #endif
       if (synthControl)
             synthControl->writeSettings();
-
+      if (mixer)
+            mixer->writeSettings();
       if (seq) {
             seq->stopWait();
             seq->exit();
