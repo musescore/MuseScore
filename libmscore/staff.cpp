@@ -638,8 +638,7 @@ void Staff::linkTo(Staff* staff)
             _linkedStaves->add(this);
             }
       else {
-            qDebug("Staff::linkTo: staff already linked\n");
-            abort();
+            _linkedStaves->add(staff);
             }
       }
 
