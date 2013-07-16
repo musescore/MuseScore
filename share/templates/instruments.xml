@@ -8611,6 +8611,26 @@
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings</name>
+            <Instrument id="string-section">
+                  <longName>String Section</longName>
+                  <shortName>Str.</shortName>
+                  <description>String Section</description>
+                  <trackName>String Section</trackName>
+                  <musicXMLid>strings.group</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>55-88</aPitchRange>
+                  <pPitchRange>55-103</pPitchRange>
+                  <Channel>
+                        <program value="48"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="violin">
                   <longName>Violin</longName>
                   <shortName>Vln.</shortName>
@@ -8707,7 +8727,7 @@
                         <program value="44"/>
                   </Channel>
             </Instrument>
-        <Instrument id="pardessus-de-viole">
+            <Instrument id="pardessus-de-viole">
                   <longName>Pardessus de viole</longName>
                   <shortName>Pds. v.</shortName>
                   <description>Pardessus de viole</description>
