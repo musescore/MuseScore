@@ -939,13 +939,17 @@ bool Palette::read(QFile* qf)
 //   read
 //---------------------------------------------------------
 
-void Palette::read(const QString& p)
+bool Palette::read(const QString& p)
       {
       QString path(p);
       if (!path.endsWith(".mpal"))
             path += ".mpal";
 
       QZipReader f(path);
+      if (!f.exists())
+            return false;
+      clear();
+
       QByteArray ba = f.fileData("META-INF/container.xml");
 
       XmlReader e(ba);
@@ -985,7 +989,7 @@ void Palette::read(const QString& p)
 
       if (rootfile.isEmpty()) {
             qDebug("can't find rootfile in: %s", qPrintable(path));
-            return;
+            return false;
             }
 
       ba = f.fileData(rootfile);
@@ -1011,6 +1015,7 @@ void Palette::read(const QString& p)
             else
                   e.unknown();
             }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -1331,15 +1336,15 @@ PaletteScrollArea::PaletteScrollArea(Palette* w, QWidget* parent)
 
 void PaletteScrollArea::resizeEvent(QResizeEvent* re)
       {
-            QScrollArea::resizeEvent(re); // necessary?
+      QScrollArea::resizeEvent(re); // necessary?
 
-            Palette* palette = static_cast<Palette*>(widget());
-            int h = palette->heightForWidth(width());
-            palette->resize(QSize(width(), h));
-            if (_restrictHeight) {
-                        setMaximumHeight(h+6);
-                        }
+      Palette* palette = static_cast<Palette*>(widget());
+      int h = palette->heightForWidth(width());
+      palette->resize(QSize(width(), h));
+      if (_restrictHeight) {
+            setMaximumHeight(h+6);
             }
+      }
 }
 
 

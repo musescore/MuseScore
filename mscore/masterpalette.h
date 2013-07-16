@@ -15,11 +15,11 @@
 #define __MASTERPALETTE_H__
 
 #include "ui_masterpalette.h"
-#include "timedialog.h"
 
 namespace Ms {
 
 class Palette;
+class TimeDialog;
 
 //---------------------------------------------------------
 //   MasterPalette
@@ -29,6 +29,7 @@ class MasterPalette : public QWidget, Ui::MasterPalette
       {
       Q_OBJECT
 
+      TimeDialog* timeDialog;
       virtual void closeEvent(QCloseEvent*);
       Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
       void addPalette(Palette* sp);

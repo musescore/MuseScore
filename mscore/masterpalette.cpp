@@ -37,6 +37,8 @@
 #include "libmscore/tremolo.h"
 #include "libmscore/chordline.h"
 
+#include "timedialog.h"
+
 namespace Ms {
 
 extern void populateIconPalette(Palette* p, const IconAction* a);
@@ -119,7 +121,8 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newClefsPalette());
       stack->addWidget(new KeyEditor);
 
-      stack->addWidget(new TimeDialog);
+      timeDialog = new TimeDialog;
+      stack->addWidget(timeDialog);
 
       addPalette(MuseScore::newBarLinePalette());
       addPalette(MuseScore::newLinesPalette());
@@ -149,6 +152,8 @@ MasterPalette::MasterPalette(QWidget* parent)
 
 void MasterPalette::closeEvent(QCloseEvent* ev)
       {
+      if (timeDialog->dirty())
+            timeDialog->save();
       emit closed(false);
       QWidget::closeEvent(ev);
       }

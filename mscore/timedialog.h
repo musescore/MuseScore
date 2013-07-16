@@ -43,10 +43,11 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase {
       void zChanged(int);
       void nChanged(int);
       void paletteChanged(int idx);
+      void setDirty() { _dirty = true; }
 
    public:
       TimeDialog(QWidget* parent = 0);
-      bool dirty() const  { return _dirty; }
+      bool dirty() const { return _dirty; }
       void save();
       };
 }
