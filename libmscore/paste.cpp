@@ -252,10 +252,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                                     undoAddElement(spanner);
                                     if (spanner->type() == Element::OTTAVA) {
                                           Ottava* o = static_cast<Ottava*>(spanner);
-                                          int shift = o->pitchShift();
-                                          Staff* st = o->staff();
-                                          st->pitchOffsets().setPitchOffset(o->tick(), shift);
-                                          st->pitchOffsets().setPitchOffset(o->tick2(), 0);
+                                          o->staff()->updateOttava(o);
                                           }
                                     else if (spanner->type() == Element::HAIRPIN) {
                                           Hairpin* hp = static_cast<Hairpin*>(spanner);

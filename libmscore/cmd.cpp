@@ -227,20 +227,9 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
 
       if (spanner->anchor() == Spanner::ANCHOR_SEGMENT) {
             spanner->setTick(segment->tick());
-
-            static const Segment::SegmentType st = Segment::SegChordRest;
-            Segment* ns = 0;
-            for (Segment* s = segment; s; s = s->next1(st)) {
-                  ns = s;
-                  if (s->measure() != segment->measure())
-                        break;
-                  }
-            if (ns == segment) {
-                  qDebug("cmdAddSpanner: cannot put object on last segment");
-                  delete spanner;
-                  return;
-                  }
-            spanner->setTick2(ns->tick());
+            int lastTick = lastMeasure()->tick() + lastMeasure()->ticks();
+            int tick2 = qMin(segment->tick() + segment->measure()->ticks(), lastTick);
+            spanner->setTick2(tick2);
             }
       else {      // ANCHOR_MEASURE
             Measure* m = static_cast<Measure*>(mb);

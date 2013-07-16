@@ -1377,9 +1377,7 @@ void Score::addElement(Element* element)
                         if (ss->system())
                               ss->system()->add(ss);
                         }
-                  Staff* s  = o->staff();
-                  s->pitchOffsets().setPitchOffset(o->tick(), o->pitchShift());
-                  s->pitchOffsets().setPitchOffset(o->tick2(), 0);
+                  o->staff()->updateOttava(o);
                   layoutFlags |= LAYOUT_FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }

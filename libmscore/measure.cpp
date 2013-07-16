@@ -506,7 +506,6 @@ qreal Measure::tick2pos(int tck) const
             tick1 = tick2;
             }
       if (s == 0) {
-            printf("     no segment found\n");
             x2    = width();
             tick2 = endTick();
             }
@@ -1913,10 +1912,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         spanner->setTick2(e.tick());
                         if (spanner->type() == OTTAVA) {
                               Ottava* o = static_cast<Ottava*>(spanner);
-                              int shift = o->pitchShift();
-                              Staff* st = o->staff();
-                              st->pitchOffsets().setPitchOffset(o->tick(), shift);
-                              st->pitchOffsets().setPitchOffset(o->tick2(), 0);
+                              o->staff()->updateOttava(o);
                               }
                         else if (spanner->type() == HAIRPIN) {
                               Hairpin* hp = static_cast<Hairpin*>(spanner);

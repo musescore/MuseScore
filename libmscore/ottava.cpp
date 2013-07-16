@@ -166,9 +166,7 @@ void Ottava::endEdit()
             s->pitchOffsets().remove(editTick);
             s->pitchOffsets().remove(editTick2);
 
-            s->pitchOffsets().setPitchOffset(tick(), _pitchShift);
-            s->pitchOffsets().setPitchOffset(tick2(), 0);
-
+            s->updateOttava(this);
             score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
             }
       }

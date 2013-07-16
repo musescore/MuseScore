@@ -3106,6 +3106,10 @@ p, li { white-space: pre-wrap; }
         <source>Lower case minor chords</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Barline to accidental distance</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ExcerptsDialog</name>
@@ -3222,6 +3226,22 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MIDI file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move track up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move track down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Down</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10162,7 +10182,7 @@ altera</source>
     </message>
     <message>
         <source>Text:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">النصّ:</translation>
     </message>
 </context>
 <context>
@@ -10188,7 +10208,7 @@ altera</source>
     </message>
     <message>
         <source>Text:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">النصّ:</translation>
     </message>
     <message>
         <source>Common Time</source>

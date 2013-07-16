@@ -3107,6 +3107,10 @@ p, li { white-space: pre-wrap; }
         <source>Lower case minor chords</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Barline to accidental distance</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ExcerptsDialog</name>
@@ -3224,6 +3228,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>MIDI file:</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move track up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished">Üles</translation>
+    </message>
+    <message>
+        <source>Move track down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished">Alla</translation>
     </message>
 </context>
 <context>
