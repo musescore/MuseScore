@@ -85,6 +85,7 @@ class Mixer : public QScrollArea
       Mixer(QWidget* parent);
       void updateAll(Score*);
       PartEdit* partEdit(int index);
+      void writeSettings();
       };
 
 

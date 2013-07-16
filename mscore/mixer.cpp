@@ -29,6 +29,8 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
+
 //---------------------------------------------------------
 //   PartEdit
 //---------------------------------------------------------
@@ -91,6 +93,14 @@ Mixer::Mixer(QWidget* parent)
       vb->setSpacing(0);
       area->setLayout(vb);
       setWidget(area);
+
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup("Mixer");
+            resize(settings.value("size", QSize(484, 184)).toSize());
+            move(settings.value("pos", QPoint(10, 10)).toPoint());
+            settings.endGroup();
+            }
       }
 
 //---------------------------------------------------------
@@ -317,6 +327,19 @@ void Mixer::updateSolo(bool val)
             PartEdit* pe    = (PartEdit*)(wi->widget());
             pe->mute->setEnabled(!val);
             }
+      }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void Mixer::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup("Mixer");
+      settings.setValue("size", size());
+      settings.setValue("pos", pos());
+      settings.endGroup();
       }
 }
 
