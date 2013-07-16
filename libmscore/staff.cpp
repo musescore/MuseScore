@@ -28,6 +28,7 @@
 #include "timesig.h"
 #include "instrtemplate.h"
 #include "barline.h"
+#include "ottava.h"
 
 namespace Ms {
 
@@ -832,6 +833,10 @@ void Staff::setInitialClef(ClefType ct)
       _initialClef = ClefTypeList(ct, ct);
       }
 
+//---------------------------------------------------------
+//   genKeySig
+//---------------------------------------------------------
+
 bool Staff::genKeySig()
       {
       switch(_staffType->group()) {
@@ -846,6 +851,10 @@ bool Staff::genKeySig()
             }
       }
 
+//---------------------------------------------------------
+//   showLedgerLines
+//---------------------------------------------------------
+
 bool Staff::showLedgerLines()
       {
       switch(_staffType->group()) {
@@ -858,6 +867,16 @@ bool Staff::showLedgerLines()
             default:
                   return true;
             }
+      }
+
+//---------------------------------------------------------
+//   updateOttava
+//---------------------------------------------------------
+
+void Staff::updateOttava(Ottava* o)
+      {
+      pitchOffsets().setPitchOffset(o->tick(), o->pitchShift());
+      pitchOffsets().setPitchOffset(o->tick2(), 0);
       }
 
 }

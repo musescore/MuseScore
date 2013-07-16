@@ -1580,7 +1580,7 @@ int Note::ppitch() const
       {
       int tick        = chord()->segment()->tick();
       int pitchOffset = score()->styleB(ST_concertPitch) ? 0 : staff()->part()->instr()->transpose().chromatic;
-      return _pitch + staff()->pitchOffsets().pitchOffset(tick) + pitchOffset;
+      return _pitch + staff()->pitchOffset(tick) + pitchOffset;
       }
 
 //---------------------------------------------------------

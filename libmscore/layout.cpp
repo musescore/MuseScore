@@ -45,6 +45,7 @@
 #include "layout.h"
 #include "lyrics.h"
 #include "harmony.h"
+#include "ottava.h"
 
 namespace Ms {
 
@@ -650,6 +651,10 @@ void Score::doLayout()
 
       for (const std::pair<int,Spanner*>& s : _spanner.map()) {
             Spanner* sp = s.second;
+            if (sp->type() == Element::OTTAVA && sp->tick2() == -1) {
+                  sp->setTick2(lastMeasure()->endTick());
+                  sp->staff()->updateOttava(static_cast<Ottava*>(sp));
+                  }
             if (sp->tick() == -1 || sp->tick2() == -1) {
                   printf("bad spanner id %d %s %d - %d\n", sp->id(), sp->name(), sp->tick(), sp->tick2());
                   }

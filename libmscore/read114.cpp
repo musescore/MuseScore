@@ -546,13 +546,14 @@ Score::FileError Score::read114(XmlReader& e)
 
             if (s->type() == Element::OTTAVA) {
                   // fix ottava position
-                  Ottava* volta = static_cast<Ottava*>(s);
-                  int n = volta->spannerSegments().size();
+                  Ottava* ottava = static_cast<Ottava*>(s);
+                  int n = ottava->spannerSegments().size();
                   for (int i = 0; i < n; ++i) {
-                        LineSegment* seg = volta->segmentAt(i);
+                        LineSegment* seg = ottava->segmentAt(i);
                         if (!seg->userOff().isNull())
                               seg->setUserYoffset(seg->userOff().y() - styleP(ST_ottavaY));
                         }
+                  ottava->staff()->updateOttava(ottava);
                   }
             }
 
