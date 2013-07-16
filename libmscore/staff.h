@@ -43,6 +43,7 @@ struct ClefTypeList;
 class Segment;
 class Clef;
 class TimeSig;
+class Ottava;
 
 //---------------------------------------------------------
 //   LinkedStaves
@@ -198,6 +199,8 @@ class Staff : public QObject {
       void setUpdateKeymap(bool v)     { _updateKeymap = v;      }
       VeloList& velocities()           { return _velocities;     }
       PitchList& pitchOffsets()        { return _pitchOffsets;   }
+      int pitchOffset(int tick)        { return _pitchOffsets.pitchOffset(tick);   }
+      void updateOttava(Ottava*);
 
       LinkedStaves* linkedStaves() const    { return _linkedStaves; }
       void setLinkedStaves(LinkedStaves* l) { _linkedStaves = l;    }

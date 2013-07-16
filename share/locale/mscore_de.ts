@@ -2812,39 +2812,39 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Minimum measure width</source>
-        <translation type="unfinished"></translation>
+        <translation>minimale Taktbreite</translation>
     </message>
     <message>
         <source>Note to barline distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Abstand Note-Taktstrich</translation>
     </message>
     <message>
         <source>Barline to note distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Abstand Taktstrich-Note</translation>
     </message>
     <message>
         <source>Minimum note distance</source>
-        <translation type="unfinished"></translation>
+        <translation>minimaler Notenabstand</translation>
     </message>
     <message>
         <source>Key signature left margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Rand Tonart</translation>
     </message>
     <message>
         <source>Time signature left margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Rand Taktart</translation>
     </message>
     <message>
         <source>Clef/Key right margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechter Rand Schlüssel/Tonart</translation>
     </message>
     <message>
         <source>Clef to barline distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Abstand Schlüssel-Taktstrich</translation>
     </message>
     <message>
         <source>Staff line width</source>
-        <translation type="unfinished"></translation>
+        <translation>Strichstärke Notenlinie</translation>
     </message>
     <message>
         <source>Bar width:</source>
@@ -3080,7 +3080,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Positioning</source>
-        <translation type="unfinished"></translation>
+        <translation>Position</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, Bb, B, C, C#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -3092,7 +3092,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>deutsch</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La, Sib, Si, Do, Do#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -3105,6 +3105,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Lower case minor chords</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Barline to accidental distance</source>
+        <translation>Abstand Taktstrich-Vorzeichen</translation>
     </message>
 </context>
 <context>
@@ -3223,6 +3227,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>MIDI file:</source>
         <translation>Mididatei:</translation>
+    </message>
+    <message>
+        <source>Move track up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move track down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5557,7 +5577,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished">Generalbass</translation>
+        <translation>Generalbass</translation>
     </message>
 </context>
 <context>
@@ -5761,7 +5781,7 @@ fehlgeschlagen: </translation>
     <name>Ms::Inspector</name>
     <message>
         <source>Inspector</source>
-        <translation type="unfinished">Objekt-Inspektor</translation>
+        <translation type="unfinished">Inspektor</translation>
     </message>
 </context>
 <context>
@@ -6094,7 +6114,7 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Load Style</source>
-        <translation type="unfinished">MuseScore: Formatvorlage öffnen</translation>
+        <translation>MuseScore: Formatvorlage öffnen</translation>
     </message>
     <message>
         <source>MuseScore Styles (*.mss);;All Files (*)</source>
@@ -11643,39 +11663,39 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Local Handbook...</source>
-        <translation type="unfinished">Lokales Handbuch</translation>
+        <translation>Lokales Handbuch</translation>
     </message>
     <message>
         <source>Save Selection...</source>
-        <translation type="unfinished"></translation>
+        <translation>Selektion sichern...</translation>
     </message>
     <message>
         <source>Save Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Selektion sichern</translation>
     </message>
     <message>
         <source>Save current selection as new score</source>
-        <translation type="unfinished"></translation>
+        <translation>Selektion als neue Partitur sichern</translation>
     </message>
     <message>
         <source>Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportieren</translation>
     </message>
     <message>
         <source>Export score</source>
-        <translation type="unfinished"></translation>
+        <translation>Partitur exportieren</translation>
     </message>
     <message>
         <source>Save a copy of the score in various formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichern der Partitur in verschiedene Formate</translation>
     </message>
     <message>
         <source>Export Parts...</source>
-        <translation type="unfinished"></translation>
+        <translation>Auszüge exportieren...</translation>
     </message>
     <message>
         <source>Export Parts</source>
-        <translation type="unfinished"></translation>
+        <translation>Auszüge exportieren</translation>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
@@ -11691,19 +11711,19 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Insert A</source>
-        <translation type="unfinished">A Einfügen</translation>
+        <translation>A Einfügen</translation>
     </message>
     <message>
         <source>Insert note A</source>
-        <translation type="unfinished">Note A einfügen</translation>
+        <translation>Note A einfügen</translation>
     </message>
     <message>
         <source>Insert B</source>
-        <translation type="unfinished"></translation>
+        <translation>B einfügen</translation>
     </message>
     <message>
         <source>Insert note B</source>
-        <translation type="unfinished"></translation>
+        <translation>Note B einfügen</translation>
     </message>
     <message>
         <source>Insert C</source>
@@ -12351,7 +12371,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>General...</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein...</translation>
     </message>
     <message>
         <source>Edit general style</source>
@@ -12523,7 +12543,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished">Generalbass</translation>
+        <translation>Generalbass</translation>
     </message>
     <message>
         <source>Transpose Up</source>
@@ -12567,7 +12587,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Staff Types...</source>
-        <translation type="unfinished"></translation>
+        <translation>Notenzeilentypen...</translation>
     </message>
     <message>
         <source>Staff type editor</source>
