@@ -438,7 +438,6 @@ else (MINGW)
       mscore
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
-         LINK_FLAGS "-L${QT_LIBRARY_DIR}"
       )
 
    if (OMR)
