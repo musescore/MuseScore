@@ -4719,6 +4719,7 @@ int main(int argc, char* av[])
                   "QGroupBox::title {\n"
                   "   subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;\n"
                   "   }");
+
             seq            = new Seq();
             MScore::seq    = seq;
             Driver* driver = driverFactory(seq, audioDriver);
