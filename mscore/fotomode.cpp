@@ -705,7 +705,6 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       QStringList fl;
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("PDF File (*.pdf)"));
-      fl.append(tr("Encapsulated PostScript File (*.eps)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
 
       QString selectedFilter;
@@ -726,7 +725,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             int idx = fl.indexOf(selectedFilter);
             if (idx != -1) {
                   static const char* extensions[] = {
-                        "png", "pdf", "eps", "svg"
+                        "png", "pdf", "svg"
                         };
                   ext = extensions[idx];
                   }
@@ -748,7 +747,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       int w = lrint(r.width()  * mag);
       int h = lrint(r.height() * mag);
 
-      if (ext == "pdf" || ext == "eps") {
+      if (ext == "pdf") {
             QPrinter printer(QPrinter::HighResolution);
             mag = printer.logicalDpiX() / MScore::DPI;
             printer.setPaperSize(QSizeF(r.width() * mag, r.height() * mag) , QPrinter::DevicePixel);
@@ -759,10 +758,6 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             printer.setOutputFileName(fn);
             if (ext == "pdf")
                   printer.setOutputFormat(QPrinter::PdfFormat);
-#if QT_VERSION < 0x050000
-            else
-                  printer.setOutputFormat(QPrinter::PostScriptFormat);
-#endif
             QPainter p(&printer);
             paintRect(printMode, p, r, mag);
             }
@@ -833,7 +828,7 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
       bool printMode   = true;
       QRectF r(_foto->rect());
 
-      QTemporaryFile tf(QDir::tempPath() + QString("/imgXXXXXX.eps"));
+      QTemporaryFile tf(QDir::tempPath() + QString("/imgXXXXXX.svg"));
       tf.setAutoRemove(false);
       tf.open();
       tf.close();
@@ -842,18 +837,15 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
 //      QString fn = "/home/ws/mops.eps";
       QString fn = tf.fileName();
 
-      QPrinter printer(QPrinter::HighResolution);
-      double mag = printer.logicalDpiX() / MScore::DPI;
-      printer.setPaperSize(QSizeF(r.width() * mag, r.height() * mag) , QPrinter::DevicePixel);
+      SvgGenerator printer;
+      double convDpi   = preferences.pngResolution;
+      double mag       = convDpi / MScore::DPI;
+      printer.setResolution(int(convDpi));
+      printer.setFileName(fn);
+      printer.setSize(QSize(r.width() * mag, r.height() * mag));
+      printer.setViewBox(QRect(0, 0, r.width() * mag, r.height() * mag));
+      printer.setDescription("created with MuseScore " VERSION);
 
-      printer.setCreator("MuseScore Version: " VERSION);
-      printer.setFullPage(true);
-      printer.setColorMode(QPrinter::Color);
-      printer.setDocName(fn);
-      printer.setOutputFileName(fn);
-#if QT_VERSION < 0x050000
-      printer.setOutputFormat(QPrinter::PostScriptFormat);
-#endif
       QPainter p(&printer);
       paintRect(printMode, p, r, mag);
 

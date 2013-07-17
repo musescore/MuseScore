@@ -1455,7 +1455,6 @@ bool MuseScore::exportFile()
       fl.append(tr("Compressed MusicXML Format (*.mxl)"));
       fl.append(tr("Standard MIDI File (*.mid)"));
       fl.append(tr("PDF File (*.pdf)"));
-      fl.append(tr("PostScript File (*.ps)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
 #ifdef HAS_AUDIOFILE
@@ -1509,7 +1508,6 @@ bool MuseScore::exportParts()
       fl.append(tr("Compressed MusicXML Format (*.mxl)"));
       fl.append(tr("Standard MIDI File (*.mid)"));
       fl.append(tr("PDF File (*.pdf)"));
-      fl.append(tr("PostScript File (*.ps)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
 #ifdef HAS_AUDIOFILE
@@ -1615,14 +1613,8 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             }
       else if (ext == "pdf") {
             // save as pdf file *.pdf
-            rv = savePsPdf(cs, fn, QPrinter::PdfFormat);
+            rv = savePdf(cs, fn);
             }
-#if QT_VERSION < 0x050000
-      else if (ext == "ps") {
-            // save as postscript file *.ps
-            rv = savePsPdf(cs, fn, QPrinter::PostScriptFormat);
-            }
-#endif
       else if (ext == "png") {
             // save as png file *.png
             rv = savePng(cs, fn);
@@ -1666,15 +1658,15 @@ bool MuseScore::saveMidi(Score* score, const QString& name)
       }
 
 //---------------------------------------------------------
-//   savePsPdf
+//   savePdf
 //---------------------------------------------------------
 
-bool MuseScore::savePsPdf(const QString& saveName, QPrinter::OutputFormat format)
+bool MuseScore::savePdf(const QString& saveName)
       {
-      return savePsPdf(cs, saveName, format);
+      return savePdf(cs, saveName);
       }
 
-bool MuseScore::savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFormat format)
+bool MuseScore::savePdf(Score* cs, const QString& saveName)
       {
       QPrinter printerDev(QPrinter::HighResolution);
       const PageFormat* pf = cs->pageFormat();
@@ -1685,7 +1677,7 @@ bool MuseScore::savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFo
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(cs->name());
       printerDev.setDoubleSidedPrinting(pf->twosided());
-      printerDev.setOutputFormat(format);
+      printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
       QPainter p(&printerDev);

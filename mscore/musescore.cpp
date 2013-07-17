@@ -2099,11 +2099,7 @@ static bool processNonGui()
             if (fn.endsWith(".mid"))
                   return mscore->saveMidi(cs, fn);
             if (fn.endsWith(".pdf"))
-                  return mscore->savePsPdf(fn, QPrinter::PdfFormat);
-#if QT_VERSION < 0x050000
-            if (fn.endsWith(".ps"))
-                  return mscore->savePsPdf(fn, QPrinter::PostScriptFormat);
-#endif
+                  return mscore->savePdf(fn);
             if (fn.endsWith(".png"))
                   return mscore->savePng(cs, fn);
             if (fn.endsWith(".svg"))
