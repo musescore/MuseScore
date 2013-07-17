@@ -51,6 +51,7 @@
 
 #include <QAtomicInt>
 #include <QStaticText>
+#include <QErrorMessage>
 
 #include <QPainterPath>
 #include <QBitmap>

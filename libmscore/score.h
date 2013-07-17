@@ -797,7 +797,6 @@ class Score : public QObject {
       int addCustomKeySig(KeySig*);
       KeySig* customKeySig(int) const;
       KeySig* keySigFactory(const KeySigEvent&);
-      void cmdPaste(MuseScoreView*);
       Element* selectMove(const QString& cmd);
       Element* move(const QString& cmd);
       void cmdEnterRest(const TDuration& d);
