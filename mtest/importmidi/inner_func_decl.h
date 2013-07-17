@@ -54,6 +54,10 @@ Meter::MaxLevel maxLevelBetween(const Fraction &startTickInBar,
                                 const Fraction &endTickInBar,
                                 const DivisionInfo &divInfo);
 
+Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
+                                    const Fraction &endTickInBar,
+                                    const std::vector<DivisionInfo> &divsInfo);
+
 } // namespace Meter
 
 } // namespace Ms
