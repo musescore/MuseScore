@@ -408,6 +408,10 @@ if (MINGW)
       ${CROSSQT}/plugins/platforms/qwindows.dll
       DESTINATION bin/platforms)
 
+    install(FILES
+      ${CROSSQT}/plugins/printsupport/windowsprintersupport.dll
+      DESTINATION bin/printsupport)
+
     install(DIRECTORY
       ${CROSSQT}/qml
       DESTINATION .
