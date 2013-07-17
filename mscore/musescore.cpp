@@ -129,6 +129,7 @@ QString localeName;
 bool useFactorySettings = false;
 QString styleName;
 QString revision;
+QErrorMessage* errorMessage;
 
 extern void initStaffTypes();
 extern bool savePositions(Score*, const QString& name);
@@ -4822,6 +4823,7 @@ int main(int argc, char* av[])
             if (!mscore->restoreSession((preferences.sessionStart == LAST_SESSION) && (files == 0)) || files)
                   loadScores(argv);
             }
+      errorMessage = new QErrorMessage(mscore);
       mscore->loadPlugins();
       mscore->writeSessionFile(false);
 
