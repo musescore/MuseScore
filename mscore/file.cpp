@@ -1415,6 +1415,7 @@ void MuseScore::printFile()
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
       double mag = printerDev.logicalDpiX() / MScore::DPI;
+
       p.scale(mag, mag);
 
       const QList<Page*> pl = cs->pages();
