@@ -737,7 +737,8 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             return false;
             }
 
-      if (fi.suffix() != ext)
+      ext = ext.toLower();
+      if (fi.suffix().toLower() != ext)
             fn += "." + ext;
 
       bool transparent = preferences.pngTransparent;
