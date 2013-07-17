@@ -83,6 +83,8 @@
 
 namespace Ms {
 
+extern QErrorMessage* errorMessage;
+
 #if 0
 // a useful enum for scale steps (could be moved to libmscore/pitchspelling.h)
 enum {
@@ -2289,7 +2291,70 @@ void ScoreView::editPaste()
 void ScoreView::normalPaste()
       {
       _score->startCmd();
-      _score->cmdPaste(this);
+
+      const QMimeData* ms = QApplication::clipboard()->mimeData();
+      if (ms == 0) {
+            qDebug("no application mime data");
+            return;
+            }
+      if (_score->selection().isSingle() && ms->hasFormat(mimeSymbolFormat)) {
+            QByteArray data(ms->data(mimeSymbolFormat));
+            XmlReader e(data);
+            QPointF dragOffset;
+            Fraction duration(1, 4);
+            Element::ElementType type = Element::readType(e, &dragOffset, &duration);
+            if (type != Element::INVALID) {
+                  Element* el = Element::create(type, _score);
+                  if (el) {
+                        el->read(e);
+                        _score->addRefresh(_score->selection().element()->abbox());   // layout() ?!
+                        DropData ddata;
+                        ddata.view       = this;
+                        ddata.element    = el;
+                        ddata.duration   = duration;
+                        _score->selection().element()->drop(ddata);
+                        if (_score->selection().element())
+                              _score->addRefresh(_score->selection().element()->abbox());
+                        }
+                  }
+            else
+                  qDebug("cannot read type");
+            }
+      else if ((_score->selection().state() == SEL_RANGE || _score->selection().state() == SEL_LIST)
+         && ms->hasFormat(mimeStaffListFormat)) {
+            ChordRest* cr = 0;
+            if (_score->selection().state() == SEL_RANGE)
+                  cr = _score->selection().firstChordRest();
+            else if (_score->selection().isSingle()) {
+                  Element* e = _score->selection().element();
+                  if (e->type() != Element::NOTE && e->type() != Element::REST) {
+                        qDebug("cannot paste to %s", e->name());
+                        return;
+                        }
+                  if (e->type() == Element::NOTE)
+                        e = static_cast<Note*>(e)->chord();
+                  cr  = static_cast<ChordRest*>(e);
+                  }
+            if (cr == 0)
+                  errorMessage->showMessage(tr("no destination to paste"), "pasteDestination");
+            else if (cr->tuplet())
+                  errorMessage->showMessage(tr("cannot paste into tuplet"), "pasteTuplet");
+            else {
+                  QByteArray data(ms->data(mimeStaffListFormat));
+                  qDebug("paste <%s>", data.data());
+                  XmlReader e(data);
+                  _score->pasteStaff(e, cr);
+                  }
+            }
+      else if (ms->hasFormat(mimeSymbolListFormat) && _score->selection().isSingle())
+            errorMessage->showMessage(tr("cannot paste symbol list to element"), "pasteSymbollist");
+      else {
+            qDebug("cannot paste selState %d staffList %d",
+               _score->selection().state(), ms->hasFormat(mimeStaffListFormat));
+            foreach(const QString& s, ms->formats())
+                  qDebug("  format %s", qPrintable(s));
+            }
+
       _score->endCmd();
       mscore->endCmd();
       }
