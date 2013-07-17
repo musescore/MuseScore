@@ -576,8 +576,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool exportFile();
       bool exportParts();
       bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext);
-      bool savePsPdf(const QString& saveName, QPrinter::OutputFormat format);
-      bool savePsPdf(Score* cs, const QString& saveName, QPrinter::OutputFormat format);
+      bool savePdf(const QString& saveName);
+      bool savePdf(Score* cs, const QString& saveName);
 
       Score* readScore(const QString& name);
 
