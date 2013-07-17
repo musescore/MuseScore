@@ -231,9 +231,9 @@ void Articulation::write(Xml& xml) const
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
       writeProperty(xml, P_DIRECTION);
+      xml.tag("subtype", subtypeName());
       if (_timeStretch != 1.0)
             xml.tag("timeStretch", _timeStretch);
-      xml.tag("subtype", subtypeName());
       Element::writeProperties(xml);
       if (_anchor != score()->style()->articulationAnchor(articulationType()))
             xml.tag("anchor", int(_anchor));
