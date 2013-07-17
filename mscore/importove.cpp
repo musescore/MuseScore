@@ -651,7 +651,6 @@ void OveToMScore::convertTrackElements(int track) {
 		for(int j=0; j<octaves.size(); ++j) {
 			OVE::OctaveShiftEndPoint* octave = static_cast<OVE::OctaveShiftEndPoint*>(octaves[j]);
 			int absTick = mtt_->getTick(i, octave->getTick());
-			Measure* measure = score_->tick2measure(absTick);
 
 			if(octave->getOctaveShiftPosition() == OVE::OctavePosition_Start) {
 				if(ottava == 0) {
@@ -680,9 +679,7 @@ void OveToMScore::convertTrackElements(int track) {
                 		ottava->setUserOff(QPointF(0, y_off * score_->spatium()));
                 	}
 
-                    Segment* s = measure->getSegment(Segment::SegChordRest, absTick);
-                    ottava->setTick(s->tick());
-                    s->add(ottava);
+                    ottava->setTick(absTick);
 
 				} else {
 					qDebug("overlapping octave-shift not supported\n");
@@ -693,14 +690,9 @@ void OveToMScore::convertTrackElements(int track) {
 				if(ottava != 0) {
 					int absTick = mtt_->getTick(i, octave->getEndTick());
 
-                    Segment* s = measure->getSegment(Segment::SegChordRest, absTick);
-                    ottava->setTick2(s->tick());
-                    int shift = ottava->pitchShift();
-                    Staff* st = ottava->staff();
-                    int tick1 = ottava->tick();
-                    st->pitchOffsets().setPitchOffset(tick1, shift);
-                    st->pitchOffsets().setPitchOffset(s->tick(), 0);
-
+                    ottava->setTick2(absTick);
+                    ottava->staff()->updateOttava(ottava);
+                    score_->addSpanner(ottava);
                     ottava = 0;
 				} else {
                     qDebug("octave-shift stop without start\n");
@@ -2182,25 +2174,12 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
 
 	        Slur* slur = new Slur(score_);
 	        slur->setSlurDirection(slurPtr->getShowOnTop()? MScore::UP : MScore::DOWN);
-              Element* n1 = score_->searchNote(absStartTick, track);
-              Element* n2 = score_->searchNote(absEndTick, track);
-              if (n1 == 0 || n2 == 0) {
-                  qDebug("ImportOve: connectSlurs: position not found\n");
-                  // remove in checkSlurs
-                  }
-              else {
-                  if (n1->isChordRest()) {
-                        slur->setTick(((ChordRest*)n1)->tick());
-                        }
-                  if (n2->isChordRest()) {
-                        slur->setTick2(((ChordRest*)n2)->tick());
-                        }
-                  }
-
-	        // slur->setTrack(track);
+              slur->setTick(absStartTick);
+              slur->setTick2(absEndTick);
+	        slur->setTrack(track);
 	        // slur->setTrack2(track+endContainer->getOffsetStaff());
 
-	        score_->add(slur);
+	        score_->addSpanner(slur);
 		}
 	}
 }
@@ -2394,18 +2373,17 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
 							measure->no()+wedgePtr->stop()->getMeasure(),
 							MeasureToTick::unitToTick(wedgePtr->stop()->getOffset(), ove_->getQuarter()));
 
-		if(absTick2 > absTick) {
+		if (absTick2 > absTick) {
 			Hairpin* hp = new Hairpin(score_);
 
 			hp->setHairpinType(OveWedgeType_To_Type(wedgePtr->getWedgeType()));
 			//hp->setYoff(wedgePtr->getYOffset());
 			hp->setTrack(track);
 
-			Segment* seg = measure->getSegment(Segment::SegChordRest, absTick);
-		    hp->setTick(seg->tick());
-		    seg->add(hp);
-		    seg = measure->getSegment(Segment::SegChordRest, absTick2);
-                hp->setTick2(seg->tick());
+		    hp->setTick(absTick);
+                hp->setTick2(absTick2);
+                hp->setAnchor(Spanner::ANCHOR_SEGMENT);
+                score_->addSpanner(hp);
 		    score_->updateHairpin(hp);
 		}
 	}
