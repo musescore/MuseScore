@@ -2961,7 +2961,6 @@ void Measure::layoutX(qreal stretch)
                                     qreal sp    = score()->styleS(si).val() * _spatium;
                                     sp          += elsp;
                                     minDistance = qMax(minDistance, sp);
-                                    // stretchDistance = sp * .7;
                                     }
                               else if (pt & (Segment::SegChordRest)) {
                                     minDistance = qMax(minDistance, minNoteDistance);
@@ -3036,6 +3035,8 @@ void Measure::layoutX(qreal stretch)
                               }
                         }
                   space += Space(elsp, etsp);
+                  if (_multiMeasure > 0)
+                        minDistance = 0;
 
                   if (found || eFound) {
                         space.rLw() += clefWidth[staffIdx];
@@ -3226,34 +3227,33 @@ void Measure::layoutX(qreal stretch)
                   ElementType t = e->type();
                   if (t == REST) {
                         Rest* rest = static_cast<Rest*>(e);
+                        qreal x1 = xpos[seg];
+                        qreal x2 = xpos[segs];
                         if (_multiMeasure > 0) {
                               if ((track % VOICES) == 0) {
-                                    Segment* ls = last();
-                                    qreal eblw = 0.0;
-                                    int t = (track / VOICES) * VOICES;
-                                    if (ls->segmentType() == Segment::SegEndBarLine) {
-                                          Element* e = ls->element(t);
-                                          if (!e)
-                                                e = ls->element(0);
-                                          eblw = e ? e->width() : 0.0;
-                                          }
-                                    if (seg == 1)
-                                          rest->setMMWidth(xpos[segs] - 2 * s->x() - eblw);
-                                    else
-                                          rest->setMMWidth(xpos[segs] - s->x() - point(score()->styleS(ST_barNoteDistance)) - eblw);
-                                    e->rxpos() = 0.0;
+                                    if (types[segs-1] == Segment::SegEndBarLine)
+                                          x2 -= width[segs-1];
+
+                                    qreal d  = point(score()->styleS(ST_multiMeasureRestMargin));
+                                    qreal w = x2 - x1 - 2 * d;
+
+                                    rest->setMMWidth(w);
+                                    StaffLines* sl = staves[track/VOICES]->lines;
+                                    e->setPos(d, sl->staffHeight() * .5);   // center vertically in measure
                                     }
                               }
                         else if (rest->durationType() == TDuration::V_MEASURE) {
-                              qreal x1 = seg == 0 ? 0.0 : xpos[seg] - clefKeyRightMargin;
                               qreal w;
-                              if ((segs > 2) && types[segs-2] == Segment::SegClef)
-                                    w  = xpos[segs-2] - x1;
-                              else
-                                    w  = xpos[segs-1] - x1;
+                              for (int i = segs-1; i > seg; --i) {
+                                    if (types[i] == Segment::SegEndBarLine) {
+                                          x2 = xpos[i] - width[i];
+                                          break;
+                                          }
+                                    }
+                              w  = x2 - x1;
                               e->rxpos() = (w - e->width()) * .5 + x1 - s->x();
+                              e->adjustReadPos();
                               }
-                        e->adjustReadPos();
                         }
                   else if (t == REPEAT_MEASURE) {
                         qreal x1 = seg == 0 ? 0.0 : xpos[seg] - clefKeyRightMargin;

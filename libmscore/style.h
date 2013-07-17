@@ -202,7 +202,8 @@ enum StyleIdx {
       ST_minNoteDistance,
       ST_barNoteDistance,
       ST_barAccidentalDistance,
-      ST_noteBarDistance,           // used??
+      ST_multiMeasureRestMargin,
+      ST_noteBarDistance,
 
       ST_measureSpacing,
       ST_staffLineWidth,

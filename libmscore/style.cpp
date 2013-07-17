@@ -90,6 +90,7 @@ StyleType styleTypes[] = {
       StyleType("ledgerLineLength",        ST_SPATIUM),
       StyleType("accidentalDistance",      ST_SPATIUM),
       StyleType("accidentalNoteDistance",  ST_SPATIUM),
+      StyleType("multiMeasureRestMargin",  ST_SPATIUM),
       StyleType("beamWidth",               ST_SPATIUM),
 
       StyleType("beamDistance",            ST_DOUBLE),      // in beamWidth units
@@ -480,6 +481,7 @@ StyleData::StyleData()
             StyleVal(ST_minNoteDistance,Spatium(0.25)),           // 0.4
             StyleVal(ST_barNoteDistance,Spatium(1.2)),
             StyleVal(ST_barAccidentalDistance,Spatium(.3)),
+            StyleVal(ST_multiMeasureRestMargin,Spatium(1.2)),
             StyleVal(ST_noteBarDistance,Spatium(1.0)),
 
             //43

@@ -75,14 +75,14 @@ void Rest::draw(QPainter* painter) const
 
       if (parent() && measure() && measure()->multiMeasure()) {
             Measure* m = measure();
-            int n     = m->multiMeasure();
+            int n      = m->multiMeasure();
             qreal pw = _spatium * .7;
             QPen pen(painter->pen());
             pen.setWidthF(pw);
             painter->setPen(pen);
 
             qreal w  = _mmWidth;
-            qreal y  = _spatium;
+            qreal y  = 0.0;
             qreal x1 = 0.0;
             qreal x2 =  w;
             pw *= .5;
@@ -313,6 +313,14 @@ int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoff
 
 void Rest::layout()
       {
+      _space.setLw(0.0);
+
+      if (parent() && measure() && measure()->multiMeasure()) {
+            _space.setRw(point(score()->styleS(ST_minMMRestWidth)));
+            return;
+            }
+
+
       rxpos() = 0.0;
       if (staff() && staff()->isTabStaff()) {
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
@@ -443,21 +451,11 @@ void Rest::layout()
             rs = Spatium(score()->styleS(ST_dotNoteDistance)
                + dots() * score()->styleS(ST_dotDotDistance));
             }
-      Segment* s = segment();
-      if (s && s->measure() && s->measure()->multiMeasure()) {
-            qreal _spatium = spatium();
-            qreal h = _spatium * 6.5;
-            qreal w = point(score()->styleS(ST_minMMRestWidth));
-            bbox().setRect(-w * .5, -h + 2 * _spatium, w, h);
+      if (dots()) {
+            rs = Spatium(score()->styleS(ST_dotNoteDistance)
+               + dots() * score()->styleS(ST_dotDotDistance));
             }
-      else {
-            if (dots()) {
-                  rs = Spatium(score()->styleS(ST_dotNoteDistance)
-                     + dots() * score()->styleS(ST_dotDotDistance));
-                  }
-            setbbox(symbols[score()->symIdx()][_sym].bbox(magS()));
-            }
-      _space.setLw(0.0);
+      setbbox(symbols[score()->symIdx()][_sym].bbox(magS()));
       _space.setRw(width() + point(rs));
       }
 
@@ -508,10 +506,9 @@ void Rest::setMMWidth(qreal val)
       Segment* s = segment();
       if (s && s->measure() && s->measure()->multiMeasure()) {
             qreal _spatium = spatium();
-            qreal h = _spatium * 6.5;
-            qreal w = _mmWidth;
-            // setbbox(QRectF(-w * .5, -h + 2 * _spatium, w, h));
-            bbox().setRect(0.0, -h + 2 * _spatium, w, h);
+            qreal h = _spatium * 2;
+            qreal w = _mmWidth;                       // + 1*lineWidth of vertical lines
+            bbox().setRect(0.0, -h * .5, w, h);
             }
       }
 

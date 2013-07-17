@@ -4638,7 +4638,7 @@ int main(int argc, char* av[])
       preferences.init();
 
       QWidget wi(0);
-      MScore::PDPI = wi.logicalDpiX();         // physical resolution
+      MScore::PDPI = wi.physicalDpiX();         // physical resolution
       MScore::DPI  = MScore::PDPI;             // logical drawing resolution
       MScore::init();                          // initialize libmscore
 
