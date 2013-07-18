@@ -26,7 +26,7 @@ bool isTupletAllowed(int tupletNumber,
 
 std::vector<int> findTupletNumbers(const Fraction &divLen, const Fraction &barFraction);
 
-Fraction findOnTimeRegularError(const Fraction &onTime, const Fraction &quantValue);
+Fraction findQuantizationError(const Fraction &onTime, const Fraction &quantValue);
 
 struct TupletInfo;
 
@@ -53,6 +53,10 @@ struct DivisionInfo;
 Meter::MaxLevel maxLevelBetween(const Fraction &startTickInBar,
                                 const Fraction &endTickInBar,
                                 const DivisionInfo &divInfo);
+
+Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
+                                    const Fraction &endTickInBar,
+                                    const std::vector<DivisionInfo> &divsInfo);
 
 } // namespace Meter
 

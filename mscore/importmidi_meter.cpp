@@ -201,6 +201,13 @@ Meter::MaxLevel maxLevelBetween(const Fraction &startTickInBar,
       return level;
       }
 
+// vector<DivisionInfo>:
+//    first elements - tuplet division info, if there are any tuplets
+//    last element - always the whole bar division info
+
+// here we use levelCount = 1 always for simplicity
+// because TUPLET_BOUNDARY_LEVEL is 'max enough'
+
 Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
                                     const Fraction &endTickInBar,
                                     const std::vector<DivisionInfo> &divsInfo)
@@ -209,22 +216,23 @@ Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
 
       for (const auto &divInfo: divsInfo) {
             if (divInfo.isTuplet) {
-                  if (startTickInBar < divInfo.onTime
-                              && endTickInBar >= divInfo.onTime + divInfo.len) {
-                        level.level = TUPLET_BOUNDARY_LEVEL;
-                        level.levelCount = 1;
-                        level.lastPos = divInfo.onTime;
-                        break;
-                        }
-                  if (startTickInBar == divInfo.onTime
+                  if (startTickInBar < divInfo.onTime + divInfo.len
                               && endTickInBar > divInfo.onTime + divInfo.len) {
                         level.level = TUPLET_BOUNDARY_LEVEL;
                         level.levelCount = 1;
                         level.lastPos = divInfo.onTime + divInfo.len;
                         break;
                         }
-                  if (startTickInBar == divInfo.onTime
-                              && endTickInBar == divInfo.onTime + divInfo.len) {
+                  if (startTickInBar < divInfo.onTime
+                              && endTickInBar > divInfo.onTime
+                              && endTickInBar <= divInfo.onTime + divInfo.len) {
+                        level.level = TUPLET_BOUNDARY_LEVEL;
+                        level.levelCount = 1;
+                        level.lastPos = divInfo.onTime;
+                        break;
+                        }
+                  if (startTickInBar >= divInfo.onTime
+                              && endTickInBar <= divInfo.onTime + divInfo.len) {
                         level = maxLevelBetween(startTickInBar, endTickInBar, divInfo);
                         break;
                         }
