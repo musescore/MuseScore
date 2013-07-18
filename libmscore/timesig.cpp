@@ -64,7 +64,6 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
       if (st == TSIG_FOUR_FOUR || st == TSIG_ALLA_BREVE)
             customText = false;
       _timeSigType = st;
-//      layout1();
       _needLayout = true;
       }
 
@@ -291,14 +290,11 @@ void TimeSig::layout1()
                   _numeratorString   = QString("%1").arg(_sig.numerator());   // build numerator string
                   _denominatorString = QString("%1").arg(_sig.denominator()); // build denominator string
                   }
-            QFontMetricsF fm(fontId2font(symIdx2fontId(score()->symIdx())));
+            QFont font = fontId2font(symIdx2fontId(score()->symIdx()));
+            font.setPixelSize(lrint(20.0 * MScore::DPI/PPI));
+            QFontMetricsF fm(font);
             QRectF numRect = fm.tightBoundingRect(_numeratorString);          // get 'tight' bounding boxes for strings
             QRectF denRect = fm.tightBoundingRect(_denominatorString);
-
-            // scale bounding boxes to mag
-            qreal spatium2 = _spatium * 2.0;          // num. and den. occupy 2 spaces vertically
-            numRect = QRectF(numRect.x() * mag, -spatium2, numRect.width() * mag, spatium2);
-            denRect = QRectF(denRect.x() * mag, -spatium2, denRect.width() * mag, spatium2);
 
             // position numerator and denominator; vertical displacement:
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)
@@ -309,6 +305,8 @@ void TimeSig::layout1()
             pz = QPointF(0.0, yoff - displ);
             // denom. horiz. posit.: centred around centre of numerator
             // vert. position:       base line is lowered by displ and by the whole height of a digit
+
+            qreal spatium2 = _spatium * 2.0;
             pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + spatium2);
 
             setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
@@ -473,6 +471,7 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
+      _needLayout = true;
       score()->setLayoutAll(true);
       setGenerated(false);
       return true;
