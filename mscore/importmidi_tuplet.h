@@ -41,8 +41,10 @@ const std::map<int, Fraction>& tupletRatios();
 
 void filterTuplets(std::vector<TupletInfo> &tuplets);
 
-Fraction findRasterForTupletNote(const Fraction &noteOnTime, const Fraction &noteLen,
-                                 const TupletInfo &tupletInfo);
+Fraction findOffTimeRaster(const Fraction &noteOffTime,
+                           int voice,
+                           const Fraction &regularQuantValue,
+                           const std::vector<TupletInfo> &tuplets);
 
 std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
                                     const Fraction &endBarTick,
