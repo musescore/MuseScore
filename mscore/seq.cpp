@@ -226,7 +226,7 @@ void Seq::selectionChanged(int mode)
 
 bool Seq::init()
       {
-      if (!_driver->start()) {
+      if (!_driver || !_driver->start()) {
             qDebug("Cannot start I/O");
             return false;
             }
