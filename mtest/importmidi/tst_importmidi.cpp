@@ -122,6 +122,16 @@ class TestImportMidi : public QObject, public MTest
       void tupletSeptuplet() { mf("tuplet_septuplet"); }
       void tupletTripletsMixed() { mf("tuplet_triplets_mixed"); }
       void tupletTriplet() { mf("tuplet_triplet"); }
+      void tupletTripletFirstTied() { mf("tuplet_triplet_first_tied"); }
+      void tupletTripletLastTied() { mf("tuplet_triplet_last_tied"); }
+      void tupletTied3_5()
+            {
+                        // requires 1/32 quantization
+            int defaultQuant = preferences.shortestNote;
+            preferences.shortestNote = MScore::division / 8; // midi quantization: 1/32
+            mf("tuplet_tied_3_5");
+            preferences.shortestNote = defaultQuant;
+            }
 
       void pickupMeasure() { mf("pickup"); }
       };
