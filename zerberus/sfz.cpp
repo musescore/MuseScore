@@ -330,11 +330,11 @@ bool ZInstrument::loadSfz(const QString& s)
       g.init(path);
 
       bool groupMode = false;
-      emit progress(0);
+      zerberus->setLoadProgress(0);
 
       while (!f.atEnd()) {
             QByteArray ba = f.readLine();
-            emit progress(((qreal)f.pos() * 100) / total);
+            zerberus->setLoadProgress(((qreal)f.pos() * 100) / total);
             ba = ba.simplified();
             if (ba.isEmpty() || ba.startsWith("//"))
                   continue;
@@ -362,7 +362,7 @@ bool ZInstrument::loadSfz(const QString& s)
                         r.readOp(bb);
                   }
             }
-      emit progress(100);
+      zerberus->setLoadProgress(100);
       if (!groupMode && !r.isEmpty())
             addRegion(r);
       return true;

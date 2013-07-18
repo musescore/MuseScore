@@ -64,9 +64,7 @@ class VoiceFifo {
 //   Zerberus
 //---------------------------------------------------------
 
-class Zerberus : public QObject, public Ms::Synthesizer {
-      Q_OBJECT
-
+class Zerberus : public Ms::Synthesizer {
       static bool initialized;
       static std::list<ZInstrument*> globalInstruments;
 
@@ -86,9 +84,6 @@ class Zerberus : public QObject, public Ms::Synthesizer {
       void processNoteOff(Channel*, int pitch);
       void processNoteOn(Channel* cp, int key, int velo);
 
-   public slots:
-      void setLoadProgress(int val) { _loadProgress = val; }
-
    public:
       Zerberus();
       ~Zerberus();
@@ -102,6 +97,7 @@ class Zerberus : public QObject, public Ms::Synthesizer {
       Voice* getActiveVoices()      { return activeVoices; }
       Channel* channel(int n)       { return _channel[n]; }
       int loadProgress()            { return _loadProgress; }
+      void setLoadProgress(int val) { _loadProgress = val; }
 
       virtual void setMasterTuning(double val) { _masterTuning = val;  }
       virtual double masterTuning() const      { return _masterTuning; }

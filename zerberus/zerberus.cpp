@@ -429,8 +429,7 @@ bool Zerberus::loadInstrument(const QString& s)
                   }
             }
       busy = true;
-      ZInstrument* instr = new ZInstrument();
-      connect(instr, SIGNAL(progress(int)), SLOT(setLoadProgress(int)));
+      ZInstrument* instr = new ZInstrument(this);
 
       if (instr->load(path)) {
             globalInstruments.push_back(instr);
