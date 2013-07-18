@@ -449,8 +449,8 @@ void Fluid::process(unsigned len, float* out, float* effect1, float* effect2)
       if (mutex.tryLock()) {
             foreach (Voice* v, activeVoices)
                   v->write(len, out, effect1, effect2);
+            mutex.unlock();
             }
-      mutex.unlock();
       }
 
 /*
