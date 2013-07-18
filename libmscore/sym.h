@@ -313,7 +313,7 @@ class Sym {
 
 #ifdef USE_GLYPHS
       QGlyphRun glyphs;       // cached values
-      void genGlyphs(const QFont& font);
+      void genGlyphs(const QRawFont&);
 #endif
 
       static QVector<const char*> symNames;

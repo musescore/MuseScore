@@ -293,7 +293,7 @@ int symIdx2fontId(int symIdx)
       }
 
 //---------------------------------------------------------
-//   fontId2Font
+//   fontId2font
 //---------------------------------------------------------
 
 QFont fontId2font(int fontId)
@@ -332,10 +332,44 @@ QFont fontId2font(int fontId)
             f->setHintingPreference(QFont::PreferVerticalHinting);
 
 #ifdef USE_GLYPHS
-            f->setPointSizeF(size);
+            f->setPixelSize(lrint(size));
+            // f->setPointSizeF(size);
 #else
             f->setPixelSize(lrint(size));
 #endif
+            }
+      return *f;
+      }
+
+//---------------------------------------------------------
+//   fontId2RawFont
+//---------------------------------------------------------
+
+QRawFont fontId2RawFont(int fontId)
+      {
+      static QRawFont* fonts[4];       // cached values
+      Q_ASSERT(fontId >= 0 && fontId < 4);
+
+      QRawFont* f = fonts[fontId];
+      if (f == 0) {
+            qreal size = 20.0 * MScore::DPI / PPI;
+            QString name;
+
+            if (fontId == 0)
+                  name = ":/fonts/mscore-20.ttf";
+            else if (fontId == 2) {
+                  name = ":/fonts/FreeSerifMscore.ttf";
+                  size = 8 * MScore::DPI / PPI;
+                  }
+            else if (fontId == 3)
+                  name = ":/fonts/gonville-20.ttf";
+            else
+                  qFatal("illegal font id %d", fontId);
+
+            // horizontal hinting is bad as note hooks do not attach to stems
+            // properly at some magnifications
+            f = fonts[fontId] = new QRawFont(name, size, QFont::PreferVerticalHinting);
+            f->setPixelSize(size);
             }
       return *f;
       }
@@ -345,9 +379,8 @@ QFont fontId2font(int fontId)
 //   genGlyphs
 //---------------------------------------------------------
 
-void Sym::genGlyphs(const QFont& font)
+void Sym::genGlyphs(const QRawFont& rfont)
       {
-      QRawFont rfont = QRawFont::fromFont(font);
       QVector<quint32> idx = rfont.glyphIndexesForString(toString());
       QVector<QPointF> adv;
       adv << QPointF();
@@ -373,7 +406,7 @@ Sym::Sym(int c, int fid, qreal ax, qreal ay)
       w     = fm.width(_code);
       _bbox = fm.boundingRect(_code);
 #ifdef USE_GLYPHS
-      genGlyphs(fontId2font(fontId));
+      genGlyphs(fontId2RawFont(fontId));
 #endif
       }
 
@@ -385,7 +418,7 @@ Sym::Sym(int c, int fid, const QPointF& a, const QRectF& b)
       _attach = a * ds;
       w = _bbox.width();
 #ifdef USE_GLYPHS
-      genGlyphs(fontId2font(fontId));
+      genGlyphs(fontId2RawFont(fontId));
 #endif
       }
 
