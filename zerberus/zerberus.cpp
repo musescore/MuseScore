@@ -431,19 +431,23 @@ bool Zerberus::loadInstrument(const QString& s)
       busy = true;
       ZInstrument* instr = new ZInstrument(this);
 
-      if (instr->load(path)) {
-            globalInstruments.push_back(instr);
-            instruments.push_back(instr);
-            instr->setRefCount(1);
-            //
-            // set default instrument for all channels:
-            //
-            if (instruments.size() == 1) {
-                  for (int i = 0; i < MAX_CHANNEL; ++i)
-                        _channel[i]->setInstrument(instr);
+      try {
+            if (instr->load(path)) {
+                  globalInstruments.push_back(instr);
+                  instruments.push_back(instr);
+                  instr->setRefCount(1);
+                  //
+                  // set default instrument for all channels:
+                  //
+                  if (instruments.size() == 1) {
+                        for (int i = 0; i < MAX_CHANNEL; ++i)
+                              _channel[i]->setInstrument(instr);
+                        }
+                  busy = false;
+                  return true;
                   }
-            busy = false;
-            return true;
+            }
+      catch (...) {
             }
       qDebug("Zerberus::loadInstrument failed");
       busy = false;

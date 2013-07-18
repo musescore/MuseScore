@@ -731,7 +731,14 @@ int Fluid::sfload(const QString& filename, bool reset_presets)
             return -1;
 
       SFont* sf = new SFont(this);
-      if (!sf->read(filename)) {
+      try {
+            if (!sf->read(filename)) {
+                  delete sf;
+                  sf = 0;
+                  return -1;
+                  }
+            }
+      catch(...) {
             delete sf;
             sf = 0;
             return -1;
