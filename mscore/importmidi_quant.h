@@ -31,7 +31,7 @@ Fraction fixedQuantRaster();
 
 Fraction quantizeValue(const Fraction &value, const Fraction &raster);
 
-Fraction findQuantRaster(const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
+Fraction findRegularQuantRaster(const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
                     const std::multimap<Fraction, MidiChord>::iterator &endChordIt,
                     const Fraction &endBarTick);
 

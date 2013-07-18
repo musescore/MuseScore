@@ -394,7 +394,7 @@ void TestImportMidi::findOnTimeRegularError()
       {
       Fraction quantValue = Fraction::fromTicks(MScore::division) / 4;  // 1/16
       Fraction onTime = quantValue + Fraction::fromTicks(12);
-      QCOMPARE(MidiTuplet::findOnTimeRegularError(onTime, quantValue),
+      QCOMPARE(MidiTuplet::findQuantizationError(onTime, quantValue),
                Fraction::fromTicks(12));
       }
 
