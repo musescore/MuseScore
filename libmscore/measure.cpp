@@ -1298,13 +1298,7 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
                   if (mrpy < t || mrpy > b)
                         return false;
                   viewer->setDropRectangle(r);
-                  for (Segment* seg = first(); seg; seg = seg->next()) {
-                        if (seg->segmentType() == Segment::SegChordRest) {
-                              if (mrpx < seg->pos().x())
-                                    return true;
-                              }
-                        }
-                  // fall through if no chordrest segment found
+                  return true;
 
             default:
                   break;
@@ -2869,7 +2863,6 @@ void Measure::layoutX(qreal stretch)
       memset(ticksList, 0, segs * sizeof(int));
 
       qreal xpos[segs+1];
-      Segment::SegmentType types[segs];
       qreal width[segs];
 
       int segmentIdx = 0;
@@ -2915,7 +2908,6 @@ void Measure::layoutX(qreal stretch)
             bool rest2[nstaves];
             bool hRest2[nstaves];
             Segment::SegmentType segType = s->segmentType();
-            types[segmentIdx]      = segType;
             qreal segmentWidth     = 0.0;
             qreal harmonyWidth     = 0.0;
             qreal stretchDistance  = 0.0;
@@ -2957,16 +2949,18 @@ void Measure::layoutX(qreal stretch)
                                                       }
                                                 }
                                           }
-                                    StyleIdx si = accidental ? ST_barAccidentalDistance : ST_barNoteDistance;
-                                    qreal sp    = score()->styleS(si).val() * _spatium;
-                                    sp          += elsp;
-                                    minDistance = qMax(minDistance, sp);
+                                    // no distance to full measure rest
+                                    if (!(cr->type() == REST && static_cast<Rest*>(cr)->durationType() == TDuration::V_MEASURE)) {
+                                          StyleIdx si = accidental ? ST_barAccidentalDistance : ST_barNoteDistance;
+                                          qreal sp    = score()->styleS(si).val() * _spatium;
+                                          sp          += elsp;
+                                          minDistance = qMax(minDistance, sp);
+                                          }
                                     }
                               else if (pt & (Segment::SegChordRest)) {
                                     minDistance = qMax(minDistance, minNoteDistance);
                                     }
                               else {
-                                    // if (pt & (Segment::SegKeySig | Segment::SegClef))
                                     bool firstClef = (segmentIdx == 1) && (pt == Segment::SegClef);
                                     if ((pt & (Segment::SegKeySig | Segment::SegTimeSig)) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
@@ -3191,6 +3185,9 @@ void Measure::layoutX(qreal stretch)
       int seg = 0;
       for (Segment* s = first(); s; s = s->next(), ++seg) {
             if ((s->segmentType() == Segment::SegClef) && (s != first())) {
+                  //
+                  // clefs are not in xpos[] table
+                  //
                   s->setPos(xpos[seg], 0.0);
                   for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                         if (!score()->staff(staffIdx)->show())
@@ -3215,7 +3212,9 @@ void Measure::layoutX(qreal stretch)
                   continue;
                   }
             s->setPos(xpos[seg], 0.0);
+            }
 
+      for (Segment* s = first(); s; s = s->next(), ++seg) {
             for (int track = 0; track < tracks; ++track) {
                   if (!score()->staff(track/VOICES)->show()) {
                         track += VOICES-1;
@@ -3225,15 +3224,27 @@ void Measure::layoutX(qreal stretch)
                   if (e == 0)
                         continue;
                   ElementType t = e->type();
-                  if (t == REST) {
+                  if (t == REST && (_multiMeasure > 0 || static_cast<Rest*>(e)->durationType() == TDuration::V_MEASURE)) {
                         Rest* rest = static_cast<Rest*>(e);
-                        qreal x1 = xpos[seg];
-                        qreal x2 = xpos[segs];
+                        qreal x1 = 0.0, x2;
+                        if (s != first()) {
+                              Segment* ps = s->prev();
+                              Element* e   = ps->element(track/VOICES * VOICES);
+                              if (e)
+                                    x1 = ps->x() + e->x() + e->width();
+                              }
+                        Segment* ns = s->next();
+                        if (ns->segmentType() == Segment::SegEndBarLine)
+                              x2 = ns->x();
+                        else {
+                              x2 = ns->x();
+                              Element* e = ns->element(track/VOICES * VOICES);
+                              if (e)
+                                    x2 += e->x();
+                              }
+
                         if (_multiMeasure > 0) {
                               if ((track % VOICES) == 0) {
-                                    if (types[segs-1] == Segment::SegEndBarLine)
-                                          x2 -= width[segs-1];
-
                                     qreal d  = point(score()->styleS(ST_multiMeasureRestMargin));
                                     qreal w = x2 - x1 - 2 * d;
 
@@ -3242,19 +3253,14 @@ void Measure::layoutX(qreal stretch)
                                     e->setPos(d, sl->staffHeight() * .5);   // center vertically in measure
                                     }
                               }
-                        else if (rest->durationType() == TDuration::V_MEASURE) {
-                              qreal w;
-                              for (int i = segs-1; i > seg; --i) {
-                                    if (types[i] == Segment::SegEndBarLine) {
-                                          x2 = xpos[i] - width[i];
-                                          break;
-                                          }
-                                    }
-                              w  = x2 - x1;
-                              e->rxpos() = (w - e->width()) * .5 + x1 - s->x();
+                        else {   // if (rest->durationType() == TDuration::V_MEASURE)
+                              qreal w  = x2 - x1;
+                              e->rxpos() = (w - e->width()) * .5 + x1 - s->pos().x();
                               e->adjustReadPos();
                               }
                         }
+                  else if (t == REST)
+                        e->rxpos() = 0;
                   else if (t == REPEAT_MEASURE) {
                         qreal x1 = seg == 0 ? 0.0 : xpos[seg] - clefKeyRightMargin;
                         qreal w  = xpos[segs-1] - x1;
@@ -3263,12 +3269,15 @@ void Measure::layoutX(qreal stretch)
                   else if (t == CHORD)
                         static_cast<Chord*>(e)->layout2();
                   else if (t == CLEF) {
-                        qreal gap = 0.0;
-                        Segment* ps = s->prev();
-                        if (ps)
-                              gap = s->x() - (ps->x() + ps->width());
-                        e->rxpos() = -gap * .5;
-                        e->adjustReadPos();
+                        if (s == first()) {
+                              // clef at the beginning of measure
+                              qreal gap = 0.0;
+                              Segment* ps = s->prev();
+                              if (ps)
+                                    gap = s->x() - (ps->x() + ps->width());
+                              e->rxpos() = -gap * .5;
+                              e->adjustReadPos();
+                              }
                         }
                   else {
                         e->setPos(-e->bbox().x(), 0.0);
@@ -3588,7 +3597,7 @@ int Measure::snapNote(int /*tick*/, const QPointF p, int staff) const
 //---------------------------------------------------------
 
 QVariant Measure::getProperty(P_ID propertyId) const
-      {
+{
       switch(propertyId) {
             case P_TIMESIG_NOMINAL:
                   return QVariant::fromValue(_timesig);
