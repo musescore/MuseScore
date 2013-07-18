@@ -7,7 +7,7 @@
     <Style>
       <minSystemDistance>8</minSystemDistance>
       <maxSystemDistance>12</maxSystemDistance>
-      <measureSpacing>1</measureSpacing>
+      <staffLineWidth>1</staffLineWidth>
       <smallStaffMag>0.681818</smallStaffMag>
       <page-layout>
         <page-height>1683.78</page-height>
