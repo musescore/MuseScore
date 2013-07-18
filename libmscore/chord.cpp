@@ -1545,18 +1545,15 @@ void Chord::layoutPitched()
             Note* note = _notes.at(i);
             note->layout();
 
-            qreal x1 = note->pos().x();
+            qreal x1 = note->pos().x() + ipos().x();
             qreal x2 = x1 + note->headWidth();
-            if (-x1 > lll)
-                  lll = -x1;
-            if (x2 > rrr)
-                  rrr = x2;
+            lll = qMax(lll, -x1);
+            rrr = qMax(rrr, x2);
 
             Accidental* accidental = note->accidental();
             if (accidental) {
                   qreal x = accidental->x() + note->x();
-                  if (-x > lll)
-                        lll = -x;
+                  lll = qMax(lll, -x);
                   }
             }
 
@@ -1601,8 +1598,7 @@ void Chord::layoutPitched()
             qreal x = dotPosX() + minNoteDistance
                + (dots()-1) * score()->styleS(ST_dotDotDistance).val() * _spatium;
             x += symbols[score()->symIdx()][dotSym].width(1.0);
-            if (x > rrr)
-                  rrr = x;
+            rrr = qMax(rrr, x);
             }
 
       if (_hook) {
