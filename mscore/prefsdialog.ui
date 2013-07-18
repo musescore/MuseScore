@@ -401,6 +401,11 @@
               <string>light</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>native</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="2" column="2">

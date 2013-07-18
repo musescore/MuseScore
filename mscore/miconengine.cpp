@@ -119,7 +119,8 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                   f.open(QIODevice::ReadOnly);
                   QByteArray ba = f.readAll();
                   if (mode == QIcon::Disabled) {
-                        if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT) {
+                        if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT ||
+                            Ms::preferences.globalStyle == Ms::STYLE_NATIVE) {
                               if (state == QIcon::On)
                                     ba.replace("fill:#ffffff", "fill:#2463aa");
                               else
@@ -133,7 +134,8 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                               }
                         }
                   else {
-                        if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT) {
+                        if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT ||
+                            Ms::preferences.globalStyle == Ms::STYLE_NATIVE) {
                               if (state == QIcon::On)
                                     ba.replace("fill:#ffffff", "fill:#2463aa");
                               else
