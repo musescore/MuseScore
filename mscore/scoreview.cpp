@@ -2088,7 +2088,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
 
             if (ee->type() == Element::SEGMENT) {
                   QPointF pt = ee->pagePos();
-                  p.setPen(Qt::blue);
+                  p.setPen(QPen(Qt::blue, 0.0));
                   p.drawLine(QLineF(pt.x()-w, pt.y()-h, pt.x()+w, pt.y()+h));
                   p.drawLine(QLineF(pt.x()+w, pt.y()-h, pt.x()-w, pt.y()+h));
                   }
