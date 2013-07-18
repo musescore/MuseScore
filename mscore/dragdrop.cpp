@@ -437,7 +437,9 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::ACCIDENTAL_BRACKET:
                         {
                         Element* el = 0;
+                        printf("drop\n");
                         foreach(const Element* e, elementsAt(pos)) {
+                              printf("   ===%s\n", e->name());
                               if (e->acceptDrop(this, pos, dragElement)) {
                                     el = const_cast<Element*>(e);
                                     break;
@@ -445,7 +447,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                               }
                         if (!el) {
                               if (!dropCanvas(dragElement)) {
-                                    qDebug("cannot drop element to canvas");
+                                    qDebug("cannot drop %s to canvas", dragElement->name());
                                     delete dragElement;
                                     dragElement = 0;
                                     }

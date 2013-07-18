@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>412</width>
-    <height>236</height>
+    <width>669</width>
+    <height>278</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>6</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
+   <property name="rightMargin">
+    <number>8</number>
+   </property>
+   <property name="bottomMargin">
     <number>8</number>
    </property>
    <item>
@@ -40,7 +49,16 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -117,10 +135,19 @@
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout_2">
-        <property name="verticalSpacing">
+        <property name="leftMargin">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="verticalSpacing">
          <number>0</number>
         </property>
         <item row="1" column="2">
@@ -414,6 +441,9 @@
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
+          <property name="minimum">
+           <double>-1000000.000000000000000</double>
+          </property>
           <property name="maximum">
            <double>100000.000000000000000</double>
           </property>
@@ -435,6 +465,9 @@
           </property>
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="minimum">
+           <double>-1000000.000000000000000</double>
           </property>
           <property name="maximum">
            <double>100000.000000000000000</double>
@@ -580,6 +613,9 @@
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
+          <property name="minimum">
+           <double>-1000000.000000000000000</double>
+          </property>
           <property name="maximum">
            <double>1000000.000000000000000</double>
           </property>
@@ -598,6 +634,9 @@
           </property>
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="minimum">
+           <double>-1000000.000000000000000</double>
           </property>
           <property name="maximum">
            <double>1000000.000000000000000</double>
