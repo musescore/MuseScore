@@ -122,6 +122,8 @@ class TestImportMidi : public QObject, public MTest
       void tupletSeptuplet() { mf("tuplet_septuplet"); }
       void tupletTripletsMixed() { mf("tuplet_triplets_mixed"); }
       void tupletTriplet() { mf("tuplet_triplet"); }
+
+      void pickupMeasure() { mf("pickup"); }
       };
 
 //---------------------------------------------------------
