@@ -27,9 +27,8 @@ class Sample;
 //   ZInstrument
 //---------------------------------------------------------
 
-class ZInstrument : public QObject {
-      Q_OBJECT
-
+class ZInstrument {
+      Zerberus* zerberus;
       int _refCount;
       QString _name;
       int _program;
@@ -41,11 +40,8 @@ class ZInstrument : public QObject {
       bool loadFromDir(const QString&);
       bool read(const QByteArray&, QZipReader*, const QString& path);
 
-   signals:
-      void progress(int);
-
    public:
-      ZInstrument();
+      ZInstrument(Zerberus*);
       ~ZInstrument();
 
       int refCount() const                  { return _refCount; }

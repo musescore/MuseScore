@@ -12,7 +12,7 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
-QT4_WRAP_CPP(zerberusMocs zerberusgui.h instrument.h zerberus.h)
+QT4_WRAP_CPP(zerberusMocs zerberusgui.h)
 QT4_WRAP_UI (zerberusUi zerberus_gui.ui)
 
 add_library (zerberus STATIC
