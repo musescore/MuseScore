@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="1.24">
   <programVersion>2.0.0</programVersion>
-  <programRevision>098c0e0</programRevision>
+  <programRevision>bbb35cb</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -10,18 +10,25 @@
       <f name="RevRoomsize" val="0.5"/>
       <f name="RevDamp" val="0.5"/>
       <f name="RevWidth" val="1"/>
-      <f name="RevGain" val="0.5"/>
+      <f name="RevGain" val="0.499015"/>
       <f name="ChoType" val="0"/>
       <f name="ChoSpeed" val="0.002"/>
       <f name="ChoDepth" val="0.8"/>
       <f name="ChoBlocks" val="0.03"/>
-      <f name="ChoGain" val="0.5"/>
+      <f name="ChoGain" val="0.499015"/>
       </SyntiSettings>
     <Division>480</Division>
     <Style>
+      <lyricsDistance>2</lyricsDistance>
+      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <bracketDistance>0.3</bracketDistance>
       <measureSpacing>1.3</measureSpacing>
       <ledgerLineWidth>0.08</ledgerLineWidth>
+      <beamMinLen>1.32</beamMinLen>
+      <smallNoteMag>0.7</smallNoteMag>
+      <graceNoteMag>0.7</graceNoteMag>
+      <smallStaffMag>0.7</smallStaffMag>
+      <voltaY>-2</voltaY>
       <page-layout>
         <page-height>1584</page-height>
         <page-width>1224</page-width>
@@ -48,6 +55,18 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -58,6 +77,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         </Staff>
       <Staff id="2">
         <type>0</type>
+        <distOffset>1.12661</distOffset>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
@@ -71,41 +91,21 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>10</height>
-        <bottomGap>42.3307</bottomGap>
+        <height>8</height>
+        <bottomGap>23.01</bottomGap>
         <Text>
-          <halign>center</halign>
-          <valign>top</valign>
-          <offsetType>spatium</offsetType>
-          <name>Title</name>
-          <family>FreeSerifMscore</family>
-          <size>24</size>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:24pt; font-weight:400; font-style:normal;">
-<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman';">Reunion</span></p></body></html>
-            </html-data>
+          <style>Title</style>
+          <text>Reunion</text>
           </Text>
         <Text>
-          <halign>right</halign>
-          <valign>bottom</valign>
-          <offsetType>spatium</offsetType>
-          <name>Composer</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:12pt; font-weight:400; font-style:normal;">
-<p align="right" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman';">Marc Sabatella</span></p></body></html>
-            </html-data>
+          <style>Composer</style>
+          <text>Marc Sabatella</text>
           </Text>
         </VBox>
       <HBox>
         <width>7.22807</width>
         </HBox>
-      <Measure number="1" len="1/2">
+      <Measure number="1" len="2/4">
         <irregular/>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -131,7 +131,7 @@ p, li { white-space: pre-wrap; }
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
-          <pos x="-9.25335" y="-6.48047"/>
+          <pos x="-9.3211" y="-6.38978"/>
           <halign>left</halign>
           <valign>baseline</valign>
           <xoffset>0</xoffset>
@@ -413,26 +413,9 @@ p, li { white-space: pre-wrap; }
         <tick>6240</tick>
         <Tempo>
           <tempo>1.9</tempo>
-          <pos x="-19.2455" y="-6.48047"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">poco rit.</span></p></td></tr></table></body></html>
-            </html-data>
+          <pos x="-19.2601" y="-4"/>
+          <style>Tempo</style>
+          <text>poco rit.</text>
           </Tempo>
         <tick>4800</tick>
         <Chord>
@@ -571,26 +554,9 @@ p, li { white-space: pre-wrap; }
       <Measure number="5">
         <Tempo>
           <tempo>2.13333</tempo>
-          <pos x="-6.65335" y="-6.48047"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">più mosso</span></p></td></tr></table></body></html>
-            </html-data>
+          <pos x="-6.65335" y="-4"/>
+          <style>Tempo</style>
+          <text>più mosso</text>
           </Tempo>
         <Slur id="6">
           <SlurSegment no="0">
@@ -842,23 +808,9 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Tempo>
           <tempo>1.8</tempo>
-          <pos x="-15.9681" y="-6.3151"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">rit.</span></p></body></html>
-            </html-data>
+          <pos x="-15.9638" y="-4"/>
+          <style>Tempo</style>
+          <text>rit.</text>
           </Tempo>
         <Beam id="7">
           </Beam>
@@ -953,44 +905,14 @@ p, li { white-space: pre-wrap; }
             </Arpeggio>
           </Chord>
         <StaffText>
-          <halign>left</halign>
-          <valign>top</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Staff</name>
-          <family>FreeSerifMscore</family>
-          <size>10</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:9.07087pt; font-weight:400; font-style:normal;">
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Times New Roman'; font-size:10pt;"><br /></p></body></html>
-            </html-data>
+          <style>Staff</style>
+          <text></text>
           </StaffText>
         <Tempo>
           <tempo>2.25</tempo>
-          <pos x="-10.7746" y="-6.48047"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">più mosso</span></p></td></tr></table></body></html>
-            </html-data>
+          <pos x="-10.8564" y="-4"/>
+          <style>Tempo</style>
+          <text>più mosso</text>
           </Tempo>
         <Beam id="8">
           </Beam>
@@ -1094,26 +1016,9 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Tempo>
           <tempo>1.9</tempo>
-          <pos x="-10.3514" y="-6.48047"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">rit.</span></p></td></tr></table></body></html>
-            </html-data>
+          <pos x="-10.3194" y="-4"/>
+          <style>Tempo</style>
+          <text>rit.</text>
           </Tempo>
         <Chord>
           <durationType>quarter</durationType>
@@ -1195,31 +1100,14 @@ p, li { white-space: pre-wrap; }
           </KeySig>
         <Dynamic>
           <subtype>mf</subtype>
-          <pos x="8.66378" y="5.35417"/>
+          <pos x="0.19375" y="8"/>
           <style>Dynamics2</style>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
-          <pos x="-7.52002" y="-6.48047"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">tempo primo</span></p></td></tr></table></body></html>
-            </html-data>
+          <pos x="-7.52002" y="-4"/>
+          <style>Tempo</style>
+          <text>tempo primo</text>
           </Tempo>
         <Slur id="8">
           <SlurSegment no="0">
@@ -1488,7 +1376,7 @@ p, li { white-space: pre-wrap; }
       <Measure number="14">
         <Dynamic>
           <subtype>other-dynamics</subtype>
-          <pos x="1.2" y="5.02344"/>
+          <pos x="-0.6" y="7.33854"/>
           <style>Dynamics</style>
           <text>cresc.</text>
           </Dynamic>
@@ -1595,25 +1483,8 @@ p, li { white-space: pre-wrap; }
         <Tempo>
           <tempo>2.06667</tempo>
           <pos x="-3.85729" y="-6.3151"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">accel.</span></p></td></tr></table></body></html>
-            </html-data>
+          <style>Tempo</style>
+          <text>accel.</text>
           </Tempo>
         <Slur id="11">
           <SlurSegment no="0">
@@ -1715,26 +1586,9 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Tempo>
           <tempo>1.83333</tempo>
-          <pos x="-3.20297" y="-6.3151"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">rit.</span></p></td></tr></table></body></html>
-            </html-data>
+          <pos x="-3.10419" y="-6.3151"/>
+          <style>Tempo</style>
+          <text>rit.</text>
           </Tempo>
         <Beam id="11">
           </Beam>
@@ -1781,7 +1635,7 @@ p, li { white-space: pre-wrap; }
       <Measure number="16">
         <Dynamic>
           <subtype>f</subtype>
-          <pos x="1.68001" y="4.19662"/>
+          <pos x="-0.6" y="6.84245"/>
           <style>Dynamics2</style>
           </Dynamic>
         <Chord>
@@ -1890,23 +1744,9 @@ p, li { white-space: pre-wrap; }
           </TimeSig>
         <Tempo>
           <tempo>1.53333</tempo>
-          <pos x="-7.03999" y="-6.3151"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">meno mosso</span></p></body></html>
-            </html-data>
+          <pos x="-7.10773" y="-4"/>
+          <style>Tempo</style>
+          <text>meno mosso</text>
           </Tempo>
         <HairPin id="12">
           <subtype>1</subtype>
@@ -1914,7 +1754,7 @@ p, li { white-space: pre-wrap; }
           <Segment>
             <subtype>0</subtype>
             <off2 x="-5.82084" y="0"/>
-            <pos x="86.8355" y="6.99954"/>
+            <pos x="67.2932" y="6.99954"/>
             </Segment>
           </HairPin>
         <Chord>
@@ -1947,7 +1787,7 @@ p, li { white-space: pre-wrap; }
       <Measure number="18">
         <Dynamic>
           <subtype>mf</subtype>
-          <pos x="3.0707" y="4.80573"/>
+          <pos x="-0.579284" y="7.45156"/>
           <style>Dynamics2</style>
           </Dynamic>
         <endSpanner id="12"/>
@@ -1985,7 +1825,7 @@ p, li { white-space: pre-wrap; }
           <Segment>
             <subtype>0</subtype>
             <off2 x="-2.40771" y="0"/>
-            <pos x="12.5562" y="6.79945"/>
+            <pos x="107.322" y="6.79945"/>
             </Segment>
           </HairPin>
         <Chord>
@@ -2017,49 +1857,19 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="20">
         <StaffText>
-          <halign>left</halign>
-          <valign>top</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Staff</name>
-          <family>FreeSerifMscore</family>
-          <size>10</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:9.07087pt; font-weight:400; font-style:normal;">
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Times New Roman'; font-size:10pt;"><br /></p></body></html>
-            </html-data>
+          <style>Staff</style>
+          <text></text>
           </StaffText>
         <Dynamic>
           <subtype>mp</subtype>
-          <pos x="10.76" y="4.85807"/>
+          <pos x="-0.6" y="7.50391"/>
           <style>Dynamics2</style>
           </Dynamic>
         <Tempo>
           <tempo>1.23333</tempo>
-          <pos x="-11.19" y="-6.48047"/>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Tempo</name>
-          <family>FreeSerifMscore</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt; font-style:italic;">rall.</span></p></td></tr></table></body></html>
-            </html-data>
+          <pos x="-11.19" y="-4"/>
+          <style>Tempo</style>
+          <text>rall.</text>
           </Tempo>
         <endSpanner id="13"/>
         <Chord>
@@ -2096,6 +1906,7 @@ p, li { white-space: pre-wrap; }
           </Chord>
         </Measure>
       <Measure number="21">
+        <vspacerUp>14.87</vspacerUp>
         <Chord>
           <dots>1</dots>
           <durationType>half</durationType>
@@ -2136,22 +1947,8 @@ p, li { white-space: pre-wrap; }
         <tick>37680</tick>
         <StaffText>
           <pos x="49.9305" y="-6.44883"/>
-          <halign>left</halign>
-          <valign>top</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>System</name>
-          <family>FreeSerifMscore</family>
-          <size>10</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:9.07087pt; font-weight:400; font-style:normal;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:18pt;">͡</span></p></body></html>
-            </html-data>
+          <style>System</style>
+          <text>͡</text>
           </StaffText>
         </Measure>
       <Measure number="22">
@@ -2186,7 +1983,7 @@ p, li { white-space: pre-wrap; }
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure number="1" len="1/2">
+      <Measure number="1" len="2/4">
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>F</transposingClefType>
@@ -3197,7 +2994,6 @@ p, li { white-space: pre-wrap; }
           </Chord>
         </Measure>
       <Measure number="15">
-        <vspacerDown>12.8557</vspacerDown>
         <Slur id="34">
           <track>0</track>
           <SlurSegment no="0">
@@ -3370,25 +3166,9 @@ p, li { white-space: pre-wrap; }
           <lineColor r="0" g="0" b="0" a="255"/>
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
-          <Segment>
-            <subtype>0</subtype>
-            <off2 x="-1.5875" y="0"/>
-            <pos x="83.3301" y="25.5627"/>
-            </Segment>
           <beginText>
-            <halign>left</halign>
-            <valign>center</valign>
-            <offsetType>spatium</offsetType>
-            <name>TextLine</name>
-            <family>FreeSerifMscore</family>
-            <size>12</size>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Times New Roman'; font-size:11pt;"><br /></p></body></html>
-              </html-data>
+            <style>TextLine</style>
+            <text></text>
             </beginText>
           </Pedal>
         <Beam id="31">
@@ -3477,25 +3257,9 @@ p, li { white-space: pre-wrap; }
           <lineColor r="0" g="0" b="0" a="255"/>
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
-          <Segment>
-            <subtype>0</subtype>
-            <off2 x="0.793747" y="0"/>
-            <pos x="103.249" y="25.5787"/>
-            </Segment>
           <beginText>
-            <halign>left</halign>
-            <valign>center</valign>
-            <offsetType>spatium</offsetType>
-            <name>TextLine</name>
-            <family>FreeSerifMscore</family>
-            <size>12</size>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Times New Roman'; font-size:11pt;"><br /></p></body></html>
-              </html-data>
+            <style>TextLine</style>
+            <text></text>
             </beginText>
           </Pedal>
         <endSpanner id="38"/>
@@ -3574,25 +3338,9 @@ p, li { white-space: pre-wrap; }
           <lineColor r="0" g="0" b="0" a="255"/>
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
-          <Segment>
-            <subtype>0</subtype>
-            <off2 x="1.32292" y="0"/>
-            <pos x="9.51818" y="25.6483"/>
-            </Segment>
           <beginText>
-            <halign>left</halign>
-            <valign>center</valign>
-            <offsetType>spatium</offsetType>
-            <name>TextLine</name>
-            <family>FreeSerifMscore</family>
-            <size>12</size>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Times New Roman'; font-size:11pt;"><br /></p></body></html>
-              </html-data>
+            <style>TextLine</style>
+            <text></text>
             </beginText>
           </Pedal>
         <endSpanner id="40"/>
@@ -3678,25 +3426,9 @@ p, li { white-space: pre-wrap; }
           <lineColor r="0" g="0" b="0" a="255"/>
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
-          <Segment>
-            <subtype>0</subtype>
-            <off2 x="-1.85209" y="0"/>
-            <pos x="31.8962" y="27.429"/>
-            </Segment>
           <beginText>
-            <halign>left</halign>
-            <valign>center</valign>
-            <offsetType>spatium</offsetType>
-            <name>TextLine</name>
-            <family>FreeSerifMscore</family>
-            <size>12</size>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Times New Roman'; font-size:11pt;"><br /></p></body></html>
-              </html-data>
+            <style>TextLine</style>
+            <text></text>
             </beginText>
           </Pedal>
         <endSpanner id="42"/>
@@ -3787,25 +3519,9 @@ p, li { white-space: pre-wrap; }
           <lineColor r="0" g="0" b="0" a="255"/>
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
-          <Segment>
-            <subtype>0</subtype>
-            <off2 x="23.2833" y="0"/>
-            <pos x="61.3659" y="27.3977"/>
-            </Segment>
           <beginText>
-            <halign>left</halign>
-            <valign>center</valign>
-            <offsetType>spatium</offsetType>
-            <name>TextLine</name>
-            <family>FreeSerifMscore</family>
-            <size>12</size>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:normal;">
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Times New Roman'; font-size:11pt;"><br /></p></body></html>
-              </html-data>
+            <style>TextLine</style>
+            <text></text>
             </beginText>
           </Pedal>
         <endSpanner id="44"/>
@@ -3832,59 +3548,22 @@ p, li { white-space: pre-wrap; }
           <continueTextPlace>left</continueTextPlace>
           <Segment>
             <subtype>0</subtype>
-            <off2 x="-5.29828" y="0"/>
-            <pos x="93.3182" y="-8.3969"/>
+            <off2 x="0" y="0"/>
+            <pos x="82.3099" y="-9.37436"/>
             </Segment>
           <beginText>
-            <halign>left</halign>
-            <valign>center</valign>
-            <offsetType>spatium</offsetType>
-            <name>Ottava</name>
-            <family>FreeSerifMscore</family>
-            <size>12</size>
-            <italic>1</italic>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:italic;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt;">8va</span></p></body></html>
-              </html-data>
+            <style>Ottava</style>
+            <text>8va</text>
             </beginText>
           <continueText>
-            <halign>left</halign>
-            <valign>center</valign>
-            <offsetType>spatium</offsetType>
-            <name>Ottava</name>
-            <family>FreeSerifMscore</family>
-            <size>12</size>
-            <italic>1</italic>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:10.885pt; font-weight:400; font-style:italic;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt;">(8va)</span></p></body></html>
-              </html-data>
+            <style>Ottava</style>
+            <text>(8va)</text>
             </continueText>
           </Ottava>
         <tick>37680</tick>
         <StaffText>
-          <halign>left</halign>
-          <valign>top</valign>
-          <xoffset>0</xoffset>
-          <yoffset>-4</yoffset>
-          <offsetType>spatium</offsetType>
-          <name>Staff</name>
-          <family>FreeSerifMscore</family>
-          <size>10</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerifMscore'; font-size:9.07087pt; font-weight:400; font-style:normal;">
-<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Times New Roman'; font-size:10pt;"><br /></p></body></html>
-            </html-data>
+          <style>Staff</style>
+          <text></text>
           </StaffText>
         <tick>36480</tick>
         <Beam id="43">
