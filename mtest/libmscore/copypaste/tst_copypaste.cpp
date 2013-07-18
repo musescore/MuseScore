@@ -17,6 +17,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/chord.h"
 
 #define DIR QString("libmscore/copypaste/")
 
@@ -57,6 +58,80 @@ void TestCopyPaste::initTestCase()
       }
 
 //---------------------------------------------------------
+//   paste
+//---------------------------------------------------------
+
+static void paste(Score* _score)
+      {
+      _score->startCmd();
+
+      const QMimeData* ms = QApplication::clipboard()->mimeData();
+      if (ms == 0) {
+                  qDebug("no application mime data");
+                  return;
+                  }
+      if (_score->selection().isSingle() && ms->hasFormat(mimeSymbolFormat)) {
+                  QByteArray data(ms->data(mimeSymbolFormat));
+                  XmlReader e(data);
+                  QPointF dragOffset;
+                  Fraction duration(1, 4);
+                  Element::ElementType type = Element::readType(e, &dragOffset, &duration);
+                  if (type != Element::INVALID) {
+                              Element* el = Element::create(type, _score);
+                              if (el) {
+                                          el->read(e);
+                                          _score->addRefresh(_score->selection().element()->abbox());   // layout() ?!
+                                          DropData ddata;
+                                          ddata.view       = 0;
+                                          ddata.element    = el;
+                                          ddata.duration   = duration;
+                                          _score->selection().element()->drop(ddata);
+                                          if (_score->selection().element())
+                                                      _score->addRefresh(_score->selection().element()->abbox());
+                                          }
+                              }
+                  else
+                              qDebug("cannot read type");
+                  }
+      else if ((_score->selection().state() == SEL_RANGE || _score->selection().state() == SEL_LIST)
+               && ms->hasFormat(mimeStaffListFormat)) {
+                  ChordRest* cr = 0;
+                  if (_score->selection().state() == SEL_RANGE)
+                              cr = _score->selection().firstChordRest();
+                  else if (_score->selection().isSingle()) {
+                              Element* e = _score->selection().element();
+                              if (e->type() != Element::NOTE && e->type() != Element::REST) {
+                                          qDebug("cannot paste to %s", e->name());
+                                          return;
+                                          }
+                              if (e->type() == Element::NOTE)
+                                          e = static_cast<Note*>(e)->chord();
+                              cr  = static_cast<ChordRest*>(e);
+                              }
+                  if (cr == 0)
+                              qDebug("no destination to paste");
+                  else if (cr->tuplet())
+                              qDebug("cannot paste into tuplet");
+                  else {
+                              QByteArray data(ms->data(mimeStaffListFormat));
+                              qDebug("paste <%s>", data.data());
+                              XmlReader e(data);
+                              _score->pasteStaff(e, cr);
+                              }
+                  }
+      else if (ms->hasFormat(mimeSymbolListFormat) && _score->selection().isSingle())
+                  qDebug("cannot paste symbol list to element");
+      else {
+                  qDebug("cannot paste selState %d staffList %d",
+                     _score->selection().state(), ms->hasFormat(mimeStaffListFormat));
+                  foreach(const QString& s, ms->formats())
+                              qDebug("  format %s", qPrintable(s));
+                  }
+
+      _score->endCmd();
+      }
+
+//---------------------------------------------------------
 //   copypaste
 //    copy measure 2, paste into measure 4
 //---------------------------------------------------------
@@ -84,7 +159,7 @@ void TestCopyPaste::copypaste(const char* idx)
       QApplication::clipboard()->setMimeData(mimeData);
 
       score->select(m4->first()->element(0));
-      score->cmdPaste(0);
+      paste(score);
       score->doLayout();
 
       QVERIFY(saveCompareScore(score, QString("copypaste%1.mscx").arg(idx),
