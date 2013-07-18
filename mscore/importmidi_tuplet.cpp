@@ -99,10 +99,10 @@ std::vector<int> findTupletNumbers(const Fraction &divLen, const Fraction &barFr
       return tupletNumbers;
       }
 
-Fraction findOnTimeRegularError(const Fraction &onTime, const Fraction &raster)
+Fraction findQuantizationError(const Fraction &value, const Fraction &raster)
       {
-      Fraction regularPos = Quantize::quantizeValue(onTime, raster);
-      return (onTime - regularPos).absValue();
+      Fraction quantizedValue = Quantize::quantizeValue(value, raster);
+      return (value - quantizedValue).absValue();
       }
 
 // return: <chordIter, minChordError>
@@ -220,7 +220,7 @@ TupletInfo findTupletApproximation(const Fraction &tupletLen,
             startTupletChordIt = bestChord.first;
             ++startTupletChordIt;
                         // find chord quant error for a regular grid
-            Fraction regularError = findOnTimeRegularError(bestChord.first->first, raster);
+            Fraction regularError = findQuantizationError(bestChord.first->first, raster);
             tupletInfo.regularSumError += regularError;
             }
 
@@ -346,7 +346,7 @@ validateTuplets(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
             }
       const Fraction &regularRaster = tuplets.front().regularQuantValue;
       for (const auto &chordIt: excludedChords)
-            sumError += findOnTimeRegularError(chordIt->first, regularRaster);
+            sumError += findQuantizationError(chordIt->first, regularRaster);
 
       return std::make_tuple(sumError.ticks() * 1.0 / sumNoteCount,
                              sumNoteCount, sumLengthOfRests);
@@ -726,7 +726,7 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
       sortNotesByPitch(startBarChordIt, endBarChordIt);
       sortTupletsByAveragePitch(tuplets);
 
-      Fraction regularRaster = Quantize::findQuantRaster(startBarChordIt, endBarChordIt, endBarTick);
+      Fraction regularRaster = Quantize::findRegularQuantRaster(startBarChordIt, endBarChordIt, endBarTick);
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
       int nonTupletVoice = findNonTupletVoice(nonTuplets, tuplets, regularRaster);
       setVoiceOfNonTupletChords(nonTuplets, nonTupletVoice);
@@ -788,19 +788,22 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
       return nonTupletVoice;
       }
 
-Fraction findRasterForTupletNote(const Fraction &noteOnTime,
-                                 const Fraction &noteLen,
-                                 const TupletInfo &tupletInfo)
+// if offTime is inside some tuplet - quant by tuplet grid
+// if offTime is outside all tuplets - quant by regular grid
+
+Fraction findOffTimeRaster(const Fraction &noteOffTime,
+                           int voice,
+                           const Fraction &regularQuantValue,
+                           const std::vector<TupletInfo> &tuplets)
       {
-      Fraction raster;
-      if (noteOnTime + noteLen <= tupletInfo.onTime + tupletInfo.len) {
-                        // if offTime is inside the tuplet - quant by tuplet grid
-            raster = tupletInfo.tupletQuantValue;
+      for (const auto &tupletInfo: tuplets) {
+            if (!tupletInfo.chords.empty()
+                        && voice == tupletInfo.chords.begin()->second->second.voice
+                        && noteOffTime > tupletInfo.onTime
+                        && noteOffTime < tupletInfo.onTime + tupletInfo.len)
+                  return tupletInfo.tupletQuantValue;
             }
-      else {            // if offTime is outside the tuplet - quant by regular grid
-            raster = tupletInfo.regularQuantValue;
-            }
-      return raster;
+      return regularQuantValue;
       }
 
 void optimizeVoices(std::multimap<Fraction, MidiChord>::iterator startBarChordIt,
@@ -826,6 +829,42 @@ void optimizeVoices(std::multimap<Fraction, MidiChord>::iterator startBarChordIt
             }
       }
 
+void addFirstTiedTupletNotes(std::multimap<Fraction, MidiChord> &chords,
+                             const std::vector<TupletInfo> &tuplets)
+      {
+      std::map<std::pair<const Fraction, MidiChord> *, Fraction> tiedTupletErrors;
+
+      for (const auto &tupletInfo: tuplets) {
+            if (tupletInfo.chords.empty())
+                  continue;
+            int firstNoteIndex = tupletInfo.chords.begin()->first;
+            if (firstNoteIndex > 0) {
+                  for (auto &chord: chords) {
+                        Fraction maxLen = maxNoteLen(chord.second.notes);
+                        Fraction tupletFreeEnd = tupletInfo.onTime
+                                    + tupletInfo.len / tupletInfo.tupletNumber * firstNoteIndex;
+                        Fraction chordOffTime = chord.first + maxLen;
+                                    // if chord offTime is outside tuplet - discard chord
+                        if (chordOffTime <= tupletInfo.onTime
+                                    || chordOffTime >= tupletFreeEnd + tupletInfo.tupletQuantValue)
+                              continue;
+
+                        Fraction chordError = findQuantizationError(chordOffTime,
+                                                                    tupletInfo.regularQuantValue);
+                        Fraction tupletError = findQuantizationError(chordOffTime,
+                                                                     tupletInfo.tupletQuantValue);
+                        auto it = tiedTupletErrors.find(&chord);
+                        bool found = (it != tiedTupletErrors.end());
+                        if (tupletError < chordError && (!found || (found && tupletError < it->second))) {
+                                    // include chord in first tuplet notes as tied chord
+                              chord.second.voice = tupletInfo.chords.begin()->second->second.voice;
+                              tiedTupletErrors.insert({&chord, tupletError});
+                              }
+                        }
+                  }
+            }
+      }
+
 std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
                                     const Fraction &endBarTick,
                                     const Fraction &barFraction,
@@ -847,7 +886,7 @@ std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
                   // end iterator, as usual, will point to the next - invalid chord
       auto endBarChordIt = findEndChordInRange(endBarTick + tol, startBarChordIt, chords.end());
 
-      Fraction raster = Quantize::findQuantRaster(startBarChordIt, endBarChordIt, endBarTick);
+      Fraction raster = Quantize::findRegularQuantRaster(startBarChordIt, endBarChordIt, endBarTick);
       auto divLengths = Meter::divisionsOfBarForTuplets(barFraction);
 
       for (const auto &divLen: divLengths) {
@@ -892,6 +931,7 @@ std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
       if (operations.useMultipleVoices) {
             int nonTupletVoice = separateTupletVoices(tuplets, startBarChordIt, endBarChordIt,
                                                       chords, endBarTick);
+            addFirstTiedTupletNotes(chords, tuplets);
             minimizeOffTimeError(tuplets, chords, nonTupletVoice);
             optimizeVoices(startBarChordIt, endBarChordIt);
             }

@@ -103,9 +103,9 @@ Fraction fixedQuantRaster()
       return userQuantNoteToTicks(operations.quantize.value);
       }
 
-Fraction findQuantRaster(const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
-                         const std::multimap<Fraction, MidiChord>::iterator &endChordIt,
-                         const Fraction &endBarTick)
+Fraction findRegularQuantRaster(const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
+                                const std::multimap<Fraction, MidiChord>::iterator &endChordIt,
+                                const Fraction &endBarTick)
       {
       Fraction raster;
       auto operations = preferences.midiImportOperations.currentTrackOperations();
@@ -139,9 +139,10 @@ Fraction quantizeValue(const Fraction &value, const Fraction &raster)
 void doGridQuantizationOfBar(std::multimap<Fraction, MidiChord> &quantizedChords,
                              const std::multimap<Fraction, MidiChord>::iterator &startChordIt,
                              const std::multimap<Fraction, MidiChord>::iterator &endChordIt,
-                             const Fraction &raster,
+                             const Fraction &regularRaster,
                              const Fraction &endBarTick,
-                             const std::vector<std::multimap<Fraction, MidiChord>::iterator> &chordsNotQuant)
+                             const std::vector<std::multimap<Fraction, MidiChord>::iterator> &chordsNotQuant,
+                             const std::vector<MidiTuplet::TupletInfo> &tuplets)
       {
       for (auto it = startChordIt; it != endChordIt; ++it) {
             if (it->first >= endBarTick)
@@ -150,9 +151,14 @@ void doGridQuantizationOfBar(std::multimap<Fraction, MidiChord> &quantizedChords
             if (found != chordsNotQuant.end())
                   continue;
             auto chord = it->second;
-            Fraction onTime = quantizeValue(it->first, raster);
-            for (auto &note: chord.notes)
-                  note.len = quantizeValue(note.len, raster);
+            Fraction onTime = quantizeValue(it->first, regularRaster);
+            for (auto &note: chord.notes) {
+                  Fraction offTime = onTime + note.len;
+                  Fraction offTimeRaster = MidiTuplet::findOffTimeRaster(offTime, it->second.voice,
+                                                                         regularRaster, tuplets);
+                  offTime = quantizeValue(offTime, offTimeRaster);
+                  note.len = offTime - onTime;
+                  }
             quantizedChords.insert({onTime, chord});
             }
       }
@@ -162,7 +168,9 @@ void applyGridQuant(std::multimap<Fraction, MidiChord> &chords,
                     const Fraction &lastTick,
                     const TimeSigMap* sigmap,
                     const std::vector<std::multimap<Fraction, MidiChord>::iterator> &chordsNotQuant
-                                = std::vector<std::multimap<Fraction, MidiChord>::iterator>())
+                                = std::vector<std::multimap<Fraction, MidiChord>::iterator>(),
+                    const std::vector<MidiTuplet::TupletInfo> &tuplets
+                                = std::vector<MidiTuplet::TupletInfo>())
       {
       Fraction startBarTick;
       auto startBarChordIt = chords.begin();
@@ -171,9 +179,9 @@ void applyGridQuant(std::multimap<Fraction, MidiChord> &chords,
             startBarChordIt = findFirstChordInRange(startBarTick, endBarTick,
                                                     startBarChordIt, chords.end());
             if (startBarChordIt != chords.end()) {      // if chords are found in this bar
-                  Fraction raster = findQuantRaster(startBarChordIt, chords.end(), endBarTick);
+                  Fraction onTimeRaster = findRegularQuantRaster(startBarChordIt, chords.end(), endBarTick);
                   doGridQuantizationOfBar(quantizedChords, startBarChordIt, chords.end(),
-                                          raster, endBarTick, chordsNotQuant);
+                                          onTimeRaster, endBarTick, chordsNotQuant, tuplets);
                   }
             else
                   startBarChordIt = chords.begin();
@@ -201,12 +209,14 @@ void quantizeChordsAndTuplets(std::multimap<Fraction, MidiTuplet::TupletData> &t
       {
       std::multimap<Fraction, MidiChord> quantizedChords;
       std::vector<std::multimap<Fraction, MidiChord>::iterator> tupletChords;
+      std::vector<MidiTuplet::TupletInfo> tupletInformation;
                   // quantize tuplet chords, if any
       Fraction startBarTick;
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
             Fraction endBarTick = Fraction::fromTicks(sigmap->bar2tick(i, 0));
             Fraction barFraction = sigmap->timesig(startBarTick.ticks()).timesig();
             auto tuplets = MidiTuplet::findTuplets(startBarTick, endBarTick, barFraction, inputChords);
+            tupletInformation.insert(tupletInformation.end(), tuplets.begin(), tuplets.end());
 
             for (auto &tupletInfo: tuplets) {
                   auto &infoChords = tupletInfo.chords;
@@ -214,12 +224,13 @@ void quantizeChordsAndTuplets(std::multimap<Fraction, MidiTuplet::TupletData> &t
                         int tupletNoteNum = tupletChord.first;
                         Fraction onTime = tupletInfo.onTime
                                    + tupletInfo.len / tupletInfo.tupletNumber * tupletNoteNum;
-                        std::multimap<Fraction, MidiChord>::iterator &midiChordEventIt = tupletChord.second;
+                        const auto &midiChordEventIt = tupletChord.second;
                                     // quantize chord to onTime value
                         MidiChord midiChord = midiChordEventIt->second;
                         for (auto &note: midiChord.notes) {
-                              Fraction raster = MidiTuplet::findRasterForTupletNote(
-                                                            onTime, note.len, tupletInfo);
+                              Fraction raster = MidiTuplet::findOffTimeRaster(
+                                                            onTime + note.len, midiChord.voice,
+                                                            tupletInfo.regularQuantValue, tuplets);
                               Fraction offTime = Quantize::quantizeValue(onTime + note.len, raster);
                               note.len = offTime - onTime;
                               }
@@ -238,7 +249,7 @@ void quantizeChordsAndTuplets(std::multimap<Fraction, MidiTuplet::TupletData> &t
             startBarTick = endBarTick;
             }
                   // quantize non-tuplet (remaining) chords with ordinary grid
-      applyGridQuant(inputChords, quantizedChords, lastTick, sigmap, tupletChords);
+      applyGridQuant(inputChords, quantizedChords, lastTick, sigmap, tupletChords, tupletInformation);
 
       std::swap(inputChords, quantizedChords);
       }
