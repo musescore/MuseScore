@@ -758,9 +758,10 @@ MuseScore::MuseScore()
 
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("print"));
+#ifndef Q_OS_MAC
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("quit"));
-
+#endif
       //---------------------
       //    Menu Edit
       //---------------------
