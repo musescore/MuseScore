@@ -2180,6 +2180,12 @@ p, li { white-space: pre-wrap; }
               <property name="text">
                <string>Multi measure rest margin</string>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="indent">
+               <number>5</number>
+              </property>
              </widget>
             </item>
             <item row="11" column="1">
