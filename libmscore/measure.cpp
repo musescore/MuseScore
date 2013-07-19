@@ -3243,14 +3243,19 @@ void Measure::layoutX(qreal stretch)
                               if (ns->element(track))
                                     break;
                               }
-                        if (ns->segmentType() == Segment::SegEndBarLine)
-                              x2 = ns->x();
-                        else {
-                              x2 = ns->x();
-                              Element* e = ns->element(track/VOICES * VOICES);
-                              if (e)
-                                    x2 += e->x();
+                        if (ns) {
+                              if (ns->segmentType() == Segment::SegEndBarLine)
+                                    x2 = ns->x();
+                              else {
+                                    x2 = ns->x();
+                                    Element* e = ns->element(track/VOICES * VOICES);
+                                    if (e)
+                                          x2 += e->x();
+                                    }
                               }
+                        else
+                              x2 = this->width();
+
 
                         if (_multiMeasure > 0) {
                               if ((track % VOICES) == 0) {
