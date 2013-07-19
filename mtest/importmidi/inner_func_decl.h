@@ -43,6 +43,12 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
                          std::multimap<Fraction, MidiChord> &chords,
                          const Fraction &endBarTick);
 
+std::list<int> findTupletsWithCommonChords(std::list<int> &restTuplets,
+                                           const std::vector<TupletInfo> &tuplets);
+
+std::vector<int> findTupletsWithNoCommonChords(std::list<int> &commonTuplets,
+                                               const std::vector<TupletInfo> &tuplets);
+
 } // namespace MidiTuplet
 
 namespace Meter {
