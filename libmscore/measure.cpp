@@ -3227,16 +3227,17 @@ void Measure::layoutX(qreal stretch)
                   if (t == REST && (_multiMeasure > 0 || static_cast<Rest*>(e)->durationType() == TDuration::V_MEASURE)) {
                         Rest* rest = static_cast<Rest*>(e);
                         qreal x1 = 0.0, x2;
-                        track = track / VOICES * VOICES;
                         if (s != first()) {
                               Segment* ps;
                               for (ps = s->prev(); ps; ps = ps->prev()) {
                                     if (ps->element(track))
                                           break;
                                     }
-                              Element* e = ps->element(track/VOICES * VOICES);
-                              if (e)
-                                    x1 = ps->x() + e->x() + e->width();
+                              if (ps) {
+                                    Element* e = ps->element(track/VOICES * VOICES);
+                                    if (e)
+                                          x1 = ps->x() + e->x() + e->width();
+                                    }
                               }
                         Segment* ns;
                         for (ns = s->next(); ns; ns = ns->next()) {
