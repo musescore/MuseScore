@@ -823,7 +823,7 @@ void Seq::seek(int utick, Segment* seg)
             }
 
       guiToSeq(SeqMsg(SEQ_SEEK, utick));
-      guiPos = events.upper_bound(utick);
+      guiPos = events.lower_bound(utick);
       mscore->setPos(utick);
       unmarkNotes();
       cs->update();
