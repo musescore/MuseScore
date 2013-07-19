@@ -115,7 +115,6 @@ void TestParts::createParts(Score* score)
       Score* nscore = ::createExcerpt(parts);
       QVERIFY(nscore);
 
-      nscore->setParentScore(score);
       nscore->setName(parts.front()->partName());
       score->undo(new AddExcerpt(nscore));
       nscore->style()->set(ST_createMultiMeasureRests, true);
@@ -128,7 +127,6 @@ void TestParts::createParts(Score* score)
       nscore = ::createExcerpt(parts);
       QVERIFY(nscore);
 
-      nscore->setParentScore(score);
       nscore->setName(parts.front()->partName());
       score->undo(new AddExcerpt(nscore));
       nscore->style()->set(ST_createMultiMeasureRests, true);
