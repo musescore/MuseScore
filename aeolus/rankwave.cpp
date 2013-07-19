@@ -106,6 +106,8 @@ void Pipewave::play()
                     k2 = (int)(-y / dy);
 	        }
                 k1 -= k2;
+                if (k2<0)
+                  k2 = 0;
                 while (k2--)
        	        {
                     *q++ += g * (r [0] + y * (r [1] - r [0]));
@@ -160,6 +162,8 @@ void Pipewave::play()
                     k2 = (int)(-y / dy);
 	        }
                 k1 -= k2;
+                if (k2<0)
+                  k2 = 0;
                 while (k2--)
        	        {
                     *q++ += p [0] + y * (p [1] - p [0]);
