@@ -32,7 +32,7 @@
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle"></metaTag>
+    <metaTag name="workTitle">testpart1</metaTag>
     <PageList>
       <Page>
         <System>

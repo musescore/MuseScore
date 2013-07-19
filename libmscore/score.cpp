@@ -243,7 +243,6 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 void Score::init()
       {
       _linkId         = 0;
-      _parentScore    = 0;
       _currentLayer   = 0;
       _playMode       = PLAYMODE_SYNTHESIZER;
       Layer l;
@@ -252,28 +251,34 @@ void Score::init()
       _layer.append(l);
       _layerTags[0]   = "default";
 
+      if (!_parentScore) {
 #ifdef Q_OS_WIN
-      _metaTags.insert("platform", "WIN");
+            _metaTags.insert("platform", "WIN");
 #endif
 #ifdef Q_OS_MAC
-      _metaTags.insert("platform", "MAC");
+            _metaTags.insert("platform", "MAC");
 #endif
 #ifdef Q_OS_LINUX
-      _metaTags.insert("platform", "X11");
+            _metaTags.insert("platform", "X11");
 #endif
-      _metaTags.insert("movementNumber", "");
-      _metaTags.insert("movementTitle", "");
-      _metaTags.insert("workNumber", "");
-      _metaTags.insert("workTitle", "");
-      _metaTags.insert("source", "");
-      _metaTags.insert("copyright", "");
-      _metaTags.insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
+            _metaTags.insert("movementNumber", "");
+            _metaTags.insert("movementTitle", "");
+            _metaTags.insert("workNumber", "");
+            _metaTags.insert("workTitle", "");
+            _metaTags.insert("source", "");
+            _metaTags.insert("copyright", "");
+            _metaTags.insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
+            _undo       = new UndoStack();
+            _repeatList = new RepeatList(this);
+            }
+      else {
+            _undo = 0;
+            _repeatList = 0;
+            }
 
       _revisions      = new Revisions;
       _symIdx         = 0;
       _pageNumberOffset = 0;
-      _undo           = new UndoStack();
-      _repeatList     = new RepeatList(this);
       foreach (StaffType* st, Ms::staffTypes)
              addStaffType(st);
 
@@ -322,6 +327,7 @@ void Score::init()
 Score::Score()
    : QObject(0), _selection(this)
       {
+      _parentScore = 0;
       init();
       _tempomap = new TempoMap;
       _sigmap   = new TimeSigMap();
@@ -331,6 +337,7 @@ Score::Score()
 Score::Score(const MStyle* s)
    : _selection(this)
       {
+      _parentScore = 0;
       init();
       _tempomap = new TempoMap;
       _sigmap   = new TimeSigMap();
@@ -351,12 +358,8 @@ Score::Score(const MStyle* s)
 Score::Score(Score* parent)
    : _selection(this)
       {
-      init();
       _parentScore = parent;
-      delete _undo;
-      _undo        = 0;
-      delete _repeatList;
-      _repeatList  = 0;
+      init();
 
       _style = *parent->style();
       if (!MScore::partStyle.isEmpty()) {
@@ -1863,14 +1866,14 @@ TimeSigMap* Score::sigmap() const
 //   metaTags
 //---------------------------------------------------------
 
-const QMap<QString, QString> Score::metaTags() const
+const QMap<QString, QString>& Score::metaTags() const
       {
-      return rootScore()->_metaTags;
+      return _metaTags;
       }
 
 QMap<QString, QString>& Score::metaTags()
       {
-      return rootScore()->_metaTags;
+      return _metaTags;
       }
 
 //---------------------------------------------------------
@@ -1879,6 +1882,8 @@ QMap<QString, QString>& Score::metaTags()
 
 Q_INVOKABLE QString Score::metaTag(const QString& s) const
       {
+      if (_metaTags.contains(s))
+            return _metaTags.value(s);
       return rootScore()->_metaTags.value(s);
       }
 
@@ -1888,7 +1893,7 @@ Q_INVOKABLE QString Score::metaTag(const QString& s) const
 
 Q_INVOKABLE void Score::setMetaTag(const QString& tag, const QString& val)
       {
-      rootScore()->_metaTags.insert(tag, val);
+      _metaTags.insert(tag, val);
       }
 
 //---------------------------------------------------------
