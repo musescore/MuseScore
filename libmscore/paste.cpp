@@ -107,6 +107,11 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                         done = true; // break main loop, nothing more to paste
                         break;
                         }
+                  if (!makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen))) {
+                        qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick);
+                        done = true; // break main loop, cannot make gap
+                        break;
+                        }
                   e.tuplets().clear();
                   while (e.readNextStartElement()) {
                         pasted = true;
@@ -115,12 +120,6 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                         if (tag == "tick") {
                               int tick = e.readInt();
                               e.setTick(tick);
-                              int shift = tick - tickStart;
-                              if (!makeGap1(dstTick + shift, dstStaffIdx, Fraction::fromTicks(tickLen - shift))) {
-                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
-                                    done = true; // break main loop, cannot make gap
-                                    break;
-                                    }
                               }
                         else if (tag == "Tuplet") {
                               Tuplet* tuplet = new Tuplet(this);
