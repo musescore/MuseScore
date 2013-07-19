@@ -848,10 +848,10 @@ class Score : public QObject {
       QByteArray readToBuffer();
       void writeSegments(Xml& xml, const Measure*, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
 
-      const QMap<QString, QString> metaTags() const           { return _metaTags; }
-      QMap<QString, QString>& metaTags()                      { return _metaTags; }
-      Q_INVOKABLE QString metaTag(const QString& s) const                 { return _metaTags.value(s);}
-      Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val) { _metaTags.insert(tag, val); }
+      const QMap<QString, QString> metaTags() const;
+      QMap<QString, QString>& metaTags();
+      Q_INVOKABLE QString metaTag(const QString& s) const;
+      Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val);
 
       void updateNotes();
       void cmdUpdateNotes();
