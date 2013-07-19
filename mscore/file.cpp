@@ -224,7 +224,7 @@ bool MuseScore::checkDirty(Score* s)
                QMessageBox::Save);
             if (n == QMessageBox::Save) {
                   if (s->isSavable()) {
-                        if (!s->saveFile())
+                        if (!saveFile())
                               return true;
                         }
                   else {
@@ -335,10 +335,10 @@ Score* MuseScore::readScore(const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-void MuseScore::saveFile()
+bool MuseScore::saveFile()
       {
       if (cs == 0)
-            return;
+            return false;
       if (cs->created()) {
             QString fn = cs->fileInfo()->fileName();
             Text* t = cs->getText(TEXT_STYLE_TITLE);
@@ -364,7 +364,7 @@ void MuseScore::saveFile()
                filter
                );
             if (fn.isEmpty())
-                  return;
+                  return false;
             cs->fileInfo()->setFile(fn);
 
             mscore->lastSaveDirectory = cs->fileInfo()->absolutePath();
@@ -375,7 +375,7 @@ void MuseScore::saveFile()
             }
       if (!cs->saveFile()) {
             QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
-            return;
+            return false;
             }
       setWindowTitle("MuseScore: " + cs->name());
       int idx = scoreList.indexOf(cs);
@@ -390,6 +390,7 @@ void MuseScore::saveFile()
             cs->setTmpName("");
             }
       writeSessionFile(false);
+      return true;
       }
 
 //---------------------------------------------------------
@@ -1729,6 +1730,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
             if (rv != Score::FILE_NO_ERROR)
                   return rv;
+            score->setCreated(false);
             }
       else {
             typedef Score::FileError (*ImportFunction)(Score*, const QString&);
@@ -1787,9 +1789,9 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   return Score::FILE_UNKNOWN_TYPE;
                   }
             score->connectTies();
+            score->setCreated(true); // force save as for imported files
             }
       score->rebuildMidiMapping();
-      score->setCreated(false);
       score->setSaved(false);
 
       int staffIdx = 0;
