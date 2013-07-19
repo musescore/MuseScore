@@ -345,7 +345,9 @@ Score::Score(const MStyle* s)
 //    _repeatList
 //    _links
 //    _staffTypes
+//    _metaTags
 //
+
 Score::Score(Score* parent)
    : _selection(this)
       {
@@ -1855,6 +1857,38 @@ TempoMap* Score::tempomap() const
 TimeSigMap* Score::sigmap() const
       {
       return rootScore()->_sigmap;
+      }
+
+//---------------------------------------------------------
+//   metaTags
+//---------------------------------------------------------
+
+const QMap<QString, QString> Score::metaTags() const
+      {
+      return rootScore()->_metaTags;
+      }
+
+QMap<QString, QString>& metaTags()
+      {
+      return rootScore()->_metaTags;
+      }
+
+//---------------------------------------------------------
+//   metaTag
+//---------------------------------------------------------
+
+Q_INVOKABLE QString metaTag(const QString& s) const
+      {
+      return rootScore()->_metaTags.value(s);
+      }
+
+//---------------------------------------------------------
+//   setMetaTag
+//---------------------------------------------------------
+
+Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val)
+      {
+      rootScore()->_metaTags.insert(tag, val);
       }
 
 //---------------------------------------------------------
