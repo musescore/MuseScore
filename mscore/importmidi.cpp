@@ -244,7 +244,7 @@ void sortNotesByLength(std::multimap<Fraction, MidiChord> &chords)
 
 // find notes of each chord that have different durations
 // and separate them into different chords
-// so all chords will have notes with equal lengths
+// so all notes inside every chord will have equal lengths
 
 void splitUnequalChords(QList<MTrack> &tracks)
       {
