@@ -1868,7 +1868,7 @@ const QMap<QString, QString> Score::metaTags() const
       return rootScore()->_metaTags;
       }
 
-QMap<QString, QString>& metaTags()
+QMap<QString, QString>& Score::metaTags()
       {
       return rootScore()->_metaTags;
       }
@@ -1877,7 +1877,7 @@ QMap<QString, QString>& metaTags()
 //   metaTag
 //---------------------------------------------------------
 
-Q_INVOKABLE QString metaTag(const QString& s) const
+Q_INVOKABLE QString Score::metaTag(const QString& s) const
       {
       return rootScore()->_metaTags.value(s);
       }
@@ -1886,7 +1886,7 @@ Q_INVOKABLE QString metaTag(const QString& s) const
 //   setMetaTag
 //---------------------------------------------------------
 
-Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val)
+Q_INVOKABLE void Score::setMetaTag(const QString& tag, const QString& val)
       {
       rootScore()->_metaTags.insert(tag, val);
       }
