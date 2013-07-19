@@ -360,7 +360,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void editInstrList();
       void symbolMenu();
       void showKeyEditor();
-      void saveFile();
+      bool saveFile();
       void fingeringMenu();
       void registerPlugin(PluginDescription*);
       int  pluginIdxFromPath(QString pluginPath);
