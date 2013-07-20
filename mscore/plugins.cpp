@@ -137,6 +137,12 @@ QQmlEngine* MuseScore::qml()
             importPaths.append(dir.absolutePath());
             _qml->setImportPathList(importPaths);
 #endif
+#ifdef Q_OS_MAC
+            QStringList importPaths;
+            QDir dir(mscoreGlobalShare + QString("/qml"));
+            importPaths.append(dir.absolutePath());
+            _qml->setImportPathList(importPaths);
+#endif      
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
             qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
