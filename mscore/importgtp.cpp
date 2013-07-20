@@ -2167,14 +2167,15 @@ void GuitarPro5::readBend(Note* note)
 //   readTremoloBar
 //---------------------------------------------------------
 
-void GuitarPro5::readTremoloBar(int track, Segment* segment)
+void GuitarPro5::readTremoloBar(int /*track*/, Segment* /*segment*/)
       {
       /*int a1 =*/ readChar();
       /*int a2 =*/ readChar();
       /*int a3 =*/ readChar();
       /*int a4 =*/ readChar();
       /*int a5 =*/ readChar();
-      int n  = readInt();
+      int n  =  readInt();
+
 
       QList<PitchValue> points;
       for (int i = 0; i < n; ++i) {
@@ -2183,10 +2184,11 @@ void GuitarPro5::readTremoloBar(int track, Segment* segment)
             int vibrato = readUChar();
             points.append(PitchValue(time, pitch, vibrato));
             }
-      TremoloBar* b = new TremoloBar(segment->score());
+      //TODO
+      /*TremoloBar* b = new TremoloBar(segment->score());
       b->setPoints(points);
       b->setTrack(track);
-      segment->add(b);
+      segment->add(b);*/
       }
 
 //---------------------------------------------------------
