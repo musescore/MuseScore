@@ -46,6 +46,9 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste09() { copypaste("09"); }       // ottava
       void copypaste10() { copypaste("10"); }       // two slurs
       void copypaste11() { copypaste("11"); }       // grace notes
+      void copypaste12() { copypaste("12"); }       // voices
+
+      void copyPastePartial();
       };
 
 //---------------------------------------------------------
@@ -166,6 +169,35 @@ void TestCopyPaste::copypaste(const char* idx)
          DIR + QString("copypaste%1-ref.mscx").arg(idx)));
       delete score;
       }
+
+void TestCopyPaste::copyPastePartial() {
+      Score* score = readScore(DIR + QString("copypaste_partial_01.mscx"));
+      score->doLayout();
+
+      Measure* m1 = score->firstMeasure();
+
+      Segment* s = m1->first(Segment::SegChordRest);
+      s = s->next(Segment::SegChordRest);
+      score->select(s->element(0));
+      s = s->next(Segment::SegChordRest);
+      score->select(s->element(4), SelectType::SELECT_RANGE);
+
+      QVERIFY(score->selection().canCopy());
+      QString mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+      score->select(m1->first(Segment::SegChordRest)->element(0));
+      paste(score);
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("copypaste_partial_01.mscx"),
+         DIR + QString("copypaste_partial_01-ref.mscx")));
+      delete score;
+}
+
 
 QTEST_MAIN(TestCopyPaste)
 #include "tst_copypaste.moc"
