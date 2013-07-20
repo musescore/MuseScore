@@ -361,6 +361,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void symbolMenu();
       void showKeyEditor();
       bool saveFile();
+      bool saveFile(Score* score);
       void fingeringMenu();
       void registerPlugin(PluginDescription*);
       int  pluginIdxFromPath(QString pluginPath);
