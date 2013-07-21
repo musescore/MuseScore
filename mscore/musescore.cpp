@@ -531,11 +531,11 @@ MuseScore::MuseScore()
       QLayout* envlayout = new QVBoxLayout;
       envlayout->setMargin(0);
       envlayout->setSpacing(0);
-//      envelope->setLayout(envlayout);
       envelope->addWidget(mainWindow);
 
       importmidi_panel = new ImportMidiPanel(this);
-      showMidiImportPanel(false);
+      importmidi_panel->setVisible(false);
+
       envelope->addWidget(importmidi_panel);
 
       {
@@ -1446,6 +1446,11 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             }
       else
             cs = 0;
+
+                  // set midi import panel
+      QString fileName = cs ? cs->fileInfo()->filePath() : "";
+      midiPanelOnSwitchToFile(fileName);
+
       updateLayer();
       updatePlayMode();
       if (seq)
@@ -1530,16 +1535,31 @@ void MuseScore::showMessage(const QString& s, int timeout)
       }
 
 //---------------------------------------------------------
-//   setIfMidiFile
+//   midiPanel
 //---------------------------------------------------------
 
-void MuseScore::showPanelIfMidiFile(const QString &file)
+void MuseScore::midiPanelOnSwitchToFile(const QString &file)
       {
-      if (ImportMidiPanel::isMidiFile(file)) {
+      bool isMidiFile = ImportMidiPanel::isMidiFile(file);
+      if (isMidiFile) {
             importmidi_panel->setMidiFile(file);
-            if (!importmidi_panel->isVisible())
-                  showMidiImportPanel(true);
+            if (importmidi_panel->prefferedVisible())
+                  importmidi_panel->setVisible(true);
             }
+      else
+            importmidi_panel->setVisible(false);
+      }
+
+void MuseScore::midiPanelOnCloseFile(const QString &file)
+      {
+      if (ImportMidiPanel::isMidiFile(file))
+            importmidi_panel->excludeMidiFile(file);
+      }
+
+void MuseScore::allowShowMidiPanel(const QString &file)
+      {
+      if (ImportMidiPanel::isMidiFile(file))
+            importmidi_panel->setPrefferedVisible(true);
       }
 
 //---------------------------------------------------------
@@ -1895,7 +1915,9 @@ void MuseScore::removeTab(int i)
       int idx1      = tab1->currentIndex();
       bool firstTab = tab1->view(idx1) == cv;
 
+      midiPanelOnCloseFile(score->fileInfo()->filePath());
       scoreList.removeAt(i);
+
       tab1->blockSignals(true);
       tab1->removeTab(i);
       tab1->blockSignals(false);
@@ -3979,7 +4001,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "toggle-navigator")
             showNavigator(a->isChecked());
       else if (cmd == "toggle-midiimportpanel")
-            showMidiImportPanel(a->isChecked());
+            importmidi_panel->setVisible(a->isChecked());
       else if (cmd == "toggle-mixer")
             showMixer(a->isChecked());
       else if (cmd == "synth-control")
