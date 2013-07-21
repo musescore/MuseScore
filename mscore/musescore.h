@@ -375,7 +375,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showOmrPanel(bool);
       void showPlayPanel(bool);
       void showNavigator(bool);
-      void showMidiImportPanel(bool);
       void showMixer(bool);
       void showSynthControl(bool);
       void showSearchDialog();
@@ -608,7 +607,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
       void loadFiles();
-      void showPanelIfMidiFile(const QString &file);
+      void midiPanelOnSwitchToFile(const QString &file);
+      void midiPanelOnCloseFile(const QString &file);
+      void allowShowMidiPanel(const QString &file);
 
       static Palette* newTextPalette();
       static Palette* newTimePalette();
