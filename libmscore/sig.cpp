@@ -93,13 +93,13 @@ void TimeSigMap::normalize()
       int z    = 4;
       int n    = 4;
       int tick = 0;
-      int bar  = 0;
+      Fraction bar;
       int tm   = ticks_measure(Fraction(z, n));
 
       for (auto i = begin(); i != end(); ++i) {
             SigEvent& e  = i->second;
-            e.setBar(bar + (i->first - tick) / tm);
-            bar  = e.bar();
+            bar += Fraction(i->first - tick, tm).reduced();
+            e.setBar(bar.numerator() / bar.denominator());
             tick = i->first;
             tm   = ticks_measure(e.timesig());
             }
