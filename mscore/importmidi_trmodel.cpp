@@ -28,6 +28,14 @@ void TracksModel::reset(const QList<TrackMeta> &tracksMeta)
       endResetModel();
       }
 
+void TracksModel::reset(const QList<TrackData> &tracksData)
+      {
+      beginResetModel();
+      trackCount_ = tracksData.size();
+      tracksData_ = tracksData;
+      endResetModel();
+      }
+
 void TracksModel::setOperation(int row, MidiOperation::Type operType, const QVariant &operValue)
       {
       int trackIndex = trackIndexFromRow(row);
@@ -312,7 +320,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         case TrackCol::TRACK_NUMBER:
                               if (trackIndex == -1)
                                     return "All";
-                              return trackIndex + 1;
+                              return tracksData_[trackIndex].opers.trackIndex + 1;
                         case TrackCol::TRACK_NAME:
                               if (trackIndex == -1)
                                     return "";
