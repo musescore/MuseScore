@@ -353,6 +353,7 @@ extern QVector<Sym> symbols[2];
 
 extern QString symToHtml(const Sym&, int leftMargin=0, const TextStyle* ts = 0, qreal sp=10.0);
 extern QString symToHtml(const Sym&, const Sym&, int leftMargin=0);
+extern QRawFont fontId2RawFont(int fontId);
 
 }     // namespace Ms
 #endif
