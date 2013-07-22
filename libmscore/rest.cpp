@@ -97,7 +97,7 @@ void Rest::draw(QPainter* painter) const
             QFont font(fontId2font(0));
             painter->setFont(font);
             QFontMetricsF fm(font);
-            y  = -_spatium * .5 - fm.ascent();
+            y  = -_spatium * .5 - (staff()->height()*.5) - fm.ascent();
             painter->drawText(QRectF(center(x1, x2), y, .0, .0),
                Qt::AlignHCenter|Qt::TextDontClip,
                QString("%1").arg(n));
