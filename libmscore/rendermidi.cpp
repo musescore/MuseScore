@@ -440,23 +440,26 @@ void Score::removeHairpin(Hairpin* h)
 void Score::updateVelo()
       {
       //
-      //    collect Dynamics & Ottava & Hairpins
+      //    collect Dynamics
       //
       if (!firstMeasure())
             return;
 
-      for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-            Staff* st      = staff(staffIdx);
+      for (Staff* st : _staves) {
             VeloList& velo = st->velocities();
             velo.clear();
             velo.setVelo(0, 80);
+            }
+      for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+            Staff* st      = staff(staffIdx);
+            VeloList& velo = st->velocities();
             Part* prt      = st->part();
             int partStaves = prt->nstaves();
             int partStaff  = Score::staffIdx(prt);
 
             for (Segment* s = firstMeasure()->first(); s; s = s->next1()) {
                   int tick = s->tick();
-                  foreach(const Element* e, s->annotations()) {
+                  foreach (const Element* e, s->annotations()) {
                         if (e->staffIdx() != staffIdx)
                               continue;
                         if (e->type() != Element::DYNAMIC)
