@@ -49,6 +49,7 @@ void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
                   tracksModel->index(row, TrackCol::TRACK_NUMBER)).toString();
             operationsModel->setTrackData(trackLabel, tracksModel->trackOperations(row));
             ui->treeViewOperations->expandAll();
+            midiData.setSelectedRow(midiFile, row);
             }
       }
 
@@ -185,16 +186,20 @@ void ImportMidiPanel::doMidiImport()
       preferences.midiImportOperations.clear();
       int trackCount = tracksModel->trackCount();
       QList<TrackData> trackData;
+
       for (int i = 0; i != trackCount; ++i) {
-            int visIndex = tracksModel->rowFromTrackIndex(i);
-            int logIndex = ui->tableViewTracks->verticalHeader()->logicalIndex(visIndex);
-            int trackIndex = tracksModel->trackIndexFromRow(logIndex);
-            TrackData data(tracksModel->trackData(trackIndex));
+            int trackRow = tracksModel->rowFromTrackIndex(i);
+            int reorderedRow = ui->tableViewTracks->verticalHeader()->logicalIndex(trackRow);
+            int reorderedIndex = tracksModel->trackIndexFromRow(reorderedRow);
+            tracksModel->setTrackReorderedIndex(i, reorderedIndex);
+            auto data = tracksModel->trackData(i);
             preferences.midiImportOperations.appendTrackOperations(data.opers);
             trackData.push_back(data);
             }
       mscore->openScore(midiFile);
-      midiData.setFileData(midiFile, trackData);
+      midiData.setTracksData(midiFile, trackData);
+      QByteArray tableViewData = ui->tableViewTracks->verticalHeader()->saveState();
+      midiData.setTableViewData(midiFile, tableViewData);
       preferences.midiImportOperations.clear();
       importInProgress = false;
       }
@@ -212,20 +217,25 @@ void ImportMidiPanel::setMidiFile(const QString &file)
       midiFile = file;
       ui->lineEditMidiFile->setText(QFileInfo(file).fileName());
       updateUi();
+
       if (isMidiFileExists) {
-            QList<TrackData> data = midiData.fileData(file);
+            QList<TrackData> data = midiData.tracksData(file);
             if (data.isEmpty()) {
                   QList<TrackMeta> tracksMeta(extractMidiTracksMeta(file));
                   tracksModel->reset(tracksMeta);
                   operationsModel->reset(tracksMeta.size());
                   for (int i = 0; i != tracksModel->trackCount(); ++i)
                         data.push_back(tracksModel->trackData(i));
-                  midiData.setFileData(file, data);
+                  midiData.setTracksData(file, data);
+                  QByteArray tableViewData = ui->tableViewTracks->verticalHeader()->saveState();
+                  midiData.setTableViewData(file, tableViewData);
                   }
             else {
                   tracksModel->reset(data);
+                  QByteArray tableViewData = midiData.tableViewData(file);
+                  ui->tableViewTracks->verticalHeader()->restoreState(tableViewData);
                   }
-            ui->tableViewTracks->selectRow(0);
+            ui->tableViewTracks->selectRow(midiData.selectedRow(midiFile));
             }
       }
 
