@@ -22,7 +22,7 @@ void TracksModel::reset(const QList<TrackMeta> &tracksMeta)
             QString instrumentName = meta.instrumentName.isEmpty()
                         ? "-" : meta.instrumentName;
             TrackOperations ops;     // initialized by default values - see ctor
-            ops.trackIndex = i++;
+            ops.reorderedIndex = i++;
             tracksData_.push_back({{trackName, instrumentName}, ops});
             }
       endResetModel();
@@ -45,6 +45,13 @@ void TracksModel::setOperation(int row, MidiOperation::Type operType, const QVar
             setTrackOperation(trackIndex, operType, operValue);
       }
 
+void TracksModel::setTrackReorderedIndex(int trackIndex, int reorderIndex)
+      {
+      if (!isTrackIndexValid(trackIndex))
+            return;
+      tracksData_[trackIndex].opers.reorderedIndex = reorderIndex;
+      }
+
 void TracksModel::setOperationForAllTracks(MidiOperation::Type operType,
                                            const QVariant &operValue)
       {
@@ -55,7 +62,7 @@ void TracksModel::setOperationForAllTracks(MidiOperation::Type operType,
 void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType,
                                     const QVariant &operValue)
       {
-      if (!operValue.isValid())
+      if (!operValue.isValid() || !isTrackIndexValid(trackIndex))
             return;
       TrackData &trackData = tracksData_[trackIndex];
 
@@ -320,7 +327,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         case TrackCol::TRACK_NUMBER:
                               if (trackIndex == -1)
                                     return "All";
-                              return tracksData_[trackIndex].opers.trackIndex + 1;
+                              return trackIndex + 1;
                         case TrackCol::TRACK_NAME:
                               if (trackIndex == -1)
                                     return "";
