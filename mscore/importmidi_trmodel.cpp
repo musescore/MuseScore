@@ -352,15 +352,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         }
                   break;
             case Qt::TextAlignmentRole:
-                  if (trackIndex == -1)
-                        break;
-                  switch (index.column()) {
-                        case TrackCol::TRACK_NAME:
-                        case TrackCol::INSTRUMENT:
-                              return Qt::AlignCenter;
-                        default:
-                              break;
-                        }
+                  return Qt::AlignCenter;
                   break;
             default:
                   break;
