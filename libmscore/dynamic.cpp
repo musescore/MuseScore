@@ -284,6 +284,7 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
+            case P_TEXT_STYLE:    return TEXT_STYLE_DYNAMICS;
             case P_DYNAMIC_RANGE: return DYNAMIC_PART;
             case P_VELOCITY:      return -1;
             default:              return Text::propertyDefault(id);
