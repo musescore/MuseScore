@@ -224,7 +224,7 @@ bool MuseScore::checkDirty(Score* s)
                QMessageBox::Save);
             if (n == QMessageBox::Save) {
                   if (s->isSavable()) {
-                        if (!saveFile())
+                        if (!saveFile(s))
                               return true;
                         }
                   else {
@@ -334,14 +334,24 @@ Score* MuseScore::readScore(const QString& name)
 //
 //    return true on success
 //---------------------------------------------------------
-
 bool MuseScore::saveFile()
       {
-      if (cs == 0)
+      return saveFile(cs);
+      }
+
+//---------------------------------------------------------
+//   saveFile
+///   Save the score.
+//
+//    return true on success
+//---------------------------------------------------------
+bool MuseScore::saveFile(Score* score)
+      {
+      if (score == 0)
             return false;
-      if (cs->created()) {
-            QString fn = cs->fileInfo()->fileName();
-            Text* t = cs->getText(TEXT_STYLE_TITLE);
+      if (score->created()) {
+            QString fn = score->fileInfo()->fileName();
+            Text* t = score->getText(TEXT_STYLE_TITLE);
             if (t)
                   fn = t->text();
             QString name = createDefaultFileName(fn);
@@ -365,29 +375,29 @@ bool MuseScore::saveFile()
                );
             if (fn.isEmpty())
                   return false;
-            cs->fileInfo()->setFile(fn);
+            score->fileInfo()->setFile(fn);
 
-            mscore->lastSaveDirectory = cs->fileInfo()->absolutePath();
+            mscore->lastSaveDirectory = score->fileInfo()->absolutePath();
 
-            updateRecentScores(cs);
-            cs->setCreated(false);
+            updateRecentScores(score);
+            score->setCreated(false);
             writeSessionFile(false);
             }
-      if (!cs->saveFile()) {
+      if (!score->saveFile()) {
             QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
             return false;
             }
-      setWindowTitle("MuseScore: " + cs->name());
-      int idx = scoreList.indexOf(cs);
-      tab1->setTabText(idx, cs->name());
+      setWindowTitle("MuseScore: " + score->name());
+      int idx = scoreList.indexOf(score);
+      tab1->setTabText(idx, score->name());
       if (tab2)
-            tab2->setTabText(idx, cs->name());
-      QString tmp = cs->tmpName();
+            tab2->setTabText(idx, score->name());
+      QString tmp = score->tmpName();
       if (!tmp.isEmpty()) {
             QFile f(tmp);
             if (!f.remove())
                   qDebug("cannot remove temporary file <%s>\n", qPrintable(f.fileName()));
-            cs->setTmpName("");
+            score->setTmpName("");
             }
       writeSessionFile(false);
       return true;
