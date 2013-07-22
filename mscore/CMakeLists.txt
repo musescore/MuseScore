@@ -112,6 +112,7 @@ QT4_WRAP_UI (ui_headers
       inspector/inspector_line.ui
       inspector/inspector_textline.ui
       inspector/inspector_slur.ui
+      inspector/inspector_text.ui
       ${SCRIPT_UI}
       )
 
