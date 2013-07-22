@@ -232,6 +232,10 @@ void Inspector::setElements(const QList<Element*>& l)
       ie->setElement();
       }
 
+//---------------------------------------------------------
+//   setupUi
+//---------------------------------------------------------
+
 void UiInspectorElement::setupUi(QWidget *InspectorElement)
       {
       Ui::InspectorElement::setupUi(InspectorElement);
@@ -247,8 +251,7 @@ void UiInspectorElement::setupUi(QWidget *InspectorElement)
       vRaster->setDefaultAction(a);
       vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
       vRaster->addAction(getAction("config-raster"));
-
-}
+      }
 
 //---------------------------------------------------------
 //   InspectorElement
@@ -506,6 +509,10 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       connect(t.followText, SIGNAL(toggled(bool)), t.tempo, SLOT(setDisabled(bool)));
       }
 
+//---------------------------------------------------------
+//   postInit
+//---------------------------------------------------------
+
 void InspectorTempoText::postInit()
       {
       t.tempo->setDisabled(t.followText->isChecked());
@@ -519,6 +526,7 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
    : InspectorBase(parent)
       {
       e.setupUi(addWidget());
+      t.setupUi(addWidget());
       d.setupUi(addWidget());
 
       iList = {
@@ -526,10 +534,33 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
             { P_VISIBLE,       0, 0, e.visible,  e.resetVisible  },
             { P_USER_OFF,      0, 0, e.offsetX,  e.resetX        },
             { P_USER_OFF,      1, 0, e.offsetY,  e.resetY        },
+            { P_TEXT_STYLE,    0, 0, t.style,    t.resetStyle    },
             { P_DYNAMIC_RANGE, 0, 0, d.dynRange, d.resetDynRange },
             { P_VELOCITY,      0, 0, d.velocity, d.resetVelocity }
             };
       mapSignals();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorDynamic::setElement()
+      {
+      Element* e = inspector->element();
+      Score* score = e->score();
+
+      t.style->blockSignals(true);
+      t.style->clear();
+      t.style->addItem(tr("unstyled"), TEXT_STYLE_UNSTYLED);
+      const QList<TextStyle>& ts = score->style()->textStyles();
+      int n = ts.size();
+      for (int i = 0; i < n; ++i) {
+            if (!(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+                  t.style->addItem(ts.at(i).name(), i);
+            }
+      t.style->blockSignals(false);
+      InspectorBase::setElement();
       }
 
 //---------------------------------------------------------

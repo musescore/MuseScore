@@ -1322,8 +1322,10 @@ void Text::clear()
 
 void Text::setTextStyleType(int st)
       {
-//      if (st == _styleIndex)
-//            return;
+      if (st == TEXT_STYLE_UNSTYLED) {
+            setUnstyled();
+            return;
+            }
       _styleIndex = st;
       if (st != TEXT_STYLE_UNKNOWN)
             setTextStyle(score()->textStyle(st));
@@ -1471,7 +1473,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
       bool rv = true;
       switch(propertyId) {
             case P_TEXT_STYLE:
-                  _styleIndex = v.toInt();
+                  setTextStyleType(v.toInt());
                   setGenerated(false);
                   break;
             case P_TEXT:
@@ -1494,7 +1496,6 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
 
 void Text::spellCheckUnderline(bool on)
       {
-      printf("spellCheckUnderline %d\n", on);
       if (styled()) {
             }
       else {
