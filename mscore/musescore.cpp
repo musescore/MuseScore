@@ -1037,7 +1037,10 @@ MuseScore::MuseScore()
       connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
       menuHelp->addAction(aboutAction);
 
-      menuHelp->addAction(tr("About &Qt"), this, SLOT(aboutQt()));
+      QAction *aboutQtAction = new QAction(tr("About &Qt"), 0);
+      aboutQtAction->setMenuRole(QAction::AboutQtRole);
+      connect(aboutQtAction, SIGNAL(triggered()), this, SLOT(aboutQt()));
+      menuHelp->addAction(aboutQtAction);
 
       QAction *aboutMusicXMLAction = new QAction(tr("About &MusicXML"), 0);
       aboutMusicXMLAction->setMenuRole(QAction::ApplicationSpecificRole);

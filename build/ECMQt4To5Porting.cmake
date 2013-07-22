@@ -192,6 +192,8 @@ set(QT_QTDECLARATIVE_LIBRARY ${Qt5Quick1_LIBRARIES})
 set(QT_LRELEASE_EXECUTABLE Qt5::lrelease)
 set(QT_LUPDATE_EXECUTABLE Qt5::lupdate)
 
+set(QT_INSTALL_PREFIX ${_qt5Core_install_prefix})
+
 get_target_property(QT_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
 set(QT_RCC_EXECUTABLE Qt5::rcc LOCATION)
 if (TARGET Qt5::uic)

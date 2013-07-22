@@ -315,8 +315,9 @@ QmlEdit::QmlEdit(QWidget* parent)
       setBackgroundVisible(true);
       setLineWrapMode(QPlainTextEdit::NoWrap);
       QFont font("FreeMono", 12);
+      font.setStyleHint(QFont::TypeWriter);
       font.setFixedPitch(true);
-
+      setFont(font);
       document()->setDefaultFont(font);
 
       QTextCursor c = textCursor();
@@ -331,11 +332,11 @@ QmlEdit::QmlEdit(QWidget* parent)
             { "startOfLine", Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_S, SLOT(startOfLine()) },
             { "endOfLine",   Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_D, SLOT(endOfLine())   },
             { "up",          Qt::CTRL+Qt::Key_E, 0, SLOT(upLine())     },
-            { "down",        Qt::CTRL+Qt::Key_X, 0, SLOT(downLine())   },
+            { "down",        /*Qt::CTRL+Qt::Key_X*/0, 0, SLOT(downLine())   },
             { "right",       Qt::CTRL+Qt::Key_D, 0, SLOT(right())      },
             { "left",        Qt::CTRL+Qt::Key_S, 0, SLOT(left())       },
             { "rightWord",   Qt::CTRL+Qt::Key_F, 0, SLOT(rightWord())  },
-            { "leftWord",    Qt::CTRL+Qt::Key_A, 0, SLOT(leftWord())   },
+            { "leftWord",    /*Qt::CTRL+Qt::Key_A*/0, 0, SLOT(leftWord())   },
             { "pick",        Qt::Key_F8,         0, SLOT(pick())       },
             { "put",         Qt::Key_F9,         0, SLOT(put())        },
             { "delLine",     Qt::CTRL+Qt::Key_Y, 0, SLOT(delLine())    },
@@ -494,6 +495,11 @@ void QmlEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
       QPainter painter(lineNumberArea);
       painter.fillRect(event->rect(), Qt::lightGray);
 
+      QFont font("FreeMono", 12);
+      font.setStyleHint(QFont::TypeWriter);
+      font.setFixedPitch(true);
+      painter.setFont(font);
+
       QTextBlock block = firstVisibleBlock();
       int blockNumber = block.blockNumber();
       int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
@@ -622,24 +628,11 @@ void QmlEdit::leftWord()
 
 void QmlEdit::keyPressEvent(QKeyEvent* event)
       {
-      if (event->modifiers() == Qt::ControlModifier) {
-            if (event->key() == Qt::Key_X) {
-                  downLine();
-                  event->accept();
-                  return;
-                  }
-            if (event->key() == Qt::Key_A) {
-                  leftWord();
-                  event->accept();
-                  return;
-                  }
-            }
-      else {
-            if (event->key() == Qt::Key_Tab) {
-                  tab();
-                  event->accept();
-                  return;
-                  }
+
+      if (event->modifiers() != Qt::ControlModifier && event->key() == Qt::Key_Tab) {
+            tab();
+            event->accept();
+            return;
             }
       QPlainTextEdit::keyPressEvent(event);
       }

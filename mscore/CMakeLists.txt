@@ -494,6 +494,16 @@ if (APPLE)
       ../fonts/mscore-BC.ttf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
+     install(DIRECTORY
+      ${QT_INSTALL_PREFIX}/qml
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+      REGEX ".*QtWebkit.*" EXCLUDE
+      REGEX ".*QtTest.*" EXCLUDE
+      REGEX ".*QtSensors.*" EXCLUDE
+      REGEX ".*QtGraphicalEffects.*" EXCLUDE
+      REGEX ".*QtMultimedia.*" EXCLUDE
+      REGEX ".*QtAudioEngine.*" EXCLUDE
+      REGEX ".*_debug\\.dylib" EXCLUDE)
 endif (APPLE)
 
 ADD_DEPENDENCIES(${ExecutableName} mops1)
