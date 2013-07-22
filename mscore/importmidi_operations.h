@@ -43,7 +43,7 @@ struct LHRHSeparation
       // bool and enum-like elementary operations (itself and inside structs) allowed
 struct TrackOperations
       {
-      int trackIndex = 0;
+      int reorderedIndex = 0;
       bool doImport = true;
       Quantization quantize;
       bool useDots = true;
@@ -74,8 +74,6 @@ class MidiImportOperations
       {
    public:
       void appendTrackOperations(const TrackOperations& operations);
-      void duplicateTrackOperations(int trackIndex);
-      void eraseTrackOperations(int trackIndex);
       void clear();
       void setCurrentTrack(int trackIndex);
       int currentTrack() const { return currentTrack_; }
