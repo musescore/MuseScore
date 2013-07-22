@@ -197,6 +197,7 @@ void InstrumentWizard::on_addButton_clicked()
             if (it == 0)
                   continue;
             PartListItem* pli = new PartListItem(it, partiturList);
+            pli->setFirstColumnSpanned(true);
             pli->op = ITEM_ADD;
 
             int n = it->nstaves();
