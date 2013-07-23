@@ -914,8 +914,9 @@ void splitIntoLeftRightHands(std::multimap<int, MTrack> &tracks)
 QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       {
       QList<MTrack> trackList;
-      for (const auto &track: tracks)
+      for (const auto &track: tracks) {
             trackList.push_back(track.second);
+            }
       return trackList;
       }
 
@@ -970,12 +971,20 @@ void createMTrackList(Fraction &lastTick, TimeSigMap *sigmap,
                         lastTick = tick;
                   }
             if (events != 0) {
-                  auto trackOperations
-                        = preferences.midiImportOperations.trackOperations(++trackIndex);
-                  if (trackOperations.doImport) {
+                  ++trackIndex;
+                  if (preferences.midiImportOperations.count()) {
+                        auto trackOperations
+                                    = preferences.midiImportOperations.trackOperations(trackIndex);
+                        if (trackOperations.doImport) {
+                              track.medPitch /= events;
+                              track.indexOfOperation = trackIndex;
+                              tracks.insert({trackOperations.reorderedIndex, track});
+                              }
+                        }
+                  else {            // if it is an initial track-list query from MIDI import panel
                         track.medPitch /= events;
                         track.indexOfOperation = trackIndex;
-                        tracks.insert({trackOperations.reorderedIndex, track});
+                        tracks.insert({trackIndex, track});
                         }
                   }
             }
@@ -1145,7 +1154,7 @@ void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiFile *mf)
             setTrackInfo(mf, mt);
                         // pass current track index to the convertTrack function
                         //   through MidiImportOperations
-            preferences.midiImportOperations.setCurrentTrack(i);
+            preferences.midiImportOperations.setCurrentTrack(mt.indexOfOperation);
             mt.convertTrack(lastTick);
 
             for (auto ie : mt.mtrack->events()) {

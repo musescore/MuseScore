@@ -28,6 +28,7 @@ class TracksModel : public QAbstractTableModel
 
       void reset(const QList<TrackMeta> &tracksMeta);
       void reset(const QList<TrackData> &tracksData);
+      void clear();
       void setOperation(int row, MidiOperation::Type operType, const QVariant &operValue);
       void setTrackReorderedIndex(int trackIndex, int reorderIndex);
 

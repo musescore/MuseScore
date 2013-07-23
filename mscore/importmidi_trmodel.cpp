@@ -36,6 +36,14 @@ void TracksModel::reset(const QList<TrackData> &tracksData)
       endResetModel();
       }
 
+void TracksModel::clear()
+      {
+      beginResetModel();
+      trackCount_ = 0;
+      tracksData_.clear();
+      endResetModel();
+      }
+
 void TracksModel::setOperation(int row, MidiOperation::Type operType, const QVariant &operValue)
       {
       int trackIndex = trackIndexFromRow(row);
@@ -203,7 +211,7 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
 
             // MidiOperation::Type::USE_MULTIPLE_VOICES
             for (int i = 1; i != trackCount_; ++i) {
-                  if (tracksData_[i].opers.useDots != opers.opers.useMultipleVoices) {
+                  if (tracksData_[i].opers.useMultipleVoices != opers.opers.useMultipleVoices) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::USE_MULTIPLE_VOICES);
                         break;
                         }
