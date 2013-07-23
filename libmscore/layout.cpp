@@ -657,6 +657,30 @@ void Score::doLayout()
                   }
             }
 
+      layoutSpanner();
+
+      if (layoutMode() != LayoutLine) {
+            layoutSystems2();
+            layoutPages();    // create list of pages
+            }
+
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+            m->layout2();
+
+      // rebuildBspTree(); called in layoutSpanner
+
+      int n = viewer.size();
+      for (int i = 0; i < n; ++i)
+            viewer.at(i)->layoutChanged();
+      _layoutAll = false;
+      }
+
+//---------------------------------------------------------
+//   layoutSpanner
+//---------------------------------------------------------
+
+void Score::layoutSpanner()
+      {
       for (const std::pair<int,Spanner*>& s : _spanner.map()) {
             Spanner* sp = s.second;
             if (sp->type() == Element::OTTAVA && sp->tick2() == -1) {
@@ -669,21 +693,7 @@ void Score::doLayout()
             else
                   sp->layout();
             }
-
-      if (layoutMode() != LayoutLine) {
-            layoutSystems2();
-            layoutPages();    // create list of pages
-            }
-
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
-            m->layout2();
-
       rebuildBspTree();
-
-      int n = viewer.size();
-      for (int i = 0; i < n; ++i)
-            viewer.at(i)->layoutChanged();
-      _layoutAll = false;
       }
 
 //-------------------------------------------------------------------
