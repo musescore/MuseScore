@@ -657,30 +657,6 @@ void Score::doLayout()
                   }
             }
 
-      layoutSpanner();
-
-      if (layoutMode() != LayoutLine) {
-            layoutSystems2();
-            layoutPages();    // create list of pages
-            }
-
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
-            m->layout2();
-
-      // rebuildBspTree(); called in layoutSpanner
-
-      int n = viewer.size();
-      for (int i = 0; i < n; ++i)
-            viewer.at(i)->layoutChanged();
-      _layoutAll = false;
-      }
-
-//---------------------------------------------------------
-//   layoutSpanner
-//---------------------------------------------------------
-
-void Score::layoutSpanner()
-      {
       for (const std::pair<int,Spanner*>& s : _spanner.map()) {
             Spanner* sp = s.second;
             if (sp->type() == Element::OTTAVA && sp->tick2() == -1) {
@@ -692,6 +668,62 @@ void Score::layoutSpanner()
                   }
             else
                   sp->layout();
+            }
+
+      if (layoutMode() != LayoutLine) {
+            layoutSystems2();
+            layoutPages();    // create list of pages
+            }
+
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+            m->layout2();
+
+      rebuildBspTree();
+
+      int n = viewer.size();
+      for (int i = 0; i < n; ++i)
+            viewer.at(i)->layoutChanged();
+      _layoutAll = false;
+      }
+
+//---------------------------------------------------------
+//   layoutSpanner
+//    called after dragging a staff
+//---------------------------------------------------------
+
+void Score::layoutSpanner()
+      {
+      int tracks = ntracks();
+      for (int track = 0; track < tracks; ++track) {
+            for (Segment* segment = firstSegment(); segment; segment = segment->next1()) {
+                  if (track == tracks-1) {
+                        int n = segment->annotations().size();
+                        for (int i = 0; i < n; ++i)
+                              segment->annotations().at(i)->layout();
+                        }
+                  Element* e = segment->element(track);
+                  if (!e)
+                        continue;
+                  if (e->isChordRest()) {
+                        Chord* c = static_cast<Chord*>(e);
+                        if (c->type() == Element::CHORD) {
+                              for (Chord* cc : c->graceNotes()) {
+                                    for (Element* e : cc->el()) {
+                                          if (e->type() == Element::SLUR)
+                                                e->layout();
+                                          }
+                                    }
+                              c->layoutStem();
+                              for (Note* n : c->notes()) {
+                                    Tie* tie = n->tieFor();
+                                    if (tie)
+                                          tie->layout();
+                                    for (Spanner* sp : n->spannerFor())
+                                          sp->layout();
+                                    }
+                              }
+                        }
+                  }
             }
       rebuildBspTree();
       }
