@@ -46,6 +46,7 @@ StyleType styleTypes[] = {
       StyleType("lyricsDistance",          ST_SPATIUM),
       StyleType("lyricsMinBottomDistance", ST_SPATIUM),
       StyleType("lyricsLineHeight",        ST_DOUBLE),      // in % of normal height (default: 1.0)
+
       StyleType("figuredBassFontFamily",   ST_STRING),
       StyleType("figuredBassFontSize",     ST_DOUBLE),      // in pt
       StyleType("figuredBassYOffset",      ST_DOUBLE),      // in sp
@@ -64,6 +65,7 @@ StyleType styleTypes[] = {
       StyleType("repeatBarTips",           ST_BOOL),
       StyleType("startBarlineSingle",      ST_BOOL),
       StyleType("startBarlineMultiple",    ST_BOOL),
+
       StyleType("bracketWidth",            ST_SPATIUM),     // system bracket line width
       StyleType("bracketDistance",         ST_SPATIUM),     // system bracket distance
       StyleType("akkoladeWidth",           ST_SPATIUM),
@@ -91,8 +93,8 @@ StyleType styleTypes[] = {
       StyleType("accidentalDistance",      ST_SPATIUM),
       StyleType("accidentalNoteDistance",  ST_SPATIUM),
       StyleType("multiMeasureRestMargin",  ST_SPATIUM),
-      StyleType("beamWidth",               ST_SPATIUM),
 
+      StyleType("beamWidth",               ST_SPATIUM),
       StyleType("beamDistance",            ST_DOUBLE),      // in beamWidth units
       StyleType("beamMinLen",              ST_SPATIUM),     // len for broken beams
       StyleType("beamMinSlope",            ST_DOUBLE),
@@ -104,7 +106,6 @@ StyleType styleTypes[] = {
       StyleType("dotDotDistance",          ST_SPATIUM),
       StyleType("propertyDistanceHead",    ST_SPATIUM),     // note property to note head
       StyleType("propertyDistanceStem",    ST_SPATIUM),     // note property to note stem
-
       StyleType("propertyDistance",        ST_SPATIUM),     // note property to note property
 //      StyleType("pageFillLimit",           ST_DOUBLE),      // 0-1.0
       StyleType("lastSystemFillLimit",     ST_DOUBLE),
@@ -124,7 +125,6 @@ StyleType styleTypes[] = {
       StyleType("showPageNumberOne",       ST_BOOL),
       StyleType("pageNumberOddEven",       ST_BOOL),
       StyleType("showMeasureNumber",       ST_BOOL),
-
       StyleType("showMeasureNumberOne",    ST_BOOL),
       StyleType("measureNumberInterval",   ST_INT),
       StyleType("measureNumberSystem",     ST_BOOL),
@@ -135,11 +135,11 @@ StyleType styleTypes[] = {
       StyleType("smallClefMag",            ST_DOUBLE),
       StyleType("genClef",                 ST_BOOL),           // create clef for all systems, not only for first
       StyleType("genKeysig",               ST_BOOL),         // create key signature for all systems
-
       StyleType("genTimesig",              ST_BOOL),
       StyleType("genCourtesyTimesig",      ST_BOOL),
       StyleType("genCourtesyKeysig",       ST_BOOL),
       StyleType("genCourtesyClef",         ST_BOOL),
+
       StyleType("useStandardNoteNames",    ST_BOOL),
       StyleType("useGermanNoteNames",      ST_BOOL),
       StyleType("useSolfeggioNoteNames",   ST_BOOL),
@@ -178,8 +178,8 @@ StyleType styleTypes[] = {
       StyleType("slurMidWidth",            ST_SPATIUM),
       StyleType("slurDottedWidth",         ST_SPATIUM),
       StyleType("slurBow",                 ST_SPATIUM),
-      StyleType("sectionPause",            ST_DOUBLE),
 
+      StyleType("sectionPause",            ST_DOUBLE),
       StyleType("musicalSymbolFont",       ST_STRING),
 
       StyleType("showHeader",              ST_BOOL),

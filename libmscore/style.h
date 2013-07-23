@@ -191,7 +191,6 @@ enum StyleIdx {
       ST_clefLeftMargin,
       ST_keysigLeftMargin,
       ST_timesigLeftMargin,
-
       ST_clefKeyRightMargin,
       ST_clefBarlineDistance,
       ST_stemWidth,
@@ -199,23 +198,23 @@ enum StyleIdx {
       ST_shortStemProgression,
       ST_shortestStem,
       ST_beginRepeatLeftMargin,
+
       ST_minNoteDistance,
       ST_barNoteDistance,
       ST_barAccidentalDistance,
-      ST_multiMeasureRestMargin,
       ST_noteBarDistance,
-
       ST_measureSpacing,
       ST_staffLineWidth,
       ST_ledgerLineWidth,
       ST_ledgerLineLength,
       ST_accidentalDistance,
       ST_accidentalNoteDistance,
+      ST_multiMeasureRestMargin,
+
       ST_beamWidth,
       ST_beamDistance,
       ST_beamMinLen,
       ST_beamMinSlope,
-
       ST_beamMaxSlope,
       ST_maxBeamTicks,
       ST_dotMag,
@@ -225,6 +224,7 @@ enum StyleIdx {
       ST_propertyDistanceHead,
       ST_propertyDistanceStem,
       ST_propertyDistance,
+
       ST_lastSystemFillLimit,
 
       ST_hairpinY,
@@ -245,7 +245,6 @@ enum StyleIdx {
       ST_showMeasureNumberOne,
       ST_measureNumberInterval,
       ST_measureNumberSystem,
-
       ST_measureNumberAllStaffs,
       ST_smallNoteMag,
       ST_graceNoteMag,
@@ -271,10 +270,16 @@ enum StyleIdx {
       ST_minMMRestWidth,
       ST_hideEmptyStaves,
       ST_dontHideStavesInFirstSystem,
+
       ST_stemDir1,
       ST_stemDir2,
       ST_stemDir3,
       ST_stemDir4,
+
+	//---------------------------------------------------------
+    //   PlayStyle
+    //---------------------------------------------------------
+
       ST_gateTime,
       ST_tenutoGateTime,
       ST_staccatoGateTime,
