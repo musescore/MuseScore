@@ -91,6 +91,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
             dragStaff->setUserDist(dist);
             startMove += delta;
             _score->doLayoutSystems();
+            _score->layoutSpanner();
             update();
             return;
             }
