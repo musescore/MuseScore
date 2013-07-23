@@ -607,9 +607,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
       void loadFiles();
+                  // midi panel functions
       void midiPanelOnSwitchToFile(const QString &file);
       void midiPanelOnCloseFile(const QString &file);
       void allowShowMidiPanel(const QString &file);
+      void setMidiPrefOperations(const QString &file);
 
       static Palette* newTextPalette();
       static Palette* newTimePalette();

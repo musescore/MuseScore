@@ -24,11 +24,12 @@ class ImportMidiPanel : public QWidget
    public:
       explicit ImportMidiPanel(QWidget *parent = 0);
       ~ImportMidiPanel();
-      static bool isMidiFile(const QString &file);
-      void setMidiFile(const QString &file);
-      void excludeMidiFile(const QString &file);
+      static bool isMidiFile(const QString &fileName);
+      void setMidiFile(const QString &fileName);
+      void excludeMidiFile(const QString &fileName);
       bool prefferedVisible() const { return prefferedVisible_; }
       void setPrefferedVisible(bool visible);
+      void setMidiPrefOperations(const QString &fileName);
 
    private slots:
       void updateUi();
@@ -40,11 +41,17 @@ class ImportMidiPanel : public QWidget
       void moveTrackDown();
       bool canMoveTrackUp(int visualIndex);
       bool canMoveTrackDown(int visualIndex);
-      int currentVisualIndex();
 
    private:
       void tweakUi();
       bool canImportMidi() const;
+      QList<int> findReorderedIndexes();
+      void saveTableViewState(const QString &fileName);
+      void restoreTableViewState(const QString &fileName);
+      void resetTableViewState();
+      int currentVisualIndex();
+      void setMidiPrefOperations(const QList<TrackData> &trackData);
+      void clearMidiPrefOperations();
 
       Ui::ImportMidiPanel *ui;
       QTimer *updateUiTimer;
@@ -56,6 +63,7 @@ class ImportMidiPanel : public QWidget
       MidiData midiData;
       bool importInProgress;
       bool prefferedVisible_;
+      bool reopenInProgress;
       };
 
 } // namespace Ms
