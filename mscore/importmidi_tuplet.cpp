@@ -151,7 +151,7 @@ Fraction maxNoteLen(const QList<MidiNote> &notes)
 
 std::vector<TupletData>
 findTupletsForDuration(int voice,
-                       const Fraction &barTick,
+                       const Fraction &barStartTick,
                        const Fraction &durationOnTime,
                        const Fraction &durationLen,
                        const std::multimap<Fraction, TupletData> &tuplets)
@@ -168,7 +168,7 @@ findTupletsForDuration(int voice,
                               // if tuplet and duration intersect each other
                   auto tupletData = tupletIt->second;
                               // convert tuplet onTime to local bar ticks
-                  tupletData.onTime -= barTick;
+                  tupletData.onTime -= barStartTick;
                   tupletsData.push_back(tupletData);
                   }
             if (tupletIt == tuplets.begin())
@@ -308,7 +308,7 @@ std::tuple<double, int, Fraction>
 validateTuplets(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
-            return std::make_tuple(0.0, 0, Fraction());
+            return std::make_tuple(0.0, 0, Fraction(0));
                   // structure of map: <chord ID, count of use of first tuplet chord with this tick>
       std::map<std::pair<const Fraction, MidiChord> *, int> usedFirstTupletNotes;
                   // chord IDs of already used chords
@@ -373,7 +373,7 @@ minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
             for (const auto &i: iIndexGroups) {
                   const auto &group = indexGroups[i];
                   for (const auto &ii: group)
-                  indexesToValidate.push_back(ii);
+                        indexesToValidate.push_back(ii);
                   }
 
             auto result = validateTuplets(indexesToValidate, tuplets);
@@ -394,6 +394,8 @@ minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
 
 bool haveCommonChords(int i, int j, const std::vector<TupletInfo> &tuplets)
       {
+      if (tuplets.empty())
+            return false;
       std::set<std::pair<const Fraction, MidiChord> *> chordsI;
       for (const auto &chord: tuplets[i].chords)
             chordsI.insert(&*chord.second);
@@ -411,13 +413,16 @@ std::list<int> findTupletsWithCommonChords(std::list<int> &restTuplets,
             return tupletGroup;
 
       QQueue<int> q;
+      {
       auto it = restTuplets.begin();
       tupletGroup.push_back(*it);
       q.enqueue(*it);
-      it = restTuplets.erase(it);
+      restTuplets.erase(it);
+      }
 
       while (!q.isEmpty() && !restTuplets.empty()) {
             int index = q.dequeue();
+            auto it = restTuplets.begin();
             while (it != restTuplets.end()) {
                   if (haveCommonChords(index, *it, tuplets)) {
                         tupletGroup.push_back(*it);
@@ -832,6 +837,8 @@ void optimizeVoices(std::multimap<Fraction, MidiChord>::iterator startBarChordIt
 void addFirstTiedTupletNotes(std::multimap<Fraction, MidiChord> &chords,
                              const std::vector<TupletInfo> &tuplets)
       {
+                  // if more than one tuplet can have first tied note - choose
+                  // the case with min quantization error
       std::map<std::pair<const Fraction, MidiChord> *, Fraction> tiedTupletErrors;
 
       for (const auto &tupletInfo: tuplets) {
@@ -845,7 +852,8 @@ void addFirstTiedTupletNotes(std::multimap<Fraction, MidiChord> &chords,
                                     + tupletInfo.len / tupletInfo.tupletNumber * firstNoteIndex;
                         Fraction chordOffTime = chord.first + maxLen;
                                     // if chord offTime is outside tuplet - discard chord
-                        if (chordOffTime <= tupletInfo.onTime
+                        if (chord.first + tupletInfo.tupletQuantValue >= tupletInfo.onTime
+                                    || chordOffTime <= tupletInfo.onTime
                                     || chordOffTime >= tupletFreeEnd + tupletInfo.tupletQuantValue)
                               continue;
 
@@ -857,7 +865,14 @@ void addFirstTiedTupletNotes(std::multimap<Fraction, MidiChord> &chords,
                         bool found = (it != tiedTupletErrors.end());
                         if (tupletError < chordError && (!found || (found && tupletError < it->second))) {
                                     // include chord in first tuplet notes as tied chord
-                              chord.second.voice = tupletInfo.chords.begin()->second->second.voice;
+                              int chordVoice = chord.second.voice;
+                              int tupletVoice = tupletInfo.chords.begin()->second->second.voice;
+                              if (chordVoice != tupletVoice) {
+                                    for (auto &ch: chords) {
+                                          if (ch.second.voice == chordVoice)
+                                                ch.second.voice = tupletVoice;
+                                          }
+                                    }
                               tiedTupletErrors.insert({&chord, tupletError});
                               }
                         }

@@ -27,7 +27,10 @@ class TracksModel : public QAbstractTableModel
       TracksModel();
 
       void reset(const QList<TrackMeta> &tracksMeta);
+      void reset(const QList<TrackData> &tracksData);
       void setOperation(int row, MidiOperation::Type operType, const QVariant &operValue);
+      void setTrackReorderedIndex(int trackIndex, int reorderIndex);
+
       TrackData trackData(int trackIndex) const;
       DefinedTrackOperations trackOperations(int row) const;
       int trackCount() const { return trackCount_; }
@@ -43,7 +46,7 @@ class TracksModel : public QAbstractTableModel
       bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
    private:
-      std::vector<TrackData> tracksData_;
+      QList<TrackData> tracksData_;
       int trackCount_;
       int colCount_;
 

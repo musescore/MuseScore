@@ -1,6 +1,8 @@
 #ifndef IMPORTMIDI_PANEL_H
 #define IMPORTMIDI_PANEL_H
 
+#include "importmidi_data.h"
+
 
 namespace Ui {
       class ImportMidiPanel;
@@ -24,12 +26,15 @@ class ImportMidiPanel : public QWidget
       ~ImportMidiPanel();
       static bool isMidiFile(const QString &file);
       void setMidiFile(const QString &file);
+      void excludeMidiFile(const QString &file);
+      bool prefferedVisible() const { return prefferedVisible_; }
+      void setPrefferedVisible(bool visible);
 
-private slots:
+   private slots:
       void updateUi();
       void onCurrentTrackChanged(const QModelIndex &currentIndex);
       void onOperationChanged(const QModelIndex &index);
-      void importMidi();
+      void doMidiImport();
       void hidePanel();
       void moveTrackUp();
       void moveTrackDown();
@@ -48,6 +53,9 @@ private slots:
       TracksModel *tracksModel;
       OperationsModel *operationsModel;
       OperationsDelegate *operationsDelegate;
+      MidiData midiData;
+      bool importInProgress;
+      bool prefferedVisible_;
       };
 
 } // namespace Ms

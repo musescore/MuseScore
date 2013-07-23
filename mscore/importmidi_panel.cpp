@@ -7,6 +7,7 @@
 #include "importmidi_trmodel.h"
 #include "importmidi_opmodel.h"
 #include "importmidi_opdelegate.h"
+#include "importmidi_data.h"
 
 
 namespace Ms {
@@ -22,6 +23,8 @@ ImportMidiPanel::ImportMidiPanel(QWidget *parent)
       , ui(new Ui::ImportMidiPanel)
       , updateUiTimer(new QTimer)
       , isMidiFileExists(false)
+      , importInProgress(false)
+      , prefferedVisible_(false)
       {
       ui->setupUi(this);
       tracksModel = new TracksModel();
@@ -46,6 +49,7 @@ void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
                   tracksModel->index(row, TrackCol::TRACK_NUMBER)).toString();
             operationsModel->setTrackData(trackLabel, tracksModel->trackOperations(row));
             ui->treeViewOperations->expandAll();
+            midiData.setSelectedRow(midiFile, row);
             }
       }
 
@@ -79,7 +83,7 @@ class CustomHorizHeaderView : public QHeaderView
 void ImportMidiPanel::tweakUi()
       {
       connect(updateUiTimer, SIGNAL(timeout()), this, SLOT(updateUi()));
-      connect(ui->pushButtonImport, SIGNAL(clicked()), SLOT(importMidi()));
+      connect(ui->pushButtonImport, SIGNAL(clicked()), SLOT(doMidiImport()));
       connect(ui->pushButtonUp, SIGNAL(clicked()), SLOT(moveTrackUp()));
       connect(ui->pushButtonDown, SIGNAL(clicked()), SLOT(moveTrackDown()));
       connect(ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
@@ -115,7 +119,7 @@ void ImportMidiPanel::hidePanel()
       {
       if (isVisible()) {
             setVisible(false);
-            getAction("toggle-midiimportpanel")->setChecked(false);
+            prefferedVisible_ = false;
             }
       }
 
@@ -174,21 +178,30 @@ void ImportMidiPanel::updateUi()
       ui->pushButtonDown->setEnabled(canMoveTrackDown(visualIndex));
       }
 
-void ImportMidiPanel::importMidi()
+void ImportMidiPanel::doMidiImport()
       {
       if (!canImportMidi())
             return;
+      importInProgress = true;
       preferences.midiImportOperations.clear();
       int trackCount = tracksModel->trackCount();
+      QList<TrackData> trackData;
+
       for (int i = 0; i != trackCount; ++i) {
-            int visIndex = tracksModel->rowFromTrackIndex(i);
-            int logIndex = ui->tableViewTracks->verticalHeader()->logicalIndex(visIndex);
-            int trackIndex = tracksModel->trackIndexFromRow(logIndex);
-            TrackData data(tracksModel->trackData(trackIndex));
+            int trackRow = tracksModel->rowFromTrackIndex(i);
+            int reorderedRow = ui->tableViewTracks->verticalHeader()->logicalIndex(trackRow);
+            int reorderedIndex = tracksModel->trackIndexFromRow(reorderedRow);
+            tracksModel->setTrackReorderedIndex(i, reorderedIndex);
+            auto data = tracksModel->trackData(i);
             preferences.midiImportOperations.appendTrackOperations(data.opers);
+            trackData.push_back(data);
             }
       mscore->openScore(midiFile);
+      midiData.setTracksData(midiFile, trackData);
+      QByteArray tableViewData = ui->tableViewTracks->verticalHeader()->saveState();
+      midiData.setTableViewData(midiFile, tableViewData);
       preferences.midiImportOperations.clear();
+      importInProgress = false;
       }
 
 bool ImportMidiPanel::isMidiFile(const QString &file)
@@ -199,32 +212,45 @@ bool ImportMidiPanel::isMidiFile(const QString &file)
 
 void ImportMidiPanel::setMidiFile(const QString &file)
       {
-      if (midiFile == file)
+      if (midiFile == file || importInProgress)
             return;
       midiFile = file;
       ui->lineEditMidiFile->setText(QFileInfo(file).fileName());
       updateUi();
+
       if (isMidiFileExists) {
-            QList<TrackMeta> tracksMeta(extractMidiTracksMeta(file));
-            tracksModel->reset(tracksMeta);
-            operationsModel->reset(tracksMeta.size());
-            ui->tableViewTracks->selectRow(0);
+            QList<TrackData> data = midiData.tracksData(file);
+            if (data.isEmpty()) {
+                  QList<TrackMeta> tracksMeta(extractMidiTracksMeta(file));
+                  tracksModel->reset(tracksMeta);
+                  operationsModel->reset(tracksMeta.size());
+                  for (int i = 0; i != tracksModel->trackCount(); ++i)
+                        data.push_back(tracksModel->trackData(i));
+                  midiData.setTracksData(file, data);
+                  QByteArray tableViewData = ui->tableViewTracks->verticalHeader()->saveState();
+                  midiData.setTableViewData(file, tableViewData);
+                  }
+            else {
+                  tracksModel->reset(data);
+                  QByteArray tableViewData = midiData.tableViewData(file);
+                  ui->tableViewTracks->verticalHeader()->restoreState(tableViewData);
+                  }
+            ui->tableViewTracks->selectRow(midiData.selectedRow(midiFile));
             }
       }
 
-
-//--------- MuseScore ---------
-
-void MuseScore::showMidiImportPanel(bool visible)
+void ImportMidiPanel::excludeMidiFile(const QString &file)
       {
-      if (visible) {
-            if (!importmidi_panel) {
-                  importmidi_panel = new ImportMidiPanel(this);
-                  }
-            }
-      if (importmidi_panel)
-            importmidi_panel->setVisible(visible);
-      getAction("toggle-midiimportpanel")->setChecked(visible);
+                  // because button "Apply" of MIDI import operations
+                  // causes reopen of the current score
+                  // we need prevent MIDI import panel from closing at that moment
+      if (!importInProgress)
+            midiData.excludeFile(file);
+      }
+
+void ImportMidiPanel::setPrefferedVisible(bool visible)
+      {
+      prefferedVisible_ = visible;
       }
 
 } // namespace Ms
