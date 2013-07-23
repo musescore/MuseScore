@@ -66,6 +66,7 @@ class TestImportMidi : public QObject, public MTest
       void findOnTimeRegularError();
       void findTupletApproximation();
       void separateTupletVoices();
+      void findTupletsWithCommonChords();
 
       // metric bar analysis
       void metricDivisionsOfTuplet();
@@ -123,13 +124,22 @@ class TestImportMidi : public QObject, public MTest
       void tupletTripletsMixed() { mf("tuplet_triplets_mixed"); }
       void tupletTriplet() { mf("tuplet_triplet"); }
       void tupletTripletFirstTied() { mf("tuplet_triplet_first_tied"); }
+      void tupletTripletFirstTied2() { mf("tuplet_triplet_first_tied2"); }
       void tupletTripletLastTied() { mf("tuplet_triplet_last_tied"); }
       void tupletTied3_5()
             {
                         // requires 1/32 quantization
             int defaultQuant = preferences.shortestNote;
             preferences.shortestNote = MScore::division / 8; // midi quantization: 1/32
-            mf("tuplet_tied_3_5");
+            mf("tuplet_tied_3_5_tuplets");
+            preferences.shortestNote = defaultQuant;
+            }
+      void tupletTied3_5_2()
+            {
+            // requires 1/32 quantization
+            int defaultQuant = preferences.shortestNote;
+            preferences.shortestNote = MScore::division / 8; // midi quantization: 1/32
+            mf("tuplet_tied_3_5_tuplets2");
             preferences.shortestNote = defaultQuant;
             }
 
@@ -605,6 +615,74 @@ void TestImportMidi::separateTupletVoices()
             }
       }
 
+void TestImportMidi::findTupletsWithCommonChords()
+      {
+      std::vector<MidiTuplet::TupletInfo> tuplets;
+
+      std::multimap<Fraction, MidiChord> chords;
+      chords.insert({Fraction(0), MidiChord()});
+      chords.insert({Fraction(1, 12), MidiChord()});
+      chords.insert({Fraction(1, 6), MidiChord()});
+      chords.insert({Fraction(3, 10), MidiChord()});
+      chords.insert({Fraction(7, 20), MidiChord()});
+      chords.insert({Fraction(2, 5), MidiChord()});
+      chords.insert({Fraction(9, 20), MidiChord()});
+
+      MidiTuplet::TupletInfo tupletData;
+                  // triplet, total len = 1/8
+      tupletData.chords.clear();
+      tupletData.chords.insert({0, chords.find(Fraction(0))});
+      tupletData.chords.insert({2, chords.find(Fraction(1, 12))});
+      tuplets.push_back(tupletData);
+                  // second triplet, total len = 1/8
+      tupletData.chords.clear();
+      tupletData.chords.insert({1, chords.find(Fraction(1, 6))});
+      tuplets.push_back(tupletData);
+                  // third triplet, total len = 1/4
+      tupletData.chords.clear();
+      tupletData.chords.insert({0, chords.find(Fraction(0))});
+      tupletData.chords.insert({1, chords.find(Fraction(1, 12))});
+      tupletData.chords.insert({2, chords.find(Fraction(1, 6))});
+      tuplets.push_back(tupletData);
+                  // quintuplet, total len = 1/4
+      tupletData.chords.clear();
+      tupletData.chords.insert({1, chords.find(Fraction(3, 10))});
+      tupletData.chords.insert({2, chords.find(Fraction(7, 20))});
+      tupletData.chords.insert({3, chords.find(Fraction(2, 5))});
+      tupletData.chords.insert({4, chords.find(Fraction(9, 20))});
+      tuplets.push_back(tupletData);
+                  // second quintuplet, total len = 1/2
+      tupletData.chords.clear();
+      tupletData.chords.insert({0, chords.find(Fraction(0))});
+      tupletData.chords.insert({1, chords.find(Fraction(1, 12))});
+      tupletData.chords.insert({3, chords.find(Fraction(3, 10))});
+      tupletData.chords.insert({4, chords.find(Fraction(2, 5))});
+      tuplets.push_back(tupletData);
+
+      QVERIFY(tuplets.size() == 5);
+      std::list<int> restTupletIndexes = {0, 1, 2, 3, 4};
+
+      std::list<int> commonTuplets = MidiTuplet::findTupletsWithCommonChords(restTupletIndexes, tuplets);
+      commonTuplets.sort();
+      QVERIFY(restTupletIndexes.empty());
+      QVERIFY(commonTuplets == std::list<int>({0, 1, 2, 3, 4}));
+
+      std::vector<int> uncommonTuplets = MidiTuplet::findTupletsWithNoCommonChords(commonTuplets, tuplets);
+      std::sort(uncommonTuplets.begin(), uncommonTuplets.end());
+      QVERIFY(uncommonTuplets == std::vector<int>({0, 1, 3}));
+      QVERIFY(commonTuplets == std::list<int>({2, 4}));
+                  // process the rest tuplets with common chords
+      uncommonTuplets = MidiTuplet::findTupletsWithNoCommonChords(commonTuplets, tuplets);
+      std::sort(uncommonTuplets.begin(), uncommonTuplets.end());
+      QVERIFY(uncommonTuplets == std::vector<int>({2}));
+      QVERIFY(commonTuplets == std::list<int>({4}));
+                  // process the rest tuplets with common chords
+      uncommonTuplets = MidiTuplet::findTupletsWithNoCommonChords(commonTuplets, tuplets);
+      std::sort(uncommonTuplets.begin(), uncommonTuplets.end());
+      QVERIFY(uncommonTuplets == std::vector<int>({4}));
+      QVERIFY(commonTuplets.empty());
+      }
+
 
 //---------------------------------------------------------
 //  metric bar analysis
@@ -701,7 +779,6 @@ void TestImportMidi::maxLevelBetween()
       startTickInBar = Fraction::fromTicks(0);
       endTickInBar = tupletData.onTime;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
-      qDebug() << level.level;
       QVERIFY(level.level == -3);
       QCOMPARE(level.lastPos, (startTickInBar + tupletData.onTime) / 2);
       QCOMPARE(level.levelCount, 1);

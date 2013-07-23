@@ -52,7 +52,7 @@ std::vector<TupletInfo> findTuplets(const Fraction &startBarTick,
                                     std::multimap<Fraction, MidiChord> &chords);
 
 std::vector<TupletData> findTupletsForDuration(int voice,
-                                               const Fraction &barTick,
+                                               const Fraction &barStartTick,
                                                const Fraction &durationOnTime,
                                                const Fraction &durationLen,
                                                const std::multimap<Fraction, TupletData> &tuplets);
