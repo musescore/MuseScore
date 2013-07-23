@@ -937,6 +937,7 @@ class Score : public QObject {
       void addSpanner(Spanner*);
 
       ChordRest* findCR(int tick, int track) const;
+      void layoutSpanner();
 
       friend class ChangeSynthesizerState;
       friend class Chord;

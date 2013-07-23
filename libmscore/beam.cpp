@@ -52,7 +52,7 @@ struct BeamFragment {
 Beam::Beam(Score* s)
    : Element(s)
       {
-      setFlags(ELEMENT_SELECTABLE | ELEMENT_STAFF_ORIGIN);
+      setFlags(ELEMENT_SELECTABLE);
       _direction       = MScore::AUTO;
       _up              = true;
       _distribute      = false;
