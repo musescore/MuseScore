@@ -1545,7 +1545,9 @@ void Chord::layoutPitched()
             Note* note = _notes.at(i);
             note->layout();
 
-            qreal x1 = note->pos().x() + ipos().x();
+            qreal x1 = note->pos().x();
+            if (_noteType == NOTE_NORMAL)
+                  x1 += ipos().x();
             qreal x2 = x1 + note->headWidth();
             lll = qMax(lll, -x1);
             rrr = qMax(rrr, x2);
