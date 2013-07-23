@@ -434,15 +434,19 @@ QString FileIO::read()
             emit error("source is empty");
             return QString();
             }
-
-      QFile file(mSource);
+      QUrl url(mSource);
+      QString source(mSource);
+      if(url.isValid() && url.isLocalFile()) {
+            source = url.toLocalFile();
+            }
+      QFile file(source);
       QString fileContent;
       if ( file.open(QIODevice::ReadOnly) ) {
             QString line;
             QTextStream t( &file );
             do {
                 line = t.readLine();
-                fileContent += line;
+                fileContent += line + "\n";
                 } while (!line.isNull());
             file.close();
             }
