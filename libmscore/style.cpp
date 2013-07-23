@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <unordered_map>
 #include "mscore.h"
 #include "style.h"
 #include "style_p.h"
@@ -34,195 +35,186 @@ MStyle* style;
 //   styleTypes
 //---------------------------------------------------------
 
-StyleType styleTypes[] = {
-      StyleType("staffUpperBorder",        ST_SPATIUM),
-      StyleType("staffLowerBorder",        ST_SPATIUM),
-      StyleType("staffDistance",           ST_SPATIUM),
-      StyleType("akkoladeDistance",        ST_SPATIUM),
-
-      StyleType("minSystemDistance",       ST_SPATIUM),
-      StyleType("maxSystemDistance",       ST_SPATIUM),
-
-      StyleType("lyricsDistance",          ST_SPATIUM),
-      StyleType("lyricsMinBottomDistance", ST_SPATIUM),
-      StyleType("lyricsLineHeight",        ST_DOUBLE),      // in % of normal height (default: 1.0)
-      StyleType("figuredBassFontFamily",   ST_STRING),
-      StyleType("figuredBassFontSize",     ST_DOUBLE),      // in pt
-      StyleType("figuredBassYOffset",      ST_DOUBLE),      // in sp
-      StyleType("figuredBassLineHeight",   ST_DOUBLE),      // in % of normal height
-      StyleType("figuredBassAlignment",    ST_INT),         // 0 = top, 1 = bottom
-      StyleType("figuredBassStyle" ,       ST_INT),         // 0=modern, 1=historic
-      StyleType("systemFrameDistance",     ST_SPATIUM),     // dist. between staff and vertical box
-      StyleType("frameSystemDistance",     ST_SPATIUM),     // dist. between vertical box and next system
-      StyleType("minMeasureWidth",         ST_SPATIUM),
-
-      StyleType("barWidth",                ST_SPATIUM),
-      StyleType("doubleBarWidth",          ST_SPATIUM),
-      StyleType("endBarWidth",             ST_SPATIUM),
-      StyleType("doubleBarDistance",       ST_SPATIUM),
-      StyleType("endBarDistance",          ST_SPATIUM),
-      StyleType("repeatBarTips",           ST_BOOL),
-      StyleType("startBarlineSingle",      ST_BOOL),
-      StyleType("startBarlineMultiple",    ST_BOOL),
-      StyleType("bracketWidth",            ST_SPATIUM),     // system bracket line width
-      StyleType("bracketDistance",         ST_SPATIUM),     // system bracket distance
-      StyleType("akkoladeWidth",           ST_SPATIUM),
-      StyleType("akkoladeBarDistance",     ST_SPATIUM),
-
-      StyleType("clefLeftMargin",          ST_SPATIUM),
-      StyleType("keysigLeftMargin",        ST_SPATIUM),
-      StyleType("timesigLeftMargin",       ST_SPATIUM),
-      StyleType("clefKeyRightMargin",      ST_SPATIUM),
-      StyleType("clefBarlineDistance",     ST_SPATIUM),
-      StyleType("stemWidth",               ST_SPATIUM),
-      StyleType("shortenStem",             ST_BOOL),        // ST_shortenStem,
-      StyleType("shortStemProgression",    ST_SPATIUM),     // ST_shortStemProgression,
-      StyleType("shortestStem",            ST_SPATIUM),
-      StyleType("beginRepeatLeftMargin",   ST_SPATIUM),
-
-      StyleType("minNoteDistance",         ST_SPATIUM),
-      StyleType("barNoteDistance",         ST_SPATIUM),
-      StyleType("barAccidentalDistance",   ST_SPATIUM),
-      StyleType("noteBarDistance",         ST_SPATIUM),
-      StyleType("measureSpacing",          ST_DOUBLE),
-      StyleType("staffLineWidth",          ST_SPATIUM),
-      StyleType("ledgerLineWidth",         ST_SPATIUM),
-      StyleType("ledgerLineLength",        ST_SPATIUM),
-      StyleType("accidentalDistance",      ST_SPATIUM),
-      StyleType("accidentalNoteDistance",  ST_SPATIUM),
-      StyleType("multiMeasureRestMargin",  ST_SPATIUM),
-      StyleType("beamWidth",               ST_SPATIUM),
-
-      StyleType("beamDistance",            ST_DOUBLE),      // in beamWidth units
-      StyleType("beamMinLen",              ST_SPATIUM),     // len for broken beams
-      StyleType("beamMinSlope",            ST_DOUBLE),
-      StyleType("beamMaxSlope",            ST_DOUBLE),
-      StyleType("maxBeamTicks",            ST_INT),
-      StyleType("dotMag",                  ST_DOUBLE),
-      StyleType("dotNoteDistance",         ST_SPATIUM),
-      StyleType("dotRestDistance",         ST_SPATIUM),
-      StyleType("dotDotDistance",          ST_SPATIUM),
-      StyleType("propertyDistanceHead",    ST_SPATIUM),     // note property to note head
-      StyleType("propertyDistanceStem",    ST_SPATIUM),     // note property to note stem
-
-      StyleType("propertyDistance",        ST_SPATIUM),     // note property to note property
-//      StyleType("pageFillLimit",           ST_DOUBLE),      // 0-1.0
-      StyleType("lastSystemFillLimit",     ST_DOUBLE),
-
-      StyleType("hairpinY",                ST_SPATIUM),
-      StyleType("hairpinHeight",           ST_SPATIUM),
-      StyleType("hairpinContHeight",       ST_SPATIUM),
-      StyleType("hairpinWidth",            ST_SPATIUM),
-
-      StyleType("pedalY",                  ST_SPATIUM),
-      StyleType("trillY",                  ST_SPATIUM),
-      StyleType("harmonyY",                ST_SPATIUM),
-      StyleType("harmonyFretDist",         ST_SPATIUM),
-      StyleType("minHarmonyDistance",      ST_SPATIUM),
-
-      StyleType("showPageNumber",          ST_BOOL),
-      StyleType("showPageNumberOne",       ST_BOOL),
-      StyleType("pageNumberOddEven",       ST_BOOL),
-      StyleType("showMeasureNumber",       ST_BOOL),
-
-      StyleType("showMeasureNumberOne",    ST_BOOL),
-      StyleType("measureNumberInterval",   ST_INT),
-      StyleType("measureNumberSystem",     ST_BOOL),
-      StyleType("measureNumberAllStaffs",  ST_BOOL),
-      StyleType("smallNoteMag",            ST_DOUBLE),
-      StyleType("graceNoteMag",            ST_DOUBLE),
-      StyleType("smallStaffMag",           ST_DOUBLE),
-      StyleType("smallClefMag",            ST_DOUBLE),
-      StyleType("genClef",                 ST_BOOL),           // create clef for all systems, not only for first
-      StyleType("genKeysig",               ST_BOOL),         // create key signature for all systems
-
-      StyleType("genTimesig",              ST_BOOL),
-      StyleType("genCourtesyTimesig",      ST_BOOL),
-      StyleType("genCourtesyKeysig",       ST_BOOL),
-      StyleType("genCourtesyClef",         ST_BOOL),
-      StyleType("useStandardNoteNames",    ST_BOOL),
-      StyleType("useGermanNoteNames",      ST_BOOL),
-      StyleType("useSolfeggioNoteNames",   ST_BOOL),
-      StyleType("lowerCaseMinorChords",    ST_BOOL),
-      StyleType("chordStyle",              ST_STRING),
-      StyleType("chordsXmlFile",           ST_BOOL),
-      StyleType("chordDescriptionFile",    ST_STRING),
-      StyleType("concertPitch",            ST_BOOL),            // display transposing instruments in concert pitch
-      StyleType("createMultiMeasureRests", ST_BOOL),
-      StyleType("minEmptyMeasures",        ST_INT),         // minimum number of empty measures for multi measure rest
-      StyleType("minMMRestWidth",          ST_SPATIUM),       // minimum width of multi measure rest
-      StyleType("hideEmptyStaves",         ST_BOOL),
-      StyleType("dontHidStavesInFirstSystm", ST_BOOL),
-
-      StyleType("stemDir1",                ST_DIRECTION),
-      StyleType("stemDir2",                ST_DIRECTION),
-      StyleType("stemDir3",                ST_DIRECTION),
-      StyleType("stemDir4",                ST_DIRECTION),
-
-      //---------------------------------------------------------
-      //   PlayStyle
-      //---------------------------------------------------------
-
-      StyleType("gateTime",                ST_INT),           // 0-100%
-      StyleType("tenutoGateTime",          ST_INT),
-      StyleType("staccatoGateTime",        ST_INT),
-      StyleType("slurGateTime",            ST_INT),
-
-      StyleType("ArpeggioNoteDistance",    ST_SPATIUM),
-      StyleType("ArpeggioLineWidth",       ST_SPATIUM),
-      StyleType("ArpeggioHookLen",         ST_SPATIUM),
-      StyleType("FixMeasureNumbers",       ST_INT),
-      StyleType("FixMeasureWidth",         ST_BOOL),
-
-      StyleType("slurEndWidth",            ST_SPATIUM),
-      StyleType("slurMidWidth",            ST_SPATIUM),
-      StyleType("slurDottedWidth",         ST_SPATIUM),
-      StyleType("slurBow",                 ST_SPATIUM),
-      StyleType("sectionPause",            ST_DOUBLE),
-
-      StyleType("musicalSymbolFont",       ST_STRING),
-
-      StyleType("showHeader",              ST_BOOL),
-      StyleType("headerStyled",            ST_BOOL),
-      StyleType("headerFirstPage",         ST_BOOL),
-      StyleType("headerOddEven",           ST_BOOL),
-      StyleType("evenHeaderL",             ST_STRING),
-      StyleType("evenHeaderC",             ST_STRING),
-      StyleType("evenHeaderR",             ST_STRING),
-      StyleType("oddHeaderL",              ST_STRING),
-      StyleType("oddHeaderC",              ST_STRING),
-      StyleType("oddHeaderR",              ST_STRING),
-
-      StyleType("showFooter",              ST_BOOL),
-      StyleType("footerStyled",            ST_BOOL),
-      StyleType("footerFirstPage",         ST_BOOL),
-      StyleType("footerOddEven",           ST_BOOL),
-      StyleType("evenFooterL",             ST_STRING),
-      StyleType("evenFooterC",             ST_STRING),
-      StyleType("evenFooterR",             ST_STRING),
-      StyleType("oddFooterL",              ST_STRING),
-      StyleType("oddFooterC",              ST_STRING),
-      StyleType("oddFooterR",              ST_STRING),
-
-      StyleType("voltaY",                  ST_SPATIUM),
-      StyleType("voltaHook",               ST_SPATIUM),
-      StyleType("voltaLineWidth",          ST_SPATIUM),
-
-      StyleType("ottavaY",                 ST_SPATIUM),
-      StyleType("ottavaHook",              ST_SPATIUM),
-      StyleType("ottavaLineWidth",         ST_SPATIUM),
-
-      StyleType("tabClef",                 ST_INT),
-
-      StyleType("tremoloWidth",            ST_SPATIUM),
-      StyleType("tremoloBoxHeight",        ST_SPATIUM),
-      StyleType("tremoloLineWidth",        ST_SPATIUM),
-      StyleType("tremoloDistance",         ST_SPATIUM),
-
-      StyleType("linearStretch",           ST_DOUBLE),
-      StyleType("crossMeasureValues",      ST_BOOL),
-      StyleType("keySigNaturals",          ST_INT)
+struct StyleTypes2 {
+      StyleIdx idx;
+      StyleType val;
       };
+
+static const StyleTypes2 styleTypes2[] = {
+      { ST_staffUpperBorder,            StyleType("staffUpperBorder",        ST_SPATIUM) },
+      { ST_staffLowerBorder,            StyleType("staffLowerBorder",        ST_SPATIUM) },
+      { ST_staffDistance,               StyleType("staffDistance",           ST_SPATIUM) },
+      { ST_akkoladeDistance,            StyleType("akkoladeDistance",        ST_SPATIUM) },
+      { ST_minSystemDistance,           StyleType("minSystemDistance",       ST_SPATIUM) },
+      { ST_maxSystemDistance,           StyleType("maxSystemDistance",       ST_SPATIUM) },
+      { ST_lyricsDistance,              StyleType("lyricsDistance",          ST_SPATIUM) },
+      { ST_lyricsMinBottomDistance,     StyleType("lyricsMinBottomDistance", ST_SPATIUM) },
+      { ST_lyricsLineHeight,            StyleType("lyricsLineHeight",        ST_DOUBLE) },      // in % of normal height (default: 1.0)
+      { ST_figuredBassFontFamily,       StyleType("figuredBassFontFamily",   ST_STRING) },
+      { ST_figuredBassFontSize,         StyleType("figuredBassFontSize",     ST_DOUBLE) },      // in pt
+      { ST_figuredBassYOffset,          StyleType("figuredBassYOffset",      ST_DOUBLE) },      // in sp
+      { ST_figuredBassLineHeight,       StyleType("figuredBassLineHeight",   ST_DOUBLE) },      // in % of normal height
+      { ST_figuredBassAlignment,        StyleType("figuredBassAlignment",    ST_INT) },         // 0 = top, 1 = bottom
+      { ST_figuredBassStyle,            StyleType("figuredBassStyle" ,       ST_INT) },         // 0=modern, 1=historic
+      { ST_systemFrameDistance,         StyleType("systemFrameDistance",     ST_SPATIUM) },     // dist. between staff and vertical box
+      { ST_frameSystemDistance,         StyleType("frameSystemDistance",     ST_SPATIUM) },     // dist. between vertical box and next system
+      { ST_minMeasureWidth,             StyleType("minMeasureWidth",         ST_SPATIUM) },
+      { ST_barWidth,                    StyleType("barWidth",                ST_SPATIUM) },
+      { ST_doubleBarWidth,              StyleType("doubleBarWidth",          ST_SPATIUM) },
+      { ST_endBarWidth,                 StyleType("endBarWidth",             ST_SPATIUM) },
+      { ST_doubleBarDistance,           StyleType("doubleBarDistance",       ST_SPATIUM) },
+      { ST_endBarDistance,              StyleType("endBarDistance",          ST_SPATIUM) },
+      { ST_repeatBarTips,               StyleType("repeatBarTips",           ST_BOOL) },
+      { ST_startBarlineSingle,          StyleType("startBarlineSingle",      ST_BOOL) },
+      { ST_startBarlineMultiple,        StyleType("startBarlineMultiple",    ST_BOOL) },
+      { ST_bracketWidth,                StyleType("bracketWidth",            ST_SPATIUM) },     // system bracket line width
+      { ST_bracketDistance,             StyleType("bracketDistance",         ST_SPATIUM) },     // system bracket distance
+      { ST_akkoladeWidth,               StyleType("akkoladeWidth",           ST_SPATIUM) },
+      { ST_akkoladeBarDistance,         StyleType("akkoladeBarDistance",     ST_SPATIUM) },
+      { ST_clefLeftMargin,              StyleType("clefLeftMargin",          ST_SPATIUM) },
+      { ST_keysigLeftMargin,            StyleType("keysigLeftMargin",        ST_SPATIUM) },
+      { ST_timesigLeftMargin,           StyleType("timesigLeftMargin",       ST_SPATIUM) },
+      { ST_clefKeyRightMargin,          StyleType("clefKeyRightMargin",      ST_SPATIUM) },
+      { ST_clefBarlineDistance,         StyleType("clefBarlineDistance",     ST_SPATIUM) },
+      { ST_stemWidth,                   StyleType("stemWidth",               ST_SPATIUM) },
+      { ST_shortenStem,                 StyleType("shortenStem",             ST_BOOL) },        // ST_shortenStem,
+      { ST_shortStemProgression,        StyleType("shortStemProgression",    ST_SPATIUM) },     // ST_shortStemProgression,
+      { ST_shortestStem,                StyleType("shortestStem",            ST_SPATIUM) },
+      { ST_beginRepeatLeftMargin,       StyleType("beginRepeatLeftMargin",   ST_SPATIUM) },
+      { ST_minNoteDistance,             StyleType("minNoteDistance",         ST_SPATIUM) },
+      { ST_barNoteDistance,             StyleType("barNoteDistance",         ST_SPATIUM) },
+      { ST_barAccidentalDistance,       StyleType("barAccidentalDistance",   ST_SPATIUM) },
+      { ST_multiMeasureRestMargin,      StyleType("noteBarDistance",         ST_SPATIUM) },
+      { ST_noteBarDistance,             StyleType("measureSpacing",          ST_DOUBLE) },
+      { ST_measureSpacing,              StyleType("staffLineWidth",          ST_SPATIUM) },
+      { ST_staffLineWidth,              StyleType("ledgerLineWidth",         ST_SPATIUM) },
+      { ST_ledgerLineWidth,             StyleType("ledgerLineLength",        ST_SPATIUM) },
+      { ST_ledgerLineLength,            StyleType("accidentalDistance",      ST_SPATIUM) },
+      { ST_accidentalDistance,          StyleType("accidentalNoteDistance",  ST_SPATIUM) },
+      { ST_accidentalNoteDistance,      StyleType("multiMeasureRestMargin",  ST_SPATIUM) },
+      { ST_beamWidth,                   StyleType("beamWidth",               ST_SPATIUM) },
+      { ST_beamDistance,                StyleType("beamDistance",            ST_DOUBLE) },      // in beamWidth units
+      { ST_beamMinLen,                  StyleType("beamMinLen",              ST_SPATIUM) },     // len for broken beams
+      { ST_beamMinSlope,                StyleType("beamMinSlope",            ST_DOUBLE) },
+      { ST_beamMaxSlope,                StyleType("beamMaxSlope",            ST_DOUBLE) },
+      { ST_maxBeamTicks,                StyleType("maxBeamTicks",            ST_INT) },
+      { ST_dotMag,                      StyleType("dotMag",                  ST_DOUBLE) },
+      { ST_dotNoteDistance,             StyleType("dotNoteDistance",         ST_SPATIUM) },
+      { ST_dotRestDistance,             StyleType("dotRestDistance",         ST_SPATIUM) },
+      { ST_dotDotDistance,              StyleType("dotDotDistance",          ST_SPATIUM) },
+      { ST_propertyDistanceHead,        StyleType("propertyDistanceHead",    ST_SPATIUM) },     // note property to note head
+      { ST_propertyDistanceStem,        StyleType("propertyDistanceStem",    ST_SPATIUM) },     // note property to note stem
+      { ST_propertyDistance,            StyleType("propertyDistance",        ST_SPATIUM) },     // note property to note property
+      { ST_lastSystemFillLimit,         StyleType("lastSystemFillLimit",     ST_DOUBLE) },
+      { ST_hairpinY,                    StyleType("hairpinY",                ST_SPATIUM) },
+      { ST_hairpinHeight,               StyleType("hairpinHeight",           ST_SPATIUM) },
+      { ST_hairpinContHeight,           StyleType("hairpinContHeight",       ST_SPATIUM) },
+      { ST_hairpinWidth,                StyleType("hairpinWidth",            ST_SPATIUM) },
+      { ST_pedalY,                      StyleType("pedalY",                  ST_SPATIUM) },
+      { ST_trillY,                      StyleType("trillY",                  ST_SPATIUM) },
+      { ST_harmonyY,                    StyleType("harmonyY",                ST_SPATIUM) },
+      { ST_harmonyFretDist,             StyleType("harmonyFretDist",         ST_SPATIUM) },
+      { ST_minHarmonyDistance,          StyleType("minHarmonyDistance",      ST_SPATIUM) },
+      { ST_showPageNumber,              StyleType("showPageNumber",          ST_BOOL) },
+      { ST_showPageNumberOne,           StyleType("showPageNumberOne",       ST_BOOL) },
+      { ST_pageNumberOddEven,           StyleType("pageNumberOddEven",       ST_BOOL) },
+      { ST_showMeasureNumber,           StyleType("showMeasureNumber",       ST_BOOL) },
+      { ST_showMeasureNumberOne,        StyleType("showMeasureNumberOne",    ST_BOOL) },
+      { ST_measureNumberInterval,       StyleType("measureNumberInterval",   ST_INT) },
+      { ST_measureNumberSystem,         StyleType("measureNumberSystem",     ST_BOOL) },
+      { ST_measureNumberAllStaffs,      StyleType("measureNumberAllStaffs",  ST_BOOL) },
+      { ST_smallNoteMag,                StyleType("smallNoteMag",            ST_DOUBLE) },
+      { ST_graceNoteMag,                StyleType("graceNoteMag",            ST_DOUBLE) },
+      { ST_smallStaffMag,               StyleType("smallStaffMag",           ST_DOUBLE) },
+      { ST_smallClefMag,                StyleType("smallClefMag",            ST_DOUBLE) },
+      { ST_genClef,                     StyleType("genClef",                 ST_BOOL) },           // create clef for all systems, not only for first
+      { ST_genKeysig,                   StyleType("genKeysig",               ST_BOOL) },         // create key signature for all systems
+      { ST_genTimesig,                  StyleType("genTimesig",              ST_BOOL) },
+      { ST_genCourtesyTimesig,          StyleType("genCourtesyTimesig",      ST_BOOL) },
+      { ST_genCourtesyKeysig,           StyleType("genCourtesyKeysig",       ST_BOOL) },
+      { ST_genCourtesyClef,             StyleType("genCourtesyClef",         ST_BOOL) },
+      { ST_useStandardNoteNames,        StyleType("useStandardNoteNames",    ST_BOOL) },
+      { ST_useGermanNoteNames,          StyleType("useGermanNoteNames",      ST_BOOL) },
+      { ST_useSolfeggioNoteNames,       StyleType("useSolfeggioNoteNames",   ST_BOOL) },
+      { ST_lowerCaseMinorChords,        StyleType("lowerCaseMinorChords",    ST_BOOL) },
+      { ST_chordStyle,                  StyleType("chordStyle",              ST_STRING) },
+      { ST_chordsXmlFile,               StyleType("chordsXmlFile",           ST_BOOL) },
+      { ST_chordDescriptionFile,        StyleType("chordDescriptionFile",    ST_STRING) },
+      { ST_concertPitch,                StyleType("concertPitch",            ST_BOOL) },            // display transposing instruments in concert pitch
+      { ST_createMultiMeasureRests,     StyleType("createMultiMeasureRests", ST_BOOL) },
+      { ST_minEmptyMeasures,            StyleType("minEmptyMeasures",        ST_INT) },         // minimum number of empty measures for multi measure rest
+      { ST_minMMRestWidth,              StyleType("minMMRestWidth",          ST_SPATIUM) },       // minimum width of multi measure rest
+      { ST_hideEmptyStaves,             StyleType("hideEmptyStaves",         ST_BOOL) },
+      { ST_dontHideStavesInFirstSystem, StyleType("dontHidStavesInFirstSystm", ST_BOOL) },
+      { ST_stemDir1,                    StyleType("stemDir1",                ST_DIRECTION) },
+      { ST_stemDir2,                    StyleType("stemDir2",                ST_DIRECTION) },
+      { ST_stemDir3,                    StyleType("stemDir3",                ST_DIRECTION) },
+      { ST_stemDir4,                    StyleType("stemDir4",                ST_DIRECTION) },
+      { ST_gateTime,                    StyleType("gateTime",                ST_INT) },           // 0-100%
+      { ST_tenutoGateTime,              StyleType("tenutoGateTime",          ST_INT) },
+      { ST_staccatoGateTime,            StyleType("staccatoGateTime",        ST_INT) },
+      { ST_slurGateTime,                StyleType("slurGateTime",            ST_INT) },
+      { ST_ArpeggioNoteDistance,        StyleType("ArpeggioNoteDistance",    ST_SPATIUM) },
+      { ST_ArpeggioLineWidth,           StyleType("ArpeggioLineWidth",       ST_SPATIUM) },
+      { ST_ArpeggioHookLen,             StyleType("ArpeggioHookLen",         ST_SPATIUM) },
+      { ST_FixMeasureNumbers,           StyleType("FixMeasureNumbers",       ST_INT) },
+      { ST_FixMeasureWidth,             StyleType("FixMeasureWidth",         ST_BOOL) },
+      { ST_SlurEndWidth,                StyleType("slurEndWidth",            ST_SPATIUM) },
+      { ST_SlurMidWidth,                StyleType("slurMidWidth",            ST_SPATIUM) },
+      { ST_SlurDottedWidth,             StyleType("slurDottedWidth",         ST_SPATIUM) },
+      { ST_SlurBow,                     StyleType("slurBow",                 ST_SPATIUM) },
+      { ST_SectionPause,                StyleType("sectionPause",            ST_DOUBLE) },
+      { ST_MusicalSymbolFont,           StyleType("musicalSymbolFont",       ST_STRING) },
+      { ST_showHeader,                  StyleType("showHeader",              ST_BOOL) },
+      { ST_headerStyled,                StyleType("headerStyled",            ST_BOOL) },
+      { ST_headerFirstPage,             StyleType("headerFirstPage",         ST_BOOL) },
+      { ST_headerOddEven,               StyleType("headerOddEven",           ST_BOOL) },
+      { ST_evenHeaderL,                 StyleType("evenHeaderL",             ST_STRING) },
+      { ST_evenHeaderC,                 StyleType("evenHeaderC",             ST_STRING) },
+      { ST_evenHeaderR,                 StyleType("evenHeaderR",             ST_STRING) },
+      { ST_oddHeaderL,                  StyleType("oddHeaderL",              ST_STRING) },
+      { ST_oddHeaderC,                  StyleType("oddHeaderC",              ST_STRING) },
+      { ST_oddHeaderR,                  StyleType("oddHeaderR",              ST_STRING) },
+      { ST_showFooter,                  StyleType("showFooter",              ST_BOOL) },
+      { ST_footerStyled,                StyleType("footerStyled",            ST_BOOL) },
+      { ST_footerFirstPage,             StyleType("footerFirstPage",         ST_BOOL) },
+      { ST_footerOddEven,               StyleType("footerOddEven",           ST_BOOL) },
+      { ST_evenFooterL,                 StyleType("evenFooterL",             ST_STRING) },
+      { ST_evenFooterC,                 StyleType("evenFooterC",             ST_STRING) },
+      { ST_evenFooterR,                 StyleType("evenFooterR",             ST_STRING) },
+      { ST_oddFooterL,                  StyleType("oddFooterL",              ST_STRING) },
+      { ST_oddFooterC,                  StyleType("oddFooterC",              ST_STRING) },
+      { ST_oddFooterR,                  StyleType("oddFooterR",              ST_STRING) },
+      { ST_voltaY,                      StyleType("voltaY",                  ST_SPATIUM) },
+      { ST_voltaHook,                   StyleType("voltaHook",               ST_SPATIUM) },
+      { ST_voltaLineWidth,              StyleType("voltaLineWidth",          ST_SPATIUM) },
+      { ST_ottavaY,                     StyleType("ottavaY",                 ST_SPATIUM) },
+      { ST_ottavaHook,                  StyleType("ottavaHook",              ST_SPATIUM) },
+      { ST_ottavaLineWidth,             StyleType("ottavaLineWidth",         ST_SPATIUM) },
+      { ST_tabClef,                     StyleType("tabClef",                 ST_INT) },
+      { ST_tremoloWidth,                StyleType("tremoloWidth",            ST_SPATIUM) },
+      { ST_tremoloBoxHeight,            StyleType("tremoloBoxHeight",        ST_SPATIUM) },
+      { ST_tremoloStrokeWidth,          StyleType("tremoloLineWidth",        ST_SPATIUM) },
+      { ST_tremoloDistance,             StyleType("tremoloDistance",         ST_SPATIUM) },
+      { ST_linearStretch,               StyleType("linearStretch",           ST_DOUBLE) },
+      { ST_crossMeasureValues,          StyleType("crossMeasureValues",      ST_BOOL) },
+      { ST_keySigNaturals,              StyleType("keySigNaturals",          ST_INT) }
+      };
+
+class StyleTypes {
+      StyleType st[ST_STYLES];
+
+   public:
+      StyleTypes()
+            {
+            for (auto i : styleTypes2)
+                  st[i.idx] = i.val;
+            };
+      const char* name(StyleIdx i) const { return st[i].name(); }
+      StyleValueType valueType(StyleIdx i) const { return st[i].valueType(); }
+      };
+
+static const StyleTypes styleTypes;
 
 static const QString ff("FreeSerifMscore");
 
@@ -292,32 +284,15 @@ void initStyle(MStyle* s)
          false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
 
-#if 0
-      AS(TextStyle(           // internal style
-         TR( "Dynamics2"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true,
-         Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false, false,           // default params
-         QColor(Qt::black), QColor(255, 255, 255, 0),                               // default params
-         TextStyle::HIDE_ALWAYS));
-#endif
-
       AS(TextStyle(
          TR( "Technik"), ff, 12, false, true, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS));
 
-#if 0
-// (temporarly) switch bold off as Qt cannot show bold glyphs with codepoint > 16bit
-// (used for musical symbols)
       AS(TextStyle(
          TR( "Tempo"), ff, 12, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS, QPointF(),
          true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true));
-#else
-      AS(TextStyle(
-         TR( "Tempo"), ff, 12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS, QPointF(),
-         true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true));
-#endif
+
       AS(TextStyle(
          TR( "Metronome"), ff, 12, true, false, false, ALIGN_LEFT));
 
@@ -432,197 +407,173 @@ StyleData::StyleData()
    : _values(ST_STYLES)
       {
       _customChordList = false;
-      static const StyleVal values[ST_STYLES] = {
-            StyleVal(ST_staffUpperBorder, Spatium(7.0)),
-            StyleVal(ST_staffLowerBorder, Spatium(7.0)),
-            StyleVal(ST_staffDistance, Spatium(6.5)),
-            StyleVal(ST_akkoladeDistance, Spatium(6.5)),
-            StyleVal(ST_minSystemDistance, Spatium(8.5)),
-            StyleVal(ST_maxSystemDistance, Spatium(15.0)),
-            StyleVal(ST_lyricsDistance, Spatium(3.5)),
 
-            StyleVal(ST_lyricsMinBottomDistance, Spatium(2)),
-            StyleVal(ST_lyricsLineHeight, qreal(1.0)),
-            StyleVal(ST_figuredBassFontFamily, QString("MuseScore Figured Bass")),
-            StyleVal(ST_figuredBassFontSize, qreal(8.0)),
-            StyleVal(ST_figuredBassYOffset, Spatium(6.0)),
-            StyleVal(ST_figuredBassLineHeight, qreal(1.0)),
-            StyleVal(ST_figuredBassAlignment, 0),
-            StyleVal(ST_figuredBassStyle, 0),
-            StyleVal(ST_systemFrameDistance, Spatium(7.0)),
-            StyleVal(ST_frameSystemDistance, Spatium(7.0)),
-            StyleVal(ST_minMeasureWidth, Spatium(5.0)),
-                                                            // finale european style
-            StyleVal(ST_barWidth, Spatium(0.16)),           // 0.1875
-            StyleVal(ST_doubleBarWidth, Spatium(0.16)),
-            StyleVal(ST_endBarWidth, Spatium(0.3)),         // 0.5
-            StyleVal(ST_doubleBarDistance, Spatium(0.30)),
-            StyleVal(ST_endBarDistance, Spatium(0.40)),     // 0.3
-            StyleVal(ST_repeatBarTips, false),
-            StyleVal(ST_startBarlineSingle, false),
-            StyleVal(ST_startBarlineMultiple, true),
-
-            StyleVal(ST_bracketWidth, Spatium(0.45)),
-            StyleVal(ST_bracketDistance, Spatium(0.8)),
-            StyleVal(ST_akkoladeWidth,Spatium(1.6)),
-            StyleVal(ST_akkoladeBarDistance,Spatium(.4)),
-
-            StyleVal(ST_clefLeftMargin, Spatium(0.64)),
-            StyleVal(ST_keysigLeftMargin, Spatium(0.5)),
-            StyleVal(ST_timesigLeftMargin, Spatium(0.5)),
-
-            StyleVal(ST_clefKeyRightMargin, Spatium(1.75)),
-            StyleVal(ST_clefBarlineDistance, Spatium(0.18)),      // was 0.5
-            StyleVal(ST_stemWidth, Spatium(0.13)),          // 0.09375
-            StyleVal(ST_shortenStem, true),
-            StyleVal(ST_shortStemProgression, Spatium(0.25)),
-            StyleVal(ST_shortestStem, Spatium(2.25)),
-            StyleVal(ST_beginRepeatLeftMargin,Spatium(1.0)),
-            StyleVal(ST_minNoteDistance,Spatium(0.25)),           // 0.4
-            StyleVal(ST_barNoteDistance,Spatium(1.2)),
-            StyleVal(ST_barAccidentalDistance,Spatium(.3)),
-            StyleVal(ST_multiMeasureRestMargin,Spatium(1.2)),
-            StyleVal(ST_noteBarDistance,Spatium(1.0)),
-
-            //43
-            StyleVal(ST_measureSpacing, qreal(1.2)),
-            StyleVal(ST_staffLineWidth,Spatium(0.08)),      // 0.09375
-            StyleVal(ST_ledgerLineWidth,Spatium(0.12)),     // 0.1875
-            StyleVal(ST_ledgerLineLength, Spatium(.6)),     // note head width + this value
-            StyleVal(ST_accidentalDistance,Spatium(0.22)),
-            StyleVal(ST_accidentalNoteDistance,Spatium(0.22)),
-            StyleVal(ST_beamWidth, Spatium(0.5)),           // was 0.48
-            StyleVal(ST_beamDistance, qreal(0.5)),          // 0.25sp
-            StyleVal(ST_beamMinLen,Spatium(1.316178)),      // exactly note head width
-            StyleVal(ST_beamMinSlope, qreal(0.05)),
-
-            StyleVal(ST_beamMaxSlope,         qreal(0.2)),
-            StyleVal(ST_maxBeamTicks,         MScore::division),
-            StyleVal(ST_dotMag,         qreal(1.0)),
-            StyleVal(ST_dotNoteDistance,      Spatium(0.35)),
-            StyleVal(ST_dotRestDistance,      Spatium(0.25)),
-            StyleVal(ST_dotDotDistance,       Spatium(0.5)),
-            StyleVal(ST_propertyDistanceHead, Spatium(1.0)),
-            StyleVal(ST_propertyDistanceStem, Spatium(1.8)),
-            StyleVal(ST_propertyDistance,     Spatium(1.0)),
-            StyleVal(ST_lastSystemFillLimit,  qreal(0.3)),
-
-            StyleVal(ST_hairpinY, Spatium(8)),
-            StyleVal(ST_hairpinHeight, Spatium(1.2)),
-            StyleVal(ST_hairpinContHeight, Spatium(0.5)),
-            StyleVal(ST_hairpinWidth, Spatium(0.13)),
-
-            StyleVal(ST_pedalY,   Spatium(8)),
-            StyleVal(ST_trillY,   Spatium(-1)),
-            StyleVal(ST_harmonyY, Spatium(-2.5)),
-            StyleVal(ST_harmonyFretDist, Spatium(-1.5)),
-            StyleVal(ST_minHarmonyDistance, Spatium(0.5)),
-
-            StyleVal(ST_showPageNumber, true),
-            StyleVal(ST_showPageNumberOne, false),
-            StyleVal(ST_pageNumberOddEven, true),
-            StyleVal(ST_showMeasureNumber, true),
-            StyleVal(ST_showMeasureNumberOne, false),
-            StyleVal(ST_measureNumberInterval, 5),
-            StyleVal(ST_measureNumberSystem, true),
-
-            //77
-            StyleVal(ST_measureNumberAllStaffs,false),
-            StyleVal(ST_smallNoteMag, qreal(.7)),
-            StyleVal(ST_graceNoteMag, qreal(0.7)),
-            StyleVal(ST_smallStaffMag, qreal(0.7)),
-            StyleVal(ST_smallClefMag, qreal(0.8)),
-            StyleVal(ST_genClef,true),
-            StyleVal(ST_genKeysig,true),
-            StyleVal(ST_genTimesig,true),
-            StyleVal(ST_genCourtesyTimesig, true),
-            StyleVal(ST_genCourtesyKeysig, true),
-            StyleVal(ST_genCourtesyClef, true),
-
-            StyleVal(ST_useStandardNoteNames, true),
-            StyleVal(ST_useGermanNoteNames, false),
-            StyleVal(ST_useSolfeggioNoteNames, false),
-            StyleVal(ST_lowerCaseMinorChords, false),
-            StyleVal(ST_chordStyle, QString("std")),
-            StyleVal(ST_chordsXmlFile, false),
-            StyleVal(ST_chordDescriptionFile, QString("chords_std.xml")),
-            StyleVal(ST_concertPitch, false),
-            StyleVal(ST_createMultiMeasureRests, false),
-            StyleVal(ST_minEmptyMeasures, 2),
-            StyleVal(ST_minMMRestWidth, Spatium(4)),
-            StyleVal(ST_hideEmptyStaves, false),
-            StyleVal(ST_dontHideStavesInFirstSystem, true),
-            StyleVal(ST_stemDir1, MScore::UP),
-            StyleVal(ST_stemDir2, MScore::DOWN),
-            StyleVal(ST_stemDir3, MScore::UP),
-            StyleVal(ST_stemDir4, MScore::DOWN),
-
-            StyleVal(ST_gateTime, 100),
-            StyleVal(ST_tenutoGateTime, 100),
-            StyleVal(ST_staccatoGateTime, 50),
-            StyleVal(ST_slurGateTime, 100),
-
-            StyleVal(ST_ArpeggioNoteDistance, Spatium(.5)),
-            StyleVal(ST_ArpeggioLineWidth, Spatium(.18)),
-            StyleVal(ST_ArpeggioHookLen, Spatium(.8)),
-            StyleVal(ST_FixMeasureNumbers, 0),
-            StyleVal(ST_FixMeasureWidth, false),
-
-            //109
-            StyleVal(ST_SlurEndWidth, Spatium(.07)),
-            StyleVal(ST_SlurMidWidth, Spatium(.15)),
-            StyleVal(ST_SlurDottedWidth, Spatium(.1)),
-            StyleVal(ST_SlurBow, Spatium(1.6)),
-
-            StyleVal(ST_SectionPause, qreal(3.0)),
-
-            StyleVal(ST_MusicalSymbolFont, QString("Emmentaler")),
-
-            StyleVal(ST_showHeader,      false),
-            StyleVal(ST_headerStyled,    true),
-            StyleVal(ST_headerFirstPage, false),
-            StyleVal(ST_headerOddEven,   true),
-
-            StyleVal(ST_evenHeaderL, QString()),
-            StyleVal(ST_evenHeaderC, QString()),
-            StyleVal(ST_evenHeaderR, QString()),
-            StyleVal(ST_oddHeaderL,  QString()),
-            StyleVal(ST_oddHeaderC,  QString()),
-            StyleVal(ST_oddHeaderR,  QString()),
-
-            StyleVal(ST_showFooter,      true),
-            StyleVal(ST_footerStyled,    true),
-            StyleVal(ST_footerFirstPage, true),
-            StyleVal(ST_footerOddEven,   true),
-
-            StyleVal(ST_evenFooterL, QString("$p")),
-            StyleVal(ST_evenFooterC, QString("$:copyright:")),
-            StyleVal(ST_evenFooterR, QString()),
-            StyleVal(ST_oddFooterL,  QString()),
-            StyleVal(ST_oddFooterC,  QString("$:copyright:")),
-            StyleVal(ST_oddFooterR,  QString("$p")),
-
-            StyleVal(ST_voltaY, Spatium(-3.0)),
-            StyleVal(ST_voltaHook, Spatium(1.9)),
-            StyleVal(ST_voltaLineWidth, Spatium(.1)),
-
-            StyleVal(ST_ottavaY, Spatium(-3.0)),
-            StyleVal(ST_ottavaHook, Spatium(1.9)),
-            StyleVal(ST_ottavaLineWidth, Spatium(.1)),
-            StyleVal(ST_tabClef, int(CLEF_TAB2)),
-
-            StyleVal(ST_tremoloWidth, Spatium(1.2)),  // tremolo stroke width: note head width
-            StyleVal(ST_tremoloBoxHeight, Spatium(0.65)),
-            StyleVal(ST_tremoloStrokeWidth, Spatium(0.35)),
-            StyleVal(ST_tremoloDistance, Spatium(0.8)),
-
-            StyleVal(ST_linearStretch, qreal(1.5)),
-            StyleVal(ST_crossMeasureValues, false),
-            StyleVal(ST_keySigNaturals, NAT_NONE),
+      struct StyleVal2 {
+            StyleIdx idx;
+            StyleVal val;
             };
-
-      for (int idx = 0; idx < ST_STYLES; ++idx)
-            _values[idx] = values[idx];
+      static const StyleVal2 values2[] = {
+            { ST_staffUpperBorder,            StyleVal(Spatium(7.0)) },
+            { ST_staffLowerBorder,            StyleVal(Spatium(7.0)) },
+            { ST_staffDistance,               StyleVal(Spatium(6.5)) },
+            { ST_akkoladeDistance,            StyleVal(Spatium(6.5)) },
+            { ST_minSystemDistance,           StyleVal(Spatium(8.5)) },
+            { ST_maxSystemDistance,           StyleVal(Spatium(15.0)) },
+            { ST_lyricsDistance,              StyleVal(Spatium(3.5)) },
+            { ST_lyricsMinBottomDistance,     StyleVal(Spatium(2)) },
+            { ST_lyricsLineHeight,            StyleVal(qreal(1.0)) },
+            { ST_figuredBassFontFamily,       StyleVal(QString("MuseScore Figured Bass")) },
+            { ST_figuredBassFontSize,         StyleVal(qreal(8.0)) },
+            { ST_figuredBassYOffset,          StyleVal(Spatium(6.0)) },
+            { ST_figuredBassLineHeight,       StyleVal(qreal(1.0)) },
+            { ST_figuredBassAlignment,        StyleVal(0) },
+            { ST_figuredBassStyle,            StyleVal(0) },
+            { ST_systemFrameDistance,         StyleVal(Spatium(7.0)) },
+            { ST_frameSystemDistance,         StyleVal(Spatium(7.0)) },
+            { ST_minMeasureWidth,             StyleVal(Spatium(5.0)) },
+            { ST_barWidth,                    StyleVal(Spatium(0.16)) },      // 0.1875
+            { ST_doubleBarWidth,              StyleVal(Spatium(0.16)) },
+            { ST_endBarWidth,                 StyleVal(Spatium(0.3)) },       // 0.5
+            { ST_doubleBarDistance,           StyleVal(Spatium(0.30)) },
+            { ST_endBarDistance,              StyleVal(Spatium(0.40)) },     // 0.3
+            { ST_repeatBarTips,               StyleVal(false) },
+            { ST_startBarlineSingle,          StyleVal(false) },
+            { ST_startBarlineMultiple,        StyleVal(true) },
+            { ST_bracketWidth,                StyleVal(Spatium(0.45)) },
+            { ST_bracketDistance,             StyleVal(Spatium(0.8)) },
+            { ST_akkoladeWidth,               StyleVal(Spatium(1.6)) },
+            { ST_akkoladeBarDistance,         StyleVal(Spatium(.4)) },
+            { ST_clefLeftMargin,              StyleVal(Spatium(0.64)) },
+            { ST_keysigLeftMargin,            StyleVal(Spatium(0.5)) },
+            { ST_timesigLeftMargin,           StyleVal(Spatium(0.5)) },
+            { ST_clefKeyRightMargin,          StyleVal(Spatium(1.75)) },
+            { ST_clefBarlineDistance,         StyleVal(Spatium(0.18)) },      // was 0.5
+            { ST_stemWidth,                   StyleVal(Spatium(0.13)) },      // 0.09375
+            { ST_shortenStem,                 StyleVal(true) },
+            { ST_shortStemProgression,        StyleVal(Spatium(0.25)) },
+            { ST_shortestStem,                StyleVal(Spatium(2.25)) },
+            { ST_beginRepeatLeftMargin,       StyleVal(Spatium(1.0)) },
+            { ST_minNoteDistance,             StyleVal(Spatium(0.25)) },      // 0.4
+            { ST_barNoteDistance,             StyleVal(Spatium(1.2)) },
+            { ST_barAccidentalDistance,       StyleVal(Spatium(.3)) },
+            { ST_multiMeasureRestMargin,      StyleVal(Spatium(1.2)) },
+            { ST_noteBarDistance,             StyleVal(Spatium(1.0)) },
+            { ST_measureSpacing,              StyleVal(qreal(1.2)) },
+            { ST_staffLineWidth,              StyleVal(Spatium(0.08)) },      // 0.09375
+            { ST_ledgerLineWidth,             StyleVal(Spatium(0.12)) },     // 0.1875
+            { ST_ledgerLineLength,            StyleVal(Spatium(.6)) },     // note head width + this value
+            { ST_accidentalDistance,          StyleVal(Spatium(0.22)) },
+            { ST_accidentalNoteDistance,      StyleVal(Spatium(0.22)) },
+            { ST_beamWidth,                   StyleVal(Spatium(0.5)) },           // was 0.48
+            { ST_beamDistance,                StyleVal(qreal(0.5)) },          // 0.25sp
+            { ST_beamMinLen,                  StyleVal(Spatium(1.316178)) },      // exactly note head width
+            { ST_beamMinSlope,                StyleVal(qreal(0.05)) },
+            { ST_beamMaxSlope,                StyleVal(qreal(0.2)) },
+            { ST_maxBeamTicks,                StyleVal(MScore::division) },
+            { ST_dotMag,                      StyleVal(qreal(1.0)) },
+            { ST_dotNoteDistance,             StyleVal(Spatium(0.35)) },
+            { ST_dotRestDistance,             StyleVal(Spatium(0.25)) },
+            { ST_dotDotDistance,              StyleVal(Spatium(0.5)) },
+            { ST_propertyDistanceHead,        StyleVal(Spatium(1.0)) },
+            { ST_propertyDistanceStem,        StyleVal(Spatium(1.8)) },
+            { ST_propertyDistance,            StyleVal(Spatium(1.0)) },
+            { ST_lastSystemFillLimit,         StyleVal(qreal(0.3)) },
+            { ST_hairpinY,                    StyleVal(Spatium(8)) },
+            { ST_hairpinHeight,               StyleVal(Spatium(1.2)) },
+            { ST_hairpinContHeight,           StyleVal(Spatium(0.5)) },
+            { ST_hairpinWidth,                StyleVal(Spatium(0.13)) },
+            { ST_pedalY,                      StyleVal(Spatium(8)) },
+            { ST_trillY,                      StyleVal(Spatium(-1)) },
+            { ST_harmonyY,                    StyleVal(Spatium(-2.5)) },
+            { ST_harmonyFretDist,             StyleVal(Spatium(-1.5)) },
+            { ST_minHarmonyDistance,          StyleVal(Spatium(0.5)) },
+            { ST_showPageNumber,              StyleVal(true) },
+            { ST_showPageNumberOne,           StyleVal(false) },
+            { ST_pageNumberOddEven,           StyleVal(true) },
+            { ST_showMeasureNumber,           StyleVal(true) },
+            { ST_showMeasureNumberOne,        StyleVal(false) },
+            { ST_measureNumberInterval,       StyleVal(5) },
+            { ST_measureNumberSystem,         StyleVal(true) },
+            { ST_measureNumberAllStaffs,      StyleVal(false) },
+            { ST_smallNoteMag,                StyleVal(qreal(.7)) },
+            { ST_graceNoteMag,                StyleVal(qreal(0.7)) },
+            { ST_smallStaffMag,               StyleVal(qreal(0.7)) },
+            { ST_smallClefMag,                StyleVal(qreal(0.8)) },
+            { ST_genClef,                     StyleVal(true) },
+            { ST_genKeysig,                   StyleVal(true) },
+            { ST_genTimesig,                  StyleVal(true) },
+            { ST_genCourtesyTimesig,          StyleVal(true) },
+            { ST_genCourtesyKeysig,           StyleVal(true) },
+            { ST_genCourtesyClef,             StyleVal(true) },
+            { ST_useStandardNoteNames,        StyleVal(true) },
+            { ST_useGermanNoteNames,          StyleVal(false) },
+            { ST_useSolfeggioNoteNames,       StyleVal(false) },
+            { ST_lowerCaseMinorChords,        StyleVal(false) },
+            { ST_chordStyle,                  StyleVal(QString("std")) },
+            { ST_chordsXmlFile,               StyleVal(false) },
+            { ST_chordDescriptionFile,        StyleVal(QString("chords_std.xml")) },
+            { ST_concertPitch,                StyleVal(false) },
+            { ST_createMultiMeasureRests,     StyleVal(false) },
+            { ST_minEmptyMeasures,            StyleVal(2) },
+            { ST_minMMRestWidth,              StyleVal(Spatium(4)) },
+            { ST_hideEmptyStaves,             StyleVal(false) },
+            { ST_dontHideStavesInFirstSystem, StyleVal(true) },
+            { ST_stemDir1,                    StyleVal(MScore::UP) },
+            { ST_stemDir2,                    StyleVal(MScore::DOWN) },
+            { ST_stemDir3,                    StyleVal(MScore::UP) },
+            { ST_stemDir4,                    StyleVal(MScore::DOWN) },
+            { ST_gateTime,                    StyleVal(100) },
+            { ST_tenutoGateTime,              StyleVal(100) },
+            { ST_staccatoGateTime,            StyleVal(50) },
+            { ST_slurGateTime,                StyleVal(100) },
+            { ST_ArpeggioNoteDistance,        StyleVal(Spatium(.5)) },
+            { ST_ArpeggioLineWidth,           StyleVal(Spatium(.18)) },
+            { ST_ArpeggioHookLen,             StyleVal(Spatium(.8)) },
+            { ST_FixMeasureNumbers,           StyleVal(0) },
+            { ST_FixMeasureWidth,             StyleVal(false) },
+            { ST_SlurEndWidth,                StyleVal(Spatium(.07)) },
+            { ST_SlurMidWidth,                StyleVal(Spatium(.15)) },
+            { ST_SlurDottedWidth,             StyleVal(Spatium(.1)) },
+            { ST_SlurBow,                     StyleVal(Spatium(1.6)) },
+            { ST_SectionPause,                StyleVal(qreal(3.0)) },
+            { ST_MusicalSymbolFont,           StyleVal(QString("Emmentaler")) },
+            { ST_showHeader,                  StyleVal(false) },
+            { ST_headerStyled,                StyleVal(true) },
+            { ST_headerFirstPage,             StyleVal(false) },
+            { ST_headerOddEven,               StyleVal(true) },
+            { ST_evenHeaderL,                 StyleVal(QString()) },
+            { ST_evenHeaderC,                 StyleVal(QString()) },
+            { ST_evenHeaderR,                 StyleVal(QString()) },
+            { ST_oddHeaderL,                  StyleVal(QString()) },
+            { ST_oddHeaderC,                  StyleVal(QString()) },
+            { ST_oddHeaderR,                  StyleVal(QString()) },
+            { ST_showFooter,                  StyleVal(true) },
+            { ST_footerStyled,                StyleVal(true) },
+            { ST_footerFirstPage,             StyleVal(true) },
+            { ST_footerOddEven,               StyleVal(true) },
+            { ST_evenFooterL,                 StyleVal(QString("$p")) },
+            { ST_evenFooterC,                 StyleVal(QString("$:copyright:")) },
+            { ST_evenFooterR,                 StyleVal(QString()) },
+            { ST_oddFooterL,                  StyleVal(QString()) },
+            { ST_oddFooterC,                  StyleVal(QString("$:copyright:")) },
+            { ST_oddFooterR,                  StyleVal(QString("$p")) },
+            { ST_voltaY,                      StyleVal(Spatium(-3.0)) },
+            { ST_voltaHook,                   StyleVal(Spatium(1.9)) },
+            { ST_voltaLineWidth,              StyleVal(Spatium(.1)) },
+            { ST_ottavaY,                     StyleVal(Spatium(-3.0)) },
+            { ST_ottavaHook,                  StyleVal(Spatium(1.9)) },
+            { ST_ottavaLineWidth,             StyleVal(Spatium(.1)) },
+            { ST_tabClef,                     StyleVal(int(CLEF_TAB2)) },
+            { ST_tremoloWidth,                StyleVal(Spatium(1.2)) },  // tremolo stroke width: note head width
+            { ST_tremoloBoxHeight,            StyleVal(Spatium(0.65)) },
+            { ST_tremoloStrokeWidth,          StyleVal(Spatium(0.35)) },
+            { ST_tremoloDistance,             StyleVal(Spatium(0.8)) },
+            { ST_linearStretch,               StyleVal(qreal(1.5)) },
+            { ST_crossMeasureValues,          StyleVal(false) },
+            { ST_keySigNaturals,              StyleVal(NAT_NONE) }
+            };
+      for (unsigned i = 0; i < sizeof(values2)/sizeof(*values2); ++i)
+            _values[values2[i].idx] = values2[i].val;
 
 // _textStyles.append(TextStyle(defaultTextStyles[i]));
       _spatium = SPATIUM20 * MScore::DPI;
@@ -990,7 +941,7 @@ void StyleData::load(XmlReader& e)
             else if (tag == "page-layout")
                   _pageFormat.read(e);
             else if (tag == "displayInConcertPitch")
-                  set(StyleVal(ST_concertPitch, bool(e.readInt())));
+                  set(ST_concertPitch, StyleVal(bool(e.readInt())));
             else if (tag == "ChordList") {
                   _chordList.clear();
                   _chordList.read(e);
@@ -1000,7 +951,7 @@ void StyleData::load(XmlReader& e)
             else if (tag == "pageFillLimit")   // obsolete
                   e.skipCurrentElement();
             else if (tag == "systemDistance")  // obsolete
-                  set(StyleVal(ST_minSystemDistance, Spatium(e.readDouble())));
+                  set(ST_minSystemDistance, StyleVal(Spatium(e.readDouble())));
             else {
                   if (tag == "stemDir") {
                         int voice = e.attribute("voice", "1").toInt() - 1;
@@ -1017,17 +968,18 @@ void StyleData::load(XmlReader& e)
                         tag += "C";
 
                   QString val(e.readElementText());
-                  int idx;
-                  for (idx = 0; idx < ST_STYLES; ++idx) {
-                        if (styleTypes[idx].name() == tag) {
-                              StyleIdx i = StyleIdx(idx);
-                              switch(styleTypes[idx].valueType()) {
-                                    case ST_SPATIUM:   set(StyleVal(i, Spatium(val.toDouble()))); break;
-                                    case ST_DOUBLE:    set(StyleVal(i, qreal(val.toDouble())));          break;
-                                    case ST_BOOL:      set(StyleVal(i, bool(val.toInt())));       break;
-                                    case ST_INT:       set(StyleVal(i, val.toInt()));             break;
-                                    case ST_DIRECTION: set(StyleVal(i, MScore::Direction(val.toInt())));  break;
-                                    case ST_STRING:    set(StyleVal(i, val));                     break;
+
+                  StyleIdx idx;
+                  for (int i = 0; i < ST_STYLES; ++i) {
+                        idx = static_cast<StyleIdx>(i);
+                        if (styleTypes.name(idx) == tag) {
+                              switch(styleTypes.valueType(idx)) {
+                                    case ST_SPATIUM:   set(idx, StyleVal(Spatium(val.toDouble()))); break;
+                                    case ST_DOUBLE:    set(idx, StyleVal(qreal(val.toDouble())));          break;
+                                    case ST_BOOL:      set(idx, StyleVal(bool(val.toInt())));       break;
+                                    case ST_INT:       set(idx, StyleVal(val.toInt()));             break;
+                                    case ST_DIRECTION: set(idx, StyleVal(MScore::Direction(val.toInt())));  break;
+                                    case ST_STRING:    set(idx, StyleVal(val));                     break;
                                     }
                               break;
                               }
@@ -1068,8 +1020,8 @@ void StyleData::load(XmlReader& e)
             if (!newChordDescriptionFile.startsWith("chords_") && value(ST_chordStyle).toString() == "std") {
                   // should not normally happen,
                   // but treat as "old" (114) score just in case
-                  set(StyleVal(ST_chordStyle, QString("custom")));
-                  set(StyleVal(ST_chordsXmlFile, true));
+                  set(ST_chordStyle, StyleVal(QString("custom")));
+                  set(ST_chordsXmlFile, StyleVal(true));
                   qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
                   }
             if (value(ST_chordStyle).toString() == "custom")
@@ -1108,7 +1060,7 @@ void StyleData::load(XmlReader& e)
 
 bool StyleData::isDefault(StyleIdx idx) const
       {
-      switch(styleTypes[idx].valueType()) {
+      switch(styleTypes.valueType(idx)) {
             case ST_DOUBLE:
             case ST_SPATIUM:
                   return _values[idx].toDouble() == MScore::baseStyle()->valueD(idx);
@@ -1137,13 +1089,13 @@ void StyleData::save(Xml& xml, bool optimize) const
             StyleIdx idx = StyleIdx(i);
             if (optimize && isDefault(idx))
                   continue;
-            switch(styleTypes[idx].valueType()) {
+            switch(styleTypes.valueType(idx)) {
                   case ST_SPATIUM:
-                  case ST_DOUBLE:    xml.tag(styleTypes[idx].name(), value(idx).toDouble()); break;
-                  case ST_BOOL:      xml.tag(styleTypes[idx].name(), value(idx).toBool()); break;
-                  case ST_INT:       xml.tag(styleTypes[idx].name(), value(idx).toInt()); break;
-                  case ST_DIRECTION: xml.tag(styleTypes[idx].name(), int(value(idx).toDirection())); break;
-                  case ST_STRING:    xml.tag(styleTypes[idx].name(), value(idx).toString()); break;
+                  case ST_DOUBLE:    xml.tag(styleTypes.name(idx), value(idx).toDouble()); break;
+                  case ST_BOOL:      xml.tag(styleTypes.name(idx), value(idx).toBool()); break;
+                  case ST_INT:       xml.tag(styleTypes.name(idx), value(idx).toInt()); break;
+                  case ST_DIRECTION: xml.tag(styleTypes.name(idx), int(value(idx).toDirection())); break;
+                  case ST_STRING:    xml.tag(styleTypes.name(idx), value(idx).toString()); break;
                   }
             }
       for (int i = 0; i < TEXT_STYLES; ++i) {
@@ -1210,52 +1162,44 @@ const TextStyle& StyleData::textStyle(int idx) const
 //   StyleVal
 //---------------------------------------------------------
 
-StyleVal::StyleVal(StyleIdx t, Spatium val)
+StyleVal::StyleVal(Spatium val)
       {
-      idx  = t;
       v.dbl = val.val();
       }
 
-StyleVal::StyleVal(StyleIdx t, qreal val)
+StyleVal::StyleVal(qreal val)
       {
-      idx  = t;
       v.dbl = val;
       }
 
-StyleVal::StyleVal(StyleIdx t, bool val)
+StyleVal::StyleVal(bool val)
       {
-      idx  = t;
       v.b   = val;
       }
 
-StyleVal::StyleVal(StyleIdx t, int val)
+StyleVal::StyleVal(int val)
       {
-      idx  = t;
       v.i   = val;
       }
 
-StyleVal::StyleVal(StyleIdx t, MScore::Direction val)
+StyleVal::StyleVal(MScore::Direction val)
       {
-      idx  = t;
       v.d   = val;
       }
 
-StyleVal::StyleVal(StyleIdx t, const QString& val)
+StyleVal::StyleVal(const QString& val)
       {
-      idx  = t;
       s    = val;
       }
 
 StyleVal::StyleVal(const StyleVal& val)
       {
-      idx = val.idx;
       s   = val.s;
       v   = val.v;
       }
 
 StyleVal& StyleVal::operator=(const StyleVal& val)
       {
-      idx = val.idx;
       s   = val.s;
       v   = val.v;
       return *this;
@@ -1264,10 +1208,10 @@ StyleVal& StyleVal::operator=(const StyleVal& val)
 StyleVal::StyleVal(const QString& name, const QString& val)
       {
       for (int i = 0; i < ST_STYLES; ++i) {
-            if (styleTypes[i].name() != name)
+            StyleIdx idx = StyleIdx(i);
+            if (styleTypes.name(idx) != name)
                   continue;
-            idx = StyleIdx(i);
-            switch(styleTypes[i].valueType()) {
+            switch(styleTypes.valueType(idx)) {
                   case ST_DOUBLE:
                   case ST_SPATIUM:
                         v.dbl = val.toDouble();
@@ -1480,9 +1424,9 @@ MStyle& MStyle::operator=(const MStyle& s)
 //   set
 //---------------------------------------------------------
 
-void MStyle::set(const StyleVal& v)
+void MStyle::set(StyleIdx id, const StyleVal& v)
       {
-      d->_values[v.getIdx()] = v;
+      d->_values[id] = v;
       }
 
 //---------------------------------------------------------
@@ -1550,32 +1494,32 @@ const QList<TextStyle>& MStyle::textStyles() const
 
 void MStyle::set(StyleIdx t, Spatium val)
       {
-      set(StyleVal(t, val));
+      set(t, StyleVal(val));
       }
 
 void MStyle::set(StyleIdx t, const QString& val)
       {
-      set(StyleVal(t, val));
+      set(t, StyleVal(val));
       }
 
 void MStyle::set(StyleIdx t, bool val)
       {
-      set(StyleVal(t, val));
+      set(t, StyleVal(val));
       }
 
 void MStyle::set(StyleIdx t, qreal val)
       {
-      set(StyleVal(t, val));
+      set(t, StyleVal(val));
       }
 
 void MStyle::set(StyleIdx t, int val)
       {
-      set(StyleVal(t, val));
+      set(t, StyleVal(val));
       }
 
 void MStyle::set(StyleIdx t, MScore::Direction val)
       {
-      set(StyleVal(t, val));
+      set(t, StyleVal(val));
       }
 
 //---------------------------------------------------------
