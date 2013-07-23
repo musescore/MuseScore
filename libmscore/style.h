@@ -142,6 +142,7 @@ class StyleType {
       StyleValueType _valueType;
 
    public:
+      StyleType() { _name = 0; }
       StyleType(const char* n, StyleValueType v) : _name(n), _valueType(v) {}
       StyleValueType valueType() const { return _valueType; }
       const char* name() const         { return _name; }
@@ -343,7 +344,6 @@ enum StyleIdx {
 //---------------------------------------------------------
 
 class StyleVal {
-      StyleIdx idx;
       QString   s;
       union {
             qreal  dbl;
@@ -353,17 +353,18 @@ class StyleVal {
             } v;
 
    public:
-      StyleVal()                  { idx = StyleIdx(-1); }
+      StyleVal()                  { }
       StyleVal(const StyleVal& val);
       StyleVal& operator=(const StyleVal& val);
+      StyleVal(const QString& name, const QString& val);
 
-      StyleVal(StyleIdx t, Spatium val);
-      StyleVal(StyleIdx t, qreal val);
-      StyleVal(StyleIdx t, bool val);
-      StyleVal(StyleIdx t, int val);
-      StyleVal(StyleIdx t, MScore::Direction val);
-      StyleVal(StyleIdx t, const QString& val);
-      StyleVal(StyleIdx t, const QColor& val);
+      StyleVal(Spatium val);
+      StyleVal(qreal val);
+      StyleVal(bool val);
+      StyleVal(int val);
+      StyleVal(MScore::Direction val);
+      StyleVal(const QString& val);
+      StyleVal(const QColor& val);
 
       Spatium toSpatium() const       { return Spatium(v.dbl); }
       qreal toDouble() const          { return v.dbl;  }
@@ -371,8 +372,6 @@ class StyleVal {
       int toInt() const               { return v.i;  }
       QString toString() const        { return s;       }
       MScore::Direction toDirection() const   { return v.d;  }
-      StyleIdx getIdx() const         { return idx;  }
-      StyleVal(const QString& name, const QString& val);
       };
 
 //---------------------------------------------------------
@@ -408,7 +407,7 @@ class MStyle {
       void set(StyleIdx t, qreal val);
       void set(StyleIdx t, int val);
       void set(StyleIdx t, MScore::Direction val);
-      void set(const StyleVal& v);
+      void set(StyleIdx t, const StyleVal& v);
 
       StyleVal value(StyleIdx idx) const;
       Spatium  valueS(StyleIdx idx) const;

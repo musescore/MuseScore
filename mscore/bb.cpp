@@ -380,7 +380,7 @@ Score::FileError importBB(Score* score, const QString& name)
             qDebug("cannot open file <%s>\n", qPrintable(name));
             return Score::FILE_OPEN_ERROR;
             }
-      score->style()->set(StyleVal(ST_chordsXmlFile, true));
+      score->style()->set(ST_chordsXmlFile, StyleVal(true));
       score->style()->chordList()->read("chords.xml");
       *(score->sigmap()) = bb.siglist();
 
