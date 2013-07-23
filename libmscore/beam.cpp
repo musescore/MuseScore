@@ -52,7 +52,7 @@ struct BeamFragment {
 Beam::Beam(Score* s)
    : Element(s)
       {
-      setFlags(ELEMENT_SELECTABLE);
+      setFlags(ELEMENT_SELECTABLE | ELEMENT_STAFF_ORIGIN);
       _direction       = MScore::AUTO;
       _up              = true;
       _distribute      = false;
@@ -119,6 +119,18 @@ QPointF Beam::pagePos() const
             return pos();
       qreal yp = y() + system->staff(staffIdx())->y() + system->y();
       return QPointF(pageX(), yp);
+      }
+
+//---------------------------------------------------------
+//   canvasPos
+//---------------------------------------------------------
+
+QPointF Beam::canvasPos() const
+      {
+      QPointF p(pagePos());
+      if (system() && system()->parent())
+            p += system()->parent()->pos();
+      return p;
       }
 
 //---------------------------------------------------------
