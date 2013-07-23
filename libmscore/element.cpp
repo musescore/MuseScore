@@ -843,6 +843,24 @@ QPointF StaffLines::pagePos() const
       }
 
 //---------------------------------------------------------
+//   canvasPos
+//---------------------------------------------------------
+
+QPointF StaffLines::canvasPos() const
+      {
+      QPointF p(pagePos());
+      Element* e = parent();
+      while (e) {
+            if (e->type() == PAGE) {
+                  p += e->pos();
+                  break;
+                  }
+            e = e->parent();
+            }
+      return p;
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
