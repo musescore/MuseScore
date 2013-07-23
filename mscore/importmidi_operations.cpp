@@ -15,21 +15,6 @@ void MidiImportOperations::appendTrackOperations(const TrackOperations &operatio
             currentTrack_ = 0;
       }
 
-void MidiImportOperations::duplicateTrackOperations(int trackIndex)
-      {
-      if (!isValidIndex(trackIndex))
-            return;
-      operations_.insert(trackIndex + 1, operations_[trackIndex]);
-      ++currentTrack_;
-      }
-
-void MidiImportOperations::eraseTrackOperations(int trackIndex)
-      {
-      if (!isValidIndex(trackIndex))
-            return;
-      operations_.removeAt(trackIndex);
-      }
-
 void MidiImportOperations::clear()
       {
       operations_.clear();

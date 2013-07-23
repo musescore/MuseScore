@@ -61,6 +61,7 @@ class MTrack {
       MidiTrack* mtrack = 0;
       QString name;
       bool hasKey = false;
+      int indexOfOperation = 0;
 
       std::multimap<Fraction, MidiChord> chords;
       std::multimap<Fraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
@@ -82,10 +83,10 @@ class MTrack {
 
 // remove overlapping notes with the same pitch
 
-void removeOverlappingNotes(QList<MTrack> &tracks)
+void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
-            auto &chords = track.chords;
+            auto &chords = track.second.chords;
             for (auto it = chords.begin(); it != chords.end(); ++it) {
                   auto &firstChord = it->second;
                   const auto &firstOnTime = it->first;
@@ -142,14 +143,14 @@ void removeOverlappingNotes(QList<MTrack> &tracks)
 // in the object's inlet in the "fudge" time zone
 // threshExtTime = 20 ms
 
-void collectChords(QList<MTrack> &tracks, const Fraction &minNoteDuration)
+void collectChords(std::multimap<int, MTrack> &tracks, const Fraction &minNoteDuration)
       {
       for (auto &track: tracks) {
-            auto &chords = track.chords;
+            auto &chords = track.second.chords;
             if (chords.empty())
                   continue;
 
-            Drumset* drumset = track.mtrack->drumTrack() ? smDrumset : 0;
+            Drumset* drumset = track.second.mtrack->drumTrack() ? smDrumset : 0;
 
             Fraction threshTime = minNoteDuration / 2;
             Fraction fudgeTime = threshTime / 4;
@@ -244,7 +245,7 @@ void sortNotesByLength(std::multimap<Fraction, MidiChord> &chords)
 
 // find notes of each chord that have different durations
 // and separate them into different chords
-// so all chords will have notes with equal lengths
+// so all notes inside every chord will have equal lengths
 
 void splitUnequalChords(QList<MTrack> &tracks)
       {
@@ -280,20 +281,22 @@ void splitUnequalChords(QList<MTrack> &tracks)
       }
 
 
-void quantizeAllTracks(QList<MTrack>& tracks, TimeSigMap* sigmap, const Fraction &lastTick)
+void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
+                       TimeSigMap *sigmap,
+                       const Fraction &lastTick)
       {
       auto &opers = preferences.midiImportOperations;
-      if (tracks.size() == 1 && opers.trackOperations(0).quantize.humanPerformance) {
+      if (opers.count() == 1 && opers.trackOperations(0).quantize.humanPerformance) {
             opers.setCurrentTrack(0);
-            Quantize::applyAdaptiveQuant(tracks[0].chords, sigmap, lastTick);
-            Quantize::applyGridQuant(tracks[0].chords, sigmap, lastTick);
+            Quantize::applyAdaptiveQuant(tracks.begin()->second.chords, sigmap, lastTick);
+            Quantize::applyGridQuant(tracks.begin()->second.chords, sigmap, lastTick);
             }
       else {
-            for (int i = 0; i < tracks.size(); ++i) {
+            for (auto &track: tracks) {
                               // pass current track index through MidiImportOperations
                               // for further usage
-                  opers.setCurrentTrack(i);
-                  Quantize::quantizeChordsAndTuplets(tracks[i].tuplets, tracks[i].chords,
+                  opers.setCurrentTrack(track.second.indexOfOperation);
+                  Quantize::quantizeChordsAndTuplets(track.second.tuplets, track.second.chords,
                                                      sigmap, lastTick);
                   }
             }
@@ -675,9 +678,8 @@ void MTrack::convertTrack(const Fraction &lastTick)
       Score* score     = staff->score();
       int key          = 0;                      // TODO-LIB findKey(mtrack, score->sigmap());
       int track        = staff->idx() * VOICES;
-      int voices       = VOICES;
 
-      for (int voice = 0; voice < voices; ++voice) {
+      for (int voice = 0; voice < VOICES; ++voice) {
                         // startChordTick is onTime value of all simultaneous notes
                         // chords here are consist of notes with equal durations
                         // several chords may have the same onTime value
@@ -797,31 +799,29 @@ Fraction metaTimeSignature(const MidiEvent& e)
       return Fraction(z, n);
       }
 
-void insertNewLeftHandTrack(QList<MTrack> &tracks,
-                            int &trackIndex,
+void insertNewLeftHandTrack(std::multimap<int, MTrack> &tracks,
+                            std::multimap<int, MTrack>::iterator &it,
                             const std::multimap<Fraction, MidiChord> &leftHandChords)
       {
-      auto leftHandTrack = tracks[trackIndex];
+      auto leftHandTrack = it->second;
       leftHandTrack.chords = leftHandChords;
-      tracks.insert(trackIndex + 1, leftHandTrack);
-                  // synchronize operations length and tracks list length
-      preferences.midiImportOperations.duplicateTrackOperations(trackIndex);
-      ++trackIndex;
+      it = tracks.insert({it->first, leftHandTrack});
       }
 
 void addNewLeftHandChord(std::multimap<Fraction, MidiChord> &leftHandChords,
                          const QList<MidiNote> &leftHandNotes,
-                         const std::multimap<Fraction, MidiChord>::iterator &i)
+                         const std::multimap<Fraction, MidiChord>::iterator &it)
       {
-      MidiChord leftHandChord = i->second;
+      MidiChord leftHandChord = it->second;
       leftHandChord.notes = leftHandNotes;
-      leftHandChords.insert({i->first, leftHandChord});
+      leftHandChords.insert({it->first, leftHandChord});
       }
 
-void splitIntoLRHands_FixedPitch(QList<MTrack> &tracks, int &trackIndex)
+void splitIntoLRHands_FixedPitch(std::multimap<int, MTrack> &tracks,
+                                 std::multimap<int, MTrack>::iterator &it)
       {
-      auto &srcTrack = tracks[trackIndex];
-      auto trackOpers = preferences.midiImportOperations.trackOperations(trackIndex);
+      auto &srcTrack = it->second;
+      auto trackOpers = preferences.midiImportOperations.trackOperations(srcTrack.indexOfOperation);
       int splitPitch = 12 * (int)trackOpers.LHRH.splitPitchOctave
                   + (int)trackOpers.LHRH.splitPitchNote;
       std::multimap<Fraction, MidiChord> leftHandChords;
@@ -842,12 +842,13 @@ void splitIntoLRHands_FixedPitch(QList<MTrack> &tracks, int &trackIndex)
                   addNewLeftHandChord(leftHandChords, leftHandNotes, i);
             }
       if (!leftHandChords.empty())
-            insertNewLeftHandTrack(tracks, trackIndex, leftHandChords);
+            insertNewLeftHandTrack(tracks, it, leftHandChords);
       }
 
-void splitIntoLRHands_HandWidth(QList<MTrack> &tracks, int &trackIndex)
+void splitIntoLRHands_HandWidth(std::multimap<int, MTrack> &tracks,
+                                std::multimap<int, MTrack>::iterator &it)
       {
-      auto &srcTrack = tracks[trackIndex];
+      auto &srcTrack = it->second;
       sortNotesByPitch(srcTrack.chords);
       const int OCTAVE = 12;
       std::multimap<Fraction, MidiChord> leftHandChords;
@@ -859,8 +860,8 @@ void splitIntoLRHands_HandWidth(QList<MTrack> &tracks, int &trackIndex)
             int maxPitch = notes.back().pitch;
             if (maxPitch - minPitch > OCTAVE) {
                               // need both hands
-                              // assign all chords in range [minPitch .. minPitch + OCTAVE] to left hand
-                              // and assign all other chords to right hand
+                              // assign all chords in range [minPitch .. minPitch + OCTAVE]
+                              // to left hand and all other chords - to right hand
                   for (auto j = notes.begin(); j != notes.end(); ) {
                         auto &note = *j;
                         if (note.pitch <= minPitch + OCTAVE) {
@@ -869,8 +870,8 @@ void splitIntoLRHands_HandWidth(QList<MTrack> &tracks, int &trackIndex)
                               continue;
                               }
                         ++j;
-                        // maybe todo later: if range of right-hand chords > OCTAVE => assign all bottom right-hand
-                        // chords to another, third track
+                        // maybe todo later: if range of right-hand chords > OCTAVE
+                        // => assign all bottom right-hand chords to another, third track
                         }
                   }
             else {            // check - use two hands or one hand will be enough (right or left?)
@@ -884,41 +885,42 @@ void splitIntoLRHands_HandWidth(QList<MTrack> &tracks, int &trackIndex)
                   addNewLeftHandChord(leftHandChords, leftHandNotes, i);
             }
       if (!leftHandChords.empty())
-            insertNewLeftHandTrack(tracks, trackIndex, leftHandChords);
+            insertNewLeftHandTrack(tracks, it, leftHandChords);
       }
 
-void splitIntoLeftRightHands(QList<MTrack> &tracks)
+void splitIntoLeftRightHands(std::multimap<int, MTrack> &tracks)
       {
-      for (int i = 0; i < tracks.size(); ++i) {
-            auto operations = preferences.midiImportOperations.trackOperations(i);
+      for (auto it = tracks.begin(); it != tracks.end(); ++it) {
+            auto operations = preferences.midiImportOperations.trackOperations(
+                              it->second.indexOfOperation);
             if (!operations.LHRH.doIt)
                   continue;
+                        // iterator 'it' will change after track split to ++it
+                        // C++11 guarantees that newely inserted item with equal key will go after:
+                        //    "The relative ordering of elements with equivalent keys is preserved,
+                        //     and newly inserted elements follow those with equivalent keys
+                        //     already in the container"
             switch (operations.LHRH.method) {
                   case MidiOperation::LHRHMethod::HAND_WIDTH:
-                        splitIntoLRHands_HandWidth(tracks, i);
+                        splitIntoLRHands_HandWidth(tracks, it);
                         break;
                   case MidiOperation::LHRHMethod::SPECIFIED_PITCH:
-                        splitIntoLRHands_FixedPitch(tracks, i);
+                        splitIntoLRHands_FixedPitch(tracks, it);
                         break;
                   }
             }
       }
 
-void reorderTracks(QList<MTrack> &tracks)
+QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       {
-      const auto &operations = preferences.midiImportOperations;
-      if (operations.count() == 0)
-            return;
-      QList<MTrack> newTracks;
-      for (int i = 0; i != tracks.size(); ++i) {
-            auto op = operations.trackOperations(i);
-            newTracks.push_back(tracks[op.trackIndex]);
-            }
-      std::swap(tracks, newTracks);
+      QList<MTrack> trackList;
+      for (const auto &track: tracks)
+            trackList.push_back(track.second);
+      return trackList;
       }
 
 void createMTrackList(Fraction &lastTick, TimeSigMap *sigmap,
-                      QList<MTrack> &tracks, MidiFile *mf)
+                      std::multimap<int, MTrack> &tracks, MidiFile *mf)
       {
       sigmap->clear();
       sigmap->add(0, Fraction(4, 4));   // default time signature
@@ -972,10 +974,9 @@ void createMTrackList(Fraction &lastTick, TimeSigMap *sigmap,
                         = preferences.midiImportOperations.trackOperations(++trackIndex);
                   if (trackOperations.doImport) {
                         track.medPitch /= events;
-                        tracks.push_back(track);
+                        track.indexOfOperation = trackIndex;
+                        tracks.insert({trackOperations.reorderedIndex, track});
                         }
-                  else
-                        preferences.midiImportOperations.eraseTrackOperations(trackIndex--);
                   }
             }
       }
@@ -1155,45 +1156,46 @@ void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiFile *mf)
             }
       }
 
-QList<TrackMeta> getTracksMeta(QList<MTrack> &tracks, MidiFile *mf)
+QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
+                               const MidiFile *mf)
 {
       QList<TrackMeta> tracksMeta;
-      for (int i = 0; i < tracks.size(); ++i) {
-            MTrack &mt = tracks[i];
-            MidiTrack *track = mt.mtrack;
-
-            for (auto ie : track->events()) {
-                  const MidiEvent& e = ie.second;
+      for (const auto &track: tracks) {
+            const MTrack &mt = track.second;
+            const MidiTrack *midiTrack = mt.mtrack;
+            QString trackName;
+            for (const auto &ie: midiTrack->events()) {
+                  const MidiEvent &e = ie.second;
                   if ((e.type() == ME_META) && (e.metaType() == META_TRACK_NAME))
-                        mt.name = (const char*)e.edata();
+                        trackName = (const char*)e.edata();
                   }
             MidiType midiType = mf->midiType();
             if (midiType == MT_UNKNOWN)
                   midiType = MT_GM;
-            QString name = instrumentName(midiType, mt.program);
-            tracksMeta.push_back({mt.name, name});
+            QString instrName = instrumentName(midiType, mt.program);
+            tracksMeta.push_back({trackName, instrName});
             }
       return tracksMeta;
       }
 
 void convertMidi(Score *score, MidiFile *mf)
       {
-      QList<MTrack> tracks;
+      std::multimap<int, MTrack> tracks;        // <track index, track>
       Fraction lastTick;
       auto sigmap = score->sigmap();
 
       mf->separateChannel();
       createMTrackList(lastTick, sigmap, tracks, mf);
-      reorderTracks(tracks);
       collectChords(tracks, Fraction::fromTicks(MScore::division) / 32);     // tol = 1/128 note
       quantizeAllTracks(tracks, sigmap, lastTick);
       removeOverlappingNotes(tracks);
       splitIntoLeftRightHands(tracks);
-      splitUnequalChords(tracks);
-
-      createInstruments(score, tracks);
+                  // no more track insertion/reordering/deletion from now
+      QList<MTrack> trackList = prepareTrackList(tracks);
+      splitUnequalChords(trackList);
+      createInstruments(score, trackList);
       createMeasures(lastTick, score);
-      createNotes(lastTick, tracks, mf);
+      createNotes(lastTick, trackList, mf);
       createTimeSignatures(score);
       score->connectTies();
       }
@@ -1216,7 +1218,7 @@ QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
       fp.close();
 
       Score mockScore;
-      QList<MTrack> tracks;
+      std::multimap<int, MTrack> tracks;
       Fraction lastTick;
 
       mf.separateChannel();
