@@ -96,7 +96,7 @@ class StyleData : public QSharedData {
 
       bool _customChordList;        // if true, chordlist will be saved as part of score
 
-      void set(const StyleVal& v)                         { _values[v.getIdx()] = v; }
+      void set(StyleIdx id, const StyleVal& v)            { _values[id] = v; }
       StyleVal value(StyleIdx idx) const                  { return _values[idx];     }
       const TextStyle& textStyle(int idx) const;
       const TextStyle& textStyle(const QString&) const;
