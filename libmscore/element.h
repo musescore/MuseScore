@@ -43,12 +43,12 @@ class Element;
 //---------------------------------------------------------
 
 enum ElementFlag {
-      ELEMENT_DROP_TARGET = 0x2,
-      ELEMENT_SELECTABLE  = 0x4,
-      ELEMENT_MOVABLE     = 0x8,
-      ELEMENT_SEGMENT     = 0x10,
-      ELEMENT_HAS_TAG     = 0x20,
-      ELEMENT_ON_STAFF    = 0x40          // parent is Segment() type
+      ELEMENT_DROP_TARGET  = 0x2,
+      ELEMENT_SELECTABLE   = 0x4,
+      ELEMENT_MOVABLE      = 0x8,
+      ELEMENT_SEGMENT      = 0x10,
+      ELEMENT_HAS_TAG      = 0x20,
+      ELEMENT_ON_STAFF     = 0x40   // parent is Segment() type
       };
 
 typedef QFlags<ElementFlag> ElementFlags;
