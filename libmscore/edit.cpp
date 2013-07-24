@@ -1289,6 +1289,7 @@ void Score::cmdDeleteSelectedMeasures()
                         break;
                   }
 
+#if 0
             // remove spanner
             std::list<Spanner*> sl;
             int tick2 = startTick + ticks;
@@ -1299,7 +1300,7 @@ void Score::cmdDeleteSelectedMeasures()
                   }
             for (Spanner* s : sl)
                   score->undoRemoveElement(s);
-
+#endif
             undoRemoveMeasures(is, ie);
 
             if (createEndBar) {
