@@ -69,8 +69,7 @@ void Box::draw(QPainter* painter) const
       if (score() && score()->printing())
             return;
       if (selected() || editMode || dropTarget() || score()->showFrames()) {
-            qreal w = 2.0 / painter->transform().m11();
-
+            qreal w = spatium() * .15;
             QPainterPathStroker stroker;
             stroker.setWidth(w);
             stroker.setJoinStyle(Qt::MiterJoin);
