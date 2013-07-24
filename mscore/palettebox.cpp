@@ -30,7 +30,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       setObjectName("palette-box");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
-      QScrollArea* sa = new QScrollArea;
+      PaletteBoxScrollArea* sa = new PaletteBoxScrollArea;
       sa->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
       sa->setContextMenuPolicy(Qt::CustomContextMenu);
       sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

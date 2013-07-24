@@ -488,7 +488,7 @@ Palette* MuseScore::newNoteHeadsPalette()
 Palette* MuseScore::newArticulationsPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Articulations && Ornaments"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Articulations"));
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
