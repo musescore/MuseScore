@@ -164,7 +164,7 @@ void ImportMidiPanel::updateUi()
       if (isMidiFileExists != QFileInfo(midiFile).exists())
             isMidiFileExists = !isMidiFileExists;
       if (isMidiFileExists) {
-            ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: black;}");
+            ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: white;}");
             ui->lineEditMidiFile->setToolTip(midiFile);
             }
       else {            // midi file does not exist

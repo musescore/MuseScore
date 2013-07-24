@@ -2398,6 +2398,7 @@ void Score::cmdRemovePart(Part* part)
       for (int i = 0; i < n; ++i)
             cmdRemoveStaff(sidx);
       undoRemovePart(part, sidx);
+
       }
 
 //---------------------------------------------------------
