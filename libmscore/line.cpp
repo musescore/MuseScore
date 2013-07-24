@@ -436,7 +436,7 @@ QPointF SLine::linePos(int grip, System** sys)
                         Measure* m = score()->tick2measure(t);
                         if (m->tick() == t) {
                               m = m->prevMeasure();
-                              x = m->pos().x() + m->width();
+                              x = m->pos().x() + m->width() - _spatium;
                               }
                         else
                               x = m->tick2pos(t);
