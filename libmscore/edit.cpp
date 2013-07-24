@@ -870,11 +870,14 @@ void Score::cmdAddTie()
       startCmd();
       foreach (Note* note, noteList) {
             if (note->tieFor()) {
-                  qDebug("cmdAddTie: has already tie? noteFor: %p", note->tieFor());
+                  qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
                   continue;
                   }
             Chord* chord  = note->chord();
             if (noteEntryMode()) {
+                  if (note->chord() == _is.cr())      // if noteentry is started
+                        break;
+
                   if (_is.cr() == 0) {
                         if (MScore::debugMode)
                               qDebug("cmdAddTie: no pos");
@@ -894,8 +897,6 @@ void Score::cmdAddTie()
                               tie->setStartNote(note);
                               tie->setEndNote(nnote);
                               tie->setTrack(note->track());
-                              note->setTieFor(tie);
-                              nnote->setTieBack(tie);
                               undoAddElement(tie);
                               nextInputPos(n->chord(), false);
                               }
