@@ -323,6 +323,10 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
             }
       foreach (Score* s, scoreList())     // for all parts
             s->connectTies();
+
+      // when pasting between different staff types (pitched->tablature)
+      // fret/line has to be calculated:
+      updateNotes();
       }
 
 //---------------------------------------------------------
