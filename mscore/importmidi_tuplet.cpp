@@ -515,11 +515,13 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                           std::multimap<Fraction, MidiChord> &chords,
                           int nonTupletVoice)
       {
-      for (auto it = tuplets.begin(); it != tuplets.end(); ++it) {
+      for (auto it = tuplets.begin(); it != tuplets.end(); ) {
             TupletInfo &tupletInfo = *it;
             auto firstChord = tupletInfo.chords.begin();
-            if (firstChord == tupletInfo.chords.end() || firstChord->first != 0)
+            if (firstChord == tupletInfo.chords.end() || firstChord->first != 0) {
+                  ++it;
                   continue;
+                  }
             auto &notes = firstChord->second->second.notes;
             const Fraction &onTime = firstChord->second->first;
             std::vector<int> removedIndexes;
@@ -579,11 +581,11 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                         tupletInfo.chords.erase(0);  // erase first (index 0) empty chord in tuplet
                         if (tupletInfo.chords.empty()) {
                               it = tuplets.erase(it);  // remove tuplet without chords
-                              --it;
                               continue;
                               }
                         }
                   }
+            ++it;
             }
       }
 
