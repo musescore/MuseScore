@@ -47,7 +47,12 @@ class PaletteBox : public QDockWidget {
       QList<Palette*> palettes() const;
       };
 
+class PaletteBoxScrollArea : public QScrollArea {
+       Q_OBJECT
 
+    public:
+      virtual QSize sizeHint() const {return QSize(170,170);}
+      };
 
 } // namespace Ms
 #endif
