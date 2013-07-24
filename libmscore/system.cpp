@@ -454,7 +454,8 @@ void System::layout2()
 void System::clear()
       {
       ml.clear();
-      foreach(SpannerSegment* ss, _spannerSegments) {
+      foreach (SpannerSegment* ss, _spannerSegments) {
+            // qDebug("System::clear %s", ss->name());
             if (ss->system() == this)
                   ss->setParent(0);       // assume parent() is System
             }

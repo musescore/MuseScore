@@ -425,10 +425,23 @@ QPointF SLine::linePos(int grip, System** sys)
       switch(anchor()) {
             case Spanner::ANCHOR_SEGMENT:
                   {
-                  int t      = grip == GRIP_LINE_START ? tick() : tick2();
-                  Measure* m = score()->tick2measure(t);
-                  *sys  = m->system();
-                  x     = m->tick2pos(t);
+                  if (grip == GRIP_LINE_START) {
+                        int t = tick();
+                        Measure* m = score()->tick2measure(t);
+                        *sys  = m->system();
+                        x     = m->tick2pos(t);
+                        }
+                  else {
+                        int t = tick2();
+                        Measure* m = score()->tick2measure(t);
+                        if (m->tick() == t) {
+                              m = m->prevMeasure();
+                              x = m->pos().x() + m->width();
+                              }
+                        else
+                              x = m->tick2pos(t);
+                        *sys = m->system();
+                        }
                   }
                   break;
 

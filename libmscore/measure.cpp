@@ -3346,7 +3346,7 @@ void Measure::layoutStage1()
                   }
             }
 
-      if(!breakMMRest()) {
+      if (!breakMMRest()) {
             for (auto i = score()->spanner().lower_bound(tick()); i != score()->spanner().upper_bound(tick()); ++i) {
                Spanner* sp = i->second;
                if (sp->type() == Element::VOLTA)
@@ -3354,9 +3354,9 @@ void Measure::layoutStage1()
                      break;
                }
             }
-      if(!breakMMRest() && this != score()->lastMeasure()) {
+      if (!breakMMRest() && this != score()->lastMeasure()) {
             auto i = score()->spanner().upper_bound(tick());
-            std::reverse_iterator<std::map<int,Spanner*>::iterator> revit (i);
+            std::reverse_iterator<std::map<int,Spanner*>::const_iterator> revit (i);
             for (; revit != score()->spanner().rend(); revit++) {
                   Spanner* sp = revit->second;
                   if (sp->type() == Element::VOLTA)
