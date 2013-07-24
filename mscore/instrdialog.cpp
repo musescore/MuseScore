@@ -847,18 +847,18 @@ void MuseScore::editInstrList()
             instrList->done(0);
             return;
             }
-
-      instrList->setScore(cs);
+      Score* rootScore = cs->rootScore();
+      instrList->setScore(rootScore);
       instrList->genPartList();
-      cs->startCmd();
-  	cs->deselectAll();
+      rootScore->startCmd();
+        rootScore->deselectAll();
       int rv = instrList->exec();
 
       if (rv == 0) {
-            cs->endCmd();
+            rootScore->endCmd();
             return;
             }
-  	cs->inputState().setTrack(-1);
+        rootScore->inputState().setTrack(-1);
       //
       // process modified partitur list
       //
@@ -889,10 +889,10 @@ void MuseScore::editInstrList()
             rstaff = 0;
             PartListItem* pli = static_cast<PartListItem*>(item);
             if (pli->op == ITEM_DELETE)
-                  cs->cmdRemovePart(pli->part);
+                  rootScore->cmdRemovePart(pli->part);
             else if (pli->op == ITEM_ADD) {
                   const InstrumentTemplate* t = ((PartListItem*)item)->it;
-                  part = new Part(cs);
+                  part = new Part(rootScore);
                   part->initFromInstrTemplate(t);
 
                   pli->part = part;
@@ -900,14 +900,14 @@ void MuseScore::editInstrList()
                   rstaff = 0;
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(ci);
-                        Staff* staff       = new Staff(cs, part, rstaff);
+                        Staff* staff       = new Staff(rootScore, part, rstaff);
                         sli->staff         = staff;
                         staff->setRstaff(rstaff);
 
                         staff->init(t, sli->staffType(), cidx);
                         staff->setInitialClef(sli->clef());
 
-                        cs->undoInsertStaff(staff, staffIdx + rstaff);
+                        rootScore->undoInsertStaff(staff, staffIdx + rstaff);
                         if (sli->linked()) {
                               // TODO: link staff
                               qDebug("TODO: link staff\n");
@@ -916,7 +916,7 @@ void MuseScore::editInstrList()
                         ++rstaff;
                         }
                   part->staves()->front()->setBarLineSpan(part->nstaves());
-                  cs->cmdInsertPart(part, staffIdx);
+                  rootScore->cmdInsertPart(part, staffIdx);
                   staffIdx += rstaff;
                   }
             else {
@@ -928,37 +928,37 @@ void MuseScore::editInstrList()
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                         StaffListItem* sli = (StaffListItem*)ci;
                         if (sli->op == ITEM_DELETE) {
-                              cs->systems()->clear();
+                              rootScore->systems()->clear();
                               Staff* staff = sli->staff;
                               int sidx = staff->idx();
                               int eidx = sidx + 1;
-                              for (MeasureBase* mb = cs->measures()->first(); mb; mb = mb->next()) {
+                              for (MeasureBase* mb = rootScore->measures()->first(); mb; mb = mb->next()) {
                                     if (mb->type() != Element::MEASURE)
                                           continue;
                                     Measure* m = (Measure*)mb;
                                     m->cmdRemoveStaves(sidx, eidx);
                                     }
-/*                              foreach(Beam* e, cs->beams()) {
+/*                              foreach(Beam* e, rootScore->beams()) {
                                     int staffIdx = e->staffIdx();
                                     if (staffIdx >= sidx && staffIdx < eidx)
-                                          cs->undoRemoveElement(e);
+                                          rootScore->undoRemoveElement(e);
                                     }
  */
-                              cs->cmdRemoveStaff(sidx);
+                              rootScore->cmdRemoveStaff(sidx);
                               }
                         else if (sli->op == ITEM_ADD) {
-                              Staff* staff = new Staff(cs, part, rstaff);
+                              Staff* staff = new Staff(rootScore, part, rstaff);
                               sli->staff   = staff;
                               staff->setRstaff(rstaff);
 
-                              cs->undoInsertStaff(staff, staffIdx);
+                              rootScore->undoInsertStaff(staff, staffIdx);
 
-                              for (Measure* m = cs->firstMeasure(); m; m = m->nextMeasure()) {
+                              for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
                                     // do not create whole measure rests for linked staves
                                     m->cmdAddStaves(staffIdx, staffIdx+1, !sli->linked());
                                     }
 
-                              cs->adjustBracketsIns(staffIdx, staffIdx+1);
+                              rootScore->adjustBracketsIns(staffIdx, staffIdx+1);
                               staff->initFromStaffType(sli->staffType());
                               staff->setInitialClef(sli->clef());
                               KeySigEvent nKey = part->staff(0)->key(0);
@@ -986,7 +986,7 @@ void MuseScore::editInstrList()
                               // look for a staff type with same structure among staff types already defined in the score
                               StaffType* st;
                               bool found = false;
-                              foreach (StaffType** scoreStaffType, cs->staffTypes()) {
+                              foreach (StaffType** scoreStaffType, rootScore->staffTypes()) {
                                     if ( (*scoreStaffType)->isSameStructure(*stfType) ) {
                                           st = *scoreStaffType;         // staff type found in score: use for instrument staff
                                           found = true;
@@ -996,14 +996,14 @@ void MuseScore::editInstrList()
                               // if staff type not found in score, use from preset (for staff and for adding to score staff types)
                               if (!found) {
                                     st = stfType->clone();
-                                    cs->addStaffType(st);
+                                    rootScore->addStaffType(st);
                                     }
 
                               // use selected staff type
                               if (st != staff->staffType())
-                                    cs->undo(new ChangeStaff(staff, staff->small(), staff->invisible(), staff->userDist(), st));
+                                    rootScore->undo(new ChangeStaff(staff, staff->small(), staff->invisible(), staff->userDist(), st));
                               if (updateNeeded)
-                                    cs->cmdUpdateNotes();
+                                    rootScore->cmdUpdateNotes();
                               }
                         else {
                               ++staffIdx;
@@ -1032,7 +1032,7 @@ void MuseScore::editInstrList()
 
       QList<int> dl;
       foreach(Staff* staff, dst) {
-            int idx = cs->staves().indexOf(staff);
+            int idx = rootScore->staves().indexOf(staff);
             if (idx == -1)
                   qDebug("staff in dialog(%p) not found in score\n", staff);
             else
@@ -1048,34 +1048,34 @@ void MuseScore::editInstrList()
 //            }
 
 //      if (sort)
-            cs->undo(new SortStaves(cs, dl));
+            rootScore->undo(new SortStaves(rootScore, dl));
 
       //
       // check for valid barLineSpan and bracketSpan
       // in all staves
       //
 
-      int n = cs->nstaves();
+      int n = rootScore->nstaves();
       for (int i = 0; i < n; ++i) {
-            Staff* staff = cs->staff(i);
+            Staff* staff = rootScore->staff(i);
             if (staff->barLineSpan() > (n - i))
-                  cs->undoChangeBarLineSpan(staff, n - i, 0, cs->staff(n-1)->lines()-1);
+                  rootScore->undoChangeBarLineSpan(staff, n - i, 0, rootScore->staff(n-1)->lines()-1);
             QList<BracketItem> brackets = staff->brackets();
             int nn = brackets.size();
             for (int ii = 0; ii < nn; ++ii) {
                   if ((brackets[ii]._bracket != -1) && (brackets[ii]._bracketSpan > (n - i)))
-                        cs->undoChangeBracketSpan(staff, ii, n - i);
+                        rootScore->undoChangeBracketSpan(staff, ii, n - i);
                   }
             }
       //
       // there should be at least one measure
       //
-      if (cs->measures()->size() == 0)
-            cs->insertMeasure(Element::MEASURE, 0, false);
+      if (rootScore->measures()->size() == 0)
+            rootScore->insertMeasure(Element::MEASURE, 0, false);
 
-      cs->setLayoutAll(true);
-      cs->endCmd();
-      cs->rebuildMidiMapping();
+      rootScore->setLayoutAll(true);
+      rootScore->endCmd();
+      rootScore->rebuildMidiMapping();
       seq->initInstruments();
       }
 
