@@ -799,12 +799,40 @@ Fraction metaTimeSignature(const MidiEvent& e)
       return Fraction(z, n);
       }
 
+void removeEmptyTuplets(MTrack &track)
+      {
+      if (track.tuplets.empty())
+            return;
+      for (auto it = track.tuplets.begin(); it != track.tuplets.end(); ) {
+            const auto &tupletData = it->second;
+            bool containsChord = false;
+            for (const auto &chord: track.chords) {
+                  if (tupletData.voice != chord.second.voice)
+                        continue;
+                  const Fraction &onTime = chord.first;
+                  Fraction len = maxNoteLen(chord.second.notes);
+                  if (onTime + len > tupletData.onTime
+                              && onTime + len <= tupletData.onTime + tupletData.len) {
+                                    // tuplet contains at least one chord
+                        containsChord = true;
+                        break;
+                        }
+                  }
+            if (!containsChord) {
+                  it = track.tuplets.erase(it);
+                  continue;
+                  }
+            ++it;
+            }
+      }
+
 void insertNewLeftHandTrack(std::multimap<int, MTrack> &tracks,
                             std::multimap<int, MTrack>::iterator &it,
                             const std::multimap<Fraction, MidiChord> &leftHandChords)
       {
       auto leftHandTrack = it->second;
       leftHandTrack.chords = leftHandChords;
+      removeEmptyTuplets(leftHandTrack);
       it = tracks.insert({it->first, leftHandTrack});
       }
 
@@ -863,7 +891,7 @@ void splitIntoLRHands_HandWidth(std::multimap<int, MTrack> &tracks,
                               // assign all chords in range [minPitch .. minPitch + OCTAVE]
                               // to left hand and all other chords - to right hand
                   for (auto j = notes.begin(); j != notes.end(); ) {
-                        auto &note = *j;
+                        const auto &note = *j;
                         if (note.pitch <= minPitch + OCTAVE) {
                               leftHandNotes.push_back(note);
                               j = notes.erase(j);
