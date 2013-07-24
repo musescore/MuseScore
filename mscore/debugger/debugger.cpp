@@ -372,15 +372,17 @@ void Debugger::updateList(Score* s)
 
       int staves = cs->nstaves();
       int tracks = staves * VOICES;
-      foreach(Page* page, cs->pages()) {
+      foreach (Page* page, cs->pages()) {
             ElementItem* pi = new ElementItem(list, page);
 
-            foreach(System* system, *page->systems()) {
+            foreach (System* system, *page->systems()) {
                   ElementItem* si = new ElementItem(pi, system);
                   if (system->barLine())
                         new ElementItem(si, system->barLine());
                   for (Bracket* b : system->brackets())
                         new ElementItem(si, b);
+                  for (SpannerSegment* ss : system->spannerSegments())
+                        new ElementItem(si, ss);
                   foreach(SysStaff* ss, *system->staves()) {
                         foreach(InstrumentName* in, ss->instrumentNames)
                               new ElementItem(si, in);
@@ -562,40 +564,41 @@ void Debugger::updateElement(Element* el)
       ShowElementBase* ew = elementViews[el->type()];
       if (ew == 0) {
             switch (el->type()) {
-                  case Element::PAGE:          ew = new ShowPageWidget;    break;
-                  case Element::SYSTEM:        ew = new SystemView;        break;
-                  case Element::MEASURE:       ew = new MeasureView;       break;
-                  case Element::CHORD:         ew = new ChordDebug;         break;
-                  case Element::NOTE:          ew = new ShowNoteWidget;    break;
-                  case Element::REST:          ew = new RestView;          break;
-                  case Element::CLEF:          ew = new ClefView;          break;
-                  case Element::TIMESIG:       ew = new ShowTimesigWidget; break;
-                  case Element::KEYSIG:        ew = new KeySigView;        break;
-                  case Element::SEGMENT:       ew = new SegmentView;       break;
-                  case Element::HAIRPIN:       ew = new HairpinView;       break;
-                  case Element::BAR_LINE:      ew = new BarLineView;       break;
-                  case Element::DYNAMIC:       ew = new DynamicView;       break;
-                  case Element::TUPLET:        ew = new TupletView;        break;
-                  case Element::SLUR:          ew = new SlurTieView;       break;
-                  case Element::TIE:           ew = new TieView;           break;
-                  case Element::VOLTA:         ew = new VoltaView;         break;
-                  case Element::VOLTA_SEGMENT: ew = new VoltaSegmentView;  break;
+                  case Element::PAGE:             ew = new ShowPageWidget;      break;
+                  case Element::SYSTEM:           ew = new SystemView;          break;
+                  case Element::MEASURE:          ew = new MeasureView;         break;
+                  case Element::CHORD:            ew = new ChordDebug;          break;
+                  case Element::NOTE:             ew = new ShowNoteWidget;      break;
+                  case Element::REST:             ew = new RestView;            break;
+                  case Element::CLEF:             ew = new ClefView;            break;
+                  case Element::TIMESIG:          ew = new ShowTimesigWidget;   break;
+                  case Element::KEYSIG:           ew = new KeySigView;          break;
+                  case Element::SEGMENT:          ew = new SegmentView;         break;
+                  case Element::HAIRPIN:          ew = new HairpinView;         break;
+                  case Element::BAR_LINE:         ew = new BarLineView;         break;
+                  case Element::DYNAMIC:          ew = new DynamicView;         break;
+                  case Element::TUPLET:           ew = new TupletView;          break;
+                  case Element::SLUR:             ew = new SlurTieView;         break;
+                  case Element::TIE:              ew = new TieView;             break;
+                  case Element::VOLTA:            ew = new VoltaView;           break;
+                  case Element::VOLTA_SEGMENT:    ew = new VoltaSegmentView;    break;
                   case Element::PEDAL:
-                  case Element::TEXTLINE:      ew = new TextLineView;         break;
+                  case Element::TEXTLINE:         ew = new TextLineView;        break;
                   case Element::PEDAL_SEGMENT:
-                  case Element::TEXTLINE_SEGMENT: ew = new TextLineSegmentView;  break;
-                  case Element::LYRICS:        ew = new LyricsView;        break;
-                  case Element::BEAM:          ew = new BeamView;          break;
-                  case Element::TREMOLO:       ew = new TremoloView;       break;
-                  case Element::OTTAVA:        ew = new OttavaView;        break;
-                  case Element::SLUR_SEGMENT:  ew = new SlurSegmentView;   break;
-                  case Element::ACCIDENTAL:    ew = new AccidentalView;    break;
-                  case Element::ARTICULATION:  ew = new ArticulationView;  break;
-                  case Element::STEM:          ew = new StemView;          break;
+                  case Element::TEXTLINE_SEGMENT: ew = new TextLineSegmentView; break;
+                  case Element::LYRICS:           ew = new LyricsView;          break;
+                  case Element::BEAM:             ew = new BeamView;            break;
+                  case Element::TREMOLO:          ew = new TremoloView;         break;
+                  case Element::OTTAVA:           ew = new OttavaView;          break;
+                  case Element::OTTAVA_SEGMENT:   ew = new TextLineSegmentView; break;
+                  case Element::SLUR_SEGMENT:     ew = new SlurSegmentView;     break;
+                  case Element::ACCIDENTAL:       ew = new AccidentalView;      break;
+                  case Element::ARTICULATION:     ew = new ArticulationView;    break;
+                  case Element::STEM:             ew = new StemView;            break;
                   case Element::VBOX:
                   case Element::HBOX:
                   case Element::FBOX:
-                  case Element::TBOX:          ew = new BoxView;           break;
+                  case Element::TBOX:             ew = new BoxView;             break;
 
                   case Element::FINGERING:
                   case Element::MARKER:
@@ -2242,9 +2245,9 @@ void TremoloView::chord2Clicked()
 //---------------------------------------------------------
 
 OttavaView::OttavaView()
-   : ShowElementBase()
+   : TextLineView()
       {
-      sb.setupUi(addWidget());
+//      ob.setupUi(addWidget());
       }
 
 //---------------------------------------------------------
@@ -2254,29 +2257,7 @@ OttavaView::OttavaView()
 void OttavaView::setElement(Element* e)
       {
       Ottava* o = static_cast<Ottava*>(e);
-      ShowElementBase::setElement(e);
-
-//      sb.startElement->setEnabled(o->startElement());
-//      sb.endElement->setEnabled(o->endElement());
-      sb.anchor->setCurrentIndex(int(o->anchor()));
-      }
-
-//---------------------------------------------------------
-//   startElementClicked
-//---------------------------------------------------------
-
-void OttavaView::startElementClicked()
-      {
-//      emit elementChanged(static_cast<Ottava*>(element())->startElement());
-      }
-
-//---------------------------------------------------------
-//   endElementClicked
-//---------------------------------------------------------
-
-void OttavaView::endElementClicked()
-      {
-//      emit elementChanged(static_cast<Ottava*>(element())->endElement());
+      TextLineView::setElement(e);
       }
 
 //---------------------------------------------------------
@@ -2475,42 +2456,12 @@ void BoxView::setElement(Element* e)
       }
 
 //---------------------------------------------------------
-//   segmentClicked
-//---------------------------------------------------------
-
-void TextLineView::segmentClicked(QTreeWidgetItem* item)
-      {
-      Element* e = (Element*)item->data(0, Qt::UserRole).value<void*>();
-      emit elementChanged(e);
-      }
-
-//---------------------------------------------------------
-//   beginTextClicked
-//---------------------------------------------------------
-
-void TextLineView::beginTextClicked()
-      {
-      emit elementChanged(static_cast<Volta*>(element())->beginText());
-      }
-
-//---------------------------------------------------------
-//   continueTextClicked
-//---------------------------------------------------------
-
-void TextLineView::continueTextClicked()
-      {
-      emit elementChanged(static_cast<Volta*>(element())->continueText());
-      }
-
-//---------------------------------------------------------
 //   TextLineView
 //---------------------------------------------------------
 
 TextLineView::TextLineView()
-   : ShowElementBase()
+   : SpannerView()
       {
-      sp.setupUi(addWidget());
-
       // SLineBase
       lb.setupUi(addWidget());
 
@@ -2519,7 +2470,6 @@ TextLineView::TextLineView()
 
       connect(tlb.beginText,    SIGNAL(clicked()), SLOT(beginTextClicked()));
       connect(tlb.continueText, SIGNAL(clicked()), SLOT(continueTextClicked()));
-      connect(sp.segments,      SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       }
 
 //---------------------------------------------------------
@@ -2529,65 +2479,33 @@ TextLineView::TextLineView()
 void TextLineView::setElement(Element* e)
       {
       Volta* volta = (Volta*)e;
-      ShowElementBase::setElement(e);
+      SpannerView::setElement(e);
 
       tlb.lineWidth->setValue(volta->lineWidth().val());
-//      lb.anchor->setCurrentIndex(int(volta->anchor()));
       lb.diagonal->setChecked(volta->diagonal());
-//      lb.leftElement->setText(QString("%1").arg((unsigned long)volta->startElement(), 8, 16));
-//      lb.rightElement->setText(QString("%1").arg((unsigned long)volta->endElement(), 8, 16));
-
-      sp.segments->clear();
-      const QList<SpannerSegment*>& el = volta->spannerSegments();
-      foreach(const SpannerSegment* e, el) {
-            QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, QString("%1").arg((unsigned long)e, 8, 16));
-            item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)e));
-            sp.segments->addTopLevelItem(item);
-            }
-
-//      sp.startElement->setEnabled(volta->startElement() != 0);
-//      sp.endElement->setEnabled(volta->endElement() != 0);
-      sp.anchor->setCurrentIndex(int(volta->anchor()));
 
       tlb.beginText->setEnabled(volta->beginText());
       tlb.continueText->setEnabled(volta->continueText());
       }
 
 //---------------------------------------------------------
-//   leftElementClicked
+//   beginTextClicked
 //---------------------------------------------------------
 
-void TextLineView::leftElementClicked()
+void TextLineView::beginTextClicked()
       {
-//TODO-S      emit elementChanged(static_cast<Volta*>(element())->startElement());
+      Volta* volta = (Volta*)element();
+      emit elementChanged(volta->beginText());
       }
 
 //---------------------------------------------------------
-//   rightElementClicked
+//   continueTextClicked
 //---------------------------------------------------------
 
-void TextLineView::rightElementClicked()
+void TextLineView::continueTextClicked()
       {
-//TODO-S      emit elementChanged(static_cast<Volta*>(element())->endElement());
-      }
-
-//---------------------------------------------------------
-//   startClicked
-//---------------------------------------------------------
-
-void TextLineView::startClicked()
-      {
-//      emit elementChanged(static_cast<Spanner*>(element())->startElement());
-      }
-
-//---------------------------------------------------------
-//   endClicked
-//---------------------------------------------------------
-
-void TextLineView::endClicked()
-      {
-//      emit elementChanged(static_cast<Spanner*>(element())->endElement());
+      Volta* volta = (Volta*)element();
+      emit elementChanged(volta->continueText());
       }
 
 

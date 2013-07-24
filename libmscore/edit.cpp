@@ -1274,34 +1274,40 @@ void Score::cmdDeleteSelectedMeasures()
 
       QList<Score*> scores = scoreList();
       int startTick = measure(startIdx)->tick();
-      int endTick = measure(endIdx)->tick();
+      int endTick   = measure(endIdx)->tick();
       foreach (Score* score, scores) {
-            MeasureBase* is = score->tick2measure(startTick);
-            MeasureBase* ie = score->tick2measure(endTick);
+            Measure* is = score->tick2measure(startTick);
+            Measure* ie = score->tick2measure(endTick);
             mBeforeSel = is->prevMeasure();
+
             int startTick = is->tick();
+
             int ticks = 0;
-            for (;;) {
-                  ticks += ie->ticks();
-                  deleteItem(ie);
-                  if (ie == is)
-                        break;
-                  ie = ie->prev();
-                  if (ie == 0)
+            for (Measure* m = is; m; m = m->nextMeasure()) {
+                  ticks += m->ticks();
+                  if (m == ie)
                         break;
                   }
-            score->insertTime(startTick, -ticks);    // handle spanner
+
+            // remove spanner
+            std::list<Spanner*> sl;
+            int tick2 = startTick + ticks;
+            for (auto i : score->_spanner.map()) {
+                  Spanner* s = i.second;
+                  if (s->tick() >= startTick && s->tick() < tick2)
+                        sl.push_back(s);
+                  }
+            for (Spanner* s : sl)
+                  score->undoRemoveElement(s);
+
+            undoRemoveMeasures(is, ie);
+
             if (createEndBar) {
-                  MeasureBase* mb = score->measures()->last();
-                  while (mb && mb->type() != Element::MEASURE)
-                        mb = mb->prev();
-                  if (mb) {
-                        Measure* lastMeasure = static_cast<Measure*>(mb);
-                        if (lastMeasure->endBarLineType() == NORMAL_BAR) {
-                              undoChangeEndBarLineType(lastMeasure, END_BAR);
-                              }
-                        }
+                  Measure* lastMeasure = score->lastMeasure();
+                  if (lastMeasure && lastMeasure->endBarLineType() == NORMAL_BAR)
+                        undoChangeEndBarLineType(lastMeasure, END_BAR);
                   }
+
             // insert correct timesig after deletion
             Measure* mAfterSel = mBeforeSel ? mBeforeSel->nextMeasure() : firstMeasure();
             if (mAfterSel && lastDeletedSig) {

@@ -365,6 +365,8 @@ class HairpinView : public SpannerView {
       virtual void setElement(Element*);
       };
 
+
+
 //---------------------------------------------------------
 //   ElementView
 //---------------------------------------------------------
@@ -518,21 +520,15 @@ class VoltaSegmentView : public ShowElementBase {
 //   TextLineView
 //---------------------------------------------------------
 
-class TextLineView : public ShowElementBase {
+class TextLineView : public SpannerView {
       Q_OBJECT;
 
       Ui::TextLineBase tlb;
       Ui::SLineBase lb;
-      Ui::SpannerBase sp;
 
    private slots:
-      void segmentClicked(QTreeWidgetItem* item);
       void beginTextClicked();
       void continueTextClicked();
-      void leftElementClicked();
-      void rightElementClicked();
-      void startClicked();
-      void endClicked();
 
    public:
       TextLineView();
@@ -620,15 +616,12 @@ class TremoloView : public ShowElementBase {
 //   OttavaView
 //---------------------------------------------------------
 
-class OttavaView : public ShowElementBase {
+class OttavaView : public TextLineView {
       Q_OBJECT;
 
-      Ui::SpannerBase sb;
 //      Ui::OttavaBase ob;
 
    private slots:
-      void startElementClicked();
-      void endElementClicked();
 
    public:
       OttavaView();

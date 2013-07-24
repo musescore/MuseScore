@@ -2680,6 +2680,13 @@ RemoveMeasures::RemoveMeasures(Measure* m1, Measure* m2)
 void RemoveMeasures::undo()
       {
       fm->score()->measures()->insert(fm, lm);
+      int ticks = 0;
+      for (Measure* m = fm; m; m = m->nextMeasure()) {
+            ticks += m->ticks();
+            if (m == lm)
+                  break;
+            }
+      fm->score()->insertTime(fm->tick(), ticks);
       fm->score()->fixTicks();
       fm->score()->connectTies();
       }
@@ -2692,6 +2699,13 @@ void RemoveMeasures::undo()
 void RemoveMeasures::redo()
       {
       fm->score()->measures()->remove(fm, lm);
+      int ticks = 0;
+      for (Measure* m = fm; m; m = m->nextMeasure()) {
+            ticks += m->ticks();
+            if (m == lm)
+                  break;
+            }
+      fm->score()->insertTime(fm->tick(), -ticks);
       fm->score()->fixTicks();
       }
 
