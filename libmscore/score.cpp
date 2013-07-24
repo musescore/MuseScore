@@ -2398,6 +2398,13 @@ void Score::cmdRemovePart(Part* part)
       for (int i = 0; i < n; ++i)
             cmdRemoveStaff(sidx);
       undoRemovePart(part, sidx);
+
+      for (int x = 0; x < _parts.size(); x++)
+      {
+          if (_parts.at(x) == part )
+              _parts.removeAt(x);
+      }//remove parts from QList
+
       }
 
 //---------------------------------------------------------
