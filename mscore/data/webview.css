@@ -3,6 +3,8 @@ body {
   height:90%;
   font-family: "Lucida Grande","Lucida Sans Unicode",Verdana,Arial,sans-serif;
   font-size: 12px;
+  margin:0px 0px; padding:0px;
+  text-align:center;
 }
 
 a {
@@ -80,7 +82,11 @@ padding:0px;
 }
 
 
-#content {height: 100%; overflow: hidden; position: relative;}
+#content {height: 100%; overflow: hidden; position: relative;
+width:200px;
+  margin:0px auto;
+  text-align:center;
+  padding:10px;}
 #content[id] {display: table; position: static;}
 
 #middle[id] {display: table-cell; vertical-align: middle; width: 100%;}
