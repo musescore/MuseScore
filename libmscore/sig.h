@@ -44,7 +44,7 @@ class SigEvent {
 
       bool operator==(const SigEvent& e) const;
       bool valid() const       { return _timesig.isValid(); }
-      QString print() const    { return _timesig.print();  }
+      QString print() const    { return _timesig.printAsFraction();  }
       Fraction timesig() const { return _timesig;          }
       Fraction nominal() const { return _nominal;          }
       void setNominal(const Fraction& f) { _nominal = f;  }

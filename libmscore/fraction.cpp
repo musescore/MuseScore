@@ -196,5 +196,26 @@ int Fraction::ticks() const
       return (_numerator * MScore::division * 4 + (_denominator/2)) / _denominator;
       }
 
-} // namespace Ms
+QString Fraction::toEnglishName() const
+{
+    QString num; QString suffix = "";
+    num.setNum(_denominator);
 
+    if (num.endsWith(QString("1")))
+        suffix = "st";
+    else if (num.endsWith(QString("2")))
+        suffix = "nd";
+    else if (num.endsWith(QString("3")))
+        suffix = "rd";
+    else
+        suffix = "th";
+
+    return num + suffix;
+}//return the fraction in a more human format
+
+QString Fraction::printAsFraction() const
+{
+    return QString("").setNum(_numerator) + "/" + QString("").setNum(_denominator);
+}
+
+} // namespace Ms
