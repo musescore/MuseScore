@@ -424,7 +424,6 @@ class Score : public QObject {
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);
       void createPlayEvents();
-      void insertTime(int tickPos, int tickLen);
 
    protected:
       void createPlayEvents(Chord*);
@@ -929,7 +928,6 @@ class Score : public QObject {
 
       qreal noteHeadWidth() const            { return _noteHeadWidth; }
 
-      std::multimap<int, Spanner*>& spanner()             { return _spanner.map(); }
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
       Spanner* findSpanner(int id) const;
       bool isSpannerStartEnd(int tick, int track) const;
@@ -938,6 +936,7 @@ class Score : public QObject {
 
       ChordRest* findCR(int tick, int track) const;
       void layoutSpanner();
+      void insertTime(int tickPos, int tickLen);
 
       friend class ChangeSynthesizerState;
       friend class Chord;
