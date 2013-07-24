@@ -427,6 +427,13 @@ toDurationList(const Fraction &startTickInBar,
                             && is23EndOfBeatInCompoundMeter(node->startPos, node->endPos, barFraction))
                         )
                   {
+                              // set tuplet boundary level to regular, non-tuplet bar division level
+                              // because there is no more need in tuplet boundary level after split
+                              // and such big level may confuse the estimation algorithm
+                  if (splitPoint.level == TUPLET_BOUNDARY_LEVEL) {
+                        std::vector<DivisionInfo> nonTupletDivs({divInfo.back()});
+                        splitPoint.level = levelOfTick(splitPoint.lastPos, nonTupletDivs);
+                        }
                               // split duration in splitPoint position
                   node->left.reset(new Node(node->startPos, splitPoint.lastPos,
                                             node->startLevel, splitPoint.level));
