@@ -660,7 +660,7 @@ ScoreView::ScoreView(QWidget* parent)
 
       //---setup state machine-------------------------------------------------
       sm          = new QStateMachine(this);
-      QState* stateActive = new QState();
+      QState* stateActive = new QState;
       for (int i = 0; i < STATES; ++i) {
             states[i] = new QState(stateActive);
             states[i]->setObjectName(stateNames[i]);
@@ -904,6 +904,7 @@ void ScoreView::setScore(Score* s)
       {
       if (_score)
             _score->removeViewer(this);
+
       _score = s;
       _score->addViewer(this);
 

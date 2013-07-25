@@ -1008,6 +1008,7 @@ bool Score::read(XmlReader& e)
       updateChannel();
       updateNotes();          // only for parts needed?
       createPlayEvents();
+      setExcerptsChanged(false);
       return true;
       }
 
