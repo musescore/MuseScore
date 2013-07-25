@@ -434,7 +434,16 @@ void InstrumentsDialog::genPartList()
                   else
                         sli->setClef(s->clefTypeList(0));
                   const LinkedStaves* ls = s->linkedStaves();
-                  sli->setLinked(ls && !ls->isEmpty());
+                  bool bLinked = false;
+                  if (ls && !ls->isEmpty()) {
+                        foreach(Staff* ps, ls->staves()) {
+                              if (ps != s && ps->score() == s->score()) {
+                                    bLinked = true;
+                                    break;
+                                    }
+                              }
+                        }
+                  sli->setLinked(bLinked);
                   int staffTypeIdx = cs->staffTypeIdx(s->staffType());
                   sli->setStaffType(staffTypeIdx != -1 ? -staffTypeIdx - 1 : -1);
                   }
