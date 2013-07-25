@@ -557,6 +557,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setModal(true);
       startWithButton->setIcon(*icons[fileOpen_ICON]);
       instrumentList1Button->setIcon(*icons[fileOpen_ICON]);
       instrumentList2Button->setIcon(*icons[fileOpen_ICON]);
