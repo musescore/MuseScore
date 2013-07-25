@@ -1235,7 +1235,7 @@ bool Score::checkHasMeasures() const
       Page* page = pages().front();
       const QList<System*>* sl = page->systems();
       if (sl == 0 || sl->empty() || sl->front()->measures().empty()) {
-            qDebug("first create measure, then repeat operation\n");
+            qDebug("first create measure, then repeat operation");
             return false;
             }
       return true;
@@ -1303,7 +1303,7 @@ Measure* Score::getCreateMeasure(int tick)
             while (tick >= lastTick) {
                   Measure* m = new Measure(this);
                   Fraction ts = _sigmap->timesig(lastTick).timesig();
-// qDebug("getCreateMeasure %d  %d/%d\n", tick, ts.numerator(), ts.denominator());
+// qDebug("getCreateMeasure %d  %d/%d", tick, ts.numerator(), ts.denominator());
                   m->setTick(lastTick);
                   m->setTimesig(ts);
                   m->setLen(ts);
@@ -1715,7 +1715,7 @@ int Score::customKeySigIdx(KeySig* ks) const
                   return idx;
             ++idx;
             }
-      qDebug("  not found\n");
+      qDebug("  not found");
       return -1;
       }
 
@@ -2003,10 +2003,10 @@ void Score::removeExcerpt(Score* score)
                         return;
                         }
                   else
-                        qDebug("removeExcerpt:: ex not found\n");
+                        qDebug("removeExcerpt:: ex not found");
                   }
             }
-      qDebug("Score::removeExcerpt: excerpt not found\n");
+      qDebug("Score::removeExcerpt: excerpt not found");
       }
 
 //---------------------------------------------------------
@@ -2081,7 +2081,7 @@ void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
 
 void Score::updateAccidentals(Measure* m, int staffIdx)
       {
-// qDebug("updateAccidentals measure %d staff %d\n", m->no(), staffIdx);
+// qDebug("updateAccidentals measure %d staff %d", m->no(), staffIdx);
       Staff* st = staff(staffIdx);
       AccidentalState as;      // list of already set accidentals for this measure
       as.init(st->keymap()->key(m->tick()));
@@ -2319,7 +2319,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         // insert Rest
                         Segment* s = tick2segment(ctick);
                         if (s == 0) {
-                              qDebug("no segment at %d\n", ctick);
+                              qDebug("no segment at %d", ctick);
                               continue;
                               }
                         setRest(ctick, dtrack, Fraction::fromTicks(rest), false, 0);
@@ -2346,7 +2346,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         // insert Rest
                         Segment* s = tick2segment(ctick);
                         if (s == 0) {
-                              qDebug("no segment at %d\n", ctick);
+                              qDebug("no segment at %d", ctick);
                               continue;
                               }
                         setRest(ctick, strack, Fraction::fromTicks(rest), false, 0);
@@ -2387,7 +2387,7 @@ void Score::cmdRemovePart(Part* part)
       int n      = part->nstaves();
       int eidx   = sidx + n;
 
-// qDebug("cmdRemovePart %d-%d\n", sidx, eidx);
+// qDebug("cmdRemovePart %d-%d", sidx, eidx);
 
       //
       //    adjust measures
@@ -2673,7 +2673,7 @@ void Score::padToggle(int n)
 
 void Score::setInputState(Element* e)
       {
-// qDebug("setInputState %s\n", e ? e->name() : "--");
+// qDebug("setInputState %s", e ? e->name() : "--");
 
       if (e == 0)
             return;
@@ -2749,7 +2749,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
             setPlayPos(static_cast<ChordRest*>(ee)->segment()->tick());
             }
       if (MScore::debugMode)
-            qDebug("select element <%s> type %d(state %d) staff %d\n",
+            qDebug("select element <%s> type %d(state %d) staff %d",
                e ? e->name() : "", type, selection().state(), e ? e->staffIdx() : -1);
 
       SelState selState = _selection.state();
@@ -2881,7 +2881,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         return;
                         }
                   else {
-                        qDebug("SELECT_RANGE: measure: sel state %d\n", _selection.state());
+                        qDebug("SELECT_RANGE: measure: sel state %d", _selection.state());
                         return;
                         }
                   }
@@ -2966,7 +2966,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               }
                         }
                   else {
-                        qDebug("sel state %d\n", _selection.state());
+                        qDebug("sel state %d", _selection.state());
                         }
                   selState = SEL_RANGE;
                   if (!_selection.endSegment())
@@ -3077,7 +3077,7 @@ void Score::addLyrics(int tick, int staffIdx, const QString& txt)
       Measure* measure = tick2measure(tick);
       Segment* seg     = measure->findSegment(Segment::SegChordRest, tick);
       if (seg == 0) {
-            qDebug("no segment found for lyrics<%s> at tick %d\n",
+            qDebug("no segment found for lyrics<%s> at tick %d",
                qPrintable(txt), tick);
             return;
             }
@@ -3090,7 +3090,7 @@ void Score::addLyrics(int tick, int staffIdx, const QString& txt)
             cr->add(l);
             }
       else {
-            qDebug("no chord/rest for lyrics<%s> at tick %d, staff %d\n",
+            qDebug("no chord/rest for lyrics<%s> at tick %d, staff %d",
                qPrintable(txt), tick, staffIdx);
             }
       }

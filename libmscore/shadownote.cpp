@@ -86,7 +86,6 @@ void ShadowNote::layout()
             }
       QRectF b = sym->bbox(magS());
       qreal _spatium = spatium();
-      qreal x  = b.width() * .5 - _spatium;
       qreal lw = point(score()->styleS(ST_ledgerLineWidth));
 
       qreal x1 = sym->width(magS())*.5 - (_spatium * mag()) - lw * .5;

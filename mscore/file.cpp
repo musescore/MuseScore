@@ -335,6 +335,7 @@ Score* MuseScore::readScore(const QString& name)
 //
 //    return true on success
 //---------------------------------------------------------
+
 bool MuseScore::saveFile()
       {
       return saveFile(cs);
@@ -346,6 +347,7 @@ bool MuseScore::saveFile()
 //
 //    return true on success
 //---------------------------------------------------------
+
 bool MuseScore::saveFile(Score* score)
       {
       if (score == 0)

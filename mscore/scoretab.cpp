@@ -223,7 +223,7 @@ void ScoreTab::updateExcerpts()
       if (idx == -1)
             return;
       ScoreView* v = view(idx);
-      if(!v)
+      if (!v)
             return;
       Score* score = v->score()->rootScore();
       clearTab2();
@@ -231,9 +231,10 @@ void ScoreTab::updateExcerpts()
       for (int i = 0; i < stack->count(); ++i) {
             QSplitter* vs = static_cast<QSplitter*>(stack->widget(i));
             ScoreView* sview = static_cast<ScoreView*>(vs->widget(0));
+
             if (sview->score() != score && sview->score()->rootScore() == score) {
                   stack->takeAt(i);
-                  delete sview;
+                  sview->deleteLater();
                   }
             }
 
@@ -245,6 +246,7 @@ void ScoreTab::updateExcerpts()
                   tab2->addTab(excerpt->score()->name().replace("&","&&"));
             tab2->blockSignals(false);
             tab2->setVisible(true);
+
             setExcerpt(0);
             }
       else {
