@@ -55,9 +55,13 @@ void Pedal::read(XmlReader& e)
             setBeginSymbol(noSym);
             setEndHook(false);
             }
-      if (e.name() == "subtype")          // obsolete
-            e.skipCurrentElement();
-      TextLine::read(e);
+      setId(e.intAttribute("id", -1));
+      while (e.readNextStartElement()) {
+            if (e.name() == "subtype")          // obsolete
+                  e.skipCurrentElement();
+            else if (!TextLine::readProperties(e))
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------

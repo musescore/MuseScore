@@ -231,9 +231,9 @@ Score::FileError importPdf(Score* score, const QString& path)
       if (sp == 0.0)
             sp = 1.5;
       score->setSpatium(sp * MScore::DPMM);
-      score->style()->set(StyleVal(ST_lastSystemFillLimit, 0.0));
-      score->style()->set(StyleVal(ST_staffLowerBorder, 0.0));
-      score->style()->set(StyleVal(ST_measureSpacing, 1.0));
+      score->style()->set(ST_lastSystemFillLimit, 0.0);
+      score->style()->set(ST_staffLowerBorder, 0.0);
+      score->style()->set(ST_measureSpacing, 1.0);
 
       PageFormat pF;
       pF.copy(*score->pageFormat());
@@ -245,9 +245,9 @@ Score::FileError importPdf(Score* score, const QString& path)
       pF.setOddBottomMargin(0);
       score->setPageFormat(pF);
 
-      score->style()->set(StyleVal(ST_minSystemDistance,   Spatium(omr->systemDistance())));
-      score->style()->set(StyleVal(ST_maxSystemDistance,   Spatium(omr->systemDistance())));
-      score->style()->set(StyleVal(ST_akkoladeDistance,    Spatium(omr->staffDistance())));
+      score->style()->set(ST_minSystemDistance,   Spatium(omr->systemDistance()));
+      score->style()->set(ST_maxSystemDistance,   Spatium(omr->systemDistance()));
+      score->style()->set(ST_akkoladeDistance,    Spatium(omr->staffDistance()));
 
       Part* part   = new Part(score);
       Staff* staff = new Staff(score, part, 0);
@@ -276,7 +276,7 @@ Score::FileError importPdf(Score* score, const QString& path)
 
       //---create bracket
 
-      score->staff(0)->setBracket(0, BRACKET_AKKOLADE);
+      score->staff(0)->setBracket(0, BRACKET_BRACE);
       score->staff(0)->setBracketSpan(0, 2);
 
       score->setShowOmr(true);
