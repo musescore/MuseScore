@@ -3006,10 +3006,10 @@ void ScoreView::dragScoreView(QMouseEvent* ev)
 void ScoreView::dragNoteEntry(QMouseEvent* ev)
       {
       QPointF p = toLogical(ev->pos());
-      _score->addRefresh(shadowNote->canvasBoundingRect());
+      QRectF r(shadowNote->canvasBoundingRect());
       setShadowNote(p);
-      _score->addRefresh(shadowNote->canvasBoundingRect());
-      _score->end();
+      r |= shadowNote->canvasBoundingRect();
+      update(toPhysical(r).adjusted(-2, -2, 2, 2));
       }
 
 //---------------------------------------------------------

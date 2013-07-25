@@ -76,7 +76,8 @@ int XmlReader::intAttribute(const char* s) const
 
 double XmlReader::doubleAttribute(const char* s) const
       {
-      return attributes().value(s).toString().toDouble();
+      QString value(attributes().value(s).toString());
+      return value.toDouble();
       }
 
 double XmlReader::doubleAttribute(const char* s, double _default) const
