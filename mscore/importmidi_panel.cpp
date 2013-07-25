@@ -22,7 +22,6 @@ ImportMidiPanel::ImportMidiPanel(QWidget *parent)
       : QWidget(parent)
       , ui(new Ui::ImportMidiPanel)
       , updateUiTimer(new QTimer)
-      , isMidiFileExists(false)
       , importInProgress(false)
       , prefferedVisible_(false)
       , reopenInProgress(false)
@@ -50,7 +49,7 @@ void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
                   tracksModel->index(row, TrackCol::TRACK_NUMBER)).toString();
             operationsModel->setTrackData(trackLabel, tracksModel->trackOperations(row));
             ui->treeViewOperations->expandAll();
-            midiData.setSelectedRow(midiFile, row);
+            preferences.midiImportOperations.midiData().setSelectedRow(midiFile, row);
             }
       }
 
@@ -113,7 +112,7 @@ void ImportMidiPanel::tweakUi()
 
 bool ImportMidiPanel::canImportMidi() const
       {
-      return QFileInfo(midiFile).exists() && tracksModel->numberOfTracksForImport();
+      return isMidiFileExists() && tracksModel->numberOfTracksForImport();
       }
 
 void ImportMidiPanel::hidePanel()
@@ -162,16 +161,6 @@ void ImportMidiPanel::moveTrackDown()
 
 void ImportMidiPanel::updateUi()
       {
-      if (isMidiFileExists != QFileInfo(midiFile).exists())
-            isMidiFileExists = !isMidiFileExists;
-      if (isMidiFileExists) {
-            ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: black;}");
-            ui->lineEditMidiFile->setToolTip(midiFile);
-            }
-      else {            // midi file does not exist
-            ui->lineEditMidiFile->setStyleSheet("QLineEdit{color: red;}");
-            ui->lineEditMidiFile->setToolTip(tr("MIDI file not found"));
-            }
       ui->pushButtonImport->setEnabled(canImportMidi());
 
       int visualIndex = currentVisualIndex();
@@ -207,7 +196,7 @@ void ImportMidiPanel::doMidiImport()
       setMidiPrefOperations(trackData);
       mscore->openScore(midiFile);
       clearMidiPrefOperations();
-      midiData.setTracksData(midiFile, trackData);
+      preferences.midiImportOperations.midiData().setTracksData(midiFile, trackData);
       saveTableViewState(midiFile);
       importInProgress = false;
       }
@@ -221,12 +210,13 @@ bool ImportMidiPanel::isMidiFile(const QString &fileName)
 void ImportMidiPanel::saveTableViewState(const QString &fileName)
       {
       QByteArray tableViewData = ui->tableViewTracks->verticalHeader()->saveState();
-      midiData.setTableViewData(fileName, tableViewData);
+      preferences.midiImportOperations.midiData().setTableViewData(fileName, tableViewData);
       }
 
 void ImportMidiPanel::restoreTableViewState(const QString &fileName)
       {
-      QByteArray tableViewData = midiData.tableViewData(fileName);
+      QByteArray tableViewData
+                  = preferences.midiImportOperations.midiData().tableViewData(fileName);
       ui->tableViewTracks->verticalHeader()->restoreState(tableViewData);
       }
 
@@ -248,12 +238,18 @@ void ImportMidiPanel::clearMidiPrefOperations()
       preferences.midiImportOperations.clear();
       }
 
+bool ImportMidiPanel::isMidiFileExists() const
+      {
+      return preferences.midiImportOperations.midiData().midiFile(midiFile);
+      }
+
 void ImportMidiPanel::setMidiPrefOperations(const QString &fileName)
       {
       if (importInProgress)
             return;
       reopenInProgress = true;
-      QList<TrackData> trackData = midiData.tracksData(fileName);
+      QList<TrackData> trackData
+                  = preferences.midiImportOperations.midiData().tracksData(fileName);
       setMidiPrefOperations(trackData);
       }
 
@@ -264,11 +260,11 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
       if (midiFile == fileName || importInProgress)
             return;
       midiFile = fileName;
-      ui->lineEditMidiFile->setText(QFileInfo(fileName).fileName());
       updateUi();
 
-      if (isMidiFileExists) {
-            QList<TrackData> trackData = midiData.tracksData(fileName);
+      if (isMidiFileExists()) {
+            QList<TrackData> trackData
+                        = preferences.midiImportOperations.midiData().tracksData(fileName);
             if (trackData.isEmpty()) {          // open new MIDI file
                   resetTableViewState();
                   clearMidiPrefOperations();
@@ -277,14 +273,15 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   operationsModel->reset(tracksMeta.size());
                   for (int i = 0; i != tracksModel->trackCount(); ++i)
                         trackData.push_back(tracksModel->trackData(i));
-                  midiData.setTracksData(fileName, trackData);
+                  preferences.midiImportOperations.midiData().setTracksData(fileName, trackData);
                   saveTableViewState(fileName);
                   }
             else {            // load previously saved data (tracks, operations) for this MIDI file
                   tracksModel->reset(trackData);
                   restoreTableViewState(fileName);
                   }
-            ui->tableViewTracks->selectRow(midiData.selectedRow(midiFile));
+            ui->tableViewTracks->selectRow(
+                              preferences.midiImportOperations.midiData().selectedRow(midiFile));
             }
       }
 
@@ -294,7 +291,7 @@ void ImportMidiPanel::excludeMidiFile(const QString &fileName)
                   // causes reopen of the current score
                   // we need to prevent MIDI import panel from closing at that moment
       if (!importInProgress && !reopenInProgress)
-            midiData.excludeFile(fileName);
+            preferences.midiImportOperations.midiData().excludeFile(fileName);
       }
 
 void ImportMidiPanel::setPrefferedVisible(bool visible)

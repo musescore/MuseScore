@@ -2,6 +2,7 @@
 #define IMPORTMIDI_OPERATIONS_H
 
 #include "importmidi_operation.h"
+#include "importmidi_data.h"
 
 
 namespace Ms {
@@ -80,10 +81,12 @@ class MidiImportOperations
       TrackOperations currentTrackOperations() const;
       TrackOperations trackOperations(int trackIndex) const;
       int count() const { return operations_.size(); }
+      MidiData& midiData() { return midiData_; }
 
    private:
       QList<TrackOperations> operations_;
       int currentTrack_ = -1;
+      MidiData midiData_;
 
       bool isValidIndex(int index) const;
       };
