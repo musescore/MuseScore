@@ -144,6 +144,24 @@ class TestImportMidi : public QObject, public MTest
             }
 
       void pickupMeasure() { mf("pickup"); }
+
+      // LH/RH separation
+      void LHRH_Nontuplet()
+            {
+            TrackOperations opers;
+            opers.LHRH.doIt = true;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("split_nontuplet");
+            preferences.midiImportOperations.clear();
+            }
+      void LHRH_Tuplet()
+            {
+            TrackOperations opers;
+            opers.LHRH.doIt = true;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("split_tuplet");
+            preferences.midiImportOperations.clear();
+            }
       };
 
 //---------------------------------------------------------
