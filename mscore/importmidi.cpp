@@ -56,9 +56,13 @@ extern Preferences preferences;
 
 class MTrack {
    public:
-      int minPitch = 127, maxPitch = 0, medPitch = 0, program = 0;
-      Staff* staff = 0;
-      MidiTrack* mtrack = 0;
+      int minPitch = 127;
+      int maxPitch = 0;
+      int medPitch = 0;
+      int program = 0;
+
+      Staff* staff = nullptr;
+      const MidiTrack* mtrack = nullptr;
       QString name;
       bool hasKey = false;
       int indexOfOperation = 0;
@@ -957,16 +961,14 @@ std::multimap<int, MTrack> createMTrackList(Fraction &lastTick,
 
       std::multimap<int, MTrack> tracks;   // <track index, track>
       int trackIndex = -1;
-      foreach(MidiTrack* t, mf->tracks()) {
-            t->mergeNoteOnOff();
-
+      for (const auto &t: mf->tracks()) {
             MTrack track;
-            track.mtrack = t;
+            track.mtrack = &t;
             int events = 0;
                         //  - create time signature list from meta events
                         //  - create MidiChord list
                         //  - extract some information from track: program, min/max pitch
-            for (auto i : t->events()) {
+            for (auto i : t.events()) {
                   const MidiEvent& e = i.second;
                               // change division to MScore::division
                   Fraction tick = Fraction::fromTicks((i.first * MScore::division + mf->division()/2)
@@ -1239,6 +1241,15 @@ void convertMidi(Score *score, const MidiFile *mf)
       score->connectTies();
       }
 
+void loadMidiData(MidiFile &mf)
+      {
+      mf.separateChannel();
+      MidiType mt = MT_UNKNOWN;
+      for (auto &track: mf.tracks())
+            track.mergeNoteOnOffAndFindMidiType(&mt);
+      mf.setMidiType(mt);
+      }
+
 QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
       {
       if (fileName.isEmpty())
@@ -1253,13 +1264,13 @@ QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
             try {
                   mf.read(&fp);
             }
-            catch(...) {
+            catch (...) {
                   fp.close();
                   return QList<TrackMeta>();
             }
             fp.close();
 
-            mf.separateChannel();
+            loadMidiData(mf);
             midiData.setMidiFile(fileName, mf);
             }
 
@@ -1272,7 +1283,6 @@ QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
 
 //---------------------------------------------------------
 //   importMidi
-//    return true on success
 //---------------------------------------------------------
 
 Score::FileError importMidi(Score *score, const QString &name)
@@ -1291,7 +1301,7 @@ Score::FileError importMidi(Score *score, const QString &name)
             try {
                   mf.read(&fp);
                   }
-            catch(QString errorText) {
+            catch (QString errorText) {
                   if (!noGui) {
                         QMessageBox::warning(0,
                            QWidget::tr("MuseScore: load midi"),
@@ -1304,7 +1314,7 @@ Score::FileError importMidi(Score *score, const QString &name)
                   }
             fp.close();
 
-            mf.separateChannel();
+            loadMidiData(mf);
             midiData.setMidiFile(name, mf);
             }
 
