@@ -421,7 +421,6 @@ void InstrumentsDialog::genPartList()
 
       foreach(Part* p, cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
-            pli->setFirstColumnSpanned(true);
             pli->setVisible(p->show());
             foreach(Staff* s, *p->staves()) {
                   StaffListItem* sli = new StaffListItem(pli);
