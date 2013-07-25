@@ -948,12 +948,14 @@ QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       return trackList;
       }
 
-void createMTrackList(Fraction &lastTick, TimeSigMap *sigmap,
-                      std::multimap<int, MTrack> &tracks, MidiFile *mf)
+std::multimap<int, MTrack> createMTrackList(Fraction &lastTick,
+                                            TimeSigMap *sigmap,
+                                            const MidiFile *mf)
       {
       sigmap->clear();
       sigmap->add(0, Fraction(4, 4));   // default time signature
 
+      std::multimap<int, MTrack> tracks;   // <track index, track>
       int trackIndex = -1;
       foreach(MidiTrack* t, mf->tracks()) {
             t->mergeNoteOnOff();
@@ -1016,6 +1018,8 @@ void createMTrackList(Fraction &lastTick, TimeSigMap *sigmap,
                         }
                   }
             }
+
+      return tracks;
       }
 
 //---------------------------------------------------------
@@ -1111,12 +1115,12 @@ QString instrumentName(int type, int program)
       return MidiInstrument::instrName(type, hbank, lbank, program);
       }
 
-void setTrackInfo(MidiFile *mf, MTrack &mt)
+void setTrackInfo(MidiType midiType, MTrack &mt)
       {
       if (mt.staff->isTop()) {
             Part *part  = mt.staff->part();
             if (mt.name.isEmpty()) {
-                  QString name = instrumentName(mf->midiType(), mt.program);
+                  QString name = instrumentName(midiType, mt.program);
                   if (!name.isEmpty())
                         part->setLongName(name);
                   }
@@ -1169,7 +1173,7 @@ void createTimeSignatures(Score *score)
             }
       }
 
-void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiFile *mf)
+void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiType midiType)
       {
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
@@ -1179,7 +1183,7 @@ void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiFile *mf)
                   if ((e.type() == ME_META) && (e.metaType() != META_LYRIC))
                         mt.processMeta(ie.first, e);
                   }
-            setTrackInfo(mf, mt);
+            setTrackInfo(midiType, mt);
                         // pass current track index to the convertTrack function
                         //   through MidiImportOperations
             preferences.midiImportOperations.setCurrentTrack(mt.indexOfOperation);
@@ -1215,14 +1219,12 @@ QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
       return tracksMeta;
       }
 
-void convertMidi(Score *score, MidiFile *mf)
+void convertMidi(Score *score, const MidiFile *mf)
       {
-      std::multimap<int, MTrack> tracks;        // <track index, track>
       Fraction lastTick;
       auto sigmap = score->sigmap();
 
-      mf->separateChannel();
-      createMTrackList(lastTick, sigmap, tracks, mf);
+      auto tracks = createMTrackList(lastTick, sigmap, mf);
       collectChords(tracks, Fraction::fromTicks(MScore::division) / 32);     // tol = 1/128 note
       quantizeAllTracks(tracks, sigmap, lastTick);
       removeOverlappingNotes(tracks);
@@ -1232,7 +1234,7 @@ void convertMidi(Score *score, MidiFile *mf)
       splitUnequalChords(trackList);
       createInstruments(score, trackList);
       createMeasures(lastTick, score);
-      createNotes(lastTick, trackList, mf);
+      createNotes(lastTick, trackList, mf->midiType());
       createTimeSignatures(score);
       score->connectTies();
       }
@@ -1241,26 +1243,31 @@ QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
       {
       if (fileName.isEmpty())
             return QList<TrackMeta>();
-      QFile fp(fileName);
-      if (!fp.open(QIODevice::ReadOnly))
-            return QList<TrackMeta>();
-      MidiFile mf;
-      try {
-            mf.read(&fp);
+
+      auto &midiData = preferences.midiImportOperations.midiData();
+      if (!midiData.midiFile(fileName)) {
+            QFile fp(fileName);
+            if (!fp.open(QIODevice::ReadOnly))
+                  return QList<TrackMeta>();
+            MidiFile mf;
+            try {
+                  mf.read(&fp);
             }
-      catch(...) {
+            catch(...) {
+                  fp.close();
+                  return QList<TrackMeta>();
+            }
             fp.close();
-            return QList<TrackMeta>();
+
+            mf.separateChannel();
+            midiData.setMidiFile(fileName, mf);
             }
-      fp.close();
 
       Score mockScore;
-      std::multimap<int, MTrack> tracks;
       Fraction lastTick;
-
-      mf.separateChannel();
-      createMTrackList(lastTick, mockScore.sigmap(), tracks, &mf);
-      return getTracksMeta(tracks, &mf);
+      auto tracks = createMTrackList(lastTick, mockScore.sigmap(),
+                                     midiData.midiFile(fileName));
+      return getTracksMeta(tracks, midiData.midiFile(fileName));
       }
 
 //---------------------------------------------------------
@@ -1272,29 +1279,37 @@ Score::FileError importMidi(Score *score, const QString &name)
       {
       if (name.isEmpty())
             return Score::FILE_NOT_FOUND;
-      QFile fp(name);
-      if (!fp.open(QIODevice::ReadOnly)) {
-            qDebug("importMidi: file open error <%s>", qPrintable(name));
-            return Score::FILE_OPEN_ERROR;
-            }
-      MidiFile mf;
-      try {
-            mf.read(&fp);
-            }
-      catch(QString errorText) {
-            if (!noGui) {
-                  QMessageBox::warning(0,
-                     QWidget::tr("MuseScore: load midi"),
-                     QWidget::tr("Load failed: ") + errorText,
-                     QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+
+      auto &midiData = preferences.midiImportOperations.midiData();
+      if (!midiData.midiFile(name)) {
+            QFile fp(name);
+            if (!fp.open(QIODevice::ReadOnly)) {
+                  qDebug("importMidi: file open error <%s>", qPrintable(name));
+                  return Score::FILE_OPEN_ERROR;
+                  }
+            MidiFile mf;
+            try {
+                  mf.read(&fp);
+                  }
+            catch(QString errorText) {
+                  if (!noGui) {
+                        QMessageBox::warning(0,
+                           QWidget::tr("MuseScore: load midi"),
+                           QWidget::tr("Load failed: ") + errorText,
+                           QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                        }
+                  fp.close();
+                  qDebug("importMidi: bad file format");
+                  return Score::FILE_BAD_FORMAT;
                   }
             fp.close();
-            qDebug("importMidi: bad file format");
-            return Score::FILE_BAD_FORMAT;
-            }
-      fp.close();
 
-      convertMidi(score, &mf);
+            mf.separateChannel();
+            midiData.setMidiFile(name, mf);
+            }
+
+      convertMidi(score, midiData.midiFile(name));
+
       return Score::FILE_NO_ERROR;
       }
 }

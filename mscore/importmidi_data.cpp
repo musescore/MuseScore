@@ -4,21 +4,6 @@
 
 namespace Ms {
 
-MidiData::MidiData()
-      {
-      }
-
-MidiData::~MidiData()
-      {
-      }
-
-struct MidiData::MidiDataStore
-      {
-      QByteArray tableViewData;
-      QList<TrackData> tracksData;
-      int selectedRow = 0;
-      };
-
 void MidiData::setTracksData(const QString &fileName, const QList<TrackData> &tracksData)
       {
       data[fileName].tracksData = tracksData;
@@ -61,6 +46,19 @@ int MidiData::selectedRow(const QString &fileName) const
 void MidiData::setSelectedRow(const QString &fileName, int row)
       {
       data[fileName].selectedRow = row;
+      }
+
+void MidiData::setMidiFile(const QString &fileName, const MidiFile &midiFile)
+      {
+      data[fileName].midiFile = midiFile;
+      }
+
+const MidiFile* MidiData::midiFile(const QString &fileName) const
+      {
+      auto it = data.find(fileName);
+      if (it == data.end())
+            return nullptr;
+      return &(it.value().midiFile);
       }
 
 } // namespace Ms

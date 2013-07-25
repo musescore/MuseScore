@@ -1,8 +1,6 @@
 #ifndef IMPORTMIDI_PANEL_H
 #define IMPORTMIDI_PANEL_H
 
-#include "importmidi_data.h"
-
 
 namespace Ui {
       class ImportMidiPanel;
@@ -16,6 +14,7 @@ namespace Ms {
 class TracksModel;
 class OperationsModel;
 class OperationsDelegate;
+struct TrackData;
 
 class ImportMidiPanel : public QWidget
       {
@@ -52,15 +51,14 @@ class ImportMidiPanel : public QWidget
       int currentVisualIndex();
       void setMidiPrefOperations(const QList<TrackData> &trackData);
       void clearMidiPrefOperations();
+      bool isMidiFileExists() const;
 
       Ui::ImportMidiPanel *ui;
       QTimer *updateUiTimer;
       QString midiFile;
-      bool isMidiFileExists;
       TracksModel *tracksModel;
       OperationsModel *operationsModel;
       OperationsDelegate *operationsDelegate;
-      MidiData midiData;
       bool importInProgress;
       bool prefferedVisible_;
       bool reopenInProgress;
