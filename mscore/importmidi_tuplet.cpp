@@ -666,9 +666,14 @@ bool hasIntersectionWithChord(
       {
       for (const auto &chordEvent: nonTupletChords) {
             MidiChord midiChord = chordEvent->second;
-            Fraction onTime = Quantize::quantizeValue(chordEvent->first, regularRaster);
-            for (auto &note: midiChord.notes)
-                  note.len = Quantize::quantizeValue(note.len, regularRaster);
+            Fraction onTimeRaster = Quantize::reduceRasterIfDottedNote(
+                                       maxNoteLen(midiChord.notes), regularRaster);
+            Fraction onTime = Quantize::quantizeValue(chordEvent->first, onTimeRaster);
+            for (auto &note: midiChord.notes) {
+                  Fraction offTimeRaster = Quantize::reduceRasterIfDottedNote(note.len,
+                                                                              regularRaster);
+                  note.len = Quantize::quantizeValue(note.len, offTimeRaster);
+                  }
             if (endTick > onTime && startTick < onTime + maxNoteLen(midiChord.notes))
                   return true;
             }

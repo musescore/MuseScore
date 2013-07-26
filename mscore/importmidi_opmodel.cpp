@@ -19,7 +19,6 @@ struct Controller {
       Node *LHRHPitchOctave = nullptr;
       Node *LHRHPitchNote = nullptr;
       Node *quantValue = nullptr;
-      Node *quantReduce = nullptr;
       Node *quantHuman = nullptr;
       Node *searchTuplets = nullptr;
       Node *duplets = nullptr;
@@ -44,7 +43,6 @@ OperationsModel::OperationsModel()
       quantValue->name = "Quantization";
       quantValue->oper.type = MidiOperation::Type::QUANT_VALUE;
       quantValue->oper.value = (int)TrackOperations().quantize.value;
-      quantValue->values.push_back("Shortest note in bar");
       quantValue->values.push_back("Value from preferences");
       quantValue->values.push_back("1/4");
       quantValue->values.push_back("1/8");
@@ -63,7 +61,6 @@ OperationsModel::OperationsModel()
       reduceToShorter->oper.value = Quantization().reduceToShorterNotesInBar;
       reduceToShorter->parent = quantValue;
       quantValue->children.push_back(std::unique_ptr<Node>(reduceToShorter));
-      controller->quantReduce = reduceToShorter;
 
 
 //      Node *humanPerformance = new Node;
@@ -523,12 +520,6 @@ bool Controller::updateNodeDependencies(Node *node, bool force_update)
             auto value = LHRHdoIt->oper.value.toBool();
             if (LHRHMethod)
                   LHRHMethod->visible = value;
-            result = true;
-            }
-      if (quantValue && (force_update || node == quantValue)) {
-            auto value = (MidiOperation::QuantValue)quantValue->oper.value.toInt();
-            if (quantReduce)
-                  quantReduce->visible = (value != MidiOperation::QuantValue::SHORTEST_IN_BAR);
             result = true;
             }
       if (searchTuplets && (force_update || node == searchTuplets)) {

@@ -41,22 +41,13 @@ Fraction shortestNoteInBar(const std::multimap<Fraction, MidiChord>::const_itera
                   // determine suitable quantization value based
                   // on shortest note in measure
       Fraction div = division;
-      if (minDuration <= division / 16)        // minimum duration is 1/64
-            div = division / 16;
-      else if (minDuration <= division / 8)
-            div = division / 8;
-      else if (minDuration <= division / 4)
-            div = division / 4;
-      else if (minDuration <= division / 2)
-            div = division / 2;
-      else if (minDuration <= division)
-            div = division;
-      else if (minDuration <= division * 2)
-            div = division * 2;
-      else if (minDuration <= division * 4)
-            div = division * 4;
-      else if (minDuration <= division * 8)
-            div = division * 8;
+      for (Fraction duration(1, 16); duration <= Fraction(8, 1); duration *= 2) {
+                        // minimum duration is 1/64
+            if (minDuration <= division * duration) {
+                  div = division * duration;
+                  break;
+                  }
+            }
       if (div == (division / 16))
             minDuration = div;
       else
@@ -107,24 +98,26 @@ Fraction findRegularQuantRaster(const std::multimap<Fraction, MidiChord>::iterat
                                 const std::multimap<Fraction, MidiChord>::iterator &endChordIt,
                                 const Fraction &endBarTick)
       {
-      Fraction raster;
       auto operations = preferences.midiImportOperations.currentTrackOperations();
-                  // find raster value for quantization
-      if (operations.quantize.value == MidiOperation::QuantValue::SHORTEST_IN_BAR)
-            raster = shortestNoteInBar(startBarChordIt, endChordIt, endBarTick);
-      else {
-            Fraction userQuantValue = userQuantNoteToTicks(operations.quantize.value);
-                        // if user value larger than the smallest note in bar
-                        // then use the smallest note to keep faster events
-            if (operations.quantize.reduceToShorterNotesInBar) {
-                  raster = shortestNoteInBar(startBarChordIt, endChordIt, endBarTick);
-                  if (userQuantValue < raster)
-                        raster = userQuantValue;
-                  }
-            else
-                  raster = userQuantValue;
+      Fraction raster = userQuantNoteToTicks(operations.quantize.value);
+                  // if user value larger than the smallest note in bar
+                  // then use the smallest note to keep faster events
+      if (operations.quantize.reduceToShorterNotesInBar) {
+            Fraction shortest = shortestNoteInBar(startBarChordIt, endChordIt, endBarTick);
+            if (shortest < raster)
+                  raster = shortest;
             }
       return raster;
+      }
+
+Fraction reduceRasterIfDottedNote(const Fraction &len, const Fraction &raster)
+      {
+      Fraction newRaster = raster;
+      Fraction div = len / raster;
+      double ratio = div.numerator() * 1.0 / div.denominator();
+      if (ratio > 1.4 && ratio < 1.6)       // 1.5: dotted note that is larger than quantization value
+            newRaster /= 2;                 // reduce quantization error for dotted notes
+      return newRaster;
       }
 
 Fraction quantizeValue(const Fraction &value, const Fraction &raster)
@@ -151,11 +144,14 @@ void doGridQuantizationOfBar(std::multimap<Fraction, MidiChord> &quantizedChords
             if (found != chordsNotQuant.end())
                   continue;
             auto chord = it->second;
-            Fraction onTime = quantizeValue(it->first, regularRaster);
+            Fraction onTimeRaster = reduceRasterIfDottedNote(maxNoteLen(chord.notes), regularRaster);
+            Fraction onTime = quantizeValue(it->first, onTimeRaster);
             for (auto &note: chord.notes) {
                   Fraction offTime = onTime + note.len;
                   Fraction offTimeRaster = MidiTuplet::findOffTimeRaster(offTime, it->second.voice,
                                                                          regularRaster, tuplets);
+                  if (offTimeRaster == regularRaster)    // offTime is not inside tuplet
+                        offTimeRaster = reduceRasterIfDottedNote(note.len, offTimeRaster);
                   offTime = quantizeValue(offTime, offTimeRaster);
                   note.len = offTime - onTime;
                   }
