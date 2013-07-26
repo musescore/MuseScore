@@ -172,7 +172,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -2306,7 +2306,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_82">
               <property name="text">
-               <string>Bar width:</string>
+               <string>Barline thickness:</string>
               </property>
              </widget>
             </item>
@@ -2315,12 +2315,15 @@ p, li { white-space: pre-wrap; }
               <property name="suffix">
                <string>sp</string>
               </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
              </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_83">
               <property name="text">
-               <string>End bar width:</string>
+               <string>End barline thickness:</string>
               </property>
              </widget>
             </item>
@@ -2329,12 +2332,15 @@ p, li { white-space: pre-wrap; }
               <property name="suffix">
                <string>sp</string>
               </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_84">
               <property name="text">
-               <string>End bar distance:</string>
+               <string>End barline distance:</string>
               </property>
              </widget>
             </item>
@@ -2343,12 +2349,15 @@ p, li { white-space: pre-wrap; }
               <property name="suffix">
                <string>sp</string>
               </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
              </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="label_85">
               <property name="text">
-               <string>Double bar width:</string>
+               <string>Double barline thickness:</string>
               </property>
              </widget>
             </item>
@@ -2357,12 +2366,15 @@ p, li { white-space: pre-wrap; }
               <property name="suffix">
                <string>sp</string>
               </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="label_86">
               <property name="text">
-               <string>Double bar distance:</string>
+               <string>Double barline distance:</string>
               </property>
              </widget>
             </item>
@@ -2370,6 +2382,9 @@ p, li { white-space: pre-wrap; }
              <widget class="QDoubleSpinBox" name="doubleBarDistance">
               <property name="suffix">
                <string>sp</string>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
               </property>
              </widget>
             </item>
