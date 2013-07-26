@@ -85,6 +85,25 @@ void HairpinSegment::layout()
       }
 
 //---------------------------------------------------------
+//   updateGrips
+//---------------------------------------------------------
+
+void HairpinSegment::updateGrips(int* grips, QRectF* grip) const
+      {
+      *grips = 3;
+      QPointF pp(pagePos());
+      qreal _spatium = spatium();
+      qreal x = pos2().x();
+      if (x < _spatium)             // minimum size of hairpin
+            x = _spatium;
+      qreal y = pos2().y();
+      QPointF p(x, y);
+      grip[GRIP_LINE_START].translate(pp);
+      grip[GRIP_LINE_END].translate(p + pp);
+      grip[GRIP_LINE_MIDDLE].translate(p * .5 + pp);
+      }
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
