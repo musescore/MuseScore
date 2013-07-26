@@ -30,7 +30,9 @@ struct MidiOperation
             TUPLET_4,
             TUPLET_5,
             TUPLET_7,
-            TUPLET_9
+            TUPLET_9,
+
+            CHANGE_CLEF
       } type;
 
       QVariant value;
