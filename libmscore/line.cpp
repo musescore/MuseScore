@@ -23,8 +23,6 @@
 
 namespace Ms {
 
-enum { GRIP_LINE_START, GRIP_LINE_END, GRIP_LINE_MIDDLE };
-
 //---------------------------------------------------------
 //   LineSegment
 //---------------------------------------------------------
