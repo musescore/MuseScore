@@ -153,6 +153,13 @@ OperationsModel::OperationsModel()
 
       // ------------------------------------
 
+      Node *changeClef = new Node;
+      changeClef->name = "Change clef";
+      changeClef->oper.type = MidiOperation::Type::CHANGE_CLEF;
+      changeClef->oper.value = TrackOperations().changeClef;
+      changeClef->parent = root.get();;
+      root->children.push_back(std::unique_ptr<Node>(changeClef));
+
 
       Node *doLHRH = new Node;
       doLHRH->name = "LH/RH separation";
@@ -456,6 +463,9 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                         node->oper.value = opers.opers.tuplets.septuplets; break;
                   case MidiOperation::Type::TUPLET_9:
                         node->oper.value = opers.opers.tuplets.nonuplets; break;
+
+                  case MidiOperation::Type::CHANGE_CLEF:
+                        node->oper.value = opers.opers.changeClef; break;
                   }
             }
       for (const auto &nodePtr: node->children)
