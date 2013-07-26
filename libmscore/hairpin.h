@@ -40,6 +40,7 @@ class HairpinSegment : public LineSegment {
       virtual HairpinSegment* clone() const { return new HairpinSegment(*this); }
       virtual ElementType type() const      { return HAIRPIN_SEGMENT; }
       virtual void draw(QPainter*) const;
+      virtual void updateGrips(int*, QRectF*) const;
       virtual void layout();
       virtual QVariant getProperty(P_ID id) const;
       virtual bool setProperty(P_ID id, const QVariant& v);
