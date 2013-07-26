@@ -3863,7 +3863,7 @@ void ExportMusicXml::write(QIODevice* dev)
             bracket[i] = 0;
 
       xml.setDevice(dev);
-      xml.setCodec("utf8");
+      xml.setCodec("UTF-8");
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml << "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n";
       xml.stag("score-partwise");
@@ -4446,7 +4446,7 @@ bool saveXml(Score* score, const QString& name)
 
 bool saveMxl(Score* score, const QString& name)
       {
-      QZipWriter uz(name);
+      MQZipWriter uz(name);
 
       QFileInfo fi(name);
 #if 0
@@ -4462,6 +4462,7 @@ bool saveMxl(Score* score, const QString& name)
       cbuf.open(QIODevice::ReadWrite);
       Xml xml;
       xml.setDevice(&cbuf);
+      xml.setCodec("UTF-8");
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("container");
       xml.stag("rootfiles");

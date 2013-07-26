@@ -945,7 +945,7 @@ bool Palette::read(const QString& p)
       if (!path.endsWith(".mpal"))
             path += ".mpal";
 
-      QZipReader f(path);
+      MQZipReader f(path);
       if (!f.exists())
             return false;
       clear();
@@ -1049,7 +1049,7 @@ void Palette::write(const QString& p)
       if (!path.endsWith(".mpal"))
             path += ".mpal";
 
-      QZipWriter f(path);
+      MQZipWriter f(path);
       // f.setCompressionPolicy(QZipWriter::NeverCompress);
       f.setCreationPermissions(
          QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
@@ -1057,7 +1057,7 @@ void Palette::write(const QString& p)
          | QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup
          | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
 
-      if (f.status() != QZipWriter::NoError) {
+      if (f.status() != MQZipWriter::NoError) {
             writeFailed(path);
             return;
             }
@@ -1097,7 +1097,7 @@ void Palette::write(const QString& p)
       f.addFile("palette.xml", cbuf.data());
       }
       f.close();
-      if (f.status() != QZipWriter::NoError)
+      if (f.status() != MQZipWriter::NoError)
             writeFailed(path);
       }
 
