@@ -17,13 +17,13 @@ void TracksModel::reset(const QList<TrackMeta> &tracksMeta)
       tracksData_.clear();
       int i = 0;
       for (const auto &meta: tracksMeta) {
-            QString trackName = meta.trackName.isEmpty()
-                        ? "-" : meta.trackName;
+            QString staffName = meta.staffName.isEmpty()
+                        ? "-" : meta.staffName;
             QString instrumentName = meta.instrumentName.isEmpty()
                         ? "-" : meta.instrumentName;
             TrackOperations ops;     // initialized by default values - see ctor
             ops.reorderedIndex = i++;
-            tracksData_.push_back({{trackName, instrumentName}, ops});
+            tracksData_.push_back({{staffName, instrumentName}, ops});
             }
       endResetModel();
       }
@@ -336,10 +336,10 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                               if (trackIndex == -1)
                                     return "All";
                               return trackIndex + 1;
-                        case TrackCol::TRACK_NAME:
+                        case TrackCol::STAFF_NAME:
                               if (trackIndex == -1)
                                     return "";
-                              return tracksData_[trackIndex].meta.trackName;
+                              return tracksData_[trackIndex].meta.staffName;
                         case TrackCol::INSTRUMENT:
                               if (trackIndex == -1)
                                     return "";
@@ -383,15 +383,15 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int r
       bool result = false;
       int trackIndex = trackIndexFromRow(index.row());
 
-      if (trackIndex == -1) { // all tracks row
+      if (trackIndex == -1) {   // all tracks row
             if (index.column() == TrackCol::DO_IMPORT && role == Qt::CheckStateRole) {
                   for (auto &trackData: tracksData_)
                         trackData.opers.doImport = value.toBool();
                   result = true;
                   }
             if (result) {
-                  // update checkboxes of all tracks
-                  // because we've changed option for all tracks simultaneously
+                              // update checkboxes of all tracks
+                              // because we've changed option for all tracks simultaneously
                   auto begIndex = this->index(0, TrackCol::DO_IMPORT);
                   auto endIndex = this->index(rowCount(QModelIndex()), TrackCol::DO_IMPORT);
                   emit dataChanged(begIndex, endIndex);
@@ -406,9 +406,9 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int r
                   result = true;
                   }
             if (result) {
-                  // update checkbox of current track row
+                              // update checkbox of current track row
                   emit dataChanged(index, index);
-                  // update checkbox of all tracks row
+                              // update checkbox of all tracks row
                   auto allIndex = this->index(0, TrackCol::DO_IMPORT);
                   emit dataChanged(allIndex, allIndex);
                   }
@@ -420,14 +420,14 @@ QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int r
       {
       if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
             switch (section) {
+                  case TrackCol::DO_IMPORT:
+                        return "Import";
                   case TrackCol::TRACK_NUMBER:
                         return "Track";
-                  case TrackCol::DO_IMPORT:
-                        return "Import?";
-                  case TrackCol::TRACK_NAME:
-                        return "Name";
+                  case TrackCol::STAFF_NAME:
+                        return "Staff Name";
                   case TrackCol::INSTRUMENT:
-                        return "Instrument";
+                        return "Sound";
                   default:
                         break;
                   }
@@ -454,7 +454,7 @@ TrackData* TracksModel::trackDataFromIndex(const QModelIndex &index)
 
 bool TracksModel::isMappingRowToTrackValid(int row) const
       {
-      if (trackCount_ > 1) // first row is reserved for all tracks
+      if (trackCount_ > 1)    // first row is reserved for all tracks
             return (row > 0 && row <= trackCount_);
       return row >= 0 && row < trackCount_;
       }

@@ -9,9 +9,14 @@ void MidiData::setTracksData(const QString &fileName, const QList<TrackData> &tr
       data[fileName].tracksData = tracksData;
       }
 
-void MidiData::setTableViewData(const QString &fileName, const QByteArray &tableViewData)
+void MidiData::saveHHeaderState(const QString &fileName, const QByteArray &headerData)
       {
-      data[fileName].tableViewData = tableViewData;
+      data[fileName].HHeaderData = headerData;
+      }
+
+void MidiData::saveVHeaderState(const QString &fileName, const QByteArray &headerData)
+      {
+      data[fileName].VHeaderData = headerData;
       }
 
 void MidiData::excludeFile(const QString &fileName)
@@ -27,12 +32,20 @@ QList<TrackData> MidiData::tracksData(const QString &fileName) const
       return it.value().tracksData;
       }
 
-QByteArray MidiData::tableViewData(const QString &fileName) const
+QByteArray MidiData::HHeaderData(const QString &fileName) const
       {
       auto it = data.find(fileName);
       if (it == data.end())
             return QByteArray();
-      return it.value().tableViewData;
+      return it.value().HHeaderData;
+      }
+
+QByteArray MidiData::VHeaderData(const QString &fileName) const
+      {
+      auto it = data.find(fileName);
+      if (it == data.end())
+            return QByteArray();
+      return it.value().VHeaderData;
       }
 
 int MidiData::selectedRow(const QString &fileName) const

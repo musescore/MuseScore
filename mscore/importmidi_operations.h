@@ -55,7 +55,7 @@ struct TrackOperations
 
 struct TrackMeta
       {
-      QString trackName;
+      QString staffName;
       QString instrumentName;
       };
 
