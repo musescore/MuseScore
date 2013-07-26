@@ -44,19 +44,19 @@ OperationsModel::OperationsModel()
       quantValue->oper.type = MidiOperation::Type::QUANT_VALUE;
       quantValue->oper.value = (int)TrackOperations().quantize.value;
       quantValue->values.push_back("Value from preferences");
-      quantValue->values.push_back("1/4");
-      quantValue->values.push_back("1/8");
-      quantValue->values.push_back("1/16");
-      quantValue->values.push_back("1/32");
-      quantValue->values.push_back("1/64");
-      quantValue->values.push_back("1/128");
+      quantValue->values.push_back("Quarter");
+      quantValue->values.push_back("Eighth");
+      quantValue->values.push_back("16th");
+      quantValue->values.push_back("32th");
+      quantValue->values.push_back("64th");
+      quantValue->values.push_back("128th");
       quantValue->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(quantValue));
       controller->quantValue = quantValue;
 
 
       Node *reduceToShorter = new Node;
-      reduceToShorter->name = "Reduce to shortest notes in bar";
+      reduceToShorter->name = "Reduce to shortest note in bar";
       reduceToShorter->oper.type = MidiOperation::Type::QUANT_REDUCE;
       reduceToShorter->oper.value = Quantization().reduceToShorterNotesInBar;
       reduceToShorter->parent = quantValue;
