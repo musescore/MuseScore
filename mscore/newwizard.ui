@@ -69,15 +69,21 @@
      <property name="text">
       <string>Create new score from template</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item row="7" column="0" colspan="2">
     <widget class="QRadioButton" name="rb2">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="text">
       <string>Create new score from scratch</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
