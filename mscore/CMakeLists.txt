@@ -351,6 +351,7 @@ if (MINGW)
       portaudio
       portmidi
       winmm
+      z
       )
 
    if (OMR)

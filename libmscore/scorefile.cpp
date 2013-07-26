@@ -385,7 +385,7 @@ void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
 
 void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection)
       {
-      QZipWriter uz(f);
+      MQZipWriter uz(f);
 
       QString fn = info.completeBaseName() + ".mscx";
       QBuffer cbuf;
@@ -558,7 +558,7 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
 
 Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       {
-      QZipReader uz(name);
+      MQZipReader uz(name);
       if (!uz.exists()) {
             qDebug("loadCompressedMsc: <%s> not found\n", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "file not found");
@@ -587,8 +587,8 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       QByteArray dbuf = uz.fileData(rootfile);
       if (dbuf.isEmpty()) {
 //            qDebug("root file <%s> is empty", qPrintable(rootfile));
-            QList<QZipReader::FileInfo> fil = uz.fileInfoList();
-            foreach(const QZipReader::FileInfo& fi, fil) {
+            QList<MQZipReader::FileInfo> fil = uz.fileInfoList();
+            foreach(const MQZipReader::FileInfo& fi, fil) {
                   if (fi.filePath.endsWith(".mscx")) {
                         dbuf = uz.fileData(fi.filePath);
                         break;
@@ -1042,7 +1042,7 @@ void Score::print(QPainter* painter, int pageNo)
 
 QByteArray Score::readCompressedToBuffer()
       {
-      QZipReader uz(filePath());
+      MQZipReader uz(filePath());
 
       QByteArray cbuf = uz.fileData("META-INF/container.xml");
 
