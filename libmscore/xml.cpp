@@ -274,6 +274,7 @@ bool compareProperty(void* val, void* defaultVal)
 
 Xml::Xml()
       {
+      setCodec("UTF-8");
       stack.clear();
       curTick       = 0;
       curTrack      = -1;

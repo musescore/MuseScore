@@ -234,14 +234,14 @@ void Workspace::write()
             dir.mkpath(_path);
             _path += "/" + _name + ext;
             }
-      QZipWriter f(_path);
+      MQZipWriter f(_path);
       f.setCreationPermissions(
          QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
          | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
          | QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup
          | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
 
-      if (f.status() != QZipWriter::NoError) {
+      if (f.status() != MQZipWriter::NoError) {
             writeFailed(_path);
             return;
             }
@@ -291,7 +291,7 @@ void Workspace::write()
       cbuf.close();
       }
 
-      if (f.status() != QZipWriter::NoError)
+      if (f.status() != MQZipWriter::NoError)
             writeFailed(_path);
       }
 
@@ -310,7 +310,7 @@ void Workspace::read()
       QFileInfo fi(_path);
       _readOnly = !fi.isWritable();
 
-      QZipReader f(_path);
+      MQZipReader f(_path);
       QByteArray ba = f.fileData("META-INF/container.xml");
 
       XmlReader e(ba);
