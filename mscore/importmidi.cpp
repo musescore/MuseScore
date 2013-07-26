@@ -56,9 +56,13 @@ extern Preferences preferences;
 
 class MTrack {
    public:
-      int minPitch = 127, maxPitch = 0, medPitch = 0, program = 0;
-      Staff* staff = 0;
-      MidiTrack* mtrack = 0;
+      int minPitch = 127;
+      int maxPitch = 0;
+      int medPitch = 0;
+      int program = 0;
+
+      Staff* staff = nullptr;
+      const MidiTrack* mtrack = nullptr;
       QString name;
       bool hasKey = false;
       int indexOfOperation = 0;
@@ -799,12 +803,40 @@ Fraction metaTimeSignature(const MidiEvent& e)
       return Fraction(z, n);
       }
 
+void removeEmptyTuplets(MTrack &track)
+      {
+      if (track.tuplets.empty())
+            return;
+      for (auto it = track.tuplets.begin(); it != track.tuplets.end(); ) {
+            const auto &tupletData = it->second;
+            bool containsChord = false;
+            for (const auto &chord: track.chords) {
+                  if (tupletData.voice != chord.second.voice)
+                        continue;
+                  const Fraction &onTime = chord.first;
+                  Fraction len = maxNoteLen(chord.second.notes);
+                  if (onTime + len > tupletData.onTime
+                              && onTime + len <= tupletData.onTime + tupletData.len) {
+                                    // tuplet contains at least one chord
+                        containsChord = true;
+                        break;
+                        }
+                  }
+            if (!containsChord) {
+                  it = track.tuplets.erase(it);
+                  continue;
+                  }
+            ++it;
+            }
+      }
+
 void insertNewLeftHandTrack(std::multimap<int, MTrack> &tracks,
                             std::multimap<int, MTrack>::iterator &it,
                             const std::multimap<Fraction, MidiChord> &leftHandChords)
       {
       auto leftHandTrack = it->second;
       leftHandTrack.chords = leftHandChords;
+      removeEmptyTuplets(leftHandTrack);
       it = tracks.insert({it->first, leftHandTrack});
       }
 
@@ -863,7 +895,7 @@ void splitIntoLRHands_HandWidth(std::multimap<int, MTrack> &tracks,
                               // assign all chords in range [minPitch .. minPitch + OCTAVE]
                               // to left hand and all other chords - to right hand
                   for (auto j = notes.begin(); j != notes.end(); ) {
-                        auto &note = *j;
+                        const auto &note = *j;
                         if (note.pitch <= minPitch + OCTAVE) {
                               leftHandNotes.push_back(note);
                               j = notes.erase(j);
@@ -914,28 +946,29 @@ void splitIntoLeftRightHands(std::multimap<int, MTrack> &tracks)
 QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       {
       QList<MTrack> trackList;
-      for (const auto &track: tracks)
+      for (const auto &track: tracks) {
             trackList.push_back(track.second);
+            }
       return trackList;
       }
 
-void createMTrackList(Fraction &lastTick, TimeSigMap *sigmap,
-                      std::multimap<int, MTrack> &tracks, MidiFile *mf)
+std::multimap<int, MTrack> createMTrackList(Fraction &lastTick,
+                                            TimeSigMap *sigmap,
+                                            const MidiFile *mf)
       {
       sigmap->clear();
       sigmap->add(0, Fraction(4, 4));   // default time signature
 
+      std::multimap<int, MTrack> tracks;   // <track index, track>
       int trackIndex = -1;
-      foreach(MidiTrack* t, mf->tracks()) {
-            t->mergeNoteOnOff();
-
+      for (const auto &t: mf->tracks()) {
             MTrack track;
-            track.mtrack = t;
+            track.mtrack = &t;
             int events = 0;
                         //  - create time signature list from meta events
                         //  - create MidiChord list
                         //  - extract some information from track: program, min/max pitch
-            for (auto i : t->events()) {
+            for (auto i : t.events()) {
                   const MidiEvent& e = i.second;
                               // change division to MScore::division
                   Fraction tick = Fraction::fromTicks((i.first * MScore::division + mf->division()/2)
@@ -970,15 +1003,25 @@ void createMTrackList(Fraction &lastTick, TimeSigMap *sigmap,
                         lastTick = tick;
                   }
             if (events != 0) {
-                  auto trackOperations
-                        = preferences.midiImportOperations.trackOperations(++trackIndex);
-                  if (trackOperations.doImport) {
+                  ++trackIndex;
+                  if (preferences.midiImportOperations.count()) {
+                        auto trackOperations
+                                    = preferences.midiImportOperations.trackOperations(trackIndex);
+                        if (trackOperations.doImport) {
+                              track.medPitch /= events;
+                              track.indexOfOperation = trackIndex;
+                              tracks.insert({trackOperations.reorderedIndex, track});
+                              }
+                        }
+                  else {            // if it is an initial track-list query from MIDI import panel
                         track.medPitch /= events;
                         track.indexOfOperation = trackIndex;
-                        tracks.insert({trackOperations.reorderedIndex, track});
+                        tracks.insert({trackIndex, track});
                         }
                   }
             }
+
+      return tracks;
       }
 
 //---------------------------------------------------------
@@ -1074,12 +1117,12 @@ QString instrumentName(int type, int program)
       return MidiInstrument::instrName(type, hbank, lbank, program);
       }
 
-void setTrackInfo(MidiFile *mf, MTrack &mt)
+void setTrackInfo(MidiType midiType, MTrack &mt)
       {
       if (mt.staff->isTop()) {
             Part *part  = mt.staff->part();
             if (mt.name.isEmpty()) {
-                  QString name = instrumentName(mf->midiType(), mt.program);
+                  QString name = instrumentName(midiType, mt.program);
                   if (!name.isEmpty())
                         part->setLongName(name);
                   }
@@ -1132,7 +1175,7 @@ void createTimeSignatures(Score *score)
             }
       }
 
-void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiFile *mf)
+void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiType midiType)
       {
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
@@ -1142,10 +1185,10 @@ void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiFile *mf)
                   if ((e.type() == ME_META) && (e.metaType() != META_LYRIC))
                         mt.processMeta(ie.first, e);
                   }
-            setTrackInfo(mf, mt);
+            setTrackInfo(midiType, mt);
                         // pass current track index to the convertTrack function
                         //   through MidiImportOperations
-            preferences.midiImportOperations.setCurrentTrack(i);
+            preferences.midiImportOperations.setCurrentTrack(mt.indexOfOperation);
             mt.convertTrack(lastTick);
 
             for (auto ie : mt.mtrack->events()) {
@@ -1178,14 +1221,12 @@ QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
       return tracksMeta;
       }
 
-void convertMidi(Score *score, MidiFile *mf)
+void convertMidi(Score *score, const MidiFile *mf)
       {
-      std::multimap<int, MTrack> tracks;        // <track index, track>
       Fraction lastTick;
       auto sigmap = score->sigmap();
 
-      mf->separateChannel();
-      createMTrackList(lastTick, sigmap, tracks, mf);
+      auto tracks = createMTrackList(lastTick, sigmap, mf);
       collectChords(tracks, Fraction::fromTicks(MScore::division) / 32);     // tol = 1/128 note
       quantizeAllTracks(tracks, sigmap, lastTick);
       removeOverlappingNotes(tracks);
@@ -1195,69 +1236,90 @@ void convertMidi(Score *score, MidiFile *mf)
       splitUnequalChords(trackList);
       createInstruments(score, trackList);
       createMeasures(lastTick, score);
-      createNotes(lastTick, trackList, mf);
+      createNotes(lastTick, trackList, mf->midiType());
       createTimeSignatures(score);
       score->connectTies();
+      }
+
+void loadMidiData(MidiFile &mf)
+      {
+      mf.separateChannel();
+      MidiType mt = MT_UNKNOWN;
+      for (auto &track: mf.tracks())
+            track.mergeNoteOnOffAndFindMidiType(&mt);
+      mf.setMidiType(mt);
       }
 
 QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
       {
       if (fileName.isEmpty())
             return QList<TrackMeta>();
-      QFile fp(fileName);
-      if (!fp.open(QIODevice::ReadOnly))
-            return QList<TrackMeta>();
-      MidiFile mf;
-      try {
-            mf.read(&fp);
+
+      auto &midiData = preferences.midiImportOperations.midiData();
+      if (!midiData.midiFile(fileName)) {
+            QFile fp(fileName);
+            if (!fp.open(QIODevice::ReadOnly))
+                  return QList<TrackMeta>();
+            MidiFile mf;
+            try {
+                  mf.read(&fp);
             }
-      catch(...) {
+            catch (...) {
+                  fp.close();
+                  return QList<TrackMeta>();
+            }
             fp.close();
-            return QList<TrackMeta>();
+
+            loadMidiData(mf);
+            midiData.setMidiFile(fileName, mf);
             }
-      fp.close();
 
       Score mockScore;
-      std::multimap<int, MTrack> tracks;
       Fraction lastTick;
-
-      mf.separateChannel();
-      createMTrackList(lastTick, mockScore.sigmap(), tracks, &mf);
-      return getTracksMeta(tracks, &mf);
+      auto tracks = createMTrackList(lastTick, mockScore.sigmap(),
+                                     midiData.midiFile(fileName));
+      return getTracksMeta(tracks, midiData.midiFile(fileName));
       }
 
 //---------------------------------------------------------
 //   importMidi
-//    return true on success
 //---------------------------------------------------------
 
 Score::FileError importMidi(Score *score, const QString &name)
       {
       if (name.isEmpty())
             return Score::FILE_NOT_FOUND;
-      QFile fp(name);
-      if (!fp.open(QIODevice::ReadOnly)) {
-            qDebug("importMidi: file open error <%s>", qPrintable(name));
-            return Score::FILE_OPEN_ERROR;
-            }
-      MidiFile mf;
-      try {
-            mf.read(&fp);
-            }
-      catch(QString errorText) {
-            if (!noGui) {
-                  QMessageBox::warning(0,
-                     QWidget::tr("MuseScore: load midi"),
-                     QWidget::tr("Load failed: ") + errorText,
-                     QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+
+      auto &midiData = preferences.midiImportOperations.midiData();
+      if (!midiData.midiFile(name)) {
+            QFile fp(name);
+            if (!fp.open(QIODevice::ReadOnly)) {
+                  qDebug("importMidi: file open error <%s>", qPrintable(name));
+                  return Score::FILE_OPEN_ERROR;
+                  }
+            MidiFile mf;
+            try {
+                  mf.read(&fp);
+                  }
+            catch (QString errorText) {
+                  if (!noGui) {
+                        QMessageBox::warning(0,
+                           QWidget::tr("MuseScore: load midi"),
+                           QWidget::tr("Load failed: ") + errorText,
+                           QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+                        }
+                  fp.close();
+                  qDebug("importMidi: bad file format");
+                  return Score::FILE_BAD_FORMAT;
                   }
             fp.close();
-            qDebug("importMidi: bad file format");
-            return Score::FILE_BAD_FORMAT;
-            }
-      fp.close();
 
-      convertMidi(score, &mf);
+            loadMidiData(mf);
+            midiData.setMidiFile(name, mf);
+            }
+
+      convertMidi(score, midiData.midiFile(name));
+
       return Score::FILE_NO_ERROR;
       }
 }

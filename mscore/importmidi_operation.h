@@ -36,8 +36,7 @@ struct MidiOperation
       QVariant value;
 
       enum class QuantValue {
-            SHORTEST_IN_BAR = 0,
-            FROM_PREFERENCES,
+            FROM_PREFERENCES = 0,
             N_4,
             N_8,
             N_16,

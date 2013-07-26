@@ -29,6 +29,7 @@ void quantizeChordsAndTuplets(std::multimap<Fraction, MidiTuplet::TupletData> &t
 
 Fraction fixedQuantRaster();
 
+Fraction reduceRasterIfDottedNote(const Fraction &len, const Fraction &raster);
 Fraction quantizeValue(const Fraction &value, const Fraction &raster);
 
 Fraction findRegularQuantRaster(const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,

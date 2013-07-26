@@ -58,6 +58,20 @@ class TestImportMidi : public QObject, public MTest
       void im4() { mf("m4"); }     // voices, typeB, resolve with tie
       void im5() { mf("m5"); }     // same as m1 with division 240
 
+      // quantization
+      void quantDotted4th()
+            {
+                        // 1/4 quantization should preserve 4th dotted note
+            int defaultQuant = preferences.shortestNote;
+            preferences.shortestNote = MScore::division; // midi quantization: 1/4
+            TrackOperations opers;
+            opers.quantize.reduceToShorterNotesInBar = false;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("quant_dotted_4th");
+            preferences.shortestNote = defaultQuant;
+            preferences.midiImportOperations.clear();
+            }
+
       // test tuplet recognition functions
       void findChordInBar();
       void bestChordForTupletNote();
@@ -144,6 +158,24 @@ class TestImportMidi : public QObject, public MTest
             }
 
       void pickupMeasure() { mf("pickup"); }
+
+      // LH/RH separation
+      void LHRH_Nontuplet()
+            {
+            TrackOperations opers;
+            opers.LHRH.doIt = true;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("split_nontuplet");
+            preferences.midiImportOperations.clear();
+            }
+      void LHRH_Tuplet()
+            {
+            TrackOperations opers;
+            opers.LHRH.doIt = true;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("split_tuplet");
+            preferences.midiImportOperations.clear();
+            }
       };
 
 //---------------------------------------------------------
