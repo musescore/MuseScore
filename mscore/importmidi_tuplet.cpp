@@ -723,6 +723,8 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
                          std::multimap<Fraction, MidiChord> &chords,
                          const Fraction &endBarTick)
       {
+      if (tuplets.empty())
+            return 0;
                   // it's better before to sort tuplets by their average pitch
                   // and notes of every chord as well
       sortNotesByPitch(startBarChordIt, endBarChordIt);
