@@ -13,9 +13,9 @@ struct DefinedTrackOperations;
 
 struct TrackCol {
       enum {
-            TRACK_NUMBER = 0,
-            DO_IMPORT,
-            TRACK_NAME,
+            DO_IMPORT = 0,
+            TRACK_NUMBER,
+            STAFF_NAME,
             INSTRUMENT,
             COL_COUNT
             };

@@ -12,10 +12,12 @@ class MidiData
       {
    public:
       void setTracksData(const QString &fileName, const QList<TrackData> &tracksData);
-      void setTableViewData(const QString &fileName, const QByteArray &tableViewData);
+      void saveHHeaderState(const QString &fileName, const QByteArray &headerData);
+      void saveVHeaderState(const QString &fileName, const QByteArray &headerData);
       void excludeFile(const QString &fileName);
       QList<TrackData> tracksData(const QString &fileName) const;
-      QByteArray tableViewData(const QString &fileName) const;
+      QByteArray HHeaderData(const QString &fileName) const;
+      QByteArray VHeaderData(const QString &fileName) const;
       int selectedRow(const QString &fileName) const;
       void setSelectedRow(const QString &fileName, int row);
       void setMidiFile(const QString &fileName, const MidiFile &midiFile);
@@ -24,7 +26,8 @@ class MidiData
    private:
       struct MidiDataStore
             {
-            QByteArray tableViewData;
+            QByteArray HHeaderData;
+            QByteArray VHeaderData;
             QList<TrackData> tracksData;
             int selectedRow = 0;
             MidiFile midiFile;

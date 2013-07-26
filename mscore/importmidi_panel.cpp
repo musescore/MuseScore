@@ -73,7 +73,7 @@ class CustomHorizHeaderView : public QHeaderView
             {
             auto sz = QHeaderView::sectionSizeFromContents(logicalIndex);
             const int EXTRA_SPACE = 35;
-            if (logicalIndex == TrackCol::TRACK_NAME || logicalIndex == TrackCol::INSTRUMENT)
+            if (logicalIndex == TrackCol::STAFF_NAME || logicalIndex == TrackCol::INSTRUMENT)
                   return QSize(sz.width() + EXTRA_SPACE, sz.height());
             else
                   return sz;
@@ -103,7 +103,7 @@ void ImportMidiPanel::tweakUi()
                                                              QHeaderView::ResizeToContents);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::DO_IMPORT,
                                                              QHeaderView::ResizeToContents);
-      ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::TRACK_NAME,
+      ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::STAFF_NAME,
                                                              QHeaderView::ResizeToContents);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::INSTRUMENT,
                                                              QHeaderView::Stretch);
@@ -209,15 +209,18 @@ bool ImportMidiPanel::isMidiFile(const QString &fileName)
 
 void ImportMidiPanel::saveTableViewState(const QString &fileName)
       {
-      QByteArray tableViewData = ui->tableViewTracks->verticalHeader()->saveState();
-      preferences.midiImportOperations.midiData().setTableViewData(fileName, tableViewData);
+      QByteArray hData = ui->tableViewTracks->horizontalHeader()->saveState();
+      QByteArray vData = ui->tableViewTracks->verticalHeader()->saveState();
+      preferences.midiImportOperations.midiData().saveHHeaderState(fileName, hData);
+      preferences.midiImportOperations.midiData().saveVHeaderState(fileName, vData);
       }
 
 void ImportMidiPanel::restoreTableViewState(const QString &fileName)
       {
-      QByteArray tableViewData
-                  = preferences.midiImportOperations.midiData().tableViewData(fileName);
-      ui->tableViewTracks->verticalHeader()->restoreState(tableViewData);
+      QByteArray hData = preferences.midiImportOperations.midiData().HHeaderData(fileName);
+      QByteArray vData = preferences.midiImportOperations.midiData().VHeaderData(fileName);
+      ui->tableViewTracks->horizontalHeader()->restoreState(hData);
+      ui->tableViewTracks->verticalHeader()->restoreState(vData);
       }
 
 void ImportMidiPanel::setMidiPrefOperations(const QList<TrackData> &trackData)
@@ -253,6 +256,21 @@ void ImportMidiPanel::setMidiPrefOperations(const QString &fileName)
       setMidiPrefOperations(trackData);
       }
 
+void ImportMidiPanel::showOrHideStaffNameCol(const QList<TrackMeta> &tracksMeta)
+      {
+      bool emptyName = true;
+      for (const auto &meta: tracksMeta) {
+            if (!meta.staffName.isEmpty()) {
+                  emptyName = false;
+                  break;
+                  }
+            }
+      if (emptyName)
+            ui->tableViewTracks->horizontalHeader()->hideSection(TrackCol::STAFF_NAME);
+      else
+            ui->tableViewTracks->horizontalHeader()->showSection(TrackCol::STAFF_NAME);
+      }
+
 void ImportMidiPanel::setMidiFile(const QString &fileName)
       {
       if (reopenInProgress)
@@ -270,6 +288,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   clearMidiPrefOperations();
                   QList<TrackMeta> tracksMeta(extractMidiTracksMeta(fileName));
                   tracksModel->reset(tracksMeta);
+                  showOrHideStaffNameCol(tracksMeta);
                   operationsModel->reset(tracksMeta.size());
                   for (int i = 0; i != tracksModel->trackCount(); ++i)
                         trackData.push_back(tracksModel->trackData(i));
