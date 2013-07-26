@@ -90,6 +90,12 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButtonUp">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>29</height>
+           </size>
+          </property>
           <property name="toolTip">
            <string>Move track up</string>
           </property>
@@ -100,6 +106,12 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButtonDown">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>29</height>
+           </size>
+          </property>
           <property name="toolTip">
            <string>Move track down</string>
           </property>
@@ -134,7 +146,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>0</height>
+          <height>29</height>
          </size>
         </property>
         <property name="toolTip">
