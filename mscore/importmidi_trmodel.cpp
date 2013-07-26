@@ -124,6 +124,9 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::TUPLET_9:
                   trackData.opers.tuplets.nonuplets = operValue.toBool();
                   break;
+            case MidiOperation::Type::CHANGE_CLEF:
+                  trackData.opers.changeClef = operValue.toBool();
+                  break;
             case MidiOperation::Type::DO_IMPORT:
                   break;
             }
@@ -268,6 +271,14 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.tuplets.nonuplets != opers.opers.tuplets.nonuplets) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::TUPLET_9);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::CHANGE_CLEF
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.changeClef != opers.opers.changeClef) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::CHANGE_CLEF);
                         break;
                         }
                   }

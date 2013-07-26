@@ -51,6 +51,7 @@ struct TrackOperations
       LHRHSeparation LHRH;
       SearchTuplets tuplets;
       bool useMultipleVoices = true;
+      bool changeClef = false;
       };
 
 struct TrackMeta

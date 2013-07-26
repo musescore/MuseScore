@@ -45,10 +45,12 @@
 #include "importmidi_tuplet.h"
 #include "libmscore/tuplet.h"
 
+#include "libmscore/undo.h"
 
 namespace Ms {
 
 extern Preferences preferences;
+extern void updateNoteLines(Segment*, int track);
 
 //---------------------------------------------------------
 //   MTrack
@@ -56,11 +58,7 @@ extern Preferences preferences;
 
 class MTrack {
    public:
-      int minPitch = 127;
-      int maxPitch = 0;
-      int medPitch = 0;
       int program = 0;
-
       Staff* staff = nullptr;
       const MidiTrack* mtrack = nullptr;
       QString name;
@@ -81,7 +79,9 @@ class MTrack {
                            const Fraction &len, Meter::DurationType durationType);
       void addElementToTuplet(int voice, const Fraction &onTime,
                               const Fraction &len, DurationElement *el);
-      void createTuplets(int track, Score *score);
+      void createTuplets();
+      void createKeys(int accidentalType);
+      void createClefs();
       };
 
 
@@ -646,8 +646,11 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
                        nextChordTick - startChordTick, track);
       }
 
-void MTrack::createTuplets(int track, Score *score)
+void MTrack::createTuplets()
       {
+      Score* score     = staff->score();
+      int track        = staff->idx() * VOICES;
+
       for (const auto &tupletEvent: tuplets) {
             const auto &tupletData = tupletEvent.second;
             if (tupletData.elements.empty())
@@ -677,12 +680,71 @@ void MTrack::createTuplets(int track, Score *score)
             }
       }
 
-void MTrack::convertTrack(const Fraction &lastTick)
+void MTrack::createKeys(int accidentalType)
       {
       Score* score     = staff->score();
-      int key          = 0;                      // TODO-LIB findKey(mtrack, score->sigmap());
       int track        = staff->idx() * VOICES;
 
+      KeyList* km = staff->keymap();
+      if (!hasKey && !mtrack->drumTrack()) {
+            KeySigEvent ks;
+            ks.setAccidentalType(accidentalType);
+            (*km)[0] = ks;
+            }
+      for (auto it = km->begin(); it != km->end(); ++it) {
+            int tick = it->first;
+            KeySigEvent key  = it->second;
+            KeySig* ks = new KeySig(score);
+            ks->setTrack(track);
+            ks->setGenerated(false);
+            ks->setKeySigEvent(key);
+            ks->setMag(staff->mag());
+            Measure* m = score->tick2measure(tick);
+            Segment* seg = m->getSegment(ks, tick);
+            seg->add(ks);
+            }
+      }
+
+ClefType clefTypeFromAveragePitch(int averagePitch)
+      {
+      return averagePitch < 60 ? CLEF_F : CLEF_G;
+      }
+
+void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
+      {
+      Clef* clef = new Clef(staff->score());
+      clef->setClefType(clefType);
+      int track = staff->idx() * VOICES;
+      clef->setTrack(track);
+      clef->setGenerated(false);
+      clef->setMag(staff->mag());
+      clef->setSmall(isSmall);
+      Measure* m = staff->score()->tick2measure(tick);
+      Segment* seg = m->getSegment(clef, tick);
+      seg->add(clef);
+      }
+
+void MTrack::createClefs()
+      {
+      ClefType lastClefType = staff->initialClef()._concertClef;
+      createClef(lastClefType, staff, 0);
+
+      auto trackOpers = preferences.midiImportOperations.trackOperations(indexOfOperation);
+      if (trackOpers.changeClef) {
+            for (const auto &chord: chords) {
+                  ClefType newClefType = clefTypeFromAveragePitch(
+                                    findAveragePitch(chord.second.notes));
+                  if (newClefType != lastClefType) {
+                        lastClefType = newClefType;
+                        bool isSmallClef = true;
+                        createClef(lastClefType, staff, chord.first.ticks(), isSmallClef);
+                        }
+                  }
+            }
+      }
+
+void MTrack::convertTrack(const Fraction &lastTick)
+      {
       for (int voice = 0; voice < VOICES; ++voice) {
                         // startChordTick is onTime value of all simultaneous notes
                         // chords here are consist of notes with equal durations
@@ -717,41 +779,11 @@ void MTrack::convertTrack(const Fraction &lastTick)
             processPendingNotes(midiChords, voice, startChordTick, lastTick);
             }
 
-      createTuplets(track, score);
+      int key = 0;                // TODO-LIB findKey(mtrack, score->sigmap());
 
-      KeyList* km = staff->keymap();
-      if (!hasKey && !mtrack->drumTrack()) {
-            KeySigEvent ks;
-            ks.setAccidentalType(key);
-            (*km)[0] = ks;
-            }
-      for (auto it = km->begin(); it != km->end(); ++it) {
-            int tick = it->first;
-            KeySigEvent key  = it->second;
-            KeySig* ks = new KeySig(score);
-            ks->setTrack(track);
-            ks->setGenerated(false);
-            ks->setKeySigEvent(key);
-            ks->setMag(staff->mag());
-            Measure* m = score->tick2measure(tick);
-            Segment* seg = m->getSegment(ks, tick);
-            seg->add(ks);
-            }
-
-#if 0  // TODO
-      ClefList* cl = staff->clefList();
-      for (ciClefEvent i = cl->begin(); i != cl->end(); ++i) {
-            int tick = i.key();
-            Clef* clef = new Clef(score);
-            clef->setClefType(i.value());
-            clef->setTrack(track);
-            clef->setGenerated(false);
-            clef->setMag(staff->mag());
-            Measure* m = score->tick2measure(tick);
-            Segment* seg = m->getSegment(clef, tick);
-            seg->add(clef);
-            }
-#endif
+      createTuplets();
+      createKeys(key);
+      createClefs();
       }
 
 #if 0
@@ -981,9 +1013,6 @@ std::multimap<int, MTrack> createMTrackList(Fraction &lastTick,
                         int pitch = e.pitch();
                         Fraction len = Fraction::fromTicks((e.len() * MScore::division + mf->division()/2)
                                                            / mf->division());
-                        track.maxPitch = qMax(pitch, track.maxPitch);
-                        track.minPitch = qMin(pitch, track.minPitch);
-                        track.medPitch += pitch;
                         if (tick + len > lastTick)
                               lastTick = tick + len;
 
@@ -1008,13 +1037,11 @@ std::multimap<int, MTrack> createMTrackList(Fraction &lastTick,
                         auto trackOperations
                                     = preferences.midiImportOperations.trackOperations(trackIndex);
                         if (trackOperations.doImport) {
-                              track.medPitch /= events;
                               track.indexOfOperation = trackIndex;
                               tracks.insert({trackOperations.reorderedIndex, track});
                               }
                         }
                   else {            // if it is an initial track-list query from MIDI import panel
-                        track.medPitch /= events;
                         track.indexOfOperation = trackIndex;
                         tracks.insert({trackIndex, track});
                         }
@@ -1022,6 +1049,26 @@ std::multimap<int, MTrack> createMTrackList(Fraction &lastTick,
             }
 
       return tracks;
+      }
+
+Measure* barFromIndex(const Score *score, int barIndex)
+      {
+      int tick = score->sigmap()->bar2tick(barIndex, 0);
+      return score->tick2measure(tick);
+      }
+
+int findAveragePitch(const std::map<Fraction, MidiChord>::const_iterator &startChordIt,
+                     const std::map<Fraction, MidiChord>::const_iterator &endChordIt)
+      {
+      int avgPitch = 0;
+      int counter = 0;
+      for (auto it = startChordIt; it != endChordIt; ++it) {
+            avgPitch += findAveragePitch(it->second.notes);
+            ++counter;
+            }
+      if (counter)
+            avgPitch /= counter;
+      return avgPitch;
       }
 
 //---------------------------------------------------------
@@ -1048,26 +1095,23 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                   part->instr()->setDrumset(smDrumset);
                   }
             else {
+                  int avgPitch = findAveragePitch(track.chords.begin(), track.chords.end());
+                  s->setInitialClef(clefTypeFromAveragePitch(avgPitch));
                   if ((idx < (ntracks-1))
                               && (tracks.at(idx+1).mtrack->outChannel() == track.mtrack->outChannel())
                               && (track.program == 0)) {
                                     // assume that the current track and the next track
                                     // form a piano part
+                        s->setBracket(0, BRACKET_BRACE);
+                        s->setBracketSpan(0, 2);
+
                         Staff* ss = new Staff(score, part, 1);
                         part->insertStaff(ss);
                         score->staves().push_back(ss);
-
-                        s->setInitialClef(CLEF_G);
-                        s->setBracket(0, BRACKET_BRACE);
-                        s->setBracketSpan(0, 2);
-                        ss->setInitialClef(CLEF_F);
                         ++idx;
+                        avgPitch = findAveragePitch(tracks[idx].chords.begin(), tracks[idx].chords.end());
+                        ss->setInitialClef(clefTypeFromAveragePitch(avgPitch));
                         tracks[idx].staff = ss;
-                        }
-                  else {
-                                    // other track type
-                        ClefType ct = track.medPitch < 58 ? CLEF_F : CLEF_G;
-                        s->setInitialClef(ct);
                         }
                   }
             score->appendPart(part);
@@ -1132,12 +1176,6 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
             part->setMidiChannel(mt.mtrack->outChannel());
             part->setMidiProgram(mt.program & 0x7f);  // only GM
             }
-      }
-
-Measure* barFromIndex(const Score *score, int barIndex)
-      {
-      int tick = score->sigmap()->bar2tick(barIndex, 0);
-      return score->tick2measure(tick);
       }
 
 void createTimeSignatures(Score *score)
