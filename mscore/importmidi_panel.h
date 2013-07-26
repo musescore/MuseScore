@@ -15,6 +15,7 @@ class TracksModel;
 class OperationsModel;
 class OperationsDelegate;
 struct TrackData;
+struct TrackMeta;
 
 class ImportMidiPanel : public QWidget
       {
@@ -30,7 +31,7 @@ class ImportMidiPanel : public QWidget
       void setPrefferedVisible(bool visible);
       void setMidiPrefOperations(const QString &fileName);
 
-   private slots:
+private slots:
       void updateUi();
       void onCurrentTrackChanged(const QModelIndex &currentIndex);
       void onOperationChanged(const QModelIndex &index);
@@ -52,6 +53,7 @@ class ImportMidiPanel : public QWidget
       void setMidiPrefOperations(const QList<TrackData> &trackData);
       void clearMidiPrefOperations();
       bool isMidiFileExists() const;
+      void showOrHideStaffNameCol(const QList<TrackMeta> &tracksMeta);
 
       Ui::ImportMidiPanel *ui;
       QTimer *updateUiTimer;
