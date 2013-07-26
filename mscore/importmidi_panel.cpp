@@ -59,6 +59,10 @@ void ImportMidiPanel::onOperationChanged(const QModelIndex &index)
       const QModelIndex &currentIndex = ui->tableViewTracks->currentIndex();
       tracksModel->setOperation(currentIndex.row(), operType, index.data(DataRole));
       ui->treeViewOperations->expandAll();
+                  // select first column to clear focus of current item
+      QModelIndex firstColIndex = operationsModel->index(index.row(), index.column() - 1,
+                                                         index.parent());
+      ui->treeViewOperations->setCurrentIndex(firstColIndex);
       }
 
 // Сlass to add an extra width to specific columns
@@ -108,6 +112,7 @@ void ImportMidiPanel::tweakUi()
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::INSTRUMENT,
                                                              QHeaderView::Stretch);
       ui->treeViewOperations->header()->resizeSection(0, 285);
+      ui->treeViewOperations->setAllColumnsShowFocus(true);
       }
 
 bool ImportMidiPanel::canImportMidi() const
