@@ -33,6 +33,8 @@ findEndChordInRange(const Fraction &endRangeTick,
                     const std::multimap<Fraction, MidiChord>::iterator &startChordIt,
                     const std::multimap<Fraction, MidiChord>::iterator &endChordIt);
 
+Fraction maxNoteLen(const QList<MidiNote> &notes);
+
 } // namespace Ms
 
 

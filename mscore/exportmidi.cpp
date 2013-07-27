@@ -33,7 +33,7 @@ void ExportMidi::writeHeader()
       {
       if (mf.tracks().isEmpty())
             return;
-      MidiTrack* track  = mf.tracks().front();
+      MidiTrack &track  = mf.tracks().front();
 #if 0 // TODO
       MeasureBase* measure  = cs->first();
 
@@ -52,23 +52,23 @@ void ExportMidi::writeHeader()
                   switch (text->subtype()) {
                         case TEXT_TITLE:
                               ev.setMetaType(META_TITLE);
-                              track->insert(ev);
+                              track.insert(ev);
                               break;
                         case TEXT_SUBTITLE:
                               ev.setMetaType(META_SUBTITLE);
-                              track->insert(ev);
+                              track.insert(ev);
                               break;
                         case TEXT_COMPOSER:
                               ev.setMetaType(META_COMPOSER);
-                              track->insert(ev);
+                              track.insert(ev);
                               break;
                         case TEXT_TRANSLATOR:
                               ev.setMetaType(META_TRANSLATOR);
-                              track->insert(ev);
+                              track.insert(ev);
                               break;
                         case TEXT_POET:
                               ev.setMetaType(META_POET);
-                              track->insert(ev);
+                              track.insert(ev);
                               break;
                         default:
                               break;
@@ -118,7 +118,7 @@ void ExportMidi::writeHeader()
                   ev.setMetaType(META_TIME_SIGNATURE);
                   ev.setEData(data);
                   ev.setLen(4);
-                  track->insert(is->first + tickOffset, ev);
+                  track.insert(is->first + tickOffset, ev);
                   }
             }
 
@@ -128,7 +128,7 @@ void ExportMidi::writeHeader()
       //---------------------------------------------------
 
       int staffIdx = 0;
-      foreach(MidiTrack* track, mf.tracks()) {
+      for (auto &track: mf.tracks()) {
             Staff* staff      = cs->staff(staffIdx);
             KeyList* keymap   = staff->keymap();
 
@@ -152,7 +152,7 @@ void ExportMidi::writeHeader()
                         data[0]   = key;
                         data[1]   = 0;  // major
                         ev.setEData(data);
-                        track->insert(ik->first + tickOffset, ev);
+                        track.insert(ik->first + tickOffset, ev);
                         }
                   if (!keysigFound) {
                         MidiEvent ev;
@@ -164,7 +164,7 @@ void ExportMidi::writeHeader()
                         data[0]   = key;
                         data[1]   = 0;  // major
                         ev.setEData(data);
-                        track->insert(0, ev);
+                        track.insert(0, ev);
                         }
                   }
             ++staffIdx;
@@ -198,7 +198,7 @@ void ExportMidi::writeHeader()
                   data[1]   = tempo >> 8;
                   data[2]   = tempo;
                   ev.setEData(data);
-                  track->insert(it->first + tickOffset, ev);
+                  track.insert(it->first + tickOffset, ev);
                   }
             }
       }
@@ -217,43 +217,43 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
       mf.setDivision(MScore::division);
       mf.setFormat(1);
-      QList<MidiTrack*>& tracks = mf.tracks();
+      QList<MidiTrack>& tracks = mf.tracks();
 
       for (int i = 0; i < cs->nstaves(); ++i)
-            tracks.append(new MidiTrack(&mf));
+            tracks.append(MidiTrack());
 
       cs->updateRepeatList(midiExpandRepeats);
       writeHeader();
 
       int staffIdx = 0;
-      foreach (MidiTrack* track, tracks) {
+      for (auto &track: tracks) {
             Staff* staff = cs->staff(staffIdx);
             Part* part   = staff->part();
             int channel  = part->midiChannel();
-            track->setOutPort(0);
-            track->setOutChannel(channel);
+            track.setOutPort(0);
+            track.setOutChannel(channel);
 
             if (staff->isTop()) {
                   // set pitch bend sensitivity to 12 semitones:
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 12));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 12));
 
                   // reset fine tuning
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 1));
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 64));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 1));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 64));
 
                   // deactivate rpn
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 127));
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 127));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 127));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 127));
 
                   if (part->midiProgram() != -1)
-                        track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PROGRAM, part->midiProgram()));
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_VOLUME, part->volume()));
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PANPOT, part->pan()));
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_REVERB_SEND, part->reverb()));
-                  track->insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_CHORUS_SEND, part->chorus()));
+                        track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PROGRAM, part->midiProgram()));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_VOLUME, part->volume()));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PANPOT, part->pan()));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_REVERB_SEND, part->reverb()));
+                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_CHORUS_SEND, part->chorus()));
                   }
 
 
@@ -265,11 +265,11 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
                   if (event.channel() != channel)
                         continue;
                   if (event.type() == ME_NOTEON) {
-                        track->insert(i->first, MidiEvent(ME_NOTEON, event.channel(),
+                        track.insert(i->first, MidiEvent(ME_NOTEON, event.channel(),
                            event.pitch(), event.velo()));
                         }
                   else if (event.type() == ME_CONTROLLER) {
-                        track->insert(i->first, MidiEvent(ME_CONTROLLER, event.channel(),
+                        track.insert(i->first, MidiEvent(ME_CONTROLLER, event.channel(),
                            event.controller(), event.value()));
                         }
                   else {

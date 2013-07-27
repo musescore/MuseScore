@@ -607,9 +607,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
       void loadFiles();
+                  // midi panel functions
       void midiPanelOnSwitchToFile(const QString &file);
       void midiPanelOnCloseFile(const QString &file);
       void allowShowMidiPanel(const QString &file);
+      void setMidiPrefOperations(const QString &file);
 
       static Palette* newTextPalette();
       static Palette* newTimePalette();
@@ -650,8 +652,6 @@ extern QAction* getAction(const char*);
 extern Shortcut* midiActionMap[128];
 extern void setMscoreLocale(QString localeName);
 extern QPixmap sym2pixmap(const Sym* s, qreal mag);
-
-extern void convertMidi(Score*, MidiFile* mf);
 
 extern bool saveMxl(Score*, const QString& name);
 extern bool saveXml(Score*, const QString& name);

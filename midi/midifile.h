@@ -36,7 +36,6 @@ class Xml;
 //---------------------------------------------------------
 
 class MidiTrack {
-      MidiFile* mf;
       std::multimap<int, MidiEvent> _events;
       int _outChannel;
       int _outPort;
@@ -46,7 +45,7 @@ class MidiTrack {
       void readXml(XmlReader&);
 
    public:
-      MidiTrack(MidiFile*);
+      MidiTrack();
       ~MidiTrack();
 
       bool empty() const;
@@ -61,7 +60,7 @@ class MidiTrack {
       bool drumTrack() const            { return _drumTrack; }
 
       void insert(int tick, const MidiEvent&);
-      void mergeNoteOnOff();
+      void mergeNoteOnOffAndFindMidiType(MidiType *mt);
       };
 
 //---------------------------------------------------------
@@ -70,7 +69,7 @@ class MidiTrack {
 
 class MidiFile {
       QIODevice* fp;
-      QList<MidiTrack*> _tracks;
+      QList<MidiTrack> _tracks;
       int _division;
       int _format;               ///< midi file format (0-2)
       bool _noRunningStatus;     ///< do not use running status on output
@@ -89,7 +88,7 @@ class MidiFile {
       bool write(const void*, qint64);
       void writeShort(int);
       void writeLong(int);
-      bool writeTrack(const MidiTrack*);
+      bool writeTrack(const MidiTrack &);
       void putvl(unsigned);
       void put(unsigned char c) { write(&c, 1); }
       void writeStatus(int type, int channel);
@@ -111,8 +110,8 @@ class MidiFile {
       bool write(QIODevice*);
       void readXml(XmlReader&);
 
-      QList<MidiTrack*>& tracks()             { return _tracks;  }
-      const QList<MidiTrack*>& tracks() const { return _tracks;  }
+      QList<MidiTrack>& tracks()             { return _tracks;  }
+      const QList<MidiTrack>& tracks() const { return _tracks;  }
 
       MidiType midiType() const     { return _midiType; }
       void setMidiType(MidiType mt) { _midiType = mt;   }

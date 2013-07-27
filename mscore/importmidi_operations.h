@@ -2,6 +2,7 @@
 #define IMPORTMIDI_OPERATIONS_H
 
 #include "importmidi_operation.h"
+#include "importmidi_data.h"
 
 
 namespace Ms {
@@ -40,7 +41,7 @@ struct LHRHSeparation
       MidiOperation::Note splitPitchNote = MidiOperation::Note::E;
       };
 
-      // bool and enum-like elementary operations (itself and inside structs) allowed
+      // bool and enum-like elementary operations (itself and inside structs) are allowed
 struct TrackOperations
       {
       int reorderedIndex = 0;
@@ -54,7 +55,7 @@ struct TrackOperations
 
 struct TrackMeta
       {
-      QString trackName;
+      QString staffName;
       QString instrumentName;
       };
 
@@ -80,10 +81,12 @@ class MidiImportOperations
       TrackOperations currentTrackOperations() const;
       TrackOperations trackOperations(int trackIndex) const;
       int count() const { return operations_.size(); }
+      MidiData& midiData() { return midiData_; }
 
    private:
       QList<TrackOperations> operations_;
       int currentTrack_ = -1;
+      MidiData midiData_;
 
       bool isValidIndex(int index) const;
       };

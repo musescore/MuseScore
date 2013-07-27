@@ -13,9 +13,9 @@ struct DefinedTrackOperations;
 
 struct TrackCol {
       enum {
-            TRACK_NUMBER = 0,
-            DO_IMPORT,
-            TRACK_NAME,
+            DO_IMPORT = 0,
+            TRACK_NUMBER,
+            STAFF_NAME,
             INSTRUMENT,
             COL_COUNT
             };
@@ -28,6 +28,7 @@ class TracksModel : public QAbstractTableModel
 
       void reset(const QList<TrackMeta> &tracksMeta);
       void reset(const QList<TrackData> &tracksData);
+      void clear();
       void setOperation(int row, MidiOperation::Type operType, const QVariant &operValue);
       void setTrackReorderedIndex(int trackIndex, int reorderIndex);
 

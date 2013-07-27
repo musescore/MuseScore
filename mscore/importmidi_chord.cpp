@@ -33,4 +33,14 @@ findEndChordInRange(const Fraction &endRangeTick,
       return it;
       }
 
+Fraction maxNoteLen(const QList<MidiNote> &notes)
+      {
+      Fraction maxLen;
+      for (const auto &note: notes) {
+            if (note.len > maxLen)
+                  maxLen = note.len;
+            }
+      return maxLen;
+      }
+
 } // namespace Ms
