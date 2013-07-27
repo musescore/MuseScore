@@ -75,7 +75,7 @@ bool MidiFile::write(QIODevice* out)
       writeShort(_format);          // format
       writeShort(_tracks.size());
       writeShort(_division);
-      foreach (const MidiTrack* t, _tracks) {
+      for (const auto &t: _tracks) {
             if (writeTrack(t))
                   return true;
             }
@@ -149,7 +149,7 @@ void MidiFile::writeEvent(const MidiEvent& event)
 //   writeTrack
 //---------------------------------------------------------
 
-bool MidiFile::writeTrack(const MidiTrack* t)
+bool MidiFile::writeTrack(const MidiTrack &t)
       {
       write("MTrk", 4);
       qint64 lenpos = fp->pos();
@@ -157,14 +157,14 @@ bool MidiFile::writeTrack(const MidiTrack* t)
 
       status   = -1;
       int tick = 0;
-      for (auto i : t->events()) {
+      for (auto i : t.events()) {
             int ntick = i.first;
             putvl(ntick - tick);    // write tick delta
             //
             // if track channel != -1, then use this
             //    channel for all events in this track
             //
-            if (t->outChannel() != -1)
+            if (t.outChannel() != -1)
                   writeEvent(i.second);
             tick = ntick;
             }
@@ -262,12 +262,11 @@ bool MidiFile::readTrack()
       status        = -1;
       sstatus       = -1;  // running status, will not be reset on meta or sysex
       click         =  0;
-      MidiTrack* track  = new MidiTrack(this);
-      _tracks.push_back(track);
+      _tracks.push_back(MidiTrack());
 
       int port = 0;
-      track->setOutPort(port);
-      track->setOutChannel(-1);
+      _tracks.back().setOutPort(port);
+      _tracks.back().setOutChannel(-1);
 
       for (;;) {
             MidiEvent event;
@@ -277,7 +276,7 @@ bool MidiFile::readTrack()
             // check for end of track:
             if ((event.type() == ME_META) && (event.metaType() == META_EOT))
                   break;
-            track->insert(click, event);
+            _tracks.back().insert(click, event);
             }
       if (curPos != endPos) {
             qWarning("bad track len: %lld != %lld, %lld bytes too much\n", endPos, curPos, endPos - curPos);
@@ -430,9 +429,8 @@ void MidiFile::putvl(unsigned val)
 //   MidiTrack
 //---------------------------------------------------------
 
-MidiTrack::MidiTrack(MidiFile* f)
+MidiTrack::MidiTrack()
       {
-      mf          = f;
       _outChannel = -1;
       _outPort    = -1;
       _drumTrack  = false;
@@ -614,12 +612,13 @@ void MidiTrack::setOutChannel(int n)
       }
 
 //---------------------------------------------------------
-//   mergeNoteOnOff
-//    find matching note on / note off events and merge
-//    into a note event with tick duration
+//   mergeNoteOnOffAndFindMidiType
+//    - find matching note on / note off events and merge
+//      into a note event with tick duration
+//    - find MIDI type
 //---------------------------------------------------------
 
-void MidiTrack::mergeNoteOnOff()
+void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType *mt)
       {
       std::multimap<int, MidiEvent> el;
 
@@ -734,29 +733,29 @@ void MidiTrack::mergeNoteOnOff()
                         int len = ev.len();
                         const uchar* buffer = ev.edata();
                         if ((len == gmOnMsgLen) && memcmp(buffer, gmOnMsg, gmOnMsgLen) == 0) {
-                              mf->setMidiType(MT_GM);
+                              *mt = MT_GM;
                               ev.setType(ME_INVALID);
                               continue;
                               }
                         if ((len == gsOnMsgLen) && memcmp(buffer, gsOnMsg, gsOnMsgLen) == 0) {
-                              mf->setMidiType(MT_GS);
+                              *mt = MT_GS;
                               ev.setType(ME_INVALID);
                               continue;
                               }
                         if ((len == xgOnMsgLen) && memcmp(buffer, xgOnMsg, xgOnMsgLen) == 0) {
-                              mf->setMidiType(MT_XG);
+                              *mt = MT_XG;
                               ev.setType(ME_INVALID);
                               continue;
                               }
                         if (buffer[0] == 0x43) {    // Yamaha
-                              mf->setMidiType(MT_XG);
+                              *mt = MT_XG;
                               int type   = buffer[1] & 0xf0;
                               if (type == 0x10) {
 //TODO                                    if (buffer[1] != 0x10) {
 //                                          buffer[1] = 0x10;    // fix to Device 1
 //                                          }
                                     if ((len == xgOnMsgLen) && memcmp(buffer, xgOnMsg, xgOnMsgLen) == 0) {
-                                          mf->setMidiType(MT_XG);
+                                          *mt = MT_XG;
                                           ev.setType(ME_INVALID);
                                           continue;
                                           }
@@ -824,40 +823,36 @@ void MidiTrack::mergeNoteOnOff()
 void MidiFile::separateChannel()
       {
       for (int i = 0; i < _tracks.size(); ++i) {
-
-            // create a list of channels used in current track
+                        // create a list of channels used in current track
             QList<int> channel;
-            MidiTrack* mt = _tracks.at(i); // current track
-            for(auto i : mt->events()) {
+            MidiTrack &mt = _tracks[i];      // current track
+            for (auto i : mt.events()) {
                   const MidiEvent& e = i.second;
                   if (e.isChannelEvent() && !channel.contains(e.channel()))
                         channel.append(e.channel());
                   }
-            mt->setOutChannel(channel.empty() ? 0 : channel[0]);
+            mt.setOutChannel(channel.empty() ? 0 : channel[0]);
             int nn = channel.size();
             if (nn <= 1)
                   continue;
             qSort(channel);
-
-            // -split
-
-            // insert additional tracks, assign to them found channels
+                        // -- split --
+                        // insert additional tracks, assign to them found channels
             for (int ii = 1; ii < nn; ++ii) {
-                  MidiTrack* t = new MidiTrack(this);
+                  MidiTrack t;
+                  t.setOutChannel(channel[ii]);
                   _tracks.insert(i + 1, t);
-                  t->setOutChannel(channel[ii]);
                   }
-
-            // extract all different channel events from current track to inserted tracks
-            for (auto ie = mt->events().begin(); ie != mt->events().end(); ) {
+                        // extract all different channel events from current track to inserted tracks
+            for (auto ie = mt.events().begin(); ie != mt.events().end(); ) {
                   const MidiEvent& e = ie->second;
                   if (e.isChannelEvent()) {
                         int ch  = e.channel();
                         int idx = channel.indexOf(ch);
-                        MidiTrack* t = _tracks.at(i + idx);
-                        if (t != mt) {
-                              t->insert(ie->first, e);
-                              ie = mt->events().erase(ie);
+                        MidiTrack &t = _tracks[i + idx];
+                        if (&t != &mt) {
+                              t.insert(ie->first, e);
+                              ie = mt.events().erase(ie);
                               continue;
                               }
                         }
