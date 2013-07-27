@@ -136,16 +136,6 @@ findBestChordForTupletNote(const Fraction &tupletNotePos,
       return bestChord;
       }
 
-Fraction maxNoteLen(const QList<MidiNote> &notes)
-      {
-      Fraction maxLen;
-      for (const auto &note: notes) {
-            if (note.len > maxLen)
-                  maxLen = note.len;
-            }
-      return maxLen;
-      }
-
 
 // find tuplets over which duration lies
 
@@ -515,11 +505,13 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                           std::multimap<Fraction, MidiChord> &chords,
                           int nonTupletVoice)
       {
-      for (auto it = tuplets.begin(); it != tuplets.end(); ++it) {
+      for (auto it = tuplets.begin(); it != tuplets.end(); ) {
             TupletInfo &tupletInfo = *it;
             auto firstChord = tupletInfo.chords.begin();
-            if (firstChord == tupletInfo.chords.end() || firstChord->first != 0)
+            if (firstChord == tupletInfo.chords.end() || firstChord->first != 0) {
+                  ++it;
                   continue;
+                  }
             auto &notes = firstChord->second->second.notes;
             const Fraction &onTime = firstChord->second->first;
             std::vector<int> removedIndexes;
@@ -579,11 +571,11 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                         tupletInfo.chords.erase(0);  // erase first (index 0) empty chord in tuplet
                         if (tupletInfo.chords.empty()) {
                               it = tuplets.erase(it);  // remove tuplet without chords
-                              --it;
                               continue;
                               }
                         }
                   }
+            ++it;
             }
       }
 
@@ -674,9 +666,14 @@ bool hasIntersectionWithChord(
       {
       for (const auto &chordEvent: nonTupletChords) {
             MidiChord midiChord = chordEvent->second;
-            Fraction onTime = Quantize::quantizeValue(chordEvent->first, regularRaster);
-            for (auto &note: midiChord.notes)
-                  note.len = Quantize::quantizeValue(note.len, regularRaster);
+            Fraction onTimeRaster = Quantize::reduceRasterIfDottedNote(
+                                       maxNoteLen(midiChord.notes), regularRaster);
+            Fraction onTime = Quantize::quantizeValue(chordEvent->first, onTimeRaster);
+            for (auto &note: midiChord.notes) {
+                  Fraction offTimeRaster = Quantize::reduceRasterIfDottedNote(note.len,
+                                                                              regularRaster);
+                  note.len = Quantize::quantizeValue(note.len, offTimeRaster);
+                  }
             if (endTick > onTime && startTick < onTime + maxNoteLen(midiChord.notes))
                   return true;
             }
@@ -726,6 +723,8 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
                          std::multimap<Fraction, MidiChord> &chords,
                          const Fraction &endBarTick)
       {
+      if (tuplets.empty())
+            return 0;
                   // it's better before to sort tuplets by their average pitch
                   // and notes of every chord as well
       sortNotesByPitch(startBarChordIt, endBarChordIt);

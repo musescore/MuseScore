@@ -1562,6 +1562,13 @@ void MuseScore::allowShowMidiPanel(const QString &file)
             importmidi_panel->setPrefferedVisible(true);
       }
 
+void MuseScore::setMidiPrefOperations(const QString &file)
+      {
+      if (ImportMidiPanel::isMidiFile(file))
+            importmidi_panel->setMidiPrefOperations(file);
+      }
+
+
 //---------------------------------------------------------
 //   dragEnterEvent
 //---------------------------------------------------------
