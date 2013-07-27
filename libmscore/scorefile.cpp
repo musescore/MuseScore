@@ -854,6 +854,7 @@ bool Score::read(XmlReader& e)
             else if (tag == "Tag" || tag == "LayerTag") {   // LayerTag obsolete
                   int id = e.intAttribute("id");
                   const QString& tag = e.attribute("tag");
+                  QString val(e.readElementText());
                   if (id >= 0 && id < MAX_TAGS) {
                         _tagSetTags[id] = tag;
                         _tagSetTagComments[id] = val;
@@ -861,12 +862,12 @@ bool Score::read(XmlReader& e)
                   }
             else if (tag == "TagSet" || tag == "Layer") {   // Layer obsolete
                   TagSet tagSet;
-                  tagSet.name = ee.attribute("name");
-                  tagSet.tags = ee.attribute("mask").toUInt();
+                  tagSet.name = e.attribute("name");
+                  tagSet.tags = e.attribute("mask").toUInt();
                   _tagSet.append(tagSet);
                   }
             else if (tag == "currentTagSet" || tag == "currentLayer")   // currentLayer obsolete
-                  _currentTagSet = val.toInt();
+                  _currentTagSet = e.readInt();
             else if (tag == "SyntiSettings")    // obsolete
                   _synthesizerState.read(e);
             else if (tag == "Synthesizer")

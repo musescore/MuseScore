@@ -44,7 +44,7 @@ QT4_WRAP_UI (ui_headers
       glissandoprop.ui articulation.ui metaedit.ui palette.ui select.ui
       synthcontrol.ui splitstaff.ui cellproperties.ui keyedit.ui selectinstr.ui
       fretdprops.ui stafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
-      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui layer.ui
+      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui tagset.ui
       omrpanel.ui startdialog.ui masterpalette.ui pluginManager.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui importmidi_panel.ui
 
@@ -139,7 +139,7 @@ QT4_WRAP_CPP (mocs
       prefsdialog.h sectionbreakprop.h bendproperties.h
       bendcanvas.h tremolobarprop.h tremolobarcanvas.h
       drumtools.h texteditor.h texttools.h pianotools.h editpitch.h
-      editstringdata.h editraster.h mediadialog.h chordview.h album.h layer.h
+      editstringdata.h editraster.h mediadialog.h chordview.h album.h tagset.h
       webpage.h
       inspector/inspector.h inspector/inspectorBase.h inspector/inspectorBeam.h masterpalette.h
       inspector/inspectorGroupElement.h inspector/inspectorImage.h waveview.h helpBrowser.h
@@ -252,7 +252,7 @@ add_executable ( ${ExecutableName}
       articulationprop.cpp textprop.cpp
       fretproperties.cpp sectionbreakprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
-      layer.cpp selectdialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
+      tagset.cpp selectdialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       inspector/inspector.cpp dragelement.cpp svggenerator.cpp
       inspector/inspectorBase.cpp inspector/inspectorBeam.cpp masterpalette.cpp
       inspector/inspectorGroupElement.cpp dragdrop.cpp inspector/inspectorImage.cpp
