@@ -154,10 +154,10 @@ OperationsModel::OperationsModel()
       // ------------------------------------
 
       Node *changeClef = new Node;
-      changeClef->name = "Change clef";
+      changeClef->name = "Clef may change along the score";
       changeClef->oper.type = MidiOperation::Type::CHANGE_CLEF;
       changeClef->oper.value = TrackOperations().changeClef;
-      changeClef->parent = root.get();;
+      changeClef->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(changeClef));
 
 
