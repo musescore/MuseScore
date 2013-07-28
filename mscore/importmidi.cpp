@@ -724,21 +724,86 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
       seg->add(clef);
       }
 
+void createSmallClef(ClefType clefType, int tick, Staff *staff)
+      {
+      bool isSmallClef = true;
+      createClef(clefType, staff, tick, isSmallClef);
+      }
+
+void resetIfNotChanged(int &counter, int &oldCounter)
+      {
+      if (counter != 0 && counter == oldCounter) {
+            counter = 0;
+            oldCounter = 0;
+            }
+      }
+
+bool isTiedBack(const std::multimap<Fraction, MidiChord>::const_iterator &it,
+                const std::multimap<Fraction, MidiChord> &chords)
+      {
+      if (it == chords.begin())
+            return false;
+      auto i = it;
+      --i;
+      for (;;) {
+            if (i->first + maxNoteLen(i->second.notes) > it->first)
+                  return true;
+            if (i == chords.begin())
+                  break;
+            --i;
+            }
+      return false;
+      }
+
 void MTrack::createClefs()
       {
-      ClefType lastClefType = staff->initialClef()._concertClef;
-      createClef(lastClefType, staff, 0);
+      ClefType currentClef = staff->initialClef()._concertClef;
+      createClef(currentClef, staff, 0);
 
       auto trackOpers = preferences.midiImportOperations.trackOperations(indexOfOperation);
       if (trackOpers.changeClef) {
-            for (const auto &chord: chords) {
-                  ClefType newClefType = clefTypeFromAveragePitch(
-                                    findAveragePitch(chord.second.notes));
-                  if (newClefType != lastClefType) {
-                        lastClefType = newClefType;
-                        bool isSmallClef = true;
-                        createClef(lastClefType, staff, chord.first.ticks(), isSmallClef);
+            const int HIGH_PITCH = 62;          // all notes upper - in treble clef
+            const int MED_PITCH = 60;
+            const int LOW_PITCH = 57;           // all notes lower - in bass clef
+
+            int oldTrebleCounter = 0;
+            int trebleCounter = 0;
+            int oldBassCounter = 0;
+            int bassCounter = 0;
+
+            const int COUNTER_LIMIT = 3;
+                        // N^2 / 2 checks of tied chords in the worst case but fast enough in practice
+            for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
+                  if (isTiedBack(chordIt, chords))
+                        continue;
+                  int tick = chordIt->first.ticks();
+                  int avgPitch = findAveragePitch(chordIt->second.notes);
+                  if (currentClef == CLEF_G && avgPitch < LOW_PITCH) {
+                        currentClef = CLEF_F;
+                        createSmallClef(currentClef, tick, staff);
                         }
+                  else if (currentClef == CLEF_F && avgPitch > HIGH_PITCH) {
+                        currentClef = CLEF_G;
+                        createSmallClef(currentClef, tick, staff);
+                        }
+                  else if (currentClef == CLEF_G && avgPitch >= LOW_PITCH && avgPitch < MED_PITCH) {
+                        if (trebleCounter < COUNTER_LIMIT)
+                              ++trebleCounter;
+                        else {
+                              currentClef = CLEF_F;
+                              createSmallClef(currentClef, tick, staff);
+                              }
+                        }
+                  else if (currentClef == CLEF_F && avgPitch <= HIGH_PITCH && avgPitch >= MED_PITCH) {
+                        if (bassCounter < COUNTER_LIMIT)
+                              ++bassCounter;
+                        else {
+                              currentClef = CLEF_G;
+                              createSmallClef(currentClef, tick, staff);
+                              }
+                        }
+                  resetIfNotChanged(bassCounter, oldBassCounter);
+                  resetIfNotChanged(trebleCounter, oldTrebleCounter);
                   }
             }
       }
