@@ -243,7 +243,7 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
 
             Chord* chord = note->chord();
             bool _up     = chord->up();
-            qreal stemX  = chord->stemPosX() - chord->pagePos().x();
+            qreal stemX  = chord->stemPosX();
 
             qreal stemWidth5;
             if (chord->stem()) {
@@ -1448,6 +1448,7 @@ void Score::add(Element* el)
 
             default:
                   qDebug("Score::add() invalid element <%s>", el->name());
+                  // abort();
                   break;
             }
       }

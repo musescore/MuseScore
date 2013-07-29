@@ -2050,8 +2050,8 @@ void Score::cmdUpdateNotes()
 
 void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
       {
-      qDebug("cmdUpdateAccidentals m=%d for staff=%d",
-            beginMeasure->no(), staffIdx);
+//      qDebug("cmdUpdateAccidentals m=%d for staff=%d",
+//            beginMeasure->no(), staffIdx);
       Staff* st = staff(staffIdx);
       for (Measure* m = beginMeasure; m; m = m->nextMeasure()) {
             AccidentalState as;
@@ -2072,7 +2072,7 @@ void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
                         m->updateAccidentals(s, staffIdx, &as);
                   }
             }
-      qDebug("leaving cmdUpdateAccidentals at end of score");
+//      qDebug("leaving cmdUpdateAccidentals at end of score");
       }
 
 //---------------------------------------------------------
