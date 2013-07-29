@@ -1246,6 +1246,9 @@ static void undoAddTuplet(DurationElement* cr)
 
 void AddElement::undo()
       {
+//      qDebug("AddElement::undo: %s %p parent %s %p", element->name(), element,
+//         element->parent() ? element->parent()->name() : "nil", element->parent());
+
       element->score()->removeElement(element);
       if (element->type() == Element::TIE) {
             Tie* tie = static_cast<Tie*>(element);
@@ -1279,6 +1282,9 @@ void AddElement::undo()
 
 void AddElement::redo()
       {
+//      qDebug("AddElement::redo: %s %p parent %s %p", element->name(), element,
+//         element->parent() ? element->parent()->name() : "nil", element->parent());
+
       element->score()->addElement(element);
       if (element->type() == Element::TIE) {
             Tie* tie = static_cast<Tie*>(element);

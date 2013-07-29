@@ -358,8 +358,8 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
       TieMap tieMap;
 
-      int srcStaffIdx  = score->staffIdx(srcStaff);
-      int dstStaffIdx  = score->staffIdx(dstStaff);
+      int srcStaffIdx = score->staffIdx(srcStaff);
+      int dstStaffIdx = score->staffIdx(dstStaff);
 
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             int sTrack = srcStaffIdx * VOICES;
@@ -369,15 +369,18 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                   int dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
                   for (Segment* seg = m->first(); seg; seg = seg->next()) {
                         Element* oe = seg->element(srcTrack);
-                        if (oe == 0)
+                        if (oe == 0 || oe->generated())
+                              continue;
+                        if (oe->type() == Element::TIMESIG)
                               continue;
                         Element* ne;
-                        if (oe->generated() || oe->type() == Element::CLEF)
+                        if (oe->type() == Element::CLEF)
                               ne = oe->clone();
                         else
                               ne = oe->linkedClone();
                         ne->setTrack(dstTrack);
-                        seg->add(ne);
+                        ne->setParent(seg);
+                        score->undoAddElement(ne);
                         if (oe->isChordRest()) {
                               ChordRest* ocr = static_cast<ChordRest*>(oe);
                               ChordRest* ncr = static_cast<ChordRest*>(ne);
@@ -401,7 +404,8 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           continue;
                                     Element* ne = e->clone();
                                     ne->setTrack(dstTrack);
-                                    seg->add(ne);
+                                    ne->setParent(seg);
+                                    score->undoAddElement(ne);
                                     }
                               if (oe->type() == Element::CHORD) {
                                     Chord* och = static_cast<Chord*>(ocr);

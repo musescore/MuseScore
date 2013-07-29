@@ -144,7 +144,7 @@ class Chord : public ChordRest {
       void setGraceIndex(int val)                   { _graceIndex = val;  }
 
       virtual QPointF stemPos() const;        ///< page coordinates
-      virtual qreal stemPosX() const;         ///< page coordinates
+      virtual qreal stemPosX() const;
       QPointF stemPosBeam() const;            ///< page coordinates
 
       Hook* hook() const                     { return _hook; }

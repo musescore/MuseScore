@@ -255,12 +255,11 @@ void Chord::setStem(Stem* s)
 
 //---------------------------------------------------------
 //   stemPosX
-//    return page coordinates
 //---------------------------------------------------------
 
 qreal Chord::stemPosX() const
       {
-      qreal x = pageX();
+      qreal x = 0.0;
       qreal _spatium = spatium();
       if (staff() && staff()->isTabStaff()) {
             qreal stemX = static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosX(this) * _spatium;

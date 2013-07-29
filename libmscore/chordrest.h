@@ -101,7 +101,7 @@ class ChordRest : public DurationElement {
       int line(bool up) const                   { return up ? upLine() : downLine(); }
       int line() const                          { return _up ? upLine() : downLine(); }
       virtual QPointF stemPos() const           { return canvasPos(); }    // point to connect stem
-      virtual qreal stemPosX() const            { return canvasPos().x(); }
+      virtual qreal stemPosX() const            { return 0.0; }
       bool up() const                           { return _up;   }
       void setUp(bool val)                      { _up = val; }
 
