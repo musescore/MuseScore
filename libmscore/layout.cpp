@@ -663,8 +663,8 @@ void Score::doLayout()
                   sp->setTick2(lastMeasure()->endTick());
                   sp->staff()->updateOttava(static_cast<Ottava*>(sp));
                   }
-            if (sp->tick() == -1 || sp->tick2() == -1) {
-                  printf("bad spanner id %d %s %d - %d\n", sp->id(), sp->name(), sp->tick(), sp->tick2());
+            if (sp->tick() == -1) {
+                  qDebug("bad spanner id %d %s %d - %d", sp->id(), sp->name(), sp->tick(), sp->tick2());
                   }
             else
                   sp->layout();
