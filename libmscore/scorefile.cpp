@@ -1190,7 +1190,8 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                               if (s->track() != track || s->generated())
                                     continue;
 
-                              if (s->tick() == segment->tick() && (!clip || s->tick2() < ls->tick())) {
+                              int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
+                              if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
                                     if (needTick) {
                                           xml.tag("tick", segment->tick() - xml.tickDiff);
                                           xml.curTick = segment->tick();
