@@ -132,7 +132,7 @@ class System : public Element {
             if (staffIdx >= _staves.size()) {
                   qDebug("System::staff(): bad index %d", staffIdx);
                   staffIdx = _staves.size() - 1;
-                  abort();
+                  // abort();
                   }
             return _staves[staffIdx];
             }

@@ -1433,8 +1433,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             //
             // PITCHED STAVES (or TAB with stems through staves)
             //
-            qreal px1 = c1->stemPosX();
-            qreal px2 = c2->stemPosX();
+            qreal px1 = c1->stemPosX() + c1->pageX();
+            qreal px2 = c2->stemPosX() + c2->pageX();
             if (_userModified[dIdx]) {
                   py1 += _pagePos.y();
                   py2 += _pagePos.y();
@@ -1527,7 +1527,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       //   create beam segments
       //---------------------------------------------
 
-      qreal x1 = crl[0]->stemPosX() - pageX();
+      qreal x1 = crl[0]->stemPosX();
 
       int baseLevel = 0;
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
@@ -1570,13 +1570,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         ++baseLevel;
 
                   qreal stemWidth  = point(score()->styleS(ST_stemWidth));
-                  qreal x2   = cr1->stemPosX() - _pagePos.x();
+                  qreal x2   = cr1->stemPosX();
                   qreal x3;
 
                   if ((c2 - c1) > 1) {
                         ChordRest* cr2 = crl[c2-1];
                         // create segment
-                        x3 = cr2->stemPosX() - _pagePos.x();
+                        x3 = cr2->stemPosX();
 
                         if (tab) {
                               x2 -= stemWidth * 0.5;
@@ -1903,8 +1903,8 @@ void Beam::updateGrips(int* grips, QRectF* grip) const
                   }
             }
       int y = pagePos().y();
-      grip[0].translate(QPointF(c1->stemPosX(), f->py1[idx] + y));
-      grip[1].translate(QPointF(c2->stemPosX(), f->py2[idx] + y));
+      grip[0].translate(QPointF(c1->stemPosX()+c1->pageX(), f->py1[idx] + y));
+      grip[1].translate(QPointF(c2->stemPosX()+c2->pageX(), f->py2[idx] + y));
       }
 
 //---------------------------------------------------------

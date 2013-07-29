@@ -239,11 +239,11 @@ void System::layout(qreal xo1)
 
       if ((nstaves > 1 && score()->styleB(ST_startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(ST_startBarlineSingle))) {
             if (_barLine == 0) {
-                  _barLine = new BarLine(score());
-                  _barLine->setParent(this);
-                  _barLine->setTrack(0);
-                  _barLine->setGenerated(true);
-                  score()->undoAddElement(_barLine);
+                  BarLine* bl = new BarLine(score());
+                  bl->setParent(this);
+                  bl->setTrack(0);
+                  bl->setGenerated(true);
+                  score()->undoAddElement(bl);
                   }
             }
       else if (_barLine)
@@ -616,6 +616,8 @@ void System::add(Element* el)
                   }
                   break;
             case BAR_LINE:
+                  if (_barLine)
+                        qDebug("%p System::add(%s, %p): there is alread a barline %p", this, el->name(), el, _barLine);
                   _barLine = static_cast<BarLine*>(el);
                   break;
             default:
@@ -632,7 +634,7 @@ void System::remove(Element* el)
       {
 // qDebug("%p System::remove: %p %s", this, el, el->name());
 
-      el->setParent(0);
+//no!      el->setParent(0);
       switch (el->type()) {
             case INSTRUMENT_NAME:
                   _staves[el->staffIdx()]->instrumentNames.removeOne(static_cast<InstrumentName*>(el));
@@ -671,6 +673,8 @@ void System::remove(Element* el)
                         }
                   break;
             case BAR_LINE:
+                  if (_barLine == 0)
+                        qDebug("System::remove(%s): there is no barline", el->name());
                   _barLine = 0;
                   break;
             default:
@@ -1006,6 +1010,7 @@ qreal System::staffY(int staffIdx) const
       if (_staves.size() <= staffIdx) {
             qDebug("staffY: staves %d <= staffIdx %d, vbox %d",
                _staves.size(), staffIdx, _vbox);
+            // abort();
             return pagePos().y();
             }
       return _staves[staffIdx]->y() + y(); // pagePos().y();
