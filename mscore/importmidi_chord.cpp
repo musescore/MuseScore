@@ -3,36 +3,6 @@
 
 namespace Ms {
 
-std::multimap<Fraction, MidiChord>::iterator
-findFirstChordInRange(const Fraction &startRangeTick,
-                      const Fraction &endRangeTick,
-                      const std::multimap<Fraction, MidiChord>::iterator &startChordIt,
-                      const std::multimap<Fraction, MidiChord>::iterator &endChordIt)
-      {
-      auto it = startChordIt;
-      for (; it != endChordIt; ++it) {
-            if (it->first >= startRangeTick) {
-                  if (it->first >= endRangeTick)
-                        it = endChordIt;
-                  break;
-                  }
-            }
-      return it;
-      }
-
-std::multimap<Fraction, MidiChord>::iterator
-findEndChordInRange(const Fraction &endRangeTick,
-                    const std::multimap<Fraction, MidiChord>::iterator &startChordIt,
-                    const std::multimap<Fraction, MidiChord>::iterator &endChordIt)
-      {
-      auto it = startChordIt;
-      for (; it != endChordIt; ++it) {
-            if (it->first > endRangeTick)
-                  break;
-            }
-      return it;
-      }
-
 Fraction maxNoteLen(const QList<MidiNote> &notes)
       {
       Fraction maxLen;
@@ -41,6 +11,14 @@ Fraction maxNoteLen(const QList<MidiNote> &notes)
                   maxLen = note.len;
             }
       return maxLen;
+      }
+
+int findAveragePitch(const QList<MidiNote> &notes)
+      {
+      int avgPitch = 0;
+      for (const auto &note: notes)
+            avgPitch += note.pitch;
+      return avgPitch / notes.size();
       }
 
 } // namespace Ms
