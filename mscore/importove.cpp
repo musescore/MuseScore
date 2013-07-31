@@ -2121,25 +2121,9 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 		if (absTick1 < absTick2) {
 			Volta* volta = new Volta(score_);
 			volta->setTrack(track);
-
-			// volta->setTick1(absTick1);
-			// volta->setTick2(absTick2);
-
-                  // does not work as segments do not exist
-                  // at time of call (ws)
-
-                  Segment* s1 = score_->tick2segment(absTick1);
-                  Segment* s2 = score_->tick2segment(absTick2);
-                  if (s1 == 0 || s2 == 0) {
-                        qDebug("cannot place %s at tick %d - %d (%p-%p)\n",
-                           volta->name(), absTick1, absTick2, s1, s2);
-                        }
-                  else {
-                        volta->setTick(s1->tick());
-                        volta->setTick2(s2->tick());
-                        s1->add(volta);
-                        }
-
+			volta->setTick(absTick1);
+			volta->setTick2(absTick2);
+			score_->addElement(volta);
 			volta->setVoltaType(VoltaType::CLOSED);
 			volta->setText(ending->getText());
 
