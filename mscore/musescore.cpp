@@ -4152,11 +4152,11 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   cs->setUpdateAll(true);
                   }
             }
-      else if(cmd == "staff-types") {
-            Staff * staff = cs->staff(0);
+      else if (cmd == "staff-types") {
+            Staff* staff = cs->staff(0);
             EditStaffType* est = new EditStaffType(this, staff);
             if (est->exec() && est->isModified()) {
-                  Score* score = cs;
+                  Score* score = cs->rootScore();
                   score->startCmd();
                   score->deselectAll();
                   QList<StaffType*> tl = est->getStaffTypes();

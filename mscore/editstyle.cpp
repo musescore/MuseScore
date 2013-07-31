@@ -225,8 +225,6 @@ void EditStyle::getValues()
       lstyle.set(ST_beamWidth,               Spatium(beamWidth->value()));
       lstyle.set(ST_beamDistance,            beamDistance->value());
       lstyle.set(ST_beamMinLen,              Spatium(beamMinLen->value()));
-      lstyle.set(ST_beamMinSlope,            beamMinSlope->value());
-      lstyle.set(ST_beamMaxSlope,            beamMaxSlope->value());
       lstyle.set(ST_graceNoteMag,            graceNoteSize->value() * 0.01);
       lstyle.set(ST_smallStaffMag,           smallStaffSize->value() * 0.01);
       lstyle.set(ST_smallNoteMag,            smallNoteSize->value() * 0.01);
@@ -370,22 +368,21 @@ void EditStyle::getValues()
       // copy to text style data relevant to it (LineHeight and Style are not in text style);
       // offsetType is necessarily OFFSET_SPATIUM
       const TextStyle fbOld = lstyle.textStyle(TEXT_STYLE_FIGURED_BASS);
-      if(family != fbOld.family() || size != fbOld.size()
-                  || vPos != fbOld.offset().y() || fbOld.offsetType() != OFFSET_SPATIUM) {
+      if (family != fbOld.family() || size != fbOld.size()
+         || vPos != fbOld.offset().y() || fbOld.offsetType() != OFFSET_SPATIUM)
+            {
             TextStyle fbNew(fbOld);
             fbNew.setFamily(family);
             fbNew.setSize(size);
             fbNew.setYoff(vPos);
             fbNew.setOffsetType(OFFSET_SPATIUM);
             lstyle.setTextStyle(fbNew);
-      }
+            }
 
       for (int i = 0; i < ARTICULATIONS; ++i) {
             QComboBox* cb = static_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
             lstyle.setArticulationAnchor(i, ArticulationAnchor(cb->itemData(cb->currentIndex()).toInt()));
             }
-
-//      lstyle.set(ST_warnPitchRange,  warnPitchRange->isChecked());
 
       lstyle.set(ST_voltaY,                  Spatium(voltaY->value()));
       lstyle.set(ST_voltaHook,               Spatium(voltaHook->value()));
@@ -456,20 +453,16 @@ void EditStyle::setValues()
       timesigLeftMargin->setValue(lstyle.valueS(ST_timesigLeftMargin).val());
       clefKeyRightMargin->setValue(lstyle.valueS(ST_clefKeyRightMargin).val());
       clefBarlineDistance->setValue(lstyle.valueS(ST_clefBarlineDistance).val());
-//      beginRepeatLeftMargin->setValue(lstyle.valueS(ST_beginRepeatLeftMargin).val());
       staffLineWidth->setValue(lstyle.valueS(ST_staffLineWidth).val());
 
       beamWidth->setValue(lstyle.valueS(ST_beamWidth).val());
       beamDistance->setValue(lstyle.value(ST_beamDistance).toDouble());
       beamMinLen->setValue(lstyle.valueS(ST_beamMinLen).val());
-      beamMinSlope->setValue(lstyle.value(ST_beamMinSlope).toDouble());
-      beamMaxSlope->setValue(lstyle.value(ST_beamMaxSlope).toDouble());
 
       graceNoteSize->setValue(lstyle.value(ST_graceNoteMag).toDouble() * 100.0);
       smallStaffSize->setValue(lstyle.value(ST_smallStaffMag).toDouble() * 100.0);
       smallNoteSize->setValue(lstyle.value(ST_smallNoteMag).toDouble() * 100.0);
       smallClefSize->setValue(lstyle.value(ST_smallClefMag).toDouble() * 100.0);
-//      pageFillThreshold->setValue(lstyle.value(ST_pageFillLimit).toDouble() * 100.0);
       lastSystemFillThreshold->setValue(lstyle.value(ST_lastSystemFillLimit).toDouble() * 100.0);
 
       hairpinY->setValue(lstyle.valueS(ST_hairpinY).val());
@@ -576,7 +569,6 @@ void EditStyle::setValues()
                   idx = 2;
             cb->setCurrentIndex(idx);
             }
-//      warnPitchRange->setChecked(lstyleB[ST_warnPitchRange]);
 
       fixNumberMeasures->setValue(lstyle.valueI(ST_FixMeasureNumbers));
       fixMeasureWidth->setChecked(lstyle.valueB(ST_FixMeasureWidth));
