@@ -713,12 +713,8 @@ bool Element::readProperties(XmlReader& e)
             if (val >= 0 && type() != SYMBOL && type() != TEMPO_TEXT && (type() != GLISSANDO || score()->mscVersion() > 114))   // hack for 1.2
                   e.setTick(score()->fileDivision(val));
             }
-      else if (tag == "offset") {         // ??obsolete -> used for volta
-            qreal _spatium = spatium();
-            QPointF pt(e.readPoint() * _spatium);
-            setUserOff(pt);
-            // _readPos = QPointF();
-            }
+      else if (tag == "offset")
+            setUserOff(e.readPoint() * spatium());
       else if (tag == "pos")
             _readPos = e.readPoint() * spatium();
       else if (tag == "voice")

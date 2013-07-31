@@ -90,7 +90,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <pos x="-1" y="0"/>
+          <offset x="-1" y="0"/>
           <durationType>quarter</durationType>
           <Note>
             <pitch>72</pitch>
