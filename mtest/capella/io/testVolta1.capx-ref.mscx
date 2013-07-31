@@ -103,8 +103,9 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="2">
         <endRepeat>2</endRepeat>
-        <Volta id="0">
+        <Volta id="2">
           <subtype>1</subtype>
+          <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
@@ -121,8 +122,10 @@ p, li { white-space: pre-wrap; }
           </Chord>
         </Measure>
       <Measure number="3">
-        <Volta id="0">
+        <endSpanner id="2"/>
+        <Volta id="3">
           <subtype>0</subtype>
+          <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
@@ -148,6 +151,7 @@ p, li { white-space: pre-wrap; }
           <style></style>
           <text>Leon Vinken</text>
           </Text>
+        <endSpanner id="3"/>
         <Chord>
           <durationType>whole</durationType>
           <Note>

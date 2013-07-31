@@ -709,6 +709,10 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                           qDebug("tick %d track %d cr1 %p cr2 %p -> slur %p", tick, track, cr1, cr2, slur);
                                           slur->setTick(cr1->tick());
                                           slur->setTick2(cr2->tick());
+                                          slur->setStartElement(cr1);
+                                          slur->setEndElement(cr2);
+                                          slur->setTrack(cr1->track());
+                                          score->addElement(slur);
                                           }
                                     }
                               }
@@ -750,8 +754,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     else
                                           volta->setVoltaType(VoltaType::OPEN);
                                     volta->setTick(cr1->measure()->tick());
-                                    cr1->measure()->add(volta);
-                                    volta->setTick2(cr2->measure()->tick());
+                                    volta->setTick2(cr2->measure()->tick() + cr2->measure()->ticks());
+                                    score->addElement(volta);
                                     }
                               }
                               break;
