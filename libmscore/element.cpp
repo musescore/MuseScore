@@ -640,7 +640,7 @@ void Element::writeProperties(Xml& xml) const
       if (_links && (_links->size() > 1) && !xml.clipboardmode)
             xml.tag("lid", _links->lid());
       if (!userOff().isNull()) {
-            if (type() == VOLTA_SEGMENT)
+            if (type() == VOLTA_SEGMENT || isChordRest())
                   xml.tag("offset", userOff() / spatium());
             else
                   xml.tag("pos", pos() / spatium());
@@ -755,7 +755,7 @@ void Element::writeProperty(Xml& xml, P_ID id) const
 void Element::write(Xml& xml) const
       {
       xml.stag(name());
-      Element::writeProperties(xml);
+      writeProperties(xml);
       xml.etag();
       }
 
@@ -766,7 +766,7 @@ void Element::write(Xml& xml) const
 void Element::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            if (!Element::readProperties(e))
+            if (!readProperties(e))
                   e.unknown();
             }
       }

@@ -43,8 +43,8 @@ class DurationElement : public Element {
 
       virtual Measure* measure() const    { return (Measure*)(parent()); }
 
-      bool readProperties(XmlReader& e);
-      void writeProperties(Xml& xml) const;
+      virtual bool readProperties(XmlReader& e);
+      virtual void writeProperties(Xml& xml) const;
       void writeTuplet(Xml& xml);
 
       void setTuplet(Tuplet* t)           { _tuplet = t;      }

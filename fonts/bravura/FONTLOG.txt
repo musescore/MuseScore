@@ -7,7 +7,7 @@ Basic Font Information
 ----------------------
 Bravura is a Unicode typeface designed by Steinberg for its in-development music notation and scoring application.
 
-It is compliant with version 0.5 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+It is compliant with version 0.6 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
 More information about Steinberg's scoring application can be found at:
 
@@ -79,3 +79,27 @@ Changelog
 - Added new range for multi-segment lines, including moving all of the various “wiggle” glyphs (for trill, glissando, arpeggiando, vibrato, etc.) plus the 11 ornament strokes from the Unicode Musical Symbols range into this range, and adding further glyphs for variable speed trills, alternate arpeggiato ending glyphs, wavy lines, squaretooth and sawtooth lines, group glissando, circular motion, and variable speed and intensity of vibrato (U+EA80–U+EAD0).
 - Added new range of pictograms for electronic music, including microphone, loudspeaker, transport controls, volume level and MIDI controller level (U+EAE0–U+EAF5).
 - Added new “do not copy” glyphs (U+EB02–U+EB03), eyeglasses (U+EB04) and choral divide arrows (U+EB05–U+EB07) glyphs to the miscellaneous symbols range.
+
+29 July 2013 (Daniel Spreadbury) Bravura version 0.3
+- Bravura 0.3 is designed to be compatible with SMuFL 0.6
+- Bravura now incorporates glyphs from the Sagittal font by George Secor and Dave Keenan (U+E360–U+E47F). For more information about the Sagittal system of accidentals and to download the stand-alone Sagittal font, see http://sagittal.org.
+- Changed registration of many glyphs in the font to match the interim guidelines for font metrics and glyph registration in SMuFL 0.6.
+- Added complete set of dynamics to liga table, and duplicated these entries in the ccmp table.
+- Added opening parenthesis and closing parenthesis for noteheads (U+E10A–U+E10B), circled slash notehead, heavy X and heavy X with hat noteheads, as used in Dante Agostini's drum method (U+E10C–U+E10E).
+- Added muted slash noteheads (U+E125–U+E127).
+- Added "si" note name noteheads for French solfège (U+E187, U+E18F, U+E197), and H sharp note name noteheads for German (U+E1AE, U+E1C5, U+E1DC).
+- Fixed the vertical position of U+E227 and U+E228 (continuing beams for 8th notes with short and long stems), and made the stem thickness of beamed groups of notes consistent with those of individual notes.
+- Added combining rim shot stem (U+E24E).
+- Added "sharp sharp" accidental for compatibility with MusicXML (U+E2A9).
+- Added extended Stein-Zimmermann accidentals with arrows (U+E2F8–U+E304).
+- Adjusted size and registration of Sims microtonal accidentals (U+E308–U+E30D).
+- Added one-third-tone sharp and two-third-tones sharp accidentals as used by Xenakis (U+E4B0–U+E4B1).
+- Significant revision to the ornaments range, including splitting into separate ranges (common ornaments, other baroque ornaments, combining strokes for trills/mordents, precomposed trills/mordents). A small number of glyphs from previous versions of SMuFL have been removed to make way for symbols drawn from Frederick Neumann’s authoritative book on baroque ornamentation.
+- The turn symbol and its derivates (U+E594 et al) have been redrawn to have a more open appearance, for better reproduction at small staff sizes or when read at a distance.
+- Added thumb pizzicato (U+E654).
+- Added recommended stylistic alternates for Bartok pizzicato above/below (U+E660–U+E661).
+- Added recommended stylistic alternates for 'Ped.' (U+E6A0) and 'Sost.' (U+E6A5) that do not include terminal dots.
+- Added choke cymbal glyph (U+E875) from Weinberg.
+- Added open, half-open and closed wah/volume pedals, left- and right-hand tapping glyphs for guitar (U+E8AD–U+E8B1).
+- Added new range for arrows and arrowheads (U+EB00–U+EB1F), including moving the up/down/right/left arrows from the vocal techniques range (previously U+E687–U+E68A) into this new range.
+- Redesigned 'do not copy' glyph (U+E833) to be a bit more aggressive.
