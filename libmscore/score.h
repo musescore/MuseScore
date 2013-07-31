@@ -929,6 +929,7 @@ class Score : public QObject {
       qreal noteHeadWidth() const            { return _noteHeadWidth; }
 
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
+      SpannerMap& spannerMap() { return _spanner; }
       Spanner* findSpanner(int id) const;
       bool isSpannerStartEnd(int tick, int track) const;
       void removeSpanner(Spanner*);
