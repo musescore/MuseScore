@@ -1485,8 +1485,8 @@ Lyrics* Score::addLyrics()
 
 void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
       {
-qDebug("createTuplet at %d <%s> duration <%s> ratio <%s> baseLen <%s>",
-  ocr->tick(), ocr->name(),
+qDebug("cmdCreateTuplet at %d <%s> track %d duration <%s> ratio <%s> baseLen <%s>",
+  ocr->tick(), ocr->name(), ocr->track(),
   qPrintable(ocr->duration().print()),
   qPrintable(tuplet->ratio().print()),
   qPrintable(tuplet->baseLen().fraction().print())
@@ -1515,13 +1515,14 @@ qDebug("createTuplet at %d <%s> duration <%s> ratio <%s> baseLen <%s>",
       Fraction an     = (tuplet->duration() * tuplet->ratio()) / tuplet->baseLen().fraction();
       int actualNotes = an.numerator() / an.denominator();
 
+      tuplet->setTrack(track);
       cr->setTuplet(tuplet);
       cr->setTrack(track);
       cr->setDurationType(tuplet->baseLen());
       cr->setDuration(tuplet->baseLen().fraction());
 
-qDebug("tuplet note duration %s  actualNotes %d  ticks %d",
-      qPrintable(tuplet->baseLen().name()), actualNotes, cr->actualTicks());
+qDebug("tuplet note duration %s  actualNotes %d  ticks %d track %d tuplet track %d",
+      qPrintable(tuplet->baseLen().name()), actualNotes, cr->actualTicks(), track, tuplet->track());
 
       undoAddCR(cr, measure, tick);
 

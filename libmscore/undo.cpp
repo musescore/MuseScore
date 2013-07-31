@@ -1109,19 +1109,17 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       else
             staffList.append(ostaff);
       Segment::SegmentType segmentType = Segment::SegChordRest;
+
+      Tuplet* t = cr->tuplet();
       foreach(Staff* staff, staffList) {
             Score* score = staff->score();
             Measure* m   = (score == this) ? measure : score->tick2measure(tick);
-            // always create new segment for grace note:
-            Segment* seg = m->findSegment(segmentType, tick);
-            if (seg == 0) {
-                  seg = new Segment(m, segmentType, tick);
-                  score->undoAddElement(seg);
-                  }
+            Segment* seg = m->undoGetSegment(segmentType, tick);
+
             ChordRest* newcr = (staff == ostaff) ? cr : static_cast<ChordRest*>(cr->linkedClone());
             newcr->setScore(score);
             int staffIdx = score->staffIdx(staff);
-            int ntrack = staffIdx * VOICES + cr->voice();
+            int ntrack   = staffIdx * VOICES + cr->voice();
             newcr->setTrack(ntrack);
             newcr->setParent(seg);
 
@@ -1133,26 +1131,29 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                               note->setTpcFromPitch();
                         }
                   }
-            if (cr->tuplet()) {
+            if (t) {
                   Tuplet* nt = 0;
-                  Tuplet* t = cr->tuplet();
                   if (staff == ostaff)
                         nt = t;
                   else {
-                        //if (t->elements().isEmpty() || t->elements().front() == cr) {
-                        if (t->elements().front() == cr) {
+                        if (t->elements().empty() || t->elements().front() == cr) {
                               nt = static_cast<Tuplet*>(t->linkedClone());
                               nt->setScore(score);
                               }
                         else {
-                              LinkedElements* le = cr->tuplet()->links();
+                              LinkedElements* le = t->links();
+                              // search the linked tuplet
                               foreach(Element* e, *le) {
-                                    if (e->score() == score)
+                                    if (e->score() == score && e->track() == ntrack) {
                                           nt = static_cast<Tuplet*>(e);
+                                          break;
+                                          }
                                     }
+                              if (nt == 0)
+                                    qDebug("linked tuplet not found");
                               }
+                        newcr->setTuplet(nt);
                         }
-                  newcr->setTuplet(nt);
                   }
             undo(new AddElement(newcr));
             score->updateAccidentals(m, staffIdx);
