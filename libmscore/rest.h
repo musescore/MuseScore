@@ -32,30 +32,28 @@ class Rest : public ChordRest {
       int dotline;            // depends on rest symbol
       qreal _mmWidth;         // width of multi measure rest
 
-      virtual QRectF drag(const QPointF& s);
-      virtual qreal upPos()   const;
-      virtual qreal downPos() const;
-      virtual qreal centerX() const;
+      virtual QRectF drag(const EditData&) override;
+      virtual qreal upPos()   const override;
+      virtual qreal downPos() const override;
+      virtual qreal centerX() const override;
       void setUserOffset(qreal x, qreal y);
 
    public:
       Rest(Score* s = 0);
       Rest(Score*, const TDuration&);
-      virtual Rest* clone() const      { return new Rest(*this); }
-      virtual ElementType type() const { return REST; }
+      virtual Rest* clone() const override      { return new Rest(*this); }
+      virtual ElementType type() const override { return REST; }
 
-      virtual Measure* measure() const { return parent() ? (Measure*)(parent()->parent()) : 0; }
-      virtual qreal mag() const;
-      virtual void draw(QPainter*) const;
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual Measure* measure() const override { return parent() ? (Measure*)(parent()->parent()) : 0; }
+      virtual qreal mag() const override;
+      virtual void draw(QPainter*) const override;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
-      virtual Element* drop(const DropData&);
-      virtual void layout();
+      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual Element* drop(const DropData&) override;
+      virtual void layout() override;
 
-      virtual void reset();
+      virtual void reset() override;
 
       void setMMWidth(qreal val);
       qreal mmWidth() const        { return _mmWidth; }

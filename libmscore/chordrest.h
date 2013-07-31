@@ -80,9 +80,8 @@ class ChordRest : public DurationElement {
       virtual Segment* segment() const           { return (Segment*)parent(); }
       virtual Measure* measure() const = 0;
 
-      virtual void read(XmlReader&) = 0;
-      void writeProperties(Xml& xml) const;
-      bool readProperties(XmlReader&);
+      virtual void writeProperties(Xml& xml) const;
+      virtual bool readProperties(XmlReader&);
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       void setBeamMode(BeamMode m)              { _beamMode = m;    }
@@ -114,10 +113,6 @@ class ChordRest : public DurationElement {
 
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
-
-//      const QList<Element*>& annotations() const { return _annotations;        }
-//      QList<Element*>& annotations()             { return _annotations;        }
-//      void removeAnnotation(Element* e)          { _annotations.removeOne(e);  }
 
       void layoutArticulations();
 

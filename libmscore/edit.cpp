@@ -1280,8 +1280,6 @@ void Score::cmdDeleteSelectedMeasures()
             Measure* ie = score->tick2measure(endTick);
             mBeforeSel = is->prevMeasure();
 
-            int startTick = is->tick();
-
             int ticks = 0;
             for (Measure* m = is; m; m = m->nextMeasure()) {
                   ticks += m->ticks();
