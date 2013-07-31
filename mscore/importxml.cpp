@@ -2096,13 +2096,13 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                           volta->endings().clear();
                                           volta->endings().append(iEndingNumbers);
                                           volta->setTick(measure->tick());
-                                          measure->add(volta);
+                                          score->addElement(volta);
                                           lastVolta = volta;
                                           }
                                     else if (endingType == "stop") {
                                           if (lastVolta) {
                                                 lastVolta->setVoltaType(VoltaType::CLOSED);
-                                                lastVolta->setTick2(measure->tick());
+                                                lastVolta->setTick2(measure->tick() + measure->ticks());
                                                 lastVolta = 0;
                                                 }
                                           else {
@@ -2112,7 +2112,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                                     else if (endingType == "discontinue") {
                                           if (lastVolta) {
                                                 lastVolta->setVoltaType(VoltaType::OPEN);
-                                                lastVolta->setTick2(measure->tick());
+                                                lastVolta->setTick2(measure->tick() + measure->ticks());
                                                 lastVolta = 0;
                                                 }
                                           else {
@@ -4068,9 +4068,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     slur[slurNo]->setSlurDirection(MScore::UP);
                               else if (pl == "below")
                                     slur[slurNo]->setSlurDirection(MScore::DOWN);
-                              // slur[slurNo]->setStart(tick, trk + voice);
-                              // slur[slurNo]->setTrack((staff + relStaff) * VOICES);
-                              // score->add(slur[slurNo]);
+                              //slur[slurNo]->setStart(tick, trk + voice);
+                              //slur[slurNo]->setTrack((staff + relStaff) * VOICES);
+                              slur[slurNo]->setTrack(track);
+                              score->addElement(slur[slurNo]);
                               if (endSlur) {
                                     slur[slurNo]->setTick(cr->tick());
                                     slur[slurNo] = 0;
