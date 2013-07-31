@@ -398,8 +398,8 @@ class Element : public QObject {
       virtual void draw(QPainter*) const {}
 
       void writeProperty(Xml& xml, P_ID id) const;
-      void writeProperties(Xml& xml) const;
-      bool readProperties(XmlReader&);
+      virtual void writeProperties(Xml& xml) const;
+      virtual bool readProperties(XmlReader&);
 
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);

@@ -164,17 +164,18 @@ void Rest::setUserOffset(qreal x, qreal y)
 //   drag
 //---------------------------------------------------------
 
-QRectF Rest::drag(const QPointF& s)
+QRectF Rest::drag(const EditData& data)
       {
+      QPointF s(data.pos);
       QRectF r(abbox());
 
       // Limit horizontal drag range
-      const qreal xDragRange = 250.0;
-      qreal xoff = (fabs(s.x()) > xDragRange) ? xDragRange : fabs(s.x());
-      if (s.x() < 0)
-            xoff *= -1;
-      setUserOffset(xoff, s.y());
+      static const qreal xDragRange = spatium() * 5;
+      if (fabs(s.x()) > xDragRange)
+            s.rx() = xDragRange * (s.x() < 0 ? -1.0 : 1.0);
+      setUserOffset(s.x(), s.y());
       layout();
+      score()->rebuildBspTree();
       return abbox() | r;
       }
 
@@ -257,31 +258,6 @@ Element* Rest::drop(const DropData& data)
                   return ChordRest::drop(data);
             }
       return 0;
-      }
-
-//---------------------------------------------------------
-//   write Rest
-//---------------------------------------------------------
-
-void Rest::write(Xml& xml) const
-      {
-      xml.stag(name());
-      ChordRest::writeProperties(xml);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   Rest::read
-//---------------------------------------------------------
-
-void Rest::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            if (!ChordRest::readProperties(e))
-                  e.unknown();
-            }
-      QPointF off(userOff());
-      setUserOffset(off.x(), off.y());
       }
 
 //---------------------------------------------------------
