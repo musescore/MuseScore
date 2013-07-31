@@ -75,6 +75,8 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Slur id="2">
+          </Slur>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -98,6 +100,7 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
