@@ -269,6 +269,17 @@ void Seq::rewindStart()
       {
       seek(0);
       }
+      
+//---------------------------------------------------------
+//   loopStart
+//---------------------------------------------------------
+
+void Seq::loopStart()
+      {
+      seek(0);
+      start();
+      qDebug("LoopStart. playPos = %d\n", playPos);
+      }
 
 //---------------------------------------------------------
 //   canStart
@@ -572,7 +583,13 @@ void Seq::process(unsigned n, float* buffer)
                   // TODO: channel?
                   putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
                   if (playPos == events.cend())
-                        emit toGui('2');
+					    if (mscore->loop()) {
+							qDebug("MScore::Seq:: loop active. playPos = %d\n", playPos);
+							loopStart();
+							} 
+						else {
+							emit toGui('2');
+						}
                   else
                         emit toGui('0');
                   }
@@ -600,7 +617,7 @@ void Seq::process(unsigned n, float* buffer)
                   int n = f - playTime;
                   if (n < 0) {
                         qDebug("%d:  %d - %d\n", playPos->first, f, playTime);
-      			n = 0;
+						n = 0;
                         }
                   if (n) {
                         if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
@@ -696,7 +713,7 @@ void Seq::process(unsigned n, float* buffer)
             peakTimer[1] = 0;
             }
       }
-
+	
 //---------------------------------------------------------
 //   initInstruments
 //---------------------------------------------------------

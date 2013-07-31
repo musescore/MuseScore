@@ -2009,6 +2009,15 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
+         "loop",
+         QT_TRANSLATE_NOOP("action","Loop"),
+         QT_TRANSLATE_NOOP("action","Toggle loop"),
+         QT_TRANSLATE_NOOP("action","Playback will continuously restart"),
+         loop_ICON
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         0,
          "metronome",
          QT_TRANSLATE_NOOP("action","Metronome"),
          QT_TRANSLATE_NOOP("action","toggle metronome"),

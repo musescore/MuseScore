@@ -1239,6 +1239,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="loopButton">
+         <property name="text">
+          <string notr="true">L</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="metronomeButton">
          <property name="text">
           <string notr="true">M</string>
