@@ -310,7 +310,6 @@ void EditStyle::getValues()
       lstyle.set(ST_SlurEndWidth,            Spatium(slurEndLineWidth->value()));
       lstyle.set(ST_SlurMidWidth,            Spatium(slurMidLineWidth->value()));
       lstyle.set(ST_SlurDottedWidth,         Spatium(slurDottedLineWidth->value()));
-      lstyle.set(ST_SlurBow,                 Spatium(slurBow->value()));
 
       lstyle.set(ST_MusicalSymbolFont,       musicalSymbolFont->currentText());
 
@@ -585,7 +584,6 @@ void EditStyle::setValues()
       slurEndLineWidth->setValue(lstyle.valueS(ST_SlurEndWidth).val());
       slurMidLineWidth->setValue(lstyle.valueS(ST_SlurMidWidth).val());
       slurDottedLineWidth->setValue(lstyle.valueS(ST_SlurDottedWidth).val());
-      slurBow->setValue(lstyle.valueS(ST_SlurBow).val());
       musicalSymbolFont->setCurrentIndex(lstyle.valueSt(ST_MusicalSymbolFont) == "Emmentaler" ? 0 : 1);
 
       showHeader->setChecked(lstyle.valueB(ST_showHeader));
