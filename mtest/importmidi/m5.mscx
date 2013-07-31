@@ -53,6 +53,10 @@
       </Part>
     <Staff id="1">
       <Measure number="1">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
         <KeySig>
           <accidental>0</accidental>
           </KeySig>
@@ -166,6 +170,10 @@
       </Staff>
     <Staff id="2">
       <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
         <KeySig>
           <accidental>0</accidental>
           </KeySig>

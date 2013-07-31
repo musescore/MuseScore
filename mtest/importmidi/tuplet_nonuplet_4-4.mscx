@@ -55,6 +55,10 @@ p, li { white-space: pre-wrap; }
       </Part>
     <Staff id="1">
       <Measure number="1">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
         <KeySig>
           <accidental>0</accidental>
           </KeySig>
