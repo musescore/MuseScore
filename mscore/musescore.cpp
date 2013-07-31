@@ -456,6 +456,10 @@ MuseScore::MuseScore()
       vRasterAction = getAction("vraster");
       vRasterAction->setCheckable(true);
 
+      loopAction = getAction("loop");
+      loopAction->setCheckable(true);
+      loopAction->setChecked(false);
+      
       metronomeAction = getAction("metronome");
       metronomeAction->setCheckable(true);
       metronomeAction->setChecked(false);
@@ -4136,6 +4140,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             cmdAddChordName2();
       else if (cmd == "tempo")
             addTempo();
+      else if (cmd == "loop")  // no action
+			;
       else if (cmd == "metronome")  // no action
             ;
       else if (cmd == "viewmode") {
