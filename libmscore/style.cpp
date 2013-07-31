@@ -95,9 +95,6 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_beamWidth,                   StyleType("beamWidth",               ST_SPATIUM) },
       { ST_beamDistance,                StyleType("beamDistance",            ST_DOUBLE) },      // in beamWidth units
       { ST_beamMinLen,                  StyleType("beamMinLen",              ST_SPATIUM) },     // len for broken beams
-      { ST_beamMinSlope,                StyleType("beamMinSlope",            ST_DOUBLE) },
-      { ST_beamMaxSlope,                StyleType("beamMaxSlope",            ST_DOUBLE) },
-      { ST_maxBeamTicks,                StyleType("maxBeamTicks",            ST_INT) },
       { ST_dotMag,                      StyleType("dotMag",                  ST_DOUBLE) },
       { ST_dotNoteDistance,             StyleType("dotNoteDistance",         ST_SPATIUM) },
       { ST_dotRestDistance,             StyleType("dotRestDistance",         ST_SPATIUM) },
@@ -466,9 +463,6 @@ StyleData::StyleData()
             { ST_beamWidth,                   StyleVal(Spatium(0.5)) },           // was 0.48
             { ST_beamDistance,                StyleVal(qreal(0.5)) },          // 0.25sp
             { ST_beamMinLen,                  StyleVal(Spatium(1.316178)) },      // exactly note head width
-            { ST_beamMinSlope,                StyleVal(qreal(0.05)) },
-            { ST_beamMaxSlope,                StyleVal(qreal(0.2)) },
-            { ST_maxBeamTicks,                StyleVal(MScore::division) },
             { ST_dotMag,                      StyleVal(qreal(1.0)) },
             { ST_dotNoteDistance,             StyleVal(Spatium(0.35)) },
             { ST_dotRestDistance,             StyleVal(Spatium(0.25)) },
