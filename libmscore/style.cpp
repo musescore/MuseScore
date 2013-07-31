@@ -967,7 +967,7 @@ void StyleData::load(XmlReader& e)
                         if (styleTypes.name(idx) == tag) {
                               switch(styleTypes.valueType(idx)) {
                                     case ST_SPATIUM:   set(idx, StyleVal(Spatium(val.toDouble()))); break;
-                                    case ST_DOUBLE:    set(idx, StyleVal(qreal(val.toDouble())));          break;
+                                    case ST_DOUBLE:    set(idx, StyleVal(qreal(val.toDouble())));   break;
                                     case ST_BOOL:      set(idx, StyleVal(bool(val.toInt())));       break;
                                     case ST_INT:       set(idx, StyleVal(val.toInt()));             break;
                                     case ST_DIRECTION: set(idx, StyleVal(MScore::Direction(val.toInt())));  break;
