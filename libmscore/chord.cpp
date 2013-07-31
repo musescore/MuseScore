@@ -1554,6 +1554,7 @@ void Chord::layoutPitched()
             Accidental* accidental = note->accidental();
             if (accidental) {
                   qreal x = accidental->x() + note->x();
+                  x -= score()->styleS(ST_accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
                   }
             }
