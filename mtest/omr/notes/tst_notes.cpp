@@ -59,8 +59,8 @@ void TestNotes::omrFileTest(QString file)
       QVERIFY(score);
       savePdf(score, file + ".pdf");
       Score* score1 = readCreatedScore(file + ".pdf");
-      score1->doLayout();
       QVERIFY(score1);
+      score1->doLayout();
       QVERIFY(saveCompareScore(score1, file + ".mscx", DIR + file + "-ref.mscx"));
       }
 
