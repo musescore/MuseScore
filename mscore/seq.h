@@ -162,6 +162,7 @@ class Seq : public QObject, public Sequencer {
       ~Seq();
       bool canStart();
       void rewindStart();
+      void loopStart();
       void seekEnd();
       void nextMeasure();
       void nextChord();
