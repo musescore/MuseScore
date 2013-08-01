@@ -384,7 +384,6 @@ void Tuplet::layout()
 
       // center number
       qreal x3 = 0.0;
-      qreal y3 = 0.0;
       qreal numberWidth = 0.0;
       if (_number) {
             _number->layout();
@@ -755,6 +754,21 @@ void Tuplet::sortElements()
       {
       qSort(_elements.begin(), _elements.end(), tickGreater);
       }
+
+//---------------------------------------------------------
+//   elementsDuration
+///  Get the sum of the element fraction in the tuplet,
+///  even if the tuplet is not complete yet
+//---------------------------------------------------------
+
+Fraction Tuplet::elementsDuration()
+      {
+      Fraction f;
+      foreach(DurationElement* el, _elements)
+            f += el->actualFraction();
+      return f;
+      }
+
 
 //---------------------------------------------------------
 //   getProperty
