@@ -2885,7 +2885,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         return;
                         }
                   }
-            else if (e->type() == Element::NOTE || e->type() == Element::REST || e->type() == Element::CHORD) {
+            else if (e->type() == Element::NOTE || e->isChordRest()) {
                   if (e->type() == Element::NOTE)
                         e = e->parent();
                   ChordRest* cr = static_cast<ChordRest*>(e);
@@ -2906,7 +2906,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               _selection.setStaffStart(oe->staffIdx());
                               _selection.setStaffEnd(_selection.staffStart() + 1);
                               _selection.setStartSegment(ocr->segment());
-                              _selection.setEndSegment(ocr->segment()->nextCR(ocr->track()));
+                              _selection.setEndSegment(tick2segment(ocr->tick() + ocr->actualTicks()));
                               if (!_selection.endSegment())
                                     _selection.setEndSegment(ocr->segment()->next());
 
@@ -2921,14 +2921,14 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                                     activeIsFirst = true;
                                     }
                               else if (tick >= _selection.tickEnd())
-                                    _selection.setEndSegment(cr->segment()->nextCR(cr->track()));
+                                    _selection.setEndSegment(tick2segment(cr->tick() + cr->actualTicks()));
                               else {
                                     if (_selection.activeSegment() == _selection.startSegment()) {
                                           _selection.setStartSegment(cr->segment());
                                           activeIsFirst = true;
                                           }
                                     else
-                                          _selection.setEndSegment(cr->segment()->nextCR(cr->track()));
+                                          _selection.setEndSegment(tick2segment(cr->tick() + cr->actualTicks()));
                                     }
                               }
                         else {
