@@ -140,7 +140,10 @@ void Score::write(Xml& xml, bool selectionOnly)
             // include title frames:
             while (measureStart->prev() && !measureStart->prev()->sectionBreak())
                   measureStart = measureStart->prev();
-            measureEnd   = _selection.endSegment()->measure()->next();
+            if (_selection.endSegment())
+                  measureEnd   = _selection.endSegment()->measure()->next();
+            else
+                  measureEnd   = 0;
             }
       else {
             staffStart   = 0;
