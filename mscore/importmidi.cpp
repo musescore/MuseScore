@@ -44,8 +44,8 @@
 #include "importmidi_quant.h"
 #include "importmidi_tuplet.h"
 #include "libmscore/tuplet.h"
+#include "importmidi_swing.h"
 
-#include "libmscore/undo.h"
 
 namespace Ms {
 
@@ -849,6 +849,9 @@ void MTrack::convertTrack(const Fraction &lastTick)
       createTuplets();
       createKeys(key);
       createClefs();
+
+      auto swingType = preferences.midiImportOperations.trackOperations(indexOfOperation).swing;
+      Swing::detectSwing(staff, swingType);
       }
 
 #if 0
