@@ -1527,7 +1527,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       //   create beam segments
       //---------------------------------------------
 
-      qreal x1 = crl[0]->stemPosX() + crl[0]->pageX();
+      qreal x1 = crl[0]->stemPosX() + crl[0]->pageX() - pageX();
 
       int baseLevel = 0;
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
@@ -1570,13 +1570,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         ++baseLevel;
 
                   qreal stemWidth  = point(score()->styleS(ST_stemWidth));
-                  qreal x2   = cr1->stemPosX() + cr1->pageX();
+                  qreal x2   = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
                   qreal x3;
 
                   if ((c2 - c1) > 1) {
                         ChordRest* cr2 = crl[c2-1];
                         // create segment
-                        x3 = cr2->stemPosX() + cr2->pageX();
+                        x3 = cr2->stemPosX() + cr2->pageX() - _pagePos.x();
 
                         if (tab) {
                               x2 -= stemWidth * 0.5;

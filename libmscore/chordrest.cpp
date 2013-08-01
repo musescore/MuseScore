@@ -165,7 +165,7 @@ void ChordRest::writeProperties(Xml& xml) const
                   case BeamMode::BEGIN:   s = "begin"; break;
                   case BeamMode::MID:     s = "mid"; break;
                   case BeamMode::END:     s = "end"; break;
-                  case BeamMode::NONE:      s = "no"; break;
+                  case BeamMode::NONE:    s = "no"; break;
                   case BeamMode::BEGIN32: s = "begin32"; break;
                   case BeamMode::BEGIN64: s = "begin64"; break;
                   case BeamMode::INVALID: s = "?"; break;
