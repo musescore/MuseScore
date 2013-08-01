@@ -35,6 +35,7 @@ extern Score::FileError importCapella(Score*, const QString&);
 extern Score::FileError importCapXml(Score*, const QString&);
 extern Score::FileError importCompressedMusicXml(Score*, const QString&);
 extern Score::FileError importMusicXml(Score*, const QString&);
+extern Score::FileError importGTP(Score*, const QString&);
 extern bool saveXml(Score*, const QString&);
 bool debugMode = false;
 bool noGui = true;
@@ -135,6 +136,8 @@ Score* MTest::readCreatedScore(const QString& name)
 #endif
       else if (csl == "xml")
             rv = importMusicXml(score, name);
+      else if (csl == "gp3" || csl == "gp4" || csl == "gp5")
+            rv = importGTP(score, name);
       else
             rv = Score::FILE_UNKNOWN_TYPE;
 
