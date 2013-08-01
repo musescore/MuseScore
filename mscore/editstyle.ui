@@ -172,7 +172,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>10</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -360,7 +360,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Music upper margin</string>
+             <string>Music top margin:</string>
             </property>
            </widget>
           </item>
@@ -408,7 +408,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Music lower margin</string>
+             <string>Music bottom margin:</string>
             </property>
            </widget>
           </item>
@@ -443,7 +443,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Staff distance</string>
+             <string>Staff distance:</string>
             </property>
            </widget>
           </item>
@@ -481,7 +481,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Grand staff distance</string>
+             <string>Grand staff distance:</string>
             </property>
            </widget>
           </item>
@@ -519,7 +519,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Min. system distance</string>
+             <string>Min. system distance:</string>
             </property>
            </widget>
           </item>
@@ -554,7 +554,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Lyrics upper margin</string>
+             <string>Lyrics top margin:</string>
             </property>
            </widget>
           </item>
@@ -586,7 +586,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Lyrics lower margin</string>
+             <string>Lyrics bottom margin:</string>
             </property>
            </widget>
           </item>
@@ -621,7 +621,7 @@
              <string>Vertical-frame upper margin</string>
             </property>
             <property name="text">
-             <string>V-frame upper margin</string>
+             <string>Vertical frame top margin:</string>
             </property>
            </widget>
           </item>
@@ -656,7 +656,7 @@
              <string>Vertical-frame lower margin</string>
             </property>
             <property name="text">
-             <string>V-frame lower margin</string>
+             <string>Vertical frame top margin:</string>
             </property>
            </widget>
           </item>
@@ -708,7 +708,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Create time signatures</string>
+             <string>Create time signature for all systems</string>
             </property>
            </widget>
           </item>
@@ -734,7 +734,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Create key sig for all systems</string>
+             <string>Create key signature for all systems</string>
             </property>
            </widget>
           </item>
@@ -774,7 +774,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="label_36">
             <property name="text">
-             <string>Lyrics line height</string>
+             <string>Lyrics line height:</string>
             </property>
            </widget>
           </item>
@@ -828,7 +828,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Max. system distance</string>
+             <string>Max. system distance:</string>
             </property>
            </widget>
           </item>
@@ -841,7 +841,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Last system fill threshold</string>
+             <string>Last system fill threshold:</string>
             </property>
            </widget>
           </item>
@@ -1720,7 +1720,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Spacing (1=tight)</string>
+               <string>Spacing (1=tight):</string>
               </property>
               <property name="textFormat">
                <enum>Qt::AutoText</enum>
@@ -1748,7 +1748,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Minimum measure width</string>
+               <string>Minimum measure width:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1783,7 +1783,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Note to barline distance</string>
+               <string>Note to barline distance:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1808,7 +1808,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Barline to note distance</string>
+               <string>Barline to note distance:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1884,7 +1884,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Clef left margin</string>
+               <string>Clef left margin:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1909,7 +1909,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Minimum note distance</string>
+               <string>Minimum note distance:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1966,7 +1966,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Key signature left margin</string>
+               <string>Key signature left margin:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2007,7 +2007,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Time signature left margin</string>
+               <string>Time signature left margin:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2048,7 +2048,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Clef/Key right margin</string>
+               <string>Clef/Key right margin:</string>
               </property>
               <property name="textFormat">
                <enum>Qt::PlainText</enum>
@@ -2076,7 +2076,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Clef to barline distance</string>
+               <string>Clef to barline distance:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2111,7 +2111,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Staff line width</string>
+               <string>Staff line thickness:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2136,7 +2136,7 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Barline to accidental distance</string>
+               <string>Barline to accidental distance:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2178,7 +2178,7 @@ p, li { white-space: pre-wrap; }
             <item row="11" column="0">
              <widget class="QLabel" name="label_103">
               <property name="text">
-               <string>Multi measure rest margin</string>
+               <string>Multi measure rest margin:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2442,7 +2442,7 @@ p, li { white-space: pre-wrap; }
                <item row="0" column="0">
                 <widget class="QLabel" name="label_46">
                  <property name="text">
-                  <string>Progression</string>
+                  <string>Progression:</string>
                  </property>
                 </widget>
                </item>
@@ -2472,7 +2472,7 @@ p, li { white-space: pre-wrap; }
                <item row="1" column="0">
                 <widget class="QLabel" name="label_47">
                  <property name="text">
-                  <string>Shortest stem</string>
+                  <string>Shortest stem:</string>
                  </property>
                 </widget>
                </item>
@@ -2502,7 +2502,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_25">
               <property name="text">
-               <string>Accidental note distance</string>
+               <string>Accidental note distance:</string>
               </property>
              </widget>
             </item>
@@ -2525,7 +2525,7 @@ p, li { white-space: pre-wrap; }
             <item row="3" column="0">
              <widget class="QLabel" name="label_43">
               <property name="text">
-               <string>Accidental distance</string>
+               <string>Accidental distance:</string>
               </property>
              </widget>
             </item>
@@ -2548,7 +2548,7 @@ p, li { white-space: pre-wrap; }
             <item row="5" column="0">
              <widget class="QLabel" name="label_22">
               <property name="text">
-               <string>Note dot distance</string>
+               <string>Note dot distance:</string>
               </property>
              </widget>
             </item>
@@ -2571,7 +2571,7 @@ p, li { white-space: pre-wrap; }
             <item row="6" column="0">
              <widget class="QLabel" name="label_23">
               <property name="text">
-               <string>Dot dot distance</string>
+               <string>Dot dot distance:</string>
               </property>
              </widget>
             </item>
@@ -2594,7 +2594,7 @@ p, li { white-space: pre-wrap; }
             <item row="8" column="0">
              <widget class="QLabel" name="label_24">
               <property name="text">
-               <string>Ledger line width</string>
+               <string>Ledger line thickness:</string>
               </property>
              </widget>
             </item>
@@ -2617,7 +2617,7 @@ p, li { white-space: pre-wrap; }
             <item row="9" column="0">
              <widget class="QLabel" name="label_34">
               <property name="text">
-               <string>Ledger line length</string>
+               <string>Ledger line length:</string>
               </property>
              </widget>
             </item>
@@ -2640,7 +2640,7 @@ p, li { white-space: pre-wrap; }
             <item row="7" column="0">
              <widget class="QLabel" name="label_100">
               <property name="text">
-               <string>Stem width</string>
+               <string>Stem thickness:</string>
               </property>
              </widget>
             </item>
@@ -2663,7 +2663,7 @@ p, li { white-space: pre-wrap; }
             <item row="4" column="0">
              <widget class="QLabel" name="label_101">
               <property name="text">
-               <string>Dot size</string>
+               <string>Dot size:</string>
               </property>
              </widget>
             </item>
@@ -2777,7 +2777,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_26">
               <property name="text">
-               <string>Distance to note</string>
+               <string>Distance to note:</string>
               </property>
              </widget>
             </item>
@@ -2797,7 +2797,7 @@ p, li { white-space: pre-wrap; }
             <item row="1" column="0">
              <widget class="QLabel" name="label_27">
               <property name="text">
-               <string>Line width</string>
+               <string>Line thickness:</string>
               </property>
              </widget>
             </item>
@@ -2817,7 +2817,7 @@ p, li { white-space: pre-wrap; }
             <item row="2" column="0">
              <widget class="QLabel" name="label_28">
               <property name="text">
-               <string>Hook length</string>
+               <string>Hook length:</string>
               </property>
              </widget>
             </item>
@@ -2871,28 +2871,24 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_62">
             <property name="text">
-             <string>Beam width</string>
+             <string>Beam thickness:</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="beamWidth">
+            <property name="suffix">
+             <string>sp</string>
+            </property>
             <property name="singleStep">
              <double>0.010000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_55">
-            <property name="text">
-             <string>spaces</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_57">
             <property name="text">
-             <string>Beam distance</string>
+             <string>Beam distance (in beam thickness units):</string>
             </property>
            </widget>
           </item>
@@ -2903,31 +2899,20 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label_58">
-            <property name="text">
-             <string>beam width units</string>
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="beamMinLen">
+            <property name="suffix">
+             <string>sp</string>
+            </property>
+            <property name="singleStep">
+             <double>0.050000000000000</double>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_59">
             <property name="text">
-             <string>Minimum length</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="beamMinLen">
-            <property name="singleStep">
-             <double>0.050000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="label_60">
-            <property name="text">
-             <string>spaces</string>
+             <string>Broken beam minimum length:</string>
             </property>
            </widget>
           </item>
@@ -2940,6 +2925,19 @@ p, li { white-space: pre-wrap; }
              <size>
               <width>20</width>
               <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="2">
+           <spacer name="horizontalSpacer_14">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
              </size>
             </property>
            </spacer>
@@ -2971,7 +2969,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_30">
               <property name="text">
-               <string>Line width at end</string>
+               <string>Line thickness at end:</string>
               </property>
              </widget>
             </item>
@@ -2994,7 +2992,7 @@ p, li { white-space: pre-wrap; }
             <item row="1" column="0">
              <widget class="QLabel" name="label_31">
               <property name="text">
-               <string>Line width middle</string>
+               <string>Line thickness middle:</string>
               </property>
              </widget>
             </item>
@@ -3017,7 +3015,7 @@ p, li { white-space: pre-wrap; }
             <item row="2" column="0">
              <widget class="QLabel" name="label_33">
               <property name="text">
-               <string>Dotted line width</string>
+               <string>Dotted line thickness:</string>
               </property>
              </widget>
             </item>
@@ -3090,7 +3088,7 @@ p, li { white-space: pre-wrap; }
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Small staff size</string>
+             <string>Small staff size:</string>
             </property>
            </widget>
           </item>
@@ -3128,7 +3126,7 @@ p, li { white-space: pre-wrap; }
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Small note size</string>
+             <string>Small note size:</string>
             </property>
            </widget>
           </item>
@@ -3163,7 +3161,7 @@ p, li { white-space: pre-wrap; }
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Grace note size</string>
+             <string>Grace note size:</string>
             </property>
            </widget>
           </item>
@@ -3201,7 +3199,7 @@ p, li { white-space: pre-wrap; }
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Small clef size</string>
+             <string>Small clef size:</string>
             </property>
            </widget>
           </item>
@@ -3262,7 +3260,7 @@ p, li { white-space: pre-wrap; }
           <item row="1" column="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Line width:</string>
+             <string>Line thickness:</string>
             </property>
            </widget>
           </item>
@@ -3330,7 +3328,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_95">
             <property name="text">
-             <string>Default Y-position:</string>
+             <string>Default vertical position:</string>
             </property>
            </widget>
           </item>
@@ -3421,7 +3419,7 @@ p, li { white-space: pre-wrap; }
           <item row="2" column="0">
            <widget class="QLabel" name="label_64">
             <property name="text">
-             <string>Line width:</string>
+             <string>Line thickness:</string>
             </property>
            </widget>
           </item>
@@ -3435,7 +3433,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_40">
             <property name="text">
-             <string>Default Y-position:</string>
+             <string>Default vertical position:</string>
             </property>
            </widget>
           </item>
@@ -3460,7 +3458,7 @@ p, li { white-space: pre-wrap; }
           <item row="2" column="0">
            <widget class="QLabel" name="label_88">
             <property name="text">
-             <string>Line width:</string>
+             <string>Line thickness:</string>
             </property>
            </widget>
           </item>
@@ -3514,7 +3512,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_81">
             <property name="text">
-             <string>Default Y-position:</string>
+             <string>Default vertical position:</string>
             </property>
            </widget>
           </item>
@@ -3547,7 +3545,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_96">
             <property name="text">
-             <string>Default Y-position:</string>
+             <string>Default vertical position:</string>
             </property>
            </widget>
           </item>
@@ -3618,7 +3616,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_97">
             <property name="text">
-             <string>Default Y-position:</string>
+             <string>Default vertical position:</string>
             </property>
            </widget>
           </item>
@@ -3738,7 +3736,7 @@ p, li { white-space: pre-wrap; }
              <item row="0" column="0">
               <widget class="QLabel" name="label_54">
                <property name="text">
-                <string>Chord description file</string>
+                <string>Chord description file:</string>
                </property>
               </widget>
              </item>
@@ -3908,7 +3906,7 @@ p, li { white-space: pre-wrap; }
              <item row="0" column="0">
               <widget class="QLabel" name="label_17">
                <property name="text">
-                <string>Default Y-position:</string>
+                <string>Default vertical position:</string>
                </property>
               </widget>
              </item>
@@ -4191,7 +4189,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="0">
              <widget class="QLabel" name="label_35">
               <property name="text">
-               <string>Note head distance</string>
+               <string>Note head distance:</string>
               </property>
              </widget>
             </item>
@@ -4218,7 +4216,7 @@ p, li { white-space: pre-wrap; }
             <item row="2" column="0">
              <widget class="QLabel" name="label_41">
               <property name="text">
-               <string>Articulation distance</string>
+               <string>Articulation distance:</string>
               </property>
              </widget>
             </item>
@@ -4235,7 +4233,7 @@ p, li { white-space: pre-wrap; }
             <item row="1" column="0">
              <widget class="QLabel" name="label_37">
               <property name="text">
-               <string>Staff distance</string>
+               <string>Staff distance:</string>
               </property>
              </widget>
             </item>
