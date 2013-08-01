@@ -656,7 +656,7 @@
              <string>Vertical-frame lower margin</string>
             </property>
             <property name="text">
-             <string>Vertical frame top margin:</string>
+             <string>Vertical frame bottom margin:</string>
             </property>
            </widget>
           </item>
