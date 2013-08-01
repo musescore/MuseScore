@@ -73,6 +73,7 @@
 #include "shortcut.h"
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
+#include "libmscore/bagpembell.h"
 
 namespace Ms {
 
@@ -658,6 +659,34 @@ Palette* MuseScore::newGraceNotePalette()
       populateIconPalette(notePalette, gna);
       return notePalette;
       }
+      
+//---------------------------------------------------------
+//   newBagpipeEmbellishmentPalette
+//---------------------------------------------------------
+
+Palette* MuseScore::newBagpipeEmbellishmentPalette()
+      {
+      Palette* sp = new Palette;
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe Embellishments"));
+      sp->setMag(0.8);
+      sp->setGrid(42, 38);
+      
+      // embellishment types
+      struct {
+            int type;
+            const char* name;
+            } t[] = {
+            { 0,       QT_TRANSLATE_NOOP("Palette", "Same pitch as note") },
+            { 1,       QT_TRANSLATE_NOOP("Palette", "Fixed pitch") },
+            { 2,       QT_TRANSLATE_NOOP("Palette", "Double fixed pitch") },
+            };
+      for (unsigned i = 0; i < sizeof(t)/sizeof(*t); ++i) {
+            BagpipeEmbellishment* b  = new BagpipeEmbellishment(gscore);
+            b->setEmbelType(t[i].type); // TODO
+            sp->append(b, t[i].name);
+            }
+      return sp;
+      }
 
 //---------------------------------------------------------
 //   newLinesPalette
@@ -955,6 +984,7 @@ void MuseScore::populatePalette()
       paletteBox->addPalette(newRepeatsPalette());
       paletteBox->addPalette(newTextPalette());
       paletteBox->addPalette(newBreaksPalette());
+      paletteBox->addPalette(newBagpipeEmbellishmentPalette());
 
       //-----------------------------------
       //    staff state changes

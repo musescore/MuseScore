@@ -264,6 +264,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case Element::SLUR:
                   case Element::ACCIDENTAL_BRACKET:
                   case Element::HARMONY:
+                  case Element::BAGPIPE_EMBELLISHMENT:
                         {
                         QList<Element*> el = elementsAt(pos);
                         bool found = false;
@@ -435,6 +436,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::SPACER:
                   case Element::SLUR:
                   case Element::ACCIDENTAL_BRACKET:
+                  case Element::BAGPIPE_EMBELLISHMENT:
                         {
                         Element* el = 0;
                         printf("drop\n");

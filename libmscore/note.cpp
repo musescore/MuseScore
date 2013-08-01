@@ -53,6 +53,7 @@
 #include "notedot.h"
 #include "spanner.h"
 #include "glissando.h"
+#include "bagpembell.h"
 
 namespace Ms {
 
@@ -1000,6 +1001,7 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8B)
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
+         || (noteType() == NOTE_NORMAL && type == BAGPIPE_EMBELLISHMENT)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
@@ -1148,6 +1150,27 @@ Element* Note::drop(const DropData& data)
                               }
                               break;
                         }
+                  }
+                  delete e;
+                  break;
+                  
+            case BAGPIPE_EMBELLISHMENT:
+                  {
+                  // TODO replace following temporary code
+                  qDebug("Note::drop BAGPIPE_EMBELLISHMENT %d", static_cast<BagpipeEmbellishment*>(e)->embelType());
+                  switch(static_cast<BagpipeEmbellishment*>(e)->embelType()) {
+                        case 0:
+                              score()->setGraceNote(ch, pitch(), NOTE_GRACE32, false, MScore::division/8);
+                              break;
+                        case 1:
+                              score()->setGraceNote(ch, 70, NOTE_GRACE32, false, MScore::division/8);
+                              break;
+                        case 2:
+                              score()->setGraceNote(ch, 70, NOTE_GRACE32, false, MScore::division/8);
+                              score()->setGraceNote(ch, 71, NOTE_GRACE32, false, MScore::division/8);
+                              break;
+                        }
+                  // end TODO
                   }
                   delete e;
                   break;
