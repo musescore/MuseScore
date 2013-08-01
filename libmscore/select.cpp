@@ -71,8 +71,9 @@ int Selection::tickStart() const
 
 int Selection::tickEnd() const
       {
-      if(_endSegment)
-          return _endSegment->tick();
+      if (_endSegment) {
+            return _endSegment->tick();
+            }
       else{ // endsegment == 0 if end of score
           Measure* m = _score->lastMeasure();
           return m->tick() + m->ticks();
@@ -466,6 +467,7 @@ QByteArray Selection::staffMimeData() const
       Xml xml(&buffer);
       xml.header();
       xml.clipboardmode = true;
+
 
       int ticks  = tickEnd() - tickStart();
       int staves = staffEnd() - staffStart();
