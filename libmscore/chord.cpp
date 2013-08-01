@@ -1559,20 +1559,27 @@ void Chord::layoutPitched()
             }
 
       //-----------------------------------------
-      //  create ledger lines
+      //  stem position
       //-----------------------------------------
 
-      qreal stemX;
+      // Y: only needed if there is an actual stem
       if (stem())
             stem()->rypos() = (_up ? downNote() : upNote())->rypos();
 
+      // X: always needed, as ledger lines rely on it.
+      // As all notes of a chord have the same value by definition,
+      // we can rely on the x-pos and head width of first chord note
+      // to determine the stem x-pos
+      qreal stemX = _notes[0]->pos().x();
       if (_up) {
-            stemX = score()->noteHeadWidth();
-            if (_noteType != NOTE_NORMAL)
-                  stemX *= score()->styleD(ST_graceNoteMag);
+            stemX += _notes[0]->headWidth();
             }
-      else
-            stemX = 0.0;
+      if (_noteType != NOTE_NORMAL)
+            stemX *= score()->styleD(ST_graceNoteMag);
+
+      //-----------------------------------------
+      //  create ledger lines
+      //-----------------------------------------
 
       addLedgerLines(stemX, staffMove());
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
