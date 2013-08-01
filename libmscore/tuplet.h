@@ -116,6 +116,7 @@ class Tuplet : public DurationElement {
       virtual int tick() const             { return _tick; }
       void setTick(int val)                { _tick = val; }
       void sortElements();
+      Fraction elementsDuration();
 
       virtual void setVisible(bool f);
       QVariant getProperty(P_ID propertyId) const;
