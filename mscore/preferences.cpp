@@ -1808,4 +1808,3 @@ void PreferenceDialog::printShortcutsClicked()
       p.end();
       }
 }
-
