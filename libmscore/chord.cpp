@@ -255,24 +255,22 @@ void Chord::setStem(Stem* s)
 
 //---------------------------------------------------------
 //   stemPosX
+//    return Chord coordinates
 //---------------------------------------------------------
 
 qreal Chord::stemPosX() const
       {
-      qreal x = 0.0;
-      qreal _spatium = spatium();
-      if (staff() && staff()->isTabStaff()) {
-            qreal stemX = static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosX(this) * _spatium;
-            return x + stemX;
-            }
+      if (staff() && staff()->isTabStaff())
+            return static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosX(this) * spatium();
+
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
             if (_noteType != NOTE_NORMAL)
                  nhw *= score()->styleD(ST_graceNoteMag);
             nhw *= mag();
-            x += nhw;
+            return nhw;
             }
-      return x;
+      return 0.0;
       }
 
 //---------------------------------------------------------
@@ -283,10 +281,11 @@ qreal Chord::stemPosX() const
 QPointF Chord::stemPos() const
       {
       qreal _spatium = spatium();
-      if (staff() && staff()->isTabStaff())
-            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * _spatium) + pagePos();
-
       QPointF p(pagePos());
+
+      if (staff() && staff()->isTabStaff())
+            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * _spatium) + p;
+
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
             if (_noteType != NOTE_NORMAL)
