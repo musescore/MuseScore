@@ -23,7 +23,7 @@ if (SCRIPT_INTERFACE)
       stafftext.h stem.h symbol.h system.h tempotext.h textframe.h text.h
       textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
       score.h cursor.h page.h part.h staff.h mscore.h staffstate.h marker.h
-      jump.h stemslash.h ledgerline.h noteline.h
+      jump.h stemslash.h ledgerline.h noteline.h bagpembell.h
       )
 endif (SCRIPT_INTERFACE)
 
@@ -76,7 +76,7 @@ add_library (
       cursor.cpp read114.cpp paste.cpp
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
-      noteline.cpp spannermap.cpp
+      noteline.cpp spannermap.cpp bagpembell.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (
