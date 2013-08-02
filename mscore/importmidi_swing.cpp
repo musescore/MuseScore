@@ -7,10 +7,36 @@
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
 #include "libmscore/tuplet.h"
+#include "libmscore/fraction.h"
 
 
 namespace Ms {
 namespace Swing {
+
+class SwingDetector
+      {
+   public:
+      SwingDetector(MidiOperation::Swing st);
+
+      void add(ChordRest *cr);
+      bool wasSwingApplied() const { return swingApplied; }
+
+   private:
+      std::vector<ChordRest *> elements;
+      Fraction sumLen;
+      const Fraction FULL_LEN = Fraction(1, 4);
+      MidiOperation::Swing swingType;
+      bool swingApplied = false;
+
+      void reset();
+      void append(ChordRest *cr);
+      void checkNormalSwing();
+      void checkShuffle();
+      void applySwing();
+      bool areAllTuplets() const;
+      bool areAllNonTuplets() const;
+      };
+
 
 SwingDetector::SwingDetector(MidiOperation::Swing st)
       : swingType(st)
