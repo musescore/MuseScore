@@ -523,41 +523,20 @@ qreal Chord::maxHeadWidth()
 //---------------------------------------------------------
 //   addLedgerLine
 ///   Add a ledger line to a chord.
-///   \arg x          note head position
-///   \arg staffIdx   determines the y origin
+///   \arg track      track the ledger line belongs to
 ///   \arg line       vertical position of line
-///   \arg lr         extend to left and/or right
-///   \arg hw         max head width in chord
+///   \arg visible    whether the line is visible or not
+///   \arg x          start x-position
+///   \arg len        line length
 //---------------------------------------------------------
 
-void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible, qreal hw)
+void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium len)
       {
       qreal _spatium = spatium();
-
-      qreal hw2      = hw * .5;
-
       LedgerLine* h = new LedgerLine(score());
-
       h->setParent(this);
-      h->setTrack(staff2track(staffIdx));
-      if (staff()->invisible())
-            visible = false;
+      h->setTrack(track);
       h->setVisible(visible);
-
-      // ledger lines extend less than half a space on each side
-      // of the notehead:
-      //
-      qreal ll = hw + score()->styleS(ST_ledgerLineLength).val() * _spatium;
-
-      if (_noteType != NOTE_NORMAL)
-            ll *= score()->styleD(ST_graceNoteMag);
-      x -= ll * .5;
-
-      x += (lr & 1) ? -hw2 : hw2;
-      if (lr == 3)
-            ll += hw;
-
-      Spatium len(ll / _spatium);
 
       //
       // Experimental:
@@ -573,6 +552,7 @@ void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible,
                   break;
                   }
             }
+
       h->setLen(len);
       h->setPos(x, line * _spatium * .5);
       h->setNext(_ledgerLines);
@@ -583,53 +563,56 @@ void Chord::addLedgerLine(qreal x, int staffIdx, int line, int lr, bool visible,
 //   addLedgerLines
 //---------------------------------------------------------
 
-void Chord::addLedgerLines(qreal x, int move)
+void Chord::addLedgerLines(int move)
       {
-      int uppos = 1000;
-      int ulr   = 0;
-      int idx   = staffIdx() + move;
+      int   idx   = staffIdx() + move;
+      qreal hw    = _notes[0]->headWidth();
+      qreal minX  = 0, maxX=0;            // no ledger line width yet
+      int   minLine = 0, maxLine = 0;     // no line yet
+      bool  visible = false;
+      qreal x;
+      // the line pos corresponding to the first ledger line below the staff
+      int   minLineBelow = score()->staff(idx)->lines() * 2;
 
-      // make ledger lines invisible if all notes
-      // are invisible
-      bool visible = false;
+      // scan chord notes, collecting visibility and x and y extrema
       int n = _notes.size();
       for (int i = 0; i < n; ++i) {
-            if (_notes.at(i)->visible()) {
-                  visible = true;
-                  break;
-                  }
-            }
-
-      qreal hw = maxHeadWidth();
-
-      for (int ni = n - 1; ni >= 0; --ni) {
-            const Note* note = _notes[ni];
-            int l = note->line();
-            if (l >= 0)
-                  break;
-            for (int i = (uppos+1) & ~1; i < l; i += 2)
-                  addLedgerLine(x, idx, i, ulr, visible, hw);
-            ulr |= (up() ^ note->mirror()) ? 0x1 : 0x2;
-            uppos = l;
-            }
-      for (int i = (uppos+1) & ~1; i <= -2; i += 2)
-            addLedgerLine(x, idx, i, ulr, visible, hw);
-
-      int downpos = -1000;
-      int dlr = 0;
-
-      for (int i = 0; i < n; ++i) {
             const Note* note = _notes.at(i);
-            int l = note->line();
-            if (l <= 8)
-                  break;
-            for (int i = downpos & ~1; i > l; i -= 2)
-                  addLedgerLine(x, idx, i, dlr, visible, hw);
-            dlr |= (up() ^ note->mirror()) ? 0x1 : 0x2;
-            downpos = l;
+
+            if (_notes.at(i)->visible())  // if one note is visible,
+                  visible = true;         // all lines are visible (WHICH IS NOT ALWAYS TRUE!)
+
+            int l = note->line();         // check note line outside current range
+            if (l < minLine)  minLine = l;
+            if (l > maxLine)  maxLine = l;
+
+            x = note->pos().x();         // check note pos and width outside current range
+            if (x < minX)     minX = x;
+            if (x+hw > maxX)  maxX = x+hw;
             }
-      for (int i = downpos & ~1; i >= 10; i -= 2)
-            addLedgerLine(x, idx, i, dlr, visible, hw);
+
+      if (minLine > -2 && maxLine < minLineBelow)
+            return;                       // no ledger lines for this chord
+
+      // some values and calculations common to all ledger lines
+      if (staff()->invisible())           // but if staff is invisible,
+            visible = false;              // lines are invisible too
+
+      qreal _spatium = spatium();
+      qreal extraLen = score()->styleS(ST_ledgerLineLength).val() * _spatium;
+      qreal lineLen = maxX - minX + extraLen;   // line length in raster units
+      Spatium len(lineLen / _spatium);          // line length in Spatium units
+      int   track = staff2track(idx);           // the track lines belong to
+      minX -= extraLen * .5;                    // the starting point x-pos
+
+      // lines above the staff
+      for (int i = (minLine+1) & ~1; i < 0; i += 2)
+            addLedgerLine(track, i, visible, minX, len);
+
+      // lines above the staff
+      maxLine &= ~1;                            // round maxLine to even number
+      for (int i = minLineBelow; i <= maxLine; i += 2)
+            addLedgerLine(track, i, visible, minX, len);
       }
 
 //-----------------------------------------------------------------------------
@@ -1566,22 +1549,11 @@ void Chord::layoutPitched()
       if (stem())
             stem()->rypos() = (_up ? downNote() : upNote())->rypos();
 
-      // X: always needed, as ledger lines rely on it.
-      // As all notes of a chord have the same value by definition,
-      // we can rely on the x-pos and head width of first chord note
-      // to determine the stem x-pos
-      qreal stemX = _notes[0]->pos().x();
-      if (_up) {
-            stemX += _notes[0]->headWidth();
-            }
-      if (_noteType != NOTE_NORMAL)
-            stemX *= score()->styleD(ST_graceNoteMag);
-
       //-----------------------------------------
       //  create ledger lines
       //-----------------------------------------
 
-      addLedgerLines(stemX, staffMove());
+      addLedgerLines(staffMove());
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
             ll->layout();
 
