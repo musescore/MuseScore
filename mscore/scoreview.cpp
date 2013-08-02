@@ -2498,6 +2498,8 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "next-chord"
          || cmd == "prev-chord"
+         || cmd == "next-track"
+         || cmd == "prev-track"
          || cmd == "next-measure"
          || cmd == "prev-measure") {
             Element* el = score()->selection().element();
