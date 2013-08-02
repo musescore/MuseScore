@@ -176,6 +176,24 @@ class TestImportMidi : public QObject, public MTest
             mf("split_tuplet");
             preferences.midiImportOperations.clear();
             }
+
+      // swing
+      void swingTriplets()
+            {
+            TrackOperations opers;
+            opers.swing = MidiOperation::Swing::SWING;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("swing_triplets");
+            preferences.midiImportOperations.clear();
+            }
+      void swingShuffle()
+            {
+            TrackOperations opers;
+            opers.swing = MidiOperation::Swing::SHUFFLE;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("swing_shuffle");
+            preferences.midiImportOperations.clear();
+            }
       };
 
 //---------------------------------------------------------
