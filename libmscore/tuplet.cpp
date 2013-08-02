@@ -765,7 +765,7 @@ Fraction Tuplet::elementsDuration()
       {
       Fraction f;
       foreach(DurationElement* el, _elements)
-            f += el->actualFraction();
+            f += el->duration();
       return f;
       }
 
