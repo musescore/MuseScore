@@ -270,6 +270,77 @@ ChordRest* Score::downStaff(ChordRest* cr)
       }
 
 //---------------------------------------------------------
+//   nextTrack
+//    returns note at or just previous to current (cr) position
+//    in next non-empty track for this measure
+//    that contains such an element
+//---------------------------------------------------------
+
+ChordRest* Score::nextTrack(ChordRest* cr)
+      {
+      if (!cr)
+            return 0;
+
+      Element* el = 0;
+      Measure* measure = cr->measure();
+      int track = cr->track();
+      int tracks = nstaves() * VOICES;
+
+      while (!el) {
+            // find next non-empty track
+            while (++track < tracks){
+                  if (measure->hasVoice(track))
+                        break;
+                  }
+            // no more tracks, return original element
+            if (track == tracks)
+                  return cr;
+            // find element at same or previous segment within this track
+            for (Segment* segment = cr->segment(); segment != 0; segment = segment->prev(Segment::SegChordRest)) {
+                  el = segment->element(track);
+                  if (el)
+                        break;
+                  }
+            }
+      return static_cast<ChordRest*>(el);
+      }
+
+//---------------------------------------------------------
+//   prevTrack
+//    returns ChordRest at or just previous to current (cr) position
+//    in previous non-empty track for this measure
+//    that contains such an element
+//---------------------------------------------------------
+
+ChordRest* Score::prevTrack(ChordRest* cr)
+      {
+      if (!cr)
+            return 0;
+
+      Element* el = 0;
+      Measure* measure = cr->measure();
+      int track = cr->track();
+
+      while (!el) {
+            // find next non-empty track
+            while (--track >= 0){
+                  if (measure->hasVoice(track))
+                        break;
+                  }
+            // no more tracks, return original element
+            if (track < 0)
+                  return cr;
+            // find element at same or previous segment within this track
+            for (Segment* segment = cr->segment(); segment != 0; segment = segment->prev(Segment::SegChordRest)) {
+                  el = segment->element(track);
+                  if (el)
+                        break;
+                  }
+            }
+      return static_cast<ChordRest*>(el);
+      }
+
+//---------------------------------------------------------
 //   nextMeasure
 //---------------------------------------------------------
 

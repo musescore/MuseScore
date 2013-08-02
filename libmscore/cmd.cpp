@@ -1795,13 +1795,23 @@ Element* Score::move(const QString& cmd)
                   moveInputPos(crc->segment());
                   }
             }
-      else if (cmd == "next-track")
-            el = downStaff(cr);
-      else if (cmd == "prev-track")
-            el = upStaff(cr);
+      else if (cmd == "next-track") {
+            el = nextTrack(cr);
+            if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
+                  ChordRest* crc = static_cast<ChordRest*>(el);
+                  moveInputPos(crc->segment());
+                  }
+            }
+      else if (cmd == "prev-track") {
+            el = prevTrack(cr);
+            if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
+                  ChordRest* crc = static_cast<ChordRest*>(el);
+                  moveInputPos(crc->segment());
+                  }
+            }
       if (el) {
             if (el->type() == Element::CHORD)
-                  el = static_cast<Chord*>(el)->downNote();
+                  el = static_cast<Chord*>(el)->upNote();       // originally downNote
             _playNote = true;
             select(el, SELECT_SINGLE, 0);
             }

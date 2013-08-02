@@ -369,6 +369,8 @@ class Score : public QObject {
       Note* downAltCtrl(Note*) const;
       ChordRest* upStaff(ChordRest* cr);
       ChordRest* downStaff(ChordRest* cr);
+      ChordRest* nextTrack(ChordRest* cr);
+      ChordRest* prevTrack(ChordRest* cr);
       void moveUp(Chord*);
       void moveDown(Chord*);
 
