@@ -127,7 +127,8 @@ void Inspector::setElements(const QList<Element*>& l)
             _element = e;
 
             if (_element == 0)
-                  return;
+                  ie = new InspectorEmpty(this);
+
 
             bool sameTypes = true;
             foreach(Element* ee, _el) {
@@ -136,7 +137,7 @@ void Inspector::setElements(const QList<Element*>& l)
                   }
             if (!sameTypes)
                   ie = new InspectorGroupElement(this);
-            else {
+            else if (_element) {
                   switch(_element->type()) {
                         case Element::FBOX:
                         case Element::TBOX:
@@ -603,6 +604,21 @@ InspectorSlur::InspectorSlur(QWidget* parent)
       mapSignals();
       }
 
+//---------------------------------------------------------
+//   InspectorEmpty
+//---------------------------------------------------------
+
+InspectorEmpty::InspectorEmpty(QWidget* parent)
+      :InspectorBase(parent)
+      {
+      message = new QLabel(tr("Select an element to display its properties"));
+      _layout->insertWidget(_layout->count()-1, message);
+      }
+
+InspectorEmpty::~InspectorEmpty()
+      {
+      delete message;
+      }
 
 #if 0
 
