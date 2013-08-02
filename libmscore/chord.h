@@ -78,8 +78,8 @@ class Chord : public ChordRest {
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
       virtual qreal centerX() const;
-      void addLedgerLine(qreal x, int staffIdx, int line, int extend, bool visible, qreal hw);
-      void addLedgerLines(qreal x, int move);
+      void addLedgerLine(int staffIdx, int line, bool visible, qreal x, Spatium len);
+      void addLedgerLines(int move);
       void processSiblings(std::function<void(Element*)> func);
       void layoutPitched();
       void layoutTablature();
