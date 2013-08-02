@@ -288,6 +288,19 @@ class InspectorSlur : public InspectorBase {
       InspectorSlur(QWidget* parent);
       };
 
+//---------------------------------------------------------
+//   InspectorEmpty
+//---------------------------------------------------------
+
+class InspectorEmpty : public InspectorBase {
+      Q_OBJECT
+
+      QLabel* message;
+
+   public:
+      InspectorEmpty(QWidget* parent);
+      ~InspectorEmpty();
+      };
 
 } // namespace Ms
 #endif

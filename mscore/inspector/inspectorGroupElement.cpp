@@ -27,7 +27,7 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
       {
       QWidget* w = new QWidget;
       ge.setupUi(w);
-      layout()->addWidget(w);
+      _layout->insertWidget(_layout->count()-1, w);
       ge.color->setColor(Qt::black);
       connect(ge.setColor, SIGNAL(clicked()), SLOT(setColor()));
       connect(ge.setVisible, SIGNAL(clicked()), SLOT(setVisible()));
