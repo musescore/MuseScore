@@ -627,6 +627,12 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
+         "prev-track",
+         QT_TRANSLATE_NOOP("action","Previous staff or voice")
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
          "next-chord",
          QT_TRANSLATE_NOOP("action","Next chord")
          ),
@@ -635,6 +641,12 @@ Shortcut Shortcut::sc[] = {
          0,
          "next-measure",
          QT_TRANSLATE_NOOP("action","Next measure")
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "next-track",
+         QT_TRANSLATE_NOOP("action","Next staff or voice")
          ),
       Shortcut(
          STATE_NORMAL,

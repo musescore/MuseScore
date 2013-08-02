@@ -253,10 +253,6 @@
     <seq>Ctrl+Up</seq>
     </SC>
   <SC>
-    <key>up-chord</key>
-    <seq>Alt+Up</seq>
-    </SC>
-  <SC>
     <key>top-chord</key>
     <seq>Ctrl+Alt+Up</seq>
     </SC>
@@ -277,10 +273,6 @@
     <seq>Ctrl+Down</seq>
     </SC>
   <SC>
-    <key>down-chord</key>
-    <seq>Alt+Down</seq>
-    </SC>
-  <SC>
     <key>bottom-chord</key>
     <seq>Ctrl+Alt+Down</seq>
     </SC>
@@ -293,12 +285,20 @@
     <seq>Left</seq>
     </SC>
   <SC>
+    <key>prev-track</key>
+    <seq>Alt+Up</seq>
+    </SC>
+  <SC>
     <key>prev-measure</key>
     <seq>Ctrl+Left</seq>
     </SC>
   <SC>
     <key>next-chord</key>
     <seq>Right</seq>
+    </SC>
+  <SC>
+    <key>next-track</key>
+    <seq>Alt+Down</seq>
     </SC>
   <SC>
     <key>next-measure</key>
