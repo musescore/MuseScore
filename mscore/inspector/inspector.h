@@ -295,11 +295,8 @@ class InspectorSlur : public InspectorBase {
 class InspectorEmpty : public InspectorBase {
       Q_OBJECT
 
-      QLabel* message;
-
    public:
       InspectorEmpty(QWidget* parent);
-      ~InspectorEmpty();
       };
 
 } // namespace Ms
