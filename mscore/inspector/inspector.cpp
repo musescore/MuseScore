@@ -611,13 +611,7 @@ InspectorSlur::InspectorSlur(QWidget* parent)
 InspectorEmpty::InspectorEmpty(QWidget* parent)
       :InspectorBase(parent)
       {
-      message = new QLabel(tr("Select an element to display its properties"));
-      _layout->insertWidget(_layout->count()-1, message);
-      }
-
-InspectorEmpty::~InspectorEmpty()
-      {
-      delete message;
+      setToolTip(tr("Select an element to display its properties"));
       }
 
 #if 0
