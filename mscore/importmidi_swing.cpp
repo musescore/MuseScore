@@ -134,9 +134,13 @@ void SwingDetector::checkShuffle()
 
 void SwingDetector::applySwing()
       {
+      if (elements.size() != 2 && elements.size() != 3)
+            return;
+
       Tuplet *tuplet = nullptr;
       for (ChordRest *el: elements) {
             el->setDurationType(TDuration::V_EIGHT);
+            el->setDuration(Fraction(1, 8));
             el->setDots(0);
             if (el->tuplet()) {
                   if (!tuplet)
@@ -144,8 +148,23 @@ void SwingDetector::applySwing()
                   el->setTuplet(nullptr);
                   }
             }
-      if (tuplet)
-            delete tuplet;
+      if (elements.size() == 3) {
+                  // remove central rest
+            ChordRest *cr = elements[1];
+            cr->score()->removeElement(cr);
+            }
+
+      ChordRest *first = elements.front();
+      int startTick = first->segment()->tick();
+      ChordRest *last = elements.back();
+      last->segment()->remove(last);
+      Segment* s = last->measure()->getSegment(last, startTick + MScore::division / 2);
+      s->add(last);
+
+      if (tuplet) {
+                  // delete tuplet
+            tuplet->score()->removeElement(tuplet);
+            }
       if (!swingApplied)
             swingApplied = true;
       }
