@@ -73,7 +73,6 @@ p, li { white-space: pre-wrap; }
           </StaffText>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="3" n="16"/>
           <Note>
             <Events>
               <Event>
@@ -90,7 +89,6 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="1" n="16"/>
           <Note>
             <Events>
               <Event>
@@ -107,7 +105,6 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="3" n="16"/>
           <Note>
             <Events>
               <Event>
@@ -124,7 +121,6 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="1" n="16"/>
           <Note>
             <Events>
               <Event>
@@ -141,7 +137,6 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="3" n="16"/>
           <Note>
             <Events>
               <Event>
@@ -158,7 +153,6 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="1" n="16"/>
           <Note>
             <Events>
               <Event>
@@ -175,7 +169,6 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="3" n="16"/>
           <Note>
             <Events>
               <Event>
@@ -192,7 +185,6 @@ p, li { white-space: pre-wrap; }
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="1" n="16"/>
           <Note>
             <Events>
               <Event>

@@ -73,7 +73,6 @@ p, li { white-space: pre-wrap; }
           </StaffText>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="1" n="4"/>
           <Note>
             <Events>
               <Event>
@@ -88,7 +87,6 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>320</tick>
         <Chord>
           <durationType>eighth</durationType>
           <Note>
@@ -105,10 +103,8 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>480</tick>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="1" n="4"/>
           <Note>
             <Events>
               <Event>
@@ -123,7 +119,6 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>800</tick>
         <Chord>
           <durationType>eighth</durationType>
           <Note>
@@ -140,7 +135,6 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>960</tick>
         <Chord>
           <durationType>eighth</durationType>
           <Note>
@@ -157,11 +151,6 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>1120</tick>
-        <Rest>
-          <durationType>eighth</durationType>
-          </Rest>
-        <tick>1280</tick>
         <Chord>
           <durationType>eighth</durationType>
           <Note>
@@ -178,10 +167,8 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>1440</tick>
         <Chord>
           <durationType>eighth</durationType>
-          <duration z="1" n="4"/>
           <Note>
             <Events>
               <Event>
@@ -196,7 +183,6 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>1760</tick>
         <Chord>
           <durationType>eighth</durationType>
           <Note>
