@@ -1156,21 +1156,14 @@ Element* Note::drop(const DropData& data)
                   
             case BAGPIPE_EMBELLISHMENT:
                   {
-                  // TODO replace following temporary code
-                  qDebug("Note::drop BAGPIPE_EMBELLISHMENT %d", static_cast<BagpipeEmbellishment*>(e)->embelType());
-                  switch(static_cast<BagpipeEmbellishment*>(e)->embelType()) {
-                        case 0:
-                              score()->setGraceNote(ch, pitch(), NOTE_GRACE32, false, MScore::division/8);
-                              break;
-                        case 1:
-                              score()->setGraceNote(ch, 70, NOTE_GRACE32, false, MScore::division/8);
-                              break;
-                        case 2:
-                              score()->setGraceNote(ch, 70, NOTE_GRACE32, false, MScore::division/8);
-                              score()->setGraceNote(ch, 71, NOTE_GRACE32, false, MScore::division/8);
-                              break;
+                  BagpipeEmbellishment* b = static_cast<BagpipeEmbellishment*>(e);
+                  noteList nl = b->getNoteList();
+                  // add grace notes in reverse order, as setGraceNote adds a grace note
+                  // before the current note
+                  for (int i = nl.size() - 1; i >= 0; --i) {
+                        int p = BagpipeEmbellishment::BagpipeNoteInfoList[nl.at(i)].pitch;
+                        score()->setGraceNote(ch, p, NOTE_GRACE32, false, MScore::division/8);
                         }
-                  // end TODO
                   }
                   delete e;
                   break;

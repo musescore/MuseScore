@@ -58,6 +58,7 @@ static bool needsStaff(Element* e)
             case Element::KEYSIG:
             case Element::TIMESIG:
             case Element::REST:
+            case Element::BAGPIPE_EMBELLISHMENT:
                   return true;
             default:
                   return false;

@@ -17,6 +17,29 @@
 
 namespace Ms {
 
+typedef QList<int> noteList;
+
+//---------------------------------------------------------
+//   BagpipeEmbellishmentInfo
+//    name and notes for a BagpipeEmbellishment
+//---------------------------------------------------------
+
+struct BagpipeEmbellishmentInfo {
+      QString name;
+      QString notes;
+      };
+      
+//---------------------------------------------------------
+//   BagpipeEmbellishmentInfo
+//    name, staff line and pitch for a bagpipe note
+//---------------------------------------------------------
+
+struct BagpipeNoteInfo {
+      QString name;
+      int line;
+      int pitch;
+      };
+
 //---------------------------------------------------------
 //   BagpipeEmbellishment
 //    dummy element, used for drag&drop
@@ -35,6 +58,11 @@ class BagpipeEmbellishment : public Element {
       void setEmbelType(int val)                  { _embelType = val;                       }
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
+      virtual void draw(QPainter*) const;
+      static BagpipeEmbellishmentInfo BagpipeEmbellishmentList[];
+      static int nEmbellishments();
+      static BagpipeNoteInfo BagpipeNoteInfoList[];
+      noteList getNoteList() const;
       };
 
 
