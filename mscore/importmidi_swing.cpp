@@ -187,8 +187,23 @@ bool SwingDetector::areAllNonTuplets() const
       return true;
       }
 
-
 // ---------------------------------------------------------------
+
+QString swingCaption(MidiOperation::Swing swingType)
+      {
+      QString caption;
+      switch (swingType) {
+            case MidiOperation::Swing::SWING:
+                  caption = "Swing";
+                  break;
+            case MidiOperation::Swing::SHUFFLE:
+                  caption = "Shuffle";
+                  break;
+            case MidiOperation::Swing::NONE:
+                  break;
+            }
+      return caption;
+      }
 
 void detectSwing(Staff *staff, MidiOperation::Swing swingType)
       {
@@ -209,7 +224,7 @@ void detectSwing(Staff *staff, MidiOperation::Swing swingType)
                         // add swing label to the score
             StaffText* st = new StaffText(score);
             st->setTextStyleType(TEXT_STYLE_STAFF);
-            st->setText("Swing");
+            st->setText(swingCaption(swingType));
             Segment *seg = score->firstSegment(Segment::SegChordRest);
             st->setParent(seg);
             st->setTrack(strack);   // voice == 0
