@@ -669,21 +669,12 @@ Palette* MuseScore::newBagpipeEmbellishmentPalette()
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe Embellishments"));
       sp->setMag(0.8);
-      sp->setGrid(42, 38);
+      sp->setGrid(60, 70);
       
-      // embellishment types
-      struct {
-            int type;
-            const char* name;
-            } t[] = {
-            { 0,       QT_TRANSLATE_NOOP("Palette", "Same pitch as note") },
-            { 1,       QT_TRANSLATE_NOOP("Palette", "Fixed pitch") },
-            { 2,       QT_TRANSLATE_NOOP("Palette", "Double fixed pitch") },
-            };
-      for (unsigned i = 0; i < sizeof(t)/sizeof(*t); ++i) {
+      for (unsigned i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
             BagpipeEmbellishment* b  = new BagpipeEmbellishment(gscore);
-            b->setEmbelType(t[i].type); // TODO
-            sp->append(b, t[i].name);
+            b->setEmbelType(i);
+            sp->append(b, BagpipeEmbellishment::BagpipeEmbellishmentList[i].name);
             }
       return sp;
       }
