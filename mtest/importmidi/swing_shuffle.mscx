@@ -69,7 +69,7 @@ p, li { white-space: pre-wrap; }
           </TimeSig>
         <StaffText>
           <style>Staff</style>
-          <text>Swing</text>
+          <text>Shuffle</text>
           </StaffText>
         <Chord>
           <durationType>eighth</durationType>
