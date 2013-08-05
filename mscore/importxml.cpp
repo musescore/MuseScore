@@ -4060,6 +4060,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     else if (lineType == "dashed")
                                           slur[slurNo]->setLineType(2);
                                     slur[slurNo]->setTick(cr->tick());
+                                    slur[slurNo]->setStartElement(cr);
                                     }
                               else
                                     endSlur = true;
@@ -4074,6 +4075,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               score->addElement(slur[slurNo]);
                               if (endSlur) {
                                     slur[slurNo]->setTick(cr->tick());
+                                    slur[slurNo]->setStartElement(cr);
                                     slur[slurNo] = 0;
                                     }
                               }
@@ -4081,11 +4083,11 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
                                     slur[slurNo]->setTick2(cr->tick());
-                                    // slur[slurNo]->setEnd(tick, trk + voice);
+                                    slur[slurNo]->setEndElement(cr);
                                     }
                               else {
-                                    // slur[slurNo]->setEnd(tick, trk + voice);
                                     slur[slurNo]->setTick2(cr->tick());
+                                    slur[slurNo]->setEndElement(cr);
                                     slur[slurNo] = 0;
                                     }
                               }
