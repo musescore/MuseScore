@@ -86,7 +86,9 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                   e.unknown();
                   break;
                   }
-
+            QString version = e.attribute("version", "NONE");
+            if(version != MSC_VERSION)
+                  break;
             int tickStart     = e.intAttribute("tick", 0);
             int tickLen       = e.intAttribute("len", 0);
             int srcStaffStart = e.intAttribute("staff", 0);
