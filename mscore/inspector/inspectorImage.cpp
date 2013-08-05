@@ -19,7 +19,8 @@
 namespace Ms {
 
 enum {
-      AUTOSCALE, SIZE_W, SIZE_H, SCALE_W, SCALE_H,
+      COLOR, VISIBLE, OFF_X, OFF_Y,                   // Element controls
+      AUTOSCALE, SIZE_W, SIZE_H, SCALE_W, SCALE_H,    // Image controls
       LOCK_RATIO, SIZE_IS_SPATIUM
       };
 
@@ -114,6 +115,7 @@ void InspectorImage::valueChanged(int idx)
                   b2->blockSignals(true);
                   b2->setValue(h);
                   b2->blockSignals(false);
+                  InspectorBase::valueChanged(SIZE_H);
                   }
             updateScaleFromSize(QSizeF(b1->value(), b2->value()));
             }
@@ -125,6 +127,7 @@ void InspectorImage::valueChanged(int idx)
                   b1->blockSignals(true);
                   b1->setValue(w);
                   b1->blockSignals(false);
+                  InspectorBase::valueChanged(SIZE_W);
                   }
             updateScaleFromSize(QSizeF(b1->value(), b2->value()));
             }
@@ -142,6 +145,7 @@ void InspectorImage::valueChanged(int idx)
                   b4->blockSignals(true);
                   b4->setValue(w);
                   b4->blockSignals(false);
+                  InspectorBase::valueChanged(SCALE_H);
                   }
             updateSizeFromScale(QSizeF(b3->value(), b4->value()));
             }
@@ -159,6 +163,7 @@ void InspectorImage::valueChanged(int idx)
                   b3->blockSignals(true);
                   b3->setValue(w);
                   b3->blockSignals(false);
+                  InspectorBase::valueChanged(SCALE_W);
                   }
             updateSizeFromScale(QSizeF(b3->value(), b4->value()));
             }
