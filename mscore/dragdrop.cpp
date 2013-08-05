@@ -437,9 +437,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::ACCIDENTAL_BRACKET:
                         {
                         Element* el = 0;
-                        printf("drop\n");
                         foreach(const Element* e, elementsAt(pos)) {
-                              printf("   ===%s\n", e->name());
                               if (e->acceptDrop(this, pos, dragElement)) {
                                     el = const_cast<Element*>(e);
                                     break;
