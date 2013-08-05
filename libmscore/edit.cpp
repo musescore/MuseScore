@@ -567,7 +567,12 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   if (fm == firstMeasure() && (fm->len() != fm->timesig())) {
                         // handle upbeat
                         undoChangeProperty(fm, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
-                        score->rewriteMeasures(fm->nextMeasure(), ns);
+                        Measure* m = fm->nextMeasure();
+                        Segment* s = m->findSegment(Segment::SegTimeSig, m->tick());
+                        if (!s) {
+                              // there is something to rewrite
+                              score->rewriteMeasures(fm->nextMeasure(), ns);
+                              }
                         }
                   else {
                         score->rewriteMeasures(fm, ns);
