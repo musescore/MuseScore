@@ -124,7 +124,7 @@
         <double>-100.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>100.000000000000000</double>
+        <double>200.000000000000000</double>
        </property>
        <property name="singleStep">
         <double>0.500000000000000</double>
@@ -185,10 +185,10 @@
         <string extracomment="spatium unit">sp</string>
        </property>
        <property name="minimum">
-        <double>-10.000000000000000</double>
+        <double>-200.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>10.000000000000000</double>
+        <double>300.000000000000000</double>
        </property>
        <property name="singleStep">
         <double>0.500000000000000</double>
