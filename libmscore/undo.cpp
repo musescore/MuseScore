@@ -2352,7 +2352,7 @@ static void updateTextStyle(void* a, Element* e)
             Text* text = static_cast<Text*>(e);
             if (text->styled() && text->textStyle().name() == s) {
                   text->setTextStyle(text->score()->textStyle(s));
-                  text->styleChanged();
+                  text->textStyleChanged();
                   }
             }
       }
@@ -2429,8 +2429,10 @@ static void updateTimeSigs(void*, Element* e)
 
 static void updateTextStyle2(void*, Element* e)
       {
-      if (!e->isText())
+      if (!e->isText()) {
+            e->styleChanged();
             return;
+            }
 
       if (e->type() == Element::HARMONY)
             static_cast<Harmony*>(e)->render();

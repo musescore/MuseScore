@@ -1269,10 +1269,10 @@ QFont Text::font() const
       }
 
 //---------------------------------------------------------
-//   styleChanged
+//   textStyleChanged
 //---------------------------------------------------------
 
-void Text::styleChanged()
+void Text::textStyleChanged()
       {
       if (styled()) {
             if (_styleIndex != TEXT_STYLE_UNKNOWN)
@@ -1292,7 +1292,7 @@ void Text::setScore(Score* s)
             return;
       Element::setScore(s);
       // TODO: handle custom text styles
-      styleChanged();
+      textStyleChanged();
       }
 
 //---------------------------------------------------------

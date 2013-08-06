@@ -534,8 +534,17 @@ class Element : public QObject {
       virtual QVariant getProperty(P_ID) const;
       virtual bool setProperty(P_ID, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      virtual void resetProperty(P_ID id)          {
+            QVariant v = propertyDefault(id);
+            if (v.isValid())
+                  setProperty(id, v);
+            }
+      virtual bool propertyIsStyled(P_ID) const { return false; }
+
       void undoChangeProperty(P_ID, const QVariant&);
       void undoPushProperty(P_ID);
+
+      virtual void styleChanged() {}
       };
 
 //---------------------------------------------------------

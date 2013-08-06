@@ -528,7 +528,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
 
                         if (!nText->styled() && (nText->textStyle() != ot->textStyle())) {
                               tt->setTextStyle(nText->textStyle());
-                              tt->styleChanged();
+                              tt->textStyleChanged();
                               tt->setModified(true);
                               }
 

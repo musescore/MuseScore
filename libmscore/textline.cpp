@@ -263,6 +263,7 @@ QVariant TextLineSegment::getProperty(P_ID id) const
       {
       switch (id) {
             case P_LINE_COLOR:
+            case P_LINE_WIDTH:
                   return textLine()->getProperty(id);
             default:
                   return LineSegment::getProperty(id);
@@ -277,6 +278,7 @@ bool TextLineSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
             case P_LINE_COLOR:
+            case P_LINE_WIDTH:
                   return textLine()->setProperty(id, v);
             default:
                   return LineSegment::setProperty(id, v);
@@ -291,6 +293,7 @@ QVariant TextLineSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
             case P_LINE_COLOR:
+            case P_LINE_WIDTH:
                   return textLine()->propertyDefault(id);
             default:
                   return LineSegment::propertyDefault(id);
@@ -455,7 +458,7 @@ void TextLine::writeProperties(Xml& xml, const TextLine* proto) const
                   xml.tag("endHookType", int(_endHookType));
             }
 
-      if (proto == 0 || proto->lineWidth() != _lineWidth)
+      if (!propertyIsStyled(P_LINE_WIDTH))
             xml.tag("lineWidth", _lineWidth.val());
       if (proto == 0 || proto->lineStyle() != _lineStyle)
             xml.tag("lineStyle", int(_lineStyle));
@@ -613,6 +616,8 @@ QVariant TextLine::getProperty(P_ID id) const
       switch (id) {
             case P_LINE_COLOR:
                   return _lineColor;
+            case P_LINE_WIDTH:
+                  return _lineWidth.val();
             default:
                   return SLine::getProperty(id);
             }
@@ -627,6 +632,9 @@ bool TextLine::setProperty(P_ID id, const QVariant& v)
       switch (id) {
             case P_LINE_COLOR:
                   _lineColor = v.value<QColor>();
+                  break;
+            case P_LINE_WIDTH:
+                  _lineWidth = Spatium(v.toDouble());
                   break;
             default:
                   return SLine::setProperty(id, v);
@@ -643,6 +651,8 @@ QVariant TextLine::propertyDefault(P_ID id) const
       switch (id) {
             case P_LINE_COLOR:
                   return MScore::defaultColor;
+            case P_LINE_WIDTH:
+                  return 0.15;
             default:
                   return SLine::propertyDefault(id);
             }

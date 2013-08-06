@@ -70,7 +70,7 @@ class Marker : public Text {
       void undoSetLabel(const QString& s);
       void undoSetMarkerType(MarkerType t);
 
-      virtual void styleChanged();
+//      virtual void styleChanged();
       virtual bool systemFlag() const  { return true;        }
       virtual void adjustReadPos();
 

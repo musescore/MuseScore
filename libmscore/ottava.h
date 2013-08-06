@@ -47,6 +47,9 @@ class OttavaSegment : public TextLineSegment {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      virtual bool propertyIsStyled(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+      virtual void styleChanged() override;
       };
 
 //---------------------------------------------------------
@@ -69,6 +72,7 @@ class Ottava : public TextLine {
    private:
       Q_PROPERTY(OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
       OttavaType _ottavaType;
+      bool lineWidthIsStyled;
 
    protected:
       QString text;
@@ -79,24 +83,29 @@ class Ottava : public TextLine {
 
    public:
       Ottava(Score* s);
-      virtual Ottava* clone() const    { return new Ottava(*this); }
-      virtual ElementType type() const { return OTTAVA; }
+      virtual Ottava* clone() const override { return new Ottava(*this); }
+      virtual ElementType type() const override { return OTTAVA; }
 
       void setOttavaType(OttavaType val);
       OttavaType ottavaType() const { return _ottavaType; }
       void undoSetOttavaType(OttavaType val);
 
-      virtual LineSegment* createLineSegment();
-      virtual void layout();
+      virtual LineSegment* createLineSegment() override;
+      virtual void layout() override;
       int pitchShift() const { return _pitchShift; }
-      virtual void endEdit();
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader& de);
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
-      virtual void setYoff(qreal);
+      virtual void endEdit() override;
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader& de) override;
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+      virtual bool propertyIsStyled(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+
+      virtual void setYoff(qreal) override;
+      virtual void styleChanged() override;
       };
 
 
