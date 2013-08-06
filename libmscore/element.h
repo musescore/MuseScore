@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -244,6 +244,7 @@ class Element : public QObject {
             ACCIDENTAL_BRACKET,
             ICON,
             OSSIA,
+            BAGPIPE_EMBELLISHMENT,
 
             MAXTYPE
             };
