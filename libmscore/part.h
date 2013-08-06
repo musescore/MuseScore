@@ -34,6 +34,7 @@ class Part : public QObject {
       Q_OBJECT
 
       Q_PROPERTY(QString partName READ partName)
+      Q_PROPERTY(bool show READ show WRITE setShow)
 
       Score* _score;
 
