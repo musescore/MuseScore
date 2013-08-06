@@ -1688,7 +1688,7 @@ Element* Score::move(const QString& cmd)
             // retrieve last element of section list
             if (!selection().elements().isEmpty())
                   el = selection().elements().last();
-            if(!el)                             // no element, no party!
+            if (!el)                            // no element, no party!
                   return 0;
             // get parent of element and process accordingly:
             // trg is the element to select on "next-chord" cmd
@@ -1744,7 +1744,7 @@ Element* Score::move(const QString& cmd)
                   return trg;
                   }
             // if no chordrest found, do nothing
-            if(cr == 0)
+            if (cr == 0)
                   return 0;
             // if some chordrest found, continue with default processing
             }
@@ -1795,9 +1795,23 @@ Element* Score::move(const QString& cmd)
                   moveInputPos(crc->segment());
                   }
             }
+      else if (cmd == "next-track") {
+            el = nextTrack(cr);
+            if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
+                  ChordRest* crc = static_cast<ChordRest*>(el);
+                  moveInputPos(crc->segment());
+                  }
+            }
+      else if (cmd == "prev-track") {
+            el = prevTrack(cr);
+            if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
+                  ChordRest* crc = static_cast<ChordRest*>(el);
+                  moveInputPos(crc->segment());
+                  }
+            }
       if (el) {
             if (el->type() == Element::CHORD)
-                  el = static_cast<Chord*>(el)->downNote();
+                  el = static_cast<Chord*>(el)->upNote();       // originally downNote
             _playNote = true;
             select(el, SELECT_SINGLE, 0);
             }
