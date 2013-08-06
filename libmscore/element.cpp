@@ -81,6 +81,7 @@
 #include "marker.h"
 #include "jump.h"
 #include "noteline.h"
+#include "bagpembell.h"
 
 namespace Ms {
 
@@ -177,7 +178,8 @@ static const char* elementNames[] = {
       QT_TRANSLATE_NOOP("elementName", "FBox"),
       QT_TRANSLATE_NOOP("elementName", "AccidentalBracket"),
       QT_TRANSLATE_NOOP("elementName", "Icon"),
-      QT_TRANSLATE_NOOP("elementName", "Ossia")
+      QT_TRANSLATE_NOOP("elementName", "Ossia"),
+      QT_TRANSLATE_NOOP("elementName", "BagpipeEmbellishment")
       };
 
 //---------------------------------------------------------
@@ -1317,6 +1319,7 @@ Element* Element::create(ElementType type, Score* score)
             case TAB_DURATION_SYMBOL: return new TabDurationSymbol(score);
             case OSSIA:               return new Ossia(score);
             case IMAGE:             return new Image(score);
+            case BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(score);
 
             case TEXTLINE_SEGMENT:    // return new TextLineSegment(score);
 
