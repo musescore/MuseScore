@@ -119,43 +119,37 @@ static bool noteLessThan(const Note* n1, const Note* n2)
 
 //---------------------------------------------------------
 //   upAlt
-//    select next higher pitched note in chord
+//    return next higher pitched note in chord
+//    move to previous track if at top of chord
 //---------------------------------------------------------
 
-Note* Score::upAlt(Element* element)
+ChordRest* Score::upAlt(Element* element)
       {
       Element* re = 0;
       if (element->type() == Element::REST) {
-            if (_is.track() <= 0)
-                  return 0;
-            _is.setTrack(_is.track() - 1);
-            re = searchNote(static_cast<Rest*>(element)->tick(), _is.track());
+            Rest* rest = static_cast<Rest*>(element);
+            re = prevTrack(rest);
             }
       else if (element->type() == Element::NOTE) {
-            // find segment
-            Chord* chord     = static_cast<Note*>(element)->chord();
-            Segment* segment = chord->segment();
-
-            // collect all notes for this segment in noteList:
-            QList<Note*> rnl;
-            int tracks = nstaves() * VOICES;
-            for (int track = 0; track < tracks; ++track) {
-                  Element* el = segment->element(track);
-                  if (!el || el->type() != Element::CHORD)
-                        continue;
-                  rnl.append(static_cast<Chord*>(el)->notes());
-                  qSort(rnl.begin(), rnl.end(), noteLessThan);
-                  int idx = rnl.indexOf(static_cast<Note*>(element));
-                  if (idx < rnl.size()-1)
-                        ++idx;
-                  re = rnl.value(idx);
+            Chord* chord = static_cast<Note*>(element)->chord();
+            QList<Note*> notes = chord->notes();
+            // qSort(notes.begin(), notes.end(), noteLessThan);
+            int idx = notes.indexOf(static_cast<Note*>(element));
+            if (idx < notes.size()-1) {
+                  ++idx;
+                  re = notes.value(idx);
+                  }
+            else {
+                  re = prevTrack(chord);
+                  if (re->track() == chord->track())
+                        re = element;
                   }
             }
       if (re == 0)
             return 0;
       if (re->type() == Element::CHORD)
             re = ((Chord*)re)->notes().front();
-      return (Note*)re;
+      return (ChordRest*)re;
       }
 
 //---------------------------------------------------------
@@ -170,46 +164,37 @@ Note* Score::upAltCtrl(Note* note) const
 
 //---------------------------------------------------------
 //   downAlt
-//    goto next note with lower pitch in chord or to
-//    top note in next staff
+//    return next lower pitched note in chord
+//    move to previous track if at bottom of chord
 //---------------------------------------------------------
 
-Note* Score::downAlt(Element* element)
+ChordRest* Score::downAlt(Element* element)
       {
       Element* re = 0;
-      int staves = nstaves();
       if (element->type() == Element::REST) {
-            if ((_is.track() + 1) >= staves * VOICES)
-                  return 0;
-            _is.setTrack(_is.track() + 1);
-            re = searchNote(static_cast<Rest*>(element)->tick(), _is.track());
+            Rest* rest = static_cast<Rest*>(element);
+            re = nextTrack(rest);
             }
       else if (element->type() == Element::NOTE) {
-            // find segment
-            Chord* chord     = static_cast<Note*>(element)->chord();
-            Segment* segment = chord->segment();
-
-            // collect all notes for this segment in noteList:
-            QList<Note*> rnl;
-            int tracks = nstaves() * VOICES;
-            for (int track = 0; track < tracks; ++track) {
-                  Element* el = segment->element(track);
-                  if (!el || el->type() != Element::CHORD)
-                        continue;
-                  rnl.append(static_cast<Chord*>(el)->notes());
-                  qSort(rnl.begin(), rnl.end(), noteLessThan);
-                  int idx = rnl.indexOf(static_cast<Note*>(element));
-                  if (idx)
-                        --idx;
-                  re = rnl.value(idx);
+            Chord* chord = static_cast<Note*>(element)->chord();
+            QList<Note*> notes = chord->notes();
+            // qSort(notes.begin(), notes.end(), noteLessThan);
+            int idx = notes.indexOf(static_cast<Note*>(element));
+            if (idx > 0) {
+                  --idx;
+                  re = notes.value(idx);
+                  }
+            else {
+                  re = nextTrack(chord);
+                  if (re->track() == chord->track())
+                        re = element;
                   }
             }
-
       if (re == 0)
             return 0;
       if (re->type() == Element::CHORD)
-            re = static_cast<Chord*>(re)->notes().back();
-      return (Note*)re;
+            re = ((Chord*)re)->notes().back();
+      return (ChordRest*)re;
       }
 
 //---------------------------------------------------------
@@ -267,6 +252,77 @@ ChordRest* Score::downStaff(ChordRest* cr)
                   return static_cast<ChordRest*>(el);
             }
       return 0;
+      }
+
+//---------------------------------------------------------
+//   nextTrack
+//    returns note at or just before current (cr) position
+//    in next track for this measure
+//    that contains such an element
+//---------------------------------------------------------
+
+ChordRest* Score::nextTrack(ChordRest* cr)
+      {
+      if (!cr)
+            return 0;
+
+      Element* el = 0;
+      Measure* measure = cr->measure();
+      int track = cr->track();
+      int tracks = nstaves() * VOICES;
+
+      while (!el) {
+            // find next non-empty track
+            while (++track < tracks){
+                  if (measure->hasVoice(track))
+                        break;
+                  }
+            // no more tracks, return original element
+            if (track == tracks)
+                  return cr;
+            // find element at same or previous segment within this track
+            for (Segment* segment = cr->segment(); segment != 0; segment = segment->prev(Segment::SegChordRest)) {
+                  el = segment->element(track);
+                  if (el)
+                        break;
+                  }
+            }
+      return static_cast<ChordRest*>(el);
+      }
+
+//---------------------------------------------------------
+//   prevTrack
+//    returns ChordRest at or just before current (cr) position
+//    in previous track for this measure
+//    that contains such an element
+//---------------------------------------------------------
+
+ChordRest* Score::prevTrack(ChordRest* cr)
+      {
+      if (!cr)
+            return 0;
+
+      Element* el = 0;
+      Measure* measure = cr->measure();
+      int track = cr->track();
+
+      while (!el) {
+            // find next non-empty track
+            while (--track >= 0){
+                  if (measure->hasVoice(track))
+                        break;
+                  }
+            // no more tracks, return original element
+            if (track < 0)
+                  return cr;
+            // find element at same or previous segment within this track
+            for (Segment* segment = cr->segment(); segment != 0; segment = segment->prev(Segment::SegChordRest)) {
+                  el = segment->element(track);
+                  if (el)
+                        break;
+                  }
+            }
+      return static_cast<ChordRest*>(el);
       }
 
 //---------------------------------------------------------
