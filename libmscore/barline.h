@@ -110,6 +110,8 @@ class BarLine : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID propertyId) const;
 
+      virtual qreal mag() const;
+
       static void  setCtrlDrag(bool val)  { ctrlDrag = val; }
       static qreal layoutWidth(Score*, BarLineType, qreal mag);
       };
