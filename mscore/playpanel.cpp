@@ -55,6 +55,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
       metronomeButton->setDefaultAction(getAction("metronome"));
+      loopButton->setDefaultAction(getAction("loop"));
 
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));

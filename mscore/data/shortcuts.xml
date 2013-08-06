@@ -557,6 +557,10 @@
     <seq>Space</seq>
     </SC>
   <SC>
+    <key>loop</key>
+    <seq>Shift+Space</seq>
+    </SC>
+  <SC>
     <key>play-prev-chord</key>
     <seq>Left</seq>
     </SC>
