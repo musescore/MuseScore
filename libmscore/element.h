@@ -55,6 +55,14 @@ typedef QFlags<ElementFlag> ElementFlags;
 Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags)
 
 //---------------------------------------------------------
+//   PropertyStyle
+//---------------------------------------------------------
+
+enum class PropertyStyle {
+      NOSTYLE, UNSTYLED, STYLED
+      };
+
+//---------------------------------------------------------
 ///   \brief Unit of horizontal measure
 //---------------------------------------------------------
 
@@ -319,7 +327,6 @@ class Element : public QObject {
       virtual void setScore(Score* s)         { _score = s;         }
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
-//      Element* parentChordRest();
       Element* findMeasure();
 
       qreal spatium() const;
@@ -539,7 +546,7 @@ class Element : public QObject {
             if (v.isValid())
                   setProperty(id, v);
             }
-      virtual bool propertyIsStyled(P_ID) const { return false; }
+      virtual PropertyStyle propertyIsStyled(P_ID) const { return PropertyStyle::NOSTYLE; }
 
       void undoChangeProperty(P_ID, const QVariant&);
       void undoPushProperty(P_ID);
