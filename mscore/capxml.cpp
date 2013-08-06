@@ -1100,7 +1100,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode);
 Score::FileError importCapXml(Score* score, const QString& name)
       {
       qDebug("importCapXml(score %p, name %s)", score, qPrintable(name));
-      QZipReader uz(name);
+      MQZipReader uz(name);
       if (!uz.exists()) {
             qDebug("importCapXml: <%s> not found", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "file not found");

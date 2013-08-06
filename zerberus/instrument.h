@@ -18,7 +18,7 @@
 
 class Zerberus;
 class XmlReader;
-class QZipReader;
+class MQZipReader;
 struct Zone;
 struct SfzRegion;
 class Sample;
@@ -38,7 +38,7 @@ class ZInstrument {
       bool loadFromFile(const QString&);
       bool loadSfz(const QString&);
       bool loadFromDir(const QString&);
-      bool read(const QByteArray&, QZipReader*, const QString& path);
+      bool read(const QByteArray&, MQZipReader*, const QString& path);
 
    public:
       ZInstrument(Zerberus*);
@@ -52,7 +52,7 @@ class ZInstrument {
       QString path() const                  { return instrumentPath; }
       const std::list<Zone*>& zones() const { return _zones;  }
       std::list<Zone*>& zones()             { return _zones;  }
-      Sample* readSample(const QString& s, QZipReader* uz);
+      Sample* readSample(const QString& s, MQZipReader* uz);
       void addZone(Zone* z)                 { _zones.push_back(z); }
       void addRegion(SfzRegion&);
 
