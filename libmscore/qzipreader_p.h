@@ -61,22 +61,22 @@
 
 QT_BEGIN_NAMESPACE
 
-class QZipReaderPrivate;
+class MQZipReaderPrivate;
 
-class Q_GUI_EXPORT QZipReader
+class MQZipReader
 {
 public:
-    QZipReader(const QString &fileName, QIODevice::OpenMode mode = QIODevice::ReadOnly );
+    MQZipReader(const QString &fileName, QIODevice::OpenMode mode = QIODevice::ReadOnly );
 
-    explicit QZipReader(QIODevice *device);
-    ~QZipReader();
+    explicit MQZipReader(QIODevice *device);
+    ~MQZipReader();
 
     QIODevice* device() const;
 
     bool isReadable() const;
     bool exists() const;
 
-    struct Q_GUI_EXPORT FileInfo
+    struct FileInfo
     {
         FileInfo();
         FileInfo(const FileInfo &other);
@@ -114,8 +114,8 @@ public:
     void close();
 
 private:
-    QZipReaderPrivate *d;
-    Q_DISABLE_COPY(QZipReader)
+    MQZipReaderPrivate *d;
+    Q_DISABLE_COPY(MQZipReader)
 };
 
 QT_END_NAMESPACE

@@ -492,7 +492,7 @@ Extract rootfile from compressed MusicXML file \a qf, return true if OK and fals
 
 static bool extractRootfile(QFile* qf, QByteArray& data)
       {
-      QZipReader f(qf->fileName());
+      MQZipReader f(qf->fileName());
       data = f.fileData("META-INF/container.xml");
 
       QDomDocument container;
