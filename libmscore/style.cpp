@@ -429,7 +429,7 @@ StyleData::StyleData()
             { ST_minMeasureWidth,             StyleVal(Spatium(5.0)) },
             { ST_barWidth,                    StyleVal(Spatium(0.16)) },      // 0.1875
             { ST_doubleBarWidth,              StyleVal(Spatium(0.16)) },
-            { ST_endBarWidth,                 StyleVal(Spatium(0.3)) },       // 0.5
+            { ST_endBarWidth,                 StyleVal(Spatium(0.5)) },       // 0.5
             { ST_doubleBarDistance,           StyleVal(Spatium(0.30)) },
             { ST_endBarDistance,              StyleVal(Spatium(0.40)) },     // 0.3
             { ST_repeatBarTips,               StyleVal(false) },
