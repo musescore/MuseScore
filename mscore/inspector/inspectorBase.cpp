@@ -269,16 +269,25 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                         break;
                   }
             ii.w->setEnabled(!valuesAreDifferent);
+            if (ii.r)
+                  ii.r->setEnabled(valuesAreDifferent);
             }
       else {
-            bool styledValue = inspector->el().front()->propertyIsStyled(ii.t);
-            if (styledValue)
+            PropertyStyle styledValue = inspector->el().front()->propertyIsStyled(ii.t);
+            bool reset;
+            if (styledValue == PropertyStyle::STYLED) {
                   ii.w->setStyleSheet("* { color: gray }");
+                  reset = false;
+                  }
+            else if (styledValue == PropertyStyle::UNSTYLED) {
+                  ii.w->setStyleSheet("");
+                  reset = true;
+                  }
             else
-                  ii.w->setStyleSheet(""); // * { color: white }");
+                  reset = !isDefault(ii);
+            if (ii.r)
+                  ii.r->setEnabled(reset);
             }
-      if (ii.r)
-            ii.r->setEnabled(!isDefault(ii) || valuesAreDifferent);
       }
 
 //---------------------------------------------------------

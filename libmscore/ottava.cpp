@@ -83,11 +83,11 @@ QVariant OttavaSegment::propertyDefault(P_ID id) const
 //   propertyIsStyled
 //---------------------------------------------------------
 
-bool OttavaSegment::propertyIsStyled(P_ID id) const
+PropertyStyle OttavaSegment::propertyIsStyled(P_ID id) const
       {
       switch (id) {
             case P_OTTAVA_TYPE:
-                  return false;
+                  return PropertyStyle::NOSTYLE;
 
             case P_LINE_WIDTH:
                   return ottava()->propertyIsStyled(id);
@@ -134,7 +134,7 @@ Ottava::Ottava(Score* s)
       _ottavaType = OttavaType(-1);
       setOttavaType(OTTAVA_8VA);
       setLineWidth(score()->styleS(ST_ottavaLineWidth));
-      lineWidthIsStyled = true;
+      lineWidthIsStyled = PropertyStyle::STYLED;
       }
 
 //---------------------------------------------------------
@@ -247,7 +247,7 @@ void Ottava::read(XmlReader& e)
                   setOttavaType(OttavaType(e.readInt()));
             else if (tag == "lineWidth") {
                   setLineWidth(Spatium(e.readDouble()));
-                  lineWidthIsStyled = false;
+                  lineWidthIsStyled = PropertyStyle::UNSTYLED;
                   }
             else if (!TextLine::readProperties(e))
                   e.unknown();
@@ -280,7 +280,7 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
                   setOttavaType(OttavaType(val.toInt()));
                   break;
             case P_LINE_WIDTH:
-                  lineWidthIsStyled = false;
+                  lineWidthIsStyled = PropertyStyle::UNSTYLED;
                   // fall through
             default:
                   if (!TextLine::setProperty(propertyId, val))
@@ -330,11 +330,11 @@ void Ottava::setYoff(qreal val)
 //   propertyIsStyled
 //---------------------------------------------------------
 
-bool Ottava::propertyIsStyled(P_ID id) const
+PropertyStyle Ottava::propertyIsStyled(P_ID id) const
       {
       switch (id) {
             case P_OTTAVA_TYPE:
-                  return false;
+                  return PropertyStyle::NOSTYLE;
 
             case P_LINE_WIDTH:
                   return lineWidthIsStyled;
@@ -356,7 +356,7 @@ void Ottava::resetProperty(P_ID id)
 
             case P_LINE_WIDTH:
                   setLineWidth(score()->styleS(ST_ottavaLineWidth));
-                  lineWidthIsStyled = true;
+                  lineWidthIsStyled = PropertyStyle::STYLED;
                   break;
 
             default:
@@ -371,7 +371,7 @@ void Ottava::resetProperty(P_ID id)
 
 void Ottava::styleChanged()
       {
-      if (lineWidthIsStyled)
+      if (lineWidthIsStyled == PropertyStyle::STYLED)
             setLineWidth(score()->styleS(ST_ottavaLineWidth));
       }
 

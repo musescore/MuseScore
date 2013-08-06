@@ -49,6 +49,9 @@ class VoltaSegment : public TextLineSegment {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      virtual PropertyStyle propertyIsStyled(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+      virtual void styleChanged() override;
       };
 
 //---------------------------------------------------------
@@ -65,6 +68,7 @@ class Volta : public TextLine {
 
       VoltaType _voltaType;
       QList<int> _endings;
+      PropertyStyle lineWidthIsStyled;
 
    public:
       Volta(Score* s);
@@ -91,6 +95,10 @@ class Volta : public TextLine {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      virtual PropertyStyle propertyIsStyled(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+      virtual void styleChanged() override;
+
       virtual void setYoff(qreal);
       };
 
