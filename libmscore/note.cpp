@@ -53,6 +53,7 @@
 #include "notedot.h"
 #include "spanner.h"
 #include "glissando.h"
+#include "bagpembell.h"
 
 namespace Ms {
 
@@ -1000,6 +1001,7 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8B)
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
+         || (noteType() == NOTE_NORMAL && type == BAGPIPE_EMBELLISHMENT)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
@@ -1147,6 +1149,20 @@ Element* Note::drop(const DropData& data)
                               score()->undoAddElement(s);
                               }
                               break;
+                        }
+                  }
+                  delete e;
+                  break;
+                  
+            case BAGPIPE_EMBELLISHMENT:
+                  {
+                  BagpipeEmbellishment* b = static_cast<BagpipeEmbellishment*>(e);
+                  noteList nl = b->getNoteList();
+                  // add grace notes in reverse order, as setGraceNote adds a grace note
+                  // before the current note
+                  for (int i = nl.size() - 1; i >= 0; --i) {
+                        int p = BagpipeEmbellishment::BagpipeNoteInfoList[nl.at(i)].pitch;
+                        score()->setGraceNote(ch, p, NOTE_GRACE32, false, MScore::division/8);
                         }
                   }
                   delete e;
