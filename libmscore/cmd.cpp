@@ -1625,11 +1625,17 @@ bool Score::processMidiInput()
 //   moveInputPos
 //---------------------------------------------------------
 
-void Score::moveInputPos(Segment* s)
+void Score::moveInputPos(Element* e)
       {
-      if (s == 0)
+      if (e == 0)
             return;
-      _is.setSegment(s);
+      Segment* s;
+      if (e->isChordRest())
+            s = static_cast<ChordRest*>(e)->segment();
+      else
+            s = static_cast<Segment*>(e);
+      if (s->type() == Element::SEGMENT)
+            _is.setSegment(s);
       }
 
 //---------------------------------------------------------
@@ -1783,31 +1789,23 @@ Element* Score::move(const QString& cmd)
             }
       else if (cmd == "next-measure") {
             el = nextMeasure(cr);
-            if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
-                  ChordRest* crc = static_cast<ChordRest*>(el);
-                  moveInputPos(crc->segment());
-                  }
+            if (noteEntryMode() && el && el->isChordRest())
+                  moveInputPos(el);
             }
       else if (cmd == "prev-measure") {
             el = prevMeasure(cr);
-            if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
-                  ChordRest* crc = static_cast<ChordRest*>(el);
-                  moveInputPos(crc->segment());
-                  }
+            if (noteEntryMode() && el && el->isChordRest())
+                  moveInputPos(el);
             }
       else if (cmd == "next-track") {
             el = nextTrack(cr);
-            if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
-                  ChordRest* crc = static_cast<ChordRest*>(el);
-                  moveInputPos(crc->segment());
-                  }
+            if (noteEntryMode() && el && el->isChordRest())
+                  moveInputPos(el);
             }
       else if (cmd == "prev-track") {
             el = prevTrack(cr);
-            if (noteEntryMode() && el && (el->type() == Element::CHORD || el->type() == Element::REST)){
-                  ChordRest* crc = static_cast<ChordRest*>(el);
-                  moveInputPos(crc->segment());
-                  }
+            if (noteEntryMode() && el && el->isChordRest())
+                  moveInputPos(el);
             }
       if (el) {
             if (el->type() == Element::CHORD)
