@@ -363,9 +363,9 @@ class Score : public QObject {
       void cmdSetBeamMode(BeamMode);
       void cmdFlip();
       Note* getSelectedNote();
-      ChordRest* upAlt(Element*);
+      Element* upAlt(Element*);
       Note* upAltCtrl(Note*) const;
-      ChordRest* downAlt(Element*);
+      Element* downAlt(Element*);
       Note* downAltCtrl(Note*) const;
       ChordRest* upStaff(ChordRest* cr);
       ChordRest* downStaff(ChordRest* cr);
@@ -374,7 +374,7 @@ class Score : public QObject {
       void moveUp(Chord*);
       void moveDown(Chord*);
 
-      void moveInputPos(Segment* s);
+      void moveInputPos(Element* s);
       void moveToPrevInputPos();
       void moveToNextInputPos();
 

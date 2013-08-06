@@ -119,21 +119,21 @@ static bool noteLessThan(const Note* n1, const Note* n2)
 
 //---------------------------------------------------------
 //   upAlt
+//    element: Note() or Rest()
+//    return: Note() or Rest()
+//
 //    return next higher pitched note in chord
 //    move to previous track if at top of chord
 //---------------------------------------------------------
 
-ChordRest* Score::upAlt(Element* element)
+Element* Score::upAlt(Element* element)
       {
       Element* re = 0;
-      if (element->type() == Element::REST) {
-            Rest* rest = static_cast<Rest*>(element);
-            re = prevTrack(rest);
-            }
+      if (element->type() == Element::REST)
+            re = prevTrack(static_cast<Rest*>(element));
       else if (element->type() == Element::NOTE) {
             Chord* chord = static_cast<Note*>(element)->chord();
-            QList<Note*> notes = chord->notes();
-            // qSort(notes.begin(), notes.end(), noteLessThan);
+            const QList<Note*>& notes = chord->notes();
             int idx = notes.indexOf(static_cast<Note*>(element));
             if (idx < notes.size()-1) {
                   ++idx;
@@ -148,8 +148,8 @@ ChordRest* Score::upAlt(Element* element)
       if (re == 0)
             return 0;
       if (re->type() == Element::CHORD)
-            re = ((Chord*)re)->notes().front();
-      return (ChordRest*)re;
+            re = static_cast<Chord*>(re)->notes().front();
+      return re;
       }
 
 //---------------------------------------------------------
@@ -168,17 +168,14 @@ Note* Score::upAltCtrl(Note* note) const
 //    move to previous track if at bottom of chord
 //---------------------------------------------------------
 
-ChordRest* Score::downAlt(Element* element)
+Element* Score::downAlt(Element* element)
       {
       Element* re = 0;
-      if (element->type() == Element::REST) {
-            Rest* rest = static_cast<Rest*>(element);
-            re = nextTrack(rest);
-            }
+      if (element->type() == Element::REST)
+            re = nextTrack(static_cast<Rest*>(element));
       else if (element->type() == Element::NOTE) {
             Chord* chord = static_cast<Note*>(element)->chord();
-            QList<Note*> notes = chord->notes();
-            // qSort(notes.begin(), notes.end(), noteLessThan);
+            const QList<Note*>& notes = chord->notes();
             int idx = notes.indexOf(static_cast<Note*>(element));
             if (idx > 0) {
                   --idx;
@@ -193,8 +190,8 @@ ChordRest* Score::downAlt(Element* element)
       if (re == 0)
             return 0;
       if (re->type() == Element::CHORD)
-            re = ((Chord*)re)->notes().back();
-      return (ChordRest*)re;
+            re = static_cast<Chord*>(re)->notes().back();
+      return re;
       }
 
 //---------------------------------------------------------
@@ -266,7 +263,7 @@ ChordRest* Score::nextTrack(ChordRest* cr)
       if (!cr)
             return 0;
 
-      Element* el = 0;
+      ChordRest* el = 0;
       Measure* measure = cr->measure();
       int track = cr->track();
       int tracks = nstaves() * VOICES;
@@ -281,13 +278,13 @@ ChordRest* Score::nextTrack(ChordRest* cr)
             if (track == tracks)
                   return cr;
             // find element at same or previous segment within this track
-            for (Segment* segment = cr->segment(); segment != 0; segment = segment->prev(Segment::SegChordRest)) {
-                  el = segment->element(track);
+            for (Segment* segment = cr->segment(); segment; segment = segment->prev(Segment::SegChordRest)) {
+                  el = static_cast<ChordRest*>(segment->element(track));
                   if (el)
                         break;
                   }
             }
-      return static_cast<ChordRest*>(el);
+      return el;
       }
 
 //---------------------------------------------------------
@@ -302,7 +299,7 @@ ChordRest* Score::prevTrack(ChordRest* cr)
       if (!cr)
             return 0;
 
-      Element* el = 0;
+      ChordRest* el = 0;
       Measure* measure = cr->measure();
       int track = cr->track();
 
@@ -317,12 +314,12 @@ ChordRest* Score::prevTrack(ChordRest* cr)
                   return cr;
             // find element at same or previous segment within this track
             for (Segment* segment = cr->segment(); segment != 0; segment = segment->prev(Segment::SegChordRest)) {
-                  el = segment->element(track);
+                  el = static_cast<ChordRest*>(segment->element(track));
                   if (el)
                         break;
                   }
             }
-      return static_cast<ChordRest*>(el);
+      return el;
       }
 
 //---------------------------------------------------------
@@ -334,14 +331,12 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior)
       if (!element)
             return 0;
 
-      MeasureBase* mb = element->measure()->next();
-      while (mb && ((mb->type() != Element::MEASURE) || (mb->type() == Element::MEASURE && static_cast<Measure*>(mb)->multiMeasure() < 0)))
-            mb = mb->next();
-
-      Measure* measure = static_cast<Measure*>(mb);
+      Measure* measure = element->measure()->nextMeasure();
+      if (measure == 0)
+            return 0;
 
       int endTick = element->measure()->last()->nextChordRest(element->track())->tick();
-      bool last = false;
+      bool last   = false;
 
       if (selection().state() == SEL_RANGE) {
             if (element->tick() != endTick && selection().tickEnd() <= endTick) {
