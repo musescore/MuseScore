@@ -175,6 +175,7 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
 void LineProperties::accept()
       {
       tl->setLineWidth(Spatium(lineWidth->value()));
+
       tl->setLineStyle(Qt::PenStyle(lineStyle->currentIndex() + 1));
       tl->setLineColor(linecolor->color());
 

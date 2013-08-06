@@ -66,6 +66,7 @@ bool VoltaSegment::setProperty(P_ID id, const QVariant& v)
 QVariant VoltaSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_LINE_WIDTH:
             case P_VOLTA_TYPE:
                   return volta()->propertyDefault(id);
             default:
@@ -91,6 +92,7 @@ Volta::Volta(Score* s)
       setBeginHookHeight(hook);
       setEndHookHeight(hook);
       setAnchor(ANCHOR_MEASURE);
+      setLineWidth(score()->styleS(ST_voltaLineWidth));
       }
 
 //---------------------------------------------------------
@@ -116,10 +118,6 @@ void Volta::setVoltaType(VoltaType val)
 
 void Volta::layout()
       {
-      setLineWidth(score()->styleS(ST_voltaLineWidth));
-      Spatium hook(score()->styleS(ST_voltaHook));
-      setBeginHookHeight(hook);
-      setEndHookHeight(hook);
       TextLine::layout();
       }
 
@@ -262,6 +260,8 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
       switch(propertyId) {
             case P_VOLTA_TYPE:
                   return 0;
+            case P_LINE_WIDTH:
+                  return score()->styleS(ST_voltaLineWidth).val();
             default:
                   return TextLine::propertyDefault(propertyId);
             }

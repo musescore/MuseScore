@@ -268,8 +268,15 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
+            ii.w->setEnabled(!valuesAreDifferent);
             }
-      ii.w->setEnabled(!valuesAreDifferent);
+      else {
+            bool styledValue = inspector->el().front()->propertyIsStyled(ii.t);
+            if (styledValue)
+                  ii.w->setStyleSheet("* { color: gray }");
+            else
+                  ii.w->setStyleSheet(""); // * { color: white }");
+            }
       if (ii.r)
             ii.r->setEnabled(!isDefault(ii) || valuesAreDifferent);
       }
@@ -358,7 +365,9 @@ void InspectorBase::resetClicked(int i)
       P_ID id      = ii.t;
       for (int i = 0; i < ii.parent; ++i)
             e = e->parent();
-      QVariant def = e->propertyDefault(id);
+      e->resetProperty(id);
+//      QVariant def = e->propertyDefault(id);
+      QVariant def = e->getProperty(id);
       QWidget* w   = ii.w;
 
       w->blockSignals(true);
