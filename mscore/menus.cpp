@@ -73,6 +73,7 @@
 #include "shortcut.h"
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
+#include "libmscore/bagpembell.h"
 
 namespace Ms {
 
@@ -658,6 +659,25 @@ Palette* MuseScore::newGraceNotePalette()
       populateIconPalette(notePalette, gna);
       return notePalette;
       }
+      
+//---------------------------------------------------------
+//   newBagpipeEmbellishmentPalette
+//---------------------------------------------------------
+
+Palette* MuseScore::newBagpipeEmbellishmentPalette()
+      {
+      Palette* sp = new Palette;
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe Embellishments"));
+      sp->setMag(0.8);
+      sp->setGrid(60, 70);
+      
+      for (unsigned i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
+            BagpipeEmbellishment* b  = new BagpipeEmbellishment(gscore);
+            b->setEmbelType(i);
+            sp->append(b, BagpipeEmbellishment::BagpipeEmbellishmentList[i].name);
+            }
+      return sp;
+      }
 
 //---------------------------------------------------------
 //   newLinesPalette
@@ -955,6 +975,7 @@ void MuseScore::populatePalette()
       paletteBox->addPalette(newRepeatsPalette());
       paletteBox->addPalette(newTextPalette());
       paletteBox->addPalette(newBreaksPalette());
+      paletteBox->addPalette(newBagpipeEmbellishmentPalette());
 
       //-----------------------------------
       //    staff state changes
