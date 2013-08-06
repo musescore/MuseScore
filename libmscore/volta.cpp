@@ -52,6 +52,7 @@ QVariant VoltaSegment::getProperty(P_ID id) const
 bool VoltaSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_LINE_WIDTH:
             case P_VOLTA_TYPE:
                   return volta()->setProperty(id, v);
             default:
@@ -75,6 +76,51 @@ QVariant VoltaSegment::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
+//   propertyIsStyled
+//---------------------------------------------------------
+
+PropertyStyle VoltaSegment::propertyIsStyled(P_ID id) const
+      {
+      switch (id) {
+            case P_VOLTA_TYPE:
+                  return PropertyStyle::NOSTYLE;
+
+            case P_LINE_WIDTH:
+                  return volta()->propertyIsStyled(id);
+
+            default:
+                  return TextLineSegment::propertyIsStyled(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void VoltaSegment::resetProperty(P_ID id)
+      {
+      switch (id) {
+            case P_VOLTA_TYPE:
+                  return;
+
+            case P_LINE_WIDTH:
+                  return volta()->resetProperty(id);
+
+            default:
+                  return TextLineSegment::resetProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//---------------------------------------------------------
+
+void VoltaSegment::styleChanged()
+      {
+      volta()->styleChanged();
+      }
+
+//---------------------------------------------------------
 //   Volta
 //---------------------------------------------------------
 
@@ -92,7 +138,9 @@ Volta::Volta(Score* s)
       setBeginHookHeight(hook);
       setEndHookHeight(hook);
       setAnchor(ANCHOR_MEASURE);
+
       setLineWidth(score()->styleS(ST_voltaLineWidth));
+      lineWidthIsStyled = PropertyStyle::STYLED;
       }
 
 //---------------------------------------------------------
@@ -166,6 +214,10 @@ void Volta::read(XmlReader& e)
                         _endings.append(i);
                         }
                   }
+            else if (tag == "lineWidth") {
+                  setLineWidth(Spatium(e.readDouble()));
+                  lineWidthIsStyled = PropertyStyle::UNSTYLED;
+                  }
             else if (!TextLine::readProperties(e))
                   e.unknown();
             }
@@ -208,7 +260,7 @@ LineSegment* Volta::createLineSegment()
 
 bool Volta::hasEnding(int repeat) const
       {
-      foreach(int ending, endings()) {
+      foreach (int ending, endings()) {
             if (ending == repeat)
                   return true;
             }
@@ -221,7 +273,7 @@ bool Volta::hasEnding(int repeat) const
 
 QVariant Volta::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_VOLTA_TYPE:
                   return int(voltaType());
             default:
@@ -237,10 +289,13 @@ QVariant Volta::getProperty(P_ID propertyId) const
 bool Volta::setProperty(P_ID propertyId, const QVariant& val)
       {
       score()->addRefresh(pageBoundingRect());
-      switch(propertyId) {
+      switch (propertyId) {
             case P_VOLTA_TYPE:
                   setVoltaType(VoltaType(val.toInt()));
                   break;
+            case P_LINE_WIDTH:
+                  lineWidthIsStyled = PropertyStyle::UNSTYLED;
+                  // fall through
             default:
                   if (!TextLine::setProperty(propertyId, val))
                         return false;
@@ -260,8 +315,10 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
       switch(propertyId) {
             case P_VOLTA_TYPE:
                   return 0;
+
             case P_LINE_WIDTH:
                   return score()->styleS(ST_voltaLineWidth).val();
+
             default:
                   return TextLine::propertyDefault(propertyId);
             }
@@ -284,6 +341,55 @@ void Volta::undoSetVoltaType(VoltaType val)
 void Volta::setYoff(qreal val)
       {
       rUserYoffset() += (val - score()->styleS(ST_voltaY).val()) * spatium();
+      }
+
+//---------------------------------------------------------
+//   propertyIsStyled
+//---------------------------------------------------------
+
+PropertyStyle Volta::propertyIsStyled(P_ID id) const
+      {
+      switch (id) {
+            case P_VOLTA_TYPE:
+                  return PropertyStyle::NOSTYLE;
+
+            case P_LINE_WIDTH:
+                  return lineWidthIsStyled;
+
+            default:
+                  return TextLine::propertyIsStyled(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void Volta::resetProperty(P_ID id)
+      {
+      switch (id) {
+            case P_VOLTA_TYPE:
+                  return;
+
+            case P_LINE_WIDTH:
+                  setLineWidth(score()->styleS(ST_voltaLineWidth));
+                  lineWidthIsStyled = PropertyStyle::STYLED;
+                  break;
+
+            default:
+                  return TextLine::resetProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    reset all styled values to actual style
+//---------------------------------------------------------
+
+void Volta::styleChanged()
+      {
+      if (lineWidthIsStyled == PropertyStyle::STYLED)
+            setLineWidth(score()->styleS(ST_voltaLineWidth));
       }
 
 }

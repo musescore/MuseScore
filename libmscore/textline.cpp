@@ -458,7 +458,7 @@ void TextLine::writeProperties(Xml& xml, const TextLine* proto) const
                   xml.tag("endHookType", int(_endHookType));
             }
 
-      if (!propertyIsStyled(P_LINE_WIDTH))
+      if (propertyIsStyled(P_LINE_WIDTH) != PropertyStyle::STYLED)
             xml.tag("lineWidth", _lineWidth.val());
       if (proto == 0 || proto->lineStyle() != _lineStyle)
             xml.tag("lineStyle", int(_lineStyle));
