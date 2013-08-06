@@ -19,23 +19,23 @@
      id="defs3000" />
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#333333"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="16"
-     inkscape:cx="-5.5053789"
-     inkscape:cy="16.374596"
+     inkscape:zoom="8"
+     inkscape:cx="-7.0200877"
+     inkscape:cy="5.0765414"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="1123"
-     inkscape:window-x="0"
-     inkscape:window-y="25"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="571"
+     inkscape:window-height="432"
+     inkscape:window-x="1407"
+     inkscape:window-y="608"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata3003">
     <rdf:RDF>
@@ -55,6 +55,7 @@
     <path
        inkscape:connector-curvature="0"
        d="M 8.0005168,12.43968 C 10.451589,12.434992 12.4351,10.451431 12.439755,8.0002587 12.435067,5.5480508 10.451589,3.5639406 8.0005168,3.5598023 5.5484109,3.563943 3.564382,5.5480508 3.5602445,8.0002587 c 0,0.9894687 0.3253266,1.8956632 0.8720211,2.6327213 L 5.3544562,9.7112695 6.5212882,14.071037 2.1627352,12.902088 3.140268,11.924515 C 2.2729016,10.852805 1.75,9.4847212 1.75,8.0002587 1.7515625,4.5482375 4.5486383,1.7510344 8.0005168,1.75 11.452913,1.7510312 14.25,4.5482375 14.25,8.0002587 14.25,11.45228 11.452913,14.25 8.0005168,14.25 l 0,-1.81032 z"
-       id="path4" />
+       id="path4"
+       style="fill:#ffffff;fill-opacity:1" />
   </g>
 </svg>
