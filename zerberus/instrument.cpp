@@ -40,10 +40,10 @@ Sample::~Sample()
 //   readSample
 //---------------------------------------------------------
 
-Sample* ZInstrument::readSample(const QString& s, QZipReader* uz)
+Sample* ZInstrument::readSample(const QString& s, MQZipReader* uz)
       {
       if (uz) {
-            QList<QZipReader::FileInfo> fi = uz->fileInfoList();
+            QList<MQZipReader::FileInfo> fi = uz->fileInfoList();
 
             buf = uz->fileData(s);
             if (buf.isEmpty()) {
@@ -156,7 +156,7 @@ bool ZInstrument::loadFromFile(const QString& path)
             printf("<%s> not a orchestra file\n", qPrintable(path));
             return false;
             }
-      QZipReader uz(path);
+      MQZipReader uz(path);
       if (!uz.exists()) {
             printf("Instrument::load: %s not found\n", qPrintable(path));
             return false;
@@ -174,7 +174,7 @@ bool ZInstrument::loadFromFile(const QString& path)
 //    read orchestra
 //---------------------------------------------------------
 
-bool ZInstrument::read(const QByteArray& buf, QZipReader* /*uz*/, const QString& /*path*/)
+bool ZInstrument::read(const QByteArray& buf, MQZipReader* /*uz*/, const QString& /*path*/)
       {
       Ms::XmlReader e(buf);
       while (e.readNextStartElement()) {
