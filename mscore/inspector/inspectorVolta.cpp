@@ -35,6 +35,7 @@ InspectorVolta::InspectorVolta(QWidget* parent)
             { P_USER_OFF,    0, 0, e.offsetX,    e.resetX          },
             { P_USER_OFF,    1, 0, e.offsetY,    e.resetY          },
             { P_LINE_COLOR,  0, 0, l.lineColor,  l.resetLineColor  },
+            { P_LINE_WIDTH,  0, 0, l.lineWidth,  l.resetLineWidth  },
             { P_VOLTA_TYPE,  0, 0, v.voltaType,  v.resetVoltaType  }
             };
 

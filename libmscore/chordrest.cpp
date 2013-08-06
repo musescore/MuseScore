@@ -370,6 +370,7 @@ void ChordRest::layoutArticulations()
             return;
       qreal _spatium  = spatium();
       qreal _spStaff  = _spatium * staff()->lineDistance(); // scaled to staff line distance for vert. pos. within a staff
+
       if (type() == CHORD) {
             if (_articulations.size() == 1) {
                   static_cast<Chord*>(this)->layoutArticulation(_articulations[0]);
@@ -419,6 +420,7 @@ void ChordRest::layoutArticulations()
                         }
                   }
             }
+
       qreal x         = centerX();
       qreal distance0 = score()->styleS(ST_propertyDistance).val()     * _spatium;
       qreal distance1 = score()->styleS(ST_propertyDistanceHead).val() * _spatium;

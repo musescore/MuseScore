@@ -83,10 +83,10 @@ void Marker::setMarkerType(MarkerType t)
 //   styleChanged
 //---------------------------------------------------------
 
-void Marker::styleChanged()
-      {
-      setMarkerType(_markerType);
-      }
+// void Marker::styleChanged()
+//      {
+//      setMarkerType(_markerType);
+//      }
 
 //---------------------------------------------------------
 //   adjustReadPos

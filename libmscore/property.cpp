@@ -150,6 +150,7 @@ static const PropertyData propertyList[] = {
       { P_DIAGONAL,            false, 0,               T_BOOL   },
       { P_GROUPS,              false, 0,               T_GROUPS },
       { P_LINE_COLOR,          false, 0,               T_COLOR  },
+      { P_LINE_WIDTH,          false, 0,               T_SPATIUM  },
 
       { P_LASSO_POS,           false, 0,               T_POINT_MM },
       { P_LASSO_SIZE,          false, 0,               T_SIZE_MM  },
