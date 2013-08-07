@@ -76,7 +76,7 @@ class Accidental;
 class Spanner;
 class BarLine;
 
-// #define DEBUG_UNDO
+#define DEBUG_UNDO
 
 #ifdef DEBUG_UNDO
 #define UNDO_NAME(a)  virtual const char* name() const { return a; }
@@ -1196,12 +1196,13 @@ class ChangeProperty : public UndoCommand {
       Element* element;
       P_ID id;
       QVariant property;
+      PropertyStyle propertyStyle;
 
       void flip();
 
    public:
-      ChangeProperty(Element* e, P_ID i, const QVariant& v)
-         : element(e), id(i), property(v) {}
+      ChangeProperty(Element* e, P_ID i, const QVariant& v, PropertyStyle ps = PropertyStyle::NOSTYLE)
+         : element(e), id(i), property(v), propertyStyle(ps) {}
       P_ID getId() const  { return id; }
       UNDO_NAME("ChangeProperty");
       };

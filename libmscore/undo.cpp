@@ -339,17 +339,17 @@ void SaveState::redo()
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st)
+void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st, PropertyStyle ps)
       {
       if (propertyLink(t) && e->links()) {
             foreach(Element* e, *e->links()) {
                   if (e->getProperty(t) != st)
-                        undo(new ChangeProperty(e, t, st));
+                        undo(new ChangeProperty(e, t, st, ps));
                   }
             }
       else {
             if (e->getProperty(t) != st)
-                  undo(new ChangeProperty(e, t, st));
+                  undo(new ChangeProperty(e, t, st, ps));
             }
       }
 
@@ -3092,9 +3092,24 @@ void ChangePartProperty::flip()
 
 void ChangeProperty::flip()
       {
-      QVariant v = element->getProperty(id);
-      element->setProperty(id, property);
+#ifdef DEBUG_UNDO
+      qDebug()
+            << "ChangeProperty::flip(): "
+            << propertyName(id)
+            << " "
+            << element->getProperty(id)
+            << " -> "
+            << property
+            ;
+#endif
+      QVariant v       = element->getProperty(id);
+      PropertyStyle ps = element->propertyStyle(id);
+      if (propertyStyle == PropertyStyle::STYLED)
+            element->resetProperty(id);
+      else
+            element->setProperty(id, property);
       property = v;
+      propertyStyle = ps;
       }
 
 //---------------------------------------------------------
