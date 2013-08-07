@@ -1291,6 +1291,8 @@ void createNotes(const Fraction &lastTick, QList<MTrack> &tracks, MidiType midiT
                   if ((e.type() == ME_META) && (e.metaType() != META_LYRIC))
                         mt.processMeta(ie.first, e);
                   }
+            if (midiType == MT_UNKNOWN)
+                  midiType = MT_GM;
             setTrackInfo(midiType, mt);
                         // pass current track index to the convertTrack function
                         //   through MidiImportOperations
