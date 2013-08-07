@@ -667,9 +667,9 @@ Palette* MuseScore::newGraceNotePalette()
 Palette* MuseScore::newBagpipeEmbellishmentPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe Embellishments"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe"));
       sp->setMag(0.8);
-      sp->setGrid(60, 70);
+      sp->setGrid(60, 80);
       
       for (unsigned i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
             BagpipeEmbellishment* b  = new BagpipeEmbellishment(gscore);
