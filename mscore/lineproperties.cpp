@@ -78,9 +78,7 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       populateLineSymbolComboBox(continueSymbol);
       populateLineSymbolComboBox(endSymbol);
 
-      lineWidth->setValue(tl->lineWidth().val());
       lineStyle->setCurrentIndex(int(tl->lineStyle() - 1));
-      linecolor->setColor(tl->lineColor());
 
       if (tl->beginText())
             _beginText = new Text(*tl->beginText());
@@ -174,10 +172,8 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
 
 void LineProperties::accept()
       {
-      tl->setLineWidth(Spatium(lineWidth->value()));
 
       tl->setLineStyle(Qt::PenStyle(lineStyle->currentIndex() + 1));
-      tl->setLineColor(linecolor->color());
 
       tl->setBeginHookHeight(Spatium(beginHookHeight->value()));
       tl->setBeginHook(beginHook->isChecked());
