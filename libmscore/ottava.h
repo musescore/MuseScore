@@ -47,7 +47,7 @@ class OttavaSegment : public TextLineSegment {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
-      virtual PropertyStyle propertyIsStyled(P_ID) const override;
+      virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
       };
@@ -72,7 +72,7 @@ class Ottava : public TextLine {
    private:
       Q_PROPERTY(OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
       OttavaType _ottavaType;
-      PropertyStyle lineWidthIsStyled;
+      PropertyStyle lineWidthStyle;
 
    protected:
       QString text;
@@ -101,7 +101,7 @@ class Ottava : public TextLine {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyStyle propertyIsStyled(P_ID) const override;
+      virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
 
       virtual void setYoff(qreal) override;

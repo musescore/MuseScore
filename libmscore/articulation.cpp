@@ -190,7 +190,8 @@ Articulation::Articulation(Score* s)
 void Articulation::setArticulationType(ArticulationType idx)
       {
       _articulationType = idx;
-      _anchor           = score()->style()->articulationAnchor(idx);
+      _anchor           = score()->style()->articulationAnchor(_articulationType);
+      anchorStyle       = PropertyStyle::STYLED;
       _timeStretch      = articulationList[articulationType()].timeStretch;
       }
 
@@ -209,8 +210,10 @@ void Articulation::read(XmlReader& e)
                   _channelName = e.attribute("name");
                   e.readNext();
                   }
-            else if (tag == "anchor")
+            else if (tag == "anchor") {
                   _anchor = ArticulationAnchor(e.readInt());
+                  anchorStyle = PropertyStyle::UNSTYLED;
+                  }
             else if (tag == "direction") {
                   setProperty(P_DIRECTION, Ms::getProperty(P_DIRECTION, e));
                   }
@@ -235,7 +238,7 @@ void Articulation::write(Xml& xml) const
       if (_timeStretch != 1.0)
             xml.tag("timeStretch", _timeStretch);
       Element::writeProperties(xml);
-      if (_anchor != score()->style()->articulationAnchor(articulationType()))
+      if (anchorStyle == PropertyStyle::UNSTYLED)
             xml.tag("anchor", int(_anchor));
       xml.etag();
       }
@@ -450,9 +453,14 @@ QVariant Articulation::getProperty(P_ID propertyId) const
 bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
-            case P_DIRECTION:           setDirection(MScore::Direction(v.toInt())); break;
-            case P_ARTICULATION_ANCHOR: setAnchor(ArticulationAnchor(v.toInt())); break;
+      switch (propertyId) {
+            case P_DIRECTION:
+                  setDirection(MScore::Direction(v.toInt()));
+                  break;
+            case P_ARTICULATION_ANCHOR:
+                  anchorStyle = PropertyStyle::UNSTYLED;
+                  setAnchor(ArticulationAnchor(v.toInt()));
+                  break;
             case P_TIME_STRETCH:
                   setTimeStretch(v.toDouble());
                   score()->fixTicks();
@@ -493,6 +501,59 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
                   break;
             }
       return Element::propertyDefault(propertyId);
+      }
+
+//---------------------------------------------------------
+//   propertyStyle
+//---------------------------------------------------------
+
+PropertyStyle Articulation::propertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_DIRECTION:
+            case P_TIME_STRETCH:
+                  return PropertyStyle::NOSTYLE;
+
+            case P_ARTICULATION_ANCHOR:
+                  return anchorStyle;
+
+            default:
+                  break;
+            }
+      return Element::propertyStyle(id);
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void Articulation::resetProperty(P_ID id)
+      {
+      switch (id) {
+            case P_DIRECTION:
+            case P_TIME_STRETCH:
+                  return;
+
+            case P_ARTICULATION_ANCHOR:
+                  setProperty(id, propertyDefault(id));
+                  anchorStyle = PropertyStyle::STYLED;
+                  return;
+
+            default:
+                  break;
+            }
+      Element::resetProperty(id);
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    reset all styled values to actual style
+//---------------------------------------------------------
+
+void Articulation::styleChanged()
+      {
+      if (anchorStyle == PropertyStyle::STYLED)
+            _anchor = score()->style()->articulationAnchor(_articulationType);
       }
 
 }

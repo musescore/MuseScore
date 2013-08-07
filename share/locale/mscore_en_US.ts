@@ -231,7 +231,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">s</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Up</source>
@@ -1114,10 +1114,6 @@ spatium unit</extracomment>
     <message>
         <source>Stem Direction:</source>
         <translation>Stem direction:</translation>
-    </message>
-    <message>
-        <source>Auto</source>
-        <translation>s</translation>
     </message>
     <message>
         <source>Up</source>
@@ -3324,7 +3320,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">s</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Up</source>
@@ -3418,7 +3414,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">s</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Up</source>
@@ -3481,7 +3477,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">s</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Up</source>
@@ -3980,7 +3976,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">s</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Top</source>
@@ -4446,7 +4442,7 @@ spatium unit</extracomment>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished">s</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Up</source>
@@ -5019,8 +5015,8 @@ spatium unit</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses 
-the freely available LAME library.  You must obtain %1 
+        <source>MuseScore does not export MP3 files directly, but instead uses
+the freely available LAME library.  You must obtain %1
 separately, and then locate the file for MuseScore.
 You only need to do this once.
 
@@ -13574,8 +13570,8 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The following file is locked: 
-%1 
+        <source>The following file is locked:
+%1
 
 Try saving to a different location.</source>
         <translation type="unfinished"></translation>

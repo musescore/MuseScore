@@ -546,7 +546,7 @@ class Element : public QObject {
             if (v.isValid())
                   setProperty(id, v);
             }
-      virtual PropertyStyle propertyIsStyled(P_ID) const { return PropertyStyle::NOSTYLE; }
+      virtual PropertyStyle propertyStyle(P_ID) const { return PropertyStyle::NOSTYLE; }
 
       void undoChangeProperty(P_ID, const QVariant&);
       void undoPushProperty(P_ID);

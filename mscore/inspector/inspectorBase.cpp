@@ -27,8 +27,9 @@ namespace Ms {
 InspectorBase::InspectorBase(QWidget* parent)
    : QWidget(parent)
       {
-      resetMapper = new QSignalMapper(this);
-      valueMapper = new QSignalMapper(this);
+      resetMapper  = new QSignalMapper(this);
+      valueMapper  = new QSignalMapper(this);
+      blockSignals = false;
 
       inspector = static_cast<Inspector*>(parent);
       _layout    = new QVBoxLayout;
@@ -96,6 +97,7 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       QWidget* w = ii.w;
 
       P_ID id  = ii.t;
+
       P_TYPE t = propertyType(id);
       if (t == T_POINT || t == T_SP_REAL)
             val = val.toDouble() / inspector->element()->score()->spatium();
@@ -189,7 +191,6 @@ bool InspectorBase::dirty() const
 void InspectorBase::setElement()
       {
       foreach (const InspectorItem& ii, iList) {
-            QWidget* w = ii.w;
             P_ID id    = ii.t;
             P_TYPE pt  = propertyType(id);
 
@@ -219,9 +220,9 @@ void InspectorBase::setElement()
                         val = QVariant(f.denominator());
                   }
 
-            w->blockSignals(true);
+            blockSignals = true;
             setValue(ii, val);
-            w->blockSignals(false);
+            blockSignals = false;
             checkDifferentValues(ii);
             }
       postInit();
@@ -229,6 +230,8 @@ void InspectorBase::setElement()
 
 //---------------------------------------------------------
 //   checkDifferentValues
+//    enable/disable reset button
+//    enable/disable value widget for multi selection
 //---------------------------------------------------------
 
 void InspectorBase::checkDifferentValues(const InspectorItem& ii)
@@ -273,9 +276,10 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   ii.r->setEnabled(valuesAreDifferent);
             }
       else {
-            PropertyStyle styledValue = inspector->el().front()->propertyIsStyled(ii.t);
+            PropertyStyle styledValue = inspector->el().front()->propertyStyle(ii.t);
             bool reset;
             if (styledValue == PropertyStyle::STYLED) {
+                  // does not work for QComboBox:
                   ii.w->setStyleSheet("* { color: gray }");
                   reset = false;
                   }
@@ -294,8 +298,11 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
 //   valueChanged
 //---------------------------------------------------------
 
-void InspectorBase::valueChanged(int idx)
+void InspectorBase::valueChanged(int idx, bool reset)
       {
+      if (blockSignals)
+            return;
+
       const InspectorItem& ii = iList[idx];
       P_ID id       = ii.t;
       P_TYPE pt     = propertyType(id);
@@ -307,17 +314,25 @@ void InspectorBase::valueChanged(int idx)
             for (int i = 0; i < ii.parent; ++i)
                   e = e->parent();
 
+            // reset sets property style UNSTYLED to STYLED
+
+            PropertyStyle ps = e->propertyStyle(id);
+            if (reset && ps == PropertyStyle::UNSTYLED)
+                  ps = PropertyStyle::STYLED;
+            else if (ps == PropertyStyle::STYLED)
+                  ps = PropertyStyle::UNSTYLED;
+
             QVariant val1 = e->getProperty(id);
             if (pt == T_SIZE || pt == T_SCALE || pt == T_SIZE_MM) {
                   qreal v   = val2.toDouble();
                   QSizeF sz = val1.toSizeF();
                   if (ii.sv == 0) {
                         if (sz.width() != v)
-                              score->undoChangeProperty(e, id, QVariant(QSizeF(v, sz.height())));
+                              score->undoChangeProperty(e, id, QVariant(QSizeF(v, sz.height())), ps);
                         }
                   else {
                         if (sz.height() != v)
-                              score->undoChangeProperty(e, id, QVariant(QSizeF(sz.width(), v)));
+                              score->undoChangeProperty(e, id, QVariant(QSizeF(sz.width(), v)), ps);
                         }
                   }
             else if (pt == T_POINT || pt == T_POINT_MM) {
@@ -325,11 +340,11 @@ void InspectorBase::valueChanged(int idx)
                   QPointF sz = val1.toPointF();
                   if (ii.sv == 0) {
                         if (sz.x() != v)
-                              score->undoChangeProperty(e, id, QVariant(QPointF(v, sz.y())));
+                              score->undoChangeProperty(e, id, QVariant(QPointF(v, sz.y())), ps);
                         }
                   else {
                         if (sz.y() != v)
-                              score->undoChangeProperty(e, id, QVariant(QPointF(sz.x(), v)));
+                              score->undoChangeProperty(e, id, QVariant(QPointF(sz.x(), v)), ps);
                         }
                   }
             else if (pt == T_FRACTION) {
@@ -339,20 +354,20 @@ void InspectorBase::valueChanged(int idx)
                         if (f.numerator() != v) {
                               QVariant va;
                               va.setValue(Fraction(v, f.denominator()));
-                              score->undoChangeProperty(e, id, va);
+                              score->undoChangeProperty(e, id, va, ps);
                               }
                         }
                   else {
                         if (f.denominator() != v) {
                               QVariant va;
                               va.setValue(Fraction(f.numerator(), v));
-                              score->undoChangeProperty(e, id, va);
+                              score->undoChangeProperty(e, id, va, ps);
                               }
                         }
                   }
             else {
-                  if (val1 != val2)
-                        score->undoChangeProperty(e, id, val2);
+                  if (val1 != val2 || (reset && ps != PropertyStyle::NOSTYLE))
+                        score->undoChangeProperty(e, id, val2, ps);
                   }
             }
       inspector->setInspectorEdit(true);
@@ -374,12 +389,10 @@ void InspectorBase::resetClicked(int i)
       P_ID id      = ii.t;
       for (int i = 0; i < ii.parent; ++i)
             e = e->parent();
-      e->resetProperty(id);
-//      QVariant def = e->propertyDefault(id);
-      QVariant def = e->getProperty(id);
+      QVariant def = e->propertyDefault(id);
       QWidget* w   = ii.w;
 
-      w->blockSignals(true);
+      blockSignals = true;
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(def.toDouble());
       else if (qobject_cast<QSpinBox*>(w))
@@ -394,9 +407,9 @@ void InspectorBase::resetClicked(int i)
             static_cast<Awl::ColorLabel*>(w)->setColor(def.value<QColor>());
       else
             qFatal("not supported widget %s", w->metaObject()->className());
-      w->blockSignals(false);
+      blockSignals = false;
 
-      valueChanged(i);
+      valueChanged(i, true);
       }
 
 //---------------------------------------------------------
