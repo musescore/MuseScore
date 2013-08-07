@@ -170,7 +170,7 @@ void Clef::layout1()
       {
       qreal smag     = mag();
       qreal _spatium = spatium();
-      qreal msp      = _spatium * smag;
+      qreal msp      = score()->spatium() * smag;
       qreal yoff     = 0.0;
 
       qDeleteAll(elements);
@@ -198,10 +198,11 @@ void Clef::layout1()
                   symbol->setSym(trebleclefSym);
                   yoff = 3.0 * curLineDist;
                   Symbol* number = new Symbol(score());
-                  symbol->setMag(smag);
+                  number->setMag(smag);
                   number->setSym(clefOneSym);
                   addElement(number, .6 * msp, -5.0 * msp + yoff * _spatium);
                   number = new Symbol(score());
+                  number->setMag(smag);
                   number->setSym(clefFiveSym);
                   addElement(number, 1.4 * msp, -5.0 * msp + yoff * _spatium);
                   }
@@ -211,7 +212,7 @@ void Clef::layout1()
                   symbol->setSym(trebleclefSym);
                   yoff = 3.0 * curLineDist;
                   Symbol* number = new Symbol(score());
-                  symbol->setMag(smag);
+                  number->setMag(smag);
                   number->setSym(clefEightSym);
                   addElement(number, 1.0 * msp, 4.0 * msp + yoff * _spatium);
                   }
@@ -225,7 +226,7 @@ void Clef::layout1()
                   symbol->setSym(bassclefSym);
                   yoff = 1.0 * curLineDist;
                   Symbol* number = new Symbol(score());
-                  symbol->setMag(smag);
+                  number->setMag(smag);
                   number->setSym(clefEightSym);
                   addElement(number, .5* msp, 4.5 * msp + yoff * _spatium);
                   }
@@ -235,10 +236,11 @@ void Clef::layout1()
                   symbol->setSym(bassclefSym);
                   yoff = 1.0 * curLineDist;
                   Symbol* number = new Symbol(score());
-                  symbol->setMag(smag);
+                  number->setMag(smag);
                   number->setSym(clefOneSym);
                   addElement(number, .3* msp, 4.5 * msp + yoff * _spatium);
                   number = new Symbol(score());
+                  number->setMag(smag);
                   number->setSym(clefFiveSym);
                   addElement(number, 1.1 * msp, 4.5 * msp + yoff * _spatium);
                   }
@@ -305,10 +307,11 @@ void Clef::layout1()
                   symbol->setSym(bassclefSym);
                   yoff = 1.0 * curLineDist;
                   Symbol* number = new Symbol(score());
-                  symbol->setMag(smag);
+                  number->setMag(smag);
                   number->setSym(clefOneSym);
                   addElement(number, .3* msp, -1.5 * msp + yoff * _spatium);
                   number = new Symbol(score());
+                  number->setMag(smag);
                   number->setSym(clefFiveSym);
                   addElement(number, 1.1 * msp, -1.5 * msp + yoff * _spatium);
                   }
