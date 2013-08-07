@@ -1161,6 +1161,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                               // drum track
                   s->setInitialClef(CLEF_PERC);
                   part->instr()->setDrumset(smDrumset);
+                  part->instr()->setUseDrumset(true);
                   }
             else {
                   int avgPitch = findAveragePitch(track.chords.begin(), track.chords.end());
