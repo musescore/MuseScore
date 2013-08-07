@@ -65,6 +65,8 @@ PageSettings::PageSettings(QWidget* parent)
       connect(oddPageRightMargin,   SIGNAL(valueChanged(double)), SLOT(ormChanged(double)));
       connect(evenPageTopMargin,    SIGNAL(valueChanged(double)), SLOT(etmChanged(double)));
       connect(evenPageBottomMargin, SIGNAL(valueChanged(double)), SLOT(ebmChanged(double)));
+      connect(evenPageRightMargin,  SIGNAL(valueChanged(double)), SLOT(ermChanged(double)));
+      connect(evenPageLeftMargin,   SIGNAL(valueChanged(double)), SLOT(elmChanged(double)));
       connect(pageGroup,            SIGNAL(activated(int)),       SLOT(pageFormatSelected(int)));
       connect(spatiumEntry,         SIGNAL(valueChanged(double)), SLOT(spatiumChanged(double)));
       connect(pageOffsetEntry,      SIGNAL(valueChanged(int)),    SLOT(pageOffsetChanged(int)));
@@ -204,8 +206,8 @@ void PageSettings::updateValues()
 
       evenPageTopMargin->setEnabled(pf->twosided());
       evenPageBottomMargin->setEnabled(pf->twosided());
-      evenPageLeftMargin->setEnabled(false);
-      evenPageRightMargin->setEnabled(false);
+      evenPageLeftMargin->setEnabled(pf->twosided());
+      evenPageRightMargin->setEnabled(pf->twosided());
 
       if (twosided->isChecked()) {
             evenPageRightMargin->setValue(oddPageLeftMargin->value());
@@ -438,6 +440,52 @@ void PageSettings::etmChanged(double val)
       preview->score()->setPageFormat(pf);
 
       updatePreview(1);
+      }
+
+//---------------------------------------------------------
+//   elmChanged
+//---------------------------------------------------------
+
+void PageSettings::elmChanged(double val)
+      {
+      if (mmUnit)
+            val /= INCH;
+
+      if(twosided->isChecked()) {
+            oddPageRightMargin->blockSignals(true);
+            oddPageRightMargin->setValue(val * (mmUnit ? INCH : 1.0));
+            oddPageRightMargin->blockSignals(false);
+            }
+      PageFormat pf;
+      pf.copy(*preview->score()->pageFormat());
+      pf.setPrintableWidth(pf.size().width() - pf.evenRightMargin() - val);
+      pf.setEvenLeftMargin(val);
+      preview->score()->setPageFormat(pf);
+
+      updatePreview(0);
+      }
+
+//---------------------------------------------------------
+//   ermChanged
+//---------------------------------------------------------
+
+void PageSettings::ermChanged(double val)
+      {
+      if (mmUnit)
+            val /= INCH;
+
+      if (twosided->isChecked()) {
+            oddPageLeftMargin->blockSignals(true);
+            oddPageLeftMargin->setValue(val * (mmUnit ? INCH : 1.0));
+            oddPageLeftMargin->blockSignals(false);
+            }
+
+      PageFormat pf;
+      pf.copy(*preview->score()->pageFormat());
+      pf.setPrintableWidth(pf.size().width() - pf.evenLeftMargin() - val);
+      pf.setOddLeftMargin(val);
+      preview->score()->setPageFormat(pf);
+      updatePreview(0);
       }
 
 //---------------------------------------------------------
