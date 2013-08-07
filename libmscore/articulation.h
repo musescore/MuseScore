@@ -59,7 +59,10 @@ class Articulation : public Element {
       ArticulationType _articulationType;
       MScore::Direction _direction;
       QString _channelName;
+
       ArticulationAnchor _anchor;
+      PropertyStyle anchorStyle;
+
       bool _up;
       qreal _timeStretch;      // for fermata
 
@@ -90,6 +93,9 @@ class Articulation : public Element {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+      virtual void styleChanged() override;
 
       QString subtypeUserName() const;
 
