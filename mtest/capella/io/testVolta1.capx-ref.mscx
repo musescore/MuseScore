@@ -105,7 +105,6 @@ p, li { white-space: pre-wrap; }
         <endRepeat>2</endRepeat>
         <Volta id="2">
           <subtype>1</subtype>
-          <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
@@ -125,7 +124,6 @@ p, li { white-space: pre-wrap; }
         <endSpanner id="2"/>
         <Volta id="3">
           <subtype>0</subtype>
-          <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
