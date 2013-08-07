@@ -59,10 +59,12 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       void ormChanged(double val);
       void etmChanged(double val);
       void ebmChanged(double val);
+      void elmChanged(double val);
+      void ermChanged(double val);
       void spatiumChanged(double val);
       void pageHeightChanged(double);
       void pageWidthChanged(double);
-	void pageOffsetChanged(int val);
+      void pageOffsetChanged(int val);
 
    public:
       PageSettings(QWidget* parent = 0);
