@@ -417,6 +417,9 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
       switch (key) {
             case Qt::Key_Return:
                   {
+                  if(_cursor.hasSelection()) {
+                        deleteSelectedText();
+                        }
                   QString left(curLine().left(_cursor.column));
                   QString right(curLine().mid(_cursor.column));
                   curLine() = left;
@@ -424,6 +427,8 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
                   _cursor.column = 0;
                   _layout.insert(_cursor.line, TLine(right));
                   s.clear();
+                  _cursor.selectLine   = _cursor.line;
+                  _cursor.selectColumn = _cursor.column;
                   }
                   break;
 
