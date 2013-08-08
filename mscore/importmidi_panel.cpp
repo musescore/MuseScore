@@ -209,7 +209,7 @@ void ImportMidiPanel::doMidiImport()
 bool ImportMidiPanel::isMidiFile(const QString &fileName)
       {
       QString extension = QFileInfo(fileName).suffix().toLower();
-      return (extension == "mid" || extension == "midi");
+      return (extension == "mid" || extension == "midi" || extension == "kar");
       }
 
 void ImportMidiPanel::saveTableViewState(const QString &fileName)
