@@ -152,6 +152,8 @@ void SwingDetector::applySwing()
                   // remove central rest
             ChordRest *cr = elements[1];
             cr->score()->removeElement(cr);
+            delete cr;
+            cr = nullptr;
             }
 
       ChordRest *first = elements.front();
@@ -163,7 +165,8 @@ void SwingDetector::applySwing()
 
       if (tuplet) {
                   // delete tuplet
-            tuplet->score()->removeElement(tuplet);
+            delete tuplet;
+            tuplet = nullptr;
             }
       if (!swingApplied)
             swingApplied = true;
