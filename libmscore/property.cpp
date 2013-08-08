@@ -147,9 +147,10 @@ static const PropertyData propertyList[] = {
       { P_GLISS_TEXT,          false, 0,               T_STRING },
       { P_GLISS_SHOW_TEXT,     false, 0,               T_BOOL   },
 
-      { P_DIAGONAL,            false, 0,               T_BOOL   },
-      { P_GROUPS,              false, 0,               T_GROUPS },
-      { P_LINE_COLOR,          false, 0,               T_COLOR  },
+      { P_DIAGONAL,            false, 0,               T_BOOL     },
+      { P_GROUPS,              false, 0,               T_GROUPS   },
+      { P_LINE_STYLE,          false, "lineStyle",     T_INT      },
+      { P_LINE_COLOR,          false, 0,               T_COLOR    },
       { P_LINE_WIDTH,          false, 0,               T_SPATIUM  },
 
       { P_LASSO_POS,           false, 0,               T_POINT_MM },

@@ -316,10 +316,12 @@ enum StyleIdx {
       ST_voltaY,
       ST_voltaHook,
       ST_voltaLineWidth,
+      ST_voltaLineStyle,
 
       ST_ottavaY,
       ST_ottavaHook,
       ST_ottavaLineWidth,
+      ST_ottavaLineStyle,
 
       ST_tabClef,
 

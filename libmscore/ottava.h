@@ -40,13 +40,13 @@ class OttavaSegment : public TextLineSegment {
 
    public:
       OttavaSegment(Score* s) : TextLineSegment(s) {}
-      virtual ElementType type() const     { return OTTAVA_SEGMENT; }
-      virtual OttavaSegment* clone() const { return new OttavaSegment(*this); }
+      virtual ElementType type() const override     { return OTTAVA_SEGMENT; }
+      virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const               { return (Ottava*)spanner(); }
-      virtual void layout();
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual void layout() override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
@@ -73,6 +73,7 @@ class Ottava : public TextLine {
       Q_PROPERTY(OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
       OttavaType _ottavaType;
       PropertyStyle lineWidthStyle;
+      PropertyStyle lineStyleStyle;
 
    protected:
       QString text;

@@ -1490,7 +1490,9 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   _placement = Placement(v.toInt());
                   break;
             default:
-                  qDebug("Element::setProperty: unknown id %d, data <%s>", propertyId, qPrintable(v.toString()));
+                  qDebug("Element::setProperty: unknown <%s>(%d), data <%s>",
+                     propertyName(propertyId), propertyId, qPrintable(v.toString()));
+                  abort();
                   return false;
             }
       setGenerated(false);

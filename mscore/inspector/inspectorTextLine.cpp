@@ -26,6 +26,7 @@ InspectorTextLine::InspectorTextLine(QWidget* parent)
       {
       e.setupUi(addWidget());
       l.setupUi(addWidget());
+      tl.setupUi(addWidget());
 
       iList = {
             { P_COLOR,         0, 0, e.color,       e.resetColor       },

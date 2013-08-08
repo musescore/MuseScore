@@ -62,6 +62,10 @@ class LineSegment : public SpannerSegment {
       friend class SLine;
       virtual void read(XmlReader&);
       bool readProperties(XmlReader&);
+
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 //---------------------------------------------------------
@@ -72,27 +76,36 @@ class LineSegment : public SpannerSegment {
 class SLine : public Spanner {
       Q_OBJECT
 
-   protected:
+      Spatium _lineWidth;
+      QColor _lineColor;
+      Qt::PenStyle _lineStyle;
       bool _diagonal;
 
    public:
       SLine(Score* s);
       SLine(const SLine&);
 
-      virtual void layout();
+      virtual void layout() override;
       bool readProperties(XmlReader& node);
       void writeProperties(Xml& xml, const SLine* proto = 0) const;
       virtual LineSegment* createLineSegment() = 0;
       void setLen(qreal l);
-      virtual const QRectF& bbox() const;
+      virtual const QRectF& bbox() const override;
 
       virtual QPointF linePos(int grip, System** system);
 
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
 
-      bool diagonal() const         { return _diagonal; }
-      void setDiagonal(bool v)      { _diagonal = v;    }
+      bool diagonal() const               { return _diagonal; }
+      void setDiagonal(bool v)            { _diagonal = v;    }
+
+      Spatium lineWidth() const           { return _lineWidth;            }
+      QColor lineColor() const            { return (_lineColor == Qt::black)? curColor() : _lineColor; }
+      Qt::PenStyle lineStyle() const      { return _lineStyle;            }
+      void setLineWidth(const Spatium& v) { _lineWidth = v;               }
+      void setLineColor(const QColor& v)  { _lineColor = v;               }
+      void setLineStyle(Qt::PenStyle v)   { _lineStyle = v;               }
 
       LineSegment* frontSegment() const   { return (LineSegment*)spannerSegments().front(); }
       LineSegment* backSegment() const    { return (LineSegment*)spannerSegments().back();  }
@@ -100,9 +113,9 @@ class SLine : public Spanner {
       LineSegment* takeLastSegment()      { return (LineSegment*)spannerSegments().takeLast(); }
       LineSegment* segmentAt(int n) const { return (LineSegment*)spannerSegments().at(n); }
 
-      virtual QVariant getProperty(P_ID id) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 
