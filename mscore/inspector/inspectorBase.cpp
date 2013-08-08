@@ -459,5 +459,18 @@ QWidget* InspectorBase::addWidget()
       _layout->insertSpacing(_layout->count()-1, 20);
       return w;
       }
+
+//---------------------------------------------------------
+//   setupLineStyle
+//---------------------------------------------------------
+
+void InspectorBase::setupLineStyle(QComboBox* cb)
+      {
+      cb->setItemData(0, int(Qt::SolidLine));
+      cb->setItemData(1, int(Qt::DashLine));
+      cb->setItemData(2, int(Qt::DotLine));
+      cb->setItemData(3, int(Qt::DashDotLine));
+      cb->setItemData(4, int(Qt::DashDotDotLine));
+      }
 }
 

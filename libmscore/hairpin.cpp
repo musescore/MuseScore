@@ -116,7 +116,8 @@ void HairpinSegment::draw(QPainter* painter) const
             color = Qt::gray;
       else
             color = hairpin()->curColor();
-      QPen pen(color, point(score()->styleS(ST_hairpinWidth)));
+//      QPen pen(color, point(score()->styleS(ST_hairpinWidth)));
+      QPen pen(color, point(hairpin()->lineWidth()), hairpin()->lineStyle());
       painter->setPen(pen);
       painter->drawLine(l1);
       painter->drawLine(l2);

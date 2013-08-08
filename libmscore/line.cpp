@@ -395,20 +395,53 @@ void LineSegment::reset()
       }
 
 //---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant LineSegment::getProperty(P_ID id) const
+      {
+      return line()->getProperty(id);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool LineSegment::setProperty(P_ID id, const QVariant& val)
+      {
+      return line()->setProperty(id, val);
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant LineSegment::propertyDefault(P_ID id) const
+      {
+      return line()->propertyDefault(id);
+      }
+
+//---------------------------------------------------------
 //   SLine
 //---------------------------------------------------------
 
 SLine::SLine(Score* s)
    : Spanner(s)
       {
-      _diagonal = false;
+      _diagonal  = false;
+      _lineColor = MScore::defaultColor;
+      _lineWidth = Spatium(0.15);
+      _lineStyle = Qt::SolidLine;
       setTrack(0);
       }
 
 SLine::SLine(const SLine& s)
    : Spanner(s)
       {
-      _diagonal = s._diagonal;
+      _diagonal  = s._diagonal;
+      _lineWidth = s._lineWidth;
+      _lineColor = s._lineColor;
+      _lineStyle = s._lineStyle;
       }
 
 //---------------------------------------------------------
@@ -638,6 +671,13 @@ void SLine::writeProperties(Xml& xml, const SLine* proto) const
       Element::writeProperties(xml);
       if (_diagonal && (proto == 0 || proto->diagonal() != _diagonal))
             xml.tag("diagonal", _diagonal);
+      if (propertyStyle(P_LINE_WIDTH) != PropertyStyle::STYLED)
+            xml.tag("lineWidth", lineWidth().val());
+      if (proto == 0 || proto->lineStyle() != lineStyle())
+            xml.tag("lineStyle", int(lineStyle()));
+      if (proto == 0 || proto->lineColor() != lineColor())
+            xml.tag("lineColor", lineColor());
+
       if (anchor() != Spanner::ANCHOR_SEGMENT && (proto == 0 || proto->anchor() != anchor()))
             xml.tag("anchor", anchor());
       if (score() == gscore) {
@@ -704,6 +744,12 @@ bool SLine::readProperties(XmlReader& e)
             setDiagonal(e.readInt());
       else if (tag == "anchor")
             setAnchor(Anchor(e.readInt()));
+      else if (tag == "lineWidth")
+            _lineWidth = Spatium(e.readDouble());
+      else if (tag == "lineStyle")
+            _lineStyle = Qt::PenStyle(e.readInt());
+      else if (tag == "lineColor")
+            _lineColor = e.readColor();
       else if (Element::readProperties(e))
             ;
       else
@@ -773,9 +819,15 @@ void SLine::read(XmlReader& e)
 
 QVariant SLine::getProperty(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_DIAGONAL:
                   return _diagonal;
+            case P_LINE_COLOR:
+                  return _lineColor;
+            case P_LINE_WIDTH:
+                  return _lineWidth.val();
+            case P_LINE_STYLE:
+                  return QVariant(int(_lineStyle));
             default:
                   return Spanner::getProperty(id);
             }
@@ -787,9 +839,18 @@ QVariant SLine::getProperty(P_ID id) const
 
 bool SLine::setProperty(P_ID id, const QVariant& v)
       {
-      switch(id) {
+      switch (id) {
             case P_DIAGONAL:
                   _diagonal = v.toBool();
+                  break;
+            case P_LINE_COLOR:
+                  _lineColor = v.value<QColor>();
+                  break;
+            case P_LINE_WIDTH:
+                  _lineWidth = Spatium(v.toDouble());
+                  break;
+            case P_LINE_STYLE:
+                  _lineStyle = Qt::PenStyle(v.toInt());
                   break;
             default:
                   return Spanner::setProperty(id, v);
@@ -803,9 +864,17 @@ bool SLine::setProperty(P_ID id, const QVariant& v)
 
 QVariant SLine::propertyDefault(P_ID id) const
       {
-      switch(id) {
-            case P_DIAGONAL: return false;
-            default:         return Spanner::propertyDefault(id);
+      switch (id) {
+            case P_DIAGONAL:
+                  return false;
+            case P_LINE_COLOR:
+                  return MScore::defaultColor;
+            case P_LINE_WIDTH:
+                  return 0.15;
+            case P_LINE_STYLE:
+                  return 0;
+            default:
+                  return Spanner::propertyDefault(id);
             }
       }
 
