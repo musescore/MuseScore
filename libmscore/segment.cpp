@@ -608,6 +608,10 @@ void Segment::sortStaves(QList<int>& dst)
                   dl.append(_elist[k]);
             }
       _elist = dl;
+      foreach (Element* e, _annotations) {
+            if(!e->systemFlag())
+                  e->setTrack(dst[e->staffIdx()] * VOICES + e->voice());
+            }
       fixStaffIdx();
       }
 
