@@ -210,7 +210,7 @@ class Seq : public QObject, public Sequencer {
       void startNoteTimer(int duration);
       void startNote(int channel, int, int, double nt);
       void eventToGui(NPlayEvent);
-      void stopNoteTimer();  
+      void stopNoteTimer();
       };
 
 extern Seq* seq;

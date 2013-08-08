@@ -606,15 +606,6 @@ void Seq::process(unsigned n, float* buffer)
       if (state == TRANSPORT_PLAY) {
             if(!cs)
                   return;
-			//
-            // loop back to "In position" if "Out position" is reached
-            //
-            //~ if ((mscore->loop()) && (getCurTick() >= loopOutPos) && (loopOutPos > loopInPos)) {
-				//~ qDebug("----> Loop test. getCurTick() = %d  cs->pos() = %d   cs->playPos() = %d", getCurTick(), cs->pos(), cs->playPos());
-				//~ seek(loopInPos);
-				//~ return;
-				//~ }
-			
             //
             // play events for one segment
             //
