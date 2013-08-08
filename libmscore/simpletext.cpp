@@ -132,7 +132,10 @@ void SimpleText::draw(QPainter* p) const
             }
 
       if (_editMode) {
-            p->setBrush(QColor("steelblue"));
+            p->setBrush(curColor());
+            QPen pen(curColor());
+            pen.setJoinStyle(Qt::MiterJoin);
+            p->setPen(pen);
             p->drawRect(cursorRect());
             }
       }
@@ -150,7 +153,7 @@ QRectF SimpleText::cursorRect() const
 
       qreal x = pt.x() + xo - 1;
       qreal y = pt.y() - fm.ascent();
-      qreal w = fm.width(QChar('w')) * .14;
+      qreal w = fm.width(QChar('w')) * .10;
       qreal h = fm.ascent() + fm.descent() + 1;
 
       return QRectF(x, y, w, h);
@@ -270,20 +273,21 @@ void SimpleText::layout()
       qreal lh = lineHeight();
       qreal ly = .0;
       int n = _layout.size();
+      QRectF cr(0, - fm.ascent(), 0, fm.height());
+
       for (int i = 0; i < n; ++i) {
             TLine* t = &_layout[i];
-
             QRectF r(fm.tightBoundingRect(t->text));
 
             t->pos.ry() = ly;
             if (align() & ALIGN_BOTTOM)
-                  t->pos.ry() += -r.bottom();
+                  t->pos.ry() += -cr.bottom();
             else if (align() & ALIGN_VCENTER)
-                  t->pos.ry() +=  -(r.top() + r.bottom()) * .5;
+                  t->pos.ry() +=  -(cr.top() + cr.bottom()) * .5;
             else if (align() & ALIGN_BASELINE)
                   ;
             else  // ALIGN_TOP
-                  t->pos.ry() += -r.top();
+                  t->pos.ry() += -cr.top();
 
             if (align() & ALIGN_RIGHT)
                   t->pos.rx() = -r.right();
@@ -514,8 +518,9 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
       if (!s.isEmpty()) {
             if (!s[0].isPrint())
                   s = "";
-            else
+            else {
                   insertText(s);
+                  }
             }
       layout();
       if (parent() && parent()->type() == TBOX) {
@@ -541,6 +546,9 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
 void SimpleText::insertText(const QString& s)
       {
       if (!s.isEmpty()) {
+            if(_cursor.hasSelection()) {
+                  deleteSelectedText();
+                  }
             curLine().insert(_cursor.column, s);
             _cursor.column += s.size();
             _cursor.selectColumn = _cursor.column;
@@ -697,14 +705,22 @@ bool SimpleText::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
       qreal x = _layout.at(_cursor.line).pos.x();
       const QString& s(curLine());
       QFontMetricsF fm(_textStyle.fontPx(spatium()));
-      for (int col = 0; col < s.size(); ++col) {
+      int col = 0;
+      for (; col < s.size(); col++) {
             if (s.at(col).isLowSurrogate())
                   continue;
-            if (x + fm.width(s.left(col))  > pt.x()) {
-                  _cursor.column = col;
+            qreal w = fm.width(s.left(col));
+            qreal prevWidth = fm.width(s.left(col-1));
+            qreal nextWidth = fm.width(s.left(col+1));
+
+            qreal off = (col == 0) ? 0 : (prevWidth + (w - prevWidth) / 2);
+            qreal off2 = w + (nextWidth - w) / 2;
+            if (x + off < pt.x() && pt.x() < x + off2) {
                   break;
                   }
             }
+      _cursor.column = col;
+
       score()->setUpdateAll(true);
       if (mode == QTextCursor::MoveAnchor) {
             _cursor.selectLine = _cursor.line;
@@ -749,7 +765,8 @@ QString SimpleText::selectedText() const
                   else
                         s += t.text;
                   }
-            s += "\n";
+            if(row != rows -1)
+                  s += "\n";
             }
       return s;
       }
