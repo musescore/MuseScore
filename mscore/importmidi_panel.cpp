@@ -108,7 +108,7 @@ void ImportMidiPanel::tweakUi()
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::DO_IMPORT,
                                                              QHeaderView::ResizeToContents);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::STAFF_NAME,
-                                                             QHeaderView::ResizeToContents);
+                                                             QHeaderView::Stretch);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::INSTRUMENT,
                                                              QHeaderView::Stretch);
       ui->treeViewOperations->header()->resizeSection(0, 285);
