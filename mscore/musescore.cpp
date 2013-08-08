@@ -2543,8 +2543,7 @@ void MuseScore::changeState(ScoreState val)
       _sstate = val;
 
       Element* e = 0;
-      if (_sstate == STATE_LYRICS_EDIT || _sstate == STATE_TEXT_EDIT || _sstate == STATE_HARMONY_FIGBASS_EDIT
-         || _sstate == STATE_EDIT) {
+      if (_sstate & STATE_ALLTEXTUAL_EDIT || _sstate == STATE_EDIT) {
             if (cv)
                   e = cv->getEditObject();
             }
