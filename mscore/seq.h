@@ -112,6 +112,8 @@ class Seq : public QObject, public Sequencer {
 
       int playTime;                       // current play position in samples
       int endTick;
+      int loopInPos; 					  // in point for loop play position
+      int loopOutPos;					  // out point for loop play position
 
       EventMap::const_iterator playPos;   // moved in real time thread
       EventMap::const_iterator guiPos;    // moved in gui thread
@@ -172,6 +174,9 @@ class Seq : public QObject, public Sequencer {
       void collectEvents();
       void guiStop();
       void stopWait();
+      void setLoopIn();
+      void setLoopOut();
+      void unsetLoop() { loopInPos = loopOutPos = 0; }
 
       bool init();
       void exit();
@@ -205,7 +210,7 @@ class Seq : public QObject, public Sequencer {
       void startNoteTimer(int duration);
       void startNote(int channel, int, int, double nt);
       void eventToGui(NPlayEvent);
-      void stopNoteTimer();
+      void stopNoteTimer();  
       };
 
 extern Seq* seq;

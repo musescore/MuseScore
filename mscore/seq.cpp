@@ -41,6 +41,7 @@
 #include "libmscore/audio.h"
 #include "synthcontrol.h"
 #include "pianoroll.h"
+#include "libmscore/cursor.h"
 
 #include "click.h"
 
@@ -145,6 +146,8 @@ Seq::Seq()
       playPos  = events.cbegin();
 
       playTime  = 0;
+      loopInPos = 0;
+      loopOutPos = 0;
       metronomeVolume = 0.3;
 
       meterValue[0]     = 0.0;
@@ -192,7 +195,7 @@ void Seq::setScoreView(ScoreView* v)
       cs = cv ? cv->score() : 0;
 
       if (!heartBeatTimer->isActive())
-            heartBeatTimer->start(20);    // msec
+            heartBeatTimer->start(20);    // 20 msec
 
       playlistChanged = true;
       _synti->reset();
@@ -271,17 +274,6 @@ void Seq::rewindStart()
       }
 
 //---------------------------------------------------------
-//   loopStart
-//---------------------------------------------------------
-
-void Seq::loopStart()
-      {
-      seek(0);
-      start();
-//      qDebug("LoopStart. playPos = %d\n", playPos);
-      }
-
-//---------------------------------------------------------
 //   canStart
 //    return true if sequencer can be started
 //---------------------------------------------------------
@@ -315,7 +307,11 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      seek(cs->playPos());
+      if (mscore->loop()) {
+            seek(loopInPos);
+		}
+	 else
+            seek(cs->playPos());
       _driver->startTransport();
       }
 
@@ -427,6 +423,10 @@ void Seq::guiStop()
 void Seq::seqMessage(int msg)
       {
       switch(msg) {
+            case '3':         // LOOP playback  (called when the end of the score is reached)
+                  getAction("play")->trigger();
+                  emit started();
+                  break;
             case '2':
                   guiStop();
 //                  heartBeatTimer->stop();
@@ -570,8 +570,7 @@ void Seq::process(unsigned n, float* buffer)
       {
       unsigned frames = n;
       int driverState = _driver->getState();
-
-      if (driverState != state) {
+	  if (driverState != state) {
             if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY) {
                   state = TRANSPORT_PLAY;
                   emit toGui('1');
@@ -582,16 +581,18 @@ void Seq::process(unsigned n, float* buffer)
                   // send sustain off
                   // TODO: channel?
                   putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
-                  if (playPos == events.cend())
-					    if (mscore->loop()) {
-//							qDebug("MScore::Seq:: loop active. playPos = %d\n", playPos);
-							loopStart();
-							}
-						else {
-							emit toGui('2');
-						}
-                  else
-                        emit toGui('0');
+                  if (playPos == events.cend()) {
+                        if (mscore->loop()) {
+                              qDebug("MScore::Seq:: loop active. playPos = %d     cs->%d\n", playPos->first,cs->pos());
+                              emit toGui('3');
+                              } 
+                        else {
+                              emit toGui('2');
+                              }
+                        }
+                  else {
+                     emit toGui('0');
+                     }
                   }
             else if (state != driverState)
                   qDebug("Seq: state transition %d -> %d ?\n",
@@ -605,6 +606,15 @@ void Seq::process(unsigned n, float* buffer)
       if (state == TRANSPORT_PLAY) {
             if(!cs)
                   return;
+			//
+            // loop back to "In position" if "Out position" is reached
+            //
+            //~ if ((mscore->loop()) && (getCurTick() >= loopOutPos) && (loopOutPos > loopInPos)) {
+				//~ qDebug("----> Loop test. getCurTick() = %d  cs->pos() = %d   cs->playPos() = %d", getCurTick(), cs->pos(), cs->playPos());
+				//~ seek(loopInPos);
+				//~ return;
+				//~ }
+			
             //
             // play events for one segment
             //
@@ -813,6 +823,7 @@ void Seq::seek(int utick)
       if (cs == 0)
             return;
 
+		qDebug ("seek : utick=%d",utick);
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
       int tick     = cs->repeatList()->utick2tick(utick);
@@ -1115,6 +1126,17 @@ void Seq::putEvent(const NPlayEvent& event)
 
 void Seq::heartBeatTimeout()
       {
+      if (state == TRANSPORT_PLAY) {
+            //
+            // loop back to "In position" if "Out position" is reached
+            //
+            if ((mscore->loop()) && (getCurTick() >= loopOutPos) && (loopOutPos > loopInPos)) {
+                  qDebug("----> Loop test. getCurTick() = %d  cs->pos() = %d   cs->playPos() = %d", getCurTick(), cs->pos(), cs->playPos());
+                  //emit toGui('4');
+                  seek(loopInPos);
+                  return;
+                  }
+            }
       SynthControl* sc = mscore->getSynthControl();
       if (sc && _driver) {
             if (++peakTimer[0] >= peakHold)
@@ -1213,5 +1235,22 @@ double Seq::curTempo() const
       {
       return cs->tempomap()->tempo(playPos->first);
       }
-}
 
+//---------------------------------------------------------
+//   set Loop in position
+//---------------------------------------------------------
+void Seq::setLoopIn()
+      {
+      loopInPos = cs->pos(); 
+      qDebug ("setLoopIn : loopInPos = %d\n",loopInPos);
+      }
+      
+//---------------------------------------------------------
+//   set Loop in position
+//---------------------------------------------------------
+void Seq::setLoopOut()
+      {
+      loopOutPos = cs->pos()+cs->inputState().ticks();
+      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() =%d \n",loopOutPos,cs->pos(),cs->inputState().ticks());
+      }
+} 
