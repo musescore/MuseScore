@@ -141,6 +141,7 @@ enum P_ID {
 
       P_DIAGONAL,
       P_GROUPS,
+      P_LINE_STYLE,
       P_LINE_COLOR,
       P_LINE_WIDTH,
 

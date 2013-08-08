@@ -63,9 +63,6 @@ enum HookType { HOOK_90, HOOK_45 };
 class TextLine : public SLine {
       Q_OBJECT
 
-      Spatium _lineWidth;
-      QColor _lineColor;
-      Qt::PenStyle _lineStyle;
       PlaceText _beginTextPlace, _continueTextPlace;
 
       bool _beginHook, _endHook;
@@ -75,7 +72,7 @@ class TextLine : public SLine {
       SymId _beginSymbol, _continueSymbol, _endSymbol;
       QPointF _beginSymbolOffset, _continueSymbolOffset, _endSymbolOffset;
 
-      qreal _sp;       // cached value from last spatiumChanged() call
+//      qreal _sp;       // cached value from last spatiumChanged() call
 
    protected:
       Text* _beginText;
@@ -126,12 +123,6 @@ class TextLine : public SLine {
       Spatium beginHookHeight() const         { return _beginHookHeight;      }
       Spatium endHookHeight() const           { return _endHookHeight;        }
 
-      Spatium lineWidth() const               { return _lineWidth;            }
-      QColor lineColor() const                { return (_lineColor == Qt::black)? curColor() : _lineColor; }
-      Qt::PenStyle lineStyle() const          { return _lineStyle;            }
-      void setLineWidth(const Spatium& v)     { _lineWidth = v;               }
-      void setLineColor(const QColor& v)      { _lineColor = v;               }
-      void setLineStyle(Qt::PenStyle v)       { _lineStyle = v;               }
       SymId beginSymbol() const               { return _beginSymbol;          }
       SymId continueSymbol() const            { return _continueSymbol;       }
       SymId endSymbol() const                 { return _endSymbol;            }

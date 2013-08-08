@@ -140,6 +140,7 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newRepeatsPalette());
       addPalette(MuseScore::newTextPalette());
       addPalette(MuseScore::newBreaksPalette());
+      addPalette(MuseScore::newBagpipeEmbellishmentPalette());
       addPalette(MuseScore::newBeamPalette());
       addPalette(MuseScore::newFramePalette());
 

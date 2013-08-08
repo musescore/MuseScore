@@ -2256,7 +2256,7 @@ OttavaView::OttavaView()
 
 void OttavaView::setElement(Element* e)
       {
-      Ottava* o = static_cast<Ottava*>(e);
+//      Ottava* o = static_cast<Ottava*>(e);
       TextLineView::setElement(e);
       }
 

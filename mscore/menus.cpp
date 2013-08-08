@@ -659,7 +659,7 @@ Palette* MuseScore::newGraceNotePalette()
       populateIconPalette(notePalette, gna);
       return notePalette;
       }
-      
+
 //---------------------------------------------------------
 //   newBagpipeEmbellishmentPalette
 //---------------------------------------------------------
@@ -670,8 +670,8 @@ Palette* MuseScore::newBagpipeEmbellishmentPalette()
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe Embellishments"));
       sp->setMag(0.8);
       sp->setGrid(60, 70);
-      
-      for (unsigned i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
+
+      for (int i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
             BagpipeEmbellishment* b  = new BagpipeEmbellishment(gscore);
             b->setEmbelType(i);
             sp->append(b, BagpipeEmbellishment::BagpipeEmbellishmentList[i].name);

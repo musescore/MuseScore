@@ -36,15 +36,15 @@ class HairpinSegment : public LineSegment {
    protected:
    public:
       HairpinSegment(Score* s) : LineSegment(s) {}
-      Hairpin* hairpin() const              { return (Hairpin*)spanner(); }
-      virtual HairpinSegment* clone() const { return new HairpinSegment(*this); }
-      virtual ElementType type() const      { return HAIRPIN_SEGMENT; }
-      virtual void draw(QPainter*) const;
-      virtual void updateGrips(int*, QRectF*) const;
-      virtual void layout();
-      virtual QVariant getProperty(P_ID id) const;
-      virtual bool setProperty(P_ID id, const QVariant& v);
-      virtual QVariant propertyDefault(P_ID id) const;
+      Hairpin* hairpin() const                  { return (Hairpin*)spanner(); }
+      virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
+      virtual ElementType type() const override { return HAIRPIN_SEGMENT; }
+      virtual void draw(QPainter*) const override;
+      virtual void updateGrips(int*, QRectF*) const override;
+      virtual void layout() override;
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID id, const QVariant& v) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 //---------------------------------------------------------
@@ -72,16 +72,16 @@ class Hairpin : public SLine {
 
    public:
       Hairpin(Score* s);
-      virtual Hairpin* clone() const   { return new Hairpin(*this); }
-      virtual ElementType type() const { return HAIRPIN;  }
+      virtual Hairpin* clone() const override   { return new Hairpin(*this); }
+      virtual ElementType type() const override { return HAIRPIN;  }
 
       HairpinType hairpinType() const      { return _hairpinType; }
       void setHairpinType(HairpinType val) { _hairpinType = val;  }
       void undoSetHairpinType(HairpinType);
 
       Segment* segment() const         { return (Segment*)parent(); }
-      virtual void layout();
-      virtual LineSegment* createLineSegment();
+      virtual void layout() override;
+      virtual LineSegment* createLineSegment() override;
 
       int veloChange() const           { return _veloChange; }
       void setVeloChange(int v)        { _veloChange = v;    }
@@ -91,14 +91,14 @@ class Hairpin : public SLine {
       void setDynRange(DynamicRange t)    { _dynRange = t;    }
       void undoSetDynRange(DynamicRange t);
 
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
 
-      virtual QVariant getProperty(P_ID id) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
 
-      virtual void setYoff(qreal);
+      virtual void setYoff(qreal) override;
       };
 
 }     // namespace Ms

@@ -16,6 +16,7 @@
 #include "inspector.h"
 #include "inspectorBase.h"
 #include "ui_inspector_textline.h"
+#include "ui_inspector_line.h"
 
 namespace Ms {
 
@@ -27,7 +28,8 @@ class InspectorTextLine : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement e;
-      Ui::InspectorTextLine l;
+      Ui::InspectorLine l;
+      Ui::InspectorTextLine tl;
 
    public:
       InspectorTextLine(QWidget* parent);

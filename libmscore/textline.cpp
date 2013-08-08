@@ -106,8 +106,7 @@ void TextLineSegment::draw(QPainter* painter) const
             l = bb.width() + textlineTextDistance;
             }
 
-      QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth);
-      pen.setStyle(tl->lineStyle());
+      QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
       painter->setPen(pen);
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END) {
             if (tl->endSymbol() != -1) {
@@ -317,23 +316,17 @@ TextLine::TextLine(Score* s)
       _beginHookType     = HOOK_90;
       _endHookType       = HOOK_90;
 
-      _lineWidth         = Spatium(0.15);
-      _lineStyle         = Qt::SolidLine;
       _beginTextPlace    = PLACE_LEFT;
       _continueTextPlace = PLACE_LEFT;
-      _lineColor         = curColor();
       _beginSymbol       = noSym;
       _continueSymbol    = noSym;
       _endSymbol         = noSym;
-      _sp                = 0;
+      // _sp                = 0;
       }
 
 TextLine::TextLine(const TextLine& e)
    : SLine(e)
       {
-      _lineWidth            = e._lineWidth;
-      _lineColor            = e._lineColor;
-      _lineStyle            = e._lineStyle;
       _beginTextPlace       = e._beginTextPlace;
       _continueTextPlace    = e._continueTextPlace;
 
@@ -360,7 +353,7 @@ TextLine::TextLine(const TextLine& e)
             _continueText = e._continueText->clone();
             _continueText->setParent(this);
             }
-      _sp = 0;
+//      _sp = 0;
       }
 
 //---------------------------------------------------------
@@ -458,12 +451,6 @@ void TextLine::writeProperties(Xml& xml, const TextLine* proto) const
                   xml.tag("endHookType", int(_endHookType));
             }
 
-      if (propertyStyle(P_LINE_WIDTH) != PropertyStyle::STYLED)
-            xml.tag("lineWidth", _lineWidth.val());
-      if (proto == 0 || proto->lineStyle() != _lineStyle)
-            xml.tag("lineStyle", int(_lineStyle));
-      if (proto == 0 || proto->lineColor() != _lineColor)
-            xml.tag("lineColor", _lineColor);
       if (proto == 0 || proto->beginTextPlace() != _beginTextPlace)
             xml.pTag("beginTextPlace", _beginTextPlace);
       if (proto == 0 || proto->continueTextPlace() != _continueTextPlace)
@@ -534,16 +521,10 @@ bool TextLine::readProperties(XmlReader& e)
             _continueSymbolOffset = e.readPoint();
       else if (tag == "endSymbolOffset")
             _endSymbolOffset = e.readPoint();
-      else if (tag == "lineWidth")
-            _lineWidth = Spatium(e.readDouble());
-      else if (tag == "lineStyle")
-            _lineStyle = Qt::PenStyle(e.readInt());
       else if (tag == "beginTextPlace")
             _beginTextPlace = readPlacement(e);
       else if (tag == "continueTextPlace")
             _continueTextPlace = readPlacement(e);
-      else if (tag == "lineColor")
-            _lineColor = e.readColor();
       else if (tag == "beginText") {
             _beginText = new Text(score());
             _beginText->setParent(this);
@@ -614,10 +595,6 @@ void TextLine::spatiumChanged(qreal ov, qreal nv)
 QVariant TextLine::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_LINE_COLOR:
-                  return _lineColor;
-            case P_LINE_WIDTH:
-                  return _lineWidth.val();
             default:
                   return SLine::getProperty(id);
             }
@@ -630,12 +607,6 @@ QVariant TextLine::getProperty(P_ID id) const
 bool TextLine::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_LINE_COLOR:
-                  _lineColor = v.value<QColor>();
-                  break;
-            case P_LINE_WIDTH:
-                  _lineWidth = Spatium(v.toDouble());
-                  break;
             default:
                   return SLine::setProperty(id, v);
             }
@@ -649,10 +620,6 @@ bool TextLine::setProperty(P_ID id, const QVariant& v)
 QVariant TextLine::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_LINE_COLOR:
-                  return MScore::defaultColor;
-            case P_LINE_WIDTH:
-                  return 0.15;
             default:
                   return SLine::propertyDefault(id);
             }

@@ -60,6 +60,7 @@ class InspectorBase : public QWidget {
       QVariant getValue(const InspectorItem&) const;
       bool isDefault(const InspectorItem&);
       void mapSignals();
+      void setupLineStyle(QComboBox*);
 
    public:
       InspectorBase(QWidget* parent);
