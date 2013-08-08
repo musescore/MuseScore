@@ -1213,8 +1213,11 @@ void createMeasures(Fraction &lastTick, Score *score)
             measure->setLen(ts);
             score->add(measure);
             }
-      score->fixTicks();
-      lastTick = Fraction::fromTicks(score->lastMeasure()->endTick());
+      Measure *m = score->lastMeasure();
+      if (m) {
+            score->fixTicks();
+            lastTick = Fraction::fromTicks(m->endTick());
+            }
       }
 
 QString instrumentName(int type, int program)
