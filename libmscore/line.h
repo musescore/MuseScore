@@ -27,6 +27,18 @@ class MuseScoreView;
 enum { GRIP_LINE_START, GRIP_LINE_END, GRIP_LINE_MIDDLE };
 
 //---------------------------------------------------------
+//   LineStyle
+//---------------------------------------------------------
+
+enum class LineStyle {
+      Solid      = Qt::SolidLine,
+      Dash       = Qt::DashLine,
+      Dot        = Qt::DotLine,
+      DashDot    = Qt::DashDotLine,
+      DashDotDot = Qt::DashDotDotLine
+      };
+
+//---------------------------------------------------------
 //   @@ LineSegment
 ///   Virtual base class for segmented lines segments
 ///   (OttavaSegment, HairpinSegment, TrillSegment...)
@@ -87,7 +99,7 @@ class SLine : public Spanner {
 
       virtual void layout() override;
       bool readProperties(XmlReader& node);
-      void writeProperties(Xml& xml, const SLine* proto = 0) const;
+      void writeProperties(Xml& xml) const;
       virtual LineSegment* createLineSegment() = 0;
       void setLen(qreal l);
       virtual const QRectF& bbox() const override;

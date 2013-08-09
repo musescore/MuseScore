@@ -229,12 +229,9 @@ void Volta::read(XmlReader& e)
 
 void Volta::write(Xml& xml) const
       {
-      Volta proto(score());
-      proto.setVoltaType(voltaType());
-
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
       xml.tag("subtype", int(_voltaType));
-      TextLine::writeProperties(xml, &proto);
+      TextLine::writeProperties(xml);
       QString s;
       foreach(int i, _endings) {
             if (!s.isEmpty())

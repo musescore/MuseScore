@@ -45,6 +45,8 @@ class HairpinSegment : public LineSegment {
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID id, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
+      virtual PropertyStyle propertyStyle(P_ID id) const override;
+      virtual void resetProperty(P_ID id) override;
       };
 
 //---------------------------------------------------------
@@ -69,6 +71,7 @@ class Hairpin : public SLine {
       HairpinType _hairpinType;
       int _veloChange;
       DynamicRange _dynRange;
+      PropertyStyle lineWidthStyle;
 
    public:
       Hairpin(Score* s);
@@ -97,8 +100,11 @@ class Hairpin : public SLine {
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
+      virtual PropertyStyle propertyStyle(P_ID id) const override;
+      virtual void resetProperty(P_ID id) override;
 
       virtual void setYoff(qreal) override;
+      virtual void styleChanged() override;
       };
 
 }     // namespace Ms

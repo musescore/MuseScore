@@ -49,22 +49,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       chordDescriptionFileButton->setIcon(*icons[fileOpen_ICON]);
 
-      stemGroups[0] = new QButtonGroup(this);
-      stemGroups[0]->addButton(voice1Up);
-      stemGroups[0]->addButton(voice1Down);
-
-      stemGroups[1] = new QButtonGroup(this);
-      stemGroups[1]->addButton(voice2Up);
-      stemGroups[1]->addButton(voice2Down);
-
-      stemGroups[2] = new QButtonGroup(this);
-      stemGroups[2]->addButton(voice3Up);
-      stemGroups[2]->addButton(voice3Down);
-
-      stemGroups[3] = new QButtonGroup(this);
-      stemGroups[3]->addButton(voice4Up);
-      stemGroups[3]->addButton(voice4Down);
-
       pageList->setCurrentRow(0);
 
       articulationTable->verticalHeader()->setVisible(false);
@@ -124,6 +108,28 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(hideEmptyStaves, SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
 
       connect(bg, SIGNAL(buttonClicked(int)), SLOT(editTextClicked(int)));
+
+      QSignalMapper* mapper = new QSignalMapper(this);
+
+#define CR(W, ID) connect(W, SIGNAL(clicked()), mapper, SLOT(map())); mapper->setMapping(W, ID);
+
+      CR(resetVoltaY, ST_voltaY);
+#if 0
+      lstyle.set(ST_voltaY,                  Spatium(voltaY->value()));
+      lstyle.set(ST_voltaHook,               Spatium(voltaHook->value()));
+      lstyle.set(ST_voltaLineWidth,          Spatium(voltaLineWidth->value()));
+      lstyle.set(ST_voltaLineStyle,          voltaLineStyle->currentIndex() + 1);
+
+      lstyle.set(ST_ottavaY,                 Spatium(ottavaY->value()));
+      lstyle.set(ST_ottavaHook,              Spatium(ottavaHook->value()));
+      lstyle.set(ST_ottavaLineWidth,         Spatium(ottavaLineWidth->value()));
+      lstyle.set(ST_ottavaLineStyle,         ottavaLineStyle->currentIndex() + 1);
+      lstyle.set(ST_hairpinY,                Spatium(hairpinY->value()));
+      lstyle.set(ST_hairpinLineWidth,        Spatium(hairpinLineWidth->value()));
+      lstyle.set(ST_hairpinHeight,           Spatium(hairpinHeight->value()));
+      lstyle.set(ST_hairpinContHeight,       Spatium(hairpinContinueHeight->value()));
+#endif
+      connect(mapper, SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
       }
 
 //---------------------------------------------------------
@@ -231,7 +237,7 @@ void EditStyle::getValues()
       lstyle.set(ST_smallClefMag,            smallClefSize->value() * 0.01);
       lstyle.set(ST_lastSystemFillLimit,     lastSystemFillThreshold->value() * 0.01);
       lstyle.set(ST_hairpinY,                Spatium(hairpinY->value()));
-      lstyle.set(ST_hairpinWidth,            Spatium(hairpinLineWidth->value()));
+      lstyle.set(ST_hairpinLineWidth,        Spatium(hairpinLineWidth->value()));
       lstyle.set(ST_hairpinHeight,           Spatium(hairpinHeight->value()));
       lstyle.set(ST_hairpinContHeight,       Spatium(hairpinContinueHeight->value()));
       lstyle.set(ST_genClef,                 genClef->isChecked());
@@ -251,9 +257,9 @@ void EditStyle::getValues()
             customChords = true;
             }
       lstyle.set(ST_chordsXmlFile, chordsXmlFile->isChecked());
-      if (lstyle.valueSt(ST_chordDescriptionFile) != chordDescriptionFile->text()) {
+      if (lstyle.value(ST_chordDescriptionFile).toString() != chordDescriptionFile->text()) {
             ChordList* cl = new ChordList();
-            if (lstyle.valueB(ST_chordsXmlFile))
+            if (lstyle.value(ST_chordsXmlFile).toBool())
                   cl->read("chords.xml");
             cl->read(chordDescriptionFile->text());
             lstyle.setChordList(cl, customChords);
@@ -289,10 +295,6 @@ void EditStyle::getValues()
       lstyle.set(ST_propertyDistanceHead,    Spatium(propertyDistanceHead->value()));
       lstyle.set(ST_propertyDistanceStem,    Spatium(propertyDistanceStem->value()));
       lstyle.set(ST_propertyDistance,        Spatium(propertyDistance->value()));
-      lstyle.set(ST_stemDir1,                voice1Up->isChecked() ? MScore::UP : MScore::DOWN);
-      lstyle.set(ST_stemDir2,                voice2Up->isChecked() ? MScore::UP : MScore::DOWN);
-      lstyle.set(ST_stemDir3,                voice3Up->isChecked() ? MScore::UP : MScore::DOWN);
-      lstyle.set(ST_stemDir4,                voice4Up->isChecked() ? MScore::UP : MScore::DOWN);
 
       lstyle.set(ST_shortenStem,             shortenStem->isChecked());
       lstyle.set(ST_shortStemProgression,    Spatium(shortStemProgression->value()));
@@ -387,12 +389,16 @@ void EditStyle::getValues()
       lstyle.set(ST_voltaY,                  Spatium(voltaY->value()));
       lstyle.set(ST_voltaHook,               Spatium(voltaHook->value()));
       lstyle.set(ST_voltaLineWidth,          Spatium(voltaLineWidth->value()));
+      lstyle.set(ST_voltaLineStyle,          voltaLineStyle->currentIndex() + 1);
 
       lstyle.set(ST_ottavaY,                 Spatium(ottavaY->value()));
       lstyle.set(ST_ottavaHook,              Spatium(ottavaHook->value()));
       lstyle.set(ST_ottavaLineWidth,         Spatium(ottavaLineWidth->value()));
+      lstyle.set(ST_ottavaLineStyle,         ottavaLineStyle->currentIndex() + 1);
 
       lstyle.set(ST_pedalY,                  Spatium(pedalY->value()));
+      lstyle.set(ST_pedalLineWidth,          Spatium(pedalLineWidth->value()));
+      lstyle.set(ST_pedalLineStyle,          pedalLineStyle->currentIndex() + 1);
       lstyle.set(ST_trillY,                  Spatium(trillY->value()));
       lstyle.set(ST_harmonyY,                Spatium(harmonyY->value()));
       lstyle.set(ST_harmonyFretDist,         Spatium(harmonyFretDist->value()));
@@ -411,53 +417,53 @@ void EditStyle::getValues()
 
 void EditStyle::setValues()
       {
-      staffUpperBorder->setValue(lstyle.valueS(ST_staffUpperBorder).val());
-      staffLowerBorder->setValue(lstyle.valueS(ST_staffLowerBorder).val());
-      staffDistance->setValue(lstyle.valueS(ST_staffDistance).val());
-      akkoladeDistance->setValue(lstyle.valueS(ST_akkoladeDistance).val());
-      minSystemDistance->setValue(lstyle.valueS(ST_minSystemDistance).val());
-      maxSystemDistance->setValue(lstyle.valueS(ST_maxSystemDistance).val());
-      lyricsDistance->setValue(lstyle.valueS(ST_lyricsDistance).val());
-      lyricsMinBottomDistance->setValue(lstyle.valueS(ST_lyricsMinBottomDistance).val());
+      staffUpperBorder->setValue(lstyle.value(ST_staffUpperBorder).toDouble());
+      staffLowerBorder->setValue(lstyle.value(ST_staffLowerBorder).toDouble());
+      staffDistance->setValue(lstyle.value(ST_staffDistance).toDouble());
+      akkoladeDistance->setValue(lstyle.value(ST_akkoladeDistance).toDouble());
+      minSystemDistance->setValue(lstyle.value(ST_minSystemDistance).toDouble());
+      maxSystemDistance->setValue(lstyle.value(ST_maxSystemDistance).toDouble());
+      lyricsDistance->setValue(lstyle.value(ST_lyricsDistance).toDouble());
+      lyricsMinBottomDistance->setValue(lstyle.value(ST_lyricsMinBottomDistance).toDouble());
       lyricsLineHeight->setValue(lstyle.value(ST_lyricsLineHeight).toDouble() * 100.0);
-      systemFrameDistance->setValue(lstyle.valueS(ST_systemFrameDistance).val());
-      frameSystemDistance->setValue(lstyle.valueS(ST_frameSystemDistance).val());
-      minMeasureWidth_2->setValue(lstyle.valueS(ST_minMeasureWidth).val());
+      systemFrameDistance->setValue(lstyle.value(ST_systemFrameDistance).toDouble());
+      frameSystemDistance->setValue(lstyle.value(ST_frameSystemDistance).toDouble());
+      minMeasureWidth_2->setValue(lstyle.value(ST_minMeasureWidth).toDouble());
 
-      barWidth->setValue(lstyle.valueS(ST_barWidth).val());
-      endBarWidth->setValue(lstyle.valueS(ST_endBarWidth).val());
-      endBarDistance->setValue(lstyle.valueS(ST_endBarDistance).val());
-      doubleBarWidth->setValue(lstyle.valueS(ST_doubleBarWidth).val());
-      doubleBarDistance->setValue(lstyle.valueS(ST_doubleBarDistance).val());
+      barWidth->setValue(lstyle.value(ST_barWidth).toDouble());
+      endBarWidth->setValue(lstyle.value(ST_endBarWidth).toDouble());
+      endBarDistance->setValue(lstyle.value(ST_endBarDistance).toDouble());
+      doubleBarWidth->setValue(lstyle.value(ST_doubleBarWidth).toDouble());
+      doubleBarDistance->setValue(lstyle.value(ST_doubleBarDistance).toDouble());
 
-      showRepeatBarTips->setChecked(lstyle.valueB(ST_repeatBarTips));
-      showStartBarlineSingle->setChecked(lstyle.valueB(ST_startBarlineSingle));
-      showStartBarlineMultiple->setChecked(lstyle.valueB(ST_startBarlineMultiple));
+      showRepeatBarTips->setChecked(lstyle.value(ST_repeatBarTips).toBool());
+      showStartBarlineSingle->setChecked(lstyle.value(ST_startBarlineSingle).toBool());
+      showStartBarlineMultiple->setChecked(lstyle.value(ST_startBarlineMultiple).toBool());
 
       measureSpacing->setValue(lstyle.value(ST_measureSpacing).toDouble());
-      minNoteDistance->setValue(lstyle.valueS(ST_minNoteDistance).val());
-      barNoteDistance->setValue(lstyle.valueS(ST_barNoteDistance).val());
-      barAccidentalDistance->setValue(lstyle.valueS(ST_barAccidentalDistance).val());
-      multiMeasureRestMargin->setValue(lstyle.valueS(ST_multiMeasureRestMargin).val());
-      noteBarDistance->setValue(lstyle.valueS(ST_noteBarDistance).val());
+      minNoteDistance->setValue(lstyle.value(ST_minNoteDistance).toDouble());
+      barNoteDistance->setValue(lstyle.value(ST_barNoteDistance).toDouble());
+      barAccidentalDistance->setValue(lstyle.value(ST_barAccidentalDistance).toDouble());
+      multiMeasureRestMargin->setValue(lstyle.value(ST_multiMeasureRestMargin).toDouble());
+      noteBarDistance->setValue(lstyle.value(ST_noteBarDistance).toDouble());
 
-      showMeasureNumber->setChecked(lstyle.valueB(ST_showMeasureNumber));
-      showFirstMeasureNumber->setChecked(lstyle.valueB(ST_showMeasureNumberOne));
-      intervalMeasureNumber->setValue(lstyle.valueI(ST_measureNumberInterval));
-      showIntervalMeasureNumber->setChecked(!lstyle.valueB(ST_measureNumberSystem));
-      showAllStaffsMeasureNumber->setChecked(lstyle.valueB(ST_measureNumberAllStaffs));
-      showEverySystemMeasureNumber->setChecked(lstyle.valueB(ST_measureNumberSystem));
+      showMeasureNumber->setChecked(lstyle.value(ST_showMeasureNumber).toBool());
+      showFirstMeasureNumber->setChecked(lstyle.value(ST_showMeasureNumberOne).toBool());
+      intervalMeasureNumber->setValue(lstyle.value(ST_measureNumberInterval).toInt());
+      showIntervalMeasureNumber->setChecked(!lstyle.value(ST_measureNumberSystem).toBool());
+      showAllStaffsMeasureNumber->setChecked(lstyle.value(ST_measureNumberAllStaffs).toBool());
+      showEverySystemMeasureNumber->setChecked(lstyle.value(ST_measureNumberSystem).toBool());
 
-      clefLeftMargin->setValue(lstyle.valueS(ST_clefLeftMargin).val());
-      keysigLeftMargin->setValue(lstyle.valueS(ST_keysigLeftMargin).val());
-      timesigLeftMargin->setValue(lstyle.valueS(ST_timesigLeftMargin).val());
-      clefKeyRightMargin->setValue(lstyle.valueS(ST_clefKeyRightMargin).val());
-      clefBarlineDistance->setValue(lstyle.valueS(ST_clefBarlineDistance).val());
-      staffLineWidth->setValue(lstyle.valueS(ST_staffLineWidth).val());
+      clefLeftMargin->setValue(lstyle.value(ST_clefLeftMargin).toDouble());
+      keysigLeftMargin->setValue(lstyle.value(ST_keysigLeftMargin).toDouble());
+      timesigLeftMargin->setValue(lstyle.value(ST_timesigLeftMargin).toDouble());
+      clefKeyRightMargin->setValue(lstyle.value(ST_clefKeyRightMargin).toDouble());
+      clefBarlineDistance->setValue(lstyle.value(ST_clefBarlineDistance).toDouble());
+      staffLineWidth->setValue(lstyle.value(ST_staffLineWidth).toDouble());
 
-      beamWidth->setValue(lstyle.valueS(ST_beamWidth).val());
+      beamWidth->setValue(lstyle.value(ST_beamWidth).toDouble());
       beamDistance->setValue(lstyle.value(ST_beamDistance).toDouble());
-      beamMinLen->setValue(lstyle.valueS(ST_beamMinLen).val());
+      beamMinLen->setValue(lstyle.value(ST_beamMinLen).toDouble());
 
       graceNoteSize->setValue(lstyle.value(ST_graceNoteMag).toDouble() * 100.0);
       smallStaffSize->setValue(lstyle.value(ST_smallStaffMag).toDouble() * 100.0);
@@ -465,22 +471,22 @@ void EditStyle::setValues()
       smallClefSize->setValue(lstyle.value(ST_smallClefMag).toDouble() * 100.0);
       lastSystemFillThreshold->setValue(lstyle.value(ST_lastSystemFillLimit).toDouble() * 100.0);
 
-      hairpinY->setValue(lstyle.valueS(ST_hairpinY).val());
-      hairpinLineWidth->setValue(lstyle.valueS(ST_hairpinWidth).val());
-      hairpinHeight->setValue(lstyle.valueS(ST_hairpinHeight).val());
-      hairpinContinueHeight->setValue(lstyle.valueS(ST_hairpinContHeight).val());
+      hairpinY->setValue(lstyle.value(ST_hairpinY).toDouble());
+      hairpinLineWidth->setValue(lstyle.value(ST_hairpinLineWidth).toDouble());
+      hairpinHeight->setValue(lstyle.value(ST_hairpinHeight).toDouble());
+      hairpinContinueHeight->setValue(lstyle.value(ST_hairpinContHeight).toDouble());
 
-      genClef->setChecked(lstyle.valueB(ST_genClef));
-      genKeysig->setChecked(lstyle.valueB(ST_genKeysig));
-      genTimesig->setChecked(lstyle.valueB(ST_genTimesig));
-      genCourtesyTimesig->setChecked(lstyle.valueB(ST_genCourtesyTimesig));
-      genCourtesyKeysig->setChecked(lstyle.valueB(ST_genCourtesyKeysig));
-      genCourtesyClef->setChecked(lstyle.valueB(ST_genCourtesyClef));
+      genClef->setChecked(lstyle.value(ST_genClef).toBool());
+      genKeysig->setChecked(lstyle.value(ST_genKeysig).toBool());
+      genTimesig->setChecked(lstyle.value(ST_genTimesig).toBool());
+      genCourtesyTimesig->setChecked(lstyle.value(ST_genCourtesyTimesig).toBool());
+      genCourtesyKeysig->setChecked(lstyle.value(ST_genCourtesyKeysig).toBool());
+      genCourtesyClef->setChecked(lstyle.value(ST_genCourtesyClef).toBool());
 
-      QString s(lstyle.valueSt(ST_chordDescriptionFile));
+      QString s(lstyle.value(ST_chordDescriptionFile).toString());
       chordDescriptionFile->setText(s);
-      chordsXmlFile->setChecked(lstyle.valueB(ST_chordsXmlFile));
-      QString cstyle(lstyle.valueSt(ST_chordStyle));
+      chordsXmlFile->setChecked(lstyle.value(ST_chordsXmlFile).toBool());
+      QString cstyle(lstyle.value(ST_chordStyle).toString());
       if (cstyle == "std") {
             chordsStandard->setChecked(true);
             chordDescriptionGroup->setEnabled(false);
@@ -493,67 +499,57 @@ void EditStyle::setValues()
             chordsCustom->setChecked(true);
             chordDescriptionGroup->setEnabled(true);
             }
-      useStandardNoteNames->setChecked(lstyle.valueB(ST_useStandardNoteNames));
-      useGermanNoteNames->setChecked(lstyle.valueB(ST_useGermanNoteNames));
-      useSolfeggioNoteNames->setChecked(lstyle.valueB(ST_useSolfeggioNoteNames));
-      lowerCaseMinorChords->setChecked(lstyle.valueB(ST_lowerCaseMinorChords));
-      concertPitch->setChecked(lstyle.valueB(ST_concertPitch));
+      useStandardNoteNames->setChecked(lstyle.value(ST_useStandardNoteNames).toBool());
+      useGermanNoteNames->setChecked(lstyle.value(ST_useGermanNoteNames).toBool());
+      useSolfeggioNoteNames->setChecked(lstyle.value(ST_useSolfeggioNoteNames).toBool());
+      lowerCaseMinorChords->setChecked(lstyle.value(ST_lowerCaseMinorChords).toBool());
+      concertPitch->setChecked(lstyle.value(ST_concertPitch).toBool());
 
-      multiMeasureRests->setChecked(lstyle.valueB(ST_createMultiMeasureRests));
-      minEmptyMeasures->setValue(lstyle.valueI(ST_minEmptyMeasures));
-      minMeasureWidth->setValue(lstyle.valueS(ST_minMMRestWidth).val());
-      hideEmptyStaves->setChecked(lstyle.valueB(ST_hideEmptyStaves));
-      dontHideStavesInFirstSystem->setChecked(lstyle.valueB(ST_dontHideStavesInFirstSystem));
+      multiMeasureRests->setChecked(lstyle.value(ST_createMultiMeasureRests).toBool());
+      minEmptyMeasures->setValue(lstyle.value(ST_minEmptyMeasures).toInt());
+      minMeasureWidth->setValue(lstyle.value(ST_minMMRestWidth).toDouble());
+      hideEmptyStaves->setChecked(lstyle.value(ST_hideEmptyStaves).toBool());
+      dontHideStavesInFirstSystem->setChecked(lstyle.value(ST_dontHideStavesInFirstSystem).toBool());
       dontHideStavesInFirstSystem->setEnabled(hideEmptyStaves->isChecked());
 
-      accidentalNoteDistance->setValue(lstyle.valueS(ST_accidentalNoteDistance).val());
-      accidentalDistance->setValue(lstyle.valueS(ST_accidentalDistance).val());
+      accidentalNoteDistance->setValue(lstyle.value(ST_accidentalNoteDistance).toDouble());
+      accidentalDistance->setValue(lstyle.value(ST_accidentalDistance).toDouble());
       dotMag->setValue(lstyle.value(ST_dotMag).toDouble() * 100.0);
-      noteDotDistance->setValue(lstyle.valueS(ST_dotNoteDistance).val());
-      dotDotDistance->setValue(lstyle.valueS(ST_dotDotDistance).val());
-      stemWidth->setValue(lstyle.valueS(ST_stemWidth).val());
-      ledgerLineWidth->setValue(lstyle.valueS(ST_ledgerLineWidth).val());
-      ledgerLineLength->setValue(lstyle.valueS(ST_ledgerLineLength).val());
+      noteDotDistance->setValue(lstyle.value(ST_dotNoteDistance).toDouble());
+      dotDotDistance->setValue(lstyle.value(ST_dotDotDistance).toDouble());
+      stemWidth->setValue(lstyle.value(ST_stemWidth).toDouble());
+      ledgerLineWidth->setValue(lstyle.value(ST_ledgerLineWidth).toDouble());
+      ledgerLineLength->setValue(lstyle.value(ST_ledgerLineLength).toDouble());
 
-      bracketWidth->setValue(lstyle.valueS(ST_bracketWidth).val());
-      bracketDistance->setValue(lstyle.valueS(ST_bracketDistance).val());
-      akkoladeWidth->setValue(lstyle.valueS(ST_akkoladeWidth).val());
-      akkoladeBarDistance->setValue(lstyle.valueS(ST_akkoladeBarDistance).val());
+      bracketWidth->setValue(lstyle.value(ST_bracketWidth).toDouble());
+      bracketDistance->setValue(lstyle.value(ST_bracketDistance).toDouble());
+      akkoladeWidth->setValue(lstyle.value(ST_akkoladeWidth).toDouble());
+      akkoladeBarDistance->setValue(lstyle.value(ST_akkoladeBarDistance).toDouble());
 
-      propertyDistanceHead->setValue(lstyle.valueS(ST_propertyDistanceHead).val());
-      propertyDistanceStem->setValue(lstyle.valueS(ST_propertyDistanceStem).val());
-      propertyDistance->setValue(lstyle.valueS(ST_propertyDistance).val());
+      propertyDistanceHead->setValue(lstyle.value(ST_propertyDistanceHead).toDouble());
+      propertyDistanceStem->setValue(lstyle.value(ST_propertyDistanceStem).toDouble());
+      propertyDistance->setValue(lstyle.value(ST_propertyDistance).toDouble());
 
-      voice1Up->setChecked(lstyle.value(ST_stemDir1).toDirection() == MScore::UP);
-      voice2Up->setChecked(lstyle.value(ST_stemDir2).toDirection() == MScore::UP);
-      voice3Up->setChecked(lstyle.value(ST_stemDir3).toDirection() == MScore::UP);
-      voice4Up->setChecked(lstyle.value(ST_stemDir4).toDirection() == MScore::UP);
-
-      voice1Down->setChecked(lstyle.value(ST_stemDir1).toDirection() != MScore::UP);
-      voice2Down->setChecked(lstyle.value(ST_stemDir2).toDirection() != MScore::UP);
-      voice3Down->setChecked(lstyle.value(ST_stemDir3).toDirection() != MScore::UP);
-      voice4Down->setChecked(lstyle.value(ST_stemDir4).toDirection() != MScore::UP);
-
-      shortenStem->setChecked(lstyle.valueB(ST_shortenStem));
-      shortStemProgression->setValue(lstyle.valueS(ST_shortStemProgression).val());
-      shortestStem->setValue(lstyle.valueS(ST_shortestStem).val());
-      arpeggioNoteDistance->setValue(lstyle.valueS(ST_ArpeggioNoteDistance).val());
-      arpeggioLineWidth->setValue(lstyle.valueS(ST_ArpeggioLineWidth).val());
-      arpeggioHookLen->setValue(lstyle.valueS(ST_ArpeggioHookLen).val());
+      shortenStem->setChecked(lstyle.value(ST_shortenStem).toBool());
+      shortStemProgression->setValue(lstyle.value(ST_shortStemProgression).toDouble());
+      shortestStem->setValue(lstyle.value(ST_shortestStem).toDouble());
+      arpeggioNoteDistance->setValue(lstyle.value(ST_ArpeggioNoteDistance).toDouble());
+      arpeggioLineWidth->setValue(lstyle.value(ST_ArpeggioLineWidth).toDouble());
+      arpeggioHookLen->setValue(lstyle.value(ST_ArpeggioHookLen).toDouble());
 
       // figured bass
       for(int i = 0; i < comboFBFont->count(); i++)
-            if(comboFBFont->itemText(i) == lstyle.valueSt(ST_figuredBassFontFamily)) {
+            if(comboFBFont->itemText(i) == lstyle.value(ST_figuredBassFontFamily).toString()) {
                   comboFBFont->setCurrentIndex(i);
                   break;
             }
       doubleSpinFBSize->setValue(lstyle.value(ST_figuredBassFontSize).toDouble());
       doubleSpinFBVertPos->setValue(lstyle.value(ST_figuredBassYOffset).toDouble());
-      spinFBLineHeight->setValue(lstyle.valueS(ST_figuredBassLineHeight).val() * 100.0);
-      radioFBTop->setChecked(lstyle.valueI(ST_figuredBassAlignment) == 0);
-      radioFBBottom->setChecked(lstyle.valueI(ST_figuredBassAlignment) == 1);
-      radioFBModern->setChecked(lstyle.valueI(ST_figuredBassStyle) == 0);
-      radioFBHistoric->setChecked(lstyle.valueI(ST_figuredBassStyle) == 1);
+      spinFBLineHeight->setValue(lstyle.value(ST_figuredBassLineHeight).toDouble() * 100.0);
+      radioFBTop->setChecked(lstyle.value(ST_figuredBassAlignment).toInt() == 0);
+      radioFBBottom->setChecked(lstyle.value(ST_figuredBassAlignment).toInt() == 1);
+      radioFBModern->setChecked(lstyle.value(ST_figuredBassStyle).toInt() == 0);
+      radioFBHistoric->setChecked(lstyle.value(ST_figuredBassStyle).toInt() == 1);
 
       for (int i = 0; i < ARTICULATIONS; ++i) {
             QComboBox* cb = static_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
@@ -570,77 +566,82 @@ void EditStyle::setValues()
             cb->setCurrentIndex(idx);
             }
 
-      fixNumberMeasures->setValue(lstyle.valueI(ST_FixMeasureNumbers));
-      fixMeasureWidth->setChecked(lstyle.valueB(ST_FixMeasureWidth));
+      fixNumberMeasures->setValue(lstyle.value(ST_FixMeasureNumbers).toInt());
+      fixMeasureWidth->setChecked(lstyle.value(ST_FixMeasureWidth).toBool());
 
-      slurEndLineWidth->setValue(lstyle.valueS(ST_SlurEndWidth).val());
-      slurMidLineWidth->setValue(lstyle.valueS(ST_SlurMidWidth).val());
-      slurDottedLineWidth->setValue(lstyle.valueS(ST_SlurDottedWidth).val());
-      musicalSymbolFont->setCurrentIndex(lstyle.valueSt(ST_MusicalSymbolFont) == "Emmentaler" ? 0 : 1);
+      slurEndLineWidth->setValue(lstyle.value(ST_SlurEndWidth).toDouble());
+      slurMidLineWidth->setValue(lstyle.value(ST_SlurMidWidth).toDouble());
+      slurDottedLineWidth->setValue(lstyle.value(ST_SlurDottedWidth).toDouble());
+      musicalSymbolFont->setCurrentIndex(lstyle.value(ST_MusicalSymbolFont).toString() == "Emmentaler" ? 0 : 1);
 
-      showHeader->setChecked(lstyle.valueB(ST_showHeader));
-      headerStyled->setChecked(lstyle.valueB(ST_headerStyled));
-      showHeaderFirstPage->setChecked(lstyle.valueB(ST_headerFirstPage));
-      headerOddEven->setChecked(lstyle.valueB(ST_headerOddEven));
+      showHeader->setChecked(lstyle.value(ST_showHeader).toBool());
+      headerStyled->setChecked(lstyle.value(ST_headerStyled).toBool());
+      showHeaderFirstPage->setChecked(lstyle.value(ST_headerFirstPage).toBool());
+      headerOddEven->setChecked(lstyle.value(ST_headerOddEven).toBool());
       if (headerStyled->isChecked()) {
-            evenHeaderL->setPlainText(lstyle.valueSt(ST_evenHeaderL));
-            evenHeaderC->setPlainText(lstyle.valueSt(ST_evenHeaderC));
-            evenHeaderR->setPlainText(lstyle.valueSt(ST_evenHeaderR));
-            oddHeaderL->setPlainText(lstyle.valueSt(ST_oddHeaderL));
-            oddHeaderC->setPlainText(lstyle.valueSt(ST_oddHeaderC));
-            oddHeaderR->setPlainText(lstyle.valueSt(ST_oddHeaderR));
+            evenHeaderL->setPlainText(lstyle.value(ST_evenHeaderL).toString());
+            evenHeaderC->setPlainText(lstyle.value(ST_evenHeaderC).toString());
+            evenHeaderR->setPlainText(lstyle.value(ST_evenHeaderR).toString());
+            oddHeaderL->setPlainText(lstyle.value(ST_oddHeaderL).toString());
+            oddHeaderC->setPlainText(lstyle.value(ST_oddHeaderC).toString());
+            oddHeaderR->setPlainText(lstyle.value(ST_oddHeaderR).toString());
             }
       else {
-            evenHeaderL->setHtml(lstyle.valueSt(ST_evenHeaderL));
-            evenHeaderC->setHtml(lstyle.valueSt(ST_evenHeaderC));
-            evenHeaderR->setHtml(lstyle.valueSt(ST_evenHeaderR));
-            oddHeaderL->setHtml(lstyle.valueSt(ST_oddHeaderL));
-            oddHeaderC->setHtml(lstyle.valueSt(ST_oddHeaderC));
-            oddHeaderR->setHtml(lstyle.valueSt(ST_oddHeaderR));
+            evenHeaderL->setHtml(lstyle.value(ST_evenHeaderL).toString());
+            evenHeaderC->setHtml(lstyle.value(ST_evenHeaderC).toString());
+            evenHeaderR->setHtml(lstyle.value(ST_evenHeaderR).toString());
+            oddHeaderL->setHtml(lstyle.value(ST_oddHeaderL).toString());
+            oddHeaderC->setHtml(lstyle.value(ST_oddHeaderC).toString());
+            oddHeaderR->setHtml(lstyle.value(ST_oddHeaderR).toString());
             }
 
-      showFooter->setChecked(lstyle.valueB(ST_showFooter));
-      footerStyled->setChecked(lstyle.valueB(ST_footerStyled));
-      showFooterFirstPage->setChecked(lstyle.valueB(ST_footerFirstPage));
-      footerOddEven->setChecked(lstyle.valueB(ST_footerOddEven));
+      showFooter->setChecked(lstyle.value(ST_showFooter).toBool());
+      footerStyled->setChecked(lstyle.value(ST_footerStyled).toBool());
+      showFooterFirstPage->setChecked(lstyle.value(ST_footerFirstPage).toBool());
+      footerOddEven->setChecked(lstyle.value(ST_footerOddEven).toBool());
       if (footerStyled->isChecked()) {
-            evenFooterL->setPlainText(lstyle.valueSt(ST_evenFooterL));
-            evenFooterC->setPlainText(lstyle.valueSt(ST_evenFooterC));
-            evenFooterR->setPlainText(lstyle.valueSt(ST_evenFooterR));
-            oddFooterL->setPlainText(lstyle.valueSt(ST_oddFooterL));
-            oddFooterC->setPlainText(lstyle.valueSt(ST_oddFooterC));
-            oddFooterR->setPlainText(lstyle.valueSt(ST_oddFooterR));
+            evenFooterL->setPlainText(lstyle.value(ST_evenFooterL).toString());
+            evenFooterC->setPlainText(lstyle.value(ST_evenFooterC).toString());
+            evenFooterR->setPlainText(lstyle.value(ST_evenFooterR).toString());
+            oddFooterL->setPlainText(lstyle.value(ST_oddFooterL).toString());
+            oddFooterC->setPlainText(lstyle.value(ST_oddFooterC).toString());
+            oddFooterR->setPlainText(lstyle.value(ST_oddFooterR).toString());
             }
       else {
-            evenFooterL->setHtml(lstyle.valueSt(ST_evenFooterL));
-            evenFooterC->setHtml(lstyle.valueSt(ST_evenFooterC));
-            evenFooterR->setHtml(lstyle.valueSt(ST_evenFooterR));
-            oddFooterL->setHtml(lstyle.valueSt(ST_oddFooterL));
-            oddFooterC->setHtml(lstyle.valueSt(ST_oddFooterC));
-            oddFooterR->setHtml(lstyle.valueSt(ST_oddFooterR));
+            evenFooterL->setHtml(lstyle.value(ST_evenFooterL).toString());
+            evenFooterC->setHtml(lstyle.value(ST_evenFooterC).toString());
+            evenFooterR->setHtml(lstyle.value(ST_evenFooterR).toString());
+            oddFooterL->setHtml(lstyle.value(ST_oddFooterL).toString());
+            oddFooterC->setHtml(lstyle.value(ST_oddFooterC).toString());
+            oddFooterR->setHtml(lstyle.value(ST_oddFooterR).toString());
             }
 
-      voltaY->setValue(lstyle.valueS(ST_voltaY).val());
-      voltaHook->setValue(lstyle.valueS(ST_voltaHook).val());
-      voltaLineWidth->setValue(lstyle.valueS(ST_voltaLineWidth).val());
+      voltaY->setValue(lstyle.value(ST_voltaY).toDouble());
+      voltaHook->setValue(lstyle.value(ST_voltaHook).toDouble());
+      voltaLineWidth->setValue(lstyle.value(ST_voltaLineWidth).toDouble());
+      voltaLineStyle->setCurrentIndex(lstyle.value(ST_voltaLineStyle).toInt()-1);
 
-      ottavaY->setValue(lstyle.valueS(ST_ottavaY).val());
-      ottavaHook->setValue(lstyle.valueS(ST_ottavaHook).val());
-      ottavaLineWidth->setValue(lstyle.valueS(ST_ottavaLineWidth).val());
+      ottavaY->setValue(lstyle.value(ST_ottavaY).toDouble());
+      ottavaHook->setValue(lstyle.value(ST_ottavaHook).toDouble());
+      ottavaLineWidth->setValue(lstyle.value(ST_ottavaLineWidth).toDouble());
+      ottavaLineStyle->setCurrentIndex(lstyle.value(ST_ottavaLineStyle).toInt()-1);
 
-      trillY->setValue(lstyle.valueS(ST_trillY).val());
-      harmonyY->setValue(lstyle.valueS(ST_harmonyY).val());
-      harmonyFretDist->setValue(lstyle.valueS(ST_harmonyFretDist).val());
-      minHarmonyDistance->setValue(lstyle.valueS(ST_minHarmonyDistance).val());
-      pedalY->setValue(lstyle.valueS(ST_pedalY).val());
+      trillY->setValue(lstyle.value(ST_trillY).toDouble());
+      harmonyY->setValue(lstyle.value(ST_harmonyY).toDouble());
+      harmonyFretDist->setValue(lstyle.value(ST_harmonyFretDist).toDouble());
+      minHarmonyDistance->setValue(lstyle.value(ST_minHarmonyDistance).toDouble());
+      pedalY->setValue(lstyle.value(ST_pedalY).toDouble());
+      pedalLineWidth->setValue(lstyle.value(ST_pedalLineWidth).toDouble());
+      pedalLineStyle->setCurrentIndex(lstyle.value(ST_pedalLineStyle).toInt()-1);
 
-      clefTab1->setChecked(lstyle.valueI(ST_tabClef) == CLEF_TAB);
-      clefTab2->setChecked(lstyle.valueI(ST_tabClef) == CLEF_TAB2);
+      clefTab1->setChecked(lstyle.value(ST_tabClef).toInt() == CLEF_TAB);
+      clefTab2->setChecked(lstyle.value(ST_tabClef).toInt() == CLEF_TAB2);
 
-      crossMeasureValues->setChecked(lstyle.valueB(ST_crossMeasureValues));
-      radioKeySigNatNone->setChecked  (lstyle.valueB(ST_keySigNaturals) == NAT_NONE);
-      radioKeySigNatBefore->setChecked(lstyle.valueB(ST_keySigNaturals) == NAT_BEFORE);
-      radioKeySigNatAfter->setChecked (lstyle.valueB(ST_keySigNaturals) == NAT_AFTER);
+      crossMeasureValues->setChecked(lstyle.value(ST_crossMeasureValues).toBool());
+      // bool ??:
+      radioKeySigNatNone->setChecked  (lstyle.value(ST_keySigNaturals).toBool() == NAT_NONE);
+      radioKeySigNatBefore->setChecked(lstyle.value(ST_keySigNaturals).toBool() == NAT_BEFORE);
+      radioKeySigNatAfter->setChecked (lstyle.value(ST_keySigNaturals).toBool() == NAT_AFTER);
       }
 
 //---------------------------------------------------------
@@ -723,5 +724,18 @@ void EditStyle::setPage(int row)
       {
       pageList->setCurrentRow(row);
       }
+
+//---------------------------------------------------------
+//   resetStyleValue
+//---------------------------------------------------------
+
+void EditStyle::resetStyleValue(int i)
+      {
+      StyleIdx id = (StyleIdx)i;
+//      if (lstyle.value(id) != MScore::defaultStyle()->value(id)) {
+            lstyle.set(id, MScore::defaultStyle()->value(id));
+//            }
+      }
+
 }
 

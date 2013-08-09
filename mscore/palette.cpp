@@ -568,7 +568,7 @@ void Palette::paintEvent(QPaintEvent* event)
 
       // QPen pen(palette().color(QPalette::Normal, QPalette::Text));
       QPen pen(Qt::black);
-      pen.setWidthF(MScore::defaultStyle()->valueS(ST_staffLineWidth).val() * PALETTE_SPATIUM * extraMag);
+      pen.setWidthF(MScore::defaultStyle()->value(ST_staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
 
       for (int idx = 0; idx < cells.size(); ++idx) {
             int yoffset = gscore->spatium() * _yOffset;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>917</width>
-    <height>367</height>
+    <width>1038</width>
+    <height>413</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,77 +17,6 @@
    <property name="leftMargin">
     <number>4</number>
    </property>
-   <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Line</string>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="2">
-       <spacer>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="lineStyle">
-        <item>
-         <property name="text">
-          <string>solid</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>dash</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>dot</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>dash dot</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>dash dot dot</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Line style:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="diagonal">
-        <property name="text">
-         <string>diagonally</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="leftMargin">
@@ -107,6 +36,12 @@
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <widget class="QRadioButton" name="beginTextRb">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Text</string>
           </property>
@@ -242,6 +177,12 @@
         </item>
         <item row="4" column="0">
          <widget class="QCheckBox" name="beginHook">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Hook</string>
           </property>

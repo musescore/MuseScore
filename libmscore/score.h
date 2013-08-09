@@ -664,13 +664,14 @@ class Score : public QObject {
       bool loadStyle(const QString&);
       bool saveStyle(const QString&);
 
-      StyleVal style(StyleIdx idx) const       { return _style.value(idx);   }
-      Spatium styleS(StyleIdx idx) const       { return _style.valueS(idx);  }
-      qreal   styleP(StyleIdx idx) const       { return _style.valueS(idx).val() * spatium();  }
-      QString styleSt(StyleIdx idx) const      { return _style.valueSt(idx); }
-      bool    styleB(StyleIdx idx) const       { return _style.valueB(idx);  }
-      qreal  styleD(StyleIdx idx) const        { return _style.valueD(idx);  }
-      int     styleI(StyleIdx idx) const       { return _style.valueI(idx);  }
+      QVariant style(StyleIdx idx) const   { return _style.value(idx);   }
+      Spatium  styleS(StyleIdx idx) const  { return Spatium(_style.value(idx).toDouble());  }
+      qreal    styleP(StyleIdx idx) const  { return _style.value(idx).toDouble() * spatium();  }
+      QString  styleSt(StyleIdx idx) const { return _style.value(idx).toString(); }
+      bool     styleB(StyleIdx idx) const  { return _style.value(idx).toBool();  }
+      qreal    styleD(StyleIdx idx) const  { return _style.value(idx).toDouble();  }
+      int      styleI(StyleIdx idx) const  { return _style.value(idx).toInt();  }
+
       const TextStyle& textStyle(int idx) const { return _style.textStyle(idx); }
       const TextStyle& textStyle(const QString& s) const  { return _style.textStyle(s); }
 

@@ -78,8 +78,6 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       populateLineSymbolComboBox(continueSymbol);
       populateLineSymbolComboBox(endSymbol);
 
-      lineStyle->setCurrentIndex(int(tl->lineStyle() - 1));
-
       if (tl->beginText())
             _beginText = new Text(*tl->beginText());
       else
@@ -156,8 +154,6 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       endHookType90->setChecked(tl->endHookType() == HOOK_90);
       endHookType45->setChecked(tl->endHookType() == HOOK_45);
 
-      diagonal->setChecked(tl->diagonal());
-
       connect(beginTextRb, SIGNAL(toggled(bool)), SLOT(beginTextToggled(bool)));
       connect(beginSymbolRb, SIGNAL(toggled(bool)), SLOT(beginSymbolToggled(bool)));
       connect(continueTextRb, SIGNAL(toggled(bool)), SLOT(continueTextToggled(bool)));
@@ -172,9 +168,6 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
 
 void LineProperties::accept()
       {
-
-      tl->setLineStyle(Qt::PenStyle(lineStyle->currentIndex() + 1));
-
       tl->setBeginHookHeight(Spatium(beginHookHeight->value()));
       tl->setBeginHook(beginHook->isChecked());
       tl->setEndHookHeight(Spatium(endHookHeight->value()));
@@ -234,7 +227,6 @@ void LineProperties::accept()
       tl->setContinueSymbolOffset(QPointF(continueSymbolX->value(), continueSymbolY->value()));
       tl->setEndSymbolOffset(QPointF(endSymbolX->value(), endSymbolY->value()));
 
-      tl->setDiagonal(diagonal->isChecked());
       QDialog::accept();
       }
 

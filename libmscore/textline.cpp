@@ -321,7 +321,6 @@ TextLine::TextLine(Score* s)
       _beginSymbol       = noSym;
       _continueSymbol    = noSym;
       _endSymbol         = noSym;
-      // _sp                = 0;
       }
 
 TextLine::TextLine(const TextLine& e)
@@ -353,7 +352,6 @@ TextLine::TextLine(const TextLine& e)
             _continueText = e._continueText->clone();
             _continueText->setParent(this);
             }
-//      _sp = 0;
       }
 
 //---------------------------------------------------------
@@ -436,25 +434,19 @@ void TextLine::read(XmlReader& e)
 //    write properties different from prototype
 //---------------------------------------------------------
 
-void TextLine::writeProperties(Xml& xml, const TextLine* proto) const
+void TextLine::writeProperties(Xml& xml) const
       {
       if (_beginHook) {
-            if (proto == 0 || proto->beginHookHeight() != _beginHookHeight)
-                  xml.tag("beginHookHeight", _beginHookHeight.val());
-            if (proto == 0 || proto->beginHookType() != _beginHookType)
-                  xml.tag("beginHookType", int(_beginHookType));
+            xml.tag("beginHookHeight", _beginHookHeight.val());
+            xml.tag("beginHookType", int(_beginHookType));
             }
       if (_endHook) {
-            if (proto == 0 || proto->endHookHeight() != _endHookHeight)
-                  xml.tag("endHookHeight", _endHookHeight.val());
-            if (proto == 0 || proto->endHookType() != _endHookType)
-                  xml.tag("endHookType", int(_endHookType));
+            xml.tag("endHookHeight", _endHookHeight.val());
+            xml.tag("endHookType", int(_endHookType));
             }
 
-      if (proto == 0 || proto->beginTextPlace() != _beginTextPlace)
-            xml.pTag("beginTextPlace", _beginTextPlace);
-      if (proto == 0 || proto->continueTextPlace() != _continueTextPlace)
-            xml.pTag("continueTextPlace", _continueTextPlace);
+      xml.pTag("beginTextPlace", _beginTextPlace);
+      xml.pTag("continueTextPlace", _continueTextPlace);
 
       SLine::writeProperties(xml);
       if (_beginText) {

@@ -23,6 +23,7 @@
 
 namespace Ms {
 
+
 //---------------------------------------------------------
 //   LineSegment
 //---------------------------------------------------------
@@ -666,19 +667,20 @@ void SLine::layout()
 //    write properties different from prototype
 //---------------------------------------------------------
 
-void SLine::writeProperties(Xml& xml, const SLine* proto) const
+void SLine::writeProperties(Xml& xml) const
       {
       Element::writeProperties(xml);
-      if (_diagonal && (proto == 0 || proto->diagonal() != _diagonal))
+      if (_diagonal)
             xml.tag("diagonal", _diagonal);
       if (propertyStyle(P_LINE_WIDTH) != PropertyStyle::STYLED)
             xml.tag("lineWidth", lineWidth().val());
-      if (proto == 0 || proto->lineStyle() != lineStyle())
+      if (propertyStyle(P_LINE_STYLE) == PropertyStyle::UNSTYLED || (lineStyle() != Qt::SolidLine))
+      if (propertyStyle(P_LINE_STYLE) != PropertyStyle::STYLED)
             xml.tag("lineStyle", int(lineStyle()));
-      if (proto == 0 || proto->lineColor() != lineColor())
+      if (propertyStyle(P_LINE_COLOR) == PropertyStyle::UNSTYLED || (lineColor() != MScore::defaultColor))
             xml.tag("lineColor", lineColor());
 
-      if (anchor() != Spanner::ANCHOR_SEGMENT && (proto == 0 || proto->anchor() != anchor()))
+      if (anchor() != Spanner::ANCHOR_SEGMENT)
             xml.tag("anchor", anchor());
       if (score() == gscore) {
             // when used as icon
@@ -872,7 +874,7 @@ QVariant SLine::propertyDefault(P_ID id) const
             case P_LINE_WIDTH:
                   return 0.15;
             case P_LINE_STYLE:
-                  return 0;
+                  return int(Qt::SolidLine);
             default:
                   return Spanner::propertyDefault(id);
             }
