@@ -959,9 +959,11 @@ void TextSegment::set(const QString& s, const QFont& f, qreal _x, qreal _y)
 void Harmony::render(const QString& s, qreal& x, qreal& y)
       {
       int fontIdx = 0;
-      TextSegment* ts = new TextSegment(s, fontList[fontIdx], x, y);
-      textList.append(ts);
-      x += ts->width();
+      if(!s.isEmpty()) {
+            TextSegment* ts = new TextSegment(s, fontList[fontIdx], x, y);
+            textList.append(ts);
+            x += ts->width();
+            }
       }
 
 //---------------------------------------------------------

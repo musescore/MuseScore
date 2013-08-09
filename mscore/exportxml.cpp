@@ -301,7 +301,7 @@ public:
       void dynamic(Dynamic const* const dyn, int staff);
       void symbol(Symbol const* const sym, int staff);
       void tempoText(TempoText const* const text, int staff);
-      void harmony(Harmony const* const, FretDiagram const* const fd);
+      void harmony(Harmony const* const, FretDiagram const* const fd, int offset = 0);
       Score* score() { return _score; }
       };
 
@@ -4268,36 +4268,14 @@ void ExportMusicXml::write(QIODevice* dev)
 
                         int sstaff = (staves > 1) ? st - strack + VOICES : 0;
                         sstaff /= VOICES;
-
                         for (Segment* seg = m->first(); seg; seg = seg->next()) {
                               Element* el = seg->element(st);
-                              if (!el)
+                              if (!el) {
                                     continue;
+                                    }
                               // must ignore start repeat to prevent spurious backup/forward
                               if (el->type() == Element::BAR_LINE && static_cast<BarLine*>(el)->barLineType() == START_REPEAT)
                                     continue;
-
-                              // look for harmony element for this tick position
-                              if (el->isChordRest()) {
-                                    QList<Element*> list;
-
-#if 0 // TODO-WS
-                                    foreach(Element* he, *m->el()) {
-                                          if ((he->type() == Element::HARMONY) && (he->staffIdx() == sstaff)
-                                              && (he->tick() == el->tick())) {
-                                                list << he;
-                                                }
-                                          }
-#endif
-
-                                    qSort(list.begin(), list.end(), elementRighter);
-
-                                    foreach (Element* hhe, list) {
-                                          attr.doAttr(xml, false);
-                                          qDebug("writing harmony");
-                                          harmony((Harmony*)hhe, 0);
-                                          }
-                                    }
 
                               // generate backup or forward to the start time of the element
                               // but not for breath, which has the same start time as the
@@ -4312,6 +4290,18 @@ void ExportMusicXml::write(QIODevice* dev)
                               if (el->isChordRest()) {
                                     attr.doAttr(xml, false);
                                     annotations(this, xml, strack, etrack, st, sstaff, seg);
+                                    // look for more harmony
+                                    for (Segment* seg1 = seg->next(); seg1; seg1 = seg1->next()) {
+                                          if(seg1->isChordRest()) {
+                                                Element* el1 = seg1->element(st);
+                                                if (el1) // found a ChordRest, next harmony will be attach to this one
+                                                      break;
+                                                foreach (Element* annot, seg1->annotations()) {
+                                                      if(annot->type() == Element::HARMONY && annot->track() == st)
+                                                            harmony(static_cast<Harmony*>(annot), 0, (seg1->tick() - seg->tick()) / div);
+                                                      }
+                                                }
+                                          }
                                     figuredBass(xml, strack, etrack, st, static_cast<const ChordRest*>(el), fbMap);
                                     spannerStop(this, strack, etrack, st, sstaff, seg);
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
@@ -4501,7 +4491,7 @@ double ExportMusicXml::getTenthsFromDots(double dots)
 //   harmony
 //---------------------------------------------------------
 
-void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd)
+void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd, int offset)
       {
       double rx = h->userOff().x()*10;
       QString relative;
@@ -4573,7 +4563,8 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                         }
                   xml.etag();
                   }
-
+            if(offset > 0)
+                  xml.tag("offset", offset);
             if (fd)
                   fd->writeMusicXML(xml);
 
