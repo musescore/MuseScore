@@ -538,7 +538,7 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
-      int idx = _style.valueSt(ST_MusicalSymbolFont) == "Gonville" ? 1 : 0;
+      int idx = styleSt(ST_MusicalSymbolFont) == "Gonville" ? 1 : 0;
 
       initSymbols(idx);
 

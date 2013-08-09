@@ -87,7 +87,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
 
 class StyleData : public QSharedData {
    protected:
-      QVector<StyleVal> _values;
+      QVector<QVariant> _values;
       ChordList _chordList;
       QList<TextStyle> _textStyles;
       PageFormat _pageFormat;
@@ -96,8 +96,8 @@ class StyleData : public QSharedData {
 
       bool _customChordList;        // if true, chordlist will be saved as part of score
 
-      void set(StyleIdx id, const StyleVal& v)            { _values[id] = v; }
-      StyleVal value(StyleIdx idx) const                  { return _values[idx];     }
+      void set(StyleIdx id, const QVariant& v)            { _values[id] = v; }
+      QVariant value(StyleIdx idx) const                  { return _values[idx];     }
       const TextStyle& textStyle(int idx) const;
       const TextStyle& textStyle(const QString&) const;
       int textStyleType(const QString&) const;

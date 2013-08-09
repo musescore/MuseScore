@@ -2465,9 +2465,9 @@ void ChangeStyle::flip()
       {
       MStyle tmp = *score->style();
 
-      if (score->styleB(ST_concertPitch) != style.valueB(ST_concertPitch))
-            score->cmdConcertPitchChanged(style.valueB(ST_concertPitch), true);
-      if (score->styleSt(ST_MusicalSymbolFont) != style.valueSt(ST_MusicalSymbolFont))
+      if (score->style(ST_concertPitch) != style.value(ST_concertPitch))
+            score->cmdConcertPitchChanged(style.value(ST_concertPitch).toBool(), true);
+      if (score->style(ST_MusicalSymbolFont) != style.value(ST_MusicalSymbolFont))
             score->scanElements(0, updateTimeSigs);
 
       score->setStyle(style);

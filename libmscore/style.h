@@ -228,9 +228,12 @@ enum StyleIdx {
       ST_hairpinY,
       ST_hairpinHeight,
       ST_hairpinContHeight,
-      ST_hairpinWidth,
+      ST_hairpinLineWidth,
 
       ST_pedalY,
+      ST_pedalLineWidth,
+      ST_pedalLineStyle,
+
       ST_trillY,
       ST_harmonyY,
       ST_harmonyFretDist,
@@ -269,10 +272,6 @@ enum StyleIdx {
       ST_minMMRestWidth,
       ST_hideEmptyStaves,
       ST_dontHideStavesInFirstSystem,
-      ST_stemDir1,
-      ST_stemDir2,
-      ST_stemDir3,
-      ST_stemDir4,
       ST_gateTime,
       ST_tenutoGateTime,
       ST_staccatoGateTime,
@@ -338,41 +337,6 @@ enum StyleIdx {
       };
 
 //---------------------------------------------------------
-//   StyleVal
-//---------------------------------------------------------
-
-class StyleVal {
-      QString   s;
-      union {
-            qreal  dbl;
-            bool      b;
-            int       i;
-            MScore::Direction d;
-            } v;
-
-   public:
-      StyleVal()                  { }
-      StyleVal(const StyleVal& val);
-      StyleVal& operator=(const StyleVal& val);
-      StyleVal(const QString& name, const QString& val);
-
-      StyleVal(Spatium val);
-      StyleVal(qreal val);
-      StyleVal(bool val);
-      StyleVal(int val);
-      StyleVal(MScore::Direction val);
-      StyleVal(const QString& val);
-      StyleVal(const QColor& val);
-
-      Spatium toSpatium() const       { return Spatium(v.dbl); }
-      qreal toDouble() const          { return v.dbl;  }
-      bool toBool() const             { return v.b;  }
-      int toInt() const               { return v.i;  }
-      QString toString() const        { return s;       }
-      MScore::Direction toDirection() const   { return v.d;  }
-      };
-
-//---------------------------------------------------------
 //   MStyle
 //---------------------------------------------------------
 
@@ -405,14 +369,9 @@ class MStyle {
       void set(StyleIdx t, qreal val);
       void set(StyleIdx t, int val);
       void set(StyleIdx t, MScore::Direction val);
-      void set(StyleIdx t, const StyleVal& v);
+      void set(StyleIdx t, const QVariant& v);
 
-      StyleVal value(StyleIdx idx) const;
-      Spatium  valueS(StyleIdx idx) const;
-      QString  valueSt(StyleIdx idx) const;
-      bool     valueB(StyleIdx idx) const;
-      qreal    valueD(StyleIdx idx) const;
-      int      valueI(StyleIdx idx) const;
+      QVariant value(StyleIdx idx) const;
 
       bool load(QFile* qf);
       void load(XmlReader& e);
