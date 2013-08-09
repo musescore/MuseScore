@@ -2311,25 +2311,36 @@ void ScoreView::normalPaste()
             qDebug("no application mime data");
             return;
             }
-      if (_score->selection().isSingle() && ms->hasFormat(mimeSymbolFormat)) {
+      if ((_score->selection().isSingle()|| _score->selection().state() == SEL_LIST) && ms->hasFormat(mimeSymbolFormat)) {
             QByteArray data(ms->data(mimeSymbolFormat));
             XmlReader e(data);
             QPointF dragOffset;
             Fraction duration(1, 4);
             Element::ElementType type = Element::readType(e, &dragOffset, &duration);
+
+            QList<Element*> els;
+            if(_score->selection().isSingle())
+                  els.append(_score->selection().element());
+            else
+                  els.append(_score->selection().elements());
+
             if (type != Element::INVALID) {
                   Element* el = Element::create(type, _score);
+                  el->read(e);
                   if (el) {
-                        el->read(e);
-                        _score->addRefresh(_score->selection().element()->abbox());   // layout() ?!
-                        DropData ddata;
-                        ddata.view       = this;
-                        ddata.element    = el;
-                        ddata.duration   = duration;
-                        _score->selection().element()->drop(ddata);
-                        if (_score->selection().element())
-                              _score->addRefresh(_score->selection().element()->abbox());
+                        for (Element* target : els) {
+                              Element* nel = el->clone();
+                              _score->addRefresh(target->abbox());   // layout() ?!
+                              DropData ddata;
+                              ddata.view       = this;
+                              ddata.element    = nel;
+                              ddata.duration   = duration;
+                              target->drop(ddata);
+                              if (_score->selection().element())
+                                    _score->addRefresh(_score->selection().element()->abbox());
+                              }
                         }
+                        delete el;
                   }
             else
                   qDebug("cannot read type");
