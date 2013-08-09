@@ -30,8 +30,12 @@ namespace Ms {
 void OttavaSegment::layout()
       {
       TextLineSegment::layout1();
-      if (parent())     // for palette
-            rypos() += score()->styleS(ST_ottavaY).val() * spatium();
+      if (parent()) {     // for palette
+            Spatium yo(score()->styleS(ST_ottavaY));
+            if (ottava()->placement() == BELOW)
+                  yo = -yo + Spatium(4);  // TODO: does only work for 5 line staves
+            rypos() += yo.val() * spatium();
+            }
       adjustReadPos();
       }
 
@@ -75,6 +79,7 @@ QVariant OttavaSegment::propertyDefault(P_ID id) const
             case P_LINE_WIDTH:
             case P_LINE_STYLE:
             case P_OTTAVA_TYPE:
+            case P_PLACEMENT:
                   return ottava()->propertyDefault(id);
             default:
                   return TextLineSegment::propertyDefault(id);
@@ -137,6 +142,7 @@ Ottava::Ottava(Score* s)
       lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(ST_ottavaLineStyle)));
       lineStyleStyle = PropertyStyle::STYLED;
+      setPlacement(ABOVE);
       }
 
 //---------------------------------------------------------
@@ -320,6 +326,9 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_LINE_STYLE:
                   return int(score()->styleI(ST_ottavaLineStyle));
 
+            case P_PLACEMENT:
+                  return ABOVE;
+
             default:
                   return TextLine::propertyDefault(propertyId);
             }
@@ -340,7 +349,10 @@ void Ottava::undoSetOttavaType(OttavaType val)
 
 void Ottava::setYoff(qreal val)
       {
-      rUserYoffset() += (val - score()->styleS(ST_ottavaY).val()) * spatium();
+      Spatium yo(score()->styleS(ST_ottavaY));
+      if (placement() == BELOW)
+            yo = -yo + Spatium(4);  // TODO: does only work for 5 line staves
+      rUserYoffset() += (val - yo.val()) * spatium();
       }
 
 //---------------------------------------------------------
