@@ -5039,6 +5039,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
 
       Harmony* ha = new Harmony(score);
       ha->setUserOff(QPointF(rx, ry + dy - styleYOff));
+      int offset = 0;
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             QString tag(e.tagName());
             if (tag == "root") {
@@ -5151,12 +5152,10 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
             else if (tag == "level")
                   domNotImplemented(e);
             else if (tag == "offset")
-                  domNotImplemented(e);
+                  offset = calcTicks(e.text(), divisions);
             else
                   domError(e);
             }
-
-      //TODO-WS ha->setTick(tick);
 
       const ChordDescription* d = 0;
       if (ha->rootTpc() != INVALID_TPC)
@@ -5176,7 +5175,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       // TODO-LV: do this only if ha points to a valid harmony
       // harmony = ha;
       ha->setTrack(staff * VOICES);
-      Segment* s = measure->getSegment(Segment::SegChordRest, tick);
+      Segment* s = measure->getSegment(Segment::SegChordRest, tick + offset);
       s->add(ha);
       }
 
