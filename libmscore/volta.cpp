@@ -389,5 +389,16 @@ void Volta::styleChanged()
             setLineWidth(score()->styleS(ST_voltaLineWidth));
       }
 
+//---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void Volta::reset()
+      {
+      if (lineWidthStyle == PropertyStyle::UNSTYLED)
+            score()->undoChangeProperty(this, P_LINE_WIDTH, propertyDefault(P_LINE_WIDTH), PropertyStyle::STYLED);
+      TextLine::reset();
+      }
+
 }
 
