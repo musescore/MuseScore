@@ -397,8 +397,19 @@ void InspectorBase::resetClicked(int i)
             static_cast<QDoubleSpinBox*>(w)->setValue(def.toDouble());
       else if (qobject_cast<QSpinBox*>(w))
             static_cast<QSpinBox*>(w)->setValue(def.toInt());
-      else if (qobject_cast<QComboBox*>(w))
-            static_cast<QComboBox*>(w)->setCurrentIndex(def.toInt());
+      else if (qobject_cast<QComboBox*>(w)) {
+            int ival = def.toInt();
+            QComboBox* cb = qobject_cast<QComboBox*>(w);
+            if (cb->itemData(0).isValid()) {
+                  for (int i = 0; i < cb->count(); ++i) {
+                        if (cb->itemData(i).toInt() == ival) {
+                              ival = i;
+                              break;
+                              }
+                        }
+                  }
+            cb->setCurrentIndex(ival);
+            }
       else if (qobject_cast<QCheckBox*>(w))
             static_cast<QCheckBox*>(w)->setChecked(def.toBool());
       else if (qobject_cast<QLineEdit*>(w))

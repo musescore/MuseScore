@@ -89,8 +89,6 @@ PropertyStyle OttavaSegment::propertyStyle(P_ID id) const
       {
       switch (id) {
             case P_OTTAVA_TYPE:
-                  return PropertyStyle::NOSTYLE;
-
             case P_LINE_WIDTH:
             case P_LINE_STYLE:
                   return ottava()->propertyStyle(id);
@@ -108,8 +106,6 @@ void OttavaSegment::resetProperty(P_ID id)
       {
       switch (id) {
             case P_OTTAVA_TYPE:
-                  return;
-
             case P_LINE_WIDTH:
             case P_LINE_STYLE:
                   return ottava()->resetProperty(id);
@@ -317,6 +313,7 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
       switch (propertyId) {
             case P_OTTAVA_TYPE:
                   return 0;
+
             case P_LINE_WIDTH:
                   return score()->styleS(ST_ottavaLineWidth).val();
 
@@ -403,6 +400,19 @@ void Ottava::styleChanged()
             setLineWidth(score()->styleS(ST_ottavaLineWidth));
       if (lineStyleStyle == PropertyStyle::STYLED)
             setLineStyle(Qt::PenStyle(score()->styleI(ST_ottavaLineStyle)));
+      }
+
+//---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void Ottava::reset()
+      {
+      if (lineWidthStyle == PropertyStyle::UNSTYLED)
+            score()->undoChangeProperty(this, P_LINE_WIDTH, propertyDefault(P_LINE_WIDTH), PropertyStyle::STYLED);
+      if (lineStyleStyle == PropertyStyle::UNSTYLED)
+            score()->undoChangeProperty(this, P_LINE_STYLE, propertyDefault(P_LINE_STYLE), PropertyStyle::STYLED);
+      TextLine::reset();
       }
 
 }
