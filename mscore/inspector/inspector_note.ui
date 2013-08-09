@@ -80,6 +80,15 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimum">
+        <double>-200.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>200.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>10.000000000000000</double>
+       </property>
       </widget>
      </item>
      <item row="6" column="0">
