@@ -320,6 +320,9 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_LINE_WIDTH:
                   return score()->styleS(ST_ottavaLineWidth).val();
 
+            case P_LINE_STYLE:
+                  return int(score()->styleI(ST_ottavaLineStyle));
+
             default:
                   return TextLine::propertyDefault(propertyId);
             }

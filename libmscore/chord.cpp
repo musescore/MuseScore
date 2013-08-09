@@ -658,14 +658,8 @@ void Chord::computeUp()
             // if no stems or stem beside staves
             if (tab->slashStyle() || !tab->stemThrough()) {
                   // if measure has voices, set stem direction according to voice
-                  if (measure()->mstaff(staffIdx())->hasVoices) {
-                        switch(voice()) {
-                              case 0:  _up = (score()->style(ST_stemDir1).toDirection() == MScore::UP); break;
-                              case 1:  _up = (score()->style(ST_stemDir2).toDirection() == MScore::UP); break;
-                              case 2:  _up = (score()->style(ST_stemDir3).toDirection() == MScore::UP); break;
-                              case 3:  _up = (score()->style(ST_stemDir4).toDirection() == MScore::UP); break;
-                              }
-                        }
+                  if (measure()->mstaff(staffIdx())->hasVoices)
+                        _up = !(track() % 2);
                   else                          // if only voice 1,
                         _up = !tab->stemsDown();// unconditionally set _up according to TAB stem direction
                   return;                       // (if no stems, _up does not really matter!)
@@ -681,14 +675,8 @@ void Chord::computeUp()
             //
             // stem direction for grace notes
             //
-            if (measure()->mstaff(staffIdx())->hasVoices) {
-                  switch(voice()) {
-                        case 0:  _up = (score()->style(ST_stemDir1).toDirection() == MScore::UP); break;
-                        case 1:  _up = (score()->style(ST_stemDir2).toDirection() == MScore::UP); break;
-                        case 2:  _up = (score()->style(ST_stemDir3).toDirection() == MScore::UP); break;
-                        case 3:  _up = (score()->style(ST_stemDir4).toDirection() == MScore::UP); break;
-                        }
-                  }
+            if (measure()->mstaff(staffIdx())->hasVoices)
+                  _up = !(track() % 2);
             else
                   _up = true;
             }
@@ -696,12 +684,7 @@ void Chord::computeUp()
             _up = staffMove() > 0;
             }
       else if (measure()->mstaff(staffIdx())->hasVoices) {
-            switch(voice()) {
-                  case 0:  _up = (score()->style(ST_stemDir1).toDirection() == MScore::UP); break;
-                  case 1:  _up = (score()->style(ST_stemDir2).toDirection() == MScore::UP); break;
-                  case 2:  _up = (score()->style(ST_stemDir3).toDirection() == MScore::UP); break;
-                  case 3:  _up = (score()->style(ST_stemDir4).toDirection() == MScore::UP); break;
-                  }
+            _up = !(track() % 2);
             }
       else {
             int   dnMaxLine   = staff()->staffType()->lines() - 1;

@@ -315,14 +315,8 @@ void Beam::layout1()
                   }
             else {
                   Measure* m = c1->measure();
-                  if (m->hasVoices(c1->staffIdx())) {
-                        switch(c1->voice()) {
-                              case 0:  _up = (score()->style(ST_stemDir1).toDirection() == MScore::UP); break;
-                              case 1:  _up = (score()->style(ST_stemDir2).toDirection() == MScore::UP); break;
-                              case 2:  _up = (score()->style(ST_stemDir3).toDirection() == MScore::UP); break;
-                              case 3:  _up = (score()->style(ST_stemDir4).toDirection() == MScore::UP); break;
-                              }
-                        }
+                  if (m->hasVoices(c1->staffIdx()))
+                        _up = !(c1->voice() % 2);
                   else if (!twoBeamedNotes()) {
                         // highest or lowest note determines stem direction
                         // down-stems is preferred if equal
@@ -380,14 +374,8 @@ void Beam::layoutGraceNotes()
             ChordRest* cr = _elements[0];
 
             Measure* m = cr->measure();
-            if (m->hasVoices(cr->staffIdx())) {
-                  switch(cr->voice()) {
-                        case 0:  _up = (score()->style(ST_stemDir1).toDirection() == MScore::UP); break;
-                        case 1:  _up = (score()->style(ST_stemDir2).toDirection() == MScore::UP); break;
-                        case 2:  _up = (score()->style(ST_stemDir3).toDirection() == MScore::UP); break;
-                        case 3:  _up = (score()->style(ST_stemDir4).toDirection() == MScore::UP); break;
-                        }
-                  }
+            if (m->hasVoices(cr->staffIdx()))
+                  _up = !(cr->voice() % 2);
             else
                   _up = true;
             }

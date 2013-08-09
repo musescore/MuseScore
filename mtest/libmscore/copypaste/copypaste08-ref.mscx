@@ -116,11 +116,10 @@
           <subtype>0</subtype>
           <endHookHeight>1.9</endHookHeight>
           <endHookType>0</endHookType>
-          <lineWidth>0.1</lineWidth>
-          <lineStyle>1</lineStyle>
-          <lineColor r="0" g="0" b="0" a="255"/>
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
+          <lineWidth>0.1</lineWidth>
+          <lineStyle>1</lineStyle>
           <beginText>
             <style>Ottava</style>
             <text>8va</text>

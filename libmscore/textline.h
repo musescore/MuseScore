@@ -72,8 +72,6 @@ class TextLine : public SLine {
       SymId _beginSymbol, _continueSymbol, _endSymbol;
       QPointF _beginSymbolOffset, _continueSymbolOffset, _endSymbolOffset;
 
-//      qreal _sp;       // cached value from last spatiumChanged() call
-
    protected:
       Text* _beginText;
       Text* _continueText;
@@ -91,7 +89,7 @@ class TextLine : public SLine {
 
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
-      void writeProperties(Xml& xml, const TextLine* proto = 0) const;
+      void writeProperties(Xml& xml) const;
       bool readProperties(XmlReader& node);
 
       bool beginHook() const                  { return _beginHook;            }
