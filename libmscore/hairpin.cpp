@@ -419,5 +419,17 @@ void Hairpin::styleChanged()
       if (lineWidthStyle == PropertyStyle::STYLED)
             setLineWidth(score()->styleS(ST_hairpinLineWidth));
       }
+
+//---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void Hairpin::reset()
+      {
+      if (lineWidthStyle == PropertyStyle::UNSTYLED)
+            score()->undoChangeProperty(this, P_LINE_WIDTH, propertyDefault(P_LINE_WIDTH), PropertyStyle::STYLED);
+      SLine::reset();
+      }
+
 }
 
