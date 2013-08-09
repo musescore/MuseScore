@@ -307,7 +307,7 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      if (mscore->loop()) {
+      if ((mscore->loop()) && (loopInPos!=loopOutPos)) {
             seek(loopInPos);
 		}
 	 else
@@ -423,6 +423,9 @@ void Seq::guiStop()
 void Seq::seqMessage(int msg)
       {
       switch(msg) {
+            case '4':         // Partial LOOP playback  (called when the loopOutPos is reached)
+                  seek(loopInPos);
+                  break;
             case '3':         // LOOP playback  (called when the end of the score is reached)
                   getAction("play")->trigger();
                   emit started();
@@ -570,7 +573,8 @@ void Seq::process(unsigned n, float* buffer)
       {
       unsigned frames = n;
       int driverState = _driver->getState();
-	  if (driverState != state) {
+      
+      if (driverState != state) {
             if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY) {
                   state = TRANSPORT_PLAY;
                   emit toGui('1');
@@ -583,7 +587,7 @@ void Seq::process(unsigned n, float* buffer)
                   putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
-                              qDebug("MScore::Seq:: loop active. playPos = %d     cs->%d\n", playPos->first,cs->pos());
+                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->%d\n", playPos->first,cs->pos());
                               emit toGui('3');
                               } 
                         else {
@@ -1117,14 +1121,14 @@ void Seq::putEvent(const NPlayEvent& event)
 
 void Seq::heartBeatTimeout()
       {
-      if (state == TRANSPORT_PLAY) {
+       if (state == TRANSPORT_PLAY) {
             //
-            // loop back to "In position" if "Out position" is reached
+            // If the loop option is active, loop back to "In position" if "Out position" is reached
             //
             if ((mscore->loop()) && (getCurTick() >= loopOutPos) && (loopOutPos > loopInPos)) {
-                  qDebug("----> Loop test. getCurTick() = %d  cs->pos() = %d   cs->playPos() = %d", getCurTick(), cs->pos(), cs->playPos());
-                  //emit toGui('4');
-                  seek(loopInPos);
+                  qDebug("----> Partial Loop: loopOutPos = %d  |  getCurTick() = %d  cs->pos() = %d   cs->playPos() = %d", loopOutPos, getCurTick(), cs->pos(), cs->playPos());
+                  emit toGui('4');
+                  //seek(loopInPos);
                   return;
                   }
             }
@@ -1230,6 +1234,7 @@ double Seq::curTempo() const
 //---------------------------------------------------------
 //   set Loop in position
 //---------------------------------------------------------
+
 void Seq::setLoopIn()
       {
       loopInPos = cs->pos(); 
@@ -1239,9 +1244,10 @@ void Seq::setLoopIn()
 //---------------------------------------------------------
 //   set Loop in position
 //---------------------------------------------------------
+
 void Seq::setLoopOut()
       {
       loopOutPos = cs->pos()+cs->inputState().ticks();
-      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() =%d \n",loopOutPos,cs->pos(),cs->inputState().ticks());
+      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() =%d \n",loopOutPos, cs->pos(), cs->inputState().ticks());
       }
 } 
