@@ -332,7 +332,7 @@ void Segment::insertStaff(int staff)
 
       foreach(Element* e, _annotations) {
             int staffIdx = e->staffIdx();
-            if (staffIdx >= staff)
+            if (staffIdx >= staff && !e->systemFlag())
                   e->setTrack(e->track() + VOICES);
             }
 
@@ -351,7 +351,7 @@ void Segment::removeStaff(int staff)
 
       foreach(Element* e, _annotations) {
             int staffIdx = e->staffIdx();
-            if (staffIdx > staff)
+            if (staffIdx > staff && !e->systemFlag())
                   e->setTrack(e->track() - VOICES);
             }
 
@@ -615,9 +615,13 @@ void Segment::sortStaves(QList<int>& dst)
                   dl.append(_elist[k]);
             }
       _elist = dl;
+      QMap<int, int> map;
+      for (int k = 0; k < dst.size(); ++k) {
+            map.insert(dst[k], k);
+            }
       foreach (Element* e, _annotations) {
             if(!e->systemFlag())
-                  e->setTrack(dst[e->staffIdx()] * VOICES + e->voice());
+                  e->setTrack(map[e->staffIdx()] * VOICES + e->voice());
             }
       fixStaffIdx();
       }
