@@ -536,6 +536,11 @@ void MuseScore::newFile()
             score->fileInfo()->setFile(createDefaultName());
             newWizard->createInstruments(score);
             }
+      if (!score->style()->chordList()->loaded()) {
+            if (score->style()->value(ST_chordsXmlFile).toBool())
+                  score->style()->chordList()->read("chords.xml");
+            score->style()->chordList()->read(score->style()->value(ST_chordDescriptionFile).toString());
+            }
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
       Measure* pm = score->firstMeasure();
