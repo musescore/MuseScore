@@ -159,6 +159,7 @@ p, li { white-space: pre-wrap; }
           </Tempo>
         <Dynamic>
           <subtype>pp</subtype>
+          <velocity>33</velocity>
           <style>Dynamics</style>
           </Dynamic>
         <Chord>
@@ -1044,6 +1045,7 @@ p, li { white-space: pre-wrap; }
             </Tempo>
           <Dynamic>
             <subtype>pp</subtype>
+            <velocity>33</velocity>
             <style>Dynamics</style>
             </Dynamic>
           <Chord>
