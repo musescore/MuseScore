@@ -245,7 +245,7 @@ QVariant Dynamic::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_DYNAMIC_RANGE:     return int(_dynRange);
-            case P_VELOCITY:          return _velocity;
+            case P_VELOCITY:          return velocity();
             case P_SUBTYPE:           return _dynamicType;
             default:
                   return Text::getProperty(propertyId);
