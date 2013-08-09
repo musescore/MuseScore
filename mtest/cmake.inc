@@ -28,12 +28,12 @@ target_link_libraries(
       libmscore
       synthesizer
       midi
+      z
       ${QT_LIBRARIES}
       )
 
 if (NOT MINGW)
    target_link_libraries(${TARGET}
-      z
       dl
       pthread
       fontconfig
