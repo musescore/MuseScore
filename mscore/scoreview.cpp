@@ -1254,6 +1254,17 @@ void ScoreView::moveCursor(int tick)
       Measure* measure = score()->tick2measure(tick);
       if (measure == 0)
             return;
+      int offset = 0;
+      if(measure->multiMeasure() < 0) {//skipped
+            while(measure) {
+                  measure = measure->prevMeasure();
+                  offset += measure->ticks();
+                  if (measure->multiMeasure() > 0)
+                        break;
+                  }
+            }
+      if (measure == 0)
+            return;
 
       qreal x;
       Segment* s;
@@ -1271,6 +1282,8 @@ void ScoreView::moveCursor(int tick)
                   t2 = measure->endTick();
                   x2 = measure->canvasPos().x() + measure->width();
                   }
+            t1 += offset;
+            t2 += offset;
             if (tick >= t1 && tick < t2) {
                   int   dt = t2 - t1;
                   qreal dx = x2 - x1;
