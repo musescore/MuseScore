@@ -756,11 +756,13 @@ Palette* MuseScore::newLinesPalette()
       ottava = new Ottava(gscore);
       ottava->setOttavaType(Ottava::OTTAVA_8VB);
       ottava->setLen(w);
+      ottava->setPlacement(Element::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(Ottava::OTTAVA_15MB);
       ottava->setLen(w);
+      ottava->setPlacement(Element::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
 
       Pedal* pedal = new Pedal(gscore);
