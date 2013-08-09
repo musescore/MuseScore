@@ -195,7 +195,7 @@ void Seq::setScoreView(ScoreView* v)
       cs = cv ? cv->score() : 0;
 
       if (!heartBeatTimer->isActive())
-            heartBeatTimer->start(20);    // 20 msec
+            heartBeatTimer->start(20);    // msec
 
       playlistChanged = true;
       _synti->reset();
@@ -309,8 +309,8 @@ void Seq::start()
             }
       if ((mscore->loop()) && (loopInPos!=loopOutPos)) {
             seek(loopInPos);
-		}
-	 else
+            }
+      else
             seek(cs->playPos());
       _driver->startTransport();
       }
@@ -573,7 +573,7 @@ void Seq::process(unsigned n, float* buffer)
       {
       unsigned frames = n;
       int driverState = _driver->getState();
-      
+
       if (driverState != state) {
             if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY) {
                   state = TRANSPORT_PLAY;
@@ -818,7 +818,7 @@ void Seq::seek(int utick)
       if (cs == 0)
             return;
 
-		qDebug ("seek : utick=%d",utick);
+      qDebug ("seek : utick=%d",utick);
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
       int tick     = cs->repeatList()->utick2tick(utick);
