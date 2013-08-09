@@ -607,9 +607,16 @@ bool SimpleText::deletePreviousChar()
 
 bool SimpleText::deleteChar()
       {
-      if (_cursor.column >= curLine().size())
+      if (_cursor.column >= curLine().size()) {
+            if (_cursor.line + 1 < _layout.size()) {
+                  TLine l = _layout.at(_cursor.line + 1);
+                  curLine() += l.text;
+                  _layout.removeAt(_cursor.line + 1);
+                  return true;
+                  }
             return false;
-      if (curLine().at(_cursor.column-1).isHighSurrogate())
+            }
+      if (_cursor.column > 0 && curLine().at(_cursor.column-1).isHighSurrogate())
             curLine().remove(_cursor.column, 1);
       curLine().remove(_cursor.column, 1);
       _cursor.selectLine   = _cursor.line;
