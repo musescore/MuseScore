@@ -329,6 +329,13 @@ void Segment::insertStaff(int staff)
       for (int voice = 0; voice < VOICES; ++voice)
             _elist.insert(track, 0);
       _dotPosX.insert(staff, 0.0);
+
+      foreach(Element* e, _annotations) {
+            int staffIdx = e->staffIdx();
+            if (staffIdx >= staff)
+                  e->setTrack(e->track() + VOICES);
+            }
+
       fixStaffIdx();
       }
 
