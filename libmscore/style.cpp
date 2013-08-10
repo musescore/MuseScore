@@ -187,6 +187,7 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_ottavaHook,                  StyleType("ottavaHook",              ST_SPATIUM) },
       { ST_ottavaLineWidth,             StyleType("ottavaLineWidth",         ST_SPATIUM) },
       { ST_ottavaLineStyle,             StyleType("ottavaLineStyle",         ST_INT) },
+      { ST_ottavaNumbersOnly,           StyleType("ottavaNumbersOnly",       ST_BOOL) },
       { ST_tabClef,                     StyleType("tabClef",                 ST_INT) },
       { ST_tremoloWidth,                StyleType("tremoloWidth",            ST_SPATIUM) },
       { ST_tremoloBoxHeight,            StyleType("tremoloBoxHeight",        ST_SPATIUM) },
@@ -409,14 +410,14 @@ StyleData::StyleData()
             QVariant val;
             };
       static const StyleVal2 values2[] = {
-            { ST_staffUpperBorder,            QVariant(7.0) },
-            { ST_staffLowerBorder,            QVariant(7.0) },
-            { ST_staffDistance,               QVariant(6.5) },
-            { ST_akkoladeDistance,            QVariant(6.5) },
-            { ST_minSystemDistance,           QVariant(8.5) },
-            { ST_maxSystemDistance,           QVariant(15.0) },
-            { ST_lyricsDistance,              QVariant(3.5) },
-            { ST_lyricsMinBottomDistance,     QVariant(2) },
+            { ST_staffUpperBorder,            7.0  },
+            { ST_staffLowerBorder,            7.0  },
+            { ST_staffDistance,               6.5  },
+            { ST_akkoladeDistance,            6.5  },
+            { ST_minSystemDistance,           8.5  },
+            { ST_maxSystemDistance,           15.0 },
+            { ST_lyricsDistance,              3.5  },
+            { ST_lyricsMinBottomDistance,     2    },
             { ST_lyricsLineHeight,            QVariant(1.0) },
             { ST_figuredBassFontFamily,       QVariant(QString("MuseScore Figured Bass")) },
             { ST_figuredBassFontSize,         QVariant(8.0) },
@@ -555,6 +556,7 @@ StyleData::StyleData()
             { ST_ottavaHook,                  QVariant(1.9) },
             { ST_ottavaLineWidth,             QVariant(.1) },
             { ST_ottavaLineStyle,             QVariant(int(Qt::DashLine)) },
+            { ST_ottavaNumbersOnly,           false },
             { ST_tabClef,                     QVariant(int(CLEF_TAB2)) },
             { ST_tremoloWidth,                QVariant(1.2) },  // tremolo stroke width: note head width
             { ST_tremoloBoxHeight,            QVariant(0.65) },

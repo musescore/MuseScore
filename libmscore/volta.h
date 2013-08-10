@@ -67,7 +67,7 @@ class Volta : public TextLine {
    private:
       Q_PROPERTY(VoltaType voltaType READ voltaType WRITE undoSetVoltaType)
 
-      VoltaType _voltaType;
+      VoltaType _voltaType;   // open/closed
       QList<int> _endings;
       PropertyStyle lineWidthStyle;
 

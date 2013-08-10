@@ -112,24 +112,24 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       QSignalMapper* mapper = new QSignalMapper(this);
 
 #define CR(W, ID) connect(W, SIGNAL(clicked()), mapper, SLOT(map())); mapper->setMapping(W, ID);
+      CR(resetVoltaY,            ST_voltaY);
+      CR(resetVoltaHook,         ST_voltaHook);
+      CR(resetVoltaLineWidth,    ST_voltaLineWidth);
+      CR(resetVoltaLineStyle,    ST_voltaLineStyle);
 
-      CR(resetVoltaY, ST_voltaY);
-#if 0
-      lstyle.set(ST_voltaY,                  Spatium(voltaY->value()));
-      lstyle.set(ST_voltaHook,               Spatium(voltaHook->value()));
-      lstyle.set(ST_voltaLineWidth,          Spatium(voltaLineWidth->value()));
-      lstyle.set(ST_voltaLineStyle,          voltaLineStyle->currentIndex() + 1);
+      CR(resetOttavaY,           ST_ottavaY);
+      CR(resetOttavaHook,        ST_ottavaHook);
+      CR(resetOttavaLineWidth,   ST_ottavaLineWidth);
+      CR(resetOttavaLineStyle,   ST_ottavaLineStyle);
+      CR(resetOttavaNumbersOnly, ST_ottavaNumbersOnly);
 
-      lstyle.set(ST_ottavaY,                 Spatium(ottavaY->value()));
-      lstyle.set(ST_ottavaHook,              Spatium(ottavaHook->value()));
-      lstyle.set(ST_ottavaLineWidth,         Spatium(ottavaLineWidth->value()));
-      lstyle.set(ST_ottavaLineStyle,         ottavaLineStyle->currentIndex() + 1);
-      lstyle.set(ST_hairpinY,                Spatium(hairpinY->value()));
-      lstyle.set(ST_hairpinLineWidth,        Spatium(hairpinLineWidth->value()));
-      lstyle.set(ST_hairpinHeight,           Spatium(hairpinHeight->value()));
-      lstyle.set(ST_hairpinContHeight,       Spatium(hairpinContinueHeight->value()));
-#endif
+      CR(resetHairpinY,          ST_hairpinY);
+      CR(resetHairpinLineWidth,  ST_hairpinLineWidth);
+      CR(resetHairpinHeight,     ST_hairpinHeight);
+      CR(resetHairpinContinueHeight, ST_hairpinContHeight);
+#undef CR
       connect(mapper, SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
+
       }
 
 //---------------------------------------------------------
@@ -395,6 +395,7 @@ void EditStyle::getValues()
       lstyle.set(ST_ottavaHook,              Spatium(ottavaHook->value()));
       lstyle.set(ST_ottavaLineWidth,         Spatium(ottavaLineWidth->value()));
       lstyle.set(ST_ottavaLineStyle,         ottavaLineStyle->currentIndex() + 1);
+      lstyle.set(ST_ottavaNumbersOnly,       ottavaNumbersOnly->isChecked());
 
       lstyle.set(ST_pedalY,                  Spatium(pedalY->value()));
       lstyle.set(ST_pedalLineWidth,          Spatium(pedalLineWidth->value()));
@@ -625,6 +626,7 @@ void EditStyle::setValues()
       ottavaHook->setValue(lstyle.value(ST_ottavaHook).toDouble());
       ottavaLineWidth->setValue(lstyle.value(ST_ottavaLineWidth).toDouble());
       ottavaLineStyle->setCurrentIndex(lstyle.value(ST_ottavaLineStyle).toInt()-1);
+      ottavaNumbersOnly->setChecked(lstyle.value(ST_ottavaNumbersOnly).toBool());
 
       trillY->setValue(lstyle.value(ST_trillY).toDouble());
       harmonyY->setValue(lstyle.value(ST_harmonyY).toDouble());
@@ -732,9 +734,11 @@ void EditStyle::setPage(int row)
 void EditStyle::resetStyleValue(int i)
       {
       StyleIdx id = (StyleIdx)i;
+      printf("reset %d dirty: %d\n", i, lstyle.value(id) != MScore::defaultStyle()->value(id));
 //      if (lstyle.value(id) != MScore::defaultStyle()->value(id)) {
             lstyle.set(id, MScore::defaultStyle()->value(id));
 //            }
+      setValues();
       }
 
 }
