@@ -903,7 +903,7 @@ FiguredBass::FiguredBass(Score* s)
       {
       setOnNote(true);
       setTextStyleType(TEXT_STYLE_FIGURED_BASS);
-      TextStyle st("figBass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
+      TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
                   false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, score()->styleD(ST_figuredBassYOffset)), OFFSET_SPATIUM);
       st.setSizeIsSpatiumDependent(true);
       setTextStyle(st);
@@ -934,11 +934,13 @@ void FiguredBass::write(Xml& xml) const
             xml.tag("onNote", onNote());
       if (ticks() > 0)
             xml.tag("ticks", ticks());
-      if (textStyleType() != TEXT_STYLE_FIGURED_BASS) {
-            if (textStyleType() == TEXT_STYLE_UNSTYLED)
+      // if unparseable items or non-standard style, write full text data
+      if (items.size() < 1 || textStyleType() != TEXT_STYLE_FIGURED_BASS) {
+            if (items.size() < 1 || textStyleType() == TEXT_STYLE_UNSTYLED)
                   Text::writeProperties(xml, true);
             else
-                  xml.tag("style", textStyleType());
+                  // if all items parsed and not unstled, we simnply have a special style: write it
+                  xml.tag("style", textStyle().name());
             }
       foreach(FiguredBassItem item, items)
             item.write(xml);
@@ -972,13 +974,13 @@ void FiguredBass::read(XmlReader& e)
                         normalizedText.append('\n');
                   normalizedText.append(pItem->normalizedText());
                   }
-            else if (tag == "style")
-                  setTextStyleType(e.readInt());
+//            else if (tag == "style")
+//                  setTextStyleType(e.readElementText());
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      // if text is styled, set normalized text
-      if(textStyleType() != TEXT_STYLE_UNSTYLED)
+      // if items could be parsed and text is styled, set normalized text
+      if(items.size() > 0 && textStyleType() != TEXT_STYLE_UNSTYLED)
             setText(normalizedText);            // this is the text to show while editing
       }
 
@@ -992,33 +994,18 @@ void FiguredBass::layout()
 
       // if 'our' style, force 'our' style data from FiguredBass parameters
       if(textStyleType() == TEXT_STYLE_FIGURED_BASS) {
-            TextStyle st("figBass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
+            TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
                         false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, score()->styleD(ST_figuredBassYOffset)),
                         OFFSET_SPATIUM);
             st.setSizeIsSpatiumDependent(true);
             setTextStyle(st);
             }
       Text::layout();                     // Text and/or SimpleText may expect some internal data to be setup
-      layoutLines();
 
       // if style has been changed (or text not styled), do nothing else, keeping default laying out and formatting
       if(textStyleType() != TEXT_STYLE_FIGURED_BASS)
             return;
-/* already taken into account by Text::layout()
-      // vertical position
-      y = 0;                                          // default vert. pos.
-      // if a staff exists for this F.B., use its y position
-      if(parent() && track() >= 0) {
-            System* sys = ((Segment*)parent())->measure()->system();
-            if (sys == 0)
-                  qDebug("FiguredBass layout: no system!");
-            else {
-                  SysStaff* staff = sys->staff(staffIdx());
-                  y = staff->y();
-                  }
-            }
-      y += point(score()->styleS(ST_figuredBassYOffset));
-*/
+
       // bounding box
       if(editMode()) {
             qreal             h, w, w1;
@@ -1039,12 +1026,11 @@ void FiguredBass::layout()
 //            setPos(0, y);
             bbox().setRect(0-2, 0-2, w+4, h+4);
             }
-      else
-            {
-//            setPos(0, y);
-            bbox().setRect(0, 0, _lineLenghts.at(0), 0);
+      else {
             // if element could be parsed into items, layout each element
             if(items.size() > 0) {
+                  layoutLines();
+                  bbox().setRect(0, 0, _lineLenghts.at(0), 0);
                   // layout each item and enlarge bbox to include items bboxes
                   for(int i=0; i < items.size(); i++) {
                         items[i].layout();
@@ -1210,7 +1196,7 @@ void FiguredBass::endEdit()
             normalizedText.append(pItem->normalizedText());
             }
       // if all items parsed and text is styled, replaced entered text with normalized text
-      if(textStyleType() != TEXT_STYLE_UNSTYLED) {
+      if(items.size() > 0 && textStyleType() != TEXT_STYLE_UNSTYLED) {
             setText(normalizedText);
             layout();
             }
