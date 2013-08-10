@@ -15,6 +15,7 @@
 #include "spanner.h"
 #include "beam.h"
 #include "tuplet.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -519,6 +520,9 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                               tag(name, QVariant("below"));
                               break;
                         }
+                  break;
+            case T_SYMID:
+                  tag(name, Sym::id2name(SymId(data.toInt())));
                   break;
             default:
                   abort();

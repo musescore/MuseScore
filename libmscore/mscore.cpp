@@ -154,7 +154,8 @@ void MScore::init()
             "FreeSerifBold.ttf",
             "gonville-20.ttf",
             "mscoreTab.ttf",
-            "mscore-BC.ttf"
+            "mscore-BC.ttf",
+            "Bravura.otf"
             };
 
       for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {

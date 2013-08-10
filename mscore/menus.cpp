@@ -691,7 +691,7 @@ Palette* MuseScore::newLinesPalette()
       sp->setGrid(82, 23);
       sp->setDrawGrid(true);
 
-      qreal w = gscore->spatium() * 7;
+      qreal w = gscore->spatium() * 8;
 
       Slur* slur = new Slur(gscore);
       slur->setId(0);
@@ -754,6 +754,11 @@ Palette* MuseScore::newLinesPalette()
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15ma"));
 
       ottava = new Ottava(gscore);
+      ottava->setOttavaType(Ottava::OTTAVA_22MA);
+      ottava->setLen(w);
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma"));
+
+      ottava = new Ottava(gscore);
       ottava->setOttavaType(Ottava::OTTAVA_8VB);
       ottava->setLen(w);
       ottava->setPlacement(Element::BELOW);
@@ -764,6 +769,12 @@ Palette* MuseScore::newLinesPalette()
       ottava->setLen(w);
       ottava->setPlacement(Element::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
+
+      ottava = new Ottava(gscore);
+      ottava->setOttavaType(Ottava::OTTAVA_22MB);
+      ottava->setLen(w);
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22mb"));
+
 
       Pedal* pedal = new Pedal(gscore);
       pedal->setLen(w);

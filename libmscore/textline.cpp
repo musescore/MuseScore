@@ -81,6 +81,7 @@ void TextLineSegment::draw(QPainter* painter) const
             color = textLine()->curColor();
             normalColor = true;
             }
+      qreal mag = magS();
       qreal l = 0.0;
       int sym = spannerSegmentType() == SEGMENT_MIDDLE ? tl->continueSymbol() : tl->beginSymbol();
       if (_text) {
@@ -97,25 +98,25 @@ void TextLineSegment::draw(QPainter* painter) const
             _text->draw(painter);
             painter->translate(-_text->pos());
             }
-      else if (sym != -1) {
-            const QRectF& bb = symbols[score()->symIdx()][sym].bbox(magS());
+      else if (sym != noSym) {
+            const QRectF& bb = symbols[score()->symIdx()][sym].bbox(mag);
             qreal h = bb.height() * .5;
             QPointF o = tl->beginSymbolOffset() * _spatium;
             painter->setPen(color);
-            symbols[score()->symIdx()][sym].draw(painter, 1.0, QPointF(o.x(), h + o.y()));
+            symbols[score()->symIdx()][sym].draw(painter, mag, QPointF(o.x(), h + o.y()));
             l = bb.width() + textlineTextDistance;
             }
 
       QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
       painter->setPen(pen);
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END) {
-            if (tl->endSymbol() != -1) {
+            if (tl->endSymbol() != noSym) {
                   int sym = tl->endSymbol();
-                  const QRectF& bb = symbols[score()->symIdx()][sym].bbox(magS());
+                  const QRectF& bb = symbols[score()->symIdx()][sym].bbox(mag);
                   qreal h = bb.height() * .5;
                   QPointF o = tl->endSymbolOffset() * _spatium;
                   pp2.setX(pp2.x() - bb.width() + textlineTextDistance);
-                  symbols[score()->symIdx()][sym].draw(painter, 1.0, QPointF(pp2.x() + textlineTextDistance + o.x(), h + o.y()));
+                  symbols[score()->symIdx()][sym].draw(painter, mag, QPointF(pp2.x() + textlineTextDistance + o.x(), h + o.y()));
                   }
             }
 
@@ -222,7 +223,7 @@ void TextLineSegment::layout1()
                   y2 = h * .5;
                   }
             }
-      else if (sym != -1) {
+      else if (sym != noSym) {
             qreal hh = symbols[score()->symIdx()][sym].height(magS()) * .5;
             y1 = -hh;
             y2 = hh;
@@ -261,6 +262,20 @@ void TextLineSegment::clearText()
 QVariant TextLineSegment::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_BEGIN_TEXT_PLACE:
+            case P_CONTINUE_TEXT_PLACE:
+            case P_BEGIN_HOOK:
+            case P_END_HOOK:
+            case P_BEGIN_HOOK_HEIGHT:
+            case P_END_HOOK_HEIGHT:
+            case P_BEGIN_HOOK_TYPE:
+            case P_END_HOOK_TYPE:
+            case P_BEGIN_SYMBOL:
+            case P_CONTINUE_SYMBOL:
+            case P_END_SYMBOL:
+            case P_BEGIN_SYMBOL_OFFSET:
+            case P_CONTINUE_SYMBOL_OFFSET:
+            case P_END_SYMBOL_OFFSET:
             case P_LINE_COLOR:
             case P_LINE_WIDTH:
                   return textLine()->getProperty(id);
@@ -276,6 +291,20 @@ QVariant TextLineSegment::getProperty(P_ID id) const
 bool TextLineSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_BEGIN_TEXT_PLACE:
+            case P_CONTINUE_TEXT_PLACE:
+            case P_BEGIN_HOOK:
+            case P_END_HOOK:
+            case P_BEGIN_HOOK_HEIGHT:
+            case P_END_HOOK_HEIGHT:
+            case P_BEGIN_HOOK_TYPE:
+            case P_END_HOOK_TYPE:
+            case P_BEGIN_SYMBOL:
+            case P_CONTINUE_SYMBOL:
+            case P_END_SYMBOL:
+            case P_BEGIN_SYMBOL_OFFSET:
+            case P_CONTINUE_SYMBOL_OFFSET:
+            case P_END_SYMBOL_OFFSET:
             case P_LINE_COLOR:
             case P_LINE_WIDTH:
                   return textLine()->setProperty(id, v);
@@ -291,6 +320,20 @@ bool TextLineSegment::setProperty(P_ID id, const QVariant& v)
 QVariant TextLineSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_BEGIN_TEXT_PLACE:
+            case P_CONTINUE_TEXT_PLACE:
+            case P_BEGIN_HOOK:
+            case P_END_HOOK:
+            case P_BEGIN_HOOK_HEIGHT:
+            case P_END_HOOK_HEIGHT:
+            case P_BEGIN_HOOK_TYPE:
+            case P_END_HOOK_TYPE:
+            case P_BEGIN_SYMBOL:
+            case P_CONTINUE_SYMBOL:
+            case P_END_SYMBOL:
+            case P_BEGIN_SYMBOL_OFFSET:
+            case P_CONTINUE_SYMBOL_OFFSET:
+            case P_END_SYMBOL_OFFSET:
             case P_LINE_COLOR:
             case P_LINE_WIDTH:
                   return textLine()->propertyDefault(id);
@@ -437,16 +480,16 @@ void TextLine::read(XmlReader& e)
 void TextLine::writeProperties(Xml& xml) const
       {
       if (_beginHook) {
-            xml.tag("beginHookHeight", _beginHookHeight.val());
-            xml.tag("beginHookType", int(_beginHookType));
+            writeProperty(xml, P_BEGIN_HOOK_HEIGHT);
+            writeProperty(xml, P_BEGIN_HOOK_TYPE);
             }
       if (_endHook) {
-            xml.tag("endHookHeight", _endHookHeight.val());
-            xml.tag("endHookType", int(_endHookType));
+            writeProperty(xml, P_END_HOOK_HEIGHT);
+            writeProperty(xml, P_END_HOOK_TYPE);
             }
 
-      xml.pTag("beginTextPlace", _beginTextPlace);
-      xml.pTag("continueTextPlace", _continueTextPlace);
+      writeProperty(xml, P_BEGIN_TEXT_PLACE);
+      writeProperty(xml, P_CONTINUE_TEXT_PLACE);
 
       SLine::writeProperties(xml);
       if (_beginText) {
@@ -460,16 +503,16 @@ void TextLine::writeProperties(Xml& xml) const
             xml.etag();
             }
       if (_beginSymbol != -1) {
-            xml.tag("beginSymbol", Sym::id2name(_beginSymbol));
-            xml.tag("beginSymbolOffset", _beginSymbolOffset);
+            writeProperty(xml, P_BEGIN_SYMBOL);
+            writeProperty(xml, P_BEGIN_SYMBOL_OFFSET);
             }
       if (_continueSymbol != -1) {
-            xml.tag("continueSymbol", Sym::id2name(_continueSymbol));
-            xml.tag("continueSymbolOffset", _continueSymbolOffset);
+            writeProperty(xml, P_CONTINUE_SYMBOL);
+            writeProperty(xml, P_CONTINUE_SYMBOL_OFFSET);
             }
       if (_endSymbol != -1) {
-            xml.tag("endSymbol", Sym::id2name(_endSymbol));
-            xml.tag("endSymbolOffset", _endSymbolOffset);
+            writeProperty(xml, P_END_SYMBOL);
+            writeProperty(xml, P_END_SYMBOL_OFFSET);
             }
       }
 
@@ -587,6 +630,34 @@ void TextLine::spatiumChanged(qreal ov, qreal nv)
 QVariant TextLine::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_BEGIN_TEXT_PLACE:
+                  return _beginTextPlace;
+            case P_CONTINUE_TEXT_PLACE:
+                  return _continueTextPlace;
+            case P_BEGIN_HOOK:
+                  return _beginHook;
+            case P_END_HOOK:
+                  return _endHook;
+            case P_BEGIN_HOOK_HEIGHT:
+                  return _beginHookHeight.val();
+            case P_END_HOOK_HEIGHT:
+                  return _endHookHeight.val();
+            case P_BEGIN_HOOK_TYPE:
+                  return _beginHookType;
+            case P_END_HOOK_TYPE:
+                  return _endHookType;
+            case P_BEGIN_SYMBOL:
+                  return _beginSymbol;
+            case P_CONTINUE_SYMBOL:
+                  return _continueSymbol;
+            case P_END_SYMBOL:
+                  return _endSymbol;
+            case P_BEGIN_SYMBOL_OFFSET:
+                  return _beginSymbolOffset;
+            case P_CONTINUE_SYMBOL_OFFSET:
+                  return _continueSymbolOffset;
+            case P_END_SYMBOL_OFFSET:
+                  return _endSymbolOffset;
             default:
                   return SLine::getProperty(id);
             }
@@ -599,6 +670,48 @@ QVariant TextLine::getProperty(P_ID id) const
 bool TextLine::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_BEGIN_TEXT_PLACE:
+                  _beginTextPlace = PlaceText(v.toInt());
+                  break;
+            case P_CONTINUE_TEXT_PLACE:
+                  _continueTextPlace = PlaceText(v.toInt());
+                  break;
+            case P_BEGIN_HOOK:
+                  _beginHook = v.toBool();
+                  break;
+            case P_END_HOOK:
+                  _endHook = v.toBool();
+                  break;
+            case P_BEGIN_HOOK_HEIGHT:
+                  _beginHookHeight = Spatium(v.toDouble());
+                  break;
+            case P_END_HOOK_HEIGHT:
+                  _endHookHeight = Spatium(v.toDouble());
+                  break;
+            case P_BEGIN_HOOK_TYPE:
+                  _beginHookType = HookType(v.toInt());
+                  break;
+            case P_END_HOOK_TYPE:
+                  _endHookType = HookType(v.toInt());
+                  break;
+            case P_BEGIN_SYMBOL:
+                  _beginSymbol = SymId(v.toInt());
+                  break;
+            case P_CONTINUE_SYMBOL:
+                  _continueSymbol = SymId(v.toInt());
+                  break;
+            case P_END_SYMBOL:
+                  _endSymbol = SymId(v.toInt());
+                  break;
+            case P_BEGIN_SYMBOL_OFFSET:
+                  _beginSymbolOffset = v.toPointF();
+                  break;
+            case P_CONTINUE_SYMBOL_OFFSET:
+                  _continueSymbolOffset = v.toPointF();
+                  break;
+            case P_END_SYMBOL_OFFSET:
+                  _endSymbolOffset = v.toPointF();
+                  break;
             default:
                   return SLine::setProperty(id, v);
             }
@@ -612,6 +725,26 @@ bool TextLine::setProperty(P_ID id, const QVariant& v)
 QVariant TextLine::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_BEGIN_TEXT_PLACE:
+            case P_CONTINUE_TEXT_PLACE:
+                  return PLACE_LEFT;
+            case P_BEGIN_HOOK:
+            case P_END_HOOK:
+                  return false;
+            case P_BEGIN_HOOK_HEIGHT:
+            case P_END_HOOK_HEIGHT:
+                  return 1.5;
+            case P_BEGIN_HOOK_TYPE:
+            case P_END_HOOK_TYPE:
+                  return HOOK_90;
+            case P_BEGIN_SYMBOL:
+            case P_CONTINUE_SYMBOL:
+            case P_END_SYMBOL:
+                  return noSym;
+            case P_BEGIN_SYMBOL_OFFSET:
+            case P_CONTINUE_SYMBOL_OFFSET:
+            case P_END_SYMBOL_OFFSET:
+                  return QPointF();
             default:
                   return SLine::propertyDefault(id);
             }

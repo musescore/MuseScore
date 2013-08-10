@@ -65,9 +65,11 @@ class Ottava : public TextLine {
    public:
       enum OttavaType {
             OTTAVA_8VA,
-            OTTAVA_15MA,
             OTTAVA_8VB,
-            OTTAVA_15MB
+            OTTAVA_15MA,
+            OTTAVA_15MB,
+            OTTAVA_22MA,
+            OTTAVA_22MB
             };
 
    private:

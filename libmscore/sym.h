@@ -297,6 +297,16 @@ enum SymId {
       timesigodotSym,
 
       tabclef2Sym,
+
+      octave8,
+      octave8va,
+      octave8vb,
+      octave15,
+      octave15ma,
+      octave15mb,
+      octave22,
+      octave22ma,
+      octave22mb,
       lastSym
       };
 

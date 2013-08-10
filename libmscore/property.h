@@ -157,6 +157,21 @@ enum P_ID {
       P_SPANNER_TICK2,
       P_USER_OFF2,
 
+      P_BEGIN_TEXT_PLACE,
+      P_CONTINUE_TEXT_PLACE,
+      P_BEGIN_HOOK,
+      P_END_HOOK,
+      P_BEGIN_HOOK_HEIGHT,
+      P_END_HOOK_HEIGHT,
+      P_BEGIN_HOOK_TYPE,
+      P_END_HOOK_TYPE,
+      P_BEGIN_SYMBOL,
+      P_CONTINUE_SYMBOL,
+      P_END_SYMBOL,
+      P_BEGIN_SYMBOL_OFFSET,
+      P_CONTINUE_SYMBOL_OFFSET,
+      P_END_SYMBOL_OFFSET,
+
       P_END
       };
 
@@ -182,7 +197,8 @@ enum P_TYPE {
       T_BEAM_MODE,
       T_PLACEMENT,
       T_TEMPO,
-      T_GROUPS
+      T_GROUPS,
+      T_SYMID
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);

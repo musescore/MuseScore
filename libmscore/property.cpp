@@ -165,6 +165,21 @@ static const PropertyData propertyList[] = {
       { P_SPANNER_TICK2,       true,  "tick2",         T_INT      },
       { P_USER_OFF2,           false, "userOff2",      T_POINT    },
 
+      { P_BEGIN_TEXT_PLACE,       false, "beginTextPlace",       T_INT     },
+      { P_CONTINUE_TEXT_PLACE,    false, "beginTextPlace",       T_INT     },
+      { P_BEGIN_HOOK,             false, "beginHook",            T_BOOL    },
+      { P_END_HOOK,               false, "endHook",              T_BOOL    },
+      { P_BEGIN_HOOK_HEIGHT,      false, "beginHookHeight",      T_SPATIUM },
+      { P_END_HOOK_HEIGHT,        false, "endHookHeight",        T_SPATIUM },
+      { P_BEGIN_HOOK_TYPE,        false, "beginHookType",        T_INT     },
+      { P_END_HOOK_TYPE,          false, "endHookType",          T_INT     },
+      { P_BEGIN_SYMBOL,           false, "beginSymbol",          T_SYMID   },
+      { P_CONTINUE_SYMBOL,        false, "continueSymbol",       T_SYMID   },
+      { P_END_SYMBOL,             false, "endSymbol",            T_SYMID   },
+      { P_BEGIN_SYMBOL_OFFSET,    false, "beginSymbolOffset",    T_POINT   },
+      { P_CONTINUE_SYMBOL_OFFSET, false, "continueSymbolOffset", T_POINT   },
+      { P_END_SYMBOL_OFFSET,      false, "endSymbolOffset",      T_POINT   },
+
       { P_END,                 false, "",              T_INT      }
       };
 

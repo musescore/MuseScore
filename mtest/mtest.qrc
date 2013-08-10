@@ -13,6 +13,7 @@
       <file alias="fonts/mscoreTab.ttf">../fonts/mscoreTab.ttf</file>
       <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
       <file alias="fonts/mscore-BC.ttf">../fonts/mscore-BC.ttf</file>
+      <file alias="fonts/Bravura.otf">../fonts/bravura/Bravura.otf</file>
 
       <file alias="instruments.xml">../share/templates/instruments.xml</file>
 
