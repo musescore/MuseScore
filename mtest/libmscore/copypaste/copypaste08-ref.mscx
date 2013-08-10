@@ -114,10 +114,6 @@
           </Chord>
         <Ottava id="2">
           <subtype>0</subtype>
-          <endHookHeight>1.9</endHookHeight>
-          <endHookType>0</endHookType>
-          <beginTextPlace>left</beginTextPlace>
-          <continueTextPlace>left</continueTextPlace>
           <lineWidth>0.1</lineWidth>
           <lineStyle>1</lineStyle>
           <beginText>

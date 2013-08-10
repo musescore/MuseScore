@@ -298,8 +298,8 @@ int symIdx2fontId(int symIdx)
 
 QFont fontId2font(int fontId)
       {
-      static QFont* fonts[4];       // cached values
-      Q_ASSERT(fontId >= 0 && fontId < 4);
+      static QFont* fonts[5];       // cached values
+      Q_ASSERT(fontId >= 0 && fontId < 5);
 
       QFont* f = fonts[fontId];
       if (f == 0) {
@@ -322,6 +322,8 @@ QFont fontId2font(int fontId)
                   }
             else if (fontId == 3)
                   f->setFamily("Gonville-20");
+            else if (fontId == 4)
+                  f->setFamily("Bravura");
             else
                   qFatal("illegal font id %d", fontId);
 
@@ -347,8 +349,8 @@ QFont fontId2font(int fontId)
 
 QRawFont fontId2RawFont(int fontId)
       {
-      static QRawFont* fonts[4];       // cached values
-      Q_ASSERT(fontId >= 0 && fontId < 4);
+      static QRawFont* fonts[5];       // cached values
+      Q_ASSERT(fontId >= 0 && fontId < 5);
 
       QRawFont* f = fonts[fontId];
       if (f == 0) {
@@ -363,6 +365,8 @@ QRawFont fontId2RawFont(int fontId)
                   }
             else if (fontId == 3)
                   name = ":/fonts/gonville-20.ttf";
+            else if (fontId == 4)
+                  name = ":/fonts/Bravura.otf";
             else
                   qFatal("illegal font id %d", fontId);
 
@@ -400,7 +404,7 @@ Sym::Sym(int c, int fid, qreal ax, qreal ay)
       QFont _font(fontId2font(fontId));
       QFontMetricsF fm(_font);
       if (!fm.inFont(_code)) {
-            qDebug("Sym: character 0x%x(%d) are not in font <%s>\n", c, c, qPrintable(_font.family()));
+            qDebug("Sym: character 0x%x(%d) are not in font <%s>", c, c, qPrintable(_font.family()));
             return;
             }
       w     = fm.width(_code);
@@ -609,6 +613,16 @@ void Sym::init()
       symUserNames[letterTSym]      = symNames[letterTSym]    = "T";
       symUserNames[letterSSym]      = symNames[letterSSym]    = "S";
       symUserNames[letterPSym]      = symNames[letterPSym]    = "P";
+
+      symUserNames[octave8]    = symNames[octave8]    = "octave8";
+      symUserNames[octave8va]  = symNames[octave8va]  = "octave8va";
+      symUserNames[octave8vb]  = symNames[octave8vb]  = "octave8vb";
+      symUserNames[octave15]   = symNames[octave15]   = "octave15";
+      symUserNames[octave15ma] = symNames[octave15ma] = "octave15ma";
+      symUserNames[octave15mb] = symNames[octave15mb] = "octave15mb";
+      symUserNames[octave22]   = symNames[octave22]   = "octave22";
+      symUserNames[octave22ma] = symNames[octave22ma] = "octave22ma";
+      symUserNames[octave22mb] = symNames[octave22mb] = "octave22mb";
       }
 
 //---------------------------------------------------------
@@ -628,6 +642,16 @@ void initSymbols(int idx)
       symbols[idx][letterTSym]   = Sym('T',  2);
       symbols[idx][letterSSym]   = Sym('S',  2);
       symbols[idx][letterPSym]   = Sym('P',  2);
+
+      symbols[idx][octave8]      = Sym(0xe550, 4);
+      symbols[idx][octave8va]    = Sym(0xe551, 4);
+      symbols[idx][octave8vb]    = Sym(0xe552, 4);
+      symbols[idx][octave15]     = Sym(0xe554, 4);
+      symbols[idx][octave15ma]   = Sym(0xe555, 4);
+      symbols[idx][octave15mb]   = Sym(0xe556, 4);
+      symbols[idx][octave22]     = Sym(0xe557, 4);
+      symbols[idx][octave22ma]   = Sym(0xe558, 4);
+      symbols[idx][octave22mb]   = Sym(0xe559, 4);
 
       QString path;
 #ifdef Q_OS_IOS

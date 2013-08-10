@@ -321,6 +321,7 @@ enum StyleIdx {
       ST_ottavaHook,
       ST_ottavaLineWidth,
       ST_ottavaLineStyle,
+      ST_ottavaNumbersOnly,
 
       ST_tabClef,
 

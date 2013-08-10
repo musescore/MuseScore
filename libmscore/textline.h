@@ -70,7 +70,8 @@ class TextLine : public SLine {
       Spatium _beginHookHeight, _endHookHeight;
 
       SymId _beginSymbol, _continueSymbol, _endSymbol;
-      QPointF _beginSymbolOffset, _continueSymbolOffset, _endSymbolOffset;
+
+      QPointF _beginSymbolOffset, _continueSymbolOffset, _endSymbolOffset;  // spatium units
 
    protected:
       Text* _beginText;

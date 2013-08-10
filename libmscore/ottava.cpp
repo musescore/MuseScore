@@ -24,6 +24,28 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   OttavaDefault
+//---------------------------------------------------------
+
+struct OttavaDefault {
+      SymId id;
+      SymId numbersOnlyId;
+      QPointF offset;
+      qreal  hookDirection;
+      Element::Placement place;
+      int shift;
+      };
+
+static const OttavaDefault ottavaDefault[] = {
+      { octave8va,  octave8,  QPointF(0.0, .7),    1.0, Element::ABOVE,  12 },
+      { octave8vb,  octave8,  QPointF(0.0, -1.0), -1.0, Element::BELOW, -12 },
+      { octave15ma, octave15, QPointF(0.0, .7),    1.0, Element::ABOVE,  24 },
+      { octave15mb, octave15, QPointF(0.0, -1.0), -1.0, Element::BELOW, -24 },
+      { octave22ma, octave22, QPointF(0.0, .7),    1.0, Element::ABOVE,  36 },
+      { octave22mb, octave22, QPointF(0.0, -1.0), -1.0, Element::BELOW, -36 }
+      };
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -31,10 +53,11 @@ void OttavaSegment::layout()
       {
       TextLineSegment::layout1();
       if (parent()) {     // for palette
-            Spatium yo(score()->styleS(ST_ottavaY));
+            qreal yo(score()->styleS(ST_ottavaY).val() * spatium());
             if (ottava()->placement() == BELOW)
-                  yo = -yo + Spatium(4);  // TODO: does only work for 5 line staves
-            rypos() += yo.val() * spatium();
+                  yo = -yo + staff()->height();
+//            rypos() += yo;
+            rypos() = yo;
             }
       adjustReadPos();
       }
@@ -136,13 +159,11 @@ void OttavaSegment::styleChanged()
 Ottava::Ottava(Score* s)
    : TextLine(s)
       {
-      _ottavaType = OttavaType(-1);
       setOttavaType(OTTAVA_8VA);
       setLineWidth(score()->styleS(ST_ottavaLineWidth));
       lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(ST_ottavaLineStyle)));
       lineStyleStyle = PropertyStyle::STYLED;
-      setPlacement(ABOVE);
       }
 
 //---------------------------------------------------------
@@ -161,41 +182,25 @@ void Ottava::layout()
 
 void Ottava::setOttavaType(OttavaType val)
       {
-      if (val == _ottavaType)
-            return;
       setEndHook(true);
       _ottavaType = val;
 
       Spatium hook(score()->styleS(ST_ottavaHook));
 
-      const TextStyle& ts = score()->textStyle(TEXT_STYLE_OTTAVA);
+      SymId id;
+      if (score()->styleB(ST_ottavaNumbersOnly))
+            id = ottavaDefault[val].numbersOnlyId;
+      else
+            id = ottavaDefault[val].id;
+      setBeginSymbol(id);
+      setContinueSymbol(id);
 
-      switch (val) {
-            case OTTAVA_8VA:
-                  setBeginText("8va", ts);
-                  setContinueText("(8va)", ts);
-                  setEndHookHeight(hook);
-                  _pitchShift = 12;
-                  break;
-            case OTTAVA_15MA:
-                  setBeginText("15ma", ts);
-                  setContinueText("(15ma)", ts);
-                  setEndHookHeight(hook);
-                  _pitchShift = 24;
-                  break;
-            case OTTAVA_8VB:
-                  setBeginText("8vb", ts);
-                  setContinueText("(8vb)", ts);
-                  _pitchShift = -12;
-                  setEndHookHeight(-hook);
-                  break;
-            case OTTAVA_15MB:
-                  setBeginText("15mb", ts);
-                  setContinueText("(15mb)", ts);
-                  _pitchShift = -24;
-                  setEndHookHeight(-hook);
-                  break;
-            }
+      setBeginSymbolOffset(ottavaDefault[val].offset);
+      setContinueSymbolOffset(ottavaDefault[val].offset);
+      setEndHookHeight(hook * ottavaDefault[val].hookDirection);
+      setPlacement(ottavaDefault[val].place);
+      _pitchShift = ottavaDefault[val].shift;
+
       foreach(SpannerSegment* s, spannerSegments()) {
             OttavaSegment* os = static_cast<OttavaSegment*>(s);
             os->clearText();
@@ -327,7 +332,18 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
                   return int(score()->styleI(ST_ottavaLineStyle));
 
             case P_PLACEMENT:
-                  return ABOVE;
+                  return ottavaDefault[_ottavaType].place;
+
+            case P_END_HOOK_HEIGHT:
+                  return score()->styleS(ST_ottavaHook).val() * ottavaDefault[_ottavaType].hookDirection;
+
+            case P_BEGIN_SYMBOL:
+            case P_CONTINUE_SYMBOL:
+                  return ottavaDefault[_ottavaType].id;
+
+            case P_BEGIN_SYMBOL_OFFSET:
+            case P_CONTINUE_SYMBOL_OFFSET:
+                  return ottavaDefault[_ottavaType].offset;
 
             default:
                   return TextLine::propertyDefault(propertyId);
@@ -349,10 +365,11 @@ void Ottava::undoSetOttavaType(OttavaType val)
 
 void Ottava::setYoff(qreal val)
       {
-      Spatium yo(score()->styleS(ST_ottavaY));
+      qreal _spatium = spatium();
+      qreal yo(score()->styleS(ST_ottavaY).val() * _spatium);
       if (placement() == BELOW)
-            yo = -yo + Spatium(4);  // TODO: does only work for 5 line staves
-      rUserYoffset() += (val - yo.val()) * spatium();
+            yo = -yo + staff()->height();
+      rUserYoffset() += val * _spatium - yo;
       }
 
 //---------------------------------------------------------
@@ -412,6 +429,7 @@ void Ottava::styleChanged()
             setLineWidth(score()->styleS(ST_ottavaLineWidth));
       if (lineStyleStyle == PropertyStyle::STYLED)
             setLineStyle(Qt::PenStyle(score()->styleI(ST_ottavaLineStyle)));
+      setOttavaType(_ottavaType);
       }
 
 //---------------------------------------------------------

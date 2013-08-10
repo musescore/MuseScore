@@ -106,11 +106,9 @@ p, li { white-space: pre-wrap; }
         <Volta id="2">
           <subtype>1</subtype>
           <beginHookHeight>1.9</beginHookHeight>
-          <beginHookType>0</beginHookType>
           <endHookHeight>1.9</endHookHeight>
-          <endHookType>0</endHookType>
-          <beginTextPlace>below</beginTextPlace>
-          <continueTextPlace>below</continueTextPlace>
+          <beginTextPlace>2</beginTextPlace>
+          <beginTextPlace>2</beginTextPlace>
           <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
@@ -131,9 +129,8 @@ p, li { white-space: pre-wrap; }
         <Volta id="3">
           <subtype>0</subtype>
           <beginHookHeight>1.9</beginHookHeight>
-          <beginHookType>0</beginHookType>
-          <beginTextPlace>below</beginTextPlace>
-          <continueTextPlace>below</continueTextPlace>
+          <beginTextPlace>2</beginTextPlace>
+          <beginTextPlace>2</beginTextPlace>
           <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
