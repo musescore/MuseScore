@@ -59,6 +59,7 @@ struct TrackMeta
       {
       QString staffName;
       QString instrumentName;
+      bool isDrumTrack;
       };
 
 struct TrackData
@@ -70,6 +71,7 @@ struct TrackData
 struct DefinedTrackOperations
       {
       QSet<int> undefinedOpers;
+      bool isDrumTrack;
       TrackOperations opers;
       };
 
@@ -84,6 +86,7 @@ class MidiImportOperations
       TrackOperations trackOperations(int trackIndex) const;
       int count() const { return operations_.size(); }
       MidiData& midiData() { return midiData_; }
+      void adaptForPercussion(int trackIndex);
 
    private:
       QList<TrackOperations> operations_;

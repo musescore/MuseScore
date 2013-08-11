@@ -27,9 +27,12 @@ struct Controller {
       Node *quintuplets = nullptr;
       Node *septuplets = nullptr;
       Node *nonuplets = nullptr;
+      Node *multipleVoices = nullptr;
 
       int trackCount = 0;
-      bool updateNodeDependencies(Node *node, bool force_update);
+      bool isDrumTrack = false;
+
+      bool updateNodeDependencies(Node *node, bool forceUpdate);
       };
 
 OperationsModel::OperationsModel()
@@ -85,6 +88,7 @@ OperationsModel::OperationsModel()
       useMultipleVoices->oper.value = TrackOperations().useMultipleVoices;
       useMultipleVoices->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(useMultipleVoices));
+      controller->multipleVoices = useMultipleVoices;
 
 
       // ------------- tuplets --------------
@@ -488,6 +492,7 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
 void OperationsModel::setTrackData(const QString &trackLabel, const DefinedTrackOperations &opers)
       {
       this->trackLabel = trackLabel;
+      controller->isDrumTrack = opers.isDrumTrack;
                   // set new operations values
       beginResetModel();
       for (const auto &nodePtr: root->children)
@@ -515,12 +520,12 @@ Node* OperationsModel::nodeFromIndex(const QModelIndex &index) const
 
 // Different controller actions, i.e. conditional visibility of node
 
-bool Controller::updateNodeDependencies(Node *node, bool force_update)
+bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
       {
       bool result = false;
-      if (!node && !force_update)
+      if (!node && !forceUpdate)
             return result;
-      if (LHRHMethod && (force_update || node == LHRHMethod)) {
+      if (LHRHMethod && (forceUpdate || node == LHRHMethod)) {
             auto value = (MidiOperation::LHRHMethod)LHRHMethod->oper.value.toInt();
             switch (value) {
                   case MidiOperation::LHRHMethod::HAND_WIDTH:
@@ -539,13 +544,13 @@ bool Controller::updateNodeDependencies(Node *node, bool force_update)
                         break;
                   }
             }
-      if (LHRHdoIt && (force_update || node == LHRHdoIt)) {
+      if (LHRHdoIt && (forceUpdate || node == LHRHdoIt)) {
             auto value = LHRHdoIt->oper.value.toBool();
             if (LHRHMethod)
                   LHRHMethod->visible = value;
             result = true;
             }
-      if (searchTuplets && (force_update || node == searchTuplets)) {
+      if (searchTuplets && (forceUpdate || node == searchTuplets)) {
             auto value = searchTuplets->oper.value.toBool();
             if (duplets)
                   duplets->visible = value;
@@ -559,6 +564,13 @@ bool Controller::updateNodeDependencies(Node *node, bool force_update)
                   septuplets->visible = value;
             if (nonuplets)
                   nonuplets->visible = value;
+            result = true;
+            }
+      if (forceUpdate) {
+            if (LHRHdoIt)
+                  LHRHdoIt->visible = !isDrumTrack;
+            if (multipleVoices)
+                  multipleVoices->visible = !isDrumTrack;
             result = true;
             }
 

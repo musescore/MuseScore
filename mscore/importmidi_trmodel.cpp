@@ -17,13 +17,9 @@ void TracksModel::reset(const QList<TrackMeta> &tracksMeta)
       tracksData_.clear();
       int i = 0;
       for (const auto &meta: tracksMeta) {
-            QString staffName = meta.staffName.isEmpty()
-                        ? "-" : meta.staffName;
-            QString instrumentName = meta.instrumentName.isEmpty()
-                        ? "-" : meta.instrumentName;
             TrackOperations ops;     // initialized by default values - see ctor
             ops.reorderedIndex = i++;
-            tracksData_.push_back({{staffName, instrumentName}, ops});
+            tracksData_.push_back({meta, ops});
             }
       endResetModel();
       }
@@ -146,6 +142,7 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             // and mark them as undefined
 
             opers.opers = tracksData_.front().opers;
+            opers.isDrumTrack = false;
 
             // MidiOperation::Type::QUANT_VALUE
             for (int i = 1; i != trackCount_; ++i) {
@@ -294,8 +291,10 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
                         }
                   }
             }
-      else
+      else {
             opers.opers = tracksData_[trackIndex].opers;
+            opers.isDrumTrack = tracksData_[trackIndex].meta.isDrumTrack;
+            }
 
       return opers;
       }
