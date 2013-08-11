@@ -293,10 +293,11 @@ void PluginCreator::runClicked()
       if (item->pluginType() == "dock" || item->pluginType() == "dialog") {
             view = new QQuickView(qml, 0);
             view->setTitle(item->menuPath().mid(item->menuPath().lastIndexOf(".") + 1));
-            view->setResizeMode(QQuickView::SizeViewToRootObject);
-            item->setParentItem(view->contentItem());
+            view->setColor(QApplication::palette().color(QPalette::Window));
+            view->setResizeMode(QQuickView::SizeRootObjectToView);
             view->setWidth(item->width());
             view->setHeight(item->height());
+            item->setParentItem(view->contentItem());
             view->show();
 
             if (item->pluginType() == "dock") {
