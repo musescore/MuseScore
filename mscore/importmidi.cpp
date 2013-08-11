@@ -1396,7 +1396,8 @@ void convertMidi(Score *score, const MidiFile *mf)
       auto sigmap = score->sigmap();
 
       auto tracks = createMTrackList(lastTick, sigmap, mf);
-      collectChords(tracks, Fraction::fromTicks(MScore::division) / 32);     // tol = 1/128 note
+      Fraction minNoteDuration = Fraction::fromTicks(MScore::division) / 32;
+      collectChords(tracks, minNoteDuration);
       quantizeAllTracks(tracks, sigmap, lastTick);
       removeOverlappingNotes(tracks);
       splitIntoLeftRightHands(tracks);
