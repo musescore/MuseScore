@@ -1454,7 +1454,7 @@ void SpannerView::setElement(Element* e)
       Spanner* spanner = static_cast<Spanner*>(e);
       ShowElementBase::setElement(e);
       sp.tick->setValue(spanner->tick());
-      sp.tickLen->setValue(spanner->tickLen());
+      sp.tick2->setValue(spanner->tick2());
       sp.anchor->setCurrentIndex(int(spanner->anchor()));
 
       sp.segments->clear();

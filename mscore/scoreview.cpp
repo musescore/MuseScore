@@ -1532,21 +1532,22 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             }
 
       if (grips) {
-            qreal lw = 2.0/vp.matrix().m11();
-            QPen pen(MScore::frameMarginColor);
-            pen.setWidthF(lw);
             if (grips == 6) {       // HACK: this are grips of a slur
-                  vp.setPen(pen);
                   QPolygonF polygon(grips+1);
                   for (int i = 0; i < grips; ++i)
                         polygon[i] = QPointF(grip[i].center());
                   polygon[grips] = QPointF(grip[0].center());
+                  QPen pen(MScore::frameMarginColor, 2.0/vp.matrix().m11());
+                  vp.setPen(pen);
                   vp.drawPolyline(polygon);
                   }
-            pen.setColor(MScore::defaultColor);
+            QPen pen(MScore::defaultColor, 0.0);
             vp.setPen(pen);
             for (int i = 0; i < grips; ++i) {
-                  vp.setBrush(((i == curGrip) && hasFocus()) ? MScore::selectColor[0] : Qt::NoBrush);
+                  if (i == curGrip && hasFocus())
+                        vp.setBrush(MScore::selectColor[0]);
+                  else
+                        vp.setBrush(Qt::NoBrush);
                   vp.drawRect(grip[i]);
                   }
             if (editObject)      // if object is moved, it may not be covered by bsp
