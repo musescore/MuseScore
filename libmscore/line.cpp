@@ -251,6 +251,8 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                                  && (s2->tick() == s2->measure()->tick()))
                                     bspDirty = true;
                               s2 = nextSeg1(s2, track);
+                              if (s2 == 0)
+                                    spanner()->setTick2(score()->lastMeasure()->endTick());
                               }
                         }
                   }
