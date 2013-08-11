@@ -35,6 +35,8 @@ struct MidiOperation
             CHANGE_CLEF,
 
             SPLIT_DRUMS,
+
+            PICKUP_MEASURE,
             
             SWING
       } type;

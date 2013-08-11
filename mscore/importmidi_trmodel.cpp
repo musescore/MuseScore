@@ -129,6 +129,9 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::CHANGE_CLEF:
                   trackData.opers.changeClef = operValue.toBool();
                   break;
+            case MidiOperation::Type::PICKUP_MEASURE:
+                  trackData.opers.pickupMeasure = operValue.toBool();
+                  break;
             case MidiOperation::Type::DO_IMPORT:
                   break;
             }
@@ -138,6 +141,7 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
       {
       DefinedTrackOperations opers;
       int trackIndex = trackIndexFromRow(row);
+      opers.allTracksSelected = (trackIndex == -1 || trackCount_ == 1);
 
       if (trackIndex == -1) {
             // all tracks row case
@@ -298,6 +302,14 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.changeClef != opers.opers.changeClef) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::CHANGE_CLEF);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::PICKUP_MEASURE
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.pickupMeasure != opers.opers.pickupMeasure) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::PICKUP_MEASURE);
                         break;
                         }
                   }
