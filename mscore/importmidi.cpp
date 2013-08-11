@@ -1248,6 +1248,23 @@ int findAveragePitch(const std::map<Fraction, MidiChord>::const_iterator &startC
       return avgPitch;
       }
 
+void setStaffBracketForDrums(QList<MTrack> &tracks)
+      {
+      int counter = 0;
+      Staff *firstDrumStaff = nullptr;
+      for (const MTrack &track: tracks) {
+            if (track.mtrack->drumTrack()) {
+                  ++counter;
+                  if (counter == 1)
+                        firstDrumStaff = track.staff;
+                  }
+            }
+      if (firstDrumStaff && counter > 1) {
+            firstDrumStaff->setBracket(0, BRACKET_NORMAL);
+            firstDrumStaff->setBracketSpan(0, counter);
+            }
+      }
+
 //---------------------------------------------------------
 // createInstruments
 //   for drum track, if any, set percussion clef
@@ -1483,6 +1500,7 @@ void convertMidi(Score *score, const MidiFile *mf)
                   // no more track insertion/reordering/deletion from now
       QList<MTrack> trackList = prepareTrackList(tracks);
       createInstruments(score, trackList);
+      setStaffBracketForDrums(trackList);
       createMeasures(lastTick, score);
       createNotes(lastTick, trackList, mf->midiType());
       createTimeSignatures(score);
