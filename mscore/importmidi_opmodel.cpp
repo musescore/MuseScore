@@ -29,9 +29,11 @@ struct Controller {
       Node *nonuplets = nullptr;
       Node *multipleVoices = nullptr;
       Node *splitDrums = nullptr;
+      Node *pickupMeasure = nullptr;
 
       int trackCount = 0;
       bool isDrumTrack = false;
+      bool allTracksSelected = true;
 
       bool updateNodeDependencies(Node *node, bool forceUpdate);
       };
@@ -158,6 +160,15 @@ OperationsModel::OperationsModel()
 
       // ------------------------------------
 
+      Node *pickupMeasure = new Node;
+      pickupMeasure->name = "Recognize pickup measure";
+      pickupMeasure->oper.type = MidiOperation::Type::PICKUP_MEASURE;
+      pickupMeasure->oper.value = TrackOperations().pickupMeasure;
+      pickupMeasure->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(pickupMeasure));
+      controller->pickupMeasure = pickupMeasure;
+
+      
       Node *swing = new Node;
       swing->name = "Swing";
       swing->oper.type = MidiOperation::Type::SWING;
@@ -167,7 +178,8 @@ OperationsModel::OperationsModel()
       swing->values.push_back("Shuffle (3:1)");
       swing->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(swing));
-
+      
+      
       Node *changeClef = new Node;
       changeClef->name = "Clef may change along the score";
       changeClef->oper.type = MidiOperation::Type::CHANGE_CLEF;
@@ -186,7 +198,7 @@ OperationsModel::OperationsModel()
 
 
       Node *doLHRH = new Node;
-      doLHRH->name = "LH/RH separation";
+      doLHRH->name = "Left/right hand separation";
       doLHRH->oper.type = MidiOperation::Type::DO_LHRH_SEPARATION;
       doLHRH->oper.value = LHRHSeparation().doIt;
       doLHRH->parent = root.get();
@@ -494,6 +506,9 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                   case MidiOperation::Type::CHANGE_CLEF:
                         node->oper.value = opers.opers.changeClef; break;
 
+                  case MidiOperation::Type::PICKUP_MEASURE:
+                        node->oper.value = opers.opers.pickupMeasure; break;
+
                   case MidiOperation::Type::SPLIT_DRUMS:
                         node->oper.value = opers.opers.splitDrums; break;
                   }
@@ -502,10 +517,12 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
             setNodeOperations(nodePtr.get(), opers);
       }
 
-void OperationsModel::setTrackData(const QString &trackLabel, const DefinedTrackOperations &opers)
+void OperationsModel::setTrackData(const QString &trackLabel,
+                                   const DefinedTrackOperations &opers)
       {
       this->trackLabel = trackLabel;
       controller->isDrumTrack = opers.isDrumTrack;
+      controller->allTracksSelected = opers.allTracksSelected;
                   // set new operations values
       beginResetModel();
       for (const auto &nodePtr: root->children)
@@ -586,6 +603,8 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   splitDrums->visible = isDrumTrack;
             if (multipleVoices)
                   multipleVoices->visible = !isDrumTrack;
+            if (pickupMeasure)
+                  pickupMeasure->visible = allTracksSelected;
             result = true;
             }
 

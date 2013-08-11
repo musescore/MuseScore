@@ -1320,17 +1320,20 @@ void createMeasures(Fraction &lastTick, Score *score)
       if (beat > 0 || tick > 0)
             ++bars;           // convert bar index to number of bars
 
+      bool pickupMeasure = preferences.midiImportOperations.currentTrackOperations().pickupMeasure;
+
       for (int i = 0; i < bars; ++i) {
             Measure* measure  = new Measure(score);
             int tick = score->sigmap()->bar2tick(i, 0);
             measure->setTick(tick);
             Fraction ts(score->sigmap()->timesig(tick).timesig());
             Fraction nominalTs = ts;
-            if (i == 0 && bars > 1) {
+
+            if (pickupMeasure && i == 0 && bars > 1) {
                   const int secondBarIndex = 1;
                   int secondBarTick = score->sigmap()->bar2tick(secondBarIndex, 0);
                   Fraction secondTs(score->sigmap()->timesig(secondBarTick).timesig());
-                  if (ts < secondTs) {    // the first measure is a pickup measure
+                  if (ts < secondTs) {          // the first measure is a pickup measure
                         nominalTs = secondTs;
                         measure->setIrregular(true);
                         }
@@ -1390,9 +1393,10 @@ void createTimeSignatures(Score *score)
             Measure* m = score->tick2measure(tick);
             if (!m)
                   continue;
-
             Fraction newTimeSig = se.timesig();
-            if (is == score->sigmap()->begin()) {
+
+            bool pickupMeasure = preferences.midiImportOperations.currentTrackOperations().pickupMeasure;
+            if (pickupMeasure && is == score->sigmap()->begin()) {
                   auto next = is;
                   ++next;
                   if (next != score->sigmap()->end()) {
