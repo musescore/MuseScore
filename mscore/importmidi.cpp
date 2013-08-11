@@ -1220,8 +1220,11 @@ void createMeasures(Fraction &lastTick, Score *score)
             }
       }
 
-QString instrumentName(int type, int program)
+QString instrumentName(int type, int program, bool isDrumTrack)
       {
+      if (isDrumTrack)
+            return "Percussion";
+
       int hbank = -1, lbank = -1;
       if (program == -1)
             program = 0;
@@ -1238,7 +1241,7 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
       if (mt.staff->isTop()) {
             Part *part  = mt.staff->part();
             if (mt.name.isEmpty()) {
-                  QString name = instrumentName(midiType, mt.program);
+                  QString name = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
                   if (!name.isEmpty())
                         part->setLongName(name);
                   }
@@ -1330,7 +1333,7 @@ QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
             MidiType midiType = mf->midiType();
             if (midiType == MT_UNKNOWN)
                   midiType = MT_GM;
-            QString instrName = instrumentName(midiType, mt.program);
+            QString instrName = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
             tracksMeta.push_back({trackName, instrName});
             }
       return tracksMeta;
