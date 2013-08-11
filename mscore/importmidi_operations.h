@@ -53,6 +53,7 @@ struct TrackOperations
       bool useMultipleVoices = true;
       bool changeClef = false;
       MidiOperation::Swing swing = MidiOperation::Swing::NONE;
+      bool pickupMeasure = true;
       };
 
 struct TrackMeta
@@ -72,6 +73,7 @@ struct DefinedTrackOperations
       {
       QSet<int> undefinedOpers;
       bool isDrumTrack;
+      bool allTracksSelected;
       TrackOperations opers;
       };
 
