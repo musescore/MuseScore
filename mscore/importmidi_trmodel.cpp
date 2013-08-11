@@ -83,6 +83,9 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::DO_LHRH_SEPARATION:
                   trackData.opers.LHRH.doIt = operValue.toBool();
                   break;
+            case MidiOperation::Type::SPLIT_DRUMS:
+                  trackData.opers.splitDrums = operValue.toBool();
+                  break;
             case MidiOperation::Type::LHRH_METHOD:
                   trackData.opers.LHRH.method = (MidiOperation::LHRHMethod)operValue.toInt();
                   break;
@@ -174,6 +177,14 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.LHRH.doIt != opers.opers.LHRH.doIt) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::DO_LHRH_SEPARATION);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::SPLIT_DRUMS
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.splitDrums != opers.opers.splitDrums) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::SPLIT_DRUMS);
                         break;
                         }
                   }

@@ -28,6 +28,7 @@ struct Controller {
       Node *septuplets = nullptr;
       Node *nonuplets = nullptr;
       Node *multipleVoices = nullptr;
+      Node *splitDrums = nullptr;
 
       int trackCount = 0;
       bool isDrumTrack = false;
@@ -173,6 +174,15 @@ OperationsModel::OperationsModel()
       changeClef->oper.value = TrackOperations().changeClef;
       changeClef->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(changeClef));
+
+
+      Node *splitDrums = new Node;
+      splitDrums->name = "Split drum set";
+      splitDrums->oper.type = MidiOperation::Type::SPLIT_DRUMS;
+      splitDrums->oper.value = TrackOperations().splitDrums;
+      splitDrums->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(splitDrums));
+      controller->splitDrums = splitDrums;
 
 
       Node *doLHRH = new Node;
@@ -483,6 +493,9 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
 
                   case MidiOperation::Type::CHANGE_CLEF:
                         node->oper.value = opers.opers.changeClef; break;
+
+                  case MidiOperation::Type::SPLIT_DRUMS:
+                        node->oper.value = opers.opers.splitDrums; break;
                   }
             }
       for (const auto &nodePtr: node->children)
@@ -569,6 +582,8 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
       if (forceUpdate) {
             if (LHRHdoIt)
                   LHRHdoIt->visible = !isDrumTrack;
+            if (splitDrums)
+                  splitDrums->visible = isDrumTrack;
             if (multipleVoices)
                   multipleVoices->visible = !isDrumTrack;
             result = true;
