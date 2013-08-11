@@ -376,11 +376,13 @@ void MuseScore::pluginTriggered(int idx)
 
       if (p->pluginType() == "dock" || p->pluginType() == "dialog") {
             QQuickView* view = new QQuickView(engine, 0);
+            view->setSource(QUrl::fromLocalFile(pp));
             view->setTitle(p->menuPath().mid(p->menuPath().lastIndexOf(".") + 1));
-            view->setResizeMode(QQuickView::SizeViewToRootObject);
-            p->setParentItem(view->contentItem());
-            view->setWidth(p->width());
-            view->setHeight(p->height());
+            view->setColor(QApplication::palette().color(QPalette::Window));
+            //p->setParentItem(view->contentItem());
+            //view->setWidth(p->width());
+            //view->setHeight(p->height());
+            view->setResizeMode(QQuickView::SizeRootObjectToView);
             view->show();
             if (p->pluginType() == "dock") {
                   QDockWidget* dock = new QDockWidget("Plugin", 0);
