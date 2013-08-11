@@ -206,6 +206,8 @@ QPointF LineSegment::gripAnchor(int grip) const
 
 bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
+      printf("LineSegment::edit\n");
+
       if (!((modifiers & Qt::ShiftModifier)
          && ((spannerSegmentType() == SEGMENT_SINGLE)
               || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == GRIP_LINE_START)
@@ -221,23 +223,35 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
       if (l->anchor() == Spanner::ANCHOR_SEGMENT) {
             Segment* s1 = score()->tick2nearestSegment(spanner()->tick());
             Segment* s2 = score()->tick2nearestSegment(spanner()->tick2());
-            if (!s1 || !s2)
+            if (!s1) {
+                  qDebug("LineSegment::edit: no start segment");
                   return true;
+                  }
 
             if (key == Qt::Key_Left) {
                   if (curGrip == GRIP_LINE_START)
                         s1 = prevSeg1(s1, track);
-                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE)
-                        s2 = prevSeg1(s2, track);
+                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE) {
+                        if (s2)
+                              s2 = prevSeg1(s2, track);
+                        else {
+                              Measure* m = score()->lastMeasure();
+                              s2 = m->last();
+                              if (s2->segmentType() != Segment::SegChordRest)
+                                    s2 = s2->prev(Segment::SegChordRest);
+                              }
+                        }
                   }
             else if (key == Qt::Key_Right) {
                   if (curGrip == GRIP_LINE_START)
                         s1 = nextSeg1(s1, track);
                   else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE) {
-                        if ((s2->system()->firstMeasure() == s2->measure())
-                           && (s2->tick() == s2->measure()->tick()))
-                              bspDirty = true;
-                        s2 = nextSeg1(s2, track);
+                        if (s2) {
+                              if ((s2->system()->firstMeasure() == s2->measure())
+                                 && (s2->tick() == s2->measure()->tick()))
+                                    bspDirty = true;
+                              s2 = nextSeg1(s2, track);
+                              }
                         }
                   }
             if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick())
@@ -454,7 +468,7 @@ QPointF SLine::linePos(int grip, System** sys)
       {
       qreal _spatium = spatium();
       qreal x = 0.0;
-      switch(anchor()) {
+      switch (anchor()) {
             case Spanner::ANCHOR_SEGMENT:
                   {
                   if (grip == GRIP_LINE_START) {

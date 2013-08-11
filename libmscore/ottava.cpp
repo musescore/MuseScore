@@ -56,7 +56,6 @@ void OttavaSegment::layout()
             qreal yo(score()->styleS(ST_ottavaY).val() * spatium());
             if (ottava()->placement() == BELOW)
                   yo = -yo + staff()->height();
-//            rypos() += yo;
             rypos() = yo;
             }
       adjustReadPos();
