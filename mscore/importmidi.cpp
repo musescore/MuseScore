@@ -328,7 +328,10 @@ void splitDrumVoices(QList<MTrack> &tracks)
 
                         auto tupletIt = track.findTuplet(chordIt->second.voice, chordIt->first,
                                                          maxNoteLen(newChord.notes));
-                        if (tupletIt != track.tuplets.end()) {
+                        auto newTupletIt = track.findTuplet(newChord.voice, chordIt->first,
+                                                         maxNoteLen(newChord.notes));
+                        if (tupletIt != track.tuplets.end()
+                                    && newTupletIt == track.tuplets.end()) {
                               MidiTuplet::TupletData newTupletData = tupletIt->second;
                               newTupletData.voice = newChord.voice;
                               track.tuplets.insert({tupletIt->first, newTupletData});
