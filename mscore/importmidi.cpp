@@ -1246,7 +1246,10 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
                   part->setLongName(mt.name);
             part->setPartName(part->longName().toPlainText());
             part->setMidiChannel(mt.mtrack->outChannel());
-            part->setMidiProgram(mt.program & 0x7f);  // only GM
+            int bank = 0;
+            if (mt.mtrack->drumTrack())
+                  bank = 128;
+            part->setMidiProgram(mt.program & 0x7f, bank);  // only GM
             }
       }
 
