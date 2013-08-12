@@ -202,18 +202,17 @@ void Dynamic::layout()
       Text::layout();
 
       Segment* s = segment();
-      qreal noteHeadWidth = score()->noteHeadWidth() * magS();
       for (int voice = 0; voice < VOICES; ++voice) {
             int t = (track() & ~0x3) + voice;
             Chord* c = static_cast<Chord*>(s->element(t));
             if (!c)
                   continue;
-      printf("mag %f %f %f\n", mag(), magS(), c->mag());
             if (c->type() == CHORD) {
+                  qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
                   if (c->stem() && !c->up())  // stem down
-                        rxpos() += noteHeadWidth * .25 * c->mag();  // center on stem + optical correction
+                        rxpos() += noteHeadWidth * .25;  // center on stem + optical correction
                   else
-                        rxpos() += noteHeadWidth * .5 * c->mag();   // center on note head
+                        rxpos() += noteHeadWidth * .5;   // center on note head
                   }
             else
                   rxpos() += c->width() * .5;
