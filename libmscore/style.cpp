@@ -279,7 +279,7 @@ void initStyle(MStyle* s)
          TR( "Dynamics"), "Bravura", 12, false,
          false,                                 // italic?
          false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
+         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
 
       AS(TextStyle(
          TR( "Technik"), ff, 12, false, true, false,
