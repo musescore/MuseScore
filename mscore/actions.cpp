@@ -771,6 +771,18 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Decrescendo")
          ),
       Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         A_CMD,
+         "add-8va",
+         QT_TRANSLATE_NOOP("action","Ottava 8va")
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         A_CMD,
+         "add-8ma",
+         QT_TRANSLATE_NOOP("action","Ottava 8ma")
+         ),
+      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
             | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY | STATE_FOTO,
          0,

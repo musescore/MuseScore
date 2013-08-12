@@ -88,7 +88,7 @@ void MScore::init()
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
       qRegisterMetaType<VoltaType>("VoltaType");
-      qRegisterMetaType<Ottava::OttavaType>("OttavaType");
+      qRegisterMetaType<OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
       qRegisterMetaType<Element::DynamicRange>("DynamicRange");
       qRegisterMetaType<JumpType>("JumpType");

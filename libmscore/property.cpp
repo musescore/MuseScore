@@ -123,6 +123,7 @@ static const PropertyData propertyList[] = {
 
       { P_VOLTA_TYPE,          false, "",              T_INT    },
       { P_OTTAVA_TYPE,         false, "",              T_INT    },
+      { P_NUMBERS_ONLY,        false, "numbersOnly",   T_BOOL   },
       { P_TRILL_TYPE,          false, "",              T_INT    },
       { P_HAIRPIN_TYPE,        false, "",              T_INT    },
       { P_VELO_CHANGE,         false, "",              T_INT    },

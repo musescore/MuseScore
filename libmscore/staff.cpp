@@ -875,8 +875,7 @@ bool Staff::showLedgerLines()
 void Staff::updateOttava(Ottava* o)
       {
       pitchOffsets().setPitchOffset(o->tick(), o->pitchShift());
-      pitchOffsets().setPitchOffset(o->tick2(), 0);
+      pitchOffsets().setPitchOffset(o->tick2()+1, 0);
       }
-
 }
 

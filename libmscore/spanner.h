@@ -67,14 +67,14 @@ class SpannerSegment : public Element {
       QPointF pos2() const                  { return _p2 + _userOff2; }
       const QPointF& ipos2() const          { return _p2;             }
 
-      virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual void endEdit();
-      virtual bool isEditable() const { return true; }
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual void endEdit() override;
+      virtual bool isEditable() const override { return true; }
       virtual bool isEdited(SpannerSegment*) const = 0;
 
-      virtual QVariant getProperty(P_ID id) const;
-      virtual bool setProperty(P_ID id, const QVariant& v);
-      virtual QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID id, const QVariant& v) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 //----------------------------------------------------------------------------------
