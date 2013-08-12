@@ -385,8 +385,8 @@
     <seq>O</seq>
     </SC>
   <SC>
-    <key>add-8va</key>
-    <seq>Shift-O</seq>
+    <key>add-8vb</key>
+    <seq>Shift+O</seq>
     </SC>
   <SC>
     <key>escape</key>
