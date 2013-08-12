@@ -1502,8 +1502,8 @@ void splitDrumTracks(std::multimap<int, MTrack> &tracks)
             auto newTracks = splitDrumTrack(it->second);
             int trackIndex = it->first;
             it = tracks.erase(it);
-            for (const auto &newTrack: newTracks)
-                  it = tracks.insert({trackIndex, newTrack.second});
+            for (auto i = newTracks.rbegin(); i != newTracks.rend(); ++i)
+                  it = tracks.insert({trackIndex, i->second});
             }
       }
 
