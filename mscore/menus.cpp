@@ -1102,7 +1102,7 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       popup->addAction(getAction("add-hairpin"));
       popup->addAction(getAction("add-hairpin-reverse"));
       popup->addAction(getAction("add-8va"));
-      popup->addAction(getAction("add-8ma"));
+      popup->addAction(getAction("add-8vb"));
       popup->addAction(getAction("add-noteline"));
       return popup;
       }

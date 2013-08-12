@@ -345,7 +345,7 @@ void Shortcut::save()
       {
       QFile f(dataPath + "/shortcuts.xml");
       if (!f.open(QIODevice::WriteOnly)) {
-            printf("cannot save shortcuts\n");
+            qDebug("cannot save shortcuts");
             return;
             }
       Xml xml(&f);
@@ -407,7 +407,7 @@ void Shortcut::load()
       if (!f.exists())
             f.setFileName(":/data/shortcuts.xml");
       if (!f.open(QIODevice::ReadOnly)) {
-            printf("cannot open shortcuts\n");
+            qDebug("cannot open shortcuts");
             return;
             }
 
@@ -424,7 +424,7 @@ void Shortcut::load()
                                           QString val(e.readElementText());
                                           sc = getShortcut(val.toLatin1().data());
                                           if (!sc) {
-                                                printf("cannot find shortcut <%s>\n", qPrintable(val));
+                                                qDebug("cannot find shortcut <%s>", qPrintable(val));
                                                 break;
                                                 }
                                           sc->clear();
@@ -470,7 +470,7 @@ static QList<Shortcut1*> loadDefaultShortcuts()
       QList<Shortcut1*> list;
       QFile f(":/data/shortcuts.xml");
       if (!f.open(QIODevice::ReadOnly)) {
-            printf("cannot open shortcuts\n");
+            qDebug("cannot open shortcuts");
             return list;
             }
       XmlReader e(&f);
