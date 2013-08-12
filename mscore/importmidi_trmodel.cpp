@@ -17,13 +17,9 @@ void TracksModel::reset(const QList<TrackMeta> &tracksMeta)
       tracksData_.clear();
       int i = 0;
       for (const auto &meta: tracksMeta) {
-            QString staffName = meta.staffName.isEmpty()
-                        ? "-" : meta.staffName;
-            QString instrumentName = meta.instrumentName.isEmpty()
-                        ? "-" : meta.instrumentName;
             TrackOperations ops;     // initialized by default values - see ctor
             ops.reorderedIndex = i++;
-            tracksData_.push_back({{staffName, instrumentName}, ops});
+            tracksData_.push_back({meta, ops});
             }
       endResetModel();
       }
@@ -87,6 +83,12 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::DO_LHRH_SEPARATION:
                   trackData.opers.LHRH.doIt = operValue.toBool();
                   break;
+            case MidiOperation::Type::SPLIT_DRUMS:
+                  trackData.opers.drums.doSplit = operValue.toBool();
+                  break;
+            case MidiOperation::Type::SHOW_STAFF_BRACKET:
+                  trackData.opers.drums.showStaffBracket = operValue.toBool();
+                  break;
             case MidiOperation::Type::LHRH_METHOD:
                   trackData.opers.LHRH.method = (MidiOperation::LHRHMethod)operValue.toInt();
                   break;
@@ -130,6 +132,9 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::CHANGE_CLEF:
                   trackData.opers.changeClef = operValue.toBool();
                   break;
+            case MidiOperation::Type::PICKUP_MEASURE:
+                  trackData.opers.pickupMeasure = operValue.toBool();
+                  break;
             case MidiOperation::Type::DO_IMPORT:
                   break;
             }
@@ -139,6 +144,7 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
       {
       DefinedTrackOperations opers;
       int trackIndex = trackIndexFromRow(row);
+      opers.allTracksSelected = (trackIndex == -1 || trackCount_ == 1);
 
       if (trackIndex == -1) {
             // all tracks row case
@@ -146,6 +152,7 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             // and mark them as undefined
 
             opers.opers = tracksData_.front().opers;
+            opers.isDrumTrack = false;
 
             // MidiOperation::Type::QUANT_VALUE
             for (int i = 1; i != trackCount_; ++i) {
@@ -177,6 +184,22 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.LHRH.doIt != opers.opers.LHRH.doIt) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::DO_LHRH_SEPARATION);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::SPLIT_DRUMS
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.drums.doSplit != opers.opers.drums.doSplit) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::SPLIT_DRUMS);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::SHOW_STAFF_BRACKET
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.drums.showStaffBracket != opers.opers.drums.showStaffBracket) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::SHOW_STAFF_BRACKET);
                         break;
                         }
                   }
@@ -293,9 +316,19 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
                         break;
                         }
                   }
+
+            // MidiOperation::Type::PICKUP_MEASURE
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.pickupMeasure != opers.opers.pickupMeasure) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::PICKUP_MEASURE);
+                        break;
+                        }
+                  }
             }
-      else
+      else {
             opers.opers = tracksData_[trackIndex].opers;
+            opers.isDrumTrack = tracksData_[trackIndex].meta.isDrumTrack;
+            }
 
       return opers;
       }
