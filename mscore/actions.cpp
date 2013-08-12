@@ -1165,7 +1165,7 @@ Shortcut Shortcut::sc[] = {
      Shortcut(
         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
-      /* no stroke: 32th*/
+      /* no stroke: 32nd*/
         "grace32",
         QT_TRANSLATE_NOOP("action","Grace: 32nd"),
         QT_TRANSLATE_NOOP("action","Grace: 32nd"),
@@ -2368,29 +2368,29 @@ Shortcut Shortcut::sc[] = {
          STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-8",
-         QT_TRANSLATE_NOOP("action","1/8 note advance (F.B./Harm.)"),
-         QT_TRANSLATE_NOOP("action","Advance of a 1/8 note (F.B./Harm. only)")
+         QT_TRANSLATE_NOOP("action","Eighth note advance (F.B./Harm.)"),
+         QT_TRANSLATE_NOOP("action","Advance of an eighth note (F.B./Harm. only)")
          ),
       Shortcut(
          STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-16",
-         QT_TRANSLATE_NOOP("action","1/16 note advance (F.B./Harm.)"),
-         QT_TRANSLATE_NOOP("action","Advance of a 1/16 note (F.B./Harm. only)")
+         QT_TRANSLATE_NOOP("action","16th note advance (F.B./Harm.)"),
+         QT_TRANSLATE_NOOP("action","Advance of a 16th note (F.B./Harm. only)")
          ),
       Shortcut(
          STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-32",
-         QT_TRANSLATE_NOOP("action","1/32 note advance (F.B./Harm.)"),
-         QT_TRANSLATE_NOOP("action","Advance of a 1/32 note (F.B./Harm. only)")
+         QT_TRANSLATE_NOOP("action","32nd note advance (F.B./Harm.)"),
+         QT_TRANSLATE_NOOP("action","Advance of a 32nd note (F.B./Harm. only)")
          ),
       Shortcut(
          STATE_HARMONY_FIGBASS_EDIT,
          0,
          "advance-64",
-         QT_TRANSLATE_NOOP("action","1/64 note advance (F.B./Harm.)"),
-         QT_TRANSLATE_NOOP("action","Advance of a 1/64 note (F.B./Harm. only)")
+         QT_TRANSLATE_NOOP("action","64th note advance (F.B./Harm.)"),
+         QT_TRANSLATE_NOOP("action","Advance of a 64th note (F.B./Harm. only)")
          ),
       Shortcut(
          STATE_HARMONY_FIGBASS_EDIT,
