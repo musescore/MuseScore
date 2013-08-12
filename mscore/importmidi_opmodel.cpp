@@ -171,7 +171,7 @@ OperationsModel::OperationsModel()
 
 
       Node *swing = new Node;
-      swing->name = "Swing";
+      swing->name = "Detect swing";
       swing->oper.type = MidiOperation::Type::SWING;
       swing->oper.value = (int)TrackOperations().swing;
       swing->values.push_back("None (1:1)");
@@ -179,8 +179,8 @@ OperationsModel::OperationsModel()
       swing->values.push_back("Shuffle (3:1)");
       swing->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(swing));
-      
-      
+
+
       Node *changeClef = new Node;
       changeClef->name = "Clef may change along the score";
       changeClef->oper.type = MidiOperation::Type::CHANGE_CLEF;
