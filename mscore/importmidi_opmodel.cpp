@@ -153,6 +153,16 @@ OperationsModel::OperationsModel()
 
       // ------------------------------------
 
+      Node *swing = new Node;
+      swing->name = "Swing";
+      swing->oper.type = MidiOperation::Type::SWING;
+      swing->oper.value = (int)TrackOperations().swing;
+      swing->values.push_back("None (1:1)");
+      swing->values.push_back("Swing (2:1)");
+      swing->values.push_back("Shuffle (3:1)");
+      swing->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(swing));
+
       Node *changeClef = new Node;
       changeClef->name = "Clef may change along the score";
       changeClef->oper.type = MidiOperation::Type::CHANGE_CLEF;
@@ -445,6 +455,9 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
 
                   case MidiOperation::Type::USE_DOTS:
                         node->oper.value = opers.opers.useDots; break;
+
+                  case MidiOperation::Type::SWING:
+                        node->oper.value = (int)opers.opers.swing; break;
 
                   case MidiOperation::Type::USE_MULTIPLE_VOICES:
                         node->oper.value = opers.opers.useMultipleVoices; break;
