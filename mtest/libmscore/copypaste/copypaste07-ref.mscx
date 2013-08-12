@@ -130,6 +130,7 @@
           <Segment>
             <subtype>0</subtype>
             <off2 x="-3.87097" y="0"/>
+            <placement>below</placement>
             </Segment>
           <beginText>
             <style>Ottava</style>

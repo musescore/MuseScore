@@ -68,7 +68,6 @@ class ChordRest : public DurationElement {
 
       Space _space;                       // cached value from layout
 
-
    public:
       ChordRest(Score*);
       ChordRest(const ChordRest&);

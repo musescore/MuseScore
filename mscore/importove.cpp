@@ -612,23 +612,23 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
 	}
 }
 
-static Ottava::OttavaType OctaveShiftTypeToInt(OVE::OctaveShiftType type) {
-	Ottava::OttavaType subtype = Ottava::OTTAVA_8VA;
+static OttavaType OctaveShiftTypeToInt(OVE::OctaveShiftType type) {
+	OttavaType subtype = OttavaType::OTTAVA_8VA;
 	switch (type) {
 	case OVE::OctaveShift_8: {
-		subtype = Ottava::OTTAVA_8VA;
+		subtype = OttavaType::OTTAVA_8VA;
 		break;
 	}
 	case OVE::OctaveShift_15: {
-		subtype = Ottava::OTTAVA_15MA;
+		subtype = OttavaType::OTTAVA_15MA;
 		break;
 	}
 	case OVE::OctaveShift_Minus_8: {
-		subtype = Ottava::OTTAVA_8VB;
+		subtype = OttavaType::OTTAVA_8VB;
 		break;
 	}
 	case OVE::OctaveShift_Minus_15: {
-		subtype = Ottava::OTTAVA_15MB;
+		subtype = OttavaType::OTTAVA_15MB;
 		break;
 	}
 	default:

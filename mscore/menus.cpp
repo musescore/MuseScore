@@ -744,34 +744,34 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, QT_TRANSLATE_NOOP("Palette", "Seconda volta 2"));
 
       Ottava* ottava = new Ottava(gscore);
-      ottava->setOttavaType(Ottava::OTTAVA_8VA);
+      ottava->setOttavaType(OttavaType::OTTAVA_8VA);
       ottava->setLen(w);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8va"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(Ottava::OTTAVA_15MA);
+      ottava->setOttavaType(OttavaType::OTTAVA_15MA);
       ottava->setLen(w);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15ma"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(Ottava::OTTAVA_22MA);
+      ottava->setOttavaType(OttavaType::OTTAVA_22MA);
       ottava->setLen(w);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(Ottava::OTTAVA_8VB);
+      ottava->setOttavaType(OttavaType::OTTAVA_8VB);
       ottava->setLen(w);
       ottava->setPlacement(Element::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(Ottava::OTTAVA_15MB);
+      ottava->setOttavaType(OttavaType::OTTAVA_15MB);
       ottava->setLen(w);
       ottava->setPlacement(Element::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(Ottava::OTTAVA_22MB);
+      ottava->setOttavaType(OttavaType::OTTAVA_22MB);
       ottava->setLen(w);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22mb"));
 
@@ -1101,6 +1101,8 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       popup->addAction(getAction("add-slur"));
       popup->addAction(getAction("add-hairpin"));
       popup->addAction(getAction("add-hairpin-reverse"));
+      popup->addAction(getAction("add-8va"));
+      popup->addAction(getAction("add-8ma"));
       popup->addAction(getAction("add-noteline"));
       return popup;
       }

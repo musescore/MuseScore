@@ -95,6 +95,7 @@ class Cursor;
 struct PageContext;
 class BarLine;
 class Bracket;
+enum class OttavaType;
 
 extern bool showRubberBand;
 
@@ -448,6 +449,7 @@ class Score : public QObject {
       void cmdRemovePart(Part*);
       void cmdAddTie();
       void cmdAddHairpin(bool);
+      void cmdAddOttava(OttavaType);
       void cmdAddStretch(qreal);
       void transpose(Note* n, Interval, bool useSharpsFlats);
 

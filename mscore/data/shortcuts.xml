@@ -381,6 +381,14 @@
     <seq>Shift+H</seq>
     </SC>
   <SC>
+    <key>add-8va</key>
+    <seq>O</seq>
+    </SC>
+  <SC>
+    <key>add-8va</key>
+    <seq>Shift-O</seq>
+    </SC>
+  <SC>
     <key>escape</key>
     <seq>Esc</seq>
     </SC>
@@ -678,7 +686,7 @@
     </SC>
   <SC>
     <key>show-omr</key>
-    <seq>O</seq>
+    <seq>Ctrl+O</seq>
     </SC>
   <SC>
     <key>fullscreen</key>
