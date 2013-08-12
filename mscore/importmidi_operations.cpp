@@ -42,5 +42,12 @@ TrackOperations MidiImportOperations::trackOperations(int trackIndex) const
       return operations_[trackIndex];
       }
 
+void MidiImportOperations::adaptForPercussion(int trackIndex)
+      {
+                  // small hack: don't use multiple voices for tuplets
+      if (isValidIndex(trackIndex))
+            operations_[trackIndex].useMultipleVoices = false;
+      }
+
 } // namespace Ms
 

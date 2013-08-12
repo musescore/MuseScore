@@ -41,6 +41,12 @@ struct LHRHSeparation
       MidiOperation::Note splitPitchNote = MidiOperation::Note::E;
       };
 
+struct SplitDrums
+      {
+      bool doSplit = false;
+      bool showStaffBracket = true;
+      };
+
       // bool and enum-like elementary operations (itself and inside structs) are allowed
 struct TrackOperations
       {
@@ -53,12 +59,15 @@ struct TrackOperations
       bool useMultipleVoices = true;
       bool changeClef = false;
       MidiOperation::Swing swing = MidiOperation::Swing::NONE;
+      SplitDrums drums;
+      bool pickupMeasure = true;
       };
 
 struct TrackMeta
       {
       QString staffName;
       QString instrumentName;
+      bool isDrumTrack;
       };
 
 struct TrackData
@@ -70,6 +79,8 @@ struct TrackData
 struct DefinedTrackOperations
       {
       QSet<int> undefinedOpers;
+      bool isDrumTrack;
+      bool allTracksSelected;
       TrackOperations opers;
       };
 
@@ -84,6 +95,7 @@ class MidiImportOperations
       TrackOperations trackOperations(int trackIndex) const;
       int count() const { return operations_.size(); }
       MidiData& midiData() { return midiData_; }
+      void adaptForPercussion(int trackIndex);
 
    private:
       QList<TrackOperations> operations_;

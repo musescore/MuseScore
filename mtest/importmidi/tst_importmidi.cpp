@@ -194,6 +194,9 @@ class TestImportMidi : public QObject, public MTest
             mf("swing_shuffle");
             preferences.midiImportOperations.clear();
             }
+            
+      // percussion
+      void percDrums() { mf("perc_drums"); }
       };
 
 //---------------------------------------------------------
