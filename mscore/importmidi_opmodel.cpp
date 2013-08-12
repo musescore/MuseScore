@@ -29,6 +29,7 @@ struct Controller {
       Node *nonuplets = nullptr;
       Node *multipleVoices = nullptr;
       Node *splitDrums = nullptr;
+      Node *showStaffBracket = nullptr;
       Node *pickupMeasure = nullptr;
 
       int trackCount = 0;
@@ -168,7 +169,7 @@ OperationsModel::OperationsModel()
       root->children.push_back(std::unique_ptr<Node>(pickupMeasure));
       controller->pickupMeasure = pickupMeasure;
 
-      
+
       Node *swing = new Node;
       swing->name = "Swing";
       swing->oper.type = MidiOperation::Type::SWING;
@@ -191,10 +192,19 @@ OperationsModel::OperationsModel()
       Node *splitDrums = new Node;
       splitDrums->name = "Split drum set";
       splitDrums->oper.type = MidiOperation::Type::SPLIT_DRUMS;
-      splitDrums->oper.value = TrackOperations().splitDrums;
+      splitDrums->oper.value = TrackOperations().drums.doSplit;;
       splitDrums->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(splitDrums));
       controller->splitDrums = splitDrums;
+
+
+      Node *showStaffBracket = new Node;
+      showStaffBracket->name = "Show staff bracket";
+      showStaffBracket->oper.type = MidiOperation::Type::SHOW_STAFF_BRACKET;
+      showStaffBracket->oper.value = TrackOperations().drums.showStaffBracket;
+      showStaffBracket->parent = splitDrums;
+      splitDrums->children.push_back(std::unique_ptr<Node>(showStaffBracket));
+      controller->showStaffBracket = showStaffBracket;
 
 
       Node *doLHRH = new Node;
@@ -510,7 +520,9 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                         node->oper.value = opers.opers.pickupMeasure; break;
 
                   case MidiOperation::Type::SPLIT_DRUMS:
-                        node->oper.value = opers.opers.splitDrums; break;
+                        node->oper.value = opers.opers.drums.doSplit; break;
+                  case MidiOperation::Type::SHOW_STAFF_BRACKET:
+                        node->oper.value = opers.opers.drums.showStaffBracket; break;
                   }
             }
       for (const auto &nodePtr: node->children)
@@ -594,6 +606,12 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   septuplets->visible = value;
             if (nonuplets)
                   nonuplets->visible = value;
+            result = true;
+            }
+      if (splitDrums && (forceUpdate || node == splitDrums)) {
+            auto value = splitDrums->oper.value.toBool();
+            if (showStaffBracket)
+                  showStaffBracket->visible = value;
             result = true;
             }
       if (forceUpdate) {
