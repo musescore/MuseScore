@@ -115,20 +115,15 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
             case Qt::Key_Return:
                   lyricsReturn();
                   break;
-	      case Qt::Key_Minus:
-                  if (!(modifiers & CONTROL_MODIFIER))
+            default:
+                  {
+                  if(s == "-" && !(modifiers & CONTROL_MODIFIER))
                         lyricsMinus();
-                  else
-                        return false;
-                  break;
-	      case Qt::Key_Underscore:
-                  if (!(modifiers & CONTROL_MODIFIER))
+                  else if (s == "_" && !(modifiers & CONTROL_MODIFIER))
                         lyricsUnderscore();
                   else
                         return false;
-                  break;
-            default:
-                  return false;
+                  }
             }
       return true;
       }
