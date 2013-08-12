@@ -1248,21 +1248,40 @@ int findAveragePitch(const std::map<Fraction, MidiChord>::const_iterator &startC
       return avgPitch;
       }
 
+void setBracket(Staff *&staff, int &counter)
+      {
+      if (staff && counter > 1) {
+            staff->setBracket(0, BRACKET_NORMAL);
+            staff->setBracketSpan(0, counter);
+            }
+      if (counter)
+            counter = 0;
+      if (staff)
+            staff = nullptr;
+      }
+
 void setStaffBracketForDrums(QList<MTrack> &tracks)
       {
       int counter = 0;
       Staff *firstDrumStaff = nullptr;
+      int opIndex = -1;
+      const auto &opers = preferences.midiImportOperations;
+
       for (const MTrack &track: tracks) {
             if (track.mtrack->drumTrack()) {
+                  if (opIndex != track.indexOfOperation) {
+                        setBracket(firstDrumStaff, counter);
+                        if (opers.trackOperations(track.indexOfOperation).drums.showStaffBracket) {
+                              opIndex = track.indexOfOperation;
+                              firstDrumStaff = track.staff;
+                              }
+                        }
                   ++counter;
-                  if (counter == 1)
-                        firstDrumStaff = track.staff;
                   }
+            else
+                  setBracket(firstDrumStaff, counter);
             }
-      if (firstDrumStaff && counter > 1) {
-            firstDrumStaff->setBracket(0, BRACKET_NORMAL);
-            firstDrumStaff->setBracketSpan(0, counter);
-            }
+      setBracket(firstDrumStaff, counter);
       }
 
 //---------------------------------------------------------
@@ -1477,7 +1496,7 @@ void splitDrumTracks(std::multimap<int, MTrack> &tracks)
                   continue;
             auto operations = preferences.midiImportOperations.trackOperations(
                               it->second.indexOfOperation);
-            if (!operations.splitDrums)
+            if (!operations.drums.doSplit)
                   continue;
             auto newTracks = splitDrumTrack(it->second);
             int trackIndex = it->first;
