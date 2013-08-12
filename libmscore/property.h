@@ -115,6 +115,7 @@ enum P_ID {
 
       P_VOLTA_TYPE,
       P_OTTAVA_TYPE,
+      P_NUMBERS_ONLY,
       P_TRILL_TYPE,
       P_HAIRPIN_TYPE,
       P_VELO_CHANGE,

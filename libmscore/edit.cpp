@@ -52,6 +52,7 @@
 #include "dynamic.h"
 #include "repeat.h"
 #include "bracket.h"
+#include "ottava.h"
 
 namespace Ms {
 
@@ -970,6 +971,31 @@ void Score::cmdAddHairpin(bool decrescendo)
       undoAddElement(pin);
       if (!noteEntryMode())
             select(pin, SELECT_SINGLE, 0);
+      }
+
+//---------------------------------------------------------
+//   cmdAddOttava
+//---------------------------------------------------------
+
+void Score::cmdAddOttava(OttavaType type)
+      {
+      ChordRest* cr1;
+      ChordRest* cr2;
+      getSelectedChordRest2(&cr1, &cr2);
+      if (!cr1)
+            return;
+      if (cr2 == 0)
+            cr2 = cr1;
+
+      Ottava* ottava = new Ottava(this);
+      ottava->setOttavaType(type);
+
+      ottava->setTrack(cr1->track());
+      ottava->setTick(cr1->tick());
+      ottava->setTick2(cr2->tick());
+      undoAddElement(ottava);
+      if (!noteEntryMode())
+            select(ottava, SELECT_SINGLE, 0);
       }
 
 //---------------------------------------------------------

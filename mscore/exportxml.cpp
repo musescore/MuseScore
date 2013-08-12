@@ -2902,7 +2902,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
 
 void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       {
-      int st = ot->ottavaType();
+      int st = int(ot->ottavaType());
       directionTag(xml, attr, ot);
       xml.stag("direction-type");
       if (ot->tick() == tick) {

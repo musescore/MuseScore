@@ -41,8 +41,9 @@ InspectorOttava::InspectorOttava(QWidget* parent)
             { P_LINE_WIDTH,  0, 0, l.lineWidth,  l.resetLineWidth  },
             { P_LINE_STYLE,  0, 0, l.lineStyle,  l.resetLineStyle  },
             // tl missing
-            { P_OTTAVA_TYPE, 0, 0, o.ottavaType, o.resetOttavaType },
-            { P_PLACEMENT,   0, 0, o.placement,  o.resetPlacement  }
+            { P_OTTAVA_TYPE,  0, 0, o.ottavaType,  o.resetOttavaType  },
+            { P_PLACEMENT,    0, 0, o.placement,   o.resetPlacement   },
+            { P_NUMBERS_ONLY, 0, 0, o.numbersOnly, o.resetNumbersOnly }
             };
 
       mapSignals();

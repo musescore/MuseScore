@@ -2051,6 +2051,10 @@ void Score::cmd(const QAction* a)
             cmdAddHairpin(false);
       else if (cmd == "add-hairpin-reverse")
             cmdAddHairpin(true);
+      else if (cmd == "add-8va")
+            cmdAddOttava(OttavaType::OTTAVA_8VA);
+      else if (cmd == "add-8vb")
+            cmdAddOttava(OttavaType::OTTAVA_8VB);
       else if (cmd == "delete-measures")
             cmdDeleteSelectedMeasures();
       else if (cmd == "time-delete") {

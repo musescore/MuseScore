@@ -49,12 +49,12 @@ void HairpinSegment::layout()
                   case SEGMENT_SINGLE:
                   case SEGMENT_BEGIN:
                         l1.setLine(.0, .0, len, h1);
-                        l2.setLine(.0, .0, len, - h1);
+                        l2.setLine(.0, .0, len, -h1);
                         break;
                   case SEGMENT_MIDDLE:
                   case SEGMENT_END:
                         l1.setLine(.0,  h2, len, h1);
-                        l2.setLine(.0, -h2, len, - h1);
+                        l2.setLine(.0, -h2, len, -h1);
                         break;
                   }
             }
