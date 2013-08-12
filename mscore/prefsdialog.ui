@@ -2359,27 +2359,27 @@
             </property>
             <item>
              <property name="text">
-              <string>1/4</string>
+              <string>Quarter</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>1/8</string>
+              <string>Eighth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>1/16</string>
+              <string>16th</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>1/32</string>
+              <string>32nd</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>1/64</string>
+              <string>64th</string>
              </property>
             </item>
            </widget>

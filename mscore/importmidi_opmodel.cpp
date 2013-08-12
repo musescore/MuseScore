@@ -54,7 +54,7 @@ OperationsModel::OperationsModel()
       quantValue->values.push_back("Quarter");
       quantValue->values.push_back("Eighth");
       quantValue->values.push_back("16th");
-      quantValue->values.push_back("32th");
+      quantValue->values.push_back("32nd");
       quantValue->values.push_back("64th");
       quantValue->values.push_back("128th");
       quantValue->parent = root.get();
