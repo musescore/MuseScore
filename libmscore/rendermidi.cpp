@@ -363,7 +363,7 @@ void Score::updateHairpin(Hairpin* h)
       int tick  = h->tick();
       int velo  = st->velocities().velo(tick);
       int incr  = h->veloChange();
-      int tick2 = h->tick2() - 1;
+      int tick2 = h->tick2();
 
       //
       // If velocity increase/decrease is zero, then assume
