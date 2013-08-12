@@ -100,6 +100,9 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::USE_DOTS:
                   trackData.opers.useDots = operValue.toBool();
                   break;
+            case MidiOperation::Type::SWING:
+                  trackData.opers.swing = (MidiOperation::Swing)operValue.toInt();
+                  break;
             case MidiOperation::Type::USE_MULTIPLE_VOICES:
                   trackData.opers.useMultipleVoices = operValue.toBool();
                   break;
@@ -208,6 +211,14 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.useDots != opers.opers.useDots) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::USE_DOTS);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::SWING
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.swing != opers.opers.swing) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::SWING);
                         break;
                         }
                   }
