@@ -52,6 +52,7 @@ struct TrackOperations
       SearchTuplets tuplets;
       bool useMultipleVoices = true;
       bool changeClef = false;
+      MidiOperation::Swing swing = MidiOperation::Swing::NONE;
       };
 
 struct TrackMeta

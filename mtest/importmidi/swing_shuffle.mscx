@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.24">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <page-layout>
+        <page-height>1683.78</page-height>
+        <page-width>1190.55</page-width>
+        <page-margins type="even">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        <page-margins type="odd">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <PageList>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <type>0</type>
+        </Staff>
+      <trackName>Grand Piano</trackName>
+      <Instrument>
+        <longName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Grand Piano<!--EndFragment--></p></body></html>
+          </longName>
+        <trackName></trackName>
+        <Channel name="normal">
+          <program value="0"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
+        <KeySig>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <StaffText>
+          <style>Staff</style>
+          <text>Shuffle</text>
+          </StaffText>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
