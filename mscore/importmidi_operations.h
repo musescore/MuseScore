@@ -41,6 +41,12 @@ struct LHRHSeparation
       MidiOperation::Note splitPitchNote = MidiOperation::Note::E;
       };
 
+struct SplitDrums
+      {
+      bool doSplit = false;
+      bool showStaffBracket = true;
+      };
+
       // bool and enum-like elementary operations (itself and inside structs) are allowed
 struct TrackOperations
       {
@@ -53,6 +59,7 @@ struct TrackOperations
       bool useMultipleVoices = true;
       bool changeClef = false;
       MidiOperation::Swing swing = MidiOperation::Swing::NONE;
+      SplitDrums drums;
       bool pickupMeasure = true;
       };
 
