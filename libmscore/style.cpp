@@ -276,7 +276,7 @@ void initStyle(MStyle* s)
          ALIGN_LEFT | ALIGN_TOP, QPointF(), OA, QPointF()));
 
       AS(TextStyle(
-         TR( "Dynamics"), ff, 12, false,
+         TR( "Dynamics"), "Bravura", 12, false,
          false,                                 // italic?
          false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));

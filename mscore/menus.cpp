@@ -172,7 +172,11 @@ Palette* MuseScore::newDynamicsPalette()
       sp->setGrid(42, 28);
       sp->setDrawGrid(true);
 
-      const char* array[8] = { "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff" };
+      const char* array[] = {
+            "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
+            "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+            "rfz", "rf", "fz", "m", "r", "s", "z", "n"
+            };
       for (const char* c : array) {
             Dynamic* dynamic = new Dynamic(gscore);
             dynamic->setDynamicType(c);
