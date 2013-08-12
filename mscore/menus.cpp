@@ -434,14 +434,14 @@ Palette* MuseScore::newTremoloPalette()
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
       const char* tremoloName[] = {
-            QT_TR_NOOP("1/8 through stem"),
-            QT_TR_NOOP("1/16 through stem"),
-            QT_TR_NOOP("1/32 through stem"),
-            QT_TR_NOOP("1/64 through stem"),
-            QT_TR_NOOP("1/8 between notes"),
-            QT_TR_NOOP("1/16 between notes"),
-            QT_TR_NOOP("1/32 between notes"),
-            QT_TR_NOOP("1/64 between notes")
+            QT_TR_NOOP("Eighth through stem"),
+            QT_TR_NOOP("16th through stem"),
+            QT_TR_NOOP("32nd through stem"),
+            QT_TR_NOOP("64th through stem"),
+            QT_TR_NOOP("Eighth between notes"),
+            QT_TR_NOOP("16th between notes"),
+            QT_TR_NOOP("32nd between notes"),
+            QT_TR_NOOP("64th between notes")
             };
 
       for (int i = TREMOLO_R8; i <= TREMOLO_C64; ++i) {
