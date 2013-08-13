@@ -1213,6 +1213,8 @@ bool MgStyle::drawFrameFocusRectPrimitive( const QStyleOption* option, QPainter*
       if ( !( qobject_cast<const QAbstractItemView*>( widget ) || widget->inherits( "Q3ListView" ) ) )
             return true;
 
+      return true; // WS
+
       const State& flags( option->state );
       const QRect r( option->rect.adjusted( 0, 0, 0, -2 ) );
       const QPalette& palette( option->palette );

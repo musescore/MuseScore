@@ -40,7 +40,8 @@ bool MgStyleConfigData::menuBarAnimationsEnabled = true;
 bool MgStyleConfigData::menuAnimationsEnabled = true;
 int  MgStyleConfigData::toolBarAnimationType = MgStyleConfigData::TB_FADE;
 
-int  MgStyleConfigData::menuHighlightMode = MgStyleConfigData::MM_DARK;
+//int  MgStyleConfigData::menuHighlightMode = MgStyleConfigData::MM_STRONG;
+int  MgStyleConfigData::menuHighlightMode = MgStyleConfigData::MM_SUBTLE;
 bool MgStyleConfigData::tabSubtleShadow = true;
 bool MgStyleConfigData::showMnemonics = true;
 int  MgStyleConfigData::scrollBarAddLineButtons = 2;
@@ -53,10 +54,10 @@ bool MgStyleConfigData::widgetExplorerEnabled = false;
 bool MgStyleConfigData::drawWidgetRects = true;
 int  MgStyleConfigData::scrollBarWidth  = 15;
 
-bool MgStyleConfigData::comboBoxTransitionsEnabled = true;
+bool MgStyleConfigData::comboBoxTransitionsEnabled = false;
 bool MgStyleConfigData::labelTransitionsEnabled = true;
 bool MgStyleConfigData::lineEditTransitionsEnabled = true;
-bool MgStyleConfigData::stackedWidgetTransitionsEnabled = true;
+bool MgStyleConfigData::stackedWidgetTransitionsEnabled = false;
 
 int  MgStyleConfigData::comboBoxTransitionsDuration = 75;
 int  MgStyleConfigData::labelTransitionsDuration = 75;
