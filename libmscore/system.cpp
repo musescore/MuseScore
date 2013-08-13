@@ -190,7 +190,7 @@ void System::layout(qreal xo1)
                               b->setLevel(i);
                               b->setBracketType(s->bracket(i));
                               b->setSpan(s->bracketSpan(i));
-                              add(b);
+                              score()->undoAddElement(b);
                               }
                         else
                               _brackets.append(b);
@@ -209,7 +209,9 @@ void System::layout(qreal xo1)
                   }
             }
 
-      qDeleteAll(bl);
+      for (Bracket* b : bl)
+            score()->undoRemoveElement(b);
+//      qDeleteAll(bl);   // delete unused brackets
 
       //---------------------------------------------------
       //  layout  SysStaff and StaffLines
