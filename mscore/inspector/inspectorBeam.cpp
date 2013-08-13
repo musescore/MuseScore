@@ -37,6 +37,7 @@ InspectorBeam::InspectorBeam(QWidget* parent)
             { P_DISTRIBUTE,     0, false, b.distribute,   b.resetDistribute   },
             { P_GROW_LEFT,      0, false, b.growLeft,     b.resetGrowLeft     },
             { P_GROW_RIGHT,     0, false, b.growRight,    b.resetGrowRight    },
+            { P_BEAM_NO_SLOPE,  0, false, b.noSlope,      b.resetNoSlope      },
             { P_USER_MODIFIED,  0, false, b.userPosition, b.resetUserPosition },
             { P_BEAM_POS,       0, false, b.y1,           0                   },
             { P_BEAM_POS,       1, false, b.y2,           0                   }
@@ -50,10 +51,11 @@ InspectorBeam::InspectorBeam(QWidget* parent)
 
 void InspectorBeam::valueChanged(int idx)
       {
-      if (idx == 8) {
+      if (iList[idx].t == P_USER_MODIFIED) {
             bool val = getValue(iList[idx]).toBool();
-            iList[9].w->setEnabled(val);
+            iList[8].w->setEnabled(!val);
             iList[10].w->setEnabled(val);
+            iList[11].w->setEnabled(val);
             }
       InspectorBase::valueChanged(idx);
       }
@@ -62,8 +64,15 @@ void InspectorBeam::setValue(const InspectorItem& ii, const QVariant& val)
       {
       if (ii.w == b.userPosition) {
             bool enable = val.toBool();
+            iList[8].w->setEnabled(!enable);
+            iList[10].w->setEnabled(enable);
+            iList[11].w->setEnabled(enable);
+            }
+      else if (ii.w == b.noSlope) {
+            bool enable = !val.toBool();
             iList[9].w->setEnabled(enable);
             iList[10].w->setEnabled(enable);
+            iList[11].w->setEnabled(enable);
             }
       InspectorBase::setValue(ii, val);
       }

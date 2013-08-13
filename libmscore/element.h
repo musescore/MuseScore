@@ -58,7 +58,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags)
 //   PropertyStyle
 //---------------------------------------------------------
 
-enum class PropertyStyle {
+enum class PropertyStyle : char {
       NOSTYLE, UNSTYLED, STYLED
       };
 
