@@ -231,6 +231,8 @@ void EditStyle::getValues()
       lstyle.set(ST_beamWidth,               Spatium(beamWidth->value()));
       lstyle.set(ST_beamDistance,            beamDistance->value());
       lstyle.set(ST_beamMinLen,              Spatium(beamMinLen->value()));
+      lstyle.set(ST_beamNoSlope,             beamNoSlope->isChecked());
+
       lstyle.set(ST_graceNoteMag,            graceNoteSize->value() * 0.01);
       lstyle.set(ST_smallStaffMag,           smallStaffSize->value() * 0.01);
       lstyle.set(ST_smallNoteMag,            smallNoteSize->value() * 0.01);
@@ -465,6 +467,7 @@ void EditStyle::setValues()
       beamWidth->setValue(lstyle.value(ST_beamWidth).toDouble());
       beamDistance->setValue(lstyle.value(ST_beamDistance).toDouble());
       beamMinLen->setValue(lstyle.value(ST_beamMinLen).toDouble());
+      beamNoSlope->setChecked(lstyle.value(ST_beamNoSlope).toBool());
 
       graceNoteSize->setValue(lstyle.value(ST_graceNoteMag).toDouble() * 100.0);
       smallStaffSize->setValue(lstyle.value(ST_smallStaffMag).toDouble() * 100.0);

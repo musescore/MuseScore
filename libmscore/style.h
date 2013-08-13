@@ -215,6 +215,7 @@ enum StyleIdx {
       ST_beamWidth,
       ST_beamDistance,
       ST_beamMinLen,
+      ST_beamNoSlope,
 
       ST_dotMag,
       ST_dotNoteDistance,
