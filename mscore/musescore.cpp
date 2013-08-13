@@ -55,6 +55,7 @@
 #include "importmidi_panel.h"
 #include "libmscore/chord.h"
 #include "mstyle/mstyle.h"
+#include "mstyle/mconfig.h"
 #include "libmscore/segment.h"
 #include "editraster.h"
 #include "pianotools.h"
@@ -459,7 +460,7 @@ MuseScore::MuseScore()
       loopAction = getAction("loop");
       loopAction->setCheckable(true);
       loopAction->setChecked(false);
-      
+
       metronomeAction = getAction("metronome");
       metronomeAction->setCheckable(true);
       metronomeAction->setChecked(false);
@@ -4755,6 +4756,7 @@ int main(int argc, char* av[])
                   "QGroupBox::title {\n"
                   "   subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;\n"
                   "   }");
+            MgStyleConfigData::animationsEnabled = preferences.animations;
 
             seq            = new Seq();
             MScore::seq    = seq;

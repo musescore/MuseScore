@@ -41,6 +41,7 @@
 #include "zerberus/zerberus.h"
 #include "fluid/fluid.h"
 #include "pathlistdialog.h"
+#include "mstyle/mconfig.h"
 
 namespace Ms {
 
@@ -181,6 +182,7 @@ void Preferences::init()
 
       styleName               = "dark";   // ??
       globalStyle             = STYLE_DARK;
+      animations              = true;
 
       QString wd      = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
 
@@ -318,6 +320,7 @@ void Preferences::write()
       s.setValue("useOsc", useOsc);
       s.setValue("oscPort", oscPort);
       s.setValue("style", styleName);
+      s.setValue("animations", animations);
       s.setValue("singlePalette", singlePalette);
 
       s.setValue("myScoresPath", myScoresPath);
@@ -462,8 +465,8 @@ void Preferences::read()
       else
             globalStyle  = STYLE_LIGHT;
 
+      animations       = s.value("animations",       animations).toBool();
       singlePalette    = s.value("singlePalette",    singlePalette).toBool();
-
       myScoresPath     = s.value("myScoresPath",     myScoresPath).toString();
       myStylesPath     = s.value("myStylesPath",     myStylesPath).toString();
       myImagesPath     = s.value("myImagesPath",     myImagesPath).toString();
@@ -952,6 +955,7 @@ void PreferenceDialog::updateValues()
       oscPort->setValue(prefs.oscPort);
 
       styleName->setCurrentIndex(prefs.globalStyle);
+      animations->setChecked(prefs.animations);
 
       defaultStyle->setText(prefs.defaultStyleFile);
 
@@ -1221,7 +1225,7 @@ void PreferenceDialog::apply()
       prefs.fgWallpaper    = fgWallpaper->text();
       prefs.bgWallpaper    = bgWallpaper->text();
       prefs.fgColor        = fgColorLabel->color();
-      MScore::bgColor            = bgColorLabel->color();
+      MScore::bgColor      = bgColorLabel->color();
 
       prefs.iconWidth      = iconWidth->value();
       prefs.iconHeight     = iconHeight->value();
@@ -1386,6 +1390,9 @@ void PreferenceDialog::apply()
             prefs.styleName = "light";
             prefs.globalStyle = STYLE_LIGHT;
             }
+
+      prefs.animations = animations->isChecked();
+      MgStyleConfigData::animationsEnabled = prefs.animations;
 
       if (languageChanged) {
             setMscoreLocale(prefs.language);
