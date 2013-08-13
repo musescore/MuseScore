@@ -19,7 +19,7 @@ Packages
 
 * **fonts** Contains fontforge source (sfd) + ttf/otf fonts
 
-* **libmscore** Data model of MuseScore. It is a subtree and you can find it standalone on [GitHub](https://github.com/musescore/LibMuseScore)
+* **libmscore** Data model of MuseScore
 
 * **mscore** Main code for the MuseScore UI
 
