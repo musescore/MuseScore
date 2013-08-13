@@ -93,9 +93,10 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_accidentalDistance,          StyleType("accidentalDistance",      ST_SPATIUM) },
       { ST_accidentalNoteDistance,      StyleType("accidentalNoteDistance",  ST_SPATIUM) },
       { ST_beamWidth,                   StyleType("beamWidth",               ST_SPATIUM) },
-      { ST_beamDistance,                StyleType("beamDistance",            ST_DOUBLE) },      // in beamWidth units
+      { ST_beamDistance,                StyleType("beamDistance",            ST_DOUBLE)  },     // in beamWidth units
       { ST_beamMinLen,                  StyleType("beamMinLen",              ST_SPATIUM) },     // len for broken beams
-      { ST_dotMag,                      StyleType("dotMag",                  ST_DOUBLE) },
+      { ST_beamNoSlope,                 StyleType("beamNoSlope",             ST_BOOL)    },
+      { ST_dotMag,                      StyleType("dotMag",                  ST_DOUBLE)  },
       { ST_dotNoteDistance,             StyleType("dotNoteDistance",         ST_SPATIUM) },
       { ST_dotRestDistance,             StyleType("dotRestDistance",         ST_SPATIUM) },
       { ST_dotDotDistance,              StyleType("dotDotDistance",          ST_SPATIUM) },
@@ -195,7 +196,7 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_tremoloDistance,             StyleType("tremoloDistance",         ST_SPATIUM) },
       { ST_linearStretch,               StyleType("linearStretch",           ST_DOUBLE) },
       { ST_crossMeasureValues,          StyleType("crossMeasureValues",      ST_BOOL) },
-      { ST_keySigNaturals,              StyleType("keySigNaturals",          ST_INT) }
+      { ST_keySigNaturals,              StyleType("keySigNaturals",          ST_INT) },
       };
 
 class StyleTypes {
