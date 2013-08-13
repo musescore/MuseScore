@@ -117,7 +117,11 @@ enum P_ID {
       P_OTTAVA_TYPE,
       P_NUMBERS_ONLY,
       P_TRILL_TYPE,
+
       P_HAIRPIN_TYPE,
+      P_HAIRPIN_HEIGHT,
+      P_HAIRPIN_CONT_HEIGHT,
+
       P_VELO_CHANGE,
       P_DYNAMIC_RANGE,
       P_PLACEMENT,

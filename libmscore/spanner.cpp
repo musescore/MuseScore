@@ -233,8 +233,11 @@ void Spanner::startEdit(MuseScoreView*, const QPointF&)
 
 void Spanner::endEdit()
       {
-      score()->undoPropertyChanged(this, P_SPANNER_TICK, editTick);
-      score()->undoPropertyChanged(this, P_SPANNER_TICK2, editTick2);
+      if (editTick != tick() || editTick2 != tick2()) {
+            score()->undoPropertyChanged(this, P_SPANNER_TICK, editTick);
+            score()->undoPropertyChanged(this, P_SPANNER_TICK2, editTick2);
+            score()->rebuildBspTree();
+            }
 
       if (spannerSegments().size() != userOffsets2.size()) {
             qDebug("SLine::endEdit(): segment size changed");

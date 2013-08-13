@@ -125,7 +125,11 @@ static const PropertyData propertyList[] = {
       { P_OTTAVA_TYPE,         false, "",              T_INT    },
       { P_NUMBERS_ONLY,        false, "numbersOnly",   T_BOOL   },
       { P_TRILL_TYPE,          false, "",              T_INT    },
-      { P_HAIRPIN_TYPE,        false, "",              T_INT    },
+
+      { P_HAIRPIN_TYPE,        false, "",              T_INT     },
+      { P_HAIRPIN_HEIGHT,      false, "hairpinHeight",     T_SPATIUM },
+      { P_HAIRPIN_CONT_HEIGHT, false, "hairpinContHeight", T_SPATIUM },
+
       { P_VELO_CHANGE,         false, "",              T_INT    },
       { P_DYNAMIC_RANGE,       false, "dynType",       T_INT    },
       { P_PLACEMENT,           false, "placement",     T_PLACEMENT    },
@@ -190,8 +194,6 @@ static const PropertyData propertyList[] = {
 
 P_TYPE propertyType(P_ID id)
       {
-      if (id == P_LASSO_SIZE)
-            printf("lasso size type ist %d\n", propertyList[id].type);
       return propertyList[id].type;
       }
 

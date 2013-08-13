@@ -47,6 +47,7 @@ class HairpinSegment : public LineSegment {
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual PropertyStyle propertyStyle(P_ID id) const override;
       virtual void resetProperty(P_ID id) override;
+      virtual void reset() override { spanner()->reset(); }
       };
 
 //---------------------------------------------------------
@@ -72,6 +73,10 @@ class Hairpin : public SLine {
       int _veloChange;
       DynamicRange _dynRange;
       PropertyStyle lineWidthStyle;
+      Spatium _hairpinHeight;
+      PropertyStyle hairpinHeightStyle;
+      Spatium _hairpinContHeight;
+      PropertyStyle hairpinContHeightStyle;
 
    public:
       Hairpin(Score* s);
@@ -90,9 +95,15 @@ class Hairpin : public SLine {
       void setVeloChange(int v)        { _veloChange = v;    }
       void undoSetVeloChange(int v);
 
-      DynamicRange dynRange() const       { return _dynRange; }
-      void setDynRange(DynamicRange t)    { _dynRange = t;    }
+      DynamicRange dynRange() const          { return _dynRange; }
+      void setDynRange(DynamicRange t)       { _dynRange = t;    }
       void undoSetDynRange(DynamicRange t);
+
+      Spatium hairpinHeight() const          { return _hairpinHeight; }
+      void setHairpinHeight(Spatium val)     { _hairpinHeight = val; }
+
+      Spatium hairpinContHeight() const      { return _hairpinContHeight; }
+      void setHairpinContHeight(Spatium val) { _hairpinContHeight = val; }
 
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;

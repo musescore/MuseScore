@@ -189,7 +189,6 @@ ChordRest* Selection::lastChordRest(int track) const
 //   findMeasure
 //---------------------------------------------------------
 
-
 Measure* Selection::findMeasure() const
       {
       Measure *m = 0;
