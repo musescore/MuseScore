@@ -41,7 +41,6 @@
 #include "libmscore/audio.h"
 #include "synthcontrol.h"
 #include "pianoroll.h"
-#include "libmscore/cursor.h"
 
 #include "click.h"
 
