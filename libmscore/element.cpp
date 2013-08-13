@@ -717,8 +717,11 @@ bool Element::readProperties(XmlReader& e)
             }
       else if (tag == "offset")
             setUserOff(e.readPoint() * spatium());
-      else if (tag == "pos")
-            _readPos = e.readPoint() * spatium();
+      else if (tag == "pos") {
+            QPointF pt = e.readPoint();
+            if (score()->mscVersion() > 114)
+                  _readPos = pt * spatium();
+            }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
       else if (tag == "tag") {
