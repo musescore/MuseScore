@@ -142,7 +142,16 @@
            <property name="spacing">
             <number>0</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -184,7 +193,11 @@
               <string>bold</string>
              </property>
              <property name="text">
-              <string>B</string>
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -220,7 +233,11 @@
               <string>italic</string>
              </property>
              <property name="text">
-              <string>I</string>
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -250,7 +267,11 @@
               <string>underline</string>
              </property>
              <property name="text">
-              <string>U</string>
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -301,7 +322,7 @@
               <string>align left edge of text to reference point</string>
              </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true">...</string>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
@@ -324,7 +345,7 @@
               <string>center text on reference point</string>
              </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true">...</string>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
@@ -347,7 +368,7 @@
               <string>align right edge of text to reference point</string>
              </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true">...</string>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
@@ -370,7 +391,7 @@
               <string>align top edge of text to reference point</string>
              </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true">...</string>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
@@ -393,7 +414,7 @@
               <string>center text vertical to reference point</string>
              </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true">...</string>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
@@ -416,7 +437,7 @@
               <string>center text vertical to text baseline</string>
              </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true">...</string>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
@@ -439,7 +460,7 @@
               <string>align bottom edge of text to reference point</string>
              </property>
              <property name="text">
-              <string>...</string>
+              <string notr="true">...</string>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
