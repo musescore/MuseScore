@@ -3178,23 +3178,27 @@ void AddBracket::redo()
       {
       staff->setBracket(level, type);
       staff->setBracketSpan(level, span);
+      staff->score()->setLayoutAll(true);
       }
 
 void AddBracket::undo()
       {
       staff->setBracket(level, NO_BRACKET);
+      staff->score()->setLayoutAll(true);
       }
 
 
 void RemoveBracket::redo()
       {
       staff->setBracket(level, NO_BRACKET);
+      staff->score()->setLayoutAll(true);
       }
 
 void RemoveBracket::undo()
       {
       staff->setBracket(level, type);
       staff->setBracketSpan(level, span);
+      staff->score()->setLayoutAll(true);
       }
 
 
