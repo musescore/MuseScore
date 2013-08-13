@@ -165,6 +165,7 @@ class Seq : public QObject, public Sequencer {
       bool canStart();
       void rewindStart();
       void loopStart();
+      void loopStop();
       void seekEnd();
       void nextMeasure();
       void nextChord();
@@ -176,7 +177,7 @@ class Seq : public QObject, public Sequencer {
       void stopWait();
       void setLoopIn();
       void setLoopOut();
-      void unsetLoop() { loopInPos = loopOutPos = 0; }
+      void unsetLoop();
 
       bool init();
       void exit();
