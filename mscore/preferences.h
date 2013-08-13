@@ -149,12 +149,12 @@ struct Preferences {
       int shortestNote;             // for midi input
       MidiImportOperations midiImportOperations;
 
-
       bool useOsc;
       int oscPort;
       bool singlePalette;
       QString styleName;
       int globalStyle;        // 0 - dark, 1 - light
+      bool animations;
 
       QString myScoresPath;
       QString myStylesPath;
