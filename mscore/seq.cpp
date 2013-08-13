@@ -274,6 +274,32 @@ void Seq::rewindStart()
       }
 
 //---------------------------------------------------------
+//   loopStart
+//---------------------------------------------------------
+
+void Seq::loopStart()
+      {
+      seek(0);
+      start();
+//      qDebug("LoopStart. playPos = %d\n", playPos);
+      }
+
+//---------------------------------------------------------
+//   loopStop
+//---------------------------------------------------------
+
+void Seq::loopStop()
+      {
+      //
+      // Finds the Loop event and removes it.
+      //
+      for (auto it = events.cbegin(); it != events.cend(); ++it)
+            if ((*it).second.type() == ME_LOOP)
+                  events.erase(it);
+      }
+
+
+//---------------------------------------------------------
 //   canStart
 //    return true if sequencer can be started
 //---------------------------------------------------------
@@ -309,6 +335,10 @@ void Seq::start()
             }
       if ((mscore->loop()) && (loopInPos!=loopOutPos)) {
             seek(loopInPos);
+            // Add loop event
+            NPlayEvent event;
+            event.setType(ME_LOOP);
+            events.insert(std::pair<int,NPlayEvent>(loopOutPos, event));
             }
       else
             seek(cs->playPos());
@@ -338,6 +368,8 @@ void Seq::stop()
             cs->setUpdateAll();
             cs->end();
             }
+      if (mscore->loop())
+            loopStop();
       }
 
 //---------------------------------------------------------
@@ -423,13 +455,6 @@ void Seq::guiStop()
 void Seq::seqMessage(int msg)
       {
       switch(msg) {
-            case '4':         // Partial LOOP playback  (called when the loopOutPos is reached)
-                  seek(loopInPos);
-                  break;
-            case '3':         // LOOP playback  (called when the end of the score is reached)
-                  getAction("play")->trigger();
-                  emit started();
-                  break;
             case '2':
                   guiStop();
 //                  heartBeatTimer->stop();
@@ -588,7 +613,7 @@ void Seq::process(unsigned n, float* buffer)
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->%d\n", playPos->first,cs->pos());
-                              emit toGui('3');
+                              loopStart();
                               } 
                         else {
                               emit toGui('2');
@@ -657,6 +682,11 @@ void Seq::process(unsigned n, float* buffer)
                         tickRest = tickLength;
                   else if (event.type() == ME_TICK2)
                         tackRest = tackLength;
+                  else if (event.type() == ME_LOOP) {
+                        qDebug ("event.type() == ME_LOOP  loopOutPos = %d  |  getCurTick() = %d ", loopOutPos, getCurTick());
+                        seek(loopInPos);
+                        return;
+                        }
                   mutex.lock();
                   ++playPos;
                   mutex.unlock();
@@ -1121,17 +1151,6 @@ void Seq::putEvent(const NPlayEvent& event)
 
 void Seq::heartBeatTimeout()
       {
-       if (state == TRANSPORT_PLAY) {
-            //
-            // If the loop option is active, loop back to "In position" if "Out position" is reached
-            //
-            if ((mscore->loop()) && (getCurTick() >= loopOutPos) && (loopOutPos > loopInPos)) {
-                  qDebug("----> Partial Loop: loopOutPos = %d  |  getCurTick() = %d  cs->pos() = %d   cs->playPos() = %d", loopOutPos, getCurTick(), cs->pos(), cs->playPos());
-                  emit toGui('4');
-                  //seek(loopInPos);
-                  return;
-                  }
-            }
       SynthControl* sc = mscore->getSynthControl();
       if (sc && _driver) {
             if (++peakTimer[0] >= peakHold)
@@ -1238,7 +1257,7 @@ double Seq::curTempo() const
 void Seq::setLoopIn()
       {
       loopInPos = cs->pos(); 
-      qDebug ("setLoopIn : loopInPos = %d\n",loopInPos);
+//      qDebug ("setLoopIn : loopInPos = %d\n",loopInPos);
       }
       
 //---------------------------------------------------------
@@ -1248,6 +1267,16 @@ void Seq::setLoopIn()
 void Seq::setLoopOut()
       {
       loopOutPos = cs->pos()+cs->inputState().ticks();
-      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() =%d \n",loopOutPos, cs->pos(), cs->inputState().ticks());
+//      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n",loopOutPos, cs->pos(), cs->inputState().ticks());
+      }
+
+//---------------------------------------------------------
+//   set Loop in position
+//---------------------------------------------------------
+
+void Seq::unsetLoop()
+      {
+      loopStop();   // Erase the loop event
+      loopInPos = loopOutPos = 0;    // Reinitialize the In/out loop positions
       }
 } 
