@@ -92,7 +92,7 @@ class NoteHead : public Symbol {
 //   @P dotPosition       enum AUTO, UP, DOWN
 //   @P headGroup         enum HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT
 //   @P headType          enum HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS
-//   @P el                array[Element] list of elements attached to note head
+//   @P elements          array[Element] list of elements attached to note head
 //---------------------------------------------------------------------------------------
 
 class Note : public Element {
@@ -128,7 +128,7 @@ class Note : public Element {
       Q_PROPERTY(Ms::MScore::Direction dotPosition READ dotPosition   WRITE undoSetDotPosition)
       Q_PROPERTY(NoteHeadGroup     headGroup   READ headGroup         WRITE undoSetHeadGroup)
       Q_PROPERTY(NoteHeadType      headType    READ headType          WRITE undoSetHeadType)
-      Q_PROPERTY(QQmlListProperty<Element> el  READ qmlElements)
+      Q_PROPERTY(QQmlListProperty<Element> elements  READ qmlElements)
 
       Q_ENUMS(NoteHeadGroup)
       Q_ENUMS(NoteHeadType)
