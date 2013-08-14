@@ -583,6 +583,8 @@ void Chord::addLedgerLines(int move)
                   visible = true;         // all lines are visible (WHICH IS NOT ALWAYS TRUE!)
 
             int l = note->line();         // check note line outside current range
+            if (l >= 0 && l < minLineBelow)     // if this note has no ledger lines
+                  continue;               // just ignore it
             if (l < minLine)  minLine = l;
             if (l > maxLine)  maxLine = l;
 
