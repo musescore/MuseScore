@@ -495,7 +495,7 @@ if (APPLE)
       ../fonts/FreeSans.ttf
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
-      ../fonts/Bravura.otf
+      ../fonts/bravura/Bravura.otf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
      install(DIRECTORY
