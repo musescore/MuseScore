@@ -167,7 +167,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>9</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -2940,7 +2940,7 @@ p, li { white-space: pre-wrap; }
           <item row="3" column="0">
            <widget class="QCheckBox" name="beamNoSlope">
             <property name="text">
-             <string>horizontal</string>
+             <string>Flatten all beams</string>
             </property>
            </widget>
           </item>
