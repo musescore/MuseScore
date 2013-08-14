@@ -20,8 +20,8 @@ namespace Ms {
       
 BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
 
-      /* These don't look nice due to varying stem length
       // Single Grace notes
+      // These don't look really nice due to varying stem length
       { "Single grace low G", "LG" },
       { "Single grace low A", "LA" },
       { "Single grace B", "B" },
@@ -31,7 +31,6 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Single grace F", "F" },
       { "Single grace high G", "HG" },
       { "Single grace high A", "HA" },
-       */
       
       // Double Grace notes
       { "Double grace", "D LG" },
@@ -76,10 +75,30 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Half doubling on D", "D E" },
       { "Half doubling on E", "E F" },
       { "Half doubling on F", "F HG" },
-      { "Half doubling on high G", "HG F" },
-      { "Half doubling on high A", "HA HG" },
+      // ? { "Half doubling on high G", "HG F" },
+      // ? { "Half doubling on high A", "HA HG" },
 
       // Regular Doublings
+      { "Doubling on high G", "HG F" },
+      { "Doubling on high A", "HA HG" },
+      
+      // Half Strikes
+      { "Half strike on low A", "LA LG" },
+      { "Half strike on B", "B LG" },
+      { "Half strike on C", "C LG" },
+      { "Half strike on D", "D LG" },
+      { "Half strike on D", "D C" },
+      { "Half strike on E", "E LA" },
+      { "Half strike on F", "F E" },
+      { "Half strike on high G", "HG F" },
+      
+      // Regular Grip
+      { "Grip", "D LG" },
+
+      // D Throw
+      { "Half D throw", "D C" },
+
+      // Regular Doublings (continued)
       { "Doubling on low G",  "HG LG D" },
       { "Doubling on low A",  "HG LA D" },
       { "Doubling on B",      "HG B D" },
@@ -87,8 +106,6 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Doubling on D",      "HG D E" },
       { "Doubling on E",      "HG E F" },
       { "Doubling on F",      "HG F HG" },
-      { "Doubling on high G", "HG F" },
-      { "Doubling on high A", "HA HG" },
 
       // Thumb Doublings
       { "Thumb doubling on low G", "HA LG D" },
@@ -98,7 +115,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Thumb doubling on D", "HA D E" },
       { "Thumb doubling on E", "HA E F" },
       { "Thumb doubling on F", "HA F HG" },
-      { "Thumb doubling on high G", "HA HG F" },
+      // ? { "Thumb doubling on high G", "HA HG F" },
 
       // G Grace note Strikes
       { "G grace note on low A", "HG LA LG" },
@@ -108,6 +125,17 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "G grace note on D", "HG D C" },
       { "G grace note on E", "HG E LA" },
       { "G grace note on F", "HG F E" },
+      
+      // Regular Double Strikes
+      { "Double strike on low A", "LG LA LG" },
+      { "Double strike on B", "LG B LG" },
+      { "Double strike on C", "LG C LG" },
+      { "Double strike on D", "LG D LG" },
+      { "Double strike on D", "C D C" },
+      { "Double strike on E", "LA E LA" },
+      { "Double strike on F", "E F E" },
+      { "Double strike on high G", "F HG F" },
+      { "Double strike on high A", "HG HA HG" },
 
       // Thumb Strikes
       { "Thumb strike on low A", "HA LA LG" },
@@ -119,20 +147,54 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Thumb strike on F", "HA F E" },
       { "Thumb strike on high G", "HA HG F" },
 
-      // Half Strikes
-      { "Half strike on low A", "LA LG" },
-      { "Half strike on B", "B LG" },
-      { "Half strike on C", "C LG" },
-      { "Half strike on D", "D LG" },
-      { "Half strike on D", "D C" },
-      { "Half strike on E", "E LA" },
-      { "Half strike on F", "F E" },
-      { "Half strike on high G", "HG F" },
-
-      // Regular Grips
+      // Regular Grips (continued)
       { "Grip", "LG D LG" },
-      { "Grip", "D LG" },
       { "Grip", "LG B LG" },
+
+      // Taorluath and Birl
+      { "Birl", "LG LA LG" },
+      { "D throw", "LG D C" },
+      { "Half heavy D throw", "D LG C" },
+      { "Taorluath", "D LG E" },
+
+      // Birl, Bubly, D Throws (continued) and Taorluaths (continued)
+      { "Birl", "LA LG LA LG" },
+      { "Bubly", "D LG C LG" },
+      { "Heavy D throw", "LG D LG C" },
+      { "Taorluath", "LG D LG E" },
+      { "Taorluath", "LG B LG E" },
+      
+      // Half Double Strikes
+      { "Half double strike on low A", "LA LG LA LG" },
+      { "Half double strike on B", "B LG B LG" },
+      { "Half double strike on C", "C LG C LG" },
+      { "Half double strike on D", "D LG D LG" },
+      { "Half double strike on D", "D C D C" },
+      { "Half double strike on E", "E LA E LA" },
+      { "Half double strike on F", "F E F E" },
+      { "Half double strike on high G", "HG F HG F" },
+      { "Half double strike on high A", "HA HG HA HG" },
+      
+      // Half Grips
+      { "Half grip on low A", "LA LG D LG" },
+      { "Half grip on B", "B LG D LG" },
+      { "Half grip on C", "C LG D LG" },
+      { "Half grip on D", "D LG D LG" },
+      { "Half grip on D", "D LG B LG" },
+      { "Half grip on E", "E LG D LG" },
+      { "Half grip on F", "F LG F LG" },
+      { "Half grip on high G", "HG LG D LG" },
+      { "Half grip on high A", "HA LG D LG" },
+      
+      // Half Peles
+      { "Half pele on low A", "LA E LA LG" },
+      { "Half pele on B", "B E B LG" },
+      { "Half pele on C", "C E C LG" },
+      { "Half pele on D", "D E D LG" },
+      { "Half pele on D", "D E D C" },
+      { "Half pele on E", "E F E LA" },
+      { "Half pele on F", "F HG F E" },
+      { "Half pele on high G", "HG HA HG F" },
 
       // G Grace note Grips
       { "G grace note grip on low A", "HG LA LG D LG" },
@@ -153,37 +215,14 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Thumb grip on F", "HA F LG F LG" },
       { "Thumb grip on high G", "HA HG LG F LG" },
 
-      // Half Grips
-      { "Half grip on low A", "LA LG D LG" },
-      { "Half grip on B", "B LG D LG" },
-      { "Half grip on C", "C LG D LG" },
-      { "Half grip on D", "D LG D LG" },
-      { "Half grip on D", "D LG B LG" },
-      { "Half grip on E", "E LG D LG" },
-      { "Half grip on F", "F LG F LG" },
-      { "Half grip on high G", "HG LG D LG" },
-      { "Half grip on high A", "HA LG D LG" },
-
-      // Taorluaths and Bublys
-      { "Taorluath", "LG D LG E" },
-      { "Taorluath", "LG B LG E" },
-      { "Taorluath", "D LG E" },
+      // Bubly
       { "Bubly", "LG D LG C LG" },
-      { "Bubly", "D LG C LG" },
 
       //  Birls
-      { "Birl", "LG LA LG" },
-      { "Birl", "LA LG LA LG" },
       { "Birl", "HG LA LG LA LG" },
       { "Birl", "HA LA LG LA LG" },
 
-      // Light, Heavy and Half D Throws
-      { "D throw", "LG D C" },
-      { "Heavy D throw", "LG D LG C" },
-      { "Half D throw", "D C" },
-      { "Half heavy D throw", "D LG C" },
-
-      // Regular, Thumb Grace Note and Half Peles
+      // Regular Peles
       { "Pele on low A", "HG LA E LA LG" },
       { "Pele on B", "HG B E B LG" },
       { "Pele on C", "HG C E C LG" },
@@ -192,7 +231,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Pele on E", "HG E F E LA" },
       { "Pele on F", "HG F HG F E" },
  
-      // Regular, Thumb Grace Note and Half Peles
+      // Thumb Grace Note Peles
       { "Thumb grace note pele on low A", "HA LA E LA LG" },
       { "Thumb grace note pele on B", "HA B E B LG" },
       { "Thumb grace note pele on C", "HA C E C LG" },
@@ -202,28 +241,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Thumb grace note pele on F", "HA F HG F E" },
       { "Thumb grace note pele on high G", "HA HG HA HG F" },
 
-      // Regular, Thumb Grace Note and Half Peles
-      { "Half pele on low A", "LA E LA LG" },
-      { "Half pele on B", "B E B LG" },
-      { "Half pele on C", "C E C LG" },
-      { "Half pele on D", "D E D LG" },
-      { "Half pele on D", "D E D C" },
-      { "Half pele on E", "E F E LA" },
-      { "Half pele on F", "F HG F E" },
-      { "Half pele on high G", "HG HA HG F" },
-
-      // Regular Double Strikes
-      { "Double strike on ", "LG LA LG" },
-      { "Double strike on ", "LG B LG" },
-      { "Double strike on ", "LG C LG" },
-      { "Double strike on ", "LG D LG" },
-      { "Double strike on ", "C D C" },
-      { "Double strike on ", "LA E LA" },
-      { "Double strike on ", "E F E" },
-      { "Double strike on ", "F HG F" },
-      { "Double strike on ", "HG HA HG" },
-
-      // G Grace note, Thumb and Half Double Strikes
+      // G Grace note Double Strikes
       { "G grace note double strike on low A", "HG LA LG LA LG" },
       { "G grace note double strike on B", "HG B LG B LG" },
       { "G grace note double strike on C", "HG C LG C LG" },
@@ -232,6 +250,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "G grace note double strike on E", "HG E LA E LA" },
       { "G grace note double strike on F", "HG F E F E" },
 
+      // Thumb Double Strikes
       { "Thumb double strike on low A", "HA LA LG LA LG" },
       { "Thumb double strike on B", "HA B LG B LG" },
       { "Thumb double strike on C", "HA C LG C LG" },
@@ -240,16 +259,6 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Thumb double strike on E", "HA E LA E LA" },
       { "Thumb double strike on F", "HA F E F E" },
       { "Thumb double strike on high G", "HA HG F HG F" },
-
-      { "Half double strike on low A", "LA LG LA LG" },
-      { "Half double strike on B", "B LG B LG" },
-      { "Half double strike on C", "C LG C LG" },
-      { "Half double strike on D", "D LG D LG" },
-      { "Half double strike on D", "D C D C" },
-      { "Half double strike on E", "E LA E LA" },
-      { "Half double strike on F", "F E F E" },
-      { "Half double strike on high G", "HG F HG F" },
-      { "Half double strike on high A", "HA HG HA HG" },
 
       // Regular Triple Strikes
       { "Triple strike on low A", "LG LA LG LA LG" },
@@ -261,27 +270,8 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Triple strike on F", "E F E F E" },
       { "Triple strike on high G", "F HG F HG F" },
       { "Triple strike on high A", "HG HA HG HA HG" },
-
-      // G Grace note, Thumb and Half Triple Strikes
-      { "G grace note triple strike on low A", "HG LA LG LA LG LA LG" },
-      { "G grace note triple strike on B", "HG B LG B LG B LG" },
-      { "G grace note triple strike on C", "HG C LG C LG C LG" },
-      { "G grace note triple strike on D", "HG D LG D LG D LG" },
-      { "G grace note triple strike on D", "HG D C D C D C" },
-      { "G grace note triple strike on E", "HG E LA E LA E LA" },
-      { "G grace note triple strike on F", "HG F E F E F E" },
-
-      // G Grace note, Thumb and Half Triple Strikes
-      { "Thumb triple strike on low A",  "HA LA LG LA LG LA LG" },
-      { "Thumb triple strike on B",      "HA B LG B LG B LG" },
-      { "Thumb triple strike on C",      "HA C LG C LG C LG" },
-      { "Thumb triple strike on D",      "HA D LG D LG D LG" },
-      { "Thumb triple strike on D",      "HA D C D C D C" },
-      { "Thumb triple strike on E",      "HA E LA E LA E LA" },
-      { "Thumb triple strike on F",      "HA F E F E F E" },
-      { "Thumb triple strike on high G", "HA HG F HG F HG F" },
-
-      // G Grace note, Thumb and Half Triple Strikes
+      
+      // Half Triple Strikes
       { "Half triple strike on low A", "LA LG LA LG LA LG" },
       { "Half triple strike on B", "B LG B LG B LG" },
       { "Half triple strike on C", "C LG C LG C LG" },
@@ -291,6 +281,25 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { "Half triple strike on F", "F E F E F E" },
       { "Half triple strike on high G", "HG F HG F HG F" },
       { "Half triple strike on high A", "HA HG HA HG HA HG" },
+
+      // G Grace note Triple Strikes
+      { "G grace note triple strike on low A", "HG LA LG LA LG LA LG" },
+      { "G grace note triple strike on B", "HG B LG B LG B LG" },
+      { "G grace note triple strike on C", "HG C LG C LG C LG" },
+      { "G grace note triple strike on D", "HG D LG D LG D LG" },
+      { "G grace note triple strike on D", "HG D C D C D C" },
+      { "G grace note triple strike on E", "HG E LA E LA E LA" },
+      { "G grace note triple strike on F", "HG F E F E F E" },
+
+      // Thumb Triple Strikes
+      { "Thumb triple strike on low A",  "HA LA LG LA LG LA LG" },
+      { "Thumb triple strike on B",      "HA B LG B LG B LG" },
+      { "Thumb triple strike on C",      "HA C LG C LG C LG" },
+      { "Thumb triple strike on D",      "HA D LG D LG D LG" },
+      { "Thumb triple strike on D",      "HA D C D C D C" },
+      { "Thumb triple strike on E",      "HA E LA E LA E LA" },
+      { "Thumb triple strike on F",      "HA F E F E F E" },
+      { "Thumb triple strike on high G", "HA HG F HG F HG F" },
 
       };
 
@@ -399,7 +408,7 @@ void BagpipeEmbellishment::draw(QPainter* painter) const
       qreal headp = headw * 1.4;          // horizontal head pitch
       qreal _spatium = score()->spatium();
       
-      qreal lw = 0.1 * _spatium;
+      qreal lw = 0.1 * _spatium;          // line width for stem
       qreal y1 =  -8 * _spatium / 2;      // top of stems
       
       QPen pen(curColor(), lw, Qt::SolidLine, Qt::FlatCap);
@@ -408,9 +417,9 @@ void BagpipeEmbellishment::draw(QPainter* painter) const
       noteList nl = getNoteList();
       int note;
       // calc x for stem of leftmost note
-      // embellishment is centered in the cell
+      // note embellishment is centered in the palette cell
       qreal x  = (headw - headp * (nl.size() - 1)) / 2;
-      qreal x0 = x; // remember for later
+      qreal x0 = x; // remember for later (left side of beam)
       // draw the notes including stems
       foreach (note, nl) {
             int line = BagpipeNoteInfoList[note].line;
@@ -421,11 +430,20 @@ void BagpipeEmbellishment::draw(QPainter* painter) const
                   painter->drawLine(QLineF(x - headw * 1.5 - lw * .5, y2, x + headw * .5 - lw * .5, y2));
             x += headp;
             }
+
+      // beam drawing setup
+      qreal bw = 0.3 * _spatium;          // line width for beam
+      QPen beamPen(curColor(), bw, Qt::SolidLine, Qt::FlatCap);
+      painter->setPen(beamPen);
+      // simplification: use short beam instead of flag for single grace notes
+      // TODO: replace by flags and fix stem length for single grace notes
+      if (nl.size() == 1)
+            x += 0.75 * headp;
       // draw the beam
       painter->drawLine(QLineF(x0 - lw * .5, y1, x - headp - lw * .5, y1));
-      y1 += _spatium / 2;
+      y1 += _spatium / 1.5;
       painter->drawLine(QLineF(x0 - lw * .5, y1, x - headp - lw * .5, y1));
-      y1 += _spatium / 2;
+      y1 += _spatium / 1.5;
       painter->drawLine(QLineF(x0 - lw * .5, y1, x - headp - lw * .5, y1));
       }
 
