@@ -28,7 +28,7 @@ class XmlReader;
 //---------------------------------------------------------
 
 struct GroupNode {
-      int pos;          // tick position, division 16
+      int pos;          // tick position, division 32nd
       int action;       // bits: cccc bbbb aaaa
                         // cc - 1/64  bb - 1/32  aa - 1/16
                         // bit pattern xxxx:
