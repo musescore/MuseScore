@@ -508,31 +508,42 @@ Score::FileError Score::read114(XmlReader& e)
       //
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             int tracks = nstaves() * VOICES;
+            bool first = true;
             for (int track = 0; track < tracks; ++track) {
                   for (Segment* s = m->first(); s; s = s->next()) {
                         if (s->segmentType() != Segment::SegChordRest)
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (cr) {
-                              switch(cr->beamMode()) {
-                                    case BeamMode::AUTO:
-                                    case BeamMode::BEGIN:
-                                    case BeamMode::END:
-                                    case BeamMode::NONE:
-                                          break;
-                                    case BeamMode::MID:
-                                    case BeamMode::BEGIN32:
-                                    case BeamMode::BEGIN64:
-                                          cr->setBeamMode(BeamMode::BEGIN);
-                                          break;
-                                    case BeamMode::INVALID:
-                                          if (cr->type() == Element::CHORD)
-                                                cr->setBeamMode(BeamMode::AUTO);
-                                          else
-                                                cr->setBeamMode(BeamMode::NONE);
-                                          break;
+                              if(cr->type() == Element::REST) {
+                                    Rest* r = static_cast<Rest*>(cr);
+                                    if (!r->userOff().isNull()) {
+                                          int lineOffset = r->computeLineOffset();
+                                          qreal lineDist = r->staff() ? r->staff()->staffType()->lineDistance().val() : 1.0;
+                                          r->rUserYoffset() -= (lineOffset * .5 * lineDist * r->spatium());
+                                          }
                                     }
-                              break;
+                              if(!first) {
+                                    switch(cr->beamMode()) {
+                                          case BeamMode::AUTO:
+                                          case BeamMode::BEGIN:
+                                          case BeamMode::END:
+                                          case BeamMode::NONE:
+                                                break;
+                                          case BeamMode::MID:
+                                          case BeamMode::BEGIN32:
+                                          case BeamMode::BEGIN64:
+                                                cr->setBeamMode(BeamMode::BEGIN);
+                                                break;
+                                          case BeamMode::INVALID:
+                                                if (cr->type() == Element::CHORD)
+                                                      cr->setBeamMode(BeamMode::AUTO);
+                                                else
+                                                      cr->setBeamMode(BeamMode::NONE);
+                                                break;
+                                          }
+                                    first = false;
+                                    }
                               }
                         }
                   }
