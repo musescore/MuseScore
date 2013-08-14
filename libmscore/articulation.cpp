@@ -402,7 +402,6 @@ void Articulation::setDirection(MScore::Direction d)
       _direction = d;
       if (d != MScore::AUTO)
             _up = (d == MScore::UP);
-//      qDebug("setDirection %p %d %d\n", this, _up, int(d));
       }
 
 //---------------------------------------------------------

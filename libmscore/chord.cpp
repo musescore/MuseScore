@@ -2053,7 +2053,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       ArticulationType st = a->articulationType();
 
       // TENUTO and STACCATO: always near the note head (or stem end if beyond a stem)
-      if (st == Articulation_Tenuto || st == Articulation_Staccato) {
+      if ((st == Articulation_Tenuto || st == Articulation_Staccato) && (aa != A_TOP_STAFF && aa != A_BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
             // if there area voices, articulation is on stem side
             if ((aa == A_CHORD) && measure()->hasVoices(a->staffIdx()))
@@ -2115,9 +2115,11 @@ QPointF Chord::layoutArticulation(Articulation* a)
       // reserve space for slur
       bool botGap = false;
       bool topGap = false;
-#if 0 // TODO-S:  optimize
-      for (Spanner* sp = spannerFor(); sp; sp = sp->next()) {
-            if (sp->type() != SLUR)
+
+      const std::vector< ::Interval<Spanner*> >& si = score()->spannerMap().findOverlapping(tick(), tick());
+      for (::Interval<Spanner*> is : si) {
+            Spanner* sp = is.value;
+            if ((sp->type() != SLUR) || (sp->tick() != tick() && sp->tick2() != tick()))
                  continue;
             Slur* s = static_cast<Slur*>(sp);
             if (s->up())
@@ -2125,16 +2127,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
             else
                   botGap = true;
             }
-      for (Spanner* sp = spannerBack(); sp; sp = sp->next()) {
-            if (sp->type() != SLUR)
-                 continue;
-            Slur* s = static_cast<Slur*>(sp);
-            if (s->up())
-                  topGap = true;
-            else
-                  botGap = true;
-            }
-#endif
+
       if (botGap)
             chordBotY += _spStaff;
       else
