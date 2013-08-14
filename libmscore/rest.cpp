@@ -362,8 +362,35 @@ void Rest::layout()
             stepOffset = staff()->staffType()->stepOffset();
       int line       = lrint(userOff().y() / _spatium); //  + ((staff()->lines()-1) * 2);
       qreal lineDist = staff() ? staff()->staffType()->lineDistance().val() : 1.0;
-      int lineOffset = 0;
 
+      int lines = staff() ? staff()->lines() : 5;
+      int lineOffset = computeLineOffset();
+
+      int yo;
+      _sym = getSymbol(durationType().type(), line + lineOffset/2, lines, &yo);
+      layoutArticulations();
+      rypos() = (qreal(yo) + qreal(lineOffset + stepOffset) * .5) * lineDist * _spatium;
+
+      Spatium rs;
+      if (dots()) {
+            rs = Spatium(score()->styleS(ST_dotNoteDistance)
+               + dots() * score()->styleS(ST_dotDotDistance));
+            }
+      if (dots()) {
+            rs = Spatium(score()->styleS(ST_dotNoteDistance)
+               + dots() * score()->styleS(ST_dotDotDistance));
+            }
+      setbbox(symbols[score()->symIdx()][_sym].bbox(magS()));
+      _space.setRw(width() + point(rs));
+      }
+
+//---------------------------------------------------------
+//   centerX
+//---------------------------------------------------------
+
+int Rest::computeLineOffset()
+      {
+      int lineOffset = 0;
       int lines = staff() ? staff()->lines() : 5;
       if (segment() && measure() && measure()->mstaff(staffIdx())->hasVoices) {
             // move rests in a multi voice context
@@ -434,23 +461,7 @@ void Rest::layout()
                         break;
                   }
             }
-
-      int yo;
-      _sym = getSymbol(durationType().type(), line + lineOffset/2, lines, &yo);
-      layoutArticulations();
-      rypos() = (qreal(yo) + qreal(lineOffset + stepOffset) * .5) * lineDist * _spatium;
-
-      Spatium rs;
-      if (dots()) {
-            rs = Spatium(score()->styleS(ST_dotNoteDistance)
-               + dots() * score()->styleS(ST_dotDotDistance));
-            }
-      if (dots()) {
-            rs = Spatium(score()->styleS(ST_dotNoteDistance)
-               + dots() * score()->styleS(ST_dotDotDistance));
-            }
-      setbbox(symbols[score()->symIdx()][_sym].bbox(magS()));
-      _space.setRw(width() + point(rs));
+      return lineOffset;
       }
 
 //---------------------------------------------------------
