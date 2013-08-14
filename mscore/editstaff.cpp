@@ -117,6 +117,9 @@ void EditStaff::updateInstrument()
       df = nl.isEmpty() ? QTextDocumentFragment() : nl[0].name;
       longName->setHtml(df.toHtml());
 
+      if (partName->text() == instrumentName->text())    // Updates part name is no custom name has been set before
+            partName->setText(instrument.trackName());
+
       instrumentName->setText(instrument.trackName());
 
       _minPitchA = instrument.minPitchA();
