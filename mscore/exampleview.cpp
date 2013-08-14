@@ -31,7 +31,7 @@ ExampleView::ExampleView(QWidget* parent)
       setAcceptDrops(true);
       setFocusPolicy(Qt::StrongFocus);
       double mag = preferences.mag;
-      _matrix    = QTransform(mag, 0.0, 0.0, mag, 10.0, -45.0);
+      _matrix    = QTransform(mag, 0.0, 0.0, mag, 10.0, -80.0);
       imatrix    = _matrix.inverted();
       }
 
