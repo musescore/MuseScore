@@ -145,6 +145,8 @@ Seq::Seq()
       playPos  = events.cbegin();
 
       playTime  = 0;
+      loopInPos = 0;
+      loopOutPos = 0;
       metronomeVolume = 0.3;
 
       meterValue[0]     = 0.0;
@@ -282,6 +284,21 @@ void Seq::loopStart()
       }
 
 //---------------------------------------------------------
+//   loopStop
+//---------------------------------------------------------
+
+void Seq::loopStop()
+      {
+      //
+      // Finds the Loop event and removes it.
+      //
+      for (auto it = events.cbegin(); it != events.cend(); ++it)
+            if ((*it).second.type() == ME_LOOP)
+                  events.erase(it);
+      }
+
+
+//---------------------------------------------------------
 //   canStart
 //    return true if sequencer can be started
 //---------------------------------------------------------
@@ -315,7 +332,15 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      seek(cs->playPos());
+      if ((mscore->loop()) && (loopInPos!=loopOutPos)) {
+            seek(loopInPos);
+            // Add loop event
+            NPlayEvent event;
+            event.setType(ME_LOOP);
+            events.insert(std::pair<int,NPlayEvent>(loopOutPos, event));
+            }
+      else
+            seek(cs->playPos());
       _driver->startTransport();
       }
 
@@ -342,6 +367,8 @@ void Seq::stop()
             cs->setUpdateAll();
             cs->end();
             }
+      if (mscore->loop())
+            loopStop();
       }
 
 //---------------------------------------------------------
@@ -582,16 +609,18 @@ void Seq::process(unsigned n, float* buffer)
                   // send sustain off
                   // TODO: channel?
                   putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
-                  if (playPos == events.cend())
-					    if (mscore->loop()) {
-//							qDebug("MScore::Seq:: loop active. playPos = %d\n", playPos);
-							loopStart();
-							}
-						else {
-							emit toGui('2');
-						}
-                  else
-                        emit toGui('0');
+                  if (playPos == events.cend()) {
+                        if (mscore->loop()) {
+                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->%d\n", playPos->first,cs->pos());
+                              loopStart();
+                              } 
+                        else {
+                              emit toGui('2');
+                              }
+                        }
+                  else {
+                     emit toGui('0');
+                     }
                   }
             else if (state != driverState)
                   qDebug("Seq: state transition %d -> %d ?\n",
@@ -652,6 +681,11 @@ void Seq::process(unsigned n, float* buffer)
                         tickRest = tickLength;
                   else if (event.type() == ME_TICK2)
                         tackRest = tackLength;
+                  else if (event.type() == ME_LOOP) {
+                        qDebug ("event.type() == ME_LOOP  loopOutPos = %d  |  getCurTick() = %d ", loopOutPos, getCurTick());
+                        seek(loopInPos);
+                        return;
+                        }
                   mutex.lock();
                   ++playPos;
                   mutex.unlock();
@@ -813,6 +847,7 @@ void Seq::seek(int utick)
       if (cs == 0)
             return;
 
+      qDebug ("seek : utick=%d",utick);
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
       int tick     = cs->repeatList()->utick2tick(utick);
@@ -1213,5 +1248,34 @@ double Seq::curTempo() const
       {
       return cs->tempomap()->tempo(playPos->first);
       }
-}
 
+//---------------------------------------------------------
+//   set Loop in position
+//---------------------------------------------------------
+
+void Seq::setLoopIn()
+      {
+      loopInPos = cs->pos(); 
+//      qDebug ("setLoopIn : loopInPos = %d\n",loopInPos);
+      }
+      
+//---------------------------------------------------------
+//   set Loop in position
+//---------------------------------------------------------
+
+void Seq::setLoopOut()
+      {
+      loopOutPos = cs->pos()+cs->inputState().ticks();
+//      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n",loopOutPos, cs->pos(), cs->inputState().ticks());
+      }
+
+//---------------------------------------------------------
+//   set Loop in position
+//---------------------------------------------------------
+
+void Seq::unsetLoop()
+      {
+      loopStop();   // Erase the loop event
+      loopInPos = loopOutPos = 0;    // Reinitialize the In/out loop positions
+      }
+} 

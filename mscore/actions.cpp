@@ -2042,6 +2042,20 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
+         "loop-in",
+         QT_TRANSLATE_NOOP("action","Loop in"),
+         QT_TRANSLATE_NOOP("action","Set loop In position")
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         0,
+         "loop-out",
+         QT_TRANSLATE_NOOP("action","Loop out"),
+         QT_TRANSLATE_NOOP("action","Set loop Out position")
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         0,
          "metronome",
          QT_TRANSLATE_NOOP("action","Metronome"),
          QT_TRANSLATE_NOOP("action","toggle metronome"),
