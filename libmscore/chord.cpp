@@ -529,7 +529,7 @@ qreal Chord::maxHeadWidth()
 ///   \arg x          start x-position
 ///   \arg len        line length
 //---------------------------------------------------------
-
+/*
 void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium len)
       {
       qreal _spatium = spatium();
@@ -558,6 +558,29 @@ void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium le
       h->setNext(_ledgerLines);
       _ledgerLines = h;
       }
+*/
+//---------------------------------------------------------
+//   createLedgerLines
+///   Creates the ledger lines fro a chord
+///   \arg track      track the ledger line belongs to
+///   \arg lines      a vector of LedgerLineData describing thelines to add
+///   \arg visible    whether the line is visible or not
+//---------------------------------------------------------
+
+void Chord::createLedgerLines(int track, vector<LedgerLineData>& vecLines, bool visible)
+      {
+      qreal _spatium = spatium();
+      for (auto lld : vecLines) {
+            LedgerLine* h = new LedgerLine(score());
+            h->setParent(this);
+            h->setTrack(track);
+            h->setVisible(lld.visible && visible);
+            h->setLen(Spatium( (lld.maxX - lld.minX) / _spatium) );
+            h->setPos(lld.minX, lld.line * _spatium * .5);
+            h->setNext(_ledgerLines);
+            _ledgerLines = h;
+            }
+      }
 
 //---------------------------------------------------------
 //   addLedgerLines
@@ -565,54 +588,115 @@ void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium le
 
 void Chord::addLedgerLines(int move)
       {
+      LedgerLineData    lld;
+      qreal _spatium = spatium();
       int   idx   = staffIdx() + move;
+      int   track = staff2track(idx);           // the track lines belong to
       qreal hw    = _notes[0]->headWidth();
-      qreal minX  = 0, maxX=0;            // no ledger line width yet
-      int   minLine = 0, maxLine = 0;     // no line yet
+      // the line pos corresponding to the bottom line of the staff
+      int   lineBelow = (score()->staff(idx)->lines()-1) * 2;
+      qreal minX, maxX;                         // note extrema in raster units
+//      qreal minXr, maxXr;                       // ledger line extrema in raster units
+      int   minLine, maxLine;
       bool  visible = false;
       qreal x;
-      // the line pos corresponding to the first ledger line below the staff
-      int   minLineBelow = score()->staff(idx)->lines() * 2;
+      // the extra length of a ledger line with respect to note head (half of it on each side)
+      qreal extraLen = score()->styleS(ST_ledgerLineLength).val() * _spatium * 0.5;
 
       // scan chord notes, collecting visibility and x and y extrema
+      // NOTE: notes are sorted from bottom to top (line no. decreasing)
+      // notes are scanned twice from outside (bottom or top) toward the staff
+      // each pass stops at the first note without ledger lines
       int n = _notes.size();
-      for (int i = 0; i < n; ++i) {
-            const Note* note = _notes.at(i);
+      for (int j = 0; j < 2; j++) {             // notes are scanned twice...
+            int from, delta;
+            vector<LedgerLineData> vecLines;
+            minX  = maxX = 0;
+            minLine = 0;
+            maxLine = lineBelow;
+            if (j == 0) {                       // ...once from lowest up...
+                  from  = 0;
+                  delta = +1;
+                  }
+            else {
+                  from = n-1;                   // ...once from highest down
+                  delta = -1;
+                  }
+            for (int i = from; i < n && i >=0 ; i += delta) {
+                  bool  accid;
+                  const Note* note = _notes.at(i);
 
-            if (_notes.at(i)->visible())  // if one note is visible,
-                  visible = true;         // all lines are visible (WHICH IS NOT ALWAYS TRUE!)
+                  int l = note->line();
+                  if ( (!j && l < lineBelow) || // if 1st pass and note not below staff
+                       (j && l >= 0) )          // or 2nd pass and note not above staff
+                        break;                  // stop this pass
+                  // round line number to even number toward 0
+                  if (l < 0)        l = (l+1) & ~ 1;
+                  else              l = l & ~ 1;
 
-            int l = note->line();         // check note line outside current range
-            if (l < minLine)  minLine = l;
-            if (l > maxLine)  maxLine = l;
+                  if (note->visible())          // if one note is visible,
+                        visible = true;         // all lines between it and the staff are visible
 
-            x = note->pos().x();         // check note pos and width outside current range
-            if (x < minX)     minX = x;
-            if (x+hw > maxX)  maxX = x+hw;
+                  //
+                  // Experimental:
+                  //  shorten ledger line to avoid collisions with accidentals
+                  //
+                  accid = (note->accidental() && note->line() >= (l-1) && note->line() <= (l+1) );
+                  //
+                  // TODO : do something with this accid flag in the following code!
+                  //
+
+                  // check if note horiz. pos. is outside current range
+                  // if more length on the right, increase range
+                  x = note->pos().x();
+                  if (x-extraLen < minX) {
+                        minX  = x - extraLen;
+//                        minXr = minX - extraLen;
+                        // increase width of all lines between this one and the staff
+                        for (auto& d : vecLines)
+                              if (!d.accidental && ((l < 0 && d.line >= l) || (l > 0 && d.line <= l)) )
+                                    d.minX = minX ;
+                        }
+                  // same for left side
+                  if (x+hw+extraLen > maxX) {
+                        maxX = x + hw + extraLen;
+//                        maxXr = maxX + extraLen;
+                        for (auto& d : vecLines)
+                              if ( (l < 0 && d.line >= l) || (l > 0 && d.line <= l) )
+                                    d.maxX = maxX;
+                        }
+
+                  // check if note vert. pos. is outside current range
+                  // and, in case, add data for new line(s)
+                  if (l < minLine) {
+                        for (int i = l; i < minLine; i += 2) {
+                              lld.line = i;
+                              lld.minX = minX;
+                              lld.maxX = maxX;
+                              lld.visible = visible;
+                              lld.accidental = false;
+                              vecLines.push_back(lld);
+                              }
+                        minLine = l;
+                        }
+                  if (l > maxLine) {
+                        for (int i = maxLine+2; i <= l; i += 2) {
+                              lld.line = i;
+                              lld.minX = minX;
+                              lld.maxX = maxX;
+                              lld.visible = visible;
+                              lld.accidental = false;
+                              vecLines.push_back(lld);
+                              }
+                        maxLine = l;
+                        }
+                  }
+            if (minLine < 0 || maxLine > lineBelow)
+                  createLedgerLines(track, vecLines, !staff()->invisible());
             }
 
-      if (minLine > -2 && maxLine < minLineBelow)
             return;                       // no ledger lines for this chord
 
-      // some values and calculations common to all ledger lines
-      if (staff()->invisible())           // but if staff is invisible,
-            visible = false;              // lines are invisible too
-
-      qreal _spatium = spatium();
-      qreal extraLen = score()->styleS(ST_ledgerLineLength).val() * _spatium;
-      qreal lineLen = maxX - minX + extraLen;   // line length in raster units
-      Spatium len(lineLen / _spatium);          // line length in Spatium units
-      int   track = staff2track(idx);           // the track lines belong to
-      minX -= extraLen * .5;                    // the starting point x-pos
-
-      // lines above the staff
-      for (int i = (minLine+1) & ~1; i < 0; i += 2)
-            addLedgerLine(track, i, visible, minX, len);
-
-      // lines above the staff
-      maxLine &= ~1;                            // round maxLine to even number
-      for (int i = minLineBelow; i <= maxLine; i += 2)
-            addLedgerLine(track, i, visible, minX, len);
       }
 
 //-----------------------------------------------------------------------------
