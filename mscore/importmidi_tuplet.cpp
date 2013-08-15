@@ -544,6 +544,7 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                   }
             if (!removedIndexes.empty()) {
                   MidiChord newTupletChord;
+                  newTupletChord.voice = firstChord->second->second.voice;
                   for (const auto &i: leavedIndexes)
                         newTupletChord.notes.push_back(notes[i]);
 
