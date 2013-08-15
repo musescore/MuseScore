@@ -632,6 +632,7 @@ MuseScore::MuseScore()
       transportTools->addSeparator();
       transportTools->addAction(getAction("rewind"));
       transportTools->addAction(getAction("play"));
+      transportTools->addAction(getAction("loop"));
       transportTools->addSeparator();
       a = getAction("repeat");
       a->setChecked(MScore::playRepeats);
@@ -4140,8 +4141,18 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             cmdAddChordName2();
       else if (cmd == "tempo")
             addTempo();
-      else if (cmd == "loop")  // no action
-			;
+      else if (cmd == "loop") {
+		    if (!mscore->loop()) 
+		         seq->unsetLoop();
+		    }
+      else if (cmd == "loop-in") {
+			//qDebug ("SetLoopIn\n");
+			seq->setLoopIn();
+			}
+      else if (cmd == "loop-out") {
+			//qDebug ("SetLoopOut\n");
+			seq->setLoopOut();
+			}
       else if (cmd == "metronome")  // no action
             ;
       else if (cmd == "viewmode") {
