@@ -715,6 +715,36 @@ void setVoiceOfNonTupletChords(
             chord->second.voice = voice;
       }
 
+// split first tuplet chord, that belong to 2 tuplets, into 2 voices
+
+void splitTupletChord(const std::vector<TupletInfo>::iterator &lastMatch,
+                      std::multimap<Fraction, MidiChord> &chords)
+      {
+      MidiChord &prevMidiChord = lastMatch->chords.begin()->second->second;
+      Fraction onTime = lastMatch->chords.begin()->first;
+      MidiChord newChord = prevMidiChord;
+                        // erase all notes except the first one
+      auto beg = newChord.notes.begin();
+      newChord.notes.erase(++beg, newChord.notes.end());
+                        // erase the first note
+      prevMidiChord.notes.erase(prevMidiChord.notes.begin());
+      lastMatch->chords.begin()->second = chords.insert({onTime, newChord});
+      if (prevMidiChord.notes.isEmpty()) {
+                        // normally this should not happen at all
+                        // because of filtering of tuplets
+            qDebug("Tuplets were not filtered correctly: same notes in different tuplets");
+            }
+      }
+
+void setTupletVoice(int voice,
+                    std::map<int, std::multimap<Fraction, MidiChord>::iterator> &tupletChords)
+      {
+      for (auto &tupletChord: tupletChords) {
+            MidiChord &midiChord = tupletChord.second->second;
+            midiChord.voice = voice;
+            }
+      }
+
 // the input tuplets should be filtered (for mutual validity)
 // result - voice of non-tuplet chords or -1 if there are no non-tuplet chords
 
@@ -730,8 +760,8 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
                   // and notes of every chord as well
       sortNotesByPitch(startBarChordIt, endBarChordIt);
       sortTupletsByAveragePitch(tuplets);
-
-      Fraction regularRaster = Quantize::findRegularQuantRaster(startBarChordIt, endBarChordIt, endBarTick);
+      Fraction regularRaster = Quantize::findRegularQuantRaster(startBarChordIt, endBarChordIt,
+                                                                endBarTick);
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
       int nonTupletVoice = findNonTupletVoice(nonTuplets, tuplets, regularRaster);
       setVoiceOfNonTupletChords(nonTuplets, nonTupletVoice);
@@ -757,38 +787,19 @@ int separateTupletVoices(std::vector<TupletInfo> &tuplets,
                         }
                   if (flag)
                         flag = false;
-                              // if first notes in tuplets match - split this chord
-                              // into 2 voices
+                              // if first notes in tuplets match - split this chord into 2 voices
                   auto firstPrevChordIt = prev->chords.begin();
-                  if (firstNowChordIt->first == 0 && firstPrevChordIt->first == 0
+                  if (firstNowChordIt->first == 0
+                              && firstPrevChordIt->first == 0
                               && firstNowChordIt->second == firstPrevChordIt->second) {
                         lastMatch = prev;
                         }
                   ++prev;
                   }
-            if (lastMatch != tuplets.end()) {
-                              // split first tuplet chord, that belong to 2 tuplets, into 2 voices
-                  MidiChord &prevMidiChord = lastMatch->chords.begin()->second->second;
-                  Fraction onTime = lastMatch->chords.begin()->first;
-                  MidiChord newChord = prevMidiChord;
-                              // erase all notes except the first one
-                  auto beg = newChord.notes.begin();
-                  newChord.notes.erase(++beg, newChord.notes.end());
-                              // erase the first note
-                  prevMidiChord.notes.erase(prevMidiChord.notes.begin());
-                  lastMatch->chords.begin()->second = chords.insert({onTime, newChord});
-                  if (prevMidiChord.notes.isEmpty()) {
-                                    // normally this should not happen at all
-                                    // because of filtering of tuplets
-                        qDebug("Tuplets were not filtered correctly: same notes in different tuplets");
-                        break;
-                        }
-                  }
+            if (lastMatch != tuplets.end())
+                  splitTupletChord(lastMatch, chords);
 
-            for (auto &tupletChord: now->chords) {
-                  MidiChord &midiChord = tupletChord.second->second;
-                  midiChord.voice = voice;
-                  }
+            setTupletVoice(voice, now->chords);
             }
       return nonTupletVoice;
       }
@@ -863,8 +874,9 @@ void addFirstTiedTupletNotes(std::multimap<Fraction, MidiChord> &chords,
                                                                      tupletInfo.tupletQuantValue);
                         auto it = tiedTupletErrors.find(&chord);
                         bool found = (it != tiedTupletErrors.end());
-                        if (tupletError < chordError && (!found || (found && tupletError < it->second))) {
-                                    // include chord in first tuplet notes as tied chord
+                        if (tupletError < chordError
+                                    && (!found || (found && tupletError < it->second))) {
+                                          // include chord in first tuplet notes as tied chord
                               int chordVoice = chord.second.voice;
                               int tupletVoice = tupletInfo.chords.begin()->second->second.voice;
                               if (chordVoice != tupletVoice) {
