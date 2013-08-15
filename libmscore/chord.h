@@ -21,6 +21,7 @@
 #include <functional>
 #include "chordrest.h"
 #include "noteevent.h"
+#include <vector>
 
 class QPainter;
 
@@ -52,6 +53,13 @@ enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 class Chord : public ChordRest {
       Q_OBJECT
 
+      struct LedgerLineData {
+            int   line;
+            qreal minX, maxX;
+            bool  visible;
+            bool  accidental;
+            };
+
       Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
       Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
 
@@ -78,7 +86,8 @@ class Chord : public ChordRest {
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
       virtual qreal centerX() const;
-      void addLedgerLine(int staffIdx, int line, bool visible, qreal x, Spatium len);
+//      void addLedgerLine(int staffIdx, int line, bool visible, qreal x, Spatium len);
+      void createLedgerLines(int track, std::vector<LedgerLineData> &vecLines, bool visible);
       void addLedgerLines(int move);
       void processSiblings(std::function<void(Element*)> func);
       void layoutPitched();
