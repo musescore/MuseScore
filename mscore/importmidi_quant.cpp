@@ -196,7 +196,7 @@ void applyGridQuant(std::multimap<Fraction, MidiChord> &chords,
       std::swap(chords, quantizedChords);
       }
 
-// input chords - sorted by onTime value, onTime values don't repeat
+// input chords - sorted by onTime value, onTime values are not repeated
 
 void quantizeChordsAndTuplets(std::multimap<Fraction, MidiTuplet::TupletData> &tupletEvents,
                               std::multimap<Fraction, MidiChord> &inputChords,
