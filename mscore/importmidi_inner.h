@@ -21,19 +21,19 @@ struct MaxLevel
       {
       int level = 0;         // 0 - the biggest, whole bar level; other: -1, -2, ...
       int levelCount = 0;    // number of ticks with 'level' value
-      Fraction lastPos = Fraction(-1, 1);   // position of last tick with value 'level'; -1 - undefined pos
+      ReducedFraction lastPos = ReducedFraction(-1, 1);   // position of last tick with value 'level'; -1 - undefined pos
       };
 
 struct DivLengthInfo
       {
-      Fraction len;
+      ReducedFraction len;
       int level;
       };
 
 struct DivisionInfo
       {
-      Fraction onTime;        // division start tick (tick is counted from the beginning of bar)
-      Fraction len;           // length of this whole division
+      ReducedFraction onTime;        // division start tick (tick is counted from the beginning of bar)
+      ReducedFraction len;           // length of this whole division
       bool isTuplet = false;
       std::vector<DivLengthInfo> divLengths;    // lengths of 'len' subdivisions
       };

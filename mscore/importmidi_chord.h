@@ -1,7 +1,7 @@
 #ifndef IMPORTMIDI_CHORD_H
 #define IMPORTMIDI_CHORD_H
 
-#include "libmscore/fraction.h"
+#include "importmidi_fraction.h"
 
 
 namespace Ms {
@@ -12,7 +12,7 @@ class MidiNote {
    public:
       int pitch;
       int velo;
-      Fraction len;
+      ReducedFraction len;
       Tie* tie = nullptr;
       };
 
@@ -24,8 +24,8 @@ class MidiChord {
 
 
 template <typename Iter>
-Iter findFirstChordInRange(const Fraction &startRangeTick,
-                           const Fraction &endRangeTick,
+Iter findFirstChordInRange(const ReducedFraction &startRangeTick,
+                           const ReducedFraction &endRangeTick,
                            const Iter &startChordIt,
                            const Iter &endChordIt)
       {
@@ -41,7 +41,7 @@ Iter findFirstChordInRange(const Fraction &startRangeTick,
       }
 
 template <typename Iter>
-Iter findEndChordInRange(const Fraction &endRangeTick,
+Iter findEndChordInRange(const ReducedFraction &endRangeTick,
                          const Iter &startChordIt,
                          const Iter &endChordIt)
       {
@@ -53,7 +53,7 @@ Iter findEndChordInRange(const Fraction &endRangeTick,
       return it;
       }
 
-Fraction maxNoteLen(const QList<MidiNote> &notes);
+ReducedFraction maxNoteLen(const QList<MidiNote> &notes);
 int findAveragePitch(const QList<MidiNote> &notes);
 
 } // namespace Ms
