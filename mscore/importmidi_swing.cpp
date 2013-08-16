@@ -7,7 +7,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
 #include "libmscore/tuplet.h"
-#include "libmscore/fraction.h"
+#include "importmidi_fraction.h"
 
 
 namespace Ms {
@@ -23,7 +23,7 @@ class SwingDetector
 
    private:
       std::vector<ChordRest *> elements;
-      Fraction sumLen;
+      ReducedFraction sumLen;
       const Fraction FULL_LEN = Fraction(1, 4);
       MidiOperation::Swing swingType;
       bool swingApplied = false;
@@ -78,7 +78,7 @@ void SwingDetector::add(ChordRest *cr)
 void SwingDetector::reset()
       {
       elements.clear();
-      sumLen = Fraction(0);
+      sumLen = ReducedFraction(0);
       }
 
 void SwingDetector::append(ChordRest *cr)

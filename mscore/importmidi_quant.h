@@ -6,7 +6,7 @@ namespace Ms {
 
 class MidiChord;
 class TimeSigMap;
-class Fraction;
+class ReducedFraction;
 
 namespace MidiTuplet {
 struct TupletData;
@@ -14,27 +14,27 @@ struct TupletData;
 
 namespace Quantize {
 
-void applyAdaptiveQuant(std::multimap<Fraction, MidiChord> &,
+void applyAdaptiveQuant(std::multimap<ReducedFraction, MidiChord> &,
                         const TimeSigMap *,
-                        const Fraction &);
+                        const ReducedFraction &);
 
-void applyGridQuant(std::multimap<Fraction, MidiChord> &chords,
+void applyGridQuant(std::multimap<ReducedFraction, MidiChord> &chords,
                     const TimeSigMap *sigmap,
-                    const Fraction &lastTick);
+                    const ReducedFraction &lastTick);
 
-void quantizeChordsAndTuplets(std::multimap<Fraction, MidiTuplet::TupletData> &tupletEvents,
-                              std::multimap<Fraction, MidiChord> &inputChords,
+void quantizeChordsAndTuplets(std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents,
+                              std::multimap<ReducedFraction, MidiChord> &inputChords,
                               const TimeSigMap *sigmap,
-                              const Fraction &lastTick);
+                              const ReducedFraction &lastTick);
 
-Fraction fixedQuantRaster();
+ReducedFraction fixedQuantRaster();
 
-Fraction reduceRasterIfDottedNote(const Fraction &len, const Fraction &raster);
-Fraction quantizeValue(const Fraction &value, const Fraction &raster);
+ReducedFraction reduceRasterIfDottedNote(const ReducedFraction &len, const ReducedFraction &raster);
+ReducedFraction quantizeValue(const ReducedFraction &value, const ReducedFraction &raster);
 
-Fraction findRegularQuantRaster(const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
-                    const std::multimap<Fraction, MidiChord>::iterator &endChordIt,
-                    const Fraction &endBarTick);
+ReducedFraction findRegularQuantRaster(const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
+                                       const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt,
+                                       const ReducedFraction &endBarTick);
 
 } // namespace Quantize
 } // namespace Ms
