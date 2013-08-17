@@ -992,44 +992,6 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
       Swing::detectSwing(staff, swingType);
       }
 
-#if 0
-      //---------------------------------------------------
-      //  remove empty measures at beginning
-      //---------------------------------------------------
-
-      int startBar, endBar, beat, tick;
-      score->sigmap()->tickValues(lastTick, &endBar, &beat, &tick);
-      if (beat || tick)
-            ++endBar;
-
-      for (startBar = 0; startBar < endBar; ++startBar) {
-            int tick1 = score->sigmap()->bar2tick(startBar, 0);
-            int tick2 = score->sigmap()->bar2tick(startBar + 1, 0);
-            int events = 0;
-            foreach (MidiTrack* midiTrack, *tracks) {
-                  if (midiTrack->staffIdx() == -1)
-                        continue;
-                  foreach(const Event ev, midiTrack->events()) {
-                        int t = ev.ontime();
-                        if (t >= tick2)
-                              break;
-                        if (t < tick1)
-                              continue;
-                        if (ev.type() == ME_NOTE) {
-                              ++events;
-                              break;
-                              }
-                        }
-                  }
-            if (events)
-                  break;
-            }
-      tick = score->sigmap()->bar2tick(startBar, 0);
-      if (tick)
-            qDebug("remove empty measures %d ticks, startBar %d", tick, startBar);
-      mf->move(-tick);
-#endif
-
 Fraction metaTimeSignature(const MidiEvent& e)
       {
       const unsigned char* data = e.edata();
