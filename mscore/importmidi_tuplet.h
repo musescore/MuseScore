@@ -23,9 +23,9 @@ struct TupletData
 
 struct TupletInfo
       {
-      ReducedFraction onTime;
-      ReducedFraction len;
-      int tupletNumber;
+      ReducedFraction onTime = -1;  // invalid
+      ReducedFraction len = -1;
+      int tupletNumber = -1;
       ReducedFraction tupletQuantValue;
       ReducedFraction regularQuantValue;
                   // <note index in tuplet, chord iterator>
@@ -44,7 +44,7 @@ void filterTuplets(std::vector<TupletInfo> &tuplets);
 
 ReducedFraction findOffTimeRaster(const ReducedFraction &noteOffTime,
                                   int voice,
-                                  const ReducedFraction &regularQuantValue,
+                                  const ReducedFraction &regularQuant,
                                   const std::vector<TupletInfo> &tuplets);
 
 std::vector<TupletInfo> findTuplets(const ReducedFraction &startBarTick,
