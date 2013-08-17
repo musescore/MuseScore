@@ -95,7 +95,7 @@ DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData &tuplet,
       tupletDivInfo.len = tuplet.len;
       tupletDivInfo.isTuplet = true;
       tupletDivInfo.divLengths.push_back({tuplet.len, TUPLET_BOUNDARY_LEVEL});
-      ReducedFraction divLen = tuplet.len / tuplet.tupletNumber;
+      auto divLen = tuplet.len / tuplet.tupletNumber;
       tupletDivInfo.divLengths.push_back({divLen, tupletStartLevel--});
       while (tupletDivInfo.divLengths.back().len >= minAllowedDuration() * 2) {
             tupletDivInfo.divLengths.push_back({
@@ -106,7 +106,7 @@ DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData &tuplet,
 
 ReducedFraction beatLength(const ReducedFraction &barFraction)
       {
-      ReducedFraction beatLen = barFraction / 4;
+      auto beatLen = barFraction / 4;
       if (Meter::isDuple(barFraction))
             beatLen = barFraction / 2;
       else if (Meter::isTriple(barFraction))
@@ -122,7 +122,7 @@ std::vector<ReducedFraction> divisionsOfBarForTuplets(const ReducedFraction &bar
       {
       DivisionInfo info = metricDivisionsOfBar(barFraction);
       std::vector<ReducedFraction> divLengths;
-      ReducedFraction beatLen = beatLength(barFraction);
+      auto beatLen = beatLength(barFraction);
       for (const auto &i: info.divLengths) {
                         // in compound meter tuplet starts from beat level, not the whole bar
             if (Meter::isCompound(barFraction) && i.len > beatLen)
@@ -177,22 +177,22 @@ Meter::MaxLevel maxLevelBetween(const ReducedFraction &startTickInBar,
                                 const DivisionInfo &divInfo)
       {
       Meter::MaxLevel level;
-      ReducedFraction startTickInDiv = startTickInBar - divInfo.onTime;
-      ReducedFraction endTickInDiv = endTickInBar - divInfo.onTime;
+      auto startTickInDiv = startTickInBar - divInfo.onTime;
+      auto endTickInDiv = endTickInBar - divInfo.onTime;
       if (startTickInDiv >= endTickInDiv
                   || startTickInDiv < 0 || endTickInDiv > divInfo.len)
             return level;
 
       for (const auto &divLengthInfo: divInfo.divLengths) {
             const auto &divLen = divLengthInfo.len;
-            ReducedFraction maxEndRaster = divLen * (endTickInDiv.ticks() / divLen.ticks());
+            auto maxEndRaster = divLen * (endTickInDiv.ticks() / divLen.ticks());
             if (maxEndRaster == endTickInDiv)
                   maxEndRaster -= divLen;
             if (startTickInDiv < maxEndRaster) {
                               // max level is found
                   level.lastPos = maxEndRaster + divInfo.onTime;
-                  ReducedFraction maxStartRaster = divLen * (startTickInDiv.ticks() / divLen.ticks());
-                  ReducedFraction count = (maxEndRaster - maxStartRaster) / divLen;
+                  auto maxStartRaster = divLen * (startTickInDiv.ticks() / divLen.ticks());
+                  auto count = (maxEndRaster - maxStartRaster) / divLen;
                   level.levelCount = qRound(count.numerator() * 1.0 / count.denominator());
                   level.level = divLengthInfo.level;
                   break;
@@ -264,8 +264,8 @@ bool isPowerOfTwo(unsigned int x)
 
 bool isSingleNoteDuration(const ReducedFraction &ticks)
       {
-      ReducedFraction division = ReducedFraction::fromTicks(MScore::division);
-      ReducedFraction div = (ticks > division) ? ticks / division : division / ticks;
+      auto division = ReducedFraction::fromTicks(MScore::division);
+      auto div = (ticks > division) ? ticks / division : division / ticks;
       if (div > ReducedFraction(0))
             return isPowerOfTwo((unsigned int)div.ticks());
       return false;
@@ -288,9 +288,8 @@ bool is23EndOfBeatInCompoundMeter(const ReducedFraction &startTickInBar,
       if (!isCompound(barFraction))
             return false;
 
-      ReducedFraction beatLen = beatLength(barFraction);
-      ReducedFraction divLen = beatLen / 3;
-
+      auto beatLen = beatLength(barFraction);
+      auto divLen = beatLen / 3;
       if ((startTickInBar - beatLen * (startTickInBar.ticks() / beatLen.ticks()) == divLen)
                   && (endTickInBar.ticks() % beatLen.ticks() == 0))
             return true;
@@ -394,7 +393,7 @@ toDurationList(const ReducedFraction &startTickInBar,
       else if (durationType == DurationType::REST)
             tol = 0;
                   // each child node duration after division is not less than minDuration()
-      const ReducedFraction minDuration = minAllowedDuration() * 2;
+      const auto minDuration = minAllowedDuration() * 2;
                   // build duration tree such that durations don't go across strong beat divisions
       while (!nodesToProcess.isEmpty()) {
             Node *node = nodesToProcess.dequeue();
