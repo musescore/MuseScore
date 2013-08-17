@@ -556,7 +556,6 @@ MidiChord chordFactory(const ReducedFraction &len, const std::vector<int> &pitch
 void TestImportMidi::separateTupletVoices()
       {
       ReducedFraction tupletLen = ReducedFraction::fromTicks(MScore::division);
-      ReducedFraction endBarTick = tupletLen * 4;
       std::multimap<ReducedFraction, MidiChord> chords;
                   // let's create 3 tuplets with the same first chord
 
@@ -635,8 +634,7 @@ void TestImportMidi::separateTupletVoices()
       QCOMPARE(septupletIt->second->second.notes[1].pitch, 71);
       QCOMPARE(septupletIt->second->second.notes[2].pitch, 67);
 
-      MidiTuplet::separateTupletVoices(tuplets, chords.begin(), chords.end(),
-                                       chords, endBarTick);
+      MidiTuplet::separateTupletVoices(tuplets, chords.begin(), chords.end(), chords);
       QVERIFY(chords.size() == 15);
 
       tripletInfo = tuplets[0];
