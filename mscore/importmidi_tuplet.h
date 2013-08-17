@@ -26,8 +26,8 @@ struct TupletInfo
       ReducedFraction onTime = -1;  // invalid
       ReducedFraction len = -1;
       int tupletNumber = -1;
-      ReducedFraction tupletQuantValue;
-      ReducedFraction regularQuantValue;
+      ReducedFraction tupletQuant;
+      ReducedFraction regularQuant;
                   // <note index in tuplet, chord iterator>
       std::map<int, std::multimap<ReducedFraction, MidiChord>::iterator> chords;
       ReducedFraction tupletSumError;
