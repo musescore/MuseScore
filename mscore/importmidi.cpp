@@ -956,7 +956,7 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
             QList<MidiChord> midiChords;
 
             for (auto it = chords.begin(); it != chords.end();) {
-                  const ReducedFraction &nextChordTick = it->first;
+                  const auto &nextChordTick = it->first;
                   const MidiChord& midiChord = it->second;
                   if (midiChord.voice != voice) {
                         ++it;
@@ -1184,16 +1184,16 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
             for (auto i : t.events()) {
                   const MidiEvent& e = i.second;
                               // change division to MScore::division
-                  ReducedFraction tick = ReducedFraction::fromTicks(
-                                    (i.first * MScore::division + mf->division()/2) / mf->division());
+                  auto tick = ReducedFraction::fromTicks(
+                                    (i.first * MScore::division + mf->division() / 2) / mf->division());
                               // remove time signature events
                   if ((e.type() == ME_META) && (e.metaType() == META_TIME_SIGNATURE))
                         sigmap->add(tick.ticks(), metaTimeSignature(e));
                   else if (e.type() == ME_NOTE) {
                         ++events;
                         int pitch = e.pitch();
-                        ReducedFraction len = ReducedFraction::fromTicks(
-                                    (e.len() * MScore::division + mf->division()/2) / mf->division());
+                        auto len = ReducedFraction::fromTicks(
+                                    (e.len() * MScore::division + mf->division() / 2) / mf->division());
                         if (tick + len > lastTick)
                               lastTick = tick + len;
 
@@ -1516,7 +1516,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       auto sigmap = score->sigmap();
 
       auto tracks = createMTrackList(lastTick, sigmap, mf);
-      ReducedFraction minNoteDuration = ReducedFraction::fromTicks(MScore::division) / 32;
+      auto minNoteDuration = ReducedFraction::fromTicks(MScore::division) / 32;
       collectChords(tracks, minNoteDuration);
       quantizeAllTracks(tracks, sigmap, lastTick);
       removeOverlappingNotes(tracks);

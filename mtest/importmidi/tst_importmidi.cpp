@@ -498,8 +498,8 @@ void TestImportMidi::findTupletApproximation()
       QCOMPARE(tupletApprox.onTime, startTupletTime);
       QCOMPARE(tupletApprox.len, tupletLen);
       QCOMPARE(tupletApprox.tupletNumber, tupletNumber);
-      QCOMPARE(tupletApprox.tupletQuantValue, ReducedFraction::fromTicks(MScore::division) / 3);
-      QCOMPARE(tupletApprox.regularQuantValue, quantValue);
+      QCOMPARE(tupletApprox.tupletQuant, ReducedFraction::fromTicks(MScore::division) / 3);
+      QCOMPARE(tupletApprox.regularQuant, quantValue);
       QVERIFY(tupletApprox.chords.size() == 3);
       QCOMPARE(tupletApprox.tupletSumError, ReducedFraction::fromTicks(0));
       QCOMPARE(tupletApprox.regularSumError, ReducedFraction::fromTicks(80));

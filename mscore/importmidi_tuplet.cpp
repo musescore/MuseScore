@@ -189,10 +189,10 @@ TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
       tupletInfo.tupletNumber = tupletNumber;
       tupletInfo.onTime = startTupletTime;
       tupletInfo.len = tupletLen;
-      tupletInfo.tupletQuantValue = tupletLen / tupletNumber;
-      while (tupletInfo.tupletQuantValue / 2 >= raster)
-            tupletInfo.tupletQuantValue /= 2;
-      tupletInfo.regularQuantValue = raster;
+      tupletInfo.tupletQuant = tupletLen / tupletNumber;
+      while (tupletInfo.tupletQuant / 2 >= raster)
+            tupletInfo.tupletQuant /= 2;
+      tupletInfo.regularQuant = raster;
 
       auto startTupletChordIt = startChordIt;
       for (int k = 0; k != tupletNumber; ++k) {
@@ -335,7 +335,7 @@ validateTuplets(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
             for (const auto &chord: tuplets[i].chords)
                   excludedChords.erase(&*chord.second);
             }
-      const ReducedFraction &regularRaster = tuplets.front().regularQuantValue;
+      const ReducedFraction &regularRaster = tuplets.front().regularQuant;
       for (const auto &chordIt: excludedChords)
             sumError += findQuantizationError(chordIt->first, regularRaster);
 
@@ -742,7 +742,7 @@ ReducedFraction findOffTimeRaster(const ReducedFraction &noteOffTime,
                         && voice == tupletInfo.chords.begin()->second->second.voice
                         && noteOffTime > tupletInfo.onTime
                         && noteOffTime < tupletInfo.onTime + tupletInfo.len)
-                  return tupletInfo.tupletQuantValue;
+                  return tupletInfo.tupletQuant;
             }
       return regularQuant;
       }
@@ -820,15 +820,15 @@ void addFirstTiedTupletNotes(std::multimap<ReducedFraction, MidiChord> &chords,
                                     + tupletInfo.len / tupletInfo.tupletNumber * firstNoteIndex;
                         ReducedFraction chordOffTime = chord.first + maxLen;
                                     // if chord offTime is outside tuplet - discard chord
-                        if (chord.first + tupletInfo.tupletQuantValue >= tupletInfo.onTime
+                        if (chord.first + tupletInfo.tupletQuant >= tupletInfo.onTime
                                     || chordOffTime <= tupletInfo.onTime
-                                    || chordOffTime >= tupletFreeEnd + tupletInfo.tupletQuantValue)
+                                    || chordOffTime >= tupletFreeEnd + tupletInfo.tupletQuant)
                               continue;
 
                         ReducedFraction chordError = findQuantizationError(chordOffTime,
-                                                                           tupletInfo.regularQuantValue);
+                                                                           tupletInfo.regularQuant);
                         ReducedFraction tupletError = findQuantizationError(chordOffTime,
-                                                                            tupletInfo.tupletQuantValue);
+                                                                            tupletInfo.tupletQuant);
                         auto it = errors.find(&chord);
                         bool found = (it != errors.end());
                         if (tupletError < chordError && (!found || (found && tupletError < it->second))) {
@@ -882,9 +882,9 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                                     && notes.size() > (int)removedIndexes.size() + 1))
                               {
                               ReducedFraction tupletError = noteLenQuantError(
-                                                onTime, note.len, tupletInfo.tupletQuantValue);
+                                                onTime, note.len, tupletInfo.tupletQuant);
                               ReducedFraction regularError = noteLenQuantError(
-                                                onTime, note.len, tupletInfo.regularQuantValue);
+                                                onTime, note.len, tupletInfo.regularQuant);
                               if (tupletError > regularError) {
                                     removedIndexes.push_back(i);
                                     continue;

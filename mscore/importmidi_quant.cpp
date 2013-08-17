@@ -27,8 +27,8 @@ ReducedFraction shortestNoteInBar(const std::multimap<ReducedFraction, MidiChord
                                   const std::multimap<ReducedFraction, MidiChord>::const_iterator &endChordIt,
                                   const ReducedFraction &endBarTick)
       {
-      ReducedFraction division = ReducedFraction::fromTicks(MScore::division);
-      ReducedFraction minDuration = division;
+      auto division = ReducedFraction::fromTicks(MScore::division);
+      auto minDuration = division;
                   // find shortest note in measure
       for (auto it = startBarChordIt; it != endChordIt; ++it) {
             if (it->first >= endBarTick)
@@ -40,7 +40,7 @@ ReducedFraction shortestNoteInBar(const std::multimap<ReducedFraction, MidiChord
             }
                   // determine suitable quantization value based
                   // on shortest note in measure
-      ReducedFraction div = division;
+      auto div = division;
       for (ReducedFraction duration(1, 16); duration <= ReducedFraction(8, 1); duration *= 2) {
                         // minimum duration is 1/64
             if (minDuration <= division * duration) {
@@ -58,8 +58,8 @@ ReducedFraction shortestNoteInBar(const std::multimap<ReducedFraction, MidiChord
 
 ReducedFraction userQuantNoteToTicks(MidiOperation::QuantValue quantNote)
       {
-      ReducedFraction division = ReducedFraction::fromTicks(MScore::division);
-      ReducedFraction userQuantValue = ReducedFraction::fromTicks(preferences.shortestNote);
+      auto division = ReducedFraction::fromTicks(MScore::division);
+      auto userQuantValue = ReducedFraction::fromTicks(preferences.shortestNote);
                   // specified quantization value
       switch (quantNote) {
             case MidiOperation::QuantValue::N_4:
@@ -99,11 +99,11 @@ ReducedFraction findRegularQuantRaster(const std::multimap<ReducedFraction, Midi
                                        const ReducedFraction &endBarTick)
       {
       auto operations = preferences.midiImportOperations.currentTrackOperations();
-      ReducedFraction raster = userQuantNoteToTicks(operations.quantize.value);
+      auto raster = userQuantNoteToTicks(operations.quantize.value);
                   // if user value larger than the smallest note in bar
                   // then use the smallest note to keep faster events
       if (operations.quantize.reduceToShorterNotesInBar) {
-            ReducedFraction shortest = shortestNoteInBar(startBarChordIt, endChordIt, endBarTick);
+            auto shortest = shortestNoteInBar(startBarChordIt, endChordIt, endBarTick);
             if (shortest < raster)
                   raster = shortest;
             }
@@ -112,8 +112,8 @@ ReducedFraction findRegularQuantRaster(const std::multimap<ReducedFraction, Midi
 
 ReducedFraction reduceRasterIfDottedNote(const ReducedFraction &len, const ReducedFraction &raster)
       {
-      ReducedFraction newRaster = raster;
-      ReducedFraction div = len / raster;
+      auto newRaster = raster;
+      auto div = len / raster;
       double ratio = div.numerator() * 1.0 / div.denominator();
       if (ratio > 1.4 && ratio < 1.6)       // 1.5: dotted note that is larger than quantization value
             newRaster /= 2;                 // reduce quantization error for dotted notes
@@ -144,12 +144,12 @@ void doGridQuantizationOfBar(std::multimap<ReducedFraction, MidiChord> &quantize
             if (found != chordsNotQuant.end())
                   continue;
             auto chord = it->second;
-            ReducedFraction onTimeRaster = reduceRasterIfDottedNote(maxNoteLen(chord.notes), regularRaster);
-            ReducedFraction onTime = quantizeValue(it->first, onTimeRaster);
+            auto onTimeRaster = reduceRasterIfDottedNote(maxNoteLen(chord.notes), regularRaster);
+            auto onTime = quantizeValue(it->first, onTimeRaster);
             for (auto &note: chord.notes) {
-                  ReducedFraction offTime = onTime + note.len;
-                  ReducedFraction offTimeRaster = MidiTuplet::findOffTimeRaster(offTime, it->second.voice,
-                                                                         regularRaster, tuplets);
+                  auto offTime = onTime + note.len;
+                  auto offTimeRaster = MidiTuplet::findOffTimeRaster(offTime, it->second.voice,
+                                                                     regularRaster, tuplets);
                   if (offTimeRaster == regularRaster)    // offTime is not inside tuplet
                         offTimeRaster = reduceRasterIfDottedNote(note.len, offTimeRaster);
                   offTime = quantizeValue(offTime, offTimeRaster);
@@ -171,11 +171,11 @@ void applyGridQuant(std::multimap<ReducedFraction, MidiChord> &chords,
       ReducedFraction startBarTick;
       auto startBarChordIt = chords.begin();
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
-            ReducedFraction endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
+            auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
             startBarChordIt = findFirstChordInRange(startBarTick, endBarTick,
                                                     startBarChordIt, chords.end());
             if (startBarChordIt != chords.end()) {      // if chords are found in this bar
-                  ReducedFraction onTimeRaster = findRegularQuantRaster(startBarChordIt, chords.end(), endBarTick);
+                  auto onTimeRaster = findRegularQuantRaster(startBarChordIt, chords.end(), endBarTick);
                   doGridQuantizationOfBar(quantizedChords, startBarChordIt, chords.end(),
                                           onTimeRaster, endBarTick, chordsNotQuant, tuplets);
                   }
@@ -209,8 +209,8 @@ void quantizeChordsAndTuplets(std::multimap<ReducedFraction, MidiTuplet::TupletD
                   // quantize tuplet chords, if any
       ReducedFraction startBarTick;
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
-            ReducedFraction endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
-            ReducedFraction barFraction = sigmap->timesig(startBarTick.ticks()).timesig();
+            auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
+            auto barFraction = sigmap->timesig(startBarTick.ticks()).timesig();
             auto tuplets = MidiTuplet::findTuplets(startBarTick, endBarTick, barFraction, inputChords);
             tupletInformation.insert(tupletInformation.end(), tuplets.begin(), tuplets.end());
 
@@ -218,16 +218,16 @@ void quantizeChordsAndTuplets(std::multimap<ReducedFraction, MidiTuplet::TupletD
                   auto &infoChords = tupletInfo.chords;
                   for (auto &tupletChord: infoChords) {
                         int tupletNoteNum = tupletChord.first;
-                        ReducedFraction onTime = tupletInfo.onTime
-                                   + tupletInfo.len / tupletInfo.tupletNumber * tupletNoteNum;
+                        auto onTime = tupletInfo.onTime
+                                    + tupletInfo.len / tupletInfo.tupletNumber * tupletNoteNum;
                         const auto &midiChordEventIt = tupletChord.second;
                                     // quantize chord to onTime value
                         MidiChord midiChord = midiChordEventIt->second;
                         for (auto &note: midiChord.notes) {
-                              ReducedFraction raster = MidiTuplet::findOffTimeRaster(
+                              auto raster = MidiTuplet::findOffTimeRaster(
                                                             onTime + note.len, midiChord.voice,
-                                                            tupletInfo.regularQuantValue, tuplets);
-                              ReducedFraction offTime = Quantize::quantizeValue(onTime + note.len, raster);
+                                                            tupletInfo.regularQuant, tuplets);
+                              auto offTime = Quantize::quantizeValue(onTime + note.len, raster);
                               note.len = offTime - onTime;
                               }
                         quantizedChords.insert({onTime, midiChord});
