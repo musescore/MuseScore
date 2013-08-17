@@ -35,11 +35,10 @@ TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
                                    const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
                                    const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt);
 
-int separateTupletVoices(std::vector<TupletInfo> &tuplets,
-                         const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
-                         const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt,
-                         std::multimap<ReducedFraction, MidiChord> &chords,
-                         const ReducedFraction &endBarTick);
+void separateTupletVoices(std::vector<TupletInfo> &tuplets,
+                          const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
+                          const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt,
+                          std::multimap<ReducedFraction, MidiChord> &chords);
 
 std::list<int> findTupletsWithCommonChords(std::list<int> &restTuplets,
                                            const std::vector<TupletInfo> &tuplets);
