@@ -153,25 +153,7 @@ void Marker::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      switch (mt) {
-            case MarkerType::SEGNO:
-            case MarkerType::VARSEGNO:
-            case MarkerType::CODA:
-            case MarkerType::VARCODA:
-            case MarkerType::CODETTA:
-                  setTextStyleType(TEXT_STYLE_REPEAT_LEFT);
-                  break;
-
-            case MarkerType::FINE:
-            case MarkerType::TOCODA:
-                  setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
-                  break;
-
-            case MarkerType::USER:
-                  setTextStyleType(TEXT_STYLE_REPEAT);
-                  break;
-            }
-      setMarkerType(mt);
+      _markerType = mt;
       }
 
 //---------------------------------------------------------
