@@ -242,9 +242,9 @@ enum UpDownMode {
 //---------------------------------------------------------
 
 enum StaffGroup {
-      PITCHED_STAFF, PERCUSSION_STAFF, TAB_STAFF
+      STANDARD_STAFF_GROUP, PERCUSSION_STAFF_GROUP, TAB_STAFF_GROUP
       };
-const int STAFF_GROUP_MAX = TAB_STAFF + 1;      // out of enum to avoid compiler complains about not handled switch cases
+const int STAFF_GROUP_MAX = TAB_STAFF_GROUP + 1;      // out of enum to avoid compiler complains about not handled switch cases
 
 //---------------------------------------------------------
 //   ClefType

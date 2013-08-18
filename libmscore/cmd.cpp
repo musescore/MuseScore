@@ -1082,14 +1082,14 @@ void Score::upDown(bool up, UpDownMode mode)
             Tablature* tab;
 
             switch(oNote->staff()->staffType()->group()) {
-                  case PERCUSSION_STAFF:
+                  case PERCUSSION_STAFF_GROUP:
                         {
                         Drumset* ds = part->instr()->drumset();
                         newPitch    = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
                         newTpc      = oNote->tpc();
                         }
                         break;
-                  case TAB_STAFF:
+                  case TAB_STAFF_GROUP:
                         {
                         tab = part->instr()->tablature();
                         switch(mode) {
@@ -1149,7 +1149,7 @@ void Score::upDown(bool up, UpDownMode mode)
                               }
                         }
                         break;
-                  case PITCHED_STAFF:
+                  case STANDARD_STAFF_GROUP:
                         switch(mode) {
                               case UP_DOWN_OCTAVE:
                                     if (up) {
@@ -1230,7 +1230,7 @@ void Score::upDown(bool up, UpDownMode mode)
                   }
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
-            else if( oNote->staff()->staffType()->group() == TAB_STAFF) {
+            else if( oNote->staff()->staffType()->group() == TAB_STAFF_GROUP) {
                   bool refret = false;
                   if (oNote->string() != string) {
                         undoChangeProperty(oNote, P_STRING, string);

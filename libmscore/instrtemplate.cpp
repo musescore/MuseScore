@@ -105,7 +105,7 @@ InstrumentTemplate::InstrumentTemplate()
       maxPitchA          = 127;
       minPitchP          = 0;
       maxPitchP          = 127;
-      staffGroup        = PITCHED_STAFF;
+      staffGroup        = STANDARD_STAFF_GROUP;
       staffTypePreset   = 0;
       useDrumset         = false;
       drumset            = 0;
@@ -454,11 +454,11 @@ void InstrumentTemplate::read(XmlReader& e)
                   QString xmlPresetName = e.attribute("staffTypePreset", "");
                   QString stfGroup = e.readElementText();
                   if (stfGroup == "percussion")
-                        staffGroup = PERCUSSION_STAFF;
+                        staffGroup = PERCUSSION_STAFF_GROUP;
                   else if (stfGroup == "tablature")
-                        staffGroup = TAB_STAFF;
+                        staffGroup = TAB_STAFF_GROUP;
                   else
-                        staffGroup = PITCHED_STAFF;
+                        staffGroup = STANDARD_STAFF_GROUP;
                   int staffTypeIdx;
                   const StaffType* stfType = 0;
                   if (!xmlPresetName.isEmpty())

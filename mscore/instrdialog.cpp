@@ -106,9 +106,9 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
       foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList)
-            if ( (canUseTabs && staffTypeData.staffType->group() == TAB_STAFF)
-                        || ( canUsePerc && staffTypeData.staffType->group() == PERCUSSION_STAFF)
-                        || (!canUsePerc && staffTypeData.staffType->group() == PITCHED_STAFF) )
+            if ( (canUseTabs && staffTypeData.staffType->group() == TAB_STAFF_GROUP)
+                        || ( canUsePerc && staffTypeData.staffType->group() == PERCUSSION_STAFF_GROUP)
+                        || (!canUsePerc && staffTypeData.staffType->group() == STANDARD_STAFF_GROUP) )
                   _staffTypeCombo->addItem(staffTypeData.displayName, staffTypeData.idx);
       treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
       connect(_staffTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(staffTypeChanged(int)) );
@@ -187,13 +187,13 @@ void StaffListItem::staffTypeChanged(int idx)
       if (stfType->group() != clefTable[_clef._transposingClef].staffGroup) {
             ClefType clefType;
             switch (stfType->group()) {
-                  case PITCHED_STAFF:
+                  case STANDARD_STAFF_GROUP:
                         clefType = CLEF_G2;
                         break;
-                  case TAB_STAFF:
+                  case TAB_STAFF_GROUP:
                         clefType = CLEF_TAB2;
                         break;
-                  case PERCUSSION_STAFF:
+                  case PERCUSSION_STAFF_GROUP:
                         clefType = CLEF_PERC;
                         break;
                   }
@@ -208,6 +208,27 @@ void StaffListItem::staffTypeChanged(int idx)
 //   static members
 //---------------------------------------------------------
 
+//---------------------------------------------------------
+//   populateStaffTypes
+//
+//    Contructs a list of all staff types OR presets for a given score.
+//    The list can be accessed later with getListedStaffType().
+//    The list is intended to be used to populate the staff type/preset drop down lists and its
+//    contents and order are optimized for this.
+//
+//    If the score contains some staff type, staff types are listed; if there is no score or it
+//    has no staff types (as it happens for new scores with the New Score Wizard), presets are listed instead.
+//
+//    The list is sorted by staff group: Standard, Percussion, Tab.
+//
+//    Indices of items in the list are:
+//    < 0  : -1 * index of staff type in score
+//    >= 0 : index of presets in preset list
+//
+//    Currently, the staff type list is used by the New Instrument page of the New Score Wizard
+//    anf by the "Add | Instruments" dlg box.
+//---------------------------------------------------------
+
 std::vector<StaffListItem::STAFF_LIST_STAFF_TYPE> StaffListItem::staffTypeList;
 Score * StaffListItem::_score = 0;
 
@@ -218,22 +239,33 @@ void StaffListItem::populateStaffTypes(Score *score)
 
       staffTypeList.clear();
       _score = score;
-      if (score) {
-            idx = -1;
-            foreach(StaffType** staffType, score->staffTypes() ) {
-                  staffTypeData.idx             = idx;
-                  staffTypeData.displayName     = (*staffType)->name();
-                  staffTypeData.staffType       = *staffType;
-                  staffTypeList.push_back(staffTypeData);
-                  idx--;
-                  }
-            }
       int numOfPresets = StaffType::numOfPresets();
-      for (idx = 0; idx < numOfPresets; idx++) {
-            staffTypeData.idx             = idx;
-            staffTypeData.staffType       = StaffType::preset(idx);
-            staffTypeData.displayName     = staffTypeData.staffType->name();
-            staffTypeList.push_back(staffTypeData);
+      // sort staff types by group
+      for (int group=0; group < STAFF_GROUP_MAX; group++) {
+            // if there is a score and it has some staff types, list them
+            if (score && score->staffTypes().count() > 0) {
+                  idx = -1;
+                  foreach(StaffType** staffType, score->staffTypes() ) {
+                        if ( (*staffType)->group() == group && !(*staffType)->builtin() ) {
+                              staffTypeData.idx             = idx;
+                              staffTypeData.displayName     = (*staffType)->name();
+                              staffTypeData.staffType       = *staffType;
+                              staffTypeList.push_back(staffTypeData);
+                              }
+                        idx--;
+                        }
+                  }
+            else {
+                  // otherwise, list presets
+                  for (idx = 0; idx < numOfPresets; idx++) {
+                        if ( StaffType::preset(idx)->group() == group) {
+                              staffTypeData.idx             = idx;
+                              staffTypeData.staffType       = StaffType::preset(idx);
+                              staffTypeData.displayName     = staffTypeData.staffType->name();
+                              staffTypeList.push_back(staffTypeData);
+                              }
+                        }
+                  }
             }
       }
 
@@ -989,7 +1021,7 @@ void MuseScore::editInstrList()
                               // (true if changing into or away from TAB)
                               StaffGroup ng = stfType->group();         // new staff group
                               StaffGroup og = staff->staffGroup();      // old staff group
-                              bool updateNeeded = (ng == TAB_STAFF) != (og == TAB_STAFF);
+                              bool updateNeeded = (ng == TAB_STAFF_GROUP) != (og == TAB_STAFF_GROUP);
 
                               // look for a staff type with same structure among staff types already defined in the score
                               StaffType* st;
