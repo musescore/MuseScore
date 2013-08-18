@@ -17,6 +17,7 @@ struct TupletData
       ReducedFraction onTime;
       ReducedFraction len;
       int tupletNumber;
+      ReducedFraction tupletQuant;
       std::vector<DurationElement *> elements;
       };
 
@@ -45,6 +46,11 @@ ReducedFraction findOffTimeRaster(const ReducedFraction &noteOffTime,
                                   int voice,
                                   const ReducedFraction &regularQuant,
                                   const std::vector<TupletInfo> &tuplets);
+
+ReducedFraction findOffTimeRaster(const ReducedFraction &noteOffTime,
+                                  int voice,
+                                  const ReducedFraction &regularQuant,
+                                  const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents);
 
 std::vector<TupletInfo> findTuplets(const ReducedFraction &startBarTick,
                                     const ReducedFraction &endBarTick,
