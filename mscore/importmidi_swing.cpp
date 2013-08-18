@@ -48,7 +48,7 @@ void SwingDetector::add(ChordRest *cr)
       if (elements.empty()) {
             if (ReducedFraction(cr->globalDuration()) >= FULL_LEN)
                   return;
-            int tickInBar = cr->tick() - cr->measure()->tick();
+            const int tickInBar = cr->tick() - cr->measure()->tick();
             if (tickInBar % MScore::division == 0)
                   append(cr);
             }
@@ -156,11 +156,11 @@ void SwingDetector::applySwing()
             cr = nullptr;
             }
 
-      ChordRest *first = elements.front();
-      int startTick = first->segment()->tick();
-      ChordRest *last = elements.back();
+      const ChordRest *const first = elements.front();
+      const int startTick = first->segment()->tick();
+      ChordRest *const last = elements.back();
       last->segment()->remove(last);
-      Segment* s = last->measure()->getSegment(last, startTick + MScore::division / 2);
+      Segment* const s = last->measure()->getSegment(last, startTick + MScore::division / 2);
       s->add(last);
 
       if (tuplet) {
@@ -210,12 +210,12 @@ QString swingCaption(MidiOperation::Swing swingType)
 
 void detectSwing(Staff *staff, MidiOperation::Swing swingType)
       {
-      Score *score = staff->score();
-      int strack = staff->idx() * VOICES;
+      Score *const score = staff->score();
+      const int strack = staff->idx() * VOICES;
       SwingDetector swingDetector(swingType);
 
       for (Segment *seg = score->firstSegment(Segment::SegChordRest); seg;
-           seg = seg->next1(Segment::SegChordRest)) {
+                                      seg = seg->next1(Segment::SegChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
                   ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
                   if (!cr)
@@ -225,10 +225,10 @@ void detectSwing(Staff *staff, MidiOperation::Swing swingType)
             }
       if (swingDetector.wasSwingApplied()) {
                         // add swing label to the score
-            StaffText* st = new StaffText(score);
+            StaffText* const st = new StaffText(score);
             st->setTextStyleType(TEXT_STYLE_STAFF);
             st->setText(swingCaption(swingType));
-            Segment *seg = score->firstSegment(Segment::SegChordRest);
+            Segment* const seg = score->firstSegment(Segment::SegChordRest);
             st->setParent(seg);
             st->setTrack(strack);   // voice == 0
             score->addElement(st);
