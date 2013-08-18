@@ -9,8 +9,9 @@ namespace Ms {
 class ReducedFraction
       {
    public:
-      ReducedFraction(int z = 0, int n = 1);
-      ReducedFraction(const Fraction &);
+      ReducedFraction();
+      ReducedFraction(int z, int n);
+      explicit ReducedFraction(const Fraction &);
 
       Fraction fraction() const { return f; }
       int numerator() const { return f.numerator(); }

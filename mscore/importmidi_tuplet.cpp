@@ -13,15 +13,15 @@
 namespace Ms {
 namespace MidiTuplet {
 
-const std::map<int, Fraction>& tupletRatios()
+const std::map<int, ReducedFraction>& tupletRatios()
       {
-      const static std::map<int, Fraction> ratios = {
-            {2, Fraction(2, 3)},
-            {3, Fraction(3, 2)},
-            {4, Fraction(4, 3)},
-            {5, Fraction(5, 4)},
-            {7, Fraction(7, 8)},
-            {9, Fraction(9, 8)}
+      const static std::map<int, ReducedFraction> ratios = {
+            {2, {2, 3}},
+            {3, {3, 2}},
+            {4, {4, 3}},
+            {5, {5, 4}},
+            {7, {7, 8}},
+            {9, {9, 8}}
             };
       return ratios;
       }
@@ -654,15 +654,16 @@ int maxTupletVoice(const std::vector<TupletInfo> &tuplets)
 void splitTupletChord(const std::vector<TupletInfo>::iterator &lastMatch,
                       std::multimap<ReducedFraction, MidiChord> &chords)
       {
-      MidiChord &prevChord = lastMatch->chords.begin()->second->second;
-      auto onTime = lastMatch->chords.begin()->first;
+      auto &chordEvent = lastMatch->chords.begin()->second;
+      MidiChord &prevChord = chordEvent->second;
+      auto onTime = chordEvent->first;
       MidiChord newChord = prevChord;
                         // erase all notes except the first one
       auto beg = newChord.notes.begin();
       newChord.notes.erase(++beg, newChord.notes.end());
                         // erase the first note
       prevChord.notes.erase(prevChord.notes.begin());
-      lastMatch->chords.begin()->second = chords.insert({onTime, newChord});
+      chordEvent = chords.insert({onTime, newChord});
       if (prevChord.notes.isEmpty()) {
                         // normally this should not happen at all because of filtering of tuplets
             qDebug("Tuplets were not filtered correctly: same notes in different tuplets");

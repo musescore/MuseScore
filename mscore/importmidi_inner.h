@@ -1,7 +1,7 @@
 #ifndef IMPORTMIDI_INNER_H
 #define IMPORTMIDI_INNER_H
 
-#include "libmscore/fraction.h"
+#include "importmidi_fraction.h"
 
 
 // ---------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ struct MaxLevel
       {
       int level = 0;         // 0 - the biggest, whole bar level; other: -1, -2, ...
       int levelCount = 0;    // number of ticks with 'level' value
-      ReducedFraction lastPos = ReducedFraction(-1, 1);   // position of last tick with value 'level'; -1 - undefined pos
+      ReducedFraction lastPos = {-1, 1};   // position of last tick with value 'level'; -1 - undefined pos
       };
 
 struct DivLengthInfo

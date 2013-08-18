@@ -210,7 +210,7 @@ void quantizeChordsAndTuplets(std::multimap<ReducedFraction, MidiTuplet::TupletD
       ReducedFraction startBarTick;
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
             auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
-            auto barFraction = sigmap->timesig(startBarTick.ticks()).timesig();
+            auto barFraction = ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
             auto tuplets = MidiTuplet::findTuplets(startBarTick, endBarTick, barFraction, inputChords);
             tupletInformation.insert(tupletInformation.end(), tuplets.begin(), tuplets.end());
 
