@@ -255,7 +255,7 @@ void Part::setInstrument(const Instrument& i, int tick)
 
       if (!_score->styleB(ST_concertPitch) && i.transpose().chromatic) {
             foreach(Staff* staff, _staves) {
-                  if (staff->staffType()->group() != PERCUSSION_STAFF)
+                  if (staff->staffType()->group() != PERCUSSION_STAFF_GROUP)
                         _score->cmdTransposeStaff(staff->idx(), i.transpose(), false);
                   }
             }
@@ -263,7 +263,7 @@ void Part::setInstrument(const Instrument& i, int tick)
             foreach(Staff* staff, _staves) {
                   Interval iv(i.transpose());
                   iv.flip();
-                  if (staff->staffType()->group() != PERCUSSION_STAFF)
+                  if (staff->staffType()->group() != PERCUSSION_STAFF_GROUP)
                         _score->cmdTransposeStaff(staff->idx(), iv, false);
                   }
             }

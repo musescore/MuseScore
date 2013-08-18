@@ -1699,7 +1699,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             // but may be incorrect for a percussion staff that does not use a percussion clef
             for (int j = 0; j < part->nstaves(); ++j)
                   if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
-                        part->staff(j)->setStaffType(score->staffType(PERCUSSION_STAFF_TYPE));
+                        part->staff(j)->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
             // set drumset for instrument
             part->instr()->setUseDrumset(true);
             part->instr()->setDrumset(drumset);
@@ -3168,7 +3168,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                         staffIdx += number - 1;
                   // qDebug("xmlAttributes clef score->staff(0) %p staffIdx %d score->staff(%d) %p",
                   //       score->staff(0), staffIdx, staffIdx, score->staff(staffIdx));
-                  if (st != PITCHED_STAFF_TYPE)
+                  if (st != STANDARD_STAFF_TYPE)
                         score->staff(staffIdx)->setStaffType(score->staffType(st));
                   }
             else if (e.tagName() == "staves")
@@ -5186,7 +5186,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
 int MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
       {
       ClefType clef   = CLEF_G;
-      int res = PITCHED_STAFF_TYPE;
+      int res = STANDARD_STAFF_TYPE;
       int clefno = e.attribute(QString("number"), "1").toInt() - 1;
       QString c;
       int i = 0;
@@ -5254,11 +5254,11 @@ int MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
             }
       else if (c == "percussion") {
             clef = CLEF_PERC2;
-            res = PERCUSSION_STAFF_TYPE;
+            res = PERC_DEFAULT_STAFF_TYPE;
             }
       else if (c == "TAB") {
             clef = CLEF_TAB2;
-            res = TAB_STAFF_TYPE;
+            res = TAB_DEFAULT_STAFF_TYPE;
             }
       else
             qDebug("ImportMusicXML: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);

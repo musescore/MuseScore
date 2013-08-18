@@ -685,7 +685,7 @@ void Score::putNote(const Position& p, bool replace)
       StaffTypeTablature * tab = 0;
 
       switch(st->staffType()->group()) {
-            case PERCUSSION_STAFF: {
+            case PERCUSSION_STAFF_GROUP: {
                   if (_is.rest)
                         break;
                   Drumset* ds   = instr->drumset();
@@ -698,7 +698,7 @@ void Score::putNote(const Position& p, bool replace)
                   stemDirection = ds->stemDirection(nval.pitch);
                   break;
                   }
-            case TAB_STAFF: {
+            case TAB_STAFF_GROUP: {
                   if (_is.rest)
                         return;
                   neck = instr->tablature();
@@ -718,7 +718,7 @@ void Score::putNote(const Position& p, bool replace)
                   break;
                   }
 
-            case PITCHED_STAFF: {
+            case STANDARD_STAFF_GROUP: {
                   AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
                   int step   = absStep(line, clef);
                   int octave = step/7;

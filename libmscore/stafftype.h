@@ -130,11 +130,18 @@ class StaffType {
       static const QString& presetName(int idx);
       };
 
-// first three staff types in staffTypes[] are built-in:
+// ready-made staff types:
 
 enum {
-      PITCHED_STAFF_TYPE, TAB_STAFF_TYPE, PERCUSSION_STAFF_TYPE,
-      STAFF_TYPES
+      STANDARD_STAFF_TYPE,
+      PERC_1LINE_STAFF_TYPE, PERC_3LINE_STAFF_TYPE, PERC_5LINE_STAFF_TYPE,
+      TAB_6SIMPLE_STAFF_TYPE, TAB_6COMMON_STAFF_TYPE, TAB_6FULL_STAFF_TYPE,
+            TAB_4SIMPLE_STAFF_TYPE, TAB_4COMMON_STAFF_TYPE, TAB_4FULL_STAFF_TYPE,
+            TAB_UKULELE_STAFF_TYPE, TAB_BALALAJKA_STAFF_TYPE, TAB_ITALIAN_STAFF_TYPE, TAB_FRENCH_STAFF_TYPE,
+      STAFF_TYPES,
+      // some usefull shorthands:
+            PERC_DEFAULT_STAFF_TYPE = PERC_5LINE_STAFF_TYPE,
+            TAB_DEFAULT_STAFF_TYPE = TAB_6COMMON_STAFF_TYPE
       };
 
 //---------------------------------------------------------
@@ -153,7 +160,7 @@ class StaffTypePitched : public StaffType {
             _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
             {
             }
-      virtual StaffGroup group() const        { return PITCHED_STAFF; }
+      virtual StaffGroup group() const        { return STANDARD_STAFF_GROUP; }
       virtual StaffTypePitched* clone() const { return new StaffTypePitched(*this); }
       virtual const char* groupName() const   { return "pitched"; }
       virtual bool isEqual(const StaffType&) const;
@@ -184,7 +191,7 @@ class StaffTypePercussion : public StaffType {
             _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
             {
             }
-      virtual StaffGroup group() const           { return PERCUSSION_STAFF; }
+      virtual StaffGroup group() const           { return PERCUSSION_STAFF_GROUP; }
       virtual StaffTypePercussion* clone() const { return new StaffTypePercussion(*this); }
       virtual const char* groupName() const      { return "percussion"; }
       virtual bool isEqual(const StaffType&) const;
@@ -335,7 +342,7 @@ class StaffTypeTablature : public StaffType {
             }
 
       // re-implemented virtual functions
-      virtual StaffGroup group() const          { return TAB_STAFF; }
+      virtual StaffGroup group() const          { return TAB_STAFF_GROUP; }
       virtual StaffTypeTablature* clone() const { return new StaffTypeTablature(*this); }
       virtual const char* groupName() const     { return "tablature"; }
       virtual void read(XmlReader& e);
@@ -415,7 +422,7 @@ class StaffTypeTablature : public StaffType {
 
 
 extern void initStaffTypes();
-extern QList<StaffType*> staffTypes;
+//extern QList<StaffType*> staffTypes;
 
 //---------------------------------------------------------
 //   TabDurationSymbol

@@ -163,7 +163,7 @@ Staff::Staff(Score* s)
       _rstaff         = 0;
       _part           = 0;
       _keymap[0]      = KeySigEvent(0);                  // default to C major
-      _staffType      = _score->staffType(PITCHED_STAFF_TYPE);
+      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -181,7 +181,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _rstaff         = rs;
       _part           = p;
       _keymap[0]      = KeySigEvent(0);                  // default to C major
-      _staffType      = _score->staffType(PITCHED_STAFF_TYPE);
+      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -714,9 +714,9 @@ void Staff::setStaffType(StaffType* st)
 
       if (_staffType->group() != csg) {
             switch(_staffType->group()) {
-                  case TAB_STAFF:        ct = ClefType(score()->styleI(ST_tabClef)); break;
-                  case PITCHED_STAFF:    ct = CLEF_G; break;      // TODO: use preferred clef for instrument
-                  case PERCUSSION_STAFF: ct = CLEF_PERC; break;
+                  case TAB_STAFF_GROUP:        ct = ClefType(score()->styleI(ST_tabClef)); break;
+                  case STANDARD_STAFF_GROUP:   ct = CLEF_G; break;      // TODO: use preferred clef for instrument
+                  case PERCUSSION_STAFF_GROUP: ct = CLEF_PERC; break;
                   }
             setInitialClef(ct);
             }
@@ -780,7 +780,7 @@ void Staff::initFromStaffType(const StaffType* staffType)
       // get staff type if given (if none, get default preset for default staff group)
       const StaffType* presetStaffType = staffType;
       if (!presetStaffType)
-            presetStaffType = StaffType::getDefaultPreset(PITCHED_STAFF, 0);
+            presetStaffType = StaffType::getDefaultPreset(STANDARD_STAFF_GROUP, 0);
 
       // look for a staff type with same structure among staff types already defined in the score
       StaffType* st = 0;
@@ -839,11 +839,11 @@ void Staff::setInitialClef(ClefType ct)
 bool Staff::genKeySig()
       {
       switch(_staffType->group()) {
-            case TAB_STAFF:
+            case TAB_STAFF_GROUP:
                   return false;
-            case PITCHED_STAFF:
+            case STANDARD_STAFF_GROUP:
                   return static_cast<StaffTypePitched*>(_staffType)->genKeysig();
-            case PERCUSSION_STAFF:
+            case PERCUSSION_STAFF_GROUP:
                   return static_cast<StaffTypePercussion*>(_staffType)->genKeysig();
             default:
                   return true;
@@ -857,11 +857,11 @@ bool Staff::genKeySig()
 bool Staff::showLedgerLines()
       {
       switch(_staffType->group()) {
-            case TAB_STAFF:
+            case TAB_STAFF_GROUP:
                   return false;
-            case PITCHED_STAFF:
+            case STANDARD_STAFF_GROUP:
                   return static_cast<StaffTypePitched*>(_staffType)->showLedgerLines();
-            case PERCUSSION_STAFF:
+            case PERCUSSION_STAFF_GROUP:
                   return static_cast<StaffTypePercussion*>(_staffType)->showLedgerLines();
             default:
                   return true;

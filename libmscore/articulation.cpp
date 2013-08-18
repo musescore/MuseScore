@@ -348,7 +348,7 @@ void Articulation::draw(QPainter* painter) const
       SymId sym = _up ? articulationList[articulationType()].upSym : articulationList[articulationType()].downSym;
       int flags = articulationList[articulationType()].flags;
       if (staff()) {
-            if (staff()->staffGroup() == TAB_STAFF) {
+            if (staff()->staffGroup() == TAB_STAFF_GROUP) {
                   if (!(flags & ARTICULATION_SHOW_IN_TABLATURE))
                         return;
                   }
