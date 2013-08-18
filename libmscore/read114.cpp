@@ -242,7 +242,7 @@ void Part::read114(XmlReader& e)
       if (instr(0)->useDrumset()) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
-                  staff->setStaffType(score()->staffType(PERCUSSION_STAFF_TYPE));
+                  staff->setStaffType(score()->staffType(PERC_DEFAULT_STAFF_TYPE));
                   staff->setLines(lines);
                   }
             }
