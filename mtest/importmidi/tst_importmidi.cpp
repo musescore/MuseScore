@@ -157,6 +157,8 @@ class TestImportMidi : public QObject, public MTest
             mf("tuplet_tied_3_5_tuplets2");
             preferences.shortestNote = defaultQuant;
             }
+      void tupletOffTimeOtherBar() { mf("tuplet_off_time_other_bar"); }
+      void tupletOffTimeOtherBar2() { mf("tuplet_off_time_other_bar2"); }
 
       void pickupMeasure() { mf("pickup"); }
 

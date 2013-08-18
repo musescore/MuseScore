@@ -427,8 +427,7 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                   opers.setCurrentTrack(mtrack.indexOfOperation);
                   if (mtrack.mtrack->drumTrack())
                         opers.adaptForPercussion(mtrack.indexOfOperation);
-                  Quantize::quantizeChordsAndTuplets(mtrack.tuplets, mtrack.chords,
-                                                     sigmap, lastTick);
+                  Quantize::quantizeChordsAndTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick);
                   }
             }
       }

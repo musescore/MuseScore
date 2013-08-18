@@ -751,6 +751,21 @@ ReducedFraction findOffTimeRaster(const ReducedFraction &noteOffTime,
       return regularQuant;
       }
 
+ReducedFraction findOffTimeRaster(const ReducedFraction &noteOffTime,
+                                  int voice,
+                                  const ReducedFraction &regularQuant,
+                                  const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents)
+      {
+      for (const auto &tupletEvent: tupletEvents) {
+            const TupletData &tupletData = tupletEvent.second;
+            if (tupletData.voice == voice
+                        && noteOffTime > tupletData.onTime
+                        && noteOffTime < tupletData.onTime + tupletData.len)
+                  return tupletData.tupletQuant;
+            }
+      return regularQuant;
+      }
+
 void shrinkVoices(std::multimap<ReducedFraction, MidiChord>::iterator startBarChordIt,
                   std::multimap<ReducedFraction, MidiChord>::iterator endBarChordIt)
       {
