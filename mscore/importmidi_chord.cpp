@@ -5,7 +5,7 @@ namespace Ms {
 
 ReducedFraction maxNoteLen(const QList<MidiNote> &notes)
       {
-      ReducedFraction maxLen;
+      ReducedFraction maxLen(0, 1);
       for (const auto &note: notes) {
             if (note.len > maxLen)
                   maxLen = note.len;

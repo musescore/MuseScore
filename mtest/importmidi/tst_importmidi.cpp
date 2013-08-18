@@ -349,13 +349,13 @@ void isChordCountInTupletAllowed(int tupletNumber,
                expectedResult);
       }
 
-void isTupletErrorAllowed(int tupletOnTimeSumError,
+void isTupletErrorAllowed(int tupletSumError,
                           int regularSumError,
                           bool expectedResult)
       {
       int tupletNumber = 3;
       ReducedFraction tupletLen = ReducedFraction::fromTicks(MScore::division);
-      int quantValue = MScore::division / 4;     // 1/16
+      ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division / 4);     // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
@@ -367,8 +367,10 @@ void isTupletErrorAllowed(int tupletOnTimeSumError,
 
       std::map<int, std::multimap<ReducedFraction, MidiChord>::iterator> tupletChords;
       tupletChords.insert({0, chords.begin()});
-      QCOMPARE(MidiTuplet::isTupletAllowed(tupletNumber, tupletLen, tupletOnTimeSumError,
-                                           regularSumError, quantValue, tupletChords),
+      ReducedFraction tupletError = {tupletSumError, 1};
+      ReducedFraction regularError = {regularSumError, 1};
+      QCOMPARE(MidiTuplet::isTupletAllowed(tupletNumber, tupletLen, tupletError,
+                                           regularError, quantValue, tupletChords),
                expectedResult);
       }
 
@@ -565,7 +567,7 @@ void TestImportMidi::separateTupletVoices()
       ReducedFraction tripletNoteLen = tripletLen / tripletNumber;
 
       MidiChord firstChord = chordFactory(tripletNoteLen, {76, 71, 67});
-      chords.insert({0, firstChord});
+      chords.insert({{0, 1}, firstChord});
 
       std::vector<int> pitches = {74, 77};
       for (int i = 1; i != tripletNumber; ++i) {

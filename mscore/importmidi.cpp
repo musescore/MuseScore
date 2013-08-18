@@ -551,7 +551,7 @@ MTrack::toDurationList(const Measure *measure,
       ReducedFraction startTickInBar = startTick - ReducedFraction::fromTicks(measure->tick());
       ReducedFraction endTickInBar = startTickInBar + len;
       return Meter::toDurationList(startTickInBar, endTickInBar,
-                                   measure->timesig(), tupletData,
+                                   ReducedFraction(measure->timesig()), tupletData,
                                    durationType, useDots);
       }
 
@@ -566,13 +566,15 @@ ReducedFraction splitDurationOnBarBoundary(const ReducedFraction &len, const Red
 
 // fill the gap between successive chords with rests
 
-void MTrack::fillGapWithRests(Score* score, int voice,
+void MTrack::fillGapWithRests(Score* score,
+                              int voice,
                               const ReducedFraction &startChordTickFrac,
-                              const ReducedFraction &restLength, int track)
+                              const ReducedFraction &restLength,
+                              int track)
       {
       ReducedFraction startChordTick = startChordTickFrac;
       ReducedFraction restLen = restLength;
-      while (restLen > 0) {
+      while (restLen > ReducedFraction(0, 1)) {
             ReducedFraction len = restLen;
             Measure* measure = score->tick2measure(startChordTick.ticks());
             if (startChordTick >= ReducedFraction::fromTicks(measure->tick() + measure->ticks())) {
@@ -633,7 +635,7 @@ void setMusicNotesFromMidi(Score *score,
                            const Drumset *drumset,
                            bool useDrumset)
       {
-      ReducedFraction actualFraction = chord->actualFraction();
+      auto actualFraction = ReducedFraction(chord->actualFraction());
 
       for (int i = 0; i < midiNotes.size(); ++i) {
             const MidiNote& mn = midiNotes[i];
@@ -676,7 +678,7 @@ ReducedFraction findMinDuration(const QList<MidiChord> &midiChords, const Reduce
       ReducedFraction len = length;
       for (const auto &chord: midiChords) {
             for (const auto &note: chord.notes) {
-                  if ((note.len < len) && (note.len != 0))
+                  if ((note.len < len) && (note.len != ReducedFraction(0, 1)))
                         len = note.len;
                   }
             }
@@ -796,11 +798,11 @@ void MTrack::createTuplets()
 
             Tuplet* tuplet = new Tuplet(score);
             auto ratioIt = MidiTuplet::tupletRatios().find(tupletData.tupletNumber);
-            Fraction tupletRatio = (ratioIt != MidiTuplet::tupletRatios().end())
-                        ? ratioIt->second : Fraction(2, 2);
+            auto tupletRatio = (ratioIt != MidiTuplet::tupletRatios().end())
+                             ? ratioIt->second : ReducedFraction(2, 2);
             if (ratioIt == MidiTuplet::tupletRatios().end())
                   qDebug("Tuplet ratio not found for tuplet number: %d", tupletData.tupletNumber);
-            tuplet->setRatio(tupletRatio);
+            tuplet->setRatio(tupletRatio.fraction());
 
             tuplet->setDuration(tupletData.len.fraction());
             TDuration baseLen(tupletData.len.fraction() / tupletRatio.denominator());

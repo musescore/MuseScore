@@ -24,7 +24,7 @@ class SwingDetector
    private:
       std::vector<ChordRest *> elements;
       ReducedFraction sumLen;
-      const Fraction FULL_LEN = Fraction(1, 4);
+      const ReducedFraction FULL_LEN = {1, 4};
       MidiOperation::Swing swingType;
       bool swingApplied = false;
 
@@ -46,14 +46,14 @@ SwingDetector::SwingDetector(MidiOperation::Swing st)
 void SwingDetector::add(ChordRest *cr)
       {
       if (elements.empty()) {
-            if (cr->globalDuration() >= FULL_LEN)
+            if (ReducedFraction(cr->globalDuration()) >= FULL_LEN)
                   return;
             int tickInBar = cr->tick() - cr->measure()->tick();
             if (tickInBar % MScore::division == 0)
                   append(cr);
             }
       else {
-            if (sumLen + cr->globalDuration() > FULL_LEN) {
+            if (sumLen + ReducedFraction(cr->globalDuration()) > FULL_LEN) {
                   reset();
                   return;
                   }
@@ -85,7 +85,7 @@ void SwingDetector::append(ChordRest *cr)
       {
       if (cr->type() == Element::CHORD || cr->type() == Element::REST) {
             elements.push_back(cr);
-            sumLen += cr->globalDuration();
+            sumLen += ReducedFraction(cr->globalDuration());
             }
       }
 

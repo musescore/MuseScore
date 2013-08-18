@@ -8,7 +8,6 @@ namespace Ms {
 
 class MidiChord;
 class DurationElement;
-class Fraction;
 
 namespace MidiTuplet {
 
@@ -23,8 +22,8 @@ struct TupletData
 
 struct TupletInfo
       {
-      ReducedFraction onTime = -1;  // invalid
-      ReducedFraction len = -1;
+      ReducedFraction onTime = {-1, 1};  // invalid
+      ReducedFraction len = {-1, 1};
       int tupletNumber = -1;
       ReducedFraction tupletQuant;
       ReducedFraction regularQuant;
@@ -38,7 +37,7 @@ struct TupletInfo
 // conversion ratios from tuplet durations to regular durations
 // for example, 8th note in triplet * 3/2 = regular 8th note
 
-const std::map<int, Fraction> &tupletRatios();
+const std::map<int, ReducedFraction> &tupletRatios();
 
 void filterTuplets(std::vector<TupletInfo> &tuplets);
 
