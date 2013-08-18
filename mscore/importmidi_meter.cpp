@@ -179,8 +179,8 @@ Meter::MaxLevel maxLevelBetween(const ReducedFraction &startTickInBar,
       Meter::MaxLevel level;
       auto startTickInDiv = startTickInBar - divInfo.onTime;
       auto endTickInDiv = endTickInBar - divInfo.onTime;
-      if (startTickInDiv >= endTickInDiv
-                  || startTickInDiv < 0 || endTickInDiv > divInfo.len)
+      if (startTickInDiv >= endTickInDiv || startTickInDiv < ReducedFraction(0, 1)
+                  || endTickInDiv > divInfo.len)
             return level;
 
       for (const auto &divLengthInfo: divInfo.divLengths) {
@@ -376,7 +376,8 @@ toDurationList(const ReducedFraction &startTickInBar,
                bool useDots)
       {
       QList<std::pair<ReducedFraction, TDuration>> durations;
-      if (startTickInBar < 0 || endTickInBar <= startTickInBar || endTickInBar > barFraction)
+      if (startTickInBar < ReducedFraction(0, 1) || endTickInBar <= startTickInBar
+                  || endTickInBar > barFraction)
             return durations;
                   // analyse mectric structure of bar
       auto divInfo = divisionInfo(barFraction, tupletsInBar);

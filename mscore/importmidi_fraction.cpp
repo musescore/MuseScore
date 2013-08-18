@@ -15,6 +15,11 @@ void reduceIfBigFraction(ReducedFraction &f)
 //---------------------------------------------------
 
 
+ReducedFraction::ReducedFraction()
+      : f(0, 1)
+      {
+      }
+
 ReducedFraction::ReducedFraction(int z, int n)
       : f(z, n)
       {
