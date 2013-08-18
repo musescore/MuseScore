@@ -44,7 +44,7 @@ ImportMidiPanel::~ImportMidiPanel()
 void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
       {
       if (currentIndex.isValid()) {
-            int row = currentIndex.row();
+            const int row = currentIndex.row();
             QString trackLabel = tracksModel->data(
                   tracksModel->index(row, TrackCol::TRACK_NUMBER)).toString();
             operationsModel->setTrackData(trackLabel, tracksModel->trackOperations(row));
@@ -55,7 +55,7 @@ void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
 
 void ImportMidiPanel::onOperationChanged(const QModelIndex &index)
       {
-      MidiOperation::Type operType = (MidiOperation::Type)index.data(OperationTypeRole).toInt();
+      const MidiOperation::Type operType = (MidiOperation::Type)index.data(OperationTypeRole).toInt();
       const QModelIndex &currentIndex = ui->tableViewTracks->currentIndex();
       tracksModel->setOperation(currentIndex.row(), operType, index.data(DataRole));
       ui->treeViewOperations->expandAll();
@@ -92,7 +92,7 @@ void ImportMidiPanel::tweakUi()
       connect(ui->pushButtonDown, SIGNAL(clicked()), SLOT(moveTrackDown()));
       connect(ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
 
-      QItemSelectionModel *sm = ui->tableViewTracks->selectionModel();
+      const QItemSelectionModel *const sm = ui->tableViewTracks->selectionModel();
       connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
               SLOT(onCurrentTrackChanged(QModelIndex)));
       connect(ui->treeViewOperations->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
@@ -141,11 +141,11 @@ bool ImportMidiPanel::canMoveTrackDown(int visualIndex)
 
 int ImportMidiPanel::currentVisualIndex()
       {
-      auto selectedRows = ui->tableViewTracks->selectionModel()->selectedRows();
+      const auto selectedRows = ui->tableViewTracks->selectionModel()->selectedRows();
       int curRow = -1;
       if (!selectedRows.isEmpty())
             curRow = ui->tableViewTracks->selectionModel()->selectedRows()[0].row();
-      int visIndex = ui->tableViewTracks->verticalHeader()->visualIndex(curRow);
+      const int visIndex = ui->tableViewTracks->verticalHeader()->visualIndex(curRow);
 
       return visIndex;
       }
@@ -159,7 +159,7 @@ void ImportMidiPanel::moveTrackUp()
 
 void ImportMidiPanel::moveTrackDown()
       {
-      int visIndex = currentVisualIndex();
+      const int visIndex = currentVisualIndex();
       if (canMoveTrackDown(visIndex))
             ui->tableViewTracks->verticalHeader()->moveSection(visIndex, visIndex + 1);
       }
@@ -168,7 +168,7 @@ void ImportMidiPanel::updateUi()
       {
       ui->pushButtonImport->setEnabled(canImportMidi());
 
-      int visualIndex = currentVisualIndex();
+      const int visualIndex = currentVisualIndex();
       ui->pushButtonUp->setEnabled(canMoveTrackUp(visualIndex));
       ui->pushButtonDown->setEnabled(canMoveTrackDown(visualIndex));
       }
@@ -177,9 +177,9 @@ QList<int> ImportMidiPanel::findReorderedIndexes()
       {
       QList<int> reorderedIndexes;
       for (int i = 0; i != tracksModel->trackCount(); ++i) {
-            int trackRow = tracksModel->rowFromTrackIndex(i);
-            int reorderedRow = ui->tableViewTracks->verticalHeader()->logicalIndex(trackRow);
-            int reorderedIndex = tracksModel->trackIndexFromRow(reorderedRow);
+            const int trackRow = tracksModel->rowFromTrackIndex(i);
+            const int reorderedRow = ui->tableViewTracks->verticalHeader()->logicalIndex(trackRow);
+            const int reorderedIndex = tracksModel->trackIndexFromRow(reorderedRow);
             reorderedIndexes.push_back(reorderedIndex);
             }
       return reorderedIndexes;
@@ -191,7 +191,7 @@ void ImportMidiPanel::doMidiImport()
             return;
 
       importInProgress = true;
-      QList<int> reorderedIndexes = findReorderedIndexes();
+      const QList<int> reorderedIndexes = findReorderedIndexes();
       QList<TrackData> trackData;
       for (int i = 0; i != tracksModel->trackCount(); ++i) {
             tracksModel->setTrackReorderedIndex(i, reorderedIndexes.indexOf(i));
@@ -208,22 +208,22 @@ void ImportMidiPanel::doMidiImport()
 
 bool ImportMidiPanel::isMidiFile(const QString &fileName)
       {
-      QString extension = QFileInfo(fileName).suffix().toLower();
+      const QString extension = QFileInfo(fileName).suffix().toLower();
       return (extension == "mid" || extension == "midi" || extension == "kar");
       }
 
 void ImportMidiPanel::saveTableViewState(const QString &fileName)
       {
-      QByteArray hData = ui->tableViewTracks->horizontalHeader()->saveState();
-      QByteArray vData = ui->tableViewTracks->verticalHeader()->saveState();
+      const QByteArray hData = ui->tableViewTracks->horizontalHeader()->saveState();
+      const QByteArray vData = ui->tableViewTracks->verticalHeader()->saveState();
       preferences.midiImportOperations.midiData().saveHHeaderState(fileName, hData);
       preferences.midiImportOperations.midiData().saveVHeaderState(fileName, vData);
       }
 
 void ImportMidiPanel::restoreTableViewState(const QString &fileName)
       {
-      QByteArray hData = preferences.midiImportOperations.midiData().HHeaderData(fileName);
-      QByteArray vData = preferences.midiImportOperations.midiData().VHeaderData(fileName);
+      const QByteArray hData = preferences.midiImportOperations.midiData().HHeaderData(fileName);
+      const QByteArray vData = preferences.midiImportOperations.midiData().VHeaderData(fileName);
       ui->tableViewTracks->horizontalHeader()->restoreState(hData);
       ui->tableViewTracks->verticalHeader()->restoreState(vData);
       }
@@ -291,7 +291,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
             if (trackData.isEmpty()) {          // open new MIDI file
                   resetTableViewState();
                   clearMidiPrefOperations();
-                  QList<TrackMeta> tracksMeta(extractMidiTracksMeta(fileName));
+                  const QList<TrackMeta> tracksMeta = extractMidiTracksMeta(fileName);
                   tracksModel->reset(tracksMeta);
                   showOrHideStaffNameCol(tracksMeta);
                   operationsModel->reset(tracksMeta.size());

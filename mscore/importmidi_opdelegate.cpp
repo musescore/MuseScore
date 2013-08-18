@@ -11,9 +11,9 @@ QWidget* OperationsDelegate::createEditor(QWidget *parent,
                                           const QStyleOptionViewItem &option,
                                           const QModelIndex &index) const
       {
-      QVariant value = index.data(Qt::EditRole);
+      const QVariant value = index.data(Qt::EditRole);
       if (value.type() == QVariant::StringList) { // list of possible values
-            QStringList list = qvariant_cast<QStringList>(value);
+            const QStringList list = qvariant_cast<QStringList>(value);
             QListWidget *lw = new QListWidget(parent);
             for (const auto &p: list)
                   lw->addItem(p);
@@ -27,29 +27,29 @@ QWidget* OperationsDelegate::createEditor(QWidget *parent,
 void OperationsDelegate::setEditorData(QWidget *editor,
                                        const QModelIndex &index) const
       {
-      QVariant value = index.data(Qt::EditRole);
+      const QVariant value = index.data(Qt::EditRole);
       if (value.type() == QVariant::StringList) {
             QListWidget *lw = qobject_cast<QListWidget *>(editor);
-            auto items = lw->findItems(index.data(Qt::DisplayRole).toString(), Qt::MatchExactly);
+            const auto items = lw->findItems(index.data(Qt::DisplayRole).toString(), Qt::MatchExactly);
             if (!items.empty())
                   lw->setCurrentItem(items.first());
             else
                   lw->setCurrentItem(lw->item(0));
 
-            const int EXTRA_WIDTH = 25;
-            const int EXTRA_HEIGHT = 6;
-            lw->setMinimumWidth(lw->sizeHintForColumn(0) + EXTRA_WIDTH);
+            const int extraWidth = 25;
+            const int extraHeight = 6;
+            lw->setMinimumWidth(lw->sizeHintForColumn(0) + extraWidth);
                         // to prevent possible hiding bottom part of the list
-            int h = lw->count() * (lw->visualItemRect(lw->currentItem()).height() + EXTRA_HEIGHT);
-            int y = (lw->parentWidget() && (lw->parentWidget()->rect().bottom() < lw->y() + h))
-                        ? lw->parentWidget()->rect().bottom() - h - EXTRA_HEIGHT : lw->y();
+            const int h = lw->count() * (lw->visualItemRect(lw->currentItem()).height() + extraHeight);
+            const int y = (lw->parentWidget() && (lw->parentWidget()->rect().bottom() < lw->y() + h))
+                        ? lw->parentWidget()->rect().bottom() - h - extraHeight : lw->y();
             lw->setGeometry(lw->x(), y, lw->width(), h);
                         // now lw can be partially hidden behind the tree view
                         // if tree view has small rect, so set parent of lw
                         // to app window and map coordinates accordingly to leave lw in place
-            auto globalCoord = lw->parentWidget()->mapToGlobal(lw->geometry().topLeft());
+            const auto globalCoord = lw->parentWidget()->mapToGlobal(lw->geometry().topLeft());
             lw->setParent(appWindow);
-            auto newLocalCoord = appWindow->mapFromGlobal(globalCoord);
+            const auto newLocalCoord = appWindow->mapFromGlobal(globalCoord);
             lw->setGeometry(newLocalCoord.x(), newLocalCoord.y(), lw->width(), h);
             }
       else        // single value
@@ -60,9 +60,9 @@ void OperationsDelegate::setModelData(QWidget *editor,
                                       QAbstractItemModel *model,
                                       const QModelIndex &index) const
       {
-      QVariant value = index.data(Qt::EditRole);
+      const QVariant value = index.data(Qt::EditRole);
       if (value.type() == QVariant::StringList) {
-            QListWidget *lw = qobject_cast<QListWidget *>(editor);
+            const QListWidget *const lw = qobject_cast<QListWidget *>(editor);
             model->setData(index, lw->currentRow());
             }
       else
@@ -71,7 +71,7 @@ void OperationsDelegate::setModelData(QWidget *editor,
 
 void OperationsDelegate::commitAndCloseEditor()
       {
-      QListWidget *editor = qobject_cast<QListWidget *>(sender());
+      QListWidget *const editor = qobject_cast<QListWidget *>(sender());
       emit commitData(editor);
       emit closeEditor(editor);
       }
