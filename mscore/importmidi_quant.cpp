@@ -56,7 +56,7 @@ ReducedFraction shortestNoteInBar(const std::multimap<ReducedFraction, MidiChord
       return minDuration;
       }
 
-ReducedFraction userQuantNoteToTicks(MidiOperation::QuantValue quantNote)
+ReducedFraction userQuantNoteToFraction(MidiOperation::QuantValue quantNote)
       {
       const auto division = ReducedFraction::fromTicks(MScore::division);
       auto userQuantValue = ReducedFraction::fromTicks(preferences.shortestNote);
@@ -91,7 +91,7 @@ ReducedFraction userQuantNoteToTicks(MidiOperation::QuantValue quantNote)
 ReducedFraction fixedQuantRaster()
       {
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
-      return userQuantNoteToTicks(operations.quantize.value);
+      return userQuantNoteToFraction(operations.quantize.value);
       }
 
 ReducedFraction findRegularQuantRaster(const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
@@ -99,7 +99,7 @@ ReducedFraction findRegularQuantRaster(const std::multimap<ReducedFraction, Midi
                                        const ReducedFraction &endBarTick)
       {
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
-      auto raster = userQuantNoteToTicks(operations.quantize.value);
+      auto raster = userQuantNoteToFraction(operations.quantize.value);
                   // if user value larger than the smallest note in bar
                   // then use the smallest note to keep faster events
       if (operations.quantize.reduceToShorterNotesInBar) {
