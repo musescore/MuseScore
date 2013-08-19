@@ -145,8 +145,6 @@ Seq::Seq()
       playPos  = events.cbegin();
 
       playTime  = 0;
-      loopInPos = 0;
-      loopOutPos = 0;
       metronomeVolume = 0.3;
 
       meterValue[0]     = 0.0;
@@ -297,7 +295,6 @@ void Seq::loopStop()
                   events.erase(it);
       }
 
-
 //---------------------------------------------------------
 //   canStart
 //    return true if sequencer can be started
@@ -332,12 +329,19 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      if ((mscore->loop()) && (loopInPos!=loopOutPos)) {
-            seek(loopInPos);
-            // Add loop event
-            NPlayEvent event;
-            event.setType(ME_LOOP);
-            events.insert(std::pair<int,NPlayEvent>(loopOutPos, event));
+      if ((mscore->loop())) {    // && (cv->loopOutPos() > cv->loopInPos())
+            if (mscore->isLoopOut()) {
+                  // Add loop Out event
+                  NPlayEvent event;
+                  event.setType(ME_LOOP);
+                  events.insert(std::pair<int,NPlayEvent>(cv->loopOutPos(), event));
+                  if (cv->loopOutPos() < cv->loopInPos())
+                        seek(0);  // If Out pos < In pos, restart playback at the beginning.
+                  else
+                        seek(cv->loopInPos());
+            } else
+                  seek(cv->loopInPos());
+
             }
       else
             seek(cs->playPos());
@@ -682,8 +686,8 @@ void Seq::process(unsigned n, float* buffer)
                   else if (event.type() == ME_TICK2)
                         tackRest = tackLength;
                   else if (event.type() == ME_LOOP) {
-                        qDebug ("event.type() == ME_LOOP  loopOutPos = %d  |  getCurTick() = %d ", loopOutPos, getCurTick());
-                        seek(loopInPos);
+                        qDebug ("event.type() == ME_LOOP  loopOutPos = %d  |  getCurTick() = %d ", cv->loopOutPos(), getCurTick());
+                        seek(cv->loopInPos());
                         return;
                         }
                   mutex.lock();
@@ -1255,27 +1259,49 @@ double Seq::curTempo() const
 
 void Seq::setLoopIn()
       {
-      loopInPos = cs->pos(); 
-//      qDebug ("setLoopIn : loopInPos = %d\n",loopInPos);
+      int tick;
+      if (state == TRANSPORT_PLAY)
+            tick = playPos->first;  // En mode playback, set the In position where note is being played
+      else
+            tick = cs->pos();   // Otherwise, use the selected note.
+      cv->setLoopInCursor(tick);
+//      qDebug ("setLoopIn : tick = %d\n",tick);
       }
-      
+
 //---------------------------------------------------------
 //   set Loop in position
 //---------------------------------------------------------
 
 void Seq::setLoopOut()
       {
-      loopOutPos = cs->pos()+cs->inputState().ticks();
+      int tick;
+      if (state == TRANSPORT_PLAY)
+            tick = playPos->first;  // En mode playback, set the Out position where note is being played
+      else
+            tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
+      cv->setLoopOutCursor(tick-1);  // Remove 1 to avoid overlapping the following events and elements
 //      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n",loopOutPos, cs->pos(), cs->inputState().ticks());
       }
 
 //---------------------------------------------------------
-//   set Loop in position
+//   unset Loop In
 //---------------------------------------------------------
 
-void Seq::unsetLoop()
+void Seq::unsetLoopIn()
+      {
+      // Reinitialize the In loop position
+      cv->setLoopInCursor(0);
+      }
+
+//---------------------------------------------------------
+//   unset Loop Out
+//---------------------------------------------------------
+
+void Seq::unsetLoopOut()
       {
       loopStop();   // Erase the loop event
-      loopInPos = loopOutPos = 0;    // Reinitialize the In/out loop positions
+
+      // Reinitialize the Out loop position
+      cv->setLoopOutCursor(cs->lastMeasure()->endTick()-1);
       }
-} 
+}
