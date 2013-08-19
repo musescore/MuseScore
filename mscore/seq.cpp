@@ -334,7 +334,9 @@ void Seq::start()
                   // Add loop Out event
                   NPlayEvent event;
                   event.setType(ME_LOOP);
-                  events.insert(std::pair<int,NPlayEvent>(cv->loopOutPos(), event));
+                  // insert ME_LOOP as first event if there are events with same tick
+                  auto hint = events.lower_bound(cv->loopOutPos());
+                  events.insert(hint, std::pair<int,NPlayEvent>(cv->loopOutPos(), event));
                   if (cv->loopOutPos() < cv->loopInPos())
                         seek(0);  // If Out pos < In pos, restart playback at the beginning.
                   else
@@ -617,7 +619,7 @@ void Seq::process(unsigned n, float* buffer)
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->%d\n", playPos->first,cs->pos());
                               loopStart();
-                              } 
+                              }
                         else {
                               emit toGui('2');
                               }
@@ -1279,7 +1281,8 @@ void Seq::setLoopOut()
             tick = playPos->first;  // En mode playback, set the Out position where note is being played
       else
             tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
-      cv->setLoopOutCursor(tick-1);  // Remove 1 to avoid overlapping the following events and elements
+//      cv->setLoopOutCursor(tick-1);  // Remove 1 to avoid overlapping the following events and elements
+      cv->setLoopOutCursor(tick);
 //      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n",loopOutPos, cs->pos(), cs->inputState().ticks());
       }
 

@@ -1459,7 +1459,7 @@ void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
             return;
       qreal x;
       int offset = 0;
-      if(measure->multiMeasure() < 0) {//skipped
+      if (measure->multiMeasure() < 0) {//skipped
             while(measure) {
                   measure = measure->prevMeasure();
                   offset += measure->ticks();

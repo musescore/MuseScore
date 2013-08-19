@@ -410,6 +410,8 @@ void Shortcut::load()
             qDebug("cannot open shortcuts");
             return;
             }
+      else
+            qDebug("read shortcuts from <%s>", qPrintable(f.fileName()));
 
       XmlReader e(&f);
 
