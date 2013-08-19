@@ -54,6 +54,8 @@ namespace Ms {
 extern Preferences preferences;
 extern void updateNoteLines(Segment*, int track);
 
+const int CLEF_BORDER_PITCH = 60;
+
 //---------------------------------------------------------
 //   MTrack
 //---------------------------------------------------------
@@ -132,6 +134,11 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
             }
       }
 
+ReducedFraction minAllowedDuration()
+      {
+      const static auto minDuration = ReducedFraction::fromTicks(MScore::division) / 32;
+      return minDuration;
+      }
 
 // based on quickthresh algorithm
 //
@@ -153,14 +160,14 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
 // in the object's inlet in the "fudge" time zone
 // threshExtTime = 20 ms
 
-void collectChords(std::multimap<int, MTrack> &tracks, const ReducedFraction &minNoteDuration)
+void collectChords(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
             auto &chords = track.second.chords;
             if (chords.empty())
                   continue;
 
-            ReducedFraction threshTime = minNoteDuration / 2;
+            ReducedFraction threshTime = minAllowedDuration() / 2;
             ReducedFraction fudgeTime = threshTime / 4;
             ReducedFraction threshExtTime = threshTime / 2;
 
@@ -409,6 +416,35 @@ std::map<int, MTrack> splitDrumTrack(MTrack &drumTrack)
       return newTracks;
       }
 
+void cleanUpMidiEvents(std::multimap<int, MTrack> &tracks)
+      {
+      auto &opers = preferences.midiImportOperations;
+
+      for (auto &track: tracks) {
+            MTrack &mtrack = track.second;
+            opers.setCurrentTrack(mtrack.indexOfOperation);
+            const auto raster = Quantize::fixedQuantRaster();
+            const bool reduce = opers.currentTrackOperations().quantize.reduceToShorterNotesInBar;
+
+            for (auto chordIt = mtrack.chords.begin(); chordIt != mtrack.chords.end(); ) {
+                  MidiChord &ch = chordIt->second;
+                  for (auto noteIt = ch.notes.begin(); noteIt != ch.notes.end(); ) {
+                        if ((noteIt->len < minAllowedDuration())
+                                    || (!reduce && noteIt->len < raster / 2)) {
+                              noteIt = ch.notes.erase(noteIt);
+                              continue;
+                              }
+                        ++noteIt;
+                        }
+                  if (ch.notes.isEmpty()) {
+                        chordIt = mtrack.chords.erase(chordIt);
+                        continue;
+                        }
+                  ++chordIt;
+                  }
+            }
+      }
+
 void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                        TimeSigMap *sigmap,
                        const ReducedFraction &lastTick)
@@ -421,9 +457,9 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
             }
       else {
             for (auto &track: tracks) {
+                  MTrack &mtrack = track.second;
                               // pass current track index through MidiImportOperations
                               // for further usage
-                  MTrack &mtrack = track.second;
                   opers.setCurrentTrack(mtrack.indexOfOperation);
                   if (mtrack.mtrack->drumTrack())
                         opers.adaptForPercussion(mtrack.indexOfOperation);
@@ -672,7 +708,8 @@ void setMusicNotesFromMidi(Score *score,
             }
       }
 
-ReducedFraction findMinDuration(const QList<MidiChord> &midiChords, const ReducedFraction &length)
+ReducedFraction findMinDuration(const QList<MidiChord> &midiChords,
+                                const ReducedFraction &length)
       {
       ReducedFraction len = length;
       for (const auto &chord: midiChords) {
@@ -847,7 +884,7 @@ void MTrack::createKeys(int accidentalType)
 
 ClefType clefTypeFromAveragePitch(int averagePitch)
       {
-      return averagePitch < 60 ? CLEF_F : CLEF_G;
+      return averagePitch < CLEF_BORDER_PITCH ? CLEF_F : CLEF_G;
       }
 
 void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
@@ -1213,6 +1250,8 @@ int findAveragePitch(const std::map<ReducedFraction, MidiChord>::const_iterator 
             }
       if (counter)
             avgPitch /= counter;
+      if (avgPitch == 0)
+            avgPitch = CLEF_BORDER_PITCH;
       return avgPitch;
       }
 
@@ -1480,8 +1519,8 @@ void convertMidi(Score *score, const MidiFile *mf)
       auto *const sigmap = score->sigmap();
 
       auto tracks = createMTrackList(lastTick, sigmap, mf);
-      const auto minNoteDuration = ReducedFraction::fromTicks(MScore::division) / 32;
-      collectChords(tracks, minNoteDuration);
+      collectChords(tracks);
+      cleanUpMidiEvents(tracks);
       quantizeAllTracks(tracks, sigmap, lastTick);
       removeOverlappingNotes(tracks);
       splitIntoLeftRightHands(tracks);
