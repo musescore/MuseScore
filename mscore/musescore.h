@@ -343,6 +343,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QAction* metronomeAction;
       QAction* loopAction;
+      QAction* loopInAction;
+      QAction* loopOutAction;
       QAction* panAction;
 
       QLabel* cornerLabel;
@@ -605,6 +607,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateLayer();
       void updatePlayMode();
       bool loop() const         	 { return loopAction->isChecked(); }
+      bool isLoopOut() const         { return loopOutAction->isChecked(); }
       bool metronome() const         { return metronomeAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
