@@ -2,6 +2,6 @@
 
 # note that the debug build must be used with the -t option to get the beams right in the .mscx files
 
-MSCORE=../../build.debug/mscore/mscore
+MSCORE=../../build.debug/mtest/guitarpro
 
 cp $MSCORE/testIrrTuplet.gp4.mscx testIrrTuplet.gp4-ref.mscx
