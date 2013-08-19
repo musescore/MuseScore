@@ -658,6 +658,18 @@ ScoreView::ScoreView(QWidget* parent)
       editObject  = 0;
       addSelect   = false;
 
+      // Create and initialize the Loop In/Out cursors
+      _curLoopIn  = new TextCursor;
+      QColor cIn(Qt::green);
+      cIn.setAlpha(80);
+      _curLoopIn->setColor(cIn);
+      _curLoopIn->setTick(-1);
+      _curLoopOut = new TextCursor;
+      QColor cOut(Qt::red);
+      cOut.setAlpha(80);
+      _curLoopOut->setColor(cOut);
+      _curLoopOut->setTick(-1);
+
       //---setup state machine-------------------------------------------------
       sm          = new QStateMachine(this);
       QState* stateActive = new QState;
@@ -934,6 +946,8 @@ ScoreView::~ScoreView()
       delete lasso;
       delete _foto;
       delete _cursor;
+      delete _curLoopIn;
+      delete _curLoopOut;
       delete bgPixmap;
       delete fgPixmap;
       delete shadowNote;
@@ -1428,6 +1442,179 @@ void ScoreView::setCursorOn(bool val)
       }
 
 //---------------------------------------------------------
+//   setLoopCursor
+//    adjust the cursor shape and position to mark the loop
+//    isInPos is used to adjust the x position of In vs Out mark
+//---------------------------------------------------------
+
+void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
+      {
+      if (tick > _score->lastMeasure()->endTick()-1)
+            tick = _score->lastMeasure()->endTick()-1;
+      //
+      // set mark height for whole system
+      //
+      Measure* measure = score()->tick2measure(tick);
+      if (measure == 0)
+            return;
+      qreal x;
+      int offset = 0;
+      if(measure->multiMeasure() < 0) {//skipped
+            while(measure) {
+                  measure = measure->prevMeasure();
+                  offset += measure->ticks();
+                  if (measure->multiMeasure() > 0)
+                        break;
+                  }
+            }
+      if (measure == 0)
+            return;
+
+      Segment* s;
+      for (s = measure->first(Segment::SegChordRest); s;) {
+            int t1 = s->tick();
+            int x1 = s->canvasPos().x();
+            qreal x2;
+            int t2;
+            Segment* ns = s->next(Segment::SegChordRest);
+            if (ns) {
+                  t2 = ns->tick();
+                  x2 = ns->canvasPos().x();
+                  }
+            else {
+                  t2 = measure->endTick();
+                  x2 = measure->canvasPos().x() + measure->width();
+                  }
+            t1 += offset;
+            t2 += offset;
+            if (tick >= t1 && tick < t2) {
+                  int   dt = t2 - t1;
+                  qreal dx = x2 - x1;
+                  x = x1 + dx * (tick-t1) / dt;
+                  break;
+                  }
+            s = ns;
+            }
+      if (s == 0)
+            return;
+
+      System* system = measure->system();
+      if (system == 0)
+            return;
+      double y        = system->staffY(0) + system->page()->pos().y();
+      double _spatium = score()->spatium();
+
+      qreal mag = _spatium / (MScore::DPI * SPATIUM20);
+      double w  = (_spatium * 2.0 + symbols[score()->symIdx()][quartheadSym].width(mag))/3;
+      double h  = 6 * _spatium;
+      //
+      // set cursor height for whole system
+      //
+      double y2 = 0.0;
+
+      for (int i = 0; i < _score->nstaves(); ++i) {
+            SysStaff* ss = system->staff(i);
+            if (!ss->show() || !_score->staff(i)->show())
+                  continue;
+            y2 = ss->y() + ss->bbox().height();
+            }
+      h += y2;
+      y -= 3 * _spatium;
+
+      if (isInPos) {
+            x = x - _spatium + w/2;
+            }
+      else {
+            x = x - _spatium - w;
+            }
+      curLoop->setTick(tick);
+      curLoop->setRect(QRectF(x, y, w, h));
+      update(_matrix.mapRect(curLoop->rect()).toRect().adjusted(-1,-1,1,1));
+      }
+
+//---------------------------------------------------------
+//   setLoopInCursor
+//    adjust the cursor shape and position to mark the beginning of the loop
+//---------------------------------------------------------
+
+void ScoreView::setLoopInCursor(int tick)
+      {
+      setLoopCursor(_curLoopIn, tick, true);
+      update();
+      }
+
+//---------------------------------------------------------
+//   setLoopOutCursor
+//    adjust the cursor shape and position to mark the end of the loop
+//---------------------------------------------------------
+
+void ScoreView::setLoopOutCursor(int tick)
+      {
+      setLoopCursor(_curLoopOut, tick, false);
+      update();
+      }
+
+//---------------------------------------------------------
+//   updateLoopCursors
+//    update loop cursors Y and Y position (for example when changing view mode)
+//---------------------------------------------------------
+
+void ScoreView::updateLoopCursors()
+      {
+      setLoopCursor(_curLoopIn, _curLoopIn->tick(), true);
+      setLoopCursor(_curLoopOut, _curLoopOut->tick(), false);
+      }
+
+//---------------------------------------------------------
+//   showLoopInCursor
+//    show the In mark for the loop
+//---------------------------------------------------------
+
+void ScoreView::showLoopInCursor()
+      {
+      if (_curLoopIn->tick() < 0)
+            setLoopInCursor(0);
+      _curLoopIn->setVisible(true);
+      qDebug("====  Show loop in tick = %d",_curLoopIn->tick());
+      update();
+      }
+
+//---------------------------------------------------------
+//   showLoopOutCursor
+//    show the Out mark for the loop
+//---------------------------------------------------------
+
+void ScoreView::showLoopOutCursor()
+      {
+      if ((_curLoopOut->tick() < 0) || (_curLoopOut->tick() > _score->lastMeasure()->endTick()-1))
+            setLoopOutCursor(_score->lastMeasure()->endTick()-1);
+      _curLoopOut->setVisible(true);
+      update();
+      }
+
+//---------------------------------------------------------
+//   hideLoopInCursor
+//    hide the In mark for the loop
+//---------------------------------------------------------
+
+void ScoreView::hideLoopInCursor()
+      {
+      _curLoopIn->setVisible(false);
+      update();
+      }
+
+//---------------------------------------------------------
+//   hideLoopOutCursor
+//    hide the Out mark for the loop
+//---------------------------------------------------------
+
+void ScoreView::hideLoopOutCursor()
+      {
+      _curLoopOut->setVisible(false);
+      update();
+      }
+
+//---------------------------------------------------------
 //   setShadowNote
 //---------------------------------------------------------
 
@@ -1504,6 +1691,11 @@ void ScoreView::paintEvent(QPaintEvent* ev)
 
       vp.setTransform(_matrix);
       vp.setClipping(false);
+
+      if (_curLoopIn && _curLoopIn->visible())
+            vp.fillRect(_curLoopIn->rect(), _curLoopIn->color());
+      if (_curLoopOut && _curLoopOut->visible())
+            vp.fillRect(_curLoopOut->rect(), _curLoopOut->color());
 
       if (_cursor && _cursor->visible())
             vp.fillRect(_cursor->rect(), _cursor->color());
