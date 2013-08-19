@@ -120,6 +120,9 @@
       <file>data/icons/list-unordered.svg</file>
       <file>data/icons/format-indent-less.svg</file>
       <file>data/icons/format-indent-more.svg</file>
+      <file>data/icons/media-playback-loop.svg</file>
+      <file>data/icons/media-playback-loop-in.svg</file>
+      <file>data/icons/media-playback-loop-out.svg</file>
       <file>data/icons/media-playback-metronome.svg</file>
       <file>data/icons/align-vertical-baseline.svg</file>
       <file>data/icons/go-home.svg</file>

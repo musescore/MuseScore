@@ -26,6 +26,7 @@
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
 #include "libmscore/mscoreview.h"
+#include "libmscore/pos.h"
 
 namespace Ms {
 
@@ -182,6 +183,10 @@ class ScoreView : public QWidget, public MuseScoreView {
       TextCursor* _cursor;
       ShadowNote* shadowNote;
 
+      // Loop In/Out marks in the score
+      TextCursor* _curLoopIn;
+      TextCursor* _curLoopOut;
+
       Lasso* lasso;           ///< temporarily drawn lasso selection
       Lasso* _foto;
 
@@ -264,6 +269,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paintPageBorder(QPainter& p, Page* page);
       bool dropCanvas(Element*);
       void editCmd(const QString&);
+      void resetLoopInCursors();
+      void resetLoopOutCursors();
+      void setLoopCursor(TextCursor *curLoop, int tick, bool isInPos);
 
    private slots:
       void enterState();
@@ -413,6 +421,16 @@ class ScoreView : public QWidget, public MuseScoreView {
       Element* getCurElement() const { return curElement; }   // current item at mouse press
       void midiNoteReceived(int pitch, bool);
       void setEditPos(const QPointF&);
+
+      int loopInPos()                          { return _curLoopIn->tick();  }
+      int loopOutPos()                         { return _curLoopOut->tick(); }
+      void setLoopInCursor(int tick);
+      void setLoopOutCursor(int tick);
+      void updateLoopCursors();
+      void showLoopInCursor();
+      void showLoopOutCursor();
+      void hideLoopInCursor();
+      void hideLoopOutCursor();
 
       virtual void moveCursor();
       virtual void layoutChanged();

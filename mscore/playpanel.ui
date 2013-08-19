@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>205</height>
+    <height>261</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1193,7 +1193,16 @@
        <property name="spacing">
         <number>1</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1239,13 +1248,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="loopButton">
-         <property name="text">
-          <string notr="true">L</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QToolButton" name="metronomeButton">
          <property name="text">
           <string notr="true">M</string>
@@ -1254,6 +1256,66 @@
        </item>
        <item>
         <spacer>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QToolButton" name="loopInButton">
+         <property name="text">
+          <string notr="true">I</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="loopButton">
+         <property name="text">
+          <string notr="true">L</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="loopOutButton">
+         <property name="text">
+          <string notr="true">O</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -1287,7 +1349,7 @@
       <number>6</number>
      </property>
      <item row="0" column="1">
-      <widget class="Awl::VolSlider" name="volumeSlider">
+      <widget class="Awl::VolSlider" name="volumeSlider" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -1310,7 +1372,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="Awl::Slider" name="tempoSlider">
+      <widget class="Awl::Slider" name="tempoSlider" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -1320,22 +1382,22 @@
        <property name="toolTip">
         <string>relative tempo</string>
        </property>
-       <property name="value">
+       <property name="value" stdset="0">
         <double>100.000000000000000</double>
        </property>
-       <property name="scaleWidth">
+       <property name="scaleWidth" stdset="0">
         <number>7</number>
        </property>
-       <property name="minValue">
+       <property name="minValue" stdset="0">
         <double>10.000000000000000</double>
        </property>
-       <property name="maxValue">
+       <property name="maxValue" stdset="0">
         <double>150.000000000000000</double>
        </property>
-       <property name="lineStep">
+       <property name="lineStep" stdset="0">
         <double>5.000000000000000</double>
        </property>
-       <property name="pageStep">
+       <property name="pageStep" stdset="0">
         <double>20.000000000000000</double>
        </property>
       </widget>
@@ -1366,8 +1428,6 @@
    <header>awl/volslider.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
