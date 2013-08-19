@@ -97,7 +97,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       if (!parentScore()) {
             int idx = 0;
             foreach(StaffType** st, _staffTypes) {
-                  if ((idx >= STAFF_TYPES) || !(*st)->isEqual(*Ms::staffTypes[idx]))
+                  if ((idx >= STAFF_TYPES) || !(*st)->isEqual(*StaffType::preset(idx)))
                         (*st)->write(xml, idx);
                   ++idx;
                   }
@@ -791,19 +791,33 @@ bool Score::read(XmlReader& e)
                   customKeysigs.append(ks);
                   }
             else if (tag == "StaffType") {
-                  int idx        = e.intAttribute("idx");
+                  int idx           = e.intAttribute("idx");
+                  QString groupName = e.attribute("group", "pitched");
+                  int group;
+                  // staff type numbering did change!
+                  // attempt to keep some compatibility with existing 2.0 scores
+                  if (groupName == "percussion")
+                        group = PERCUSSION_STAFF_GROUP;
+                  else if (groupName == "tablature")
+                        group = TAB_STAFF_GROUP;
+                  else group = STANDARD_STAFF_GROUP;
                   StaffType* ost = staffType(idx);
                   StaffType* st;
-                  if (ost)
+                  if (ost && ost->group() == group)
                         st = ost->clone();
                   else {
-                        QString group  = e.attribute("group", "pitched");
-                        if (group == "percussion")
+                        idx = -1;
+                        switch (group)
+                        {
+                        case PERCUSSION_STAFF_GROUP:
                               st  = new StaffTypePercussion();
-                        else if (group == "tablature")
+                              break;
+                        case TAB_STAFF_GROUP:
                               st  = new StaffTypeTablature();
-                        else
+                              break;
+                        default:
                               st  = new StaffTypePitched();
+                        }
                         }
                   st->read(e);
                   st->setBuiltin(false);

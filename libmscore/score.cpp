@@ -279,8 +279,11 @@ void Score::init()
       _revisions      = new Revisions;
       _symIdx         = 0;
       _pageNumberOffset = 0;
-      foreach (StaffType* st, Ms::staffTypes)
-             addStaffType(st);
+      int numOfPresets = StaffType::numOfPresets();
+      for (int idx = 0; idx < numOfPresets; idx++) {
+            StaffType * st = StaffType::preset(idx)->clone();
+            addStaffType(st);
+            }
 
       _mscVersion     = MSCVERSION;
       _created        = false;
@@ -2542,7 +2545,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool useDoubleSharpsFlats)
       undo(new ChangeConcertPitch(this, flag));
 
       foreach(Staff* staff, _staves) {
-            if (staff->staffType()->group() == PERCUSSION_STAFF)
+            if (staff->staffType()->group() == PERCUSSION_STAFF_GROUP)
                   continue;
             Instrument* instr = staff->part()->instr();
             Interval interval = instr->transpose();

@@ -90,9 +90,9 @@ void EditStaff::fillStaffTypeCombo()
       staffType->clear();
       for (int idx = 0; idx < n; ++idx) {
             StaffType* st = score->staffType(idx);
-            if ( (canUseTabs && st->group() == TAB_STAFF)
-                        || ( canUsePerc && st->group() == PERCUSSION_STAFF)
-                        || (!canUsePerc && st->group() == PITCHED_STAFF) ) {
+            if ( (canUseTabs && st->group() == TAB_STAFF_GROUP)
+                        || ( canUsePerc && st->group() == PERCUSSION_STAFF_GROUP)
+                        || (!canUsePerc && st->group() == STANDARD_STAFF_GROUP) ) {
                   staffType->addItem(st->name(), idx);
                   if (st == staff->staffType())
                         curIdx = staffType->count() - 1;
@@ -234,9 +234,9 @@ void EditStaff::apply()
       StaffGroup ng = st->group();                          // new staff group
       StaffGroup og = staff->staffType()->group();          // old staff group
 
-      bool updateNeeded = (ng == TAB_STAFF && og != TAB_STAFF) ||
-                          (ng != TAB_STAFF && og == TAB_STAFF) ||
-                          (ng == TAB_STAFF && og == TAB_STAFF
+      bool updateNeeded = (ng == TAB_STAFF_GROUP && og != TAB_STAFF_GROUP) ||
+                          (ng != TAB_STAFF_GROUP && og == TAB_STAFF_GROUP) ||
+                          (ng == TAB_STAFF_GROUP && og == TAB_STAFF_GROUP
                              && instrument.tablature() != part->instr()->tablature());
 
       if (!(instrument == *part->instr()) || part->partName() != partName->text()) {
