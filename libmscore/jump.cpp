@@ -94,7 +94,7 @@ void Jump::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);
+//      setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);    // do not reset text style!
       }
 
 //---------------------------------------------------------
