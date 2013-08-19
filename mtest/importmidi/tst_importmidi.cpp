@@ -159,6 +159,15 @@ class TestImportMidi : public QObject, public MTest
             }
       void tupletOffTimeOtherBar() { mf("tuplet_off_time_other_bar"); }
       void tupletOffTimeOtherBar2() { mf("tuplet_off_time_other_bar2"); }
+      void minDuration() { mf("min_duration"); }
+      void minDurationNoReduce()
+            {
+            TrackOperations opers;
+            opers.quantize.reduceToShorterNotesInBar = false;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("min_duration_no_reduce");
+            preferences.midiImportOperations.clear();
+            }
 
       void pickupMeasure() { mf("pickup"); }
 
