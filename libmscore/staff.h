@@ -191,9 +191,9 @@ class Staff : public QObject {
       StaffType* staffType() const     { return _staffType;      }
       void setStaffType(StaffType* st);
       StaffGroup staffGroup() const    { return _staffType->group(); }
-      bool isPitchedStaff() const      { return staffGroup() == PITCHED_STAFF; }
-      bool isTabStaff() const          { return staffGroup() == TAB_STAFF; }
-      bool isDrumStaff() const         { return staffGroup() == PERCUSSION_STAFF; }
+      bool isPitchedStaff() const      { return staffGroup() == STANDARD_STAFF_GROUP; }
+      bool isTabStaff() const          { return staffGroup() == TAB_STAFF_GROUP; }
+      bool isDrumStaff() const         { return staffGroup() == PERCUSSION_STAFF_GROUP; }
 
       bool updateKeymap() const        { return _updateKeymap;   }
       void setUpdateKeymap(bool v)     { _updateKeymap = v;      }

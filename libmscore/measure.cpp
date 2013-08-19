@@ -3402,7 +3402,7 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
             // TAB_STAFF is different, as each note has to be fretted
             // in the context of the all of the chords of the whole segment
 
-            if (staffGroup == TAB_STAFF) {
+            if (staffGroup == TAB_STAFF_GROUP) {
                   instrument->tablature()->fretChords(chord);
                   continue;               // skip other staff type cases
                   }
@@ -3413,7 +3413,7 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
             for (int i = 0; i < n; ++i) {
                   Note* note = chord->notes().at(i);
                   switch(staffGroup) {
-                        case PITCHED_STAFF:
+                        case STANDARD_STAFF_GROUP:
                               if (note->tieBack()) {
                                     if (note->accidental() && note->tpc() == note->tieBack()->startNote()->tpc()) {
                                           // TODO: remove accidental only if note is not
@@ -3423,7 +3423,7 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
                                     }
                               note->updateAccidental(tversatz);
                               break;
-                        case PERCUSSION_STAFF:
+                        case PERCUSSION_STAFF_GROUP:
                               {
                               Drumset* drumset = instrument->drumset();
                               int pitch = note->pitch();
@@ -3437,7 +3437,7 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
                                     }
                               }
                               break;
-                        case TAB_STAFF:   // to avoid compiler warning
+                        case TAB_STAFF_GROUP:   // to avoid compiler warning
                               break;
                         }
                   }
