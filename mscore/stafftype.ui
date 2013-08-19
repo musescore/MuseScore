@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>855</width>
     <height>770</height>
    </rect>
   </property>
@@ -198,7 +198,7 @@
               </font>
              </property>
              <property name="text">
-              <string>PITCHED STAFF</string>
+              <string>STANDARD STAFF</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -247,7 +247,7 @@
                 <string>Create a new staff type of current group.</string>
                </property>
                <property name="text">
-                <string>Create new pitched type</string>
+                <string>Create new standard type</string>
                </property>
               </widget>
              </item>
@@ -463,7 +463,16 @@
                     <enum>QFrame::Plain</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_6">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>0</number>
                     </property>
                     <item>
@@ -524,7 +533,16 @@
                     <enum>QFrame::Plain</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_8">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>0</number>
                     </property>
                     <item>
@@ -585,7 +603,16 @@
                     <enum>QFrame::Plain</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_9">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>0</number>
                     </property>
                     <item>
@@ -658,7 +685,16 @@
                     <enum>QFrame::Plain</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_5">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>0</number>
                     </property>
                     <item>
@@ -732,7 +768,16 @@
                     <enum>QFrame::Plain</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_17">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>0</number>
                     </property>
                     <item>
@@ -793,7 +838,16 @@
                     <enum>QFrame::Plain</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_15">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>0</number>
                     </property>
                     <item>
@@ -854,7 +908,16 @@
                     <enum>QFrame::Plain</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_18">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>0</number>
                     </property>
                     <item>
@@ -1278,13 +1341,14 @@
   <tabstop>durY</tabstop>
   <tabstop>pushQuickConfig</tabstop>
   <tabstop>newTypeTablature</tabstop>
+  <tabstop>presetPercCombo</tabstop>
   <tabstop>showLedgerLinesPercussion</tabstop>
   <tabstop>genKeysigPercussion</tabstop>
   <tabstop>stemlessPercussion</tabstop>
   <tabstop>newTypePercussion</tabstop>
-  <tabstop>buttonBox</tabstop>
   <tabstop>save</tabstop>
   <tabstop>load</tabstop>
+  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>
