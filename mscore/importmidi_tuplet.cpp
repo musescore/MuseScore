@@ -149,22 +149,19 @@ findTupletsForDuration(int voice,
       std::vector<TupletData> tupletsData;
       if (tuplets.empty())
             return tupletsData;
-      auto tupletIt = tuplets.lower_bound(durationOnTime + durationLen);
-      if (tupletIt != tuplets.begin())
-            --tupletIt;
+      auto tupletIt = tuplets.lower_bound(barStartTick);
 
-      while (durationOnTime + durationLen > tupletIt->first
-             && durationOnTime < tupletIt->first + tupletIt->second.len) {
-            if (tupletIt->second.voice == voice) {
+      while (tupletIt != tuplets.end()
+                && tupletIt->first < durationOnTime + durationLen) {
+            if (tupletIt->second.voice == voice
+                        && durationOnTime < tupletIt->first + tupletIt->second.len) {
                               // if tuplet and duration intersect each other
                   auto tupletData = tupletIt->second;
                               // convert tuplet onTime to local bar ticks
                   tupletData.onTime -= barStartTick;
                   tupletsData.push_back(tupletData);
                   }
-            if (tupletIt == tuplets.begin())
-                  break;
-            --tupletIt;
+            ++tupletIt;
             }
 
       struct {
