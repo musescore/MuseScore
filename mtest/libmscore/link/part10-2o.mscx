@@ -732,7 +732,7 @@ p, li { white-space: pre-wrap; }
       <Part>
         <Staff id="1">
           <linkedTo>1</linkedTo>
-          <type>0</type>
+          <type>-1</type>
           <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>
@@ -1110,7 +1110,7 @@ p, li { white-space: pre-wrap; }
       <Part>
         <Staff id="1">
           <linkedTo>2</linkedTo>
-          <type>0</type>
+          <type>-1</type>
           <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>

@@ -211,12 +211,12 @@ p, li { white-space: pre-wrap; }
       <Part>
         <Staff id="1">
           <linkedTo>1</linkedTo>
-          <type>0</type>
+          <type>14</type>
           <bracket type="0" span="2"/>
           </Staff>
         <Staff id="2">
           <linkedTo>1</linkedTo>
-          <type>1</type>
+          <type>5</type>
           <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>
