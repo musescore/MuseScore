@@ -2044,14 +2044,18 @@ Shortcut Shortcut::sc[] = {
          0,
          "loop-in",
          QT_TRANSLATE_NOOP("action","Loop in"),
-         QT_TRANSLATE_NOOP("action","Set loop In position")
+         QT_TRANSLATE_NOOP("action","Set loop In position"),
+         QT_TRANSLATE_NOOP("action","Set loop In position"),
+         loopIn_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "loop-out",
          QT_TRANSLATE_NOOP("action","Loop out"),
-         QT_TRANSLATE_NOOP("action","Set loop Out position")
+         QT_TRANSLATE_NOOP("action","Set loop Out position"),
+         QT_TRANSLATE_NOOP("action","Set loop Out position"),
+         loopOut_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,

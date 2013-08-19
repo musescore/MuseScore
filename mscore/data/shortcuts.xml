@@ -387,7 +387,6 @@
   <SC>
     <key>add-8vb</key>
     <seq>Ctrl+Y,Ctrl+O,Ctrl+B</seq>
-    <seq>Shift+O</seq>
     </SC>
   <SC>
     <key>escape</key>
