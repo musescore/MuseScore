@@ -9,24 +9,19 @@ class ReducedFraction;
 
 namespace MidiTuplet {
 
+struct TupletInfo;
+
 std::pair<std::multimap<ReducedFraction, MidiChord>::iterator, ReducedFraction>
 findBestChordForTupletNote(const ReducedFraction &tupletNotePos,
                            const ReducedFraction &quantValue,
                            const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
                            const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt);
 
-bool isTupletAllowed(int tupletNumber,
-                     const ReducedFraction &tupletLen,
-                     const ReducedFraction &tupletOnTimeSumError,
-                     const ReducedFraction &regularSumError,
-                     const ReducedFraction &quantValue,
-                     const std::map<int, std::multimap<ReducedFraction, MidiChord>::iterator> &tupletChords);
+bool isTupletAllowed(const TupletInfo &tupletInfo);
 
 std::vector<int> findTupletNumbers(const ReducedFraction &divLen, const ReducedFraction &barFraction);
 
 ReducedFraction findQuantizationError(const ReducedFraction &onTime, const ReducedFraction &quantValue);
-
-struct TupletInfo;
 
 TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
                                    int tupletNumber,

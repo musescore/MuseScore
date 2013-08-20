@@ -259,7 +259,7 @@ void TestImportMidi::findChordInBar()
       auto endChordIt = findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.find(ReducedFraction::fromTicks(2000)));
 
-      endBarTick = ReducedFraction(0);
+      endBarTick = ReducedFraction(0, 1);
 
       firstChordIt = findFirstChordInRange(startBarTick, endBarTick,
                                            chords.begin(), chords.end());
@@ -297,7 +297,7 @@ void TestImportMidi::bestChordForTupletNote()
       auto bestChord = MidiTuplet::findBestChordForTupletNote(tupletNotePos, quantValue,
                                                               chords.begin(), chords.end());
       QCOMPARE(bestChord.first, chords.find(ReducedFraction::fromTicks(160)));
-      QCOMPARE(bestChord.second, ReducedFraction(0));
+      QCOMPARE(bestChord.second, ReducedFraction(0, 1));
 
       tupletNotePos = tupletNoteLen * 2;
       bestChord = MidiTuplet::findBestChordForTupletNote(tupletNotePos, quantValue,
@@ -314,76 +314,75 @@ void isSingleNoteInTupletAllowed(int tupletNumber,
                                  double noteLenInTupletLen,
                                  bool expectedResult)
       {
-      const ReducedFraction tupletLen = ReducedFraction::fromTicks(MScore::division);
-      const ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
+      MidiTuplet::TupletInfo tupletInfo;
+      tupletInfo.len = ReducedFraction::fromTicks(MScore::division);
+      tupletInfo.regularQuant = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
       MidiNote note;
-      note.len = ReducedFraction::fromTicks(std::round(tupletLen.ticks() * noteLenInTupletLen));
+      note.len = ReducedFraction::fromTicks(std::round(tupletInfo.len.ticks()
+                                                       * noteLenInTupletLen));
       chord.notes.push_back(note);
       const ReducedFraction onTime = ReducedFraction::fromTicks(10);
       chords.insert({onTime, chord});
 
-      std::map<int, std::multimap<ReducedFraction, MidiChord>::iterator> tupletChords;
-      tupletChords.insert({tupletNoteNumber - 1, chords.begin()});
+      tupletInfo.chords.insert({onTime, chords.begin()});
                   // tuplet error is less than regular error => allowed
-      ReducedFraction tupletOnTimeSumError;
-      const ReducedFraction regularSumError = ReducedFraction::fromTicks(1);
-      QCOMPARE(MidiTuplet::isTupletAllowed(tupletNumber, tupletLen, tupletOnTimeSumError,
-                                           regularSumError, quantValue, tupletChords),
-               expectedResult);
+      tupletInfo.tupletSumError = {0, 1};
+      tupletInfo.regularSumError = ReducedFraction::fromTicks(1);
+      tupletInfo.tupletNumber = tupletNumber;
+      tupletInfo.firstChordIndex = tupletNoteNumber - 1;
+      QCOMPARE(MidiTuplet::isTupletAllowed(tupletInfo), expectedResult);
       }
 
 void isChordCountInTupletAllowed(int tupletNumber,
                                  int chordCount,
                                  bool expectedResult)
       {
-      const ReducedFraction tupletLen = ReducedFraction::fromTicks(MScore::division);
-      const ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
+      MidiTuplet::TupletInfo tupletInfo;
+      tupletInfo.len = ReducedFraction::fromTicks(MScore::division);
+      tupletInfo.regularQuant = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
 
-      std::map<int, std::multimap<ReducedFraction, MidiChord>::iterator> tupletChords;
       std::multimap<ReducedFraction, MidiChord> chords;
+      tupletInfo.firstChordIndex = 0;
       for (int i = 0; i != chordCount; ++i) {
             MidiChord chord;
             MidiNote note;
-            note.len = tupletLen / tupletNumber; // allowed
+            note.len = tupletInfo.len / tupletNumber; // allowed
             chord.notes.push_back(note);
-            const ReducedFraction onTime = tupletLen / tupletNumber * i;
+            const ReducedFraction onTime = tupletInfo.len / tupletNumber * i;
             const auto lastChordIt = chords.insert({onTime, chord});
-            tupletChords.insert({i, lastChordIt});
+            tupletInfo.chords.insert({onTime, lastChordIt});
             }
                   // tuplet error is less than regular error => allowed
-      ReducedFraction tupletOnTimeSumError;
-      const ReducedFraction regularSumError = ReducedFraction::fromTicks(1);
-      QCOMPARE(MidiTuplet::isTupletAllowed(tupletNumber, tupletLen, tupletOnTimeSumError,
-                                           regularSumError, quantValue, tupletChords),
-               expectedResult);
+      tupletInfo.tupletSumError = {0, 1};
+      tupletInfo.regularSumError = ReducedFraction::fromTicks(1);
+      tupletInfo.tupletNumber = tupletNumber;
+      QCOMPARE(MidiTuplet::isTupletAllowed(tupletInfo), expectedResult);
       }
 
 void isTupletErrorAllowed(int tupletSumError,
                           int regularSumError,
                           bool expectedResult)
       {
-      const int tupletNumber = 3;
-      const ReducedFraction tupletLen = ReducedFraction::fromTicks(MScore::division);
-      const ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division / 4);     // 1/16
+      MidiTuplet::TupletInfo tupletInfo;
+      tupletInfo.tupletNumber = 3;
+      tupletInfo.len = ReducedFraction::fromTicks(MScore::division);
+      tupletInfo.regularQuant = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
       MidiNote note;
-      note.len = tupletLen / tupletNumber;  // allowed
+      note.len = tupletInfo.len / tupletInfo.tupletNumber;  // allowed
       chord.notes.push_back(note);
       const ReducedFraction onTime = ReducedFraction::fromTicks(10);
       chords.insert({onTime, chord});
 
-      std::map<int, std::multimap<ReducedFraction, MidiChord>::iterator> tupletChords;
-      tupletChords.insert({0, chords.begin()});
-      const ReducedFraction tupletError = {tupletSumError, 1};
-      const ReducedFraction regularError = {regularSumError, 1};
-      QCOMPARE(MidiTuplet::isTupletAllowed(
-                   tupletNumber, tupletLen, tupletError, regularError, quantValue, tupletChords),
-               expectedResult);
+      tupletInfo.chords.insert({onTime, chords.begin()});
+      tupletInfo.tupletSumError = {tupletSumError, 1};
+      tupletInfo.regularSumError = {regularSumError, 1};
+      QCOMPARE(MidiTuplet::isTupletAllowed(tupletInfo), expectedResult);
       }
 
 void TestImportMidi::isTupletAllowed()
@@ -504,7 +503,7 @@ void TestImportMidi::findTupletApproximation()
       chords.insert({ReducedFraction::fromTicks(3201), MidiChord()});
 
       {
-      const ReducedFraction startTupletTime = ReducedFraction(0);
+      const ReducedFraction startTupletTime = ReducedFraction(0, 1);
       const MidiTuplet::TupletInfo tupletApprox = MidiTuplet::findTupletApproximation(
                         tupletLen, tupletNumber, quantValue,
                         startTupletTime, chords.begin(), chords.end()
@@ -517,9 +516,12 @@ void TestImportMidi::findTupletApproximation()
       QVERIFY(tupletApprox.chords.size() == 3);
       QCOMPARE(tupletApprox.tupletSumError, ReducedFraction::fromTicks(0));
       QCOMPARE(tupletApprox.regularSumError, ReducedFraction::fromTicks(80));
-      QCOMPARE(tupletApprox.chords.find(0)->second, chords.find(ReducedFraction::fromTicks(0)));
-      QCOMPARE(tupletApprox.chords.find(1)->second, chords.find(ReducedFraction::fromTicks(160)));
-      QCOMPARE(tupletApprox.chords.find(2)->second, chords.find(ReducedFraction::fromTicks(320)));
+      QCOMPARE(tupletApprox.chords.find(ReducedFraction::fromTicks(0))->second,
+               chords.find(ReducedFraction::fromTicks(0)));
+      QCOMPARE(tupletApprox.chords.find(ReducedFraction::fromTicks(160))->second,
+               chords.find(ReducedFraction::fromTicks(160)));
+      QCOMPARE(tupletApprox.chords.find(ReducedFraction::fromTicks(320))->second,
+               chords.find(ReducedFraction::fromTicks(320)));
       }
       {
       const ReducedFraction startTupletTime = ReducedFraction::fromTicks(960);
@@ -538,7 +540,8 @@ void TestImportMidi::findTupletApproximation()
       QVERIFY(tupletApprox.chords.size() == 1);
       QCOMPARE(tupletApprox.tupletSumError, ReducedFraction::fromTicks(40));
       QCOMPARE(tupletApprox.regularSumError, ReducedFraction::fromTicks(40));
-      QCOMPARE(tupletApprox.chords.find(0)->second, chords.find(ReducedFraction::fromTicks(1480)));
+      QCOMPARE(tupletApprox.chords.find(ReducedFraction::fromTicks(1480))->second,
+               chords.find(ReducedFraction::fromTicks(1480)));
       }
       }
 
@@ -606,22 +609,31 @@ void TestImportMidi::separateTupletVoices()
             }
 
       MidiTuplet::TupletInfo tripletInfo;
-      tripletInfo.onTime = ReducedFraction(0);
+      tripletInfo.onTime = ReducedFraction(0, 1);
       tripletInfo.len = tripletLen;
-      for (int i = 0; i != 3; ++i)
-            tripletInfo.chords.insert({i, chords.find(tripletNoteLen * i)});
+      tripletInfo.firstChordIndex = 0;
+      for (int i = 0; i != 3; ++i) {
+            const auto onTime = tripletNoteLen * i;
+            tripletInfo.chords.insert({onTime, chords.find(onTime)});
+            }
 
       MidiTuplet::TupletInfo quintupletInfo;
-      quintupletInfo.onTime = ReducedFraction(0);
+      quintupletInfo.onTime = ReducedFraction(0, 1);
       quintupletInfo.len = quintupletLen;
-      for (int i = 0; i != 5; ++i)
-            quintupletInfo.chords.insert({i, chords.find(quintupletNoteLen * i)});
+      quintupletInfo.firstChordIndex = 0;
+      for (int i = 0; i != 5; ++i) {
+            const auto onTime = quintupletNoteLen * i;
+            quintupletInfo.chords.insert({onTime, chords.find(onTime)});
+            }
 
       MidiTuplet::TupletInfo septupletInfo;
-      septupletInfo.onTime = ReducedFraction(0);
+      septupletInfo.onTime = ReducedFraction(0, 1);
       septupletInfo.len = septupletLen;
-      for (int i = 0; i != 7; ++i)
-            septupletInfo.chords.insert({i, chords.find(septupletNoteLen * i)});
+      septupletInfo.firstChordIndex = 0;
+      for (int i = 0; i != 7; ++i) {
+            const auto onTime = septupletNoteLen * i;
+            septupletInfo.chords.insert({onTime, chords.find(onTime)});
+            }
 
       std::vector<MidiTuplet::TupletInfo> tuplets;
       tuplets.push_back(tripletInfo);
@@ -630,19 +642,21 @@ void TestImportMidi::separateTupletVoices()
 
       QVERIFY(chords.size() == 13);
 
-      auto tripletIt = tripletInfo.chords.find(0);  // first chord in tuplet
+      const auto firstChordTime = ReducedFraction(0, 1);
+
+      auto tripletIt = tripletInfo.chords.find(firstChordTime);  // first chord in tuplet
       QCOMPARE(tripletIt->second->second.notes.size(), 3);
       QCOMPARE(tripletIt->second->second.notes[0].pitch, 76);
       QCOMPARE(tripletIt->second->second.notes[1].pitch, 71);
       QCOMPARE(tripletIt->second->second.notes[2].pitch, 67);
 
-      auto quintupletIt = quintupletInfo.chords.find(0);
+      auto quintupletIt = quintupletInfo.chords.find(firstChordTime);
       QCOMPARE(quintupletIt->second->second.notes.size(), 3);
       QCOMPARE(quintupletIt->second->second.notes[0].pitch, 76);
       QCOMPARE(quintupletIt->second->second.notes[1].pitch, 71);
       QCOMPARE(quintupletIt->second->second.notes[2].pitch, 67);
 
-      auto septupletIt = septupletInfo.chords.find(0);
+      auto septupletIt = septupletInfo.chords.find(firstChordTime);
       QCOMPARE(septupletIt->second->second.notes.size(), 3);
       QCOMPARE(septupletIt->second->second.notes[0].pitch, 76);
       QCOMPARE(septupletIt->second->second.notes[1].pitch, 71);
@@ -655,15 +669,15 @@ void TestImportMidi::separateTupletVoices()
       quintupletInfo = tuplets[1];
       septupletInfo = tuplets[2];
 
-      tripletIt = tripletInfo.chords.find(0);
+      tripletIt = tripletInfo.chords.find(firstChordTime);
       QCOMPARE(tripletIt->second->second.notes.size(), 1);
       QCOMPARE(tripletIt->second->second.notes[0].pitch, 76);
 
-      quintupletIt = quintupletInfo.chords.find(0);
+      quintupletIt = quintupletInfo.chords.find(firstChordTime);
       QCOMPARE(quintupletIt->second->second.notes.size(), 1);
       QCOMPARE(quintupletIt->second->second.notes[0].pitch, 71);
 
-      septupletIt = septupletInfo.chords.find(0);
+      septupletIt = septupletInfo.chords.find(firstChordTime);
       QCOMPARE(septupletIt->second->second.notes.size(), 1);
       QCOMPARE(septupletIt->second->second.notes[0].pitch, 67);
 
@@ -686,7 +700,7 @@ void TestImportMidi::findTupletsWithCommonChords()
       std::vector<MidiTuplet::TupletInfo> tuplets;
 
       std::multimap<ReducedFraction, MidiChord> chords;
-      chords.insert({ReducedFraction(0), MidiChord()});
+      chords.insert({ReducedFraction(0, 1), MidiChord()});
       chords.insert({ReducedFraction(1, 12), MidiChord()});
       chords.insert({ReducedFraction(1, 6), MidiChord()});
       chords.insert({ReducedFraction(3, 10), MidiChord()});
@@ -697,32 +711,32 @@ void TestImportMidi::findTupletsWithCommonChords()
       MidiTuplet::TupletInfo tupletData;
                   // triplet, total len = 1/8
       tupletData.chords.clear();
-      tupletData.chords.insert({0, chords.find(ReducedFraction(0))});
-      tupletData.chords.insert({2, chords.find(ReducedFraction(1, 12))});
+      tupletData.chords.insert({ReducedFraction(0, 1), chords.find(ReducedFraction(0, 1))});
+      tupletData.chords.insert({ReducedFraction(1, 12), chords.find(ReducedFraction(1, 12))});
       tuplets.push_back(tupletData);
                   // second triplet, total len = 1/8
       tupletData.chords.clear();
-      tupletData.chords.insert({1, chords.find(ReducedFraction(1, 6))});
+      tupletData.chords.insert({ReducedFraction(1, 6), chords.find(ReducedFraction(1, 6))});
       tuplets.push_back(tupletData);
                   // third triplet, total len = 1/4
       tupletData.chords.clear();
-      tupletData.chords.insert({0, chords.find(ReducedFraction(0))});
-      tupletData.chords.insert({1, chords.find(ReducedFraction(1, 12))});
-      tupletData.chords.insert({2, chords.find(ReducedFraction(1, 6))});
+      tupletData.chords.insert({ReducedFraction(0, 1), chords.find(ReducedFraction(0, 1))});
+      tupletData.chords.insert({ReducedFraction(1, 12), chords.find(ReducedFraction(1, 12))});
+      tupletData.chords.insert({ReducedFraction(1, 6), chords.find(ReducedFraction(1, 6))});
       tuplets.push_back(tupletData);
                   // quintuplet, total len = 1/4
       tupletData.chords.clear();
-      tupletData.chords.insert({1, chords.find(ReducedFraction(3, 10))});
-      tupletData.chords.insert({2, chords.find(ReducedFraction(7, 20))});
-      tupletData.chords.insert({3, chords.find(ReducedFraction(2, 5))});
-      tupletData.chords.insert({4, chords.find(ReducedFraction(9, 20))});
+      tupletData.chords.insert({ReducedFraction(3, 10), chords.find(ReducedFraction(3, 10))});
+      tupletData.chords.insert({ReducedFraction(7, 20), chords.find(ReducedFraction(7, 20))});
+      tupletData.chords.insert({ReducedFraction(2, 5), chords.find(ReducedFraction(2, 5))});
+      tupletData.chords.insert({ReducedFraction(9, 20), chords.find(ReducedFraction(9, 20))});
       tuplets.push_back(tupletData);
                   // second quintuplet, total len = 1/2
       tupletData.chords.clear();
-      tupletData.chords.insert({0, chords.find(ReducedFraction(0))});
-      tupletData.chords.insert({1, chords.find(ReducedFraction(1, 12))});
-      tupletData.chords.insert({3, chords.find(ReducedFraction(3, 10))});
-      tupletData.chords.insert({4, chords.find(ReducedFraction(2, 5))});
+      tupletData.chords.insert({ReducedFraction(0, 1), chords.find(ReducedFraction(0, 1))});
+      tupletData.chords.insert({ReducedFraction(1, 12), chords.find(ReducedFraction(1, 12))});
+      tupletData.chords.insert({ReducedFraction(3, 10), chords.find(ReducedFraction(3, 10))});
+      tupletData.chords.insert({ReducedFraction(2, 5), chords.find(ReducedFraction(2, 5))});
       tuplets.push_back(tupletData);
 
       QVERIFY(tuplets.size() == 5);
