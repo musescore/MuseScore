@@ -88,11 +88,6 @@ class MTrack {
       void createTuplets();
       void createKeys(int accidentalType);
       void createClefs();
-      std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator
-            findTupletWithAllRangeInside(int voice, const ReducedFraction &onTime,
-                                         const ReducedFraction &len);
-      std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator
-            findTupletWithOnTimeInside(int voice, const ReducedFraction &onTime);
       };
 
 
@@ -341,10 +336,10 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                   if (!newChord.notes.isEmpty()) {
                         newChordEvents.push_back({chordIt->first, newChord});
 
-                        const auto tupletIt = track.findTupletWithOnTimeInside(chordIt->second.voice,
-                                                                               chordIt->first);
-                        const auto newTupletIt = track.findTupletWithOnTimeInside(newChord.voice,
-                                                                                  chordIt->first);
+                        const auto tupletIt = MidiTuplet::findTupletContainsTime(
+                                          chordIt->second.voice, chordIt->first, track.tuplets);
+                        const auto newTupletIt = MidiTuplet::findTupletContainsTime(
+                                          newChord.voice, chordIt->first, track.tuplets);
                         if (tupletIt != track.tuplets.end()
                                     && newTupletIt == track.tuplets.end()) {
                               MidiTuplet::TupletData newTupletData = tupletIt->second;
@@ -392,11 +387,11 @@ std::map<int, MTrack> splitDrumTrack(MTrack &drumTrack)
                               newChord.notes.push_back(*noteIt);
                               curTrack->chords.insert({it->first, newChord});
 
-                              const auto tupletIt = drumTrack.findTupletWithOnTimeInside(chord.voice,
-                                                                                         it->first);
+                              const auto tupletIt = MidiTuplet::findTupletContainsTime(
+                                                chord.voice, it->first, drumTrack.tuplets);
                               if (tupletIt != drumTrack.tuplets.end()) {
-                                    auto newTupletIt = curTrack->findTupletWithOnTimeInside(newChord.voice,
-                                                                                            it->first);
+                                    auto newTupletIt = MidiTuplet::findTupletContainsTime(
+                                                      newChord.voice, it->first, curTrack->tuplets);
                                     if (newTupletIt == curTrack->tuplets.end()) {
                                           MidiTuplet::TupletData newTupletData = tupletIt->second;
                                           newTupletData.voice = newChord.voice;
@@ -453,21 +448,14 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                        const ReducedFraction &lastTick)
       {
       auto &opers = preferences.midiImportOperations;
-      if (opers.count() == 1 && opers.trackOperations(0).quantize.humanPerformance) {
-            opers.setCurrentTrack(0);
-            Quantize::applyAdaptiveQuant(tracks.begin()->second.chords, sigmap, lastTick);
-            Quantize::applyGridQuant(tracks.begin()->second.chords, sigmap, lastTick);
-            }
-      else {
-            for (auto &track: tracks) {
-                  MTrack &mtrack = track.second;
-                              // pass current track index through MidiImportOperations
-                              // for further usage
-                  opers.setCurrentTrack(mtrack.indexOfOperation);
-                  if (mtrack.mtrack->drumTrack())
-                        opers.adaptForPercussion(mtrack.indexOfOperation);
-                  Quantize::quantizeChordsAndTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick);
-                  }
+      for (auto &track: tracks) {
+            MTrack &mtrack = track.second;
+                        // pass current track index through MidiImportOperations
+                        // for further usage
+            opers.setCurrentTrack(mtrack.indexOfOperation);
+            if (mtrack.mtrack->drumTrack())
+                  opers.adaptForPercussion(mtrack.indexOfOperation);
+            Quantize::quantizeChordsAndTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick);
             }
       }
 
@@ -584,7 +572,7 @@ MTrack::toDurationList(const Measure *measure,
       const bool useDots = preferences.midiImportOperations.currentTrackOperations().useDots;
                   // find tuplets over which duration is go
       std::vector<MidiTuplet::TupletData> tupletData
-                  = MidiTuplet::findTupletsForDuration(voice, ReducedFraction::fromTicks(measure->tick()),
+                  = MidiTuplet::findTupletsInBarForDuration(voice, ReducedFraction::fromTicks(measure->tick()),
                                                        startTick, len, tuplets);
       const ReducedFraction startTickInBar = startTick - ReducedFraction::fromTicks(measure->tick());
       const ReducedFraction endTickInBar = startTickInBar + len;
@@ -725,7 +713,9 @@ ReducedFraction findMinDuration(const QList<MidiChord> &midiChords,
       return len;
       }
 
-void setTies(Chord *chord, Score *score, QList<MidiNote> &midiNotes)
+void setTies(Chord *chord,
+             Score *score,
+             QList<MidiNote> &midiNotes)
       {
       for (int i = 0; i < midiNotes.size(); ++i) {
             const MidiNote &midiNote = midiNotes[i];
@@ -736,58 +726,12 @@ void setTies(Chord *chord, Score *score, QList<MidiNote> &midiNotes)
             }
       }
 
-std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator
-MTrack::findTupletWithAllRangeInside(int voice,
-                                     const ReducedFraction &onTime,
-                                     const ReducedFraction &len)
+void MTrack::addElementToTuplet(int voice,
+                                const ReducedFraction &onTime,
+                                const ReducedFraction &len,
+                                DurationElement *el)
       {
-      if (tuplets.empty())
-            return tuplets.end();
-
-      auto it = tuplets.upper_bound(onTime + len);
-      if (it != tuplets.begin())
-            --it;
-      while (true) {
-            const auto &tupletData = it->second;
-            if (tupletData.voice == voice
-                        && onTime >= tupletData.onTime
-                        && onTime + len <= tupletData.onTime + tupletData.len) {
-                  return it;
-                  }
-            if (it == tuplets.begin())
-                  break;
-            --it;
-            }
-      return tuplets.end();
-      }
-
-std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator
-MTrack::findTupletWithOnTimeInside(int voice, const ReducedFraction &onTime)
-      {
-      if (tuplets.empty())
-            return tuplets.end();
-
-      auto it = tuplets.upper_bound(onTime);
-      if (it != tuplets.begin())
-            --it;
-      while (true) {
-            const auto &tupletData = it->second;
-            if (tupletData.voice == voice
-                        && onTime >= tupletData.onTime
-                        && onTime < tupletData.onTime + tupletData.len) {
-                  return it;
-                  }
-            if (it == tuplets.begin())
-                  break;
-            --it;
-            }
-      return tuplets.end();
-      }
-
-void MTrack::addElementToTuplet(int voice, const ReducedFraction &onTime,
-                                const ReducedFraction &len, DurationElement *el)
-      {
-      const auto it = findTupletWithAllRangeInside(voice, onTime, len);
+      const auto it = MidiTuplet::findTupletWithAllRangeInside(voice, onTime, len, tuplets);
       if (it != tuplets.end())
              it->second.elements.push_back(el);       // add chord/rest to the tuplet
       }
