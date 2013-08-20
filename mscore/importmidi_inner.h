@@ -38,7 +38,50 @@ struct DivisionInfo
       std::vector<DivLengthInfo> divLengths;    // lengths of 'len' subdivisions
       };
 
+enum class DurationType;
+
 } // namespace Meter
+
+namespace MidiTuplet {
+class TupletData;
+}
+
+class Staff;
+class Score;
+class MidiTrack;
+class DurationElement;
+class MidiChord;
+class MidiEvent;
+class TDuration;
+class Measure;
+
+class MTrack {
+   public:
+      int program = 0;
+      Staff* staff = nullptr;
+      const MidiTrack* mtrack = nullptr;
+      QString name;
+      bool hasKey = false;
+      int indexOfOperation = 0;
+
+      std::multimap<ReducedFraction, MidiChord> chords;
+      std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
+
+      void convertTrack(const ReducedFraction &lastTick);
+      void processPendingNotes(QList<MidiChord>& midiChords,
+                               int voice,
+                               const ReducedFraction &startChordTickFrac,
+                               const ReducedFraction &nextChordTick);
+      void processMeta(int tick, const MidiEvent& mm);
+      void fillGapWithRests(Score *score, int voice, const ReducedFraction &startChordTickFrac,
+                            const ReducedFraction &restLength, int track);
+      QList<std::pair<ReducedFraction, TDuration> >
+            toDurationList(const Measure *measure, int voice, const ReducedFraction &startTick,
+                           const ReducedFraction &len, Meter::DurationType durationType);
+      void createTuplets();
+      void createKeys(int accidentalType);
+      void createClefs();
+      };
 
 namespace MidiTuplet {
 
