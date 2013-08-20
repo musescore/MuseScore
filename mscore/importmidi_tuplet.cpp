@@ -6,6 +6,7 @@
 #include "preferences.h"
 #include "importmidi_inner.h"
 #include "libmscore/fraction.h"
+#include "libmscore/duration.h"
 
 #include <set>
 
@@ -1074,6 +1075,46 @@ findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
             startBarTick = endBarTick;
             }
       return tupletEvents;
+      }
+
+void removeEmptyTuplets(MTrack &track)
+      {
+      if (track.tuplets.empty())
+            return;
+      for (auto it = track.tuplets.begin(); it != track.tuplets.end(); ) {
+            const auto &tupletData = it->second;
+            bool containsChord = false;
+            for (const auto &chord: track.chords) {
+                  if (tupletData.voice != chord.second.voice)
+                        continue;
+                  const ReducedFraction &onTime = chord.first;
+                  const ReducedFraction len = maxNoteLen(chord.second.notes);
+                  if (onTime + len > tupletData.onTime
+                              && onTime + len <= tupletData.onTime + tupletData.len) {
+                                    // tuplet contains at least one chord
+                        containsChord = true;
+                        break;
+                        }
+                  }
+            if (!containsChord) {
+                  it = track.tuplets.erase(it);
+                  continue;
+                  }
+            ++it;
+            }
+      }
+
+void addElementToTuplet(int voice,
+                        const ReducedFraction &onTime,
+                        const ReducedFraction &len,
+                        DurationElement *el,
+                        std::multimap<ReducedFraction, TupletData> &tuplets)
+      {
+      const auto it = MidiTuplet::findTupletForTimeRange(voice, onTime, len, tuplets);
+      if (it != tuplets.end()) {
+            auto &tuplet = const_cast<MidiTuplet::TupletData &>(it->second);
+            tuplet.elements.push_back(el);       // add chord/rest to the tuplet
+            }
       }
 
 } // namespace MidiTuplet

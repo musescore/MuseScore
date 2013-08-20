@@ -9,6 +9,7 @@ namespace Ms {
 class MidiChord;
 class DurationElement;
 class TimeSigMap;
+class MTrack;
 
 namespace MidiTuplet {
 
@@ -61,6 +62,14 @@ std::multimap<ReducedFraction, TupletData>
 findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
                const TimeSigMap *sigmap,
                const ReducedFraction &lastTick);
+
+void removeEmptyTuplets(MTrack &track);
+
+void addElementToTuplet(int voice,
+                        const ReducedFraction &onTime,
+                        const ReducedFraction &len,
+                        DurationElement *el,
+                        std::multimap<ReducedFraction, TupletData> &tuplets);
 
 } // namespace MidiTuplet
 } // namespace Ms
