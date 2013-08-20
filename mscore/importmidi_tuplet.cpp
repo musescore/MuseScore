@@ -55,7 +55,7 @@ bool isTupletAllowed(int tupletNumber,
       if (tupletNumber == 2 || tupletNumber == 4) {
             if (tupletSumError > regularSumError)
                   return false;
-            else if (tupletSumError == regularSumError && tupletSumError > ReducedFraction(0))
+            else if (tupletSumError == regularSumError && tupletSumError > ReducedFraction(0, 1))
                   return false;
             }
       else {
@@ -327,7 +327,7 @@ std::tuple<double, int, ReducedFraction>
 validateTuplets(std::list<int> &indexes, const std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
-            return std::make_tuple(0.0, 0, ReducedFraction(0));
+            return std::make_tuple(0.0, 0, ReducedFraction(0, 1));
                   // structure of map: <chord ID, count of use of first tuplet chord with this tick>
       std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
                   // chord IDs of already used chords
