@@ -1055,5 +1055,26 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
       return convertToData(tuplets);
       }
 
+std::multimap<ReducedFraction, TupletData>
+findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
+               const TimeSigMap *sigmap,
+               const ReducedFraction &lastTick)
+      {
+      std::multimap<ReducedFraction, TupletData> tupletEvents;
+      ReducedFraction startBarTick = {0, 1};
+
+      for (int i = 1;; ++i) {       // iterate over all measures by indexes
+            const auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
+            const auto barFraction = ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
+            const auto tuplets = findTuplets(startBarTick, endBarTick, barFraction, chords);
+            for (const auto &tupletData: tuplets)
+                  tupletEvents.insert({tupletData.onTime, tupletData});
+            if (endBarTick > lastTick)
+                  break;
+            startBarTick = endBarTick;
+            }
+      return tupletEvents;
+      }
+
 } // namespace MidiTuplet
 } // namespace Ms

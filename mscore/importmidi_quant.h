@@ -14,11 +14,9 @@ struct TupletData;
 
 namespace Quantize {
 
-void quantizeChordsAndTuplets(
-            std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents,
-            std::multimap<ReducedFraction, MidiChord> &inputChords,
-            const TimeSigMap *sigmap,
-            const ReducedFraction &lastTick);
+void quantizeChords(std::multimap<ReducedFraction, MidiChord> &chords,
+                    const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents,
+                    const TimeSigMap *sigmap);
 
 ReducedFraction fixedQuantRaster();
 

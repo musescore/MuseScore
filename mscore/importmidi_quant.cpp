@@ -153,24 +153,10 @@ ReducedFraction findQuantRaster(
 
 // input chords - sorted by onTime value, onTime values are not repeated
 
-void quantizeChordsAndTuplets(std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents,
-                              std::multimap<ReducedFraction, MidiChord> &chords,
-                              const TimeSigMap *sigmap,
-                              const ReducedFraction &lastTick)
+void quantizeChords(std::multimap<ReducedFraction, MidiChord> &chords,
+                    const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents,
+                    const TimeSigMap *sigmap)
       {
-      ReducedFraction startBarTick = {0, 1};
-      for (int i = 1;; ++i) {       // iterate over all measures by indexes
-            const auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
-            const auto barFraction = ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
-            const auto tuplets = MidiTuplet::findTuplets(startBarTick, endBarTick,
-                                                         barFraction, chords);
-            for (const auto &tupletData: tuplets)
-                  tupletEvents.insert({tupletData.onTime, tupletData});
-            if (endBarTick > lastTick)
-                  break;
-            startBarTick = endBarTick;
-            }
-
       std::multimap<ReducedFraction, MidiChord> quantizedChords;
       for (auto &chordEvent: chords) {
             MidiChord chord = chordEvent.second;     // copy chord
