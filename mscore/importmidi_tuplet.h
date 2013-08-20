@@ -42,7 +42,6 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                                     const ReducedFraction &endBarTick,
                                     const ReducedFraction &barFraction,
                                     std::multimap<ReducedFraction, MidiChord> &chords);
-
 std::vector<TupletData>
 findTupletsInBarForDuration(int voice,
                             const ReducedFraction &barStartTick,
@@ -50,11 +49,11 @@ findTupletsInBarForDuration(int voice,
                             const ReducedFraction &durationLen,
                             const std::multimap<ReducedFraction, TupletData> &tupletEvents);
 
-std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator
-findTupletWithAllRangeInside(int voice,
-                             const ReducedFraction &onTime,
-                             const ReducedFraction &len,
-                             std::multimap<ReducedFraction, TupletData> &tupletEvents);
+std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
+findTupletForTimeRange(int voice,
+                       const ReducedFraction &onTime,
+                       const ReducedFraction &len,
+                       const std::multimap<ReducedFraction, TupletData> &tupletEvents);
 
 std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
 findTupletContainsTime(int voice,
