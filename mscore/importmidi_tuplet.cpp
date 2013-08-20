@@ -138,6 +138,7 @@ findBestChordForTupletNote(const ReducedFraction &tupletNotePos,
 
 
 // find tuplets over which duration lies
+//
 
 std::vector<TupletData>
 findTupletsInBarForDuration(int voice,
@@ -163,26 +164,16 @@ findTupletsInBarForDuration(int voice,
                   }
             ++tupletIt;
             }
-
-      struct {
-            bool operator()(const TupletData &d1, const TupletData &d2)
-                  {
-                  return (d1.len > d2.len);
-                  }
-            } comparator;
-                  // sort by tuplet length in desc order
-      sort(tupletsData.begin(), tupletsData.end(), comparator);
-
       return tupletsData;
       }
 
-std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator
-findTupletWithAllRangeInside(int voice,
-                             const ReducedFraction &onTime,
-                             const ReducedFraction &len,
-                             std::multimap<ReducedFraction, TupletData> &tupletEvents)
+std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
+findTupletForTimeRange(int voice,
+                       const ReducedFraction &onTime,
+                       const ReducedFraction &len,
+                       const std::multimap<ReducedFraction, TupletData> &tupletEvents)
       {
-      if (tupletEvents.empty())
+      if (tupletEvents.empty() || len < ReducedFraction(0, 1))
             return tupletEvents.end();
 
       auto it = tupletEvents.upper_bound(onTime + len);
@@ -190,9 +181,13 @@ findTupletWithAllRangeInside(int voice,
             --it;
       while (true) {
             const auto &tupletData = it->second;
+            const auto &tupletOffTime = tupletData.onTime + tupletData.len;
             if (tupletData.voice == voice
                         && onTime >= tupletData.onTime
-                        && onTime + len <= tupletData.onTime + tupletData.len) {
+                        && ((len > ReducedFraction(0, 1)
+                             ? onTime + len <= tupletOffTime
+                             : onTime < tupletOffTime)
+                            )) {
                   return it;
                   }
             if (it == tupletEvents.begin())
@@ -207,24 +202,7 @@ findTupletContainsTime(int voice,
                        const ReducedFraction &time,
                        const std::multimap<ReducedFraction, TupletData> &tupletEvents)
       {
-      if (tupletEvents.empty())
-            return tupletEvents.end();
-
-      auto it = tupletEvents.upper_bound(time);
-      if (it != tupletEvents.begin())
-            --it;
-      while (true) {
-            const auto &tupletData = it->second;
-            if (tupletData.voice == voice
-                        && time >= tupletData.onTime
-                        && time < tupletData.onTime + tupletData.len) {
-                  return it;
-                  }
-            if (it == tupletEvents.begin())
-                  break;
-            --it;
-            }
-      return tupletEvents.end();
+      return findTupletForTimeRange(voice, time, ReducedFraction(0, 1), tupletEvents);
       }
 
 TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,

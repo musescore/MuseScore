@@ -571,13 +571,23 @@ MTrack::toDurationList(const Measure *measure,
       {
       const bool useDots = preferences.midiImportOperations.currentTrackOperations().useDots;
                   // find tuplets over which duration is go
-      std::vector<MidiTuplet::TupletData> tupletData
-                  = MidiTuplet::findTupletsInBarForDuration(voice, ReducedFraction::fromTicks(measure->tick()),
-                                                       startTick, len, tuplets);
-      const ReducedFraction startTickInBar = startTick - ReducedFraction::fromTicks(measure->tick());
+      auto barTick = ReducedFraction::fromTicks(measure->tick());
+      auto tupletsData = MidiTuplet::findTupletsInBarForDuration(voice, barTick, startTick,
+                                                                len, tuplets);
+      struct {
+            bool operator()(const MidiTuplet::TupletData &d1,
+                            const MidiTuplet::TupletData &d2)
+                  {
+                  return (d1.len > d2.len);
+                  }
+            } comparator;
+                  // sort by tuplet length in desc order
+      sort(tupletsData.begin(), tupletsData.end(), comparator);
+
+      const ReducedFraction startTickInBar = startTick - barTick;
       const ReducedFraction endTickInBar = startTickInBar + len;
       return Meter::toDurationList(startTickInBar, endTickInBar,
-                                   ReducedFraction(measure->timesig()), tupletData,
+                                   ReducedFraction(measure->timesig()), tupletsData,
                                    durationType, useDots);
       }
 
@@ -731,9 +741,11 @@ void MTrack::addElementToTuplet(int voice,
                                 const ReducedFraction &len,
                                 DurationElement *el)
       {
-      const auto it = MidiTuplet::findTupletWithAllRangeInside(voice, onTime, len, tuplets);
-      if (it != tuplets.end())
-             it->second.elements.push_back(el);       // add chord/rest to the tuplet
+      const auto it = MidiTuplet::findTupletForTimeRange(voice, onTime, len, tuplets);
+      if (it != tuplets.end()) {
+            auto &tuplet = const_cast<MidiTuplet::TupletData &>(it->second);
+            tuplet.elements.push_back(el);       // add chord/rest to the tuplet
+            }
       }
 
 // convert midiChords with the same onTime value to music notation
