@@ -290,9 +290,12 @@ void Seq::loopStop()
       //
       // Finds the Loop event and removes it.
       //
-      for (auto it = events.cbegin(); it != events.cend(); ++it)
+      for (auto it = events.begin(); it != events.end(); ) {
             if ((*it).second.type() == ME_LOOP)
-                  events.erase(it);
+                  it = events.erase(it);
+            else
+                  ++it;
+            }
       }
 
 //---------------------------------------------------------
