@@ -34,6 +34,8 @@ DivisionInfo metricDivisionsOfBar(const ReducedFraction &barFraction);
 DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData &tuplet,
                                      int tupletStartLevel);
 
+bool isSimpleNoteDuration(const ReducedFraction &duration);   // quarter, half, eighth, 16th ...
+
             // division lengths of bar, each can be a tuplet length
 std::vector<ReducedFraction> divisionsOfBarForTuplets(const ReducedFraction &barFraction);
 

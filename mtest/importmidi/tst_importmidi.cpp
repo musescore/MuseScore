@@ -86,6 +86,7 @@ class TestImportMidi : public QObject, public MTest
       // metric bar analysis
       void metricDivisionsOfTuplet();
       void maxLevelBetween();
+      void isSimpleDuration();
 
       // test scores for meter (duration subdivision)
       void meterTimeSig4_4() { mf("meter_4-4"); }
@@ -920,6 +921,30 @@ void TestImportMidi::maxLevelBetween()
       endTickInBar = startTickInBar + ReducedFraction(1, 3);
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QVERIFY(level.level != Meter::TUPLET_BOUNDARY_LEVEL);
+      }
+
+void TestImportMidi::isSimpleDuration()
+      {
+      QVERIFY(Meter::isSimpleNoteDuration({4, 2}));
+      QVERIFY(Meter::isSimpleNoteDuration({4, 1}));
+      QVERIFY(Meter::isSimpleNoteDuration({2, 2}));
+      QVERIFY(Meter::isSimpleNoteDuration({2, 1}));
+      QVERIFY(Meter::isSimpleNoteDuration({1, 1}));
+      QVERIFY(Meter::isSimpleNoteDuration({1, 2}));
+      QVERIFY(Meter::isSimpleNoteDuration({1, 4}));
+      QVERIFY(Meter::isSimpleNoteDuration({1, 8}));
+      QVERIFY(Meter::isSimpleNoteDuration({1, 16}));
+      QVERIFY(Meter::isSimpleNoteDuration({1, 32}));
+      QVERIFY(Meter::isSimpleNoteDuration({1, 64}));
+      QVERIFY(Meter::isSimpleNoteDuration({1, 128}));
+
+      QVERIFY(!Meter::isSimpleNoteDuration({1, 6}));
+      QVERIFY(!Meter::isSimpleNoteDuration({3, 2}));
+      QVERIFY(!Meter::isSimpleNoteDuration({12, 8}));
+      QVERIFY(!Meter::isSimpleNoteDuration({3, 16}));
+      QVERIFY(!Meter::isSimpleNoteDuration({3, 4}));
+      QVERIFY(!Meter::isSimpleNoteDuration({3, 8}));
+      QVERIFY(!Meter::isSimpleNoteDuration({1, 5}));
       }
 
 

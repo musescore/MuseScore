@@ -262,12 +262,16 @@ bool isPowerOfTwo(unsigned int x)
       return x && !(x & (x - 1));
       }
 
-bool isSingleNoteDuration(const ReducedFraction &ticks)
+bool isSimpleNoteDuration(const ReducedFraction &duration)
       {
       const auto division = ReducedFraction::fromTicks(MScore::division);
-      const auto div = (ticks > division) ? ticks / division : division / ticks;
-      if (div > ReducedFraction(0))
-            return isPowerOfTwo((unsigned int)div.ticks());
+      auto div = (duration > division) ? duration / division : division / duration;
+      if (div > ReducedFraction(0, 1)) {
+            div.reduce();
+            int minVal = qMin(div.numerator(), div.denominator());
+            int maxVal = qMax(div.numerator(), div.denominator());
+            return minVal == 1 && isPowerOfTwo((unsigned int)maxVal);
+            }
       return false;
       }
 

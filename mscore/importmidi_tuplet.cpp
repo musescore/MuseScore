@@ -140,18 +140,18 @@ findBestChordForTupletNote(const ReducedFraction &tupletNotePos,
 // find tuplets over which duration lies
 
 std::vector<TupletData>
-findTupletsForDuration(int voice,
-                       const ReducedFraction &barStartTick,
-                       const ReducedFraction &durationOnTime,
-                       const ReducedFraction &durationLen,
-                       const std::multimap<ReducedFraction, TupletData> &tuplets)
+findTupletsInBarForDuration(int voice,
+                            const ReducedFraction &barStartTick,
+                            const ReducedFraction &durationOnTime,
+                            const ReducedFraction &durationLen,
+                            const std::multimap<ReducedFraction, TupletData> &tupletEvents)
       {
       std::vector<TupletData> tupletsData;
-      if (tuplets.empty())
+      if (tupletEvents.empty())
             return tupletsData;
-      auto tupletIt = tuplets.lower_bound(barStartTick);
+      auto tupletIt = tupletEvents.lower_bound(barStartTick);
 
-      while (tupletIt != tuplets.end()
+      while (tupletIt != tupletEvents.end()
                 && tupletIt->first < durationOnTime + durationLen) {
             if (tupletIt->second.voice == voice
                         && durationOnTime < tupletIt->first + tupletIt->second.len) {
@@ -174,6 +174,57 @@ findTupletsForDuration(int voice,
       sort(tupletsData.begin(), tupletsData.end(), comparator);
 
       return tupletsData;
+      }
+
+std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator
+findTupletWithAllRangeInside(int voice,
+                             const ReducedFraction &onTime,
+                             const ReducedFraction &len,
+                             std::multimap<ReducedFraction, TupletData> &tupletEvents)
+      {
+      if (tupletEvents.empty())
+            return tupletEvents.end();
+
+      auto it = tupletEvents.upper_bound(onTime + len);
+      if (it != tupletEvents.begin())
+            --it;
+      while (true) {
+            const auto &tupletData = it->second;
+            if (tupletData.voice == voice
+                        && onTime >= tupletData.onTime
+                        && onTime + len <= tupletData.onTime + tupletData.len) {
+                  return it;
+                  }
+            if (it == tupletEvents.begin())
+                  break;
+            --it;
+            }
+      return tupletEvents.end();
+      }
+
+std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
+findTupletContainsTime(int voice,
+                       const ReducedFraction &time,
+                       const std::multimap<ReducedFraction, TupletData> &tupletEvents)
+      {
+      if (tupletEvents.empty())
+            return tupletEvents.end();
+
+      auto it = tupletEvents.upper_bound(time);
+      if (it != tupletEvents.begin())
+            --it;
+      while (true) {
+            const auto &tupletData = it->second;
+            if (tupletData.voice == voice
+                        && time >= tupletData.onTime
+                        && time < tupletData.onTime + tupletData.len) {
+                  return it;
+                  }
+            if (it == tupletEvents.begin())
+                  break;
+            --it;
+            }
+      return tupletEvents.end();
       }
 
 TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
@@ -950,26 +1001,42 @@ void handleMultipleVoices(std::multimap<ReducedFraction, MidiChord> &chords,
       adjustNonTupletVoices(nonTuplets, tuplets);
       }
 
-std::vector<TupletInfo> findTuplets(const ReducedFraction &startBarTick,
+std::vector<TupletData> convertToData(const std::vector<TupletInfo> &tuplets)
+      {
+      std::vector<TupletData> tupletsData;
+      for (const auto &tupletInfo: tuplets) {
+            MidiTuplet::TupletData tupletData = {tupletInfo.chords.begin()->second->second.voice,
+                                                 tupletInfo.onTime,
+                                                 tupletInfo.len,
+                                                 tupletInfo.tupletNumber,
+                                                 tupletInfo.tupletQuant,
+                                                 {}};
+            tupletsData.push_back(tupletData);
+            }
+      return tupletsData;
+      }
+
+std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                                     const ReducedFraction &endBarTick,
                                     const ReducedFraction &barFraction,
                                     std::multimap<ReducedFraction, MidiChord> &chords)
       {
-      std::vector<TupletInfo> tuplets;
       if (chords.empty() || startBarTick >= endBarTick)     // invalid cases
-            return tuplets;
+            return std::vector<TupletData>();
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
       if (!operations.tuplets.doSearch)
-            return tuplets;
+            return std::vector<TupletData>();
       const auto tol = Quantize::fixedQuantRaster() / 2;
       const auto startBarChordIt = findFirstChordInRange(startBarTick - tol, endBarTick,
                                                          chords.begin(), chords.end());
       if (startBarChordIt == chords.end()) // no chords in this bar
-            return tuplets;
+            return std::vector<TupletData>();
+
       const auto endBarChordIt = findEndChordInRange(endBarTick + tol, startBarChordIt, chords.end());
       const auto raster = Quantize::findRegularQuantRaster(startBarChordIt, endBarChordIt, endBarTick);
       const auto divLengths = Meter::divisionsOfBarForTuplets(barFraction);
 
+      std::vector<TupletInfo> tuplets;
       for (const auto &divLen: divLengths) {
             const auto tupletNumbers = findTupletNumbers(divLen, barFraction);
             const auto div = barFraction / divLen;
@@ -1007,7 +1074,7 @@ std::vector<TupletInfo> findTuplets(const ReducedFraction &startBarTick,
       if (operations.useMultipleVoices)
             handleMultipleVoices(chords, tuplets, startBarChordIt, endBarChordIt, endBarTick);
 
-      return tuplets;
+      return convertToData(tuplets);
       }
 
 } // namespace MidiTuplet
