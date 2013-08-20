@@ -8,6 +8,7 @@ namespace Ms {
 
 class MidiChord;
 class DurationElement;
+class TimeSigMap;
 
 namespace MidiTuplet {
 
@@ -38,10 +39,6 @@ ReducedFraction findOffTimeRaster(const ReducedFraction &noteOffTime,
                                   const ReducedFraction &regularQuant,
                                   const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents);
 
-std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
-                                    const ReducedFraction &endBarTick,
-                                    const ReducedFraction &barFraction,
-                                    std::multimap<ReducedFraction, MidiChord> &chords);
 std::vector<TupletData>
 findTupletsInBarForDuration(int voice,
                             const ReducedFraction &barStartTick,
@@ -59,6 +56,11 @@ std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
 findTupletContainsTime(int voice,
                        const ReducedFraction &time,
                        const std::multimap<ReducedFraction, TupletData> &tupletEvents);
+
+std::multimap<ReducedFraction, TupletData>
+findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
+               const TimeSigMap *sigmap,
+               const ReducedFraction &lastTick);
 
 } // namespace MidiTuplet
 } // namespace Ms
