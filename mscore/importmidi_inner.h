@@ -92,11 +92,12 @@ struct TupletInfo
       int tupletNumber = -1;
       ReducedFraction tupletQuant;
       ReducedFraction regularQuant;
-                  // <note index in tuplet, chord iterator>
-      std::map<int, std::multimap<ReducedFraction, MidiChord>::iterator> chords;
+                  // <chord onTime, chord iterator>
+      std::map<ReducedFraction, std::multimap<ReducedFraction, MidiChord>::iterator> chords;
       ReducedFraction tupletSumError;
       ReducedFraction regularSumError;
       ReducedFraction sumLengthOfRests;
+      int firstChordIndex = -1;
       };
 
 } // namespace MidiTuplet
