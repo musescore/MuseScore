@@ -19,9 +19,9 @@ const int TUPLET_BOUNDARY_LEVEL = 10;
 
 struct MaxLevel
       {
-      int level = 0;         // 0 - the biggest, whole bar level; other: -1, -2, ...
-      int levelCount = 0;    // number of ticks with 'level' value
-      ReducedFraction lastPos = {-1, 1};   // position of last tick with value 'level'; -1 - undefined pos
+      int level = 0;                   // 0 - the biggest, whole bar level; other: -1, -2, ...
+      int levelCount = 0;              // number of positions with 'level' value
+      ReducedFraction pos = {-1, 1};   // first position with value 'level'; -1 - undefined pos
       };
 
 struct DivLengthInfo
