@@ -103,6 +103,7 @@ class TestImportMidi : public QObject, public MTest
       void meterLastQuarterRestCompound() { mf("meter_last_quarter_rest_compound"); }
       void meterRests() { mf("meter_rests"); }
       void meterTwoBeatsOver() { mf("meter_two_beats_over"); }
+      void meterDotTie() { mf("meter_dot_tie"); }
 
       // test scores for tuplets
       void tuplet2Voices3_5Tuplets()
@@ -810,13 +811,13 @@ void TestImportMidi::maxLevelBetween()
 
       Meter::MaxLevel level = Meter::maxLevelBetween(startTickInBar, endTickInBar, regularDivInfo);
       QCOMPARE(level.level, -2);
-      QCOMPARE(level.lastPos, ReducedFraction::fromTicks(480));
+      QCOMPARE(level.pos, ReducedFraction::fromTicks(480));
       QCOMPARE(level.levelCount, 1);
 
       startTickInBar = ReducedFraction::fromTicks(499);
       level = Meter::maxLevelBetween(startTickInBar, endTickInBar, regularDivInfo);
       QCOMPARE(level.level, 0);
-      QCOMPARE(level.lastPos, ReducedFraction(-1, 1));
+      QCOMPARE(level.pos, ReducedFraction(-1, 1));
       QCOMPARE(level.levelCount, 0);
 
       MidiTuplet::TupletData tupletData;
@@ -833,7 +834,7 @@ void TestImportMidi::maxLevelBetween()
       endTickInBar = startTickInBar + tupletData.len;
       level = Meter::maxLevelBetween(startTickInBar, endTickInBar, tupletDivInfo);
       QCOMPARE(level.level, tupletStartLevel);
-      QCOMPARE(level.lastPos, tupletData.onTime + tupletData.len * 2 / tupletData.tupletNumber);
+      QCOMPARE(level.pos, tupletData.onTime + tupletData.len / tupletData.tupletNumber);
       QCOMPARE(level.levelCount, 2);
 
 
@@ -853,77 +854,77 @@ void TestImportMidi::maxLevelBetween()
       endTickInBar = (startTickInBar + tupletData.onTime) / 2;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QVERIFY(level.level == -4);
-      QCOMPARE(level.lastPos, (startTickInBar + endTickInBar) / 2);
+      QCOMPARE(level.pos, (startTickInBar + endTickInBar) / 2);
       QCOMPARE(level.levelCount, 1);
                   // s < e == ts < te
       startTickInBar = ReducedFraction::fromTicks(0);
       endTickInBar = tupletData.onTime;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QVERIFY(level.level == -3);
-      QCOMPARE(level.lastPos, (startTickInBar + tupletData.onTime) / 2);
+      QCOMPARE(level.pos, (startTickInBar + tupletData.onTime) / 2);
       QCOMPARE(level.levelCount, 1);
                   // s < ts < e < te
       startTickInBar = ReducedFraction::fromTicks(0);
       endTickInBar = tupletData.onTime + tupletData.len / 2;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QVERIFY(level.level == Meter::TUPLET_BOUNDARY_LEVEL);
-      QCOMPARE(level.lastPos, tupletData.onTime);
+      QCOMPARE(level.pos, tupletData.onTime);
       QCOMPARE(level.levelCount, 1);
                   // s < ts < e == te
       startTickInBar = ReducedFraction::fromTicks(0);
       endTickInBar = tupletData.onTime + tupletData.len;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QVERIFY(level.level == Meter::TUPLET_BOUNDARY_LEVEL);
-      QCOMPARE(level.lastPos, tupletData.onTime);
+      QCOMPARE(level.pos, tupletData.onTime);
       QCOMPARE(level.levelCount, 1);
                   // s < ts < te < e
       startTickInBar = ReducedFraction::fromTicks(0);
       endTickInBar = tupletData.onTime + tupletData.len + ReducedFraction(1, 3);
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QVERIFY(level.level == Meter::TUPLET_BOUNDARY_LEVEL);
-      QCOMPARE(level.lastPos, tupletData.onTime + tupletData.len);
+      QCOMPARE(level.pos, tupletData.onTime + tupletData.len);
       QCOMPARE(level.levelCount, 1);
                   // s == ts < e < te
       startTickInBar = tupletData.onTime;
       endTickInBar = tupletData.onTime + tupletData.len / 2;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QCOMPARE(level.level, tupletStartLevel);
-      QCOMPARE(level.lastPos, tupletData.onTime + tupletData.len / tupletData.tupletNumber);
+      QCOMPARE(level.pos, tupletData.onTime + tupletData.len / tupletData.tupletNumber);
       QCOMPARE(level.levelCount, 1);
                   // s == ts < e == te
       startTickInBar = tupletData.onTime;
       endTickInBar = tupletData.onTime + tupletData.len;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QCOMPARE(level.level, tupletStartLevel);
-      QCOMPARE(level.lastPos, tupletData.onTime + tupletData.len * 2 / tupletData.tupletNumber);
+      QCOMPARE(level.pos, tupletData.onTime + tupletData.len / tupletData.tupletNumber);
       QCOMPARE(level.levelCount, 2);
                   // s == ts < te < e
       startTickInBar = tupletData.onTime;
       endTickInBar = tupletData.onTime + tupletData.len * 2;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QCOMPARE(level.level, Meter::TUPLET_BOUNDARY_LEVEL);
-      QCOMPARE(level.lastPos, tupletData.onTime + tupletData.len);
+      QCOMPARE(level.pos, tupletData.onTime + tupletData.len);
       QCOMPARE(level.levelCount, 1);
                   // ts < s < e < te
       startTickInBar = tupletData.onTime + tupletData.len / tupletData.tupletNumber;
       endTickInBar = tupletData.onTime + tupletData.len * 2 / tupletData.tupletNumber;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QVERIFY(level.level == tupletStartLevel - 1);
-      QCOMPARE(level.lastPos, (startTickInBar + endTickInBar) / 2);
+      QCOMPARE(level.pos, (startTickInBar + endTickInBar) / 2);
       QCOMPARE(level.levelCount, 1);
                   // ts < s < e = te
       startTickInBar = tupletData.onTime + tupletData.len / tupletData.tupletNumber;
       endTickInBar = tupletData.onTime + tupletData.len;
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QVERIFY(level.level == tupletStartLevel);
-      QCOMPARE(level.lastPos, tupletData.onTime + tupletData.len * 2 / tupletData.tupletNumber);
+      QCOMPARE(level.pos, tupletData.onTime + tupletData.len * 2 / tupletData.tupletNumber);
       QCOMPARE(level.levelCount, 1);
                   // ts < s < te < e
       startTickInBar = tupletData.onTime + tupletData.len / 2;
       endTickInBar = tupletData.onTime + tupletData.len + ReducedFraction(1, 3);
       level = Meter::findMaxLevelBetween(startTickInBar, endTickInBar, divInfo);
       QVERIFY(level.level == Meter::TUPLET_BOUNDARY_LEVEL);
-      QCOMPARE(level.lastPos, tupletData.onTime + tupletData.len);
+      QCOMPARE(level.pos, tupletData.onTime + tupletData.len);
       QCOMPARE(level.levelCount, 1);
                   // ts < te = s < e
       startTickInBar = tupletData.onTime + tupletData.len;

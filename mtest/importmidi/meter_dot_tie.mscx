@@ -63,30 +63,15 @@ p, li { white-space: pre-wrap; }
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <sigN>3</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <durationType>eighth</durationType>
+          <dots>1</dots>
+          <durationType>half</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>eighth</durationType>
-          <Note>
-            <Tie id="2">
+            <Tie>
               </Tie>
             <Events>
               <Event>
@@ -95,32 +80,14 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>80</velocity>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <velocity>100</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <dots>1</dots>
-          <durationType>quarter</durationType>
-          <Note>
-            <endSpanner id="2"/>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>eighth</durationType>
+          <durationType>16th</durationType>
           <Note>
             <Events>
               <Event>
@@ -131,7 +98,55 @@ p, li { white-space: pre-wrap; }
               </Events>
             <pitch>67</pitch>
             <tpc>15</tpc>
-            <velocity>80</velocity>
+            <velocity>100</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <velocity>100</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <velocity>100</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <velocity>100</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
