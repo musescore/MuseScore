@@ -112,7 +112,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Tie>
+            <Tie id="2">
               </Tie>
             <pitch>71</pitch>
             <tpc>19</tpc>
@@ -121,6 +121,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
+            <endSpanner id="2"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -182,7 +183,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Tie>
+            <Tie id="3">
               </Tie>
             <pitch>71</pitch>
             <tpc>19</tpc>
@@ -191,6 +192,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
+            <endSpanner id="3"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>

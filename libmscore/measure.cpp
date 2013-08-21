@@ -1882,16 +1882,6 @@ void Measure::read(XmlReader& e, int staffIdx)
 
                   e.rtick() += ts.ticks();
                   }
-            else if (tag == "Note") {                 // obsolete
-                  Chord* chord = new Chord(score());
-                  chord->setTrack(e.track());
-                  chord->readNote(e);
-                  segment = getSegment(chord, e.tick());
-                  segment->add(chord);
-
-                  Fraction ts(timeStretch * chord->globalDuration());
-                  e.setTick(e.tick() + ts.ticks());
-                  }
             else if (tag == "Breath") {
                   Breath* breath = new Breath(score());
                   breath->setTrack(e.track());

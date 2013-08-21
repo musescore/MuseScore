@@ -47,8 +47,6 @@ class XmlReader : public QXmlStreamReader {
 
       void unknown() const;
 
-//      void error(int, int);
-
       // attribute helper routines:
       QString attribute(const char* s) const { return attributes().value(s).toString(); }
       QString attribute(const char* s, const QString&) const;

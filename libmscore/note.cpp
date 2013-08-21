@@ -640,8 +640,12 @@ void Note::write(Xml& xml) const
                         _dots[i]->write(xml);
                   }
             }
-      if (_tieFor)
+      if (_tieFor) {
+            _tieFor->setId(++xml.spannerId);
             _tieFor->write(xml);
+            }
+      if (_tieBack)
+            xml.tagE(QString("endSpanner id=\"%1\"").arg(_tieBack->id()));
       if (chord() == 0 || chord()->userPlayEvents()) {
             if (!_playEvents.isEmpty()) {
                   xml.stag("Events");
@@ -730,6 +734,7 @@ void Note::read(XmlReader& e)
                   _tieFor->setTrack(track());
                   _tieFor->read(e);
                   _tieFor->setStartNote(this);
+                  score()->addSpanner(_tieFor);
                   }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
@@ -864,11 +869,14 @@ void Note::read(XmlReader& e)
                   Spanner* sp = score()->findSpanner(id);
                   if (sp) {
                         sp->setEndElement(this);
-                        addSpannerBack(sp);
+                        if (sp->type() == TIE)
+                              _tieBack = static_cast<Tie*>(sp);
+                        else
+                              addSpannerBack(sp);
+                        score()->removeSpanner(sp);
                         }
                   else
                         qDebug("Note::read(): cannot find spanner %d", id);
-                  score()->removeSpanner(sp);
                   e.readNext();
                   }
             else if (tag == "TextLine") {
@@ -1153,7 +1161,7 @@ Element* Note::drop(const DropData& data)
                   }
                   delete e;
                   break;
-                  
+
             case BAGPIPE_EMBELLISHMENT:
                   {
                   BagpipeEmbellishment* b = static_cast<BagpipeEmbellishment*>(e);

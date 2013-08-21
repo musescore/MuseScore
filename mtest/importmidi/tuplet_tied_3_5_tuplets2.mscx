@@ -110,7 +110,7 @@ p, li { white-space: pre-wrap; }
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Note>
-            <Tie>
+            <Tie id="2">
               </Tie>
             <Events>
               <Event>
@@ -134,6 +134,7 @@ p, li { white-space: pre-wrap; }
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
           <Note>
+            <endSpanner id="2"/>
             <Events>
               <Event>
                 <pitch>0</pitch>

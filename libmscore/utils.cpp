@@ -628,6 +628,42 @@ Note* searchTieNote(Note* note)
       }
 
 //---------------------------------------------------------
+//   searchTieNote114
+//    search Note to tie to "note", tie to next note in
+//    same voice
+//---------------------------------------------------------
+
+Note* searchTieNote114(Note* note)
+      {
+      Note* note2  = 0;
+      Chord* chord = note->chord();
+      Segment* seg = chord->segment();
+      Part* part   = chord->staff()->part();
+      int strack   = part->staves()->front()->idx() * VOICES;
+      int etrack   = strack + part->staves()->size() * VOICES;
+
+      while ((seg = seg->next1(Segment::SegChordRest))) {
+            for (int track = strack; track < etrack; ++track) {
+                  Chord* c = static_cast<Chord*>(seg->element(track));
+                  if (c == 0 || (c->type() != Element::CHORD) || (c->track() != chord->track()))
+                        continue;
+                  int staffIdx = c->staffIdx() + c->staffMove();
+                  if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
+                        continue;
+                  for (Note* n : c->notes()) {
+                        if (n->pitch() == note->pitch()) {
+                              if (note2 == 0 || c->track() == chord->track())
+                                    note2 = n;
+                              }
+                        }
+                  }
+            if (note2)
+                  break;
+            }
+      return note2;
+      }
+
+//---------------------------------------------------------
 //   absStep
 ///   Compute absolute step.
 ///   C D E F G A B ....

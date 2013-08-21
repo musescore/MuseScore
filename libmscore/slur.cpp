@@ -283,6 +283,7 @@ void SlurSegment::setGrip(int n, const QPointF& pt)
 
 void SlurSegment::editDrag(const EditData& ed)
       {
+      printf("edit drag\n");
       qreal _spatium = spatium();
       ups[ed.curGrip].off += (ed.delta / _spatium);
       if (ed.curGrip == GRIP_START || ed.curGrip == GRIP_END) {
@@ -290,19 +291,32 @@ void SlurSegment::editDrag(const EditData& ed)
             //
             // move anchor for slurs
             //
-            Slur* slur = static_cast<Slur*>(slurTie());
+            Spanner* spanner = static_cast<Spanner*>(slurTie());
             Element* e = ed.view->elementNear(ed.pos);
-            if ((slur->type() == SLUR)
-               && (
-                  (ed.curGrip == GRIP_START && (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN))
-                  || (ed.curGrip == GRIP_END && (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END))
-                  )
+            SpannerSegmentType st = spannerSegmentType();
+            if (
+               (ed.curGrip == GRIP_START  && (st == SEGMENT_SINGLE || st == SEGMENT_BEGIN))
+               || (ed.curGrip == GRIP_END && (st == SEGMENT_SINGLE || st == SEGMENT_END))
                ) {
                   if (e && e->type() == NOTE) {
-                        Chord* chord = static_cast<Note*>(e)->chord();
-                        if ((ed.curGrip == GRIP_END && chord != slur->endCR())
-                           || (ed.curGrip == GRIP_START && chord != slur->startCR())) {
+                        Note* note = static_cast<Note*>(e);
+                        Chord* chord = note->chord();
+                        if ((spanner->type() == SLUR)
+                           && ((ed.curGrip == GRIP_END && chord != spanner->endCR())
+                           || (ed.curGrip == GRIP_START && chord != spanner->startCR())))
+                              {
                               changeAnchor(ed.view, ed.curGrip, chord);
+                              QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
+                              ups[ed.curGrip].off = p1 / _spatium;
+                              return;
+                              }
+                        else if ((ed.curGrip == GRIP_END && note != spanner->endElement())
+                           || (ed.curGrip == GRIP_START && note != spanner->startElement())) {
+                              printf("change tie anchor\n");
+                              Tie* tie = static_cast<Tie*>(spanner);
+                              tie->endNote()->setTieBack(0);
+                              note->setTieBack(tie);
+                              tie->setEndNote(note);
                               QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
                               ups[ed.curGrip].off = p1 / _spatium;
                               return;
@@ -1437,7 +1451,7 @@ void Tie::setStartNote(Note* note)
 
 void Tie::write(Xml& xml) const
       {
-      xml.stag("Tie");
+      xml.stag(QString("Tie id=\"%1\"").arg(id()));
       SlurTie::writeProperties(xml);
       xml.etag();
       }
@@ -1448,6 +1462,7 @@ void Tie::write(Xml& xml) const
 
 void Tie::read(XmlReader& e)
       {
+      setId(e.intAttribute("id"));
       while (e.readNextStartElement()) {
             if (SlurTie::readProperties(e) || Element::readProperties(e))
                   ;
@@ -1659,7 +1674,7 @@ void Slur::layoutChord()
             }
 
       Chord* c1 = startChord();
-      Chord* c2 = endChord();
+//      Chord* c2 = endChord();
       Note* startNote = c1->upNote();
       // Note* endNote = c2->upNote();
 
