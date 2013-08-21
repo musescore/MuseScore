@@ -86,7 +86,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>eighth</durationType>
           <Note>
-            <Tie>
+            <Tie id="2">
               </Tie>
             <Events>
               <Event>
@@ -104,6 +104,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>eighth</durationType>
           <Note>
+            <endSpanner id="2"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -152,7 +153,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>eighth</durationType>
           <Note>
-            <Tie>
+            <Tie id="3">
               </Tie>
             <Events>
               <Event>
@@ -170,6 +171,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>eighth</durationType>
           <Note>
+            <endSpanner id="3"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -207,7 +209,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Tie>
+            <Tie id="4">
               </Tie>
             <Events>
               <Event>
@@ -226,8 +228,9 @@ p, li { white-space: pre-wrap; }
           <dots>1</dots>
           <durationType>quarter</durationType>
           <Note>
-            <Tie>
+            <Tie id="5">
               </Tie>
+            <endSpanner id="4"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -244,6 +247,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>eighth</durationType>
           <Note>
+            <endSpanner id="5"/>
             <Events>
               <Event>
                 <pitch>0</pitch>

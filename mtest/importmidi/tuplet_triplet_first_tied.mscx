@@ -70,7 +70,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Tie>
+            <Tie id="2">
               </Tie>
             <Events>
               <Event>
@@ -94,6 +94,7 @@ p, li { white-space: pre-wrap; }
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Note>
+            <endSpanner id="2"/>
             <Events>
               <Event>
                 <pitch>0</pitch>

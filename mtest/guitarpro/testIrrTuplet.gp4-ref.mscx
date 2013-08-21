@@ -129,7 +129,7 @@ p, li { white-space: pre-wrap; }
           <Beam>1</Beam>
           <Note>
             <lid>6</lid>
-            <Tie>
+            <Tie id="2">
               </Tie>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -144,6 +144,7 @@ p, li { white-space: pre-wrap; }
           <Beam>1</Beam>
           <Note>
             <lid>8</lid>
+            <endSpanner id="2"/>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>8</fret>
@@ -304,7 +305,7 @@ p, li { white-space: pre-wrap; }
             <Beam>2</Beam>
             <Note>
               <lid>6</lid>
-              <Tie>
+              <Tie id="3">
                 </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -319,6 +320,7 @@ p, li { white-space: pre-wrap; }
             <Beam>2</Beam>
             <Note>
               <lid>8</lid>
+              <endSpanner id="3"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -386,7 +388,7 @@ p, li { white-space: pre-wrap; }
             <Beam>3</Beam>
             <Note>
               <lid>6</lid>
-              <Tie>
+              <Tie id="4">
                 </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -401,6 +403,7 @@ p, li { white-space: pre-wrap; }
             <Beam>3</Beam>
             <Note>
               <lid>8</lid>
+              <endSpanner id="4"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
