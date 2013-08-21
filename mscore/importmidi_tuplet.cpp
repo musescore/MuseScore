@@ -212,8 +212,8 @@ ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo)
       for (const auto &chord: tupletInfo.chords) {
             const MidiChord &midiChord = chord.second->second;
             const auto &chordOnTime = chord.second->first;
-            // approximate length of gaps between successive chords,
-            // quantization is not taken into account
+                        // approximate length of gaps between successive chords,
+                        // quantization is not taken into account
             if (beg < chordOnTime)
                   sumLen += (chordOnTime - beg);
             beg = chordOnTime + maxNoteLen(midiChord.notes);
@@ -327,14 +327,16 @@ bool areTupletChordsInUse(
       return false;
       }
 
-// result: <average quant error, negative total tuplet note count, sum length of rests inside all tuplets>
+// result: <average quant error,
+//          sum length of rests inside all tuplets,
+//          negative total tuplet note count>
 
-std::tuple<double, int, ReducedFraction>
+std::tuple<double, ReducedFraction, int>
 validateTuplets(std::list<int> &indexes,
                 const std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
-            return std::make_tuple(0.0, 0, ReducedFraction(0, 1));
+            return std::make_tuple(0.0, ReducedFraction(0, 1), 0);
                   // structure of map: <chord ID, count of use of first tuplet chord with this tick>
       std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
                   // chord IDs of already used chords
@@ -359,13 +361,13 @@ validateTuplets(std::list<int> &indexes,
             }
 
       ReducedFraction sumError;
-      int sumNoteCount = 0;
       ReducedFraction sumLengthOfRests;
+      int sumNoteCount = 0;
 
       for (const auto &i: indexes) {
             sumError += tuplets[i].tupletSumError;
-            sumNoteCount += tuplets[i].chords.size();
             sumLengthOfRests += tuplets[i].sumLengthOfRests;
+            sumNoteCount += tuplets[i].chords.size();
             }
                   // add quant error of all chords excluded from tuplets
       for (const auto &i: indexes) {
@@ -377,7 +379,7 @@ validateTuplets(std::list<int> &indexes,
             sumError += findQuantizationError(chordIt->first, regularRaster);
 
       return std::make_tuple(sumError.ticks() * 1.0 / sumNoteCount,
-                             -sumNoteCount, sumLengthOfRests);
+                             sumLengthOfRests, sumNoteCount);
       }
 
 // try different permutations of tuplet indexes to minimize error
@@ -386,7 +388,7 @@ std::list<int>
 minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
                    const std::vector<TupletInfo> &tuplets)
       {
-      std::tuple<double, int, ReducedFraction> minResult;
+      std::tuple<double, ReducedFraction, int> minResult;
       std::vector<int> iIndexGroups;  // indexes of elements in indexGroups
       for (int i = 0; i != (int)indexGroups.size(); ++i)
             iIndexGroups.push_back(i);
