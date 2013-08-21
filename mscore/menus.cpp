@@ -1120,7 +1120,7 @@ void MuseScore::addTempo()
       ChordRest* cr = cs->getSelectedChordRest();
       if (!cr)
             return;
-      double bps = 120.0;
+      double bps = 2.0;
       TempoText* tt = new TempoText(cs);
       tt->setParent(cr->segment());
       tt->setTrack(cr->track());
