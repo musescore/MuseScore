@@ -562,8 +562,8 @@ class Score : public QObject {
       void repitchNote(const Position& pos, bool replace);
       void setInputState(Element* obj);
 
-      void startCmd();        // start undoable command
-      void endCmd();          // end undoable command
+      Q_INVOKABLE void startCmd();        // start undoable command
+      Q_INVOKABLE void endCmd();          // end undoable command
       void end();             // layout & update canvas
       void end1();
       void update();

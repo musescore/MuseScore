@@ -33,6 +33,7 @@ class Measure;
 //   @P voice    int          current voice (track % 4)
 //   @P element  Element*     current element at track, read only
 //   @P segment  Segment*     current segment, read only
+//   @P segment  Measure*     current measure, read only
 //   @P tick     int          midi tick position, read only
 //   @P time     double       time at tick position, read only
 //   @P score    Score*       associated score
@@ -46,6 +47,7 @@ class Cursor : public QObject {
 
       Q_PROPERTY(Ms::Element* element READ element)
       Q_PROPERTY(Ms::Segment* segment READ segment)
+      Q_PROPERTY(Ms::Measure* measure READ measure)
 
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
@@ -79,6 +81,7 @@ class Cursor : public QObject {
 
       Element* element() const;
       Segment* segment() const                { return _segment;  }
+      Measure* measure() const;
 
       int tick();
       double time();
