@@ -904,69 +904,6 @@ void Chord::write(Xml& xml) const
       }
 
 //---------------------------------------------------------
-//   Chord::readNote
-//---------------------------------------------------------
-
-void Chord::readNote(XmlReader& e)
-      {
-      Note* note = new Note(score());
-      note->setPitch(e.intAttribute("pitch"));
-      if (e.hasAttribute("ticks")) {
-            int ticks  = e.intAttribute("ticks");
-            TDuration d;
-            d.setVal(ticks);
-            setDurationType(d);
-            }
-      int tpc = INVALID_TPC;
-      if (e.hasAttribute("tpc"))
-            tpc = e.intAttribute("tpc");
-
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-
-            QString val(e.readElementText());
-            if (tag == "StemDirection") {
-                  if (val == "up")
-                        _stemDirection = MScore::UP;
-                  else if (val == "down")
-                        _stemDirection = MScore::DOWN;
-                  else
-                        _stemDirection = MScore::Direction(e.readInt());
-                  }
-            else if (tag == "pitch")
-                  note->setPitch(e.readInt());
-            else if (tag == "prefix") {
-                  qDebug("read Note:: prefix: TODO\n");
-                  }
-            else if (tag == "line")
-                  note->setLine(e.readInt());
-            else if (tag == "Tie") {
-                  Tie* _tieFor = new Tie(score());
-                  _tieFor->setTrack(track());
-                  _tieFor->read(e);
-                  _tieFor->setStartNote(note);
-                  note->setTieFor(_tieFor);
-                  }
-            else if (tag == "Text") {
-                  Text* f = new Text(score());
-                  f->setTextStyleType(TEXT_STYLE_FINGERING);
-                  f->read(e);
-                  f->setParent(this);
-                  note->add(f);
-                  }
-            else if (tag == "move")
-                  setStaffMove(e.readInt());
-            else if (!ChordRest::readProperties(e))
-                  e.unknown();
-            }
-      if (!tpcIsValid(tpc))
-            note->setTpc(tpc);
-      else
-            note->setTpcFromPitch();
-      add(note);
-      }
-
-//---------------------------------------------------------
 //   Chord::read
 //---------------------------------------------------------
 

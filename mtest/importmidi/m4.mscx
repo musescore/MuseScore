@@ -103,7 +103,7 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Tie>
+            <Tie id="2">
               </Tie>
             <Events>
               <Event>
@@ -121,6 +121,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>quarter</durationType>
           <Note>
+            <endSpanner id="2"/>
             <Events>
               <Event>
                 <pitch>0</pitch>

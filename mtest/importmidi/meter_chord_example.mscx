@@ -73,7 +73,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>16th</durationType>
           <Note>
-            <Tie>
+            <Tie id="2">
               </Tie>
             <Events>
               <Event>
@@ -91,6 +91,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>16th</durationType>
           <Note>
+            <endSpanner id="2"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -104,7 +105,7 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Tie>
+            <Tie id="3">
               </Tie>
             <Events>
               <Event>
@@ -119,7 +120,7 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Tie>
+            <Tie id="4">
               </Tie>
             <Events>
               <Event>
@@ -134,7 +135,7 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Tie>
+            <Tie id="5">
               </Tie>
             <Events>
               <Event>
@@ -152,6 +153,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>16th</durationType>
           <Note>
+            <endSpanner id="3"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -165,6 +167,7 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           <Note>
+            <endSpanner id="4"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -178,8 +181,9 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Tie>
+            <Tie id="6">
               </Tie>
+            <endSpanner id="5"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -196,6 +200,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>16th</durationType>
           <Note>
+            <endSpanner id="6"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -271,7 +276,7 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Tie>
+            <Tie id="7">
               </Tie>
             <Events>
               <Event>
@@ -289,6 +294,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>16th</durationType>
           <Note>
+            <endSpanner id="7"/>
             <Events>
               <Event>
                 <pitch>0</pitch>

@@ -1392,9 +1392,13 @@ void Score::connectTies()
                         continue;
                   for (Note* n : c->notes()) {
                         Tie* tie = n->tieFor();
-                        if (!tie)
+                        if (!tie || tie->endNote())
                               continue;
-                        Note* nnote = searchTieNote(n);
+                        Note* nnote;
+                        if (_mscVersion <= 114)
+                              nnote = searchTieNote114(n);
+                        else
+                              nnote = searchTieNote(n);
                         if (nnote == 0) {
                               qDebug("next note at %d track %d for tie not found",
                                  s->tick(), i);

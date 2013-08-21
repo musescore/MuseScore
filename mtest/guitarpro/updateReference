@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# note that the debug build must be used with the -t option to get the beams right in the .mscx files
-
 MSCORE=../../build.debug/mtest/guitarpro
 
-cp $MSCORE/testIrrTuplet.gp4.mscx testIrrTuplet.gp4-ref.mscx
+cp   $MSCORE/testIrrTuplet.gp4.mscx testIrrTuplet.gp4-ref.mscx
+
+

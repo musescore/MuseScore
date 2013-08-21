@@ -106,7 +106,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Tie>
+            <Tie id="2">
               </Tie>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -115,6 +115,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
+            <endSpanner id="2"/>
             <pitch>64</pitch>
             <tpc>18</tpc>
             </Note>

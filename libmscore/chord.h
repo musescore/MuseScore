@@ -166,8 +166,6 @@ class Chord : public ChordRest {
       void layout2();
       void layout10(AccidentalState*);
 
-      void readNote(XmlReader& node);
-
       NoteType noteType() const       { return _noteType; }
       void setNoteType(NoteType t)    { _noteType = t; }
       bool isGrace() const            { return _noteType != NOTE_NORMAL; }
