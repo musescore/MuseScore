@@ -2308,22 +2308,7 @@ void Score::cmd(const QAction* a)
             Element* e = selection().element();
             if (e && e->type() == Element::BAR_LINE && e->parent()->type() == Element::SEGMENT) {
                   Measure* measure = static_cast<Measure*>(e->parent()->parent());
-                  if (!measure->lineBreak()) {
-                        LayoutBreak* lb = new LayoutBreak(this);
-                        lb->setLayoutBreakType(type);
-                        lb->setTrack(-1);       // this are system elements
-                        lb->setParent(measure);
-                        undoAddElement(lb);
-                        }
-                  else {
-                        // remove line break
-                        foreach(Element* e, *measure->el()) {
-                              if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
-                                    undoRemoveElement(e);
-                                    break;
-                                    }
-                              }
-                        }
+                  measure->undoSetBreak(!measure->lineBreak(), type);
                   }
             }
       else if (cmd == "reset-stretch")

@@ -309,6 +309,28 @@ bool MeasureBase::setProperty(P_ID id, const QVariant& property)
       return true;
       }
 
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
 
+void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
+      {
+      if (v) {
+            LayoutBreak* lb = new LayoutBreak(_score);
+            lb->setLayoutBreakType(type);
+            lb->setTrack(-1);       // this are system elements
+            lb->setParent(this);
+            _score->undoAddElement(lb);
+            }
+      else {
+            // remove line break
+            foreach(Element* e, *el()) {
+                  if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
+                        _score->undoRemoveElement(e);
+                        break;
+                        }
+                  }
+            }
+      }
 }
 
