@@ -327,7 +327,7 @@ bool areTupletChordsInUse(
       return false;
       }
 
-// result: <average quant error, total tuplet note count, sum length of rests inside all tuplets>
+// result: <average quant error, negative total tuplet note count, sum length of rests inside all tuplets>
 
 std::tuple<double, int, ReducedFraction>
 validateTuplets(std::list<int> &indexes,
@@ -377,7 +377,7 @@ validateTuplets(std::list<int> &indexes,
             sumError += findQuantizationError(chordIt->first, regularRaster);
 
       return std::make_tuple(sumError.ticks() * 1.0 / sumNoteCount,
-                             sumNoteCount, sumLengthOfRests);
+                             -sumNoteCount, sumLengthOfRests);
       }
 
 // try different permutations of tuplet indexes to minimize error
