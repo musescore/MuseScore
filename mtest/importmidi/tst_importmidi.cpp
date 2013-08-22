@@ -105,6 +105,9 @@ class TestImportMidi : public QObject, public MTest
       void meterTwoBeatsOver() { mf("meter_two_beats_over"); }
       void meterDotTie() { mf("meter_dot_tie"); }
 
+      // time sig
+      void timesigChanges() { mf("timesig_changes"); }
+
       // test scores for tuplets
       void tuplet2Voices3_5Tuplets()
             {

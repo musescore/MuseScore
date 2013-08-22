@@ -63,6 +63,7 @@ class MTrack {
       QString name;
       bool hasKey = false;
       int indexOfOperation = 0;
+      int division = 0;
 
       std::multimap<ReducedFraction, MidiChord> chords;
       std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
