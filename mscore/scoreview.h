@@ -425,11 +425,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void setLoopInCursor();
       void setLoopOutCursor();
       void updateLoopCursors();
-      void showLoopInCursor();
       void showLoopCursors();
-      void showLoopOutCursor();
-      void hideLoopInCursor();
-      void hideLoopOutCursor();
       void hideLoopCursors();
 
       virtual void moveCursor();
