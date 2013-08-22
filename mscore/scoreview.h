@@ -372,7 +372,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void onEditPasteTransition(QMouseEvent* ev);
 
       virtual void setDropRectangle(const QRectF&);
-      void setDropTarget(const Element*);
+      virtual void setDropTarget(const Element*) override;
       void setDropAnchor(const QLineF&);
       const QTransform& matrix() const  { return _matrix; }
       qreal mag() const;

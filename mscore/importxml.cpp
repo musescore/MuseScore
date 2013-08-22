@@ -53,6 +53,7 @@
 #include "libmscore/element.h"
 #include "libmscore/sym.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/segment.h"

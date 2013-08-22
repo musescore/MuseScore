@@ -69,7 +69,6 @@ class LineSegment : public SpannerSegment {
       virtual void reset();
       virtual void spatiumChanged(qreal, qreal);
       virtual QPointF pagePos() const;
-      virtual bool isEdited(SpannerSegment*) const;
 
       friend class SLine;
       virtual void read(XmlReader&);

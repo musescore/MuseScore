@@ -35,6 +35,17 @@ enum {
       };
 
 //---------------------------------------------------------
+//   SlurPos
+//---------------------------------------------------------
+
+struct SlurPos {
+      QPointF p1;             // start point of slur
+      System* system1;        // start system of slur
+      QPointF p2;             // end point of slur
+      System* system2;        // end system of slur
+      };
+
+//---------------------------------------------------------
 //   UP
 //---------------------------------------------------------
 
@@ -61,7 +72,7 @@ class SlurSegment : public SpannerSegment {
       QPainterPath shapePath;
 
       void computeBezier();
-      void changeAnchor(MuseScoreView*, int curGrip, ChordRest*);
+      void changeAnchor(MuseScoreView*, int curGrip, Element*);
 
    public:
       SlurSegment(Score*);
@@ -96,8 +107,6 @@ class SlurSegment : public SpannerSegment {
       void setSlurOffset(int i, const QPointF& val) { ups[i].off = val;  }
       QPointF slurOffset(int i) const               { return ups[i].off; }
       const struct UP* getUps(int idx) const        { return &ups[idx]; }
-
-      virtual bool isEdited(SpannerSegment*) const;
 
       friend class Tie;
       friend class Slur;
@@ -182,29 +191,6 @@ class Slur : public SlurTie {
       virtual void slurPos(SlurPos*);
       virtual void computeBezier(SlurSegment*, QPointF so = QPointF());
       friend SlurSegment;
-      };
-
-//---------------------------------------------------------
-//   @@ Tie
-///   ties have Note's as startElement/endElement
-//---------------------------------------------------------
-
-class Tie : public SlurTie {
-      Q_OBJECT
-
-   public:
-      Tie(Score* = 0);
-      virtual Tie* clone() const          { return new Tie(*this);  }
-      virtual ElementType type() const    { return TIE;             }
-      void setStartNote(Note* note);
-      void setEndNote(Note* note)         { setEndElement((Element*)note);      }
-      Note* startNote() const             { return (Note*) startElement();      }
-      Note* endNote() const               { return (Note*) endElement();        }
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
-      virtual void layout();
-      virtual void slurPos(SlurPos*) override;
-      virtual void computeBezier(SlurSegment*, QPointF so = QPointF());
       };
 
 }     // namespace Ms

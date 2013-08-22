@@ -52,6 +52,7 @@
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/staff.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"

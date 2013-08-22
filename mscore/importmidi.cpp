@@ -24,6 +24,7 @@
 #include "libmscore/utils.h"
 #include "libmscore/text.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/style.h"

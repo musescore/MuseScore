@@ -80,18 +80,6 @@ void LineSegment::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   isEdited
-//---------------------------------------------------------
-
-bool LineSegment::isEdited(SpannerSegment* ss) const
-      {
-      LineSegment* ls = static_cast<LineSegment*>(ss);
-      if (pos() != ls->pos() || pos2() != ls->pos2())
-            return true;
-      return false;
-      }
-
-//---------------------------------------------------------
 //   updateGrips
 //---------------------------------------------------------
 

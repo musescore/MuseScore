@@ -637,6 +637,9 @@ class SlurSegmentView : public ShowElementBase {
 
       Ui::SlurSegment ss;
 
+   private slots:
+      void slurTieClicked();
+
    public:
       SlurSegmentView();
       virtual void setElement(Element*);

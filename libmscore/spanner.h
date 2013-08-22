@@ -70,7 +70,6 @@ class SpannerSegment : public Element {
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
       virtual bool isEditable() const override { return true; }
-      virtual bool isEdited(SpannerSegment*) const = 0;
 
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID id, const QVariant& v) override;
@@ -118,7 +117,7 @@ class Spanner : public Element {
       ~Spanner();
 
       virtual ElementType type() const = 0;
-      virtual void setScore(Score* s);
+      virtual void setScore(Score* s) override;
 
       int tick() const         { return _tick;          }
       void setTick(int v)      { _tick = v;             }
@@ -135,13 +134,12 @@ class Spanner : public Element {
       const QList<SpannerSegment*>& spannerSegments() const { return segments; }
       QList<SpannerSegment*>& spannerSegments()             { return segments; }
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual void endEdit();
-      virtual void setSelected(bool f);
-      virtual bool isEdited(Spanner* originalSpanner) const;
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual void endEdit() override;
+      virtual void setSelected(bool f) override;
       bool removeSpannerBack();
       virtual void setYoff(qreal) {};    // used in musicxml import
 

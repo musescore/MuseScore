@@ -42,6 +42,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/harmony.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/notedot.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/accidental.h"
@@ -142,7 +143,7 @@ QQmlEngine* MuseScore::qml()
             QDir dir(mscoreGlobalShare + QString("/qml"));
             importPaths.append(dir.absolutePath());
             _qml->setImportPathList(importPaths);
-#endif      
+#endif
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
             qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings

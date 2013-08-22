@@ -24,6 +24,7 @@
 #include "chord.h"
 #include "note.h"
 #include "slur.h"
+#include "tie.h"
 #include "keysig.h"
 #include "barline.h"
 #include "repeat.h"

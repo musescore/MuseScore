@@ -243,11 +243,13 @@ void Spanner::endEdit()
             qDebug("SLine::endEdit(): segment size changed");
             return;
             }
+#if 0 //HACK
       for (int i = 0; i < userOffsets2.size(); ++i) {
             SpannerSegment* ss = segments[i];
             score()->undoPropertyChanged(ss, P_USER_OFF, userOffsets[i]);
             score()->undoPropertyChanged(ss, P_USER_OFF2, userOffsets2[i]);
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -259,24 +261,6 @@ void Spanner::setSelected(bool f)
       foreach(SpannerSegment* ss, segments)
             ss->setSelected(f);
       Element::setSelected(f);
-      }
-
-//---------------------------------------------------------
-//   isEdited
-//    compare edited spanner with origSpanner
-//---------------------------------------------------------
-
-bool Spanner::isEdited(Spanner* originalSpanner) const
-      {
-      if (_tick != originalSpanner->_tick || _tick2 != originalSpanner->_tick2)
-            return true;
-      if (spannerSegments().size() != originalSpanner->spannerSegments().size())
-            return true;
-      for (int i = 0; i < segments.size(); ++i) {
-            if (segments[i]->isEdited(originalSpanner->segments[i]))
-                  return true;
-            }
-      return false;
       }
 
 //---------------------------------------------------------

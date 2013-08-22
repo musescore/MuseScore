@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -1291,7 +1291,22 @@ class AddBracket : public UndoCommand {
       UNDO_NAME("AddBracket");
       };
 
+//---------------------------------------------------------
+//   ChangeSpannerElements
+//---------------------------------------------------------
 
+class ChangeSpannerElements : public UndoCommand {
+      Spanner* spanner;
+      Element* startElement;
+      Element* endElement;
+
+      void flip();
+
+   public:
+      ChangeSpannerElements(Spanner* s, Element* se, Element* ee)
+         : spanner(s), startElement(se), endElement(ee) {}
+      UNDO_NAME("ChangeSpannerElements");
+      };
 
 }     // namespace Ms
 #endif

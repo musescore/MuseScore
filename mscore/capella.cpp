@@ -37,6 +37,7 @@
 #include "libmscore/pitchspelling.h"
 #include "libmscore/keysig.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/box.h"
 #include "libmscore/measure.h"
 #include "libmscore/sig.h"

@@ -37,6 +37,7 @@
 #include "libmscore/pitchspelling.h"
 #include "libmscore/score.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/staff.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/timesig.h"
