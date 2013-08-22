@@ -333,20 +333,21 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      if ((mscore->loop())) {    // && (cv->loopOutPos() > cv->loopInPos())
+      if ((mscore->loop())) {
             if (mscore->isLoopOut()) {
                   // Add loop Out event
                   NPlayEvent event;
                   event.setType(ME_LOOP);
                   // insert ME_LOOP as first event if there are events with same tick
-                  auto hint = events.lower_bound(cv->loopOutPos());
-                  events.insert(hint, std::pair<int,NPlayEvent>(cv->loopOutPos(), event));
-                  if (cv->loopOutPos() < cv->loopInPos())
+                  auto hint = events.lower_bound(cs->loopOutTick());
+                  events.insert(hint, std::pair<int,NPlayEvent>(cs->loopOutTick(), event));
+                  qDebug ("Add loop event at tick %d   (loopInTick = %d)", cs->loopOutTick(), cs->loopInTick());
+                  if (cs->loopOutTick() < cs->loopInTick())
                         seek(0);  // If Out pos < In pos, restart playback at the beginning.
                   else
-                        seek(cv->loopInPos());
+                        seek(cs->loopInTick());
             } else
-                  seek(cv->loopInPos());
+                  seek(cs->loopInTick());
 
             }
       else
@@ -692,8 +693,8 @@ void Seq::process(unsigned n, float* buffer)
                   else if (event.type() == ME_TICK2)
                         tackRest = tackLength;
                   else if (event.type() == ME_LOOP) {
-                        qDebug ("event.type() == ME_LOOP  loopOutPos = %d  |  getCurTick() = %d ", cv->loopOutPos(), getCurTick());
-                        seek(cv->loopInPos());
+                        qDebug ("event.type() == ME_LOOP  in/out tick = %d/%d  loop |  getCurTick() = %d ", cs->loopInTick(), cs->loopOutTick(), getCurTick());
+                        seek(cs->loopInTick());
                         return;
                         }
                   mutex.lock();
@@ -1270,7 +1271,8 @@ void Seq::setLoopIn()
             tick = playPos->first;  // En mode playback, set the In position where note is being played
       else
             tick = cs->pos();   // Otherwise, use the selected note.
-      cv->setLoopInCursor(tick);
+      cs->setLoopInTick(tick);
+      cv->updateLoopCursors();
 //      qDebug ("setLoopIn : tick = %d\n",tick);
       }
 
@@ -1286,8 +1288,22 @@ void Seq::setLoopOut()
       else
             tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
 //      cv->setLoopOutCursor(tick-1);  // Remove 1 to avoid overlapping the following events and elements
-      cv->setLoopOutCursor(tick);
+      cs->setLoopOutTick(tick);
 //      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n",loopOutPos, cs->pos(), cs->inputState().ticks());
+      cv->updateLoopCursors();
+      }
+
+
+//---------------------------------------------------------
+//   set Loop In/Out position based on the selection
+//---------------------------------------------------------
+
+void Seq::setLoopSelection()
+      {
+      cs->setLoopInTick(cs->selection().tickStart());
+      cs->setLoopOutTick(cs->selection().tickEnd());
+      qDebug ("setLoopSelection : loopInTick = %d  loopOutTick = %d\n",cs->selection().tickStart(), cs->pos(), cs->selection().tickEnd());
+      cv->updateLoopCursors();
       }
 
 //---------------------------------------------------------
@@ -1297,7 +1313,8 @@ void Seq::setLoopOut()
 void Seq::unsetLoopIn()
       {
       // Reinitialize the In loop position
-      cv->setLoopInCursor(0);
+      cs->setLoopInTick(-1);
+      cv->updateLoopCursors();
       }
 
 //---------------------------------------------------------
@@ -1309,6 +1326,7 @@ void Seq::unsetLoopOut()
       loopStop();   // Erase the loop event
 
       // Reinitialize the Out loop position
-      cv->setLoopOutCursor(cs->lastMeasure()->endTick()-1);
+      cs->setLoopOutTick(-1);
+      cv->updateLoopCursors();
       }
 }
