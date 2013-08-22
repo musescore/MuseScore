@@ -416,7 +416,7 @@ QVariant OperationsModel::headerData(int section, Qt::Orientation orientation, i
                   case OperationCol::OPER_NAME:
                         return "Selected track [" + trackLabel + "] operations";
                   case OperationCol::VALUE:
-                        return "Value";
+                        return "Value (click to change)";
                   default:
                         break;
                   }
