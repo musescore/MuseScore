@@ -333,6 +333,8 @@ class Score : public QObject {
       QList<Staff*> _staves;
 
       int _playPos;     ///< sequencer seek position
+      int _loopInTick;    ///< In tick for loop play position
+      int _loopOutTick;   ///< Out tick for loop play position
 
       bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
                                       ///< indicating if playPos after expanded repeats
@@ -632,6 +634,10 @@ class Score : public QObject {
 
       bool playlistDirty();
       void setPlaylistDirty(bool val) { _playlistDirty = val; }
+      int loopInTick() { return _loopInTick; }
+      int loopOutTick() { return _loopOutTick; }
+      void setLoopInTick(int tick);
+      void setLoopOutTick(int tick);
 
       void cmd(const QAction*);
       int fileDivision(int t) const { return (t * MScore::division + _fileDivision/2) / _fileDivision; }

@@ -4154,13 +4154,16 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "loop") {
             qDebug("loopAction = %d", loopAction->isChecked());
             if (loopAction->isChecked()) {
-                  cv->showLoopInCursor();
-                  cv->showLoopOutCursor();
+                  if(cs->selection().state() == SEL_RANGE) {
+                        seq->setLoopSelection();
+                        loopInAction->setChecked(true);
+                        loopOutAction->setChecked(true);
+                        }
+                  cv->showLoopCursors();
                   }
             else {
                   seq->loopStop();
-                  cv->hideLoopInCursor();
-                  cv->hideLoopOutCursor();
+                  cv->hideLoopCursors();
                   }
             }
       else if (cmd == "loop-in") {
@@ -4168,7 +4171,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   seq->setLoopIn();
                   if (!loopAction->isChecked())
                         loopAction->trigger();
-                  cv->showLoopInCursor();
+                  //cv->showLoopCursors();
                   }
             else {
                   seq->unsetLoopIn();
@@ -4179,7 +4182,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   seq->setLoopOut();
                   if (!loopAction->isChecked())
                         loopAction->trigger();
-                  cv->showLoopOutCursor();
+                  //cv->showLoopCursors();
                   }
             else {
                   seq->unsetLoopOut();
