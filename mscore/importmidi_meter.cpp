@@ -191,7 +191,7 @@ Meter::MaxLevel maxLevelBetween(const ReducedFraction &startTickInBar,
                   const auto maxStartRaster = divLen * (startTickInDiv.ticks() / divLen.ticks());
                   const auto count = (maxEndRaster - maxStartRaster) / divLen;
                   level.pos = maxStartRaster + divLen + divInfo.onTime;
-                  level.levelCount = qRound(count.numerator() * 1.0 / count.denominator());
+                  level.levelCount = count.numerator() / count.denominator();
                   level.level = divLengthInfo.level;
                   break;
                   }
