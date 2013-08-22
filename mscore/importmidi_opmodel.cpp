@@ -46,7 +46,7 @@ OperationsModel::OperationsModel()
       beginResetModel();
                   // - initialize opeations with their default values
                   // - string lists below should match Operation enum values
-      Node *const quantValue = new Node;
+      Node *quantValue = new Node;
       quantValue->name = "Quantization";
       quantValue->oper.type = MidiOperation::Type::QUANT_VALUE;
       quantValue->oper.value = (int)TrackOperations().quantize.value;
@@ -62,7 +62,7 @@ OperationsModel::OperationsModel()
       controller->quantValue = quantValue;
 
 
-      Node *const reduceToShorter = new Node;
+      Node *reduceToShorter = new Node;
       reduceToShorter->name = "Reduce to shortest note in bar";
       reduceToShorter->oper.type = MidiOperation::Type::QUANT_REDUCE;
       reduceToShorter->oper.value = Quantization().reduceToShorterNotesInBar;
@@ -70,7 +70,7 @@ OperationsModel::OperationsModel()
       quantValue->children.push_back(std::unique_ptr<Node>(reduceToShorter));
 
 
-//      Node *const humanPerformance = new Node;
+//      Node *humanPerformance = new Node;
 //      humanPerformance->name = "Human performance";
 //      humanPerformance->oper.type = MidiOperation::Type::QUANT_HUMAN;
 //      humanPerformance->oper.value = Quantization().humanPerformance;
@@ -79,14 +79,14 @@ OperationsModel::OperationsModel()
 //      controller->quantHuman = humanPerformance;
 
 
-      Node *const useDots = new Node;
+      Node *useDots = new Node;
       useDots->name = "Use dots";
       useDots->oper.type = MidiOperation::Type::USE_DOTS;
       useDots->oper.value = TrackOperations().useDots;
       useDots->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(useDots));
 
-      Node *const useMultipleVoices = new Node;
+      Node *useMultipleVoices = new Node;
       useMultipleVoices->name = "Multiple voices";
       useMultipleVoices->oper.type = MidiOperation::Type::USE_MULTIPLE_VOICES;
       useMultipleVoices->oper.value = TrackOperations().useMultipleVoices;
@@ -97,7 +97,7 @@ OperationsModel::OperationsModel()
 
       // ------------- tuplets --------------
 
-      Node *const searchTuplets = new Node;
+      Node *searchTuplets = new Node;
       searchTuplets->name = "Search tuplets";
       searchTuplets->oper.type = MidiOperation::Type::TUPLET_SEARCH;
       searchTuplets->oper.value = TrackOperations().tuplets.doSearch;
@@ -106,7 +106,7 @@ OperationsModel::OperationsModel()
       controller->searchTuplets = searchTuplets;
 
 
-      Node *const duplets = new Node;
+      Node *duplets = new Node;
       duplets->name = "Duplets (2)";
       duplets->oper.type = MidiOperation::Type::TUPLET_2;
       duplets->oper.value = TrackOperations().tuplets.duplets;
@@ -115,7 +115,7 @@ OperationsModel::OperationsModel()
       controller->duplets = duplets;
 
 
-      Node *const triplets = new Node;
+      Node *triplets = new Node;
       triplets->name = "Triplets (3)";
       triplets->oper.type = MidiOperation::Type::TUPLET_3;
       triplets->oper.value = TrackOperations().tuplets.triplets;
@@ -124,7 +124,7 @@ OperationsModel::OperationsModel()
       controller->triplets = triplets;
 
 
-      Node *const quadruplets = new Node;
+      Node *quadruplets = new Node;
       quadruplets->name = "Quadruplets (4)";
       quadruplets->oper.type = MidiOperation::Type::TUPLET_4;
       quadruplets->oper.value = TrackOperations().tuplets.quadruplets;
@@ -133,7 +133,7 @@ OperationsModel::OperationsModel()
       controller->quadruplets = quadruplets;
 
 
-      Node *const quintuplets = new Node;
+      Node *quintuplets = new Node;
       quintuplets->name = "Quintuplets (5)";
       quintuplets->oper.type = MidiOperation::Type::TUPLET_5;
       quintuplets->oper.value = TrackOperations().tuplets.quintuplets;
@@ -142,7 +142,7 @@ OperationsModel::OperationsModel()
       controller->quintuplets = quintuplets;
 
 
-      Node *const septuplets = new Node;
+      Node *septuplets = new Node;
       septuplets->name = "Septuplets (7)";
       septuplets->oper.type = MidiOperation::Type::TUPLET_7;
       septuplets->oper.value = TrackOperations().tuplets.septuplets;
@@ -151,7 +151,7 @@ OperationsModel::OperationsModel()
       controller->septuplets = septuplets;
 
 
-      Node *const nonuplets = new Node;
+      Node *nonuplets = new Node;
       nonuplets->name = "Nonuplets (9)";
       nonuplets->oper.type = MidiOperation::Type::TUPLET_9;
       nonuplets->oper.value = TrackOperations().tuplets.nonuplets;
@@ -161,7 +161,7 @@ OperationsModel::OperationsModel()
 
       // ------------------------------------
 
-      Node *const pickupMeasure = new Node;
+      Node *pickupMeasure = new Node;
       pickupMeasure->name = "Recognize pickup measure";
       pickupMeasure->oper.type = MidiOperation::Type::PICKUP_MEASURE;
       pickupMeasure->oper.value = TrackOperations().pickupMeasure;
@@ -170,7 +170,7 @@ OperationsModel::OperationsModel()
       controller->pickupMeasure = pickupMeasure;
 
 
-      Node *const swing = new Node;
+      Node *swing = new Node;
       swing->name = "Detect swing";
       swing->oper.type = MidiOperation::Type::SWING;
       swing->oper.value = (int)TrackOperations().swing;
@@ -181,7 +181,7 @@ OperationsModel::OperationsModel()
       root->children.push_back(std::unique_ptr<Node>(swing));
 
 
-      Node *const changeClef = new Node;
+      Node *changeClef = new Node;
       changeClef->name = "Clef may change along the score";
       changeClef->oper.type = MidiOperation::Type::CHANGE_CLEF;
       changeClef->oper.value = TrackOperations().changeClef;
@@ -189,7 +189,7 @@ OperationsModel::OperationsModel()
       root->children.push_back(std::unique_ptr<Node>(changeClef));
 
 
-      Node *const splitDrums = new Node;
+      Node *splitDrums = new Node;
       splitDrums->name = "Split drum set";
       splitDrums->oper.type = MidiOperation::Type::SPLIT_DRUMS;
       splitDrums->oper.value = TrackOperations().drums.doSplit;;
@@ -198,7 +198,7 @@ OperationsModel::OperationsModel()
       controller->splitDrums = splitDrums;
 
 
-      Node *const showStaffBracket = new Node;
+      Node *showStaffBracket = new Node;
       showStaffBracket->name = "Show staff bracket";
       showStaffBracket->oper.type = MidiOperation::Type::SHOW_STAFF_BRACKET;
       showStaffBracket->oper.value = TrackOperations().drums.showStaffBracket;
@@ -207,7 +207,7 @@ OperationsModel::OperationsModel()
       controller->showStaffBracket = showStaffBracket;
 
 
-      Node *const doLHRH = new Node;
+      Node *doLHRH = new Node;
       doLHRH->name = "Left/right hand separation";
       doLHRH->oper.type = MidiOperation::Type::DO_LHRH_SEPARATION;
       doLHRH->oper.value = LHRHSeparation().doIt;
@@ -216,7 +216,7 @@ OperationsModel::OperationsModel()
       controller->LHRHdoIt = doLHRH;
 
 
-      Node *const LHRHMethod = new Node;
+      Node *LHRHMethod = new Node;
       LHRHMethod->name = "Separation method";
       LHRHMethod->oper.type = MidiOperation::Type::LHRH_METHOD;
       LHRHMethod->oper.value = (int)LHRHSeparation().method;
@@ -227,7 +227,7 @@ OperationsModel::OperationsModel()
       controller->LHRHMethod = LHRHMethod;
 
 
-      Node *const LHRHPitchOctave = new Node;
+      Node *LHRHPitchOctave = new Node;
       LHRHPitchOctave->name = "Split pitch octave";
       LHRHPitchOctave->oper.type = MidiOperation::Type::LHRH_SPLIT_OCTAVE;
       LHRHPitchOctave->oper.value = (int)LHRHSeparation().splitPitchOctave;
@@ -247,7 +247,7 @@ OperationsModel::OperationsModel()
       controller->LHRHPitchOctave = LHRHPitchOctave;
 
 
-      Node *const LHRHPitchNote = new Node;
+      Node *LHRHPitchNote = new Node;
       LHRHPitchNote->name = "Split pitch note";
       LHRHPitchNote->oper.type = MidiOperation::Type::LHRH_SPLIT_NOTE;
       LHRHPitchNote->oper.value = (int)LHRHSeparation().splitPitchNote;
@@ -288,7 +288,7 @@ QModelIndex OperationsModel::index(int row, int column, const QModelIndex &paren
       {
       if (!root || row < 0 || column < 0 || column >= OperationCol::COL_COUNT)
             return QModelIndex();
-      const Node *const parentNode = nodeFromIndex(parent);
+      const Node *parentNode = nodeFromIndex(parent);
       if (!parentNode)
             return QModelIndex();
       if (parentNode->children.empty() || row >= (int)parentNode->children.size())
@@ -301,7 +301,7 @@ QModelIndex OperationsModel::index(int row, int column, const QModelIndex &paren
             if (!parentNode->children.at(i)->visible)
                   ++shift;
             }
-      Node *const childNode = parentNode->children.at(row + shift).get();
+      Node *childNode = parentNode->children.at(row + shift).get();
       if (!childNode || !childNode->visible)
             return QModelIndex();
       return createIndex(row, column, childNode);
@@ -309,13 +309,13 @@ QModelIndex OperationsModel::index(int row, int column, const QModelIndex &paren
 
 QModelIndex OperationsModel::parent(const QModelIndex &child) const
       {
-      const Node *const node = nodeFromIndex(child);
+      const Node *node = nodeFromIndex(child);
       if (!node)
             return QModelIndex();
-      Node *const parentNode = node->parent;
+      Node *parentNode = node->parent;
       if (!parentNode)
             return QModelIndex();
-      const Node *const grandparentNode = parentNode->parent;
+      const Node *grandparentNode = parentNode->parent;
       if (!grandparentNode)
             return QModelIndex();
       const auto &children = grandparentNode->children;
@@ -329,7 +329,7 @@ int OperationsModel::rowCount(const QModelIndex &parent) const
       {
       if (parent.column() >= OperationCol::COL_COUNT)
             return 0;
-      const Node *const parentNode = nodeFromIndex(parent);
+      const Node *parentNode = nodeFromIndex(parent);
       if (!parentNode)
             return 0;
                   // take only visible nodes into account
@@ -350,7 +350,7 @@ int OperationsModel::columnCount(const QModelIndex &parent) const
 
 QVariant OperationsModel::data(const QModelIndex &index, int role) const
       {
-      const Node *const node = nodeFromIndex(index);
+      const Node *node = nodeFromIndex(index);
       if (!node)
             return QVariant();
       switch (role) {
@@ -426,7 +426,7 @@ QVariant OperationsModel::headerData(int section, Qt::Orientation orientation, i
 
 Qt::ItemFlags OperationsModel::flags(const QModelIndex &index) const
       {
-      const Node *const node = nodeFromIndex(index);
+      const Node *node = nodeFromIndex(index);
       if (!node)
             return Qt::ItemFlags();
       Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled);
@@ -441,7 +441,7 @@ Qt::ItemFlags OperationsModel::flags(const QModelIndex &index) const
 
 bool OperationsModel::setData(const QModelIndex &index, const QVariant &value, int role)
       {
-      Node *const node = nodeFromIndex(index);
+      Node *node = nodeFromIndex(index);
       if (!node)
             return false;
       bool result = false;
@@ -545,7 +545,7 @@ void OperationsModel::setTrackData(const QString &trackLabel,
 
 void OperationsModel::onDataChanged(const QModelIndex &index)
       {
-      Node *const node = nodeFromIndex(index);
+      Node *node = nodeFromIndex(index);
       if (!node)
             return;
       if (controller->updateNodeDependencies(node, false))
