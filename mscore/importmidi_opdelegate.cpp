@@ -62,7 +62,7 @@ void OperationsDelegate::setModelData(QWidget *editor,
       {
       const QVariant value = index.data(Qt::EditRole);
       if (value.type() == QVariant::StringList) {
-            const QListWidget *const lw = qobject_cast<QListWidget *>(editor);
+            const QListWidget *lw = qobject_cast<QListWidget *>(editor);
             model->setData(index, lw->currentRow());
             }
       else
@@ -71,7 +71,7 @@ void OperationsDelegate::setModelData(QWidget *editor,
 
 void OperationsDelegate::commitAndCloseEditor()
       {
-      QListWidget *const editor = qobject_cast<QListWidget *>(sender());
+      QListWidget *editor = qobject_cast<QListWidget *>(sender());
       emit commitData(editor);
       emit closeEditor(editor);
       }

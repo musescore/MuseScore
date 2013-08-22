@@ -156,11 +156,11 @@ void SwingDetector::applySwing()
             cr = nullptr;
             }
 
-      const ChordRest *const first = elements.front();
+      const ChordRest *first = elements.front();
       const int startTick = first->segment()->tick();
-      ChordRest *const last = elements.back();
+      ChordRest *last = elements.back();
       last->segment()->remove(last);
-      Segment* const s = last->measure()->getSegment(last, startTick + MScore::division / 2);
+      Segment *s = last->measure()->getSegment(last, startTick + MScore::division / 2);
       s->add(last);
 
       if (tuplet) {
@@ -210,7 +210,7 @@ QString swingCaption(MidiOperation::Swing swingType)
 
 void detectSwing(Staff *staff, MidiOperation::Swing swingType)
       {
-      Score *const score = staff->score();
+      Score *score = staff->score();
       const int strack = staff->idx() * VOICES;
       SwingDetector swingDetector(swingType);
 
@@ -225,10 +225,10 @@ void detectSwing(Staff *staff, MidiOperation::Swing swingType)
             }
       if (swingDetector.wasSwingApplied()) {
                         // add swing label to the score
-            StaffText* const st = new StaffText(score);
+            StaffText* st = new StaffText(score);
             st->setTextStyleType(TEXT_STYLE_STAFF);
             st->setText(swingCaption(swingType));
-            Segment* const seg = score->firstSegment(Segment::SegChordRest);
+            Segment* seg = score->firstSegment(Segment::SegChordRest);
             st->setParent(seg);
             st->setTrack(strack);   // voice == 0
             score->addElement(st);

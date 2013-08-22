@@ -92,7 +92,7 @@ void ImportMidiPanel::tweakUi()
       connect(ui->pushButtonDown, SIGNAL(clicked()), SLOT(moveTrackDown()));
       connect(ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
 
-      const QItemSelectionModel *const sm = ui->tableViewTracks->selectionModel();
+      const QItemSelectionModel *sm = ui->tableViewTracks->selectionModel();
       connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
               SLOT(onCurrentTrackChanged(QModelIndex)));
       connect(ui->treeViewOperations->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
