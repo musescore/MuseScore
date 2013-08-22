@@ -50,6 +50,8 @@
 #include "importmidi_drum.h"
 #include "importmidi_inner.h"
 
+#include "libmscore/element.h"
+
 
 namespace Ms {
 
@@ -710,29 +712,49 @@ void createSmallClef(ClefType clefType, int tick, Staff *staff)
       createClef(clefType, staff, tick, isSmallClef);
       }
 
-void resetIfNotChanged(int &counter, int &oldCounter)
+// go <trebleCounter> chord segments back
+
+int findPrevSegTick(int trebleCounter, Segment *seg, int tick)
       {
-      if (counter != 0 && counter == oldCounter) {
-            counter = 0;
-            oldCounter = 0;
+      --trebleCounter;
+      Segment *prevSeg = seg;
+      for ( ; prevSeg && trebleCounter;
+            prevSeg = prevSeg->prev1(Segment::SegChordRest)) {
+            if (prevSeg->type() == Element::REST)
+                  continue;
+            --trebleCounter;
             }
+      if (prevSeg) {
+            tick = prevSeg->tick();
+            Segment *clefSeg = prevSeg->measure()->findSegment(Segment::SegClef, tick);
+                        // remove clef if it is not the staff clef
+            if (clefSeg && clefSeg != prevSeg->score()->firstSegment(Segment::SegClef)) {
+                  prevSeg->measure()->remove(clefSeg);
+                  delete clefSeg;
+                  }
+            }
+      return tick;
       }
 
-bool isTiedBack(const std::multimap<ReducedFraction, MidiChord>::const_iterator &it,
-                const std::multimap<ReducedFraction, MidiChord> &chords)
+int findAverageSegPitch(Segment *seg, int strack)
       {
-      if (it == chords.begin())
-            return false;
-      auto i = it;
-      --i;
-      for (;;) {
-            if (i->first + maxNoteLen(i->second.notes) > it->first)
-                  return true;
-            if (i == chords.begin())
-                  break;
-            --i;
+      int avgPitch = -1;
+      int sumPitch = 0;
+      int count = 0;
+      for (int voice = 0; voice < VOICES; ++voice) {
+            ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
+            if (cr && cr->type() == Element::CHORD) {
+                  Chord *chord = static_cast<Chord *>(cr);
+                  const auto &notes = chord->notes();
+                  for (const Note *note: notes) {
+                        if (note->tieBack())
+                              return avgPitch;
+                        sumPitch += note->pitch();
+                        }
+                  count += notes.size();
+                  }
             }
-      return false;
+      return (count) ? sumPitch / count : avgPitch;
       }
 
 void MTrack::createClefs()
@@ -741,50 +763,56 @@ void MTrack::createClefs()
       createClef(currentClef, staff, 0);
 
       const auto trackOpers = preferences.midiImportOperations.trackOperations(indexOfOperation);
-      if (trackOpers.changeClef) {
-            const int hightPitch = 62;          // all notes upper - in treble clef
-            const int medPitch = 60;
-            const int lowPitch = 57;           // all notes lower - in bass clef
+      if (!trackOpers.changeClef)
+            return;
 
-            int oldTrebleCounter = 0;
-            int trebleCounter = 0;
-            int oldBassCounter = 0;
-            int bassCounter = 0;
+      const int highPitch = 62;          // all notes upper - in treble clef
+      const int midPitch = 60;
+      const int lowPitch = 55;           // all notes lower - in bass clef
+      const int counterLimit = 3;
+      int trebleCounter = 0;
+      int bassCounter = 0;
+      const int strack = staff->idx() * VOICES;
 
-            const int counterLimit = 3;
-                        // N^2 / 2 checks of tied chords in the worst case but fast enough in practice
-            for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
-                  if (isTiedBack(chordIt, chords))
-                        continue;
-                  const int tick = chordIt->first.ticks();
-                  const int avgPitch = findAveragePitch(chordIt->second.notes);
-                  if (currentClef == CLEF_G && avgPitch < lowPitch) {
+      for (Segment *seg = staff->score()->firstSegment(Segment::SegChordRest); seg;
+                        seg = seg->next1(Segment::SegChordRest)) {
+            int avgPitch = findAverageSegPitch(seg, strack);
+            if (avgPitch == -1)
+                  continue;
+            int tick = seg->tick();
+            int oldTrebleCounter = trebleCounter;
+            int oldBassCounter = bassCounter;
+
+            if (currentClef == CLEF_G && avgPitch < lowPitch) {
+                  currentClef = CLEF_F;
+                  createSmallClef(currentClef, tick, staff);
+                  }
+            else if (currentClef == CLEF_F && avgPitch > highPitch) {
+                  currentClef = CLEF_G;
+                  createSmallClef(currentClef, tick, staff);
+                  }
+            else if (currentClef == CLEF_G && avgPitch >= lowPitch && avgPitch < midPitch) {
+                  if (trebleCounter < counterLimit)
+                        ++trebleCounter;
+                  else {
+                        tick = findPrevSegTick(trebleCounter, seg, tick);
                         currentClef = CLEF_F;
                         createSmallClef(currentClef, tick, staff);
                         }
-                  else if (currentClef == CLEF_F && avgPitch > hightPitch) {
+                  }
+            else if (currentClef == CLEF_F && avgPitch <= highPitch && avgPitch >= midPitch) {
+                  if (bassCounter < counterLimit)
+                        ++bassCounter;
+                  else {
+                        tick = findPrevSegTick(bassCounter, seg, tick);
                         currentClef = CLEF_G;
                         createSmallClef(currentClef, tick, staff);
                         }
-                  else if (currentClef == CLEF_G && avgPitch >= lowPitch && avgPitch < medPitch) {
-                        if (trebleCounter < counterLimit)
-                              ++trebleCounter;
-                        else {
-                              currentClef = CLEF_F;
-                              createSmallClef(currentClef, tick, staff);
-                              }
-                        }
-                  else if (currentClef == CLEF_F && avgPitch <= hightPitch && avgPitch >= medPitch) {
-                        if (bassCounter < counterLimit)
-                              ++bassCounter;
-                        else {
-                              currentClef = CLEF_G;
-                              createSmallClef(currentClef, tick, staff);
-                              }
-                        }
-                  resetIfNotChanged(bassCounter, oldBassCounter);
-                  resetIfNotChanged(trebleCounter, oldTrebleCounter);
                   }
+            if (trebleCounter > 0 && trebleCounter == oldTrebleCounter)
+                  trebleCounter = 0;
+            if (bassCounter > 0 && bassCounter == oldBassCounter)
+                  bassCounter = 0;
             }
       }
 
@@ -828,10 +856,11 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
 
       createTuplets();
       createKeys(key);
-      createClefs();
 
       const auto swingType = preferences.midiImportOperations.trackOperations(indexOfOperation).swing;
       Swing::detectSwing(staff, swingType);
+
+      createClefs();
       }
 
 Fraction metaTimeSignature(const MidiEvent& e)
