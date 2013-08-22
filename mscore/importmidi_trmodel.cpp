@@ -453,7 +453,7 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int r
                   }
             }
       else {
-            TrackData *const trackData = trackDataFromIndex(index);
+            TrackData *trackData = trackDataFromIndex(index);
             if (!trackData)
                   return false;
             if (index.column() == TrackCol::DO_IMPORT && role == Qt::CheckStateRole) {

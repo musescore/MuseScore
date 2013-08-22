@@ -231,7 +231,7 @@ void TestImportMidi::initTestCase()
 
 void TestImportMidi::mf(const char* name)
       {
-      Score* const score = new Score(mscore->baseStyle());
+      Score* score = new Score(mscore->baseStyle());
       score->setName(name);
       const QString midiname = QString(name) + ".mid";
       const QString mscorename = QString(name) + ".mscx";
