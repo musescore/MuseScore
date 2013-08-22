@@ -18,6 +18,7 @@
 #include "clef.h"
 #include "score.h"
 #include "slur.h"
+#include "tie.h"
 #include "hairpin.h"
 #include "segment.h"
 #include "staff.h"

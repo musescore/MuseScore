@@ -36,6 +36,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/barline.h"
 #include "libmscore/excerpt.h"

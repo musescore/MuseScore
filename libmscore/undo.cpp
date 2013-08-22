@@ -32,6 +32,7 @@
 #include "select.h"
 #include "input.h"
 #include "slur.h"
+#include "tie.h"
 #include "clef.h"
 #include "staff.h"
 #include "chord.h"
@@ -3201,6 +3202,27 @@ void RemoveBracket::undo()
       staff->score()->setLayoutAll(true);
       }
 
+//---------------------------------------------------------
+//   ChangeSpannerElements
+//---------------------------------------------------------
+
+void ChangeSpannerElements::flip()
+      {
+      Element* se = spanner->startElement();
+      Element* ee = spanner->endElement();
+      spanner->setStartElement(startElement);
+      spanner->setEndElement(endElement);
+      startElement = se;
+      endElement   = ee;
+      if (spanner->type() == Element::TIE) {
+            Tie* tie = static_cast<Tie*>(spanner);
+            static_cast<Note*>(endElement)->setTieBack(0);
+            tie->endNote()->setTieBack(tie);
+            static_cast<Note*>(startElement)->setTieFor(0);
+            tie->startNote()->setTieFor(tie);
+            }
+      spanner->score()->setLayoutAll(true);
+      }
 
 
 }

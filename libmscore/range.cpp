@@ -17,6 +17,7 @@
 #include "chord.h"
 #include "score.h"
 #include "slur.h"
+#include "tie.h"
 #include "note.h"
 #include "tuplet.h"
 #include "utils.h"

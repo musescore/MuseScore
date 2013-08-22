@@ -19,7 +19,7 @@ if (SCRIPT_INTERFACE)
       glissando.h hairpin.h harmony.h hook.h icon.h image.h instrchange.h
       keysig.h lasso.h layoutbreak.h line.h lyrics.h measurebase.h measure.h
       notedot.h note.h ossia.h ottava.h page.h pedal.h rehearsalmark.h repeat.h
-      rest.h segment.h shadownote.h simpletext.h slur.h spacer.h spanner.h
+      rest.h segment.h shadownote.h simpletext.h slur.h tie.h spacer.h spanner.h
       stafftext.h stem.h symbol.h system.h tempotext.h textframe.h text.h
       textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
       score.h cursor.h page.h part.h staff.h mscore.h staffstate.h marker.h
@@ -60,7 +60,7 @@ add_library (
       measure.cpp navigate.cpp note.cpp noteevent.cpp ottava.cpp
       page.cpp part.cpp pedal.cpp pitch.cpp pitchspelling.cpp
       rendermidi.cpp repeat.cpp repeatlist.cpp rest.cpp
-      score.cpp segment.cpp select.cpp shadownote.cpp slur.cpp
+      score.cpp segment.cpp select.cpp shadownote.cpp slur.cpp tie.cpp
       spacer.cpp spanner.cpp staff.cpp staffstate.cpp
       stafftext.cpp stafftype.cpp stem.cpp style.cpp symbol.cpp
       sym.cpp system.cpp tablature.cpp tempotext.cpp text.cpp

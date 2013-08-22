@@ -55,6 +55,7 @@ class MuseScoreView {
       virtual void startEdit() = 0;
       virtual void startEdit(Element*, int startGrip) = 0;
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
+      virtual void setDropTarget(const Element*) {}
       };
 
 

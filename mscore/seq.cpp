@@ -24,6 +24,7 @@
 
 #include "synthesizer/msynthesizer.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/note.h"

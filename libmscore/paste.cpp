@@ -16,6 +16,7 @@
 #include "clef.h"
 #include "navigate.h"
 #include "slur.h"
+#include "tie.h"
 #include "note.h"
 #include "rest.h"
 #include "chord.h"
