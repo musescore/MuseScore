@@ -161,7 +161,8 @@ int levelOfTick(const ReducedFraction &tick, const std::vector<DivisionInfo> &di
             if (tick < divInfo.onTime || tick > divInfo.onTime + divInfo.len)
                   continue;
             for (const auto &divLenInfo: divInfo.divLengths) {
-                  if ((tick - divInfo.onTime).ticks() % divLenInfo.len.ticks() == 0)
+                  const auto ratio = (tick - divInfo.onTime) / divLenInfo.len;
+                  if (ratio.numerator() % ratio.denominator() == 0)
                         return divLenInfo.level;
                   }
             }
@@ -294,8 +295,10 @@ bool is23EndOfBeatInCompoundMeter(const ReducedFraction &startTickInBar,
 
       const auto beatLen = beatLength(barFraction);
       const auto divLen = beatLen / 3;
-      if ((startTickInBar - beatLen * (startTickInBar.ticks() / beatLen.ticks()) == divLen)
-                  && (endTickInBar.ticks() % beatLen.ticks() == 0))
+      const auto ratio1 = startTickInBar / beatLen;
+      const auto ratio2 = endTickInBar / beatLen;
+      if ((startTickInBar - beatLen * (ratio1.numerator() / ratio1.denominator()) == divLen)
+                  && (ratio2.numerator() % ratio2.denominator() == 0))
             return true;
       return false;
       }
