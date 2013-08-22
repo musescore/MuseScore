@@ -316,21 +316,18 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   cs->addLyrics(tick, staffIdx, s);
                   }
                   break;
-
             case META_TRACK_NAME:
                   if (name.isEmpty())
                         name = (const char*)data;
                   break;
-
             case META_TEMPO:
                   {
                   const unsigned tempo = data[2] + (data[1] << 8) + (data[0] <<16);
                   const double t = 1000000.0 / double(tempo);
                   cs->setTempo(tick, t);
-                  // TODO: create TempoText
+                              // TODO: create TempoText
                   }
                   break;
-
             case META_KEY_SIGNATURE:
                   {
                   const int key = ((const char*)data)[0];
@@ -381,16 +378,12 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   measure->add(text);
                   }
                   break;
-
             case META_COPYRIGHT:
                   cs->setMetaTag("Copyright", QString((const char*)(mm.edata())));
                   break;
-
             case META_TIME_SIGNATURE:
-                  qDebug("midi: meta timesig: %d, division %d", tick, MScore::division);
                   cs->sigmap()->add(tick, Fraction(data[0], 1 << data[1]));
                   break;
-
             default:
                   if (MScore::debugMode)
                         qDebug("unknown meta type 0x%02x", mm.metaType());
@@ -976,6 +969,11 @@ QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       return trackList;
       }
 
+ReducedFraction toMuseScoreTicks(int tick, int oldDivision)
+      {
+      return ReducedFraction::fromTicks((tick * MScore::division + oldDivision / 2) / oldDivision);
+      }
+
 std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                                             TimeSigMap *sigmap,
                                             const MidiFile *mf)
@@ -988,18 +986,18 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
       for (const auto &t: mf->tracks()) {
             MTrack track;
             track.mtrack = &t;
+            track.division = mf->division();
             int events = 0;
                         //  - create time signature list from meta events
                         //  - create MidiChord list
                         //  - extract some information from track: program, min/max pitch
             for (auto i : t.events()) {
                   const MidiEvent& e = i.second;
-                              // change division to MScore::division
-                  const auto tick = ReducedFraction::fromTicks(
-                                   (i.first * MScore::division + mf->division() / 2) / mf->division());
+                  const auto tick = toMuseScoreTicks(i.first, track.division);
                               // remove time signature events
-                  if ((e.type() == ME_META) && (e.metaType() == META_TIME_SIGNATURE))
+                  if ((e.type() == ME_META) && (e.metaType() == META_TIME_SIGNATURE)) {
                         sigmap->add(tick.ticks(), metaTimeSignature(e));
+                        }
                   else if (e.type() == ME_NOTE) {
                         ++events;
                         const int pitch = e.pitch();
@@ -1222,16 +1220,21 @@ void createTimeSignatures(Score *score)
             }
       }
 
+void processMeta(MTrack &mt, bool isLyric)
+      {
+      for (const auto &ie : mt.mtrack->events()) {
+            const MidiEvent &e = ie.second;
+            const auto tick = toMuseScoreTicks(ie.first, mt.division);
+            if ((e.type() == ME_META) && ((e.metaType() == META_LYRIC) == isLyric))
+                  mt.processMeta(tick.ticks(), e);
+            }
+      }
+
 void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiType midiType)
       {
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
-
-            for (auto ie : mt.mtrack->events()) {
-                  const MidiEvent &e = ie.second;
-                  if ((e.type() == ME_META) && (e.metaType() != META_LYRIC))
-                        mt.processMeta(ie.first, e);
-                  }
+            processMeta(mt, false);
             if (midiType == MT_UNKNOWN)
                   midiType = MT_GM;
             setTrackInfo(midiType, mt);
@@ -1239,12 +1242,7 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
                         //   through MidiImportOperations
             preferences.midiImportOperations.setCurrentTrack(mt.indexOfOperation);
             mt.convertTrack(lastTick);
-
-            for (auto ie : mt.mtrack->events()) {
-                  const MidiEvent &e = ie.second;
-                  if ((e.type() == ME_META) && (e.metaType() == META_LYRIC))
-                        mt.processMeta(ie.first, e);
-                  }
+            processMeta(mt, true);
             }
       }
 
@@ -1258,8 +1256,10 @@ QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
             QString trackName;
             for (const auto &ie: midiTrack->events()) {
                   const MidiEvent &e = ie.second;
-                  if ((e.type() == ME_META) && (e.metaType() == META_TRACK_NAME))
+                  if ((e.type() == ME_META) && (e.metaType() == META_TRACK_NAME)) {
                         trackName = (const char*)e.edata();
+                        break;
+                        }
                   }
             MidiType midiType = mf->midiType();
             if (midiType == MT_UNKNOWN)
