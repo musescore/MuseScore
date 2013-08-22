@@ -58,6 +58,7 @@ class BagpipeEmbellishment : public Element {
       void setEmbelType(int val)                  { _embelType = val;                       }
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
+      virtual void layout();
       virtual void draw(QPainter*) const;
       static BagpipeEmbellishmentInfo BagpipeEmbellishmentList[];
       static int nEmbellishments();
