@@ -183,12 +183,14 @@ Meter::MaxLevel maxLevelBetween(const ReducedFraction &startTickInBar,
 
       for (const auto &divLengthInfo: divInfo.divLengths) {
             const auto &divLen = divLengthInfo.len;
-            auto maxEndRaster = divLen * (endTickInDiv.ticks() / divLen.ticks());
+            const auto ratio = endTickInDiv / divLen;
+            auto maxEndRaster = divLen * (ratio.numerator() / ratio.denominator());
             if (maxEndRaster == endTickInDiv)
                   maxEndRaster -= divLen;
             if (startTickInDiv < maxEndRaster) {
                               // max level is found
-                  const auto maxStartRaster = divLen * (startTickInDiv.ticks() / divLen.ticks());
+                  const auto ratio = startTickInDiv / divLen;
+                  const auto maxStartRaster = divLen * (ratio.numerator() / ratio.denominator());
                   const auto count = (maxEndRaster - maxStartRaster) / divLen;
                   level.pos = maxStartRaster + divLen + divInfo.onTime;
                   level.levelCount = count.numerator() / count.denominator();
