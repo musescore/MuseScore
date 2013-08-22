@@ -292,7 +292,7 @@ void Seq::loopStop()
       // Finds the Loop event and removes it.
       //
       for (auto it = events.begin(); it != events.end(); ) {
-            if ((*it).second.type() == ME_LOOP)
+            if (it->second.type() == ME_LOOP)
                   it = events.erase(it);
             else
                   ++it;
@@ -338,9 +338,10 @@ void Seq::start()
                   // Add loop Out event
                   NPlayEvent event;
                   event.setType(ME_LOOP);
-                  // insert ME_LOOP as first event if there are events with same tick
-                  auto hint = events.lower_bound(cs->loopOutTick());
-                  events.insert(hint, std::pair<int,NPlayEvent>(cs->loopOutTick(), event));
+                  // **Lower bound causes crash** insert ME_LOOP as first event if there are events with same tick
+                  //auto hint = events.lower_bound(cs->loopOutTick());
+                  //events.insert(hint, std::pair<int,NPlayEvent>(cs->loopOutTick(), event));
+                  events.insert(std::pair<int,NPlayEvent>(cs->loopOutTick(), event));
                   qDebug ("Add loop event at tick %d   (loopInTick = %d)", cs->loopOutTick(), cs->loopInTick());
                   if (cs->loopOutTick() < cs->loopInTick())
                         seek(0);  // If Out pos < In pos, restart playback at the beginning.
@@ -1302,7 +1303,7 @@ void Seq::setLoopSelection()
       {
       cs->setLoopInTick(cs->selection().tickStart());
       cs->setLoopOutTick(cs->selection().tickEnd());
-      qDebug ("setLoopSelection : loopInTick = %d  loopOutTick = %d\n",cs->selection().tickStart(), cs->pos(), cs->selection().tickEnd());
+      qDebug ("setLoopSelection : loopInTick = %d  loopOutTick = %d\n",cs->selection().tickStart(), cs->selection().tickEnd());
       cv->updateLoopCursors();
       }
 
