@@ -4171,7 +4171,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   seq->setLoopIn();
                   if (!loopAction->isChecked())
                         loopAction->trigger();
-                  //cv->showLoopCursors();
                   }
             else {
                   seq->unsetLoopIn();
@@ -4182,7 +4181,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   seq->setLoopOut();
                   if (!loopAction->isChecked())
                         loopAction->trigger();
-                  //cv->showLoopCursors();
                   }
             else {
                   seq->unsetLoopOut();
