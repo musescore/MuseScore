@@ -20,6 +20,7 @@
 #include "page.h"
 #include "text.h"
 #include "slur.h"
+#include "tie.h"
 #include "sig.h"
 #include "tempo.h"
 #include "measure.h"

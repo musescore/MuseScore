@@ -146,7 +146,8 @@ QList<Element*> Page::items(const QRectF& r)
 #ifdef USE_BSP
       if (!bspTreeValid)
             doRebuildBspTree();
-      return bspTree.items(r);
+      QList<Element*> el = bspTree.items(r);
+      return el;
 #else
       return QList<Element*>();
 #endif

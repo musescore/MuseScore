@@ -161,6 +161,8 @@ enum P_ID {
 
       P_SPANNER_TICK,
       P_SPANNER_TICK2,
+      P_SPANNER_ANCHOR1,
+      P_SPANNER_ANCHOR2,
       P_USER_OFF2,
 
       P_BEGIN_TEXT_PLACE,
@@ -204,7 +206,7 @@ enum P_TYPE {
       T_PLACEMENT,
       T_TEMPO,
       T_GROUPS,
-      T_SYMID
+      T_SYMID,
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);

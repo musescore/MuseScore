@@ -40,6 +40,7 @@
 #include "libmscore/hook.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/volta.h"
 #include "libmscore/line.h"
@@ -2268,6 +2269,16 @@ SlurSegmentView::SlurSegmentView()
    : ShowElementBase()
       {
       ss.setupUi(addWidget());
+      connect(ss.slurTie, SIGNAL(clicked()), SLOT(slurTieClicked()));
+      }
+
+//---------------------------------------------------------
+//   stemClicked
+//---------------------------------------------------------
+
+void SlurSegmentView::slurTieClicked()
+      {
+      emit elementChanged(static_cast<SlurSegment*>(element())->slurTie());
       }
 
 //---------------------------------------------------------
@@ -2297,6 +2308,7 @@ void SlurSegmentView::setElement(Element* e)
       ss.up4py->setValue(s->getUps(GRIP_END)->p.y());
       ss.up4ox->setValue(s->getUps(GRIP_END)->off.x());
       ss.up4oy->setValue(s->getUps(GRIP_END)->off.y());
+
       }
 
 //---------------------------------------------------------

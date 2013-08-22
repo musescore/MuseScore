@@ -25,7 +25,7 @@
 #include "system.h"
 #include "tuplet.h"
 #include "hook.h"
-#include "slur.h"
+#include "tie.h"
 #include "arpeggio.h"
 #include "score.h"
 #include "tremolo.h"

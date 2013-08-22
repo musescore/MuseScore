@@ -166,8 +166,8 @@ void ScoreView::endDragEdit()
       {
       _score->addRefresh(editObject->canvasBoundingRect());
       editObject->endEditDrag();
+      setDropTarget(0);
       updateGrips();
-      // setDropTarget(0); // this also resets dropRectangle and dropAnchor
       _score->rebuildBspTree();
       _score->addRefresh(editObject->canvasBoundingRect());
       _score->end();

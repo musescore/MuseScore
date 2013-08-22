@@ -2268,10 +2268,8 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
       p.setBrush(Qt::NoBrush);
 
       p.setPen(QPen(Qt::red, 0.0));
-      p.drawPath(e->shape());
-
-      // p.setPen(Qt::red);
-      // p.drawRect(e->bbox());
+      // p.drawPath(e->shape());
+      p.drawRect(e->bbox());
 
       p.setPen(QPen(Qt::red, 0.0));
       qreal w = 5.0 / p.matrix().m11();
@@ -3214,6 +3212,12 @@ void ScoreView::dragScoreView(QMouseEvent* ev)
          _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy()+dy, _matrix.m33());
       imatrix = _matrix.inverted();
       scroll(dx, dy, QRect(0, 0, width(), height()));
+      // scroll schedules an update which is probably too small
+      // hack around:
+      if (dx > 0)
+            update(-10, 0, dx + 50, height());
+      else if (dx < 0)
+            update(width() - 50 + dx, 0, width() + 10, height());
       emit offsetChanged(_matrix.dx(), _matrix.dy());
       emit viewRectChanged();
       }
@@ -3567,11 +3571,12 @@ void ScoreView::setDropAnchor(const QLineF& l)
             r.adjust(-w, -w, 2*w, 2*w);
             _score->addRefresh(r);
             }
-      if (dropTarget) {
+/*      if (dropTarget) {
             dropTarget->setDropTarget(false);
             _score->addRefresh(dropTarget->canvasBoundingRect());
             dropTarget = 0;
             }
+      */
       if (dropRectangle.isValid()) {
             _score->addRefresh(dropRectangle);
             dropRectangle = QRectF();

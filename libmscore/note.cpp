@@ -24,6 +24,7 @@
 #include "sym.h"
 #include "xml.h"
 #include "slur.h"
+#include "tie.h"
 #include "text.h"
 #include "clef.h"
 #include "staff.h"

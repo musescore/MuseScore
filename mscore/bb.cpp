@@ -19,6 +19,7 @@
 #include "libmscore/text.h"
 #include "libmscore/box.h"
 #include "libmscore/slur.h"
+#include "libmscore/tie.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/rest.h"

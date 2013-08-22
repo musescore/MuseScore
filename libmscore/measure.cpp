@@ -26,6 +26,7 @@
 #include "key.h"
 #include "dynamic.h"
 #include "slur.h"
+#include "tie.h"
 #include "sig.h"
 #include "beam.h"
 #include "tuplet.h"
