@@ -26,7 +26,7 @@ void MidiData::excludeFile(const QString &fileName)
 
 QList<TrackData> MidiData::tracksData(const QString &fileName) const
       {
-      auto it = data.find(fileName);
+      const auto it = data.find(fileName);
       if (it == data.end())
             return QList<TrackData>();
       return it.value().tracksData;
@@ -34,7 +34,7 @@ QList<TrackData> MidiData::tracksData(const QString &fileName) const
 
 QByteArray MidiData::HHeaderData(const QString &fileName) const
       {
-      auto it = data.find(fileName);
+      const auto it = data.find(fileName);
       if (it == data.end())
             return QByteArray();
       return it.value().HHeaderData;
@@ -42,7 +42,7 @@ QByteArray MidiData::HHeaderData(const QString &fileName) const
 
 QByteArray MidiData::VHeaderData(const QString &fileName) const
       {
-      auto it = data.find(fileName);
+      const auto it = data.find(fileName);
       if (it == data.end())
             return QByteArray();
       return it.value().VHeaderData;
@@ -50,7 +50,7 @@ QByteArray MidiData::VHeaderData(const QString &fileName) const
 
 int MidiData::selectedRow(const QString &fileName) const
       {
-      auto it = data.find(fileName);
+      const auto it = data.find(fileName);
       if (it == data.end())
             return 0;
       return it.value().selectedRow;
@@ -68,7 +68,7 @@ void MidiData::setMidiFile(const QString &fileName, const MidiFile &midiFile)
 
 const MidiFile* MidiData::midiFile(const QString &fileName) const
       {
-      auto it = data.find(fileName);
+      const auto it = data.find(fileName);
       if (it == data.end())
             return nullptr;
       return &(it.value().midiFile);

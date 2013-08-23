@@ -67,8 +67,17 @@ p, li { white-space: pre-wrap; }
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="3" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <durationType>16th</durationType>
+          </Rest>
         <Chord>
-          <durationType>eighth</durationType>
+          <durationType>64th</durationType>
           <Note>
             <Events>
               <Event>
@@ -77,64 +86,27 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
+            <pitch>84</pitch>
+            <tpc>14</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Chord>
+        <Rest>
+          <durationType>64th</durationType>
+          </Rest>
+        <Rest>
+          <durationType>32nd</durationType>
+          </Rest>
+        <Rest>
           <durationType>eighth</durationType>
-          <Note>
-            <Tie id="2">
-              </Tie>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <dots>1</dots>
+          </Rest>
+        <Rest>
           <durationType>quarter</durationType>
-          <Note>
-            <endSpanner id="2"/>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>eighth</durationType>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
+          </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       </Staff>
     </Score>

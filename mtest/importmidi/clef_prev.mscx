@@ -56,8 +56,8 @@ p, li { white-space: pre-wrap; }
     <Staff id="1">
       <Measure number="1">
         <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
           </Clef>
         <KeySig>
           <accidental>0</accidental>
@@ -67,6 +67,34 @@ p, li { white-space: pre-wrap; }
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>45</pitch>
+            <tpc>17</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
         <Tuplet id="1">
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
@@ -74,7 +102,7 @@ p, li { white-space: pre-wrap; }
           </Tuplet>
         <Chord>
           <Tuplet>1</Tuplet>
-          <durationType>eighth</durationType>
+          <durationType>quarter</durationType>
           <Note>
             <Events>
               <Event>
@@ -83,9 +111,9 @@ p, li { white-space: pre-wrap; }
                 <len>666</len>
                 </Event>
               </Events>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            <velocity>80</velocity>
+            <pitch>56</pitch>
+            <tpc>22</tpc>
+            <velocity>76</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
@@ -100,123 +128,99 @@ p, li { white-space: pre-wrap; }
                 <len>666</len>
                 </Event>
               </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <Tuplet>1</Tuplet>
-          <durationType>eighth</durationType>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>666</len>
-                </Event>
-              </Events>
-            <pitch>72</pitch>
+            <pitch>60</pitch>
             <tpc>14</tpc>
-            <velocity>80</velocity>
+            <velocity>48</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Tuplet id="2">
+          <normalNotes>2</normalNotes>
+          <actualNotes>3</actualNotes>
+          <baseNote>eighth</baseNote>
+          </Tuplet>
         <Chord>
+          <Tuplet>2</Tuplet>
           <durationType>quarter</durationType>
           <Note>
             <Events>
               <Event>
                 <pitch>0</pitch>
                 <ontime>0</ontime>
-                <len>1000</len>
+                <len>666</len>
                 </Event>
               </Events>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
+            <pitch>63</pitch>
+            <tpc>11</tpc>
+            <velocity>65</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>64</pitch>
-            <tpc>18</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
-        <tick>0</tick>
-        <Chord>
-          <track>1</track>
+          <Tuplet>2</Tuplet>
           <durationType>eighth</durationType>
           <Note>
-            <track>1</track>
             <Events>
               <Event>
                 <pitch>0</pitch>
                 <ontime>0</ontime>
-                <len>1000</len>
+                <len>666</len>
                 </Event>
               </Events>
-            <pitch>62</pitch>
-            <tpc>16</tpc>
-            <velocity>80</velocity>
+            <pitch>68</pitch>
+            <tpc>22</tpc>
+            <velocity>79</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Tuplet id="3">
+          <normalNotes>2</normalNotes>
+          <actualNotes>3</actualNotes>
+          <baseNote>eighth</baseNote>
+          </Tuplet>
+        <Rest>
+          <Tuplet>3</Tuplet>
+          <durationType>quarter</durationType>
+          </Rest>
         <Chord>
-          <track>1</track>
+          <Tuplet>3</Tuplet>
           <durationType>eighth</durationType>
           <Note>
-            <track>1</track>
             <Events>
               <Event>
                 <pitch>0</pitch>
                 <ontime>0</ontime>
-                <len>1000</len>
+                <len>666</len>
                 </Event>
               </Events>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
+            <pitch>68</pitch>
+            <tpc>22</tpc>
+            <velocity>71</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Tuplet id="4">
+          <normalNotes>2</normalNotes>
+          <actualNotes>3</actualNotes>
+          <baseNote>eighth</baseNote>
+          </Tuplet>
         <Rest>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <track>1</track>
+          <Tuplet>4</Tuplet>
           <durationType>quarter</durationType>
           </Rest>
         <Chord>
-          <track>1</track>
-          <durationType>quarter</durationType>
+          <Tuplet>4</Tuplet>
+          <durationType>eighth</durationType>
           <Note>
-            <track>1</track>
             <Events>
               <Event>
                 <pitch>0</pitch>
                 <ontime>0</ontime>
-                <len>1000</len>
+                <len>666</len>
                 </Event>
               </Events>
-            <pitch>62</pitch>
-            <tpc>16</tpc>
+            <pitch>68</pitch>
+            <tpc>22</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>

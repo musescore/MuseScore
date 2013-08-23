@@ -7,7 +7,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
 #include "libmscore/tuplet.h"
-#include "libmscore/fraction.h"
+#include "importmidi_fraction.h"
 
 
 namespace Ms {
@@ -23,8 +23,8 @@ class SwingDetector
 
    private:
       std::vector<ChordRest *> elements;
-      Fraction sumLen;
-      const Fraction FULL_LEN = Fraction(1, 4);
+      ReducedFraction sumLen;
+      const ReducedFraction FULL_LEN = {1, 4};
       MidiOperation::Swing swingType;
       bool swingApplied = false;
 
@@ -46,14 +46,14 @@ SwingDetector::SwingDetector(MidiOperation::Swing st)
 void SwingDetector::add(ChordRest *cr)
       {
       if (elements.empty()) {
-            if (cr->globalDuration() >= FULL_LEN)
+            if (ReducedFraction(cr->globalDuration()) >= FULL_LEN)
                   return;
-            int tickInBar = cr->tick() - cr->measure()->tick();
+            const int tickInBar = cr->tick() - cr->measure()->tick();
             if (tickInBar % MScore::division == 0)
                   append(cr);
             }
       else {
-            if (sumLen + cr->globalDuration() > FULL_LEN) {
+            if (sumLen + ReducedFraction(cr->globalDuration()) > FULL_LEN) {
                   reset();
                   return;
                   }
@@ -78,14 +78,14 @@ void SwingDetector::add(ChordRest *cr)
 void SwingDetector::reset()
       {
       elements.clear();
-      sumLen = Fraction(0);
+      sumLen = ReducedFraction(0);
       }
 
 void SwingDetector::append(ChordRest *cr)
       {
       if (cr->type() == Element::CHORD || cr->type() == Element::REST) {
             elements.push_back(cr);
-            sumLen += cr->globalDuration();
+            sumLen += ReducedFraction(cr->globalDuration());
             }
       }
 
@@ -153,14 +153,13 @@ void SwingDetector::applySwing()
             ChordRest *cr = elements[1];
             cr->score()->removeElement(cr);
             delete cr;
-            cr = nullptr;
             }
 
-      ChordRest *first = elements.front();
-      int startTick = first->segment()->tick();
+      const ChordRest *first = elements.front();
+      const int startTick = first->segment()->tick();
       ChordRest *last = elements.back();
       last->segment()->remove(last);
-      Segment* s = last->measure()->getSegment(last, startTick + MScore::division / 2);
+      Segment *s = last->measure()->getSegment(last, startTick + MScore::division / 2);
       s->add(last);
 
       if (tuplet) {
@@ -211,11 +210,11 @@ QString swingCaption(MidiOperation::Swing swingType)
 void detectSwing(Staff *staff, MidiOperation::Swing swingType)
       {
       Score *score = staff->score();
-      int strack = staff->idx() * VOICES;
+      const int strack = staff->idx() * VOICES;
       SwingDetector swingDetector(swingType);
 
       for (Segment *seg = score->firstSegment(Segment::SegChordRest); seg;
-           seg = seg->next1(Segment::SegChordRest)) {
+                                      seg = seg->next1(Segment::SegChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
                   ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
                   if (!cr)
@@ -228,7 +227,7 @@ void detectSwing(Staff *staff, MidiOperation::Swing swingType)
             StaffText* st = new StaffText(score);
             st->setTextStyleType(TEXT_STYLE_STAFF);
             st->setText(swingCaption(swingType));
-            Segment *seg = score->firstSegment(Segment::SegChordRest);
+            Segment* seg = score->firstSegment(Segment::SegChordRest);
             st->setParent(seg);
             st->setTrack(strack);   // voice == 0
             score->addElement(st);

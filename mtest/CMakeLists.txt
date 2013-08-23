@@ -44,7 +44,11 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_chord.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_data.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_fraction.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_swing.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_drum.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_clef.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_lrhand.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
