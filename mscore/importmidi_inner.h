@@ -81,7 +81,6 @@ class MTrack {
                            const ReducedFraction &len, Meter::DurationType durationType);
       void createTuplets();
       void createKeys(int accidentalType);
-      void createClefs();
       };
 
 namespace MidiTuplet {
