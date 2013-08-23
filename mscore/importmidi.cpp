@@ -52,6 +52,8 @@
 
 #include "libmscore/element.h"
 
+#include <set>
+
 
 namespace Ms {
 
@@ -664,8 +666,8 @@ void MTrack::createTuplets()
 
 void MTrack::createKeys(int accidentalType)
       {
-      Score* score     = staff->score();
-      const int track        = staff->idx() * VOICES;
+      Score* score = staff->score();
+      const int track = staff->idx() * VOICES;
 
       KeyList* km = staff->keymap();
       if (!hasKey && !mtrack->drumTrack()) {
@@ -706,56 +708,149 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
       seg->add(clef);
       }
 
-void createSmallClef(ClefType clefType, int tick, Staff *staff)
+void createSmallClef(ClefType clefType, Segment *chordRestSeg, Staff *staff)
       {
-      const bool isSmallClef = true;
-      createClef(clefType, staff, tick, isSmallClef);
-      }
-
-// go <trebleCounter> chord segments back
-
-int findPrevSegTick(int trebleCounter, Segment *seg, int tick)
-      {
-      --trebleCounter;
-      Segment *prevSeg = seg;
-      for ( ; prevSeg && trebleCounter;
-            prevSeg = prevSeg->prev1(Segment::SegChordRest)) {
-            if (prevSeg->type() == Element::REST)
-                  continue;
-            --trebleCounter;
-            }
-      if (prevSeg) {
-            tick = prevSeg->tick();
-            Segment *clefSeg = prevSeg->measure()->findSegment(Segment::SegClef, tick);
-                        // remove clef if it is not the staff clef
-            if (clefSeg && clefSeg != prevSeg->score()->firstSegment(Segment::SegClef)) {
-                  prevSeg->measure()->remove(clefSeg);
-                  delete clefSeg;
+      const int strack = staff->idx() * VOICES;
+      const int tick = chordRestSeg->tick();
+      Segment *clefSeg = chordRestSeg->measure()->findSegment(Segment::SegClef, tick);
+                  // remove clef if it is not the staff clef
+      if (clefSeg && clefSeg != chordRestSeg->score()->firstSegment(Segment::SegClef)) {
+            Clef *c = static_cast<Clef *>(clefSeg->element(strack));   // voice == 0 for clefs
+            if (c) {
+                  clefSeg->remove(c);
+                  delete c;
+                  if (clefSeg->isEmpty()) {
+                        chordRestSeg->measure()->remove(clefSeg);
+                        delete clefSeg;
+                        }
+                  return;
                   }
             }
-      return tick;
+      createClef(clefType, staff, tick, true);
       }
 
-int findAverageSegPitch(Segment *seg, int strack)
+
+class AveragePitch
       {
-      int avgPitch = -1;
-      int sumPitch = 0;
-      int count = 0;
+   public:
+      AveragePitch() : sumPitch_(0), count_(0) {}
+      AveragePitch(int sumPitch, int count) : sumPitch_(sumPitch), count_(count) {}
+
+      int pitch() const { return sumPitch_ / count_; }
+      int sumPitch() const { return sumPitch_; }
+      int count() const { return count_; }
+      void addPitch(int pitch)
+            {
+            sumPitch_ += pitch;
+            ++count_;
+            }
+      void reset()
+            {
+            sumPitch_ = 0;
+            count_ = 0;
+            }
+      AveragePitch& operator+=(const AveragePitch &other)
+            {
+            sumPitch_ += other.sumPitch();
+            count_ += other.count();
+            return *this;
+            }
+   private:
+      int sumPitch_;
+      int count_;
+      };
+
+AveragePitch findAverageSegPitch(const Segment *seg, int strack)
+      {
+      AveragePitch avgPitch;
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
             if (cr && cr->type() == Element::CHORD) {
                   Chord *chord = static_cast<Chord *>(cr);
                   const auto &notes = chord->notes();
-                  for (const Note *note: notes) {
-                        if (note->tieBack())
-                              return avgPitch;
-                        sumPitch += note->pitch();
-                        }
-                  count += notes.size();
+                  for (const Note *note: notes)
+                        avgPitch.addPitch(note->pitch());
                   }
             }
-      return (count) ? sumPitch / count : avgPitch;
+      return avgPitch;
       }
+
+bool isTied(const Segment *seg, int strack, int voice,
+            Ms::Tie*(Note::*tieFunc)() const)
+      {
+      ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
+      if (cr && cr->type() == Element::CHORD) {
+            Chord *chord = static_cast<Chord *>(cr);
+            const auto &notes = chord->notes();
+            for (const Note *note: notes) {
+                  if ((note->*tieFunc)())
+                        return true;
+                  }
+            }
+      return false;
+      }
+
+bool isTiedFor(const Segment *seg, int strack, int voice)
+      {
+      return isTied(seg, strack, voice, &Note::tieFor);
+      }
+
+bool isTiedBack(const Segment *seg, int strack, int voice)
+      {
+      return isTied(seg, strack, voice, &Note::tieBack);
+      }
+
+
+class TieStateMachine
+      {
+   public:
+      enum class State
+            {
+            UNTIED, TIED_FOR, TIED_BOTH, TIED_BACK
+            };
+
+      void addSeg(const Segment *seg, int strack)
+            {
+            bool isChord = false;
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
+                  if (!cr || cr->type() != Element::CHORD)
+                        continue;
+                  if (!isChord)
+                        isChord = true;
+
+                  bool tiedFor = isTiedFor(seg, strack, voice);
+                  bool tiedBack = isTiedBack(seg, strack, voice);
+
+                  if (tiedFor && !tiedBack)
+                        tiedVoices.insert(voice);
+                  else if (!tiedFor && tiedBack)
+                        tiedVoices.erase(voice);
+                  }
+            if (!isChord)
+                  return;
+
+            if (tiedVoices.empty() && (state_ == State::TIED_FOR
+                                       || state_ == State::TIED_BOTH)) {
+                  state_ = State::TIED_BACK;
+                  }
+            else if (tiedVoices.empty() && state_ == State::TIED_BACK) {
+                  state_ = State::UNTIED;
+                  }
+            else if (!tiedVoices.empty() && (state_ == State::TIED_BACK
+                                             || state_ == State::UNTIED)) {
+                  state_ = State::TIED_FOR;
+                  }
+            else if (!tiedVoices.empty() && state_ == State::TIED_FOR) {
+                  state_ = State::TIED_BOTH;
+                  }
+            }
+      State state() const { return state_; }
+
+   private:
+      std::set<int> tiedVoices;
+      State state_ = State::UNTIED;
+      };
 
 void MTrack::createClefs()
       {
@@ -766,53 +861,85 @@ void MTrack::createClefs()
       if (!trackOpers.changeClef)
             return;
 
-      const int highPitch = 62;          // all notes upper - in treble clef
+      const int highPitch = 64;          // all notes upper - in treble clef
       const int midPitch = 60;
       const int lowPitch = 55;           // all notes lower - in bass clef
       const int counterLimit = 3;
-      int trebleCounter = 0;
-      int bassCounter = 0;
+      int counter = 0;
+      Segment *prevSeg = nullptr;
+      Segment *tiedSeg = nullptr;
       const int strack = staff->idx() * VOICES;
+      AveragePitch avgGroupPitch;
+      TieStateMachine tieTracker;
 
       for (Segment *seg = staff->score()->firstSegment(Segment::SegChordRest); seg;
                         seg = seg->next1(Segment::SegChordRest)) {
-            int avgPitch = findAverageSegPitch(seg, strack);
-            if (avgPitch == -1)
+            const auto avgPitch = findAverageSegPitch(seg, strack);
+            if (avgPitch.count() == 0)    // no chords
                   continue;
-            int tick = seg->tick();
-            int oldTrebleCounter = trebleCounter;
-            int oldBassCounter = bassCounter;
+            tieTracker.addSeg(seg, strack);
+            auto tieState = tieTracker.state();
 
-            if (currentClef == CLEF_G && avgPitch < lowPitch) {
-                  currentClef = CLEF_F;
-                  createSmallClef(currentClef, tick, staff);
+            if (tieState != TieStateMachine::State::UNTIED)
+                  avgGroupPitch += avgPitch;
+            if (tieState == TieStateMachine::State::TIED_FOR)
+                  tiedSeg = seg;
+            else if (tieState == TieStateMachine::State::TIED_BACK) {
+                  ClefType clef = clefTypeFromAveragePitch(avgGroupPitch.pitch());
+                  if (clef != currentClef) {
+                        currentClef = clef;
+                        if (tiedSeg)
+                              createSmallClef(currentClef, tiedSeg, staff);
+                        else {
+                              qDebug("createClefs: empty tied segment, tick = %d, that should not occur",
+                                     seg->tick());
+                              }
+                        }
+                  avgGroupPitch.reset();
+                  tiedSeg = nullptr;
                   }
-            else if (currentClef == CLEF_F && avgPitch > highPitch) {
-                  currentClef = CLEF_G;
-                  createSmallClef(currentClef, tick, staff);
-                  }
-            else if (currentClef == CLEF_G && avgPitch >= lowPitch && avgPitch < midPitch) {
-                  if (trebleCounter < counterLimit)
-                        ++trebleCounter;
-                  else {
-                        tick = findPrevSegTick(trebleCounter, seg, tick);
+
+            int oldCounter = counter;
+            if (tieState != TieStateMachine::State::TIED_BOTH
+                        && tieState != TieStateMachine::State::TIED_BACK) {
+
+                  if (currentClef == CLEF_G && avgPitch.pitch() < lowPitch) {
                         currentClef = CLEF_F;
-                        createSmallClef(currentClef, tick, staff);
+                        createSmallClef(currentClef, seg, staff);
                         }
-                  }
-            else if (currentClef == CLEF_F && avgPitch <= highPitch && avgPitch >= midPitch) {
-                  if (bassCounter < counterLimit)
-                        ++bassCounter;
-                  else {
-                        tick = findPrevSegTick(bassCounter, seg, tick);
+                  else if (currentClef == CLEF_F && avgPitch.pitch() > highPitch) {
                         currentClef = CLEF_G;
-                        createSmallClef(currentClef, tick, staff);
+                        createSmallClef(currentClef, seg, staff);
+                        }
+                  else if (currentClef == CLEF_G && avgPitch.pitch() >= lowPitch
+                           && avgPitch.pitch() < midPitch) {
+                        if (counter < counterLimit) {
+                              if (counter == 0)
+                                    prevSeg = seg;
+                              ++counter;
+                              }
+                        else {
+                              currentClef = CLEF_F;
+                              createSmallClef(currentClef, prevSeg, staff);
+                              }
+                        }
+                  else if (currentClef == CLEF_F && avgPitch.pitch() <= highPitch
+                           && avgPitch.pitch() >= midPitch) {
+                        if (counter < counterLimit){
+                              if (counter == 0)
+                                    prevSeg = seg;
+                              ++counter;
+                              }
+                        else {
+                              currentClef = CLEF_G;
+                              createSmallClef(currentClef, prevSeg, staff);
+                              }
                         }
                   }
-            if (trebleCounter > 0 && trebleCounter == oldTrebleCounter)
-                  trebleCounter = 0;
-            if (bassCounter > 0 && bassCounter == oldBassCounter)
-                  bassCounter = 0;
+            if (counter > 0 && counter == oldCounter) {
+                  counter = 0;
+                  prevSeg = nullptr;
+                  }
             }
       }
 

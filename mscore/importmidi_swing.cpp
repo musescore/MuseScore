@@ -153,7 +153,6 @@ void SwingDetector::applySwing()
             ChordRest *cr = elements[1];
             cr->score()->removeElement(cr);
             delete cr;
-            cr = nullptr;
             }
 
       const ChordRest *first = elements.front();
