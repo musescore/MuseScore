@@ -334,7 +334,9 @@ void Seq::start()
                   }
             }
       if ((mscore->loop())) {
-            if (mscore->isLoopOut()) {
+            if(cs->selection().state() == SEL_RANGE)
+                  setLoopSelection();
+            if (cs->loopOutTick() > 0) {
                   // Add loop Out event
                   NPlayEvent event;
                   event.setType(ME_LOOP);
@@ -1273,7 +1275,6 @@ void Seq::setLoopIn()
       else
             tick = cs->pos();   // Otherwise, use the selected note.
       cs->setLoopInTick(tick);
-      cv->updateLoopCursors();
 //      qDebug ("setLoopIn : tick = %d\n",tick);
       }
 
@@ -1288,12 +1289,9 @@ void Seq::setLoopOut()
             tick = playPos->first;  // En mode playback, set the Out position where note is being played
       else
             tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
-//      cv->setLoopOutCursor(tick-1);  // Remove 1 to avoid overlapping the following events and elements
       cs->setLoopOutTick(tick);
 //      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n",loopOutPos, cs->pos(), cs->inputState().ticks());
-      cv->updateLoopCursors();
       }
-
 
 //---------------------------------------------------------
 //   set Loop In/Out position based on the selection
@@ -1303,8 +1301,8 @@ void Seq::setLoopSelection()
       {
       cs->setLoopInTick(cs->selection().tickStart());
       cs->setLoopOutTick(cs->selection().tickEnd());
+      cs->updateLoopCursors();
       qDebug ("setLoopSelection : loopInTick = %d  loopOutTick = %d\n",cs->selection().tickStart(), cs->selection().tickEnd());
-      cv->updateLoopCursors();
       }
 
 //---------------------------------------------------------
@@ -1315,7 +1313,6 @@ void Seq::unsetLoopIn()
       {
       // Reinitialize the In loop position
       cs->setLoopInTick(-1);
-      cv->updateLoopCursors();
       }
 
 //---------------------------------------------------------
@@ -1328,6 +1325,5 @@ void Seq::unsetLoopOut()
 
       // Reinitialize the Out loop position
       cs->setLoopOutTick(-1);
-      cv->updateLoopCursors();
       }
 }

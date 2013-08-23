@@ -638,6 +638,9 @@ class Score : public QObject {
       int loopOutTick() { return _loopOutTick; }
       void setLoopInTick(int tick);
       void setLoopOutTick(int tick);
+      void updateLoopCursors();
+      void showLoopCursors();
+      void hideLoopCursors();
 
       void cmd(const QAction*);
       int fileDivision(int t) const { return (t * MScore::division + _fileDivision/2) / _fileDivision; }
