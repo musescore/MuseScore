@@ -188,6 +188,30 @@ AveragePitch findAverageSegPitch(const Segment *seg, int strack)
       return avgPitch;
       }
 
+Segment* enlargeSegToPrev(Segment *s, int strack, int counterLimit, int lPitch, int hPitch)
+      {
+      int count = 0;
+      auto newSeg = s;
+      for (Segment *segPrev = s->prev1(Segment::SegChordRest); segPrev;
+                              segPrev = segPrev->prev1(Segment::SegChordRest)) {
+            auto pitch = findAverageSegPitch(segPrev, strack);
+            if (pitch.count() > 0) {
+                  if (pitch.pitch() >= lPitch && pitch.pitch() < hPitch)
+                        newSeg = segPrev;
+                  else
+                        break;
+                  }
+            else {                  // it's a rest - should be at the end
+                  s = newSeg;
+                  break;
+                  }
+            ++count;
+            if (count == counterLimit)
+                  break;
+            }
+      return s;
+      }
+
 void createClefs(Staff *staff, int indexOfOperation)
       {
       ClefType currentClef = staff->initialClef()._concertClef;
@@ -197,7 +221,7 @@ void createClefs(Staff *staff, int indexOfOperation)
       if (!trackOpers.changeClef)
             return;
 
-      const int highPitch = 64;          // all notes upper - in treble clef
+      const int highPitch = 65;          // all notes equal or upper - in treble clef
       const int midPitch = 60;
       const int lowPitch = 55;           // all notes lower - in bass clef
       const int counterLimit = 3;
@@ -239,36 +263,48 @@ void createClefs(Staff *staff, int indexOfOperation)
             if (tieState != TieStateMachine::State::TIED_BOTH
                         && tieState != TieStateMachine::State::TIED_BACK) {
 
-                  if (currentClef == CLEF_G && avgPitch.pitch() < lowPitch) {
-                        currentClef = CLEF_F;
-                        createSmallClef(currentClef, seg, staff);
-                        }
-                  else if (currentClef == CLEF_F && avgPitch.pitch() > highPitch) {
-                        currentClef = CLEF_G;
-                        createSmallClef(currentClef, seg, staff);
-                        }
-                  else if (currentClef == CLEF_G && avgPitch.pitch() >= lowPitch
-                           && avgPitch.pitch() < midPitch) {
-                        if (counter < counterLimit) {
-                              if (counter == 0)
-                                    prevSeg = seg;
-                              ++counter;
-                              }
-                        else {
+                  if (avgPitch.pitch() < lowPitch) {
+                        if (currentClef == CLEF_G) {
+                              Segment *s = (counter > 0) ? prevSeg : seg;
                               currentClef = CLEF_F;
-                              createSmallClef(currentClef, prevSeg, staff);
+                              s = enlargeSegToPrev(s, strack, counterLimit, midPitch, highPitch);
+                              createSmallClef(currentClef, s, staff);
                               }
                         }
-                  else if (currentClef == CLEF_F && avgPitch.pitch() <= highPitch
-                           && avgPitch.pitch() >= midPitch) {
-                        if (counter < counterLimit){
-                              if (counter == 0)
-                                    prevSeg = seg;
-                              ++counter;
+                  else if (avgPitch.pitch() >= lowPitch && avgPitch.pitch() < midPitch) {
+                        if (currentClef == CLEF_G) {
+                              if (counter < counterLimit) {
+                                    if (counter == 0)
+                                          prevSeg = seg;
+                                    ++counter;
+                                    }
+                              else {
+                                    currentClef = CLEF_F;
+                                    auto s = enlargeSegToPrev(prevSeg, strack, counterLimit, midPitch, highPitch);
+                                    createSmallClef(currentClef, s, staff);
+                                    }
                               }
-                        else {
+                        }
+                  else if (avgPitch.pitch() >= midPitch && avgPitch.pitch() < highPitch) {
+                        if (currentClef == CLEF_F) {
+                              if (counter < counterLimit){
+                                    if (counter == 0)
+                                          prevSeg = seg;
+                                    ++counter;
+                                    }
+                              else {
+                                    currentClef = CLEF_G;
+                                    auto s = enlargeSegToPrev(prevSeg, strack, counterLimit, lowPitch, midPitch);
+                                    createSmallClef(currentClef, s, staff);
+                                    }
+                              }
+                        }
+                  else if (avgPitch.pitch() >= highPitch) {
+                        if (currentClef == CLEF_F) {
+                              Segment *s = (counter > 0) ? prevSeg : seg;
                               currentClef = CLEF_G;
-                              createSmallClef(currentClef, prevSeg, staff);
+                              s = enlargeSegToPrev(s, strack, counterLimit, lowPitch, midPitch);
+                              createSmallClef(currentClef, s, staff);
                               }
                         }
                   }
