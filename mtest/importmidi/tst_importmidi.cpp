@@ -221,6 +221,11 @@ class TestImportMidi : public QObject, public MTest
 
       // percussion
       void percDrums() { mf("perc_drums"); }
+
+      // clef changes along the score
+      void clefTied() { mf("clef_tied"); }
+      void clefMelody() { mf("clef_melody"); }
+      void clefPrev() { mf("clef_prev"); }
       };
 
 //---------------------------------------------------------
