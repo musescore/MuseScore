@@ -220,7 +220,7 @@ ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo)
                         // quantization is not taken into account
             if (beg < chordOnTime)
                   sumLen += (chordOnTime - beg);
-            beg = chordOnTime + maxNoteLen(midiChord.notes);
+            beg = chordOnTime + MChord::maxNoteLen(midiChord.notes);
             if (beg >= tupletInfo.onTime + tupletInfo.len)
                   break;
             }
@@ -642,14 +642,14 @@ bool hasIntersectionWithChord(const ReducedFraction &startTick,
                               const std::multimap<ReducedFraction, MidiChord>::iterator &chord)
       {
       const auto onTimeRaster = Quantize::reduceRasterIfDottedNote(
-                                  maxNoteLen(chord->second.notes), regularRaster);
+                                  MChord::maxNoteLen(chord->second.notes), regularRaster);
       const auto onTime = Quantize::quantizeValue(chord->first, onTimeRaster);
       auto testChord = chord->second;
       for (auto &note: testChord.notes) {
             auto offTimeRaster = Quantize::reduceRasterIfDottedNote(note.len, regularRaster);
             note.len = Quantize::quantizeValue(note.len, offTimeRaster);
             }
-      return (endTick > onTime && startTick < onTime + maxNoteLen(testChord.notes));
+      return (endTick > onTime && startTick < onTime + MChord::maxNoteLen(testChord.notes));
       }
 
 // input tuplets are sorted by average pitch in desc. order
@@ -877,7 +877,7 @@ void addFirstTiedTupletNotes(std::multimap<ReducedFraction, MidiChord> &chords,
                   const auto tupletFreeEnd = tupletInfo.onTime
                                   + tupletInfo.len / tupletInfo.tupletNumber * firstChordIndex;
                   for (auto &chord: chords) {
-                        const auto maxLen = maxNoteLen(chord.second.notes);
+                        const auto maxLen = MChord::maxNoteLen(chord.second.notes);
                         const auto chordOffTime = chord.first + maxLen;
                                     // if chord offTime is outside tuplet - discard chord
                         if (chord.first + tupletInfo.tupletQuant >= tupletInfo.onTime
@@ -994,7 +994,7 @@ void addChordsBetweenTupletNotes(
                                                           tuplet.regularQuant, chordIt)) {
                         auto regularError = findQuantizationError(onTime, tuplet.regularQuant);
                         auto tupletError = findQuantizationError(onTime, tuplet.tupletQuant);
-                        const auto offTime = maxNoteLen(chordIt->second.notes);
+                        const auto offTime = MChord::maxNoteLen(chordIt->second.notes);
 
                         if (offTime < tuplet.onTime + tuplet.len) {
                               regularError += findQuantizationError(offTime, tuplet.regularQuant);
@@ -1056,12 +1056,13 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
       if (!operations.tuplets.doSearch)
             return std::vector<TupletData>();
       const auto tol = Quantize::fixedQuantRaster() / 2;
-      const auto startBarChordIt = findFirstChordInRange(startBarTick - tol, endBarTick,
-                                                         chords.begin(), chords.end());
+      const auto startBarChordIt = MChord::findFirstChordInRange(startBarTick - tol, endBarTick,
+                                                                 chords.begin(), chords.end());
       if (startBarChordIt == chords.end()) // no chords in this bar
             return std::vector<TupletData>();
 
-      const auto endBarChordIt = findEndChordInRange(endBarTick + tol, startBarChordIt, chords.end());
+      const auto endBarChordIt = MChord::findEndChordInRange(endBarTick + tol,
+                                                             startBarChordIt, chords.end());
       const auto regularRaster = Quantize::findRegularQuantRaster(startBarChordIt, endBarChordIt,
                                                                   endBarTick);
       const auto divLengths = Meter::divisionsOfBarForTuplets(barFraction);
@@ -1077,14 +1078,14 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                   const auto endDivTime = startBarTick + divLen * (i + 1);
                               // check which chords can be inside tuplet period
                               // [startDivTime - quantValue, endDivTime + quantValue]
-                  const auto startDivChordIt = findFirstChordInRange(
-                            startDivTime - regularRaster, endDivTime + regularRaster,
-                            startBarChordIt, endBarChordIt);
+                  const auto startDivChordIt = MChord::findFirstChordInRange(
+                                    startDivTime - regularRaster, endDivTime + regularRaster,
+                                    startBarChordIt, endBarChordIt);
                   if (startDivChordIt == endBarChordIt)
                         continue;
                               // end iterator, as usual, will point to the next - invalid chord
-                  const auto endDivChordIt = findEndChordInRange(
-                            endDivTime + regularRaster, startDivChordIt, endBarChordIt);
+                  const auto endDivChordIt = MChord::findEndChordInRange(
+                                 endDivTime + regularRaster, startDivChordIt, endBarChordIt);
                               // try different tuplets, nested tuplets are not allowed
                   for (const auto &tupletNumber: tupletNumbers) {
                         const auto tupletNoteLen = divLen / tupletNumber;
@@ -1140,7 +1141,7 @@ void removeEmptyTuplets(MTrack &track)
                   if (tupletData.voice != chord.second.voice)
                         continue;
                   const ReducedFraction &onTime = chord.first;
-                  const ReducedFraction len = maxNoteLen(chord.second.notes);
+                  const ReducedFraction len = MChord::maxNoteLen(chord.second.notes);
                   if (onTime + len > tupletData.onTime
                               && onTime + len <= tupletData.onTime + tupletData.len) {
                                     // tuplet contains at least one chord

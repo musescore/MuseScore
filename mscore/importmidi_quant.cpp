@@ -144,7 +144,7 @@ ReducedFraction findQuantRaster(
             const auto startBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(bar, 0));
             const auto endBarTick = startBarTick
                         + ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
-            const auto startBarChordIt = findFirstChordInRange(
+            const auto startBarChordIt = MChord::findFirstChordInRange(
                             startBarTick, endBarTick, chords.begin(), chords.end());
             raster = findRegularQuantRaster(startBarChordIt, chords.end(), endBarTick);
             }
