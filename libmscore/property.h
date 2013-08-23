@@ -60,6 +60,7 @@ enum P_ID {
 
       P_STRING,
       P_GHOST,
+      P_PLAY,
       P_TIMESIG_NOMINAL,
       P_TIMESIG_ACTUAL,
       P_NUMBER_TYPE,
@@ -67,8 +68,8 @@ enum P_ID {
       P_NORMAL_NOTES,
       P_ACTUAL_NOTES,
       P_P1,
-      P_P2,
 
+/*40*/P_P2,
       P_GROW_LEFT,
       P_GROW_RIGHT,
       P_BOX_HEIGHT,
@@ -78,8 +79,8 @@ enum P_ID {
       P_LEFT_MARGIN,
       P_RIGHT_MARGIN,
       P_TOP_MARGIN,
-      P_BOTTOM_MARGIN,
 
+      P_BOTTOM_MARGIN,
       P_LAYOUT_BREAK,
       P_AUTOSCALE,
       P_SIZE,
@@ -89,8 +90,8 @@ enum P_ID {
       P_TEXT_STYLE,
       P_TEXT,
       P_HTML_TEXT,
-      P_USER_MODIFIED,
 
+      P_USER_MODIFIED,
       P_BEAM_POS,
       P_BEAM_MODE,
       P_BEAM_NO_SLOPE,
@@ -100,9 +101,9 @@ enum P_ID {
       P_TEMPO_FOLLOW_TEXT,
       P_ACCIDENTAL_BRACKET,
       P_NUMERATOR_STRING,
+
       P_DENOMINATOR_STRING,
       P_SHOW_NATURALS,
-
       P_BREAK_HINT,
       P_FBPREFIX,             // used for FiguredBassItem
       P_FBDIGIT,              //    "           "
@@ -111,60 +112,52 @@ enum P_ID {
       P_FBPARENTHESIS1,       //    "           "
       P_FBPARENTHESIS2,       //    "           "
       P_FBPARENTHESIS3,       //    "           "
+
       P_FBPARENTHESIS4,       //    "           "
       P_FBPARENTHESIS5,       //    "           "
-
       P_VOLTA_TYPE,
       P_OTTAVA_TYPE,
       P_NUMBERS_ONLY,
       P_TRILL_TYPE,
-
       P_HAIRPIN_TYPE,
       P_HAIRPIN_HEIGHT,
       P_HAIRPIN_CONT_HEIGHT,
-
       P_VELO_CHANGE,
+
       P_DYNAMIC_RANGE,
       P_PLACEMENT,
       P_VELOCITY,
       P_JUMP_TO,
       P_PLAY_UNTIL,
-
       P_CONTINUE_AT,
       P_LABEL,
       P_MARKER_TYPE,
       P_ARP_USER_LEN1,
       P_ARP_USER_LEN2,
+
       P_REPEAT_FLAGS,
       P_END_BARLINE_TYPE,
       P_END_BARLINE_VISIBLE,
       P_END_BARLINE_COLOR,
       P_MEASURE_NUMBER_MODE,
-
       P_GLISS_TYPE,
       P_GLISS_TEXT,
       P_GLISS_SHOW_TEXT,
-
       P_DIAGONAL,
       P_GROUPS,
+
       P_LINE_STYLE,
       P_LINE_COLOR,
       P_LINE_WIDTH,
-
       P_LASSO_POS,
       P_LASSO_SIZE,
-
       P_TIME_STRETCH,
-
       P_TIMESIG,
       P_TIMESIG_GLOBAL,
-
       P_SPANNER_TICK,
       P_SPANNER_TICK2,
-      P_SPANNER_ANCHOR1,
-      P_SPANNER_ANCHOR2,
-      P_USER_OFF2,
 
+      P_USER_OFF2,
       P_BEGIN_TEXT_PLACE,
       P_CONTINUE_TEXT_PLACE,
       P_BEGIN_HOOK,
@@ -174,6 +167,7 @@ enum P_ID {
       P_BEGIN_HOOK_TYPE,
       P_END_HOOK_TYPE,
       P_BEGIN_SYMBOL,
+
       P_CONTINUE_SYMBOL,
       P_END_SYMBOL,
       P_BEGIN_SYMBOL_OFFSET,

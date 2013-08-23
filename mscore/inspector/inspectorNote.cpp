@@ -72,6 +72,7 @@ InspectorNote::InspectorNote(QWidget* parent)
             { P_HEAD_TYPE,      0, 0, n.noteHeadType,  n.resetNoteHeadType  },
             { P_MIRROR_HEAD,    0, 0, n.mirrorHead,    n.resetMirrorHead    },
             { P_DOT_POSITION,   0, 0, n.dotPosition,   n.resetDotPosition   },
+            { P_PLAY,           0, 0, n.play,          n.resetPlay          },
             { P_TUNING,         0, 0, n.tuning,        n.resetTuning        },
             { P_VELO_TYPE,      0, 0, n.velocityType,  n.resetVelocityType  },
             { P_VELO_OFFSET,    0, 0, n.velocity,      n.resetVelocity      },

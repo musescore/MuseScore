@@ -142,6 +142,7 @@ Note::Note(Score* s)
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       dragMode           = false;
       _pitch             = 0;
+      _play              = true;
       _tuning            = 0.0;
       _accidental        = 0;
       _mirror            = false;
@@ -196,6 +197,7 @@ Note::Note(const Note& n)
       _pitch             = n._pitch;
       _tpc               = n._tpc;
       _hidden            = n._hidden;
+      _play              = n._play;
       _tuning            = n._tuning;
       _veloType          = n._veloType;
       _veloOffset        = n._veloOffset;
@@ -662,6 +664,7 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_DOT_POSITION);
       writeProperty(xml, P_HEAD_GROUP);
       writeProperty(xml, P_VELO_OFFSET);
+      writeProperty(xml, P_PLAY);
       writeProperty(xml, P_TUNING);
       writeProperty(xml, P_FRET);
       writeProperty(xml, P_STRING);
@@ -716,6 +719,8 @@ void Note::read(XmlReader& e)
                   setProperty(P_HEAD_GROUP, Ms::getProperty(P_HEAD_GROUP, e));
             else if (tag == "velocity")
                   setVeloOffset(e.readInt());
+            else if (tag == "play")
+                  setPlay(e.readInt());
             else if (tag == "tuning")
                   setTuning(e.readDouble());
             else if (tag == "fret")
@@ -1778,6 +1783,8 @@ QVariant Note::getProperty(P_ID propertyId) const
                   return headType();
             case P_VELO_TYPE:
                   return veloType();
+            case P_PLAY:
+                  return play();
             default:
                   break;
             }
@@ -1839,6 +1846,9 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                         }
                   break;
                   }
+            case P_PLAY:
+                  setPlay(v.toBool());
+                  break;
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;
@@ -1882,6 +1892,15 @@ void Note::undoSetGhost(bool val)
 void Note::undoSetSmall(bool val)
       {
       undoChangeProperty(P_SMALL, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetPlay
+//---------------------------------------------------------
+
+void Note::undoSetPlay(bool val)
+      {
+      undoChangeProperty(P_PLAY, val);
       }
 
 //---------------------------------------------------------
@@ -1963,6 +1982,7 @@ void Note::undoSetHeadType(NoteHeadType val)
 QVariant Note::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
+            case P_GHOST:
             case P_SMALL:
                   return false;
             case P_MIRROR_HEAD:
@@ -1977,12 +1997,12 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_FRET:
             case P_STRING:
                   return -1;
-            case P_GHOST:
-                  return false;
             case P_HEAD_TYPE:
                   return Note::HEAD_AUTO;
             case P_VELO_TYPE:
                   return MScore::OFFSET_VAL;
+            case P_PLAY:
+                  return true;
             default:
                   break;
             }

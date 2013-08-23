@@ -1146,7 +1146,8 @@ void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
 
 //---------------------------------------------------------
 //   updateGrips
-//    if (curGrip == -1) then initialize to grips-1
+//    if (curGrip == -1) then initialize to element
+//    default grip
 //---------------------------------------------------------
 
 void ScoreView::updateGrips()
@@ -1726,10 +1727,14 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       if (grips) {
             if (grips == 6) {       // HACK: this are grips of a slur
                   QPolygonF polygon(grips+1);
-                  for (int i = 0; i < grips; ++i)
-                        polygon[i] = QPointF(grip[i].center());
-                  polygon[grips] = QPointF(grip[0].center());
-                  QPen pen(MScore::frameMarginColor, 2.0/vp.matrix().m11());
+                  polygon[0] = QPointF(grip[GRIP_START].center());
+                  polygon[1] = QPointF(grip[GRIP_BEZIER1].center());
+                  polygon[2] = QPointF(grip[GRIP_SHOULDER].center());
+                  polygon[3] = QPointF(grip[GRIP_BEZIER2].center());
+                  polygon[4] = QPointF(grip[GRIP_END].center());
+                  polygon[5] = QPointF(grip[GRIP_DRAG].center());
+                  polygon[6] = QPointF(grip[GRIP_START].center());
+                  QPen pen(MScore::frameMarginColor, 0.0);
                   vp.setPen(pen);
                   vp.drawPolyline(polygon);
                   }
@@ -4167,7 +4172,6 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             cr2 = cr1;
 
       Slur* slur = new Slur(_score);
-      slur->setAnchor(Spanner::ANCHOR_SEGMENT);
       slur->setTick(cr1->tick());
       slur->setTick2(cr2->tick());
       slur->setTrack(cr1->track());
