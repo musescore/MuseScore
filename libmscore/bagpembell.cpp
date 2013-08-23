@@ -379,23 +379,191 @@ void BagpipeEmbellishment::read(XmlReader& e)
       }
       
 //---------------------------------------------------------
+//   BEDrawingDataX
+//      BagpipeEmbellishment drawing data in the x direction
+//      shared between ::draw() and ::layout()
+//---------------------------------------------------------
+      
+struct BEDrawingDataX {
+      const Sym& headsym;     // grace note head symbol
+      const Sym& flagsym;     // grace note flag symbol
+      const qreal mags;       // grace head magnification
+      const qreal headw;      // grace head width
+      const qreal headp;      // horizontal head pitch
+      const qreal spatium;    // spatium
+      const qreal lw;         // line width for stem
+      const qreal xl;         // calc x for stem of leftmost note
+      const qreal xcorr;      // correction to align flag with top of stem
+
+      BEDrawingDataX(const Sym& hs, const Sym& fs, const qreal m, const qreal s, const int nn)
+         :  headsym(hs),
+            flagsym(fs),
+            mags(     0.75 * m),
+            headw(    hs.width(mags)),
+            headp(    1.4 * hs.width(mags)),
+            spatium(  s),
+            lw(       0.1 * s),
+            xl(       (1 - 1.4 * (nn - 1)) * hs.width(mags) / 2),
+            xcorr(    0.1 * s) {}
+};
+      
+//---------------------------------------------------------
+//   BEDrawingDataY
+//      BagpipeEmbellishment drawing data in the y direction
+//      shared between ::draw() and ::layout()
+//---------------------------------------------------------
+
+struct BEDrawingDataY {
+      const qreal y1b;        // top of all stems for beamed notes
+      const qreal y1f;        // top of stem for note with flag
+      const qreal y2;         // bottom of stem
+      const qreal ycorr;      // correction to align flag with top of stem
+      const qreal bw;         // line width for beam
+      
+      BEDrawingDataY(const int l, const qreal s)
+         :  y1b(   -8 * s / 2),
+            y1f(    (l - 6) * s / 2),
+            y2(     l * s / 2),
+            ycorr( -0.2 * s),
+            bw(     0.3 * s) {}
+};
+      
+//---------------------------------------------------------
+//   debug support (disabled)
+//---------------------------------------------------------
+
+static void printBBox(const char* name, const QRectF b)
+      {
+      /*
+      qDebug("bbox%s left %f bot %f right %f top %f",
+             name,
+             b.left(),
+             b.bottom(),
+             b.right(),
+             b.top());
+       */
+      }
+
+static void symMetrics(const char* name, const Sym& headsym)
+      {
+      /*
+      qDebug("%s", name);
+      qDebug("bbox left %f bot %f right %f top %f",
+             headsym.getBbox().left(),
+             headsym.getBbox().bottom(),
+             headsym.getBbox().right(),
+             headsym.getBbox().top());
+      qDebug("attach x %f y %f",
+             headsym.getAttach().x(),
+             headsym.getAttach().y());
+       */
+      }
+      
+//---------------------------------------------------------
+//   layout
+//      calculate and set bounding box
+//---------------------------------------------------------
+
+void BagpipeEmbellishment::layout()
+      {
+      if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
+            // qDebug("BagpipeEmbellishment::layout st %d", _embelType);
+      }
+      const Sym& headsym = symbols[score()->symIdx()][quartheadSym];
+      const Sym& flagsym = symbols[score()->symIdx()][thirtysecondflagSym];
+            
+      noteList nl = getNoteList();
+      BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
+
+      setbbox(QRectF());
+      if (_embelType == 0) {
+            symMetrics("headsym", headsym);
+            symMetrics("flagsym", flagsym);
+            // qDebug("mags %f headw %f headp %f spatium %f", dx.mags, dx.headw, dx.headp, dx.spatium);
+            }
+            
+      bool drawFlag = nl.size() == 1;
+            
+      // draw the notes including stem, (optional) flag and (optional) ledger line
+      qreal x = dx.xl;
+      foreach (int note, nl) {
+            int line = BagpipeNoteInfoList[note].line;
+            BEDrawingDataY dy(line, score()->spatium());
+
+            // head
+            addbbox(headsym.bbox(dx.mags).translated(QPointF(x - dx.lw * .5 - dx.headw, dy.y2)));
+            if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
+                  printBBox(" notehead", bbox());
+                  }
+
+            // stem
+            // highest top of stems actually used is y1b
+            addbbox(QRectF(x - dx.lw * .5 - dx.headw, dy.y1b, dx.lw, dy.y2 - dy.y1b));
+            if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
+                  printBBox(" notehead + stem", bbox());
+                  }
+
+            // flag
+            if (drawFlag) {
+                  addbbox(flagsym.bbox(dx.mags).translated(QPointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
+                  printBBox(" notehead + stem + flag", bbox());
+                  }
+
+            // draw the ledger line for high A
+            if (line == -2) {
+                  addbbox(QRectF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2 - dx.lw * 2, dx.headw * 2, dx.lw));
+                  if (_embelType == 8) {
+                        printBBox(" notehead + stem + ledger line", bbox());
+                        }
+                  }
+            
+            // move x to next note x position
+            x += dx.headp;
+            }
+      }
+
+//---------------------------------------------------------
+//   drawBeams
+//      draw the beams
+//      x1,y is one side of the top beam
+//      x2,y is the other side of the top beam
+//---------------------------------------------------------
+      
+static void drawBeams(QPainter* painter, const qreal spatium,
+                      const qreal x1, const qreal x2, qreal y)
+      {
+      // draw the beams
+      painter->drawLine(QLineF(x1, y, x2, y));
+      y += spatium / 1.5;
+      painter->drawLine(QLineF(x1, y, x2, y));
+      y += spatium / 1.5;
+      painter->drawLine(QLineF(x1, y, x2, y));
+      }
+
+//---------------------------------------------------------
 //   drawGraceNote
 //      draw a single grace note in a palette cell
 //      x,y1 is the top of the stem
 //      x,y2 is the bottom of the stem
 //---------------------------------------------------------
 
-static void drawGraceNote(QPainter* painter, const Sym& headsym, const qreal lw, const qreal mags,
-                          const qreal x, const qreal y1, const qreal y2)
+static void drawGraceNote(QPainter* painter, const BEDrawingDataX& dx, const BEDrawingDataY& dy,
+                          const Sym& flagsym, const qreal x, const bool drawFlag)
       {
-      qreal headw = headsym.width(mags);
-      painter->drawLine(QLineF(x - lw * .5, y1, x - lw * .5, y2));
-      headsym.draw(painter, mags, QPointF(x - headw, y2));
+      // draw head
+      dx.headsym.draw(painter, dx.mags, QPointF(x - dx.headw, dy.y2));
+      // draw stem
+      qreal y1 =  drawFlag ? dy.y1f : dy.y1b;          // top of stems actually used
+      painter->drawLine(QLineF(x - dx.lw * .5, y1, x - dx.lw * .5, dy.y2));
+      if (drawFlag) {
+            // draw flag
+            flagsym.draw(painter, dx.mags, QPointF(x - dx.lw * .5 + dx.xcorr, y1 + dy.ycorr));
+            }
       }
 
 //---------------------------------------------------------
 //   draw
-//      draw the embellishment in a palette cell
+//      draw the embellishment centered in a palette cell
 //      x = 0 is horizontal cell center
 //      y = 0 is the top staff line
 //---------------------------------------------------------
@@ -403,48 +571,40 @@ static void drawGraceNote(QPainter* painter, const Sym& headsym, const qreal lw,
 void BagpipeEmbellishment::draw(QPainter* painter) const
       {
       const Sym& headsym = symbols[score()->symIdx()][quartheadSym];
-      qreal mags = magS() * 0.75;         // grace head magnification
-      qreal headw = headsym.width(mags);  // grace head width
-      qreal headp = headw * 1.4;          // horizontal head pitch
-      qreal _spatium = score()->spatium();
-      
-      qreal lw = 0.1 * _spatium;          // line width for stem
-      qreal y1 =  -8 * _spatium / 2;      // top of stems
-      
-      QPen pen(curColor(), lw, Qt::SolidLine, Qt::FlatCap);
-      painter->setPen(pen);
+      const Sym& flagsym = symbols[score()->symIdx()][thirtysecondflagSym];
 
       noteList nl = getNoteList();
-      int note;
-      // calc x for stem of leftmost note
-      // note embellishment is centered in the palette cell
-      qreal x  = (headw - headp * (nl.size() - 1)) / 2;
-      qreal x0 = x; // remember for later (left side of beam)
-      // draw the notes including stems
-      foreach (note, nl) {
+      BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
+
+      QPen pen(curColor(), dx.lw, Qt::SolidLine, Qt::FlatCap);
+      painter->setPen(pen);
+
+      bool drawBeam = nl.size() > 1;
+      bool drawFlag = nl.size() == 1;
+
+      // draw the notes including stem, (optional) flag and (optional) ledger line
+      qreal x = dx.xl;
+      foreach (int note, nl) {
             int line = BagpipeNoteInfoList[note].line;
-            qreal y2 = line * _spatium / 2;
-            drawGraceNote(painter, headsym, lw, mags, x, y1, y2);
+            BEDrawingDataY dy(line, score()->spatium());
+            drawGraceNote(painter, dx, dy, flagsym, x, drawFlag);
+
+            // draw the ledger line for high A
             if (line == -2)
-                  // draw the ledger line for high A
-                  painter->drawLine(QLineF(x - headw * 1.5 - lw * .5, y2, x + headw * .5 - lw * .5, y2));
-            x += headp;
+                  painter->drawLine(QLineF(x - dx.headw * 1.5 - dx.lw * .5,
+                                           dy.y2, x + dx.headw * .5 - dx.lw * .5, dy.y2));
+
+            // move x to next note x position
+            x += dx.headp;
             }
 
-      // beam drawing setup
-      qreal bw = 0.3 * _spatium;          // line width for beam
-      QPen beamPen(curColor(), bw, Qt::SolidLine, Qt::FlatCap);
-      painter->setPen(beamPen);
-      // simplification: use short beam instead of flag for single grace notes
-      // TODO: replace by flags and fix stem length for single grace notes
-      if (nl.size() == 1)
-            x += 0.75 * headp;
-      // draw the beam
-      painter->drawLine(QLineF(x0 - lw * .5, y1, x - headp - lw * .5, y1));
-      y1 += _spatium / 1.5;
-      painter->drawLine(QLineF(x0 - lw * .5, y1, x - headp - lw * .5, y1));
-      y1 += _spatium / 1.5;
-      painter->drawLine(QLineF(x0 - lw * .5, y1, x - headp - lw * .5, y1));
+      if (drawBeam) {
+            // beam drawing setup
+            BEDrawingDataY dy(0, score()->spatium());
+            QPen beamPen(curColor(), dy.bw, Qt::SolidLine, Qt::FlatCap);
+            painter->setPen(beamPen);
+            // draw the beams
+            drawBeams(painter, dx.spatium, dx.xl - dx.lw * .5, x - dx.headp - dx.lw * .5, dy.y1b);
+            }
       }
-
 }
