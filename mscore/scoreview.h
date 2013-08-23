@@ -424,7 +424,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       int loopOutPos()                         { return _curLoopOut->tick(); }
       void setLoopInCursor();
       void setLoopOutCursor();
-      void updateLoopCursors();
+      virtual void updateLoopCursors();
       void showLoopCursors();
       void hideLoopCursors();
 
