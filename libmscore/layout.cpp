@@ -682,8 +682,11 @@ void Score::doLayout()
       rebuildBspTree();
 
       int n = viewer.size();
-      for (int i = 0; i < n; ++i)
+      for (int i = 0; i < n; ++i) {
             viewer.at(i)->layoutChanged();
+            viewer.at(i)->updateLoopCursors();
+      }
+
       _layoutAll = false;
       }
 
