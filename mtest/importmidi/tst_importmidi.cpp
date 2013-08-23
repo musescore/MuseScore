@@ -269,27 +269,27 @@ void TestImportMidi::findChordInBar()
       ReducedFraction startBarTick;
       ReducedFraction endBarTick = ReducedFraction::fromTicks(4 * MScore::division); // 4/4
 
-      auto firstChordIt = findFirstChordInRange(startBarTick, endBarTick,
-                                                chords.begin(), chords.end());
+      auto firstChordIt = MChord::findFirstChordInRange(startBarTick, endBarTick,
+                                                        chords.begin(), chords.end());
       QCOMPARE(firstChordIt, chords.begin());
-      auto endChordIt = findEndChordInRange(endBarTick, firstChordIt, chords.end());
+      auto endChordIt = MChord::findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.find(ReducedFraction::fromTicks(2000)));
 
       endBarTick = ReducedFraction(0, 1);
 
-      firstChordIt = findFirstChordInRange(startBarTick, endBarTick,
-                                           chords.begin(), chords.end());
+      firstChordIt = MChord::findFirstChordInRange(startBarTick, endBarTick,
+                                                   chords.begin(), chords.end());
       QCOMPARE(firstChordIt, chords.end());
-      endChordIt = findEndChordInRange(endBarTick, firstChordIt, chords.end());
+      endChordIt = MChord::findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.end());
 
       startBarTick = ReducedFraction::fromTicks(10);
       endBarTick = ReducedFraction::fromTicks(-100);
 
-      firstChordIt = findFirstChordInRange(startBarTick, endBarTick,
-                                           chords.begin(), chords.end());
+      firstChordIt = MChord::findFirstChordInRange(startBarTick, endBarTick,
+                                                   chords.begin(), chords.end());
       QCOMPARE(firstChordIt, chords.end());
-      endChordIt = findEndChordInRange(endBarTick, firstChordIt, chords.end());
+      endChordIt = MChord::findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.end());
       }
 
