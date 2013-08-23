@@ -625,40 +625,6 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
                        nextChordTick - startChordTick, track);
       }
 
-void MTrack::createTuplets()
-      {
-      Score* score     = staff->score();
-      const int track        = staff->idx() * VOICES;
-
-      for (const auto &tupletEvent: tuplets) {
-            const auto &tupletData = tupletEvent.second;
-            if (tupletData.elements.empty())
-                  continue;
-
-            Tuplet* tuplet = new Tuplet(score);
-            const auto ratioIt = MidiTuplet::tupletRatios().find(tupletData.tupletNumber);
-            const auto tupletRatio = (ratioIt != MidiTuplet::tupletRatios().end())
-                                   ? ratioIt->second : ReducedFraction(2, 2);
-            if (ratioIt == MidiTuplet::tupletRatios().end())
-                  qDebug("Tuplet ratio not found for tuplet number: %d", tupletData.tupletNumber);
-            tuplet->setRatio(tupletRatio.fraction());
-
-            tuplet->setDuration(tupletData.len.fraction());
-            const TDuration baseLen = tupletData.len.fraction() / tupletRatio.denominator();
-            tuplet->setBaseLen(baseLen);
-
-            tuplet->setTrack(track);
-            tuplet->setTick(tupletData.onTime.ticks());
-            Measure* measure = score->tick2measure(tupletData.onTime.ticks());
-            tuplet->setParent(measure);
-
-            for (DurationElement *el: tupletData.elements) {
-                  tuplet->add(el);
-                  el->setTuplet(tuplet);
-                  }
-            }
-      }
-
 void MTrack::createKeys(int accidentalType)
       {
       Score* score = staff->score();
@@ -722,7 +688,7 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
 
       const int key = 0;                // TODO-LIB findKey(mtrack, score->sigmap());
 
-      createTuplets();
+      MidiTuplet::createTuplets(staff, tuplets);
       createKeys(key);
 
       const auto swingType = preferences.midiImportOperations.trackOperations(indexOfOperation).swing;
