@@ -79,7 +79,6 @@ class MTrack {
       QList<std::pair<ReducedFraction, TDuration> >
             toDurationList(const Measure *measure, int voice, const ReducedFraction &startTick,
                            const ReducedFraction &len, Meter::DurationType durationType);
-      void createTuplets();
       void createKeys(int accidentalType);
       };
 
