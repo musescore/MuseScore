@@ -118,7 +118,14 @@ class TestImportMidi : public QObject, public MTest
             preferences.shortestNote = defaultQuant;
             }
       void tuplet2VoicesTupletNon() { mf("tuplet_2_voices_tuplet_non"); }
-      void tuplet3_5_7tuplets() { mf("tuplet_3_5_7_tuplets"); }
+      void tuplet3_5_7tuplets()
+            {
+            TrackOperations opers;
+            opers.changeClef = false;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("tuplet_3_5_7_tuplets");
+            preferences.midiImportOperations.clear();
+            }
       void tuplet5_5TupletsRests() { mf("tuplet_5_5_tuplets_rests"); }
       void tuplet3_4() { mf("tuplet_3-4"); }
       void tupletDuplet() { mf("tuplet_duplet"); }
