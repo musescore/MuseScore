@@ -71,7 +71,7 @@ p, li { white-space: pre-wrap; }
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <Tie>
+            <Tie id="2">
               </Tie>
             <Events>
               <Event>
@@ -89,6 +89,7 @@ p, li { white-space: pre-wrap; }
         <Chord>
           <durationType>16th</durationType>
           <Note>
+            <endSpanner id="2"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
