@@ -124,16 +124,17 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
       if (slurTie()->type() != SLUR)
             return false;
 
+
       if (!((modifiers & Qt::ShiftModifier)
          && ((spannerSegmentType() == SEGMENT_SINGLE)
-              || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == 0)
-              || (spannerSegmentType() == SEGMENT_END && curGrip == 3)
+              || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == GRIP_START)
+              || (spannerSegmentType() == SEGMENT_END && curGrip == GRIP_END)
             )))
             return false;
 
       ChordRest* cr = 0;
-      ChordRest* e  = curGrip == 0 ? sl->startCR() : sl->endCR();
-      ChordRest* e1 = curGrip == 0 ? sl->endCR() : sl->startCR();
+      ChordRest* e  = curGrip == GRIP_START ? sl->startCR() : sl->endCR();
+      ChordRest* e1 = curGrip == GRIP_START ? sl->endCR() : sl->startCR();
 
       if (key == Qt::Key_Left)
             cr = prevChordRest(e);
@@ -160,7 +161,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   tie->setStartNote(static_cast<Note*>(element));
                   static_cast<Note*>(element)->setTieFor(tie);
                   }
-            else if (spanner()->anchor() == Spanner::ANCHOR_CHORD)
+            else if (spanner()->anchor() == Spanner::ANCHOR_SEGMENT)
                   spanner()->setTick(static_cast<Chord*>(element)->tick());
             }
       else {
@@ -171,7 +172,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   tie->setEndNote(static_cast<Note*>(element));
                   static_cast<Note*>(element)->setTieBack(tie);
                   }
-            else if (spanner()->anchor() == Spanner::ANCHOR_CHORD)
+            else if (spanner()->anchor() == Spanner::ANCHOR_SEGMENT)
                   spanner()->setTick2(static_cast<Chord*>(element)->tick());
             }
 
@@ -272,7 +273,6 @@ void SlurSegment::setGrip(int n, const QPointF& pt)
 
 void SlurSegment::editDrag(const EditData& ed)
       {
-// printf("edit drag\n");
       qreal _spatium = spatium();
       ups[ed.curGrip].off += (ed.delta / _spatium);
       if (ed.curGrip == GRIP_START || ed.curGrip == GRIP_END) {

@@ -68,6 +68,7 @@ static const PropertyData propertyList[] = {
 
       { P_STRING,              false, "string",        T_INT   },
       { P_GHOST,               false, "ghost",         T_BOOL  },
+      { P_PLAY,                false, "play",          T_BOOL  },
       { P_TIMESIG_NOMINAL,     false, 0,               T_FRACTION },
       { P_TIMESIG_ACTUAL,      false, 0,               T_FRACTION },
       { P_NUMBER_TYPE,         false, "numberType",    T_INT   },
@@ -75,8 +76,8 @@ static const PropertyData propertyList[] = {
       { P_NORMAL_NOTES,        false, "normalNotes",   T_INT   },
       { P_ACTUAL_NOTES,        false, "actualNotes",   T_INT   },
       { P_P1,                  false, "p1",            T_POINT },
-      { P_P2,                  false, "p2",            T_POINT },
 
+      { P_P2,                  false, "p2",            T_POINT },
       { P_GROW_LEFT,           false, "growLeft",      T_REAL    },
       { P_GROW_RIGHT,          false, "growRight",     T_REAL    },
       { P_BOX_HEIGHT,          false, "height",        T_SPATIUM },
@@ -86,8 +87,8 @@ static const PropertyData propertyList[] = {
       { P_LEFT_MARGIN,         false, "leftMargin",    T_REAL    },
       { P_RIGHT_MARGIN,        false, "rightMargin",   T_REAL    },
       { P_TOP_MARGIN,          false, "topMargin",     T_REAL    },
-      { P_BOTTOM_MARGIN,       false, "bottomMargin",  T_REAL    },
 
+      { P_BOTTOM_MARGIN,       false, "bottomMargin",  T_REAL    },
       { P_LAYOUT_BREAK,        false, "subtype",       T_LAYOUT_BREAK },
       { P_AUTOSCALE,           false, "autoScale",     T_BOOL   },
       { P_SIZE,                false, "size",            T_SIZE },
@@ -97,8 +98,8 @@ static const PropertyData propertyList[] = {
       { P_TEXT_STYLE,          false, "textStyle",       T_INT  },
       { P_TEXT,                false, 0,               T_STRING },
       { P_HTML_TEXT,           false, 0,               T_STRING },
-      { P_USER_MODIFIED,       false, 0,               T_BOOL   },
 
+      { P_USER_MODIFIED,       false, 0,               T_BOOL   },
       { P_BEAM_POS,            false, 0,               T_POINT  },
       { P_BEAM_MODE,           true, "BeamMode",       T_BEAM_MODE  },
       { P_BEAM_NO_SLOPE,       true, "noSlope",        T_BOOL   },
@@ -108,9 +109,9 @@ static const PropertyData propertyList[] = {
       { P_TEMPO_FOLLOW_TEXT,   false, "followText",    T_BOOL   },
       { P_ACCIDENTAL_BRACKET,  false, "bracket",       T_BOOL   },
       { P_NUMERATOR_STRING,    false, "textN",         T_STRING },
+
       { P_DENOMINATOR_STRING,  false, "textD",         T_STRING },
       { P_SHOW_NATURALS,       false, "showNaturals",  T_BOOL   },
-
       { P_BREAK_HINT,          false, "",              T_BOOL   },
       { P_FBPREFIX,            false, "prefix",        T_INT    },
       { P_FBDIGIT,             false, "digit",         T_INT    },
@@ -119,58 +120,52 @@ static const PropertyData propertyList[] = {
       { P_FBPARENTHESIS1,      false, "",              T_INT    },
       { P_FBPARENTHESIS2,      false, "",              T_INT    },
       { P_FBPARENTHESIS3,      false, "",              T_INT    },
+
       { P_FBPARENTHESIS4,      false, "",              T_INT    },
       { P_FBPARENTHESIS5,      false, "",              T_INT    },
-
       { P_VOLTA_TYPE,          false, "",              T_INT    },
       { P_OTTAVA_TYPE,         false, "",              T_INT    },
       { P_NUMBERS_ONLY,        false, "numbersOnly",   T_BOOL   },
       { P_TRILL_TYPE,          false, "",              T_INT    },
-
       { P_HAIRPIN_TYPE,        false, "",              T_INT     },
       { P_HAIRPIN_HEIGHT,      false, "hairpinHeight",     T_SPATIUM },
       { P_HAIRPIN_CONT_HEIGHT, false, "hairpinContHeight", T_SPATIUM },
-
       { P_VELO_CHANGE,         false, "",              T_INT    },
+
       { P_DYNAMIC_RANGE,       false, "dynType",       T_INT    },
       { P_PLACEMENT,           false, "placement",     T_PLACEMENT    },
       { P_VELOCITY,            false, "velocity",      T_INT    },
       { P_JUMP_TO,             false, "jumpTo",        T_STRING },
       { P_PLAY_UNTIL,          false, "playUntil",     T_STRING },
-
       { P_CONTINUE_AT,         false, "continueAt",    T_STRING },
       { P_LABEL,               false, "label",         T_STRING },
       { P_MARKER_TYPE,         false, 0,               T_INT    },
       { P_ARP_USER_LEN1,       false, 0,               T_REAL   },
       { P_ARP_USER_LEN2,       false, 0,               T_REAL   },
+
       { P_REPEAT_FLAGS,        false, 0,               T_INT    },
       { P_END_BARLINE_TYPE,    false, 0,               T_INT    },
       { P_END_BARLINE_VISIBLE, false, 0,               T_BOOL   },
       { P_END_BARLINE_COLOR,   false, 0,               T_COLOR  },
       { P_MEASURE_NUMBER_MODE, false, 0,               T_INT    },
-
       { P_GLISS_TYPE,          false, 0,               T_INT    },
       { P_GLISS_TEXT,          false, 0,               T_STRING },
       { P_GLISS_SHOW_TEXT,     false, 0,               T_BOOL   },
-
       { P_DIAGONAL,            false, 0,               T_BOOL     },
       { P_GROUPS,              false, 0,               T_GROUPS   },
+
       { P_LINE_STYLE,          false, "lineStyle",     T_INT      },
       { P_LINE_COLOR,          false, 0,               T_COLOR    },
       { P_LINE_WIDTH,          false, 0,               T_SPATIUM  },
-
       { P_LASSO_POS,           false, 0,               T_POINT_MM },
       { P_LASSO_SIZE,          false, 0,               T_SIZE_MM  },
-
       { P_TIME_STRETCH,        false, 0,               T_REAL     },
-
       { P_TIMESIG,             false, 0,               T_FRACTION },
       { P_TIMESIG_GLOBAL,      false, 0,               T_FRACTION },
-
       { P_SPANNER_TICK,        true,  "tick",          T_INT      },
       { P_SPANNER_TICK2,       true,  "tick2",         T_INT      },
-      { P_USER_OFF2,           false, "userOff2",      T_POINT    },
 
+      { P_USER_OFF2,           false, "userOff2",      T_POINT    },
       { P_BEGIN_TEXT_PLACE,       false, "beginTextPlace",       T_INT     },
       { P_CONTINUE_TEXT_PLACE,    false, "beginTextPlace",       T_INT     },
       { P_BEGIN_HOOK,             false, "beginHook",            T_BOOL    },
@@ -180,6 +175,7 @@ static const PropertyData propertyList[] = {
       { P_BEGIN_HOOK_TYPE,        false, "beginHookType",        T_INT     },
       { P_END_HOOK_TYPE,          false, "endHookType",          T_INT     },
       { P_BEGIN_SYMBOL,           false, "beginSymbol",          T_SYMID   },
+
       { P_CONTINUE_SYMBOL,        false, "continueSymbol",       T_SYMID   },
       { P_END_SYMBOL,             false, "endSymbol",            T_SYMID   },
       { P_BEGIN_SYMBOL_OFFSET,    false, "beginSymbolOffset",    T_POINT   },
