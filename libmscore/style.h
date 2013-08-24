@@ -224,6 +224,7 @@ enum StyleIdx {
       ST_propertyDistanceHead,
       ST_propertyDistanceStem,
       ST_propertyDistance,
+      ST_articulationMag,
       ST_lastSystemFillLimit,
 
       ST_hairpinY,
