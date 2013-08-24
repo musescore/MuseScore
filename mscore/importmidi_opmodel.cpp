@@ -31,6 +31,7 @@ struct Controller {
       Node *splitDrums = nullptr;
       Node *showStaffBracket = nullptr;
       Node *pickupMeasure = nullptr;
+      Node *clef = nullptr;
 
       int trackCount = 0;
       bool isDrumTrack = false;
@@ -187,6 +188,7 @@ OperationsModel::OperationsModel()
       changeClef->oper.value = TrackOperations().changeClef;
       changeClef->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(changeClef));
+      controller->clef = changeClef;
 
 
       Node *splitDrums = new Node;
@@ -621,6 +623,8 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   splitDrums->visible = isDrumTrack;
             if (multipleVoices)
                   multipleVoices->visible = !isDrumTrack;
+            if (clef)
+                  clef->visible = !isDrumTrack;
             if (pickupMeasure)
                   pickupMeasure->visible = allTracksSelected;
             result = true;
