@@ -1,4 +1,5 @@
 #include "importmidi_opdelegate.h"
+#include "importmidi_opmodel.h"
 
 
 namespace Ms {
@@ -6,6 +7,52 @@ namespace Ms {
 OperationsDelegate::OperationsDelegate(QWidget *appWindow)
       : appWindow(appWindow)
       {}
+
+void OperationsDelegate::paint(QPainter *painter,
+                               const QStyleOptionViewItem &option,
+                               const QModelIndex &index) const
+      {
+      QStyledItemDelegate::paint(painter, option, index);
+                  // draw small arrow that symbolizes list
+      if (index.column() == OperationCol::VALUE)
+            {
+            QVariant value = index.data(Qt::EditRole);
+            if (value.type() == QVariant::StringList)
+                  {
+                  QStringList list = qvariant_cast<QStringList>(value);
+                  if (list.size() > 1)
+                        {
+                        painter->save();
+
+                        QFontMetrics fm(painter->font());
+
+                        const int textWidth = fm.width(index.data(Qt::DisplayRole).toString());
+                        const int gap = 10;
+                        const int height = 4;
+                        const int width = 8;
+                        const int x = option.rect.left() + textWidth + gap;
+                        const int y = option.rect.top() + option.rect.height() / 2 + 1;
+
+                        QPoint p1(x, y - height / 2);
+                        QPoint p2(x + width, y - height / 2);
+                        QPoint p3(x + width / 2, y + height / 2);
+
+                        QPen pen = painter->pen();
+                        painter->setPen(pen);
+                        pen.setWidth(1);
+                        painter->drawLine(p1, p2);
+                        pen.setWidth(2);
+                        painter->setPen(pen);
+                        painter->drawLine(QPoint(p2.x() - 1, p2.y() + 1), QPoint(p3.x() + 1, p3.y() - 1));
+                        pen.setWidth(1);
+                        painter->setPen(pen);
+                        painter->drawLine(p3, p1);
+
+                        painter->restore();
+                        }
+                  }
+            }
+      }
 
 QWidget* OperationsDelegate::createEditor(QWidget *parent,
                                           const QStyleOptionViewItem &option,
