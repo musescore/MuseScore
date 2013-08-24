@@ -1,47 +1,39 @@
 #ifndef INNER_FUNC_DECL_H
 #define INNER_FUNC_DECL_H
 
-#include "libmscore/fraction.h"
-
 
 namespace Ms {
 
 class MidiChord;
-class Fraction;
+class ReducedFraction;
 
 namespace MidiTuplet {
 
-std::pair<std::multimap<Fraction, MidiChord>::iterator, Fraction>
-findBestChordForTupletNote(const Fraction &tupletNotePos,
-                           const Fraction &quantValue,
-                           const std::multimap<Fraction, MidiChord>::iterator &startChordIt,
-                           const std::multimap<Fraction, MidiChord>::iterator &endChordIt);
-
-bool isTupletAllowed(int tupletNumber,
-                     const Fraction &tupletLen,
-                     const Fraction &tupletOnTimeSumError,
-                     const Fraction &regularSumError,
-                     const Fraction &quantValue,
-                     const std::map<int, std::multimap<Fraction, MidiChord>::iterator> &tupletChords);
-
-std::vector<int> findTupletNumbers(const Fraction &divLen, const Fraction &barFraction);
-
-Fraction findQuantizationError(const Fraction &onTime, const Fraction &quantValue);
-
 struct TupletInfo;
 
-TupletInfo findTupletApproximation(const Fraction &tupletLen,
-                                   int tupletNumber,
-                                   const Fraction &quantValue,
-                                   const Fraction &startTupletTime,
-                                   const std::multimap<Fraction, MidiChord>::iterator &startChordIt,
-                                   const std::multimap<Fraction, MidiChord>::iterator &endChordIt);
+std::pair<std::multimap<ReducedFraction, MidiChord>::iterator, ReducedFraction>
+findBestChordForTupletNote(const ReducedFraction &tupletNotePos,
+                           const ReducedFraction &quantValue,
+                           const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
+                           const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt);
 
-int separateTupletVoices(std::vector<TupletInfo> &tuplets,
-                         const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
-                         const std::multimap<Fraction, MidiChord>::iterator &endBarChordIt,
-                         std::multimap<Fraction, MidiChord> &chords,
-                         const Fraction &endBarTick);
+bool isTupletAllowed(const TupletInfo &tupletInfo);
+
+std::vector<int> findTupletNumbers(const ReducedFraction &divLen, const ReducedFraction &barFraction);
+
+ReducedFraction findQuantizationError(const ReducedFraction &onTime, const ReducedFraction &quantValue);
+
+TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
+                                   int tupletNumber,
+                                   const ReducedFraction &quantValue,
+                                   const ReducedFraction &startTupletTime,
+                                   const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
+                                   const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt);
+
+void separateTupletVoices(std::vector<TupletInfo> &tuplets,
+                          const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
+                          const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt,
+                          std::multimap<ReducedFraction, MidiChord> &chords);
 
 std::list<int> findTupletsWithCommonChords(std::list<int> &restTuplets,
                                            const std::vector<TupletInfo> &tuplets);
@@ -56,12 +48,12 @@ namespace Meter {
 struct MaxLevel;
 struct DivisionInfo;
 
-Meter::MaxLevel maxLevelBetween(const Fraction &startTickInBar,
-                                const Fraction &endTickInBar,
+Meter::MaxLevel maxLevelBetween(const ReducedFraction &startTickInBar,
+                                const ReducedFraction &endTickInBar,
                                 const DivisionInfo &divInfo);
 
-Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
-                                    const Fraction &endTickInBar,
+Meter::MaxLevel findMaxLevelBetween(const ReducedFraction &startTickInBar,
+                                    const ReducedFraction &endTickInBar,
                                     const std::vector<DivisionInfo> &divsInfo);
 
 } // namespace Meter

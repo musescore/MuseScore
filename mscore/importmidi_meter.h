@@ -4,7 +4,7 @@
 
 namespace Ms {
 
-class Fraction;
+class ReducedFraction;
 class TDuration;
 
 namespace MidiTuplet {
@@ -19,30 +19,32 @@ enum class DurationType
       REST
       };
 
-bool isSimple(const Fraction &barFraction);
-bool isCompound(const Fraction &barFraction);
-bool isComplex(const Fraction &barFraction);
-bool isDuple(const Fraction &barFraction);
-bool isTriple(const Fraction &barFraction);
-bool isQuadruple(const Fraction &barFraction);
+bool isSimple(const ReducedFraction &barFraction);
+bool isCompound(const ReducedFraction &barFraction);
+bool isComplex(const ReducedFraction &barFraction);
+bool isDuple(const ReducedFraction &barFraction);
+bool isTriple(const ReducedFraction &barFraction);
+bool isQuadruple(const ReducedFraction &barFraction);
 
-Fraction beatLength(const Fraction &barFraction);
+ReducedFraction beatLength(const ReducedFraction &barFraction);
 
 struct DivisionInfo;
 
-DivisionInfo metricDivisionsOfBar(const Fraction &barFraction);
+DivisionInfo metricDivisionsOfBar(const ReducedFraction &barFraction);
 DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData &tuplet,
                                      int tupletStartLevel);
 
+bool isSimpleNoteDuration(const ReducedFraction &duration);   // quarter, half, eighth, 16th ...
+
             // division lengths of bar, each can be a tuplet length
-std::vector<Fraction> divisionsOfBarForTuplets(const Fraction &barFraction);
+std::vector<ReducedFraction> divisionsOfBarForTuplets(const ReducedFraction &barFraction);
 
             // duration and all tuplets should belong to the same voice
 // nested tuplets are not allowed
-QList<std::pair<Fraction, TDuration> >
-toDurationList(const Fraction &startTickInBar,
-               const Fraction &endTickInBar,
-               const Fraction &barFraction,
+QList<std::pair<ReducedFraction, TDuration> >
+toDurationList(const ReducedFraction &startTickInBar,
+               const ReducedFraction &endTickInBar,
+               const ReducedFraction &barFraction,
                const std::vector<MidiTuplet::TupletData> &tupletsInBar,
                DurationType durationType,
                bool useDots);

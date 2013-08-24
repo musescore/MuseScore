@@ -6,7 +6,7 @@ namespace Ms {
 
 class MidiChord;
 class TimeSigMap;
-class Fraction;
+class ReducedFraction;
 
 namespace MidiTuplet {
 struct TupletData;
@@ -14,27 +14,22 @@ struct TupletData;
 
 namespace Quantize {
 
-void applyAdaptiveQuant(std::multimap<Fraction, MidiChord> &,
-                        const TimeSigMap *,
-                        const Fraction &);
+void quantizeChords(std::multimap<ReducedFraction, MidiChord> &chords,
+                    const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents,
+                    const TimeSigMap *sigmap);
 
-void applyGridQuant(std::multimap<Fraction, MidiChord> &chords,
-                    const TimeSigMap *sigmap,
-                    const Fraction &lastTick);
+ReducedFraction fixedQuantRaster();
 
-void quantizeChordsAndTuplets(std::multimap<Fraction, MidiTuplet::TupletData> &tupletEvents,
-                              std::multimap<Fraction, MidiChord> &inputChords,
-                              const TimeSigMap *sigmap,
-                              const Fraction &lastTick);
+ReducedFraction reduceRasterIfDottedNote(const ReducedFraction &noteLen,
+                                         const ReducedFraction &raster);
 
-Fraction fixedQuantRaster();
+ReducedFraction quantizeValue(const ReducedFraction &value,
+                              const ReducedFraction &raster);
 
-Fraction reduceRasterIfDottedNote(const Fraction &len, const Fraction &raster);
-Fraction quantizeValue(const Fraction &value, const Fraction &raster);
-
-Fraction findRegularQuantRaster(const std::multimap<Fraction, MidiChord>::iterator &startBarChordIt,
-                    const std::multimap<Fraction, MidiChord>::iterator &endChordIt,
-                    const Fraction &endBarTick);
+ReducedFraction findRegularQuantRaster(
+            const std::multimap<ReducedFraction, MidiChord>::const_iterator &startBarChordIt,
+            const std::multimap<ReducedFraction, MidiChord>::const_iterator &endChordIt,
+            const ReducedFraction &endBarTick);
 
 } // namespace Quantize
 } // namespace Ms
