@@ -103,6 +103,7 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_propertyDistanceHead,        StyleType("propertyDistanceHead",    ST_SPATIUM) },     // note property to note head
       { ST_propertyDistanceStem,        StyleType("propertyDistanceStem",    ST_SPATIUM) },     // note property to note stem
       { ST_propertyDistance,            StyleType("propertyDistance",        ST_SPATIUM) },     // note property to note property
+      { ST_articulationMag,             StyleType("articulationMag",         ST_DOUBLE) },     // note property to note property
       { ST_lastSystemFillLimit,         StyleType("lastSystemFillLimit",     ST_DOUBLE) },
       { ST_hairpinY,                    StyleType("hairpinY",                ST_SPATIUM) },
       { ST_hairpinHeight,               StyleType("hairpinHeight",           ST_SPATIUM) },
@@ -472,6 +473,7 @@ StyleData::StyleData()
             { ST_propertyDistanceHead,        QVariant(1.0) },
             { ST_propertyDistanceStem,        QVariant(1.8) },
             { ST_propertyDistance,            QVariant(1.0) },
+            { ST_articulationMag,             QVariant(1.0) },
             { ST_lastSystemFillLimit,         QVariant(0.3) },
             { ST_hairpinY,                    QVariant(8) },
             { ST_hairpinHeight,               QVariant(1.2) },

@@ -297,6 +297,7 @@ void EditStyle::getValues()
       lstyle.set(ST_propertyDistanceHead,    Spatium(propertyDistanceHead->value()));
       lstyle.set(ST_propertyDistanceStem,    Spatium(propertyDistanceStem->value()));
       lstyle.set(ST_propertyDistance,        Spatium(propertyDistance->value()));
+      lstyle.set(ST_articulationMag,         articulationMag->value() * 0.01);
 
       lstyle.set(ST_shortenStem,             shortenStem->isChecked());
       lstyle.set(ST_shortStemProgression,    Spatium(shortStemProgression->value()));
@@ -533,6 +534,7 @@ void EditStyle::setValues()
       propertyDistanceHead->setValue(lstyle.value(ST_propertyDistanceHead).toDouble());
       propertyDistanceStem->setValue(lstyle.value(ST_propertyDistanceStem).toDouble());
       propertyDistance->setValue(lstyle.value(ST_propertyDistance).toDouble());
+      articulationMag->setValue(lstyle.value(ST_articulationMag).toDouble() * 100.0);
 
       shortenStem->setChecked(lstyle.value(ST_shortenStem).toBool());
       shortStemProgression->setValue(lstyle.value(ST_shortStemProgression).toDouble());
