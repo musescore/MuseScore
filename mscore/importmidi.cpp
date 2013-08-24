@@ -492,7 +492,7 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
       const auto swingType = preferences.midiImportOperations.trackOperations(indexOfOperation).swing;
       Swing::detectSwing(staff, swingType);
 
-      MidiClef::createClefs(staff, indexOfOperation);
+      MidiClef::createClefs(staff, indexOfOperation, mtrack->drumTrack());
       }
 
 Fraction metaTimeSignature(const MidiEvent& e)
