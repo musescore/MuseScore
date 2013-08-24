@@ -555,6 +555,15 @@ void Articulation::styleChanged()
             _anchor = score()->style()->articulationAnchor(_articulationType);
       }
 
+//---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Articulation::mag() const
+      {
+      return parent() ? parent()->mag() * score()->styleD(ST_articulationMag): 1.0;
+      }
 }
+
 
 

@@ -167,7 +167,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="Seite1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -4654,21 +4654,11 @@ p, li { white-space: pre-wrap; }
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_9">
           <item>
-           <layout class="QFormLayout" name="formLayout_5">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_35">
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_37">
               <property name="text">
-               <string>Note head distance:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="propertyDistanceHead">
-              <property name="suffix">
-               <string comment="space unit">sp</string>
-              </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
+               <string>Staff distance:</string>
               </property>
              </widget>
             </item>
@@ -4699,10 +4689,43 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_37">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_35">
               <property name="text">
-               <string>Staff distance:</string>
+               <string>Note head distance:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="propertyDistanceHead">
+              <property name="suffix">
+               <string comment="space unit">sp</string>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QSpinBox" name="articulationMag">
+              <property name="suffix">
+               <string>%</string>
+              </property>
+              <property name="maximum">
+               <number>300</number>
+              </property>
+              <property name="singleStep">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>100</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_32">
+              <property name="text">
+               <string>Articulation size:</string>
               </property>
              </widget>
             </item>
