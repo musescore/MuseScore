@@ -228,7 +228,8 @@ void ScoreTab::updateExcerpts()
       Score* score = v->score()->rootScore();
       clearTab2();
       //delete all scoreviews for parts, especially for the deleted ones
-      for (int i = 0; i < stack->count(); ++i) {
+      int n = stack->count() - 1;
+      for (int i = n; i >= 0; --i) {
             QSplitter* vs = static_cast<QSplitter*>(stack->widget(i));
             ScoreView* sview = static_cast<ScoreView*>(vs->widget(0));
 
