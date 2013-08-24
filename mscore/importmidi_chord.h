@@ -1,7 +1,7 @@
 #ifndef IMPORTMIDI_CHORD_H
 #define IMPORTMIDI_CHORD_H
 
-#include "libmscore/fraction.h"
+#include "importmidi_fraction.h"
 
 
 namespace Ms {
@@ -12,7 +12,7 @@ class MidiNote {
    public:
       int pitch;
       int velo;
-      Fraction len;
+      ReducedFraction len;
       Tie* tie = nullptr;
       };
 
@@ -22,10 +22,13 @@ class MidiChord {
       QList<MidiNote> notes;
       };
 
+class MTrack;
+
+namespace MChord {
 
 template <typename Iter>
-Iter findFirstChordInRange(const Fraction &startRangeTick,
-                           const Fraction &endRangeTick,
+Iter findFirstChordInRange(const ReducedFraction &startRangeTick,
+                           const ReducedFraction &endRangeTick,
                            const Iter &startChordIt,
                            const Iter &endChordIt)
       {
@@ -41,7 +44,7 @@ Iter findFirstChordInRange(const Fraction &startRangeTick,
       }
 
 template <typename Iter>
-Iter findEndChordInRange(const Fraction &endRangeTick,
+Iter findEndChordInRange(const ReducedFraction &endRangeTick,
                          const Iter &startChordIt,
                          const Iter &endChordIt)
       {
@@ -53,9 +56,19 @@ Iter findEndChordInRange(const Fraction &endRangeTick,
       return it;
       }
 
-Fraction maxNoteLen(const QList<MidiNote> &notes);
+ReducedFraction maxNoteLen(const QList<MidiNote> &notes);
 int findAveragePitch(const QList<MidiNote> &notes);
+int findAveragePitch(const std::map<ReducedFraction, MidiChord>::const_iterator &startChordIt,
+                     const std::map<ReducedFraction, MidiChord>::const_iterator &endChordIt);
+ReducedFraction minAllowedDuration();
+ReducedFraction findMinDuration(const QList<MidiChord> &midiChords,
+                                const ReducedFraction &length);
+void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord> &chords);
+void collectChords(std::multimap<int, MTrack> &tracks);
+void removeOverlappingNotes(std::multimap<int, MTrack> &tracks);
+void splitUnequalChords(std::multimap<int, MTrack> &tracks);
 
+} // namespace MChord
 } // namespace Ms
 
 

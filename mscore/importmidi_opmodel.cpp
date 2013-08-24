@@ -171,7 +171,7 @@ OperationsModel::OperationsModel()
 
 
       Node *swing = new Node;
-      swing->name = "Swing";
+      swing->name = "Detect swing";
       swing->oper.type = MidiOperation::Type::SWING;
       swing->oper.value = (int)TrackOperations().swing;
       swing->values.push_back("None (1:1)");
@@ -179,8 +179,8 @@ OperationsModel::OperationsModel()
       swing->values.push_back("Shuffle (3:1)");
       swing->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(swing));
-      
-      
+
+
       Node *changeClef = new Node;
       changeClef->name = "Clef may change along the score";
       changeClef->oper.type = MidiOperation::Type::CHANGE_CLEF;
@@ -288,53 +288,53 @@ QModelIndex OperationsModel::index(int row, int column, const QModelIndex &paren
       {
       if (!root || row < 0 || column < 0 || column >= OperationCol::COL_COUNT)
             return QModelIndex();
-      Node *parent_node = nodeFromIndex(parent);
-      if (!parent_node)
+      const Node *parentNode = nodeFromIndex(parent);
+      if (!parentNode)
             return QModelIndex();
-      if (parent_node->children.empty() || row >= (int)parent_node->children.size())
+      if (parentNode->children.empty() || row >= (int)parentNode->children.size())
             return QModelIndex();
                   // find new row in connection with invisible items
       int shift = 0;
       for (int i = 0; i <= row + shift; ++i) {
-            if (i >= (int)parent_node->children.size())
+            if (i >= (int)parentNode->children.size())
                   return QModelIndex();
-            if (!parent_node->children.at(i)->visible)
+            if (!parentNode->children.at(i)->visible)
                   ++shift;
             }
-      Node *child_node = parent_node->children.at(row + shift).get();
-      if (!child_node || !child_node->visible)
+      Node *childNode = parentNode->children.at(row + shift).get();
+      if (!childNode || !childNode->visible)
             return QModelIndex();
-      return createIndex(row, column, child_node);
+      return createIndex(row, column, childNode);
       }
 
 QModelIndex OperationsModel::parent(const QModelIndex &child) const
       {
-      Node *node = nodeFromIndex(child);
+      const Node *node = nodeFromIndex(child);
       if (!node)
-          return QModelIndex();
-      Node *parent_node = node->parent;
-      if (!parent_node)
-          return QModelIndex();
-      Node *grandparent_node = parent_node->parent;
-      if (!grandparent_node)
-          return QModelIndex();
-      auto &v = grandparent_node->children;
-      auto iter = std::find_if(v.begin(), v.end(),
-          [parent_node](std::unique_ptr<Node> &el){ return el.get() == parent_node; });
-      int row = (iter == v.end()) ? -1 : iter - v.begin();
-      return createIndex(row, 0, parent_node);
+            return QModelIndex();
+      Node *parentNode = node->parent;
+      if (!parentNode)
+            return QModelIndex();
+      const Node *grandparentNode = parentNode->parent;
+      if (!grandparentNode)
+            return QModelIndex();
+      const auto &children = grandparentNode->children;
+      const auto iter = std::find_if(children.begin(), children.end(),
+               [parentNode](const std::unique_ptr<Node> &el){ return el.get() == parentNode; });
+      const int row = (iter == children.end()) ? -1 : iter - children.begin();
+      return createIndex(row, 0, parentNode);
       }
 
 int OperationsModel::rowCount(const QModelIndex &parent) const
       {
       if (parent.column() >= OperationCol::COL_COUNT)
             return 0;
-      Node *parent_node = nodeFromIndex(parent);
-      if (!parent_node)
+      const Node *parentNode = nodeFromIndex(parent);
+      if (!parentNode)
             return 0;
                   // take only visible nodes into account
       size_t counter = 0;
-      for (const auto &p: parent_node->children)
+      for (const auto &p: parentNode->children)
             if (p->visible)
                   ++counter;
       return counter;
@@ -350,7 +350,7 @@ int OperationsModel::columnCount(const QModelIndex &parent) const
 
 QVariant OperationsModel::data(const QModelIndex &index, int role) const
       {
-      Node *node = nodeFromIndex(index);
+      const Node *node = nodeFromIndex(index);
       if (!node)
             return QVariant();
       switch (role) {
@@ -416,7 +416,7 @@ QVariant OperationsModel::headerData(int section, Qt::Orientation orientation, i
                   case OperationCol::OPER_NAME:
                         return "Selected track [" + trackLabel + "] operations";
                   case OperationCol::VALUE:
-                        return "Value";
+                        return "Value (click to change)";
                   default:
                         break;
                   }
@@ -426,7 +426,7 @@ QVariant OperationsModel::headerData(int section, Qt::Orientation orientation, i
 
 Qt::ItemFlags OperationsModel::flags(const QModelIndex &index) const
       {
-      Node *node = nodeFromIndex(index);
+      const Node *node = nodeFromIndex(index);
       if (!node)
             return Qt::ItemFlags();
       Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled);
@@ -568,7 +568,7 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
       if (!node && !forceUpdate)
             return result;
       if (LHRHMethod && (forceUpdate || node == LHRHMethod)) {
-            auto value = (MidiOperation::LHRHMethod)LHRHMethod->oper.value.toInt();
+            const auto value = (MidiOperation::LHRHMethod)LHRHMethod->oper.value.toInt();
             switch (value) {
                   case MidiOperation::LHRHMethod::HAND_WIDTH:
                         if (LHRHPitchOctave)
@@ -587,13 +587,13 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   }
             }
       if (LHRHdoIt && (forceUpdate || node == LHRHdoIt)) {
-            auto value = LHRHdoIt->oper.value.toBool();
+            const auto value = LHRHdoIt->oper.value.toBool();
             if (LHRHMethod)
                   LHRHMethod->visible = value;
             result = true;
             }
       if (searchTuplets && (forceUpdate || node == searchTuplets)) {
-            auto value = searchTuplets->oper.value.toBool();
+            const auto value = searchTuplets->oper.value.toBool();
             if (duplets)
                   duplets->visible = value;
             if (triplets)
@@ -609,7 +609,7 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
             result = true;
             }
       if (splitDrums && (forceUpdate || node == splitDrums)) {
-            auto value = splitDrums->oper.value.toBool();
+            const auto value = splitDrums->oper.value.toBool();
             if (showStaffBracket)
                   showStaffBracket->visible = value;
             result = true;

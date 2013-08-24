@@ -57,7 +57,7 @@ struct TrackOperations
       LHRHSeparation LHRH;
       SearchTuplets tuplets;
       bool useMultipleVoices = true;
-      bool changeClef = false;
+      bool changeClef = true;
       MidiOperation::Swing swing = MidiOperation::Swing::NONE;
       SplitDrums drums;
       bool pickupMeasure = true;

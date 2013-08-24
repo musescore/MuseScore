@@ -42,7 +42,7 @@ void TracksModel::clear()
 
 void TracksModel::setOperation(int row, MidiOperation::Type operType, const QVariant &operValue)
       {
-      int trackIndex = trackIndexFromRow(row);
+      const int trackIndex = trackIndexFromRow(row);
       if (trackIndex == -1)
             setOperationForAllTracks(operType, operValue);
       else if (isTrackIndexValid(trackIndex))
@@ -143,7 +143,7 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
 DefinedTrackOperations TracksModel::trackOperations(int row) const
       {
       DefinedTrackOperations opers;
-      int trackIndex = trackIndexFromRow(row);
+      const int trackIndex = trackIndexFromRow(row);
       opers.allTracksSelected = (trackIndex == -1 || trackCount_ == 1);
 
       if (trackIndex == -1) {
@@ -370,12 +370,12 @@ Qt::CheckState TracksModel::areAllTracksForImport() const
       {
       if (trackCount_ == 0)
             return Qt::Unchecked;
-      bool firstTrackImport = tracksData_[0].opers.doImport;
+      const bool doFirstTrackImport = tracksData_[0].opers.doImport;
       for (int i = 1; i != trackCount_; ++i) {
-            if (tracksData_[i].opers.doImport != firstTrackImport)
+            if (tracksData_[i].opers.doImport != doFirstTrackImport)
                   return Qt::PartiallyChecked;
             }
-      return (firstTrackImport) ? Qt::Checked : Qt::Unchecked;
+      return (doFirstTrackImport) ? Qt::Checked : Qt::Unchecked;
       }
 
 QVariant TracksModel::data(const QModelIndex &index, int role) const
@@ -383,7 +383,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
       if (!index.isValid())
             return QVariant();
 
-      int trackIndex = trackIndexFromRow(index.row());
+      const int trackIndex = trackIndexFromRow(index.row());
       switch (role) {
             case Qt::DisplayRole:
                   switch (index.column()) {
@@ -436,7 +436,7 @@ Qt::ItemFlags TracksModel::flags(const QModelIndex &index) const
 bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int role)
       {
       bool result = false;
-      int trackIndex = trackIndexFromRow(index.row());
+      const int trackIndex = trackIndexFromRow(index.row());
 
       if (trackIndex == -1) {   // all tracks row
             if (index.column() == TrackCol::DO_IMPORT && role == Qt::CheckStateRole) {
@@ -447,8 +447,8 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int r
             if (result) {
                               // update checkboxes of all tracks
                               // because we've changed option for all tracks simultaneously
-                  auto begIndex = this->index(0, TrackCol::DO_IMPORT);
-                  auto endIndex = this->index(rowCount(QModelIndex()), TrackCol::DO_IMPORT);
+                  const auto begIndex = this->index(0, TrackCol::DO_IMPORT);
+                  const auto endIndex = this->index(rowCount(QModelIndex()), TrackCol::DO_IMPORT);
                   emit dataChanged(begIndex, endIndex);
                   }
             }
@@ -464,7 +464,7 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int r
                               // update checkbox of current track row
                   emit dataChanged(index, index);
                               // update checkbox of all tracks row
-                  auto allIndex = this->index(0, TrackCol::DO_IMPORT);
+                  const auto allIndex = this->index(0, TrackCol::DO_IMPORT);
                   emit dataChanged(allIndex, allIndex);
                   }
             }
