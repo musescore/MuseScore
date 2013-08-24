@@ -1,49 +1,47 @@
 #include "importmidi_meter.h"
-#include "libmscore/fraction.h"
+#include "importmidi_fraction.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
 #include "importmidi_tuplet.h"
 #include "importmidi_inner.h"
 
-#include <memory>
-
 
 namespace Ms {
 namespace Meter {
 
-bool isSimple(const Fraction &barFraction)       // 2/2, 3/4, 4/4, ...
+bool isSimple(const ReducedFraction &barFraction)       // 2/2, 3/4, 4/4, ...
       {
       return barFraction.numerator() < 5;
       }
 
-bool isCompound(const Fraction &barFraction)     // 6/8, 12/4, ...
+bool isCompound(const ReducedFraction &barFraction)     // 6/8, 12/4, ...
       {
       return barFraction.numerator() % 3 == 0 && barFraction.numerator() > 3;
       }
 
-bool isComplex(const Fraction &barFraction)      // 5/4, 7/8, ...
+bool isComplex(const ReducedFraction &barFraction)      // 5/4, 7/8, ...
       {
       return barFraction.numerator() == 5 || barFraction.numerator() == 7;
       }
 
-bool isDuple(const Fraction &barFraction)        // 2/2, 6/8, ...
+bool isDuple(const ReducedFraction &barFraction)        // 2/2, 6/8, ...
       {
       return barFraction.numerator() == 2 || barFraction.numerator() == 6;
       }
 
-bool isTriple(const Fraction &barFraction)       // 3/4, 9/4, ...
+bool isTriple(const ReducedFraction &barFraction)       // 3/4, 9/4, ...
       {
       return barFraction.numerator() == 3 || barFraction.numerator() == 9;
       }
 
-bool isQuadruple(const Fraction &barFraction)    // 4/4, 12/8, ...
+bool isQuadruple(const ReducedFraction &barFraction)    // 4/4, 12/8, ...
       {
       return barFraction.numerator() % 4 == 0;
       }
 
-Fraction minAllowedDuration()
+ReducedFraction minAllowedDuration()
       {
-      return Fraction::fromTicks(MScore::division / 32);    // smallest allowed duration is 1/128
+      return ReducedFraction::fromTicks(MScore::division / 32);    // smallest allowed duration is 1/128
       }
 
 
@@ -51,7 +49,7 @@ Fraction minAllowedDuration()
 // and its corresponding levels
 // tuplets are not taken into account here
 
-DivisionInfo metricDivisionsOfBar(const Fraction &barFraction)
+DivisionInfo metricDivisionsOfBar(const ReducedFraction &barFraction)
       {
       DivisionInfo barDivInfo;
       barDivInfo.len = barFraction;
@@ -62,11 +60,11 @@ DivisionInfo metricDivisionsOfBar(const Fraction &barFraction)
       int level = 0;
       divLengths.push_back({barFraction, level});
                   // pulse-level division
-      if (Meter::isDuple(barFraction))
+      if (isDuple(barFraction))
             divLengths.push_back({barFraction / 2, --level});
-      else if (Meter::isTriple(barFraction))
+      else if (isTriple(barFraction))
             divLengths.push_back({barFraction / 3, --level});
-      else if (Meter::isQuadruple(barFraction)) {
+      else if (isQuadruple(barFraction)) {
             divLengths.push_back({barFraction / 2, --level});    // additional central accent
             divLengths.push_back({barFraction / 4, --level});
             }
@@ -75,7 +73,7 @@ DivisionInfo metricDivisionsOfBar(const Fraction &barFraction)
             divLengths.push_back({barFraction / barFraction.numerator(), --level});
             }
 
-      if (Meter::isCompound(barFraction)) {
+      if (isCompound(barFraction)) {
             --level;    // additional min level for pulse divisions
                         // subdivide pulse of compound meter into 3 parts
             divLengths.push_back({divLengths.back().len / 3, --level});
@@ -95,7 +93,7 @@ DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData &tuplet,
       tupletDivInfo.len = tuplet.len;
       tupletDivInfo.isTuplet = true;
       tupletDivInfo.divLengths.push_back({tuplet.len, TUPLET_BOUNDARY_LEVEL});
-      Fraction divLen = tuplet.len / tuplet.tupletNumber;
+      const auto divLen = tuplet.len / tuplet.tupletNumber;
       tupletDivInfo.divLengths.push_back({divLen, tupletStartLevel--});
       while (tupletDivInfo.divLengths.back().len >= minAllowedDuration() * 2) {
             tupletDivInfo.divLengths.push_back({
@@ -104,28 +102,28 @@ DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData &tuplet,
       return tupletDivInfo;
       }
 
-Fraction beatLength(const Fraction &barFraction)
+ReducedFraction beatLength(const ReducedFraction &barFraction)
       {
-      Fraction beatLen = barFraction / 4;
-      if (Meter::isDuple(barFraction))
+      auto beatLen = barFraction / 4;
+      if (isDuple(barFraction))
             beatLen = barFraction / 2;
-      else if (Meter::isTriple(barFraction))
+      else if (isTriple(barFraction))
             beatLen = barFraction / 3;
-      else if (Meter::isQuadruple(barFraction))
+      else if (isQuadruple(barFraction))
             beatLen = barFraction / 4;
-      else if (Meter::isComplex(barFraction))
+      else if (isComplex(barFraction))
             beatLen = barFraction / barFraction.numerator();
       return beatLen;
       }
 
-std::vector<Fraction> divisionsOfBarForTuplets(const Fraction &barFraction)
+std::vector<ReducedFraction> divisionsOfBarForTuplets(const ReducedFraction &barFraction)
       {
-      DivisionInfo info = metricDivisionsOfBar(barFraction);
-      std::vector<Fraction> divLengths;
-      Fraction beatLen = beatLength(barFraction);
+      const DivisionInfo info = metricDivisionsOfBar(barFraction);
+      std::vector<ReducedFraction> divLengths;
+      const auto beatLen = beatLength(barFraction);
       for (const auto &i: info.divLengths) {
                         // in compound meter tuplet starts from beat level, not the whole bar
-            if (Meter::isCompound(barFraction) && i.len > beatLen)
+            if (isCompound(barFraction) && i.len > beatLen)
                   continue;
             divLengths.push_back(i.len);
             }
@@ -134,12 +132,12 @@ std::vector<Fraction> divisionsOfBarForTuplets(const Fraction &barFraction)
 
 // result in vector: first elements - all tuplets info, one at the end - bar division info
 
-std::vector<DivisionInfo> divisionInfo(const Fraction &barFraction,
+std::vector<DivisionInfo> divisionInfo(const ReducedFraction &barFraction,
                                        const std::vector<MidiTuplet::TupletData> &tupletsInBar)
       {
       std::vector<DivisionInfo> divsInfo;
 
-      auto barDivisionInfo = metricDivisionsOfBar(barFraction);
+      const auto barDivisionInfo = metricDivisionsOfBar(barFraction);
       for (const auto &tuplet: tupletsInBar) {
             int tupletStartLevel = 0;
             for (const auto &divLenInfo: barDivisionInfo.divLengths) {
@@ -157,43 +155,46 @@ std::vector<DivisionInfo> divisionInfo(const Fraction &barFraction,
 
 // tick is counted from the beginning of bar
 
-int levelOfTick(const Fraction &tick, const std::vector<DivisionInfo> &divsInfo)
+int levelOfTick(const ReducedFraction &tick, const std::vector<DivisionInfo> &divsInfo)
       {
       for (const auto &divInfo: divsInfo) {
             if (tick < divInfo.onTime || tick > divInfo.onTime + divInfo.len)
                   continue;
             for (const auto &divLenInfo: divInfo.divLengths) {
-                  if ((tick - divInfo.onTime).ticks() % divLenInfo.len.ticks() == 0)
+                  const auto ratio = (tick - divInfo.onTime) / divLenInfo.len;
+                  if (ratio.numerator() % ratio.denominator() == 0)
                         return divLenInfo.level;
                   }
             }
       return 0;
       }
 
-// return level with lastPos == Fraction(-1, 1) if undefined - see MaxLevel class
+// return level with pos == Fraction(-1, 1) if undefined - see MaxLevel class
 
-Meter::MaxLevel maxLevelBetween(const Fraction &startTickInBar,
-                                const Fraction &endTickInBar,
+Meter::MaxLevel maxLevelBetween(const ReducedFraction &startTickInBar,
+                                const ReducedFraction &endTickInBar,
                                 const DivisionInfo &divInfo)
       {
-      Meter::MaxLevel level;
-      Fraction startTickInDiv = startTickInBar - divInfo.onTime;
-      Fraction endTickInDiv = endTickInBar - divInfo.onTime;
-      if (startTickInDiv >= endTickInDiv
-                  || startTickInDiv < 0 || endTickInDiv > divInfo.len)
+      MaxLevel level;
+      const auto startTickInDiv = startTickInBar - divInfo.onTime;
+      const auto endTickInDiv = endTickInBar - divInfo.onTime;
+      if (startTickInDiv >= endTickInDiv || startTickInDiv < ReducedFraction(0, 1)
+                  || endTickInDiv > divInfo.len)
             return level;
 
       for (const auto &divLengthInfo: divInfo.divLengths) {
             const auto &divLen = divLengthInfo.len;
-            Fraction maxEndRaster = divLen * (endTickInDiv.ticks() / divLen.ticks());
+            const auto ratio = endTickInDiv / divLen;
+            auto maxEndRaster = divLen * (ratio.numerator() / ratio.denominator());
             if (maxEndRaster == endTickInDiv)
                   maxEndRaster -= divLen;
             if (startTickInDiv < maxEndRaster) {
                               // max level is found
-                  level.lastPos = maxEndRaster + divInfo.onTime;
-                  Fraction maxStartRaster = divLen * (startTickInDiv.ticks() / divLen.ticks());
-                  Fraction count = (maxEndRaster - maxStartRaster) / divLen;
-                  level.levelCount = qRound(count.numerator() * 1.0 / count.denominator());
+                  const auto ratio = startTickInDiv / divLen;
+                  const auto maxStartRaster = divLen * (ratio.numerator() / ratio.denominator());
+                  const auto count = (maxEndRaster - maxStartRaster) / divLen;
+                  level.pos = maxStartRaster + divLen + divInfo.onTime;
+                  level.levelCount = count.numerator() / count.denominator();
                   level.level = divLengthInfo.level;
                   break;
                   }
@@ -208,11 +209,11 @@ Meter::MaxLevel maxLevelBetween(const Fraction &startTickInBar,
 // here we use levelCount = 1 always for simplicity
 // because TUPLET_BOUNDARY_LEVEL is 'max enough'
 
-Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
-                                    const Fraction &endTickInBar,
+Meter::MaxLevel findMaxLevelBetween(const ReducedFraction &startTickInBar,
+                                    const ReducedFraction &endTickInBar,
                                     const std::vector<DivisionInfo> &divsInfo)
       {
-      Meter::MaxLevel level;
+      MaxLevel level;
 
       for (const auto &divInfo: divsInfo) {
             if (divInfo.isTuplet) {
@@ -220,7 +221,7 @@ Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
                               && endTickInBar > divInfo.onTime + divInfo.len) {
                         level.level = TUPLET_BOUNDARY_LEVEL;
                         level.levelCount = 1;
-                        level.lastPos = divInfo.onTime + divInfo.len;
+                        level.pos = divInfo.onTime + divInfo.len;
                         break;
                         }
                   if (startTickInBar < divInfo.onTime
@@ -228,7 +229,7 @@ Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
                               && endTickInBar <= divInfo.onTime + divInfo.len) {
                         level.level = TUPLET_BOUNDARY_LEVEL;
                         level.levelCount = 1;
-                        level.lastPos = divInfo.onTime;
+                        level.pos = divInfo.onTime;
                         break;
                         }
                   if (startTickInBar >= divInfo.onTime
@@ -245,8 +246,8 @@ Meter::MaxLevel findMaxLevelBetween(const Fraction &startTickInBar,
       return level;
       }
 
-int tupletNumberForDuration(const Fraction &startTick,
-                            const Fraction &endTick,
+int tupletNumberForDuration(const ReducedFraction &startTick,
+                            const ReducedFraction &endTick,
                             const std::vector<MidiTuplet::TupletData> &tupletsInBar)
       {
       for (const auto &tupletData: tupletsInBar) {
@@ -262,16 +263,20 @@ bool isPowerOfTwo(unsigned int x)
       return x && !(x & (x - 1));
       }
 
-bool isSingleNoteDuration(const Fraction &ticks)
+bool isSimpleNoteDuration(const ReducedFraction &duration)
       {
-      Fraction division = Fraction::fromTicks(MScore::division);
-      Fraction div = (ticks > division) ? ticks / division : division / ticks;
-      if (div > Fraction(0))
-            return isPowerOfTwo((unsigned int)div.ticks());
+      const auto division = ReducedFraction::fromTicks(MScore::division);
+      auto div = (duration > division) ? duration / division : division / duration;
+      if (div > ReducedFraction(0, 1)) {
+            div.reduce();
+            int minVal = qMin(div.numerator(), div.denominator());
+            int maxVal = qMax(div.numerator(), div.denominator());
+            return minVal == 1 && isPowerOfTwo((unsigned int)maxVal);
+            }
       return false;
       }
 
-bool isQuarterDuration(const Fraction &ticks)
+bool isQuarterDuration(const ReducedFraction &ticks)
       {
       return (ticks.numerator() == 1 && ticks.denominator() == 4);
       }
@@ -279,181 +284,213 @@ bool isQuarterDuration(const Fraction &ticks)
 // If last 2/3 of beat in compound meter is rest,
 // it should be splitted into 2 rests
 
-bool is23EndOfBeatInCompoundMeter(const Fraction &startTickInBar,
-                                  const Fraction &endTickInBar,
-                                  const Fraction &barFraction)
+bool is23EndOfBeatInCompoundMeter(const ReducedFraction &startTickInBar,
+                                  const ReducedFraction &endTickInBar,
+                                  const ReducedFraction &barFraction)
       {
       if (endTickInBar <= startTickInBar)
             return false;
       if (!isCompound(barFraction))
             return false;
 
-      Fraction beatLen = beatLength(barFraction);
-      Fraction divLen = beatLen / 3;
-
-      if ((startTickInBar - beatLen * (startTickInBar.ticks() / beatLen.ticks()) == divLen)
-                  && (endTickInBar.ticks() % beatLen.ticks() == 0))
+      const auto beatLen = beatLength(barFraction);
+      const auto divLen = beatLen / 3;
+      const auto ratio1 = startTickInBar / beatLen;
+      const auto ratio2 = endTickInBar / beatLen;
+      if ((startTickInBar - beatLen * (ratio1.numerator() / ratio1.denominator()) == divLen)
+                  && (ratio2.numerator() % ratio2.denominator() == 0))
             return true;
       return false;
       }
 
-bool isHalfDuration(const Fraction &f)
+bool is2of3RestInTripleMeter(const ReducedFraction &startTickInBar,
+                             const ReducedFraction &endTickInBar,
+                             const ReducedFraction &barFraction)
       {
-      Fraction ff = f.reduced();
-      return ff.numerator() == 1 && ff.denominator() == 2;
-      }
-
-// 3/4: if half rest starts from beg of bar or ends on bar end
-// then it is a bad practice - need to split rest into 2 quarter rests
-
-bool isHalfRestOn34(const Fraction &startTickInBar,
-                    const Fraction &endTickInBar,
-                    const Fraction &barFraction)
-      {
-      if (endTickInBar - startTickInBar <= Fraction(0))
+      if (endTickInBar - startTickInBar <= ReducedFraction(0, 1))
             return false;
-      if (barFraction.numerator() == 3 && barFraction.denominator() == 4
-                  && (startTickInBar == Fraction(0) || endTickInBar == barFraction)
-                  && isHalfDuration(endTickInBar - startTickInBar))
+      if (isTriple(barFraction)
+                  && (startTickInBar == ReducedFraction(0, 1)
+                      || endTickInBar == barFraction)
+                  && endTickInBar - startTickInBar == (barFraction * 2) / 3)
             return true;
       return false;
       }
 
-
-// Node for binary tree of durations
 
 struct Node
       {
-      Node(Fraction startTick, Fraction endTick, int startLevel, int endLevel)
-            : startPos(startTick)
-            , endPos(endTick)
-            , startLevel(startLevel)
-            , endLevel(endLevel)
-            , tupletRatio({2, 2})
-            , parent(nullptr)
+      Node(int edgeLevel, int midLevel)
+            : edgeLevel(edgeLevel)
+            , midLevel(midLevel)
             {}
 
-      Fraction startPos;
-      Fraction endPos;
-      int startLevel;
-      int endLevel;
-             // all durations inside tuplets are smaller/larger than their regular versions
-             // this difference is represented by tuplet ratio: 3/2 for triplets, etc.
-      Fraction tupletRatio;
-
-      Node *parent;
-      std::unique_ptr<Node> left;
-      std::unique_ptr<Node> right;
+      int edgeLevel;
+      int midLevel;
       };
 
-void treeToDurationList(Node *node,
-                        QList<std::pair<Fraction, TDuration>> &dl,
-                        bool useDots)
+
+// all durations inside tuplets are smaller/larger than their regular versions
+// this difference is represented by tuplet ratio: 3/2 for triplets, etc.
+
+// if node duration is completely inside some tuplet
+// then assign to the node tuplet-to-regular-duration conversion coefficient
+
+ReducedFraction findTupletRatio(const ReducedFraction &startPos,
+                                const ReducedFraction &endPos,
+                                const std::vector<MidiTuplet::TupletData> &tupletsInBar)
       {
-      if (node->left != nullptr && node->right != nullptr) {
-            treeToDurationList(node->left.get(), dl, useDots);
-            treeToDurationList(node->right.get(), dl, useDots);
+      ReducedFraction tupletRatio = {2, 2};
+      int tupletNumber = tupletNumberForDuration(startPos, endPos, tupletsInBar);
+      if (tupletNumber != -1) {
+            const auto it = MidiTuplet::tupletRatios().find(tupletNumber);
+            if (it != MidiTuplet::tupletRatios().end())
+                  tupletRatio = it->second;
+            else
+                  qDebug("Tuplet ratio not found for tuplet number: %d", tupletNumber);
             }
-      else {
-            const int MAX_DOTS = 1;
-            QList<TDuration> list = toDurationList(
-                              node->tupletRatio * (node->endPos - node->startPos),
-                              useDots, MAX_DOTS);
+
+      return tupletRatio;
+      }
+
+QList<std::pair<ReducedFraction, TDuration> >
+collectDurations(const std::map<ReducedFraction, Node> &nodes,
+                 const std::vector<MidiTuplet::TupletData> &tupletsInBar,
+                 bool useDots)
+      {
+      QList<std::pair<ReducedFraction, TDuration>> resultDurations;
+
+      for (auto it1 = nodes.begin(); it1 != nodes.end(); ++it1) {
+            auto it2 = it1;
+            ++it2;
+            if (it2 == nodes.end())
+                  break;
+            const auto tupletRatio = findTupletRatio(it1->first, it2->first, tupletsInBar);
+            const auto duration = tupletRatio * (it2->first - it1->first);
+            auto list = toDurationList(duration.fraction(), useDots, 1);
             for (const auto &duration: list)
-                  dl.push_back({node->tupletRatio, duration});
+                  resultDurations.push_back({tupletRatio, duration});
             }
+
+      return resultDurations;
+      }
+
+bool badLevelCondition(int startLevelDiff, int endLevelDiff, int tol)
+      {
+      return startLevelDiff > tol || endLevelDiff > tol;
+      }
+
+void excludeNodes(std::map<ReducedFraction, Node> &nodes, int tol)
+      {
+      if (tol == 0)     // no nodes can be excluded
+            return;
+
+      auto p1 = nodes.begin();
+      if (p1 == nodes.end())
+            return;
+      auto p2 = p1;
+      ++p2;
+      if (p2 == nodes.end())
+            return;
+      auto p3 = p2;
+      ++p3;
+      if (p3 == nodes.end())
+            return;
+
+      while (p3 != nodes.end()) {
+            if (!badLevelCondition(p2->second.midLevel - p1->second.edgeLevel,
+                                   p2->second.midLevel - p3->second.edgeLevel, tol)) {
+                  p2 = nodes.erase(p2);
+                  ++p3;
+                  continue;
+                  }
+            ++p1;
+            ++p2;
+            ++p3;
+            }
+      }
+
+// set tuplet boundary level to regular, non-tuplet bar division level
+// because there is no more need in tuplet boundary level after split
+// and such big level may confuse the estimation algorithm
+
+int adjustEdgeLevelIfTuplet(const Meter::MaxLevel &splitPoint,
+                            const std::vector<DivisionInfo> &divInfo)
+      {
+      int tupletLevel = splitPoint.level;
+      if (splitPoint.level == TUPLET_BOUNDARY_LEVEL) {
+            std::vector<DivisionInfo> nonTupletDivs({divInfo.back()});
+            tupletLevel = levelOfTick(splitPoint.pos, nonTupletDivs);
+            }
+
+      return tupletLevel;
       }
 
 // duration start/end should be quantisized, quantum >= 1/128 note
 // pair here represents the tuplet ratio of duration and the duration itself
 // for regular (non-tuplet) durations fraction.numerator == fraction.denominator
 
-QList<std::pair<Fraction, TDuration> >
-toDurationList(const Fraction &startTickInBar,
-               const Fraction &endTickInBar,
-               const Fraction &barFraction,
+// tol - max allowed difference between start/end level of duration and split point level
+//    1 for notes, 0 for rests
+
+QList<std::pair<ReducedFraction, TDuration> >
+toDurationList(const ReducedFraction &startTickInBar,
+               const ReducedFraction &endTickInBar,
+               const ReducedFraction &barFraction,
                const std::vector<MidiTuplet::TupletData> &tupletsInBar,
                DurationType durationType,
                bool useDots)
       {
-      QList<std::pair<Fraction, TDuration>> durations;
-      if (startTickInBar < 0 || endTickInBar <= startTickInBar || endTickInBar > barFraction)
-            return durations;
-                  // analyse mectric structure of bar
-      auto divInfo = divisionInfo(barFraction, tupletsInBar);
-                  // create a root for binary tree of durations
-      std::unique_ptr<Node> root(new Node(startTickInBar, endTickInBar,
-                                          levelOfTick(startTickInBar, divInfo),
-                                          levelOfTick(endTickInBar, divInfo)));
-      QQueue<Node *> nodesToProcess;
-      nodesToProcess.enqueue(root.get());
-                  // max allowed difference between start/end level of duration and split point level
-      int tol = 0;
-      if (durationType == DurationType::NOTE)
-            tol = 1;
-      else if (durationType == DurationType::REST)
-            tol = 0;
-                  // each child node duration after division is not less than minDuration()
-      const Fraction minDuration = minAllowedDuration() * 2;
-                  // build duration tree such that durations don't go across strong beat divisions
-      while (!nodesToProcess.isEmpty()) {
-            Node *node = nodesToProcess.dequeue();
-                        // if node duration is completely inside some tuplet
-                        // then assign to the node tuplet-to-regular-duration conversion coefficient
-            if (node->tupletRatio.numerator() == node->tupletRatio.denominator()) {
-                  int tupletNumber = tupletNumberForDuration(node->startPos,
-                                                             node->endPos, tupletsInBar);
-                  if (tupletNumber != -1) {
-                        auto it = MidiTuplet::tupletRatios().find(tupletNumber);
-                        if (it != MidiTuplet::tupletRatios().end())
-                              node->tupletRatio = it->second;
-                        else
-                              qDebug("Tuplet ratio not found for tuplet number: %d", tupletNumber);
-                        }
-                  }
-                        // don't split node if its duration is less than minDuration
-            if (node->endPos - node->startPos < minDuration)
+      if (startTickInBar < ReducedFraction(0, 1)
+                  || endTickInBar <= startTickInBar || endTickInBar > barFraction)
+            return QList<std::pair<ReducedFraction, TDuration>>();
+
+      const auto divInfo = divisionInfo(barFraction, tupletsInBar);  // mectric structure of bar
+      const int tol = (durationType == DurationType::NOTE) ? 1 : 0;
+      const auto minDuration = minAllowedDuration() * 2;  // >= minAllowedDuration() after subdivision
+
+      std::map<ReducedFraction, Node> nodes;    // <onTime, Node>
+      {
+      int level = levelOfTick(startTickInBar, divInfo);
+      nodes.insert({startTickInBar, Node(level, level)});
+      level = levelOfTick(endTickInBar, divInfo);
+      nodes.insert({endTickInBar, Node(level, level)});
+      }
+
+      QQueue<std::pair<ReducedFraction, ReducedFraction>> gapsToProcess;
+      gapsToProcess.enqueue({startTickInBar, endTickInBar});
+
+      while (!gapsToProcess.isEmpty()) {
+            const auto gap = gapsToProcess.dequeue();
+                        // don't split gap if its duration is less than minDuration
+            if (gap.second - gap.first < minDuration)
                   continue;
-            auto splitPoint = findMaxLevelBetween(node->startPos, node->endPos, divInfo);
+            auto splitPoint = findMaxLevelBetween(gap.first, gap.second, divInfo);
                         // sum levels if there are several positions (beats) with max level value
                         // for example, 8th + half duration + 8th in 3/4, and half is over two beats
-            if (splitPoint.lastPos == Fraction(-1, 1))     // undefined
+            if (splitPoint.pos == ReducedFraction(-1, 1))     // undefined
                   continue;
-            int effectiveLevel = splitPoint.level + splitPoint.levelCount - 1;
-            if (effectiveLevel - node->startLevel > tol
-                        || effectiveLevel - node->endLevel > tol
-                        || isHalfRestOn34(node->startPos, node->endPos, barFraction)
+            const int effectiveLevel = splitPoint.level + splitPoint.levelCount - 1;
+            const Node &startNode = nodes.find(gap.first)->second;
+            const Node &endNode = nodes.find(gap.second)->second;
+
+            if (badLevelCondition(effectiveLevel - startNode.edgeLevel,
+                                  effectiveLevel - endNode.edgeLevel, tol)
+                        || is2of3RestInTripleMeter(gap.first, gap.second, barFraction)
                         || (durationType == DurationType::REST
-                            && is23EndOfBeatInCompoundMeter(node->startPos, node->endPos, barFraction))
-                        )
+                            && is23EndOfBeatInCompoundMeter(gap.first, gap.second, barFraction)))
                   {
-                              // set tuplet boundary level to regular, non-tuplet bar division level
-                              // because there is no more need in tuplet boundary level after split
-                              // and such big level may confuse the estimation algorithm
-                  if (splitPoint.level == TUPLET_BOUNDARY_LEVEL) {
-                        std::vector<DivisionInfo> nonTupletDivs({divInfo.back()});
-                        splitPoint.level = levelOfTick(splitPoint.lastPos, nonTupletDivs);
-                        }
-                              // split duration in splitPoint position
-                  node->left.reset(new Node(node->startPos, splitPoint.lastPos,
-                                            node->startLevel, splitPoint.level));
-                  node->left->parent = node;
-                  nodesToProcess.enqueue(node->left.get());
-
-                  node->right.reset(new Node(splitPoint.lastPos, node->endPos,
-                                             splitPoint.level, node->endLevel));
-                  node->right->parent = node;
-                  nodesToProcess.enqueue(node->right.get());
-
-                  if (node->tupletRatio.reduced() != Fraction(1, 1)) {
-                        node->left->tupletRatio = node->tupletRatio;
-                        node->right->tupletRatio = node->tupletRatio;
-                        }
+                  int edgeLevel = adjustEdgeLevelIfTuplet(splitPoint, divInfo);
+                              // split gap in splitPoint position
+                  nodes.insert({splitPoint.pos, Node(edgeLevel, effectiveLevel)});
+                  gapsToProcess.enqueue({gap.first, splitPoint.pos});
+                  gapsToProcess.enqueue({splitPoint.pos, gap.second});
                   }
             }
-                  // collect the resulting durations
-      treeToDurationList(root.get(), durations, useDots);
-      return durations;
+
+      excludeNodes(nodes, tol);
+
+      return collectDurations(nodes, tupletsInBar, useDots);
       }
 
 } // namespace Meter
