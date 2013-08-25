@@ -767,6 +767,7 @@ static void addText(VBox*& vbx, Score* s, QString strTxt, int stl)
 
 /**
  Create Text elements for the credits read from MusicXML credit-words elements.
+ Apply simple heuristics using only default x and y to recognize the meaning of credit words
  If no credits are found, create credits from meta data.
  */
 
@@ -800,60 +801,93 @@ void MusicXml::doCredits()
                    w->vAlign.toUtf8().data(),
                    w->words.toUtf8().data());
             }
-      */
-      // apply simple heuristics using only default x and y
-      // to recognize the meaning of credit words
+       */
+
       CreditWords* crwTitle = 0;
       CreditWords* crwSubTitle = 0;
       CreditWords* crwComposer = 0;
       CreditWords* crwPoet = 0;
       CreditWords* crwCopyRight = 0;
-      // title is highest above middle of the page that is in the middle column
-      // it is done first because subtitle detection depends on the title
+
+      QMap<int, CreditWords*> creditMap;  // store credit-words sorted on y pos
+      int nWordsHeader = 0;               // number of credit-words in the header
+      int nWordsFooter = 0;               // number of credit-words in the footer
+
       for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
             CreditWords* w = *ci;
             double defx = w->defaultX;
             double defy = w->defaultY;
-            if (defy > ph2 && pw1 < defx && defx < pw2) {
-                  // found a possible title
-                  if (!crwTitle || defy > crwTitle->defaultY) crwTitle = w;
-                  }
-            }
-      // subtitle is highest above middle of the page that is
-      // in the middle column and is not the title
-      for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
-            CreditWords* w = *ci;
-            double defx = w->defaultX;
-            double defy = w->defaultY;
-            if (defy > ph2 && pw1 < defx && defx < pw2) {
-                  // found a possible subtitle
-                  if ((!crwSubTitle || defy > crwSubTitle->defaultY)
-                      && w != crwTitle)
-                        crwSubTitle = w;
-                  }
-            // composer is above middle of the page and in the right column
-            if (defy > ph2 && pw2 < defx) {
+            // composer is in the right column
+            if (pw2 < defx) {
                   // found composer
                   if (!crwComposer) crwComposer = w;
                   }
-            // poet is above middle of the page and in the left column
-            if (defy > ph2 && defx < pw1) {
+            // poet is in the left column
+            else if (defx < pw1) {
                   // found poet
                   if (!crwPoet) crwPoet = w;
                   }
-            // copyright is below middle of the page and in the middle column
-            if (defy < ph2 && pw1 < defx && defx < pw2) {
-                  // found copyright
-                  if (!crwCopyRight) crwCopyRight = w;
+            // save others (in the middle column) to be handled later
+            else {
+                  creditMap.insert(defy, w);
+                  // and count #words in header and footer
+                  if (defy > ph2)
+                        nWordsHeader++;
+                  else
+                        nWordsFooter++;
                   }
             } // end for (ciCreditWords ...
+
+      /*
+      qDebug("header %d footer %d", nWordsHeader, nWordsFooter);
+      QMap<int, CreditWords*>::const_iterator ci = creditMap.constBegin();
+      while (ci != creditMap.constEnd()) {
+            CreditWords* w = ci.value();
+            qDebug("creditMap %d credit-words defx=%g defy=%g just=%s hal=%s val=%s words=%s",
+                   ci.key(),
+                   w->defaultX,
+                   w->defaultY,
+                   w->justify.toUtf8().data(),
+                   w->hAlign.toUtf8().data(),
+                   w->vAlign.toUtf8().data(),
+                   w->words.toUtf8().data());
+            ++ci;
+            }
+       */
+
+      // assign title, subtitle and copyright
+      QList<int> keys = creditMap.uniqueKeys(); // note: ignoring credit-words at the same y pos
+
+      // if any credit-words present, the highest is the title
+      // note that the keys are sorted in ascending order
+      // -> use the last key
+      if (keys.size() >= 1)
+            crwTitle = creditMap.value(keys.at(keys.size() - 1));
+      
+      // if two credit-words present and both are in the header or the footer,
+      // the lowest one is the subtitle, else it is the copyright
+      if (keys.size() == 2) {
+            if (nWordsHeader == 2 || nWordsFooter == 2)
+                  crwSubTitle = creditMap.value(keys.at(0));
+            else
+                  crwCopyRight = creditMap.value(keys.at(0));
+            }
+
+      // if three or more credit-words present
+      // the second-highest is the subtitle
+      // the lowest one is the copyright
+      if (keys.size() >= 3) {
+            crwSubTitle = creditMap.value(keys.at(keys.size() - 2));
+            crwCopyRight = creditMap.value(keys.at(0));
+            }
+
       /*
       if (crwTitle) qDebug("title='%s'", crwTitle->words.toUtf8().data());
       if (crwSubTitle) qDebug("subtitle='%s'", crwSubTitle->words.toUtf8().data());
       if (crwComposer) qDebug("composer='%s'", crwComposer->words.toUtf8().data());
       if (crwPoet) qDebug("poet='%s'", crwPoet->words.toUtf8().data());
       if (crwCopyRight) qDebug("copyright='%s'", crwCopyRight->words.toUtf8().data());
-      */
+       */
 
       if (crwTitle || crwSubTitle || crwComposer || crwPoet || crwCopyRight)
             score->setCreditsRead(true);
@@ -896,7 +930,14 @@ void MusicXml::doCredits()
             vbox->setTick(0);
             score->measures()->add(vbox);
             }
-      if (crwCopyRight)
+
+      // if no <rights> element was read and a copyright was found in the credit-words
+      // set the rights metadata to the value found
+      // note that MusicXML files can contain at least two different copyright statements:
+      // - in the <rights> element (metadata)
+      // - in the <credit-words> (the printed version)
+      // while MuseScore supports only the first one
+      if (score->metaTag("copyright") == "" && crwCopyRight)
             score->setMetaTag("copyright", crwCopyRight->words);
       }
 
@@ -1166,21 +1207,41 @@ void MusicXml::scorePartwise(QDomElement ee)
             else if (tag == "movement-title")
                   score->setMetaTag("movementTitle", e.text());
             else if (tag == "credit") {
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        QString tag(ee.tagName());
-                        if (tag == "credit-words") {
-                              // IMPORT_LAYOUT
-                              double defaultx    = ee.attribute(QString("default-x")).toDouble();
-                              double defaulty    = ee.attribute(QString("default-y")).toDouble();
-                              QString justify = ee.attribute(QString("justify"));
-                              QString halign  = ee.attribute(QString("halign"));
-                              QString valign  = ee.attribute(QString("valign"));
-                              QString crwords = ee.text();
+                  QString page = e.attribute(QString("page"), "1");
+                  // handle only page 1 credits (to extract title etc.)
+                  if (page == "1") {
+                        // multiple credit-words elements may be present,
+                        // which are appended
+                        // use the position info from the first one
+                        // font information is ignored, credits will be styled
+                        bool   creditWordsRead = false;
+                        double defaultx = 0;
+                        double defaulty = 0;
+                        QString justify;
+                        QString halign;
+                        QString valign;
+                        QString crwords;
+                        for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+                              QString tag(ee.tagName());
+                              if (tag == "credit-words") {
+                                    // IMPORT_LAYOUT
+                                    if (!creditWordsRead) {
+                                          defaultx = ee.attribute(QString("default-x")).toDouble();
+                                          defaulty = ee.attribute(QString("default-y")).toDouble();
+                                          justify  = ee.attribute(QString("justify"));
+                                          halign   = ee.attribute(QString("halign"));
+                                          valign   = ee.attribute(QString("valign"));
+                                          creditWordsRead = true;
+                                          }
+                                    crwords += ee.text();
+                                    }
+                              else
+                                    domError(ee);
+                              }
+                        if (crwords != "") {
                               CreditWords* cw = new CreditWords(defaultx, defaulty, justify, halign, valign, crwords);
                               credits.append(cw);
                               }
-                        else
-                              domError(ee);
                         }
                   }
             else
@@ -4686,8 +4747,6 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                         noteheadColor = QColor(color);
                   }
             else if (tag == "instrument") {
-                  qDebug("MusicXml::xmlNote part %s instrument %s",
-                         qPrintable(partId), qPrintable(e.attribute("id")));
                   instrId = e.attribute("id");
                   }
             else if (tag == "cue")
@@ -4905,10 +4964,6 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                               sd = MScore::UP;
                         }
 
-                  qDebug("MusicXml::xmlNote clef %d po %d (line %d) pitch %d (line %d)",
-                         clef, po, absStep(po), pitch, absStep(pitch));
-                  qDebug("MusicXml::xmlNote part %s instrument %s notehead %d line %d stemDir %d",
-                         qPrintable(partId), qPrintable(instrId), headGroup, line, sd);
                   if (drumsets.contains(partId)
                       && drumsets[partId].contains(instrId)) {
                         drumsets[partId][instrId].notehead = headGroup;
