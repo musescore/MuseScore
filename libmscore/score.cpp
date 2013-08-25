@@ -311,6 +311,8 @@ void Score::init()
       _dirty          = false;
       _saved          = false;
       _playPos        = 0;
+      _loopInTick     = -1;
+      _loopOutTick    = -1;
       _fileDivision   = MScore::division;
       _creditsRead    = false;
       _defaultsRead   = false;
@@ -3498,5 +3500,31 @@ void Score::insertTime(int tick, int len)
             }
       }
 
+
+//---------------------------------------------------------
+//   set Loop In position
+//---------------------------------------------------------
+
+void Score::setLoopInTick(int tick)
+      {
+      qDebug ("setLoopInTick : tick = %d", tick);
+      if ((tick < 0) || (tick > lastMeasure()->endTick()-1))
+            tick = 0;
+      _loopInTick = tick;
+      }
+
+//---------------------------------------------------------
+//   set Loop Out position
+//---------------------------------------------------------
+
+void Score::setLoopOutTick(int tick)
+      {
+      qDebug ("setLoopOutTick : tick = %d", tick);
+      int lastTick = lastMeasure()->endTick()-1;
+      if ((tick > lastTick) || (tick < 0))
+            _loopOutTick = lastTick;
+      else
+            _loopOutTick = tick;
+      }
 }
 

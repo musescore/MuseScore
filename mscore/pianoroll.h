@@ -81,6 +81,9 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual void dataChanged(const QRectF&);
       virtual void updateAll();
       virtual void moveCursor();
+      virtual void updateLoopCursors();
+      virtual void showLoopCursors() {}
+      virtual void hideLoopCursors() {}
       virtual void adjustCanvasPosition(const Element*, bool);
       virtual void setScore(Score*);
       virtual void removeScore();

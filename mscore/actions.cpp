@@ -2031,7 +2031,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Show OMR Panel")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "loop",
          QT_TRANSLATE_NOOP("action","Loop"),
@@ -2040,7 +2040,7 @@ Shortcut Shortcut::sc[] = {
          loop_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "loop-in",
          QT_TRANSLATE_NOOP("action","Loop in"),
@@ -2049,7 +2049,7 @@ Shortcut Shortcut::sc[] = {
          loopIn_ICON
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "loop-out",
          QT_TRANSLATE_NOOP("action","Loop out"),
