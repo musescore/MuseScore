@@ -139,6 +139,7 @@ QPointF LineSegment::getGrip(int grip) const
       return p;
       }
 
+#if 0
 //---------------------------------------------------------
 //   pagePos
 //    return position in canvas coordinates
@@ -151,6 +152,7 @@ QPointF LineSegment::pagePos() const
             pt += parent()->pos();
       return pt;
       }
+#endif
 
 //---------------------------------------------------------
 //   gripAnchor
@@ -537,6 +539,7 @@ QPointF SLine::linePos(int grip, System** sys)
                   qFatal("Sline::linePos(): anchor not implemented\n");
                   break;
             }
+      printf("staff %d\n", staffIdx());
       qreal y = (*sys)->staves()->isEmpty() ? 0.0 : (*sys)->staff(staffIdx())->y();
       return QPointF(x, y);
       }
@@ -610,7 +613,6 @@ void SLine::layout()
             }
 
       int segIdx = 0;
-      int si  = staffIdx();
       for (int i = sysIdx1; i <= sysIdx2; ++i) {
             System* system = systems->at(i);
             if (system->isVbox())
@@ -623,7 +625,6 @@ void SLine::layout()
             Segment* mseg = m->first(Segment::SegChordRest);
             qreal x1 = (mseg ? mseg->pos().x() : 0) + m->pos().x();
             qreal x2 = system->bbox().right();
-            qreal y  = system->staff(si)->y();
 
             if (sysIdx1 == sysIdx2) {
                   // single segment
@@ -643,7 +644,7 @@ void SLine::layout()
             else if (i > 0 && i != sysIdx2) {
                   // middle segment
                   seg->setSpannerSegmentType(SEGMENT_MIDDLE);
-                  seg->setPos(QPointF(x1, y));
+                  seg->setPos(QPointF(x1, p1.y()));
                   seg->setPos2(QPointF(x2 - x1, 0.0));
                   }
             else if (i == sysIdx2) {
@@ -652,7 +653,7 @@ void SLine::layout()
                   if (anchor() == ANCHOR_SEGMENT)
                         len = qMax(3 * spatium(), len);
                   seg->setSpannerSegmentType(SEGMENT_END);
-                  seg->setPos(QPointF(x1, y));
+                  seg->setPos(QPointF(x1, p1.y()));
                   seg->setPos2(QPointF(len, 0.0));    // p2 is relative to p1
                   }
             seg->layout();
@@ -672,8 +673,8 @@ void SLine::writeProperties(Xml& xml) const
       if (propertyStyle(P_LINE_WIDTH) != PropertyStyle::STYLED)
             xml.tag("lineWidth", lineWidth().val());
       if (propertyStyle(P_LINE_STYLE) == PropertyStyle::UNSTYLED || (lineStyle() != Qt::SolidLine))
-      if (propertyStyle(P_LINE_STYLE) != PropertyStyle::STYLED)
-            xml.tag("lineStyle", int(lineStyle()));
+            if (propertyStyle(P_LINE_STYLE) != PropertyStyle::STYLED)
+                  xml.tag("lineStyle", int(lineStyle()));
       if (propertyStyle(P_LINE_COLOR) == PropertyStyle::UNSTYLED || (lineColor() != MScore::defaultColor))
             xml.tag("lineColor", lineColor());
 

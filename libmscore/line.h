@@ -67,7 +67,7 @@ class LineSegment : public SpannerSegment {
       virtual void draw(QPainter*) const = 0;
       SLine* line() const                         { return (SLine*)spanner(); }
       virtual void spatiumChanged(qreal, qreal);
-      virtual QPointF pagePos() const;
+//      virtual QPointF pagePos() const;
 
       friend class SLine;
       virtual void read(XmlReader&);
