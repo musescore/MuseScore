@@ -269,8 +269,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paintPageBorder(QPainter& p, Page* page);
       bool dropCanvas(Element*);
       void editCmd(const QString&);
-      void resetLoopInCursors();
-      void resetLoopOutCursors();
       void setLoopCursor(TextCursor *curLoop, int tick, bool isInPos);
 
    private slots:
@@ -424,13 +422,11 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       int loopInPos()                          { return _curLoopIn->tick();  }
       int loopOutPos()                         { return _curLoopOut->tick(); }
-      void setLoopInCursor(int tick);
-      void setLoopOutCursor(int tick);
-      void updateLoopCursors();
-      void showLoopInCursor();
-      void showLoopOutCursor();
-      void hideLoopInCursor();
-      void hideLoopOutCursor();
+      void setLoopInCursor();
+      void setLoopOutCursor();
+      virtual void updateLoopCursors();
+      void showLoopCursors();
+      void hideLoopCursors();
 
       virtual void moveCursor();
       virtual void layoutChanged();
