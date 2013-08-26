@@ -292,7 +292,7 @@ void Seq::loopStop()
       // Finds the Loop event and removes it.
       //
       for (auto it = events.begin(); it != events.end(); ) {
-            if ((*it).second.type() == ME_LOOP)
+            if (it->second.type() == ME_LOOP)
                   it = events.erase(it);
             else
                   ++it;
@@ -333,20 +333,24 @@ void Seq::start()
                   oggInit = true;
                   }
             }
-      if ((mscore->loop())) {    // && (cv->loopOutPos() > cv->loopInPos())
-            if (mscore->isLoopOut()) {
+      if ((mscore->loop())) {
+            if(cs->selection().state() == SEL_RANGE)
+                  setLoopSelection();
+            if (cs->loopOutTick() > 0) {
                   // Add loop Out event
                   NPlayEvent event;
                   event.setType(ME_LOOP);
-                  // insert ME_LOOP as first event if there are events with same tick
-                  auto hint = events.lower_bound(cv->loopOutPos());
-                  events.insert(hint, std::pair<int,NPlayEvent>(cv->loopOutPos(), event));
-                  if (cv->loopOutPos() < cv->loopInPos())
+                  // **Lower bound causes crash** insert ME_LOOP as first event if there are events with same tick
+                  //auto hint = events.lower_bound(cs->loopOutTick());
+                  //events.insert(hint, std::pair<int,NPlayEvent>(cs->loopOutTick(), event));
+                  events.insert(std::pair<int,NPlayEvent>(cs->loopOutTick(), event));
+                  qDebug ("Add loop event at tick %d   (loopInTick = %d)", cs->loopOutTick(), cs->loopInTick());
+                  if (cs->loopOutTick() < cs->loopInTick())
                         seek(0);  // If Out pos < In pos, restart playback at the beginning.
                   else
-                        seek(cv->loopInPos());
+                        seek(cs->loopInTick());
             } else
-                  seek(cv->loopInPos());
+                  seek(cs->loopInTick());
 
             }
       else
@@ -692,8 +696,8 @@ void Seq::process(unsigned n, float* buffer)
                   else if (event.type() == ME_TICK2)
                         tackRest = tackLength;
                   else if (event.type() == ME_LOOP) {
-                        qDebug ("event.type() == ME_LOOP  loopOutPos = %d  |  getCurTick() = %d ", cv->loopOutPos(), getCurTick());
-                        seek(cv->loopInPos());
+                        qDebug ("event.type() == ME_LOOP  in/out tick = %d/%d  loop |  getCurTick() = %d ", cs->loopInTick(), cs->loopOutTick(), getCurTick());
+                        seek(cs->loopInTick());
                         return;
                         }
                   mutex.lock();
@@ -1270,7 +1274,7 @@ void Seq::setLoopIn()
             tick = playPos->first;  // En mode playback, set the In position where note is being played
       else
             tick = cs->pos();   // Otherwise, use the selected note.
-      cv->setLoopInCursor(tick);
+      cs->setLoopInTick(tick);
 //      qDebug ("setLoopIn : tick = %d\n",tick);
       }
 
@@ -1285,9 +1289,20 @@ void Seq::setLoopOut()
             tick = playPos->first;  // En mode playback, set the Out position where note is being played
       else
             tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
-//      cv->setLoopOutCursor(tick-1);  // Remove 1 to avoid overlapping the following events and elements
-      cv->setLoopOutCursor(tick);
+      cs->setLoopOutTick(tick);
 //      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n",loopOutPos, cs->pos(), cs->inputState().ticks());
+      }
+
+//---------------------------------------------------------
+//   set Loop In/Out position based on the selection
+//---------------------------------------------------------
+
+void Seq::setLoopSelection()
+      {
+      cs->setLoopInTick(cs->selection().tickStart());
+      cs->setLoopOutTick(cs->selection().tickEnd());
+      cs->updateLoopCursors();
+      qDebug ("setLoopSelection : loopInTick = %d  loopOutTick = %d\n",cs->selection().tickStart(), cs->selection().tickEnd());
       }
 
 //---------------------------------------------------------
@@ -1297,7 +1312,7 @@ void Seq::setLoopOut()
 void Seq::unsetLoopIn()
       {
       // Reinitialize the In loop position
-      cv->setLoopInCursor(0);
+      cs->setLoopInTick(-1);
       }
 
 //---------------------------------------------------------
@@ -1309,6 +1324,6 @@ void Seq::unsetLoopOut()
       loopStop();   // Erase the loop event
 
       // Reinitialize the Out loop position
-      cv->setLoopOutCursor(cs->lastMeasure()->endTick()-1);
+      cs->setLoopOutTick(-1);
       }
 }

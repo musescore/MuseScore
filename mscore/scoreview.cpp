@@ -658,7 +658,6 @@ ScoreView::ScoreView(QWidget* parent)
       editObject  = 0;
       addSelect   = false;
 
-      // Create and initialize the Loop In/Out cursors
       _curLoopIn  = new TextCursor;
       QColor cIn(Qt::green);
       cIn.setAlpha(80);
@@ -1450,8 +1449,7 @@ void ScoreView::setCursorOn(bool val)
 
 void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
       {
-      if (tick > _score->lastMeasure()->endTick()-1)
-            tick = _score->lastMeasure()->endTick()-1;
+      qDebug ("setLoopCursor :  tick=%d, isInPos=%d",tick, isInPos);
       //
       // set mark height for whole system
       //
@@ -1538,9 +1536,11 @@ void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
 //    adjust the cursor shape and position to mark the beginning of the loop
 //---------------------------------------------------------
 
-void ScoreView::setLoopInCursor(int tick)
+void ScoreView::setLoopInCursor()
       {
-      setLoopCursor(_curLoopIn, tick, true);
+      if (_score->loopInTick() < 0)
+            _score->setLoopInTick(-1);
+      setLoopCursor(_curLoopIn, _score->loopInTick(), true);
       update();
       }
 
@@ -1549,9 +1549,11 @@ void ScoreView::setLoopInCursor(int tick)
 //    adjust the cursor shape and position to mark the end of the loop
 //---------------------------------------------------------
 
-void ScoreView::setLoopOutCursor(int tick)
+void ScoreView::setLoopOutCursor()
       {
-      setLoopCursor(_curLoopOut, tick, false);
+      if (_score->loopOutTick() < 0)
+            _score->setLoopOutTick(-1);
+      setLoopCursor(_curLoopOut, _score->loopOutTick(),false);
       update();
       }
 
@@ -1562,55 +1564,35 @@ void ScoreView::setLoopOutCursor(int tick)
 
 void ScoreView::updateLoopCursors()
       {
-      setLoopCursor(_curLoopIn, _curLoopIn->tick(), true);
-      setLoopCursor(_curLoopOut, _curLoopOut->tick(), false);
+      setLoopInCursor();    // In pos
+      setLoopOutCursor();   // Out pos
       }
 
 //---------------------------------------------------------
-//   showLoopInCursor
-//    show the In mark for the loop
+//   showLoopCursors
+//    show the In/Out marks for the loop
 //---------------------------------------------------------
 
-void ScoreView::showLoopInCursor()
+void ScoreView::showLoopCursors()
       {
       if (_curLoopIn->tick() < 0)
-            setLoopInCursor(0);
+            setLoopInCursor();
+      if (_curLoopOut->tick() < 0)
+            setLoopOutCursor();
       _curLoopIn->setVisible(true);
-      qDebug("====  Show loop in tick = %d",_curLoopIn->tick());
-      update();
-      }
-
-//---------------------------------------------------------
-//   showLoopOutCursor
-//    show the Out mark for the loop
-//---------------------------------------------------------
-
-void ScoreView::showLoopOutCursor()
-      {
-      if ((_curLoopOut->tick() < 0) || (_curLoopOut->tick() > _score->lastMeasure()->endTick()-1))
-            setLoopOutCursor(_score->lastMeasure()->endTick()-1);
       _curLoopOut->setVisible(true);
+      //qDebug("====  Show loop in tick = %d",_curLoopIn->tick());
       update();
       }
 
 //---------------------------------------------------------
-//   hideLoopInCursor
-//    hide the In mark for the loop
+//   hideLoopCursors
+//    hide the In/Out marks for the loop
 //---------------------------------------------------------
 
-void ScoreView::hideLoopInCursor()
+void ScoreView::hideLoopCursors()
       {
       _curLoopIn->setVisible(false);
-      update();
-      }
-
-//---------------------------------------------------------
-//   hideLoopOutCursor
-//    hide the Out mark for the loop
-//---------------------------------------------------------
-
-void ScoreView::hideLoopOutCursor()
-      {
       _curLoopOut->setVisible(false);
       update();
       }
