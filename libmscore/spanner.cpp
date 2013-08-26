@@ -134,6 +134,17 @@ QVariant SpannerSegment::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void SpannerSegment::reset()
+      {
+      score()->undoChangeProperty(this, P_USER_OFF2, QPointF());
+      Element::reset();
+      spanner()->reset();
+      }
+
+//---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
 
@@ -449,6 +460,5 @@ Segment* Spanner::endSegment() const
       {
       return score()->tick2segment(tick2());
       }
-
 }
 

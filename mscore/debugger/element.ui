@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>669</width>
+    <width>743</width>
     <height>278</height>
    </rect>
   </property>
@@ -150,9 +150,12 @@
         <property name="verticalSpacing">
          <number>0</number>
         </property>
-        <item row="1" column="2">
+        <item row="1" column="1">
          <widget class="QCheckBox" name="droptarget">
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -160,7 +163,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="5">
+        <item row="2" column="4">
          <widget class="QLabel" name="label_3">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -169,6 +172,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -185,9 +191,12 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
+        <item row="0" column="1">
          <widget class="QCheckBox" name="generated">
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -195,7 +204,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="6">
+        <item row="1" column="5">
          <widget class="QDoubleSpinBox" name="mag">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -204,6 +213,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="buttonSymbols">
@@ -219,14 +231,20 @@
           <property name="toolTip">
            <string notr="true"/>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string notr="true" comment="do not translate">selected</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="3">
+        <item row="0" column="2">
          <widget class="QCheckBox" name="visible">
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -234,7 +252,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="5">
+        <item row="1" column="4">
          <widget class="QLabel" name="label_11">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -243,6 +261,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -256,7 +277,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="6">
+        <item row="2" column="5">
          <widget class="Awl::ColorLabel" name="color">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -272,7 +293,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="5">
+        <item row="0" column="4">
          <widget class="QLabel" name="label_4">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -281,6 +302,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -294,7 +318,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="6">
+        <item row="0" column="5">
          <widget class="QSpinBox" name="subtype">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -303,6 +327,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="readOnly">
@@ -321,14 +348,20 @@
           <property name="toolTip">
            <string notr="true"/>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string notr="true">selectable</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="3">
+        <item row="1" column="2">
          <widget class="QCheckBox" name="systemFlag">
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -336,10 +369,13 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0" colspan="4">
+        <item row="2" column="0" colspan="3">
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QLabel" name="label_13">
+            <property name="accessibleDescription">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string notr="true">Track</string>
             </property>
@@ -353,6 +389,9 @@
           </item>
           <item>
            <widget class="QSpinBox" name="track">
+            <property name="accessibleDescription">
+             <string notr="true"/>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -366,6 +405,9 @@
           </item>
           <item>
            <widget class="QLabel" name="label_14">
+            <property name="accessibleDescription">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string notr="true">Z</string>
             </property>
@@ -379,6 +421,9 @@
           </item>
           <item>
            <widget class="QSpinBox" name="z">
+            <property name="accessibleDescription">
+             <string notr="true"/>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -391,6 +436,33 @@
            </widget>
           </item>
          </layout>
+        </item>
+        <item row="0" column="6">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string notr="true">placement</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="QComboBox" name="placement">
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
+          <item>
+           <property name="text">
+            <string>above</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>below</string>
+           </property>
+          </item>
+         </widget>
         </item>
        </layout>
       </item>
@@ -408,6 +480,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -435,6 +510,9 @@
           <property name="toolTip">
            <string notr="true">relative x position</string>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -460,6 +538,9 @@
           <property name="toolTip">
            <string notr="true">relative y position</string>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -483,6 +564,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -510,6 +594,9 @@
           <property name="toolTip">
            <string notr="true"/>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -533,6 +620,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="readOnly">
@@ -560,6 +650,9 @@
           <property name="toolTip">
            <string notr="true"/>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -583,6 +676,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="readOnly">
@@ -610,6 +706,9 @@
           <property name="toolTip">
            <string notr="true">canvas x position</string>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
@@ -631,6 +730,9 @@
           </property>
           <property name="toolTip">
            <string notr="true">canvas y position</string>
+          </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
           </property>
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
@@ -654,6 +756,9 @@
           <property name="toolTip">
            <string notr="true">read x position</string>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
@@ -676,6 +781,9 @@
           <property name="toolTip">
            <string notr="true">read y position</string>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
@@ -696,6 +804,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
@@ -720,6 +831,18 @@
           <property name="toolTip">
            <string notr="true"/>
           </property>
+          <property name="statusTip">
+           <string notr="true"/>
+          </property>
+          <property name="whatsThis">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleName">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string notr="true" comment="do not translate">Uoff</string>
           </property>
@@ -741,6 +864,9 @@
           </property>
           <property name="toolTip">
            <string notr="true">user x offset</string>
+          </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
           </property>
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
@@ -768,6 +894,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="buttonSymbols">
@@ -798,6 +927,9 @@
           <property name="toolTip">
            <string notr="true"/>
           </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string notr="true">CPos</string>
           </property>
@@ -818,6 +950,9 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
            <string notr="true"/>
           </property>
           <property name="text">
