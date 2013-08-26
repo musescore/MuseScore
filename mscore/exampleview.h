@@ -56,6 +56,9 @@ class ExampleView : public QFrame, public MuseScoreView {
       ExampleView(QWidget* parent = 0);
       virtual void layoutChanged();
       virtual void dataChanged(const QRectF&);
+      virtual void updateLoopCursors();
+      virtual void showLoopCursors() {}
+      virtual void hideLoopCursors() {}
       virtual void updateAll();
       virtual void moveCursor();
       virtual void adjustCanvasPosition(const Element* el, bool playBack);
