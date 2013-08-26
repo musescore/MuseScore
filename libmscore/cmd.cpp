@@ -2051,7 +2051,7 @@ void Score::cmd(const QAction* a)
       //
       Element* el = selection().element();
       if (cmd == "pitch-up") {
-            if (el && (el->type() == Element::ARTICULATION || el->type() == Element::FINGERING))
+            if (el && (el->type() == Element::ARTICULATION || el->isText()))
                   undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::REST)
                   cmdMoveRest(static_cast<Rest*>(el), MScore::UP);
@@ -2061,7 +2061,7 @@ void Score::cmd(const QAction* a)
                   upDown(true, UP_DOWN_CHROMATIC);
             }
       else if (cmd == "pitch-down") {
-            if (el && (el->type() == Element::ARTICULATION || el->type() == Element::FINGERING))
+            if (el && (el->type() == Element::ARTICULATION || el->isText()))
                   undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::REST)
                   cmdMoveRest(static_cast<Rest*>(el), MScore::DOWN);
@@ -2093,10 +2093,18 @@ void Score::cmd(const QAction* a)
             // remove measures if stave-range is 0-nstaves()
             cmdDeleteSelectedMeasures();
             }
-      else if (cmd == "pitch-up-octave")
-            upDown(true, UP_DOWN_OCTAVE);
-      else if (cmd == "pitch-down-octave")
-            upDown(false, UP_DOWN_OCTAVE);
+      else if (cmd == "pitch-up-octave") {
+            if (el && (el->type() == Element::ARTICULATION || el->isText()))
+                  undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
+            else
+                  upDown(true, UP_DOWN_OCTAVE);
+            }
+      else if (cmd == "pitch-down-octave") {
+            if (el && (el->type() == Element::ARTICULATION || el->isText()))
+                  undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
+            else
+                  upDown(false, UP_DOWN_OCTAVE);
+            }
       else if (cmd == "pitch-up-diatonic")
             upDown(true, UP_DOWN_DIATONIC);
       else if (cmd == "pitch-down-diatonic")

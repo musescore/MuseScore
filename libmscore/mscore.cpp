@@ -51,6 +51,8 @@ bool    MScore::replaceFractions;
 bool    MScore::playRepeats;
 bool    MScore::panPlayback;
 qreal   MScore::nudgeStep;
+qreal   MScore::nudgeStep10;
+qreal   MScore::nudgeStep50;
 int     MScore::defaultPlayDuration;
 QString MScore::partStyle;
 QString MScore::lastError;

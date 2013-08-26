@@ -232,9 +232,9 @@ void ScoreView::editKey(QKeyEvent* ev)
       else {
             xval = MScore::nudgeStep * _spatium;
             if (modifiers & Qt::ControlModifier)
-                  xval = preferences.nudgeStep10 * _spatium;
+                  xval = MScore::nudgeStep10 * _spatium;
             else if (modifiers & Qt::AltModifier)
-                  xval = preferences.nudgeStep50 * _spatium;
+                  xval = MScore::nudgeStep50 * _spatium;
             }
       yval = xval;
 

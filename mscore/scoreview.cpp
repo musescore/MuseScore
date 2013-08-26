@@ -1691,11 +1691,11 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       if (dragElement)
             dragElement->scanElements(&vp, paintElement, false);
       if (!dropAnchor.isNull()) {
-            QPen pen(QBrush(QColor(80, 0, 0)), 2.0 / vp.worldMatrix().m11(), Qt::DotLine);
+            QPen pen(QBrush(QColor(80, 0, 0)), 2.0 / vp.worldTransform().m11(), Qt::DotLine);
             vp.setPen(pen);
             vp.drawLine(dropAnchor);
 
-            qreal d = 4.0 / vp.worldMatrix().m11();
+            qreal d = 4.0 / vp.worldTransform().m11();
             QRectF r(-d, -d, 2 * d, 2 * d);
 
             vp.setBrush(QBrush(QColor(80, 0, 0)));
@@ -2705,13 +2705,16 @@ void ScoreView::cmd(const QAction* a)
          || cmd == "next-measure"
          || cmd == "prev-measure") {
             Element* el = score()->selection().element();
-            if (el && (el->type() == Element::FINGERING)) {
+            if (el && (el->isText())) {
                   score()->startCmd();
-                  QPointF pt(MScore::nudgeStep * el->spatium(), 0.0);
                   if (cmd == "prev-chord")
-                        score()->undoMove(el, el->userOff() - pt);
+                        score()->undoMove(el, el->userOff() - QPointF (MScore::nudgeStep * el->spatium(), 0.0));
                   else if (cmd == "next-chord")
-                        score()->undoMove(el, el->userOff() + pt);
+                        score()->undoMove(el, el->userOff() + QPointF (MScore::nudgeStep * el->spatium(), 0.0));
+                  else if (cmd == "prev-measure")
+                        score()->undoMove(el, el->userOff() - QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
+                  else if (cmd == "next-measure")
+                        score()->undoMove(el, el->userOff() + QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
                   score()->endCmd();
                   }
             else {

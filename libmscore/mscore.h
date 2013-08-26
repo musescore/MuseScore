@@ -379,6 +379,8 @@ class MScore : public QObject {
       static qreal vRaster()              { return _vRaster;     }
       static void setHRaster(int val)     { _hRaster = val;      }
       static void setVRaster(int val)     { _vRaster = val;      }
+      static void setNudgeStep10(qreal val)     { nudgeStep10 = val;      }
+      static void setNudgeStep50(qreal val)     { nudgeStep50 = val;      }
 
       static QColor selectColor[4];
       static QColor defaultColor;
@@ -392,6 +394,8 @@ class MScore : public QObject {
       static bool playRepeats;
       static bool panPlayback;
       static qreal nudgeStep;
+      static qreal nudgeStep10;
+      static qreal nudgeStep50;
       static int defaultPlayDuration;
       static QString partStyle;
       static QString lastError;
