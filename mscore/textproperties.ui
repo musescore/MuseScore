@@ -542,7 +542,7 @@
         <item>
          <widget class="QCheckBox" name="systemFlag">
           <property name="text">
-           <string>System Flag</string>
+           <string>System flag</string>
           </property>
          </widget>
         </item>
@@ -584,7 +584,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string extracomment="coordinate">X:</string>
+              <string extracomment="coordinate">Horizontal:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -625,7 +625,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>relX:</string>
+              <string>Relative X:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -664,7 +664,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string extracomment="coordinate">Y:</string>
+              <string extracomment="coordinate">Vertical:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -702,7 +702,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>relY:</string>
+              <string>Relative Y:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -755,7 +755,7 @@
             <string>offset is absolute</string>
            </property>
            <property name="text">
-            <string>MM</string>
+            <string>mm</string>
            </property>
           </widget>
          </item>
@@ -907,7 +907,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Round:</string>
+              <string>Radius:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -933,7 +933,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Foreground Color:</string>
+              <string>Foreground color:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -972,7 +972,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Background Color:</string>
+              <string>Background color:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

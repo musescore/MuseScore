@@ -102,7 +102,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Offset Y</string>
+        <string>Vertical offset</string>
        </property>
       </widget>
      </item>
@@ -233,7 +233,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Offset X</string>
+        <string>Horizontal offset</string>
        </property>
       </widget>
      </item>
