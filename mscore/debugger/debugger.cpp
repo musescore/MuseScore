@@ -1749,6 +1749,7 @@ void ShowElementBase::setElement(Element* e)
       eb.offsety->setValue(e->userOff().y());
       eb.readPosX->setValue(e->readPos().x());
       eb.readPosY->setValue(e->readPos().y());
+      eb.placement->setCurrentIndex(int(e->placement()));
 
 #if 0
       Align a = e->align();
@@ -2545,6 +2546,17 @@ void TextLineSegmentView::setElement(Element* e)
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
       lb.offset2y->setValue(vs->userOff2().y());
+      connect(lb.line, SIGNAL(clicked()), SLOT(lineClicked()));
+      }
+
+//---------------------------------------------------------
+//   lineClicked
+//---------------------------------------------------------
+
+void TextLineSegmentView::lineClicked()
+      {
+      Spanner* sp = static_cast<SpannerSegment*>(element())->spanner();
+      emit elementChanged(sp);
       }
 
 //---------------------------------------------------------
