@@ -94,7 +94,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Dynamic Range</string>
+        <string>Dynamic range</string>
        </property>
       </widget>
      </item>
@@ -163,7 +163,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Velo. change</string>
+        <string>Velocity change</string>
        </property>
       </widget>
      </item>
@@ -190,7 +190,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Continue Height</string>
+        <string>Continue height</string>
        </property>
       </widget>
      </item>
