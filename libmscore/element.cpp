@@ -506,6 +506,8 @@ QPointF Element::pagePos() const
                   system = static_cast<Segment*>(parent())->measure()->system();
             else if (parent()->type() == MEASURE)     // used in measure number
                   system = static_cast<Measure*>(parent())->system();
+            else if (parent()->type() == SYSTEM)
+                  system = static_cast<System*>(parent());
             else
                   abort();
             if (system) {
@@ -538,6 +540,8 @@ QPointF Element::canvasPos() const
                   system = static_cast<Segment*>(parent())->measure()->system();
             else if (parent()->type() == MEASURE)     // used in measure number
                   system = static_cast<Measure*>(parent())->system();
+            else if (parent()->type() == SYSTEM)
+                  system = static_cast<System*>(parent());
             else
                   abort();
             if (system) {

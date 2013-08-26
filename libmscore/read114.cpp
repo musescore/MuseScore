@@ -384,8 +384,9 @@ Score::FileError Score::read114(XmlReader& e)
                         qDebug("invalid spanner %s tick2: %d\n",
                            s->name(), s->tick2());
                         }
-                  else
+                  else {
                         addSpanner(s);
+                        }
                   }
             else if (tag == "Excerpt") {
                   Excerpt* ex = new Excerpt(this);
@@ -470,6 +471,30 @@ Score::FileError Score::read114(XmlReader& e)
 
       for (std::pair<int,Spanner*> p : spanner()) {
             Spanner* s = p.second;
+            if (s->anchor() == Spanner::ANCHOR_SEGMENT) {
+                  Segment* segment = tick2segment(s->tick2(), true, Segment::SegChordRest);
+                  if (segment) {
+                        segment = segment->prev1(Segment::SegChordRest);
+                        if (segment)
+                              s->setTick2(segment->tick());
+                        else
+                              qDebug("1:no segment for tick %d", s->tick2());
+                        }
+                  else {
+                        Measure* m = lastMeasure();
+                        segment = m->last();
+                        if (!segment)
+                              qDebug("2:no segment for tick %d", s->tick2());
+                        else {
+                              if (segment->segmentType() != Segment::SegChordRest)
+                                    segment = segment->prev1(Segment::SegChordRest);
+                              if (segment)
+                                    s->setTick2(segment->tick());
+                              else
+                                    qDebug("3:no segment for tick %d", s->tick2());
+                              }
+                        }
+                  }
             if (s->type() == Element::OTTAVA
                || (s->type() == Element::TEXTLINE)
                || (s->type() == Element::VOLTA)
@@ -494,8 +519,12 @@ Score::FileError Score::read114(XmlReader& e)
                   int n = ottava->spannerSegments().size();
                   for (int i = 0; i < n; ++i) {
                         LineSegment* seg = ottava->segmentAt(i);
+                        seg->setUserOff(QPointF());
+                        seg->setUserOff2(QPointF());
+#if 0
                         if (!seg->userOff().isNull())
                               seg->setUserYoffset(seg->userOff().y() - styleP(ST_ottavaY));
+#endif
                         }
                   ottava->staff()->updateOttava(ottava);
                   }
