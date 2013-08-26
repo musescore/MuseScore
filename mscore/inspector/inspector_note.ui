@@ -133,7 +133,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Mirror Head</string>
+        <string>Mirror head</string>
        </property>
       </widget>
      </item>
@@ -438,7 +438,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Head Type</string>
+        <string>Head type</string>
        </property>
       </widget>
      </item>
@@ -451,7 +451,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Head Group</string>
+        <string>Head group</string>
        </property>
       </widget>
      </item>
@@ -464,7 +464,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Dot Position</string>
+        <string>Dot position</string>
        </property>
       </widget>
      </item>
@@ -477,7 +477,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Velo. Type</string>
+        <string>Velocity type</string>
        </property>
       </widget>
      </item>
