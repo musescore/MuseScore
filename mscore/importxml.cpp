@@ -1100,26 +1100,11 @@ void MusicXml::scorePartwise(QDomElement ee)
                         }
                   }
             else if (tag == "identification") {
-                  // TODO: this is metadata !
+                  // read the metadata
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "creator") {
                               // type is an arbitrary label
-                              QString type = ee.attribute(QString("type"));
-                              QString str = ee.text();
-                              MusicXmlCreator* crt = new MusicXmlCreator(type, str);
-                              score->addCreator(crt);
-                              if (type == "composer")
-                                    composer = str;
-                              else if (type == "poet") //not in dtd ?
-                                    poet = str;
-                              else if (type == "lyricist")
-                                    poet = str;
-                              else if (type == "translator")
-                                    translator = str;
-                              else if (type == "transcriber")
-                                    ;
-                              else
-                                    qDebug("unknown creator <%s>", type.toLatin1().data());
+                              score->setMetaTag(ee.attribute(QString("type")), ee.text());
                               }
                         else if (ee.tagName() == "rights")
                               score->setMetaTag("copyright", ee.text());
