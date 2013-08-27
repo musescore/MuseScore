@@ -75,7 +75,6 @@ class Part;
 class Instrument;
 class UndoStack;
 class RepeatList;
-class MusicXmlCreator;
 class TimeSig;
 class Clef;
 class Beam;
@@ -347,7 +346,6 @@ class Score : public QObject {
       QMap<int, LinkedElements*> _elinks;
       QMap<QString, QString> _metaTags;
 
-      QList<MusicXmlCreator*> _creators;
       bool _creditsRead;             ///< credits were read at MusicXML import
       bool _defaultsRead;            ///< defaults were read at MusicXML import, allow export of defaults in convertermode
 
@@ -733,9 +731,6 @@ class Score : public QObject {
       void setCreditsRead(bool val)                  { _creditsRead = val;      }
       bool defaultsRead() const                      { return _defaultsRead;    }
       void setDefaultsRead(bool b)                   { _defaultsRead = b;       }
-      void addCreator(MusicXmlCreator* c)            { _creators.append(c);     }
-      const MusicXmlCreator* getCreator(int i) const { return _creators.at(i);  }
-      int numberOfCreators() const                   { return _creators.size(); }
       Text* getText(int subtype);
 
       void lassoSelect(const QRectF&);
