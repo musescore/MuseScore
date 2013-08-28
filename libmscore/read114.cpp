@@ -516,17 +516,17 @@ Score::FileError Score::read114(XmlReader& e)
             if (s->type() == Element::OTTAVA) {
                   // fix ottava position
                   Ottava* ottava = static_cast<Ottava*>(s);
+                  ottava->staff()->updateOttava(ottava);
+
                   int n = ottava->spannerSegments().size();
+                  qreal yo(styleS(ST_ottavaY).val() * spatium());
+                  if (ottava->placement() == Element::BELOW)
+                        yo = -yo + ottava->staff()->height();
                   for (int i = 0; i < n; ++i) {
                         LineSegment* seg = ottava->segmentAt(i);
-                        seg->setUserOff(QPointF());
-                        seg->setUserOff2(QPointF());
-#if 0
                         if (!seg->userOff().isNull())
-                              seg->setUserYoffset(seg->userOff().y() - styleP(ST_ottavaY));
-#endif
+                              seg->setUserYoffset(seg->userOff().y() - yo);
                         }
-                  ottava->staff()->updateOttava(ottava);
                   }
             }
 

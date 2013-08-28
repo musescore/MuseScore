@@ -39,7 +39,8 @@ class OttavaSegment : public TextLineSegment {
    protected:
 
    public:
-      OttavaSegment(Score* s) : TextLineSegment(s) { setFlag(ELEMENT_ON_STAFF, true); }
+      // OttavaSegment(Score* s) : TextLineSegment(s) { setFlag(ELEMENT_ON_STAFF, true); }
+      OttavaSegment(Score* s) : TextLineSegment(s) { }
       virtual ElementType type() const override     { return OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const               { return (Ottava*)spanner(); }
@@ -104,7 +105,6 @@ class Ottava : public TextLine {
       void setNumbersOnly(bool val) { _numbersOnly = val; }
 
       virtual LineSegment* createLineSegment() override;
-      virtual void layout() override;
       int pitchShift() const { return _pitchShift; }
 
       virtual void endEdit() override;
