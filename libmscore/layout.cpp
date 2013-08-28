@@ -262,7 +262,8 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
                         x = stemX - hw + stemWidth5 * 2;
                   }
             else {
-                  if (chord->durationType().headType() == Note::HEAD_WHOLE) {
+                  int ht = chord->durationType().headType();
+                  if (ht == Note::HEAD_WHOLE || ht == Note::HEAD_BREVIS) {
                         // center whole note
                         qreal xd = (hw - noteHeadWidth() * chord->mag()) * .5;
                         if (_up)
