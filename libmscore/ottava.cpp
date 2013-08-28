@@ -38,8 +38,8 @@ struct OttavaDefault {
 
 static const OttavaDefault ottavaDefault[] = {
       { octave8va,  octave8,  QPointF(0.0, .7),    1.0, Element::ABOVE,  12 },
-      { octave8vb,  octave8,  QPointF(0.0, -1.0), -1.0, Element::BELOW, -12 },
       { octave15ma, octave15, QPointF(0.0, .7),    1.0, Element::ABOVE,  24 },
+      { octave8vb,  octave8,  QPointF(0.0, -1.0), -1.0, Element::BELOW, -12 },
       { octave15mb, octave15, QPointF(0.0, -1.0), -1.0, Element::BELOW, -24 },
       { octave22ma, octave22, QPointF(0.0, .7),    1.0, Element::ABOVE,  36 },
       { octave22mb, octave22, QPointF(0.0, -1.0), -1.0, Element::BELOW, -36 }
@@ -56,7 +56,7 @@ void OttavaSegment::layout()
             qreal yo(score()->styleS(ST_ottavaY).val() * spatium());
             if (ottava()->placement() == BELOW)
                   yo = -yo + staff()->height();
-            rypos() = yo;
+            rypos() += yo;
             }
       adjustReadPos();
       }
@@ -169,16 +169,6 @@ Ottava::Ottava(Score* s)
       lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(ST_ottavaLineStyle)));
       lineStyleStyle = PropertyStyle::STYLED;
-      }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Ottava::layout()
-      {
-      setPos(0.0, 0.0);
-      TextLine::layout();
       }
 
 //---------------------------------------------------------
@@ -400,6 +390,7 @@ void Ottava::undoSetOttavaType(OttavaType val)
 
 //---------------------------------------------------------
 //   setYoff
+//    used in musicxml import
 //---------------------------------------------------------
 
 void Ottava::setYoff(qreal val)

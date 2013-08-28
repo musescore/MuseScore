@@ -52,13 +52,13 @@ class LineSegment : public SpannerSegment {
       Q_OBJECT
 
    protected:
-      virtual bool isEditable() const { return true; }
-      virtual void editDrag(const EditData&);
-      virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);
-      virtual void updateGrips(int*, QRectF*) const;
-      virtual void setGrip(int grip, const QPointF& p);
-      virtual QPointF getGrip(int) const;
-      virtual QPointF gripAnchor(int) const;
+      virtual bool isEditable() const override { return true; }
+      virtual void editDrag(const EditData&) override;
+      virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s) override;
+      virtual void updateGrips(int*, QRectF*) const override;
+      virtual void setGrip(int grip, const QPointF& p) override;
+      virtual QPointF getGrip(int) const override;
+      virtual QPointF gripAnchor(int) const override;
 
    public:
       LineSegment(Score* s);
@@ -66,11 +66,11 @@ class LineSegment : public SpannerSegment {
       virtual LineSegment* clone() const = 0;
       virtual void draw(QPainter*) const = 0;
       SLine* line() const                         { return (SLine*)spanner(); }
-      virtual void spatiumChanged(qreal, qreal);
-//      virtual QPointF pagePos() const;
+      virtual void spatiumChanged(qreal, qreal) override;
+      virtual QPointF pagePos() const override;
 
       friend class SLine;
-      virtual void read(XmlReader&);
+      virtual void read(XmlReader&) override;
       bool readProperties(XmlReader&);
 
       virtual QVariant getProperty(P_ID id) const override;
