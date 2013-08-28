@@ -1811,7 +1811,10 @@ void Chord::layoutTablature()
 void Chord::crossMeasureSetup(bool on)
       {
       if (!on) {
-            _crossMeasure = CROSSMEASURE_UNKNOWN;
+            if (_crossMeasure != CROSSMEASURE_UNKNOWN) {
+                  _crossMeasure = CROSSMEASURE_UNKNOWN;
+                  layoutStem1();
+                  }
             return;
             }
       if (_crossMeasure == CROSSMEASURE_UNKNOWN) {
@@ -1828,8 +1831,9 @@ void Chord::crossMeasureSetup(bool on)
                         // if duration can be expressed as a single duration
                         // apply cross-measure modification
                         if(durList.size() == 1) {
-                              tempCross = CROSSMEASURE_FIRST;
+                              _crossMeasure = tempCross = CROSSMEASURE_FIRST;
                               _crossMeasureTDur = durList[0];
+                              layoutStem1();
                               }
                         }
                   _crossMeasure = tempCross;
