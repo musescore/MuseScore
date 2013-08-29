@@ -166,6 +166,7 @@ p, li { white-space: pre-wrap; }
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -173,7 +174,6 @@ p, li { white-space: pre-wrap; }
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
