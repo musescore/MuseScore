@@ -601,22 +601,22 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
 
       int i;
       for (i = 0; i < nstaves();) {
-            SysStaff* staff = s->staff(i);
-            if (!staff->show()) {
+            SysStaff* stff = s->staff(i);
+            if (!stff->show() || !staff(i)->show()) {
                   ++i;
                   continue;
                   }
             int ni = i;
             for (;;) {
                   ++ni;
-                  if (ni == nstaves() || s->staff(ni)->show())
+                  if (ni == nstaves() || (s->staff(ni)->show() && staff(ni)->show()))
                         break;
                   }
 
             qreal sy2;
             if (ni != nstaves()) {
                   SysStaff* nstaff = s->staff(ni);
-                  qreal s1y2 = staff->bbox().y() + staff->bbox().height();
+                  qreal s1y2 = stff->bbox().y() + stff->bbox().height();
                   sy2 = s1y2 + (nstaff->bbox().y() - s1y2)/2;
                   }
             else
