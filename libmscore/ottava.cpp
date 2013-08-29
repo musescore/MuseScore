@@ -34,15 +34,16 @@ struct OttavaDefault {
       qreal  hookDirection;
       Element::Placement place;
       int shift;
+      const char* name;
       };
 
 static const OttavaDefault ottavaDefault[] = {
-      { octave8va,  octave8,  QPointF(0.0, .7),    1.0, Element::ABOVE,  12 },
-      { octave15ma, octave15, QPointF(0.0, .7),    1.0, Element::ABOVE,  24 },
-      { octave8vb,  octave8,  QPointF(0.0, -1.0), -1.0, Element::BELOW, -12 },
-      { octave15mb, octave15, QPointF(0.0, -1.0), -1.0, Element::BELOW, -24 },
-      { octave22ma, octave22, QPointF(0.0, .7),    1.0, Element::ABOVE,  36 },
-      { octave22mb, octave22, QPointF(0.0, -1.0), -1.0, Element::BELOW, -36 }
+      { octave8va,  octave8,  QPointF(0.0, .7),    1.0, Element::ABOVE,  12, "8va"  },
+      { octave15ma, octave15, QPointF(0.0, .7),    1.0, Element::ABOVE,  24, "15ma" },
+      { octave8vb,  octave8,  QPointF(0.0, -1.0), -1.0, Element::BELOW, -12, "8vb"  },
+      { octave15mb, octave15, QPointF(0.0, -1.0), -1.0, Element::BELOW, -24, "15ma" },
+      { octave22ma, octave22, QPointF(0.0, .7),    1.0, Element::ABOVE,  36, "22ma" },
+      { octave22mb, octave22, QPointF(0.0, -1.0), -1.0, Element::BELOW, -36, "22mb" }
       };
 
 //---------------------------------------------------------
@@ -58,6 +59,8 @@ void OttavaSegment::layout()
                   yo = -yo + staff()->height();
             rypos() += yo;
             }
+      printf("OttavaSegment::layout %p: readPosX %f userOffX %f(%f)\n",
+       this, readPos().x(), userOff().x(), userOff().x() / spatium());
       adjustReadPos();
       }
 
@@ -237,7 +240,7 @@ void Ottava::write(Xml& xml) const
       {
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
       writeProperty(xml, P_NUMBERS_ONLY);
-      xml.tag("subtype", int(ottavaType()));
+      xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
       TextLine::writeProperties(xml);
       xml.etag();
       }
@@ -253,8 +256,22 @@ void Ottava::read(XmlReader& e)
       setId(e.intAttribute("id", -1));
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "subtype")
-                  _ottavaType = OttavaType(e.readInt());
+            if (tag == "subtype") {
+                  QString s = e.readElementText();
+                  bool ok;
+                  int idx = s.toInt(&ok);
+                  if (!ok) {
+                        idx = int(OttavaType::OTTAVA_8VA);
+                        for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
+                              if (s == ottavaDefault[i].name) {
+                                    idx = i;
+                                    break;
+                                    }
+                              }
+
+                        }
+                  setOttavaType(OttavaType(idx));
+                  }
             else if (tag == "numbersOnly") {
                   _numbersOnly = e.readInt();
                   numbersOnlyStyle = PropertyStyle::UNSTYLED;
@@ -270,7 +287,6 @@ void Ottava::read(XmlReader& e)
             else if (!TextLine::readProperties(e))
                   e.unknown();
             }
-      setOttavaType(_ottavaType);
       }
 
 //---------------------------------------------------------

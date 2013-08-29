@@ -518,12 +518,10 @@ Score::FileError Score::read114(XmlReader& e)
                   Ottava* ottava = static_cast<Ottava*>(s);
                   ottava->staff()->updateOttava(ottava);
 
-                  int n = ottava->spannerSegments().size();
                   qreal yo(styleS(ST_ottavaY).val() * spatium());
                   if (ottava->placement() == Element::BELOW)
                         yo = -yo + ottava->staff()->height();
-                  for (int i = 0; i < n; ++i) {
-                        LineSegment* seg = ottava->segmentAt(i);
+                  for (SpannerSegment* seg : ottava->spannerSegments()) {
                         if (!seg->userOff().isNull())
                               seg->setUserYoffset(seg->userOff().y() - yo);
                         }
@@ -653,6 +651,30 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             }
 
+      for (std::pair<int,Spanner*> p : spanner()) {
+            Spanner* s = p.second;
+            if (s->type() == Element::OTTAVA) {
+                  qreal dx = 0.0;
+                  Segment* s1 = tick2segment(s->tick2(), true, Segment::SegChordRest);
+                  if (s1) {
+                        qreal x1 = s1->pagePos().x();
+                        qreal x2;
+                        Segment* s2 = s1->next1(Segment::SegChordRest);
+                        if (s2)
+                              x2 = s2->pagePos().x();
+                        else
+                              x2 = lastMeasure()->pagePos().x() + lastMeasure()->width();
+
+                        dx =  x2 - x1 - s->spatium() * 2.0;
+                        }
+
+                  Ottava* o = static_cast<Ottava*>(s);
+                  printf("===dx %f\n", dx);
+                  for (SpannerSegment* seg : o->spannerSegments()) {
+                        seg->setUserOff2(QPointF(seg->userOff2().x() + dx, seg->userOff2().y()));
+                        }
+                  }
+            }
       return FILE_NO_ERROR;
       }
 
