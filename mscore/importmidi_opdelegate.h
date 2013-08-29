@@ -10,6 +10,9 @@ class OperationsDelegate : public QStyledItemDelegate
 
    public:
       explicit OperationsDelegate(QWidget *appWindow);
+      void paint(QPainter *painter,
+                 const QStyleOptionViewItem &option,
+                 const QModelIndex &index) const;
       QWidget* createEditor(QWidget *parent,
                             const QStyleOptionViewItem &option,
                             const QModelIndex &index) const;
