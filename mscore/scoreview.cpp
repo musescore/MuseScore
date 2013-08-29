@@ -5120,12 +5120,17 @@ void ScoreView::cmdInsertMeasure(Element::ElementType type)
 void ScoreView::cmdRepeatSelection()
       {
       const Selection& selection = _score->selection();
-      if (selection.isSingle() && noteEntryMode()) {
-#if 0 // TODO
-            qDebug("cmdRepeatSelection(): single selection not implemented");
-            const InputState& is = _score->inputState();
-            cmdAddPitch1(is.pitch, false, STEP_NONE);
-#endif
+      if (noteEntryMode() && selection.isSingle()) {
+            Element* el = _score->selection().element();
+            if (el && el->type() == Element::NOTE) {
+                  Chord* c = static_cast<Note*>(el)->chord();
+                  _score->startCmd();
+                  for (int i = 0; i < c->notes().size(); ++i) {
+                        Note* n = c->notes().at(i);
+                        _score->addPitch(n->pitch(), i != 0);
+                        }
+                  _score->endCmd();
+                  }
             return;
             }
 
