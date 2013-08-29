@@ -68,7 +68,7 @@ enum class OttavaType {
 
 //---------------------------------------------------------
 //   @@ Ottava
-//   @P ottavaType   enum OttavaType OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB
+//   @P ottavaType   enum OttavaType OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB, OTTAVA_22MA, OTTAVA_22MB
 //---------------------------------------------------------
 
 class Ottava : public TextLine {
@@ -121,7 +121,6 @@ class Ottava : public TextLine {
       virtual void styleChanged() override;
       virtual void reset() override;
       };
-
 
 }     // namespace Ms
 

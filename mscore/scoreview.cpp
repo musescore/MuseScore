@@ -1449,7 +1449,7 @@ void ScoreView::setCursorOn(bool val)
 
 void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
       {
-      qDebug ("setLoopCursor :  tick=%d, isInPos=%d",tick, isInPos);
+//      qDebug ("setLoopCursor :  tick=%d, isInPos=%d",tick, isInPos);
       //
       // set mark height for whole system
       //

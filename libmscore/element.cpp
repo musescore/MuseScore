@@ -689,10 +689,6 @@ bool Element::readProperties(XmlReader& e)
             e.readInt();
       else if (tag == "userOff")
             _userOff = e.readPoint();
-      else if (tag == "color")
-            _color = e.readColor();
-      else if (tag == "selected")
-            _selected = e.readInt();
       else if (tag == "lid") {
             int id = e.readInt();
             _links = score()->links().value(id);

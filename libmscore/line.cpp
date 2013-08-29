@@ -62,7 +62,7 @@ bool LineSegment::readProperties(XmlReader& e)
             else
                   e.readNext();
             }
-      else if (!Element::readProperties(e)) {
+      else if (!SpannerSegment::readProperties(e)) {
             e.unknown();
             return false;
             }
@@ -114,7 +114,7 @@ void LineSegment::setGrip(int grip, const QPointF& p)
                   setUserOff(pt);
                   break;
             }
-//      layout();
+      layout();   // needed?
       }
 
 //---------------------------------------------------------
@@ -537,6 +537,7 @@ QPointF SLine::linePos(int grip, System** sys)
                   break;
             }
       qreal y = (*sys)->staves()->isEmpty() ? 0.0 : (*sys)->staffY(staffIdx());
+      x += (*sys)->pos().x();
       return QPointF(x, y);
       }
 
