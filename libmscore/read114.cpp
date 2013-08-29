@@ -669,7 +669,6 @@ Score::FileError Score::read114(XmlReader& e)
                         }
 
                   Ottava* o = static_cast<Ottava*>(s);
-                  printf("===dx %f\n", dx);
                   for (SpannerSegment* seg : o->spannerSegments()) {
                         seg->setUserOff2(QPointF(seg->userOff2().x() + dx, seg->userOff2().y()));
                         }

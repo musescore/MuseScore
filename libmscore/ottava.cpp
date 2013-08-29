@@ -59,8 +59,6 @@ void OttavaSegment::layout()
                   yo = -yo + staff()->height();
             rypos() += yo;
             }
-      printf("OttavaSegment::layout %p: readPosX %f userOffX %f(%f)\n",
-       this, readPos().x(), userOff().x(), userOff().x() / spatium());
       adjustReadPos();
       }
 
