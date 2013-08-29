@@ -1895,8 +1895,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
       {
       if (!cr) return;
       // create a new beam
-      // currently only required when stem direction is explicit
-      if (bm == BeamMode::BEGIN && sd != MScore::AUTO) {
+      if (bm == BeamMode::BEGIN) {
             // if currently in a beam, delete it
             if (beam) {
                   qDebug("handleBeamAndStemDir() new beam, removing previous incomplete beam %p", beam);
