@@ -485,6 +485,10 @@ bool Score::loadStyle(const QString& fn)
                   undo(new ChangeStyle(this, st));
                   return true;
                   }
+             else {
+                  MScore::lastError = tr("The style file is not compatible with this version of MuseScore.");
+                  return false;
+                  }
             }
       MScore::lastError = strerror(errno);
       return false;
