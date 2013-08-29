@@ -1467,7 +1467,9 @@ bool StyleData::load(QFile* qf)
             if (e.name() == "museScore") {
                   QString version = e.attribute("version");
                   QStringList sl  = version.split('.');
-                  // _mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
+                  int mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
+                  if (mscVersion != MSCVERSION)
+                        return false;
                   while (e.readNextStartElement()) {
                         if (e.name() == "Style")
                               load(e);
