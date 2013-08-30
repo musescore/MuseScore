@@ -346,7 +346,6 @@ class Score : public QObject {
       QMap<int, LinkedElements*> _elinks;
       QMap<QString, QString> _metaTags;
 
-      bool _creditsRead;             ///< credits were read at MusicXML import
       bool _defaultsRead;            ///< defaults were read at MusicXML import, allow export of defaults in convertermode
 
       Selection _selection;
@@ -727,8 +726,6 @@ class Score : public QObject {
       void setPause(int tick, qreal seconds);
       qreal tempo(int tick) const;
 
-      bool creditsRead() const                       { return _creditsRead;     }
-      void setCreditsRead(bool val)                  { _creditsRead = val;      }
       bool defaultsRead() const                      { return _defaultsRead;    }
       void setDefaultsRead(bool b)                   { _defaultsRead = b;       }
       Text* getText(int subtype);
