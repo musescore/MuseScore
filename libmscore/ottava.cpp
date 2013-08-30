@@ -163,8 +163,10 @@ void OttavaSegment::styleChanged()
 Ottava::Ottava(Score* s)
    : TextLine(s)
       {
-      _numbersOnly   = false;
-      numbersOnlyStyle = PropertyStyle::STYLED;
+      _numbersOnly        = score()->styleB(ST_ottavaNumbersOnly);
+      numbersOnlyStyle    = PropertyStyle::STYLED;
+      beginSymbolStyle    = PropertyStyle::STYLED;
+      continueSymbolStyle = PropertyStyle::STYLED;
       setOttavaType(OttavaType::OTTAVA_8VA);
       setLineWidth(score()->styleS(ST_ottavaLineWidth));
       lineWidthStyle = PropertyStyle::STYLED;
@@ -188,8 +190,10 @@ void Ottava::setOttavaType(OttavaType val)
             id = ottavaDefault[int(val)].numbersOnlyId;
       else
             id = ottavaDefault[int(val)].id;
-      setBeginSymbol(id);
-      setContinueSymbol(id);
+      if (beginSymbolStyle == PropertyStyle::STYLED)
+            setBeginSymbol(id);
+      if (continueSymbolStyle == PropertyStyle::STYLED)
+            setContinueSymbol(id);
 
       setBeginSymbolOffset(ottavaDefault[int(val)].offset);
       setContinueSymbolOffset(ottavaDefault[int(val)].offset);
@@ -201,6 +205,10 @@ void Ottava::setOttavaType(OttavaType val)
             OttavaSegment* os = static_cast<OttavaSegment*>(s);
             os->clearText();
             }
+      delete _beginText;
+      _beginText = 0;
+      delete _continueText;
+      _continueText = 0;
       }
 
 //---------------------------------------------------------
@@ -281,6 +289,16 @@ void Ottava::read(XmlReader& e)
             else if (tag == "lineStyle") {
                   setLineStyle(Qt::PenStyle(e.readInt()));
                   lineStyleStyle = PropertyStyle::UNSTYLED;
+                  }
+            else if (tag == "beginSymbol") {
+                  beginSymbolStyle = PropertyStyle::UNSTYLED;
+                  QString text(e.readElementText());
+                  setBeginSymbol(text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text));
+                  }
+            else if (tag == "continueSymbol") {
+                  continueSymbolStyle = PropertyStyle::UNSTYLED;
+                  QString text(e.readElementText());
+                  setContinueSymbol(text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text));
                   }
             else if (!TextLine::readProperties(e))
                   e.unknown();
@@ -386,7 +404,7 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
                   return ottavaDefault[int(_ottavaType)].offset;
 
             case P_NUMBERS_ONLY:
-                  return false;
+                  return score()->styleB(ST_ottavaNumbersOnly);
 
             default:
                   return TextLine::propertyDefault(propertyId);
@@ -466,6 +484,16 @@ void Ottava::resetProperty(P_ID id)
                   setOttavaType(_ottavaType);
                   break;
 
+            case P_BEGIN_SYMBOL:
+                  setBeginSymbol(SymId(getProperty(P_BEGIN_SYMBOL).toInt()));
+                  beginSymbolStyle = PropertyStyle::STYLED;
+                  break;
+
+            case P_CONTINUE_SYMBOL:
+                  setContinueSymbol(SymId(getProperty(P_CONTINUE_SYMBOL).toInt()));
+                  continueSymbolStyle = PropertyStyle::STYLED;
+                  break;
+
             default:
                   return TextLine::resetProperty(id);
             }
@@ -499,8 +527,14 @@ void Ottava::reset()
             score()->undoChangeProperty(this, P_LINE_STYLE, propertyDefault(P_LINE_STYLE), PropertyStyle::STYLED);
       if (numbersOnlyStyle == PropertyStyle::UNSTYLED)
             score()->undoChangeProperty(this, P_NUMBERS_ONLY, propertyDefault(P_NUMBERS_ONLY), PropertyStyle::STYLED);
+      if (beginSymbolStyle == PropertyStyle::UNSTYLED)
+            score()->undoChangeProperty(this, P_BEGIN_SYMBOL, propertyDefault(P_BEGIN_SYMBOL), PropertyStyle::STYLED);
+      if (continueSymbolStyle == PropertyStyle::UNSTYLED)
+            score()->undoChangeProperty(this, P_CONTINUE_SYMBOL, propertyDefault(P_CONTINUE_SYMBOL), PropertyStyle::STYLED);
+
+      setOttavaType(_ottavaType);
+
       TextLine::reset();
       }
-
 }
 

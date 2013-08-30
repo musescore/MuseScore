@@ -353,7 +353,7 @@ class Sym {
       QString toString() const;
 
       static SymId name2id(const QString& s) { return lnhash.value(s, noSym); }     // return noSym if not found
-      static const char* id2name(SymId id)   { return symNames[id];     }
+      static const char* id2name(SymId id);
       static QString id2userName(SymId id)   { return symUserNames[id]; }
       static SymId userName2id(const QString& s)      { return (SymId)(symUserNames.indexOf(s)); }
       static void init();

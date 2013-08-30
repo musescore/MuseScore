@@ -84,6 +84,8 @@ class Ottava : public TextLine {
       PropertyStyle numbersOnlyStyle;
       PropertyStyle lineWidthStyle;
       PropertyStyle lineStyleStyle;
+      PropertyStyle beginSymbolStyle;
+      PropertyStyle continueSymbolStyle;
 
    protected:
       QString text;
