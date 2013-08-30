@@ -314,7 +314,6 @@ void Score::init()
       _loopInTick     = -1;
       _loopOutTick    = -1;
       _fileDivision   = MScore::division;
-      _creditsRead    = false;
       _defaultsRead   = false;
       _omr            = 0;
       _audio          = 0;

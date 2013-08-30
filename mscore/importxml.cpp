@@ -889,22 +889,21 @@ void MusicXml::doCredits()
       if (crwCopyRight) qDebug("copyright='%s'", crwCopyRight->words.toUtf8().data());
        */
 
-      if (crwTitle || crwSubTitle || crwComposer || crwPoet || crwCopyRight)
-            score->setCreditsRead(true);
-
       QString strTitle;
       QString strSubTitle;
       QString strComposer;
       QString strPoet;
       QString strTranslator;
 
-      if (score->creditsRead()) {
+      if (crwTitle || crwSubTitle || crwComposer || crwPoet || crwCopyRight) {
+            // use credits
             if (crwTitle) strTitle = crwTitle->words;
             if (crwSubTitle) strSubTitle = crwSubTitle->words;
             if (crwComposer) strComposer = crwComposer->words;
             if (crwPoet) strPoet = crwPoet->words;
             }
       else {
+            // use metadata
             if (!(score->metaTag("movementTitle").isEmpty() && score->metaTag("workTitle").isEmpty())) {
                   strTitle = score->metaTag("movementTitle");
                   if (strTitle.isEmpty())
@@ -915,9 +914,12 @@ void MusicXml::doCredits()
                   if (strSubTitle.isEmpty())
                         strSubTitle = score->metaTag("workNumber");
                   }
-            if (!composer.isEmpty()) strComposer = composer;
-            if (!poet.isEmpty()) strPoet = poet;
-            if (!translator.isEmpty()) strTranslator = translator;
+            QString metaComposer = score->metaTag("composer");
+            QString metaPoet = score->metaTag("poet");
+            QString metaTranslator = score->metaTag("translator");
+            if (!metaComposer.isEmpty()) strComposer = metaComposer;
+            if (!metaPoet.isEmpty()) strPoet = metaPoet;
+            if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
             }
 
       VBox* vbox  = 0;
