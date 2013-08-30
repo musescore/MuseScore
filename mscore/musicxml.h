@@ -28,6 +28,7 @@
 
 #include "libmscore/fraction.h"
 #include "libmscore/mscore.h"
+#include "libmscore/pitchspelling.h"
 #include "importxmlfirstpass.h"
 #include "musicxmlsupport.h"
 
@@ -152,6 +153,13 @@ public:
 
 typedef QList<JumpMarkerDesc> JumpMarkerDescList;
 
+struct GraceNoteInfo {
+      NoteType type;
+      int pitch;
+      int tpc;
+      int len;
+};
+
 //---------------------------------------------------------
 //   MusicXml
 //---------------------------------------------------------
@@ -228,7 +236,7 @@ class MusicXml {
                     QMap<int, Lyrics*>& defyLyrics,
                     QList<Lyrics*>& unNumbrdLyrics);
       void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
-      void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, int& currentVoice, QDomElement node);
+      void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, int& currentVoice, QDomElement node, QList<GraceNoteInfo>&);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       int xmlClef(QDomElement, int staffIdx, Measure*);
       void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion);

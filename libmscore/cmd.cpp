@@ -515,10 +515,13 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
 ///   \len is the visual duration of the grace note (1/16 or 1/32)
 //---------------------------------------------------------
 
-void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool /*behind*/, int len)
+void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool /*behind*/, int len, int tpc)
       {
       Note* note = new Note(this);
-      note->setPitch(pitch);
+      if(tpc ==  INVALID_TPC)
+            note->setPitch(pitch);
+      else
+            note->setPitch(pitch, tpc);
 
       Chord* chord = new Chord(this);
       chord->setTrack(ch->track());

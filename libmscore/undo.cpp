@@ -854,8 +854,10 @@ void Score::undoAddElement(Element* element)
                   if (element->type() == Element::FINGERING)
                         element->score()->layoutFingering(static_cast<Fingering*>(element));
                   else if (element->type() == Element::CHORD) {
-                        for (Note* n : static_cast<Chord*>(element)->notes())
-                              n->setTpcFromPitch();
+                        for (Note* n : static_cast<Chord*>(element)->notes()) {
+                              if(n->tpc() == INVALID_TPC)
+                                    n->setTpcFromPitch();
+                              }
                         element->score()->updateNotes();
                         }
                   return;
