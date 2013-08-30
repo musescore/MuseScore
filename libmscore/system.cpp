@@ -1004,10 +1004,11 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
       }
 
 //---------------------------------------------------------
-//   staffY
+//   staffYpage
+//    return page coordinates
 //---------------------------------------------------------
 
-qreal System::staffY(int staffIdx) const
+qreal System::staffYpage(int staffIdx) const
       {
       if (_staves.size() <= staffIdx) {
             qDebug("staffY: staves %d <= staffIdx %d, vbox %d",

@@ -1120,7 +1120,7 @@ QLineF Harmony::dragAnchor() const
             xp += e->x();
       qreal yp;
       if (parent()->type() == SEGMENT)
-            yp = static_cast<Segment*>(parent())->measure()->system()->staffY(staffIdx());
+            yp = static_cast<Segment*>(parent())->measure()->system()->staffYpage(staffIdx());
       else
             yp = parent()->canvasPos().y();
       QPointF p(xp, yp);
