@@ -559,7 +559,7 @@ StyleData::StyleData()
             { ST_ottavaHook,                  QVariant(1.9) },
             { ST_ottavaLineWidth,             QVariant(.1) },
             { ST_ottavaLineStyle,             QVariant(int(Qt::DashLine)) },
-            { ST_ottavaNumbersOnly,           false },
+            { ST_ottavaNumbersOnly,           true },
             { ST_tabClef,                     QVariant(int(CLEF_TAB2)) },
             { ST_tremoloWidth,                QVariant(1.2) },  // tremolo stroke width: note head width
             { ST_tremoloBoxHeight,            QVariant(0.65) },

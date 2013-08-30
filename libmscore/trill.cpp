@@ -125,8 +125,10 @@ void TrillSegment::layout()
 
 bool TrillSegment::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      if (e->type() == ACCIDENTAL)
+      if (e->type() == ACCIDENTAL) {
+            printf("========accept drop\n");
             return true;
+            }
       return false;
       }
 
@@ -139,6 +141,7 @@ Element* TrillSegment::drop(const DropData& data)
       Element* e = data.element;
       switch(e->type()) {
             case ACCIDENTAL:
+            printf("========drop\n");
                   e->setParent(trill());
                   score()->undoAddElement(e);
                   break;

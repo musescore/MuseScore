@@ -154,12 +154,13 @@ QPointF LineSegment::pagePos() const
 
 //---------------------------------------------------------
 //   gripAnchor
+//    return page coordinates
 //---------------------------------------------------------
 
 QPointF LineSegment::gripAnchor(int grip) const
       {
       if (spannerSegmentType() == SEGMENT_MIDDLE) {
-            qreal y = system()->staffY(staffIdx());
+            qreal y = system()->staffYpage(staffIdx());
             qreal x;
             switch(grip) {
                   case GRIP_LINE_START:
@@ -181,7 +182,10 @@ QPointF LineSegment::gripAnchor(int grip) const
                   return QPointF(0, 0);
             else {
                   System* s;
-                  return line()->linePos(grip, &s);
+                  QPointF p(line()->linePos(grip, &s));
+                  if (s)
+                        p += s->pos();
+                  return p;
                   }
             }
       }
@@ -212,7 +216,6 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                   qDebug("LineSegment::edit: no start/end segment");
                   return true;
                   }
-
             if (key == Qt::Key_Left) {
                   if (curGrip == GRIP_LINE_START)
                         s1 = prevSeg1(s1, track);
@@ -360,7 +363,7 @@ void LineSegment::editDrag(const EditData& ed)
                         }
                   }
             }
-//      line()->layout();
+      line()->layout();
       }
 
 //---------------------------------------------------------
@@ -536,8 +539,9 @@ QPointF SLine::linePos(int grip, System** sys)
                   qFatal("Sline::linePos(): anchor not implemented\n");
                   break;
             }
-      qreal y = (*sys)->staves()->isEmpty() ? 0.0 : (*sys)->staffY(staffIdx());
-      x += (*sys)->pos().x();
+      qreal y = (*sys)->staves()->isEmpty() ? 0.0 : (*sys)->staffYpage(staffIdx());
+      y -= (*sys)->pos().y();
+//      x += (*sys)->pos().x();
       return QPointF(x, y);
       }
 
@@ -567,8 +571,8 @@ void SLine::layout()
 
       System* s1;
       System* s2;
-      QPointF p1 = linePos(GRIP_LINE_START, &s1);
-      QPointF p2 = linePos(GRIP_LINE_END,   &s2);
+      QPointF p1(linePos(GRIP_LINE_START, &s1));
+      QPointF p2(linePos(GRIP_LINE_END,   &s2));
 
       QList<System*>* systems = score()->systems();
       int sysIdx1 = systems->indexOf(s1);

@@ -84,7 +84,7 @@ QPointF BarLine::pagePos() const
 
       qreal yp = y();
       if (system)
-            yp += system->staffY(staffIdx());
+            yp += system->staffYpage(staffIdx());
       return QPointF(pageX(), yp);
       }
 

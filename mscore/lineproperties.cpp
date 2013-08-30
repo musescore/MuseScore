@@ -39,11 +39,9 @@ namespace Ms {
 static void populateLineSymbolComboBox(QComboBox* cb)
       {
       cb->clear();
-      cb->addItem(QComboBox::tr("Ped (Pedal)"), pedalPedSym);
-      cb->addItem(QComboBox::tr("* (Pedal)"), pedalasteriskSym);
-      cb->addItem(QComboBox::tr(". (Pedal)"), pedaldotSym);
-      cb->addItem(QComboBox::tr("dash (Pedal)"), pedaldashSym);
-      cb->addItem(QComboBox::tr("tr (Trill)"), trillSym);
+      cb->addItem(cb->tr("no symbol"), noSym);
+      for (int i = 0; i < lastSym; ++i)
+            cb->addItem(Sym::id2userName(SymId(i)), i);
       }
 
 //---------------------------------------------------------
@@ -52,8 +50,6 @@ static void populateLineSymbolComboBox(QComboBox* cb)
 
 static void setLineSymbolComboBox(QComboBox* cb, int sym)
       {
-      if (sym == -1)
-            return;
       for (int i = 0; i < cb->count(); ++i) {
             if (cb->itemData(i).toInt() == sym) {
                   cb->setCurrentIndex(i);

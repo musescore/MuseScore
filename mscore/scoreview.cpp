@@ -1317,7 +1317,7 @@ void ScoreView::moveCursor(int tick)
       System* system = measure->system();
       if (system == 0)
             return;
-      double y        = system->staffY(0) + system->page()->pos().y();
+      double y        = system->staffYpage(0) + system->page()->pos().y();
       double _spatium = score()->spatium();
 
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
@@ -1372,7 +1372,7 @@ void ScoreView::moveCursor()
             }
       int staffIdx    = track == -1 ? 0 : track / VOICES;
       double x        = segment->canvasPos().x();
-      double y        = system->staffY(staffIdx) + system->page()->pos().y();
+      double y        = system->staffYpage(staffIdx) + system->page()->pos().y();
       double _spatium = score()->spatium();
 
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
@@ -1500,7 +1500,7 @@ void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
       System* system = measure->system();
       if (system == 0)
             return;
-      double y        = system->staffY(0) + system->page()->pos().y();
+      double y        = system->staffYpage(0) + system->page()->pos().y();
       double _spatium = score()->spatium();
 
       qreal mag = _spatium / (MScore::DPI * SPATIUM20);

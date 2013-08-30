@@ -83,7 +83,8 @@ void TextLineSegment::draw(QPainter* painter) const
             }
       qreal mag = magS();
       qreal l = 0.0;
-      int sym = spannerSegmentType() == SEGMENT_MIDDLE ? tl->continueSymbol() : tl->beginSymbol();
+      int sym = (spannerSegmentType() == SEGMENT_MIDDLE || spannerSegmentType() == SEGMENT_END)
+         ? tl->continueSymbol() : tl->beginSymbol();
       if (_text) {
             SpannerSegmentType st = spannerSegmentType();
             if (
@@ -502,15 +503,15 @@ void TextLine::writeProperties(Xml& xml) const
             _continueText->writeProperties(xml);
             xml.etag();
             }
-      if (_beginSymbol != -1) {
+      if (QVariant(_beginSymbol) != propertyDefault(P_BEGIN_SYMBOL)) {
             writeProperty(xml, P_BEGIN_SYMBOL);
             writeProperty(xml, P_BEGIN_SYMBOL_OFFSET);
             }
-      if (_continueSymbol != -1) {
+      if (QVariant(_continueSymbol) != propertyDefault(P_CONTINUE_SYMBOL)) {
             writeProperty(xml, P_CONTINUE_SYMBOL);
             writeProperty(xml, P_CONTINUE_SYMBOL_OFFSET);
             }
-      if (_endSymbol != -1) {
+      if (QVariant(_endSymbol) != propertyDefault(P_END_SYMBOL)) {
             writeProperty(xml, P_END_SYMBOL);
             writeProperty(xml, P_END_SYMBOL_OFFSET);
             }

@@ -283,7 +283,7 @@ QLineF Dynamic::dragAnchor() const
       qreal xp = 0.0;
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
-      qreal yp = measure()->system()->staffY(staffIdx());
+      qreal yp = measure()->system()->staffYpage(staffIdx());
       QPointF p(xp, yp);
       return QLineF(p, canvasPos());
       }

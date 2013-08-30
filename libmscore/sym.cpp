@@ -586,6 +586,16 @@ QString symToHtml(const Sym& s1, const Sym& s2, int leftMargin)
       "</data>").arg(family).arg(size).arg(leftMargin).arg(s1.code()).arg(s2.code());
       }
 
+//---------------------------------------------------------
+//   id2name
+//---------------------------------------------------------
+
+const char* Sym::id2name(SymId id)
+      {
+      if (id == noSym)
+            return "noSym";
+      return symNames[id];
+      }
 
 //---------------------------------------------------------
 //   init

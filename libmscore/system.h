@@ -124,7 +124,7 @@ class System : public Element {
       QRectF bboxStaff(int staff) const      { return _staves[staff]->bbox(); }
       QList<SysStaff*>* staves()             { return &_staves;   }
       const QList<SysStaff*>* staves() const { return &_staves;   }
-      qreal staffY(int staffIdx) const;
+      qreal staffYpage(int staffIdx) const;
 #ifdef NDEBUG
       SysStaff* staff(int staffIdx) const    { return _staves[staffIdx]; }
 #else

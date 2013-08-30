@@ -107,7 +107,7 @@ QPointF FretDiagram::pagePos() const
             System* system = m->system();
             qreal yp = y();
             if (system)
-                  yp += system->staffY(staffIdx());
+                  yp += system->staffYpage(staffIdx());
             return QPointF(pageX(), yp);
             }
       else
