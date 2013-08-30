@@ -31,6 +31,7 @@
 #include "accidental.h"
 #include "note.h"
 #include "spannermap.h"
+#include "pitchspelling.h"
 
 class QPainter;
 
@@ -524,7 +525,7 @@ class Score : public QObject {
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
 
-      void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
+      void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len, int tpc = INVALID_TPC);
 
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);

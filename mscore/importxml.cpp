@@ -1999,12 +1999,12 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
             measure->setIrregular(true);
 
       int cv = 0; // current voice for chords, default is 0
-
+      QList<GraceNoteInfo> graceNotesInfos;
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "attributes")
                   xmlAttributes(measure, staff, e.firstChildElement());
             else if (e.tagName() == "note") {
-                  xmlNote(measure, staff, part->id(), beam, cv, e);
+                  xmlNote(measure, staff, part->id(), beam, cv, e, graceNotesInfos);
                   moveTick(measure->tick(), tick, maxtick, noteTypeTickFr, divisions, e);
 #ifdef DEBUG_TICK
                   qDebug(" after inserting note tick=%d", tick);
@@ -4492,7 +4492,7 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
  \a Staff is the number of first staff of the part this note belongs to.
  */
 
-void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, int& currentVoice, QDomElement e)
+void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, int& currentVoice, QDomElement e, QList<GraceNoteInfo>& gni)
       {
       int ticks = 0;
 #ifdef DEBUG_TICK
@@ -4825,8 +4825,6 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             char c = step[0].toLatin1();
             note = new Note(score);
             note->setHeadGroup(headGroup);
-            // note->setTrack(track);
-            // note->setStaffMove(move);
             if (noteheadColor != QColor::Invalid)
                   note->setColor(noteheadColor);
 
@@ -4835,57 +4833,24 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   note->setVeloOffset(velocity);
                   }
 
-            // if (grace)
-            //       qDebug(" grace: nrOfGraceSegsReq: %d", nrOfGraceSegsReq(pn));
-            int gl = nrOfGraceSegsReq(pn);
-            // TODO-S  cr = measure->findChord(loc_tick, track, grace);
-            // implementation of grace notes has changed
-
             cr = measure->findChord(loc_tick, track);
             if (cr == 0) {
-                  // Segment::SegmentType st = Segment::SegChordRest;
-                  cr = new Chord(score);
-                  cr->setBeamMode(bm);
-                  cr->setTrack(track);
-                  // qDebug(" grace=%d", grace);
-                  if (grace) {
-                        NoteType nt = NOTE_APPOGGIATURA;
-                        if (graceSlash == "yes")
-                              nt = NOTE_ACCIACCATURA;
-                        ((Chord*)cr)->setNoteType(nt);
-                        // the subtraction causes a grace at tick=0 to fail
-                        // cr->setTick(tick - (MScore::division / 2));
-                        if (durationType.type() == TDuration::V_QUARTER) {
-                              ((Chord*)cr)->setNoteType(NOTE_GRACE4);
-                              cr->setDurationType(TDuration::V_QUARTER);
-                              }
-                        else if (durationType.type() == TDuration::V_16TH) {
-                              ((Chord*)cr)->setNoteType(NOTE_GRACE16);
-                              cr->setDurationType(TDuration::V_16TH);
-                              }
-                        else if (durationType.type() == TDuration::V_32ND) {
-                              ((Chord*)cr)->setNoteType(NOTE_GRACE32);
-                              cr->setDurationType(TDuration::V_32ND);
-                              }
-                        else
-                              cr->setDurationType(TDuration::V_EIGHT);
-                        // st = Segment::SegGrace;
-                        }
-                  else {
+                  if(!grace) {
+                        cr = new Chord(score);
+                        cr->setBeamMode(bm);
+                        cr->setTrack(track);
+
                         if (durationType.type() == TDuration::V_INVALID)
                               durationType.setType(TDuration::V_QUARTER);
                         cr->setDurationType(durationType);
-                        }
-                  cr->setDots(dots);
-                  cr->setDuration(cr->durationType().fraction());
-                  //qDebug(" cr->tick()=%d ", cr->tick());
-//TODO-S  deal with grace notes
-                  if(gl == 0) {
+                        cr->setDots(dots);
+                        cr->setDuration(cr->durationType().fraction());
                         Segment* s = measure->getSegment(cr, loc_tick);
                         s->add(cr);
                         }
                   }
-            cr->setStaffMove(move);
+            if(cr)
+                  cr->setStaffMove(move);
 
             // pitch must be set before adding note to chord as note
             // is inserted into pitch sorted list (ws)
@@ -4902,7 +4867,38 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   }
             else
                   xmlSetPitch(note, c, alter, octave, ottava, track);
+
+            if(grace) {
+                  NoteType nt = NOTE_APPOGGIATURA;
+                  int len = MScore::division/2;
+                  if (graceSlash == "yes")
+                         nt = NOTE_ACCIACCATURA;
+                  if (durationType.type() == TDuration::V_QUARTER) {
+                        nt = NOTE_GRACE4;
+                        len = MScore::division;
+                        }
+                  else if (durationType.type() == TDuration::V_16TH) {
+                        nt = NOTE_GRACE16;
+                        len = MScore::division/4;
+                        }
+                  else if (durationType.type() == TDuration::V_32ND) {
+                        nt = NOTE_GRACE32;
+                        len = MScore::division/8;
+                        }
+                  gni.append({nt, note->pitch(), note->tpc(), len});
+                  delete note;
+                  return;
+                  }
+
             cr->add(note);
+
+            if(!grace && gni.size() > 0) {
+                  for (int i = gni.size() - 1; i >= 0; --i) {
+                        GraceNoteInfo g = gni.at(i);
+                        score->setGraceNote(static_cast<Chord*>(cr), g.pitch, g.type, false, g.len, g.tpc);
+                        }
+                  gni.clear();
+                  }
 
             static_cast<Chord*>(cr)->setNoStem(noStem);
 
