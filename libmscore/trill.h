@@ -33,15 +33,17 @@ class TrillSegment : public LineSegment {
    public:
       TrillSegment(Score* s) : LineSegment(s) {}
       Trill* trill() const                { return (Trill*)spanner(); }
-      virtual ElementType type() const    { return TRILL_SEGMENT; }
-      virtual TrillSegment* clone() const { return new TrillSegment(*this); }
-      virtual void draw(QPainter*) const;
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
-      virtual Element* drop(const DropData&);
-      virtual void layout();
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual ElementType type() const override    { return TRILL_SEGMENT; }
+      virtual TrillSegment* clone() const override { return new TrillSegment(*this); }
+      virtual void draw(QPainter*) const override;
+      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual Element* drop(const DropData&) override;
+      virtual void layout() override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
       };
 
 //---------------------------------------------------------
@@ -61,33 +63,36 @@ class Trill : public SLine {
    private:
       Q_PROPERTY(TrillType trillType READ trillType WRITE undoSetTrillType)
       TrillType _trillType;
-      ElementList _el;        // accidentals etc.
+      Accidental* _accidental;
 
    public:
       Trill(Score* s);
-      virtual Trill* clone() const     { return new Trill(*this); }
-      virtual ElementType type() const { return TRILL; }
+      virtual ~Trill();
+      virtual Trill* clone() const override     { return new Trill(*this); }
+      virtual ElementType type() const override { return TRILL; }
 
-      virtual void layout();
-      virtual LineSegment* createLineSegment();
-      virtual void add(Element*);
-      virtual void remove(Element*);
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
+      virtual void layout() override;
+      virtual LineSegment* createLineSegment() override;
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
 
       void setTrillType(const QString& s);
       void undoSetTrillType(TrillType val);
       void setTrillType(TrillType tt)     { _trillType = tt; }
       TrillType trillType() const         { return _trillType; }
       QString trillTypeName() const;
+      Accidental* accidental() const      { return _accidental; }
+      void setAccidental(Accidental* a)   { _accidental = a; }
 
       Segment* segment() const          { return (Segment*)parent(); }
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
-      virtual void setYoff(qreal);
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+      virtual void setYoff(qreal) override;
       };
 
 

@@ -291,9 +291,12 @@ void Accidental::layout()
             return;
             }
 
-      qreal m = magS();
+      qreal m = parent() ? parent()->mag() : 1.0;
       if (_small)
             m *= score()->styleD(ST_smallNoteMag);
+      setMag(m);
+
+      m = magS();
       QPointF pos;
       if (_hasBracket) {
             SymElement e(leftparenSym, 0.0);
@@ -377,13 +380,9 @@ void Accidental::draw(QPainter* painter) const
       {
       if (staff() && staff()->isTabStaff())        //in TAB, accidentals are not shown
             return;
-
-      qreal m = magS();
-      if (_small)
-            m *= score()->styleD(ST_smallNoteMag);
       painter->setPen(curColor());
       foreach(const SymElement& e, el)
-            symbols[score()->symIdx()][e.sym].draw(painter, m, QPointF(e.x, 0.0));
+            symbols[score()->symIdx()][e.sym].draw(painter, magS(), QPointF(e.x, 0.0));
       }
 
 //---------------------------------------------------------
