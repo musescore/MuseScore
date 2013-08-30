@@ -447,9 +447,9 @@ QColor Element::curColor() const
             return MScore::dropColor;
       bool marked = false;
       if (type() == Element::NOTE) {
-         const Note* note = static_cast<const Note*>(this);
-         marked = note->mark();
-         }
+            const Note* note = static_cast<const Note*>(this);
+            marked = note->mark();
+            }
       if (_selected || marked ) {
             if (track() == -1)
                   return MScore::selectColor[0];

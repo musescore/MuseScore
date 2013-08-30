@@ -67,6 +67,7 @@
 #include "libmscore/pitchspelling.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/bracket.h"
+#include "libmscore/trill.h"
 
 namespace Ms {
 
@@ -368,8 +369,14 @@ void Debugger::updateList(Score* s)
 
       QTreeWidgetItem* li = new QTreeWidgetItem(list, Element::INVALID);
       li->setText(0, "Global");
-      for (auto i : s->spanner())
-            new ElementItem(li, i.second);
+      for (auto i : s->spanner()) {
+            ElementItem* it = new ElementItem(li, i.second);
+            if (i.second->type() == Element::TRILL) {
+                  Trill* trill = static_cast<Trill*>(i.second);
+                  if (trill->accidental())
+                        new ElementItem(it, trill->accidental());
+                  }
+            }
 
       int staves = cs->nstaves();
       int tracks = staves * VOICES;
@@ -2334,6 +2341,7 @@ void AccidentalView::setElement(Element* e)
       acc.hasBracket->setChecked(s->hasBracket());
       acc.accAuto->setChecked(s->role() == Accidental::ACC_AUTO);
       acc.accUser->setChecked(s->role() == Accidental::ACC_USER);
+      acc.small->setChecked(s->small());
       }
 
 //---------------------------------------------------------
