@@ -4348,7 +4348,9 @@ void ExportMusicXml::write(QIODevice* dev)
                                           {
                                           Chord* c                 = static_cast<Chord*>(el);
                                           const QList<Lyrics*>* ll = &c->lyricsList();
-
+                                          for (Chord* g : c->graceNotes()) {
+                                                chord(g, sstaff, ll, part->instr()->useDrumset());
+                                                }
                                           chord(c, sstaff, ll, part->instr()->useDrumset());
                                           break;
                                           }

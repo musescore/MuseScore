@@ -29,7 +29,7 @@
   <part id="P1">
     <measure number="1">
       <attributes>
-        <divisions>8</divisions>
+        <divisions>1</divisions>
         <key>
           <fifths>0</fifths>
           <mode>major</mode>
@@ -48,7 +48,7 @@
           <step>C</step>
           <octave>5</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -59,7 +59,7 @@
           <step>E</step>
           <octave>5</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -90,7 +90,7 @@
           <step>C</step>
           <octave>5</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -101,13 +101,13 @@
           <step>E</step>
           <octave>5</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
         </note>
       <backup>
-        <duration>32</duration>
+        <duration>4</duration>
         </backup>
       <note>
         <grace slash="yes"/>
@@ -135,7 +135,7 @@
           <step>D</step>
           <octave>4</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>2</voice>
         <type>half</type>
         <stem>down</stem>
@@ -146,7 +146,7 @@
           <step>F</step>
           <octave>4</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>2</voice>
         <type>half</type>
         <stem>down</stem>
@@ -156,7 +156,7 @@
           <step>D</step>
           <octave>4</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>2</voice>
         <type>half</type>
         <stem>down</stem>
@@ -167,7 +167,7 @@
           <step>F</step>
           <octave>4</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>2</voice>
         <type>half</type>
         <stem>down</stem>
@@ -203,7 +203,7 @@
           <step>C</step>
           <octave>5</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -273,20 +273,20 @@
           <step>C</step>
           <octave>5</octave>
           </pitch>
-        <duration>16</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
         </note>
       <backup>
-        <duration>32</duration>
+        <duration>4</duration>
         </backup>
       <note>
         <pitch>
           <step>F</step>
           <octave>4</octave>
           </pitch>
-        <duration>32</duration>
+        <duration>4</duration>
         <voice>2</voice>
         <type>whole</type>
         </note>
