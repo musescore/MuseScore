@@ -58,7 +58,9 @@ InspectorImage::InspectorImage(QWidget* parent)
 void InspectorImage::updateScaleFromSize(const QSizeF& sz)
       {
       Image* image = static_cast<Image*>(inspector->element());
-      QSizeF scale = image->scaleForSize(sz);
+      QSizeF scale;
+      if (image->isValid())
+            scale = image->scaleForSize(sz);
 
       QDoubleSpinBox* b1 = b.scaleWidth;
       QDoubleSpinBox* b2 = b.scaleHeight;
@@ -77,7 +79,9 @@ void InspectorImage::updateScaleFromSize(const QSizeF& sz)
 void InspectorImage::updateSizeFromScale(const QSizeF& scale)
       {
       Image* image = static_cast<Image*>(inspector->element());
-      QSizeF size = image->sizeForScale(scale);
+      QSizeF size;
+      if (image->isValid())
+            size = image->sizeForScale(scale);
 
       QDoubleSpinBox* b1 = b.sizeWidth;
       QDoubleSpinBox* b2 = b.sizeHeight;
