@@ -880,10 +880,12 @@ void PreferenceDialog::updateValues()
             Portaudio* audio = static_cast<Portaudio*>(seq->driver());
             if (audio) {
                   QStringList apis = audio->apiList();
+                  portaudioApi->clear();
                   portaudioApi->addItems(apis);
                   portaudioApi->setCurrentIndex(audio->currentApi());
 
                   QStringList devices = audio->deviceList(audio->currentApi());
+                  portaudioDevice->clear();
                   portaudioDevice->addItems(devices);
                   portaudioDevice->setCurrentIndex(audio->currentDevice());
 
@@ -893,6 +895,7 @@ void PreferenceDialog::updateValues()
                   if(midiDriver){
                         QStringList midiInputs = midiDriver->deviceInList();
                         int curMidiInIdx = 0;
+                        portMidiInput->clear();
                         for(int i = 0; i < midiInputs.size(); ++i) {
                               portMidiInput->addItem(midiInputs.at(i), i);
                               if (midiInputs.at(i) == prefs.portMidiInput)
