@@ -265,7 +265,7 @@ void Image::draw(QPainter* painter) const
                   QSize ss = QSizeF(s.width() * t.m11(), s.height() * t.m22()).toSize();
                   t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                   painter->setWorldTransform(t);
-                  if ((buffer.size() != ss || _dirty) && !rasterDoc->isNull()) {
+                  if ((buffer.size() != ss || _dirty) && rasterDoc && !rasterDoc->isNull()) {
                         buffer = QPixmap::fromImage(rasterDoc->scaled(ss, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
                         _dirty = false;
                         }
