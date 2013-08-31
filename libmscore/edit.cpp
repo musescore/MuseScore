@@ -876,6 +876,8 @@ void Score::cmdAddTie()
 
       startCmd();
       foreach (Note* note, noteList) {
+            if(note->chord() &&  note->chord()->isGrace())
+                  continue;
             if (note->tieFor()) {
                   qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
                   continue;
