@@ -488,6 +488,9 @@ void Chord::remove(Element* e)
                         }
                   }
                   break;
+            case STEM_SLASH:
+                  _stemSlash = 0;
+                  break;
             case CHORDLINE:
                   _el.remove(e);
                   break;
