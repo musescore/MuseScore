@@ -106,16 +106,14 @@ void Rest::draw(QPainter* painter) const
             glyphs.setPositions(adv);
             glyphs.setRawFont(rfont);
             QRectF r = glyphs.boundingRect();
-            y  = -_spatium * .5;
+            y  = -_spatium * .5 - (staff()->height()*.5);
             painter->drawGlyphRun(QPointF((x2 - x1) * .5 + x1 - r.width() * .5, y), glyphs);
 #else
             QFont font = fontId2font(0);
             font.setPixelSize(lrint(20.0 * spatium()/(PPI * SPATIUM20)));
             painter->setFont(font);
             QFontMetricsF fm(font);
-            // y  = -_spatium * .5 - (staff()->height()*.5) - fm.ascent();
-            y  = -_spatium * .5 - fm.ascent();
-
+            y  = -_spatium * .5 - (staff()->height()*.5) - fm.ascent();
             painter->drawText(QRectF(center(x1, x2), y, .0, .0),
                Qt::AlignHCenter|Qt::TextDontClip,
                QString("%1").arg(n));
