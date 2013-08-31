@@ -144,11 +144,13 @@ void Image::setScale(const QSizeF& scale)
 
 QSizeF Image::scaleForSize(const QSizeF& s) const
       {
+      if(!isValid())
+            return QSizeF();
       QSizeF sz = s * scaleFactor();
       return QSizeF(
-         (sz.width()  * 100.0)/ imageSize().width(),
-         (sz.height() * 100.0)/ imageSize().height()
-         );
+               (sz.width()  * 100.0)/ imageSize().width(),
+               (sz.height() * 100.0)/ imageSize().height()
+               );
       }
 
 //---------------------------------------------------------

@@ -85,6 +85,7 @@ class Image : public BSymbol {
       qreal scaleFactor() const;
 
       void setImageType(ImageType);
+      bool isValid() const           { return rasterDoc || svgDoc; }
       };
 
 
