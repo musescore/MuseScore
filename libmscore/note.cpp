@@ -1310,15 +1310,23 @@ void Note::layout2()
 
             // if TAB and stems through staff
             if (staff()->isTabStaff()) {
-                  if(static_cast<StaffTypeTablature*>( staff()->staffType())->stemThrough() ) {
+                  // with TAB's, dotPosX is not set:
+                  // get dot X from width of fret text and use TAB default spacing
+                  StaffTypeTablature* tab = static_cast<StaffTypeTablature*>( staff()->staffType());
+                  x = width();
+                  dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
+                  d = dd * 0.5;
+                  if(tab->stemThrough() ) {
                         // if fret mark on lines, use standard processing
-                        if (static_cast<StaffTypeTablature*>(staff()->staffType())->onLines())
+                        if (tab->onLines())
                               onLine = true;
                         else
                         // if fret marks above lines, raise the dots by half line distance
                               y = -staff()->lineDistance() * 0.5;
                         }
                   // if stems beside staff, do nothing
+                  else
+                        return;
                   }
             // if not TAB, look at note line
             else
