@@ -355,11 +355,19 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
                   QList<Note*> nl = chord->notes();
-                  foreach (Note* n, nl) {
+                  for (Note* n : nl) {
                         if (mode == TRANSPOSE_DIATONICALLY)
                               n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                         else
                               transpose(n, interval, useDoubleSharpsFlats);
+                        }
+                  for (Chord* g : chord->graceNotes()) {
+                        for (Note* n : g->notes()) {
+                              if (mode == TRANSPOSE_DIATONICALLY)
+                                    n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
+                              else
+                                    transpose(n, interval, useDoubleSharpsFlats);
+                              }
                         }
                   }
             if (transposeChordNames) {

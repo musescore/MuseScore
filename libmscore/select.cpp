@@ -515,6 +515,9 @@ QList<Note*> Selection::noteList(int selTrack) const
                                     continue;
                               Chord* c = static_cast<Chord*>(e);
                               nl.append(c->notes());
+                              for (Chord* g : c->graceNotes()) {
+                                    nl.append(g->notes());
+                                    }
                               }
                         }
                   }
