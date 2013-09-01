@@ -3848,6 +3848,43 @@ void ExportMusicXml::keysigTimesig(Measure* m, int strack, int etrack)
       if (tsig)
             timesig(tsig);
       }
+      
+//---------------------------------------------------------
+//  identification -- write the identification
+//---------------------------------------------------------
+
+static void identification(Xml& xml, Score const* const score)
+      {
+      xml.stag("identification");
+
+      QStringList creators;
+      // the creator types commonly found in MusicXML
+      creators << "arranger" << "composer" << "lyricist" << "poet" << "translator";
+      foreach (QString type, creators) {
+            QString creator = score->metaTag(type);
+            if (!creator.isEmpty())
+                  xml.tag(QString("creator type=\"%1\"").arg(type), creator);
+            }
+
+      if (!score->metaTag("copyright").isEmpty())
+            xml.tag("rights", score->metaTag("copyright"));
+      
+      xml.stag("encoding");
+      if (MScore::debugMode) {
+            xml.tag("software", QString("MuseScore 0.7.0"));
+            xml.tag("encoding-date", QString("2007-09-10"));
+            }
+      else {
+            xml.tag("software", QString("MuseScore ") + QString(VERSION));
+            xml.tag("encoding-date", QDate::currentDate().toString(Qt::ISODate));
+            }
+      xml.etag();
+      
+      if (!score->metaTag("source").isEmpty())
+            xml.tag("source", score->metaTag("source"));
+      
+      xml.etag();
+      }
 
 //---------------------------------------------------------
 //  write
@@ -3874,32 +3911,7 @@ void ExportMusicXml::write(QIODevice* dev)
       const MeasureBase* measure = _score->measures()->first();
       work(measure);
 
-      // LVI TODO: write these text elements as credit-words
-      // use meta data here instead
-      xml.stag("identification");
-      for (int i = 0; i < _score->numberOfCreators(); ++i) {
-            qDebug("creator type='%s' text='%s'",
-                   _score->getCreator(i)->crType().toUtf8().data(),
-                   _score->getCreator(i)->crText().toUtf8().data()
-                   );
-            const MusicXmlCreator* crt = _score->getCreator(i);
-            xml.tag(QString("creator type=\"%1\"").arg(crt->crType()), crt->crText());
-            }
-      if (!_score->metaTag("copyright").isEmpty())
-            xml.tag("rights", _score->metaTag("copyright"));
-      xml.stag("encoding");
-      if (MScore::debugMode) {
-            xml.tag("software", QString("MuseScore 0.7.0"));
-            xml.tag("encoding-date", QString("2007-09-10"));
-            }
-      else {
-            xml.tag("software", QString("MuseScore ") + QString(VERSION));
-            xml.tag("encoding-date", QDate::currentDate().toString(Qt::ISODate));
-            }
-      xml.etag();
-      if (!_score->metaTag("source").isEmpty())
-            xml.tag("source", _score->metaTag("source"));
-      xml.etag();
+      identification(xml, _score);
 
       if (preferences.musicxmlExportLayout) {
             defaults(xml, _score, millimeters, tenths);

@@ -265,6 +265,17 @@ void Score::init()
             _metaTags.insert("movementTitle", "");
             _metaTags.insert("workNumber", "");
             _metaTags.insert("workTitle", "");
+            /* TODO enable following block of code
+             * This adds arranger, composer, lyricist, poet and translator fields
+             * to the File / Info dialog.
+             * As these fields are saved in every .msc[xz] file, it requires updating
+             * all regression test files in the mtest directory.
+            _metaTags.insert("arranger", "");
+            _metaTags.insert("composer", "");
+            _metaTags.insert("lyricist", "");
+            _metaTags.insert("poet", "");
+            _metaTags.insert("translator", "");
+             */
             _metaTags.insert("source", "");
             _metaTags.insert("copyright", "");
             _metaTags.insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
@@ -314,7 +325,6 @@ void Score::init()
       _loopInTick     = -1;
       _loopOutTick    = -1;
       _fileDivision   = MScore::division;
-      _creditsRead    = false;
       _defaultsRead   = false;
       _omr            = 0;
       _audio          = 0;

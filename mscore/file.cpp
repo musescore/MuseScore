@@ -702,12 +702,15 @@ void MuseScore::newFile()
                   s->setTextStyleType(TEXT_STYLE_COMPOSER);
                   s->setText(composer);
                   measure->add(s);
+                  score->setMetaTag("composer", composer);
                   }
             if (!poet.isEmpty()) {
                   Text* s = new Text(score);
                   s->setTextStyleType(TEXT_STYLE_POET);
                   s->setText(poet);
                   measure->add(s);
+                  // the poet() functions returns data called lyricist in the dialog
+                  score->setMetaTag("lyricist", poet);
                   }
             }
       if (newWizard->createTempo()) {

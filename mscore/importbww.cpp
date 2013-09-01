@@ -439,9 +439,7 @@ void MsScWriter::header(const QString title, const QString type,
       // TODO re-enable following statement
       // currently disabled because it breaks the bww iotest
       // if (!type.isEmpty()) score->setMetaTag("workNumber", type);
-      QString strType = "composer";
-      QString strComposer = composer; // TODO: const parameters ctor MusicXmlCreator
-      score->addCreator(new Ms::MusicXmlCreator(strType, strComposer));
+      if (!composer.isEmpty()) score->setMetaTag("composer", composer);
       if (!footer.isEmpty()) score->setMetaTag("copyright", footer);
 
       //  score->setWorkTitle(title);
