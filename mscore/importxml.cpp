@@ -889,22 +889,21 @@ void MusicXml::doCredits()
       if (crwCopyRight) qDebug("copyright='%s'", crwCopyRight->words.toUtf8().data());
        */
 
-      if (crwTitle || crwSubTitle || crwComposer || crwPoet || crwCopyRight)
-            score->setCreditsRead(true);
-
       QString strTitle;
       QString strSubTitle;
       QString strComposer;
       QString strPoet;
       QString strTranslator;
 
-      if (score->creditsRead()) {
+      if (crwTitle || crwSubTitle || crwComposer || crwPoet || crwCopyRight) {
+            // use credits
             if (crwTitle) strTitle = crwTitle->words;
             if (crwSubTitle) strSubTitle = crwSubTitle->words;
             if (crwComposer) strComposer = crwComposer->words;
             if (crwPoet) strPoet = crwPoet->words;
             }
       else {
+            // use metadata
             if (!(score->metaTag("movementTitle").isEmpty() && score->metaTag("workTitle").isEmpty())) {
                   strTitle = score->metaTag("movementTitle");
                   if (strTitle.isEmpty())
@@ -915,9 +914,12 @@ void MusicXml::doCredits()
                   if (strSubTitle.isEmpty())
                         strSubTitle = score->metaTag("workNumber");
                   }
-            if (!composer.isEmpty()) strComposer = composer;
-            if (!poet.isEmpty()) strPoet = poet;
-            if (!translator.isEmpty()) strTranslator = translator;
+            QString metaComposer = score->metaTag("composer");
+            QString metaPoet = score->metaTag("poet");
+            QString metaTranslator = score->metaTag("translator");
+            if (!metaComposer.isEmpty()) strComposer = metaComposer;
+            if (!metaPoet.isEmpty()) strPoet = metaPoet;
+            if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
             }
 
       VBox* vbox  = 0;
@@ -1100,26 +1102,11 @@ void MusicXml::scorePartwise(QDomElement ee)
                         }
                   }
             else if (tag == "identification") {
-                  // TODO: this is metadata !
+                  // read the metadata
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "creator") {
                               // type is an arbitrary label
-                              QString type = ee.attribute(QString("type"));
-                              QString str = ee.text();
-                              MusicXmlCreator* crt = new MusicXmlCreator(type, str);
-                              score->addCreator(crt);
-                              if (type == "composer")
-                                    composer = str;
-                              else if (type == "poet") //not in dtd ?
-                                    poet = str;
-                              else if (type == "lyricist")
-                                    poet = str;
-                              else if (type == "translator")
-                                    translator = str;
-                              else if (type == "transcriber")
-                                    ;
-                              else
-                                    qDebug("unknown creator <%s>", type.toLatin1().data());
+                              score->setMetaTag(ee.attribute(QString("type")), ee.text());
                               }
                         else if (ee.tagName() == "rights")
                               score->setMetaTag("copyright", ee.text());
