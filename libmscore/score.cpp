@@ -265,6 +265,11 @@ void Score::init()
             _metaTags.insert("movementTitle", "");
             _metaTags.insert("workNumber", "");
             _metaTags.insert("workTitle", "");
+            _metaTags.insert("arranger", "");
+            _metaTags.insert("composer", "");
+            _metaTags.insert("lyricist", "");
+            _metaTags.insert("poet", "");
+            _metaTags.insert("translator", "");
             _metaTags.insert("source", "");
             _metaTags.insert("copyright", "");
             _metaTags.insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
