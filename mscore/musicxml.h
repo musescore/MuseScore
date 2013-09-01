@@ -116,24 +116,6 @@ typedef  CreditWordsList::iterator iCreditWords;
 typedef  CreditWordsList::const_iterator ciCreditWords;
 
 //---------------------------------------------------------
-//   MusicXmlCreator
-//---------------------------------------------------------
-
-/**
- The MusicXML "creator" meta-data element.
-*/
-
-class MusicXmlCreator {
-      QString _type;
-      QString _text;
-
-public:
-      MusicXmlCreator(QString& tp, QString& txt) { _type = tp; _text = txt; }
-      QString crType() const { return _type; }
-      QString crText() const { return _text; }
-      };
-
-//---------------------------------------------------------
 //   JumpMarkerDesc
 //---------------------------------------------------------
 
@@ -197,9 +179,6 @@ class MusicXml {
       int divisions;                            ///< Current MusicXML divisions
       QVector<Tuplet*> tuplets;                 ///< Current tuplet for each track in the current part
 
-      QString composer;
-      QString poet;
-      QString translator;
       CreditWordsList credits;
       JumpMarkerDescList jumpsMarkers;
 
