@@ -44,6 +44,7 @@ class TrillSegment : public LineSegment {
       virtual QVariant propertyDefault(P_ID) const override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all) override;
       };
 
 //---------------------------------------------------------

@@ -233,6 +233,20 @@ QVariant TrillSegment::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void TrillSegment::scanElements(void* data, void (*func)(void*, Element*), bool all)
+      {
+      func(data, this);
+      if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
+            Accidental* a = trill()->accidental();
+            if (a)
+                  func(data, a);
+            }
+      }
+
+//---------------------------------------------------------
 //   Trill
 //---------------------------------------------------------
 
