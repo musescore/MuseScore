@@ -4809,11 +4809,10 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             return;
             }
       Drumset* ds = is.drumset();
-      int pitch;
       int octave = is.pitch / 12;
       if (ds) {
             char note1 = "CDEFGAB"[note];
-            pitch = -1;
+            int pitch = -1;
             for (int i = 0; i < 127; ++i) {
                   if (!ds->isValid(i))
                         continue;
@@ -4845,20 +4844,26 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             qApp->processEvents();
             }
       Position pos;
-      pos.segment = is.segment();
+      pos.segment   = is.segment();
+      pos.staffIdx  = is.track() / VOICES;
+      ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
+      pos.line      = relStep(octave * 7 + note, clef);
 
       if (addFlag) {
             Element* el = score()->selection().element();
             if (el && el->type() == Element::NOTE) {
-                 Chord* c = static_cast<Note*>(el)->chord();
-                 if (c)
-                        pos.segment = c->segment();
-                 }
+                  Chord* chord = static_cast<Note*>(el)->chord();
+                  NoteVal val;
+                  val.pitch  = line2pitch(pos.line, clef, 0);
+                  val.tpc    = INVALID_TPC;
+                  val.fret   = FRET_NONE;
+                  val.string = STRING_NONE;
+                  _score->addNote(chord, val);
+                  _score->endCmd();
+                  return;
+                  }
             }
 
-      pos.staffIdx  = is.track() / VOICES;
-      ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
-      pos.line      = relStep(octave * 7 + note, clef);
 
       if (is.repitchMode())
             score()->repitchNote(pos, !addFlag);

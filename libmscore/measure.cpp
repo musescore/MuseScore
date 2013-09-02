@@ -386,11 +386,22 @@ AccidentalVal Measure::findAccidental(Note* note) const
                   if (!e || e->type() != CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
+                  for (Chord* chord1 : chord->graceNotes()) {
+                        for (Note* note1 : chord1->notes()) {
+                              if (note1->tieBack())
+                                    continue;
+                              //
+                              // compute accidental
+                              //
+                              int tpc  = note1->tpc();
+                              int line = absStep(tpc, note1->pitch());
 
-                  int n = chord->notes().size();
-                  for (int i = 0; i < n; ++i) {
-                        Note* note1 = chord->notes().at(i);
-
+                              if (note == note1)
+                                    return tversatz.accidentalVal(line);
+                              tversatz.setAccidentalVal(line, tpc2alter(tpc));
+                              }
+                        }
+                  for (Note* note1 : chord->notes()) {
                         if (note1->tieBack())
                               continue;
                         //
@@ -405,7 +416,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                         }
                   }
             }
-      qDebug("note not found");
+      qDebug("Measure::findAccidental: note not found");
       return NATURAL;
       }
 
@@ -435,10 +446,17 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
                   if (!e || e->type() != CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
+                  for (Chord* chord1 : chord->graceNotes()) {
+                        for (Note* note : chord1->notes()) {
+                              if (note->tieBack())
+                                    continue;
+                              int tpc  = note->tpc();
+                              int l    = absStep(tpc, note->pitch());
+                              tversatz.setAccidentalVal(l, tpc2alter(tpc));
+                              }
+                        }
 
-                  int n = chord->notes().size();
-                  for (int i = 0; i < n; ++i) {
-                        Note* note = chord->notes().at(i);
+                  for (Note* note : chord->notes()) {
                         if (note->tieBack())
                               continue;
                         int tpc    = note->tpc();
@@ -3400,9 +3418,7 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
 
             // PITCHED_ and PERCUSSION_STAFF can go note by note
 
-            int n = chord->notes().size();
-            for (int i = 0; i < n; ++i) {
-                  Note* note = chord->notes().at(i);
+            for (Note* note : chord->notes()) {
                   switch(staffGroup) {
                         case STANDARD_STAFF_GROUP:
                               if (note->tieBack()) {
