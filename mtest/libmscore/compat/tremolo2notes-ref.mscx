@@ -22,6 +22,7 @@
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
       <voltaY>-2</voltaY>
       <keySigNaturals>1</keySigNaturals>
+      <tupletOufOfStaff>0</tupletOufOfStaff>
       <page-layout>
         <page-height>1683.78</page-height>
         <page-width>1190.55</page-width>
