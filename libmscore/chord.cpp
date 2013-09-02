@@ -1601,6 +1601,20 @@ void Chord::layoutPitched()
                   }
             }
 
+      if (_ledgerLines) {
+
+            // increase distance to previous chord if both have
+            // ledger lines
+
+            Segment* s = segment();
+            s = s->prev(Segment::SegChordRest);
+            if (s && s->element(track()) && s->element(track())->type() == CHORD
+               && static_cast<Chord*>(s->element(track()))->ledgerLines()) {
+                  // TODO: detect case were one chord is above staff, the other below
+                  lll = qMax(_spatium, lll);
+                  }
+            }
+
       _space.setLw(lll);
       _space.setRw(rrr);
 

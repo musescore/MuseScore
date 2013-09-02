@@ -1319,6 +1319,55 @@ void Score::changeAccidental(Accidental::AccidentalType idx)
       }
 
 //---------------------------------------------------------
+//   changeAccidental2
+//---------------------------------------------------------
+
+static void changeAccidental2(Note* n, int pitch, int tpc)
+      {
+      Score* score  = n->score();
+      Chord* chord  = n->chord();
+      int staffIdx  = chord->staffIdx();
+      Staff* st     = chord->staff();
+      int fret      = n->fret();
+      int string    = n->string();
+
+      if (st->isTabStaff()) {
+            if (pitch != n->pitch()) {
+                  //
+                  // as pitch has changed, calculate new
+                  // string & fret
+                  //
+                  Tablature* tab = n->staff()->part()->instr()->tablature();
+                  if (tab)
+                        tab->convertPitch(pitch, &string, &fret);
+                  }
+            }
+      score->undo(new ChangePitch(n, pitch, tpc, n->line()));
+      if (!st->isTabStaff()) {
+            //
+            // handle ties
+            //
+            if (n->tieBack()) {
+                  score->undoRemoveElement(n->tieBack());
+                  if (n->tieFor())
+                        score->undoRemoveElement(n->tieFor());
+                  }
+            else {
+                  Note* nn = n;
+                  while (nn->tieFor()) {
+                        nn = nn->tieFor()->endNote();
+                        score->undo(new ChangePitch(nn, pitch, tpc, nn->line()));
+                        }
+                  }
+            }
+      //
+      // recalculate needed accidentals for
+      // whole measure
+      //
+      score->updateAccidentals(chord->measure(), staffIdx);
+      }
+
+//---------------------------------------------------------
 //   changeAccidental
 ///   Change accidental to subtype \accidental for
 ///   note \a note.
@@ -1336,10 +1385,8 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
 
       Chord* chord     = note->chord();
       Segment* segment = chord->segment();
-      int voice        = chord->voice();
       Measure* measure = segment->measure();
       int tick         = segment->tick();
-      int noteIndex    = chord->notes().indexOf(note);
       Staff* estaff    = staff(chord->staffIdx() + chord->staffMove());
       int clef         = estaff->clef(tick);
       int step         = clefTable[clef].pitchOffset - note->line();
@@ -1363,8 +1410,8 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
             tpc     = step2tpc(step, acc2);
             // check if there's accidentals left, previously set as
             // precautionary accidentals
-            Accidental *a_rem = note->accidental();
-            if (a_rem)
+            Accidental* a = note->accidental();
+            if (a)
                   undoRemoveElement(note->accidental());
             }
       else {
@@ -1389,59 +1436,13 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
                   }
             }
 
-      foreach(Staff* st, staffList) {
-            Score* score = st->score();
-            Measure* m;
-            Segment* s;
-            if (score == this) {
-                  m = measure;
-                  s = segment;
-                  }
-            else {
-                  m   = score->tick2measure(measure->tick());
-                  s   = m->findSegment(segment->segmentType(), segment->tick());
-                  }
-            int staffIdx  = score->staffIdx(st);
-            Chord* chord  = static_cast<Chord*>(s->element(staffIdx * VOICES + voice));
-            Note* n       = chord->notes().at(noteIndex);
 
-            int fret   = n->fret();
-            int string = n->string();
-            if (st->isTabStaff()) {
-                  if (pitch != n->pitch()) {
-                        //
-                        // as pitch has changed, calculate new
-                        // string & fret
-                        //
-                        Tablature* tab = n->staff()->part()->instr()->tablature();
-                        if (tab)
-                              tab->convertPitch(pitch, &string, &fret);
-                        }
-                  }
-            undo(new ChangePitch(n, pitch, tpc, n->line()));
-            if (!st->isTabStaff()) {
-                  //
-                  // handle ties
-                  //
-                  if (n->tieBack()) {
-                        undoRemoveElement(n->tieBack());
-                        if (n->tieFor())
-                              undoRemoveElement(n->tieFor());
-                        }
-                  else {
-                        Note* nn = n;
-                        while (nn->tieFor()) {
-                              nn = nn->tieFor()->endNote();
-                              undo(new ChangePitch(nn, pitch, tpc, nn->line()));
-                              }
-                        }
-                  }
-            //
-            // recalculate needed accidentals for
-            // whole measure
-            //
-            score->updateAccidentals(m, staffIdx);
+      if (note->links()) {
+            for (Element* e : *note->links())
+                  changeAccidental2(static_cast<Note*>(e), pitch, tpc);
             }
+      else
+            changeAccidental2(note, pitch, tpc);
       }
 
 //---------------------------------------------------------
