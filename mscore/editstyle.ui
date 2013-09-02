@@ -130,6 +130,11 @@
        <string>Accidentals</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Tuplets</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="1" column="0" colspan="2">
@@ -167,9 +172,9 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>6</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="Seite1">
+     <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
        <property name="spacing">
         <number>0</number>
@@ -322,7 +327,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite2">
+     <widget class="QWidget" name="Page2">
       <layout class="QVBoxLayout" name="verticalLayout_21">
        <property name="spacing">
         <number>0</number>
@@ -867,7 +872,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite3">
+     <widget class="QWidget" name="Page3">
       <layout class="QGridLayout" name="gridLayout_10">
        <property name="leftMargin">
         <number>8</number>
@@ -1524,7 +1529,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite4">
+     <widget class="QWidget" name="Page4">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <property name="spacing">
         <number>0</number>
@@ -1668,7 +1673,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite5">
+     <widget class="QWidget" name="Page5">
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <property name="spacing">
         <number>0</number>
@@ -2235,7 +2240,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite6">
+     <widget class="QWidget" name="Page6">
       <layout class="QVBoxLayout" name="verticalLayout_17">
        <property name="spacing">
         <number>0</number>
@@ -2403,7 +2408,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite7">
+     <widget class="QWidget" name="Page7">
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <property name="spacing">
         <number>0</number>
@@ -2701,7 +2706,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite8">
+     <widget class="QWidget" name="Page8">
       <layout class="QVBoxLayout" name="verticalLayout_27">
        <property name="spacing">
         <number>0</number>
@@ -2753,7 +2758,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite9">
+     <widget class="QWidget" name="Page9">
       <layout class="QVBoxLayout" name="verticalLayout_15">
        <property name="spacing">
         <number>0</number>
@@ -2849,7 +2854,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite10">
+     <widget class="QWidget" name="Page10">
       <layout class="QVBoxLayout" name="verticalLayout_14">
        <property name="spacing">
         <number>0</number>
@@ -2949,7 +2954,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite11">
+     <widget class="QWidget" name="Page11">
       <layout class="QVBoxLayout" name="verticalLayout_13">
        <property name="spacing">
         <number>0</number>
@@ -3070,7 +3075,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite12">
+     <widget class="QWidget" name="Page12">
       <layout class="QVBoxLayout" name="verticalLayout_18">
        <property name="spacing">
         <number>0</number>
@@ -3245,7 +3250,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite13">
+     <widget class="QWidget" name="Page13">
       <layout class="QVBoxLayout" name="verticalLayout_19">
        <property name="spacing">
         <number>0</number>
@@ -3953,7 +3958,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page">
+     <widget class="QWidget" name="Page14">
       <layout class="QVBoxLayout" name="verticalLayout_34">
        <item>
         <widget class="QGroupBox" name="groupBox_21">
@@ -4123,7 +4128,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite14">
+     <widget class="QWidget" name="Page15">
       <layout class="QVBoxLayout" name="verticalLayout_12">
        <property name="spacing">
         <number>0</number>
@@ -4400,7 +4405,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="FiguredBass">
+     <widget class="QWidget" name="Page16">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QGroupBox" name="groupBox_20">
@@ -4642,7 +4647,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite15">
+     <widget class="QWidget" name="Page17">
       <layout class="QVBoxLayout" name="verticalLayout_24">
        <property name="spacing">
         <number>0</number>
@@ -4789,7 +4794,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite16">
+     <widget class="QWidget" name="Page18">
       <layout class="QVBoxLayout" name="verticalLayout_30">
        <property name="spacing">
         <number>0</number>
@@ -4851,6 +4856,233 @@ p, li { white-space: pre-wrap; }
              <string>After change to less sharps / flats (but before change sharps &lt;=&gt; flats)</string>
             </property>
            </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="Page19">
+      <layout class="QVBoxLayout" name="verticalLayout_30">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Tuplets</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_38">
+          <item>
+           <widget class="QGroupBox" name="verticalDistance">
+            <property name="title">
+             <string>Vertical distance from the notes</string>
+            </property>
+            <layout class="QFormLayout" name="formLayout_5">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_48">
+               <property name="text">
+                <string>Maximum slope:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_49">
+               <property name="text">
+                <string>Vertical distance from stem:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_50">
+               <property name="text">
+                <string>Vertical distance from notehead:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="tupletOutOfStaff">
+               <property name="text">
+                <string>Avoid the staves</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="tupletVStemDistance">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>-5.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.250000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="tupletVHeadDistance">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>-5.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="tupletMaxSlope">
+               <property name="minimum">
+                <double>0.100000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_26">
+            <property name="title">
+             <string>Horizontal distance from the notes</string>
+            </property>
+            <layout class="QFormLayout" name="formLayout_8">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_51">
+               <property name="text">
+                <string>Distance before the stem of the first note:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_55">
+               <property name="text">
+                <string>Distance before the head of the first note:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_56">
+               <property name="text">
+                <string>Distance after the stem of the last note:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_58">
+               <property name="text">
+                <string>Distance after the head of the last note:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="tupletStemLeftDistance">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>-5.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="tupletNoteLeftDistance">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>-5.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="tupletStemRightDistance">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>-5.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QDoubleSpinBox" name="tupletNoteRightDistance">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>-5.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>

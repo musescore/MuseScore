@@ -198,6 +198,14 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_linearStretch,               StyleType("linearStretch",           ST_DOUBLE) },
       { ST_crossMeasureValues,          StyleType("crossMeasureValues",      ST_BOOL) },
       { ST_keySigNaturals,              StyleType("keySigNaturals",          ST_INT) },
+      { ST_tupletMaxSlope,              StyleType("tupletMaxSlope",          ST_DOUBLE) },
+      { ST_tupletOufOfStaff,            StyleType("tupletOufOfStaff",        ST_BOOL) },
+      { ST_tupletVHeadDistance,         StyleType("tupletVHeadDistance",     ST_SPATIUM) },
+      { ST_tupletVStemDistance,         StyleType("tupletVStemDistance",     ST_SPATIUM) },
+      { ST_tupletStemLeftDistance,      StyleType("tupletStemLeftDistance",  ST_SPATIUM) },
+      { ST_tupletStemRightDistance,     StyleType("tupletStemRightDistance", ST_SPATIUM) },
+      { ST_tupletNoteLeftDistance,      StyleType("tupletNoteLeftDistance",  ST_SPATIUM) },
+      { ST_tupletNoteRightDistance,     StyleType("tupletNoteRightDistance", ST_SPATIUM) },
       };
 
 class StyleTypes {
@@ -567,7 +575,15 @@ StyleData::StyleData()
             { ST_tremoloDistance,             QVariant(0.8) },
             { ST_linearStretch,               QVariant(qreal(1.5)) },
             { ST_crossMeasureValues,          QVariant(false) },
-            { ST_keySigNaturals,              QVariant(NAT_NONE) }
+            { ST_keySigNaturals,              QVariant(NAT_NONE) },
+            { ST_tupletMaxSlope,              QVariant(qreal(0.5)) },
+            { ST_tupletOufOfStaff,            QVariant(true) },
+            { ST_tupletVHeadDistance,         QVariant(.5) },
+            { ST_tupletVStemDistance,         QVariant(.25) },
+            { ST_tupletStemLeftDistance,      QVariant(.5) },
+            { ST_tupletStemRightDistance,     QVariant(.5) },
+            { ST_tupletNoteLeftDistance,      QVariant(0.0) },
+            { ST_tupletNoteRightDistance,     QVariant(0.0)}
             };
       for (unsigned i = 0; i < sizeof(values2)/sizeof(*values2); ++i)
             _values[values2[i].idx] = values2[i].val;

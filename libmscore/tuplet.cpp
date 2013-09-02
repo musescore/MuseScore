@@ -21,6 +21,8 @@
 #include "element.h"
 #include "undo.h"
 #include "stem.h"
+#include "beam.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -202,52 +204,69 @@ void Tuplet::layout()
       //
       //    calculate bracket start and end point p1 p2
       //
+      qreal maxSlope = score()->styleD(ST_tupletMaxSlope);
+      bool outOfStaff = score()->styleB(ST_tupletOufOfStaff);
+      qreal vHeadDistance = score()->styleS(ST_tupletVHeadDistance).val() * _spatium;
+      qreal vStemDistance = score()->styleS(ST_tupletVStemDistance).val() * _spatium;
+      qreal stemLeft = score()->styleS(ST_tupletStemLeftDistance).val() * _spatium;
+      qreal stemRight = score()->styleS(ST_tupletStemRightDistance).val() * _spatium;
+      qreal noteLeft = score()->styleS(ST_tupletNoteLeftDistance).val() * _spatium;
+      qreal noteRight = score()->styleS(ST_tupletNoteRightDistance).val() * _spatium;
 
-      qreal headDistance = _spatium * .75;
+      qreal l1 = _spatium;          // bracket tip height
+      qreal l2l = vHeadDistance;     // left bracket vertical distance
+      qreal l2r = vHeadDistance;     // right bracket vertical distance right
+
       if (_isUp)
-            headDistance = -headDistance;
+            vHeadDistance = -vHeadDistance;
 
       p1      = cr1->pagePos();
       p2      = cr2->pagePos();
-      p2.rx() += score()->noteHeadWidth();
-      p1.ry() += headDistance;
-      p2.ry() += headDistance;
+      p1.rx() -= noteLeft;
+      p2.rx() += score()->noteHeadWidth() + noteRight;
+      p1.ry() += vHeadDistance;
+      p2.ry() += vHeadDistance;
 
-      qreal xx1 = p1.x();
-      qreal xx2 = p2.x();
+      qreal xx1 = p1.x(); // use to center the number on the beam
 
       if (_isUp) {
             if (cr1->type() == CHORD) {
                   const Chord* chord1 = static_cast<const Chord*>(cr1);
                   Stem* stem = chord1->stem();
-
-                  if (stem) {
+                  if (stem)
                         xx1 = stem->abbox().x();
-                        if (chord1->up())
-                              p1.setY(stem->abbox().y());
-                        else if ((cr2->type() == CHORD) && !chord1->up()) {
-                              const Chord* chord2 = static_cast<const Chord*>(cr2);
-                              Stem* stem2 = chord2->stem();
-                              if (stem2) {
-                                    xx2 = stem2->abbox().x();
-                                    int l1 = chord1->upNote()->line();
-                                    int l2 = chord2->upNote()->line();
-                                    p1.ry() = stem2->abbox().top() + _spatium * .5 * (l1 - l2);
-                                    }
+                  if (chord1->up()) {
+                        if (stem) {
+                              if (chord1->beam())
+                                    p1.ry() = chord1->beam()->abbox().y();
+                              else
+                                    p1.ry() = stem->abbox().y();
+                              l2l = vStemDistance;
                               }
+                        else {
+                              p1.ry() = chord1->upNote()->abbox().top(); // whole note
+                              }
+                        }
+                  else if (!chord1->up()) {
+                        p1.ry() = chord1->upNote()->abbox().top();
+                        if(stem)
+                              p1.rx() = cr1->pagePos().x() - stemLeft;
                         }
                   }
 
             if (cr2->type() == CHORD) {
                   const Chord* chord2 = static_cast<const Chord*>(cr2);
                   Stem* stem = chord2->stem();
-                  if (stem && chord2->up())
-                        p2.setY(stem->abbox().top());
-                  else if ((cr1->type() == CHORD) && stem && !chord2->up()) {
-                        const Chord* chord1 = static_cast<const Chord*>(cr1);
-                        int l1 = chord1->upNote()->line();
-                        int l2 = chord2->upNote()->line();
-                        p2.ry() = p1.ry() + _spatium * .5 * (l2 - l1);
+                  if (stem && chord2->up()) {
+                        if(chord2->beam())
+                              p2.ry() = chord2->beam()->abbox().top();
+                        else
+                              p2.ry() = stem->abbox().top();
+                        l2r = vStemDistance;
+                        p2.rx() = chord2->pagePos().x() + chord2->maxHeadWidth() + stemRight;
+                        }
+                  else {
+                        p2.ry() = chord2->upNote()->abbox().top();
                         }
                   }
             //
@@ -267,11 +286,35 @@ void Tuplet::layout()
                         p1.setY(p2.y());
                   }
 
-            // check for collisions
+            // outOfStaff
+            if(outOfStaff) {
+                  qreal min = cr1->measure()->staffabbox(cr1->staffIdx()).y();
+                  if (min < p1.y()) {
+                        p1.ry() = min;
+                        l2l = vStemDistance;
+                        }
+                  min = cr2->measure()->staffabbox(cr2->staffIdx()).y();
+                  if (min < p2.y()) {
+                        p2.ry() = min;
+                        l2r = vStemDistance;
+                        }
+                  }
 
+            //check that slope is no more than 30°
+            qreal d = (p2.y() - p1.y())/(p2.x() - p1.x());
+            if (d  < -maxSlope) {
+                  // move p1 y up
+                  p1.ry() = p2.y() + maxSlope * (p2.x() - p1.x());
+                  }
+            else if (d  > maxSlope) {
+                  // move p2 y up
+                  p2.ry() = p1.ry() + maxSlope * (p2.x() - p1.x());
+                  }
+
+            // check for collisions
             int n = _elements.size();
             if (n >= 3) {
-                  qreal d = (p2.y() - p1.y())/(p2.x() - p1.x());
+                  d = (p2.y() - p1.y())/(p2.x() - p1.x());
                   for (int i = 1; i < (n-1); ++i) {
                         Element* e = _elements[i];
                         if (e->type() == CHORD) {
@@ -296,21 +339,23 @@ void Tuplet::layout()
             if (cr1->type() == CHORD) {
                   const Chord* chord1 = static_cast<const Chord*>(cr1);
                   Stem* stem = chord1->stem();
-                  if (stem) {
+                  if (stem)
                         xx1 = stem->abbox().x();
-                        if (!chord1->up()) {
-                              p1.setY(stem->abbox().bottom());
+                  if (!chord1->up()) {
+                        if(stem) {
+                              if(chord1->beam())
+                                    p1.ry() = chord1->beam()->abbox().bottom();
+                              else
+                                    p1.ry() = stem->abbox().bottom();
+                              l2l = vStemDistance;
+                              p1.rx() = cr1->pagePos().x() - stemLeft;
                               }
-                        else if ((cr2->type() == CHORD) && stem && chord1->up()) {
-                              const Chord* chord2 = static_cast<const Chord*>(cr2);
-                              Stem* stem2 = chord2->stem();
-                              if (stem2) {
-                                    xx2     = stem2->abbox().x();
-                                    int l1  = chord1->upNote()->line();
-                                    int l2  = chord2->upNote()->line();
-                                    p1.ry() = stem2->abbox().bottom() + _spatium * .5 * (l1 - l2);
-                                    }
+                        else{
+                              p1.ry() = chord1->downNote()->abbox().bottom(); // whole note
                               }
+                        }
+                  else if (chord1->up()) {
+                        p1.ry() = chord1->downNote()->abbox().bottom();
                         }
                   }
 
@@ -321,15 +366,22 @@ void Tuplet::layout()
                   if (stem && !chord2->up()) {
                         // if (chord2->beam())
                         //      p2.setX(stem->abbox().x());
-                        p2.setY(stem->abbox().bottom());
+                        if(chord2->beam())
+                              p2.ry() = chord2->beam()->abbox().bottom();
+                        else
+                              p2.ry() = stem->abbox().bottom();
+                        l2r = vStemDistance;
                         }
-                  else if ((cr1->type() == CHORD) && stem && chord2->up()) {
-                        const Chord* chord1 = static_cast<const Chord*>(cr1);
-                        int l1 = chord1->upNote()->line();
-                        int l2 = chord2->upNote()->line();
-                        p2.ry() = p1.ry() + _spatium * .5 * (l2 - l1);
+                  else {
+                        p2.ry() = chord2->downNote()->abbox().bottom();
+                        if (stem)
+                              p2.rx() = chord2->pagePos().x() + chord2->maxHeadWidth() + stemRight;
                         }
                   }
+            //
+            // special case: one of the bracket endpoints is
+            // a rest
+            //
             if (cr1->type() != CHORD && cr2->type() == CHORD) {
                   if (p2.y() > p1.y())
                         p1.setY(p2.y());
@@ -342,9 +394,31 @@ void Tuplet::layout()
                   else
                         p1.setY(p2.y());
                   }
+            // outOfStaff
+            if(outOfStaff) {
+                  qreal max = cr1->measure()->staffabbox(cr1->staffIdx()).bottom();
+                  if (max > p1.y()) {
+                        p1.ry() = max;
+                        l2l = vStemDistance;
+                        }
+                  max = cr2->measure()->staffabbox(cr2->staffIdx()).bottom();
+                  if (max > p2.y()) {
+                        p2.ry() = max;
+                        l2r = vStemDistance;
+                        }
+                  }
+            //check that slope is no more than 30°
+            qreal d = (p2.y() - p1.y())/(p2.x() - p1.x());
+            if (d  < -maxSlope) {
+                  // move p1 y up
+                  p2.ry() = p1.y() - maxSlope * (p2.x() - p1.x());
+                  }
+            else if (d  > maxSlope) {
+                  // move p2 y up
+                  p1.ry() = p2.ry() - maxSlope * (p2.x() - p1.x());
+                  }
 
             // check for collisions
-
             int n = _elements.size();
             if (n >= 3) {
                   qreal d  = (p2.y() - p1.y())/(p2.x() - p1.x());
@@ -369,9 +443,6 @@ void Tuplet::layout()
                   }
             }
 
-      qreal l1 = _spatium;          // bracket tip height
-      qreal l2 = _spatium * .5;     // bracket distance to note
-
       setPos(0.0, 0.0);
       QPointF mp(parent()->pagePos());
       p1 -= mp;
@@ -380,27 +451,36 @@ void Tuplet::layout()
       p1 += _p1;
       p2 += _p2;
       xx1 -= mp.x();
-      xx2 -= mp.x();
+
+      p1.ry() -= l2l * (_isUp ? 1.0 : -1.0);
+      p2.ry() -= l2r * (_isUp ? 1.0 : -1.0);
 
       // center number
       qreal x3 = 0.0;
       qreal numberWidth = 0.0;
       if (_number) {
             _number->layout();
+            numberWidth = _number->bbox().width();
             //
             // for beamed tuplets, center number on beam
             //
-            if (cr1->beam() && cr2->beam()) {
-                  qreal deltax = cr2->pagePos().x() - cr1->pagePos().x();
-                  x3 = xx1 + deltax * .5;
+            if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam()) {
+                  const ChordRest* crr = static_cast<const ChordRest*>(cr1);
+                  if(_isUp == crr->up()) {
+                        qreal deltax = cr2->pagePos().x() - cr1->pagePos().x();
+                        x3 = xx1 + deltax * .5;
+                        }
+                  else {
+                        qreal deltax = p2.x() - p1.x();
+                        x3 = p1.x() + deltax * .5;
+                        }
                   }
             else {
                   qreal deltax = p2.x() - p1.x();
                   x3 = p1.x() + deltax * .5;
                   }
 
-            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - (l1 + l2) * (_isUp ? 1.0 : -1.0);
-            numberWidth = _number->bbox().width();
+            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0);
             _number->setPos(QPointF(x3, y3) - ipos());
             }
 
@@ -409,44 +489,44 @@ void Tuplet::layout()
 
             if (_isUp) {
                   if (_number) {
-                        bracketL[0] = QPointF(p1.x(), p1.y() - l2);
-                        bracketL[1] = QPointF(p1.x(), p1.y() - l1 - l2);
+                        bracketL[0] = QPointF(p1.x(), p1.y());
+                        bracketL[1] = QPointF(p1.x(), p1.y() - l1);
                         qreal x     = x3 - numberWidth * .5 - _spatium * .5;
                         qreal y     = p1.y() + (x - p1.x()) * slope;
-                        bracketL[2] = QPointF(x,   y - l1 - l2);
+                        bracketL[2] = QPointF(x,   y - l1);
 
                         x           = x3 + numberWidth * .5 + _spatium * .5;
                         y           = p1.y() + (x - p1.x()) * slope;
-                        bracketR[0] = QPointF(x,   y - l1 - l2);
-                        bracketR[1] = QPointF(p2.x(), p2.y() - l1 - l2);
-                        bracketR[2] = QPointF(p2.x(), p2.y() - l2);
+                        bracketR[0] = QPointF(x,   y - l1);
+                        bracketR[1] = QPointF(p2.x(), p2.y() - l1);
+                        bracketR[2] = QPointF(p2.x(), p2.y());
                         }
                   else {
-                        bracketL[0] = QPointF(p1.x(), p1.y() - l2);
-                        bracketL[1] = QPointF(p1.x(), p1.y() - l1 - l2);
-                        bracketL[2] = QPointF(p2.x(), p2.y() - l1 - l2);
-                        bracketL[3] = QPointF(p2.x(), p2.y() - l2);
+                        bracketL[0] = QPointF(p1.x(), p1.y());
+                        bracketL[1] = QPointF(p1.x(), p1.y() - l1);
+                        bracketL[2] = QPointF(p2.x(), p2.y() - l1);
+                        bracketL[3] = QPointF(p2.x(), p2.y());
                         }
                   }
             else {
                   if (_number) {
-                        bracketL[0] = QPointF(p1.x(), p1.y() + l2);
-                        bracketL[1] = QPointF(p1.x(), p1.y() + l1 + l2);
+                        bracketL[0] = QPointF(p1.x(), p1.y());
+                        bracketL[1] = QPointF(p1.x(), p1.y() + l1);
                         qreal x     = x3 - numberWidth * .5 - _spatium * .5;
                         qreal y     = p1.y() + (x - p1.x()) * slope;
-                        bracketL[2] = QPointF(x,   y + l1 + l2);
+                        bracketL[2] = QPointF(x,   y + l1);
 
                         x           = x3 + numberWidth * .5 + _spatium * .5;
                         y           = p1.y() + (x - p1.x()) * slope;
-                        bracketR[0] = QPointF(x,   y + l1 + l2);
-                        bracketR[1] = QPointF(p2.x(), p2.y() + l1 + l2);
-                        bracketR[2] = QPointF(p2.x(), p2.y() + l2);
+                        bracketR[0] = QPointF(x,   y + l1);
+                        bracketR[1] = QPointF(p2.x(), p2.y() + l1);
+                        bracketR[2] = QPointF(p2.x(), p2.y());
                         }
                   else {
-                        bracketL[0] = QPointF(p1.x(), p1.y() + l2);
-                        bracketL[1] = QPointF(p1.x(), p1.y() + l1 + l2);
-                        bracketL[2] = QPointF(p2.x(), p2.y() + l1 + l2);
-                        bracketL[3] = QPointF(p2.x(), p2.y() + l2);
+                        bracketL[0] = QPointF(p1.x(), p1.y());
+                        bracketL[1] = QPointF(p1.x(), p1.y() + l1);
+                        bracketL[2] = QPointF(p2.x(), p2.y() + l1);
+                        bracketL[3] = QPointF(p2.x(), p2.y());
                         }
                   }
             }

@@ -413,6 +413,15 @@ void EditStyle::getValues()
       lstyle.set(ST_crossMeasureValues,      crossMeasureValues->isChecked());
       lstyle.set(ST_keySigNaturals,          radioKeySigNatNone->isChecked() ? NAT_NONE :
                   (radioKeySigNatBefore->isChecked() ? NAT_BEFORE : NAT_AFTER) );
+
+      lstyle.set(ST_tupletMaxSlope,           tupletMaxSlope->value());
+      lstyle.set(ST_tupletOufOfStaff,         tupletOutOfStaff->isChecked());
+      lstyle.set(ST_tupletVHeadDistance,      Spatium(tupletVHeadDistance->value()));
+      lstyle.set(ST_tupletVStemDistance,      Spatium(tupletVStemDistance->value()));
+      lstyle.set(ST_tupletStemLeftDistance,   Spatium(tupletStemLeftDistance->value()));
+      lstyle.set(ST_tupletStemRightDistance,  Spatium(tupletStemRightDistance->value()));
+      lstyle.set(ST_tupletNoteLeftDistance,   Spatium(tupletNoteLeftDistance->value()));
+      lstyle.set(ST_tupletNoteRightDistance,  Spatium(tupletNoteRightDistance->value()));
       }
 
 //---------------------------------------------------------
@@ -649,6 +658,15 @@ void EditStyle::setValues()
       radioKeySigNatNone->setChecked  (lstyle.value(ST_keySigNaturals).toBool() == NAT_NONE);
       radioKeySigNatBefore->setChecked(lstyle.value(ST_keySigNaturals).toBool() == NAT_BEFORE);
       radioKeySigNatAfter->setChecked (lstyle.value(ST_keySigNaturals).toBool() == NAT_AFTER);
+
+      tupletMaxSlope->setValue(lstyle.value(ST_tupletMaxSlope).toDouble());
+      tupletOutOfStaff->setChecked(lstyle.value(ST_tupletOufOfStaff).toBool());
+      tupletVHeadDistance->setValue(lstyle.value(ST_tupletVHeadDistance).toDouble());
+      tupletVStemDistance->setValue(lstyle.value(ST_tupletVStemDistance).toDouble());
+      tupletStemLeftDistance->setValue(lstyle.value(ST_tupletStemLeftDistance).toDouble());
+      tupletStemRightDistance->setValue(lstyle.value(ST_tupletStemRightDistance).toDouble());
+      tupletNoteLeftDistance->setValue(lstyle.value(ST_tupletNoteLeftDistance).toDouble());
+      tupletNoteRightDistance->setValue(lstyle.value(ST_tupletNoteRightDistance).toDouble());
       }
 
 //---------------------------------------------------------
