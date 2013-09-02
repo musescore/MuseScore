@@ -133,7 +133,15 @@ static const StyleVal2 style114[] = {
       { ST_ArpeggioHookLen,              QVariant(.8) },
       { ST_FixMeasureNumbers,            QVariant(0) },
       { ST_FixMeasureWidth,              QVariant(false) },
-      { ST_keySigNaturals,               QVariant(NAT_BEFORE) }
+      { ST_keySigNaturals,               QVariant(NAT_BEFORE) },
+      { ST_tupletMaxSlope,               QVariant(qreal(0.5)) },
+      { ST_tupletOufOfStaff,             QVariant(false) },
+      { ST_tupletVHeadDistance,          QVariant(.5) },
+      { ST_tupletVStemDistance,          QVariant(.25) },
+      { ST_tupletStemLeftDistance,       QVariant(.5) },
+      { ST_tupletStemRightDistance,      QVariant(.5) },
+      { ST_tupletNoteLeftDistance,       QVariant(0.0) },
+      { ST_tupletNoteRightDistance,      QVariant(0.0) }
       };
 
 //---------------------------------------------------------
