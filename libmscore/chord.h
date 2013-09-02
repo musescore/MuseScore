@@ -134,7 +134,7 @@ class Chord : public ChordRest {
       virtual int upString() const;
       virtual int downString() const;
 
-      qreal maxHeadWidth();
+      qreal maxHeadWidth() const;
 
       Note* findNote(int pitch) const;
 

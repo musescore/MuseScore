@@ -511,7 +511,7 @@ void Chord::remove(Element* e)
 //---------------------------------------------------------
 //   maxHeadWidth
 //---------------------------------------------------------
-qreal Chord::maxHeadWidth()
+qreal Chord::maxHeadWidth() const
       {
       // determine max head width in chord
       qreal hw       = 0;

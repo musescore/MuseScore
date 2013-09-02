@@ -336,6 +336,15 @@ enum StyleIdx {
       ST_crossMeasureValues,
       ST_keySigNaturals,
 
+      ST_tupletMaxSlope,
+      ST_tupletOufOfStaff,
+      ST_tupletVHeadDistance,
+      ST_tupletVStemDistance,
+      ST_tupletStemLeftDistance,
+      ST_tupletStemRightDistance,
+      ST_tupletNoteLeftDistance,
+      ST_tupletNoteRightDistance,
+
       ST_STYLES
       };
 
