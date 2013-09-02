@@ -999,7 +999,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   v = v1 || v2; // hide spanner if both chords are hidden
                   }
             if (all || (score()->staff(staffIdx)->show() && v) || (spanner->type() == Element::VOLTA))
-                  ss->spanner()->scanElements(data, func, all);
+                  ss->scanElements(data, func, all);
             }
       }
 
