@@ -336,22 +336,7 @@ void Seq::start()
       if ((mscore->loop())) {
             if(cs->selection().state() == SEL_RANGE)
                   setLoopSelection();
-            if (cs->loopOutTick() > 0) {
-                  // Add loop Out event
-                  NPlayEvent event;
-                  event.setType(ME_LOOP);
-                  // **Lower bound causes crash** insert ME_LOOP as first event if there are events with same tick
-                  //auto hint = events.lower_bound(cs->loopOutTick());
-                  //events.insert(hint, std::pair<int,NPlayEvent>(cs->loopOutTick(), event));
-                  events.insert(std::pair<int,NPlayEvent>(cs->loopOutTick(), event));
-                  qDebug ("Add loop event at tick %d   (loopInTick = %d)", cs->loopOutTick(), cs->loopInTick());
-                  if (cs->loopOutTick() < cs->loopInTick())
-                        seek(0);  // If Out pos < In pos, restart playback at the beginning.
-                  else
-                        seek(cs->loopInTick());
-            } else
-                  seek(cs->loopInTick());
-
+            seek(cs->loopInTick());
             }
       else
             seek(cs->playPos());
@@ -381,8 +366,8 @@ void Seq::stop()
             cs->setUpdateAll();
             cs->end();
             }
-      if (mscore->loop())
-            loopStop();
+      //if (mscore->loop())
+        //    loopStop();
       }
 
 //---------------------------------------------------------
@@ -468,6 +453,9 @@ void Seq::guiStop()
 void Seq::seqMessage(int msg)
       {
       switch(msg) {
+            case '3':   // Loop restart while playing
+                  seek(cs->loopInTick());
+                  break;
             case '2':
                   guiStop();
 //                  heartBeatTimer->stop();
@@ -662,6 +650,14 @@ void Seq::process(unsigned n, float* buffer)
                         qDebug("%d:  %d - %d\n", playPos->first, f, playTime);
 						n = 0;
                         }
+                  if (mscore->loop()) {
+                        qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   f = %d   playTime = %d", playPos->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), f, playTime);
+                        if (playPos->first >= cs->loopOutTick()) {
+                              emit toGui('3');   // Exit this function to avoid segmentation fault in Scoreview
+                              //seek(cs->loopInTick());
+                              return;
+                              }
+                        }
                   if (n) {
                         if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
                               metronome(n, p);
@@ -695,11 +691,6 @@ void Seq::process(unsigned n, float* buffer)
                         tickRest = tickLength;
                   else if (event.type() == ME_TICK2)
                         tackRest = tackLength;
-                  else if (event.type() == ME_LOOP) {
-                        qDebug ("event.type() == ME_LOOP  in/out tick = %d/%d  loop |  getCurTick() = %d ", cs->loopInTick(), cs->loopOutTick(), getCurTick());
-                        seek(cs->loopInTick());
-                        return;
-                        }
                   mutex.lock();
                   ++playPos;
                   mutex.unlock();
@@ -1198,8 +1189,9 @@ void Seq::heartBeatTimeout()
 
       QRectF r;
       for (;guiPos != events.cend(); ++guiPos) {
-            if (guiPos->first > ppos->first)
-                  break;
+            if (mscore->loop())
+                  if (guiPos->first >= cs->loopOutTick())
+                        break;
             const NPlayEvent& n = guiPos->second;
             if (n.type() == ME_NOTEON) {
                   const Note* note1 = n.note();
@@ -1270,27 +1262,40 @@ double Seq::curTempo() const
 void Seq::setLoopIn()
       {
       int tick;
-      if (state == TRANSPORT_PLAY)
-            tick = playPos->first;  // En mode playback, set the In position where note is being played
-      else
-            tick = cs->pos();   // Otherwise, use the selected note.
+      if (state == TRANSPORT_PLAY) {      // If in playback mode, set the In position where note is being played
+            auto ppos = playPos;
+            if (ppos != events.cbegin())
+                  --ppos;                 // We have to go back one pos to get the correct note that has just been played
+            tick = ppos->first;
+            }
+      else {
+            tick = cs->pos();             // Otherwise, use the selected note.
+            }
+      if (tick >= cs->loopOutTick())   // If In pos >= Out pos, reset Out pos to end of score
+            cs->setLoopOutTick(-1);
       cs->setLoopInTick(tick);
-//      qDebug ("setLoopIn : tick = %d\n",tick);
+      qDebug ("seq::setLoopIn() : tick = %d\n",tick);
       }
 
 //---------------------------------------------------------
-//   set Loop in position
+//   set Loop Out position
 //---------------------------------------------------------
 
 void Seq::setLoopOut()
       {
       int tick;
-      if (state == TRANSPORT_PLAY)
-            tick = playPos->first;  // En mode playback, set the Out position where note is being played
-      else
+      if (state == TRANSPORT_PLAY) {    // If in playback mode, set the Out position where note is being played
+            tick = playPos->first;
+            }
+      else {
             tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
+            }
+      if (tick <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
+            cs->setLoopInTick(-1);
       cs->setLoopOutTick(tick);
-//      qDebug ("setLoopOut : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n",loopOutPos, cs->pos(), cs->inputState().ticks());
+      qDebug ("seq::setLoopOut() : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n", tick, cs->pos(), cs->inputState().ticks());
+      if (state == TRANSPORT_PLAY)
+            guiToSeq(SeqMsg(SEQ_SEEK, tick));
       }
 
 //---------------------------------------------------------
@@ -1303,27 +1308,5 @@ void Seq::setLoopSelection()
       cs->setLoopOutTick(cs->selection().tickEnd());
       cs->updateLoopCursors();
       qDebug ("setLoopSelection : loopInTick = %d  loopOutTick = %d\n",cs->selection().tickStart(), cs->selection().tickEnd());
-      }
-
-//---------------------------------------------------------
-//   unset Loop In
-//---------------------------------------------------------
-
-void Seq::unsetLoopIn()
-      {
-      // Reinitialize the In loop position
-      cs->setLoopInTick(-1);
-      }
-
-//---------------------------------------------------------
-//   unset Loop Out
-//---------------------------------------------------------
-
-void Seq::unsetLoopOut()
-      {
-      loopStop();   // Erase the loop event
-
-      // Reinitialize the Out loop position
-      cs->setLoopOutTick(-1);
       }
 }
