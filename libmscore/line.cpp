@@ -210,8 +210,8 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
       int track   = l->track();
 
       if (l->anchor() == Spanner::ANCHOR_SEGMENT) {
-            Segment* s1 = score()->tick2nearestSegment(spanner()->tick());
-            Segment* s2 = score()->tick2nearestSegment(spanner()->tick2());
+            Segment* s1 = spanner()->startSegment();
+            Segment* s2 = spanner()->endSegment();
             if (!s1 && !s2) {
                   qDebug("LineSegment::edit: no start/end segment");
                   return true;
