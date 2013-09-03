@@ -651,8 +651,8 @@ void Seq::process(unsigned n, float* buffer)
 						n = 0;
                         }
                   if (mscore->loop()) {
-                        qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   f = %d   playTime = %d", playPos->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), f, playTime);
                         if (playPos->first >= cs->loopOutTick()) {
+                              qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   f = %d   playTime = %d", playPos->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), f, playTime);
                               emit toGui('3');   // Exit this function to avoid segmentation fault in Scoreview
                               //seek(cs->loopInTick());
                               return;
