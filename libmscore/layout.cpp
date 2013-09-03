@@ -620,9 +620,8 @@ void Score::doLayout()
       for (int track = 0; track < tracks; ++track) {
             for (Segment* segment = firstSegment(); segment; segment = segment->next1()) {
                   if (track == tracks-1) {
-                        int n = segment->annotations().size();
-                        for (int i = 0; i < n; ++i)
-                              segment->annotations().at(i)->layout();
+                        for (Element* e : segment->annotations())
+                              e->layout();
                         }
                   Element* e = segment->element(track);
                   if (!e)
@@ -2577,7 +2576,8 @@ qreal Score::computeMinWidth(Segment* fs)
                               if (e->type() != Element::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
                               Harmony* h = static_cast<Harmony*>(e);
-                              h->layout();
+                              //h->layout();
+                              h->calculateBoundingRect();
                               QRectF b(h->bboxtight().translated(h->pos()));
                               if (hFound)
                                     hBbox |= b;

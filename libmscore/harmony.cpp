@@ -219,13 +219,10 @@ void Harmony::write(Xml& xml) const
                         xml.etag();
                         }
                   }
-            Element::writeProperties(xml);
             }
-      else {
+      else
             xml.tag("name", _textName);
-            Element::writeProperties(xml);
-//            Text::writeProperties(xml);
-            }
+      Element::writeProperties(xml);
       if (_rightParen)
             xml.tagE("rightParen");
       xml.etag();
@@ -822,35 +819,17 @@ bool Harmony::isEmpty() const
 
 void Harmony::layout()
       {
-      if (editMode() || textList.isEmpty()) {
-            Text::layout1();
-            setbboxtight(bbox());
-            }
-      else {
-            // textStyle().layout(this);
-            QRectF bb, tbb;
-            foreach(const TextSegment* ts, textList) {
-                  bb |= ts->boundingRect().translated(ts->x, ts->y);
-                  tbb |= ts->tightBoundingRect().translated(ts->x, ts->y);
-                  }
-            setbbox(bb);
-            setbboxtight(tbb);
-            }
-      if (!parent()) {          // for use in palette
-            setPos(QPointF());
-            return;
-            }
+      // calculateBoundingRect()
 
       qreal yy = 0.0;
       if (parent()->type() == SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
-            yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
+            yy = track() < 0 ? 0.0 : m->system()->staffYpage(staffIdx());
             yy += score()->styleP(ST_harmonyY);
             }
-      else if (parent()->type() == FRET_DIAGRAM) {
+      else if (parent()->type() == FRET_DIAGRAM)
             yy = score()->styleP(ST_harmonyFretDist);
-            }
-      setPos(QPointF(0.0, yy));
+      setPos(0.0, yy);
 
       if (!readPos().isNull()) {
             // version 114 is measure based
@@ -865,6 +844,28 @@ void Harmony::layout()
             MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
             qreal dist = -(bbox().top());
             mstaff->distanceUp = qMax(mstaff->distanceUp, dist + spatium());
+            }
+      }
+
+//---------------------------------------------------------
+//   calculateBoundingRect
+//---------------------------------------------------------
+
+void Harmony::calculateBoundingRect()
+      {
+      if (editMode() || textList.isEmpty()) {
+            Text::layout1();
+            setbboxtight(bbox());
+            }
+      else {
+            // textStyle().layout(this);
+            QRectF bb, tbb;
+            foreach(const TextSegment* ts, textList) {
+                  bb |= ts->boundingRect().translated(ts->x, ts->y);
+                  tbb |= ts->tightBoundingRect().translated(ts->x, ts->y);
+                  }
+            setbbox(bb);
+            setbboxtight(tbb);
             }
       }
 
