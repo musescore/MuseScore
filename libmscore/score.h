@@ -626,7 +626,8 @@ class Score : public QObject {
       MeasureBase* tick2measureBase(int tick) const;
       Segment* tick2segment(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll) const;
       Segment* tick2segmentEnd(int track, int tick) const;
-      Segment* tick2nearestSegment(int tick) const;
+      Segment* tick2leftSegment(int tick) const;
+      Segment* tick2rightSegment(int tick) const;
       void fixTicks();
       bool addArticulation(Element*, Articulation* atr);
 
