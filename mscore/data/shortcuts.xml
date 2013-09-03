@@ -606,11 +606,11 @@
     </SC>
   <SC>
     <key>clef-violin</key>
-    <seq>Ctrl+Y, Ctrl+1</seq>
+    <seq>Ctrl+Y,Ctrl+1</seq>
     </SC>
   <SC>
     <key>clef-bass</key>
-    <seq>Ctrl+Y, Ctrl+2</seq>
+    <seq>Ctrl+Y,Ctrl+2</seq>
     </SC>
   <SC>
     <key>system-break</key>
