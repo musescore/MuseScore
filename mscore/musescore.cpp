@@ -4165,7 +4165,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   cs->showLoopCursors();
                   }
             else {
-                  //seq->loopStop();
                   cs->hideLoopCursors();
                   }
             }
