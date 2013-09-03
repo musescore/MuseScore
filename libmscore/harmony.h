@@ -170,6 +170,7 @@ class Harmony : public Text {
       virtual QLineF dragAnchor() const;
       void setHarmony(const QString& s);
       virtual QPainterPath shape() const;
+      void calculateBoundingRect();
       };
 
 

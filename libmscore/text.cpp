@@ -1021,10 +1021,10 @@ QLineF Text::dragAnchor() const
             p1 = QPointF(xp, yp);
             }
       else {
-            p1 = parent()->canvasPos(); // QPointF(parent()->canvasBoundingRect().topLeft());
+            p1 = parent()->canvasPos();
             if (parent()->type() == SEGMENT) {
                   Segment* s = static_cast<Segment*>(parent());
-                  p1.ry() += s ? s->measure()->system()->staff(staffIdx())->y() : 0.0;
+                  p1.ry() = s ? s->measure()->system()->staffYpage(staffIdx()) : 0.0;
                   }
             }
 
