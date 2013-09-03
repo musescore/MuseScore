@@ -175,8 +175,6 @@ class Seq : public QObject, public Sequencer {
       void stopWait();
       void setLoopIn();
       void setLoopOut();
-      void unsetLoopIn();
-      void unsetLoopOut();
       void setLoopSelection();
 
       bool init();
