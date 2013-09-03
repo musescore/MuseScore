@@ -1189,6 +1189,8 @@ void Seq::heartBeatTimeout()
 
       QRectF r;
       for (;guiPos != events.cend(); ++guiPos) {
+            if (guiPos->first > ppos->first)
+                  break;
             if (mscore->loop())
                   if (guiPos->first >= cs->loopOutTick())
                         break;
