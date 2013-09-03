@@ -449,7 +449,7 @@ ChordRest* Spanner::endCR() const
 
 Segment* Spanner::startSegment() const
       {
-      return score()->tick2segment(tick());
+      return score()->tick2rightSegment(tick());
       }
 
 //---------------------------------------------------------
@@ -458,7 +458,7 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
       {
-      return score()->tick2segment(tick2());
+      return score()->tick2leftSegment(tick2());
       }
 }
 

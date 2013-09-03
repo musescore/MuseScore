@@ -134,14 +134,16 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
       }
 
 //---------------------------------------------------------
-//   tick2nearestSegment
+//   tick2leftSegment
+/// return the segment at this tick position if any or
+/// the first segment *before* this tick position
 //---------------------------------------------------------
 
-Segment* Score::tick2nearestSegment(int tick) const
+Segment* Score::tick2leftSegment(int tick) const
       {
       Measure* m = tick2measure(tick);
       if (m == 0) {
-            qDebug("tick2nearestSegment(): not found tick %d\n", tick);
+            qDebug("tick2leftSegment(): not found tick %d\n", tick);
             return 0;
             }
       // loop over all segments
@@ -152,6 +154,27 @@ Segment* Score::tick2nearestSegment(int tick) const
             else if (tick == s->tick())
                   return s;
             ps = s;
+            }
+      return ps;
+      }
+
+//---------------------------------------------------------
+//   tick2leftSegment
+/// return the segment at this tick position if any or
+/// the first segment *after* this tick position
+//---------------------------------------------------------
+
+Segment* Score::tick2rightSegment(int tick) const
+      {
+      Measure* m = tick2measure(tick);
+      if (m == 0) {
+            qDebug("tick2nearestSegment(): not found tick %d\n", tick);
+            return 0;
+            }
+      // loop over all segments
+      for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
+            if (tick <= s->tick())
+                  return s;
             }
       return 0;
       }

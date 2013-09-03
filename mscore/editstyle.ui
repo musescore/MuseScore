@@ -172,7 +172,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>18</number>
      </property>
      <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -5029,7 +5029,7 @@ p, li { white-space: pre-wrap; }
                 <double>5.000000000000000</double>
                </property>
                <property name="singleStep">
-                <double>0.500000000000000</double>
+                <double>0.050000000000000</double>
                </property>
               </widget>
              </item>
@@ -5064,7 +5064,7 @@ p, li { white-space: pre-wrap; }
                 <double>5.000000000000000</double>
                </property>
                <property name="singleStep">
-                <double>0.500000000000000</double>
+                <double>0.050000000000000</double>
                </property>
               </widget>
              </item>
