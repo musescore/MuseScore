@@ -551,17 +551,16 @@ void Shortcut::reset()
 
 static const QString numPadPrefix("NumPad+");
 static const int NUMPADPREFIX_SIZE = 7;         // the length in chars of the above string
-static const QString keySepar(", ");
 
 QString Shortcut::keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt)
       {
       QString s;
-      int   code, i;
-      for (i = 0; i < KEYSEQ_SIZE; ++i) {
+      for (int i = 0; i < KEYSEQ_SIZE; ++i) {
+            int code;
             if ( (code = keySeq[i]) == 0)
                   break;
             if (i)
-                  s += keySepar;
+                  s += ",";
             if (code & Qt::KeypadModifier) {
                   s += numPadPrefix;
                   code &= ~Qt::KeypadModifier;
@@ -578,17 +577,18 @@ QKeySequence Shortcut::keySeqFromString(const QString& str, QKeySequence::Sequen
       for (i = 0; i < KEYSEQ_SIZE; ++i)
             code[i] = 0;
 
-      QStringList strList = str.split(keySepar, QString::SkipEmptyParts, Qt::CaseSensitive);
+      QStringList strList = str.split(",", QString::SkipEmptyParts, Qt::CaseSensitive);
 
       i = 0;
-      foreach (QString keyStr, strList) {
+      for (const QString& s : strList) {
+            QString keyStr = s.trimmed();
             if( keyStr.startsWith(numPadPrefix, Qt::CaseInsensitive) ) {
                   code[i] += Qt::KeypadModifier;
                   keyStr.remove(0, NUMPADPREFIX_SIZE);
                   }
             QKeySequence seq = QKeySequence::fromString(keyStr, fmt);
             code[i] += seq[0];
-            if(++i >= KEYSEQ_SIZE)
+            if (++i >= KEYSEQ_SIZE)
                   break;
             }
       QKeySequence keySeq(code[0], code[1], code[2], code[3]);
