@@ -163,7 +163,6 @@ class Seq : public QObject, public Sequencer {
       bool canStart();
       void rewindStart();
       void loopStart();
-      void loopStop();
       void seekEnd();
       void nextMeasure();
       void nextChord();

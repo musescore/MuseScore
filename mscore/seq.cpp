@@ -283,23 +283,6 @@ void Seq::loopStart()
       }
 
 //---------------------------------------------------------
-//   loopStop
-//---------------------------------------------------------
-
-void Seq::loopStop()
-      {
-      //
-      // Finds the Loop event and removes it.
-      //
-      for (auto it = events.begin(); it != events.end(); ) {
-            if (it->second.type() == ME_LOOP)
-                  it = events.erase(it);
-            else
-                  ++it;
-            }
-      }
-
-//---------------------------------------------------------
 //   canStart
 //    return true if sequencer can be started
 //---------------------------------------------------------
