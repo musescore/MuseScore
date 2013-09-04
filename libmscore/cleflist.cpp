@@ -55,7 +55,6 @@ ClefTypeList ClefList::clef(int tick) const
 
 void ClefList::setClef(int tick, ClefTypeList idx)
       {
-qDebug("setClef...\n");
       replace(tick, idx);
       }
 
@@ -65,6 +64,7 @@ qDebug("setClef...\n");
 
 void ClefList::read(XmlReader& e, Score* cs)
       {
+      insert(0, ClefTypeList(ClefType(0), ClefType(0)));
       while (e.readNextStartElement()) {
             if (e.name() == "clef") {
                   int tick    = e.intAttribute("tick", 0);
