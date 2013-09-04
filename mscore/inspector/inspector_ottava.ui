@@ -119,6 +119,16 @@
          <string>15mb</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>22ma</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>22mb</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item row="1" column="1">
