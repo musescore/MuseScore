@@ -819,8 +819,13 @@ bool Harmony::isEmpty() const
 
 void Harmony::layout()
       {
-      // calculateBoundingRect()
+      // calculateBoundingRect()    // for normal symbols this is called in layout: computeMinWidth()
 
+      if (!parent()) {
+            calculateBoundingRect();
+            setPos(0.0, 0.0);
+            return;
+            }
       qreal yy = 0.0;
       if (parent()->type() == SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
