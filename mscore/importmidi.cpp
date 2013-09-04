@@ -492,7 +492,7 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
       const auto swingType = preferences.midiImportOperations.trackOperations(indexOfOperation).swing;
       Swing::detectSwing(staff, swingType);
 
-      MidiClef::createClefs(staff, indexOfOperation);
+      MidiClef::createClefs(staff, indexOfOperation, mtrack->drumTrack());
       }
 
 Fraction metaTimeSignature(const MidiEvent& e)
@@ -593,6 +593,12 @@ Measure* barFromIndex(const Score *score, int barIndex)
       return score->tick2measure(tick);
       }
 
+bool isPianoPart(const MTrack &t1, const MTrack &t2)
+      {
+      return (t1.mtrack->outChannel() == t2.mtrack->outChannel()
+                  && (t1.program >= 0 && t1.program <= 7));
+      }
+
 //---------------------------------------------------------
 // createInstruments
 //   for drum track, if any, set percussion clef
@@ -621,9 +627,8 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                   const int avgPitch = MChord::findAveragePitch(track.chords.begin(),
                                                                 track.chords.end());
                   s->setInitialClef(MidiClef::clefTypeFromAveragePitch(avgPitch));
-                  if ((idx < (ntracks-1))
-                              && (tracks.at(idx+1).mtrack->outChannel() == track.mtrack->outChannel())
-                              && (track.program == 0)) {
+                  if (idx < (tracks.size() - 1) && idx >= 0
+                              && isPianoPart(tracks[idx], tracks[idx + 1])) {
                                     // assume that the current track and the next track
                                     // form a piano part
                         s->setBracket(0, BRACKET_BRACE);
@@ -768,6 +773,8 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
             processMeta(mt, false);
             if (midiType == MT_UNKNOWN)
                   midiType = MT_GM;
+            if (i % 2 && isPianoPart(tracks[i - 1], tracks[i]))
+                  mt.name = tracks[i - 1].name;
             setTrackInfo(midiType, mt);
                         // pass current track index to the convertTrack function
                         //   through MidiImportOperations
@@ -781,11 +788,21 @@ QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
                                const MidiFile *mf)
 {
       QList<TrackMeta> tracksMeta;
-      for (const auto &track: tracks) {
-            const MTrack &mt = track.second;
-            const MidiTrack *midiTrack = mt.mtrack;
+      int i = 0;
+      for (auto it = tracks.begin(); it != tracks.end(); ++it, ++i) {
+            if (i % 2) {
+                  auto prev = it;
+                  --prev;
+                  if (isPianoPart(prev->second, it->second)) {
+                        TrackMeta lastMeta = tracksMeta.back();
+                        tracksMeta.push_back(lastMeta);
+                        continue;
+                        }
+                  }
+
+            const MTrack &mt = it->second;
             QString trackName;
-            for (const auto &ie: midiTrack->events()) {
+            for (const auto &ie: mt.mtrack->events()) {
                   const MidiEvent &e = ie.second;
                   if ((e.type() == ME_META) && (e.metaType() == META_TRACK_NAME)) {
                         trackName = (const char*)e.edata();
@@ -795,9 +812,9 @@ QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
             MidiType midiType = mf->midiType();
             if (midiType == MT_UNKNOWN)
                   midiType = MT_GM;
-            const QString instrName = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
-            const bool isDrumTrack = midiTrack->drumTrack();
-            tracksMeta.push_back({trackName, instrName, isDrumTrack});
+            const QString instrName = instrumentName(midiType, mt.program,
+                                                     mt.mtrack->drumTrack());
+            tracksMeta.push_back({trackName, instrName,  mt.mtrack->drumTrack()});
             }
       return tracksMeta;
       }

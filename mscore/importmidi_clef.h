@@ -10,7 +10,7 @@ class Staff;
 
 namespace MidiClef {
 
-void createClefs(Staff *staff, int indexOfOperation);
+void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack);
 int midPitch();
 ClefType clefTypeFromAveragePitch(int averagePitch);
 
