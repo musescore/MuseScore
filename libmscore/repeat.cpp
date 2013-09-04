@@ -48,10 +48,10 @@ void RepeatMeasure::layout()
       qreal sp  = spatium();
 
       qreal y   = sp;
-      qreal w   = sp * 2.0;
+      qreal w   = sp * 2.4;
       qreal h   = sp * 2.0;
-      qreal lw  = sp * .30;  // line width
-      qreal r   = sp * .15;  // dot radius
+      qreal lw  = sp * .50;  // line width
+      qreal r   = sp * .20;  // dot radius
 
       path       = QPainterPath();
 
@@ -64,6 +64,7 @@ void RepeatMeasure::layout()
       path.addEllipse(QRectF(w * .75 - r, y+h * .75 - r, r * 2.0, r * 2.0 ));
 
       setbbox(path.boundingRect());
+      _space.setRw(width());
       }
 
 //---------------------------------------------------------
