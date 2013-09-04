@@ -827,8 +827,11 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef->setClefType(staff->clefTypeList(tick));  // set before add !
                         undoAddElement(clef);
                         }
-                  else if (clef->generated())
-                        clef->setClefType(staff->clefTypeList(tick));
+                  else if (clef->generated()) {
+                        ClefTypeList cl = staff->clefTypeList(tick);
+                        if (cl != clef->clefTypeList())
+                              undo(new ChangeClefType(clef, cl._concertClef, cl._transposingClef));
+                        }
                   }
             else {
                   if (clef && clef->generated())
