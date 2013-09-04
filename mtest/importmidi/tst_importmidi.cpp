@@ -92,6 +92,7 @@ class TestImportMidi : public QObject, public MTest
       void meterTimeSig4_4() { mf("meter_4-4"); }
       void metertimeSig9_8() { mf("meter_9-8"); }
       void metertimeSig12_8() { mf("meter_12-8"); }
+      void metertimeSig15_8() { mf("meter_15-8"); }
       void meterCentralLongNote() { mf("meter_central_long_note"); }
       void meterCentralLongRest() { mf("meter_central_long_rest"); }
       void meterChordExample() { mf("meter_chord_example"); }
