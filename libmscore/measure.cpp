@@ -3233,7 +3233,7 @@ void Measure::layoutX(qreal stretch)
                   if (e == 0)
                         continue;
                   ElementType t = e->type();
-                  if (t == REST && (_multiMeasure > 0 || static_cast<Rest*>(e)->durationType() == TDuration::V_MEASURE)) {
+                  if (t == REPEAT_MEASURE || (t == REST && (_multiMeasure > 0 || static_cast<Rest*>(e)->durationType() == TDuration::V_MEASURE))) {
                         Rest* rest = static_cast<Rest*>(e);
                         qreal x1 = 0.0, x2;
                         if (s != first()) {
