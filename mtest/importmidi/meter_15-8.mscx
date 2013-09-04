@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.24">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <page-layout>
+        <page-height>1683.78</page-height>
+        <page-width>1190.55</page-width>
+        <page-margins type="even">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        <page-margins type="odd">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <PageList>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <type>0</type>
+        </Staff>
+      <trackName>Fingered Bass</trackName>
+      <Instrument>
+        <longName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Fingered Bass<!--EndFragment--></p></body></html>
+          </longName>
+        <trackName></trackName>
+        <Channel name="normal">
+          <program value="33"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
+        <KeySig>
+          <accidental>-2</accidental>
+          </KeySig>
+        <TimeSig>
+          <sigN>15</sigN>
+          <sigD>8</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Chord>
+          <dots>1</dots>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>39</pitch>
+            <tpc>11</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>16th</durationType>
+          </Rest>
+        <Rest>
+          <durationType>eighth</durationType>
+          </Rest>
+        <Chord>
+          <dots>1</dots>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>44</pitch>
+            <tpc>22</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>16th</durationType>
+          </Rest>
+        <Rest>
+          <durationType>eighth</durationType>
+          </Rest>
+        <Chord>
+          <dots>1</dots>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>16th</durationType>
+          </Rest>
+        <Rest>
+          <durationType>eighth</durationType>
+          </Rest>
+        <Chord>
+          <dots>1</dots>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>41</pitch>
+            <tpc>13</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>16th</durationType>
+          </Rest>
+        <Rest>
+          <durationType>eighth</durationType>
+          </Rest>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>41</pitch>
+            <tpc>13</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>16th</durationType>
+          </Rest>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>34</pitch>
+            <tpc>12</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>16th</durationType>
+          </Rest>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
