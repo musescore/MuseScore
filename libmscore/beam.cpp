@@ -1850,10 +1850,8 @@ void Beam::read(XmlReader& e)
                         }
                   fragments.append(f);
                   }
-#ifndef NDEBUG
             else if (tag == "l1" || tag == "l2")      // ignore
                   e.skipCurrentElement();
-#endif
             else if (tag == "subtype")          // obsolete
                   e.skipCurrentElement();
             else if (!Element::readProperties(e))
