@@ -212,13 +212,13 @@ Segment* enlargeSegToPrev(Segment *s, int strack, int counterLimit, int lPitch, 
       return s;
       }
 
-void createClefs(Staff *staff, int indexOfOperation)
+void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       {
       ClefType currentClef = staff->initialClef()._concertClef;
       createClef(currentClef, staff, 0);
 
       const auto trackOpers = preferences.midiImportOperations.trackOperations(indexOfOperation);
-      if (!trackOpers.changeClef)
+      if (!trackOpers.changeClef || isDrumTrack)
             return;
 
       const int highPitch = 65;          // all notes equal or upper - in treble clef

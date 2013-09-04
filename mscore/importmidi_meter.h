@@ -25,6 +25,8 @@ bool isComplex(const ReducedFraction &barFraction);
 bool isDuple(const ReducedFraction &barFraction);
 bool isTriple(const ReducedFraction &barFraction);
 bool isQuadruple(const ReducedFraction &barFraction);
+bool isQuintuple(const ReducedFraction &barFraction);
+bool isSeptuple(const ReducedFraction &barFraction);
 
 ReducedFraction beatLength(const ReducedFraction &barFraction);
 

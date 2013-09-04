@@ -39,6 +39,17 @@ bool isQuadruple(const ReducedFraction &barFraction)    // 4/4, 12/8, ...
       return barFraction.numerator() % 4 == 0;
       }
 
+bool isQuintuple(const ReducedFraction &barFraction)    // 5/4, 15/8, ...
+      {
+      return barFraction.numerator() % 5 == 0;
+      }
+
+bool isSeptuple(const ReducedFraction &barFraction)    // 7/8, 21/8, ...
+      {
+      return barFraction.numerator() % 7 == 0;
+      }
+
+
 ReducedFraction minAllowedDuration()
       {
       return ReducedFraction::fromTicks(MScore::division / 32);    // smallest allowed duration is 1/128
@@ -68,8 +79,13 @@ DivisionInfo metricDivisionsOfBar(const ReducedFraction &barFraction)
             divLengths.push_back({barFraction / 2, --level});    // additional central accent
             divLengths.push_back({barFraction / 4, --level});
             }
-      else {
-                        // if complex meter - not a complete solution: pos of central accent is unknown
+      else if (isQuintuple(barFraction)) {
+            divLengths.push_back({barFraction / 5, --level});
+            }
+      else if (isSeptuple(barFraction)) {
+            divLengths.push_back({barFraction / 7, --level});
+            }
+      else {            // if other - complex meter
             divLengths.push_back({barFraction / barFraction.numerator(), --level});
             }
 
