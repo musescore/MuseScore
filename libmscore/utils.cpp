@@ -159,7 +159,7 @@ Segment* Score::tick2leftSegment(int tick) const
       }
 
 //---------------------------------------------------------
-//   tick2leftSegment
+//   tick2rightSegment
 /// return the segment at this tick position if any or
 /// the first segment *after* this tick position
 //---------------------------------------------------------
