@@ -1,32 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="1.24">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      <s>
-        </s>
-      <f>
-        </f>
-      <f>
-        </f>
-      <f>
-        </f>
-      <f>
-        </f>
-      <f>
-        </f>
-      <f>
-        </f>
-      <f>
-        </f>
-      <f>
-        </f>
-      <f>
-        </f>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
       <staffLowerBorder>0</staffLowerBorder>
@@ -65,10 +41,8 @@
     <showMargins>0</showMargins>
     <metaTag name="Platform">WIN</metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2013-08-18</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">X11</metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Lachrimae Antiquae</metaTag>
@@ -84,7 +58,6 @@
       <Staff id="1">
         <type>5</type>
         <bracket type="-1" span="1"/>
-        <barLineSpan from="0" to="14">1</barLineSpan>
         </Staff>
       <trackName>Renaissance Tenor Lute (6 course)</trackName>
       <Instrument>
@@ -104,7 +77,6 @@
           </Tablature>
         <Channel>
           <program value="25"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -156,8 +128,13 @@
             <string>3</string>
             </Note>
           </Chord>
+        <Beam id="1">
+          <l1>46</l1>
+          <l2>46</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>59</pitch>
             <tpc>19</tpc>
@@ -173,6 +150,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -242,8 +220,13 @@
             <string>2</string>
             </Note>
           </Chord>
+        <Beam id="2">
+          <l1>46</l1>
+          <l2>46</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>62</pitch>
             <tpc>16</tpc>
@@ -253,6 +236,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -305,9 +289,6 @@
             <string>1</string>
             </Note>
           <Note>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
             <pitch>68</pitch>
             <tpc>22</tpc>
             <fret>1</fret>
@@ -416,9 +397,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
             <pitch>56</pitch>
             <tpc>22</tpc>
             <fret>3</fret>
@@ -458,9 +436,6 @@
             <string>3</string>
             </Note>
           <Note>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
             <pitch>61</pitch>
             <tpc>21</tpc>
             <fret>4</fret>
@@ -479,8 +454,13 @@
             <string>0</string>
             </Note>
           </Chord>
+        <Beam id="3">
+          <l1>46</l1>
+          <l2>46</l2>
+          </Beam>
         <Chord>
           <durationType>16th</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -490,6 +470,7 @@
           </Chord>
         <Chord>
           <durationType>16th</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
@@ -499,6 +480,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -508,6 +490,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>62</pitch>
             <tpc>16</tpc>
@@ -517,6 +500,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>61</pitch>
             <tpc>21</tpc>
@@ -526,6 +510,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <pitch>59</pitch>
             <tpc>19</tpc>
