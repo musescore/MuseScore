@@ -460,11 +460,11 @@ MuseScore::MuseScore()
       loopAction = getAction("loop");
       loopAction->setCheckable(true);
       loopAction->setChecked(false);
-      
+
       loopInAction = getAction("loop-in");
       loopInAction->setCheckable(false);
       //loopInAction->setChecked(false);
-      
+
       loopOutAction = getAction("loop-out");
       loopOutAction->setCheckable(false);
       //loopOutAction->setChecked(false);
@@ -923,9 +923,7 @@ MuseScore::MuseScore()
       //    Menu Create
       //---------------------
 
-      QMenu* menuCreate = genCreateMenu(mb);
-      mb->setObjectName("Insert");
-      mb->addMenu(menuCreate);
+      mb->addMenu(genCreateMenu(mb));
 
       //---------------------
       //    Menu Notes

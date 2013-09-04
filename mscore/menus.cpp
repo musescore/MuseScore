@@ -674,7 +674,7 @@ Palette* MuseScore::newBagpipeEmbellishmentPalette()
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe"));
       sp->setMag(0.8);
       sp->setGrid(60, 80);
-      
+
       for (int i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
             BagpipeEmbellishment* b  = new BagpipeEmbellishment(gscore);
             b->setEmbelType(i);
@@ -1063,8 +1063,8 @@ void MuseScore::populatePalette()
 
 QMenu* MuseScore::genCreateMenu(QWidget* parent)
       {
-      QMenu* popup = new QMenu(tr("&Insert"), parent);
-      popup->setObjectName("Insert");
+      QMenu* popup = new QMenu(tr("&Add"), parent);
+      popup->setObjectName("Add");
 
       popup->addAction(getAction("instruments"));
 
@@ -1101,13 +1101,14 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       text->addAction(getAction("figured-bass"));
       text->addAction(getAction("tempo"));
 
-      popup->addSeparator();
-      popup->addAction(getAction("add-slur"));
-      popup->addAction(getAction("add-hairpin"));
-      popup->addAction(getAction("add-hairpin-reverse"));
-      popup->addAction(getAction("add-8va"));
-      popup->addAction(getAction("add-8vb"));
-      popup->addAction(getAction("add-noteline"));
+      QMenu* lines = popup->addMenu(tr("&Lines"));
+      lines->addSeparator();
+      lines->addAction(getAction("add-slur"));
+      lines->addAction(getAction("add-hairpin"));
+      lines->addAction(getAction("add-hairpin-reverse"));
+      lines->addAction(getAction("add-8va"));
+      lines->addAction(getAction("add-8vb"));
+      lines->addAction(getAction("add-noteline"));
       return popup;
       }
 
