@@ -2703,7 +2703,6 @@ void Score::setInputState(Element* e)
             _is.setDuration(chord->durationType());
             _is.rest      = false;
             _is.setTrack(note->track());
-            _is.pitch     = note->pitch();
             _is.noteType  = note->noteType();
             _is.beamMode  = chord->beamMode();
             }

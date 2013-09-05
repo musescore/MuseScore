@@ -4809,7 +4809,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             return;
             }
       Drumset* ds = is.drumset();
-      int octave = is.pitch / 12;
+      int octave = 4;
       if (ds) {
             char note1 = "CDEFGAB"[note];
             int pitch = -1;
@@ -4829,9 +4829,33 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             octave = pitch / 12;
             }
       else {
-            static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
-            int delta = octave * 12 + tab[note] - is.pitch;
+            int curPitch = -1;
+            if(is.segment()) {
+                  Segment* seg = is.segment()->prev1(Segment::SegChordRest | Segment::SegClef);
+                  while(seg) {
+                        if(seg->segmentType() == Segment::SegChordRest) {
+                              Element* p = seg->element(is.track());
+                              if(p && p->type() == Element::CHORD) {
+                                    Chord* ch = static_cast<Chord*>(p);
+                                    curPitch = ch->downNote()->pitch();
+                                    break;
+                                    }
+                              }
+                        else if(seg->segmentType() == Segment::SegClef) {
+                              Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
+                              if(p && p->type() == Element::CLEF) {
+                                    Clef* clef = static_cast<Clef*>(p);
+                                    curPitch = line2pitch(4, clef->clefType(), 0); // C 72 for treble clef
+                                    break;
+                                    }
+                              }
+                        seg = seg->prev1(Segment::SegChordRest | Segment::SegClef);
+                        }
+                        octave = curPitch / 12;
+                  }
 
+            static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
+            int delta = octave * 12 + tab[note] - curPitch;
             if (delta > 6)
                    --octave;
             else if (delta < -6)
