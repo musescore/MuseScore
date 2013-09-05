@@ -655,6 +655,8 @@ Score::FileError importMusicXml(Score* score, const QString& name)
 
       // open the MusicXML file
       QFile xmlFile(name);
+      if (!xmlFile.exists())
+            return Score::FILE_NOT_FOUND;
       if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qDebug("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open MusicXML file\n");
@@ -681,6 +683,8 @@ Score::FileError importCompressedMusicXml(Score* score, const QString& name)
 
       // open the compressed MusicXML file
       QFile mxlFile(name);
+      if (!mxlFile.exists())
+            return Score::FILE_NOT_FOUND;
       if (!mxlFile.open(QIODevice::ReadOnly)) {
             qDebug("importCompressedMusicXml() could not open compressed MusicXML file '%s'", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open compressed MusicXML file\n");
