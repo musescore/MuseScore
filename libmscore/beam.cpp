@@ -278,6 +278,22 @@ void Beam::layout1()
                         }
                   }
             }
+      else if (staff()->isDrumStaff()) {
+            if (_direction != MScore::AUTO) {
+                  _up = _direction == MScore::UP;
+                  }
+            else {
+                  foreach (ChordRest* cr, _elements) {
+                        if (cr->type() == CHORD) {
+                              c2 = static_cast<Chord*>(cr);
+                              _up = c2->up();
+                              break;
+                              }
+                        }
+                  }
+            foreach(ChordRest* cr, _elements)
+                  cr->setUp(_up);
+            }
       else {
             //PITCHED STAVES (and TAB's with stems through staves)
             minMove = 1000;
