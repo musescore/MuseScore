@@ -1749,6 +1749,12 @@ void Measure::read(XmlReader& e, int staffIdx)
 
       QList<Chord*> graceNotes;
 
+      //sort tuplet elements. needed for nested tuplets #22537
+      if (score()->mscVersion() <= 114) {
+            for(Tuplet* t : e.tuplets()) {
+                  t->sortElements();
+                  }
+            }
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
 
