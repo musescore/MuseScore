@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>892</width>
-    <height>608</height>
+    <height>633</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1505,24 +1505,28 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QRadioButton" name="showIntervalMeasureNumber">
-            <property name="text">
-             <string>Interval</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSpinBox" name="intervalMeasureNumber">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>5</number>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QRadioButton" name="showIntervalMeasureNumber">
+              <property name="text">
+               <string>Interval</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="intervalMeasureNumber">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="value">
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -5156,8 +5160,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>showMeasureNumber</tabstop>
   <tabstop>showFirstMeasureNumber</tabstop>
   <tabstop>showEverySystemMeasureNumber</tabstop>
-  <tabstop>showIntervalMeasureNumber</tabstop>
-  <tabstop>intervalMeasureNumber</tabstop>
   <tabstop>showAllStaffsMeasureNumber</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>bracketDistance</tabstop>
