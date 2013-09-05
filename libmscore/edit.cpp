@@ -729,7 +729,6 @@ void Score::putNote(const Position& p, bool replace)
                   break;
             }
 
-      _is.pitch = nval.pitch;
       expandVoice();
       ChordRest* cr = _is.cr();
       bool addToChord = false;
@@ -827,8 +826,6 @@ void Score::repitchNote(const Position& p, bool replace)
       int octave = step / 7;
       nval.pitch = step2pitch(step) + octave * 12 + acci;
       nval.tpc   = step2tpc(step % 7, acci);
-
-      _is.pitch = nval.pitch;
 
       Chord* chord;
       if (_is.cr()->type() == Element::REST) {

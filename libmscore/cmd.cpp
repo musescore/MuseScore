@@ -500,7 +500,6 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
             setLayoutAll(true);
 
             select(note, SELECT_SINGLE, 0);
-            _is.pitch = note->pitch();
             }
       moveToNextInputPos();
       endCmd();
@@ -1253,7 +1252,6 @@ void Score::upDown(bool up, UpDownMode mode)
                               }
                         break;
                   }
-            _is.pitch = newPitch;
 
             if ((oNote->pitch() != newPitch) || (oNote->tpc() != newTpc)) {
                   // remove accidental if present to make sure
@@ -2135,7 +2133,6 @@ void Score::cmd(const QAction* a)
                   Element* e = upAlt(el);
                   if (e) {
                         if (e->type() == Element::NOTE) {
-                              _is.pitch = static_cast<Note*>(e)->pitch();
                               _playNote = true;
                               }
                         select(e, SELECT_SINGLE, 0);
@@ -2149,7 +2146,6 @@ void Score::cmd(const QAction* a)
                   Element* e = downAlt(el);
                   if (e) {
                         if (e->type() == Element::NOTE) {
-                              _is.pitch = static_cast<Note*>(e)->pitch();
                               _playNote = true;
                               }
                         select(e, SELECT_SINGLE, 0);
@@ -2163,7 +2159,6 @@ void Score::cmd(const QAction* a)
                   Element* e = upAltCtrl(static_cast<Note*>(el));
                   if (e) {
                         if (e->type() == Element::NOTE) {
-                              _is.pitch = static_cast<Note*>(e)->pitch();
                               _playNote = true;
                               }
                         select(e, SELECT_SINGLE, 0);
@@ -2177,7 +2172,6 @@ void Score::cmd(const QAction* a)
                   Element* e = downAltCtrl(static_cast<Note*>(el));
                   if (e) {
                         if (e->type() == Element::NOTE) {
-                              _is.pitch = static_cast<Note*>(e)->pitch();
                               _playNote = true;
                               }
                         select(e, SELECT_SINGLE, 0);

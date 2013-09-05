@@ -38,7 +38,6 @@ class InputState {
 
    public:
       bool rest;              // rest mode
-      int pitch;              // last pitch
       NoteType noteType;
       BeamMode beamMode;
       bool noteEntryMode;

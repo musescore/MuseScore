@@ -34,7 +34,6 @@ InputState::InputState() :
    _string(VISUAL_STRING_NONE),
    _repitchMode(false),
    rest(false),
-   pitch(72),
    noteType(NOTE_NORMAL),
    beamMode(BeamMode::AUTO),
    noteEntryMode(false),
