@@ -88,13 +88,13 @@ void MuseData::musicalAttribute(QString s, Part* part)
                         }
                   staffIdx -= 1;
 /*                  int clef = item.mid(col).toInt();
-                  ClefType mscoreClef = CLEF_G;
+                  ClefType mscoreClef = ClefType::G;
                   switch(clef) {
-                        case 4:  mscoreClef = CLEF_G; break;
-                        case 22: mscoreClef = CLEF_F; break;
-                        case 13: mscoreClef = CLEF_C3; break;
-                        case 14: mscoreClef = CLEF_C2; break;
-                        case 15: mscoreClef = CLEF_C1; break;
+                        case 4:  mscoreClef = ClefType::G; break;
+                        case 22: mscoreClef = ClefType::F; break;
+                        case 13: mscoreClef = ClefType::C3; break;
+                        case 14: mscoreClef = ClefType::C2; break;
+                        case 15: mscoreClef = ClefType::C1; break;
                         default:
                               qDebug("unknown clef %d\n", clef);
                               break;

@@ -268,7 +268,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
       if (measureNumber == 1) {
             // clef
             Ms::Clef* clef = new Ms::Clef(score);
-            clef->setClefType(Ms::CLEF_G);
+            clef->setClefType(Ms::ClefType::G);
             clef->setTrack(0);
             Ms::Segment* s = currentMeasure->getSegment(clef, tick);
             s->add(clef);

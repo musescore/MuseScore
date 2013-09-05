@@ -40,36 +40,38 @@ bool ClefTypeList::operator!=(const ClefTypeList& t) const
 
 ClefTypeList ClefList::clef(int tick) const
       {
-      if (empty())
-            return ClefTypeList(CLEF_G, CLEF_G);
-      auto i = upperBound(tick);
-      if (i == begin())
-            return ClefTypeList(CLEF_G, CLEF_G);
-      --i;
-      return i.value();
+      auto i = upper_bound(tick);
+      if (i != begin())
+            --i;
+      return i->second;
       }
 
 //---------------------------------------------------------
 //   setClef
 //---------------------------------------------------------
 
-void ClefList::setClef(int tick, ClefTypeList idx)
+void ClefList::setClef(int tick, ClefTypeList ctl)
       {
-      replace(tick, idx);
+      auto i = find(tick);
+      if (i == end())
+            insert(std::pair<int, ClefTypeList>(tick, ctl));
+      else
+            i->second = ctl;
       }
 
 //---------------------------------------------------------
 //   ClefList::read
+//    only used for 1.3 scores
 //---------------------------------------------------------
 
 void ClefList::read(XmlReader& e, Score* cs)
       {
-      insert(0, ClefTypeList(ClefType(0), ClefType(0)));
+      clear();
       while (e.readNextStartElement()) {
             if (e.name() == "clef") {
                   int tick    = e.intAttribute("tick", 0);
                   ClefType ct = Clef::clefType(e.attribute("idx", "0"));
-                  insert(cs->fileDivision(tick), ClefTypeList(ct, ct));
+                  insert(std::pair<int, ClefTypeList>(cs->fileDivision(tick), ClefTypeList(ct, ct)));
                   e.readNext();
                   }
             else

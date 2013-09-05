@@ -2322,22 +2322,22 @@ void ExportLy::writeClef(int clef)
 {
   out << "\\clef ";
   switch(clef) {
-  case CLEF_G:      out << "treble\n";         break;
-  case CLEF_F:      out << "bass\n";           break;
-  case CLEF_G1:     out << "\"treble^8\"\n";   break;
-  case CLEF_G2:     out << "\"treble^15\"\n";  break;
-  case CLEF_G3:     out << "\"treble_8\"\n";   break;
-  case CLEF_F8:     out << "\"bass_8\"\n";     break;
-  case CLEF_F15:    out << "\"bass_15\"\n";    break;
-  case CLEF_F_B:    out << "bass\n";           break;
-  case CLEF_F_C:    out << "bass\n";           break;
-  case CLEF_C1:     out <<  "soprano\n";       break;
-  case CLEF_C2:     out <<  "mezzo-soprano\n"; break;
-  case CLEF_C3:     out <<  "alto\n";          break;
-  case CLEF_C4:     out <<  "tenor\n";         break;
-  case CLEF_TAB2:
-  case CLEF_TAB:    out <<  "tab\n";           break;
-  case CLEF_PERC:   out <<  "percussion\n";    break;
+  case ClefType::G:      out << "treble\n";         break;
+  case ClefType::F:      out << "bass\n";           break;
+  case ClefType::G1:     out << "\"treble^8\"\n";   break;
+  case ClefType::G2:     out << "\"treble^15\"\n";  break;
+  case ClefType::G3:     out << "\"treble_8\"\n";   break;
+  case ClefType::F8:     out << "\"bass_8\"\n";     break;
+  case ClefType::F15:    out << "\"bass_15\"\n";    break;
+  case ClefType::F_B:    out << "bass\n";           break;
+  case ClefType::F_C:    out << "bass\n";           break;
+  case ClefType::C1:     out <<  "soprano\n";       break;
+  case ClefType::C2:     out <<  "mezzo-soprano\n"; break;
+  case ClefType::C3:     out <<  "alto\n";          break;
+  case ClefType::C4:     out <<  "tenor\n";         break;
+  case ClefType::TAB2:
+  case ClefType::TAB:    out <<  "tab\n";           break;
+  case ClefType::PERC:   out <<  "percussion\n";    break;
   }
 
 }
@@ -4169,37 +4169,37 @@ void ExportLy::writeScore()
     relativ="";
 	  switch(staff->clef(0))
 	    {
-	    case CLEF_G:
+	    case ClefType::G:
 	      relativ="'";
 	      staffpitch=12*5;
 	      break;
-	    case CLEF_TAB:
-	    case CLEF_PERC:
-	    case CLEF_PERC2:
-	    case CLEF_G3:
-	    case CLEF_F:
+	    case ClefType::TAB:
+	    case ClefType::PERC:
+	    case ClefType::PERC2:
+	    case ClefType::G3:
+	    case ClefType::F:
 	      relativ="";
 	      staffpitch=12*4;
 	      break;
-	    case CLEF_G1:
-	    case CLEF_G2:
+	    case ClefType::G1:
+	    case ClefType::G2:
 	      relativ="''";
 	      staffpitch=12*6;
 	      break;
-	    case CLEF_F_B:
-	    case CLEF_F_C:
-	    case CLEF_F8:
+	    case ClefType::F_B:
+	    case ClefType::F_C:
+	    case ClefType::F8:
 	      relativ=",";
 	      staffpitch=12*3;
 	      break;
-	    case CLEF_F15:
+	    case ClefType::F15:
 	      relativ=",,";
 	      staffpitch=12*2;
 	      break;
-	    case CLEF_C1:
-	    case CLEF_C2:
-	    case CLEF_C3:
-	    case CLEF_C4:
+	    case ClefType::C1:
+	    case ClefType::C2:
+	    case ClefType::C3:
+	    case ClefType::C4:
 	      relativ="'";
 	      staffpitch=12*5;
 	      break;

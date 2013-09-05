@@ -108,6 +108,7 @@ ChordRest* prevChordRest(ChordRest* cr)
       return 0;
       }
 
+#if 0
 //---------------------------------------------------------
 //   noteLessThan
 //---------------------------------------------------------
@@ -116,6 +117,7 @@ static bool noteLessThan(const Note* n1, const Note* n2)
       {
       return n1->pitch() <= n2->pitch();
       }
+#endif
 
 //---------------------------------------------------------
 //   upAlt

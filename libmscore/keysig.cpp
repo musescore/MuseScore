@@ -120,7 +120,7 @@ void KeySig::layout()
       keySymbols.clear();
 
       // determine current clef for this staff
-      int clef = 0;
+      ClefType clef = ClefType::G;
       if (staff())
             clef = staff()->clef(segment());
 
@@ -179,11 +179,13 @@ void KeySig::layout()
       // naturals should go AFTER accidentals if they should not go before!
       bool suffixNaturals = naturalsOn && !prefixNaturals;
 
+      const char* lines = ClefInfo::lines(clef);
+
       // add prefixed naturals, if any
       if (prefixNaturals) {
             for (int i = 0; i < 7; ++i) {
                   if (naturals & (1 << i)) {
-                        addLayout(naturalSym, xo, clefTable[clef].lines[i + coffset]);
+                        addLayout(naturalSym, xo, lines[i + coffset]);
                         xo += 1.0;
                         }
                   }
@@ -191,22 +193,23 @@ void KeySig::layout()
       // add accidentals
       static const qreal sspread = 1.0;
       static const qreal fspread = 1.0;
+
       switch(t1) {
-            case 7:  addLayout(sharpSym, xo + 6.0 * sspread, clefTable[clef].lines[6]);
-            case 6:  addLayout(sharpSym, xo + 5.0 * sspread, clefTable[clef].lines[5]);
-            case 5:  addLayout(sharpSym, xo + 4.0 * sspread, clefTable[clef].lines[4]);
-            case 4:  addLayout(sharpSym, xo + 3.0 * sspread, clefTable[clef].lines[3]);
-            case 3:  addLayout(sharpSym, xo + 2.0 * sspread, clefTable[clef].lines[2]);
-            case 2:  addLayout(sharpSym, xo + 1.0 * sspread, clefTable[clef].lines[1]);
-            case 1:  addLayout(sharpSym, xo,                 clefTable[clef].lines[0]);
+            case 7:  addLayout(sharpSym, xo + 6.0 * sspread, lines[6]);
+            case 6:  addLayout(sharpSym, xo + 5.0 * sspread, lines[5]);
+            case 5:  addLayout(sharpSym, xo + 4.0 * sspread, lines[4]);
+            case 4:  addLayout(sharpSym, xo + 3.0 * sspread, lines[3]);
+            case 3:  addLayout(sharpSym, xo + 2.0 * sspread, lines[2]);
+            case 2:  addLayout(sharpSym, xo + 1.0 * sspread, lines[1]);
+            case 1:  addLayout(sharpSym, xo,                 lines[0]);
                      break;
-            case -7: addLayout(flatSym, xo + 6.0 * fspread, clefTable[clef].lines[13]);
-            case -6: addLayout(flatSym, xo + 5.0 * fspread, clefTable[clef].lines[12]);
-            case -5: addLayout(flatSym, xo + 4.0 * fspread, clefTable[clef].lines[11]);
-            case -4: addLayout(flatSym, xo + 3.0 * fspread, clefTable[clef].lines[10]);
-            case -3: addLayout(flatSym, xo + 2.0 * fspread, clefTable[clef].lines[9]);
-            case -2: addLayout(flatSym, xo + 1.0 * fspread, clefTable[clef].lines[8]);
-            case -1: addLayout(flatSym, xo,                 clefTable[clef].lines[7]);
+            case -7: addLayout(flatSym, xo + 6.0 * fspread, lines[13]);
+            case -6: addLayout(flatSym, xo + 5.0 * fspread, lines[12]);
+            case -5: addLayout(flatSym, xo + 4.0 * fspread, lines[11]);
+            case -4: addLayout(flatSym, xo + 3.0 * fspread, lines[10]);
+            case -3: addLayout(flatSym, xo + 2.0 * fspread, lines[9]);
+            case -2: addLayout(flatSym, xo + 1.0 * fspread, lines[8]);
+            case -1: addLayout(flatSym, xo,                 lines[7]);
             case 0:
                   break;
             default:
@@ -219,12 +222,12 @@ void KeySig::layout()
             if(t1 > 0) {                  // after sharps, add a little more space
                   xo += 0.15;
                   // if last sharp (t1) is above next natural (t1+1)...
-                  if (clefTable[clef].lines[t1] < clefTable[clef].lines[t1+1])
+                  if (lines[t1] < lines[t1+1])
                         xo += 0.2;        // ... add more space
                   }
             for (int i = 0; i < 7; ++i) {
                   if (naturals & (1 << i)) {
-                        addLayout(naturalSym, xo, clefTable[clef].lines[i + coffset]);
+                        addLayout(naturalSym, xo, lines[i + coffset]);
                         xo += 1.0;
                         }
                   }

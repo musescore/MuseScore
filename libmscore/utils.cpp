@@ -287,7 +287,7 @@ int pitchKeyAdjust(int step, int key)
 //   y2pitch
 //---------------------------------------------------------
 
-int y2pitch(qreal y, int clef, qreal _spatium)
+int y2pitch(qreal y, ClefType clef, qreal _spatium)
       {
       int l = lrint(y / _spatium * 2.0);
       return line2pitch(l, clef, 0);
@@ -298,9 +298,9 @@ int y2pitch(qreal y, int clef, qreal _spatium)
 //    key  -7 ... +7
 //---------------------------------------------------------
 
-int line2pitch(int line, int clef, int key)
+int line2pitch(int line, ClefType clef, int key)
       {
-      int l      = clefTable[clef].pitchOffset - line;
+      int l      = ClefInfo::pitchOffset(clef) - line;
       int octave = 0;
       while (l < 0) {
             l += 7;
@@ -712,7 +712,7 @@ int absStep(int pitch)
 
 int absStep(int line, ClefType clef)
       {
-      return clefTable[clef].pitchOffset - line;
+      return ClefInfo::pitchOffset(clef) - line;
       }
 
 //---------------------------------------------------------
@@ -724,7 +724,7 @@ int absStep(int line, ClefType clef)
 
 int relStep(int line, ClefType clef)
       {
-      return clefTable[clef].pitchOffset - line;
+      return ClefInfo::pitchOffset(clef) - line;
       }
 
 int relStep(int pitch, int tpc, ClefType clef)

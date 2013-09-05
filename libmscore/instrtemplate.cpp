@@ -114,8 +114,8 @@ InstrumentTemplate::InstrumentTemplate()
 //      useTablature       = false;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
-            clefTypes[i]._concertClef = CLEF_G;
-            clefTypes[i]._transposingClef = CLEF_G;
+            clefTypes[i]._concertClef = ClefType::G;
+            clefTypes[i]._transposingClef = ClefType::G;
             staffLines[i]  = 5;
             smallStaff[i]  = false;
             bracket[i]     = NO_BRACKET;
@@ -208,15 +208,15 @@ void InstrumentTemplate::write(Xml& xml) const
             xml.tag("staves", staves);
       for (int i = 0; i < staves; ++i) {
             if (clefTypes[i]._concertClef == clefTypes[i]._transposingClef) {
-                  QString tag = clefTable[clefTypes[i]._concertClef].tag;
+                  QString tag = ClefInfo::tag(clefTypes[i]._concertClef);
                   if (i)
                         xml.tag(QString("clef staff=\"%1\"").arg(i+1), tag);
                   else
                         xml.tag("clef", tag);
                   }
             else {
-                  QString tag1 = clefTable[clefTypes[i]._concertClef].tag;
-                  QString tag2 = clefTable[clefTypes[i]._transposingClef].tag;
+                  QString tag1 = ClefInfo::tag(clefTypes[i]._concertClef);
+                  QString tag2 = ClefInfo::tag(clefTypes[i]._transposingClef);
                   if (i) {
                         xml.tag(QString("concertClef staff=\"%1\"").arg(i+1), tag1);
                         xml.tag(QString("transposingClef staff=\"%1\"").arg(i+1), tag2);

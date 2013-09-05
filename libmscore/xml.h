@@ -37,7 +37,6 @@ class XmlReader : public QXmlStreamReader {
       int _track;
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
-      QList<ClefList*> _clefListList;      // used reading 1.2 scores
 
    public:
       XmlReader(QFile*);
@@ -81,7 +80,6 @@ class XmlReader : public QXmlStreamReader {
 
       QList<Tuplet*>& tuplets()        { return _tuplets; }
       QList<Beam*>& beams()            { return _beams; }
-      QList<ClefList*>& clefListList() { return _clefListList; }
       };
 
 //---------------------------------------------------------

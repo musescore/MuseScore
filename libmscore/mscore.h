@@ -247,36 +247,6 @@ enum StaffGroup {
 const int STAFF_GROUP_MAX = TAB_STAFF_GROUP + 1;      // out of enum to avoid compiler complains about not handled switch cases
 
 //---------------------------------------------------------
-//   ClefType
-//---------------------------------------------------------
-
-enum ClefType {
-      CLEF_INVALID = -1,
-      CLEF_G = 0,
-      CLEF_G1,
-      CLEF_G2,
-      CLEF_G3,
-      CLEF_F,
-      CLEF_F8,
-      CLEF_F15,
-      CLEF_F_B,
-      CLEF_F_C,
-      CLEF_C1,
-      CLEF_C2,
-      CLEF_C3,
-      CLEF_C4,
-      CLEF_TAB,
-      CLEF_PERC,
-      CLEF_C5,
-      CLEF_G4,
-      CLEF_F_8VA,
-      CLEF_F_15MA,
-      CLEF_PERC2,
-      CLEF_TAB2,
-      CLEF_MAX
-      };
-
-//---------------------------------------------------------
 //   Text Style Type
 //    Enumerate the list of build in text styles.
 //    Must be in sync with list in setDefaultStyle().

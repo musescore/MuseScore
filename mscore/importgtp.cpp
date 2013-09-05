@@ -1,21 +1,13 @@
 //=============================================================================
-//  MusE Score
-//  Linux Music Score Editor
-//  $Id:$
+//  MuseScore
+//  Music Composition & Notation
 //
 //  Copyright (C) 2011 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "importgtp.h"
@@ -790,16 +782,16 @@ qDebug("BeginRepeat=============================================\n");
             //
             Staff* staff = score->staff(i);
             int patch = channelDefaults[midiChannel].patch;
-            ClefType clefId = CLEF_G;
+            ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
-                  clefId = CLEF_PERC;
+                  clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
-                  clefId = CLEF_G3;
+                  clefId = ClefType::G3;
             else if (patch >= 32 && patch < 40)
-                  clefId = CLEF_F8;
+                  clefId = ClefType::F8;
             Measure* measure = score->firstMeasure();
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
@@ -1270,16 +1262,16 @@ qDebug("BeginRepeat=============================================\n");
             //
             Staff* staff = score->staff(i);
             int patch = channelDefaults[midiChannel].patch;
-            ClefType clefId = CLEF_G;
+            ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
-                  clefId = CLEF_PERC;
+                  clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
-                  clefId = CLEF_G3;
+                  clefId = ClefType::G3;
             else if (patch >= 32 && patch < 40)
-                  clefId = CLEF_F8;
+                  clefId = ClefType::F8;
             Measure* measure = score->firstMeasure();
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
@@ -1788,16 +1780,16 @@ void GuitarPro4::read(QFile* fp)
             //
             Staff* staff = score->staff(i);
             int patch = channelDefaults[midiChannel].patch;
-            ClefType clefId = CLEF_G;
+            ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
-                  clefId = CLEF_PERC;
+                  clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
-                  clefId = CLEF_G3;
+                  clefId = ClefType::G3;
             else if (patch >= 32 && patch < 40)
-                  clefId = CLEF_F8;
+                  clefId = ClefType::F8;
             Measure* measure = score->firstMeasure();
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
@@ -2478,16 +2470,16 @@ void GuitarPro5::readTracks()
             // determine clef
             //
             int patch = channelDefaults[midiChannel].patch;
-            ClefType clefId = CLEF_G;
+            ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
-                  clefId = CLEF_PERC;
+                  clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
                   staff->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
-                  clefId = CLEF_G3;
+                  clefId = ClefType::G3;
             else if (patch >= 32 && patch < 40)
-                  clefId = CLEF_F8;
+                  clefId = ClefType::F8;
             Measure* measure = score->firstMeasure();
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);

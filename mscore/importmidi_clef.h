@@ -7,6 +7,7 @@
 namespace Ms {
 
 class Staff;
+enum class ClefType : signed char;
 
 namespace MidiClef {
 
