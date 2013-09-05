@@ -21,6 +21,7 @@
 #include "chordlist.h"
 #include "page.h"
 #include "mscore.h"
+#include "clef.h"
 
 namespace Ms {
 
@@ -568,7 +569,7 @@ StyleData::StyleData()
             { ST_ottavaLineWidth,             QVariant(.1) },
             { ST_ottavaLineStyle,             QVariant(int(Qt::DashLine)) },
             { ST_ottavaNumbersOnly,           true },
-            { ST_tabClef,                     QVariant(int(CLEF_TAB2)) },
+            { ST_tabClef,                     QVariant(int(ClefType::TAB2)) },
             { ST_tremoloWidth,                QVariant(1.2) },  // tremolo stroke width: note head width
             { ST_tremoloBoxHeight,            QVariant(0.65) },
             { ST_tremoloStrokeWidth,          QVariant(0.35) },

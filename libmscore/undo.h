@@ -75,6 +75,7 @@ class Box;
 class Accidental;
 class Spanner;
 class BarLine;
+enum class ClefType : signed char;
 
 // #define DEBUG_UNDO
 

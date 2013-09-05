@@ -96,6 +96,7 @@ struct PageContext;
 class BarLine;
 class Bracket;
 enum class OttavaType;
+enum class ClefType : signed char;
 
 extern bool showRubberBand;
 

@@ -52,7 +52,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
       a->setShortcut(Qt::Key_Delete);
       addAction(a);
       clef = new Clef(gscore);
-      clef->setClefType(CLEF_G);
+      clef->setClefType(ClefType::G);
       connect(a, SIGNAL(triggered()), SLOT(deleteElement()));
       }
 

@@ -29,7 +29,7 @@ namespace Ms {
 #define TR(a)  QT_TRANSLATE_NOOP("clefTable", a)
 
 // table must be in sync with enum ClefType
-const ClefInfo clefTable[] = {
+const ClefInfo ClefInfo::clefTable[] = {
 // tag    xmlName    line oCh pOff|-lines for sharps---||---lines for flats--|   name
 { "G",    "G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef"),            STANDARD_STAFF_GROUP  },
 { "G8va", "G",         2,  1, 52, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Treble clef 8va"),        STANDARD_STAFF_GROUP  },
@@ -40,20 +40,33 @@ const ClefInfo clefTable[] = {
 { "F15mb","F",         4, -2, 19, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 15mb"),         STANDARD_STAFF_GROUP  },
 { "F3",   "F",         3,  0, 35, { 4, 0, 3,-1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, TR("Baritone clef (F clef)"), STANDARD_STAFF_GROUP  },
 { "F5",   "F",         5,  0, 31, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Subbass clef"),           STANDARD_STAFF_GROUP  },
-{ "C1",   "C",         1,  0, 43, { 5, 1, 4, 0, 3,-1, 2, 2,-1, 3, 0, 4, 1, 5 }, TR("Soprano clef"),           STANDARD_STAFF_GROUP  }, // CLEF_C1
-{ "C2",   "C",         2,  0, 41, { 3, 6, 2, 5, 1, 4, 0, 0, 4, 1, 5, 2, 6, 3 }, TR("Mezzo-soprano clef"),     STANDARD_STAFF_GROUP  }, // CLEF_C2
-{ "C3",   "C",         3,  0, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 }, TR("Alto clef"),              STANDARD_STAFF_GROUP  }, // CLEF_C3
-{ "C4",   "C",         4,  0, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, TR("Tenor clef"),             STANDARD_STAFF_GROUP  }, // CLEF_C4
+{ "C1",   "C",         1,  0, 43, { 5, 1, 4, 0, 3,-1, 2, 2,-1, 3, 0, 4, 1, 5 }, TR("Soprano clef"),           STANDARD_STAFF_GROUP  }, // C1
+{ "C2",   "C",         2,  0, 41, { 3, 6, 2, 5, 1, 4, 0, 0, 4, 1, 5, 2, 6, 3 }, TR("Mezzo-soprano clef"),     STANDARD_STAFF_GROUP  }, // C2
+{ "C3",   "C",         3,  0, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 }, TR("Alto clef"),              STANDARD_STAFF_GROUP  }, // C3
+{ "C4",   "C",         4,  0, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, TR("Tenor clef"),             STANDARD_STAFF_GROUP  }, // C4
 { "TAB",  "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Tablature"),              TAB_STAFF_GROUP       },
 { "PERC", "percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Percussion"),             PERCUSSION_STAFF_GROUP},
-{ "C5",   "C",         5,  0, 35, { 4, 0, 3,-1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, TR("Baritone clef (C clef)"), STANDARD_STAFF_GROUP  }, // CLEF_C5
-{ "G1",   "G",         1,  0, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("French violin clef"),     STANDARD_STAFF_GROUP  }, // CLEF_G4
-{ "F8va", "F",         4,  1, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 8va"),          STANDARD_STAFF_GROUP  }, // CLEF_F_8VA
-{ "F15ma","F",         4,  2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 15ma"),         STANDARD_STAFF_GROUP  }, // CLEF_F_15MA
-{ "PERC2","percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Percussion"),             PERCUSSION_STAFF_GROUP}, // CLEF_PERC2 placeholder
+{ "C5",   "C",         5,  0, 35, { 4, 0, 3,-1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, TR("Baritone clef (C clef)"), STANDARD_STAFF_GROUP  }, // C5
+{ "G1",   "G",         1,  0, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("French violin clef"),     STANDARD_STAFF_GROUP  }, // G4
+{ "F8va", "F",         4,  1, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 8va"),          STANDARD_STAFF_GROUP  }, // F_8VA
+{ "F15ma","F",         4,  2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, TR("Bass clef 15ma"),         STANDARD_STAFF_GROUP  }, // F_15MA
+{ "PERC2","percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Percussion"),             PERCUSSION_STAFF_GROUP}, // PERC2 placeholder
 { "TAB2", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, TR("Tablature2"),             TAB_STAFF_GROUP       },
       };
 #undef TR
+
+//---------------------------------------------------------
+//   tag2type
+//---------------------------------------------------------
+
+ClefType ClefInfo::tag2type(const QString& s)
+      {
+      for (unsigned i = 0; i < sizeof(ClefInfo::clefTable)/sizeof(*ClefInfo::clefTable); ++i) {
+            if (clefTable[i]._tag == s)
+                  return ClefType(i);
+            }
+      return ClefType::G;
+      }
 
 //---------------------------------------------------------
 //   Clef
@@ -66,9 +79,9 @@ Clef::Clef(Score* s)
 
       _showCourtesy               = true;
       _small                      = false;
-      _clefTypes._concertClef     = CLEF_INVALID;
-      _clefTypes._transposingClef = CLEF_INVALID;
-      curClefType                 = CLEF_G;
+      _clefTypes._concertClef     = ClefType::INVALID;
+      _clefTypes._transposingClef = ClefType::INVALID;
+      curClefType                 = ClefType::G;
       curLines                    = -1;
       curLineDist                 = 1.0;
       }
@@ -144,7 +157,7 @@ void Clef::layout()
             if (staffType->group() == TAB_STAFF_GROUP) {
                   // if current clef type not compatible with tablature,
                   // set tab clef according to score style
-                  if (clefTable[clefType()].staffGroup != TAB_STAFF_GROUP)
+                  if (ClefInfo::staffGroup(clefType()) != TAB_STAFF_GROUP)
                         setClefType( ClefType(score()->styleI(ST_tabClef)) );
                   }
             // all staff types: init values from staff type
@@ -179,11 +192,11 @@ void Clef::layout1()
       Symbol* symbol = new Symbol(score());
 
       switch (curClefType) {
-            case CLEF_G:                              // G clef on 2nd line
+            case ClefType::G:                              // G clef on 2nd line
                   symbol->setSym(trebleclefSym);
                   yoff = 3.0 * curLineDist;
                   break;
-            case CLEF_G1:                             // G clef 8va on 2nd line
+            case ClefType::G1:                             // G clef 8va on 2nd line
                   {
                   symbol->setSym(trebleclefSym);
                   yoff = 3.0 * curLineDist;
@@ -193,7 +206,7 @@ void Clef::layout1()
                   addElement(number, 1.0 * msp, -5.0 * msp + yoff * _spatium);
                   }
                   break;
-            case CLEF_G2:                             // G clef 15ma on 2nd line
+            case ClefType::G2:                             // G clef 15ma on 2nd line
                   {
                   symbol->setSym(trebleclefSym);
                   yoff = 3.0 * curLineDist;
@@ -207,7 +220,7 @@ void Clef::layout1()
                   addElement(number, 1.4 * msp, -5.0 * msp + yoff * _spatium);
                   }
                   break;
-            case CLEF_G3:                             // G clef 8va bassa on 2nd line
+            case ClefType::G3:                             // G clef 8va bassa on 2nd line
                   {
                   symbol->setSym(trebleclefSym);
                   yoff = 3.0 * curLineDist;
@@ -217,11 +230,11 @@ void Clef::layout1()
                   addElement(number, 1.0 * msp, 4.0 * msp + yoff * _spatium);
                   }
                   break;
-            case CLEF_F:                              // F clef on penultimate line
+            case ClefType::F:                              // F clef on penultimate line
                   symbol->setSym(bassclefSym);
                   yoff = 1.0 * curLineDist;
                   break;
-            case CLEF_F8:                             // F clef 8va bassa on penultimate line
+            case ClefType::F8:                             // F clef 8va bassa on penultimate line
                   {
                   symbol->setSym(bassclefSym);
                   yoff = 1.0 * curLineDist;
@@ -231,7 +244,7 @@ void Clef::layout1()
                   addElement(number, .5* msp, 4.5 * msp + yoff * _spatium);
                   }
                   break;
-            case CLEF_F15:                            // F clef 15ma bassa on penultimate line
+            case ClefType::F15:                            // F clef 15ma bassa on penultimate line
                   {
                   symbol->setSym(bassclefSym);
                   yoff = 1.0 * curLineDist;
@@ -245,54 +258,54 @@ void Clef::layout1()
                   addElement(number, 1.1 * msp, 4.5 * msp + yoff * _spatium);
                   }
                   break;
-            case CLEF_F_B:                            // baritone clef
+            case ClefType::F_B:                            // baritone clef
                   symbol->setSym(bassclefSym);
                   yoff = 2.0 * curLineDist;
                   break;
-            case CLEF_F_C:                            // subbass clef
+            case ClefType::F_C:                            // subbass clef
                   symbol->setSym(bassclefSym);
                   yoff = 0.0;
                   break;
-            case CLEF_C1:                             // C clef in 1st line
+            case ClefType::C1:                             // C clef in 1st line
                   symbol->setSym(altoclefSym);
                   yoff = 4.0 * curLineDist;
                   break;
-            case CLEF_C2:                             // C clef on 2nd line
+            case ClefType::C2:                             // C clef on 2nd line
                   symbol->setSym(altoclefSym);
                   yoff = 3.0 * curLineDist;
                   break;
-            case CLEF_C3:                             // C clef in 3rd line
+            case ClefType::C3:                             // C clef in 3rd line
                   symbol->setSym(altoclefSym);
                   yoff = 2.0 * curLineDist;
                   break;
-            case CLEF_C4:                             // C clef on 4th line
+            case ClefType::C4:                             // C clef on 4th line
                   symbol->setSym(altoclefSym);
                   yoff = 1.0 * curLineDist;
                   break;
-            case CLEF_C5:                             // C clef on 5th line
+            case ClefType::C5:                             // C clef on 5th line
                   symbol->setSym(altoclefSym);
                   yoff = 0.0;
                   break;
-            case CLEF_TAB:                            // TAB clef
+            case ClefType::TAB:                            // TAB clef
                   symbol->setSym(tabclefSym);
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = curLineDist * (curLines - 1) * .5;
                   break;                              // TAB clef alternate style
-            case CLEF_TAB2:
+            case ClefType::TAB2:
                   symbol->setSym(tabclef2Sym);
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = curLineDist * (curLines - 1) * .5;
                   break;
-            case CLEF_PERC:                           // percussion clefs
-            case CLEF_PERC2:
+            case ClefType::PERC:                           // percussion clefs
+            case ClefType::PERC2:
                   symbol->setSym(percussionclefSym);
                   yoff = curLineDist * (curLines - 1) * 0.5;
                   break;
-            case CLEF_G4:                             // G clef in 1st line
+            case ClefType::G4:                             // G clef in 1st line
                   symbol->setSym(trebleclefSym);
                   yoff = 4.0 * curLineDist;
                   break;
-            case CLEF_F_8VA:                          // F clef 8va on penultimate line
+            case ClefType::F_8VA:                          // F clef 8va on penultimate line
                   {
                   symbol->setSym(bassclefSym);
                   yoff = 1.0 * curLineDist;
@@ -302,7 +315,7 @@ void Clef::layout1()
                   addElement(number, .5 * msp, -1.5 * msp + yoff * _spatium);
                   }
                   break;
-            case CLEF_F_15MA:                         // F clef 15ma on penultimate line
+            case ClefType::F_15MA:                         // F clef 15ma on penultimate line
                   {
                   symbol->setSym(bassclefSym);
                   yoff = 1.0 * curLineDist;
@@ -316,8 +329,8 @@ void Clef::layout1()
                   addElement(number, 1.1 * msp, -1.5 * msp + yoff * _spatium);
                   }
                   break;
-            case CLEF_INVALID:
-            case CLEF_MAX:
+            case ClefType::INVALID:
+            case ClefType::MAX:
                   return;
             }
 
@@ -388,7 +401,7 @@ void Clef::setSmall(bool val)
       {
       if (val != _small) {
             _small = val;
-            curClefType = CLEF_INVALID;
+            curClefType = ClefType::INVALID;
             }
       }
 
@@ -413,8 +426,8 @@ void Clef::read(XmlReader& e)
             }
       if (score()->mscVersion() < 113)
             setUserOff(QPointF());
-      if (clefType() == CLEF_INVALID)
-            setClefType(CLEF_G);
+      if (clefType() == ClefType::INVALID)
+            setClefType(ClefType::G);
       }
 
 //---------------------------------------------------------
@@ -424,10 +437,10 @@ void Clef::read(XmlReader& e)
 void Clef::write(Xml& xml) const
       {
       xml.stag(name());
-      if(_clefTypes._concertClef != CLEF_INVALID)
-            xml.tag("concertClefType",     clefTable[_clefTypes._concertClef].tag);
-      if(_clefTypes._transposingClef != CLEF_INVALID)
-            xml.tag("transposingClefType", clefTable[_clefTypes._transposingClef].tag);
+      if(_clefTypes._concertClef != ClefType::INVALID)
+            xml.tag("concertClefType", ClefInfo::tag(_clefTypes._concertClef));
+      if(_clefTypes._transposingClef != ClefType::INVALID)
+            xml.tag("transposingClefType", ClefInfo::tag(_clefTypes._transposingClef));
       if (!_showCourtesy)
             xml.tag("showCourtesyClef", _showCourtesy);
       Element::writeProperties(xml);
@@ -450,9 +463,9 @@ int Clef::tick() const
 void Clef::setClefType(const QString& s)
       {
       ClefType ct = clefType(s);
-      if (ct == CLEF_INVALID) {
+      if (ct == ClefType::INVALID) {
             qDebug("Clef::setSubtype: unknown: <%s>\n", qPrintable(s));
-            ct = CLEF_G;
+            ct = ClefType::G;
             }
       setClefType(ct);
       }
@@ -463,7 +476,7 @@ void Clef::setClefType(const QString& s)
 
 ClefType Clef::clefType(const QString& s)
       {
-      ClefType ct = CLEF_G;
+      ClefType ct = ClefType::G;
       bool ok;
       int i = s.toInt(&ok);
       if (ok) {
@@ -472,37 +485,31 @@ ClefType Clef::clefType(const QString& s)
             //
             switch (i) {
                   default:
-                  case  0: ct = CLEF_G; break;
-                  case  1: ct = CLEF_G1; break;
-                  case  2: ct = CLEF_G2; break;
-                  case  3: ct = CLEF_G3; break;
-                  case  4: ct = CLEF_F; break;
-                  case  5: ct = CLEF_F8; break;
-                  case  6: ct = CLEF_F15; break;
-                  case  7: ct = CLEF_F_B; break;
-                  case  8: ct = CLEF_F_C; break;
-                  case  9: ct = CLEF_C1; break;
-                  case 10: ct = CLEF_C2; break;
-                  case 11: ct = CLEF_C3; break;
-                  case 12: ct = CLEF_C4; break;
-                  case 13: ct = CLEF_TAB; break;
-                  case 14: ct = CLEF_PERC; break;
-                  case 15: ct = CLEF_C5; break;
-                  case 16: ct = CLEF_G4; break;
-                  case 17: ct = CLEF_F_8VA; break;
-                  case 18: ct = CLEF_F_15MA; break;
-                  case 19: ct = CLEF_PERC2; break;
-                  case 20: ct = CLEF_TAB2; break;
+                  case  0: ct = ClefType::G; break;
+                  case  1: ct = ClefType::G1; break;
+                  case  2: ct = ClefType::G2; break;
+                  case  3: ct = ClefType::G3; break;
+                  case  4: ct = ClefType::F; break;
+                  case  5: ct = ClefType::F8; break;
+                  case  6: ct = ClefType::F15; break;
+                  case  7: ct = ClefType::F_B; break;
+                  case  8: ct = ClefType::F_C; break;
+                  case  9: ct = ClefType::C1; break;
+                  case 10: ct = ClefType::C2; break;
+                  case 11: ct = ClefType::C3; break;
+                  case 12: ct = ClefType::C4; break;
+                  case 13: ct = ClefType::TAB; break;
+                  case 14: ct = ClefType::PERC; break;
+                  case 15: ct = ClefType::C5; break;
+                  case 16: ct = ClefType::G4; break;
+                  case 17: ct = ClefType::F_8VA; break;
+                  case 18: ct = ClefType::F_15MA; break;
+                  case 19: ct = ClefType::PERC2; break;
+                  case 20: ct = ClefType::TAB2; break;
                   }
             }
-      else {
-            for (unsigned i = 0; i < sizeof(clefTable)/sizeof(*clefTable); ++i) {
-                  if (clefTable[i].tag == s) {
-                        ct = ClefType(i);
-                        break;
-                        }
-                  }
-            }
+      else
+            ct = ClefInfo::tag2type(s);
       return ct;
       }
 
@@ -514,13 +521,13 @@ void Clef::setClefType(ClefType i)
       {
       if (score()->concertPitch()) {
             _clefTypes._concertClef = i;
-            if (_clefTypes._transposingClef == CLEF_INVALID)
+            if (_clefTypes._transposingClef == ClefType::INVALID)
                   _clefTypes._transposingClef = i;
 
             }
       else {
             _clefTypes._transposingClef = i;
-            if (_clefTypes._concertClef == CLEF_INVALID)
+            if (_clefTypes._concertClef == ClefType::INVALID)
                   _clefTypes._concertClef = i;
             }
       }

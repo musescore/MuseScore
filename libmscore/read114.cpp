@@ -166,7 +166,7 @@ static SymId resolveSymCompatibility(SymId i, QString programVersion)
 //   Staff::read114
 //---------------------------------------------------------
 
-void Staff::read114(XmlReader& e, ClefList& _clefList)
+void Staff::read114(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -179,7 +179,7 @@ void Staff::read114(XmlReader& e, ClefList& _clefList)
             else if (tag == "slashStyle")
                   e.skipCurrentElement();
             else if (tag == "cleflist")
-                  _clefList.read(e, _score);
+                  clefs.read(e, _score);
             else if (tag == "keylist")
                   _keymap.read(e, _score);
             else if (tag == "bracket") {
@@ -209,9 +209,7 @@ void Part::read114(XmlReader& e)
                   Staff* staff = new Staff(_score, this, rstaff);
                   _score->staves().push_back(staff);
                   _staves.push_back(staff);
-                  ClefList* cl = new ClefList;
-                  e.clefListList().append(cl);
-                  staff->read114(e, *cl);
+                  staff->read114(e);
                   ++rstaff;
                   }
             else if (tag == "Instrument") {
@@ -428,10 +426,9 @@ Score::FileError Score::read114(XmlReader& e)
                   s->setBarLineSpan(n - idx);
                   }
 
-            ClefList* cl = e.clefListList().at(idx);
-            for (auto i = cl->constBegin(); i != cl->constEnd(); ++i) {
-                  int tick = i.key();
-                  ClefType clefId = i.value()._concertClef;
+            for (auto i = s->clefList().cbegin(); i != s->clefList().cend(); ++i) {
+                  int tick = i->first;
+                  ClefType clefId = i->second._concertClef;
                   Measure* m = tick2measure(tick);
                   if (!m)
                         continue;
@@ -475,7 +472,6 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             }
-      qDeleteAll(e.clefListList());
 
       for (std::pair<int,Spanner*> p : spanner()) {
             Spanner* s = p.second;

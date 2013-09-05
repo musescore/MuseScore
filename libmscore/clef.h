@@ -32,6 +32,36 @@ class Segment;
 static const int NO_CLEF = -1000;
 
 //---------------------------------------------------------
+//   ClefType
+//---------------------------------------------------------
+
+enum class ClefType : signed char {
+      INVALID = -1,
+      G = 0,
+      G1,
+      G2,
+      G3,
+      F,
+      F8,
+      F15,
+      F_B,
+      F_C,
+      C1,
+      C2,
+      C3,
+      C4,
+      TAB,
+      PERC,
+      C5,
+      G4,
+      F_8VA,
+      F_15MA,
+      PERC2,
+      TAB2,
+      MAX
+      };
+
+//---------------------------------------------------------
 //   ClefTypeList
 //---------------------------------------------------------
 
@@ -50,18 +80,30 @@ struct ClefTypeList {
 ///   Info about a clef.
 //---------------------------------------------------------
 
-struct ClefInfo {
-      const char* tag;        ///< comprehensive name for instruments.xml
-      const char* sign;       ///< Name for musicXml.
-      int line;               ///< Line for musicXml.
-      int octChng;            ///< Octave change for musicXml.
-      int pitchOffset;        ///< Pitch offset for line 0.
-      char lines[14];
-      const char* name;
-      StaffGroup staffGroup;
-      };
+class ClefInfo {
+   public:
+      static const ClefInfo clefTable[];
 
-extern const ClefInfo clefTable[];
+      const char* _tag;        ///< comprehensive name for instruments.xml
+      const char* _sign;       ///< Name for musicXml.
+      int _line;               ///< Line for musicXml.
+      int _octChng;            ///< Octave change for musicXml.
+      int _pitchOffset;        ///< Pitch offset for line 0.
+      char _lines[14];
+      const char* _name;
+      StaffGroup _staffGroup;
+
+   public:
+      static const char* tag(ClefType t)       { return clefTable[int(t)]._tag;         }
+      static const char* sign(ClefType t)      { return clefTable[int(t)]._sign;        }
+      static int line(ClefType t)              { return clefTable[int(t)]._line;        }
+      static int octChng(ClefType t)           { return clefTable[int(t)]._octChng;     }
+      static int pitchOffset(ClefType t)       { return clefTable[int(t)]._pitchOffset; }
+      static const char* lines(ClefType t)     { return clefTable[int(t)]._lines;       }
+      static const char* name(ClefType t)      { return clefTable[int(t)]._name;        }
+      static StaffGroup staffGroup(ClefType t) { return clefTable[int(t)]._staffGroup;  }
+      static ClefType tag2type(const QString&);
+      };
 
 //---------------------------------------------------------
 //   @@ Clef

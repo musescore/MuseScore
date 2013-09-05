@@ -34,6 +34,7 @@ static const char* timeNames[] = { "1/1", "1/2", "1/4", "1/8", "1/16", "1/32", "
 #endif
 
 class Capella;
+enum class ClefType : signed char;
 
 enum CapellaNoteObjectType {
       T_REST, T_CHORD, T_CLEF, T_KEY, T_METER, T_EXPL_BARLINE, T_IMPL_BARLINE,

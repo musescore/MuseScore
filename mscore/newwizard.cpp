@@ -208,7 +208,7 @@ void InstrumentWizard::on_addButton_clicked()
                   sli->setPartIdx(i);
                   sli->staffIdx = -1;
                   if (i > MAX_STAVES)
-                        sli->setClef(ClefTypeList(CLEF_G, CLEF_G));
+                        sli->setClef(ClefTypeList(ClefType::G, ClefType::G));
                   else
                         sli->setClef(it->clefTypes[i]);
                   sli->setStaffType(it->staffTypePreset);
@@ -465,7 +465,7 @@ void InstrumentWizard::createInstruments(Score* cs)
                   ++rstaff;
 
                   staff->init(t, sli->staffType(), cidx);
-                  staff->setInitialClef(sli->clef());
+                  staff->setClef(0, sli->clef());
 
                   if (sli->linked() && !part->staves()->isEmpty()) {
                         Staff* linkedStaff = part->staves()->back();

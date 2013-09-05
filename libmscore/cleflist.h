@@ -24,7 +24,7 @@ class Score;
 //   ClefList
 //---------------------------------------------------------
 
-class ClefList : public QMultiMap<int, ClefTypeList> {
+class ClefList : public std::map<int, ClefTypeList> {
    public:
       ClefList() {}
       ClefTypeList clef(int tick) const;

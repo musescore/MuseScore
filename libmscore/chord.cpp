@@ -626,7 +626,6 @@ void Chord::addLedgerLines(int move)
                   delta = -1;
                   }
             for (int i = from; i < n && i >=0 ; i += delta) {
-                  bool  accid;
                   const Note* note = _notes.at(i);
 
                   int l = note->line();
@@ -644,7 +643,7 @@ void Chord::addLedgerLines(int move)
                   // Experimental:
                   //  shorten ledger line to avoid collisions with accidentals
                   //
-                  accid = (note->accidental() && note->line() >= (l-1) && note->line() <= (l+1) );
+                  // bool accid = (note->accidental() && note->line() >= (l-1) && note->line() <= (l+1) );
                   //
                   // TODO : do something with this accid flag in the following code!
                   //
