@@ -2380,7 +2380,8 @@ Score::FileError importOve(Score* score, const QString& name) {
 	OVE::OveSong oveSong;
 
 	QFile oveFile(name);
-
+	if(!oveFile.exists())
+		return Score::FILE_NOT_FOUND;
 	if (!oveFile.open(QFile::ReadOnly)) {
 		//messageOutString(QString("can't read file!"));
 		return Score::FILE_OPEN_ERROR;

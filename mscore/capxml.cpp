@@ -1103,7 +1103,6 @@ Score::FileError importCapXml(Score* score, const QString& name)
       MQZipReader uz(name);
       if (!uz.exists()) {
             qDebug("importCapXml: <%s> not found", qPrintable(name));
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "file not found");
             return Score::FILE_NOT_FOUND;
             }
 

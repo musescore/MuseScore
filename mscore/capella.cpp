@@ -2348,6 +2348,8 @@ void Capella::read(QFile* fp)
 Score::FileError importCapella(Score* score, const QString& name)
       {
       QFile fp(name);
+      if(!fp.exists())
+            return Score::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
             return Score::FILE_OPEN_ERROR;
 
