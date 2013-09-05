@@ -179,13 +179,15 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   canIgnore = true;
                   break;
             case Score::FILE_TOO_NEW:
-                  msg += QT_TRANSLATE_NOOP(file, "this score was saved using a newer version of MuseScore.<br>\n"
+                  msg += QT_TRANSLATE_NOOP(file, "This score was saved using a newer version of MuseScore.<br>\n"
                          "Visit the <a href=\"http://musescore.org\">MuseScore website</a>"
                          " to obtain the latest version.");
                   canIgnore = true;
                   break;
-            case Score::FILE_ERROR:
             case Score::FILE_NOT_FOUND:
+                  msg = QString(QT_TRANSLATE_NOOP(file, "File not found %1")).arg(name);
+                  break;
+            case Score::FILE_ERROR:
             case Score::FILE_OPEN_ERROR:
             default:
                   msg += MScore::lastError;
