@@ -377,7 +377,7 @@ bool BBFile::read(const QString& name)
 Score::FileError importBB(Score* score, const QString& name)
       {
       BBFile bb;
-      if(QFileInfo(name).exists())
+      if(!QFileInfo(name).exists())
             return Score::FILE_NOT_FOUND;
       if (!bb.read(name)) {
             qDebug("cannot open file <%s>\n", qPrintable(name));

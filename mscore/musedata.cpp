@@ -739,7 +739,7 @@ void MuseData::convert()
 
 Score::FileError importMuseData(Score* score, const QString& name)
       {
-      if(QFileInfo(name).exists())
+      if(!QFileInfo(name).exists())
             return Score::FILE_NOT_FOUND;
       MuseData md(score);
       if (!md.read(name))
