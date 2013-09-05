@@ -44,6 +44,7 @@
 #include <QPointF>
 #include <QVariant>
 #include <QMap>
+#include <QByteArray>
 #include <QDateTime>
 #include <QtGlobal>
 #include <QtDebug>
