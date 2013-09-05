@@ -401,62 +401,62 @@ void OveToMScore::convertGroups() {
 }
 
 ClefType OveClefToClef(OVE::ClefType type){
-	ClefType clef = CLEF_G;
+	ClefType clef = ClefType::G;
 	switch(type){
 	case OVE::Clef_Treble:{
-		clef = CLEF_G;
+		clef = ClefType::G;
 		break;
 	}
 	case OVE::Clef_Bass:{
-		clef = CLEF_F;
+		clef = ClefType::F;
 		break;
 	}
 	case OVE::Clef_Alto:{
-		clef = CLEF_C3;
+		clef = ClefType::C3;
 		break;
 	}
 	case OVE::Clef_UpAlto:{
-		clef = CLEF_C4;
+		clef = ClefType::C4;
 		break;
 	}
 	case OVE::Clef_DownDownAlto:{
-		clef = CLEF_C1;
+		clef = ClefType::C1;
 		break;
 	}
 	case OVE::Clef_DownAlto:{
-		clef = CLEF_C2;
+		clef = ClefType::C2;
 		break;
 	}
 	case OVE::Clef_UpUpAlto:{
-		clef = CLEF_C5;
+		clef = ClefType::C5;
 		break;
 	}
 	case OVE::Clef_Treble8va:{
-		clef = CLEF_G1;
+		clef = ClefType::G1;
 		break;
 	}
 	case OVE::Clef_Bass8va:{
-		clef = CLEF_F_8VA;
+		clef = ClefType::F_8VA;
 		break;
 	}
 	case OVE::Clef_Treble8vb:{
-		clef = CLEF_G3;
+		clef = ClefType::G3;
 		break;
 	}
 	case OVE::Clef_Bass8vb:{
-		clef = CLEF_F8;
+		clef = ClefType::F8;
 		break;
 	}
 	case OVE::Clef_Percussion1:{
-		clef = CLEF_PERC;
+		clef = ClefType::PERC;
 		break;
 	}
 	case OVE::Clef_Percussion2:{
-		clef = CLEF_PERC2;
+		clef = ClefType::PERC2;
 		break;
 	}
 	case OVE::Clef_TAB:{
-		clef = CLEF_TAB;
+		clef = ClefType::TAB;
 		break;
 	}
 	default:

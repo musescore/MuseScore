@@ -1,3 +1,15 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2013 Werner Schweer
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
+//=============================================================================
+
 #include "importmidi_clef.h"
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
@@ -135,7 +147,7 @@ class TieStateMachine
 
 ClefType clefTypeFromAveragePitch(int averagePitch)
       {
-      return averagePitch < midPitch() ? CLEF_F : CLEF_G;
+      return averagePitch < midPitch() ? ClefType::F : ClefType::G;
       }
 
 void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
@@ -214,7 +226,7 @@ Segment* enlargeSegToPrev(Segment *s, int strack, int counterLimit, int lPitch, 
 
 void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       {
-      ClefType currentClef = staff->initialClef()._concertClef;
+      ClefType currentClef = staff->clefTypeList(0)._concertClef;
       createClef(currentClef, staff, 0);
 
       const auto trackOpers = preferences.midiImportOperations.trackOperations(indexOfOperation);
@@ -264,45 +276,45 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                         && tieState != TieStateMachine::State::TIED_BACK) {
 
                   if (avgPitch.pitch() < lowPitch) {
-                        if (currentClef == CLEF_G) {
+                        if (currentClef == ClefType::G) {
                               Segment *s = (counter > 0) ? prevSeg : seg;
-                              currentClef = CLEF_F;
+                              currentClef = ClefType::F;
                               s = enlargeSegToPrev(s, strack, counterLimit, midPitch, highPitch);
                               createSmallClef(currentClef, s, staff);
                               }
                         }
                   else if (avgPitch.pitch() >= lowPitch && avgPitch.pitch() < midPitch) {
-                        if (currentClef == CLEF_G) {
+                        if (currentClef == ClefType::G) {
                               if (counter < counterLimit) {
                                     if (counter == 0)
                                           prevSeg = seg;
                                     ++counter;
                                     }
                               else {
-                                    currentClef = CLEF_F;
+                                    currentClef = ClefType::F;
                                     auto s = enlargeSegToPrev(prevSeg, strack, counterLimit, midPitch, highPitch);
                                     createSmallClef(currentClef, s, staff);
                                     }
                               }
                         }
                   else if (avgPitch.pitch() >= midPitch && avgPitch.pitch() < highPitch) {
-                        if (currentClef == CLEF_F) {
+                        if (currentClef == ClefType::F) {
                               if (counter < counterLimit){
                                     if (counter == 0)
                                           prevSeg = seg;
                                     ++counter;
                                     }
                               else {
-                                    currentClef = CLEF_G;
+                                    currentClef = ClefType::G;
                                     auto s = enlargeSegToPrev(prevSeg, strack, counterLimit, lowPitch, midPitch);
                                     createSmallClef(currentClef, s, staff);
                                     }
                               }
                         }
                   else if (avgPitch.pitch() >= highPitch) {
-                        if (currentClef == CLEF_F) {
+                        if (currentClef == ClefType::F) {
                               Segment *s = (counter > 0) ? prevSeg : seg;
-                              currentClef = CLEF_G;
+                              currentClef = ClefType::G;
                               s = enlargeSegToPrev(s, strack, counterLimit, lowPitch, midPitch);
                               createSmallClef(currentClef, s, staff);
                               }

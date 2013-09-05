@@ -967,7 +967,7 @@ void Note::endDrag()
             _lineOffset = 0;
             // get note context
             int tick    = chord()->tick();
-            int clef    = staff->clef(tick);
+            ClefType clef    = staff->clef(tick);
             int key     = staff->key(tick).accidentalType();
             // determine new pitch of dragged note
             nPitch      = line2pitch(nLine, clef, key);

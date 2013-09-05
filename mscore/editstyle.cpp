@@ -31,6 +31,7 @@
 #include "libmscore/harmony.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/figuredbass.h"
+#include "libmscore/clef.h"
 
 namespace Ms {
 
@@ -408,7 +409,7 @@ void EditStyle::getValues()
       lstyle.set(ST_harmonyFretDist,         Spatium(harmonyFretDist->value()));
       lstyle.set(ST_minHarmonyDistance,      Spatium(minHarmonyDistance->value()));
 
-      lstyle.set(ST_tabClef, clefTab1->isChecked() ? CLEF_TAB : CLEF_TAB2);
+      lstyle.set(ST_tabClef, int(clefTab1->isChecked() ? ClefType::TAB : ClefType::TAB2));
 
       lstyle.set(ST_crossMeasureValues,      crossMeasureValues->isChecked());
       lstyle.set(ST_keySigNaturals,          radioKeySigNatNone->isChecked() ? NAT_NONE :
@@ -650,8 +651,8 @@ void EditStyle::setValues()
       pedalLineWidth->setValue(lstyle.value(ST_pedalLineWidth).toDouble());
       pedalLineStyle->setCurrentIndex(lstyle.value(ST_pedalLineStyle).toInt()-1);
 
-      clefTab1->setChecked(lstyle.value(ST_tabClef).toInt() == CLEF_TAB);
-      clefTab2->setChecked(lstyle.value(ST_tabClef).toInt() == CLEF_TAB2);
+      clefTab1->setChecked(lstyle.value(ST_tabClef).toInt() == int(ClefType::TAB));
+      clefTab2->setChecked(lstyle.value(ST_tabClef).toInt() == int(ClefType::TAB2));
 
       crossMeasureValues->setChecked(lstyle.value(ST_crossMeasureValues).toBool());
       // bool ??:

@@ -619,14 +619,14 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
             if (track.mtrack->drumTrack()) {
                               // drum track
-                  s->setInitialClef(CLEF_PERC);
+                  s->setClef(0, ClefType::PERC);
                   part->instr()->setDrumset(smDrumset);
                   part->instr()->setUseDrumset(true);
                   }
             else {
                   const int avgPitch = MChord::findAveragePitch(track.chords.begin(),
                                                                 track.chords.end());
-                  s->setInitialClef(MidiClef::clefTypeFromAveragePitch(avgPitch));
+                  s->setClef(0, MidiClef::clefTypeFromAveragePitch(avgPitch));
                   if (idx < (tracks.size() - 1) && idx >= 0
                               && isPianoPart(tracks[idx], tracks[idx + 1])) {
                                     // assume that the current track and the next track
@@ -640,7 +640,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                         ++idx;
                         const int avgPitch = MChord::findAveragePitch(tracks[idx].chords.begin(),
                                                                       tracks[idx].chords.end());
-                        ss->setInitialClef(MidiClef::clefTypeFromAveragePitch(avgPitch));
+                        ss->setClef(0, MidiClef::clefTypeFromAveragePitch(avgPitch));
                         tracks[idx].staff = ss;
                         }
                   }

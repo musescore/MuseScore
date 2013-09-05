@@ -483,11 +483,8 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
 
       foreach(Staff* staff, staffList) {
             Score* score = staff->score();
-            if (staff->staffType()->group() != clefTable[st].staffGroup) {
-                  qDebug("Staff::changeClef(%d): invalid staff group, src %d, dst %d",
-                     st, clefTable[st].staffGroup, staff->staffType()->group());
+            if (staff->staffType()->group() != ClefInfo::staffGroup(st))
                   continue;
-                  }
             int tick = seg->tick();
             Measure* measure = score->tick2measure(tick);
             if (!measure) {

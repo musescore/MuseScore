@@ -658,7 +658,7 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
                   *rst = i;
                   if (pitch) {
                         Staff* s = _staves[i];
-                        int clef = s->clef(segment->tick());
+                        ClefType clef = s->clef(segment->tick());
                         *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s->spatium());
                         }
                   if (offset)
@@ -2256,7 +2256,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
             m->cmdAddStaves(staffIdx+1, staffIdx+2, false);
 
       Clef* clef = new Clef(this);
-      clef->setClefType(CLEF_F);
+      clef->setClefType(ClefType::F);
       clef->setTrack((staffIdx+1) * VOICES);
       Segment* seg = firstMeasure()->getSegment(Segment::SegClef, 0);
       clef->setParent(seg);

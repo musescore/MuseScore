@@ -867,7 +867,7 @@ void MusicXml::doCredits()
       // -> use the last key
       if (keys.size() >= 1)
             crwTitle = creditMap.value(keys.at(keys.size() - 1));
-      
+
       // if two credit-words present and both are in the header or the footer,
       // the lowest one is the subtitle, else it is the copyright
       if (keys.size() == 2) {
@@ -4797,7 +4797,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             if (step != "" && 0 <= octave && octave <= 9) {
                   // qDebug("rest step=%s oct=%d", qPrintable(step), octave);
                   ClefType clef = cr->staff()->clef(loc_tick);
-                  int po = clefTable[clef].pitchOffset;
+                  int po = ClefInfo::pitchOffset(clef);
                   int istep = step[0].toLatin1() - 'A';
                   // qDebug(" clef=%d po=%d istep=%d", clef, po, istep);
                   if (istep < 0 || istep > 6) {
@@ -4930,7 +4930,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             if (unpitched) {
                   // determine staff line based on display-step / -octave and clef type
                   ClefType clef = cr->staff()->clef(loc_tick);
-                  int po = clefTable[clef].pitchOffset;
+                  int po = ClefInfo::pitchOffset(clef);
                   int pitch = MusicXMLStepAltOct2Pitch(step[0].toLatin1(), 0, octave);
                   int line = po - absStep(pitch);
 
@@ -5227,7 +5227,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
 
 int MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
       {
-      ClefType clef   = CLEF_G;
+      ClefType clef   = ClefType::G;
       int res = STANDARD_STAFF_TYPE;
       int clefno = e.attribute(QString("number"), "1").toInt() - 1;
       QString c;
@@ -5259,47 +5259,47 @@ int MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
             }
 
       if (c == "G" && i == 0 && line == 2)
-            clef = CLEF_G;
+            clef = ClefType::G;
       else if (c == "G" && i == 1 && line == 2)
-            clef = CLEF_G1;
+            clef = ClefType::G1;
       else if (c == "G" && i == 2 && line == 2)
-            clef = CLEF_G2;
+            clef = ClefType::G2;
       else if (c == "G" && i == -1 && line == 2)
-            clef = CLEF_G3;
+            clef = ClefType::G3;
       else if (c == "G" && i == 0 && line == 1)
-            clef = CLEF_G4;
+            clef = ClefType::G4;
       else if (c == "F" && i == 0 && line == 3)
-            clef = CLEF_F_B;
+            clef = ClefType::F_B;
       else if (c == "F" && i == 0 && line == 4)
-            clef = CLEF_F;
+            clef = ClefType::F;
       else if (c == "F" && i == 1 && line == 4)
-            clef = CLEF_F_8VA;
+            clef = ClefType::F_8VA;
       else if (c == "F" && i == 2 && line == 4)
-            clef = CLEF_F_15MA;
+            clef = ClefType::F_15MA;
       else if (c == "F" && i == -1 && line == 4)
-            clef = CLEF_F8;
+            clef = ClefType::F8;
       else if (c == "F" && i == -2 && line == 4)
-            clef = CLEF_F15;
+            clef = ClefType::F15;
       else if (c == "F" && i == 0 && line == 5)
-            clef = CLEF_F_C;
+            clef = ClefType::F_C;
       else if (c == "C") {
             if (line == 5)
-                  clef = CLEF_C5;
+                  clef = ClefType::C5;
             else if (line == 4)
-                  clef = CLEF_C4;
+                  clef = ClefType::C4;
             else if (line == 3)
-                  clef = CLEF_C3;
+                  clef = ClefType::C3;
             else if (line == 2)
-                  clef = CLEF_C2;
+                  clef = ClefType::C2;
             else if (line == 1)
-                  clef = CLEF_C1;
+                  clef = ClefType::C1;
             }
       else if (c == "percussion") {
-            clef = CLEF_PERC2;
+            clef = ClefType::PERC2;
             res = PERC_DEFAULT_STAFF_TYPE;
             }
       else if (c == "TAB") {
-            clef = CLEF_TAB2;
+            clef = ClefType::TAB2;
             res = TAB_DEFAULT_STAFF_TYPE;
             }
       else

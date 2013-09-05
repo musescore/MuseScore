@@ -481,7 +481,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   int line = on->line() - valTmp;
                   int tick   = chord->tick();
                   Staff* estaff = staff(on->staffIdx() + chord->staffMove());
-                  int clef   = estaff->clef(tick);
+                  ClefType clef   = estaff->clef(tick);
                   int key    = estaff->key(tick).accidentalType();
                   npitch = line2pitch(line, clef, key);
                   ntpc   = pitch2tpc(npitch, key, PREFER_NEAREST);
@@ -1386,8 +1386,8 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       Measure* measure = segment->measure();
       int tick         = segment->tick();
       Staff* estaff    = staff(chord->staffIdx() + chord->staffMove());
-      int clef         = estaff->clef(tick);
-      int step         = clefTable[clef].pitchOffset - note->line();
+      ClefType clef    = estaff->clef(tick);
+      int step         = ClefInfo::pitchOffset(clef) - note->line();
       while (step < 0)
             step += 7;
       step %= 7;
@@ -2318,9 +2318,9 @@ void Score::cmd(const QAction* a)
       else if (cmd == "reset-beammode")
             cmdResetBeamMode();
       else if (cmd == "clef-violin")
-            cmdInsertClef(CLEF_G);
+            cmdInsertClef(ClefType::G);
       else if (cmd == "clef-bass")
-            cmdInsertClef(CLEF_F);
+            cmdInsertClef(ClefType::F);
       else if (cmd == "voice-x12")
             cmdExchangeVoice(0, 1);
       else if (cmd == "voice-x13")

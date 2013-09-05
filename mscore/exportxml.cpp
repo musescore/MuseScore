@@ -268,7 +268,7 @@ class ExportMusicXml {
       int findBracket(const TextLine* tl) const;
       void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff);
-      void clef(int staff, int clef);
+      void clef(int staff, ClefType clef);
       void timesig(TimeSig* tsig);
       void keysig(int key, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
@@ -1110,7 +1110,7 @@ void ExportMusicXml::pitch2xml(Note* note, char& c, int& alter, int& octave)
       Staff* i   = note->score()->staff(staffIdx);
 
       ClefType clef   = i->clef(tick);
-      int offset = clefTable[clef].pitchOffset - 45;  // HACK
+      int offset = ClefInfo::pitchOffset(clef) - 45;  // HACK
 
       int step   = (note->line() - offset + 700) % 7;
       // step = 6 - ((absoluteStaffLine(note->line(), clef) + 3)%7));
@@ -1132,7 +1132,7 @@ void ExportMusicXml::pitch2xml(Note* note, char& c, int& alter, int& octave)
       // note->pitch() and note->line()
       // note->line() is determined by drumMap
       //
-      if (clef == CLEF_PERC || clef == CLEF_PERC2) {
+      if (clef == ClefType::PERC || clef == ClefType::PERC2) {
             alter = 0;
             pitch = line2pitch(note->line(), clef, 0);
             octave = (pitch / 12) - 1;
@@ -1184,7 +1184,7 @@ void ExportMusicXml::unpitch2xml(Note* note, char& step, int& octave)
       Staff* st       = note->staff();
       ClefType ct     = st->clef(tick);
       // offset in lines between staff with current clef and with G clef
-      int clefOffset  = clefTable[ct].pitchOffset - clefTable[CLEF_G].pitchOffset;
+      int clefOffset  = ClefInfo::pitchOffset(ct) - ClefInfo::pitchOffset(ClefType::G);
       // line note would be on on a five line staff with G clef
       // note top line is line 0, bottom line is line 8
       int line5g      = note->line() - clefOffset;
@@ -1427,7 +1427,7 @@ void ExportMusicXml::keysig(int key, int staff, bool visible)
 //   clef
 //---------------------------------------------------------
 
-void ExportMusicXml::clef(int staff, int clef)
+void ExportMusicXml::clef(int staff, ClefType clef)
       {
 #ifdef DEBUG_CLEF
       qDebug("ExportMusicXml::clef(staff %d, clef %d)", staff, clef);
@@ -1437,12 +1437,12 @@ void ExportMusicXml::clef(int staff, int clef)
             xml.stag(QString("clef number=\"%1\"").arg(staff));
       else
             xml.stag("clef");
-      QString sign = clefTable[clef].sign;
-      int line   = clefTable[clef].line;
+      QString sign = ClefInfo::sign(clef);
+      int line   = ClefInfo::line(clef);
       xml.tag("sign", sign);
       xml.tag("line", line);
-      if (clefTable[clef].octChng)
-            xml.tag("clef-octave-change", clefTable[clef].octChng);
+      if (ClefInfo::octChng(clef))
+            xml.tag("clef-octave-change", ClefInfo::octChng(clef));
       xml.etag();
       }
 
@@ -2424,12 +2424,12 @@ void ExportMusicXml::rest(Rest* rest, int staff)
       int oct       = 0;
       int stp       = 0;
       ClefType clef = rest->staff()->clef(rest->tick());
-      int po        = clefTable[clef].pitchOffset;
+      int po        = ClefInfo::pitchOffset(clef);
 
       // Determine y position, but leave at zero in case of tablature staff
       // as no display-step or display-octave should be written for a tablature staff,
 
-      if (clef != CLEF_TAB && clef != CLEF_TAB2) {
+      if (clef != ClefType::TAB && clef != ClefType::TAB2) {
             double yOffsSp = rest->userOff().y() / rest->spatium();              // y offset in spatium (negative = up)
             yOffsSt = -2 * int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5); // same rounded to int (positive = up)
 
@@ -3518,7 +3518,7 @@ void ExportMusicXml::work(const MeasureBase* /*measure*/)
             xml.tag("movement-title", _score->metaTag("movementTitle"));
       }
 
-
+#if 0
 //---------------------------------------------------------
 //   elementRighter // used for harmony order
 //---------------------------------------------------------
@@ -3527,6 +3527,7 @@ static bool elementRighter(const Element* e1, const Element* e2)
       {
       return e1->x() < e2->x();
       }
+#endif
 
 //---------------------------------------------------------
 //  measureStyle -- write measure-style
@@ -3848,7 +3849,7 @@ void ExportMusicXml::keysigTimesig(Measure* m, int strack, int etrack)
       if (tsig)
             timesig(tsig);
       }
-      
+
 //---------------------------------------------------------
 //  identification -- write the identification
 //---------------------------------------------------------
@@ -3868,7 +3869,7 @@ static void identification(Xml& xml, Score const* const score)
 
       if (!score->metaTag("copyright").isEmpty())
             xml.tag("rights", score->metaTag("copyright"));
-      
+
       xml.stag("encoding");
       if (MScore::debugMode) {
             xml.tag("software", QString("MuseScore 0.7.0"));
@@ -3879,10 +3880,10 @@ static void identification(Xml& xml, Score const* const score)
             xml.tag("encoding-date", QDate::currentDate().toString(Qt::ISODate));
             }
       xml.etag();
-      
+
       if (!score->metaTag("source").isEmpty())
             xml.tag("source", score->metaTag("source"));
-      
+
       xml.etag();
       }
 
@@ -4200,10 +4201,10 @@ void ExportMusicXml::write(QIODevice* dev)
                                     el = seg->element(st);
                                     if (el && el->type() == Element::CLEF) {
                                           Clef* cle = static_cast<Clef*>(el);
-                                          int ct = cle->clefType();
+                                          ClefType ct = cle->clefType();
                                           int ti = cle->segment()->tick();
 #ifdef DEBUG_CLEF
-                                          qDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", ti, ct, el->generated());
+                                          qDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", ti, int(ct), el->generated());
 #endif
                                           // output only clef changes, not generated clefs at line beginning
                                           // exception: at tick=0, export clef anyway
@@ -4327,7 +4328,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                           // at line beginning
                                           // also ignore clefs at the start of a measure,
                                           // these have already been output
-                                          int ct = ((Clef*)el)->clefType();
+                                          ClefType ct = ((Clef*)el)->clefType();
 #ifdef DEBUG_CLEF
                                           int ti = seg->tick();
                                           qDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, ct, el->generated());

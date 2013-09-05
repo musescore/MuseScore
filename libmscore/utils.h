@@ -35,13 +35,14 @@ class Segment;
 class System;
 class Element;
 class Note;
+enum class ClefType : signed char;
 
 extern QRectF handleRect(const QPointF& pos);
 
 extern int getStaff(System* system, const QPointF& p);
 extern int pitchKeyAdjust(int note, int key);
-extern int line2pitch(int line, int clef, int key);
-extern int y2pitch(qreal y, int clef, qreal spatium);
+extern int line2pitch(int line, ClefType clef, int key);
+extern int y2pitch(qreal y, ClefType clef, qreal spatium);
 extern int quantizeLen(int, int);
 extern void selectNoteMessage();
 extern void selectNoteRestMessage();
@@ -71,6 +72,7 @@ extern Note* searchTieNote114(Note* note);
 
 extern int absStep(int pitch);
 extern int absStep(int tpc, int pitch);
+
 extern int absStep(int line, ClefType clef);
 extern int relStep(int line, ClefType clef);
 extern int relStep(int pitch, int tpc, ClefType clef);

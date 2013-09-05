@@ -172,7 +172,7 @@ Staff::Staff(Score* s)
       _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
-      _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
+      setClef(0, ClefType::G);
       }
 
 Staff::Staff(Score* s, Part* p, int rs)
@@ -190,7 +190,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
-      _initialClef    = ClefTypeList(CLEF_G, CLEF_G);
+      setClef(0, ClefType::G);
       }
 
 //---------------------------------------------------------
@@ -212,17 +212,7 @@ Staff::~Staff()
 
 ClefTypeList Staff::clefTypeList(int tick) const
       {
-      ClefTypeList ctl = _initialClef;
-      int track  = idx() * VOICES;
-      for (Segment* s = score()->firstSegment(); s; s = s->next1()) {
-            if (s->tick() > tick)
-                  break;
-            if (s->segmentType() != Segment::SegClef)
-                  continue;
-            if (s->element(track) && !s->element(track)->generated())
-                  ctl = static_cast<Clef*>(s->element(track))->clefTypeList();
-            }
-      return ctl;
+      return clefs.clef(tick);
       }
 
 //---------------------------------------------------------
@@ -231,29 +221,13 @@ ClefTypeList Staff::clefTypeList(int tick) const
 
 ClefType Staff::clef(int tick) const
       {
-      auto i = clefs.upper_bound(tick);
-      if (i != clefs.begin())
-            --i;
-      if (i == clefs.end())
-            return score()->concertPitch() ? _initialClef._concertClef : _initialClef._transposingClef;
-      else
-            return i->second->clefType();
+      ClefTypeList c = clefs.clef(tick);
+      return score()->concertPitch() ? c._concertClef : c._transposingClef;
       }
 
 ClefType Staff::clef(Segment* segment) const
       {
-      ClefType ct = score()->concertPitch() ? _initialClef._concertClef : _initialClef._transposingClef;
-      int track = idx() * VOICES;
-      for (;;) {
-            segment = segment->prev1(Segment::SegClef);
-            if (segment == 0)
-                  break;
-            if (segment->element(track)) {
-                  ct = static_cast<Clef*>(segment->element(track))->clefType();
-                  break;
-                  }
-            }
-      return ct;
+      return clef(segment->tick());
       }
 
 //---------------------------------------------------------
@@ -264,6 +238,51 @@ Fraction Staff::timeStretch(int tick) const
       {
       TimeSig* timesig = timeSig(tick);
       return timesig == 0 ? Fraction(1,1) : timesig->stretch();
+      }
+
+//---------------------------------------------------------
+//   addClef
+//---------------------------------------------------------
+
+void Staff::addClef(Clef* clef)
+      {
+      int tick = clef->segment()->tick();
+      if (tick == 0 || !clef->generated())
+            clefs.setClef(tick, clef->clefTypeList());
+      }
+
+//---------------------------------------------------------
+//   setClef
+//---------------------------------------------------------
+
+void Staff::setClef(int tick, const ClefTypeList& ctl)
+      {
+      clefs.setClef(tick, ctl);
+      }
+
+void Staff::setClef(int tick, ClefType ct)
+      {
+      setClef(tick, ClefTypeList(ct, ct));
+      }
+
+//---------------------------------------------------------
+//   removeClef
+//---------------------------------------------------------
+
+void Staff::removeClef(Clef* clef)
+      {
+      if (clef->generated())
+            return;
+      int tick = clef->segment()->tick();
+      if (tick == 0) {
+            setClef(0, ClefType::G);
+            return;
+            }
+      auto i = clefs.find(tick);
+      if (i != clefs.end())
+            clefs.erase(i);
+      else
+            qDebug("Staff::removeClef: Clef at %d not found", tick);
       }
 
 //---------------------------------------------------------
@@ -296,23 +315,6 @@ const Groups& Staff::group(int tick) const
       }
 
 //---------------------------------------------------------
-//   addClef
-//---------------------------------------------------------
-
-void Staff::addClef(Clef* clef)
-      {
-      if (clef->generated()) {
-            if (clef->segment()->tick() == 0)
-                  _initialClef = clef->clefTypeList();
-            return;
-            }
-      if (clef->segment()->measure() == 0)
-            abort();
-      int tick = clef->segment()->tick();
-      clefs.insert(std::pair<int,Clef*>(tick, clef));
-      }
-
-//---------------------------------------------------------
 //   addTimeSig
 //---------------------------------------------------------
 
@@ -322,32 +324,12 @@ void Staff::addTimeSig(TimeSig* timesig)
       }
 
 //---------------------------------------------------------
-//   removeClef
-//---------------------------------------------------------
-
-void Staff::removeClef(Clef* clef)
-      {
-      if (clef->generated())
-            return;
-      int tick = clef->segment()->tick();
-      for (auto i = clefs.lower_bound(tick); i != clefs.upper_bound(tick); ++i) {
-            if (i->second == clef) {
-                  clefs.erase(i);
-                  return;
-                  }
-            }
-      qDebug("Staff::removeClef: Clef at %d not found", tick);
-      // abort();
-      }
-
-//---------------------------------------------------------
 //   removeTimeSig
 //---------------------------------------------------------
 
 void Staff::removeTimeSig(TimeSig* timesig)
       {
-      int tick = timesig->segment()->tick();
-      timesigs.erase(tick);
+      timesigs.erase(timesig->segment()->tick());
       }
 
 //---------------------------------------------------------
@@ -710,15 +692,15 @@ void Staff::setStaffType(StaffType* st)
       //    if necessary
       //
       ClefType ct = clef(0);
-      StaffGroup csg = clefTable[ct].staffGroup;
+      StaffGroup csg = ClefInfo::staffGroup(ct);
 
       if (_staffType->group() != csg) {
             switch(_staffType->group()) {
                   case TAB_STAFF_GROUP:        ct = ClefType(score()->styleI(ST_tabClef)); break;
-                  case STANDARD_STAFF_GROUP:   ct = CLEF_G; break;      // TODO: use preferred clef for instrument
-                  case PERCUSSION_STAFF_GROUP: ct = CLEF_PERC; break;
+                  case STANDARD_STAFF_GROUP:   ct = ClefType::G; break;      // TODO: use preferred clef for instrument
+                  case PERCUSSION_STAFF_GROUP: ct = ClefType::PERC; break;
                   }
-            setInitialClef(ct);
+            clefs.setClef(0, ClefTypeList(ct, ct));
             }
       }
 
@@ -731,11 +713,11 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
       // set staff-type-independent parameters
       if (cidx > MAX_STAVES) {
             setSmall(false);
-            setInitialClef(t->clefTypes[0]);
+            clefs.setClef(0, t->clefTypes[0]);
             }
       else {
             setSmall(t->smallStaff[cidx]);
-            setInitialClef(t->clefTypes[cidx]);         // initial clef will be fixed to staff-type clef by setStaffType()
+            clefs.setClef(0, t->clefTypes[cidx]);     // initial clef will be fixed to staff-type clef by setStaffType()
             setBracket(0, t->bracket[cidx]);
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
@@ -816,20 +798,6 @@ void Staff::spatiumChanged(qreal oldValue, qreal newValue)
 bool Staff::show() const
       {
       return _part->show();
-      }
-
-//---------------------------------------------------------
-//   setInitialClef
-//---------------------------------------------------------
-
-void Staff::setInitialClef(const ClefTypeList& cl)
-      {
-      _initialClef = cl;
-      }
-
-void Staff::setInitialClef(ClefType ct)
-      {
-      _initialClef = ClefTypeList(ct, ct);
       }
 
 //---------------------------------------------------------

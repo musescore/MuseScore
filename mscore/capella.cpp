@@ -460,27 +460,27 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     break;
                               }
                         s->add(chord);
-                        int clef = score->staff(staffIdx)->clef(tick);
+                        ClefType clef = score->staff(staffIdx)->clef(tick);
                         int key  = score->staff(staffIdx)->key(tick).accidentalType();
                         int off;
                         switch (clef) {
-                              case CLEF_G:      off = 0; break;
-                              case CLEF_G1:     off = 7; break;
-                              case CLEF_G2:     off = 14; break;
-                              case CLEF_G3:     off = -7; break;
-                              case CLEF_F:      off = -14; break;
-                              case CLEF_F8:     off = -21; break;
-                              case CLEF_F15:    off = -28; break;
-                              case CLEF_F_B:    off = -14; break;
-                              case CLEF_F_C:    off = -14; break;
-                              case CLEF_C1:     off = -7; break;
-                              case CLEF_C2:     off = -7; break;
-                              case CLEF_C3:     off = -7; break;
-                              case CLEF_C4:     off = -7; break;
-                              case CLEF_C5:     off = -7; break;
-                              case CLEF_G4:     off = 0; break;
-                              case CLEF_F_8VA:  off = -7; break;
-                              case CLEF_F_15MA: off = 0; break;
+                              case ClefType::G:      off = 0; break;
+                              case ClefType::G1:     off = 7; break;
+                              case ClefType::G2:     off = 14; break;
+                              case ClefType::G3:     off = -7; break;
+                              case ClefType::F:      off = -14; break;
+                              case ClefType::F8:     off = -21; break;
+                              case ClefType::F15:    off = -28; break;
+                              case ClefType::F_B:    off = -14; break;
+                              case ClefType::F_C:    off = -14; break;
+                              case ClefType::C1:     off = -7; break;
+                              case ClefType::C2:     off = -7; break;
+                              case ClefType::C3:     off = -7; break;
+                              case ClefType::C4:     off = -7; break;
+                              case ClefType::C5:     off = -7; break;
+                              case ClefType::G4:     off = 0; break;
+                              case ClefType::F_8VA:  off = -7; break;
+                              case ClefType::F_15MA: off = 0; break;
                               default:          off = 0; qDebug("clefType %d not implemented", clef);
                               }
                         // qDebug("clef %d off %d", clef, off);
@@ -562,7 +562,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         CapClef* o = static_cast<CapClef*>(no);
                         ClefType nclef = o->clef();
                         qDebug("%d:%d <Clef> %s line %d oct %d clef %d", tick, staffIdx, o->name(), o->line, o->oct, o->clef());
-                        if (nclef == CLEF_INVALID)
+                        if (nclef == ClefType::INVALID)
                               break;
                         // staff(staffIdx)->setClef(tick, nclef);
                         Clef* clef = new Clef(score);
@@ -1028,6 +1028,10 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       // score->connectSlurs();
       score->connectTies();
       score->fixTicks();
+      score->updateNotes();
+      score->setPlaylistDirty(true);
+      score->setLayoutAll(true);
+      score->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
       }
 
 //---------------------------------------------------------
@@ -1996,28 +2000,28 @@ ClefType CapClef::clefType(FORM form, CLEF_LINE line, OCT oct)
       {
       int idx = form + (line << 3) + (oct << 5);
       switch (idx) {
-            case FORM_G + (LINE_2 << 3) + (OCT_NULL << 5):  return CLEF_G;
-            case FORM_G + (LINE_2 << 3) + (OCT_ALTA << 5):  return CLEF_G1;
-            case FORM_G + (LINE_2 << 3) + (OCT_BASSA << 5): return CLEF_G3;
+            case FORM_G + (LINE_2 << 3) + (OCT_NULL << 5):  return ClefType::G;
+            case FORM_G + (LINE_2 << 3) + (OCT_ALTA << 5):  return ClefType::G1;
+            case FORM_G + (LINE_2 << 3) + (OCT_BASSA << 5): return ClefType::G3;
 
-            case FORM_C + (LINE_1 << 3) + (OCT_NULL << 5):  return CLEF_C1;
-            case FORM_C + (LINE_2 << 3) + (OCT_NULL << 5):  return CLEF_C2;
-            case FORM_C + (LINE_3 << 3) + (OCT_NULL << 5):  return CLEF_C3;
-            case FORM_C + (LINE_4 << 3) + (OCT_NULL << 5):  return CLEF_C4;
-            case FORM_C + (LINE_5 << 3) + (OCT_NULL << 5):  return CLEF_C5;
+            case FORM_C + (LINE_1 << 3) + (OCT_NULL << 5):  return ClefType::C1;
+            case FORM_C + (LINE_2 << 3) + (OCT_NULL << 5):  return ClefType::C2;
+            case FORM_C + (LINE_3 << 3) + (OCT_NULL << 5):  return ClefType::C3;
+            case FORM_C + (LINE_4 << 3) + (OCT_NULL << 5):  return ClefType::C4;
+            case FORM_C + (LINE_5 << 3) + (OCT_NULL << 5):  return ClefType::C5;
 
-            case FORM_F + (LINE_4 << 3) + (OCT_NULL << 5):  return CLEF_F;
-            case FORM_F + (LINE_4 << 3) + (OCT_BASSA << 5): return CLEF_F8;
-            case FORM_F + (LINE_3 << 3) + (OCT_NULL << 5):  return CLEF_F_B;
-            case FORM_F + (LINE_5 << 3) + (OCT_NULL << 5):  return CLEF_F_C;
+            case FORM_F + (LINE_4 << 3) + (OCT_NULL << 5):  return ClefType::F;
+            case FORM_F + (LINE_4 << 3) + (OCT_BASSA << 5): return ClefType::F8;
+            case FORM_F + (LINE_3 << 3) + (OCT_NULL << 5):  return ClefType::F_B;
+            case FORM_F + (LINE_5 << 3) + (OCT_NULL << 5):  return ClefType::F_C;
 
             default:
                   if (form == FORM_NULL)
-                        return CLEF_INVALID;
+                        return ClefType::INVALID;
                   qDebug("unknown clef %d %d %d", form, line, oct);
                   break;
             }
-      return CLEF_INVALID;
+      return ClefType::INVALID;
       }
 
 //---------------------------------------------------------

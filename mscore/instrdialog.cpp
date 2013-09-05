@@ -59,7 +59,7 @@ StaffListItem::StaffListItem(PartListItem* li)
       setPartIdx(0);
       staffIdx = 0;
       setLinked(false);
-      setClef(ClefTypeList(CLEF_G, CLEF_G));
+      setClef(ClefTypeList(ClefType::G, ClefType::G));
       _staffTypeCombo = 0;
       initStaffTypeCombo();
       }
@@ -71,7 +71,7 @@ StaffListItem::StaffListItem()
       staff    = 0;
       setPartIdx(0);
       staffIdx = 0;
-      setClef(ClefTypeList(CLEF_G, CLEF_G));
+      setClef(ClefTypeList(ClefType::G, ClefType::G));
       setLinked(false);
       _staffTypeCombo = 0;
       }
@@ -131,7 +131,7 @@ void StaffListItem::setPartIdx(int val)
 void StaffListItem::setClef(const ClefTypeList& val)
       {
       _clef = val;
-      setText(2, qApp->translate("clefTable", clefTable[_clef._transposingClef].name));
+      setText(2, qApp->translate("clefTable", ClefInfo::name(_clef._transposingClef)));
       }
 
 //---------------------------------------------------------
@@ -184,17 +184,17 @@ void StaffListItem::staffTypeChanged(int idx)
       // check current clef matches new staff type
       int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
       const StaffType* stfType = getListedStaffType(staffTypeIdx);
-      if (stfType->group() != clefTable[_clef._transposingClef].staffGroup) {
+      if (stfType->group() != ClefInfo::staffGroup(_clef._transposingClef)) {
             ClefType clefType;
             switch (stfType->group()) {
                   case STANDARD_STAFF_GROUP:
-                        clefType = CLEF_G2;
+                        clefType = ClefType::G2;
                         break;
                   case TAB_STAFF_GROUP:
-                        clefType = CLEF_TAB2;
+                        clefType = ClefType::TAB2;
                         break;
                   case PERCUSSION_STAFF_GROUP:
-                        clefType = CLEF_PERC;
+                        clefType = ClefType::PERC;
                         break;
                   }
             setClef(ClefTypeList(clefType, clefType));
@@ -945,7 +945,7 @@ void MuseScore::editInstrList()
                         staff->setRstaff(rstaff);
 
                         staff->init(t, sli->staffType(), cidx);
-                        staff->setInitialClef(sli->clef());
+                        staff->setClef(0, sli->clef());
 
                         rootScore->undoInsertStaff(staff, staffIdx + rstaff);
                         if (sli->linked()) {
@@ -1000,7 +1000,7 @@ void MuseScore::editInstrList()
 
                               rootScore->adjustBracketsIns(staffIdx, staffIdx+1);
                               staff->initFromStaffType(sli->staffType());
-                              staff->setInitialClef(sli->clef());
+                              staff->setClef(0, sli->clef());
                               KeySigEvent nKey = part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
