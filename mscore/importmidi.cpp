@@ -599,6 +599,11 @@ bool isPianoPart(const MTrack &t1, const MTrack &t2)
                   && (t1.program >= 0 && t1.program <= 7));
       }
 
+bool isSameChannel(const MTrack &t1, const MTrack &t2)
+      {
+      return (t1.mtrack->outChannel() == t2.mtrack->outChannel());
+      }
+
 //---------------------------------------------------------
 // createInstruments
 //   for drum track, if any, set percussion clef
@@ -706,8 +711,10 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
             Part *part  = mt.staff->part();
             if (mt.name.isEmpty()) {
                   QString name = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
-                  if (!name.isEmpty())
+                  if (!name.isEmpty()) {
+                        mt.name = name;
                         part->setLongName(name);
+                        }
                   }
             else
                   part->setLongName(mt.name);
@@ -773,8 +780,8 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
             processMeta(mt, false);
             if (midiType == MT_UNKNOWN)
                   midiType = MT_GM;
-            if (i % 2 && isPianoPart(tracks[i - 1], tracks[i]))
-                  mt.name = tracks[i - 1].name;
+            if (i % 2 && isSameChannel(tracks[i - 1], tracks[i]))
+                  mt.program = tracks[i - 1].program;
             setTrackInfo(midiType, mt);
                         // pass current track index to the convertTrack function
                         //   through MidiImportOperations
@@ -793,7 +800,7 @@ QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
             if (i % 2) {
                   auto prev = it;
                   --prev;
-                  if (isPianoPart(prev->second, it->second)) {
+                  if (isSameChannel(prev->second, it->second)) {
                         TrackMeta lastMeta = tracksMeta.back();
                         tracksMeta.push_back(lastMeta);
                         continue;
