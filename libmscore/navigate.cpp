@@ -334,10 +334,12 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior)
             return 0;
 
       Measure* measure = element->measure()->nextMeasure();
+      while (measure &&  measure->multiMeasure() < 0)
+            measure = measure->nextMeasure();
       if (measure == 0)
             return 0;
 
-      int endTick = element->measure()->last()->nextChordRest(element->track())->tick();
+      int endTick = element->measure()->last()->nextChordRest(element->track(), true)->tick();
       bool last   = false;
 
       if (selection().state() == SEL_RANGE) {
