@@ -225,8 +225,11 @@ Chord* Chord::linkedClone()
 Chord::~Chord()
       {
       delete _arpeggio;
-      if (_tremolo && _tremolo->chord1() == this)
+      if (_tremolo && _tremolo->chord1() == this) {
+            if (_tremolo->chord2())
+                  _tremolo->chord2()->setTremolo(0);
             delete _tremolo;
+            }
       delete _glissando;
       delete _stemSlash;
       delete _stem;
