@@ -627,6 +627,7 @@ Score::FileError Score::read114(XmlReader& e)
                   nscore->setName(excerpt->title());
                   nscore->rebuildMidiMapping();
                   nscore->updateChannel();
+                  nscore->updateNotes();
                   nscore->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
                   nscore->doLayout();
                   excerpt->setScore(nscore);
