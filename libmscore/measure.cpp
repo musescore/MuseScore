@@ -607,28 +607,24 @@ void Measure::layout2()
             QString s;
             if (smn)
                   s = QString("%1").arg(_no + 1);
-            int sn = 0;
             int nn = 1;
-            if (score()->styleB(ST_measureNumberAllStaffs))
-                  nn = n;
-            else {
+            if (!score()->styleB(ST_measureNumberAllStaffs)) {
                   //find first non invisible staff
                   for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                         MStaff* ms = staves.at(staffIdx);
                         SysStaff* s  = system()->staff(staffIdx);
                         Staff* staff = score()->staff(staffIdx);
                         if (ms->visible() && staff->show() && s->show()) {
-                              sn = staffIdx;
-                              nn = staffIdx + 1;
+                              nn = staffIdx;
                               break;
                               }
                         }
                   }
-            for (int staffIdx = sn; staffIdx < nn; ++staffIdx) {
+            for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                   MStaff* ms = staves.at(staffIdx);
                   Text* t = ms->noText();
                   if (smn) {
-                        if (t == 0) {
+                        if (t == 0 && (staffIdx == nn || score()->styleB(ST_measureNumberAllStaffs))) {
                               t = new Text(score());
                               t->setFlag(ELEMENT_ON_STAFF, true);
                               t->setTrack(staffIdx * VOICES);
@@ -637,9 +633,11 @@ void Measure::layout2()
                               t->setParent(this);
                               score()->undoAddElement(t);
                               }
-                        t->setText(s);
-                        t->layout();
-                        smn = score()->styleB(ST_measureNumberAllStaffs);
+                        if(t) {
+                              t->setText(s);
+                              t->layout();
+                              smn = score()->styleB(ST_measureNumberAllStaffs);
+                              }
                         }
                   else {
                         if (t)
