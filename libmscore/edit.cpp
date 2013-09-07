@@ -1494,8 +1494,11 @@ Lyrics* Score::addLyrics()
             return 0;
             }
       ChordRest* cr;
-      if (el->type() == Element::NOTE)
+      if (el->type() == Element::NOTE) {
             cr = static_cast<Note*>(el)->chord();
+            if(cr->isGrace())
+                  cr = static_cast<ChordRest*>(cr->parent());
+            }
       else if (el->type() == Element::LYRICS)
             cr = static_cast<Lyrics*>(el)->chordRest();
       else
