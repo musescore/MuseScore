@@ -235,11 +235,13 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
       if (modif) {
             // save common properties
             // save-group specific properties
+            if(name->text().isEmpty())
+                  name->setText(createUniqueStaffTypeName(st->group()));
             switch(st->group()) {
                   case STANDARD_STAFF_GROUP:
                         {
                         StaffTypePitched* stp = static_cast<StaffTypePitched*>(st);
-                        stp->setName(o->text());
+                        stp->setName(name->text());
                         stp->setLines(lines->value());
                         stp->setLineDistance(Spatium(lineDistance->value()));
                         stp->setShowBarlines(showBarlines->isChecked());
@@ -336,27 +338,7 @@ void EditStaffType::createNewType()
       int idx       = staffTypeList->currentItem()->data(Qt::UserRole).toInt();
       StaffType* ns = staffTypes[idx]->clone();
 
-      //
-      // create unique new name for StaffType
-      //
-      // count how many types there are already of the same group of the new type
-      for (int i = idx = 0; i < staffTypes.count(); i++)
-            if (staffTypes[i]->group() == ns->group())
-                  idx++;
-      QString name;
-      switch (ns->group())
-      {
-            case STANDARD_STAFF_GROUP:
-                  name = QString("Standard-%1 [*]").arg(idx);
-                  break;
-            case PERCUSSION_STAFF_GROUP:
-                  name = QString("Perc-%1 [*]").arg(idx);
-                  break;
-            case TAB_STAFF_GROUP:
-                  name = QString("Tab-%1 [*]").arg(idx);
-                  break;
-      }
-      ns->setName(name);
+      ns->setName(createUniqueStaffTypeName(ns->group()));
 
       staffTypes.append(ns);
       QListWidgetItem* item = new QListWidgetItem(ns->name());
@@ -812,6 +794,36 @@ void EditStaffType::updateTabPreview()
       presetTablatureCombo->setCurrentIndex(idx);
       presetTablatureCombo->blockSignals(false);
       }
+
+
+//---------------------------------------------------------
+//   createUniqueStaffTypeName
+///  create unique new name for StaffType
+//---------------------------------------------------------
+
+QString EditStaffType::createUniqueStaffTypeName(StaffGroup group)
+      {
+      // count how many types there are already of the same group of the new type
+      int idx       = staffTypeList->currentItem()->data(Qt::UserRole).toInt();
+      for (int i = idx = 0; i < staffTypes.count(); i++)
+            if (staffTypes[i]->group() == group)
+                  idx++;
+      QString name;
+      switch (group)
+            {
+            case STANDARD_STAFF_GROUP:
+                  name = QString("Standard-%1 [*]").arg(idx);
+                  break;
+            case PERCUSSION_STAFF_GROUP:
+                  name = QString("Perc-%1 [*]").arg(idx);
+                  break;
+            case TAB_STAFF_GROUP:
+                  name = QString("Tab-%1 [*]").arg(idx);
+                  break;
+            }
+      return name;
+      }
+
 
 //---------------------------------------------------------
 //   accept
