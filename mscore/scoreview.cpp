@@ -1294,7 +1294,12 @@ void ScoreView::moveCursor(int tick)
                   }
             else {
                   t2 = measure->endTick();
-                  x2 = measure->canvasPos().x() + measure->width();
+                  // measure->width is not good enough because of courtesy keysig, timesig
+                  Segment* seg = measure->findSegment(Segment::SegEndBarLine, measure->tick() + measure->ticks());
+                  if(seg)
+                        x2 = seg->canvasPos().x();
+                  else
+                        x2 = measure->canvasPos().x() + measure->width(); //safety, should not happen
                   }
             t1 += offset;
             t2 += offset;
