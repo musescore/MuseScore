@@ -819,17 +819,16 @@ bool Harmony::isEmpty() const
 
 void Harmony::layout()
       {
-      // calculateBoundingRect()    // for normal symbols this is called in layout: computeMinWidth()
+      calculateBoundingRect();    // for normal symbols this is called in layout: computeMinWidth()
 
       if (!parent()) {
-            calculateBoundingRect();
             setPos(0.0, 0.0);
             return;
             }
       qreal yy = 0.0;
       if (parent()->type() == SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
-            yy = track() < 0 ? 0.0 : m->system()->staffYpage(staffIdx());
+            yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
             yy += score()->styleP(ST_harmonyY);
             }
       else if (parent()->type() == FRET_DIAGRAM)
