@@ -5,6 +5,10 @@
 #include "midi/midifile.h"
 #include "importmidi_fraction.h"
 #include "importmidi_chord.h"
+#include "libmscore/text.h"
+#include "libmscore/measurebase.h"
+#include "libmscore/element.h"
+#include "libmscore/box.h"
 
 
 namespace Ms {
@@ -59,25 +63,54 @@ int findBestTrack(const QList<MTrack> &tracks,
       return bestTrack;
       }
 
+void addTitle(Score *score, const MidiEvent &e, int *textCounter)
+      {
+      const uchar* data = (uchar*)e.edata();
+      QString string((char*)data);
+      const QString textSign = "@T";
+
+      if (string.left(textSign.size()) == textSign) {
+            ++*textCounter;
+            Text* text = new Text(score);
+            if (*textCounter == 1)
+                  text->setTextStyleType(TEXT_STYLE_TITLE);
+            else if (*textCounter == 2)
+                  text->setTextStyleType(TEXT_STYLE_COMPOSER);
+            text->setText(string.right(string.size() - textSign.size()));
+
+            MeasureBase* measure = score->first();
+            if (measure->type() != Element::VBOX) {
+                  measure = new VBox(score);
+                  measure->setTick(0);
+                  measure->setNext(score->first());
+                  score->add(measure);
+                  }
+            measure->add(text);
+            }
+      }
+
 void addLyrics(const MidiFile *mf,
                const MidiTrack &lyricsTrack,
-               const MTrack &trackToInsertLyrics)
+               const Staff *staffAddTo)
       {
+      Score *score = staffAddTo->score();
+      int textCounter = 0;
+
       for (const auto &origEvt: lyricsTrack.events()) {
             const auto &e = origEvt.second;
             if ((e.type() == ME_META) && (e.metaType() == META_TEXT
                                           || e.metaType() == META_LYRIC)) {
                   const auto tick = toMuseScoreTicks(origEvt.first, mf->division());
-                  const auto &chords = trackToInsertLyrics.chords;
-                  if (chords.find(tick) != chords.end()) {
+                  if (tick == ReducedFraction(0, 1)) {
+                        addTitle(score, e, &textCounter);
+                        }
+                  else {
                         const uchar* data = (uchar*)e.edata();
                         QString text((char*)data);
                                     // remove slashes in kar format
                         text = text.replace("/", "");
                         text = text.replace("\\", "");
-                        Staff *staff = trackToInsertLyrics.staff;
-                        Score *score = staff->score();
-                        score->addLyrics(tick.ticks(), staff->idx(), text);
+                        score->addLyrics(tick.ticks(), staffAddTo->idx(), text);
                         }
                   }
             }
@@ -94,7 +127,7 @@ void extractLyrics(const QList<MTrack> &tracks,
                         // it will be the track with max onTime match cases
             int bestTrack = findBestTrack(tracks, mf, t);
             if (bestTrack >= 0)
-                  addLyrics(mf, t, tracks[bestTrack]);
+                  addLyrics(mf, t, tracks[bestTrack].staff);
             }
       }
 
