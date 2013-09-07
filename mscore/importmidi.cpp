@@ -51,6 +51,7 @@
 #include "importmidi_inner.h"
 #include "importmidi_clef.h"
 #include "importmidi_lrhand.h"
+#include "importmidi_lyrics.h"
 
 
 namespace Ms {
@@ -515,11 +516,6 @@ QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       return trackList;
       }
 
-ReducedFraction toMuseScoreTicks(int tick, int oldDivision)
-      {
-      return ReducedFraction::fromTicks((tick * MScore::division + oldDivision / 2) / oldDivision);
-      }
-
 std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                                             TimeSigMap *sigmap,
                                             const MidiFile *mf)
@@ -537,7 +533,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                         //  - create time signature list from meta events
                         //  - create MidiChord list
                         //  - extract some information from track: program, min/max pitch
-            for (auto i : t.events()) {
+            for (const auto &i: t.events()) {
                   const MidiEvent& e = i.second;
                   const auto tick = toMuseScoreTicks(i.first, track.division);
                               // remove time signature events
@@ -848,6 +844,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       createNotes(lastTick, trackList, mf->midiType());
       createTimeSignatures(score);
       score->connectTies();
+      MidiLyrics::extractLyrics(trackList, mf);
       }
 
 void loadMidiData(MidiFile &mf)
