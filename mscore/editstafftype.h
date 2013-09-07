@@ -22,6 +22,7 @@
 #define __EDITSTAFFTYPE_H__
 
 #include "ui_stafftype.h"
+#include "libmscore/mscore.h"
 
 namespace Ms {
 
@@ -61,6 +62,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void tabStemsCompatibility(bool checked);
       void tabMinimShortCompatibility(bool checked);
       void tabStemThroughCompatibility(bool checked);
+      QString createUniqueStaffTypeName(StaffGroup group);
 
    private slots:
       void typeChanged(QListWidgetItem*, QListWidgetItem*);
