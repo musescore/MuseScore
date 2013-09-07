@@ -71,7 +71,10 @@ void addLyrics(const MidiFile *mf,
                   const auto &chords = trackToInsertLyrics.chords;
                   if (chords.find(tick) != chords.end()) {
                         const uchar* data = (uchar*)e.edata();
-                        const QString text((char*)data);
+                        QString text((char*)data);
+                                    // remove slashes in kar format
+                        text = text.replace("/", "");
+                        text = text.replace("\\", "");
                         Staff *staff = trackToInsertLyrics.staff;
                         Score *score = staff->score();
                         score->addLyrics(tick.ticks(), staff->idx(), text);
