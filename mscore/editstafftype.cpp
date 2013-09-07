@@ -235,8 +235,11 @@ void EditStaffType::saveCurrent(QListWidgetItem* o)
       if (modif) {
             // save common properties
             // save-group specific properties
-            if(name->text().isEmpty())
-                  name->setText(createUniqueStaffTypeName(st->group()));
+            if(name->text().isEmpty()) {
+                  QString n = createUniqueStaffTypeName(st->group());
+                  name->setText(n);
+                  o->setText(n);
+                  }
             switch(st->group()) {
                   case STANDARD_STAFF_GROUP:
                         {
