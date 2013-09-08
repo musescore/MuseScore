@@ -576,9 +576,9 @@ void Palette::paintEvent(QPaintEvent* event)
             QRect rShift = r.translated(0, yoffset);
             p.setPen(pen);
             if (idx == selectedIdx)
-                  p.fillRect(r, bgColor.light(200));
+                  p.fillRect(r, MScore::selectColor[0].lighter(225));
             else if (idx == currentIdx)
-                  p.fillRect(r, bgColor.light(118));
+                  p.fillRect(r, bgColor.lighter(200));
             if (cells.isEmpty() || cells[idx] == 0)
                   continue;
 

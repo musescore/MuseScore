@@ -50,7 +50,7 @@ void ShadowNote::draw(QPainter* painter) const
       else
             voice = ps.voice();
 
-      QPen pen(MScore::selectColor[voice].light(140), lw);
+      QPen pen(MScore::selectColor[voice].lighter(140), lw);
       painter->setPen(pen);
 
       sym->draw(painter, magS());
