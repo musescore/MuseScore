@@ -3100,7 +3100,7 @@ void Score::addLyrics(int tick, int staffIdx, const QString& txt)
       if (cr) {
             Lyrics* l = new Lyrics(this);
             l->setText(txt);
-            l->setTrack(staffIdx * VOICES);
+            l->setTrack(track);
             cr->add(l);
             }
       else {
