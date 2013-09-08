@@ -48,6 +48,8 @@ class ReducedFraction
       Fraction f;
       };
 
+ReducedFraction toMuseScoreTicks(int tick, int oldDivision);
+
 } // namespace Ms
 
 
