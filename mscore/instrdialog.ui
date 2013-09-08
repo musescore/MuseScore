@@ -62,6 +62,9 @@
          <property name="columnCount">
           <number>1</number>
          </property>
+         <attribute name="headerVisible">
+          <bool>false</bool>
+         </attribute>
          <column>
           <property name="text">
            <string>Instrument List</string>

@@ -53,6 +53,7 @@ InstrumentWizard::InstrumentWizard(QWidget* parent)
       instrumentList->setSelectionMode(QAbstractItemView::ExtendedSelection);
       partiturList->setSelectionMode(QAbstractItemView::SingleSelection);
       instrumentList->setHeaderLabels(QStringList(tr("Instrument List")));
+      instrumentList->setHeaderHidden(true);
 
       QStringList header = (QStringList() << tr("Staves") << tr("Visib.") << tr("Clef") << tr("Link.") << tr("Staff type"));
       partiturList->setHeaderLabels(header);
