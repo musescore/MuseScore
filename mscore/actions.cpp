@@ -1534,7 +1534,7 @@ Shortcut Shortcut::sc[] = {
          A_SCORE,
          "pan",
          QT_TRANSLATE_NOOP("action","Pan"),
-         QT_TRANSLATE_NOOP("action","Pan score while playing on/off"),
+         QT_TRANSLATE_NOOP("action","Pan score during playback"),
           pan_ICON
          ),
       Shortcut(
@@ -1847,7 +1847,8 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "follow",
-         QT_TRANSLATE_NOOP("action","Follow song")
+         QT_TRANSLATE_NOOP("action","Pan roll during playback"),
+          pan_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
