@@ -203,6 +203,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -222,6 +225,9 @@
        </property>
        <property name="editTriggers">
         <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+       </property>
+       <property name="tabKeyNavigation">
+        <bool>true</bool>
        </property>
        <property name="alternatingRowColors">
         <bool>true</bool>

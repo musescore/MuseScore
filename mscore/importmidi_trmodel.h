@@ -15,6 +15,7 @@ struct TrackCol {
       enum {
             DO_IMPORT = 0,
             TRACK_NUMBER,
+            LYRICS,
             STAFF_NAME,
             INSTRUMENT,
             COL_COUNT
@@ -31,6 +32,7 @@ class TracksModel : public QAbstractTableModel
       void clear();
       void setOperation(int row, MidiOperation::Type operType, const QVariant &operValue);
       void setTrackReorderedIndex(int trackIndex, int reorderIndex);
+      void setLyricsList(const QStringList &list);
 
       TrackData trackData(int trackIndex) const;
       DefinedTrackOperations trackOperations(int row) const;
@@ -50,6 +52,7 @@ class TracksModel : public QAbstractTableModel
       QList<TrackData> tracksData_;
       int trackCount_;
       int colCount_;
+      QStringList lyricsList_;
 
       void setTrackOperation(int trackIndex, MidiOperation::Type operType, const QVariant &operValue);
       void setOperationForAllTracks(MidiOperation::Type operType, const QVariant &operValue);
