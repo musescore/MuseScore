@@ -1525,8 +1525,9 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL,
          A_SCORE,
          "repeat",
-         QT_TRANSLATE_NOOP("action","Repeat"),
-         QT_TRANSLATE_NOOP("action","Play repeats on/off"),
+         QT_TRANSLATE_NOOP("action","Play repeats"),
+         QT_TRANSLATE_NOOP("action","Toggle repeats playback"),
+         QT_TRANSLATE_NOOP("action","Play repeats"),
           repeat_ICON
          ),
       Shortcut(
@@ -1534,6 +1535,7 @@ Shortcut Shortcut::sc[] = {
          A_SCORE,
          "pan",
          QT_TRANSLATE_NOOP("action","Pan"),
+         QT_TRANSLATE_NOOP("action","Toggle pan score"),
          QT_TRANSLATE_NOOP("action","Pan score during playback"),
           pan_ICON
          ),
@@ -1847,6 +1849,8 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "follow",
+         QT_TRANSLATE_NOOP("action","Pan piano roll"),
+         QT_TRANSLATE_NOOP("action","Toggle pan piano roll"),
          QT_TRANSLATE_NOOP("action","Pan roll during playback"),
           pan_ICON
          ),
@@ -2046,8 +2050,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "loop",
          QT_TRANSLATE_NOOP("action","Loop"),
-         QT_TRANSLATE_NOOP("action","Toggle loop"),
-         QT_TRANSLATE_NOOP("action","Playback will continuously restart"),
+         QT_TRANSLATE_NOOP("action","Toggle loop playback"),
+         QT_TRANSLATE_NOOP("action","Loop playback"),
          loop_ICON
          ),
       Shortcut(
@@ -2073,7 +2077,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "metronome",
          QT_TRANSLATE_NOOP("action","Metronome"),
-         QT_TRANSLATE_NOOP("action","toggle metronome"),
+         QT_TRANSLATE_NOOP("action","Toggle metronome playback"),
+         QT_TRANSLATE_NOOP("action","Play metronome during playback"),
          metronome_ICON
          ),
       Shortcut(
@@ -2112,31 +2117,31 @@ Shortcut Shortcut::sc[] = {
          STATE_LYRICS_EDIT,
          0,
          "next-lyric",
-         QT_TRANSLATE_NOOP("action","next syllable")
+         QT_TRANSLATE_NOOP("action","Next syllable")
          ),
       Shortcut(
          STATE_LYRICS_EDIT,
          0,
          "prev-lyric",
-         QT_TRANSLATE_NOOP("action","previous syllable")
+         QT_TRANSLATE_NOOP("action","Previous syllable")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "toggle-visible",
-         QT_TRANSLATE_NOOP("action","toggle visibility")
+         QT_TRANSLATE_NOOP("action","Toggle visibility")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "set-visible",
-         QT_TRANSLATE_NOOP("action","set visible")
+         QT_TRANSLATE_NOOP("action","Set visible")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "unset-visible",
-         QT_TRANSLATE_NOOP("action","set unvisible")
+         QT_TRANSLATE_NOOP("action","Set unvisible")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
