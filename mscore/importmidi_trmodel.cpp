@@ -19,6 +19,7 @@ void TracksModel::reset(const QList<TrackMeta> &tracksMeta)
       for (const auto &meta: tracksMeta) {
             TrackOperations ops;     // initialized by default values - see ctor
             ops.reorderedIndex = i++;
+            ops.lyricTrackIndex = meta.initLyricTrackIndex;
             tracksData_.push_back({meta, ops});
             }
       endResetModel();
@@ -54,6 +55,11 @@ void TracksModel::setTrackReorderedIndex(int trackIndex, int reorderIndex)
       if (!isTrackIndexValid(trackIndex))
             return;
       tracksData_[trackIndex].opers.reorderedIndex = reorderIndex;
+      }
+
+void TracksModel::setLyricsList(const QStringList &list)
+      {
+      lyricsList_ = list;
       }
 
 void TracksModel::setOperationForAllTracks(MidiOperation::Type operType,
@@ -135,7 +141,9 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::PICKUP_MEASURE:
                   trackData.opers.pickupMeasure = operValue.toBool();
                   break;
+
             case MidiOperation::Type::DO_IMPORT:
+            case MidiOperation::Type::LYRIC_TRACK_INDEX:
                   break;
             }
       }
@@ -391,6 +399,17 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                               if (trackIndex == -1)
                                     return "All";
                               return trackIndex + 1;
+                        case TrackCol::LYRICS:
+                              {
+                              if (trackIndex == -1)
+                                    return "";
+                              int lyricTrack = tracksData_[trackIndex].opers.lyricTrackIndex;
+                              if (lyricTrack == -1)
+                                    return "";
+                              if (lyricTrack >= 0 && lyricTrack < lyricsList_.size())
+                                    return lyricsList_[lyricTrack];
+                              }
+                              break;
                         case TrackCol::STAFF_NAME:
                               if (trackIndex == -1)
                                     return "";
@@ -401,6 +420,15 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                               return tracksData_[trackIndex].meta.instrumentName;
                         default:
                               break;
+                        }
+                  break;
+            case Qt::EditRole:
+                  if (index.column() == TrackCol::LYRICS && trackIndex != -1) {
+                        if (!lyricsList_.isEmpty()) {
+                              auto list = QStringList("");
+                              list.append(lyricsList_);
+                              return list;
+                              }
                         }
                   break;
             case Qt::CheckStateRole:
@@ -415,7 +443,10 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         }
                   break;
             case Qt::TextAlignmentRole:
-                  return Qt::AlignCenter;
+                  if (index.column() == TrackCol::LYRICS)
+                        return Qt::AlignLeft + Qt::AlignVCenter;
+                  else
+                        return Qt::AlignCenter;
                   break;
             case Qt::ToolTipRole:
                   if (trackIndex != -1) {
@@ -442,6 +473,11 @@ Qt::ItemFlags TracksModel::flags(const QModelIndex &index) const
       Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
       if (index.column() == TrackCol::DO_IMPORT)
             flags |= Qt::ItemIsUserCheckable;
+      if (index.column() == TrackCol::LYRICS
+                  && !lyricsList_.isEmpty()
+                  && trackIndexFromRow(index.row()) != -1) {
+            flags |= Qt::ItemIsEditable;
+            }
       return flags;
       }
 
@@ -472,10 +508,24 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int r
                   trackData->opers.doImport = value.toBool();
                   result = true;
                   }
+            else if (index.column() == TrackCol::LYRICS && role == Qt::EditRole) {
+                  int lyricIndex = value.toInt() - 1;
+                              // reset another tracks with this index
+                  for (int i = 0; i != tracksData_.size(); ++i) {
+                        if (tracksData_[i].opers.lyricTrackIndex == lyricIndex) {
+                              tracksData_[i].opers.lyricTrackIndex = -1;
+                              const auto idx = this->index(rowFromTrackIndex(i), TrackCol::LYRICS);
+                              emit dataChanged(idx, idx);
+                              }
+                        }
+                  trackData->opers.lyricTrackIndex = lyricIndex;
+                  result = true;
+                  }
+
             if (result) {
                               // update checkbox of current track row
                   emit dataChanged(index, index);
-                              // update checkbox of all tracks row
+                              // update checkbox of <all tracks> row
                   const auto allIndex = this->index(0, TrackCol::DO_IMPORT);
                   emit dataChanged(allIndex, allIndex);
                   }
@@ -491,6 +541,8 @@ QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int r
                         return "Import";
                   case TrackCol::TRACK_NUMBER:
                         return "Track";
+                  case TrackCol::LYRICS:
+                        return "Lyrics";
                   case TrackCol::STAFF_NAME:
                         return "Staff Name";
                   case TrackCol::INSTRUMENT:

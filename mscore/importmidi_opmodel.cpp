@@ -70,16 +70,6 @@ OperationsModel::OperationsModel()
       reduceToShorter->parent = quantValue;
       quantValue->children.push_back(std::unique_ptr<Node>(reduceToShorter));
 
-
-//      Node *humanPerformance = new Node;
-//      humanPerformance->name = "Human performance";
-//      humanPerformance->oper.type = MidiOperation::Type::QUANT_HUMAN;
-//      humanPerformance->oper.value = Quantization().humanPerformance;
-//      humanPerformance->parent = quantValue;
-//      quantValue->children.push_back(std::unique_ptr<Node>(humanPerformance));
-//      controller->quantHuman = humanPerformance;
-
-
       Node *useDots = new Node;
       useDots->name = "Use dots";
       useDots->oper.type = MidiOperation::Type::USE_DOTS;
@@ -473,7 +463,9 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
             node->oper.value = QVariant();
       else {
             switch (node->oper.type) {
-                  case MidiOperation::Type::DO_IMPORT: break;
+                  case MidiOperation::Type::DO_IMPORT:
+                  case MidiOperation::Type::LYRIC_TRACK_INDEX:
+                        break;
 
                   case MidiOperation::Type::QUANT_VALUE:
                         node->oper.value = (int)opers.opers.quantize.value; break;
@@ -629,14 +621,6 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   pickupMeasure->visible = allTracksSelected;
             result = true;
             }
-
-//      if (quantHuman) {
-//            bool oneTrack = (trackCount == 1);
-//            if (oneTrack != quantHuman->visible) {
-//                  quantHuman->visible = oneTrack;
-//                  result = true;
-//                  }
-//            }
 
       return result;
       }

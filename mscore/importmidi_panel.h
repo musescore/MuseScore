@@ -31,7 +31,7 @@ class ImportMidiPanel : public QWidget
       void setPrefferedVisible(bool visible);
       void setMidiPrefOperations(const QString &fileName);
 
-private slots:
+   private slots:
       void updateUi();
       void onCurrentTrackChanged(const QModelIndex &currentIndex);
       void onOperationChanged(const QModelIndex &index);
@@ -54,6 +54,7 @@ private slots:
       void clearMidiPrefOperations();
       bool isMidiFileExists() const;
       void showOrHideStaffNameCol(const QList<TrackMeta> &tracksMeta);
+      void showOrHideLyricsCol(const QList<TrackData> &tracksData);
 
       Ui::ImportMidiPanel *ui;
       QTimer *updateUiTimer;
@@ -61,6 +62,7 @@ private slots:
       TracksModel *tracksModel;
       OperationsModel *operationsModel;
       OperationsDelegate *operationsDelegate;
+      OperationsDelegate *tracksDelegate;
       bool importInProgress;
       bool prefferedVisible_;
       bool reopenInProgress;
