@@ -2141,7 +2141,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "unset-visible",
-         QT_TRANSLATE_NOOP("action","Set unvisible")
+         QT_TRANSLATE_NOOP("action","Set invisible")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
