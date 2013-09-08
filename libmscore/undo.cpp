@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -1341,6 +1341,12 @@ RemoveElement::RemoveElement(Element* e)
                   score->undoRemoveElement(cr->tuplet());
             if (e->type() == Element::CHORD) {
                   Chord* chord = static_cast<Chord*>(e);
+                  // remove tremolo between 2 notes
+                  if (chord->tremolo()) {
+                        Tremolo* tremolo = chord->tremolo();
+                        if (tremolo->twoNotes())
+                              score->undoRemoveElement(tremolo);
+                        }
                   foreach(Note* note, chord->notes()) {
                         if (note->tieFor() && note->tieFor()->endNote())
                               score->undoRemoveElement(note->tieFor());
