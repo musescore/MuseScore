@@ -196,7 +196,7 @@
       <property name="handleWidth">
        <number>2</number>
       </property>
-      <widget class="QTableView" name="tableViewTracks">
+      <widget class="TracksView" name="tableViewTracks">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -235,6 +235,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TracksView</class>
+   <extends>QTableView</extends>
+   <header>mscore/importmidi_trview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="musescore.qrc"/>
  </resources>
