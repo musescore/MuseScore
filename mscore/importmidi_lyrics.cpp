@@ -43,6 +43,9 @@ int findBestTrack(const QList<MTrack> &tracks,
       int maxMatches = 0;
 
       for (int i = 0; i != tracks.size(); ++i) {
+            if (tracks[i].mtrack->drumTrack())
+                  continue;
+
             int matches = 0;
             for (const auto &origEvt: lyricsTrack.events()) {
                   const auto &e = origEvt.second;
