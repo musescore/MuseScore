@@ -80,9 +80,10 @@ ViewRect::ViewRect(QWidget* w)
 void ViewRect::paintEvent(QPaintEvent* ev)
       {
       QPainter p(this);
-      QPen pen(MScore::selectColor[0], 2.0);
+      QColor c(MScore::selectColor[0]);
+      QPen pen(c, 2.0);
       p.setPen(pen);
-      p.setBrush(QColor(0, 0, 255, 40));
+      p.setBrush(QColor(c.red(), c.green(), c.blue(), 40));
       p.drawRect(ev->rect());
       }
 
@@ -108,7 +109,7 @@ Navigator::Navigator(NScrollArea* sa, QWidget* parent)
 //   resizeEvent
 //---------------------------------------------------------
 
-void Navigator::resizeEvent(QResizeEvent* ev)
+void Navigator::resizeEvent(QResizeEvent* /*ev*/)
       {
       if (_score) {
             rescale();
@@ -323,7 +324,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
             page->scanElements(&p, paintElement, false);
             if (page->score()->layoutMode() == LayoutPage) {
                   p.setFont(QFont("FreeSans", 400));  // !!
-                  p.setPen(QColor(0, 0, 255, 50));
+                  p.setPen(MScore::layoutBreakColor);
                   p.drawText(page->bbox(), Qt::AlignCenter, QString("%1").arg(page->no()+1));
                   }
             p.translate(-pos);
