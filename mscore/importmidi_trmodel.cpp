@@ -417,6 +417,18 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
             case Qt::TextAlignmentRole:
                   return Qt::AlignCenter;
                   break;
+            case Qt::ToolTipRole:
+                  if (trackIndex != -1) {
+                        switch (index.column()) {
+                              case TrackCol::STAFF_NAME:
+                                    return tracksData_[trackIndex].meta.staffName;
+                              case TrackCol::INSTRUMENT:
+                                    return tracksData_[trackIndex].meta.instrumentName;
+                              default:
+                                    break;
+                              }
+                        }
+                  break;
             default:
                   break;
             }
