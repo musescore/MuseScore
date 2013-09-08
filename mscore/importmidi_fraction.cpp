@@ -1,4 +1,5 @@
 #include "importmidi_fraction.h"
+#include "libmscore/mscore.h"
 
 
 namespace Ms {
@@ -133,6 +134,13 @@ bool ReducedFraction::operator==(const ReducedFraction& val) const
 bool ReducedFraction::operator!=(const ReducedFraction& val) const
       {
       return f != val.fraction();
+      }
+
+//-------------------------------------------------------------------------
+
+ReducedFraction toMuseScoreTicks(int tick, int oldDivision)
+      {
+      return ReducedFraction::fromTicks((tick * MScore::division + oldDivision / 2) / oldDivision);
       }
 
 } // namespace Ms
