@@ -736,23 +736,6 @@ void Score::putNote(const Position& p, bool replace)
       if (cr) {
             // retrieve total duration of current chord
             TDuration d = cr->durationType();
-            Note* note = 0;
-            if (cr->type() == Element::CHORD) {
-                  Fraction f = cr->duration();
-                  note = static_cast<Chord*>(cr)->upNote();
-                  if (note) {
-                        Note* note2 = note;
-                        while (note2->tieFor() && note2->tieFor()->endNote()) {
-                              note2 = note2->tieFor()->endNote();
-                              f += note2->chord()->duration();
-                              }
-                        TDuration dd(f);
-                        if (dd.isValid())
-                              d = dd;
-                        }
-                  else
-                        qDebug("note not found: %d!", nval.pitch);
-                  }
             // if not in replace mode AND chord duration == input duration AND not rest input
             // we need to add to current chord (otherwise, we will need to replace it or create a new onw)
             if (!replace
@@ -784,7 +767,7 @@ void Score::putNote(const Position& p, bool replace)
                   else {                        // not TAB
                         // if a note with the same pitch already exists in the chord, remove it
                         Chord* chord = static_cast<Chord*>(cr);
-                        note = chord->findNote(nval.pitch);
+                        Note* note = chord->findNote(nval.pitch);
                         if (note) {
                               if (chord->notes().size() > 1)
                                     undoRemoveElement(note);
