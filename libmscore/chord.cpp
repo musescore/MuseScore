@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -225,8 +225,11 @@ Chord* Chord::linkedClone()
 Chord::~Chord()
       {
       delete _arpeggio;
-      if (_tremolo && _tremolo->chord1() == this)
+      if (_tremolo && _tremolo->chord1() == this) {
+            if (_tremolo->chord2())
+                  _tremolo->chord2()->setTremolo(0);
             delete _tremolo;
+            }
       delete _glissando;
       delete _stemSlash;
       delete _stem;
@@ -460,6 +463,9 @@ void Chord::remove(Element* e)
                         int dots = d.dots();
                         d          = d.shift(1);
                         d.setDots(dots);
+                        Fraction f = duration();
+                        if (f.numerator() > 0)
+                              d = TDuration(f);
                         if (tremolo->chord1())
                               tremolo->chord1()->setDurationType(d);
                         if (tremolo->chord2())

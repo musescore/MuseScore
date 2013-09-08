@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -71,6 +71,7 @@
 #include "mscore.h"
 #include "accidental.h"
 #include "sequencer.h"
+#include "tremolo.h"
 
 namespace Ms {
 
@@ -716,6 +717,15 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   }
             Fraction td(cr->duration());
 
+            // remove tremolo between 2 notes, if present
+            if (cr->type() == Element::CHORD) {
+                  Chord* c = static_cast<Chord*>(cr);
+                  if (c->tremolo()) {
+                        Tremolo* tremolo = c->tremolo();
+                        if (tremolo->twoNotes())
+                              undoRemoveElement(tremolo);
+                        }
+                  }
             Tuplet* ltuplet = cr->tuplet();
             if (cr->tuplet() != tuplet) {
                   //
@@ -950,9 +960,14 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
             deselectAll();
             if (cr->type() == Element::CHORD) {
                   //
-                  // remove ties
+                  // remove ties and tremolo between 2 notes
                   //
                   Chord* c = static_cast<Chord*>(cr);
+                  if (c->tremolo()) {
+                        Tremolo* tremolo = c->tremolo();
+                        if (tremolo->twoNotes())
+                              undoRemoveElement(tremolo);
+                        }
                   foreach(Note* n, c->notes()) {
                         if (n->tieFor())
                               undoRemoveElement(n->tieFor());
