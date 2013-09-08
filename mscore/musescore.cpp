@@ -1537,6 +1537,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       showMessage(cs->filePath(), 2000);
       if (_navigator && _navigator->widget())
             navigator()->setScoreView(view);
+      if (loop()) {
+            cs->updateLoopCursors();
+            cv->showLoopCursors();
+            }
       }
 
 //---------------------------------------------------------
@@ -4159,7 +4163,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   cs->showLoopCursors();
                   }
             else {
-                  seq->loopStop();
                   cs->hideLoopCursors();
                   }
             }
