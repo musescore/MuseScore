@@ -148,7 +148,7 @@ void genIcons()
       for (int i = 0; i < VOICES; ++i) {
             icons[voice1_ICON + i] = new QIcon;
             QPixmap image(iw, ih);
-            QColor c(MScore::selectColor[i].light(180));
+            QColor c(MScore::selectColor[i].lighter(180));
             image.fill(c);
             QPainter painter(&image);
             painter.setFont(QFont("FreeSans", 8));
@@ -159,7 +159,7 @@ void genIcons()
             icons[voice1_ICON +i]->addPixmap(image);
 
             painter.begin(&image);
-            c = QColor(MScore::selectColor[i].light(140));
+            c = QColor(MScore::selectColor[i].lighter(140));
             painter.fillRect(0, 0, iw, ih, c);
             painter.setPen(QPen(Qt::black));
             painter.drawText(QRect(0, 0, iw, ih), Qt::AlignCenter, vtext[i]);
