@@ -299,7 +299,7 @@ Element::Element(Score* s) :
    _track(-1),
    _color(MScore::defaultColor),
    _mag(1.0),
-   _tag(1),
+   _tag(0),
    _score(s),
    itemDiscovered(0)
       {
@@ -658,9 +658,8 @@ void Element::writeProperties(Xml& xml) const
             }
       if (_tag != 0x1) {
             for (int i = 1; i < MAX_TAGS; i++) {
-                  if (_tag == ((unsigned)1 << i)) {
-                        xml.tag("tag", score()->layerTags()[i]);
-                        break;
+                if ((_tag & (unsigned)1 << i) != 0) {
+                        xml.tag("tag", score()->tagSetTags()[i]);
                         }
                   }
             }
@@ -727,9 +726,8 @@ bool Element::readProperties(XmlReader& e)
       else if (tag == "tag") {
             QString val(e.readElementText());
             for (int i = 1; i < MAX_TAGS; i++) {
-                  if (score()->layerTags()[i] == val) {
-                        _tag = 1 << i;
-                        break;
+                if (score()->tagSetTags()[i] == val) {
+                        _tag = _tag | (1 << i);
                         }
                   }
             }

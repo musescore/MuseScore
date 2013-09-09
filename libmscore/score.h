@@ -208,10 +208,10 @@ enum PlayMode {
       };
 
 //---------------------------------------------------------
-//   Layer
+//   TagSet
 //---------------------------------------------------------
 
-struct Layer {
+struct TagSet {
       QString name;
       uint tags;
       };
@@ -256,10 +256,11 @@ class Score : public QObject {
       Revisions* _revisions;
       QList<Excerpt*> _excerpts;
 
-      QString _layerTags[32];
-      QString _layerTagComments[32];
-      QList<Layer> _layer;
-      int _currentLayer;
+      QString _tagSetTags[MAX_TAGS];
+      QString _tagSetTagComments[MAX_TAGS];
+      QList<TagSet> _tagSet;
+      int _currentTagSet;
+      uint _autoTags;
 
       int _symIdx;                  // used symbol set, derived from style
       int _pageNumberOffset;        ///< Offset for page numbers.
@@ -270,7 +271,7 @@ class Score : public QObject {
       // generated objects during layout:
       //
       QList<Page*> _pages;          // pages are build from systems
-      QList<System*> _systems;      // measures are akkumulated to systems
+      QList<System*> _systems;      // measures are accumulated to systems
 
       // temp values used during doLayout:
       int curPage;
@@ -879,14 +880,18 @@ class Score : public QObject {
       void setMscoreVersion(const QString& val) { _mscoreVersion = val; }
       void setMscoreRevision(int val)           { _mscoreRevision = val; }
 
-      uint currentLayerMask() const         { return _layer[_currentLayer].tags; }
-      void setCurrentLayer(int val)         { _currentLayer = val;  }
-      int currentLayer() const              { return _currentLayer; }
-      QString* layerTags()                  { return _layerTags;    }
-      QString* layerTagComments()           { return _layerTagComments;    }
-      QList<Layer>& layer()                 { return _layer;       }
-      const QList<Layer>& layer() const     { return _layer;       }
-      bool tagIsValid(uint tag) const       { return tag & _layer[_currentLayer].tags; }
+      uint currentTagSetMask() const        { return _tagSet[_currentTagSet].tags; }
+      void setCurrentTagSet(int val)        { _currentTagSet = val;  }
+      int currentTagSet() const             { return _currentTagSet; }
+      QString* tagSetTags()                 { return _tagSetTags;    }
+      QString* tagSetTagComments()          { return _tagSetTagComments;    }
+      QList<TagSet>& tagSet()               { return _tagSet;       }
+      const QList<TagSet>& tagSet() const   { return _tagSet;       }
+      bool tagIsValid(uint tag) const       { return tag & _tagSet[_currentTagSet].tags; }
+      uint currentAutoTagMask() const       { return _autoTags; }
+      void addAutoTag(int val)              { _autoTags |= 1 << val; }
+      void clearAutoTags()                  { _autoTags = 0; }
+      bool autoTagIsSet(int val) const      { return _autoTags & 1 << val; }
 
       void transpose(int mode, TransposeDirection, int transposeKey, int transposeInterval,
          bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
@@ -925,7 +930,7 @@ class Score : public QObject {
       void linkId(int);
       int getLinkId() const { return _linkId; }
       QList<Score*> scoreList();
-      bool switchLayer(const QString& s);
+      bool switchTagSet(const QString& s);
       void layoutPage(const PageContext&,  qreal);
       Q_INVOKABLE void appendPart(const QString&);
       Q_INVOKABLE void appendMeasures(int);

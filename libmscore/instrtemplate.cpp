@@ -22,8 +22,22 @@
 
 namespace Ms {
 
+QList<InstrumentSection*> instrumentSections;
 QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                // global articulations
+
+//---------------------------------------------------------
+//   searchInstrumentSection
+//---------------------------------------------------------
+
+static InstrumentSection* searchInstrumentSection(const QString& name)
+      {
+      foreach(InstrumentSection* s, instrumentSections) {
+            if (s->id == name)
+                  return s;
+            }
+      return nullptr;
+      }
 
 //---------------------------------------------------------
 //   searchInstrumentGroup
@@ -35,7 +49,7 @@ static InstrumentGroup* searchInstrumentGroup(const QString& name)
             if (g->id == name)
                   return g;
             }
-      return 0;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -53,6 +67,40 @@ static int readStaffIdx(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readInstrumentSection
+//---------------------------------------------------------
+
+void InstrumentSection::read(XmlReader& e)
+      {
+      id       = e.attribute("id");
+      name     = e.attribute("name");
+      extended = e.intAttribute("extended", 0);
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "instrument-group" || tag == "InstrumentGroup") {
+                QString id = e.attribute("id");
+                InstrumentGroup * g = searchInstrumentGroup(id);
+                if (g == 0) {
+                      g = new InstrumentGroup;
+                      instrumentGroups.append(g);
+                      }
+                g->read(e);
+//                sectionId = id;
+                }
+            else if (tag == "name")
+                  name = e.readElementText();
+            else if (tag == "extended")
+                  extended = e.readInt();
+            else
+                  e.unknown();
+            }
+
+      if (id.isEmpty())
+            id = name.toLower().replace(" ", "-");
+      }
+
+//---------------------------------------------------------
 //   readInstrumentGroup
 //---------------------------------------------------------
 
@@ -63,9 +111,10 @@ void InstrumentGroup::read(XmlReader& e)
       extended = e.intAttribute("extended", 0);
 
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
+           const QStringRef& tag(e.name());
             if (tag == "instrument" || tag == "Instrument") {
                   QString id = e.attribute("id");
+                  id = e.attribute("id");
                   InstrumentTemplate* t = searchTemplate(id);
                   if (t == 0) {
                         t = new InstrumentTemplate;
@@ -359,6 +408,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   QString val(e.readElementText());
                   bool ok;
                   int i = val.toInt(&ok);
+                  i = val.toInt(&ok);
                   ClefType ct = ok ? ClefType(i) : Clef::clefType(val);
                   clefTypes[idx]._concertClef = ct;
                   clefTypes[idx]._transposingClef = ct;
@@ -368,6 +418,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   QString val(e.readElementText());
                   bool ok;
                   int i = val.toInt(&ok);
+                  i = val.toInt(&ok);
                   clefTypes[idx]._concertClef = ok ? ClefType(i) : Clef::clefType(val);
                   }
             else if (tag == "transposingClef") {
@@ -440,6 +491,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   a.read(e);
                   int n = articulation.size();
                   int i;
+                  n = articulation.size();
                   for(i = 0; i < n; ++i) {
                         if (articulation[i].name == a.name) {
                               articulation[i] = a;
@@ -471,15 +523,17 @@ void InstrumentTemplate::read(XmlReader& e)
                   }
             else if (tag == "init") {
                   QString val(e.readElementText());
+                  val = e.readElementText();
                   InstrumentTemplate* ttt = searchTemplate(val);
                   if (ttt)
                         init(*ttt);
                   else
                         qDebug("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
                   }
-            else if (tag == "musicXMLid") {
+
+            else if (tag == "musicXMLid")
                   musicXMLid = e.readElementText();
-                  }
+
             else
                   e.unknown();
             }
@@ -487,6 +541,7 @@ void InstrumentTemplate::read(XmlReader& e)
       // check bar line spans
       //
       int barLine = 0;
+      barLine = 0;
       for (int i = 0; i < staves; ++i) {
             int bls = barlineSpan[i];
             if (barLine) {
@@ -637,6 +692,15 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                                     }
                               group->read(e);
                               }
+                        else if (tag == "InstrumentSection") {
+                              QString id(e.attribute("id"));
+                              InstrumentSection* section = searchInstrumentSection(id);
+                              if (section == 0) {
+                                    section = new InstrumentSection;
+                                    instrumentSections.append(section);
+                                    }
+                              section->read(e);
+                              }
                         else if (tag == "Articulation") {
                               // read global articulation
                               MidiArticulation a;
@@ -666,6 +730,4 @@ InstrumentTemplate* searchTemplate(const QString& name)
             }
       return 0;
       }
-
 }
-

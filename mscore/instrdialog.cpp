@@ -330,6 +330,13 @@ InstrumentTemplateListItem::InstrumentTemplateListItem(QString group, QTreeWidge
       setText(0, group);
       }
 
+InstrumentTemplateListItem::InstrumentTemplateListItem(QString section, InstrumentTemplateListItem *parent)
+   : QTreeWidgetItem(parent) {
+      _instrumentTemplate = 0;
+      _section = section;
+      setText(0, section);
+      }
+
 InstrumentTemplateListItem::InstrumentTemplateListItem(InstrumentTemplate* i, InstrumentTemplateListItem* item)
    : QTreeWidgetItem(item) {
       _instrumentTemplate = i;
@@ -403,16 +410,22 @@ void populateInstrumentList(QTreeWidget* instrumentList, bool extended)
       {
       instrumentList->clear();
       // TODO: memory leak
-      foreach(InstrumentGroup* g, instrumentGroups) {
-            if (!extended && g->extended)
-                  continue;
-            InstrumentTemplateListItem* group = new InstrumentTemplateListItem(g->name, instrumentList);
-            group->setFlags(Qt::ItemIsEnabled);
-            foreach(InstrumentTemplate* t, g->instrumentTemplates) {
-                  if (!extended && t->extended)
-                        continue;
-                  new InstrumentTemplateListItem(t, group);
-                  }
+      foreach(InstrumentSection* s, instrumentSections) {
+          if(!extended && s->extended)
+                continue;
+          InstrumentTemplateListItem* section = new InstrumentTemplateListItem(s->name, instrumentList);
+          section->setFlags(Qt::ItemIsEnabled);
+          foreach(InstrumentGroup* g, s->instrumentGroups) {
+                if (!extended && g->extended)
+                      continue;
+                InstrumentTemplateListItem* group = new InstrumentTemplateListItem(g->name, section);
+                group->setFlags(Qt::ItemIsEnabled);
+                foreach(InstrumentTemplate* t, g->instrumentTemplates) {
+                      if (!extended && t->extended)
+                            continue;
+                      new InstrumentTemplateListItem(t, group);
+                      }
+                }
             }
       }
 

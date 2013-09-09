@@ -71,18 +71,18 @@ void Score::write(Xml& xml, bool selectionOnly)
             _audio->write(xml);
             }
 
-      for (int i = 0; i < 32; ++i) {
-            if (!_layerTags[i].isEmpty()) {
-                  xml.tag(QString("LayerTag id=\"%1\" tag=\"%2\"").arg(i).arg(_layerTags[i]),
-                     _layerTagComments[i]);
+      for (int i = 0; i < MAX_TAGS; ++i) {
+            if (!_tagSetTags[i].isEmpty()) {
+                  xml.tag(QString("Tag id=\"%1\" tag=\"%2\"").arg(i).arg(_tagSetTags[i]),
+                     _tagSetTagComments[i]);
                   }
             }
-      int n = _layer.size();
+      int n = _tagSet.size();
       for (int i = 1; i < n; ++i) {       // dont save default variant
-            const Layer& l = _layer[i];
-            xml.tagE(QString("Layer name=\"%1\" mask=\"%2\"").arg(l.name).arg(l.tags));
+            const TagSet& ts = _tagSet[i];
+            xml.tagE(QString("TagSet name=\"%1\" mask=\"%2\"").arg(ts.name).arg(ts.tags));
             }
-      xml.tag("currentLayer", _currentLayer);
+      xml.tag("currentTagSet", _currentTagSet);
 
       if (!MScore::testMode)
             _synthesizerState.write(xml);
@@ -851,23 +851,23 @@ bool Score::read(XmlReader& e)
                   _showOmr = e.readInt();
             else if (tag == "playMode")
                   _playMode = PlayMode(e.readInt());
-            else if (tag == "LayerTag") {
+            else if (tag == "Tag" || tag == "LayerTag") {   // LayerTag obsolete
                   int id = e.intAttribute("id");
                   const QString& tag = e.attribute("tag");
                   QString val(e.readElementText());
-                  if (id >= 0 && id < 32) {
-                        _layerTags[id] = tag;
-                        _layerTagComments[id] = val;
+                  if (id >= 0 && id < MAX_TAGS) {
+                        _tagSetTags[id] = tag;
+                        _tagSetTagComments[id] = val;
                         }
                   }
-            else if (tag == "Layer") {
-                  Layer layer;
-                  layer.name = e.attribute("name");
-                  layer.tags = e.attribute("mask").toUInt();
-                  _layer.append(layer);
+            else if (tag == "TagSet" || tag == "Layer") {   // Layer obsolete
+                  TagSet tagSet;
+                  tagSet.name = e.attribute("name");
+                  tagSet.tags = e.attribute("mask").toUInt();
+                  _tagSet.append(tagSet);
                   }
-            else if (tag == "currentLayer")
-                  _currentLayer = e.readInt();
+            else if (tag == "currentTagSet" || tag == "currentLayer")   // currentLayer obsolete
+                  _currentTagSet = e.readInt();
             else if (tag == "SyntiSettings")    // obsolete
                   _synthesizerState.read(e);
             else if (tag == "Synthesizer")

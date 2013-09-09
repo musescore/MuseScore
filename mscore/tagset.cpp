@@ -18,49 +18,58 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "layer.h"
+#include "tagset.h"
 #include "libmscore/score.h"
 #include "musescore.h"
+#include "libmscore/mscore.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   LayerManager
+//   TagSetManager
 //---------------------------------------------------------
 
-LayerManager::LayerManager(Score* s, QWidget* parent)
+TagSetManager::TagSetManager(Score* s, QWidget* parent)
    : QDialog(parent)
       {
       score = s;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      for (int i = 0; i < 31; ++i) {
-            QTableWidgetItem* item = new QTableWidgetItem(score->layerTags()[i+1]);
+            // Set up tags for tag tab
+      for (int i = 0; i < MAX_TAGS; ++i) {
+          QTableWidgetItem* item = new QTableWidgetItem();
+            item->setCheckState(s->autoTagIsSet(i+1) ? Qt::Checked : Qt::Unchecked);
             tags->setItem(i, 0, item);
-            item = new QTableWidgetItem(score->layerTagComments()[i+1]);
+            item = new QTableWidgetItem(score->tagSetTags()[i+1]);
             tags->setItem(i, 1, item);
+            item = new QTableWidgetItem(score->tagSetTagComments()[i+1]);
+            tags->setItem(i, 2, item);
             }
 
-      layers->setRowCount(score->layer().size());
+            // Set up tagset tab
+      tagSets->setRowCount(score->tagSet().size());
       int row = 0;
-      foreach(const Layer& l, score->layer()) {
-            QTableWidgetItem* item = new QTableWidgetItem(l.name);
-            layers->setItem(row, 0, item);
+      foreach(const TagSet& ts, score->tagSet()) {
+          QTableWidgetItem* item = new QTableWidgetItem();
+            item->setCheckState(score->currentTagSet()==row ? Qt::Checked : Qt::Unchecked);
+            tagSets->setItem(row, 0, item);
+            item = new QTableWidgetItem(ts.name);
+            tagSets->setItem(row, 1, item);
             QString tagString;
-            for (int i = 0; i < 31; ++i) {
+            for (int i = 0; i < MAX_TAGS-1; ++i) {
                   uint mask = 1 << (i+1);
-                  if (mask &  l.tags) {
+                  if (mask &  ts.tags) {
                         if (!tagString.isEmpty())
                               tagString += ",";
-                        tagString += tags->item(i, 0)->text();
+                        tagString += tags->item(i, 1)->text();
                         }
                   }
             item = new QTableWidgetItem(tagString);
-            layers->setItem(row, 1, item);
+            tagSets->setItem(row, 2, item);
             ++row;
             }
-      layers->setCurrentCell(score->currentLayer(), 0);
+      tagSets->setCurrentCell(score->currentTagSet(), 0);
       connect(createButton, SIGNAL(clicked()), SLOT(createClicked()));
       connect(deleteButton, SIGNAL(clicked()), SLOT(deleteClicked()));
       connect(addTagButton, SIGNAL(clicked()), SLOT(addTagClicked()));
@@ -68,12 +77,12 @@ LayerManager::LayerManager(Score* s, QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   showLayerManager
+//   showTagSetManager
 //---------------------------------------------------------
 
-void MuseScore::showLayerManager()
+void MuseScore::showTagSetManager()
       {
-      LayerManager am(cs);
+      TagSetManager am(cs);
       am.exec();
       }
 
@@ -81,22 +90,27 @@ void MuseScore::showLayerManager()
 //   createClicked
 //---------------------------------------------------------
 
-void LayerManager::createClicked()
+void TagSetManager::createClicked()
       {
-      int row      = layers->rowCount();
-      QString name = QString("layer%1").arg(row + 1);
-      QTableWidgetItem* item = new QTableWidgetItem(name);
-      layers->setRowCount(row+1);
-      layers->setItem(row, 0, item);
+      int row      = tagSets->rowCount();
+      QString name = QString("tagSet%1").arg(row + 1);
+
+      tagSets->setRowCount(row+1);
+
+      QTableWidgetItem* item = new QTableWidgetItem();
+      item->setCheckState(Qt::Unchecked);
+      tagSets->setItem(row, 0, item);
+      item = new QTableWidgetItem(name);
+      tagSets->setItem(row, 1, item);
       item = new QTableWidgetItem("");
-      layers->setItem(row, 1, item);
+      tagSets->setItem(row, 2, item);
       }
 
 //---------------------------------------------------------
 //   deleteClicked
 //---------------------------------------------------------
 
-void LayerManager::deleteClicked()
+void TagSetManager::deleteClicked()
       {
       qDebug("TODO\n");
       }
@@ -105,40 +119,40 @@ void LayerManager::deleteClicked()
 //   addTagClicked
 //---------------------------------------------------------
 
-void LayerManager::addTagClicked()
+void TagSetManager::addTagClicked()
       {
-      int row = layers->currentRow();
+      int row = tagSets->currentRow();
       if (row == -1)
             return;
       QStringList items;
-      for (int i = 0; i < 31; ++i) {
-            QString s = score->layerTags()[i+1];
+      for (int i = 1; i <= MAX_TAGS; ++i) {
+            QString s = score->tagSetTags()[i];
             if (!s.isEmpty())
                   items.append(s);
             }
-      for (int i = 0; i < 31; ++i) {
-            QString tag(tags->item(i, 0)->text());
+/*      for (int i = 0; i < MAX_TAGS-1; ++i) {
+            QString tag(tags->item(i, 1)->text());
             if (!tag.isEmpty())
                   items.append(tag);
-            }
+            } */
 
       if (items.isEmpty()) {
             qDebug("no tags defined\n");
             return;
             }
       bool ok;
-      QString item = QInputDialog::getItem(this, tr("MuseScore: select layer tag"), tr("layer tag"),
+      QString item = QInputDialog::getItem(this, tr("MuseScore: select tag"), tr("tag"),
          items, 0, false, &ok);
       if (ok && !item.isEmpty()) {
 //            uint tagBits = 0;
-            for (int i = 0; i < 31; ++i) {
-                  QString s = score->layerTags()[i+1];
+            for (int i = 1; i < MAX_TAGS; ++i) {
+                  QString s = score->tagSetTags()[i];
                   if (s == item) {
 //                        tagBits = 1 << (i+1);
                         break;
                         }
                   }
-            QTableWidgetItem* wi = layers->item(row, 1);
+            QTableWidgetItem* wi = tagSets->item(row, 2);
             QString s = wi->text();
             if (!s.isEmpty())
                   s += ",";
@@ -151,16 +165,16 @@ void LayerManager::addTagClicked()
 //   deleteTagClicked
 //---------------------------------------------------------
 
-void LayerManager::deleteTagClicked()
+void TagSetManager::deleteTagClicked()
       {
-      int row = layers->currentRow();
+      int row = tagSets->currentRow();
       if (row == -1)
             return;
-      QTableWidgetItem* item = layers->item(row, 1);
+      QTableWidgetItem* item = tagSets->item(row, 2);
       QString s = item->text();
       QStringList items = s.split(",");
       bool ok;
-      QString tag = QInputDialog::getItem(this, tr("MuseScore: select layer tag"), tr("layer tag"),
+      QString tag = QInputDialog::getItem(this, tr("MuseScore: select tag"), tr("tag"),
          items, 0, false, &ok);
       if (ok && !tag.isEmpty()) {
             items.removeOne(tag);
@@ -172,47 +186,52 @@ void LayerManager::deleteTagClicked()
 //   closeEvent
 //---------------------------------------------------------
 
-void LayerManager:: accept()
+void TagSetManager:: accept()
       {
       score->startCmd();
-      for (int i = 0; i < 31; ++i) {
-            QString tag(tags->item(i, 0)->text());
-            QString comment(tags->item(i, 1)->text());
-            score->layerTags()[i+1] = tag;
-            score->layerTagComments()[i+1] = comment;
+      score->clearAutoTags();
+            // Record tags & tagsets in the score
+      for (int i = 0; i < MAX_TAGS-1; ++i) {
+            QString tag(tags->item(i, 1)->text());
+            QString comment(tags->item(i, 2)->text());
+            score->tagSetTags()[i+1] = tag;
+            score->tagSetTagComments()[i+1] = comment;
+
+                  // If this tag is set as an autotag, record it in the score
+            if (tags->item(i, 0)->checkState() && i+1 != 0 )
+                  score->addAutoTag(i+1);
             }
-      int row = layers->currentRow();
+      int row = tagSets->currentRow();
       if (row != -1)
-            score->setCurrentLayer(row);
+            score->setCurrentTagSet(row);
 
-      QList<Layer>& layer = score->layer();
-      layer.clear();
+      QList<TagSet>& tagSet = score->tagSet();
+      tagSet.clear();
 
-      int n = layers->rowCount();
+      int n = tagSets->rowCount();
       for (int i = 0; i < n; ++i) {
-            Layer l;
-            l.name           = layers->item(i, 0)->text();
-            l.tags           = 1;
-            QString ts       = layers->item(i, 1)->text();
-            QStringList tags = ts.split(",");
+            TagSet ts;
+            ts.name          = tagSets->item(i, 1)->text();
+            ts.tags          = 1;                   // Every tagset has the default tag
+            QString tstxt    = tagSets->item(i, 2)->text();
+            QStringList tags = tstxt.split(",");
             foreach (QString tag, tags) {
-                  for (int idx = 0; idx < 32; ++idx) {
-                        if (tag == score->layerTags()[idx]) {
-                              l.tags |= 1 << idx;
-                              break;
+                  for (int idx = 0; idx < MAX_TAGS; ++idx) {
+                        if (tag != "" && tag == score->tagSetTags()[idx]) {
+                              ts.tags |= 1 << idx;
                               }
                         }
                   }
             if (i == 0)             // hardwired default tag
-                  l.tags |= 1;
-            layer.append(l);
+                  ts.tags |= 1;
+            tagSet.append(ts);
             }
       score->setDirty(true);
       score->setLayoutAll(true);
       score->endCmd();
-      mscore->updateLayer();
+      mscore->updateTagSet();
+      mscore->showAutoTagState();
       QDialog::accept();
       }
 
 }
-

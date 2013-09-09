@@ -90,17 +90,18 @@ void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
             if (e->flag(ELEMENT_HAS_TAG)) {
                   popup->addSeparator();
 
-                  QMenu* menuLayer = new QMenu(tr("Layer"));
-                  for (int i = 0; i < MAX_TAGS; ++i) {
-                        QString tagName = score()->layerTags()[i];
+                  QMenu* menuTags = new QMenu(tr("Tags"));
+                        // Exclude the default tag
+                  for (int i = 1; i < MAX_TAGS; ++i) {
+                        QString tagName = score()->tagSetTags()[i];
                         if (!tagName.isEmpty()) {
-                              QAction* a = menuLayer->addAction(tagName);
-                              a->setData(QString("layer-%1").arg(i));
+                              QAction* a = menuTags->addAction(tagName);
+                              a->setData(QString("tagSet-%1").arg(i));
                               a->setCheckable(true);
                               a->setChecked(e->tag() & (1 << i));
                               }
                         }
-                  popup->addMenu(menuLayer);
+                  popup->addMenu(menuTags);
                   }
             }
       }
@@ -120,17 +121,18 @@ void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
       if (e->flag(ELEMENT_HAS_TAG)) {
             popup->addSeparator();
 
-            QMenu* menuLayer = new QMenu(tr("Layer"));
-            for (int i = 0; i < MAX_TAGS; ++i) {
-                  QString tagName = score()->layerTags()[i];
+            QMenu* menuTags = new QMenu(tr("Tags"));
+                  // Exclude rhe default tag
+            for (int i = 1; i < MAX_TAGS; ++i) {
+                  QString tagName = score()->tagSetTags()[i];
                   if (!tagName.isEmpty()) {
-                        QAction* a = menuLayer->addAction(tagName);
-                        a->setData(QString("layer-%1").arg(i));
+                        QAction* a = menuTags->addAction(tagName);
+                        a->setData(QString("tagSet-%1").arg(i));
                         a->setCheckable(true);
                         a->setChecked(e->tag() & (1 << i));
                         }
                   }
-            popup->addMenu(menuLayer);
+            popup->addMenu(menuTags);
             }
       popup->addAction(tr("Text Properties..."))->setData("text-props");
       }
@@ -631,11 +633,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             score()->undoChangeInvisible(e, !e->visible());
       else if (cmd == "color")
             score()->colorItem(e);
-      else if (cmd.startsWith("layer-")) {
-            int n = cmd.mid(6).toInt();
-            uint mask = 1 << n;
+      else if (cmd.startsWith("tagSet-")) {
+            int n = cmd.mid(7).toInt();
+            uint mask = e->tag() ^ (1 << n);
             e->setTag(mask);
             }
       }
 }
-

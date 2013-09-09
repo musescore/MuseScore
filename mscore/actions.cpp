@@ -1990,10 +1990,10 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NORMAL,
          0,
-         "layer",
+         "tagSet",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Layers..."),
-         QT_TRANSLATE_NOOP("action","Layers")
+         QT_TRANSLATE_NOOP("action","TagSets..."),
+         QT_TRANSLATE_NOOP("action","TagSets")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,

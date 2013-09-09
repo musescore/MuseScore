@@ -18,20 +18,20 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __LAYER_H__
-#define __LAYER_H__
+#ifndef __TAGSET_H__
+#define __TAGSET_H__
 
-#include "ui_layer.h"
+#include "ui_tagset.h"
 
 namespace Ms {
 
 class Score;
 
 //---------------------------------------------------------
-//   LayerManager
+//   TagSetManager
 //---------------------------------------------------------
 
-class LayerManager : public QDialog, public Ui::LayerManager {
+class TagSetManager : public QDialog, public Ui::TagSetManager {
       Q_OBJECT
 
       Score* score;
@@ -44,10 +44,9 @@ class LayerManager : public QDialog, public Ui::LayerManager {
       virtual void accept();
 
    public:
-      LayerManager(Score*, QWidget* parent = 0);
+      TagSetManager(Score*, QWidget* parent = 0);
       };
 
 
 } // namespace Ms
 #endif
-
