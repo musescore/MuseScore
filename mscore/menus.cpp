@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: menus.cpp 5651 2012-05-19 15:57:26Z lasconic $
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -534,10 +534,13 @@ Palette* MuseScore::newBracketsPalette()
       b2->setBracketType(BRACKET_BRACE);
       Bracket* b3 = new Bracket(gscore);
       b3->setBracketType(BRACKET_SQUARE);
+      Bracket* b4 = new Bracket(gscore);
+      b4->setBracketType(BRACKET_LINE);
 
       sp->append(b1, tr("Bracket"));
       sp->append(b2, tr("Brace"));
       sp->append(b3, tr("Square"));
+      sp->append(b4, tr("Line"));
 
       return sp;
       }
