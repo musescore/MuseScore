@@ -25,7 +25,17 @@ class Staff;
 class Tablature;
 
 //---------------------------------------------------------
-//   InstrumentTemplate
+//   InstrumentGenre
+//---------------------------------------------------------
+
+class InstrumentGenre {
+   public:
+      QString id;
+
+      InstrumentGenre() { id = ""; }
+      };
+
+//---------------------------------------------------------//   InstrumentTemplate
 //---------------------------------------------------------
 
 class InstrumentTemplate {
@@ -56,6 +66,7 @@ class InstrumentTemplate {
       QList<NamedEventList>   midiActions;
       QList<MidiArticulation> articulation;
       QList<Channel>          channel;
+      QList<InstrumentGenre*> InstrumentGenres;     //; list of genres this instrument belongs to
 
       ClefTypeList clefTypes[MAX_STAVES];
       int staffLines[MAX_STAVES];
@@ -70,6 +81,9 @@ class InstrumentTemplate {
       InstrumentTemplate(const InstrumentTemplate&);
       ~InstrumentTemplate();
       void init(const InstrumentTemplate&);
+      void linkGenre(const QString &);
+      void addGenre(QList<InstrumentGenre *>);
+      bool genreMember(const QString &);
 
       void setPitchRange(const QString& s, char* a, char* b) const;
       void write(Xml& xml) const;
@@ -93,6 +107,7 @@ struct InstrumentGroup {
       InstrumentGroup() { extended = false; }
       };
 
+extern QList<InstrumentGenre *> instrumentGenres;
 extern QList<InstrumentGroup*> instrumentGroups;
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern bool saveInstrumentTemplates(const QString& instrTemplates);
