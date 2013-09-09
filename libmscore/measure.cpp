@@ -1391,6 +1391,7 @@ qDebug("drop staffList");
                               if (staffIdx >= firstStaff && staffIdx <= lastStaff)
                                     ++level;
                               }
+                        firstStaff++;
                         }
                   score()->undoAddBracket(staff, level, b->bracketType(), 1);
                   delete b;
