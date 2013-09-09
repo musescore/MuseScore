@@ -4834,37 +4834,48 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             octave = pitch / 12;
             }
       else {
-            int curPitch = -1;
-            if(is.segment()) {
-                  Segment* seg = is.segment()->prev1(Segment::SegChordRest | Segment::SegClef);
-                  while(seg) {
-                        if(seg->segmentType() == Segment::SegChordRest) {
-                              Element* p = seg->element(is.track());
-                              if(p && p->type() == Element::CHORD) {
-                                    Chord* ch = static_cast<Chord*>(p);
-                                    curPitch = ch->downNote()->pitch();
-                                    break;
-                                    }
-                              }
-                        else if(seg->segmentType() == Segment::SegClef) {
-                              Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
-                              if(p && p->type() == Element::CLEF) {
-                                    Clef* clef = static_cast<Clef*>(p);
-                                    curPitch = line2pitch(4, clef->clefType(), 0); // C 72 for treble clef
-                                    break;
-                                    }
-                              }
-                        seg = seg->prev1(Segment::SegChordRest | Segment::SegClef);
-                        }
-                        octave = curPitch / 12;
+            // if adding notes, add above the upNote of the current chord
+            Element* el = score()->selection().element();
+            if (addFlag && el && el->type() == Element::NOTE) {
+                  Chord* chord = static_cast<Note*>(el)->chord();
+                  Note * n = chord->upNote();
+                  octave = n->pitch() / 12;
+                  if( note < n->pitch() / (octave * 7))
+                        octave++;
                   }
+            else {
+                  int curPitch = -1;
+                  if(is.segment()) {
+                        Segment* seg = is.segment()->prev1(Segment::SegChordRest | Segment::SegClef);
+                        while(seg) {
+                              if(seg->segmentType() == Segment::SegChordRest) {
+                                    Element* p = seg->element(is.track());
+                                    if(p && p->type() == Element::CHORD) {
+                                          Chord* ch = static_cast<Chord*>(p);
+                                          curPitch = ch->downNote()->pitch();
+                                          break;
+                                          }
+                                    }
+                              else if(seg->segmentType() == Segment::SegClef) {
+                                    Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
+                                    if(p && p->type() == Element::CLEF) {
+                                          Clef* clef = static_cast<Clef*>(p);
+                                          curPitch = line2pitch(4, clef->clefType(), 0); // C 72 for treble clef
+                                          break;
+                                          }
+                                    }
+                              seg = seg->prev1(Segment::SegChordRest | Segment::SegClef);
+                              }
+                              octave = curPitch / 12;
+                        }
 
-            static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
-            int delta = octave * 12 + tab[note] - curPitch;
-            if (delta > 6)
-                   --octave;
-            else if (delta < -6)
-                  ++octave;
+                  static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
+                  int delta = octave * 12 + tab[note] - curPitch;
+                  if (delta > 6)
+                         --octave;
+                  else if (delta < -6)
+                        ++octave;
+                  }
             }
 
       _score->startCmd();
