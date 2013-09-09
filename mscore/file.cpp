@@ -1563,25 +1563,51 @@ bool MuseScore::exportParts()
       if (fn.isEmpty())
           return false;
 
-      lastSaveCopyDirectory = fn;
+      QFileInfo fi(fn);
+      lastSaveCopyDirectory = fi.absolutePath();
+
+      QString ext = fi.suffix();
+      if (ext.isEmpty()) {
+            QMessageBox::critical(this, tr("MuseScore: Export Parts"), tr("cannot determine file type"));
+            return false;
+            }
 
       Score* thisScore = cs;
       if (thisScore->parentScore())
             thisScore = thisScore->parentScore();
-
+      bool overwrite = false;
+      bool noToAll = false;
       foreach(Excerpt* e, thisScore->excerpts())  {
             Score* pScore = e->score();
-            QString partfn = fn + QDir::separator() + thisScore->name() + "-" + pScore->name();
-            QFileInfo fi(partfn);
-            QString ext = fi.suffix();
-            if (ext.isEmpty()) {
-                  QMessageBox::critical(this, tr("MuseScore: Export Parts"), tr("cannot determine file type"));
-                  return false;
+            QString partfn = fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + pScore->name() + "." + ext;
+            QFileInfo fip(partfn);
+            if(fip.exists() && !overwrite) {
+                  if(noToAll)
+                        continue;
+                  QMessageBox msgBox( QMessageBox::Question, tr("Confirm replace"),
+                        tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(partfn)),
+                        QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
+                  msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
+                  msgBox.setButtonText(QMessageBox::No, tr("Skip"));
+                  msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
+                  msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
+                  int sb = msgBox.exec();
+                  if(sb == QMessageBox::YesToAll) {
+                        overwrite = true;
+                        }
+                  else if (sb == QMessageBox::NoToAll) {
+                        noToAll = true;
+                        continue;
+                        }
+                  else if (sb == QMessageBox::No)
+                        continue;
                   }
+
             if (!saveAs(pScore, true, partfn, ext))
                   return false;
             }
-      QMessageBox::information(this, tr("MuseScore: Export Parts"), tr("Parts were successfully exported"));
+      if(!noToAll)
+            QMessageBox::information(this, tr("MuseScore: Export Parts"), tr("Parts were successfully exported"));
       return true;
       }
 
@@ -2016,6 +2042,8 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
       int pages = pl.size();
 
       int padding = QString("%1").arg(pages).size();
+      bool overwrite = false;
+      bool noToAll = false;
       for (int pageNumber = 0; pageNumber < pages; ++pageNumber) {
             Page* page = pl.at(pageNumber);
 
@@ -2057,7 +2085,30 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             if (fileName.endsWith(".png"))
                   fileName = fileName.left(fileName.size() - 4);
             fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
-
+            if(!converterMode) {
+                  QFileInfo fip(fileName);
+                  if(fip.exists() && !overwrite) {
+                        if(noToAll)
+                              continue;
+                        QMessageBox msgBox( QMessageBox::Question, tr("Confirm replace"),
+                              tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(fileName)),
+                              QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
+                        msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
+                        msgBox.setButtonText(QMessageBox::No, tr("Skip"));
+                        msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
+                        msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
+                        int sb = msgBox.exec();
+                        if(sb == QMessageBox::YesToAll) {
+                              overwrite = true;
+                              }
+                        else if (sb == QMessageBox::NoToAll) {
+                              noToAll = true;
+                              continue;
+                              }
+                        else if (sb == QMessageBox::No)
+                              continue;
+                        }
+                  }
             rv = printer.save(fileName, "png");
             if (!rv)
                   break;
