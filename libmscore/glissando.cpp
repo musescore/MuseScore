@@ -79,6 +79,7 @@ void Glissando::layout()
       Note* anchor1 = static_cast<Chord*>(cr)->upNote();
 
       setPos(0.0, 0.0);
+      adjustReadPos();
 
       QPointF cp1    = anchor1->pagePos();
       QPointF cp2    = anchor2->pagePos();
