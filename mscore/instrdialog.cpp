@@ -383,6 +383,7 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       partiturList->resizeColumnToContents(1);  // shrink "visible "and "linked" columns as much as possible
       partiturList->resizeColumnToContents(3);
 
+      populateGenreCombo();
       buildTemplateList();
 
       addButton->setEnabled(false);
@@ -396,7 +397,25 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   populateInstrumentList
+//   populateGenreCombo
+//---------------------------------------------------------
+
+void InstrumentsDialog::populateGenreCombo()
+      {
+            QStringList listGenres;
+            InstrumentGenreFilter->clear();
+            InstrumentGenreFilter->addItem(tr("All"));
+            foreach(InstrumentGenre *ig, instrumentGenres) {
+                listGenres.append(ig->id);
+            }
+            listGenres.sort();
+
+            InstrumentGenreFilter->addItems(listGenres);
+      }
+
+
+//---------------------------------------------------------
+ //   populateInstrumentList
 //---------------------------------------------------------
 
 void populateInstrumentList(QTreeWidget* instrumentList, bool extended)
@@ -1233,5 +1252,63 @@ void InstrumentsDialog::on_clearSearch_clicked()
       search->clear();
       filterInstruments (instrumentList);
       }
-}
+//---------------------------------------------------------
+//   on_InstrumentGenreFilter_currentTextChanged
+//---------------------------------------------------------
 
+void InstrumentsDialog::on_InstrumentGenreFilter_currentTextChanged(const QString &genre)
+      {
+      // Redisplay tree, only showing items from the selected genre
+      filterInstrumentsByGenre(instrumentList, genre);
+      }
+
+
+
+//---------------------------------------------------------
+//   filterInstrumentsByGenre
+//---------------------------------------------------------
+
+void InstrumentsDialog::filterInstrumentsByGenre(QTreeWidget *instrumentList, QString genre)
+      {
+      QTreeWidgetItem* item = 0;
+      for (int idx = 0; (item = instrumentList->topLevelItem(idx)); ++idx) {
+            int numMatchedChildren = 0;
+
+            if(item) {
+                  numMatchedChildren += checkGenres(item, genre);
+                  item->setHidden(numMatchedChildren == 0);
+                  item->setExpanded(numMatchedChildren > 0 && !genre.isEmpty());
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   checkGenres
+//---------------------------------------------------------
+
+int InstrumentsDialog::checkGenres(QTreeWidgetItem *parent, QString genre)
+      {
+      QTreeWidgetItem* item = 0;
+      int numMatchedChildren = 0;
+
+      for (int idx = 0; (item = parent->child(idx)); ++idx) {
+
+            if(item->childCount() > 0)
+                numMatchedChildren += checkGenres(item, genre);
+
+            InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(item);
+            InstrumentTemplate *it=itli->instrumentTemplate();
+            bool isMatch = false;
+            if(it)
+                isMatch = (genre == tr("All")) || it->genreMember(genre);
+
+            if (isMatch)
+                  numMatchedChildren++;
+
+            item->setHidden(numMatchedChildren == 0);
+//            numMatchedChildren = 0;
+            }
+
+      return numMatchedChildren;
+      }
+}
