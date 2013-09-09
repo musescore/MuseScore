@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: importxml.cpp 5653 2012-05-19 20:19:58Z lvinken $
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -1312,7 +1312,7 @@ static void partGroupStart(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, in
       else if (s == "bracket")
             bracketType = BRACKET_NORMAL;
       else if (s == "line")
-            bracketType = BRACKET_NORMAL;
+            bracketType = BRACKET_LINE;
       else if (s == "square")
             bracketType = BRACKET_SQUARE;
       else {
