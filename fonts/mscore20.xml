@@ -297,20 +297,20 @@
   <Glyph>
     <name>noteheads.uM2</name>
     <code>0xe128</code>
-    <attach x="10.79" y="0"/>
-    <bbox x="-0.78125" y="-2.75003" w="10.00234" h="5.50006"/>
+    <attach x="11.51" y="2.3"/>
+    <bbox x="0" y="-2.75" w="11.51" h="5.5"/>
     </Glyph>
   <Glyph>
     <name>noteheads.dM2</name>
     <code>0xe129</code>
-    <attach x="10.79" y="0"/>
-    <bbox x="-0.78125" y="-2.75003" w="10.00234" h="5.50006"/>
+    <attach x="11.51" y="2.3"/>
+    <bbox x="0" y="-2.75" w="11.51" h="5.5"/>
     </Glyph>
   <Glyph>
     <name>noteheads.sM1</name>
     <code>0xe12a</code>
-    <attach x="10.79" y="0"/>
-    <bbox x="-0.78125" y="-2.75003" w="10.00234" h="5.50006"/>
+    <attach x="11.51" y="2.3"/>
+    <bbox x="0" y="-2.75" w="11.51" h="5.5"/>
     </Glyph>
   <Glyph>
     <name>noteheads.sM1double</name>
@@ -1305,20 +1305,20 @@
   <Glyph>
     <name>noteheads.uM2alt</name>
     <code>0xe1c4</code>
-    <attach x="9.50" y="0"/>
-    <bbox x="0.50781" y="-2.75003" w="10.00234" h="5.50006"/>
+    <attach x="8.92" y="4.10"/>
+    <bbox x="0" y="-4.53" w="8.92" h="9.06"/>
     </Glyph>
   <Glyph>
     <name>noteheads.dM2alt</name>
     <code>0xe1c5</code>
-    <attach x="9.50" y="0"/>
-    <bbox x="0.50781" y="-2.75003" w="10.00234" h="5.50006"/>
+    <attach x="8.92" y="4.10"/>
+    <bbox x="0" y="-4.53" w="8.92" h="9.06"/>
     </Glyph>
   <Glyph>
     <name>noteheads.sM1alt</name>
     <code>0xe1c6</code>
-    <attach x="9.50" y="0"/>
-    <bbox x="0.50781" y="-2.75003" w="10.00234" h="5.50006"/>
+    <attach x="8.92" y="4.10"/>
+    <bbox x="0" y="-4.53" w="8.92" h="9.06"/>
     </Glyph>
   <Glyph>
     <name>timesig.Cdot</name>
