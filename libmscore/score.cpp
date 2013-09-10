@@ -2493,7 +2493,7 @@ void Score::adjustBracketsIns(int sidx, int eidx)
                   }
             int span = staff->barLineSpan();
             if ((sidx >= staffIdx) && (eidx < (staffIdx + span)))
-                  undoChangeBarLineSpan(staff, span + (eidx-sidx), 0, (staff->lines()-1)*2);
+                  undoChangeBarLineSpan(staff, span, 0, (_staves[staffIdx + span -1]->lines()-1)*2);
             }
       }
 
