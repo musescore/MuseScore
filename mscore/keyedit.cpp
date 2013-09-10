@@ -110,7 +110,10 @@ void KeyCanvas::paintEvent(QPaintEvent*)
 
       QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 
-      QPen pen(palette().brush(QPalette::Normal, QPalette::Text).color());
+      QRectF background = imatrix.mapRect(QRectF(0, 0, ww, wh));
+      painter.fillRect(background, Qt::white);
+
+      QPen pen(Qt::black);
       pen.setWidthF(MScore::defaultStyle()->value(ST_staffLineWidth).toDouble() * spatium);
       painter.setPen(pen);
 
@@ -127,8 +130,6 @@ void KeyCanvas::paintEvent(QPaintEvent*)
       foreach(Accidental* a, accidentals) {
             painter.save();
             painter.translate(a->pagePos());
-//            painter.setPen(QPen(a->curColor()));
-            painter.setPen(QPen(Qt::white));
             a->draw(&painter);
             painter.restore();
             }
