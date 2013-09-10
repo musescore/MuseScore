@@ -962,7 +962,8 @@ void MuseScore::editInstrList()
 
                         ++rstaff;
                         }
-                  part->staves()->front()->setBarLineSpan(part->nstaves());
+                  if(linked.size() == 0)
+                        part->staves()->front()->setBarLineSpan(part->nstaves());
                   //equivalent to cmdInsertPart(part, staffIdx)
                   // but we donnt add rests for linked parts
                   rootScore->undoInsertPart(part, staffIdx);
