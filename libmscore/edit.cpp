@@ -1868,7 +1868,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                   if (s == 0 || s->element(track) == 0) {
                         // add rest to this staff and to all the staves linked to it
                         Rest* rest = new Rest(root, TDuration(TDuration::V_MEASURE));
-                        Fraction timeStretch(staff(staffIdx)->timeStretch(m->tick()));
+                        Fraction timeStretch(root->staff(staffIdx)->timeStretch(m->tick()));
                         rest->setDuration(m->len() / timeStretch);
                         rest->setTrack(track);
                         undoAddCR(rest, m, m->tick());
