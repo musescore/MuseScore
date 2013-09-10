@@ -938,6 +938,8 @@ void MuseScore::editInstrList()
                   pli->part = part;
                   QTreeWidgetItem* ci = 0;
                   rstaff = 0;
+                  QList<Staff*> linked;
+                  QList<Staff*> nonLinked;
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(ci);
                         Staff* staff       = new Staff(rootScore, part, rstaff);
@@ -948,15 +950,35 @@ void MuseScore::editInstrList()
                         staff->setClef(0, sli->clef());
 
                         rootScore->undoInsertStaff(staff, staffIdx + rstaff);
-                        if (sli->linked()) {
-                              // TODO: link staff
-                              qDebug("TODO: link staff\n");
+                        Staff* linkedStaff = part->staves()->front();
+                        if (sli->linked() && linkedStaff != staff) {
+                              linkedStaff->linkTo(staff);
+                              cloneStaff(linkedStaff, staff);
+                              linked.append(staff);
+                              }
+                        else {
+                              nonLinked.append(staff);
                               }
 
                         ++rstaff;
                         }
                   part->staves()->front()->setBarLineSpan(part->nstaves());
-                  rootScore->cmdInsertPart(part, staffIdx);
+                  //equivalent to cmdInsertPart(part, staffIdx)
+                  // but we donnt add rests for linked parts
+                  rootScore->undoInsertPart(part, staffIdx);
+                  for(Staff* s : nonLinked) {
+                        int si = rootScore->staffIdx(s);
+                        for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure())
+                              m->cmdAddStaves(si, si + 1, true);
+                        }
+                  for(Staff* s : linked) {
+                        int si = rootScore->staffIdx(s);
+                        for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure())
+                              m->cmdAddStaves(si, si + 1, false);
+                        }
+                  int sidx = rootScore->staffIdx(part);
+                  int eidx = sidx + part->nstaves();
+                  rootScore->adjustBracketsIns(sidx, eidx);
                   staffIdx += rstaff;
                   }
             else {
@@ -1071,7 +1093,7 @@ void MuseScore::editInstrList()
             }
 
       QList<int> dl;
-      foreach(Staff* staff, dst) {
+      for(Staff* staff : dst) {
             int idx = rootScore->staves().indexOf(staff);
             if (idx == -1)
                   qDebug("staff in dialog(%p) not found in score\n", staff);
