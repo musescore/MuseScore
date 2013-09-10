@@ -737,12 +737,24 @@ static const QString unknownFret = QString("?");
 
 QString StaffTypeTablature::fretString(int fret, bool ghost) const
       {
-      QString s = ghost ? _fretFonts[_fretFontIdx].ghostChar :
-            ( _useNumbers ?
-                  (fret >= NUM_OF_DIGITFRETS  ? unknownFret : _fretFonts[_fretFontIdx].displayDigit[fret]) :
-                  (fret >= NUM_OF_LETTERFRETS ? unknownFret : _fretFonts[_fretFontIdx].displayLetter[fret])
-            );
-      return s;
+      if (fret == FRET_NONE)
+            return unknownFret;
+      if (ghost)
+            return _fretFonts[_fretFontIdx].ghostChar;
+      else {
+            if (_useNumbers) {
+                  if(fret >= NUM_OF_DIGITFRETS)
+                        return unknownFret;
+                  else
+                        return _fretFonts[_fretFontIdx].displayDigit[fret];
+                  }
+           else {
+                  if(fret >= NUM_OF_LETTERFRETS)
+                        return unknownFret;
+                  else
+                        return _fretFonts[_fretFontIdx].displayLetter[fret];
+                  }
+           }
       }
 
 QString StaffTypeTablature::durationString(TDuration::DurationType type, int dots) const
