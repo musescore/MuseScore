@@ -1,8 +1,6 @@
 #ifndef IMPORTMIDI_CLEF_H
 #define IMPORTMIDI_CLEF_H
 
-#include "libmscore/mscore.h"
-
 
 namespace Ms {
 
