@@ -249,7 +249,6 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
             qreal stemWidth5;
             if (chord->stem()) {
                   stemWidth5 = chord->stem()->lineWidth() * .5;
-                  chord->stem()->rxpos() = _up ? stemX - stemWidth5 : stemWidth5;
                   }
             else
                   stemWidth5 = 0.0;
@@ -282,6 +281,9 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
             note->rxpos()  = x;
             if (x < lx)
                   lx = x;
+
+            if (chord->stem())
+                  chord->stem()->rxpos() = _up ? x + hw - stemWidth5 : x + stemWidth5;
 
             qreal xx = x + hw + note->chord()->pos().x();
             if (xx > dotPosX)
