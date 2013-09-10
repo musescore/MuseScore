@@ -1116,6 +1116,7 @@ void MuseScore::editInstrList()
       rootScore->setLayoutAll(true);
       rootScore->endCmd();
       rootScore->rebuildMidiMapping();
+      rootScore->updateNotes(); // need to compute frets for tabs
       seq->initInstruments();
       }
 
