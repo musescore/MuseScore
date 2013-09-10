@@ -74,6 +74,9 @@ void Rest::draw(QPainter* painter) const
       painter->setPen(curColor());
 
       if (parent() && measure() && measure()->multiMeasure()) {
+            //only on voice 1
+            if((track() % VOICES) != 0)
+                  return;
             Measure* m = measure();
             int n      = m->multiMeasure();
             qreal pw = _spatium * .7;

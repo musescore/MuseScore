@@ -3254,10 +3254,14 @@ void Measure::layoutX(qreal stretch)
                                     }
                               }
                         Segment* ns;
-                        for (ns = s->next(); ns; ns = ns->next()) {
-                              if (ns->element(track))
-                                    break;
+                        if (t == REPEAT_MEASURE) {
+                              for (ns = s->next(); ns; ns = ns->next()) {
+                                    if (ns->element(track))
+                                          break;
+                                    }
                               }
+                        else
+                              ns = s->next();
                         if (ns) {
                               if (ns->segmentType() == Segment::SegEndBarLine)
                                     x2 = ns->x();
