@@ -3140,7 +3140,7 @@ void ScoreView::startNoteEntry()
 
 void ScoreView::endNoteEntry()
       {
-      _score->inputState().setSegment(0);
+      //_score->inputState().setSegment(0);
       _score->inputState().noteEntryMode = false;
       if (_score->inputState().slur) {
             const QList<SpannerSegment*>& el = _score->inputState().slur->spannerSegments();
