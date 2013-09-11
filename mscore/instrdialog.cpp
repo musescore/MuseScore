@@ -1263,52 +1263,33 @@ void InstrumentsDialog::on_InstrumentGenreFilter_currentTextChanged(const QStrin
       }
 
 
-
 //---------------------------------------------------------
 //   filterInstrumentsByGenre
 //---------------------------------------------------------
 
 void InstrumentsDialog::filterInstrumentsByGenre(QTreeWidget *instrumentList, QString genre)
       {
-      QTreeWidgetItem* item = 0;
-      for (int idx = 0; (item = instrumentList->topLevelItem(idx)); ++idx) {
-            int numMatchedChildren = 0;
-
-            if(item) {
-                  numMatchedChildren += checkGenres(item, genre);
-                  item->setHidden(numMatchedChildren == 0);
-                  item->setExpanded(numMatchedChildren > 0 && !genre.isEmpty());
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   checkGenres
-//---------------------------------------------------------
-
-int InstrumentsDialog::checkGenres(QTreeWidgetItem *parent, QString genre)
-      {
-      QTreeWidgetItem* item = 0;
-      int numMatchedChildren = 0;
-
-      for (int idx = 0; (item = parent->child(idx)); ++idx) {
-
-            if(item->childCount() > 0)
-                numMatchedChildren += checkGenres(item, genre);
-
-            InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(item);
+      QTreeWidgetItemIterator iList(instrumentList);
+      while (*iList) {
+            (*iList)->setHidden(true);
+            InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(*iList);
             InstrumentTemplate *it=itli->instrumentTemplate();
-            bool isMatch = false;
-            if(it)
-                isMatch = (genre == tr("All")) || it->genreMember(genre);
 
-            if (isMatch)
-                  numMatchedChildren++;
+            if(it) {
+                  if (genre == tr("All") || it->genreMember(genre)) {
+                        (*iList)->setHidden(false);
 
-            item->setHidden(numMatchedChildren == 0);
-//            numMatchedChildren = 0;
+                        QTreeWidgetItem *iParent = (*iList)->parent();
+                        while(iParent) {
+                              if(!iParent-isHidden())
+                                    break;
+
+                              iParent->setHidden(false);
+                              iParent = iParent->parent();
+                              }
+                        }
+                  }
+            ++iList;
             }
-
-      return numMatchedChildren;
       }
 }
