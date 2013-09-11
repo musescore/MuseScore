@@ -280,12 +280,12 @@ KeyEditor::KeyEditor(QWidget* parent)
       sp = MuseScore::newKeySigPalette();
       sp->setReadOnly(false);
 
-      PaletteScrollArea* keyPalette = new PaletteScrollArea(sp);
+      _keyPalette = new PaletteScrollArea(sp);
       QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-      keyPalette->setSizePolicy(policy);
-      keyPalette->setRestrictHeight(false);
+      _keyPalette->setSizePolicy(policy);
+      _keyPalette->setRestrictHeight(false);
 
-      l->addWidget(keyPalette);
+      l->addWidget(_keyPalette);
 
       // create accidental palette
 
@@ -349,6 +349,7 @@ void KeyEditor::addClicked()
       sp->append(ks, "custom");
       _dirty = true;
       sp->updateGeometry();
+      _keyPalette->adjustSize();
       }
 
 //---------------------------------------------------------
