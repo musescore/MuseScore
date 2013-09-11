@@ -31,6 +31,7 @@ class Chord;
 class TimeDialog : public QWidget, Ui::TimeDialogBase {
       Q_OBJECT
 
+      PaletteScrollArea* _timePalette;
       Palette* sp;
       bool _dirty;
       TimeSig* timesig;

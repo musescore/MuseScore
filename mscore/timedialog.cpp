@@ -40,8 +40,11 @@ TimeDialog::TimeDialog(QWidget* parent)
       {
       setupUi(this);
       setWindowTitle(tr("MuseScore: Time Signatures"));
+
       QLayout* l = new QVBoxLayout();
+      l->setContentsMargins(0, 0, 0, 0);
       frame->setLayout(l);
+
       sp = MuseScore::newTimePalette();
       sp->setReadOnly(false);
       sp->setSelectable(true);
@@ -52,11 +55,12 @@ TimeDialog::TimeDialog(QWidget* parent)
       connect(sp,        SIGNAL(changed()),         SLOT(setDirty()));
       connect(addButton, SIGNAL(clicked()),         SLOT(addClicked()));
 
-      PaletteScrollArea* timePalette = new PaletteScrollArea(sp);
+      _timePalette = new PaletteScrollArea(sp);
       QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-      timePalette->setSizePolicy(policy);
+      _timePalette->setSizePolicy(policy);
+      _timePalette->setRestrictHeight(false);
 
-      l->addWidget(timePalette);
+      l->addWidget(_timePalette);
 
       _dirty = false;
 
@@ -88,6 +92,7 @@ void TimeDialog::addClicked()
       sp->append(ts, "");
       _dirty = true;
       sp->updateGeometry();
+      _timePalette->adjustSize();
       }
 
 //---------------------------------------------------------

@@ -26,6 +26,7 @@
 namespace Ms {
 
 class Palette;
+class PaletteScrollArea;
 
 //---------------------------------------------------------
 //   KeyEditor
@@ -34,6 +35,7 @@ class Palette;
 class KeyEditor : public QWidget, Ui::KeyEdit {
       Q_OBJECT
 
+      PaletteScrollArea* _keyPalette;
       Palette* sp;
       Palette* sp1;
       bool _dirty;
