@@ -196,12 +196,15 @@
       <property name="handleWidth">
        <number>2</number>
       </property>
-      <widget class="QTableView" name="tableViewTracks">
+      <widget class="TracksView" name="tableViewTracks">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
        </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
@@ -223,6 +226,9 @@
        <property name="editTriggers">
         <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
        </property>
+       <property name="tabKeyNavigation">
+        <bool>true</bool>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -235,6 +241,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TracksView</class>
+   <extends>QTableView</extends>
+   <header>mscore/importmidi_trview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="musescore.qrc"/>
  </resources>

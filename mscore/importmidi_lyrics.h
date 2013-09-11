@@ -9,7 +9,10 @@ class MTrack;
 
 namespace MidiLyrics {
 
-void extractLyrics(const QList<MTrack> &tracks, const MidiFile *mf);
+void setInitialIndexes(QList<MTrack> &tracks);
+void extractLyricsToMidiData(const MidiFile *mf);
+void setLyrics(const MidiFile *mf, const QList<MTrack> &tracks);
+QStringList makeLyricsList();
 
 } // namespace MidiLyrics
 } // namespace Ms
