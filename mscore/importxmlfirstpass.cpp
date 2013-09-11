@@ -693,7 +693,7 @@ bool MxmlReaderFirstPass::determineMeasureLength(QVector<int>& ml) const
                               maxMeasDur = measDurPartJ;
                         }
                   }
-            qDebug("determineMeasureLength() measure %d %s (%d)", i, qPrintable(maxMeasDur.print()), maxMeasDur.ticks());
+            // qDebug("determineMeasureLength() measure %d %s (%d)", i, qPrintable(maxMeasDur.print()), maxMeasDur.ticks());
             ml.append(maxMeasDur.ticks());
             }
       return true;
@@ -802,9 +802,11 @@ void MxmlReaderFirstPass::parseFile()
             }
 
       // debug: print results
+      /*
       for (int i = 0; i < parts.size(); ++i) {
             qDebug("part %d\n%s", i + 1, qPrintable(parts.at(i).toString()));
             }
+       */
 
       qDebug("Parsing time elapsed: %d ms", t.elapsed());
       qDebug("MxmlReaderFirstPass::parseFile() end");
