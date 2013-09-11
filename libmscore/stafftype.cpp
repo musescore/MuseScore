@@ -1173,9 +1173,9 @@ void initStaffTypes()
       // init staff type presets
 //                                                                                 human readable name  lin dst clef  bars stmless time  key  ledger
       _presets[STANDARD_STAFF_TYPE].staffType     = new StaffTypePitched   (QObject::tr("Standard"),      5, 1, true, true, false, true, true, true);
-      _presets[PERC_1LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 1 lines"), 1, 1, true, true, false, true, true, true);
-      _presets[PERC_3LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, true, true);
-      _presets[PERC_5LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, true, true);
+      _presets[PERC_1LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 1 lines"), 1, 1, true, true, false, true, false, true);
+      _presets[PERC_3LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, false, true);
+      _presets[PERC_5LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, false, true);
 //                                                                                     human-readable name  lin dist  clef   bars stemless time  duration font                 size off genDur fret font                       size off  thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
       _presets[TAB_6SIMPLE_STAFF_TYPE].staffType  = new StaffTypeTablature(QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
       _presets[TAB_6COMMON_STAFF_TYPE].staffType  = new StaffTypeTablature(QObject::tr("Tab. 6-str common"), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
