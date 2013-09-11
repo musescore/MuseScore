@@ -132,7 +132,6 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentDialogBase {
       void on_search_textChanged(const QString &searchPhrase);
       void on_clearSearch_clicked();
       void filterInstrumentsByGenre(QTreeWidget *, QString);
-      int checkGenres(QTreeWidgetItem *, QString);
       void populateGenreCombo();
 
       void on_InstrumentGenreFilter_currentTextChanged(const QString &);
