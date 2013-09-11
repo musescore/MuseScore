@@ -42,6 +42,7 @@
 #include "libmscore/system.h"
 #include "libmscore/tablature.h"
 #include "libmscore/undo.h"
+#include "libmscore/keysig.h"
 
 namespace Ms {
 
@@ -898,11 +899,35 @@ void MuseScore::editInstrList()
             rootScore->endCmd();
             return;
             }
-        rootScore->inputState().setTrack(-1);
+      rootScore->inputState().setTrack(-1);
+
+      // keep the keylist of the first staff to apply it to new ones
+      KeyList tmpKeymap;
+      Staff* firstStaff = nullptr;
+      for(Staff* s : rootScore->staves()) {
+            KeyList* km = s->keymap();
+            if(!s->isDrumStaff()) {
+                  tmpKeymap.insert(km->begin(), km->end());
+                  firstStaff = s;
+                  break;
+                  }
+      }
+      //normalize the keyevent to concert pitch if necessary
+      if(firstStaff && !rootScore->styleB(ST_concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
+                  int interval = firstStaff->part()->instr()->transpose().chromatic;
+                  for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
+                        int tick = i->first;
+                        KeySigEvent oKey = i->second;
+                        int nKeyType = transposeKey(oKey.accidentalType(), interval);
+                        KeySigEvent nKey;
+                        nKey.setAccidentalType(nKeyType);
+                        tmpKeymap[tick] = nKey;
+                        }
+                  }
+
       //
       // process modified partitur list
       //
-
       QTreeWidget* pl = instrList->partiturList;
       Part* part   = 0;
       int staffIdx = 0;
@@ -959,7 +984,6 @@ void MuseScore::editInstrList()
                         else {
                               nonLinked.append(staff);
                               }
-
                         ++rstaff;
                         }
                   if(linked.size() == 0)
@@ -980,6 +1004,9 @@ void MuseScore::editInstrList()
                   int sidx = rootScore->staffIdx(part);
                   int eidx = sidx + part->nstaves();
                   rootScore->adjustBracketsIns(sidx, eidx);
+                  //insert keysigs
+                  if(firstStaff)
+                        rootScore->adjustKeySigs(sidx, eidx, tmpKeymap);
                   staffIdx += rstaff;
                   }
             else {
@@ -1033,6 +1060,8 @@ void MuseScore::editInstrList()
                                     linkedStaff->linkTo(staff);
                                     cloneStaff(linkedStaff, staff);
                                     }
+                              if(firstStaff && !sli->linked())
+                                    rootScore->adjustKeySigs(staffIdx, staffIdx+1, tmpKeymap);
                               ++staffIdx;
                               ++rstaff;
                               }
