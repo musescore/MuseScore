@@ -95,6 +95,7 @@ class Cursor;
 struct PageContext;
 class BarLine;
 class Bracket;
+class KeyList;
 enum class OttavaType;
 enum class ClefType : signed char;
 
@@ -748,6 +749,7 @@ class Score : public QObject {
 
       void adjustBracketsDel(int sidx, int eidx);
       void adjustBracketsIns(int sidx, int eidx);
+      void adjustKeySigs(int sidx, int eidx, KeyList km);
       void renumberMeasures();
 
       void endUndoRedo();
