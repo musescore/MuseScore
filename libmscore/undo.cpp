@@ -444,6 +444,11 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
 
             KeySig* nks  = new KeySig(score);
             nks->setTrack(track);
+
+            int diff = -staff->part()->instr()->transpose().chromatic;
+            if (diff != 0 && !score->styleB(ST_concertPitch))
+                  st.setAccidentalType(transposeKey(st.accidentalType(), diff));
+
             nks->changeKeySigEvent(st);
             nks->setParent(s);
             if (links == 0)
