@@ -61,6 +61,7 @@ struct TrackOperations
       MidiOperation::Swing swing = MidiOperation::Swing::NONE;
       SplitDrums drums;
       bool pickupMeasure = true;
+      int lyricTrackIndex = -1;     // empty lyric
       };
 
 struct TrackMeta
@@ -68,6 +69,7 @@ struct TrackMeta
       QString staffName;
       QString instrumentName;
       bool isDrumTrack;
+      int initLyricTrackIndex;
       };
 
 struct TrackData
@@ -84,22 +86,29 @@ struct DefinedTrackOperations
       TrackOperations opers;
       };
 
+class ReducedFraction;
+
 class MidiImportOperations
       {
    public:
       void appendTrackOperations(const TrackOperations& operations);
       void clear();
       void setCurrentTrack(int trackIndex);
+      void setCurrentMidiFile(const QString &fileName);
       int currentTrack() const { return currentTrack_; }
       TrackOperations currentTrackOperations() const;
       TrackOperations trackOperations(int trackIndex) const;
       int count() const { return operations_.size(); }
       MidiData& midiData() { return midiData_; }
       void adaptForPercussion(int trackIndex);
+                  // lyrics
+      void addTrackLyrics(const std::multimap<ReducedFraction, QString> &trackLyrics);
+      const QList<std::multimap<ReducedFraction, QString> >* getLyrics();
 
    private:
       QList<TrackOperations> operations_;
       int currentTrack_ = -1;
+      QString currentMidiFile_;
       MidiData midiData_;
 
       bool isValidIndex(int index) const;
