@@ -787,23 +787,17 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
             }
       }
 
-QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
+QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
                                const MidiFile *mf)
 {
       QList<TrackMeta> tracksMeta;
-      int i = 0;
-      for (auto it = tracks.begin(); it != tracks.end(); ++it, ++i) {
-            if (i % 2) {
-                  auto prev = it;
-                  --prev;
-                  if (isSameChannel(prev->second, it->second)) {
-                        TrackMeta lastMeta = tracksMeta.back();
-                        tracksMeta.push_back(lastMeta);
-                        continue;
-                        }
+      for (int i = 0; i < tracks.size(); ++i) {
+            if (i % 2 && isSameChannel(tracks[i - 1], tracks[i])){
+                  TrackMeta lastMeta = tracksMeta.back();
+                  tracksMeta.push_back(lastMeta);
+                  continue;
                   }
-
-            const MTrack &mt = it->second;
+            const MTrack &mt = tracks[i];
             QString trackName;
             for (const auto &ie: mt.mtrack->events()) {
                   const MidiEvent &e = ie.second;
@@ -817,7 +811,11 @@ QList<TrackMeta> getTracksMeta(const std::multimap<int, MTrack> &tracks,
                   midiType = MT_GM;
             const QString instrName = instrumentName(midiType, mt.program,
                                                      mt.mtrack->drumTrack());
-            tracksMeta.push_back({trackName, instrName,  mt.mtrack->drumTrack()});
+            tracksMeta.push_back({trackName,
+                                  instrName,
+                                  mt.mtrack->drumTrack(),
+                                  mt.initLyricTrackIndex
+                                 });
             }
       return tracksMeta;
       }
@@ -844,7 +842,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       createNotes(lastTick, trackList, mf->midiType());
       createTimeSignatures(score);
       score->connectTies();
-      MidiLyrics::extractLyrics(trackList, mf);
+      MidiLyrics::setLyrics(mf, trackList);
       }
 
 void loadMidiData(MidiFile &mf)
@@ -882,9 +880,12 @@ QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
 
       Score mockScore;
       ReducedFraction lastTick;
-      const auto tracks = createMTrackList(lastTick, mockScore.sigmap(),
-                                           midiData.midiFile(fileName));
-      return getTracksMeta(tracks, midiData.midiFile(fileName));
+      const MidiFile *mf = midiData.midiFile(fileName);
+      const auto tracks = createMTrackList(lastTick, mockScore.sigmap(), mf);
+      QList<MTrack> trackList = prepareTrackList(tracks);
+      MidiLyrics::setInitialIndexes(trackList);
+
+      return getTracksMeta(trackList, mf);
       }
 
 //---------------------------------------------------------

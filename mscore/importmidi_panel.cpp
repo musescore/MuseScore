@@ -8,6 +8,7 @@
 #include "importmidi_opmodel.h"
 #include "importmidi_opdelegate.h"
 #include "importmidi_data.h"
+#include "importmidi_lyrics.h"
 
 
 namespace Ms {
@@ -28,11 +29,13 @@ ImportMidiPanel::ImportMidiPanel(QWidget *parent)
       {
       ui->setupUi(this);
       tracksModel = new TracksModel();
-      ui->tableViewTracks->setModel(tracksModel);
       operationsModel = new OperationsModel();
+      operationsDelegate = new OperationsDelegate(parentWidget(), false);
+      tracksDelegate = new OperationsDelegate(parentWidget(), true);    // same class
       ui->treeViewOperations->setModel(operationsModel);
-      operationsDelegate = new OperationsDelegate(parentWidget());
       ui->treeViewOperations->setItemDelegate(operationsDelegate);
+      ui->tableViewTracks->setModel(tracksModel);
+      ui->tableViewTracks->setItemDelegate(tracksDelegate);
       tweakUi();
       }
 
@@ -107,6 +110,8 @@ void ImportMidiPanel::tweakUi()
                                                              QHeaderView::ResizeToContents);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::DO_IMPORT,
                                                              QHeaderView::ResizeToContents);
+      ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::LYRICS,
+                                                             QHeaderView::Stretch);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::STAFF_NAME,
                                                              QHeaderView::Stretch);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::INSTRUMENT,
@@ -233,6 +238,7 @@ void ImportMidiPanel::setMidiPrefOperations(const QList<TrackData> &trackData)
       clearMidiPrefOperations();
       for (const auto &data: trackData)
             preferences.midiImportOperations.appendTrackOperations(data.opers);
+      preferences.midiImportOperations.setCurrentMidiFile(midiFile);
       }
 
 void ImportMidiPanel::resetTableViewState()
@@ -244,6 +250,7 @@ void ImportMidiPanel::resetTableViewState()
 void ImportMidiPanel::clearMidiPrefOperations()
       {
       preferences.midiImportOperations.clear();
+      preferences.midiImportOperations.setCurrentMidiFile(midiFile);
       }
 
 bool ImportMidiPanel::isMidiFileExists() const
@@ -259,6 +266,7 @@ void ImportMidiPanel::setMidiPrefOperations(const QString &fileName)
       QList<TrackData> trackData
                   = preferences.midiImportOperations.midiData().tracksData(fileName);
       setMidiPrefOperations(trackData);
+      preferences.midiImportOperations.setCurrentMidiFile(fileName);
       }
 
 void ImportMidiPanel::showOrHideStaffNameCol(const QList<TrackMeta> &tracksMeta)
@@ -274,6 +282,21 @@ void ImportMidiPanel::showOrHideStaffNameCol(const QList<TrackMeta> &tracksMeta)
             ui->tableViewTracks->horizontalHeader()->hideSection(TrackCol::STAFF_NAME);
       else
             ui->tableViewTracks->horizontalHeader()->showSection(TrackCol::STAFF_NAME);
+      }
+
+void ImportMidiPanel::showOrHideLyricsCol(const QList<TrackData> &tracksData)
+      {
+      bool hasLyricsTrack = false;
+      for (const auto &data: tracksData) {
+            if (data.opers.lyricTrackIndex >= 0) {
+                  hasLyricsTrack = true;
+                  break;
+                  }
+            }
+      if (hasLyricsTrack)
+            ui->tableViewTracks->horizontalHeader()->showSection(TrackCol::LYRICS);
+      else
+            ui->tableViewTracks->horizontalHeader()->hideSection(TrackCol::LYRICS);
       }
 
 void ImportMidiPanel::setMidiFile(const QString &fileName)
@@ -293,15 +316,19 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   clearMidiPrefOperations();
                   const QList<TrackMeta> tracksMeta = extractMidiTracksMeta(fileName);
                   tracksModel->reset(tracksMeta);
+                  tracksModel->setLyricsList(MidiLyrics::makeLyricsList());
                   showOrHideStaffNameCol(tracksMeta);
                   operationsModel->reset(tracksMeta.size());
                   for (int i = 0; i != tracksModel->trackCount(); ++i)
                         trackData.push_back(tracksModel->trackData(i));
                   preferences.midiImportOperations.midiData().setTracksData(fileName, trackData);
+                  showOrHideLyricsCol(trackData);
                   saveTableViewState(fileName);
                   }
             else {            // load previously saved data (tracks, operations) for this MIDI file
+                  preferences.midiImportOperations.setCurrentMidiFile(midiFile);
                   tracksModel->reset(trackData);
+                  tracksModel->setLyricsList(MidiLyrics::makeLyricsList());
                   restoreTableViewState(fileName);
                   }
             ui->tableViewTracks->selectRow(
@@ -314,8 +341,14 @@ void ImportMidiPanel::excludeMidiFile(const QString &fileName)
                   // because button "Apply" of MIDI import operations
                   // causes reopen of the current score
                   // we need to prevent MIDI import panel from closing at that moment
-      if (!importInProgress && !reopenInProgress)
-            preferences.midiImportOperations.midiData().excludeFile(fileName);
+      if (importInProgress || reopenInProgress)
+            return;
+
+      preferences.midiImportOperations.midiData().excludeFile(fileName);
+      if (fileName == midiFile) {
+            preferences.midiImportOperations.setCurrentMidiFile("");
+            midiFile = "";
+            }
       }
 
 void ImportMidiPanel::setPrefferedVisible(bool visible)

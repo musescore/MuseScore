@@ -2,6 +2,7 @@
 #define IMPORTMIDI_INNER_H
 
 #include "importmidi_fraction.h"
+#include "importmidi_tuplet.h"
 
 
 // ---------------------------------------------------------------------------------------
@@ -42,10 +43,6 @@ enum class DurationType;
 
 } // namespace Meter
 
-namespace MidiTuplet {
-class TupletData;
-}
-
 class Staff;
 class Score;
 class MidiTrack;
@@ -64,6 +61,7 @@ class MTrack {
       bool hasKey = false;
       int indexOfOperation = 0;
       int division = 0;
+      int initLyricTrackIndex = -1;
 
       std::multimap<ReducedFraction, MidiChord> chords;
       std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>

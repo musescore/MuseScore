@@ -38,8 +38,10 @@ struct MidiOperation
             SHOW_STAFF_BRACKET,
 
             PICKUP_MEASURE,
-            
-            SWING
+
+            SWING,
+
+            LYRIC_TRACK_INDEX
       } type;
 
       QVariant value;
