@@ -1240,26 +1240,45 @@ void MusicXml::scorePartwise(QDomElement ee)
             }
 
       // add bracket where required
-      const QList<Part*>& il = score->parts();
       // add bracket to multi-staff parts
-      /* LVIFIX TODO is this necessary ?
-      for (int idx = 0; idx < il.size(); ++idx) {
-            Part* part = il.at(idx);
-            qDebug("part %d staves=%d", idx, part->nstaves());
-            if (part->nstaves() > 1)
-                  part->staff(0)->addBracket(BracketItem(BRACKET_AKKOLADE, part->nstaves()));
-            }
-      */
+
+      /*
+      qDebug("partGroupList");
       for (int i = 0; i < (int) partGroupList.size(); i++) {
             MusicXmlPartGroup* pg = partGroupList[i];
+            qDebug("part-group span %d start %d type %d barlinespan %d",
+                   pg->span, pg->start, pg->type, pg->barlineSpan);
+            }
+       */
+
+      // set of parts containing one or more explicit brackets
+      // i.e. the parts starting a part-group
+      QSet<Part const* const> partSet;
+
+      // handle the explicit brackets
+      const QList<Part*>& il = score->parts();
+      for (int i = 0; i < (int) partGroupList.size(); i++) {
+            MusicXmlPartGroup* pg = partGroupList[i];
+            // add part to set
+            partSet << il.at(pg->start);
             // determine span in staves
             int stavesSpan = 0;
             for (int j = 0; j < pg->span; j++)
                   stavesSpan += il.at(pg->start + j)->nstaves();
-            // and add bracket
+            // add bracket and set the span
+            // TODO: use group-symbol default-x to determine horizontal order of brackets
             il.at(pg->start)->staff(0)->addBracket(BracketItem(pg->type, stavesSpan));
             if (pg->barlineSpan)
                   il.at(pg->start)->staff(0)->setBarLineSpan(pg->span);
+            }
+
+      // handle the implicit brackets:
+      // multi-staff parts w/o explicit brackets get a brace
+      foreach(Part const* const p, il) {
+            if (p->nstaves() > 1 && !partSet.contains(p)) {
+                  p->staff(0)->addBracket(BracketItem(BRACKET_BRACE, p->nstaves()));
+                  p->staff(0)->setBarLineSpan(p->nstaves());
+                  }
             }
 
       // having read all parts (meaning all segments have been created),
@@ -3129,12 +3148,6 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   // grow tuplets size, do not shrink to prevent losing info
                   if (staves * VOICES > tuplets.size())
                         tuplets.resize(staves * VOICES);
-                  Staff* st = part->staff(0);
-                  if (st && staves == 2) {
-                        st->setBracket(0, BRACKET_BRACE);
-                        st->setBracketSpan(0, 2);
-                        st->setBarLineSpan(2); //seems to be default in musicXML
-                        }
                   }
             }
 
