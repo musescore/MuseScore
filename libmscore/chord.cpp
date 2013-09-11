@@ -1194,7 +1194,7 @@ void Chord::layoutStem1()
 void Chord::layoutHook1()
       {
       int hookIdx  = durationType().hooks();
-      if (hookIdx) {
+      if (hookIdx && !(_noStem || measure()->slashStyle(staffIdx()))) {
             if (!_hook) {
                   Hook* hook = new Hook(score());
                   hook->setParent(this);
