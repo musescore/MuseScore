@@ -2498,6 +2498,34 @@ void Score::adjustBracketsIns(int sidx, int eidx)
       }
 
 //---------------------------------------------------------
+//   adjustKeySigs
+//---------------------------------------------------------
+
+void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
+      {
+      for (int staffIdx = sidx; staffIdx < eidx; ++staffIdx) {
+            Staff* staff = _staves[staffIdx];
+            if(!staff->isDrumStaff()) {
+                  for (auto i = km.begin(); i != km.end(); ++i) {
+                        int tick = i->first;
+                        Measure* measure = tick2measure(tick);
+                        KeySigEvent oKey = i->second;
+                        KeySigEvent nKey = oKey;
+                        int diff = -staff->part()->instr()->transpose().chromatic;
+                        if (diff != 0 && !styleB(ST_concertPitch))
+                              nKey.setAccidentalType(transposeKey(nKey.accidentalType(), diff));
+                        (*(staff->keymap()))[tick] = nKey;
+                        KeySig* keysig = new KeySig(this);
+                        keysig->setTrack(staffIdx * VOICES);
+                        keysig->setKeySigEvent(nKey);
+                        Segment* s = measure->getSegment(keysig, tick);
+                        s->add(keysig);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   cmdRemoveStaff
 //---------------------------------------------------------
 
