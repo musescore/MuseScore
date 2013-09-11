@@ -1186,6 +1186,10 @@ void MusicXml::scorePartwise(QDomElement ee)
                               domNotImplemented(ee);
                         else if (tag == "lyric-font")
                               domNotImplemented(ee);
+                        else if (tag == "appearance")
+                              domNotImplemented(ee);
+                        else if (tag == "lyric-language")
+                              domNotImplemented(ee);
                         else
                               domError(ee);
                         }
@@ -1474,6 +1478,12 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               if (part->longName().isEmpty())
                                     part->setLongName(ee.text());
                               }
+                        else if (ee.tagName() == "instrument-sound")
+                              domNotImplemented(e);
+                        else if (ee.tagName() == "solo")
+                              domNotImplemented(e);
+                        else if (ee.tagName() == "virtual-instrument")
+                              domNotImplemented(e);
                         else
                               domError(ee);
                         }
@@ -1516,11 +1526,13 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
       */
 
       // dump drumset for this part
+      /*
       MusicXMLDrumsetIterator i(drumsets[id]);
       while (i.hasNext()) {
             i.next();
             qDebug("%s %s", qPrintable(i.key()), qPrintable(i.value().toString()));
             }
+       */
       }
 
 
@@ -1679,7 +1691,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
 
 void MusicXml::xmlPart(QDomElement e, QString id)
       {
-      qDebug("xmlPart(id='%s')", qPrintable(id));
+      // qDebug("xmlPart(id='%s')", qPrintable(id));
       if (id == "") {
             qDebug("MusicXML import: part without id");
             return;
@@ -1755,7 +1767,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
       MusicXMLDrumsetIterator ii(drumsets[id]);
       while (ii.hasNext()) {
             ii.next();
-            qDebug("%s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
+            // qDebug("%s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
             int pitch = ii.value().pitch;
             if (0 <= pitch && pitch <= 127) {
                   hasDrumset = true;
@@ -1764,7 +1776,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                                          ii.value().notehead, ii.value().line, ii.value().stemDirection);
                   }
             }
-      qDebug("hasDrumset %d", hasDrumset);
+      // qDebug("hasDrumset %d", hasDrumset);
       if (hasDrumset) {
             // set staff type to percussion if incorrectly imported as pitched staff
             // Note: part has been read, staff type already set based on clef type and staff-details
@@ -2536,6 +2548,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   if (rstaff < 0)         // ???
                         rstaff = 0;
                   }
+            else if (e.tagName() == "voice")
+                  domNotImplemented(e);
             else
                   domError(e);
             } // for (e = e.firstChildElement(); ...
