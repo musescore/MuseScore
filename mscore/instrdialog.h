@@ -131,10 +131,9 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentDialogBase {
 
       void on_search_textChanged(const QString &searchPhrase);
       void on_clearSearch_clicked();
-      void filterInstrumentsByGenre(QTreeWidget *, QString);
-      void populateGenreCombo();
 
-      void on_InstrumentGenreFilter_currentTextChanged(const QString &);
+      void on_instrumentGenreFilter_currentIndexChanged(int);
+      void filterInstrumentsByGenre(QTreeWidget *, QString);
 
    public:
       InstrumentsDialog(QWidget* parent = 0);
@@ -159,7 +158,8 @@ class InstrumentTemplateListItem : public QTreeWidgetItem {
       virtual QString text(int col) const;
       };
 
-extern void populateInstrumentList(QTreeWidget* instrumentList, bool extended);
+extern void populateInstrumentList(QTreeWidget* instrumentList);
+extern void populateGenreCombo(QComboBox* combo);
 
 } // namespace Ms
 

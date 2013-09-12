@@ -31,8 +31,12 @@ class Tablature;
 class InstrumentGenre {
    public:
       QString id;
+      QString name;
 
-      InstrumentGenre() { id = ""; }
+      InstrumentGenre() {}
+      void write(Xml& xml) const;
+      void write1(Xml& xml) const;
+      void read(XmlReader&);
       };
 
 //---------------------------------------------------------//   InstrumentTemplate
@@ -66,7 +70,7 @@ class InstrumentTemplate {
       QList<NamedEventList>   midiActions;
       QList<MidiArticulation> articulation;
       QList<Channel>          channel;
-      QList<InstrumentGenre*> InstrumentGenres;     //; list of genres this instrument belongs to
+      QList<InstrumentGenre*> genres;     //; list of genres this instrument belongs to
 
       ClefTypeList clefTypes[MAX_STAVES];
       int staffLines[MAX_STAVES];

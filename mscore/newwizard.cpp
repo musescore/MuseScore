@@ -68,7 +68,6 @@ InstrumentWizard::InstrumentWizard(QWidget* parent)
       downButton->setEnabled(false);
       linkedButton->setEnabled(false);
       belowButton->setEnabled(false);
-      connect(showMore, SIGNAL(clicked()), SLOT(buildTemplateList()));
       connect( instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
       }
 
@@ -82,7 +81,8 @@ void InstrumentWizard::buildTemplateList()
       search->clear();
       filterInstruments(instrumentList);
 
-      populateInstrumentList(instrumentList, showMore->isChecked());
+      populateInstrumentList(instrumentList);
+      populateGenreCombo(instrumentGenreFilter);
       }
 
 //---------------------------------------------------------
@@ -973,6 +973,9 @@ bool NewWizard::useTemplate() const
 void InstrumentWizard::on_search_textChanged(const QString &searchPhrase)
       {
       filterInstruments(instrumentList, searchPhrase);
+      instrumentGenreFilter->blockSignals(true);
+      instrumentGenreFilter->setCurrentIndex(0);
+      instrumentGenreFilter->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -983,6 +986,48 @@ void InstrumentWizard::on_clearSearch_clicked()
       {
       search->clear();
       filterInstruments (instrumentList);
+      }
+
+//---------------------------------------------------------
+//   on_instrumentGenreFilter_currentTextChanged
+//---------------------------------------------------------
+
+void InstrumentWizard::on_instrumentGenreFilter_currentIndexChanged(int index)
+      {
+      QString id = instrumentGenreFilter->itemData(index).toString();
+      // Redisplay tree, only showing items from the selected genre
+      filterInstrumentsByGenre(instrumentList, id);
+      }
+
+
+//---------------------------------------------------------
+//   filterInstrumentsByGenre
+//---------------------------------------------------------
+
+void InstrumentWizard::filterInstrumentsByGenre(QTreeWidget *instrumentList, QString genre)
+      {
+      QTreeWidgetItemIterator iList(instrumentList);
+      while (*iList) {
+            (*iList)->setHidden(true);
+            InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(*iList);
+            InstrumentTemplate *it=itli->instrumentTemplate();
+
+            if(it) {
+                  if (genre == "all" || it->genreMember(genre)) {
+                        (*iList)->setHidden(false);
+
+                        QTreeWidgetItem *iParent = (*iList)->parent();
+                        while(iParent) {
+                              if(!iParent->isHidden())
+                                    break;
+
+                              iParent->setHidden(false);
+                              iParent = iParent->parent();
+                              }
+                        }
+                  }
+            ++iList;
+            }
       }
 }
 

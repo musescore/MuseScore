@@ -39,6 +39,9 @@
     </layout>
    </item>
    <item>
+    <widget class="QComboBox" name="instrumentGenreFilter"/>
+   </item>
+   <item>
     <widget class="QTreeWidget" name="instrumentList">
      <property name="expandsOnDoubleClick">
       <bool>false</bool>
@@ -54,11 +57,22 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="showMore">
-     <property name="text">
-      <string>show more</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLineEdit" name="search">
+       <property name="placeholderText">
+        <string>Search</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clearSearch">
+       <property name="text">
+        <string>Clear</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
