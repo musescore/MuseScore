@@ -41,6 +41,12 @@ class SelectInstrument : public QDialog, private Ui::SelectInstrument {
       void on_instrumentList_itemSelectionChanged();
       void on_instrumentList_itemDoubleClicked(QTreeWidgetItem* item, int);
 
+      void on_search_textChanged(const QString &searchPhrase);
+      void on_clearSearch_clicked();
+
+      void on_instrumentGenreFilter_currentIndexChanged(int);
+      void filterInstrumentsByGenre(QTreeWidget *, QString);
+
    public:
       SelectInstrument(const Instrument&, QWidget* parent = 0);
       const InstrumentTemplate* instrTemplate() const;

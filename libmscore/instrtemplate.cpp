@@ -32,13 +32,11 @@ QList<InstrumentGenre*> instrumentGenres;
 
 static InstrumentGenre * searchInstrumentGenre(const QString& genre)
       {
-      InstrumentGenre * rVal = NULL;
       foreach(InstrumentGenre* ig, instrumentGenres) {
-            if (ig->id == genre) {
-                  rVal = ig;
-                  }
+            if (ig->id == genre)
+                  return ig;
             }
-      return rVal;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -51,7 +49,7 @@ static InstrumentGroup* searchInstrumentGroup(const QString& name)
             if (g->id == name)
                   return g;
             }
-      return 0;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -153,7 +151,6 @@ InstrumentTemplate::InstrumentTemplate(const InstrumentTemplate& t)
 
 void InstrumentTemplate::init(const InstrumentTemplate& t)
       {
-      trackName  = t.trackName;
       longNames  = t.longNames;
       shortNames = t.shortNames;
       musicXMLid = t.musicXMLid;
@@ -580,7 +577,9 @@ bool saveInstrumentTemplates(const QString& instrTemplates)
       Xml xml(&qf);
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("museScore");
-
+      foreach(const InstrumentGenre* genre, instrumentGenres)
+            genre->write(xml);
+      xml << "\n";
       foreach(const MidiArticulation& a, articulation)
             a.write(xml);
       xml << "\n";
@@ -615,7 +614,8 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
       Xml xml(&qf);
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("museScore");
-
+      foreach(const InstrumentGenre* genre, instrumentGenres)
+            genre->write1(xml);
       foreach(InstrumentGroup* group, instrumentGroups) {
             xml.stag(QString("InstrumentGroup id=\"%1\"").arg(group->id));
             xml.tag("name", group->name);
@@ -663,9 +663,14 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                               a.read(e);
                               articulation.append(a);
                               }
-                        else if (tag == "genre") {
+                        else if (tag == "Genre") {
                               QString id(e.attribute("id"));
-                              searchInstrumentGenre("id");
+                              InstrumentGenre* genre = searchInstrumentGenre(id);
+                              if (!genre) {
+                                    genre = new InstrumentGenre;
+                                    instrumentGenres.append(genre);
+                                    }
+                              genre->read(e);
                               }
                         else
                               e.unknown();
@@ -702,14 +707,8 @@ InstrumentTemplate* searchTemplate(const QString& name)
 void InstrumentTemplate::linkGenre(const QString& genre)
       {
       InstrumentGenre *ig = searchInstrumentGenre(genre);
-
-      if (!ig) {
-            ig = new InstrumentGenre;
-            ig->id = genre;
-            instrumentGenres.append(ig);
-            }
-
-      InstrumentGenres.append(ig);
+      if (ig)
+            genres.append(ig);
       }
 
 //---------------------------------------------------------
@@ -720,7 +719,7 @@ void InstrumentTemplate::linkGenre(const QString& genre)
 bool InstrumentTemplate::genreMember(const QString& name)
       {
             bool rVal=false;
-            foreach(InstrumentGenre *instrumentGenre, InstrumentGenres ) {
+            foreach(InstrumentGenre *instrumentGenre, genres ) {
                 if(instrumentGenre->id == name) {
                       rVal = true;
                       break;
@@ -728,4 +727,32 @@ bool InstrumentTemplate::genreMember(const QString& name)
             }
             return rVal;
       }
+
+void InstrumentGenre::write(Xml& xml) const
+      {
+      xml.stag(QString("Genre id=\"%1\"").arg(id));
+      xml.tag("name", name);
+      xml.etag();
+      }
+
+void InstrumentGenre::write1(Xml& xml) const
+      {
+      write(xml);
+      }
+
+void InstrumentGenre::read(XmlReader& e)
+      {
+      id = e.attribute("id");
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "name") {
+                  name = e.readElementText();
+            }
+            else
+                  e.unknown();
+            }
+     }
+
 }
+
+
