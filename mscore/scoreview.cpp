@@ -1526,10 +1526,10 @@ void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
       y -= 3 * _spatium;
 
       if (isInPos) {
-            x = x - _spatium + w/2;
+            x = x - _spatium + w/1.5;
             }
       else {
-            x = x - _spatium + w/3;
+            x = x - _spatium;
             }
       curLoop->setTick(tick);
       curLoop->setRect(QRectF(x, y, w, h));
