@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>405</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,7 +37,7 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QComboBox" name="InstrumentGenreFilter"/>
+        <widget class="QComboBox" name="instrumentGenreFilter"/>
        </item>
        <item>
         <widget class="QTreeWidget" name="instrumentList">
@@ -101,13 +101,6 @@
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="showMore">
-         <property name="text">
-          <string>show more</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -392,7 +385,6 @@
   <tabstop>belowButton</tabstop>
   <tabstop>linkedButton</tabstop>
   <tabstop>partiturList</tabstop>
-  <tabstop>showMore</tabstop>
   <tabstop>loadButton</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>okButton</tabstop>

@@ -17,6 +17,9 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <widget class="QComboBox" name="instrumentGenreFilter"/>
+     </item>
+     <item>
       <widget class="QTreeWidget" name="instrumentList">
        <property name="alternatingRowColors">
         <bool>true</bool>
@@ -36,6 +39,9 @@
        <property name="columnCount">
         <number>1</number>
        </property>
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
        <column>
         <property name="text">
          <string>0</string>
@@ -63,13 +69,6 @@
         </widget>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="showMore">
-       <property name="text">
-        <string>show more</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>
@@ -248,7 +247,6 @@
   <tabstop>search</tabstop>
   <tabstop>clearSearch</tabstop>
   <tabstop>instrumentList</tabstop>
-  <tabstop>showMore</tabstop>
   <tabstop>addButton</tabstop>
   <tabstop>removeButton</tabstop>
   <tabstop>upButton</tabstop>
