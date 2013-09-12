@@ -37,6 +37,9 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
+        <widget class="QComboBox" name="InstrumentGenreFilter"/>
+       </item>
+       <item>
         <widget class="QTreeWidget" name="instrumentList">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">

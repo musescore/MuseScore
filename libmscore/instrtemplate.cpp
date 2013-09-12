@@ -24,6 +24,22 @@ namespace Ms {
 
 QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                // global articulations
+QList<InstrumentGenre*> instrumentGenres;
+
+//---------------------------------------------------------
+//   searchGenre
+//---------------------------------------------------------
+
+static InstrumentGenre * searchInstrumentGenre(const QString& genre)
+      {
+      InstrumentGenre * rVal = NULL;
+      foreach(InstrumentGenre* ig, instrumentGenres) {
+            if (ig->id == genre) {
+                  rVal = ig;
+                  }
+            }
+      return rVal;
+      }
 
 //---------------------------------------------------------
 //   searchInstrumentGroup
@@ -480,6 +496,10 @@ void InstrumentTemplate::read(XmlReader& e)
             else if (tag == "musicXMLid") {
                   musicXMLid = e.readElementText();
                   }
+            else if (tag == "genre") {
+                  QString val(e.readElementText());
+                  linkGenre(val);
+                  }
             else
                   e.unknown();
             }
@@ -643,6 +663,10 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                               a.read(e);
                               articulation.append(a);
                               }
+                        else if (tag == "genre") {
+                              QString id(e.attribute("id"));
+                              searchInstrumentGenre("id");
+                              }
                         else
                               e.unknown();
                         }
@@ -667,5 +691,41 @@ InstrumentTemplate* searchTemplate(const QString& name)
       return 0;
       }
 
-}
 
+//---------------------------------------------------------
+//   linkGenre
+//      link the current instrument template to the genre list specified by "genre"
+//      Each genre is a list of pointers to instrument templates
+//      The list of genres is at application level
+//---------------------------------------------------------
+
+void InstrumentTemplate::linkGenre(const QString& genre)
+      {
+      InstrumentGenre *ig = searchInstrumentGenre(genre);
+
+      if (!ig) {
+            ig = new InstrumentGenre;
+            ig->id = genre;
+            instrumentGenres.append(ig);
+            }
+
+      InstrumentGenres.append(ig);
+      }
+
+//---------------------------------------------------------
+//   genreMember
+//      is this instrument template a member of the supplied genre
+//---------------------------------------------------------
+
+bool InstrumentTemplate::genreMember(const QString& name)
+      {
+            bool rVal=false;
+            foreach(InstrumentGenre *instrumentGenre, InstrumentGenres ) {
+                if(instrumentGenre->id == name) {
+                      rVal = true;
+                      break;
+                }
+            }
+            return rVal;
+      }
+}
