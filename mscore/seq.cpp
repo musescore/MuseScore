@@ -277,7 +277,6 @@ void Seq::rewindStart()
 
 void Seq::loopStart()
       {
-      seek(0);
       start();
 //      qDebug("LoopStart. playPos = %d\n", playPos);
       }
@@ -349,8 +348,6 @@ void Seq::stop()
             cs->setUpdateAll();
             cs->end();
             }
-      //if (mscore->loop())
-        //    loopStop();
       }
 
 //---------------------------------------------------------
@@ -599,7 +596,7 @@ void Seq::process(unsigned n, float* buffer)
                   putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
-                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->%d\n", playPos->first,cs->pos());
+                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
                               emit toGui('4');
                               loopStart();
                               }
