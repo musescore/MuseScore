@@ -318,7 +318,7 @@ void Seq::start()
       if ((mscore->loop())) {
             if(cs->selection().state() == SEL_RANGE)
                   setLoopSelection();
-            seek(cs->loopInTick());
+            seek(cs->repeatList()->tick2utick(cs->loopInTick()));
             }
       else
             seek(cs->playPos());
@@ -437,7 +437,7 @@ void Seq::seqMessage(int msg)
                   loopStart();
                   break;
             case '3':   // Loop restart while playing
-                  seek(cs->loopInTick());
+                  seek(cs->repeatList()->tick2utick(cs->loopInTick()));
                   break;
             case '2':
                   guiStop();
