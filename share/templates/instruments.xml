@@ -1508,7 +1508,7 @@
                   <longName>D Clarinet</longName>
                   <shortName>D Cl.</shortName>
                   <description>D Clarinet</description>
-                  <musicXMLid>wind.reed.clarinet.d</musicXMLid>
+                  <musicXMLid>wind.reed.clarinet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>54-93</aPitchRange>
