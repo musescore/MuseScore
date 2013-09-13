@@ -43,6 +43,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
    private slots:
       void volumeChanged(double,int);
       void relTempoChanged(double,int);
+      void relTempoChanged();
 
    signals:
       void relTempoChanged(double);
