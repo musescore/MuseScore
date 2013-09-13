@@ -1461,7 +1461,7 @@
             <Instrument id="clarinet">
                   <longName>Clarinet</longName>
                   <shortName>Cl.</shortName>
-                  <description>B♭ Clarinet</description>
+                  <description>B♭ Clarinet (generic)</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1472,6 +1472,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
+                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="piccolo-clarinet">
                   <longName>Piccolo Clarinet</longName>
@@ -1506,8 +1507,8 @@
             <Instrument id="d-clarinet">
                   <longName>D Clarinet</longName>
                   <shortName>D Cl.</shortName>
-                  <description>Clarinet</description>
-                  <musicXMLid>wind.reed.clarinet</musicXMLid>
+                  <description>D Clarinet</description>
+                  <musicXMLid>wind.reed.clarinet.d</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>54-93</aPitchRange>
@@ -1551,7 +1552,6 @@
                         <program value="71"/>
                   </Channel>
                   <genre>common</genre>
-                  <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="a-clarinet">
@@ -2889,6 +2889,7 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
+                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="piccolo-trumpet">
                   <longName>Piccolo Trumpet</longName>
@@ -3020,7 +3021,6 @@
                         <program value="59"/>
                   </Channel>
                   <genre>common</genre>
-                  <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="pocket-trumpet">
