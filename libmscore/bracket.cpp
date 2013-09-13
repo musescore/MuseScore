@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -53,13 +53,15 @@ void Bracket::setHeight(qreal h)
 
 qreal Bracket::width() const
       {
-      qreal w;
+      qreal w = 0;
       if (bracketType() == BRACKET_BRACE)
             w = point(score()->styleS(ST_akkoladeWidth) + score()->styleS(ST_akkoladeBarDistance));
       else if (bracketType() == BRACKET_NORMAL)
             w = point(score()->styleS(ST_bracketWidth) + score()->styleS(ST_bracketDistance));
       else if (bracketType() == BRACKET_SQUARE)
             w = point(score()->styleS(ST_staffLineWidth) + Spatium(0.5));
+      else if (bracketType() == BRACKET_LINE)
+            w = point(0.67 * score()->styleS(ST_bracketWidth) + score()->styleS(ST_bracketDistance));
       return w;
       }
 
@@ -123,6 +125,15 @@ void Bracket::layout()
             w      += (.5 * spatium() + 3* w);
             bbox().setRect(x, y, w, h);
             }
+      else if (bracketType() == BRACKET_LINE) {
+            qreal _spatium = spatium();
+            qreal w = 0.67 * score()->styleS(ST_bracketWidth).val() * _spatium * .5;
+            qreal x = -w;
+            qreal bd = _spatium * .25;
+            qreal y = -bd;
+            qreal h = (-y + h2) * 2;
+            bbox().setRect(x, y, w, h);
+            }
       }
 
 //---------------------------------------------------------
@@ -164,6 +175,15 @@ void Bracket::draw(QPainter* painter) const
             painter->drawLine(QLineF(0.0, 0.0, w + .5 *_spatium, 0.0));
             painter->drawLine(QLineF(0.0, h  , w + .5 *_spatium, h));
             }
+      else if (bracketType() == BRACKET_LINE) {
+            qreal h = 2 * h2;
+            qreal _spatium = spatium();
+            qreal w = 0.67 * score()->styleS(ST_bracketWidth).val() * _spatium;
+            QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
+            painter->setPen(pen);
+            qreal bd   = _spatium * .25;
+            painter->drawLine(QLineF(0.0, -bd, 0.0, h + bd));
+            }
       }
 
 //---------------------------------------------------------
@@ -181,6 +201,9 @@ void Bracket::write(Xml& xml) const
                   break;
             case BRACKET_SQUARE:
                   xml.stag("Bracket type=\"Square\"");
+                  break;
+            case BRACKET_LINE:
+                  xml.stag("Bracket type=\"Line\"");
                   break;
             case NO_BRACKET:
                   break;
@@ -207,6 +230,8 @@ void Bracket::read(XmlReader& e)
             setBracketType(BRACKET_BRACE);
       else if (t == "Square")
             setBracketType(BRACKET_SQUARE);
+      else if (t == "Line")
+            setBracketType(BRACKET_LINE);
       else
             qDebug("unknown brace type <%s>", qPrintable(t));
 

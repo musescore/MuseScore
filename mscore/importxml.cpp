@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: importxml.cpp 5653 2012-05-19 20:19:58Z lvinken $
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -1186,6 +1186,10 @@ void MusicXml::scorePartwise(QDomElement ee)
                               domNotImplemented(ee);
                         else if (tag == "lyric-font")
                               domNotImplemented(ee);
+                        else if (tag == "appearance")
+                              domNotImplemented(ee);
+                        else if (tag == "lyric-language")
+                              domNotImplemented(ee);
                         else
                               domError(ee);
                         }
@@ -1240,26 +1244,45 @@ void MusicXml::scorePartwise(QDomElement ee)
             }
 
       // add bracket where required
-      const QList<Part*>& il = score->parts();
       // add bracket to multi-staff parts
-      /* LVIFIX TODO is this necessary ?
-      for (int idx = 0; idx < il.size(); ++idx) {
-            Part* part = il.at(idx);
-            qDebug("part %d staves=%d", idx, part->nstaves());
-            if (part->nstaves() > 1)
-                  part->staff(0)->addBracket(BracketItem(BRACKET_AKKOLADE, part->nstaves()));
-            }
-      */
+
+      /*
+      qDebug("partGroupList");
       for (int i = 0; i < (int) partGroupList.size(); i++) {
             MusicXmlPartGroup* pg = partGroupList[i];
+            qDebug("part-group span %d start %d type %d barlinespan %d",
+                   pg->span, pg->start, pg->type, pg->barlineSpan);
+            }
+       */
+
+      // set of parts containing one or more explicit brackets
+      // i.e. the parts starting a part-group
+      QSet<Part const* const> partSet;
+
+      // handle the explicit brackets
+      const QList<Part*>& il = score->parts();
+      for (int i = 0; i < (int) partGroupList.size(); i++) {
+            MusicXmlPartGroup* pg = partGroupList[i];
+            // add part to set
+            partSet << il.at(pg->start);
             // determine span in staves
             int stavesSpan = 0;
             for (int j = 0; j < pg->span; j++)
                   stavesSpan += il.at(pg->start + j)->nstaves();
-            // and add bracket
+            // add bracket and set the span
+            // TODO: use group-symbol default-x to determine horizontal order of brackets
             il.at(pg->start)->staff(0)->addBracket(BracketItem(pg->type, stavesSpan));
             if (pg->barlineSpan)
                   il.at(pg->start)->staff(0)->setBarLineSpan(pg->span);
+            }
+
+      // handle the implicit brackets:
+      // multi-staff parts w/o explicit brackets get a brace
+      foreach(Part const* const p, il) {
+            if (p->nstaves() > 1 && !partSet.contains(p)) {
+                  p->staff(0)->addBracket(BracketItem(BRACKET_BRACE, p->nstaves()));
+                  p->staff(0)->setBarLineSpan(p->nstaves());
+                  }
             }
 
       // having read all parts (meaning all segments have been created),
@@ -1312,7 +1335,7 @@ static void partGroupStart(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, in
       else if (s == "bracket")
             bracketType = BRACKET_NORMAL;
       else if (s == "line")
-            bracketType = BRACKET_NORMAL;
+            bracketType = BRACKET_LINE;
       else if (s == "square")
             bracketType = BRACKET_SQUARE;
       else {
@@ -1455,6 +1478,12 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               if (part->longName().isEmpty())
                                     part->setLongName(ee.text());
                               }
+                        else if (ee.tagName() == "instrument-sound")
+                              domNotImplemented(e);
+                        else if (ee.tagName() == "solo")
+                              domNotImplemented(e);
+                        else if (ee.tagName() == "virtual-instrument")
+                              domNotImplemented(e);
                         else
                               domError(ee);
                         }
@@ -1497,11 +1526,13 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
       */
 
       // dump drumset for this part
+      /*
       MusicXMLDrumsetIterator i(drumsets[id]);
       while (i.hasNext()) {
             i.next();
             qDebug("%s %s", qPrintable(i.key()), qPrintable(i.value().toString()));
             }
+       */
       }
 
 
@@ -1660,7 +1691,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
 
 void MusicXml::xmlPart(QDomElement e, QString id)
       {
-      qDebug("xmlPart(id='%s')", qPrintable(id));
+      // qDebug("xmlPart(id='%s')", qPrintable(id));
       if (id == "") {
             qDebug("MusicXML import: part without id");
             return;
@@ -1736,7 +1767,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
       MusicXMLDrumsetIterator ii(drumsets[id]);
       while (ii.hasNext()) {
             ii.next();
-            qDebug("%s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
+            // qDebug("%s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
             int pitch = ii.value().pitch;
             if (0 <= pitch && pitch <= 127) {
                   hasDrumset = true;
@@ -1745,7 +1776,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                                          ii.value().notehead, ii.value().line, ii.value().stemDirection);
                   }
             }
-      qDebug("hasDrumset %d", hasDrumset);
+      // qDebug("hasDrumset %d", hasDrumset);
       if (hasDrumset) {
             // set staff type to percussion if incorrectly imported as pitched staff
             // Note: part has been read, staff type already set based on clef type and staff-details
@@ -2517,6 +2548,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   if (rstaff < 0)         // ???
                         rstaff = 0;
                   }
+            else if (e.tagName() == "voice")
+                  domNotImplemented(e);
             else
                   domError(e);
             } // for (e = e.firstChildElement(); ...
@@ -3129,12 +3162,6 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   // grow tuplets size, do not shrink to prevent losing info
                   if (staves * VOICES > tuplets.size())
                         tuplets.resize(staves * VOICES);
-                  Staff* st = part->staff(0);
-                  if (st && staves == 2) {
-                        st->setBracket(0, BRACKET_BRACE);
-                        st->setBracketSpan(0, 2);
-                        st->setBarLineSpan(2); //seems to be default in musicXML
-                        }
                   }
             }
 
