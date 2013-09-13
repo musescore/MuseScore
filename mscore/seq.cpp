@@ -277,7 +277,6 @@ void Seq::rewindStart()
 
 void Seq::loopStart()
       {
-      seek(0);
       start();
 //      qDebug("LoopStart. playPos = %d\n", playPos);
       }
@@ -319,7 +318,7 @@ void Seq::start()
       if ((mscore->loop())) {
             if(cs->selection().state() == SEL_RANGE)
                   setLoopSelection();
-            seek(cs->loopInTick());
+            seek(cs->repeatList()->tick2utick(cs->loopInTick()));
             }
       else
             seek(cs->playPos());
@@ -349,8 +348,6 @@ void Seq::stop()
             cs->setUpdateAll();
             cs->end();
             }
-      //if (mscore->loop())
-        //    loopStop();
       }
 
 //---------------------------------------------------------
@@ -436,8 +433,11 @@ void Seq::guiStop()
 void Seq::seqMessage(int msg)
       {
       switch(msg) {
+            case '4':   // Restart the playback at the end of the score
+                  loopStart();
+                  break;
             case '3':   // Loop restart while playing
-                  seek(cs->loopInTick());
+                  seek(cs->repeatList()->tick2utick(cs->loopInTick()));
                   break;
             case '2':
                   guiStop();
@@ -596,7 +596,8 @@ void Seq::process(unsigned n, float* buffer)
                   putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
-                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->%d\n", playPos->first,cs->pos());
+                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
+                              emit toGui('4');
                               loopStart();
                               }
                         else {
@@ -634,12 +635,13 @@ void Seq::process(unsigned n, float* buffer)
 						n = 0;
                         }
                   if (mscore->loop()) {
-                        if (playPos->first >= cs->loopOutTick()) {
-                              qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   f = %d   playTime = %d", playPos->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), f, playTime);
-                              emit toGui('3');   // Exit this function to avoid segmentation fault in Scoreview
-                              //seek(cs->loopInTick());
-                              return;
-                              }
+                        int tickLoop = cs->repeatList()->tick2utick(cs->loopOutTick());
+                        if (tickLoop < cs->lastMeasure()->endTick()-1)
+                              if (playPos->first >= tickLoop) {
+                                    qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d", playPos->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), tickLoop, playTime);
+                                    emit toGui('3');   // Exit this function to avoid segmentation fault in Scoreview
+                                    return;
+                                    }
                         }
                   if (n) {
                         if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
@@ -1251,7 +1253,7 @@ void Seq::setLoopIn()
             auto ppos = playPos;
             if (ppos != events.cbegin())
                   --ppos;                 // We have to go back one pos to get the correct note that has just been played
-            tick = ppos->first;
+            tick = cs->repeatList()->utick2tick(ppos->first);
             }
       else {
             tick = cs->pos();             // Otherwise, use the selected note.
@@ -1270,7 +1272,7 @@ void Seq::setLoopOut()
       {
       int tick;
       if (state == TRANSPORT_PLAY) {    // If in playback mode, set the Out position where note is being played
-            tick = playPos->first;
+            tick = cs->repeatList()->utick2tick(playPos->first);
             }
       else {
             tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
