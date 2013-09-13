@@ -52,7 +52,6 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addAction(getAction("undo"));
       tb->addAction(getAction("redo"));
       tb->addSeparator();
-      tb->addAction(getAction("sound-on"));
 #ifdef HAS_MIDI
       tb->addAction(getAction("midi-on"));
 #endif
