@@ -121,7 +121,7 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                   if (mode == QIcon::Disabled) {
                         if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT) {
                               if (state == QIcon::On)
-                                    ba.replace("fill:#ffffff", "fill:#2463aa");
+                                    ba.replace("fill:#ffffff", "fill:#91336c");
                               else
                                     ba.replace("fill:#ffffff", "fill:#a0a0a0");
                               }
@@ -135,9 +135,9 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                   else {
                         if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT) {
                               if (state == QIcon::On)
-                                    ba.replace("fill:#ffffff", "fill:#2463aa");
+                                    ba.replace("fill:#ffffff", "fill:#91336c");
                               else
-                                    ba.replace("fill:#ffffff", "fill:#000000");
+                                    ba.replace("fill:#ffffff", "fill:#333333");
                               }
                         else {
                               if (state == QIcon::On)

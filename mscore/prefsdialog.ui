@@ -110,52 +110,20 @@
            <widget class="QComboBox" name="language"/>
           </item>
           <item>
-           <widget class="QLabel" name="restartWarning_2">
+           <widget class="QLabel" name="restartWarningLanguage">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="palette">
-             <palette>
-              <active>
-               <colorrole role="WindowText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>1</green>
-                  <blue>39</blue>
-                 </color>
-                </brush>
-               </colorrole>
-              </active>
-              <inactive>
-               <colorrole role="WindowText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>1</green>
-                  <blue>39</blue>
-                 </color>
-                </brush>
-               </colorrole>
-              </inactive>
-              <disabled>
-               <colorrole role="WindowText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>119</red>
-                  <green>119</green>
-                  <blue>121</blue>
-                 </color>
-                </brush>
-               </colorrole>
-              </disabled>
-             </palette>
+            <property name="font">
+             <font>
+              <italic>true</italic>
+             </font>
             </property>
             <property name="text">
-             <string>Attention: changing the language requires a restart of MuseScore.</string>
+             <string notr="true">The language will be changed once you restart MuseScore.</string>
             </property>
             <property name="textFormat">
              <enum>Qt::PlainText</enum>
