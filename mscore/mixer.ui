@@ -23,7 +23,16 @@
    <property name="spacing">
     <number>3</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>1</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <property name="bottomMargin">
     <number>1</number>
    </property>
    <item>
@@ -41,7 +50,16 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <property name="bottomMargin">
        <number>1</number>
       </property>
       <property name="spacing">
@@ -96,9 +114,9 @@
           </property>
           <property name="scaleValueColor" stdset="0">
            <color>
-            <red>255</red>
-            <green>3</green>
-            <blue>7</blue>
+            <red>238</red>
+            <green>80</green>
+            <blue>54</blue>
            </color>
           </property>
           <property name="maxValue" stdset="0">

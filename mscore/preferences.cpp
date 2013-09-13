@@ -180,8 +180,8 @@ void Preferences::init()
       oscPort                 = 5282;
       singlePalette           = false;
 
-      styleName               = "dark";   // ??
-      globalStyle             = STYLE_DARK;
+      styleName               = "light";   // ??
+      globalStyle             = STYLE_LIGHT;
       animations              = true;
 
       QString wd      = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
@@ -658,6 +658,9 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       for (int idx = 0; idx < n; ++idx)
             exportAudioSampleRate->addItem(QString("%1").arg(exportAudioSampleRates[idx]));
 
+      restartWarningLanguage->setText("");
+      connect(language, SIGNAL(currentIndexChanged(int)), SLOT(languageChanged(int)));
+
       connect(recordButtons,          SIGNAL(buttonClicked(int)), SLOT(recordButtonClicked(int)));
       connect(midiRemoteControlClear, SIGNAL(clicked()), SLOT(midiRemoteControlClearClicked()));
       connect(portaudioDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
@@ -684,6 +687,16 @@ void PreferenceDialog::setPreferences(const Preferences& p)
 PreferenceDialog::~PreferenceDialog()
       {
       qDeleteAll(localShortcuts);
+      }
+
+
+//---------------------------------------------------------
+//   recordButtonClicked
+//---------------------------------------------------------
+
+void PreferenceDialog::languageChanged(int /*val*/)
+      {
+      restartWarningLanguage->setText(tr("The language will be changed once you restart MuseScore."));
       }
 
 //---------------------------------------------------------
@@ -855,12 +868,14 @@ void PreferenceDialog::updateValues()
       autoSaveTime->setValue(prefs.autoSaveTime);
       pngResolution->setValue(prefs.pngResolution);
       pngTransparent->setChecked(prefs.pngTransparent);
+      language->blockSignals(true);
       for (int i = 0; i < language->count(); ++i) {
             if (language->itemText(i).startsWith(prefs.language)) {
                   language->setCurrentIndex(i);
                   break;
                   }
             }
+      language->blockSignals(false);
       //
       // initialize local shortcut table
       //    we need a deep copy to be able to rewind all
@@ -945,6 +960,7 @@ void PreferenceDialog::updateValues()
 
       warnPitchRange->setChecked(MScore::warnPitchRange);
 
+      language->blockSignals(true);
       language->clear();
       int curIdx = 0;
       for(int i = 0; i < mscore->languages().size(); ++i) {
@@ -953,6 +969,7 @@ void PreferenceDialog::updateValues()
                   curIdx = i;
             }
       language->setCurrentIndex(curIdx);
+      language->blockSignals(false);
 
       oscServer->setChecked(prefs.useOsc);
       oscPort->setValue(prefs.oscPort);

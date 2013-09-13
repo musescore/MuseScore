@@ -117,7 +117,7 @@ void MScore::init()
 
       selectColor[0].setNamedColor("#2456aa");     //blue
       selectColor[1].setNamedColor("#5f8f00");     //green
-      selectColor[2].setNamedColor("#d79112");  //yellow
+      selectColor[2].setNamedColor("#1a8239");  //yellow
       selectColor[3].setNamedColor("#75112b");   //purple
 
       defaultColor        = Qt::black;
@@ -134,7 +134,7 @@ void MScore::init()
 
       layoutBreakColor    = QColor("#6abed3");
       frameMarginColor    = QColor("#6abed3");
-      bgColor.setRgb(0xbf, 0xbf, 0xbf);
+      bgColor.setNamedColor("#dddddd");
 
       _defaultStyle         = new MStyle();
       Ms::initStyle(_defaultStyle);
