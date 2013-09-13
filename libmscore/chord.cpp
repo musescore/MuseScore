@@ -177,6 +177,10 @@ Chord::Chord(const Chord& c)
       for (int i = 0; i < n; ++i)
             add(new Note(*c._notes.at(i)));
 
+      for (Chord* gn : c.graceNotes()) {
+            add(new Chord(*gn));
+            }
+
       _stem          = 0;
       _hook          = 0;
       _glissando     = 0;
@@ -215,6 +219,9 @@ Chord* Chord::linkedClone()
       int n = notes().size();
       for (int i = 0; i < n; ++i)
             _notes[i]->linkTo(chord->_notes[i]);
+      n = _graceNotes.size();
+      for (int i = 0; i < n; ++i)
+            _graceNotes[i]->linkTo(chord->_graceNotes[i]);
       return chord;
       }
 
