@@ -141,9 +141,9 @@ else (MINGW OR APPLE)
 endif (MINGW OR APPLE)
 
 ##
-##  look for Qt4
+##  look for Qt5
 ##
-SET(QT_MIN_VERSION    "4.8.0")
+SET(QT_MIN_VERSION    "5.1.0")
 SET(QT_USE_QTXML         TRUE)
 SET(QT_USE_QTSVG         TRUE)
 SET(QT_USE_QTNETWORK     TRUE)
