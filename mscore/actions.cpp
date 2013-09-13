@@ -1235,15 +1235,6 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "sound-on",
-         QT_TRANSLATE_NOOP("action","Editing sound on"),
-         QT_TRANSLATE_NOOP("action","Enable sound while editing"),
-         QT_TRANSLATE_NOOP("action","Enable sound while editing"),
-          speaker_ICON
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "beam-start",
          QT_TRANSLATE_NOOP("action","Beam start"),
