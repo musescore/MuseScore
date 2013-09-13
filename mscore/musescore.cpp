@@ -388,7 +388,6 @@ MuseScore::MuseScore()
       inspector             = 0;
       omrPanel              = 0;
       _midiinEnabled        = true;
-      _speakerEnabled       = true;
       newWizard             = 0;
       lastOpenPath          = preferences.myScoresPath;
       _textTools            = 0;
@@ -590,10 +589,6 @@ MuseScore::MuseScore()
       a->setEnabled(preferences.enableMidiInput);
       a->setChecked(_midiinEnabled);
 #endif
-      a = getAction("sound-on");
-      a->setCheckable(true);
-      a->setEnabled(preferences.playNotes);
-      a->setChecked(_speakerEnabled);
 
       getAction("play")->setCheckable(true);
       a = getAction("repeat");
@@ -633,7 +628,6 @@ MuseScore::MuseScore()
 
       transportTools = addToolBar(tr("Transport Tools"));
       transportTools->setObjectName("transport-tools");
-      transportTools->addAction(getAction("sound-on"));
 #ifdef HAS_MIDI
       transportTools->addAction(getAction("midi-on"));
 #endif
@@ -1890,21 +1884,12 @@ void MuseScore::midiCtrlReceived(int controller, int /*value*/)
       }
 
 //---------------------------------------------------------
-//   speakerToggled
-//---------------------------------------------------------
-
-void MuseScore::speakerToggled(bool val)
-      {
-      _speakerEnabled = val;
-      }
-
-//---------------------------------------------------------
 //   playEnabled
 //---------------------------------------------------------
 
 bool MuseScore::playEnabled() const
       {
-      return preferences.playNotes && _speakerEnabled;
+      return preferences.playNotes;
       }
 
 //---------------------------------------------------------
@@ -4002,8 +3987,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             decMag();
       else if (cmd == "midi-on")
             midiinToggled(a->isChecked());
-      else if (cmd == "sound-on")
-            speakerToggled(a->isChecked());
       else if (cmd == "undo") {
             undo();
             if (inspector)

@@ -281,7 +281,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       OmrPanel* omrPanel;
 
       bool _midiinEnabled;
-      bool _speakerEnabled;
       QString lastOpenPath;
       QList<QString> plugins;
       ScriptEngine* se;
@@ -370,7 +369,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       int  pluginIdxFromPath(QString pluginPath);
       void startDebugger();
       void midiinToggled(bool);
-      void speakerToggled(bool);
       void undo();
       void redo();
       void showPalette(bool);
