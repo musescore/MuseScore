@@ -121,7 +121,7 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                   if (mode == QIcon::Disabled) {
                         if (Ms::preferences.globalStyle == Ms::STYLE_LIGHT) {
                               if (state == QIcon::On)
-                                    ba.replace("fill:#ffffff", "fill:#91336c");
+                                    ba.replace("fill:#ffffff", "fill:#d3adc4");
                               else
                                     ba.replace("fill:#ffffff", "fill:#a0a0a0");
                               }
