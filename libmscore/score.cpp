@@ -3545,6 +3545,8 @@ void Score::insertTime(int tick, int len)
 void Score::setLoopInTick(int tick)
       {
       qDebug ("setLoopInTick : tick = %d", tick);
+      if(!lastMeasure())
+            return;
       if ((tick < 0) || (tick > lastMeasure()->endTick()-1))
             tick = 0;
       _loopInTick = tick;
@@ -3557,6 +3559,8 @@ void Score::setLoopInTick(int tick)
 void Score::setLoopOutTick(int tick)
       {
       qDebug ("setLoopOutTick : tick = %d", tick);
+      if(!lastMeasure())
+            return;
       int lastTick = lastMeasure()->endTick()-1;
       if ((tick > lastTick) || (tick < 0))
             _loopOutTick = lastTick;
