@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2011-2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -122,7 +122,7 @@ enum ArticulationType {
 //---------------------------------------------------------
 
 enum BracketType {
-      BRACKET_NORMAL, BRACKET_BRACE, BRACKET_SQUARE, NO_BRACKET = -1
+      BRACKET_NORMAL, BRACKET_BRACE, BRACKET_SQUARE, BRACKET_LINE, NO_BRACKET = -1
       };
 
 //---------------------------------------------------------
