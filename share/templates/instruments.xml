@@ -1461,7 +1461,7 @@
             <Instrument id="clarinet">
                   <longName>Clarinet</longName>
                   <shortName>Cl.</shortName>
-                  <description>Clarinet</description>
+                  <description>B♭ Clarinet</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1504,8 +1504,8 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-clarinet">
-                  <longName>Clarinet</longName>
-                  <shortName>Cl.</shortName>
+                  <longName>D Clarinet</longName>
+                  <shortName>D Cl.</shortName>
                   <description>Clarinet</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
                   <clef>G</clef>
@@ -1519,9 +1519,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-clarinet">
-                  <longName>E♭­ Clarinet</longName>
-                  <shortName>E♭­ Cl.</shortName>
-                  <description>E♭­ Clarinet</description>
+                  <longName>E♭ Clarinet</longName>
+                  <shortName>E♭ Cl.</shortName>
+                  <description>E♭ Clarinet</description>
                   <musicXMLid>wind.reed.clarinet.eflat</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
