@@ -1974,11 +1974,14 @@ void Score::layoutLinear()
       curSystem      = 0;
       System* system = getNextSystem(true, false);
       system->setInstrumentNames(true);
-      qreal xo;
-      if (curMeasure->type() == Element::HBOX)
-            xo = point(static_cast<Box*>(curMeasure)->boxWidth());
-      else
-            xo = 0.0;
+      qreal xo = 0;
+
+      Measure* fm = firstMeasure();
+      for(MeasureBase* m = first(); m != fm ; m = m->next()) {
+            if (m->type() == Element::HBOX)
+                  xo += point(static_cast<Box*>(m)->boxWidth());
+            }
+
       system->layout(xo);
       system->setPos(0.0, spatium() * 10.0);
       curPage = 0;
@@ -1999,10 +2002,15 @@ void Score::layoutLinear()
       addSystemHeader(firstMeasure(), true);
       removeGeneratedElements(firstMeasure(), lastMeasure());
 
-      QPointF pos(system->leftMargin(), 0.0);
+      QPointF pos(0.0, 0.0);
+      bool isFirstMeasure = true;
       foreach(MeasureBase* mb, system->measures()) {
             qreal w = 0.0;
             if (mb->type() == Element::MEASURE) {
+                  if(isFirstMeasure) {
+                        pos.rx() += system->leftMargin();
+                        isFirstMeasure = false;
+                        }
                   Measure* m = static_cast<Measure*>(mb);
                   m->createEndBarLines();       // TODO: not set here
                   w = m->minWidth1() * styleD(ST_linearStretch);
