@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>812</width>
-    <height>531</height>
+    <width>1134</width>
+    <height>686</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1359,43 +1359,6 @@ VI</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="palette">
-               <palette>
-                <active>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>32</red>
-                    <green>64</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </active>
-                <inactive>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>32</red>
-                    <green>64</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </inactive>
-                <disabled>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>32</red>
-                    <green>64</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </disabled>
-               </palette>
-              </property>
               <property name="text">
                <string>Tremulant</string>
               </property>
@@ -1685,43 +1648,6 @@ altera</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="palette">
-               <palette>
-                <active>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>32</red>
-                    <green>64</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </active>
-                <inactive>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>32</red>
-                    <green>64</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </inactive>
-                <disabled>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>32</red>
-                    <green>64</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </disabled>
-               </palette>
-              </property>
               <property name="text">
                <string>Tremulant</string>
               </property>
@@ -1737,43 +1663,6 @@ altera</string>
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="palette">
-               <palette>
-                <active>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </active>
-                <inactive>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </inactive>
-                <disabled>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </disabled>
-               </palette>
               </property>
               <property name="text">
                <string>II+III</string>
@@ -1811,8 +1700,8 @@ altera</string>
               <rect>
                <x>20</x>
                <y>30</y>
-               <width>709</width>
-               <height>45</height>
+               <width>882</width>
+               <height>51</height>
               </rect>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -2212,43 +2101,6 @@ VI</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="palette">
-               <palette>
-                <active>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </active>
-                <inactive>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </inactive>
-                <disabled>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </disabled>
-               </palette>
-              </property>
               <property name="text">
                <string>I+II</string>
               </property>
@@ -2264,43 +2116,6 @@ VI</string>
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="palette">
-               <palette>
-                <active>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </active>
-                <inactive>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </inactive>
-                <disabled>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </disabled>
-               </palette>
               </property>
               <property name="text">
                <string>I+III</string>
@@ -2627,43 +2442,6 @@ VI</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="palette">
-               <palette>
-                <active>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </active>
-                <inactive>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </inactive>
-                <disabled>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </disabled>
-               </palette>
-              </property>
               <property name="text">
                <string>P+I</string>
               </property>
@@ -2680,43 +2458,6 @@ VI</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="palette">
-               <palette>
-                <active>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </active>
-                <inactive>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </inactive>
-                <disabled>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </disabled>
-               </palette>
-              </property>
               <property name="text">
                <string>P+II</string>
               </property>
@@ -2732,43 +2473,6 @@ VI</string>
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="palette">
-               <palette>
-                <active>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </active>
-                <inactive>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </inactive>
-                <disabled>
-                 <colorrole role="Button">
-                  <brush brushstyle="SolidPattern">
-                   <color alpha="255">
-                    <red>64</red>
-                    <green>48</green>
-                    <blue>32</blue>
-                   </color>
-                  </brush>
-                 </colorrole>
-                </disabled>
-               </palette>
               </property>
               <property name="text">
                <string>P+III</string>
