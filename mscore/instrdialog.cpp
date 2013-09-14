@@ -222,12 +222,8 @@ void StaffListItem::staffTypeChanged(int idx)
 //
 //    The list is sorted by staff group: Standard, Percussion, Tab.
 //
-//    Indices of items in the list are:
-//    < 0  : -1 * index of staff type in score
-//    >= 0 : index of presets in preset list
-//
 //    Currently, the staff type list is used by the New Instrument page of the New Score Wizard
-//    anf by the "Add | Instruments" dlg box.
+//    and by the "Add | Instruments" dlg box.
 //---------------------------------------------------------
 
 std::vector<StaffListItem::STAFF_LIST_STAFF_TYPE> StaffListItem::staffTypeList;
@@ -245,7 +241,7 @@ void StaffListItem::populateStaffTypes(Score *score)
       for (int group=0; group < STAFF_GROUP_MAX; group++) {
             // if there is a score and it has some staff types, list them
             if (score && score->staffTypes().count() > 0) {
-                  idx = -1;
+                  idx = 0;
                   foreach(StaffType** staffType, score->staffTypes() ) {
                         if ( (*staffType)->group() == group && !(*staffType)->builtin() ) {
                               staffTypeData.idx             = idx;
@@ -253,7 +249,7 @@ void StaffListItem::populateStaffTypes(Score *score)
                               staffTypeData.staffType       = *staffType;
                               staffTypeList.push_back(staffTypeData);
                               }
-                        idx--;
+                        idx++;
                         }
                   }
             else {
@@ -494,7 +490,7 @@ void InstrumentsDialog::genPartList()
                         }
                   sli->setLinked(bLinked);
                   int staffTypeIdx = cs->staffTypeIdx(s->staffType());
-                  sli->setStaffType(staffTypeIdx != -1 ? -staffTypeIdx - 1 : -1);
+                  sli->setStaffType(staffTypeIdx);
                   }
             partiturList->setItemExpanded(pli, true);
             }
