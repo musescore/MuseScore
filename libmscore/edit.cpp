@@ -682,7 +682,7 @@ void Score::putNote(const Position& p, bool replace)
       const Instrument* instr = st->part()->instr();
       MScore::Direction stemDirection = MScore::AUTO;
       NoteVal nval;
-      Tablature* neck = 0;
+      Tablature* stringData = 0;
       StaffTypeTablature * tab = 0;
 
       switch(st->staffType()->group()) {
@@ -702,10 +702,10 @@ void Score::putNote(const Position& p, bool replace)
             case TAB_STAFF_GROUP: {
                   if (_is.rest)
                         return;
-                  neck = instr->tablature();
+                  stringData = instr->tablature();
                   tab = (StaffTypeTablature*)st->staffType();
                   int string = tab->VisualStringToPhys(line);
-                  if (string < 0 || string >= neck->strings())
+                  if (string < 0 || string >= stringData->strings())
                       return;
                   // build a default NoteVal for that line
                   nval.string = string;
@@ -715,7 +715,7 @@ void Score::putNote(const Position& p, bool replace)
                         _is.setString(line);
                         nval.fret = 0;
                         }
-                  nval.pitch = neck->getPitch(string, nval.fret);
+                  nval.pitch = stringData->getPitch(string, nval.fret);
                   break;
                   }
 
@@ -746,21 +746,32 @@ void Score::putNote(const Position& p, bool replace)
                   if (st->isTabStaff()) {      // TAB
                         // if a note on same string already exists, update to new pitch/fret
                         foreach(Note * note, static_cast<Chord*>(cr)->notes())
-                              if(note->string() == nval.string) { // if string is the same
-                                    // if adding a new digit will keep fret number within fret limit
-                                    // add a digit
-                                    if (neck && tab->useNumbers() && note->fret() >= 1) {
+                              if(note->string() == nval.string) {       // if string is the same
+                                    // if adding a new digit will keep fret number within fret limit,
+                                    // add a digit to existing fret number
+                                    if (stringData && tab->useNumbers() && note->fret() >= 1) {
                                           int fret = note->fret() * 10 + nval.fret;
-                                          if (fret <= neck->frets() ) {
+                                          if (fret <= stringData->frets() ) {
                                                 nval.fret = fret;
-                                                nval.pitch = neck->getPitch(nval.string, nval.fret);
+                                                nval.pitch = stringData->getPitch(nval.string, nval.fret);
                                                 }
                                           else
                                                 qDebug("can't increase fret to %d", fret);
                                           }
-                                    // otherwise, replace with new fret
-                                    note->undoChangeProperty(P_PITCH, nval.pitch);
-                                    note->undoChangeProperty(P_FRET, nval.fret);
+                                    // set fret number (orignal or combined) in all linked notes
+                                    nval.tpc = pitch2tpc(nval.pitch, KEY_C, PREFER_NEAREST);
+                                    foreach (Element* e, note->linkList()) {
+                                          Note* linkedNote = static_cast<Note*>(e);
+                                          Staff* staff = linkedNote->staff();
+                                          if (staff->isTabStaff()) {
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_PITCH, nval.pitch);
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_TPC,   nval.tpc);
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_FRET,  nval.fret);
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_STRING,nval.string);
+                                                }
+                                          else if (staff->isPitchedStaff())
+                                                undoChangePitch(linkedNote, nval.pitch, nval.tpc, linkedNote->line());
+                                          }
                                     return;
                                     }
                         }
