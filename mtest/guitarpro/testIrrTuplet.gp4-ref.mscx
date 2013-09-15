@@ -54,7 +54,7 @@ p, li { white-space: pre-wrap; }
 <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Gtr 2<!--EndFragment--></p></body></html>
           </longName>
         <trackName></trackName>
-        <Tablature>
+        <StringData>
           <frets>24</frets>
           <string>40</string>
           <string>45</string>
@@ -62,7 +62,7 @@ p, li { white-space: pre-wrap; }
           <string>55</string>
           <string>59</string>
           <string>64</string>
-          </Tablature>
+          </StringData>
         <Channel name="normal">
           <program value="29"/>
           <controller ctrl="7" value="63"/>
@@ -229,7 +229,7 @@ p, li { white-space: pre-wrap; }
 <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Gtr 2<!--EndFragment--></p></body></html>
             </longName>
           <trackName></trackName>
-          <Tablature>
+          <StringData>
             <frets>24</frets>
             <string>40</string>
             <string>45</string>
@@ -237,7 +237,7 @@ p, li { white-space: pre-wrap; }
             <string>55</string>
             <string>59</string>
             <string>64</string>
-            </Tablature>
+            </StringData>
           <Channel name="normal">
             <program value="29"/>
             <controller ctrl="7" value="63"/>

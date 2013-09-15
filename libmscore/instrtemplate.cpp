@@ -422,7 +422,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   transpose.chromatic = e.readInt();
             else if (tag == "transposeDiatonic")
                   transpose.diatonic = e.readInt();
-            else if (tag == "Tablature" || tag == "StringData") {
+            else if (tag == "StringData") {
                   stringData = new StringData;
                   stringData->read(e);
                   }

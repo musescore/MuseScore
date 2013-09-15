@@ -256,6 +256,7 @@ void InstrumentData::read(XmlReader& e)
                         }
                   _drumset->load(e);
                   }
+            // support tag "Tablature" for a while for compatibility with existent 2.0 scores
             else if (tag == "Tablature" || tag == "StringData") {
                   _stringData = new StringData();
                   _stringData->read(e);
