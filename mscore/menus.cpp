@@ -1125,12 +1125,57 @@ void MuseScore::addTempo()
       if (!cr)
             return;
       double bps = 2.0;
+
+      SigEvent event = cs->sigmap()->timesig(cr->tick());
+      Fraction f = event.nominal();
+
+      QString text(QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5f)));
+      switch (f.denominator()) {
+            case 1:
+                  text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5d));
+                  break;
+            case 2:
+                  text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5e));
+                  break;
+            case 4:
+                  text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5f));
+                  break;
+            case 8:
+                  if(f.numerator() % 3 == 0)
+                        text = QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5f)).arg(QChar(0xd834)).arg(QChar(0xdd6d));
+                  else
+                        text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd60));
+                  break;
+            case 16:
+                  if(f.numerator() % 3 == 0)
+                        text = QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd60)).arg(QChar(0xd834)).arg(QChar(0xdd6d));
+                  else
+                        text = text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd61));
+                  break;
+            case 32:
+                  if(f.numerator() % 3 == 0)
+                        text = QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd61)).arg(QChar(0xd834)).arg(QChar(0xdd6d));
+                  else
+                        text = text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd62));
+                  break;
+            case 64:
+                  if(f.numerator() % 3 == 0)
+                        text = QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd62)).arg(QChar(0xd834)).arg(QChar(0xdd6d));
+                  else
+                        text = text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd63));
+                  break;
+            default:
+                  break;
+            }
+
       TempoText* tt = new TempoText(cs);
       tt->setParent(cr->segment());
       tt->setTrack(cr->track());
-      tt->setText(tr("tempo"));
-      tt->setTempo(bps);
+      tt->setText(text);
+      tt->setFollowText(true);
+      //tt->setTempo(bps);
       cs->undoAddElement(tt);
+      cv->startEdit(tt);
       }
 }
 
