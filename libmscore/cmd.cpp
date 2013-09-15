@@ -1127,7 +1127,7 @@ void Score::upDown(bool up, UpDownMode mode)
             int newPitch = pitch;    // default to unchanged
             int string   = oNote->string();
             int fret     = oNote->fret();
-            Tablature* tab;
+            StringData* stringData;
 
             switch(oNote->staff()->staffType()->group()) {
                   case PERCUSSION_STAFF_GROUP:
@@ -1139,17 +1139,17 @@ void Score::upDown(bool up, UpDownMode mode)
                         break;
                   case TAB_STAFF_GROUP:
                         {
-                        tab = part->instr()->tablature();
+                        stringData = part->instr()->stringData();
                         switch(mode) {
                               case UP_DOWN_OCTAVE:          // move same note to next string, if possible
                                     {
                                     StaffTypeTablature * stt = static_cast<StaffTypeTablature*>(oNote->staff()->staffType());
                                     string = stt->physStringToVisual(string);
                                     string += (up ? -1 : 1);
-                                    if(string < 0 || string >= tab->strings())
+                                    if(string < 0 || string >= stringData->strings())
                                           return;           // no next string to move to
                                     string = stt->VisualStringToPhys(string);
-                                    fret = tab->fret(pitch, string);
+                                    fret = stringData->fret(pitch, string);
                                     if(fret == -1)          // can't have that note on that string
                                           return;
                                     // newPitch and newTpc remain unchanged
@@ -1184,9 +1184,9 @@ void Score::upDown(bool up, UpDownMode mode)
                                     fret += (up ? 1 : -1);
                                     if (fret < 0)
                                           fret = 0;
-                                    else if (fret >= tab->frets())
-                                          fret = tab->frets() - 1;
-                                    newPitch    = tab->getPitch(string, fret);
+                                    else if (fret >= stringData->frets())
+                                          fret = stringData->frets() - 1;
+                                    newPitch    = stringData->getPitch(string, fret);
                                     newTpc      = pitch2tpc(newPitch, key, up ? PREFER_SHARPS : PREFER_FLATS);
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
@@ -1288,7 +1288,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         refret = true;
                         }
                   if (refret)
-                        tab->fretChords(oNote->chord());
+                        stringData->fretChords(oNote->chord());
                   }
 
             // play new note with velocity 80 for 0.3 sec:
@@ -1350,9 +1350,9 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
                   // as pitch has changed, calculate new
                   // string & fret
                   //
-                  Tablature* tab = n->staff()->part()->instr()->tablature();
-                  if (tab)
-                        tab->convertPitch(pitch, &string, &fret);
+                  StringData* stringData = n->staff()->part()->instr()->stringData();
+                  if (stringData)
+                        stringData->convertPitch(pitch, &string, &fret);
                   }
             }
       score->undo(new ChangePitch(n, pitch, tpc, n->line()));

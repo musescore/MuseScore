@@ -955,7 +955,7 @@ void Note::endDrag()
                         -_lineOffset : _lineOffset);
             _lineOffset = 0;
             // get a fret number for same pitch on new string
-            nFret       = staff->part()->instr()->tablature()->fret(_pitch, nString);
+            nFret       = staff->part()->instr()->stringData()->fret(_pitch, nString);
             if (nFret < 0)                      // no fret?
                   return;                       // no party!
             score()->undoChangeProperty(this, P_FRET, nFret);
@@ -1394,8 +1394,8 @@ void Note::layout10(AccidentalState* as)
                   }
             if (_fret < 0) {
                   int string, fret;
-                  Tablature* tab = staff()->part()->instr()->tablature();
-                  if (tab->convertPitch(_pitch, &string, &fret)) {
+                  StringData* stringData = staff()->part()->instr()->stringData();
+                  if (stringData->convertPitch(_pitch, &string, &fret)) {
                         _fret   = fret;
                         _string = string;
                         }
