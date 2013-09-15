@@ -20,19 +20,19 @@ namespace Ms {
 class Chord;
 
 //---------------------------------------------------------
-//   Tablature
+//   StringData
 //---------------------------------------------------------
 
-class Tablature {
+class StringData {
       QList<int>  stringTable;
       int         _frets;
 
       static bool bFretting;
 
 public:
-      Tablature();
-      Tablature(int numFrets, int numStrings, int strings[]);
-      Tablature(int numFrets, QList<int>& strings);
+      StringData();
+      StringData(int numFrets, int numStrings, int strings[]);
+      StringData(int numFrets, QList<int>& strings);
       bool        convertPitch(int pitch, int* string, int* fret) const;
       int         fret(int pitch, int string) const;
       void        fretChords(Chord * chord) const;
@@ -48,7 +48,7 @@ public:
       void        writeMusicXML(Xml& xml) const;
       };
 
-extern Tablature emptyStringData;
+extern StringData emptyStringData;
 
 }     // namespace Ms
 #endif

@@ -23,7 +23,7 @@ class InstrumentTemplate;
 class Xml;
 class XmlReader;
 class Drumset;
-class Tablature;
+class StringData;
 
 //---------------------------------------------------------
 //   StaffName
@@ -170,8 +170,8 @@ class Instrument {
       void setArticulation(const QList<MidiArticulation>& l);
       void setChannel(const QList<Channel>& l);
       void setChannel(int i, const Channel& c);
-      Tablature* tablature() const;
-      void setTablature(Tablature* t);
+      StringData* stringData() const;
+      void setStringData(StringData* t);
       static Instrument fromTemplate(const InstrumentTemplate*);
 
       const QList<StaffNameDoc>& longNames() const;

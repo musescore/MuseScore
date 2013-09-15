@@ -4216,7 +4216,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                   continue;
             if (staff->isTabStaff()) {
                   int string = n->line() + (up ? 1 : -1);
-                  int fret = staff->part()->instr()->tablature()->fret(n->pitch(), string);
+                  int fret = staff->part()->instr()->stringData()->fret(n->pitch(), string);
                   if (fret != -1) {
                         score()->undoChangeProperty(n, P_FRET, fret);
                         score()->undoChangeProperty(n, P_STRING, string);
