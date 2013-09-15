@@ -1160,8 +1160,8 @@ void handleMultipleVoices(std::multimap<ReducedFraction, MidiChord> &chords,
       const auto prevBarStart = findStartOfPrevBar(barLen, endBarTick);
       addFirstTiedTupletNotes(chords, tuplets, nonTuplets, prevBarStart);
       minimizeOffTimeError(tuplets, chords);
-//      shrinkVoices(startBarChordIt, endBarChordIt);
       mergeVoices(tuplets, nonTuplets);
+      shrinkVoices(startBarChordIt, endBarChordIt);
       adjustNonTupletVoices(nonTuplets, tuplets);
       }
 
