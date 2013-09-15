@@ -334,10 +334,10 @@
         <double>300.000000000000000</double>
        </property>
        <property name="lineStep" stdset="0">
-        <double>5.000000000000000</double>
+        <double>1.000000000000000</double>
        </property>
        <property name="pageStep" stdset="0">
-        <double>20.000000000000000</double>
+        <double>10.000000000000000</double>
        </property>
       </widget>
      </item>

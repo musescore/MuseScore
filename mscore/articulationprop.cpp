@@ -57,7 +57,7 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
 
             foreach(const Channel& a, instrument->channel()) {
                   if (a.name.isEmpty())
-                        channelList->addItem("normal");
+                        channelList->addItem(tr("default"));
                   else
                         channelList->addItem(a.name);
                   }
