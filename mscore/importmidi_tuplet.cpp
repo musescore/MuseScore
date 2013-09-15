@@ -810,8 +810,9 @@ ReducedFraction findOffTimeRaster(const ReducedFraction &noteOffTime,
       return regularQuant;
       }
 
-void shrinkVoices(std::multimap<ReducedFraction, MidiChord>::iterator startBarChordIt,
-                  std::multimap<ReducedFraction, MidiChord>::iterator endBarChordIt)
+void shrinkVoices(const std::multimap<ReducedFraction, MidiChord>::iterator startBarChordIt,
+                  const std::multimap<ReducedFraction, MidiChord>::iterator endBarChordIt,
+                  const std::set<int> &notMovableVoices)
       {
       int shift = 0;
       for (int voice = 0; voice < VOICES; ++voice) {
@@ -824,8 +825,15 @@ void shrinkVoices(std::multimap<ReducedFraction, MidiChord>::iterator startBarCh
                   }
             if (shift > 0 && voiceInUse) {
                   for (auto it = startBarChordIt; it != endBarChordIt; ++it) {
-                        if (it->second.voice == voice)
-                              it->second.voice -= shift;
+                        if (it->second.voice == voice
+                                    && notMovableVoices.find(voice) == notMovableVoices.end()) {
+                              int counter = 0;
+                              while (counter < shift && it->second.voice > 0) {
+                                    --it->second.voice;
+                                    if (notMovableVoices.find(it->second.voice) == notMovableVoices.end())
+                                          ++counter;
+                                    }
+                              }
                         }
                   }
             if (!voiceInUse)
@@ -852,7 +860,8 @@ bool haveIntersection(const std::vector<std::pair<ReducedFraction, ReducedFracti
 // we don't use interval trees here because the interval count is small
 
 void mergeVoices(std::vector<TupletInfo> &tuplets,
-                 std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets)
+                 std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
+                 const std::set<int> &notMovableVoices)
       {
                   // <voice, intervals>
       std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> intervals;
@@ -880,6 +889,8 @@ void mergeVoices(std::vector<TupletInfo> &tuplets,
             auto i2 = i1;
             ++i2;
             for (; i2 != intervals.end(); ++i2) {
+                  if (notMovableVoices.find(i2->first) != notMovableVoices.end())
+                        continue;
                   if (!haveIntersection(i1->second, i2->second)) {
                         i1->second.insert(i1->second.end(), i2->second.begin(), i2->second.end());
                         i2->second.clear();
@@ -998,9 +1009,14 @@ bool canTupletBeTied(const TupletInfo &tuplet,
 void addFirstTiedTupletNotes(const std::multimap<ReducedFraction, MidiChord> &chords,
                              std::vector<TupletInfo> &tuplets,
                              std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
-                             const ReducedFraction &prevBarStart)
+                             const ReducedFraction &barStart,
+                             const ReducedFraction &barLen,
+                             std::set<int> &notMovableVoices)
       {
       std::set<int> changedTuplets;
+      auto prevBarStart = barStart - barLen;
+      if (prevBarStart < ReducedFraction(0, 1))
+            prevBarStart = ReducedFraction(0, 1);
 
       for (int i = 0; i != (int)tuplets.size(); ++i) {
             if (tuplets[i].chords.empty())
@@ -1020,6 +1036,8 @@ void addFirstTiedTupletNotes(const std::multimap<ReducedFraction, MidiChord> &ch
                                     changeTupletVoice(tuplets[i], newVoice);
                                     changedTuplets.insert(i);
                                     exchangeVoicesOfNonTuplets(nonTuplets, oldVoice, newVoice);
+                                    if (chordIt->first < barStart)
+                                          notMovableVoices.insert(newVoice);
                                     }
                               }
                         }
@@ -1134,16 +1152,6 @@ void addChordsBetweenTupletNotes(
             }
       }
 
-ReducedFraction findStartOfPrevBar(const ReducedFraction &barLen,
-                                   const ReducedFraction &endBarTick)
-      {
-      auto prevBarStart = endBarTick - barLen * 2;
-      if (prevBarStart < ReducedFraction(0, 1))
-            prevBarStart = ReducedFraction(0, 1);
-
-      return prevBarStart;
-      }
-
 void handleMultipleVoices(std::multimap<ReducedFraction, MidiChord> &chords,
                           std::vector<TupletInfo> &tuplets,
                           const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
@@ -1157,11 +1165,12 @@ void handleMultipleVoices(std::multimap<ReducedFraction, MidiChord> &chords,
       const auto regularRaster = Quantize::findRegularQuantRaster(
                                        startBarChordIt, endBarChordIt, endBarTick);
       setNonTupletVoices(tuplets, nonTuplets, regularRaster);
-      const auto prevBarStart = findStartOfPrevBar(barLen, endBarTick);
-      addFirstTiedTupletNotes(chords, tuplets, nonTuplets, prevBarStart);
+      std::set<int> notMovableVoices;
+      addFirstTiedTupletNotes(chords, tuplets, nonTuplets, endBarTick - barLen,
+                              barLen, notMovableVoices);
       minimizeOffTimeError(tuplets, chords);
-      mergeVoices(tuplets, nonTuplets);
-      shrinkVoices(startBarChordIt, endBarChordIt);
+      mergeVoices(tuplets, nonTuplets, notMovableVoices);
+      shrinkVoices(startBarChordIt, endBarChordIt, notMovableVoices);
       adjustNonTupletVoices(nonTuplets, tuplets);
       }
 
