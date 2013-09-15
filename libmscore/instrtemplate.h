@@ -22,7 +22,7 @@ namespace Ms {
 class Xml;
 class Part;
 class Staff;
-class Tablature;
+class StringData;
 
 //---------------------------------------------------------
 //   InstrumentGenre
@@ -65,7 +65,7 @@ class InstrumentTemplate {
       bool useDrumset;
       Drumset* drumset;
 
-      Tablature* tablature;
+      StringData* stringData;
 
       QList<NamedEventList>   midiActions;
       QList<MidiArticulation> articulation;

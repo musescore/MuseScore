@@ -192,22 +192,22 @@ void FretDiagram::setStrings(int n)
 //   init
 //---------------------------------------------------------
 
-void FretDiagram::init(Tablature* tab, Chord* chord)
+void FretDiagram::init(StringData* stringData, Chord* chord)
       {
-      if (tab == 0)
+      if (stringData == 0)
             setStrings(6);
       else
-            setStrings(tab->strings());
-      if (tab) {
+            setStrings(stringData->strings());
+      if (stringData) {
             for (int string = 0; string < _strings; ++string)
                   _marker[string] = 'X';
             foreach(const Note* note, chord->notes()) {
                   int string;
                   int fret;
-                  if (tab->convertPitch(note->ppitch(), &string, &fret))
+                  if (stringData->convertPitch(note->ppitch(), &string, &fret))
                         setDot(string, fret);
                   }
-            _maxFrets = tab->frets();
+            _maxFrets = stringData->frets();
             }
       else
             _maxFrets = 6;

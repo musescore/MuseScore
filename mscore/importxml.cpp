@@ -3041,10 +3041,10 @@ static void setStaffLines(Score* score, int staffIdx, int stafflines)
       }
 
 //---------------------------------------------------------
-//   readTablature
+//   readStringData
 //---------------------------------------------------------
 
-static void readTablature(Tablature* t, QDomElement de)
+static void readStringData(StringData* t, QDomElement de)
       {
       t->setFrets(25);
 
@@ -3098,7 +3098,7 @@ static void readTablature(Tablature* t, QDomElement de)
 //   xmlStaffDetails
 //---------------------------------------------------------
 
-static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e)
+static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement e)
       {
       int number  = e.attribute(QString("number"), "-1").toInt();
       int staffIdx = staff;
@@ -3128,9 +3128,9 @@ static void xmlStaffDetails(Score* score, int staff, Tablature* t, QDomElement e
             }
 
       if (t) {
-            readTablature(t, e);
+            readStringData(t, e);
             Instrument* i = score->staff(staff)->part()->instr();
-            i->setTablature(t);
+            i->setStringData(t);
             }
       }
 
@@ -3257,9 +3257,9 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                   int staffIdx = staff;
                   if (number != -1)
                         staffIdx += number - 1;
-                  Tablature* t = 0;
+                  StringData* t = 0;
                   if (score->staff(staffIdx)->isTabStaff())
-                        t = new Tablature;
+                        t = new StringData;
                   xmlStaffDetails(score, staff, t, e);
                   }
             else if (e.tagName() == "instruments")

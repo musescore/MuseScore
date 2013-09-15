@@ -4241,8 +4241,8 @@ void ExportMusicXml::write(QIODevice* dev)
                                     else
                                           xml.stag("staff-details");
                                     xml.tag("staff-lines", st->lines());
-                                    if (st->isTabStaff() && instrument->tablature()) {
-                                          QList<int> l = instrument->tablature()->stringList();
+                                    if (st->isTabStaff() && instrument->stringData()) {
+                                          QList<int> l = instrument->stringData()->stringList();
                                           for (int i = 0; i < l.size(); i++) {
                                                 char step  = ' ';
                                                 int alter  = 0;
