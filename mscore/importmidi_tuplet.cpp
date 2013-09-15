@@ -741,6 +741,8 @@ void setNonTupletVoices(std::vector<TupletInfo> &tuplets,
       }
 
 // the input tuplets should be filtered (for mutual validity)
+// the output voices can be larger than VOICES - 1
+// it will be handled later by merging voices
 
 void separateTupletVoices(std::vector<TupletInfo> &tuplets,
                           const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
@@ -847,12 +849,14 @@ bool haveIntersection(const std::vector<std::pair<ReducedFraction, ReducedFracti
       return false;
       }
 
+// we don't use interval trees here because the interval count is small
+
 void mergeVoices(std::vector<TupletInfo> &tuplets,
                  std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets)
       {
-                  // we don't use interval trees here because the interval count is small
-      std::vector<std::pair<ReducedFraction, ReducedFraction>> intervals[VOICES];
-      std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> chords[VOICES];
+                  // <voice, intervals>
+      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> intervals;
+      std::map<int, std::vector<std::multimap<ReducedFraction, MidiChord>::iterator>> chords;
 
       for (const auto &tuplet: tuplets) {
             if (tuplet.chords.empty())
@@ -870,17 +874,20 @@ void mergeVoices(std::vector<TupletInfo> &tuplets,
             chords[nonTuplet->second.voice].push_back(nonTuplet);
             }
 
-      for (int v1 = 0; v1 < VOICES - 1; ++v1) {
-            for (int v2 = v1 + 1; v2 < VOICES; ++v2) {
-                  if (!haveIntersection(intervals[v1], intervals[v2])) {
-                        intervals[v1].insert(intervals[v1].end(),
-                                             intervals[v2].begin(), intervals[v2].end());
-                        intervals[v2].clear();
-                        for (auto &chord: chords[v2])
-                              chord->second.voice = v1;
-                        chords[v1].insert(chords[v1].end(),
-                                          chords[v2].begin(), chords[v2].end());
-                        chords[v2].clear();
+      auto prevEnd = intervals.end();
+      --prevEnd;
+      for (auto i1 = intervals.begin(); i1 != prevEnd; ++i1) {
+            auto i2 = i1;
+            ++i2;
+            for (; i2 != intervals.end(); ++i2) {
+                  if (!haveIntersection(i1->second, i2->second)) {
+                        i1->second.insert(i1->second.end(), i2->second.begin(), i2->second.end());
+                        i2->second.clear();
+                        for (auto &chord: chords[i2->first])
+                              chord->second.voice = i1->first;
+                        chords[i1->first].insert(chords[i1->first].end(),
+                                              chords[i2->first].begin(), chords[i2->first].end());
+                        chords[i2->first].clear();
                         }
                   }
             }
@@ -1153,7 +1160,7 @@ void handleMultipleVoices(std::multimap<ReducedFraction, MidiChord> &chords,
       const auto prevBarStart = findStartOfPrevBar(barLen, endBarTick);
       addFirstTiedTupletNotes(chords, tuplets, nonTuplets, prevBarStart);
       minimizeOffTimeError(tuplets, chords);
-      shrinkVoices(startBarChordIt, endBarChordIt);
+//      shrinkVoices(startBarChordIt, endBarChordIt);
       mergeVoices(tuplets, nonTuplets);
       adjustNonTupletVoices(nonTuplets, tuplets);
       }
