@@ -492,10 +492,10 @@ void GuitarPro1::read(QFile* fp)
                   tuning2[strings-k-1] = tuning[k];
 
             int frets = 32;   // TODO
-            Tablature* tab = new Tablature(frets, strings, tuning2);
+            StringData* stringData = new StringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
-            instr->setTablature(tab);
+            instr->setStringData(stringData);
             }
 
       measures = readInt();
@@ -598,7 +598,7 @@ void GuitarPro1::read(QFile* fp)
                         cr->setDurationType(d);
                         segment->add(cr);
                         Staff* staff = cr->staff();
-                        int numStrings = staff->part()->instr()->tablature()->strings();
+                        int numStrings = staff->part()->instr()->stringData()->strings();
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -769,10 +769,10 @@ qDebug("BeginRepeat=============================================\n");
             int tuning2[strings];
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
-            Tablature* tab = new Tablature(frets, strings, tuning2);
+            StringData* stringData = new StringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
-            instr->setTablature(tab);
+            instr->setStringData(stringData);
             part->setPartName(name);
             instr->setTranspose(Interval(capo));
             part->setLongName(name);
@@ -894,7 +894,7 @@ qDebug("BeginRepeat=============================================\n");
                         cr->setDurationType(d);
                         segment->add(cr);
                         Staff* staff = cr->staff();
-                        int numStrings = staff->part()->instr()->tablature()->strings();
+                        int numStrings = staff->part()->instr()->stringData()->strings();
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -1008,7 +1008,7 @@ void GuitarPro1::readNote(int string, Note* note)
             note->setHeadGroup(Note::HEAD_CROSS);
             note->setGhost(true);
             }
-      int pitch = staff->part()->instr()->tablature()->getPitch(string, fretNumber);
+      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);
@@ -1249,10 +1249,10 @@ qDebug("BeginRepeat=============================================\n");
             int tuning2[strings];
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
-            Tablature* tab = new Tablature(frets, strings, tuning2);
+            StringData* stringData = new StringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
-            instr->setTablature(tab);
+            instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
             instr->setTranspose(Interval(capo));
@@ -1393,7 +1393,7 @@ qDebug("BeginRepeat=============================================\n");
                         cr->setDurationType(d);
                         segment->add(cr);
                         Staff* staff = cr->staff();
-                        int numStrings = staff->part()->instr()->tablature()->strings();
+                        int numStrings = staff->part()->instr()->stringData()->strings();
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -1580,7 +1580,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             note->setHeadGroup(Note::HEAD_CROSS);
             note->setGhost(true);
             }
-      int pitch = staff->part()->instr()->tablature()->getPitch(string, fretNumber);
+      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);
@@ -1767,10 +1767,10 @@ void GuitarPro4::read(QFile* fp)
             int tuning2[strings];
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
-            Tablature* tab = new Tablature(frets, strings, tuning2);
+            StringData* stringData = new StringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
-            instr->setTablature(tab);
+            instr->setStringData(stringData);
             part->setPartName(name);
             instr->setTranspose(Interval(capo));
             part->setLongName(name);
@@ -1898,7 +1898,7 @@ void GuitarPro4::read(QFile* fp)
 
                         segment->add(cr);
                         Staff* staff = cr->staff();
-                        int numStrings = staff->part()->instr()->tablature()->strings();
+                        int numStrings = staff->part()->instr()->stringData()->strings();
                         bool hasSlur = false;
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
@@ -2070,7 +2070,7 @@ void GuitarPro5::readNote(int string, Note* note)
             note->setHeadGroup(Note::HEAD_CROSS);
             note->setGhost(true);
             }
-      int pitch = staff->part()->instr()->tablature()->getPitch(string, fretNumber);
+      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);
@@ -2302,7 +2302,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             segment->add(cr);
 
             Staff* staff = cr->staff();
-            int numStrings = staff->part()->instr()->tablature()->strings();
+            int numStrings = staff->part()->instr()->stringData()->strings();
             for (int i = 6; i >= 0; --i) {
                   if (strings & (1 << i) && ((6-i) < numStrings)) {
                         Note* note = new Note(score);
@@ -2459,9 +2459,9 @@ void GuitarPro5::readTracks()
             int tuning2[strings];
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
-            Tablature* tab = new Tablature(frets, strings, tuning2);
+            StringData* stringData = new StringData(frets, strings, tuning2);
             Instrument* instr = part->instr();
-            instr->setTablature(tab);
+            instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
             instr->setTranspose(Interval(capo));

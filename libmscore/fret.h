@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-class Tablature;
+class StringData;
 class Chord;
 class Harmony;
 
@@ -79,7 +79,7 @@ class FretDiagram : public Element {
       Harmony* harmony() const { return _harmony; }
 
       char* fingering() { return _fingering; }
-      void init(Tablature*, Chord*);
+      void init(Ms::StringData *, Chord*);
 
       virtual void add(Element*);
       virtual void remove(Element*);

@@ -119,13 +119,12 @@ InstrumentTemplate::InstrumentTemplate()
       maxPitchA          = 127;
       minPitchP          = 0;
       maxPitchP          = 127;
-      staffGroup        = STANDARD_STAFF_GROUP;
-      staffTypePreset   = 0;
+      staffGroup         = STANDARD_STAFF_GROUP;
+      staffTypePreset    = 0;
       useDrumset         = false;
       drumset            = 0;
       extended           = false;
-      tablature          = 0;
-//      useTablature       = false;
+      stringData         = 0;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
             clefTypes[i]._concertClef = ClefType::G;
@@ -177,10 +176,10 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
             drumset = new Drumset(*t.drumset);
       else
             drumset = 0;
-      if (t.tablature)
-            tablature = new Tablature(*t.tablature);
+      if (t.stringData)
+            stringData = new StringData(*t.stringData);
       else
-            tablature = 0;
+            stringData = 0;
       midiActions = t.midiActions;
       channel     = t.channel;
       }
@@ -215,8 +214,8 @@ void InstrumentTemplate::write(Xml& xml) const
       xml.tag("musicXMLid", musicXMLid);
       if (extended)
             xml.tag("extended", extended);
-      if (tablature)
-            tablature->write(xml);
+      if (stringData)
+            stringData->write(xml);
       if (staves > 1)
             xml.tag("staves", staves);
       for (int i = 0; i < staves; ++i) {
@@ -423,9 +422,9 @@ void InstrumentTemplate::read(XmlReader& e)
                   transpose.chromatic = e.readInt();
             else if (tag == "transposeDiatonic")
                   transpose.diatonic = e.readInt();
-            else if (tag == "Tablature") {
-                  tablature = new Tablature;
-                  tablature->read(e);
+            else if (tag == "StringData") {
+                  stringData = new StringData;
+                  stringData->read(e);
                   }
             else if (tag == "drumset")
                   useDrumset = e.readInt();
