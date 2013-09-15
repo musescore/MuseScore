@@ -425,17 +425,22 @@ void Shortcut::load()
                                     if (tag == "key") {
                                           QString val(e.readElementText());
                                           sc = getShortcut(val.toLatin1().data());
-                                          if (!sc) {
+                                          if (!sc)
                                                 qDebug("cannot find shortcut <%s>", qPrintable(val));
-                                                break;
-                                                }
-                                          sc->clear();
+                                          else
+                                                sc->clear();
                                           }
-                                    else if (tag == "std")
-                                          sc->_standardKey = QKeySequence::StandardKey(e.readInt());
-                                    else if (tag == "seq")
+                                    else if (tag == "std") {
+                                          int i = e.readInt();
+                                          if(sc)
+                                                sc->_standardKey = QKeySequence::StandardKey(i);
+                                          }
+                                    else if (tag == "seq") {
+                                          QString s = e.readElementText();
+                                          if(sc)
+                                                sc->_keys.append(Shortcut::keySeqFromString(s, QKeySequence::PortableText));
 //                                          sc->_keys.append(QKeySequence::fromString(e.readElementText(), QKeySequence::PortableText));
-                                          sc->_keys.append(Shortcut::keySeqFromString(e.readElementText(), QKeySequence::PortableText));
+                                          }
                                     else
                                           e.unknown();
                                     }
