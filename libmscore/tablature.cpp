@@ -20,21 +20,21 @@ namespace Ms {
 
 // static int guitarStrings[6] = { 40, 45, 50, 55, 59, 64 };
 
-Tablature emptyStringData(0, 0, 0);
+StringData emptyStringData(0, 0, 0);
 
 //---------------------------------------------------------
-//   Tablature
+//   StringData
 //---------------------------------------------------------
 
-bool Tablature::bFretting = false;
+bool StringData::bFretting = false;
 
-Tablature::Tablature()
+StringData::StringData()
       {
       _frets = 0;
       stringTable = QList<int>();
       }
 
-Tablature::Tablature(int numFrets, int numStrings, int strings[])
+StringData::StringData(int numFrets, int numStrings, int strings[])
       {
       _frets = numFrets;
 
@@ -42,7 +42,7 @@ Tablature::Tablature(int numFrets, int numStrings, int strings[])
             stringTable.append(strings[i]);
       }
 
-Tablature::Tablature(int numFrets, QList<int>& strings)
+StringData::StringData(int numFrets, QList<int>& strings)
       {
       _frets = numFrets;
 
@@ -54,7 +54,7 @@ Tablature::Tablature(int numFrets, QList<int>& strings)
 //   read
 //---------------------------------------------------------
 
-void Tablature::read(XmlReader& e)
+void StringData::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -71,9 +71,9 @@ void Tablature::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Tablature::write(Xml& xml) const
+void StringData::write(Xml& xml) const
       {
-      xml.stag("Tablature");
+      xml.stag("StringData");
       xml.tag("frets", _frets);
       foreach(int pitch, stringTable)
             xml.tag("string", pitch);
@@ -93,7 +93,7 @@ void Tablature::write(Xml& xml) const
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool Tablature::convertPitch(int pitch, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, int* string, int* fret) const
       {
       int strings = stringTable.size();
 
@@ -125,7 +125,7 @@ bool Tablature::convertPitch(int pitch, int* string, int* fret) const
 //   Returns the pitch corresponding to the string / fret combination
 //---------------------------------------------------------
 
-int Tablature::getPitch(int string, int fret) const
+int StringData::getPitch(int string, int fret) const
       {
       int strings = stringTable.size();
       return stringTable[strings - string - 1] + fret;
@@ -137,7 +137,7 @@ int Tablature::getPitch(int string, int fret) const
 //    returns -1 if not possible
 //---------------------------------------------------------
 
-int Tablature::fret(int pitch, int string) const
+int StringData::fret(int pitch, int string) const
       {
       int strings = stringTable.size();
 
@@ -160,7 +160,7 @@ int Tablature::fret(int pitch, int string) const
 //    a separate string
 //---------------------------------------------------------
 
-void Tablature::fretChords(Chord * chord) const
+void StringData::fretChords(Chord * chord) const
       {
       int   nFret, nNewFret, nTempFret;
       int   nString, nNewString, nTempString;
@@ -296,7 +296,7 @@ static int MusicXMLStepAltOct2Pitch(char step, int alter, int octave)
 //   Read MusicXML
 //---------------------------------------------------------
 
-void Tablature::readMusicXML(XmlReader& e)
+void StringData::readMusicXML(XmlReader& e)
       {
       _frets = 25;
 
@@ -309,7 +309,7 @@ void Tablature::readMusicXML(XmlReader& e)
                         stringTable = QVector<int>(val).toList();
                         }
                   else
-                        qDebug("Tablature::readMusicXML: illegal staff-lines %d", val);
+                        qDebug("StringData::readMusicXML: illegal staff-lines %d", val);
                   }
             else if (tag == "staff-tuning") {
                   int     line   = e.intAttribute("line");
@@ -332,7 +332,7 @@ void Tablature::readMusicXML(XmlReader& e)
                         if (pitch >= 0)
                               stringTable[line - 1] = pitch;
                         else
-                              qDebug("Tablature::readMusicXML invalid string %d tuning step/alter/oct %s/%d/%d",
+                              qDebug("StringData::readMusicXML invalid string %d tuning step/alter/oct %s/%d/%d",
                                      line, qPrintable(step), alter, octave);
                         }
                   }
@@ -350,7 +350,7 @@ void Tablature::readMusicXML(XmlReader& e)
 //   Write MusicXML
 //---------------------------------------------------------
 
-void Tablature::writeMusicXML(Xml& /*xml*/) const
+void StringData::writeMusicXML(Xml& /*xml*/) const
       {
       }
 

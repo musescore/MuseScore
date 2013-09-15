@@ -682,7 +682,7 @@ void Score::putNote(const Position& p, bool replace)
       const Instrument* instr = st->part()->instr();
       MScore::Direction stemDirection = MScore::AUTO;
       NoteVal nval;
-      Tablature* stringData = 0;
+      StringData* stringData = 0;
       StaffTypeTablature * tab = 0;
 
       switch(st->staffType()->group()) {
@@ -702,7 +702,7 @@ void Score::putNote(const Position& p, bool replace)
             case TAB_STAFF_GROUP: {
                   if (_is.rest)
                         return;
-                  stringData = instr->tablature();
+                  stringData = instr->stringData();
                   tab = (StaffTypeTablature*)st->staffType();
                   int string = tab->VisualStringToPhys(line);
                   if (string < 0 || string >= stringData->strings())
