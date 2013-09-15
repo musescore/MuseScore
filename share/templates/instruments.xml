@@ -7785,14 +7785,14 @@
                   <shortName>Bj.</shortName>
                   <description>5 string Banjo</description>
                   <musicXMLid>pluck.banjo</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>79</string>
                         <string>50</string>
                         <string>55</string>
                         <string>59</string>
                         <string>62</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-87</aPitchRange>
@@ -7877,7 +7877,7 @@
                   <shortName>Guit.</shortName>
                   <description>Acoustic Nylon-strung Guitar</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>19</frets>
                         <string>40</string>
                         <string>45</string>
@@ -7885,7 +7885,7 @@
                         <string>55</string>
                         <string>59</string>
                         <string>64</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
@@ -7909,7 +7909,7 @@
                   <shortName>Guit.</shortName>
                   <description>Acoustic Steel-strung Guitar</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>19</frets>
                         <string>40</string>
                         <string>45</string>
@@ -7917,7 +7917,7 @@
                         <string>55</string>
                         <string>59</string>
                         <string>64</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
@@ -7985,7 +7985,7 @@
                   <shortName>El. Guit.</shortName>
                   <description>Electric Guitar</description>
                   <musicXMLid>pluck.guitar.electric</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>19</frets>
                         <string>40</string>
                         <string>45</string>
@@ -7993,7 +7993,7 @@
                         <string>55</string>
                         <string>59</string>
                         <string>64</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-86</aPitchRange>
@@ -8050,7 +8050,7 @@
                   <shortName>Lute</shortName>
                   <description>Lute</description>
                   <musicXMLid>pluck.lute</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>43</string>
                         <string>48</string>
@@ -8058,7 +8058,7 @@
                         <string>57</string>
                         <string>62</string>
                         <string>67</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-79</aPitchRange>
@@ -8081,14 +8081,14 @@
                   <trackName>Lute 5 course</trackName>
                   <description>Ren. Tenor Lute (5 course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>48</string>
                         <string>53</string>
                         <string>57</string>
                         <string>62</string>
                         <string>67</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-79</aPitchRange>
@@ -8103,7 +8103,7 @@
                   <trackName>Lute 6 course</trackName>
                   <description>Ren. Tenor Lute (6 course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>43</string>
                         <string>48</string>
@@ -8111,7 +8111,7 @@
                         <string>57</string>
                         <string>62</string>
                         <string>67</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-79</aPitchRange>
@@ -8140,7 +8140,7 @@
                   <trackName>Lute 8 course</trackName>
                   <description>Ren. Tenor Lute (8 course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>43</string>
                         <string>48</string>
@@ -8148,7 +8148,7 @@
                         <string>57</string>
                         <string>62</string>
                         <string>67</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-79</aPitchRange>
@@ -8163,7 +8163,7 @@
                   <trackName>Lute 9 course</trackName>
                   <description>Ren. Tenor Lute (9 course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>43</string>
                         <string>48</string>
@@ -8171,7 +8171,7 @@
                         <string>57</string>
                         <string>62</string>
                         <string>67</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-79</aPitchRange>
@@ -8186,7 +8186,7 @@
                   <trackName>Lute 10 course</trackName>
                   <description>Ren. Tenor Lute (10 course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>43</string>
                         <string>48</string>
@@ -8194,7 +8194,7 @@
                         <string>57</string>
                         <string>62</string>
                         <string>67</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-79</aPitchRange>
@@ -8209,7 +8209,7 @@
                   <trackName>Lute 13 course</trackName>
                   <description>Baroque Lute (13 course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>45</string>
                         <string>50</string>
@@ -8217,7 +8217,7 @@
                         <string>57</string>
                         <string>62</string>
                         <string>65</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-77</aPitchRange>
@@ -8231,7 +8231,7 @@
                   <shortName>A. Lute</shortName>
                   <description>Archlute (14 course)</description>
                   <musicXMLid>pluck.archlute</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>43</string>
                         <string>48</string>
@@ -8239,7 +8239,7 @@
                         <string>57</string>
                         <string>62</string>
                         <string>67</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-77</aPitchRange>
@@ -8253,7 +8253,7 @@
                   <shortName>Thb.</shortName>
                   <description>Theorbo (15 course)</description>
                   <musicXMLid>pluck.theorbo</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>45</string>
                         <string>49</string>
@@ -8261,7 +8261,7 @@
                         <string>59</string>
                         <string>52</string>
                         <string>57</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-71</aPitchRange>
@@ -8275,13 +8275,13 @@
                   <shortName>Mdn.</shortName>
                   <description>Mandolin</description>
                   <musicXMLid>pluck.mandolin</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>24</frets>
                         <string>55</string>
                         <string>62</string>
                         <string>69</string>
                         <string>76</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-85</aPitchRange>
@@ -8294,13 +8294,13 @@
                   <longName>Mandola</longName>
                   <shortName>Mda.</shortName>
                   <description>Mandola</description>
-                  <Tablature>
+                  <StringData>
                         <frets>24</frets>
                         <string>48</string>
                         <string>55</string>
                         <string>62</string>
                         <string>69</string>
-                  </Tablature>
+                  </StringData>
                   <clef>C3</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-87</aPitchRange>
@@ -8314,13 +8314,13 @@
                   <shortName>Mda.</shortName>
                   <description>Mandola Viola tuning</description>
                   <musicXMLid>pluck.mandola</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>24</frets>
                         <string>48</string>
                         <string>55</string>
                         <string>62</string>
                         <string>69</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-87</aPitchRange>
@@ -8334,13 +8334,13 @@
                   <shortName>Mda.</shortName>
                   <description>Mandola 8va mandolin tuning</description>
                   <musicXMLid>pluck.mandola</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>24</frets>
                         <string>43</string>
                         <string>50</string>
                         <string>57</string>
                         <string>64</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-87</aPitchRange>
@@ -8354,13 +8354,13 @@
                   <shortName>Mncl.</shortName>
                   <description>Mandocello</description>
                   <musicXMLid>pluck.mandocello</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>24</frets>
                         <string>36</string>
                         <string>43</string>
                         <string>50</string>
                         <string>57</string>
-                  </Tablature>
+                  </StringData>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-75</aPitchRange>
@@ -8374,13 +8374,13 @@
                   <shortName>OM.</shortName>
                   <description>Octave Mandolin</description>
                   <musicXMLid>pluck.mandolin.octave</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>24</frets>
                         <string>43</string>
                         <string>50</string>
                         <string>57</string>
                         <string>64</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-73</aPitchRange>
@@ -8422,13 +8422,13 @@
                   <shortName>Uk.</shortName>
                   <description>Ukulele</description>
                   <musicXMLid>pluck.ukulele</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>18</frets>
                         <string>67</string>
                         <string>60</string>
                         <string>64</string>
                         <string>69</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-81</aPitchRange>
@@ -8451,13 +8451,13 @@
                   <shortName>Ten. Uk.</shortName>
                   <description>Tenor Ukulele</description>
                   <musicXMLid>pluck.ukulele.tenor</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>18</frets>
                         <string>67</string>
                         <string>60</string>
                         <string>64</string>
                         <string>69</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-81</aPitchRange>
@@ -8484,13 +8484,13 @@
                   <shortName>B. Guit.</shortName>
                   <description>Bass Guitar</description>
                   <musicXMLid>pluck.bass</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>24</frets>
                         <string>28</string>
                         <string>33</string>
                         <string>38</string>
                         <string>43</string>
-                  </Tablature>
+                  </StringData>
                   <clef>F8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-65</aPitchRange>
@@ -8529,13 +8529,13 @@
                   <shortName>El. B.</shortName>
                   <description>Electric Bass</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>24</frets>
                         <string>28</string>
                         <string>33</string>
                         <string>38</string>
                         <string>43</string>
-                  </Tablature>
+                  </StringData>
                   <clef>F8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-65</aPitchRange>
@@ -8560,13 +8560,13 @@
                   <shortName>Frtl. El. B.</shortName>
                   <description>Fretless Electric Bass</description>
                   <musicXMLid>pluck.bass.fretless</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>24</frets>
                         <string>28</string>
                         <string>33</string>
                         <string>38</string>
                         <string>43</string>
-                  </Tablature>
+                  </StringData>
                   <clef>F8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-65</aPitchRange>
@@ -8727,7 +8727,7 @@
                   <shortName>Tr. vl.</shortName>
                   <description>Treble Viol</description>
                   <musicXMLid>strings.viol.treble</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>50</string>
                         <string>55</string>
@@ -8735,7 +8735,7 @@
                         <string>64</string>
                         <string>69</string>
                         <string>74</string>
-                  </Tablature>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>50-86</aPitchRange>
@@ -8749,7 +8749,7 @@
                   <shortName>A. Vl.</shortName>
                   <description>Alto Viol (a smaller version of the tenor viol tuned higher)</description>
                   <musicXMLid>strings.viol.alto</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>45</string>
                         <string>50</string>
@@ -8757,7 +8757,7 @@
                         <string>59</string>
                         <string>64</string>
                         <string>69</string>
-                  </Tablature>
+                  </StringData>
                   <clef>C3</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>45-81</aPitchRange>
@@ -8771,7 +8771,7 @@
                   <shortName>T. Vl.</shortName>
                   <description>Tenor Viol</description>
                   <musicXMLid>strings.viol.tenor</musicXMLid>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>43</string>
                         <string>48</string>
@@ -8779,7 +8779,7 @@
                         <string>57</string>
                         <string>62</string>
                         <string>67</string>
-                  </Tablature>
+                  </StringData>
                   <clef>C3</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-79</aPitchRange>
@@ -8792,7 +8792,7 @@
                   <longName>Viola da gamba</longName>
                   <shortName>Vla. d. g.</shortName>
                   <description>Viola da gamba</description>
-                  <Tablature>
+                  <StringData>
                         <frets>13</frets>
                         <string>38</string>
                         <string>43</string>
@@ -8800,7 +8800,7 @@
                         <string>52</string>
                         <string>57</string>
                         <string>62</string>
-                  </Tablature>
+                  </StringData>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-74</aPitchRange>
