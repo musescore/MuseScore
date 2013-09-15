@@ -693,7 +693,7 @@ int maxTupletVoice(const std::vector<TupletInfo> &tuplets)
       return maxVoice;
       }
 
-// split first tuplet chord, that belong to 2 tuplets, into 2 voices
+// split first tuplet chord, that belong to 2 tuplets, into 2 chords
 
 void splitTupletChord(const std::vector<TupletInfo>::iterator &lastMatch,
                       std::multimap<ReducedFraction, MidiChord> &chords)
@@ -740,6 +740,25 @@ void setNonTupletVoices(std::vector<TupletInfo> &tuplets,
             }
       }
 
+void splitFirstTupletChords(std::vector<TupletInfo> &tuplets,
+                            std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      for (auto now = tuplets.begin(); now != tuplets.end(); ++now) {
+            auto lastMatch = tuplets.end();
+            const auto nowChordIt = now->chords.begin();
+            for (auto prev = tuplets.begin(); prev != now; ++prev) {
+                  auto prevChordIt = prev->chords.begin();
+                  if (now->firstChordIndex == 0
+                              && prev->firstChordIndex == 0
+                              && nowChordIt->second == prevChordIt->second) {
+                        lastMatch = prev;
+                        }
+                  }
+            if (lastMatch != tuplets.end())
+                  splitTupletChord(lastMatch, chords);
+            }
+      }
+
 // the input tuplets should be filtered (for mutual validity)
 // the output voices can be larger than VOICES - 1
 // it will be handled later by merging voices
@@ -753,26 +772,16 @@ void separateTupletVoices(std::vector<TupletInfo> &tuplets,
             return;
       sortNotesByPitch(startBarChordIt, endBarChordIt);
       sortTupletsByAveragePitch(tuplets);
+      splitFirstTupletChords(tuplets, chords);
 
       for (auto now = tuplets.begin(); now != tuplets.end(); ++now) {
             int voice = 0;
-            auto lastMatch = tuplets.end();
-            const auto nowChordIt = now->chords.begin();
             for (auto prev = tuplets.begin(); prev != now; ++prev) {
                               // check is <now> tuplet go over <prev> tuplet
                   if (now->onTime + now->len > prev->onTime
                               && now->onTime < prev->onTime + prev->len)
                         ++voice;
-                  auto prevChordIt = prev->chords.begin();
-                  if (now->firstChordIndex == 0
-                              && prev->firstChordIndex == 0
-                              && nowChordIt->second == prevChordIt->second) {
-                        lastMatch = prev;
-                        }
                   }
-            if (lastMatch != tuplets.end())
-                  splitTupletChord(lastMatch, chords);
-
             setTupletVoice(now->chords, voice);
             }
       }
