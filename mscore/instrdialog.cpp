@@ -98,9 +98,9 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
       // PartListItem has different members filled out if used in New Score Wizard or in Instruments Wizard
       if (part) {
-            Tablature* tab = part->it ? part->it->tablature :
-                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->tablature() : 0);
-            canUseTabs = tab && tab->strings() > 0;
+            StringData* stringData = part->it ? part->it->stringData :
+                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->stringData() : 0);
+            canUseTabs = stringData && stringData->strings() > 0;
             canUsePerc = part->it ? part->it->useDrumset :
                         ( (part->part && part->part->instr(0)) ? part->part->instr(0)->useDrumset() : false);
             }

@@ -91,7 +91,7 @@ InstrumentData::InstrumentData()
       _maxPitchP   = 127;
       _useDrumset  = false;
       _drumset     = 0;
-      _tablature   = 0;
+      _stringData  = 0;
       }
 
 InstrumentData::InstrumentData(const InstrumentData& i)
@@ -107,9 +107,9 @@ InstrumentData::InstrumentData(const InstrumentData& i)
       _transpose    = i._transpose;
       _useDrumset   = i._useDrumset;
       _drumset      = 0;
-      _tablature    = 0;
+      _stringData    = 0;
       setDrumset(i._drumset);
-      setTablature(i._tablature);
+      setStringData(i._stringData);
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
       _channel      = i._channel;
@@ -121,7 +121,7 @@ InstrumentData::InstrumentData(const InstrumentData& i)
 
 InstrumentData::~InstrumentData()
       {
-      delete _tablature;
+      delete _stringData;
       delete _drumset;
       }
 
@@ -131,9 +131,9 @@ InstrumentData::~InstrumentData()
 //    (guitar) tablature
 //---------------------------------------------------------
 
-Tablature* InstrumentData::tablature() const
+StringData *InstrumentData::stringData() const
       {
-      return _tablature ? _tablature : &emptyStringData;
+      return _stringData ? _stringData : &emptyStringData;
       }
 
 //---------------------------------------------------------
@@ -177,8 +177,8 @@ void InstrumentData::write(Xml& xml) const
             xml.tag("useDrumset", _useDrumset);
             _drumset->save(xml);
             }
-      if (_tablature)
-            _tablature->write(xml);
+      if (_stringData)
+            _stringData->write(xml);
       foreach(const NamedEventList& a, _midiActions)
             a.write(xml, "MidiAction");
       foreach(const MidiArticulation& a, _articulation)
@@ -256,9 +256,10 @@ void InstrumentData::read(XmlReader& e)
                         }
                   _drumset->load(e);
                   }
-            else if (tag == "Tablature") {
-                  _tablature = new Tablature();
-                  _tablature->read(e);
+            // support tag "Tablature" for a while for compatibility with existent 2.0 scores
+            else if (tag == "Tablature" || tag == "StringData") {
+                  _stringData = new StringData();
+                  _stringData->read(e);
                   }
             else if (tag == "MidiAction") {
                   NamedEventList a;
@@ -627,7 +628,7 @@ bool InstrumentData::operator==(const InstrumentData& i) const
          &&  i._transpose.diatonic == _transpose.diatonic
          &&  i._transpose.chromatic == _transpose.chromatic
          &&  i._trackName == _trackName
-         &&  i.tablature() == tablature();
+         &&  i.stringData() == stringData();
          ;
       }
 
@@ -669,13 +670,13 @@ void InstrumentData::setDrumset(Drumset* ds)
 //   setTablature
 //---------------------------------------------------------
 
-void InstrumentData::setTablature(Tablature* t)
+void InstrumentData::setStringData(StringData* t)
       {
-      delete _tablature;
+      delete _stringData;
       if (t)
-            _tablature = new Tablature(*t);
+            _stringData = new StringData(*t);
       else
-            _tablature = 0;
+            _stringData = 0;
       }
 
 //---------------------------------------------------------
@@ -1036,18 +1037,18 @@ void Instrument::setChannel(int i, const Channel& c)
 //   tablature
 //---------------------------------------------------------
 
-Tablature* Instrument::tablature() const
+StringData* Instrument::stringData() const
       {
-      return d->tablature();
+      return d->stringData();
       }
 
 //---------------------------------------------------------
 //   setTablature
 //---------------------------------------------------------
 
-void Instrument::setTablature(Tablature* t)
+void Instrument::setStringData(StringData* t)
       {
-      d->setTablature(t);
+      d->setStringData(t);
       }
 
 //---------------------------------------------------------
@@ -1198,7 +1199,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setMidiActions(t->midiActions);
       instr.setArticulation(t->articulation);
       instr.setChannel(t->channel);
-      instr.setTablature(t->tablature ? new Tablature(*t->tablature) : 0);
+      instr.setStringData(t->stringData ? new StringData(*t->stringData) : 0);
       return instr;
       }
 

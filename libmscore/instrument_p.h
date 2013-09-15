@@ -31,7 +31,7 @@ class InstrumentData : public QSharedData {
 
       bool       _useDrumset;
       Drumset*   _drumset;
-      Tablature* _tablature;
+      StringData* _stringData;
 
       QList<NamedEventList>   _midiActions;
       QList<MidiArticulation> _articulation;
@@ -75,8 +75,8 @@ class InstrumentData : public QSharedData {
       void setArticulation(const QList<MidiArticulation>& l) { _articulation = l; }
       void setChannel(const QList<Channel>& l)               { _channel = l;      }
       void setChannel(int i, const Channel& c)               { _channel[i] = c;   }
-      Tablature* tablature() const;
-      void setTablature(Tablature* t);    // move ownership of tablature to Instrument
+      StringData* stringData() const;
+      void setStringData(StringData* t);    // move ownership of tablature to Instrument
 
       void setLongName(const QTextDocumentFragment& f);
       void setShortName(const QTextDocumentFragment& f);
