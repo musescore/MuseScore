@@ -37,7 +37,7 @@ class KeyList;
 class StaffType;
 class StaffTypeTablature;
 class Staff;
-class Tablature;
+class StringData;
 class ClefList;
 struct ClefTypeList;
 class Segment;
