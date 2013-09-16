@@ -1342,11 +1342,14 @@ Measure* Score::getCreateMeasure(int tick)
 
 void Score::addElement(Element* element)
       {
+#if 0
       if (MScore::debugMode) {
             qDebug("   Score(%p)::addElement %p(%s) parent %p(%s)",
                this, element, element->name(), element->parent(),
                element->parent() ? element->parent()->name() : "");
             }
+#endif
+
       if (element->parent() && element->parent()->type() == Element::SEGMENT)
             static_cast<Segment*>(element->parent())->measure()->setDirty();
 
@@ -1476,10 +1479,12 @@ void Score::removeElement(Element* element)
       {
       Element* parent = element->parent();
 
+#if 0
       if (MScore::debugMode) {
             qDebug("   Score(%p)::removeElement %p(%s) parent %p(%s)",
                this, element, element->name(), parent, parent ? parent->name() : "");
             }
+#endif
       if (element->parent() && element->parent()->type() == Element::SEGMENT)
             static_cast<Segment*>(element->parent())->measure()->setDirty();
 

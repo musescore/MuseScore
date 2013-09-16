@@ -106,6 +106,12 @@ namespace Ms {
 // #define DEBUG_REPEATS true
 // #define DEBUG_TICK true
 
+#ifdef DEBUG_CLEF
+#define clefDebug(...) qDebug(__VA_ARGS__)
+#else
+#define clefDebug(...) ;
+#endif
+
 //---------------------------------------------------------
 //   typedefs
 //---------------------------------------------------------
@@ -1429,9 +1435,8 @@ void ExportMusicXml::keysig(int key, int staff, bool visible)
 
 void ExportMusicXml::clef(int staff, ClefType clef)
       {
-#ifdef DEBUG_CLEF
-      qDebug("ExportMusicXml::clef(staff %d, clef %d)", staff, clef);
-#endif
+      clefDebug("ExportMusicXml::clef(staff %d, clef %d)", staff, clef);
+
       attr.doAttr(xml, true);
       if (staff)
             xml.stag(QString("clef number=\"%1\"").arg(staff));
@@ -4183,48 +4188,54 @@ void ExportMusicXml::write(QIODevice* dev)
                         if (staves > 1)
                               xml.tag("staves", staves);
                         }
+
+                  {
+                  Measure* prevMeasure = m->prevMeasure();
+                  int tick             = m->tick();
+                  Segment* cs1;
+                  Segment* cs2         = m->findSegment(Segment::SegClef, tick);
+                  Segment* seg         = 0;
+
+                  if (prevMeasure)
+                        cs1 = prevMeasure->findSegment(Segment::SegClef,  tick);
+                  else
+                        cs1 = 0;
+
+                  if (cs1 && cs2)         // should not happen
+                        seg = cs2;
+                  else if (cs1)
+                        seg = cs1;
+                  else
+                        seg = cs2;
+
                   // output attribute at start of measure: clef
-                  for (Segment* seg = m->first(); seg; seg = seg->next()) {
+                  if (seg) {
+                        for (int st = strack; st < etrack; st += VOICES) {
+                              // sstaff - xml staff number, counting from 1 for this
+                              // instrument
+                              // special number 0 -> dont show staff number in
+                              // xml output (because there is only one staff)
 
-                        if (seg->tick() > m->tick())
-                              break;
-                        Element* el = seg->element(strack);
-                        if (!el)
-                              continue;
-                        if (el->type() == Element::CLEF)
-                              for (int st = strack; st < etrack; st += VOICES) {
-                                    // sstaff - xml staff number, counting from 1 for this
-                                    // instrument
-                                    // special number 0 -> dont show staff number in
-                                    // xml output (because there is only one staff)
+                              int sstaff = (staves > 1) ? st - strack + VOICES : 0;
+                              sstaff /= VOICES;
 
-                                    int sstaff = (staves > 1) ? st - strack + VOICES : 0;
-                                    sstaff /= VOICES;
-
-                                    el = seg->element(st);
-                                    if (el && el->type() == Element::CLEF) {
-                                          Clef* cle = static_cast<Clef*>(el);
-                                          ClefType ct = cle->clefType();
-                                          int ti = cle->segment()->tick();
-#ifdef DEBUG_CLEF
-                                          qDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", ti, int(ct), el->generated());
-#endif
-                                          // output only clef changes, not generated clefs at line beginning
-                                          // exception: at tick=0, export clef anyway
-                                          if (ti == 0 || !cle->generated()) {
-#ifdef DEBUG_CLEF
-                                                qDebug("exportxml: clef exported");
-#endif
-                                                clef(sstaff, ct);
-                                                }
-                                          else {
-#ifdef DEBUG_CLEF
-                                                qDebug("exportxml: clef not exported");
-#endif
-                                                }
+                              Clef* cle = static_cast<Clef*>(seg->element(st));
+                              if (cle) {
+                                    ClefType ct = cle->clefType();
+                                    clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(ct), cle->generated());
+                                    // output only clef changes, not generated clefs at line beginning
+                                    // exception: at tick=0, export clef anyway
+                                    if (tick == 0 || !cle->generated()) {
+                                          clefDebug("exportxml: clef exported");
+                                          clef(sstaff, ct);
+                                          }
+                                    else {
+                                          clefDebug("exportxml: clef not exported");
                                           }
                                     }
+                              }
                         }
+                  }
 
                   // output attributes with the first actual measure (pickup or regular) only
                   if ((irregularMeasureNo + measureNo + pickupMeasureNo) == 4) {
@@ -4331,23 +4342,19 @@ void ExportMusicXml::write(QIODevice* dev)
                                           // at line beginning
                                           // also ignore clefs at the start of a measure,
                                           // these have already been output
+                                          // also ignore clefs at the end of a measure
+                                          //
                                           ClefType ct = ((Clef*)el)->clefType();
-#ifdef DEBUG_CLEF
                                           int ti = seg->tick();
-                                          qDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, ct, el->generated());
-#endif
+                                          clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, ct, el->generated());
                                           if (el->generated()) {
-#ifdef DEBUG_CLEF
-                                                qDebug("exportxml: generated clef not exported");
-#endif
+                                                clefDebug("exportxml: generated clef not exported");
                                                 break;
                                                 }
-                                          if (!el->generated() && seg->tick() != m->tick())
+                                          if (!el->generated() && ti != m->tick() && ti != m->endTick())
                                                 clef(sstaff, ct);
                                           else {
-#ifdef DEBUG_CLEF
-                                                qDebug("exportxml: clef not exported");
-#endif
+                                                clefDebug("exportxml: clef not exported");
                                                 }
                                           }
                                           break;
