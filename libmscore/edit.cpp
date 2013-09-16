@@ -356,6 +356,8 @@ Note* Score::addNote(Chord* chord, int pitch)
       undoAddElement(note);
       _playNote = true;
       select(note, SELECT_SINGLE, 0);
+      if (!chord->staff()->isTabStaff())
+            moveToNextInputPos();
       return note;
       }
 
@@ -374,6 +376,8 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       undoAddElement(note);
       _playNote = true;
       select(note, SELECT_SINGLE, 0);
+      if (!chord->staff()->isTabStaff())
+            moveToNextInputPos();
       return note;
       }
 
@@ -791,6 +795,7 @@ void Score::putNote(const Position& p, bool replace)
       if (addToChord && cr->type() == Element::CHORD) {
             // if adding, add!
             addNote(static_cast<Chord*>(cr), nval);
+            return;
             }
       else {
             // if not adding, replace current chord (or create a new one)
@@ -822,12 +827,13 @@ void Score::repitchNote(const Position& p, bool replace)
       nval.tpc   = step2tpc(step % 7, acci);
 
       Chord* chord;
-      if (_is.cr()->type() == Element::REST) {
-            undoRemoveElement(_is.cr());
-            chord = new Chord(this);
-            chord->setParent(s);
-            chord->setTrack(_is.cr()->track());
-            undoAddElement(chord);
+      if (_is.cr()->type() == Element::REST) { //skip rests
+            ChordRest* next = nextChordRest(_is.cr());
+            while(next && next->type() != Element::CHORD)
+                  next = nextChordRest(next);
+            if(next)
+                  moveInputPos(next->segment());
+            return;
             }
       else {
             chord = static_cast<Chord*>(_is.cr());
@@ -841,7 +847,12 @@ void Score::repitchNote(const Position& p, bool replace)
                   undoRemoveElement(chord->notes().first());
             }
       undoAddElement(note);
-      moveToNextInputPos();
+      // move to next Chord
+      ChordRest* next = nextChordRest(_is.cr());
+      while(next && next->type() != Element::CHORD)
+            next = nextChordRest(next);
+      if(next)
+            moveInputPos(next->segment());
       }
 
 //---------------------------------------------------------

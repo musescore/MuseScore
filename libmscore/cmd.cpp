@@ -387,7 +387,7 @@ Note* Score::addPitch(int pitch, bool addFlag)
             Chord* chord = static_cast<Chord*>(_is.cr());
             Note* n = addNote(chord, pitch);
             setLayoutAll(true);
-            moveToNextInputPos();
+            //moveToNextInputPos();
             return n;
             }
       expandVoice();
