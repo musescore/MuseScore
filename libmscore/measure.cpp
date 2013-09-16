@@ -3261,7 +3261,7 @@ void Measure::layoutX(qreal stretch)
                                           break;
                                     }
                               }
-                        else if(_multiMeasure > 0)
+                        else if (_multiMeasure > 0)
                               ns = s->next();
 
                         if (ns) {
@@ -3285,7 +3285,8 @@ void Measure::layoutX(qreal stretch)
 
                                     rest->setMMWidth(w);
                                     StaffLines* sl = staves[track/VOICES]->lines;
-                                    e->setPos(d, sl->staffHeight() * .5);   // center vertically in measure
+                                    qreal x = x1 - rest->segment()->pos().x() + d;
+                                    e->setPos(x, sl->staffHeight() * .5);   // center vertically in measure
                                     }
                               }
                         else {   // if (rest->durationType() == TDuration::V_MEASURE)
