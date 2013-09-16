@@ -820,8 +820,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         //
                         clef = new Clef(this);
                         clef->setTrack(i * VOICES);
-                        clef->setGenerated(true);
                         clef->setSmall(false);
+                        clef->setGenerated(staff->clef(tick) == staff->clef(tick-1));
 
                         Segment* s = m->undoGetSegment(Segment::SegClef, tick);
                         clef->setParent(s);
@@ -1329,6 +1329,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
 
 void Score::removeGeneratedElements(Measure* sm, Measure* em)
       {
+      printf("removeGeneratedElements\n");
       for (Measure* m = sm; m; m = m->nextMeasure()) {
             //
             // remove generated elements from all measures in [sm;em]
@@ -1361,6 +1362,15 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                               if (clef->small() != small) {
                                     clef->setSmall(small);
                                     m->setDirty();
+                                    }
+                              if (s->firstMeasure() != m && seg->tick() == m->tick()) {
+                                    printf("move clef to prev measure\n");
+                                    undoRemoveElement(el);
+                                    Measure* pm = m->prevMeasure();
+                                    Segment* s = pm->undoGetSegment(Segment::SegClef, m->tick());
+                                    Clef* nc = clef->clone();
+                                    nc->setParent(s);
+                                    undoAddElement(nc);
                                     }
                               }
                         }
@@ -1693,37 +1703,44 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   // courtesy clefs
                   // no courtesy clef if this measure is the end of a repeat
 
-                  bool showCourtesyClef = styleB(ST_genCourtesyClef);
-                  if (showCourtesyClef && !(m->repeatFlags() & RepeatEnd)) {
-                        Clef* c;
-                        int n = _staves.size();
-                        for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-                              Staff* staff = _staves[staffIdx];
-                              ClefType c1 = staff->clef(tick - 1);
-                              ClefType c2 = staff->clef(tick);
-                              if (c1 != c2) {
-                                    // locate a clef in next measure and, if found,
-                                    // check if it has court. sig turned off
-                                    s = nm->findSegment(Segment::SegClef, tick);
-                                    showCourtesySig = true;	// assume this clef change has court. sig turned on
-                                    if (s) {
-                                          c = static_cast<Clef*>(s->element(staffIdx*VOICES));
-                                          if (c && !c->showCourtesy())
-                                                continue;   // this key change has court. sig turned off
-                                          }
+                  bool showCourtesyClef = styleB(ST_genCourtesyClef) && nm && !(m->repeatFlags() & RepeatEnd);
+                  for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                        Staff* staff = _staves[staffIdx];
+                        ClefType clefType = staff->clef(tick);
+                        if (clefType == staff->clef(tick-1))
+                              continue;
 
-                                    s = m->undoGetSegment(Segment::SegClef, tick);
-                                    int track = staffIdx * VOICES;
-                                    if (!s->element(track)) {
-                                          c = new Clef(this);
-                                          c->setClefType(c2);
-                                          c->setTrack(track);
-                                          c->setGenerated(true);
-                                          c->setSmall(true);
-                                          c->setParent(s);
-                                          undoAddElement(c);
+                        bool show = showCourtesyClef;
+                        Clef* clef;
+                        if (showCourtesyClef) {
+                              // locate a clef in next measure and, if found,
+                              // check if it has court. sig turned off
+                              s = nm->findSegment(Segment::SegClef, tick);
+                              if (s) {
+                                    clef = static_cast<Clef*>(s->element(staffIdx*VOICES));
+                                    if (clef && !clef->showCourtesy()) {
+                                          show = false;
+                                          continue;   // this key change has court. sig turned off
                                           }
                                     }
+                              }
+                        s = m->findSegment(Segment::SegClef, tick);
+                        if (s)
+                              clef = static_cast<Clef*>(s->element(staffIdx * VOICES));
+                        else
+                              clef = 0;
+                        if (clef && !show)
+                              undoRemoveElement(clef);
+                        else if (!clef && show) {
+                              s = m->undoGetSegment(Segment::SegClef, tick);
+                              int track = staffIdx * VOICES;
+                              clef = new Clef(this);
+                              clef->setClefType(clefType);
+                              clef->setTrack(track);
+                              clef->setGenerated(true);
+                              clef->setSmall(true);
+                              clef->setParent(s);
+                              undoAddElement(clef);
                               }
                         }
                   }
