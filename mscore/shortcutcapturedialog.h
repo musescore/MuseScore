@@ -41,7 +41,7 @@ class ShortcutCaptureDialog : public QDialog, public Ui::ShortcutCaptureDialogBa
       Q_OBJECT
 
       Shortcut* s;
-      void keyPressEvent(QKeyEvent* e);
+      void keyPress(QKeyEvent* e);
       virtual bool eventFilter(QObject* o, QEvent* e);
       QKeySequence key;
       QMap<QString, Shortcut*> localShortcuts;
