@@ -36,6 +36,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
       sa->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
       sa->setWidgetResizable(true);
+      sa->setFrameShape(QFrame::NoFrame);
       setWidget(sa);
 
       QWidget* paletteList = new QWidget;

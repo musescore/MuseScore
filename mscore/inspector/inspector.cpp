@@ -79,6 +79,7 @@ Inspector::Inspector(QWidget* parent)
       setObjectName("inspector");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
       sa = new QScrollArea;
+      sa->setFrameShape(QFrame::NoFrame);
       sa->setWidgetResizable(true);
       setWidget(sa);
 
