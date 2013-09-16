@@ -2029,12 +2029,24 @@ void Score::layoutLinear()
                         isFirstMeasure = false;
                         }
                   Measure* m = static_cast<Measure*>(mb);
-                  m->createEndBarLines();       // TODO: not set here
+                  Measure* nm = m->nextMeasure();
+                 if (m->repeatFlags() & RepeatEnd) {
+                        if (nm && (nm->repeatFlags() & RepeatStart))
+                              m->setEndBarLineType(END_START_REPEAT, true);
+                        else
+                              m->setEndBarLineType(END_REPEAT, true);
+                        }
+                  else if (nm && (nm->repeatFlags() & RepeatStart))
+                        m->setEndBarLineType(START_REPEAT, true);
+                  m->createEndBarLines();
                   w = m->minWidth1() * styleD(ST_linearStretch);
                   m->layout(w);
                   }
-            else
+            else {
+                  mb->layout();
                   w = mb->width();
+                 }
+
             mb->setPos(pos);
             pos.rx() += w;
             }
