@@ -40,13 +40,12 @@ ShortcutCaptureDialog::ShortcutCaptureDialog(Shortcut* _s, QMap<QString, Shortcu
       addButton->setEnabled(false);
       replaceButton->setEnabled(false);
       oshrtLabel->setText(s->keysToString());
+      oshrtLabel->setEnabled(false);
       connect(clearButton, SIGNAL(clicked()), SLOT(clearClicked()));
       connect(addButton, SIGNAL(clicked()), SLOT(addClicked()));
       connect(replaceButton, SIGNAL(clicked()), SLOT(replaceClicked()));
       clearClicked();
-      grabKeyboard();
 
-      oshrtLabel->installEventFilter(this);
       nshrtLabel->installEventFilter(this);
       }
 
@@ -76,7 +75,6 @@ void ShortcutCaptureDialog::replaceClicked()
 ShortcutCaptureDialog::~ShortcutCaptureDialog()
       {
       nshrtLabel->removeEventFilter(this);
-      oshrtLabel->removeEventFilter(this);
       releaseKeyboard();
       }
 
@@ -84,13 +82,10 @@ ShortcutCaptureDialog::~ShortcutCaptureDialog()
 //   eventFilter
 //---------------------------------------------------------
 
-bool ShortcutCaptureDialog::eventFilter(QObject* o, QEvent* e)
-    {
-    // Mac only, harmless on Win
-    // Grab the backspace key before one of the QLineEdit widgets gets them.
-    // Otherwise Qt on mac swallows the Backspace even if the field is read-only.
-    if (e->type() == QEvent::KeyPress && static_cast<QKeyEvent*>(e)->key() == Qt::Key_Backspace) {
-        keyPressEvent(static_cast<QKeyEvent*>(e));
+bool ShortcutCaptureDialog::eventFilter(QObject* /*o*/, QEvent* e)
+    {    
+    if (e->type() == QEvent::KeyPress) {
+        keyPress(static_cast<QKeyEvent*>(e));
         return true;
         }
     return false;
@@ -101,7 +96,7 @@ bool ShortcutCaptureDialog::eventFilter(QObject* o, QEvent* e)
 //   keyPressEvent
 //---------------------------------------------------------
 
-void ShortcutCaptureDialog::keyPressEvent(QKeyEvent* e)
+void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
       {
       if (key.count() >= 4)
             return;
@@ -168,7 +163,7 @@ qDebug("capture key 0x%x  modifiers 0x%x virt 0x%x scan 0x%x <%s><%s>\n",
 
 void ShortcutCaptureDialog::clearClicked()
       {
-      nshrtLabel->setText(tr("Undefined"));
+      //nshrtLabel->setText(tr("Undefined"));
       key = 0;
       }
 }
