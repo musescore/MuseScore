@@ -1329,7 +1329,6 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
 
 void Score::removeGeneratedElements(Measure* sm, Measure* em)
       {
-      printf("removeGeneratedElements\n");
       for (Measure* m = sm; m; m = m->nextMeasure()) {
             //
             // remove generated elements from all measures in [sm;em]
@@ -1363,14 +1362,19 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                                     clef->setSmall(small);
                                     m->setDirty();
                                     }
+                              //
+                              // if measure is not the first in the system, the clef at
+                              // measure start has to be moved to the end of the previous measure
+                              //
                               if (s->firstMeasure() != m && seg->tick() == m->tick()) {
-                                    printf("move clef to prev measure\n");
                                     undoRemoveElement(el);
                                     Measure* pm = m->prevMeasure();
                                     Segment* s = pm->undoGetSegment(Segment::SegClef, m->tick());
                                     Clef* nc = clef->clone();
                                     nc->setParent(s);
                                     undoAddElement(nc);
+                                    m->setDirty();
+                                    pm->setDirty();
                                     }
                               }
                         }
@@ -1729,19 +1733,37 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               clef = static_cast<Clef*>(s->element(staffIdx * VOICES));
                         else
                               clef = 0;
-                        if (clef && !show)
+                        Clef* nextClef = 0;
+                        Segment* ns = nm->findSegment(Segment::SegClef, tick);
+                        if (ns)
+                              nextClef = static_cast<Clef*>(ns->element(staffIdx * VOICES));
+                        if (clef && !nextClef) {
+                              //
+                              // move original clef to next measure
+                              //
+                              nextClef = clef->clone();
+                              ns = nm->undoGetSegment(Segment::SegClef, tick);
+                              nextClef->setParent(ns);
+                              undoAddElement(nextClef);
+                              }
+                        if (clef && !show) {
                               undoRemoveElement(clef);
+                              clef = 0;
+                              }
                         else if (!clef && show) {
                               s = m->undoGetSegment(Segment::SegClef, tick);
                               int track = staffIdx * VOICES;
                               clef = new Clef(this);
                               clef->setClefType(clefType);
                               clef->setTrack(track);
-                              clef->setGenerated(true);
                               clef->setSmall(true);
                               clef->setParent(s);
                               undoAddElement(clef);
                               }
+                        if (clef)
+                              clef->setGenerated(true);
+                        if (nextClef)
+                              nextClef->setGenerated(false);
                         }
                   }
 
