@@ -30,7 +30,7 @@ int findAveragePitch(const QList<MidiNote> &notes)
       int avgPitch = 0;
       for (const auto &note: notes)
             avgPitch += note.pitch;
-      return avgPitch / notes.size();
+      return notes.size() ? avgPitch / notes.size() : 0;
       }
 
 int findAveragePitch(const std::map<ReducedFraction, MidiChord>::const_iterator &startChordIt,
