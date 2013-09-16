@@ -1177,6 +1177,14 @@ void MuseScore::editInstrList()
       if (rootScore->measures()->size() == 0)
             rootScore->insertMeasure(Element::MEASURE, 0, false);
 
+      QList<Score*> toDelete;
+      for (Excerpt* excpt : rootScore->excerpts()) {
+            if (excpt->score()->staves().size() == 0)
+                  toDelete.append(excpt->score());
+            }
+      for(Score* s: toDelete)
+            rootScore->undo(new RemoveExcerpt(s));
+
       rootScore->setLayoutAll(true);
       rootScore->endCmd();
       rootScore->rebuildMidiMapping();

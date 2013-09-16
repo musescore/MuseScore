@@ -2536,9 +2536,22 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
 
 void Score::cmdRemoveStaff(int staffIdx)
       {
-      adjustBracketsDel(staffIdx, staffIdx+1);
       Staff* s = staff(staffIdx);
+      adjustBracketsDel(staffIdx, staffIdx+1);
       undoRemoveStaff(s, staffIdx);
+
+      // remove linked staff and measures in linked staves
+      // should be done earlier for the main staff
+      for(Staff* staff : s->linkedStaves()->staves()) {
+           Score* lscore = staff->score();
+           if(lscore != this) {
+                 int lstaffIdx = lscore->staffIdx(staff);
+                 adjustBracketsDel(lstaffIdx, lstaffIdx+1);
+                 for (Measure* m = lscore->firstMeasure(); m; m = m->nextMeasure())
+                        m->cmdRemoveStaves(lstaffIdx, lstaffIdx + 1);
+                  undoRemoveStaff(staff, lstaffIdx);
+                  }
+            }
       }
 
 //---------------------------------------------------------
