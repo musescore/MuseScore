@@ -9,6 +9,9 @@
       <Genre id="orchestra">
             <name>Orchestral instruments</name>
       </Genre>
+      <Genre id="earlymusic">
+            <name>Early Music</name>
+      </Genre>
       <Genre id="ethnic">
             <name>Ethnic instruments</name>
       </Genre>
@@ -372,6 +375,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="soprano-gemshorn">
                   <longName>Soprano Gemshorn</longName>
@@ -385,6 +389,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-gemshorn">
                   <longName>Alto Gemshorn</longName>
@@ -398,6 +403,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-gemshorn">
                   <longName>Tenor Gemshorn</longName>
@@ -411,6 +417,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bass-gemshorn">
                   <longName>Bass Gemshorn</longName>
@@ -424,6 +431,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ocarina">
                   <longName>Ocarina</longName>
@@ -675,6 +683,7 @@
                   <Channel>
                         <program value="74"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="sopranino-recorder">
                   <longName>Sopranino Recorder</longName>
@@ -688,6 +697,7 @@
                   <Channel>
                         <program value="74"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="soprano-recorder">
                   <longName>Soprano Recorder</longName>
@@ -701,6 +711,7 @@
                   <Channel>
                         <program value="74"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-recorder">
                   <longName>Alto Recorder</longName>
@@ -714,6 +725,7 @@
                   <Channel>
                         <program value="74"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-recorder">
                   <longName>Tenor Recorder</longName>
@@ -727,6 +739,7 @@
                   <Channel>
                         <program value="74"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bass-recorder">
                   <longName>Bass Recorder</longName>
@@ -740,6 +753,7 @@
                   <Channel>
                         <program value="74"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="contrabass-recorder">
                   <longName>Contrabass Recorder</longName>
@@ -753,6 +767,7 @@
                   <Channel>
                         <program value="74"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="greatbass-recorder">
                   <longName>Greatbass Recorder</longName>
@@ -766,6 +781,7 @@
                   <Channel>
                         <program value="74"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="slide-whistle">
                   <longName>Slide Whistle</longName>
@@ -861,6 +877,7 @@
                   <Channel>
                         <program value="69"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="oboe-d'amore">
                   <longName>Oboe d'amore</longName>
@@ -892,6 +909,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="english-horn">
                   <longName>English Horn</longName>
@@ -975,6 +993,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="soprano-shawm">
                   <longName>Soprano Shawm</longName>
@@ -988,6 +1007,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-shawm">
                   <longName>Alto Shawm</longName>
@@ -1001,6 +1021,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-shawm">
                   <longName>Tenor Shawm</longName>
@@ -1014,6 +1035,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bass-shawm">
                   <longName>Bass Shawm</longName>
@@ -1027,6 +1049,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="great-bass-shawm">
                   <longName>Great Bass Shawm</longName>
@@ -1040,6 +1063,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="cromorne">
                   <longName>Cromorne</longName>
@@ -1053,6 +1077,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="crumhorn">
                   <longName>Crumhorn</longName>
@@ -1066,6 +1091,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="soprano-crumhorn">
                   <longName>Soprano Crumhorn</longName>
@@ -1079,6 +1105,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-crumhorn">
                   <longName>Alto Crumhorn</longName>
@@ -1092,6 +1119,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-crumhorn">
                   <longName>Tenor Crumhorn</longName>
@@ -1105,6 +1133,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bass-crumhorn">
                   <longName>Bass Crumhorn</longName>
@@ -1118,6 +1147,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="greatbass-crumhorn">
                   <longName>Greatbass Crumhorn</longName>
@@ -1131,6 +1161,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="cornamuse">
                   <longName>Cornamuse</longName>
@@ -1679,6 +1710,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="sopranino-chalumeau">
                   <longName>Sopranino Chalumeau</longName>
@@ -1692,6 +1724,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="soprano-chalumeau">
                   <longName>Soprano Chalumeau</longName>
@@ -1705,6 +1738,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-chalumeau">
                   <longName>Alto Chalumeau</longName>
@@ -1718,6 +1752,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-chalumeau">
                   <longName>Tenor Chalumeau</longName>
@@ -1731,6 +1766,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bass-chalumeau">
                   <longName>Bass Chalumeau</longName>
@@ -1744,6 +1780,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tarogato">
                   <longName>Tarogato</longName>
@@ -1831,6 +1868,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="rackett">
                   <longName>Rackett</longName>
@@ -1844,6 +1882,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="sarrusophone">
                   <longName>Sarrusophone</longName>
@@ -3163,6 +3202,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="f-baroque-trumpet">
                   <longName>Baroque Trumpet in F</longName>
@@ -3178,6 +3218,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="eb-baroque-trumpet">
                   <longName>Baroque Trumpet in E♭</longName>
@@ -3193,6 +3234,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="d-baroque-trumpet">
                   <longName>Baroque Trumpet in D</longName>
@@ -3208,6 +3250,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="c-baroque-trumpet">
                   <longName>Baroque Trumpet in C</longName>
@@ -3221,6 +3264,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bb-baroque-trumpet">
                   <longName>Baroque Trumpet in B♭</longName>
@@ -3236,6 +3280,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="rag-dung">
                   <longName>Rag Dung</longName>
@@ -3495,6 +3540,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="cornett">
                   <longName>Cornett</longName>
@@ -3508,6 +3554,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="soprano-cornett">
                   <longName>Soprano Cornett</longName>
@@ -3521,6 +3568,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-cornett">
                   <longName>Alto Cornett</longName>
@@ -3534,6 +3582,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-cornett">
                   <longName>Tenor Cornett</longName>
@@ -3547,6 +3596,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="serpent">
                   <longName>Serpent</longName>
@@ -3561,6 +3611,7 @@
                         <program value="56"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="trombone">
                   <longName>Trombone</longName>
@@ -6706,6 +6757,7 @@
                   <Channel>
                         <program value="7"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="harpsichord">
                   <longName>Harpsichord</longName>
@@ -6725,6 +6777,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="virginal">
                   <longName>Virginal</longName>
@@ -6742,6 +6795,7 @@
                   <Channel>
                         <program value="6"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="celesta">
                   <longName>Celesta</longName>
@@ -8066,6 +8120,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="lute-tablature">
                   <trackName>Lute [Tablature]</trackName>
@@ -8074,6 +8129,7 @@
                   <musicXMLid>pluck.lute</musicXMLid>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <clef>TAB</clef>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-5-course">
                   <longName>Lute</longName>
@@ -8096,6 +8152,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-6-course">
                   <longName>Lute</longName>
@@ -8119,6 +8176,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-7-course">
                   <longName>Lute</longName>
@@ -8133,6 +8191,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-8-course">
                   <longName>Lute</longName>
@@ -8156,6 +8215,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-9-course">
                   <longName>Lute</longName>
@@ -8179,6 +8239,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-10-course">
                   <longName>Lute</longName>
@@ -8202,6 +8263,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="baroque-lute-13-course">
                   <longName>Lute</longName>
@@ -8225,6 +8287,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="archlute-14-course">
                   <longName>Archlute</longName>
@@ -8247,6 +8310,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="theorbo-15-course">
                   <longName>Theorbo</longName>
@@ -8269,6 +8333,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="mandolin">
                   <longName>Mandolin</longName>
@@ -8721,6 +8786,7 @@
                   <Channel>
                         <program value="40"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="treble-viol">
                   <longName>Treble Viol</longName>
@@ -8743,6 +8809,7 @@
                   <Channel>
                         <program value="40"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-viol">
                   <longName>Alto Viol</longName>
@@ -8765,6 +8832,7 @@
                   <Channel>
                         <program value="41"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-viol">
                   <longName>Tenor Viol</longName>
@@ -8787,6 +8855,7 @@
                   <Channel>
                         <program value="41"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="viola-da-gamba">
                   <longName>Viola da gamba</longName>
@@ -8794,6 +8863,7 @@
                   <description>Viola da gamba</description>
                   <StringData>
                         <frets>13</frets>
+                        <string>33</string>
                         <string>38</string>
                         <string>43</string>
                         <string>48</string>
@@ -8808,6 +8878,7 @@
                   <Channel>
                         <program value="42"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="viola-da-gamba-tablature">
                   <longName>Viola da gamba (Tab)</longName>
@@ -8817,6 +8888,7 @@
                   <description>Viola da gamba (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <clef>TAB</clef>
+                  <genre>earlymusic</genre>
             </Instrument>
             <!-- Viola da Gamba (6 string) removed as a duplication -->
             <Instrument id="violone">
@@ -8831,6 +8903,7 @@
                   <Channel>
                         <program value="43"/>
                   </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
       </InstrumentGroup>
 </museScore>
