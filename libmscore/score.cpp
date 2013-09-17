@@ -2547,7 +2547,7 @@ void Score::cmdRemoveStaff(int staffIdx)
                  Score* lscore = staff->score();
                  if(lscore != this) {
                        int lstaffIdx = lscore->staffIdx(staff);
-                       adjustBracketsDel(lstaffIdx, lstaffIdx+1);
+                       //adjustBracketsDel(lstaffIdx, lstaffIdx+1);
                        for (Measure* m = lscore->firstMeasure(); m; m = m->nextMeasure())
                               m->cmdRemoveStaves(lstaffIdx, lstaffIdx + 1);
                         undoRemoveStaff(staff, lstaffIdx);
