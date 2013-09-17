@@ -19,3 +19,5 @@ build.qt5
 mscore/revision.h
 .DS_Store
 CMakeLists.txt.user.*
+vtest/html
+
