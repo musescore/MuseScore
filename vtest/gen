@@ -1,0 +1,35 @@
+#!/bin/sh
+
+SRC="mmrest-1"
+MSCORE=../build.debug/mscore/mscore
+DPI=130
+
+
+
+F=vtest.html
+
+
+rm -rf html
+mkdir html
+cd html
+
+for src in $SRC; do
+      echo process ../$src
+      cp ../$src-ref.png .
+      ../$MSCORE ../$src.mscz -r $DPI -o $src.png
+      done
+
+rm -f $F
+echo "<html>" >> $F
+echo "  <body>" >> $F
+for src in $SRC; do
+      echo "    <h2>$src</h2></br>" >> $F
+      echo "    <img src=\"$src-1.png\">" >> $F
+      echo "    <img src=\"$src-ref.png\">" >> $F
+      done
+echo "  </body>" >> $F
+echo "</html>" >> $F
+
+
+konqueror $F
+
