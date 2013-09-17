@@ -1,13 +1,10 @@
 #!/bin/sh
 
-SRC="mmrest-1"
+SRC="mmrest-1 fmrest-1"
+
 MSCORE=../build.debug/mscore/mscore
 DPI=130
-
-
-
 F=vtest.html
-
 
 rm -rf html
 mkdir html
