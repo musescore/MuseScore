@@ -2542,14 +2542,16 @@ void Score::cmdRemoveStaff(int staffIdx)
 
       // remove linked staff and measures in linked staves
       // should be done earlier for the main staff
-      for(Staff* staff : s->linkedStaves()->staves()) {
-           Score* lscore = staff->score();
-           if(lscore != this) {
-                 int lstaffIdx = lscore->staffIdx(staff);
-                 adjustBracketsDel(lstaffIdx, lstaffIdx+1);
-                 for (Measure* m = lscore->firstMeasure(); m; m = m->nextMeasure())
-                        m->cmdRemoveStaves(lstaffIdx, lstaffIdx + 1);
-                  undoRemoveStaff(staff, lstaffIdx);
+      if(s->linkedStaves()) {
+            for(Staff* staff : s->linkedStaves()->staves()) {
+                 Score* lscore = staff->score();
+                 if(lscore != this) {
+                       int lstaffIdx = lscore->staffIdx(staff);
+                       adjustBracketsDel(lstaffIdx, lstaffIdx+1);
+                       for (Measure* m = lscore->firstMeasure(); m; m = m->nextMeasure())
+                              m->cmdRemoveStaves(lstaffIdx, lstaffIdx + 1);
+                        undoRemoveStaff(staff, lstaffIdx);
+                        }
                   }
             }
       }
