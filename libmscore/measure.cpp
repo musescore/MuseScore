@@ -3285,13 +3285,15 @@ void Measure::layoutX(qreal stretch)
 
                                     rest->setMMWidth(w);
                                     StaffLines* sl = staves[track/VOICES]->lines;
-                                    qreal x = x1 - rest->segment()->pos().x() + d;
+                                    qreal x = x1 - s->pos().x() + d;
                                     e->setPos(x, sl->staffHeight() * .5);   // center vertically in measure
                                     }
                               }
                         else {   // if (rest->durationType() == TDuration::V_MEASURE)
-                              qreal w  = x2 - x1;
-                              e->rxpos() = (w - e->width()) * .5 + x1 - s->pos().x();
+                              // qreal w  = x2 - x1;
+                              // e->rxpos() = (w - e->width()) * .5 + x1 - s->pos().x();
+                              qreal w = x2 - s->pos().x();
+                              e->rxpos() = (w - e->width()) * .5;
                               e->adjustReadPos();
                               }
                         }
