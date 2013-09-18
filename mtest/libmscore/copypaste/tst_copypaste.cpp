@@ -32,6 +32,7 @@ class TestCopyPaste : public QObject, public MTest
       Q_OBJECT
 
       void copypaste(const char*);
+      void copypastestaff(const char*);
 
    private slots:
       void initTestCase();
@@ -47,6 +48,8 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste10() { copypaste("10"); }       // two slurs
       void copypaste11() { copypaste("11"); }       // grace notes
       void copypaste12() { copypaste("12"); }       // voices
+
+      void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
       void copyPastePartial();
       };
@@ -160,8 +163,41 @@ void TestCopyPaste::copypaste(const char* idx)
       QMimeData* mimeData = new QMimeData;
       mimeData->setData(mimeType, score->selection().mimeData());
       QApplication::clipboard()->setMimeData(mimeData);
-
       score->select(m4->first()->element(0));
+      paste(score);
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("copypaste%1.mscx").arg(idx),
+         DIR + QString("copypaste%1-ref.mscx").arg(idx)));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   copypaste
+//    copy measure 2, paste into measure 4
+//---------------------------------------------------------
+
+void TestCopyPaste::copypastestaff(const char* idx)
+      {
+      Score* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
+      score->doLayout();
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();    // src
+
+      QVERIFY(m1 != 0);
+      QVERIFY(m2 != 0);
+
+      score->select(m2, SELECT_RANGE, 0);
+      QVERIFY(score->selection().canCopy());
+      QString mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+      score->deselectAll();
+
+      score->select(m2, SELECT_RANGE, 1);
       paste(score);
       score->doLayout();
 
