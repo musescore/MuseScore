@@ -475,7 +475,7 @@ Score::FileError Score::read114(XmlReader& e)
 
       for (std::pair<int,Spanner*> p : spanner()) {
             Spanner* s = p.second;
-            if (s->anchor() == Spanner::ANCHOR_SEGMENT) {
+            if (s->anchor() == Spanner::ANCHOR_SEGMENT && s->type() != Element::SLUR) {
                   Segment* segment = tick2segment(s->tick2(), true, Segment::SegChordRest);
                   if (segment) {
                         segment = segment->prev1(Segment::SegChordRest);
