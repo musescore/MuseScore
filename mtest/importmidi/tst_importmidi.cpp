@@ -679,7 +679,7 @@ void TestImportMidi::separateTupletVoices()
       QCOMPARE(septupletIt->second->second.notes[1].pitch, 71);
       QCOMPARE(septupletIt->second->second.notes[2].pitch, 67);
 
-      MidiTuplet::separateTupletVoices(tuplets, chords.begin(), chords.end(), chords);
+      MidiTuplet::splitFirstTupletChords(tuplets, chords);
       QVERIFY(chords.size() == 15);
 
       tripletInfo = tuplets[0];
@@ -697,19 +697,6 @@ void TestImportMidi::separateTupletVoices()
       septupletIt = septupletInfo.chords.find(firstChordTime);
       QCOMPARE(septupletIt->second->second.notes.size(), 1);
       QCOMPARE(septupletIt->second->second.notes[0].pitch, 67);
-
-      for (const auto &chord: tripletInfo.chords) {
-            const MidiChord &midiChord = chord.second->second;
-            QCOMPARE(midiChord.voice, 0);
-            }
-      for (const auto &chord: quintupletInfo.chords) {
-            const MidiChord &midiChord = chord.second->second;
-            QCOMPARE(midiChord.voice, 1);
-            }
-      for (const auto &chord: septupletInfo.chords) {
-            const MidiChord &midiChord = chord.second->second;
-            QCOMPARE(midiChord.voice, 2);
-            }
       }
 
 void TestImportMidi::findTupletsWithCommonChords()
