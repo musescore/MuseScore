@@ -61,7 +61,6 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                   for (auto &note1: firstChord.notes) {
                         auto ii = it;
                         ++ii;
-                        bool overlapFound = false;
                         for (; ii != chords.end(); ++ii) {
                               auto &secondChord = ii->second;
                               const auto &secondOnTime = ii->first;
@@ -74,11 +73,9 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                                            firstOnTime.ticks(), note1.len.ticks(),
                                            secondOnTime.ticks(), note2.len.ticks());
                                     note1.len = secondOnTime - firstOnTime;
-                                    overlapFound = true;
+                                    ii = chords.end();
                                     break;
                                     }
-                              if (overlapFound)
-                                    break;
                               }
                         if (note1.len <= ReducedFraction(0, 1)) {
                               qDebug("Midi import: duration <= 0: drop note at %d",
