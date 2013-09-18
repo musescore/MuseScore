@@ -815,11 +815,6 @@ QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
 {
       QList<TrackMeta> tracksMeta;
       for (int i = 0; i < tracks.size(); ++i) {
-            if (i % 2 && isSameChannel(tracks[i - 1], tracks[i])){
-                  TrackMeta lastMeta = tracksMeta.back();
-                  tracksMeta.push_back(lastMeta);
-                  continue;
-                  }
             const MTrack &mt = tracks[i];
             QString trackName;
             for (const auto &ie: mt.mtrack->events()) {
@@ -829,11 +824,18 @@ QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
                         break;
                         }
                   }
-            MidiType midiType = mf->midiType();
-            if (midiType == MT_UNKNOWN)
-                  midiType = MT_GM;
-            const QString instrName = instrumentName(midiType, mt.program,
-                                                     mt.mtrack->drumTrack());
+            QString instrName;
+            if (i % 2 && isSameChannel(tracks[i - 1], tracks[i])){
+                  TrackMeta lastMeta = tracksMeta.back();
+                  instrName = lastMeta.instrumentName;
+                  }
+            else {
+                  MidiType midiType = mf->midiType();
+                  if (midiType == MT_UNKNOWN)
+                        midiType = MT_GM;
+                  instrName = instrumentName(midiType, mt.program,
+                                             mt.mtrack->drumTrack());
+                  }
             tracksMeta.push_back({trackName,
                                   instrName,
                                   mt.mtrack->drumTrack(),
