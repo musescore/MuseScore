@@ -799,8 +799,18 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
             processMeta(mt, false);
             if (midiType == MT_UNKNOWN)
                   midiType = MT_GM;
-            if (i % 2 && isSameChannel(tracks[i - 1], tracks[i]))
+            if (i % 2 && isSameChannel(tracks[i - 1], mt)) {
                   mt.program = tracks[i - 1].program;
+                  }
+                        // if tracks in Grand staff have different names - clear them,
+                        // instrument name will be used instead
+            if (i % 2 == 0 && i < tracks.size() - 1
+                        && isGrandStaff(mt, tracks[i + 1])) {
+                  if (mt.name != tracks[i + 1].name) {
+                        mt.name = "";
+                        tracks[i + 1].name = "";
+                        }
+                  }
             setTrackInfo(midiType, mt);
                         // pass current track index to the convertTrack function
                         //   through MidiImportOperations
