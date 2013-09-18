@@ -53,6 +53,8 @@
 #include "importmidi_lrhand.h"
 #include "importmidi_lyrics.h"
 
+#include <set>
+
 
 namespace Ms {
 
@@ -589,10 +591,31 @@ Measure* barFromIndex(const Score *score, int barIndex)
       return score->tick2measure(tick);
       }
 
-bool isPianoPart(const MTrack &t1, const MTrack &t2)
+bool isGrandStaff(const MTrack &t1, const MTrack &t2)
       {
-      return (t1.mtrack->outChannel() == t2.mtrack->outChannel()
-                  && (t1.program >= 0 && t1.program <= 7));
+      const static std::set<int> grandStaffPrograms = {
+                  // Piano
+              0, 1, 2, 3, 4, 5, 6, 7
+                  // Chromatic Percussion
+            , 8, 10, 11, 12, 13, 15
+                  // Organ
+            , 16, 17, 18, 19, 20, 21, 23
+                  // Strings
+            , 46
+                  // Ensemble
+            , 50, 51, 54
+                  // Brass
+            , 62, 63
+                  // Synth Lead
+            , 80, 81, 82, 83, 84, 85, 86, 87
+                  // Synth Pad
+            , 88, 89, 90, 91, 92, 93, 94, 95
+                  // Synth Effects
+            , 96, 97, 98, 99, 100, 101, 102, 103
+            };
+
+      return t1.mtrack->outChannel() == t2.mtrack->outChannel()
+                  && grandStaffPrograms.find(t1.program) != grandStaffPrograms.end();
       }
 
 bool isSameChannel(const MTrack &t1, const MTrack &t2)
@@ -629,7 +652,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                                                                 track.chords.end());
                   s->setClef(0, MidiClef::clefTypeFromAveragePitch(avgPitch));
                   if (idx < (tracks.size() - 1) && idx >= 0
-                              && isPianoPart(tracks[idx], tracks[idx + 1])) {
+                              && isGrandStaff(tracks[idx], tracks[idx + 1])) {
                                     // assume that the current track and the next track
                                     // form a piano part
                         s->setBracket(0, BRACKET_BRACE);
