@@ -155,9 +155,22 @@ p, li { white-space: pre-wrap; }
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Rest>
+        <Chord>
           <durationType>quarter</durationType>
-          </Rest>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>62</pitch>
+            <tpc>16</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <tick>0</tick>
         <Chord>
           <track>1</track>
@@ -201,26 +214,8 @@ p, li { white-space: pre-wrap; }
           </Rest>
         <Rest>
           <track>1</track>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           </Rest>
-        <Chord>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          <Note>
-            <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>62</pitch>
-            <tpc>16</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
         </Measure>
       </Staff>
     </Score>
