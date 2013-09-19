@@ -90,7 +90,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         </Measure>
-      <Measure number="2">
+      <Measure number="1">
         <Tuplet id="1">
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>

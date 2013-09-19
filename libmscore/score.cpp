@@ -423,25 +423,6 @@ Score::~Score()
       }
 
 //---------------------------------------------------------
-//   renumberMeasures
-//---------------------------------------------------------
-
-void Score::renumberMeasures()
-      {
-      int measureNo = 0;
-      for (Measure* measure = firstMeasure(); measure; measure = measure->nextMeasure()) {
-            measureNo += measure->noOffset();
-            measure->setNo(measureNo);
-            if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
-                  measureNo = 0;
-            else if (measure->irregular())      // dont count measure
-                  ;
-            else
-                  ++measureNo;
-            }
-      }
-
-//---------------------------------------------------------
 //   elementAdjustReadPos
 //---------------------------------------------------------
 
@@ -467,7 +448,6 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
 //      - measure ticks
 //      - tempo map
 //      - time signature map
-//      - measure numbers
 //---------------------------------------------------------
 
 /**
@@ -479,8 +459,7 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
 
 void Score::fixTicks()
       {
-      int number = 0;
-      int tick   = 0;
+      int tick = 0;
       Measure* fm = firstMeasure();
       if (fm == 0)
             return;
@@ -491,7 +470,7 @@ void Score::fixTicks()
       if (!parentScore()) {
             tempomap()->clear();
             smap->clear();
-            smap->add(0, SigEvent(sig,  nsig, number));
+            smap->add(0, SigEvent(sig,  nsig, 0));
             }
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
@@ -553,23 +532,11 @@ void Score::fixTicks()
                   }
 
             //
-            // calculate measure number
-            //
-            number += m->noOffset();
-            if (m->no() != number)
-                  m->setNo(number);
-
-            if (m->sectionBreak())
-                  number = 0;
-            else if (!m->irregular())      // dont count measure
-                  ++number;
-
-            //
             // update time signature map
             //
             if (!parentScore() && (m->len() != sig)) {
                   sig = m->len();
-                  smap->add(tick, SigEvent(sig, m->timesig(),  number));
+                  smap->add(tick, SigEvent(sig, m->timesig(),  m->no()));
                   }
             tick += measureTicks;
             }
@@ -1616,7 +1583,42 @@ Measure* Score::firstMeasure() const
       MeasureBase* mb = _measures.first();
       while (mb && mb->type() != Element::MEASURE)
             mb = mb->next();
+
       return static_cast<Measure*>(mb);
+      }
+
+//---------------------------------------------------------
+//   firstMeasureMM
+//---------------------------------------------------------
+
+Measure* Score::firstMeasureMM() const
+      {
+      MeasureBase* mb = _measures.first();
+      while (mb && mb->type() != Element::MEASURE)
+            mb = mb->next();
+      if (mb
+         && mb->type() == Element::MEASURE
+         && styleB(ST_createMultiMeasureRests)
+         && static_cast<Measure*>(mb)->hasMMRest()) {
+            return static_cast<Measure*>(mb)->mmRest();
+            }
+      return static_cast<Measure*>(mb);
+      }
+
+//---------------------------------------------------------
+//   firstMM
+//---------------------------------------------------------
+
+MeasureBase* Score::firstMM() const
+      {
+      MeasureBase* m = _measures.first();
+      if (m
+         && m->type() == Element::MEASURE
+         && styleB(ST_createMultiMeasureRests)
+         && static_cast<Measure*>(m)->hasMMRest()) {
+            return static_cast<Measure*>(m)->mmRest();
+            }
+      return m;
       }
 
 //---------------------------------------------------------
@@ -2133,8 +2135,6 @@ Score* Score::clone()
       Score* score = new Score(style());
       score->read1(r, true);
 
-      score->renumberMeasures();
-
       int staffIdx = 0;
       foreach(Staff* st, score->staves()) {
             if (st->updateKeymap())
@@ -2234,7 +2234,7 @@ bool Score::appendScore(Score* score)
             _measures.add(nmb);
             }
       fixTicks();
-      renumberMeasures();
+      setLayoutAll(true);
       return true;
       }
 
@@ -3567,7 +3567,7 @@ void Score::insertTime(int tick, int len)
 
 void Score::setLoopInTick(int tick)
       {
-      qDebug ("setLoopInTick : tick = %d", tick);
+//      qDebug ("setLoopInTick : tick = %d", tick);
       if(!lastMeasure())
             return;
       if ((tick < 0) || (tick > lastMeasure()->endTick()-1))
@@ -3581,7 +3581,7 @@ void Score::setLoopInTick(int tick)
 
 void Score::setLoopOutTick(int tick)
       {
-      qDebug ("setLoopOutTick : tick = %d", tick);
+//      qDebug ("setLoopOutTick : tick = %d", tick);
       if(!lastMeasure())
             return;
       int lastTick = lastMeasure()->endTick()-1;
@@ -3590,5 +3590,6 @@ void Score::setLoopOutTick(int tick)
       else
             _loopOutTick = tick;
       }
+
 }
 

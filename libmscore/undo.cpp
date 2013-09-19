@@ -2588,7 +2588,6 @@ void ChangeMeasureProperties::flip()
       if (o != noOffset || ir != irregular) {
             measure->setNoOffset(noOffset);
             measure->setIrregular(irregular);
-            score->renumberMeasures();
             }
       breakMM     = a;
       repeatCount = r;

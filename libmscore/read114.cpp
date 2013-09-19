@@ -636,7 +636,6 @@ Score::FileError Score::read114(XmlReader& e)
 
 //      _mscVersion = MSCVERSION;     // for later drag & drop usage
       fixTicks();
-      renumberMeasures();
       rebuildMidiMapping();
       updateChannel();
       updateNotes();    // only for parts needed?

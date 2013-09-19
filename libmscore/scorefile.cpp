@@ -53,6 +53,18 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   writeMeasure
+//---------------------------------------------------------
+
+static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSystemElements)
+      {
+      if (m->type() == Element::MEASURE || staffIdx == 0)
+           m->write(xml, staffIdx, writeSystemElements);
+      if (m->type() == Element::MEASURE)
+            xml.curTick = m->tick() + m->ticks();
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -159,12 +171,9 @@ void Score::write(Xml& xml, bool selectionOnly)
                   xml.curTick  = measureStart->tick();
                   xml.tickDiff = xml.curTick;
                   xml.curTrack = staffIdx * VOICES;
-                  for (MeasureBase* m = measureStart; m != measureEnd; m = m->next()) {
-                        if (m->type() == Element::MEASURE || staffIdx == 0)
-                              m->write(xml, staffIdx, staffIdx == staffStart);
-                        if (m->type() == Element::MEASURE)
-                              xml.curTick = m->tick() + m->ticks();
-                        }
+                  bool writeSystemElements = staffIdx == staffStart;
+                  for (MeasureBase* m = measureStart; m != measureEnd; m = m->next())
+                        writeMeasure(xml, m, staffIdx, writeSystemElements);
                   xml.etag();
                   }
             }
@@ -1024,7 +1033,6 @@ bool Score::read(XmlReader& e)
             _showOmr = false;
 
       fixTicks();
-      renumberMeasures();
       rebuildMidiMapping();
       updateChannel();
       updateNotes();          // only for parts needed?
@@ -1259,6 +1267,7 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
+#if 0 // TODO MM
                   if ((segment->segmentType() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
                         xml.stag("BarLine");
                         xml.tag("subtype", m->endBarLineType());
@@ -1266,7 +1275,8 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         xml.etag();
                         }
                   else
-                        e->write(xml);
+#endif
+                  e->write(xml);
                   segment->write(xml);    // write only once
                   }
             }
