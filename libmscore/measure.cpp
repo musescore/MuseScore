@@ -152,8 +152,8 @@ Measure::Measure(Score* s)
       _endBarLineGenerated   = true;
       _endBarLineVisible     = true;
       _endBarLineType        = NORMAL_BAR;
-      _mmEndBarLineType      = NORMAL_BAR;
-      _multiMeasure          = 0;
+      _mmRest                = 0;
+      _mmRestCount           = 0;
       setFlag(ELEMENT_MOVABLE, true);
       }
 
@@ -187,8 +187,8 @@ Measure::Measure(const Measure& m)
       _endBarLineGenerated   = m._endBarLineGenerated;
       _endBarLineVisible     = m._endBarLineVisible;
       _endBarLineType        = m._endBarLineType;
-      _mmEndBarLineType      = m._mmEndBarLineType;
-      _multiMeasure          = m._multiMeasure;
+      _mmRest                = m._mmRest;
+      _mmRestCount           = m._mmRestCount;
       _playbackCount         = m._playbackCount;
       _endBarLineColor       = m._endBarLineColor;
       }
@@ -502,11 +502,11 @@ void Measure::layout(qreal width)
 
 qreal Measure::tick2pos(int tck) const
       {
-      if (multiMeasure() > 0) {
+      if (isMMRest()) {
             Segment* s = first(Segment::SegChordRest);
             qreal x1 = s->x();
             qreal w  = width() - x1;
-            return x1 + (tck * w) / (ticks() * multiMeasure());
+            return x1 + (tck * w) / (ticks() * mmRestCount());
             }
 
       Segment* s;
@@ -1733,6 +1733,8 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   el->write(xml);
                   }
             }
+      Q_ASSERT(first());
+      Q_ASSERT(last());
       score()->writeSegments(xml, this, strack, etrack, first(), last()->next1(), writeSystemElements, false, false);
       xml.etag();
       }
@@ -2405,7 +2407,6 @@ bool Measure::createEndBarLines()
                   //
                   // there should be a barline in this staff
                   //
-                  BarLineType et = _multiMeasure > 0 ? _mmEndBarLineType : _endBarLineType;
                   // if we already have a bar line, keep extending this bar line down until span exhausted;
                   // if no barline yet, re-use the bar line existing in this staff if any,
                   // restarting actual span
@@ -2419,7 +2420,7 @@ bool Measure::createEndBarLines()
                         bl->setVisible(_endBarLineVisible);
                         bl->setColor(_endBarLineColor);
                         bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
-                        bl->setBarLineType(et);
+                        bl->setBarLineType(_endBarLineType);
                         bl->setParent(seg);
                         bl->setTrack(track);
                         score()->undoAddElement(bl);
@@ -2428,13 +2429,13 @@ bool Measure::createEndBarLines()
                   else {
                         // a bar line is there (either existing or newly created):
                         // adjust subtype, if not fitting
-                        if (bl->barLineType() != et && !bl->customSubtype()) {
-                              score()->undoChangeProperty(bl, P_SUBTYPE, et);
+                        if (bl->barLineType() != _endBarLineType && !bl->customSubtype()) {
+                              score()->undoChangeProperty(bl, P_SUBTYPE, _endBarLineType);
                               bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
                               changed = true;
                               }
                         // or clear custom subtype flag if same type as measure
-                        if (bl->barLineType() == et && bl->customSubtype())
+                        if (bl->barLineType() == _endBarLineType && bl->customSubtype())
                               bl->setCustomSubtype(false);
                         // if a bar line exists for this staff (cbl) but
                         // it is not the bar line we are dealing with (bl),
@@ -3043,7 +3044,7 @@ void Measure::layoutX(qreal stretch)
                               }
                         }
                   space += Space(elsp, etsp);
-                  if (_multiMeasure > 0)
+                  if (isMMRest())
                         minDistance = 0;
 
                   if (found || eFound) {
@@ -3238,72 +3239,110 @@ void Measure::layoutX(qreal stretch)
                   if (e == 0)
                         continue;
                   ElementType t = e->type();
-                  if (t == REPEAT_MEASURE || (t == REST && (_multiMeasure > 0 || static_cast<Rest*>(e)->durationType() == TDuration::V_MEASURE))) {
-                        Rest* rest = static_cast<Rest*>(e);
-                        qreal x1 = 0.0, x2;
-                        if (s != first()) {
-                              Segment* ps;
-                              for (ps = s->prev(); ps; ps = ps->prev()) {
-                                    if (ps->element(track))
-                                          break;
+                  Rest* rest = static_cast<Rest*>(e);
+                  if (((track % VOICES) == 0) &&
+                     (t == REPEAT_MEASURE || (t == REST && (isMMRest() || rest->isFullMeasureRest())))) {
+                        //
+                        // element has to be centered in free space
+                        //    x1 - left measure position of free space
+                        //    x2 - right measure position of free space
+
+                        if (isMMRest()) {
+                              //
+                              // center multi measure rest
+                              //
+                              qreal x1 = 0.0, x2;
+                              if (s != first()) {
+                                    Segment* ps;
+                                    for (ps = s->prev(); ps && !ps->element(track) ; ps = ps->prev())
+                                          ;
+                                    if (ps) {
+                                          Element* ee = ps->element(track);
+                                          x1 = ps->x() + ee->x() + ee->width();
+                                          }
                                     }
-                              if (ps) {
-                                    Element* e = ps->element(track/VOICES * VOICES);
-                                    if (e)
+                              Segment* ns = s->next();
+                              if (ns) {
+                                    x2 = ns->x();
+                                    if (ns->segmentType() != Segment::SegEndBarLine) {
+                                          Element* ee = ns->element(track);
+                                          if (ee)
+                                                x2 += ee->x();
+                                          }
+                                    }
+                              else
+                                    x2 = this->width();
+
+
+                              qreal d  = point(score()->styleS(ST_multiMeasureRestMargin));
+                              qreal w = x2 - x1 - 2 * d;
+
+                              rest->setMMWidth(w);
+                              StaffLines* sl = staves[track/VOICES]->lines;
+                              qreal x = x1 - s->pos().x() + d;
+                              e->setPos(x, sl->staffHeight() * .5);   // center vertically in measure
+                              }
+                        else if (rest->isFullMeasureRest()) {
+                              //
+                              // center full measure rest
+                              //
+                              qreal x1 = 0.0;
+                              qreal x2 = this->width();
+
+                              if (s != first()) {
+                                    Segment* ps;
+                                    for (ps = s->prev(); ps && !ps->element(track); ps = ps->prev())
+                                          ;
+                                    if (ps) {
+                                          Element* e = ps->element(track);
                                           x1 = ps->x() + e->x() + e->width();
+                                          }
                                     }
-                              }
-
-                        Segment* ns;
-                        if (t == REPEAT_MEASURE || _multiMeasure <= 0) {
-                              for (ns = s->next(); ns; ns = ns->next()) {
-                                    if (ns->element(track))
-                                          break;
-                                    }
-                              }
-                        else if (_multiMeasure > 0)
-                              ns = s->next();
-
-                        if (ns) {
-                              if (ns->segmentType() == Segment::SegEndBarLine)
+                              Segment* ns;
+                              for (ns = s->next(); ns && !ns->element(track); ns = ns->next())
+                                    ;
+                              if (ns) {
                                     x2 = ns->x();
-                              else {
+                                    if (ns->segmentType() != Segment::SegEndBarLine) {
+                                          Element* ee = ns->element(track);
+                                          x2 += ee->x();
+                                          }
+                                    }
+                              rest->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s->x();
+                              rest->adjustReadPos();
+                              }
+                        else {
+                              //
+                              // center repeat measure
+                              //
+                              qreal x1 = 0.0, x2;
+                              if (s != first()) {
+                                    Segment* ps;
+                                    for (ps = s->prev(); ps && !ps->element(track); ps = ps->prev())
+                                          ;
+                                    if (ps) {
+                                          Element* ee = ps->element(track);
+                                          x1 = ps->x() + ee->x() + e->width();
+                                          }
+                                    }
+
+                              Segment* ns;
+                              for (ns = s->next(); ns && ! ns->element(track); ns = ns->next())
+                                    ;
+                              if (ns) {
                                     x2 = ns->x();
-                                    Element* e = ns->element(track/VOICES * VOICES);
-                                    if (e)
-                                          x2 += e->x();
+                                    if (ns->segmentType() != Segment::SegEndBarLine)
+                                          x2 += ns->element(track)->x();
                                     }
-                              }
-                        else
-                              x2 = this->width();
+                              else
+                                    x2 = this->width();
 
-
-                        if (_multiMeasure > 0) {
-                              if ((track % VOICES) == 0) {
-                                    qreal d  = point(score()->styleS(ST_multiMeasureRestMargin));
-                                    qreal w = x2 - x1 - 2 * d;
-
-                                    rest->setMMWidth(w);
-                                    StaffLines* sl = staves[track/VOICES]->lines;
-                                    qreal x = x1 - s->pos().x() + d;
-                                    e->setPos(x, sl->staffHeight() * .5);   // center vertically in measure
-                                    }
-                              }
-                        else {   // if (rest->durationType() == TDuration::V_MEASURE)
-                              // qreal w  = x2 - x1;
-                              // e->rxpos() = (w - e->width()) * .5 + x1 - s->pos().x();
-                              qreal w = x2 - s->pos().x();
-                              e->rxpos() = (w - e->width()) * .5;
+                              e->rxpos() = (x2 - x1 - e->width()) * .5 - s->pos().x();
                               e->adjustReadPos();
                               }
                         }
                   else if (t == REST)
                         e->rxpos() = 0;
-                  else if (t == REPEAT_MEASURE) {
-                        qreal x1 = seg == 0 ? 0.0 : xpos[seg] - clefKeyRightMargin;
-                        qreal w  = xpos[segs-1] - x1;
-                        e->rxpos() = (w - e->width()) * .5 + x1 - s->x();
-                        }
                   else if (t == CHORD)
                         static_cast<Chord*>(e)->layout2();
                   else if (t == CLEF) {
@@ -3498,8 +3537,6 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       m->_endBarLineGenerated   = _endBarLineGenerated;
       m->_endBarLineVisible     = _endBarLineVisible;
       m->_endBarLineType        = _endBarLineType;
-      m->_mmEndBarLineType      = _mmEndBarLineType;
-      m->_multiMeasure          = _multiMeasure;
       m->_playbackCount         = _playbackCount;
       m->_endBarLineColor       = _endBarLineColor;
 

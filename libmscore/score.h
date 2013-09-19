@@ -402,12 +402,12 @@ class Score : public QObject {
 
       Page* addPage();
       bool layoutSystem(qreal& minWidth, qreal w, bool, bool);
+      void createMMRests();
       bool layoutSystem1(qreal& minWidth, bool, bool);
       QList<System*> layoutSystemRow(qreal w, bool, bool);
       void addSystemHeader(Measure* m, bool);
       System* getNextSystem(bool, bool);
       bool doReLayout();
-      Measure* skipEmptyMeasures(Measure*, System*);
 
       void layoutStage2();
       void layoutStage3();
@@ -750,7 +750,6 @@ class Score : public QObject {
       void adjustBracketsDel(int sidx, int eidx);
       void adjustBracketsIns(int sidx, int eidx);
       void adjustKeySigs(int sidx, int eidx, KeyList km);
-      void renumberMeasures();
 
       void endUndoRedo();
       Measure* searchLabel(const QString& s);
@@ -775,8 +774,10 @@ class Score : public QObject {
       MeasureBaseList* measures()             { return &_measures; }
       bool checkHasMeasures() const;
       MeasureBase* first() const;
+      MeasureBase* firstMM() const;
       MeasureBase* last()  const;
       Q_INVOKABLE Ms::Measure* firstMeasure() const;
+      Ms::Measure* firstMeasureMM() const;
       Q_INVOKABLE Ms::Measure* lastMeasure() const;
       int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;

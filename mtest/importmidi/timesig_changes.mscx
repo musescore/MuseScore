@@ -92,7 +92,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         </Measure>
-      <Measure number="2">
+      <Measure number="1">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -139,7 +139,7 @@ p, li { white-space: pre-wrap; }
           <durationType>half</durationType>
           </Rest>
         </Measure>
-      <Measure number="3">
+      <Measure number="1">
         <KeySig>
           <accidental>1</accidental>
           </KeySig>
@@ -168,7 +168,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         </Measure>
-      <Measure number="4">
+      <Measure number="1">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
