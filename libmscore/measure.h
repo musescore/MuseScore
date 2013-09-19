@@ -125,17 +125,11 @@ class Measure : public MeasureBase {
       bool        _endBarLineVisible;
       QColor      _endBarLineColor;
 
-      BarLineType _mmEndBarLineType;       ///< bar line type if this measure is presented
-                                   ///< as multi measure rest
-
-      int _multiMeasure;      // set from layout();
-                              //   0 - normal measure
-                              // > 0 - multi measure rest;
-                              // < 0 - skipped measure
-
       int _playbackCount;     // temp. value used in RepeatList
                               // counts how many times this measure was already played
 
+      Measure* _mmRest;       // multi measure rest which replaces a measure range
+      int _mmRestCount;       // > 0 if this is a multi measure rest
 
       void push_back(Segment* e);
       void push_front(Segment* e);
@@ -145,9 +139,9 @@ class Measure : public MeasureBase {
       Measure(Score* = 0);
       Measure(const Measure&);
       ~Measure();
-      virtual Measure* clone() const   { return new Measure(*this); }
-      virtual ElementType type() const { return MEASURE; }
-      virtual void setScore(Score* s);
+      virtual Measure* clone() const override   { return new Measure(*this); }
+      virtual ElementType type() const override { return MEASURE; }
+      virtual void setScore(Score* s) override;
       Measure* cloneMeasure(Score*, TieMap*);
 
       void read(XmlReader&, int idx);
@@ -155,11 +149,11 @@ class Measure : public MeasureBase {
       void write(Xml&, int, bool writeSystemElements) const;
       void writeBox(Xml&) const;
       void readBox(XmlReader&);
-      virtual bool isEditable() const { return false; }
+      virtual bool isEditable() const override { return false; }
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
-      virtual void change(Element* o, Element* n);
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
+      virtual void change(Element* o, Element* n) override;
 
       System* system() const               { return (System*)parent(); }
       QList<MStaff*>* staffList()          { return &staves;      }
@@ -192,7 +186,7 @@ class Measure : public MeasureBase {
       Fraction stretchedLen(Staff*) const;
       void setLen(const Fraction& f)       { _len = f;            }
       // actual length of measure in ticks
-      virtual int ticks() const            { return _len.ticks(); }
+      virtual int ticks() const override   { return _len.ticks(); }
 
       int size() const                     { return _segments.size();        }
       Q_INVOKABLE Ms::Segment* first() const   { return _segments.first();       }
@@ -231,8 +225,8 @@ class Measure : public MeasureBase {
       void sortStaves(QList<int>& dst);
 
       void dump() const;
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
-      virtual Element* drop(const DropData&);
+      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual Element* drop(const DropData&) override;
 
       int repeatCount() const         { return _repeatCount; }
       void setRepeatCount(int val)    { _repeatCount = val; }
@@ -247,7 +241,6 @@ class Measure : public MeasureBase {
       void setEndBarLineType(BarLineType val, bool g, bool visible = true, QColor color = QColor());
       BarLineType endBarLineType() const        { return _endBarLineType; }
 
-      void setMmEndBarLineType(BarLineType v)   { _mmEndBarLineType = v;    }
       bool setStartRepeatBarLine(bool);
       bool endBarLineGenerated() const          { return _endBarLineGenerated; }
       void setEndBarLineGenerated(bool v)       { _endBarLineGenerated = v;    }
@@ -255,7 +248,7 @@ class Measure : public MeasureBase {
       QColor endBarLineColor() const            { return _endBarLineColor;     }
 
       void cmdRemoveEmptySegment(Segment* s);
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       void createVoice(int track);
       void adjustToLen(Fraction);
       int repeatFlags() const                   { return _repeatFlags; }
@@ -276,8 +269,6 @@ class Measure : public MeasureBase {
       void setBreakMMRest(bool v)               { _breakMMRest = v;    }
       bool getBreakMultiMeasureRest() const     { return _breakMultiMeasureRest; }
       void setBreakMultiMeasureRest(bool val)   { _breakMultiMeasureRest = val;  }
-      int multiMeasure() const                  { return _multiMeasure; }
-      void setMultiMeasure(int val)             { _multiMeasure = val;  }
 
       bool isEmpty() const;
 
@@ -289,11 +280,17 @@ class Measure : public MeasureBase {
       void setPlaybackCount(int val) { _playbackCount = val; }
       QRectF staffabbox(int staffIdx) const;
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
-      };
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
+      bool hasMMRest() const        { return _mmRest != 0; }
+      bool isMMRest() const         { return _mmRestCount != 0; }
+      Measure* mmRest() const       { return _mmRest;      }
+      void setMMRest(Measure* m)    { _mmRest = m;         }
+      int mmRestCount() const       { return _mmRestCount; }    // number of measures _mmRest spans
+      void setMMRestCount(int n)    { _mmRestCount = n;    }
+      };
 
 }     // namespace Ms
 #endif

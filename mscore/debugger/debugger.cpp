@@ -738,7 +738,7 @@ void MeasureView::setElement(Element* e)
       mb.endBarLineType->setValue(m->endBarLineType());
       mb.endBarLineGenerated->setChecked(m->endBarLineGenerated());
       mb.endBarLineVisible->setChecked(m->endBarLineVisible());
-      mb.multiMeasure->setValue(m->multiMeasure());
+//TODO MM      mb.multiMeasure->setValue(m->multiMeasure());
       mb.timesig->setText(m->timesig().print());
       mb.len->setText(m->len().print());
       mb.tick->setValue(m->tick());

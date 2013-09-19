@@ -483,6 +483,8 @@ QPointF SLine::linePos(int grip, System** sys)
                         Q_ASSERT(endElement()->type() == MEASURE);
                         m = static_cast<Measure*>(endElement());
                         x = m->pos().x() + m->bbox().right();
+
+#if 0 // MM
                         if (type() == VOLTA) {
                               if (score()->styleB(ST_createMultiMeasureRests)) {
                                     //find the actual measure where the volta should stop
@@ -495,7 +497,7 @@ QPointF SLine::linePos(int grip, System** sys)
                                                 // skip to last rest measure of multi measure rest
                                                 for (int k = 0; k < nn; ++k) {
                                                       mm = mm->nextMeasure();
-                                                      if(mm == m) {
+                                                      if (mm == m) {
                                                             m = sm;
                                                             foundMeasure = true;
                                                             break;
@@ -519,7 +521,9 @@ QPointF SLine::linePos(int grip, System** sys)
                                           }
                                     }
                               }
+#endif
                         }
+
                   Q_ASSERT(m->system());
                   *sys = m->system();
                   }

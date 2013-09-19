@@ -9,6 +9,14 @@ m2.mscx
 m3.mscx
 m4.mscx
 m5.mscx
+clef_prev.mscx
+clef_melody.mscx
+clef_tied.mscx
+timesig_changes.mscx
+tuplet_off_time_other_bar.mscx
+tuplet_off_time_other_bar2.mscx
+min_duration.mscx
+min_duration_no_reduce.mscx
 meter_12-8.mscx
 meter_4-4.mscx
 meter_9-8.mscx

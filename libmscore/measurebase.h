@@ -62,12 +62,14 @@ class MeasureBase : public Element {
       virtual void setScore(Score* s);
 
       MeasureBase* next() const              { return _next;   }
+      MeasureBase* nextMM() const;
       void setNext(MeasureBase* e)           { _next = e;      }
       MeasureBase* prev() const              { return _prev;   }
       void setPrev(MeasureBase* e)           { _prev = e;      }
 
       Q_INVOKABLE Ms::Measure* nextMeasure() const;
       Q_INVOKABLE Ms::Measure* prevMeasure() const;
+      Ms::Measure* nextMeasureMM() const;
 
       virtual int ticks() const              { return 0;       }
       virtual void write(Xml&, int, bool) const = 0;

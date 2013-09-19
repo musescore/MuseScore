@@ -66,6 +66,7 @@ void TestRepeat::initTestCase()
 void TestRepeat::repeat(const char* f1, const QString & ref)
       {
       Score* score = readScore(DIR + f1);
+      score->doLayout();
       QVERIFY(score);
       score->updateRepeatList(true);
       QStringList sl;
