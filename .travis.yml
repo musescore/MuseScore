@@ -1,3 +1,9 @@
+env:
+ global:
+   - "ARTIFACTS_AWS_REGION=us-east-1"
+   - "ARTIFACTS_S3_BUCKET=vtest.musescore.org"
+   - secure: "lVj+9BBtJIjW3CwfXstvNyYVn0AkXEwTyiPmp4BprcheP78WIqZNC0uG2RjG9MgyHbZkprE7zRdqR9YPWTitg+XYkkD6+jPHRO+PQFLARuiTAX9yhUO53yQQZC2wMkQ+bFuZsFmz1rfAsPHx3bXeZAMsz+Qnh8D2yIqqV7qxwWw="
+   - secure: "L+66yQZIZJTyIAfrG89ncKIkMAr4+UvaOZMsd420OSdnEH9kpdm5Kws8rG0VVLAtqhfQfi3K9DuC8Ub7IiXqil//h+I9WJ2LHKirWK0m/MkhTFC6hfi0uSnQCX/jud3Keewxf3ovgiKQvIw6VR37UC50YJM9+KhZKtsNYhGAdos="
 before_install:
   # rm the rabbitmq source file since it currently times out and we don't need it
   - "sudo rm -f /etc/apt/sources.list.d/rabbitmq-source.list"
@@ -8,12 +14,14 @@ before_install:
   - "sudo apt-get install -y alsa libsndfile1 wget make ant curl cmake"
   - "sudo apt-get install -y libasound2-dev portaudio19-dev libsndfile1-dev zlib1g-dev libfreetype6-dev libfontconfig-dev"
   - "sudo apt-get install -y lame libmp3lame-dev"
+  - "sudo apt-get install -y imagemagick"
   - "mkdir qt5"
   - "wget -q -O qt5.zip http://ftp.osuosl.org/pub/musescore/linux/qt/qt510.zip"
   - "unzip -qq qt5.zip -d qt5"
   - "export PATH=`pwd`/qt5/bin:$PATH"
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
 before_script: 
+  - "gem install travis-artifacts"
   - "make revision"
   - "make debug CPUS=16"
   - "sudo make installdebug"
@@ -21,6 +29,8 @@ before_script:
   - "make -j 4"
 script:
   - "../../build/run_tests.sh"
+after_script:
+  - "travis-artifacts upload --path ../../vtest/html --target-path $TRAVIS_COMMIT"
 notifications:
   recipients:
     - build@musescore.org
