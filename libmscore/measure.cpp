@@ -3252,13 +3252,16 @@ void Measure::layoutX(qreal stretch)
                               // center multi measure rest
                               //
                               qreal x1 = 0.0, x2;
+                              Segment* ss = first();
+                              for (; ss->segmentType() != Segment::SegChordRest; ss = ss->next())
+                                    ;
                               if (s != first()) {
-                                    Segment* ps;
-                                    for (ps = s->prev(); ps && !ps->element(track) ; ps = ps->prev())
-                                          ;
-                                    if (ps) {
-                                          Element* ee = ps->element(track);
-                                          x1 = ps->x() + ee->x() + ee->width();
+                                    ss = ss->prev();
+                                    for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+                                          int track = staffIdx * VOICES;
+                                          Element* e = ss->element(track);
+                                          if (e)
+                                                x1 = qMax(x1, ss->x() + e->x() + e->width());
                                           }
                                     }
                               Segment* ns = s->next();
@@ -3372,18 +3375,20 @@ void Measure::layoutX(qreal stretch)
 
 //---------------------------------------------------------
 //   layoutStage1
+//    compute multi measure rest break
+//    call layoutChords0
 //---------------------------------------------------------
 
 void Measure::layoutStage1()
       {
       setDirty();
 
+      setBreakMMRest(false);
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-            setBreakMMRest(false);
             if (score()->styleB(ST_createMultiMeasureRests)) {
                   if ((repeatFlags() & RepeatStart) || (prevMeasure() && (prevMeasure()->repeatFlags() & RepeatEnd)))
                         setBreakMMRest(true);
-                  else if (!breakMMRest()) {
+                  else if (!breakMultiMeasureRest()) {
                         for (Segment* s = first(); s; s = s->next()) {
                               int n = s->annotations().size();
                               for (int i = 0; i < n; ++i) {
@@ -3393,7 +3398,7 @@ void Measure::layoutStage1()
                                           break;
                                           }
                                     }
-                              if (breakMMRest())      // optimize
+                              if (breakMultiMeasureRest())      // optimize
                                     break;
                               }
                         }
@@ -3404,17 +3409,17 @@ void Measure::layoutStage1()
             for (Segment* segment = first(); segment; segment = segment->next()) {
                   Element* e = segment->element(track);
 
-                  if (segment->segmentType() & (Segment::SegKeySig | Segment::SegStartRepeatBarLine | Segment::SegTimeSig)) {
+                  if (segment->segmentType() & (Segment::SegClef | Segment::SegKeySig | Segment::SegStartRepeatBarLine | Segment::SegTimeSig)) {
                         if (e && !e->generated())
                               setBreakMMRest(true);
                         }
 
-                  if (segment->segmentType() & Segment::SegChordRest)
+                  if (segment->segmentType() == Segment::SegChordRest)
                         layoutChords0(segment, staffIdx * VOICES);
                   }
             }
 
-      if (!breakMMRest()) {
+      if (!breakMultiMeasureRest()) {
             for (auto i = score()->spanner().lower_bound(tick()); i != score()->spanner().upper_bound(tick()); ++i) {
                Spanner* sp = i->second;
                if (sp->type() == Element::VOLTA)
@@ -3422,7 +3427,7 @@ void Measure::layoutStage1()
                      break;
                }
             }
-      if (!breakMMRest() && this != score()->lastMeasure()) {
+      if (!breakMultiMeasureRest() && this != score()->lastMeasure()) {
             auto i = score()->spanner().upper_bound(tick());
             std::reverse_iterator<std::map<int,Spanner*>::const_iterator> revit (i);
             for (; revit != score()->spanner().rend(); revit++) {
