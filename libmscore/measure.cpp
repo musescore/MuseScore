@@ -3288,16 +3288,19 @@ void Measure::layoutX(qreal stretch)
                               //
                               qreal x1 = 0.0;
                               qreal x2 = this->width();
-
-                              if (s != first()) {
-                                    Segment* ps;
-                                    for (ps = s->prev(); ps && !ps->element(track); ps = ps->prev())
-                                          ;
-                                    if (ps) {
-                                          Element* e = ps->element(track);
-                                          x1 = ps->x() + e->x() + e->width();
+                              Segment* ss = first();
+                              for (; ss->segmentType() != Segment::SegChordRest; ss = ss->next())
+                                    ;
+                              if (ss != first()) {
+                                    ss = ss->prev();
+                                    for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+                                          int track = staffIdx * VOICES;
+                                          Element* e = ss->element(track);
+                                          if (e)
+                                                x1 = qMax(x1, ss->x() + e->x() + e->width());
                                           }
                                     }
+#if 0
                               Segment* ns;
                               for (ns = s->next(); ns && !ns->element(track); ns = ns->next())
                                     ;
@@ -3308,6 +3311,7 @@ void Measure::layoutX(qreal stretch)
                                           x2 += ee->x();
                                           }
                                     }
+#endif
                               rest->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s->x();
                               rest->adjustReadPos();
                               }
