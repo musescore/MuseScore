@@ -1272,7 +1272,10 @@ void MusicXml::scorePartwise(QDomElement ee)
                   stavesSpan += il.at(pg->start + j)->nstaves();
             // add bracket and set the span
             // TODO: use group-symbol default-x to determine horizontal order of brackets
-            il.at(pg->start)->staff(0)->addBracket(BracketItem(pg->type, stavesSpan));
+            if (pg->type == NO_BRACKET)
+                  il.at(pg->start)->staff(0)->setBracket(0, NO_BRACKET);
+            else
+                  il.at(pg->start)->staff(0)->addBracket(BracketItem(pg->type, stavesSpan));
             if (pg->barlineSpan)
                   il.at(pg->start)->staff(0)->setBarLineSpan(pg->span);
             }
@@ -1330,7 +1333,9 @@ static void partGroupStart(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, in
 
       BracketType bracketType = NO_BRACKET;
       if (s == "")
-            ;  //ignore
+            ;  // ignore (handle as NO_BRACKET)
+      else if (s == "none")
+            ;  // already set to NO_BRACKET
       else if (s == "brace")
             bracketType = BRACKET_BRACE;
       else if (s == "bracket")
