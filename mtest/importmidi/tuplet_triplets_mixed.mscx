@@ -180,7 +180,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         </Measure>
-      <Measure number="2">
+      <Measure number="1">
         <Tuplet id="2">
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
@@ -286,7 +286,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         </Measure>
-      <Measure number="3">
+      <Measure number="1">
         <Tuplet id="3">
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
@@ -392,7 +392,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         </Measure>
-      <Measure number="4">
+      <Measure number="1">
         <Tuplet id="4">
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
@@ -518,13 +518,13 @@ p, li { white-space: pre-wrap; }
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="2">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="3">
+      <Measure number="1">
         <Tuplet id="5">
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
@@ -630,7 +630,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         </Measure>
-      <Measure number="4">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>

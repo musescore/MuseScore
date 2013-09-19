@@ -542,6 +542,8 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
+      // printf("======doLayout\n");
+
       int idx = styleSt(ST_MusicalSymbolFont) == "Gonville" ? 1 : 0;
 
       initSymbols(idx);
@@ -557,6 +559,21 @@ void Score::doLayout()
             updateVelo();
       if (layoutFlags & LAYOUT_PLAY_EVENTS)
             createPlayEvents();
+
+      int measureNo = 0;
+      for (MeasureBase* m = first(); m; m = m->next()) {
+            if (m->type() == Element::MEASURE) {
+                  Measure* measure = static_cast<Measure*>(m);
+                  measureNo += measure->noOffset();
+                  measure->setNo(measureNo);
+                  if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
+                        measureNo = 0;
+                  else if (measure->irregular())      // dont count measure
+                        ;
+                  else
+                        ++measureNo;
+                  }
+            }
 
       for (MeasureBase* m = first(); m; m = m->next())
             m->layout0();
@@ -605,6 +622,10 @@ void Score::doLayout()
       // compute note head lines and accidentals:
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
             m->layoutStage1();
+
+      if (styleB(ST_createMultiMeasureRests))
+            createMMRests();
+
 
       layoutStage2();   // beam notes, finally decide if chord is up/down
       layoutStage3();   // compute note head horizontal positions
@@ -678,7 +699,7 @@ void Score::doLayout()
             layoutPages();    // create list of pages
             }
 
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+      for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM())
             m->layout2();
 
       rebuildBspTree();
@@ -873,37 +894,98 @@ System* Score::getNextSystem(bool isFirstSystem, bool isVbox)
       }
 
 //---------------------------------------------------------
-//   skipEmptyMeasures
-//    search for empty measures; return number if empty
-//    measures in sequence
+//   createMMRests
 //---------------------------------------------------------
 
-Measure* Score::skipEmptyMeasures(Measure* m, System* system)
+void Score::createMMRests()
       {
-      Measure* sm = m;
-      int n       = 0;
-      while (m->isEmpty()) {
-            MeasureBase* mb = _showVBox ? m->next() : m->nextMeasure();
-            if (m->breakMultiMeasureRest() && n)
-                  break;
-            ++n;
-            if (!mb || (mb->type() != Element::MEASURE))
-                  break;
-            m = static_cast<Measure*>(mb);
-            }
-      m = sm;
-      if (n >= styleI(ST_minEmptyMeasures)) {
-            m->setMultiMeasure(n);  // first measure is presented as multi measure rest
-            m->setSystem(system);
-            for (int i = 1; i < n; ++i) {
-                  m = static_cast<Measure*>(_showVBox ? m->next() : m->nextMeasure());
-                  m->setMultiMeasure(-1);
-                  m->setSystem(system);
+      //
+      //  create mm rest measures
+      //
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            Measure* nm = m;
+            Measure* lm = nm;
+            int n = 0;
+            Fraction len;
+            while (nm->isEmpty()) {
+                  MeasureBase* mb = _showVBox ? nm->next() : nm->nextMeasure();
+                  if (nm->breakMultiMeasureRest() && n)
+                        break;
+                  ++n;
+                  len += nm->len();
+                  lm = nm;
+                  nm = static_cast<Measure*>(mb);
+                  if (!mb || (mb->type() != Element::MEASURE))
+                        break;
+                  }
+
+            if (n >= styleI(ST_minEmptyMeasures)) {
+                  //
+                  // create a multi measure rest from m to lm (inclusive)
+                  // attach the measure to m
+                  //
+                  Measure* mmr = m->mmRest() ? m->mmRest() : new Measure(this);
+                  mmr->setMMRestCount(n);
+                  mmr->setTick(m->tick());
+                  mmr->setLen(len);
+                  mmr->setNo(m->no());
+                  mmr->setEndBarLineType(lm->endBarLineType(), true, lm->endBarLineVisible(), lm->endBarLineColor());
+                  Segment* s = mmr->getSegment(Segment::SegChordRest, m->tick());
+                  for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                        int track = staffIdx * VOICES;
+                        if (s->element(track) == 0) {
+                              Rest* r = new Rest(this);
+                              r->setDurationType(TDuration::V_MEASURE);
+                              r->setTrack(track);
+                              s->add(r);
+                              }
+                        }
+                  //
+                  // check for clefs
+                  //
+                  Segment* cs = lm->findSegment(Segment::SegClef, lm->endTick());
+                  if (cs) {
+                        Segment* ns = mmr->getSegment(Segment::SegClef, lm->endTick());
+                        for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                              int track = staffIdx * VOICES;
+                              Clef* clef = static_cast<Clef*>(cs->element(track));
+                              if (clef) {
+                                    if (ns->element(track) == 0)
+                                          ns->add(clef->clone());
+                                    else {
+                                          //TODO: check if same clef
+                                          }
+                                    }
+                              }
+                        }
+                  //
+                  // check for time signature
+                  //
+                  cs = m->findSegment(Segment::SegTimeSig, m->tick());
+                  if (cs) {
+                        Segment* ns = mmr->getSegment(Segment::SegTimeSig, m->tick());
+                        for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                              int track = staffIdx * VOICES;
+                              TimeSig* ts = static_cast<TimeSig*>(cs->element(track));
+                              if (ts) {
+                                    if (ns->element(track) == 0)
+                                          ns->add(ts->clone());
+                                    else {
+                                          //TODO: check if same time signature
+                                          }
+                                    }
+                              }
+                        }
+                  mmr->setNext(nm);
+                  mmr->setPrev(m->prev());
+                  m->setMMRest(mmr);
+                  m = lm;
+                  }
+            else if (m->mmRest()) {
+                  delete m->mmRest();
+                  m->setMMRest(0);
                   }
             }
-      else
-            m->setMultiMeasure(0);
-      return m;
       }
 
 //---------------------------------------------------------
@@ -1003,18 +1085,10 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
       for (; curMeasure;) {
             MeasureBase* nextMeasure;
-            if (curMeasure->type() == Element::MEASURE) {
-                  Measure* m = static_cast<Measure*>(curMeasure);
-                  if (styleB(ST_createMultiMeasureRests)) {
-                        nextMeasure = skipEmptyMeasures(m, system)->next();
-                        }
-                  else {
-                        m->setMultiMeasure(0);
-                        nextMeasure = _showVBox ? curMeasure->next() : curMeasure->nextMeasure();
-                        }
-                  }
+            if (curMeasure->type() == Element::MEASURE && !_showVBox)
+                  nextMeasure = curMeasure->nextMeasureMM();
             else
-                  nextMeasure = curMeasure->next();
+                  nextMeasure = curMeasure->nextMM();
 
             System* oldSystem = curMeasure->system();
             curMeasure->setSystem(system);
@@ -1058,7 +1132,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                         if (m->repeatFlags() & RepeatEnd)
                               nt = END_REPEAT;
                         else {
-                              Measure* nm = m->nextMeasure();
+                              Measure* nm = m->nextMeasureMM();
                               if (nm && (nm->repeatFlags() & RepeatStart))
                                     nt = START_REPEAT;
                               }
@@ -1090,9 +1164,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
             Element::ElementType nt;
             if (_showVBox)
-                  nt = curMeasure->next() ? curMeasure->next()->type() : Element::INVALID;
+                  nt = curMeasure->nextMM() ? curMeasure->nextMM()->type() : Element::INVALID;
             else
-                  nt = curMeasure->nextMeasure() ? curMeasure->nextMeasure()->type() : Element::INVALID;
+                  nt = curMeasure->nextMeasureMM() ? curMeasure->nextMeasureMM()->type() : Element::INVALID;
             int n = styleI(ST_FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
@@ -1237,16 +1311,8 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
 
       for (; curMeasure;) {
             MeasureBase* nextMeasure;
-            if (curMeasure->type() == Element::MEASURE) {
-                  Measure* m = static_cast<Measure*>(curMeasure);
-                  if (styleB(ST_createMultiMeasureRests)) {
-                        nextMeasure = skipEmptyMeasures(m, system)->next();
-                        }
-                  else {
-                        m->setMultiMeasure(0);
-                        nextMeasure = _showVBox ? curMeasure->next() : curMeasure->nextMeasure();
-                        }
-                  }
+            if (curMeasure->type() == Element::MEASURE && !_showVBox)
+                  nextMeasure = curMeasure->nextMeasure();
             else
                   nextMeasure = curMeasure->next();
 
@@ -1774,6 +1840,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   bool firstMeasure = true;
                   const QList<MeasureBase*>& ml = system->measures();
                   MeasureBase* lmb = ml.back();
+#if 0 // MM
                   if (lmb->type() == Element::MEASURE) {
                         if (static_cast<Measure*>(lmb)->multiMeasure() > 0) {
                               for (;;lmb = lmb->next()) {
@@ -1784,6 +1851,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                     }
                               }
                         }
+#endif
                   for (MeasureBase* mb = ml.front(); mb; mb = mb->next()) {
                         if (mb->type() != Element::MEASURE) {
                               if (mb == lmb)
@@ -1835,7 +1903,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         if (mb == lmb)
                               break;
                         }
-
+#if 0 // MM
                   foreach (MeasureBase* mb, ml) {
                         if (mb->type() != Element::MEASURE)
                               continue;
@@ -1853,6 +1921,8 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                     }
                               }
                         }
+#endif
+
                   }
 //            }
 
@@ -1941,7 +2011,12 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
 void Score::layoutSystems()
       {
-      curMeasure              = _showVBox ? first() : firstMeasure();
+      curMeasure = _showVBox ? first() : firstMeasure();
+      if (curMeasure->type() == Element::MEASURE
+         && styleB(ST_createMultiMeasureRests)
+         && static_cast<Measure*>(curMeasure)->hasMMRest()) {
+            curMeasure = static_cast<Measure*>(curMeasure)->mmRest();
+            }
       curSystem               = 0;
       bool firstSystem        = true;
       bool startWithLongNames = true;

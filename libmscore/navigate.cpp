@@ -53,8 +53,6 @@ ChordRest* nextChordRest(ChordRest* cr)
       Segment::SegmentTypes st = Segment::SegChordRest;
 
       for (Segment* seg = cr->segment()->next1(st); seg; seg = seg->next1(st)) {
-            if (seg->measure()->multiMeasure() < 0)
-                  continue;
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
                   if (e->type() == Element::CHORD) {
@@ -99,25 +97,12 @@ ChordRest* prevChordRest(ChordRest* cr)
       int track = cr->track();
       Segment::SegmentTypes st = Segment::SegChordRest;
       for (Segment* seg = cr->segment()->prev1(st); seg; seg = seg->prev1(st)) {
-            if (seg->measure()->multiMeasure() < 0)
-                  continue;
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e)
                   return e;
             }
       return 0;
       }
-
-#if 0
-//---------------------------------------------------------
-//   noteLessThan
-//---------------------------------------------------------
-
-static bool noteLessThan(const Note* n1, const Note* n2)
-      {
-      return n1->pitch() <= n2->pitch();
-      }
-#endif
 
 //---------------------------------------------------------
 //   upAlt
@@ -334,8 +319,6 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior)
             return 0;
 
       Measure* measure = element->measure()->nextMeasure();
-      while (measure &&  measure->multiMeasure() < 0)
-            measure = measure->nextMeasure();
       if (measure == 0)
             return 0;
 
@@ -383,7 +366,7 @@ ChordRest* Score::prevMeasure(ChordRest* element)
             return 0;
 
       MeasureBase* mb = element->measure()->prev();
-      while (mb && ((mb->type() != Element::MEASURE) || (mb->type() == Element::MEASURE && static_cast<Measure*>(mb)->multiMeasure() < 0)))
+      while (mb && mb->type() != Element::MEASURE)
             mb = mb->prev();
 
       Measure* measure = static_cast<Measure*>(mb);
