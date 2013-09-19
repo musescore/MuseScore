@@ -264,6 +264,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             spanner->setTick2(tick2);
             }
       else {      // ANCHOR_MEASURE
+            spanner->setTrack(0);
             Measure* m = static_cast<Measure*>(mb);
             QRectF b(m->canvasBoundingRect());
 
