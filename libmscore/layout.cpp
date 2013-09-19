@@ -623,13 +623,10 @@ void Score::doLayout()
             return;
             }
 
-      // compute note head lines and accidentals:
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
             m->layoutStage1();
-
       if (styleB(ST_createMultiMeasureRests))
             createMMRests();
-
 
       layoutStage2();   // beam notes, finally decide if chord is up/down
       layoutStage3();   // compute note head horizontal positions
@@ -913,7 +910,8 @@ void Score::createMMRests()
             Fraction len;
             while (nm->isEmpty()) {
                   MeasureBase* mb = _showVBox ? nm->next() : nm->nextMeasure();
-                  if (nm->breakMultiMeasureRest() && n)
+                  // if (nm->breakMultiMeasureRest() && n)
+                  if (nm->breakMultiMeasureRest())
                         break;
                   ++n;
                   len += nm->len();
@@ -976,6 +974,24 @@ void Score::createMMRests()
                                           ns->add(ts->clone());
                                     else {
                                           //TODO: check if same time signature
+                                          }
+                                    }
+                              }
+                        }
+                  //
+                  // check for key signature
+                  //
+                  cs = m->findSegment(Segment::SegKeySig, m->tick());
+                  if (cs) {
+                        Segment* ns = mmr->getSegment(Segment::SegKeySig, m->tick());
+                        for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                              int track = staffIdx * VOICES;
+                              KeySig* ts = static_cast<KeySig*>(cs->element(track));
+                              if (ts) {
+                                    if (ns->element(track) == 0)
+                                          ns->add(ts->clone());
+                                    else {
+                                          //TODO: check if same key signature
                                           }
                                     }
                               }
