@@ -1243,8 +1243,7 @@ void MusicXml::scorePartwise(QDomElement ee)
                   domError(e);
             }
 
-      // add bracket where required
-      // add bracket to multi-staff parts
+      // add brackets where required
 
       /*
       qDebug("partGroupList");
@@ -1255,8 +1254,9 @@ void MusicXml::scorePartwise(QDomElement ee)
             }
        */
 
-      // set of parts containing one or more explicit brackets
-      // i.e. the parts starting a part-group
+      // set of (typically multi-staff) parts containing one or more explicit brackets
+      // spanning only that part: these won't get an implicit brace later
+      // e.g. a two-staff piano part with an explicit brace
       QSet<Part const* const> partSet;
 
       // handle the explicit brackets
@@ -1264,7 +1264,8 @@ void MusicXml::scorePartwise(QDomElement ee)
       for (int i = 0; i < (int) partGroupList.size(); i++) {
             MusicXmlPartGroup* pg = partGroupList[i];
             // add part to set
-            partSet << il.at(pg->start);
+            if (pg->span == 1)
+                  partSet << il.at(pg->start);
             // determine span in staves
             int stavesSpan = 0;
             for (int j = 0; j < pg->span; j++)
