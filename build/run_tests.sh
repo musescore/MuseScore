@@ -7,6 +7,11 @@ killall Xvfb
 xvfb-run ./mtest
 fi
 
+#pwd == build.debug/mtest
+cd ../../vtest
+xvfb-run ./gen
+cd -
+
 #make reporthtml
 #REVISION=`git rev-parse --short HEAD`
 #mv report/html $REVISION
