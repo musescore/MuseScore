@@ -3282,7 +3282,7 @@ void Measure::layoutX(qreal stretch)
                               qreal x = x1 - s->pos().x() + d;
                               e->setPos(x, sl->staffHeight() * .5);   // center vertically in measure
                               }
-                        else if (rest->isFullMeasureRest()) {
+                        else { // if (rest->isFullMeasureRest()) {
                               //
                               // center full measure rest
                               //
@@ -3315,6 +3315,7 @@ void Measure::layoutX(qreal stretch)
                               rest->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s->x();
                               rest->adjustReadPos();
                               }
+#if 0
                         else {
                               //
                               // center repeat measure
@@ -3344,6 +3345,7 @@ void Measure::layoutX(qreal stretch)
                               e->rxpos() = (x2 - x1 - e->width()) * .5 - s->pos().x();
                               e->adjustReadPos();
                               }
+#endif
                         }
                   else if (t == REST)
                         e->rxpos() = 0;

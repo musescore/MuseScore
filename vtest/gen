@@ -3,7 +3,7 @@
 #
 # "compare" - image magick compare program
 #
-SRC="mmrest-1 fmrest-1 fmrest-2 fmrest-3 fmrest-4 fmrest-5"
+SRC="mmrest-1 fmrest-1 fmrest-2 fmrest-3 fmrest-4 fmrest-5 measure-repeat-1"
 
 MSCORE=../build.debug/mscore/mscore
 DPI=130
@@ -25,9 +25,11 @@ echo "<html>" >> $F
 echo "  <body>" >> $F
 for src in $SRC; do
       echo "    <h2>$src</h2></br>" >> $F
-      echo "    <img src=\"$src-1.png\">" >> $F
-      echo "    <img src=\"$src-ref.png\">" >> $F
-      echo "    <img src=\"$src-diff.png\">" >> $F
+      echo "    <div>" >> $F
+      echo "      <img src=\"$src-1.png\">" >> $F
+      echo "      <img src=\"$src-ref.png\">" >> $F
+      echo "      <img src=\"$src-diff.png\">" >> $F
+      echo "    </div>" >> $F
       done
 echo "  </body>" >> $F
 echo "</html>" >> $F
