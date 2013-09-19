@@ -3383,7 +3383,6 @@ void Measure::layoutStage1()
       {
       setDirty();
 
-      setBreakMMRest(false);
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             if (score()->styleB(ST_createMultiMeasureRests)) {
                   if ((repeatFlags() & RepeatStart) || (prevMeasure() && (prevMeasure()->repeatFlags() & RepeatEnd)))
@@ -3409,9 +3408,18 @@ void Measure::layoutStage1()
             for (Segment* segment = first(); segment; segment = segment->next()) {
                   Element* e = segment->element(track);
 
-                  if (segment->segmentType() & (Segment::SegClef | Segment::SegKeySig | Segment::SegStartRepeatBarLine | Segment::SegTimeSig)) {
-                        if (e && !e->generated())
+                  if (e && !e->generated()) {
+                        if (segment->segmentType() & (Segment::SegKeySig | Segment::SegStartRepeatBarLine | Segment::SegTimeSig))
                               setBreakMMRest(true);
+                        else if (segment->segmentType() == Segment::SegClef) {
+                              if (segment->tick() == endTick()) {
+                                    Measure* m = nextMeasure();
+                                    if (m)
+                                          m->setBreakMMRest(true);
+                                    }
+                              else
+                                    setBreakMMRest(true);
+                              }
                         }
 
                   if (segment->segmentType() == Segment::SegChordRest)

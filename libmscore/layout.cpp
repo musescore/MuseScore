@@ -579,8 +579,11 @@ void Score::doLayout()
                   }
             }
 
-      for (MeasureBase* m = first(); m; m = m->next())
+      for (MeasureBase* m = first(); m; m = m->next()) {
             m->layout0();
+            if (m->type() == Element::MEASURE)
+                  static_cast<Measure*>(m)->setBreakMMRest(false);
+            }
 
       layoutFlags = 0;
 
@@ -910,8 +913,7 @@ void Score::createMMRests()
             Fraction len;
             while (nm->isEmpty()) {
                   MeasureBase* mb = _showVBox ? nm->next() : nm->nextMeasure();
-                  // if (nm->breakMultiMeasureRest() && n)
-                  if (nm->breakMultiMeasureRest())
+                  if (nm->breakMultiMeasureRest() && n)
                         break;
                   ++n;
                   len += nm->len();
