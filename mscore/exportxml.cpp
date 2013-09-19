@@ -3547,10 +3547,10 @@ static bool elementRighter(const Element* e1, const Element* e2)
 
 static void measureStyle(Xml& xml, Attributes& attr, Measure* m)
       {
-      if (m->multiMeasure() > 0) {
+      if (m->isMMRest()) {
             attr.doAttr(xml, true);
             xml.stag("measure-style");
-            xml.tag("multiple-rest", m->multiMeasure());
+            xml.tag("multiple-rest", 3); // TODO MM    m->multiMeasure());
             xml.etag();
             }
       }

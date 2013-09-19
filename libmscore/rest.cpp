@@ -73,12 +73,12 @@ void Rest::draw(QPainter* painter) const
 
       painter->setPen(curColor());
 
-      if (parent() && measure() && measure()->multiMeasure()) {
+      if (parent() && measure() && measure()->isMMRest()) {
             //only on voice 1
             if((track() % VOICES) != 0)
                   return;
             Measure* m = measure();
-            int n      = m->multiMeasure();
+            int n      = m->mmRestCount();
             qreal pw = _spatium * .7;
             QPen pen(painter->pen());
             pen.setWidthF(pw);
@@ -311,7 +311,7 @@ void Rest::layout()
       {
       _space.setLw(0.0);
 
-      if (parent() && measure() && measure()->multiMeasure()) {
+      if (parent() && measure() && measure()->isMMRest()) {
             _space.setRw(point(score()->styleS(ST_minMMRestWidth)));
             return;
             }
@@ -510,7 +510,7 @@ void Rest::setMMWidth(qreal val)
       {
       _mmWidth = val;
       Segment* s = segment();
-      if (s && s->measure() && s->measure()->multiMeasure()) {
+      if (s && s->measure() && s->measure()->isMMRest()) {
             qreal _spatium = spatium();
             qreal h = _spatium * 2;
             qreal w = _mmWidth;                       // + 1*lineWidth of vertical lines
