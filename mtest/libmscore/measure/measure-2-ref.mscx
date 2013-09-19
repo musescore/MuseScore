@@ -768,8 +768,8 @@ p, li { white-space: pre-wrap; }
             <duration z="2" n="4"/>
             </Rest>
           <BarLine>
-            <subtype>0</subtype>
-            <visible>1</visible>
+            <subtype>normal</subtype>
+            <span>1</span>
             </BarLine>
           </Measure>
         <Measure number="3">

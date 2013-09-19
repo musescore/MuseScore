@@ -188,7 +188,7 @@ void TestParts::insertMeasure()
       score->insertMeasure(Element::MEASURE, m);
       score->endCmd();
 
-      //QVERIFY(saveCompareScore(score, "part2-5.mscx", DIR + "part2-5o.mscx"));
+      // QVERIFY(saveCompareScore(score, "part2-5.mscx", DIR + "part2-5o.mscx"));
 
       score->undo()->undo();
       score->endUndoRedo();

@@ -48,20 +48,20 @@ class Box : public MeasureBase {
 
    public:
       Box(Score*);
-      virtual void draw(QPainter*) const;
-      virtual bool isEditable() const { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);
-      virtual void editDrag(const EditData&);
-      virtual void endEdit();
-      virtual void updateGrips(int* grips, QRectF*) const;
-      virtual void layout();
-      virtual void write(Xml&) const;
-      virtual void write(Xml& xml, int, bool) const { write(xml); }
-      virtual void read(XmlReader&);
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
-      virtual Element* drop(const DropData&);
-      virtual void add(Element* e);
+      virtual void draw(QPainter*) const override;
+      virtual bool isEditable() const override { return true; }
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s) override;
+      virtual void editDrag(const EditData&) override;
+      virtual void endEdit() override;
+      virtual void updateGrips(int* grips, QRectF*) const override;
+      virtual void layout() override;
+      virtual void write(Xml&) const override;
+      virtual void write(Xml& xml, int, bool) const override { write(xml); }
+      virtual void read(XmlReader&) override;
+      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual Element* drop(const DropData&) override;
+      virtual void add(Element* e) override;
 
       Spatium boxWidth() const        { return _boxWidth;     }
       void setBoxWidth(Spatium val)   { _boxWidth = val;      }
@@ -80,9 +80,9 @@ class Box : public MeasureBase {
       qreal bottomGap() const         { return _bottomGap;    }
       void setBottomGap(qreal val)    { _bottomGap = val;     }
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       };
 
 //---------------------------------------------------------

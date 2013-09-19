@@ -1269,16 +1269,6 @@ void ScoreView::moveCursor(int tick)
       if (measure == 0)
             return;
       int offset = 0;
-      if(measure->multiMeasure() < 0) {//skipped
-            while(measure) {
-                  measure = measure->prevMeasure();
-                  offset += measure->ticks();
-                  if (measure->multiMeasure() > 0)
-                        break;
-                  }
-            }
-      if (measure == 0)
-            return;
 
       qreal x;
       Segment* s;
@@ -1463,16 +1453,6 @@ void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
             return;
       qreal x;
       int offset = 0;
-      if (measure->multiMeasure() < 0) {//skipped
-            while(measure) {
-                  measure = measure->prevMeasure();
-                  offset += measure->ticks();
-                  if (measure->multiMeasure() > 0)
-                        break;
-                  }
-            }
-      if (measure == 0)
-            return;
 
       Segment* s;
       for (s = measure->first(Segment::SegChordRest); s;) {

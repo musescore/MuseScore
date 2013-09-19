@@ -251,13 +251,13 @@ p, li { white-space: pre-wrap; }
           <duration z="2" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="2">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="3">
+      <Measure number="1">
         <Chord>
           <durationType>16th</durationType>
           <StemDirection>up</StemDirection>
@@ -489,7 +489,7 @@ p, li { white-space: pre-wrap; }
           <durationType>eighth</durationType>
           </Rest>
         </Measure>
-      <Measure number="4">
+      <Measure number="1">
         <Chord>
           <durationType>16th</durationType>
           <StemDirection>up</StemDirection>

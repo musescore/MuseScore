@@ -114,7 +114,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="2">
+      <Measure number="1">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -126,31 +126,31 @@
           <durationType>half</durationType>
           </Rest>
         </Measure>
-      <Measure number="3">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="4">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="5">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="6">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="7">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
@@ -194,37 +194,37 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="2">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="3">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="4">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="5">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="6">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="7">
+      <Measure number="1">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>

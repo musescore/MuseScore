@@ -130,8 +130,7 @@ void MeasureBase::add(Element* e)
                   case LAYOUT_BREAK_SECTION:
                         _sectionBreak = b;
 //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
-                        if(b->startWithMeasureOne())
-                              score()->renumberMeasures();
+                        score()->setLayoutAll(true);
                         break;
                   }
             }
@@ -160,15 +159,13 @@ void MeasureBase::remove(Element* el)
                   case LAYOUT_BREAK_SECTION:
                         _sectionBreak = 0;
                         score()->tempomap()->setPause(endTick(), 0);
-                        if(lb->startWithMeasureOne())
-                              score()->renumberMeasures();
+                        score()->setLayoutAll(true);
                         break;
                   }
             }
       if (!_el.remove(el))
             qDebug("MeasureBase(%p)::remove(%s,%p) not found\n", this, el->name(), el);
       }
-
 
 //---------------------------------------------------------
 //   nextMeasure
@@ -183,6 +180,28 @@ Measure* MeasureBase::nextMeasure() const
             m = m->_next;
             }
       return static_cast<Measure*>(m);
+      }
+
+//---------------------------------------------------------
+//   nextMeasureMM
+//---------------------------------------------------------
+
+Measure* MeasureBase::nextMeasureMM() const
+      {
+      MeasureBase* m = _next;
+      for (;;) {
+            if (m == 0 || m->type() == MEASURE)
+                  break;
+            m = m->_next;
+            }
+      Measure* mm = static_cast<Measure*>(m);
+      if (mm
+         && mm->type() == MEASURE
+         && score()->styleB(ST_createMultiMeasureRests)
+         && static_cast<Measure*>(mm)->hasMMRest()) {
+            return static_cast<Measure*>(mm)->mmRest();
+            }
+      return static_cast<Measure*>(mm);
       }
 
 //---------------------------------------------------------
@@ -331,6 +350,21 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
                         }
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   nextMM
+//---------------------------------------------------------
+
+MeasureBase* MeasureBase::nextMM() const
+      {
+      if (_next
+         && _next->type() == MEASURE
+         && score()->styleB(ST_createMultiMeasureRests)
+         && static_cast<Measure*>(_next)->hasMMRest()) {
+            return static_cast<Measure*>(_next)->mmRest();
+            }
+      return _next;
       }
 }
 
