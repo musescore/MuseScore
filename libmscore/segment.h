@@ -119,7 +119,11 @@ class Segment : public Element {
 
       ChordRest* nextChordRest(int track, bool backwards = false) const;
 
-      Q_INVOKABLE Ms::Element* element(int track) const    { return _elist.value(track);  }
+      Q_INVOKABLE Ms::Element* element(int track) const { return _elist.value(track);  }
+      ChordRest* cr(int track) const                    {
+            Q_ASSERT(_segmentType == SegChordRest);
+            return (ChordRest*)(_elist.value(track));
+            };
       const QList<Element*>& elist() const { return _elist; }
 
       void removeElement(int track);

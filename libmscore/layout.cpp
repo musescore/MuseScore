@@ -565,25 +565,21 @@ void Score::doLayout()
             createPlayEvents();
 
       int measureNo = 0;
-      for (MeasureBase* m = first(); m; m = m->next()) {
-            if (m->type() == Element::MEASURE) {
-                  Measure* measure = static_cast<Measure*>(m);
-                  measureNo += measure->noOffset();
-                  measure->setNo(measureNo);
-                  if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
-                        measureNo = 0;
-                  else if (measure->irregular())      // dont count measure
-                        ;
-                  else
-                        ++measureNo;
-                  }
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            Measure* measure = static_cast<Measure*>(m);
+            measureNo += measure->noOffset();
+            measure->setNo(measureNo);
+            if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
+                  measureNo = 0;
+            else if (measure->irregular())      // dont count measure
+                  ;
+            else
+                  ++measureNo;
+            measure->setBreakMMRest(false);
             }
 
-      for (MeasureBase* m = first(); m; m = m->next()) {
+      for (MeasureBase* m = first(); m; m = m->next())
             m->layout0();
-            if (m->type() == Element::MEASURE)
-                  static_cast<Measure*>(m)->setBreakMMRest(false);
-            }
 
       layoutFlags = 0;
 
@@ -928,6 +924,7 @@ void Score::createMMRests()
                   // create a multi measure rest from m to lm (inclusive)
                   // attach the measure to m
                   //
+                  printf("create mm rest %d %d\n", n, _showVBox);
                   Measure* mmr = m->mmRest() ? m->mmRest() : new Measure(this);
                   mmr->setMMRestCount(n);
                   mmr->setTick(m->tick());
@@ -1417,7 +1414,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
 
 void Score::removeGeneratedElements(Measure* sm, Measure* em)
       {
-      for (Measure* m = sm; m; m = m->nextMeasure()) {
+      for (Measure* m = sm; m; m = m->nextMeasureMM()) {
             //
             // remove generated elements from all measures in [sm;em]
             //    assume: generated elements are only living in voice 0
@@ -2033,12 +2030,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
 void Score::layoutSystems()
       {
-      curMeasure = _showVBox ? first() : firstMeasure();
-      if (curMeasure->type() == Element::MEASURE
-         && styleB(ST_createMultiMeasureRests)
-         && static_cast<Measure*>(curMeasure)->hasMMRest()) {
-            curMeasure = static_cast<Measure*>(curMeasure)->mmRest();
-            }
+      curMeasure              = _showVBox ? firstMM() : firstMeasureMM();
       curSystem               = 0;
       bool firstSystem        = true;
       bool startWithLongNames = true;
@@ -2061,7 +2053,7 @@ void Score::layoutSystems()
                   system->rxpos() = 0.0;
                   system->setPageBreak(vbox->pageBreak());
                   system->measures().push_back(vbox);
-                  curMeasure = curMeasure->next();
+                  curMeasure = curMeasure->nextMM();
                   ++curSystem;
                   }
             else {
