@@ -14,7 +14,6 @@ before_install:
   - "sudo apt-get install -y alsa libsndfile1 wget make ant curl cmake"
   - "sudo apt-get install -y libasound2-dev portaudio19-dev libsndfile1-dev zlib1g-dev libfreetype6-dev libfontconfig-dev"
   - "sudo apt-get install -y lame libmp3lame-dev"
-  - "sudo apt-get install -y imagemagick"
   - "mkdir qt5"
   - "wget -q -O qt5.zip http://ftp.osuosl.org/pub/musescore/linux/qt/qt510.zip"
   - "unzip -qq qt5.zip -d qt5"
@@ -30,7 +29,8 @@ before_script:
 script:
   - "../../build/run_tests.sh"
 after_script:
-  - "travis-artifacts upload --path ../../vtest/html --target-path $TRAVIS_COMMIT"
+  - "export TRAVIS_SHORT_COMMIT=`echo $TRAVIS_COMMIT | cut -c 1-8`"
+  - "travis-artifacts upload --path ../../vtest/html --target-path $TRAVIS_SHORT_COMMIT"
 notifications:
   recipients:
     - build@musescore.org
