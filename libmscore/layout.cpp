@@ -924,11 +924,22 @@ void Score::createMMRests()
                   // create a multi measure rest from m to lm (inclusive)
                   // attach the measure to m
                   //
-                  printf("create mm rest %d %d\n", n, _showVBox);
-                  Measure* mmr = m->mmRest() ? m->mmRest() : new Measure(this);
+                  Measure* mmr;
+                  if (m->mmRest()) {
+                        mmr = m->mmRest();
+                        if (m->len() != len) {
+                              Segment* s = mmr->findSegment(Segment::SegEndBarLine, mmr->endTick());
+                              mmr->setLen(len);
+                              s->setTick(mmr->endTick());
+                              }
+                        }
+                  else {
+                        mmr = new Measure(this);
+                        mmr->setLen(len);
+                        }
+
                   mmr->setMMRestCount(n);
                   mmr->setTick(m->tick());
-                  mmr->setLen(len);
                   mmr->setNo(m->no());
                   mmr->setEndBarLineType(lm->endBarLineType(), true, lm->endBarLineVisible(), lm->endBarLineColor());
                   Segment* s = mmr->getSegment(Segment::SegChordRest, m->tick());
