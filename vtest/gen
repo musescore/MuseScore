@@ -25,7 +25,7 @@ rm -f $F
 echo "<html>" >> $F
 echo "  <body>" >> $F
 for src in $SRC; do
-      echo "    <h2>$src</h2></br>" >> $F
+      echo "    <h2 id=\"$src\">$src <a class=\"toc-anchor\" href=\"#$src\">#</a></h2>" >> $F
       echo "    <div>" >> $F
       echo "      <img src=\"$src-1.png\">" >> $F
       echo "      <img src=\"$src-ref.png\">" >> $F
