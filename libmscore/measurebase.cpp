@@ -195,13 +195,9 @@ Measure* MeasureBase::nextMeasureMM() const
             m = m->_next;
             }
       Measure* mm = static_cast<Measure*>(m);
-      if (mm
-         && mm->type() == MEASURE
-         && score()->styleB(ST_createMultiMeasureRests)
-         && static_cast<Measure*>(mm)->hasMMRest()) {
-            return static_cast<Measure*>(mm)->mmRest();
-            }
-      return static_cast<Measure*>(mm);
+      if (mm && score()->styleB(ST_createMultiMeasureRests) && mm->hasMMRest())
+            return mm->mmRest();
+      return mm;
       }
 
 //---------------------------------------------------------

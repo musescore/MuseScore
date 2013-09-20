@@ -544,12 +544,14 @@ void Measure::layout2()
       if (parent() == 0)
             return;
 
+      Q_ASSERT(score()->nstaves() == staves.size());
+
+      int tracks = score()->nstaves() * VOICES;
       qreal _spatium = spatium();
-      int tracks = staves.size() * VOICES;
       static const Segment::SegmentTypes st = Segment::SegChordRest;
       for (int track = 0; track < tracks; ++track) {
             for (Segment* s = first(st); s; s = s->next(st)) {
-                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                  ChordRest* cr = s->cr(track);
                   if (!cr)
                         continue;
                   int n = cr->lyricsList().size();
@@ -575,10 +577,8 @@ void Measure::layout2()
                         }
                   }
             }
-      int n = staves.size();
-      for (int i = 0; i < n; ++i)
-            staves.at(i)->lines->setWidth(width());
-
+      for (MStaff* ms : staves)
+            ms->lines->setWidth(width());
 
       MeasureBase::layout();  // layout LAYOUT_BREAK elements
 
@@ -610,7 +610,7 @@ void Measure::layout2()
             int nn = 1;
             if (!score()->styleB(ST_measureNumberAllStaffs)) {
                   //find first non invisible staff
-                  for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+                  for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx) {
                         MStaff* ms = staves.at(staffIdx);
                         SysStaff* s  = system()->staff(staffIdx);
                         Staff* staff = score()->staff(staffIdx);
@@ -620,7 +620,7 @@ void Measure::layout2()
                               }
                         }
                   }
-            for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+            for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx) {
                   MStaff* ms = staves.at(staffIdx);
                   Text* t = ms->noText();
                   if (smn) {
@@ -1001,7 +1001,7 @@ void Measure::removeStaves(int sStaff, int eStaff)
                   s->removeStaff(staff);
                   }
             }
-      foreach(Element* e, _el) {
+      foreach (Element* e, _el) {
             if (e->track() == -1)
                   continue;
             int voice = e->voice();
@@ -1011,8 +1011,6 @@ void Measure::removeStaves(int sStaff, int eStaff)
                   e->setTrack(staffIdx * VOICES + voice);
                   }
             }
-      for (int i = 0; i < staves.size(); ++i)
-            staves[i]->setTrack(i * VOICES);
       }
 
 //---------------------------------------------------------
@@ -1021,7 +1019,7 @@ void Measure::removeStaves(int sStaff, int eStaff)
 
 void Measure::insertStaves(int sStaff, int eStaff)
       {
-      foreach(Element* e, _el) {
+      foreach (Element* e, _el) {
             if (e->track() == -1)
                   continue;
             int staffIdx = e->staffIdx();
@@ -1036,8 +1034,6 @@ void Measure::insertStaves(int sStaff, int eStaff)
                   s->insertStaff(staff);
                   }
             }
-      for (int i = 0; i < staves.size(); ++i)
-            staves[i]->setTrack(i * VOICES);
       }
 
 //---------------------------------------------------------
@@ -1079,9 +1075,6 @@ qDebug("cmdRemoveStaves %d-%d", sStaff, eStaff);
 
       for (int i = eStaff - 1; i >= sStaff; --i)
             _score->undo(new RemoveMStaff(this, *(staves.begin()+i), i));
-
-      for (int i = 0; i < staves.size(); ++i)
-            staves[i]->lines->setTrack(i * VOICES);
 
       // barLine
       // TODO
@@ -1156,11 +1149,10 @@ void MStaff::setTrack(int track)
 
 void Measure::insertMStaff(MStaff* staff, int idx)
       {
+printf("insertMStaff %d\n", idx);
       staves.insert(idx, staff);
       for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx)
             staves[staffIdx]->setTrack(staffIdx * VOICES);
-      if (MScore::debugMode)
-            qDebug("     Measure::insertMStaff %d -> n:%d", idx, staves.size());
       }
 
 //---------------------------------------------------------
@@ -1169,9 +1161,7 @@ void Measure::insertMStaff(MStaff* staff, int idx)
 
 void Measure::removeMStaff(MStaff* /*staff*/, int idx)
       {
-      if (MScore::debugMode)
-            qDebug("     Measure::removeMStaff %d", idx);
-
+printf("removeMStaff %d\n", idx);
       staves.removeAt(idx);
       for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx)
             staves[staffIdx]->setTrack(staffIdx * VOICES);
@@ -2518,7 +2508,7 @@ void Measure::setEndBarLineType(BarLineType val, bool g, bool visible, QColor co
 void Measure::sortStaves(QList<int>& dst)
       {
       QList<MStaff*> ms;
-      foreach(int idx, dst)
+      foreach (int idx, dst)
             ms.push_back(staves[idx]);
       staves = ms;
 
