@@ -516,7 +516,7 @@ void Score::fixTicks()
                                     int nn = cr->articulations().size();
                                     for (int ii = 0; ii < nn; ++ii)
                                           stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
-                                    if (stretch != 0.0) {
+                                    if (stretch != 0.0 && stretch != 1.0) {
                                           qreal otempo = tempomap()->tempo(cr->tick());
                                           qreal ntempo = otempo / stretch;
                                           setTempo(cr->tick(), ntempo);
