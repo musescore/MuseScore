@@ -1107,6 +1107,8 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
 
 void Harmony::render(const TextStyle* st)
       {
+      int capo = score()->styleI(ST_capoPosition);
+
       if (st == 0)
             st = &textStyle();
       ChordList* chordList = score()->style()->chordList();
@@ -1148,6 +1150,42 @@ void Harmony::render(const TextStyle* st)
       // render bass
       if (_baseTpc != INVALID_TPC)
             render(chordList->renderListBase, x, y, _baseTpc, _baseSpelling, _baseLowerCase);
+
+      if (_rootTpc != INVALID_TPC && capo > 0 && capo < 12) {
+            int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
+            int capoRootTpc = _rootTpc + tpcOffset[capo];
+            int capoBassTpc = _baseTpc;
+
+            if (capoBassTpc != INVALID_TPC)
+                  capoBassTpc += tpcOffset[capo];
+
+            /*
+             * For guitarists, avoid x and bb in Root or Bass,
+             * and also avoid E#, B#, Cb and Fb in Root.
+             */
+            if (capoRootTpc < 8 || (capoBassTpc != INVALID_TPC && capoBassTpc < 6)) {
+                  capoRootTpc += 12;
+                  if (capoBassTpc != INVALID_TPC)
+                        capoBassTpc += 12;
+                  }
+            else if (capoRootTpc > 24 || (capoBassTpc != INVALID_TPC && capoBassTpc > 26)) {
+                  capoRootTpc -= 12;
+                  if (capoBassTpc != INVALID_TPC)
+                        capoBassTpc -= 12;
+                  }
+
+            render("(", x, y);
+            render(chordList->renderListRoot, x, y, capoRootTpc, _rootSpelling, _rootLowerCase);
+
+            // render extension
+            const ChordDescription* cd = getDescription();
+            if (cd)
+                  render(cd->renderList, x, y, 0);
+
+            if (capoBassTpc != INVALID_TPC)
+                  render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseLowerCase);
+            render(")", x, y);
+            }
 
       if (_rightParen)
             render(" )", x, y);
