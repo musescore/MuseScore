@@ -3255,17 +3255,18 @@ void Measure::layoutX(qreal stretch)
                                           }
                                     }
                               Segment* ns = s->next();
+                              x2 = this->width();
                               if (ns) {
                                     x2 = ns->x();
                                     if (ns->segmentType() != Segment::SegEndBarLine) {
-                                          Element* ee = ns->element(track);
-                                          if (ee)
-                                                x2 += ee->x();
+                                          for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+                                                int track = staffIdx * VOICES;
+                                                Element* e = ns->element(track);
+                                                if (e)
+                                                      x2 = qMin(x2, ns->x() + e->x());
+                                                }
                                           }
                                     }
-                              else
-                                    x2 = this->width();
-
 
                               qreal d  = point(score()->styleS(ST_multiMeasureRestMargin));
                               qreal w = x2 - x1 - 2 * d;
@@ -3293,52 +3294,9 @@ void Measure::layoutX(qreal stretch)
                                                 x1 = qMax(x1, ss->x() + e->x() + e->width());
                                           }
                                     }
-#if 0
-                              Segment* ns;
-                              for (ns = s->next(); ns && !ns->element(track); ns = ns->next())
-                                    ;
-                              if (ns) {
-                                    x2 = ns->x();
-                                    if (ns->segmentType() != Segment::SegEndBarLine) {
-                                          Element* ee = ns->element(track);
-                                          x2 += ee->x();
-                                          }
-                                    }
-#endif
                               rest->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s->x();
                               rest->adjustReadPos();
                               }
-#if 0
-                        else {
-                              //
-                              // center repeat measure
-                              //
-                              qreal x1 = 0.0, x2;
-                              if (s != first()) {
-                                    Segment* ps;
-                                    for (ps = s->prev(); ps && !ps->element(track); ps = ps->prev())
-                                          ;
-                                    if (ps) {
-                                          Element* ee = ps->element(track);
-                                          x1 = ps->x() + ee->x() + e->width();
-                                          }
-                                    }
-
-                              Segment* ns;
-                              for (ns = s->next(); ns && ! ns->element(track); ns = ns->next())
-                                    ;
-                              if (ns) {
-                                    x2 = ns->x();
-                                    if (ns->segmentType() != Segment::SegEndBarLine)
-                                          x2 += ns->element(track)->x();
-                                    }
-                              else
-                                    x2 = this->width();
-
-                              e->rxpos() = (x2 - x1 - e->width()) * .5 - s->pos().x();
-                              e->adjustReadPos();
-                              }
-#endif
                         }
                   else if (t == REST)
                         e->rxpos() = 0;
