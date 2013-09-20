@@ -902,8 +902,11 @@ void setTupletVoices(std::vector<TupletInfo> &tuplets,
                      std::set<int> &pendingTuplets,
                      const ReducedFraction &regularRaster)
       {
+      const auto operations = preferences.midiImportOperations.currentTrackOperations();
+      const int voiceLimit = (operations.useMultipleVoices) ? VOICES : 1;
       int voice = 0;
-      while (!pendingTuplets.empty()) {
+
+      while (!pendingTuplets.empty() && voice < voiceLimit) {
             for (auto it = pendingTuplets.begin(); it != pendingTuplets.end(); ) {
                   int i = *it;
                   auto interval = tupletInterval(tuplets[i], regularRaster);
@@ -923,8 +926,11 @@ void setNonTupletVoices(std::set<std::pair<const ReducedFraction, MidiChord> *> 
                         std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> &intervals,
                         const ReducedFraction &regularRaster)
       {
+      const auto operations = preferences.midiImportOperations.currentTrackOperations();
+      const int voiceLimit = (operations.useMultipleVoices) ? VOICES : 1;
       int voice = 0;
-      while (!pendingNonTuplets.empty()) {
+
+      while (!pendingNonTuplets.empty() && voice < voiceLimit) {
             for (auto it = pendingNonTuplets.begin(); it != pendingNonTuplets.end(); ) {
                   auto chord = *it;
                   auto interval = chordInterval(chord, regularRaster);
@@ -957,6 +963,19 @@ void setTiedTupletVoice(std::vector<TupletInfo> &tuplets,
                         break;
                         }
                   }
+            }
+      }
+
+void removeUnusedTuplets(std::vector<TupletInfo> &tuplets,
+                         const std::set<int> &pendingTuplets)
+      {
+      if (!pendingTuplets.empty()) {
+            std::vector<TupletInfo> newTuplets;
+            for (int i = 0; i != (int)tuplets.size(); ++i) {
+                  if (pendingTuplets.find(i) == pendingTuplets.end())
+                        newTuplets.push_back(tuplets[i]);
+                  }
+            std::swap(tuplets, newTuplets);
             }
       }
 
@@ -995,6 +1014,7 @@ void assignVoices(std::multimap<ReducedFraction, MidiChord> &chords,
 
       setTupletVoices(tuplets, intervals, pendingTuplets, regularRaster);
       setNonTupletVoices(pendingNonTuplets, intervals, regularRaster);
+      removeUnusedTuplets(tuplets, pendingTuplets);
       }
 
 std::vector<TupletData> convertToData(const std::vector<TupletInfo> &tuplets)
@@ -1072,14 +1092,12 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
 
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
       addChordsBetweenTupletNotes(tuplets, nonTuplets);
-
-      if (operations.useMultipleVoices) {
-            sortNotesByPitch(startBarChordIt, endBarChordIt);
-            sortTupletsByAveragePitch(tuplets);
+      sortNotesByPitch(startBarChordIt, endBarChordIt);
+      sortTupletsByAveragePitch(tuplets);
+      if (operations.useMultipleVoices)
             splitFirstTupletChords(tuplets, chords);
-            minimizeOffTimeError(tuplets, chords, nonTuplets);
-            assignVoices(chords, tuplets, nonTuplets, startBarTick, endBarTick, regularRaster);
-            }
+      minimizeOffTimeError(tuplets, chords, nonTuplets);
+      assignVoices(chords, tuplets, nonTuplets, startBarTick, endBarTick, regularRaster);
 
       return convertToData(tuplets);
       }
@@ -1095,7 +1113,7 @@ findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
             const auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
             const auto barFraction = ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
-            const auto tuplets = findTuplets(startBarTick, endBarTick, barFraction, chords);
+                  const auto tuplets = findTuplets(startBarTick, endBarTick, barFraction, chords);
             for (const auto &tupletData: tuplets)
                   tupletEvents.insert({tupletData.onTime, tupletData});
             if (endBarTick > lastTick)
