@@ -3,7 +3,7 @@
 #
 # "compare" - image magick compare program
 #
-SRC="mmrest-1 mmrest-2 mmrest-4\
+SRC="mmrest-1 mmrest-2 mmrest-4 mmrest-5 mmrest-6\
  fmrest-1 fmrest-2 fmrest-3 fmrest-4 fmrest-5 measure-repeat-1"
 
 MSCORE=../build.debug/mscore/mscore

@@ -1596,13 +1596,10 @@ Measure* Score::firstMeasureMM() const
       MeasureBase* mb = _measures.first();
       while (mb && mb->type() != Element::MEASURE)
             mb = mb->next();
-      if (mb
-         && mb->type() == Element::MEASURE
-         && styleB(ST_createMultiMeasureRests)
-         && static_cast<Measure*>(mb)->hasMMRest()) {
-            return static_cast<Measure*>(mb)->mmRest();
-            }
-      return static_cast<Measure*>(mb);
+      Measure* m = static_cast<Measure*>(mb);
+      if (m && styleB(ST_createMultiMeasureRests) && m->hasMMRest())
+            return m->mmRest();
+      return m;
       }
 
 //---------------------------------------------------------
@@ -2038,7 +2035,7 @@ void Score::removeExcerpt(Score* score)
 
 void Score::updateNotes()
       {
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+      for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                   AccidentalState tversatz;      // state of already set accidentals for this measure
                   tversatz.init(staff(staffIdx)->keymap()->key(m->tick()));
@@ -2059,7 +2056,7 @@ void Score::updateNotes()
 
 void Score::cmdUpdateNotes()
       {
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+      for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
                   updateAccidentals(m, staffIdx);
             }
@@ -2075,7 +2072,7 @@ void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
 //      qDebug("cmdUpdateAccidentals m=%d for staff=%d",
 //            beginMeasure->no(), staffIdx);
       Staff* st = staff(staffIdx);
-      for (Measure* m = beginMeasure; m; m = m->nextMeasure()) {
+      for (Measure* m = beginMeasure; m; m = m->nextMeasureMM()) {
             AccidentalState as;
             as.init(st->keymap()->key(m->tick()));
 
@@ -2257,8 +2254,11 @@ void Score::splitStaff(int staffIdx, int splitPoint)
 
       undoInsertStaff(ns, staffIdx+1);
 
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             m->cmdAddStaves(staffIdx+1, staffIdx+2, false);
+            if (m->hasMMRest())
+                  m->mmRest()->cmdAddStaves(staffIdx+1, staffIdx+2, false);
+            }
 
       Clef* clef = new Clef(this);
       clef->setClefType(ClefType::F);
@@ -2268,16 +2268,6 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       undoAddElement(clef);
 
       undoChangeKeySig(ns, 0, s->key(0));
-
-#if 0       // created on layout
-      Bracket* b = new Bracket(this);
-      b->setSubtype(BRACKET_AKKOLADE);
-      b->setTrack(staffIdx * VOICES);
-      b->setParent(firstMeasure()->system());
-      b->setLevel(-1);  // add bracket
-      b->setSpan(2);
-      undoAddElement(b);
-#endif
 
       rebuildMidiMapping();
       _instrumentsChanged = true;
@@ -2392,8 +2382,12 @@ void Score::cmdInsertPart(Part* part, int staffIdx)
 
       int sidx = this->staffIdx(part);
       int eidx = sidx + part->nstaves();
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             m->cmdAddStaves(sidx, eidx, true);
+            if (m->hasMMRest())
+                  m->mmRest()->cmdAddStaves(sidx, eidx, true);
+            }
+
       adjustBracketsIns(sidx, eidx);
       }
 
@@ -2407,16 +2401,18 @@ void Score::cmdRemovePart(Part* part)
       int n      = part->nstaves();
       int eidx   = sidx + n;
 
-// qDebug("cmdRemovePart %d-%d", sidx, eidx);
-
       //
       //    adjust measures
       //
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             m->cmdRemoveStaves(sidx, eidx);
+            if (m->hasMMRest())
+                  m->mmRest()->cmdRemoveStaves(sidx, eidx);
+            }
 
       for (int i = 0; i < n; ++i)
             cmdRemoveStaff(sidx);
+
       undoRemovePart(part, sidx);
       }
 
@@ -2559,8 +2555,11 @@ void Score::cmdRemoveStaff(int staffIdx)
                        int lstaffIdx = lscore->staffIdx(staff);
                        int pIndex = lscore->staffIdx(staff->part());
                        //adjustBracketsDel(lstaffIdx, lstaffIdx+1);
-                       for (Measure* m = lscore->firstMeasure(); m; m = m->nextMeasure())
+                       for (Measure* m = lscore->firstMeasure(); m; m = m->nextMeasure()) {
                               m->cmdRemoveStaves(lstaffIdx, lstaffIdx + 1);
+                              if (m->hasMMRest())
+                                    m->mmRest()->cmdRemoveStaves(lstaffIdx, lstaffIdx + 1);
+                              }
                         undoRemoveStaff(staff, lstaffIdx);
                         if (staff->part()->nstaves() == 0)
                               undoRemovePart(staff->part(), pIndex);
@@ -2589,7 +2588,7 @@ void Score::sortStaves(QList<int>& dst)
       _parts.clear();
       Part* curPart = 0;
       QList<Staff*> dl;
-      foreach(int idx, dst) {
+      foreach (int idx, dst) {
             Staff* staff = _staves[idx];
             if (staff->part() != curPart) {
                   curPart = staff->part();
@@ -2601,11 +2600,10 @@ void Score::sortStaves(QList<int>& dst)
             }
       _staves = dl;
 
-      for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
-            if (mb->type() != Element::MEASURE)
-                  continue;
-            Measure* m = static_cast<Measure*>(mb);
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             m->sortStaves(dst);
+            if (m->hasMMRest())
+                  m->mmRest()->sortStaves(dst);
             }
       }
 
