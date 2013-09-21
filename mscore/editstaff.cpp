@@ -274,6 +274,7 @@ void EditStaff::showInstrumentDialog()
       if (si.exec()) {
             instrument = Instrument::fromTemplate(si.instrTemplate());
             updateInstrument();
+            fillStaffTypeCombo();
             }
       }
 
