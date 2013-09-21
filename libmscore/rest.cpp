@@ -320,12 +320,21 @@ void Rest::layout()
       if (staff() && staff()->isTabStaff()) {
             StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
             // if rests are shown and note values are shown as duration symbols
-            if(tab->showRests() &&tab->genDurations()) {
+            if(tab->showRests() && tab->genDurations()) {
+                  TDuration::DurationType type = durationType().type();
+                  int                     dots = durationType().dots();
+                  // if rest is whole measure, convert into actual type and dot values
+                  if (type == TDuration::V_MEASURE) {
+                        int       ticks = measure()->ticks();
+                        TDuration dur   = TDuration(Fraction::fromTicks(ticks)).type();
+                        type = dur.type();
+                        dots = dur.dots();
+                        }
                   // symbol needed; if not exist, create, if exists, update duration
                   if (!_tabDur)
-                        _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
+                        _tabDur = new TabDurationSymbol(score(), tab, type, dots);
                   else
-                        _tabDur->setDuration(durationType().type(), dots(), tab);
+                        _tabDur->setDuration(type, dots, tab);
                   _tabDur->setParent(this);
 // needed?        _tabDur->setTrack(track());
                   _tabDur->layout();
