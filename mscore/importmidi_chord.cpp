@@ -74,6 +74,7 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                                            secondOnTime.ticks(), note2.len.ticks());
                                     note1.len = secondOnTime - firstOnTime;
                                     ii = chords.end();
+                                    --ii;
                                     break;
                                     }
                               }
