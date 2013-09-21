@@ -2711,6 +2711,7 @@ void RemoveMeasures::undo()
       fm->score()->insertTime(fm->tick(), ticks);
       fm->score()->fixTicks();
       fm->score()->connectTies();
+      fm->score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
