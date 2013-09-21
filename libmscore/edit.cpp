@@ -1137,6 +1137,7 @@ void Score::deleteItem(Element* el)
                   Chord* chord = static_cast<Chord*>(el->parent());
                   if (chord->notes().size() > 1) {
                         undoRemoveElement(el);
+                        select(chord->downNote(), SELECT_SINGLE, 0);
                         break;
                         }
                   // else fall through
