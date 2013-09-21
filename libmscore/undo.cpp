@@ -95,9 +95,12 @@ void updateNoteLines(Segment* segment, int track)
             for (int t = track; t < track + VOICES; ++t) {
                   Chord* chord = static_cast<Chord*>(s->element(t));
                   if (chord && chord->type() == Element::CHORD) {
-                        int n = chord->notes().size();
-                        for (int i = 0; i < n; ++i)
-                              chord->notes().at(i)->updateLine();
+                        for (Note* n : chord->notes())
+                              n->updateLine();
+                        for (Chord* gc : chord->graceNotes()) {
+                              for(Note* gn : gc->notes())
+                                    gn->updateLine();
+                              }
                         }
                   }
             }
