@@ -396,7 +396,24 @@ bool badLevelCondition(int startLevelDiff, int endLevelDiff, int tol)
       return startLevelDiff > tol || endLevelDiff > tol;
       }
 
-void excludeNodes(std::map<ReducedFraction, Node> &nodes, int tol)
+int noteCount(const ReducedFraction &duration,
+              bool useDots)
+      {
+      return toDurationList(duration.fraction(), useDots, 1).size();
+      }
+
+bool isLessNoteCount(const ReducedFraction &t1,
+                     const ReducedFraction &t2,
+                     const ReducedFraction &t3,
+                     bool useDots)
+      {
+      return noteCount(t3 - t1, useDots) <
+                  noteCount(t2 - t1, useDots) + noteCount(t3 - t2, useDots);
+      }
+
+void excludeNodes(std::map<ReducedFraction, Node> &nodes,
+                  int tol,
+                  bool useDots)
       {
       if (tol == 0)     // no nodes can be excluded
             return;
@@ -415,7 +432,8 @@ void excludeNodes(std::map<ReducedFraction, Node> &nodes, int tol)
 
       while (p3 != nodes.end()) {
             if (!badLevelCondition(p2->second.midLevel - p1->second.edgeLevel,
-                                   p2->second.midLevel - p3->second.edgeLevel, tol)) {
+                                   p2->second.midLevel - p3->second.edgeLevel, tol)
+                        && isLessNoteCount(p1->first, p2->first, p3->first, useDots)) {
                   p2 = nodes.erase(p2);
                   ++p3;
                   continue;
@@ -462,7 +480,6 @@ toDurationList(const ReducedFraction &startTickInBar,
             return QList<std::pair<ReducedFraction, TDuration>>();
 
       const auto divInfo = divisionInfo(barFraction, tupletsInBar);  // mectric structure of bar
-      const int tol = (durationType == DurationType::NOTE) ? 1 : 0;
       const auto minDuration = minAllowedDuration() * 2;  // >= minAllowedDuration() after subdivision
 
       std::map<ReducedFraction, Node> nodes;    // <onTime, Node>
@@ -491,7 +508,7 @@ toDurationList(const ReducedFraction &startTickInBar,
             const Node &endNode = nodes.find(gap.second)->second;
 
             if (badLevelCondition(effectiveLevel - startNode.edgeLevel,
-                                  effectiveLevel - endNode.edgeLevel, tol)
+                                  effectiveLevel - endNode.edgeLevel, 0)
                         || is2of3RestInTripleMeter(gap.first, gap.second, barFraction)
                         || (durationType == DurationType::REST
                             && is23EndOfBeatInCompoundMeter(gap.first, gap.second, barFraction)))
@@ -504,7 +521,8 @@ toDurationList(const ReducedFraction &startTickInBar,
                   }
             }
 
-      excludeNodes(nodes, tol);
+      const int tol = (durationType == DurationType::NOTE) ? 1 : 0;
+      excludeNodes(nodes, tol, useDots);
 
       return collectDurations(nodes, tupletsInBar, useDots);
       }
