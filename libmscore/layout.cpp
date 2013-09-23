@@ -930,7 +930,8 @@ void Score::createMMRests()
                         if (m->len() != len) {
                               Segment* s = mmr->findSegment(Segment::SegEndBarLine, mmr->endTick());
                               mmr->setLen(len);
-                              s->setTick(mmr->endTick());
+                              if (s)
+                                    s->setTick(mmr->endTick());
                               }
                         }
                   else {

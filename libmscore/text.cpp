@@ -296,7 +296,11 @@ void Text::layout1()
                   }
             if (e->type() == SEGMENT) {
                   Segment* s = static_cast<Segment*>(e);
-                  rypos() += s->measure()->system()->staff(staffIdx())->y();
+                  System* system = s->measure()->system();
+                  if (system) {
+                        SysStaff* sstaff = system->staff(staffIdx());
+                        rypos() += sstaff->y();
+                        }
                   }
             }
 
