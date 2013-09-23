@@ -48,6 +48,7 @@ enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 //
 //   @P notes  array[Note]    the list of notes (read only)
 //   @P lyrics  array[Lyrics]  the list of lyrics (read only)
+//   @P graceNotes  array[Chord]  the list of grace note chords (read only)
 //---------------------------------------------------------
 
 class Chord : public ChordRest {
@@ -62,6 +63,7 @@ class Chord : public ChordRest {
 
       Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
       Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
+      Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
 
       QList<Note*> _notes;          // sorted to decreasing line step
       LedgerLine*  _ledgerLines;    // single linked list
@@ -74,7 +76,7 @@ class Chord : public ChordRest {
       Tremolo*   _tremolo;
       Glissando* _glissando;
       ElementList _el;              ///< chordline, slur
-      std::vector<Chord*> _graceNotes;
+      QList<Chord*> _graceNotes;
       int _graceIndex;              ///< if this is a grace note, index in parent list
 
       MScore::Direction  _stemDirection;
@@ -123,6 +125,7 @@ class Chord : public ChordRest {
 
       QQmlListProperty<Ms::Note> qmlNotes()    { return QQmlListProperty<Ms::Note>(this, _notes); }
       QQmlListProperty<Ms::Lyrics> qmlLyrics() { return QQmlListProperty<Ms::Lyrics>(this, _lyricsList); }
+      QQmlListProperty<Ms::Chord> qmlGraceNotes() { return QQmlListProperty<Ms::Chord>(this, _graceNotes); }
       QList<Note*>& notes()                  { return _notes; }
       const QList<Note*>& notes() const      { return _notes; }
 
@@ -147,8 +150,8 @@ class Chord : public ChordRest {
       StemSlash* stemSlash() const           { return _stemSlash; }
       void setStemSlash(StemSlash* s);
 
-      const std::vector<Chord*>& graceNotes() const { return _graceNotes; }
-      std::vector<Chord*>& graceNotes()             { return _graceNotes; }
+      const QList<Chord*>& graceNotes() const { return _graceNotes; }
+      QList<Chord*>& graceNotes()             { return _graceNotes; }
       int graceIndex() const                        { return _graceIndex; }
       void setGraceIndex(int val)                   { _graceIndex = val;  }
 

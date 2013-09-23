@@ -315,7 +315,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             popup->addSeparator();
             popup->addAction(tr("Harmony Properties..."))->setData("ha-props");
-            popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
       else if (e->type() == Element::INSTRUMENT_NAME) {
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
