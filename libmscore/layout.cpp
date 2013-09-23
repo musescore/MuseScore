@@ -942,7 +942,7 @@ void Score::createMMRests()
                   mmr->setMMRestCount(n);
                   mmr->setTick(m->tick());
                   mmr->setNo(m->no());
-                  mmr->setEndBarLineType(lm->endBarLineType(), true, lm->endBarLineVisible(), lm->endBarLineColor());
+                  mmr->setEndBarLineType(lm->endBarLineType(), false, lm->endBarLineVisible(), lm->endBarLineColor());
                   Segment* s = mmr->getSegment(Segment::SegChordRest, m->tick());
                   for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                         int track = staffIdx * VOICES;
@@ -1899,7 +1899,6 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               // create a double bar line as end bar line
                               //
                               BarLineType bl = hasCourtesyKeysig ? DOUBLE_BAR : NORMAL_BAR;
-
                               if (m->repeatFlags() & RepeatEnd)
                                     m->setEndBarLineType(END_REPEAT, true);
                               else if (m->endBarLineGenerated())
