@@ -224,6 +224,20 @@ Segment* Segment::next1() const
       return m->first();
       }
 
+//---------------------------------------------------------
+//   next1MM
+//---------------------------------------------------------
+
+Segment* Segment::next1MM() const
+      {
+      if (next())
+            return next();
+      Measure* m = measure()->nextMeasureMM();
+      if (m == 0)
+            return 0;
+      return m->first();
+      }
+
 Segment* Segment::next1(SegmentTypes types) const
       {
       for (Segment* s = next1(); s; s = s->next1()) {

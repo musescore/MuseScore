@@ -111,6 +111,7 @@ class Segment : public Element {
       void setPrev(Segment* e)          { _prev = e;      }
 
       Q_INVOKABLE Ms::Segment* next1() const;
+      Ms::Segment* next1MM() const;
       Segment* next1(SegmentTypes) const;
       Q_INVOKABLE Ms::Segment* prev1() const;
       Segment* prev1(SegmentTypes) const;
