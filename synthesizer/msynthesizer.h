@@ -37,7 +37,7 @@ class MasterSynthesizer : public QObject {
       double _masterTuning;
 
    public:
-      static const int MAX_BUFFERSIZE = 4096;
+      static const int MAX_BUFFERSIZE = 8192;
       static const int MAX_EFFECTS = 2;
 
    private:
