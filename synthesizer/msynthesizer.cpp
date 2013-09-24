@@ -273,6 +273,9 @@ void MasterSynthesizer::process(unsigned n, float* p)
             lock1 = false;
             return;
             }
+      // avoid overflow
+      if( n > MAX_BUFFERSIZE / 2)
+            return;
       for (Synthesizer* s : _synthesizer) {
             if (s->active())
                   s->process(n, p, effect1Buffer, effect2Buffer);
