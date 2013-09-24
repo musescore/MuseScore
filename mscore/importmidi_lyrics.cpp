@@ -245,8 +245,10 @@ QStringList makeLyricsList()
                         lyricText += text.left(symbolLimit - lyricText.size());
                   else
                         lyricText += text;
-                  if (lyricText.size() >= symbolLimit - 1)
+                  if (lyricText.size() >= symbolLimit - 1) {
+                        lyricText += "...";
                         break;
+                        }
                   }
             list.push_back(lyricText);
             }
