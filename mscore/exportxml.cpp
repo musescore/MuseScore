@@ -2637,17 +2637,20 @@ static void partGroupStart(Xml& xml, int number, int bracket)
       xml.stag(QString("part-group type=\"start\" number=\"%1\"").arg(number));
       QString br = "";
       switch (bracket) {
+            case NO_BRACKET:
+                  br = "none";
+                  break;
             case BRACKET_NORMAL:
                   br = "bracket";
                   break;
             case BRACKET_BRACE:
                   br = "brace";
                   break;
-            case BRACKET_SQUARE:
-                  br = "square";
-                  break;
             case BRACKET_LINE:
                   br = "line";
+                  break;
+            case BRACKET_SQUARE:
+                  br = "square";
                   break;
             default:
                   qDebug("bracket subtype %d not understood\n", bracket);
@@ -3896,6 +3899,20 @@ static void identification(Xml& xml, Score const* const score)
       }
 
 //---------------------------------------------------------
+//  findPartGroupNumber
+//---------------------------------------------------------
+
+static int findPartGroupNumber(int* partGroupEnd)
+      {
+      // find part group number
+      for (int number = 0; number < MAX_PART_GROUPS; ++number)
+            if (partGroupEnd[number] == -1)
+                  return number;
+      qDebug("no free part group number");
+      return MAX_PART_GROUPS;
+      }
+            
+//---------------------------------------------------------
 //  write
 //---------------------------------------------------------
 
@@ -3930,31 +3947,30 @@ void ExportMusicXml::write(QIODevice* dev)
       xml.stag("part-list");
       const QList<Part*>& il = _score->parts();
       int staffCount = 0;                       // count sum of # staves in parts
-      int partGroupEnd[MAX_PART_GROUPS];        // staff where part group ends
+      int partGroupEnd[MAX_PART_GROUPS];        // staff where part group ends (bracketSpan is in staves, not parts)
       for (int i = 0; i < MAX_PART_GROUPS; i++)
             partGroupEnd[i] = -1;
       for (int idx = 0; idx < il.size(); ++idx) {
             Part* part = il.at(idx);
+            bool bracketFound = false;
+            // handle brackets
             for (int i = 0; i < part->nstaves(); i++) {
                   Staff* st = part->staff(i);
                   if (st) {
                         for (int j = 0; j < st->bracketLevels(); j++) {
                               if (st->bracket(j) != NO_BRACKET) {
+                                    bracketFound = true;
                                     if (i == 0) {
                                           // OK, found bracket in first staff of part
                                           // filter out implicit brackets
-                                          if (st->bracketSpan(j) != part->nstaves()) {
-                                                // find part group number
-                                                int number = 0;
-                                                for (; number < MAX_PART_GROUPS; number++)
-                                                      if (partGroupEnd[number] == -1)
-                                                            break;
+                                          if (!(st->bracketSpan(j) == part->nstaves()
+                                                && st->bracket(j) == BRACKET_BRACE)) {
+                                                // add others
+                                                int number = findPartGroupNumber(partGroupEnd);
                                                 if (number < MAX_PART_GROUPS) {
                                                       partGroupStart(xml, number + 1, st->bracket(j));
-                                                      partGroupEnd[number] = idx + st->bracketSpan(j);
+                                                      partGroupEnd[number] = staffCount + st->bracketSpan(j);
                                                       }
-                                                else
-                                                      qDebug("no free part group number");
                                                 }
                                           }
                                     else {
@@ -3963,6 +3979,14 @@ void ExportMusicXml::write(QIODevice* dev)
                                           }
                                     }
                               }
+                        }
+                  }
+            // handle bracket none
+            if (!bracketFound && part->nstaves() > 1) {
+                  int number = findPartGroupNumber(partGroupEnd);
+                  if (number < MAX_PART_GROUPS) {
+                        partGroupStart(xml, number + 1, NO_BRACKET);
+                        partGroupEnd[number] = idx + part->nstaves();
                         }
                   }
 
