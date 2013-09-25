@@ -107,6 +107,11 @@
      </item>
      <item>
       <property name="text">
+       <string>Tempo</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Text</string>
       </property>
      </item>

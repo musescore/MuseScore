@@ -873,6 +873,37 @@ struct TempoPattern {
 //   newTempoPalette
 //---------------------------------------------------------
 
+Palette* MuseScore::newTempoPalette()
+      {
+      Palette* sp = new Palette;
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Tempo"));
+      sp->setMag(0.65);
+      sp->setGrid(60, 30);
+      sp->setDrawGrid(true);
+
+      static const TempoPattern tp[] = {
+            TempoPattern(QString("%1%2 = 80").    arg(QChar(0xd834)).arg(QChar(0xdd5f)), 80.0/60.0),      // 1/4
+            TempoPattern(QString("%1%2 = 80").    arg(QChar(0xd834)).arg(QChar(0xdd5e)), 80.0/30.0),      // 1/2
+            TempoPattern(QString("%1%2 = 80").    arg(QChar(0xd834)).arg(QChar(0xdd60)), 80.0/120.0),     // 1/8
+            TempoPattern(QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5f)).arg(QChar(0xd834)).arg(QChar(0xdd6d)), 120.0/60.0),  // dotted 1/4
+            TempoPattern(QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5e)).arg(QChar(0xd834)).arg(QChar(0xdd6d)), 120/30.0),    // dotted 1/2
+            TempoPattern(QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd60)).arg(QChar(0xd834)).arg(QChar(0xdd6d)), 120/120.0)    // dotted 1/8
+            };
+      for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
+            TempoText* tt = new TempoText(gscore);
+            tt->setFollowText(true);
+            tt->setTrack(0);
+            tt->setTempo(tp[i].f);
+            tt->setText(tp[i].pattern);
+            sp->append(tt, tr("Tempo Text"), QString(), 1.5);
+            }
+      return sp;
+      }
+
+//---------------------------------------------------------
+//   newTextPalette
+//---------------------------------------------------------
+
 Palette* MuseScore::newTextPalette()
       {
       Palette* sp = new Palette;
@@ -905,23 +936,6 @@ Palette* MuseScore::newTextPalette()
       text->setTextStyleType(TEXT_STYLE_LYRICS_VERSE_NUMBER);
       text->setText(tr("1."));
       sp->append(text, tr("Lyrics Verse Number"));
-
-      static const TempoPattern tp[] = {
-            TempoPattern(QString("%1%2 = 80").    arg(QChar(0xd834)).arg(QChar(0xdd5f)), 80.0/60.0),      // 1/4
-            TempoPattern(QString("%1%2 = 80").    arg(QChar(0xd834)).arg(QChar(0xdd5e)), 80.0/30.0),      // 1/2
-            TempoPattern(QString("%1%2 = 80").    arg(QChar(0xd834)).arg(QChar(0xdd60)), 80.0/120.0),     // 1/8
-            TempoPattern(QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5f)).arg(QChar(0xd834)).arg(QChar(0xdd6d)), 120.0/60.0),  // dotted 1/4
-            TempoPattern(QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5e)).arg(QChar(0xd834)).arg(QChar(0xdd6d)), 120/30.0),    // dotted 1/2
-            TempoPattern(QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd60)).arg(QChar(0xd834)).arg(QChar(0xdd6d)), 120/120.0)    // dotted 1/8
-            };
-      for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
-            TempoText* tt = new TempoText(gscore);
-            tt->setFollowText(true);
-            tt->setTrack(0);
-            tt->setTempo(tp[i].f);
-            tt->setText(tp[i].pattern);
-            sp->append(tt, tr("Tempo Text"), QString(), 1.5);
-            }
 
       Harmony* harmony = new Harmony(gscore);
       harmony->setText("C7");
