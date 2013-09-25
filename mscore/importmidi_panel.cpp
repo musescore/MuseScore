@@ -129,6 +129,7 @@ void ImportMidiPanel::hidePanel()
       {
       if (isVisible()) {
             setVisible(false);
+            emit closeClicked();
             prefferedVisible_ = false;
             }
       }
