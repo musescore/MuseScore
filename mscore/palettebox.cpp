@@ -17,6 +17,7 @@
 #include "preferences.h"
 #include "libmscore/xml.h"
 #include "paletteBoxButton.h"
+#include "workspace.h"
 
 namespace Ms {
 
@@ -93,11 +94,11 @@ Palette* PaletteBox::newPalette(const QString& name, int slot)
       Palette* p = new Palette;
       p->setReadOnly(false);
       p->setName(name);
-      PaletteBoxButton* b   = new PaletteBoxButton(p);
+      PaletteBoxButton* b = new PaletteBoxButton(p);
       vbox->insertWidget(slot, b);
       vbox->insertWidget(slot+1, p, 1000);
       connect(b, SIGNAL(paletteCmd(int,int)), SLOT(paletteCmd(int,int)));
-      connect(p, SIGNAL(changed()), SLOT(setDirty()));
+      connect(p, SIGNAL(changed()), Workspace::currentWorkspace, SLOT(setDirty()));
       for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
             static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
       return p;
