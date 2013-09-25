@@ -31,6 +31,9 @@ class ImportMidiPanel : public QWidget
       void setPrefferedVisible(bool visible);
       void setMidiPrefOperations(const QString &fileName);
 
+   signals:
+      void closeClicked();
+
    private slots:
       void updateUi();
       void onCurrentTrackChanged(const QModelIndex &currentIndex);

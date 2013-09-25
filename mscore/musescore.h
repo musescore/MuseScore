@@ -220,7 +220,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* tab1;
       ScoreTab* tab2;
       NScrollArea* _navigator;
-      ImportMidiPanel* importmidi_panel;
+      ImportMidiPanel* importmidiPanel;
+      QFrame* importmidiShowPanel;
       QSplitter* mainWindow;
 
       QMenu* menuView;
@@ -449,6 +450,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void switchPlayMode(int);
       void networkFinished(QNetworkReply*);
       void switchLayoutMode(int);
+      void showMidiImportPanel();
 
    public slots:
       virtual void cmd(QAction* a);
