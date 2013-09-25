@@ -1,4 +1,4 @@
-//=============================================================================
+
 //  MuseScore
 //  Music Composition & Notation
 //  $Id: palette.cpp 5576 2012-04-24 19:15:22Z wschweer $
@@ -99,6 +99,25 @@ Palette::~Palette()
 void Palette::resizeEvent(QResizeEvent* e)
       {
       setFixedHeight(heightForWidth(e->size().width()));
+      }
+
+//---------------------------------------------------------
+//   setMoreElements
+//---------------------------------------------------------
+
+void Palette::setMoreElements(bool val)
+      {
+      _moreElements = val;
+      if (val && (cells.isEmpty() || cells.back()->tag != "ShowMore")) {
+            PaletteCell* cell = new PaletteCell;
+            cell->name      = "Show More";
+            cell->tag       = "ShowMore";
+            cells.append(cell);
+            }
+      else if (!val && !cells.isEmpty() && (cells.last()->tag == "ShowMore") ) {
+            PaletteCell* cell = cells.takeLast();
+            delete cell;
+            }
       }
 
 //---------------------------------------------------------
@@ -220,16 +239,19 @@ Element* Palette::element(int idx)
 void Palette::mousePressEvent(QMouseEvent* ev)
       {
       dragStartPosition = ev->pos();
+      int i = idx(dragStartPosition);
+      if (i == -1)
+            return;
       if (_selectable) {
-            int i = idx(dragStartPosition);
-            if (i == -1)
-                  return;
             if (i != selectedIdx) {
                   update(idxRect(i) | idxRect(selectedIdx));
                   selectedIdx = i;
                   }
             emit boxClicked(i);
             }
+      PaletteCell* cell = cells[i];
+      if (cell && (cell->tag == "ShowMore"))
+            emit displayMore(_name);
       }
 
 //---------------------------------------------------------
@@ -389,10 +411,11 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
       {
       if ((currentIdx != -1) && (ev->buttons() & Qt::LeftButton)
          && (ev->pos() - dragStartPosition).manhattanLength() > QApplication::startDragDistance()) {
-            if (cells[currentIdx]) {
+            PaletteCell* cell = cells[currentIdx];
+            if (cell && cell->element) {
                   QDrag* drag = new QDrag(this);
                   QMimeData* mimeData = new QMimeData;
-                  Element* el  = cells[currentIdx]->element;
+                  Element* el  = cell->element;
                   qreal mag    = PALETTE_SPATIUM * extraMag / gscore->spatium();
                   QPointF spos = QPointF(dragStartPosition) / mag;
                   spos        -= QPointF(cells[currentIdx]->x, cells[currentIdx]->y);
@@ -453,8 +476,16 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
             return 0;
             }
       PaletteCell* cell = new PaletteCell;
-      cells.append(cell);
-      return add(cells.size() - 1, s, name, tag, mag);
+      int idx;
+      if (_moreElements) {
+            idx = cells.size()-2;
+            cells.insert(cells.size()-1, cell);
+            }
+      else {
+            cells.append(cell);
+            idx = cells.size() - 1;
+            }
+      return add(idx, s, name, tag, mag);
       }
 
 PaletteCell* Palette::append(SymId symIdx)
@@ -582,12 +613,16 @@ void Palette::paintEvent(QPaintEvent* event)
             if (cells.isEmpty() || cells[idx] == 0)
                   continue;
 
-            if (!cells[idx]->tag.isEmpty()) {
+            QString tag = cells[idx]->tag;
+            if (!tag.isEmpty()) {
                   p.setPen(Qt::darkGray);
                   QFont f(p.font());
                   f.setPointSize(12);
                   p.setFont(f);
-                  p.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, cells[idx]->tag);
+                  if (tag == "ShowMore")
+                        p.drawText(idxRect(idx), Qt::AlignCenter, "???");
+                  else
+                        p.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
                   }
 
             p.setPen(pen);
@@ -880,7 +915,9 @@ void Palette::write(Xml& xml) const
 
       int n = cells.size();
       for (int i = 0; i < n; ++i) {
-            if (cells[i] && cells[i]->readOnly)
+//            if (cells[i] && cells[i]->readOnly)
+//                  continue;
+            if (cells[i] && cells[i]->tag == "ShowMore")
                   continue;
             if (cells[i] == 0 || cells[i]->element == 0) {
                   xml.tagE("Cell");
@@ -1119,57 +1156,45 @@ void Palette::read(XmlReader& e)
             else if (t == "grid")
                   _drawGrid = e.readInt();
             else if (t == "moreElements")
-                  _moreElements = e.readInt();
+                  setMoreElements(e.readInt());
             else if (t == "yoffset")
                   _yOffset = e.readDouble();
             else if (t == "drumPalette")      // obsolete
                   e.skipCurrentElement();
             else if (t == "Cell") {
-                  QString name   = e.attribute("name");
-                  Element* element = 0;
-                  QString tag;
-                  bool   drawStaff = false;
-                  double xoffset = 0.0;
-                  double yoffset = 0.0;
-                  qreal mag   = 1.0;
+                  PaletteCell* cell = new PaletteCell;
+                  cell->name = e.attribute("name");
                   while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
                         if (t == "staff")
-                              drawStaff = e.readInt();
+                              cell->drawStaff = e.readInt();
                         else if (t == "xoffset")
-                              xoffset = e.readDouble();
+                              cell->xoffset = e.readDouble();
                         else if (t == "yoffset")
-                              yoffset = e.readDouble();
+                              cell->yoffset = e.readDouble();
                         else if (t == "mag")
-                              mag = e.readDouble();
+                              cell->mag = e.readDouble();
                         else if (t == "tag")
-                              tag = e.readElementText();
+                              cell->tag = e.readElementText();
                         else {
-                              element = Element::name2Element(t, gscore);
-                              if (element == 0) {
+                              cell->element = Element::name2Element(t, gscore);
+                              if (cell->element == 0) {
                                     e.unknown();
+                                    delete cell;
                                     return;
                                     }
                               else {
-                                    element->read(e);
-                                    if (element->type() == Element::ICON) {
-                                          Icon* icon = static_cast<Icon*>(element);
+                                    cell->element->read(e);
+                                    if (cell->element->type() == Element::ICON) {
+                                          Icon* icon = static_cast<Icon*>(cell->element);
                                           QIcon qicon(getAction(icon->action())->icon());
                                           icon->setAction(icon->action(), qicon);
                                           }
-                                    append(element, name);
                                     }
                               }
                         }
-                  if (!element)
-                        cells.append(new PaletteCell());    // add empty cell
-                  else {
-                        cells.back()->tag       = tag;
-                        cells.back()->drawStaff = drawStaff;
-                        cells.back()->xoffset   = xoffset;
-                        cells.back()->yoffset   = yoffset;
-                        cells.back()->mag       = mag;
-                        }
+                  int idx = _moreElements ? cells.size() - 1 : cells.size();
+                  cells.insert(idx, cell);
                   }
             else
                   e.unknown();
