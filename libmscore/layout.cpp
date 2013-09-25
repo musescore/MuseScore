@@ -596,7 +596,7 @@ void Score::doLayout()
                         Element* e = s->element(track);
                         if (e == 0 || e->generated())
                               continue;
-                        if ((s->segmentType() == Segment::SegKeySig) && st->updateKeymap()) {
+                        if ((s->segmentType() == Segment::SegKeySig)) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);
@@ -832,6 +832,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   }
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
+            else if (keysig && keysig->keySigEvent() != keyIdx)
+                  undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy(), keysig->showNaturals()));
 
             bool needClef = isFirstSystem || styleB(ST_genClef);
             if (needClef) {
