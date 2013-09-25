@@ -1042,16 +1042,16 @@ void Measure::insertStaves(int sStaff, int eStaff)
 
 void Measure::cmdRemoveStaves(int sStaff, int eStaff)
       {
-qDebug("cmdRemoveStaves %d-%d", sStaff, eStaff);
+// qDebug("cmdRemoveStaves %d-%d", sStaff, eStaff);
       int sTrack = sStaff * VOICES;
       int eTrack = eStaff * VOICES;
       for (Segment* s = first(); s; s = s->next()) {
-            qDebug(" seg %d <%s>", s->tick(), s->subTypeName());
+//            qDebug(" seg %d <%s>", s->tick(), s->subTypeName());
             for (int track = eTrack - 1; track >= sTrack; --track) {
                   Element* el = s->element(track);
 //                  if (el && !el->generated()) {
                   if (el) {
-                        qDebug("  remove %s track %d", el->name(), track);
+//                        qDebug("  remove %s track %d", el->name(), track);
                         _score->undoRemoveElement(el);
                         }
                   }
@@ -1149,7 +1149,6 @@ void MStaff::setTrack(int track)
 
 void Measure::insertMStaff(MStaff* staff, int idx)
       {
-printf("insertMStaff %d\n", idx);
       staves.insert(idx, staff);
       for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx)
             staves[staffIdx]->setTrack(staffIdx * VOICES);
@@ -1161,7 +1160,6 @@ printf("insertMStaff %d\n", idx);
 
 void Measure::removeMStaff(MStaff* /*staff*/, int idx)
       {
-printf("removeMStaff %d\n", idx);
       staves.removeAt(idx);
       for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx)
             staves[staffIdx]->setTrack(staffIdx * VOICES);
