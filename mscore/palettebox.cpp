@@ -150,7 +150,9 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                   break;
 
             case PALETTE_NEW:
-                  newPalette(tr("new Palette"), slot);
+                  palette = newPalette(tr("new Palette"), slot);
+                  item   = vbox->itemAt(slot);
+                  b = static_cast<PaletteBoxButton*>(item->widget());
                   // fall through
 
             case PALETTE_EDIT:
@@ -165,6 +167,7 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                   }
                   emit changed();
                   break;
+
             case PALETTE_UP:
                   if (slot) {
                         QLayoutItem* i1 = vbox->itemAt(slot);
