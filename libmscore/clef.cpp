@@ -75,7 +75,8 @@ ClefType ClefInfo::tag2type(const QString& s)
 Clef::Clef(Score* s)
   : Element(s)
       {
-      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF | ELEMENT_MOVABLE);
+//      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF | ELEMENT_MOVABLE);
+      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
 
       _showCourtesy               = true;
       _small                      = false;
