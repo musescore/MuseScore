@@ -16,6 +16,12 @@
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -1039,7 +1045,7 @@
               </property>
               <property name="font">
                <font>
-                <family>DejaVu Serif</family>
+                <family>MS Shell Dlg 2</family>
                </font>
               </property>
               <property name="text">
@@ -1099,8 +1105,13 @@
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Gemshorn
+               <string>Suabile
 8</string>
               </property>
               <property name="checkable">
@@ -1153,9 +1164,14 @@
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Quinta-
-dena 8</string>
+               <string>Gamba
+8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1207,8 +1223,13 @@ dena 8</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Suabile
+               <string>Celeste
 8</string>
               </property>
               <property name="checkable">
@@ -1261,9 +1282,14 @@ dena 8</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Rohrflöte
-8</string>
+               <string>Octave
+4</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1315,9 +1341,14 @@ dena 8</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Dulzflöte
-4</string>
+               <string>Flauto
+Dolce 4</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1369,9 +1400,14 @@ dena 8</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Quintflöte
-2 2/3</string>
+               <string>Super-
+octave 2</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1443,9 +1479,14 @@ dena 8</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Super-
-octave 2</string>
+               <string>Cymbel
+VI</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1497,9 +1538,14 @@ octave 2</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Sifflet
-1</string>
+               <string>Flute
+Cornet V</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1551,9 +1597,14 @@ octave 2</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Cymbel
-VI</string>
+               <string>Fagotto
+16</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1605,8 +1656,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Oboe</string>
+               <string>Oboe
+8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1684,6 +1741,11 @@ VI</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>Tremulant</string>
@@ -1794,12 +1856,12 @@ VI</string>
               </property>
               <property name="font">
                <font>
-                <family>DejaVu Serif</family>
+                <family>MS Shell Dlg 2</family>
                </font>
               </property>
               <property name="text">
-               <string>Rohrflöte
-8</string>
+               <string>Lieblich
+Bourdon 16</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1854,8 +1916,13 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Harmonic
+               <string>Rohr
 Flute 8</string>
               </property>
               <property name="checkable">
@@ -1908,9 +1975,14 @@ Flute 8</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Flauto
-Dolce 4</string>
+               <string>Harmonic
+Flute 8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1961,6 +2033,11 @@ Dolce 4</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>Nasard
@@ -2016,8 +2093,13 @@ Dolce 4</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Ottavina
+               <string>Octavina
 2</string>
               </property>
               <property name="checkable">
@@ -2070,8 +2152,13 @@ Dolce 4</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Tertia
+               <string>Tierce
 1 3/5</string>
               </property>
               <property name="checkable">
@@ -2124,9 +2211,14 @@ Dolce 4</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Sesqui
-altera</string>
+               <string>Larigot
+1 1/3</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2200,11 +2292,12 @@ altera</string>
               </property>
               <property name="font">
                <font>
-                <family>DejaVu Serif</family>
+                <family>MS Shell Dlg 2</family>
                </font>
               </property>
               <property name="text">
-               <string>Septime</string>
+               <string>Sifflet
+1</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2259,8 +2352,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>None</string>
+               <string>Krumhorn
+16</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2312,8 +2411,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Krumhorn</string>
+               <string>Krumhorn
+8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2365,8 +2470,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Melodia</string>
+               <string>Vox
+Humana 8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2444,6 +2555,11 @@ altera</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>Tremulant</string>
@@ -2524,6 +2640,11 @@ altera</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>II+III</string>
@@ -2729,12 +2850,12 @@ altera</string>
               </property>
               <property name="font">
                <font>
-                <family>DejaVu Serif</family>
+                <family>MS Shell Dlg 2</family>
                </font>
               </property>
               <property name="text">
                <string>Principal
-8</string>
+16</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2789,9 +2910,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
                <string>Principal
-4</string>
+8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2843,9 +2969,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Octave
-2</string>
+               <string>Gedact
+8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2897,9 +3028,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Octave
-1</string>
+               <string>Quint
+5 1/3</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2951,9 +3087,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Quint
-5 1/3</string>
+               <string>Octave
+4</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3005,9 +3146,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Quint
-2 2/3</string>
+               <string>Rohr
+Flute 4</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3059,9 +3205,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Tibia
-8</string>
+               <string>Twelfth
+2 2/3</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3113,9 +3264,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Celesta
-8</string>
+               <string>Super-
+octave 2</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3189,12 +3345,12 @@ altera</string>
               </property>
               <property name="font">
                <font>
-                <family>DejaVu Serif</family>
+                <family>MS Shell Dlg 2</family>
                </font>
               </property>
               <property name="text">
-               <string>Flöte
-8</string>
+               <string>Mixture
+V</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3249,9 +3405,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Flöte
-4</string>
+               <string>Mounted
+Cornet V</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3303,9 +3464,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Flöte
-2</string>
+               <string>Sesqui-
+altera II</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3357,9 +3523,14 @@ altera</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Cymbel
-VI</string>
+               <string>Double
+Trumpet 16</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3411,8 +3582,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Mixtur</string>
+               <string>Trumpet
+8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3464,8 +3641,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Trumpet</string>
+               <string>Tromba
+8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3543,6 +3726,11 @@ VI</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>I+II</string>
@@ -3623,6 +3811,11 @@ VI</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>I+III</string>
@@ -3733,12 +3926,12 @@ VI</string>
               </property>
               <property name="font">
                <font>
-                <family>DejaVu Serif</family>
+                <family>MS Shell Dlg 2</family>
                </font>
               </property>
               <property name="text">
                <string>Subbass
-16</string>
+32</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3792,6 +3985,11 @@ VI</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>Principal
@@ -3847,9 +4045,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Principal
-8</string>
+               <string>Bourdon
+16</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3901,9 +4104,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Principal
-4</string>
+               <string>Dulciana
+16</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3955,9 +4163,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Octave
-2</string>
+               <string>Ocatve
+8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4009,9 +4222,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Octave
-1</string>
+               <string>Bass
+Flute 8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4063,9 +4281,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Quint
-5 1/3</string>
+               <string>Super-
+Octave 4</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4117,9 +4340,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Quint
-2 2/3</string>
+               <string>Choral
+Bass 4</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4193,11 +4421,12 @@ VI</string>
               </property>
               <property name="font">
                <font>
-                <family>DejaVu Serif</family>
+                <family>MS Shell Dlg 2</family>
                </font>
               </property>
               <property name="text">
-               <string>Mixtur</string>
+               <string>Mixture
+V</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4252,9 +4481,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Fagott
-16</string>
+               <string>Bombarde
+32</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4305,6 +4539,11 @@ VI</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>Trombone
@@ -4360,9 +4599,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Bombarde
-32</string>
+               <string>Trumpet
+8</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4414,8 +4658,14 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Trumpet</string>
+               <string>Clarion
+4</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4493,6 +4743,11 @@ VI</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>P+I</string>
@@ -4574,6 +4829,11 @@ VI</string>
                 </disabled>
                </palette>
               </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
+              </property>
               <property name="text">
                <string>P+II</string>
               </property>
@@ -4653,6 +4913,11 @@ VI</string>
                  </colorrole>
                 </disabled>
                </palette>
+              </property>
+              <property name="font">
+               <font>
+                <family>MS Shell Dlg 2</family>
+               </font>
               </property>
               <property name="text">
                <string>P+III</string>
