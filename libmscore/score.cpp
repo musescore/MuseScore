@@ -3507,12 +3507,14 @@ void Score::insertTime(int tick, int len)
                         //
                         undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
                        }
-                  else if (tick < s->tick()) {
+                  else if (tick <= s->tick()) {
                         //
                         //  case b:
                         //       +----spanner--------
                         //  +---add---
-                        //
+                        // and
+                        //            +----spanner--------
+                        //  +---add---+
                         undoChangeProperty(s, P_SPANNER_TICK, s->tick() + len);
                         undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
                         }
