@@ -88,7 +88,7 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>60</width>
+            <width>40</width>
             <height>20</height>
            </size>
           </property>
@@ -173,6 +173,15 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="editable">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -182,7 +191,7 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>60</width>
+            <width>40</width>
             <height>20</height>
            </size>
           </property>
