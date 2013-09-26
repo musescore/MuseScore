@@ -1798,7 +1798,8 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                               createEndBar = true;
                         }
 
-                  Fraction f = score->sigmap()->timesig(tick).nominal();
+                  // use nominal time signature of previous measure
+                  Fraction f = score->sigmap()->timesig(tick - 1).nominal();
 
                   Measure* m = static_cast<Measure*>(mb);
                   m->setTimesig(f);
