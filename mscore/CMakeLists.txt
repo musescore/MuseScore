@@ -269,6 +269,7 @@ add_executable ( ${ExecutableName}
       importmidi_meter.cpp importmidi_quant.cpp importmidi_tuplet.cpp importmidi_chord.cpp
       importmidi_data.cpp importmidi_swing.cpp importmidi_fraction.cpp importmidi_drum.cpp
       importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp importmidi_trview.cpp
+      importmidi_inner.cpp
 
       ${OMR_FILES}
       ${AUDIO}

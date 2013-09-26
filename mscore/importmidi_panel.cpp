@@ -9,6 +9,7 @@
 #include "importmidi_opdelegate.h"
 #include "importmidi_data.h"
 #include "importmidi_lyrics.h"
+#include "importmidi_inner.h"
 
 
 namespace Ms {
@@ -118,6 +119,9 @@ void ImportMidiPanel::tweakUi()
                                                              QHeaderView::Stretch);
       ui->treeViewOperations->header()->resizeSection(0, 285);
       ui->treeViewOperations->setAllColumnsShowFocus(true);
+      ui->comboBoxCharset->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
+
+      fillCharsetList();
       }
 
 bool ImportMidiPanel::canImportMidi() const
@@ -205,6 +209,12 @@ void ImportMidiPanel::doMidiImport()
             }
 
       setMidiPrefOperations(trackData);
+                  // update charset
+      preferences.midiImportOperations.midiData().setCharset(
+                        midiFile, ui->comboBoxCharset->currentText());
+      tracksModel->forceColumnDataChanged(TrackCol::STAFF_NAME);
+      tracksModel->forceColumnDataChanged(TrackCol::LYRICS);
+
       mscore->openScore(midiFile);
       clearMidiPrefOperations();
       preferences.midiImportOperations.midiData().setTracksData(midiFile, trackData);
@@ -274,7 +284,7 @@ void ImportMidiPanel::showOrHideStaffNameCol(const QList<TrackMeta> &tracksMeta)
       {
       bool emptyName = true;
       for (const auto &meta: tracksMeta) {
-            if (!meta.staffName.isEmpty()) {
+            if (!meta.staffName.empty()) {
                   emptyName = false;
                   break;
                   }
@@ -298,6 +308,27 @@ void ImportMidiPanel::showOrHideLyricsCol(const QList<TrackData> &tracksData)
             ui->tableViewTracks->horizontalHeader()->showSection(TrackCol::LYRICS);
       else
             ui->tableViewTracks->horizontalHeader()->hideSection(TrackCol::LYRICS);
+      }
+
+void ImportMidiPanel::fillCharsetList()
+      {
+      QFontMetrics fm(ui->comboBoxCharset->font());
+
+      ui->comboBoxCharset->clear();
+      QList<QByteArray> charsets = QTextCodec::availableCodecs();
+      qSort(charsets.begin(), charsets.end());
+      int idx = 0;
+      int maxWidth = 0;
+      for (const auto &charset: charsets) {
+            ui->comboBoxCharset->addItem(charset);
+            if (charset == MidiCharset::defaultCharset())
+                  ui->comboBoxCharset->setCurrentIndex(idx);
+            int newWidth = fm.width(charset);
+            if (newWidth > maxWidth)
+                  maxWidth = newWidth;
+            ++idx;
+            }
+      ui->comboBoxCharset->view()->setMinimumWidth(maxWidth);
       }
 
 void ImportMidiPanel::setMidiFile(const QString &fileName)
@@ -332,6 +363,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   tracksModel->setLyricsList(MidiLyrics::makeLyricsList());
                   restoreTableViewState(fileName);
                   }
+            ui->comboBoxCharset->setCurrentText(preferences.midiImportOperations.charset());
             ui->tableViewTracks->selectRow(
                               preferences.midiImportOperations.midiData().selectedRow(midiFile));
             }
