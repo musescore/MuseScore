@@ -2391,7 +2391,7 @@ Score::FileError importOve(Score* score, const QString& name) {
 
 	oveFile.close();
 
-	oveSong.setTextCodecName(preferences.importCharset);
+	oveSong.setTextCodecName(preferences.importCharsetOve);
 	oveLoader->setOve(&oveSong);
 	oveLoader->setFileStream((unsigned char*) buffer.data(), buffer.size());
 	bool result = oveLoader->load();

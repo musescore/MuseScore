@@ -74,6 +74,8 @@ class GuitarPro {
       QFile* f;
       int curPos;
 
+      QTextCodec* _codec;
+
       void skip(qint64 len);
       void read(void* p, qint64 len);
       int readUChar();
