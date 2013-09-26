@@ -8060,7 +8060,7 @@
             </Instrument>
             <Instrument id="electric-guitar-tablature">
                   <trackName>Electric Guitar [Tablature]</trackName>
-                  <init>electric-guitar-strung</init>
+                  <init>electric-guitar</init>
                   <description>Electric Guitar (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
                   <clef>TAB</clef>
