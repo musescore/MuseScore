@@ -212,6 +212,8 @@ bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          ) {
             return true;
             }
+      if(type == REPEAT_MEASURE && durationType().type() == TDuration::V_MEASURE)
+            return true;
       return false;
       }
 
@@ -254,6 +256,12 @@ Element* Rest::drop(const DropData& data)
                         }
                   delete e;
                   }
+                  break;
+            case REPEAT_MEASURE:
+                  delete e;
+                  if (durationType().type() == TDuration::V_MEASURE) {
+                        measure()->cmdInsertRepeatMeasure(staffIdx());
+                        }
                   break;
             default:
                   return ChordRest::drop(data);
