@@ -37,10 +37,11 @@ struct OttavaDefault {
       const char* name;
       };
 
+// order is important, should be the same than OttavaType
 static const OttavaDefault ottavaDefault[] = {
       { octave8va,  octave8,  QPointF(0.0, .7),    1.0, Element::ABOVE,  12, "8va"  },
-      { octave15ma, octave15, QPointF(0.0, .7),    1.0, Element::ABOVE,  24, "15ma" },
       { octave8vb,  octave8,  QPointF(0.0, -1.0), -1.0, Element::BELOW, -12, "8vb"  },
+      { octave15ma, octave15, QPointF(0.0, .7),    1.0, Element::ABOVE,  24, "15ma" },
       { octave15mb, octave15, QPointF(0.0, -1.0), -1.0, Element::BELOW, -24, "15mb" },
       { octave22ma, octave22, QPointF(0.0, .7),    1.0, Element::ABOVE,  36, "22ma" },
       { octave22mb, octave22, QPointF(0.0, -1.0), -1.0, Element::BELOW, -36, "22mb" }
