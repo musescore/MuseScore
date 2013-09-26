@@ -3,6 +3,7 @@
 
 #include "midi/midifile.h"
 #include "importmidi_fraction.h"
+#include "importmidi_inner.h"
 
 
 namespace Ms {
@@ -25,8 +26,11 @@ class MidiData
       const MidiFile *midiFile(const QString &fileName) const;
                   // lyrics
       void addTrackLyrics(const QString &fileName,
-                          const std::multimap<ReducedFraction, QString> &trackLyrics);
-      const QList<std::multimap<ReducedFraction, QString> >* getLyrics(const QString &fileName);
+                          const std::multimap<ReducedFraction,  std::string> &trackLyrics);
+      const QList<std::multimap<ReducedFraction, std::string> > *
+            getLyrics(const QString &fileName);
+      QString charset(const QString &fileName) const;
+      void setCharset(const QString &fileName, const QString &charset);
 
    private:
       struct MidiDataStore
@@ -35,9 +39,10 @@ class MidiData
             QByteArray VHeaderData;
             QList<TrackData> tracksData;
                         // tracks of <tick, lyric fragment> from karaoke files
-            QList<std::multimap<ReducedFraction, QString>> lyricTracks;
+            QList<std::multimap<ReducedFraction, std::string>> lyricTracks;
             int selectedRow = 0;
             MidiFile midiFile;
+            QString charset = MidiCharset::defaultCharset();
             };
       QMap<QString, MidiDataStore> data;    // <file name, tracks data>
       };
