@@ -40,6 +40,7 @@ class TieMap;
 class AccidentalState;
 class Spanner;
 class Part;
+class RepeatMeasure;
 
 //---------------------------------------------------------
 //   MStaff
@@ -248,6 +249,8 @@ class Measure : public MeasureBase {
       QColor endBarLineColor() const            { return _endBarLineColor;     }
 
       void cmdRemoveEmptySegment(Segment* s);
+      RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx);
+
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       void createVoice(int track);
       void adjustToLen(Fraction);

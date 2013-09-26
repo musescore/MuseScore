@@ -1488,39 +1488,8 @@ qDebug("drop staffList");
             case REPEAT_MEASURE:
                   {
                   delete e;
-                  //
-                  // see also cmdDeleteSelection()
-                  //
-                  _score->select(0, SELECT_SINGLE, 0);
-                  for (Segment* s = first(); s; s = s->next()) {
-                        if (s->segmentType() & Segment::SegChordRest) {
-                              int strack = staffIdx * VOICES;
-                              int etrack = strack + VOICES;
-                              for (int track = strack; track < etrack; ++track) {
-                                    Element* el = s->element(track);
-                                    if (el)
-                                          _score->undoRemoveElement(el);
-                                    }
-                              if (s->isEmpty())
-                                    _score->undoRemoveElement(s);
-                              }
-                        }
-                  //
-                  // add repeat measure
-                  //
-
-                  Segment* seg = undoGetSegment(Segment::SegChordRest, tick());
-                  RepeatMeasure* rm = new RepeatMeasure(_score);
-                  rm->setTrack(staffIdx * VOICES);
-                  rm->setParent(seg);
-                  _score->undoAddElement(rm);
-                  foreach(Element* el, _el) {
-                        if (el->type() == SLUR && el->staffIdx() == staffIdx)
-                              _score->undoRemoveElement(el);
-                        }
-                  return rm;
+                  return cmdInsertRepeatMeasure(staffIdx);
                   }
-
             case ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
@@ -1557,6 +1526,43 @@ void Measure::cmdRemoveEmptySegment(Segment* s)
       {
       if (s->isEmpty())
             _score->undoRemoveElement(s);
+      }
+
+//---------------------------------------------------------
+//   cmdInsertRepeatMeasure
+//---------------------------------------------------------
+RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
+      {
+      //
+      // see also cmdDeleteSelection()
+      //
+      _score->select(0, SELECT_SINGLE, 0);
+      for (Segment* s = first(); s; s = s->next()) {
+            if (s->segmentType() & Segment::SegChordRest) {
+                  int strack = staffIdx * VOICES;
+                  int etrack = strack + VOICES;
+                  for (int track = strack; track < etrack; ++track) {
+                        Element* el = s->element(track);
+                        if (el)
+                              _score->undoRemoveElement(el);
+                        }
+                  if (s->isEmpty())
+                        _score->undoRemoveElement(s);
+                  }
+            }
+      //
+      // add repeat measure
+      //
+      Segment* seg = undoGetSegment(Segment::SegChordRest, tick());
+      RepeatMeasure* rm = new RepeatMeasure(_score);
+      rm->setTrack(staffIdx * VOICES);
+      rm->setParent(seg);
+      _score->undoAddElement(rm);
+      foreach(Element* el, _el) {
+            if (el->type() == SLUR && el->staffIdx() == staffIdx)
+                  _score->undoRemoveElement(el);
+            }
+      return rm;
       }
 
 //---------------------------------------------------------
