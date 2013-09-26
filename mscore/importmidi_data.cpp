@@ -75,18 +75,34 @@ const MidiFile* MidiData::midiFile(const QString &fileName) const
       }
 
 void MidiData::addTrackLyrics(const QString &fileName,
-                              const std::multimap<ReducedFraction, QString> &trackLyrics)
+                              const std::multimap<ReducedFraction, std::string> &trackLyrics)
       {
       data[fileName].lyricTracks.push_back(trackLyrics);
       }
 
-const QList<std::multimap<ReducedFraction, QString> >*
+const QList<std::multimap<ReducedFraction, std::string> >*
 MidiData::getLyrics(const QString &fileName)
       {
       const auto it = data.find(fileName);
       if (it == data.end())
             return nullptr;
       return &it.value().lyricTracks;
+      }
+
+QString MidiData::charset(const QString &fileName) const
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return "";
+      return it.value().charset;
+      }
+
+void MidiData::setCharset(const QString &fileName, const QString &charset)
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return;
+      it.value().charset = charset;
       }
 
 } // namespace Ms
