@@ -30,9 +30,10 @@ ExampleView::ExampleView(QWidget* parent)
       _score = 0;
       setAcceptDrops(true);
       setFocusPolicy(Qt::StrongFocus);
-      double mag = preferences.mag;
-      _matrix    = QTransform(mag, 0.0, 0.0, mag, 10.0, -45.0);
-      imatrix    = _matrix.inverted();
+      double mag = 1.0;
+      qreal _spatium = SPATIUM20 * MScore::DPI;
+      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 6);
+      imatrix  = _matrix.inverted();
       }
 
 void ExampleView::layoutChanged()
