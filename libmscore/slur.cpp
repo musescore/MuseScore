@@ -1084,6 +1084,9 @@ void Slur::layout()
             layoutChord();
             return;
             }
+      if (track2() == -1)
+            setTrack2(tick());
+
       qreal _spatium = spatium();
 
       if (score() == gscore || tick() == -1) {
@@ -1113,8 +1116,8 @@ void Slur::layout()
             }
 
       if (startCR() == 0 || endCR() == 0) {
-            qDebug("Slur::layout(): id %d  track %d %p %p %d-%d null anchor",
-               id(), track(), startCR(), endCR(), tick(), tick2());
+            qDebug("Slur::layout(): id %d  track %d-%d  %p - %p tick %d-%d null anchor",
+               id(), track(), track2(), startCR(), endCR(), tick(), tick2());
             return;
             }
       switch (_slurDirection) {
