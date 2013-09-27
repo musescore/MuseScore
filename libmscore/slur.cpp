@@ -1025,8 +1025,8 @@ void Slur::read(XmlReader& e)
       setId(e.intAttribute("id"));
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "track2")                // obsolete
-                  e.readInt();
+            if (tag == "track2")
+                  setTrack2(e.readInt());
             else if (tag == "startTrack")       // obsolete
                   setTrack(e.readInt());
             else if (tag == "endTrack")         // obsolete
