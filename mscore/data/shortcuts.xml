@@ -824,6 +824,10 @@
     <seq>Q</seq>
     </SC>
   <SC>
+    <key>rest-TAB</key>
+    <seq>'</seq>
+    </SC>
+  <SC>
     <key>string-above</key>
     <seq>Up</seq>
     </SC>
@@ -874,13 +878,14 @@
   <SC>
     <key>fret-8</key>
     <seq>8</seq>
-    <seq>J</seq>
+    <seq>I</seq>
     </SC>
   <SC>
     <key>fret-9</key>
     <seq>9</seq>
     <seq>K</seq>
     </SC>
+<!-- HARMONY / FIGURED BASS specific shortcuts -->
   <SC>
     <key>advance-longa</key>
     <seq>Ctrl+9</seq>
