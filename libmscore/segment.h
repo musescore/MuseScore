@@ -113,8 +113,11 @@ class Segment : public Element {
       Q_INVOKABLE Ms::Segment* next1() const;
       Ms::Segment* next1MM() const;
       Segment* next1(SegmentTypes) const;
+      Segment* next1MM(SegmentTypes) const;
       Q_INVOKABLE Ms::Segment* prev1() const;
+      Ms::Segment* prev1MM() const;
       Segment* prev1(SegmentTypes) const;
+      Segment* prev1MM(SegmentTypes) const;
 
       Segment* nextCR(int track = -1) const;
 

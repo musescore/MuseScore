@@ -2360,7 +2360,14 @@ void Score::cmd(const QAction* a)
             Element* e = selection().element();
             if (e && e->type() == Element::BAR_LINE && e->parent()->type() == Element::SEGMENT) {
                   Measure* measure = static_cast<Measure*>(e->parent()->parent());
-                  measure->undoSetBreak(!measure->lineBreak(), type);
+                  if (measure->isMMRest()) {
+                        // if measure is mm rest, then propagate to last original measure
+                        measure = measure->nextMeasure();
+                        if (measure)
+                              measure = measure->prevMeasure();
+                        }
+                  if (measure)
+                        measure->undoSetBreak(!measure->lineBreak(), type);
                   }
             }
       else if (cmd == "reset-stretch")

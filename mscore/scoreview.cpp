@@ -1943,7 +1943,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             double x1;
 
             for (Segment* s = ss; s && (s != es);) {
-                  Segment* ns = s->next1();
+                  Segment* ns = s->next1MM();
                   system1  = system2;
                   system2  = s->measure()->system();
                   pt       = s->pagePos();

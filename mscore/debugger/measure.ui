@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
-    <height>532</height>
+    <width>631</width>
+    <height>549</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -266,7 +266,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true">MultiMeasure:</string>
+           <string notr="true">mmRestCount</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -274,7 +274,7 @@
          </widget>
         </item>
         <item row="3" column="5">
-         <widget class="QSpinBox" name="multiMeasure">
+         <widget class="QSpinBox" name="mmRestCount">
           <property name="minimum">
            <number>-2</number>
           </property>
@@ -331,7 +331,16 @@
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <property name="spacing">
@@ -429,6 +438,13 @@
          <widget class="QCheckBox" name="breakMMRest">
           <property name="text">
            <string notr="true">breakMMRest</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QPushButton" name="mmRest">
+          <property name="text">
+           <string notr="true">mmRest</string>
           </property>
          </widget>
         </item>

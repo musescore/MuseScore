@@ -131,6 +131,8 @@ class Measure : public MeasureBase {
 
       Measure* _mmRest;       // multi measure rest which replaces a measure range
       int _mmRestCount;       // > 0 if this is a multi measure rest
+                              // 0 if this is the start of a mm rest (_mmRest != 0)
+                              // < 0 if this measure is covered by a mm rest
 
       void push_back(Segment* e);
       void push_front(Segment* e);
@@ -288,7 +290,7 @@ class Measure : public MeasureBase {
       virtual QVariant propertyDefault(P_ID) const override;
 
       bool hasMMRest() const        { return _mmRest != 0; }
-      bool isMMRest() const         { return _mmRestCount != 0; }
+      bool isMMRest() const         { return _mmRestCount > 0; }
       Measure* mmRest() const       { return _mmRest;      }
       void setMMRest(Measure* m)    { _mmRest = m;         }
       int mmRestCount() const       { return _mmRestCount; }    // number of measures _mmRest spans

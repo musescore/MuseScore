@@ -1261,6 +1261,23 @@ void Score::deleteItem(Element* el)
                   undoRemoveBracket(static_cast<Bracket*>(el));
                   break;
 
+            case Element::LAYOUT_BREAK:
+                  {
+                  undoRemoveElement(el);
+                  LayoutBreak* lb = static_cast<LayoutBreak*>(el);
+                  Measure* m = lb->measure();
+                  if (m->isMMRest()) {
+                        m = static_cast<Measure*>(m->next()->prev());
+                        foreach(Element* e, *m->el()) {
+                              if (e->type() == Element::LAYOUT_BREAK) {
+                                    undoRemoveElement(e);
+                                    break;
+                                    }
+                              }
+                        }
+                  }
+                  break;
+
             default:
                   undoRemoveElement(el);
                   break;
