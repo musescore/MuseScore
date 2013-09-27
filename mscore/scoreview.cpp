@@ -2709,7 +2709,7 @@ void ScoreView::cmd(const QAction* a)
                   updateAll();
                   }
             }
-      else if (cmd == "rest")
+      else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
       else if (cmd == "rest-1")
             cmdEnterRest(TDuration(TDuration::V_WHOLE));
