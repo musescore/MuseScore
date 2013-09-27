@@ -70,6 +70,7 @@ class MeasureBase : public Element {
       Q_INVOKABLE Ms::Measure* nextMeasure() const;
       Q_INVOKABLE Ms::Measure* prevMeasure() const;
       Ms::Measure* nextMeasureMM() const;
+      Ms::Measure* prevMeasureMM() const;
 
       virtual int ticks() const              { return 0;       }
       virtual void write(Xml&, int, bool) const = 0;
