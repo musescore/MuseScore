@@ -216,6 +216,31 @@ Measure* MeasureBase::prevMeasure() const
       }
 
 //---------------------------------------------------------
+//   prevMeasure
+//---------------------------------------------------------
+
+Measure* MeasureBase::prevMeasureMM() const
+      {
+      MeasureBase* m = prev();
+      while (m) {
+            if (m->type() == MEASURE) {
+                  Measure* mm = static_cast<Measure*>(m);
+                  if (score()->styleB(ST_createMultiMeasureRests)) {
+                        if (mm->mmRestCount() >= 0) {
+                              if (mm->hasMMRest())
+                                    return mm->mmRest();
+                              return mm;
+                              }
+                        }
+                  else
+                        return mm;
+                  }
+            m = m->prev();
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   pause
 //---------------------------------------------------------
 

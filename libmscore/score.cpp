@@ -2857,7 +2857,8 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   int etick = tick + m->ticks();
                   if (_selection.state() == SEL_NONE) {
                         _selection.setStartSegment(m->tick2segment(tick));
-                        _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                        // _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                        _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                         }
                   else {
                         select(0, SELECT_SINGLE, 0);
@@ -2897,7 +2898,8 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         _selection.setStaffStart(staffIdx);
                         _selection.setStaffEnd(staffIdx + 1);
                         _selection.setStartSegment(m->tick2segment(tick));
-                        _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                        // _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                        _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                         }
                   else if (_selection.state() == SEL_RANGE) {
                         if (staffIdx < _selection.staffStart())
@@ -2909,14 +2911,16 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               activeIsFirst = true;
                               }
                         else if (etick >= _selection.tickEnd())
-                              _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                              //_selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                              _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                         else {
                               if (_selection.activeSegment() == _selection.startSegment()) {
                                     _selection.setStartSegment(m->tick2segment(tick));
                                     activeIsFirst = true;
                                     }
                               else
-                                    _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                                    //_selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                                    _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                               }
                         }
                   else if (_selection.isSingle()) {
@@ -2943,9 +2947,9 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               if (el && el->isChordRest())
                                     break;
                               if (reverse)
-                                    seg = seg->prev1();
+                                    seg = seg->prev1MM();
                               else
-                                    seg = seg->next1();
+                                    seg = seg->next1MM();
                               if (!seg)
                                     break;
                               }
