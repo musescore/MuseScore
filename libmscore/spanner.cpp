@@ -22,6 +22,7 @@ namespace Ms {
 
 int Spanner::editTick;
 int Spanner::editTick2;
+int Spanner::editTrack2;
 QList<QPointF> Spanner::userOffsets2;
 QList<QPointF> Spanner::userOffsets;
 
@@ -230,6 +231,8 @@ void Spanner::startEdit(MuseScoreView*, const QPointF&)
       {
       editTick  = _tick;
       editTick2 = _tick2;
+      editTrack2 = _track2;
+
       userOffsets.clear();
       userOffsets2.clear();
       foreach (SpannerSegment* ss, spannerSegments()) {
@@ -244,9 +247,10 @@ void Spanner::startEdit(MuseScoreView*, const QPointF&)
 
 void Spanner::endEdit()
       {
-      if (editTick != tick() || editTick2 != tick2()) {
+      if (editTick != tick() || editTick2 != tick2() || editTrack2 != track2()) {
             score()->undoPropertyChanged(this, P_SPANNER_TICK, editTick);
             score()->undoPropertyChanged(this, P_SPANNER_TICK2, editTick2);
+            score()->undoPropertyChanged(this, P_SPANNER_TRACK2, editTrack2);
             score()->rebuildBspTree();
             }
 
@@ -285,6 +289,8 @@ QVariant Spanner::getProperty(P_ID propertyId) const
                   return tick();
             case P_SPANNER_TICK2:
                   return tick2();
+            case P_SPANNER_TRACK2:
+                  return track2();
             default:
                   break;
             }
@@ -303,6 +309,9 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_SPANNER_TICK2:
                   setTick2(v.toInt());
+                  break;
+            case P_SPANNER_TRACK2:
+                  setTrack2(v.toInt());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -344,7 +353,6 @@ ChordRest* Score::findCR(int tick, int track) const
 
 void Spanner::computeStartElement()
       {
-//      _startElement = 0;
       switch (_anchor) {
             case ANCHOR_SEGMENT:
                   _startElement = score()->findCR(tick(), track());
@@ -366,10 +374,9 @@ void Spanner::computeStartElement()
 
 void Spanner::computeEndElement()
       {
-//      _endElement = 0;
       switch (_anchor) {
             case ANCHOR_SEGMENT:
-                  _endElement = score()->findCR(tick2(), track());
+                  _endElement = score()->findCR(tick2(), track2());
                   break;
 
             case ANCHOR_MEASURE:
