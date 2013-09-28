@@ -2461,7 +2461,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL,
          A_CMD,
          "toggle-mmrest",
-         QT_TRANSLATE_NOOP("action","toggle create multi measure rest"),
+         QT_TRANSLATE_NOOP("action","toggle create multi measure rest")
          ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)

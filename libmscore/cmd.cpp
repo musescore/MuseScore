@@ -2388,6 +2388,10 @@ void Score::cmd(const QAction* a)
             transposeSemitone(1);
       else if (cmd == "transpose-down")
             transposeSemitone(-1);
+      else if (cmd == "toggle-mmrest") {
+            bool val = !styleB(ST_createMultiMeasureRests);
+            undo(new ChangeStyleVal(this, ST_createMultiMeasureRests, val));
+            }
       else
             qDebug("1unknown cmd <%s>", qPrintable(cmd));
       }

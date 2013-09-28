@@ -2503,6 +2503,18 @@ void ChangeStyle::flip()
       }
 
 //---------------------------------------------------------
+//   ChangeStyleVal::flip
+//---------------------------------------------------------
+
+void ChangeStyleVal::flip()
+      {
+      QVariant v = score->style(idx);
+      score->style()->set(idx, value);
+      score->setLayoutAll(true);
+      value = v;
+      }
+
+//---------------------------------------------------------
 //   ChangeChordStaffMove
 //---------------------------------------------------------
 
