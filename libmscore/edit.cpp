@@ -1105,7 +1105,7 @@ void Score::cmdFlip()
 
 void Score::deleteItem(Element* el)
       {
-      if(!el)
+      if (!el)
             return;
       switch(el->type()) {
             case Element::INSTRUMENT_NAME: {
@@ -1249,6 +1249,7 @@ void Score::deleteItem(Element* el)
                         }
                   }
                   break;
+
             case Element::TUPLET:
                   cmdDeleteTuplet(static_cast<Tuplet*>(el), true);
                   break;
@@ -1267,6 +1268,7 @@ void Score::deleteItem(Element* el)
                   LayoutBreak* lb = static_cast<LayoutBreak*>(el);
                   Measure* m = lb->measure();
                   if (m->isMMRest()) {
+                        // propagate to original measure
                         m = static_cast<Measure*>(m->next()->prev());
                         foreach(Element* e, *m->el()) {
                               if (e->type() == Element::LAYOUT_BREAK) {
@@ -1274,6 +1276,21 @@ void Score::deleteItem(Element* el)
                                     break;
                                     }
                               }
+                        }
+                  }
+                  break;
+
+            case Element::CLEF:
+                  {
+                  undoRemoveElement(el);
+                  Clef* clef = static_cast<Clef*>(el);
+                  Measure* m = clef->measure();
+                  if (m->isMMRest()) {
+                        // propagate to original measure
+                        m = static_cast<Measure*>(m->next()->prev());
+                        Segment* s = m->findSegment(Segment::SegClef, clef->segment()->tick());
+                        if (s && s->element(clef->track()))
+                              undoRemoveElement(s->element(clef->track()));
                         }
                   }
                   break;

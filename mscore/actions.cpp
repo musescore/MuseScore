@@ -2457,6 +2457,12 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Add brackets to notehead"),
          brackets_ICON
          ),
+      Shortcut(
+         STATE_NORMAL,
+         A_CMD,
+         "toggle-mmrest",
+         QT_TRANSLATE_NOOP("action","toggle create multi measure rest"),
+         ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)
       };
