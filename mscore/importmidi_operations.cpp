@@ -47,6 +47,11 @@ TrackOperations MidiImportOperations::trackOperations(int trackIndex) const
       return operations_[trackIndex];
       }
 
+QString MidiImportOperations::charset() const
+      {
+      return midiData_.charset(currentMidiFile_);
+      }
+
 void MidiImportOperations::adaptForPercussion(int trackIndex)
       {
                   // small hack: don't use multiple voices for tuplets
@@ -54,12 +59,12 @@ void MidiImportOperations::adaptForPercussion(int trackIndex)
             operations_[trackIndex].useMultipleVoices = false;
       }
 
-void MidiImportOperations::addTrackLyrics(const std::multimap<ReducedFraction, QString> &trackLyrics)
+void MidiImportOperations::addTrackLyrics(const std::multimap<ReducedFraction, std::string> &trackLyrics)
       {
       midiData_.addTrackLyrics(currentMidiFile_, trackLyrics);
       }
 
-const QList<std::multimap<ReducedFraction, QString>>*
+const QList<std::multimap<ReducedFraction, std::string>>*
 MidiImportOperations::getLyrics()
       {
       return midiData_.getLyrics(currentMidiFile_);
