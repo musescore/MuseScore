@@ -41,6 +41,7 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/segment.h"
 #include "libmscore/rehearsalmark.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -76,6 +77,7 @@ GuitarPro::GuitarPro(Score* s, int v)
       {
       score   = s;
       version = v;
+      _codec = QTextCodec::codecForName(preferences.importCharsetGP.toLatin1());
       }
 
 GuitarPro::~GuitarPro()
@@ -142,7 +144,10 @@ QString GuitarPro::readPascalString(int n)
       read(s, l);
       s[l] = 0;
       skip(n - l);
-      return QString(s);
+      if(_codec)
+            return _codec->toUnicode(s);
+      else
+            return QString(s);
       }
 
 //---------------------------------------------------------
@@ -155,7 +160,10 @@ QString GuitarPro::readWordPascalString()
       char c[l+1];
       read(c, l);
       c[l] = 0;
-      return QString::fromLocal8Bit(c);
+      if(_codec)
+            return _codec->toUnicode(c);
+      else
+            return QString::fromLocal8Bit(c);
       }
 
 //---------------------------------------------------------
@@ -168,7 +176,10 @@ QString GuitarPro::readBytePascalString()
       char c[l+1];
       read(c, l);
       c[l] = 0;
-      return QString::fromLocal8Bit(c);
+      if(_codec)
+            return  _codec->toUnicode(c);
+      else
+            return QString::fromLocal8Bit(c);
       }
 
 //---------------------------------------------------------
@@ -186,7 +197,10 @@ QString GuitarPro::readDelphiString()
       char c[l + 1];
       read(c, l);
       c[l] = 0;
-      return QString::fromLatin1(c);
+      if(_codec)
+            return  _codec->toUnicode(c);
+      else
+            return QString::fromLatin1(c);
       }
 
 //---------------------------------------------------------

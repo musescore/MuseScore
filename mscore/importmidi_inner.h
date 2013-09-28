@@ -98,6 +98,14 @@ struct TupletInfo
       };
 
 } // namespace MidiTuplet
+
+namespace MidiCharset {
+
+QString convertToCharset(const std::string &text);
+QString defaultCharset();
+std::string fromUchar(const uchar *text);
+
+} // namespace MidiCharset
 } // namespace Ms
 
 

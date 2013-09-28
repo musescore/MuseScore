@@ -2264,6 +2264,14 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NOTE_ENTRY_TAB,
          0,
+         "rest-TAB",
+         QT_TRANSLATE_NOOP("action","Rest (TAB)"),
+         QT_TRANSLATE_NOOP("action","Enter rest (TAB)"),
+         quartrest_ICON
+         ),
+      Shortcut(
+         STATE_NOTE_ENTRY_TAB,
+         0,
          "pad-rest-TAB",
          QT_TRANSLATE_NOOP("action","Rest (TAB)"),
          QT_TRANSLATE_NOOP("action","Note entry: rest (TAB)")
@@ -2448,6 +2456,12 @@ Shortcut Shortcut::sc[] = {
          "add-brackets",
          QT_TRANSLATE_NOOP("action","Add brackets to notehead"),
          brackets_ICON
+         ),
+      Shortcut(
+         STATE_NORMAL,
+         A_CMD,
+         "toggle-mmrest",
+         QT_TRANSLATE_NOOP("action","toggle create multi measure rest")
          ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)

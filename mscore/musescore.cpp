@@ -431,7 +431,7 @@ MuseScore::MuseScore()
       _fullscreen           = false;
       lastCmd               = 0;
       lastShortcut          = 0;
-      importmidi_panel      = 0;
+      importmidiPanel      = 0;
 
       if (!preferences.styleName.isEmpty()) {
             QFile f(preferences.styleName);
@@ -539,16 +539,27 @@ MuseScore::MuseScore()
       QSplitter* envelope = new QSplitter;
       envelope->setChildrenCollapsible(false);
       envelope->setOrientation(Qt::Vertical);
-
-      QLayout* envlayout = new QVBoxLayout;
-      envlayout->setMargin(0);
-      envlayout->setSpacing(0);
       envelope->addWidget(mainWindow);
 
-      importmidi_panel = new ImportMidiPanel(this);
-      importmidi_panel->setVisible(false);
+      importmidiPanel = new ImportMidiPanel(this);
+      importmidiPanel->setVisible(false);
+      envelope->addWidget(importmidiPanel);
 
-      envelope->addWidget(importmidi_panel);
+      {
+      importmidiShowPanel = new QFrame;
+      QHBoxLayout *hl = new QHBoxLayout;
+      hl->setMargin(0);
+      hl->setSpacing(0);
+      importmidiShowPanel->setLayout(hl);
+      QPushButton *b = new QPushButton("Show MIDI import panel");
+      importmidiShowPanel->setVisible(false);
+      connect(b, SIGNAL(clicked()), SLOT(showMidiImportPanel()));
+      connect(importmidiPanel, SIGNAL(closeClicked()), importmidiShowPanel, SLOT(show()));
+      hl->addWidget(b);
+      QSpacerItem *item = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
+      hl->addSpacerItem(item);
+      envelope->addWidget(importmidiShowPanel);
+      }
 
       {
       QList<int> sizes;
@@ -1554,30 +1565,40 @@ void MuseScore::midiPanelOnSwitchToFile(const QString &file)
       {
       bool isMidiFile = ImportMidiPanel::isMidiFile(file);
       if (isMidiFile) {
-            importmidi_panel->setMidiFile(file);
-            if (importmidi_panel->prefferedVisible())
-                  importmidi_panel->setVisible(true);
+            importmidiPanel->setMidiFile(file);
+            if (importmidiPanel->prefferedVisible())
+                  importmidiPanel->setVisible(true);
             }
       else
-            importmidi_panel->setVisible(false);
+            importmidiPanel->setVisible(false);
+      importmidiShowPanel->setVisible(!importmidiPanel->prefferedVisible() && isMidiFile);
       }
 
 void MuseScore::midiPanelOnCloseFile(const QString &file)
       {
       if (ImportMidiPanel::isMidiFile(file))
-            importmidi_panel->excludeMidiFile(file);
+            importmidiPanel->excludeMidiFile(file);
       }
 
 void MuseScore::allowShowMidiPanel(const QString &file)
       {
       if (ImportMidiPanel::isMidiFile(file))
-            importmidi_panel->setPrefferedVisible(true);
+            importmidiPanel->setPrefferedVisible(true);
       }
 
 void MuseScore::setMidiPrefOperations(const QString &file)
       {
       if (ImportMidiPanel::isMidiFile(file))
-            importmidi_panel->setMidiPrefOperations(file);
+            importmidiPanel->setMidiPrefOperations(file);
+      }
+
+void MuseScore::showMidiImportPanel()
+      {
+      importmidiPanel->setPrefferedVisible(true);
+      QString fileName = cs ? cs->fileInfo()->filePath() : "";
+      if (ImportMidiPanel::isMidiFile(fileName))
+            importmidiPanel->setVisible(true);
+      importmidiShowPanel->hide();
       }
 
 
@@ -2409,10 +2430,10 @@ void MuseScore::changeState(ScoreState val)
 //            return;
       static const char* stdNames[] = {
             "note-longa", "note-breve", "pad-note-1", "pad-note-2", "pad-note-4",
-            "pad-note-8", "pad-note-16", "pad-note-32", "pad-note-64", "pad-note-128", "pad-rest"};
+      "pad-note-8", "pad-note-16", "pad-note-32", "pad-note-64", "pad-note-128", "pad-rest", "rest"};
       static const char* tabNames[] = {
             "note-longa-TAB", "note-breve-TAB", "pad-note-1-TAB", "pad-note-2-TAB", "pad-note-4-TAB",
-            "pad-note-8-TAB", "pad-note-16-TAB", "pad-note-32-TAB", "pad-note-64-TAB", "pad-note-128-TAB", "pad-rest-TAB"};
+      "pad-note-8-TAB", "pad-note-16-TAB", "pad-note-32-TAB", "pad-note-64-TAB", "pad-note-128-TAB", "pad-rest-TAB", "rest-TAB"};
       bool intoTAB = (_sstate != STATE_NOTE_ENTRY_TAB) && (val == STATE_NOTE_ENTRY_TAB);
       bool fromTAB = (_sstate == STATE_NOTE_ENTRY_TAB) && (val != STATE_NOTE_ENTRY_TAB);
       // if activating TAB note entry, swap "pad-note-...-TAB" shorctuts into "pad-note-..." actions
@@ -4010,7 +4031,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "toggle-navigator")
             showNavigator(a->isChecked());
       else if (cmd == "toggle-midiimportpanel")
-            importmidi_panel->setVisible(a->isChecked());
+            importmidiPanel->setVisible(a->isChecked());
       else if (cmd == "toggle-mixer")
             showMixer(a->isChecked());
       else if (cmd == "synth-control")

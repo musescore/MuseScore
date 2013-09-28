@@ -1943,7 +1943,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             double x1;
 
             for (Segment* s = ss; s && (s != es);) {
-                  Segment* ns = s->next1();
+                  Segment* ns = s->next1MM();
                   system1  = system2;
                   system2  = s->measure()->system();
                   pt       = s->pagePos();
@@ -2709,7 +2709,7 @@ void ScoreView::cmd(const QAction* a)
                   updateAll();
                   }
             }
-      else if (cmd == "rest")
+      else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
       else if (cmd == "rest-1")
             cmdEnterRest(TDuration(TDuration::V_WHOLE));
@@ -5112,8 +5112,10 @@ void ScoreView::cmdInsertMeasures(int n, Element::ElementType type)
       _score->startCmd();
       for (int i = 0; i < n; ++i)
             mb = _score->insertMeasure(type, mb);
-      if (mb)
-           _score->select(mb, SELECT_SINGLE, 0);
+
+      // measure may be part of mm rest:
+      if (!_score->styleB(ST_createMultiMeasureRests) && type == Element::MEASURE)
+            _score->select(mb, SELECT_SINGLE, 0);
       _score->endCmd();
       }
 

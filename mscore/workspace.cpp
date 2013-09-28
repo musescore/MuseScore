@@ -263,8 +263,6 @@ void Workspace::write()
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      //f.addDirectory("META-INF");
-      //f.addDirectory("Pictures");
       f.addFile("META-INF/container.xml", cbuf.data());
 
       // save images
@@ -282,7 +280,7 @@ void Workspace::write()
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       xml.stag("Workspace");
-      xml.tag("name", _name);
+      // xml.tag("name", _name);
       PaletteBox* pb = mscore->getPaletteBox();
       pb->write(xml);
       xml.etag();
@@ -313,7 +311,7 @@ void Workspace::read()
       MQZipReader f(_path);
       QByteArray ba = f.fileData("META-INF/container.xml");
 
-      XmlReader e(ba);
+      XmlReader e(ba, _path);
 
       // extract first rootfile
       QString rootfile = "";
@@ -373,7 +371,7 @@ void Workspace::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
-                  _name = e.readElementText();
+                  e.readElementText();
             else if (tag == "PaletteBox") {
                   PaletteBox* paletteBox = mscore->getPaletteBox();
                   paletteBox->clear();

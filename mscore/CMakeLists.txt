@@ -193,9 +193,8 @@ endif (USE_JACK)
 
 if (APPLE)
         set (ExecutableName mscore MACOSX_BUNDLE)
-        set (MACOSX_BUNDLE_INFO_STRING MuseScore prerelease for Mac OSX)
         set (MACOSX_BUNDLE_ICON_FILE      mscore.icns)
-        set (MACOSX_BUNDLE_GUI_IDENTIFIER net.sourceforge.mscore)
+        set (MACOSX_BUNDLE_GUI_IDENTIFIER org.musescore.MuseScore)
         set (MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSESCORE_VERSION_FULL})
         set (MACOSX_BUNDLE_BUNDLE_NAME MuseScore)
         set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
@@ -270,6 +269,7 @@ add_executable ( ${ExecutableName}
       importmidi_meter.cpp importmidi_quant.cpp importmidi_tuplet.cpp importmidi_chord.cpp
       importmidi_data.cpp importmidi_swing.cpp importmidi_fraction.cpp importmidi_drum.cpp
       importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp importmidi_trview.cpp
+      importmidi_inner.cpp
 
       ${OMR_FILES}
       ${AUDIO}

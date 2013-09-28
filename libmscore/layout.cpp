@@ -596,7 +596,7 @@ void Score::doLayout()
                         Element* e = s->element(track);
                         if (e == 0 || e->generated())
                               continue;
-                        if ((s->segmentType() == Segment::SegKeySig) && st->updateKeymap()) {
+                        if ((s->segmentType() == Segment::SegKeySig)) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);
@@ -832,6 +832,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   }
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
+            else if (keysig && keysig->keySigEvent() != keyIdx)
+                  undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy(), keysig->showNaturals()));
 
             bool needClef = isFirstSystem || styleB(ST_genClef);
             if (needClef) {
@@ -908,6 +910,7 @@ void Score::createMMRests()
             int n = 0;
             Fraction len;
             while (nm->isEmpty()) {
+                  m->setMMRestCount(0);
                   MeasureBase* mb = _showVBox ? nm->next() : nm->nextMeasure();
                   if (nm->breakMultiMeasureRest() && n)
                         break;
@@ -924,6 +927,11 @@ void Score::createMMRests()
                   // create a multi measure rest from m to lm (inclusive)
                   // attach the measure to m
                   //
+                  for (Measure* mm = m->nextMeasure(); mm; mm = mm->nextMeasure()) {
+                        mm->setMMRestCount(-1);
+                        if (mm == lm)
+                              break;
+                        }
                   Measure* mmr;
                   if (m->mmRest()) {
                         mmr = m->mmRest();
@@ -942,7 +950,15 @@ void Score::createMMRests()
                   mmr->setMMRestCount(n);
                   mmr->setTick(m->tick());
                   mmr->setNo(m->no());
+                  mmr->setPageBreak(lm->pageBreak());
+                  mmr->setLineBreak(lm->lineBreak());
+                  mmr->setSectionBreak(lm->sectionBreak());
                   mmr->setEndBarLineType(lm->endBarLineType(), false, lm->endBarLineVisible(), lm->endBarLineColor());
+                  qDeleteAll(*mmr->el());
+                  mmr->el()->clear();
+                  for (Element* e : *lm->el())
+                        mmr->add(e->clone());
+
                   Segment* s = mmr->getSegment(Segment::SegChordRest, m->tick());
                   for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                         int track = staffIdx * VOICES;

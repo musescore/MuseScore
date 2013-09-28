@@ -33,6 +33,15 @@
        <property name="text">
         <string>1/16</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <property name="indent">
+        <number>5</number>
+       </property>
       </widget>
      </item>
      <item row="1" column="2">
@@ -131,6 +140,12 @@
        </property>
        <property name="text">
         <string>1/32</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="indent">
+        <number>5</number>
        </property>
       </widget>
      </item>
@@ -316,6 +331,12 @@
        </property>
        <property name="text">
         <string>1/8</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="indent">
+        <number>5</number>
        </property>
       </widget>
      </item>

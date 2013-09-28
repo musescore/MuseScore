@@ -144,7 +144,8 @@ struct Preferences {
       int checkUpdateStartup;
 
       bool followSong;
-      QString importCharset;
+      QString importCharsetOve;
+      QString importCharsetGP;
       QString importStyleFile;
       int shortestNote;             // for midi input
       MidiImportOperations midiImportOperations;

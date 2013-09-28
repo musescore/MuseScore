@@ -1042,16 +1042,16 @@ void Measure::insertStaves(int sStaff, int eStaff)
 
 void Measure::cmdRemoveStaves(int sStaff, int eStaff)
       {
-qDebug("cmdRemoveStaves %d-%d", sStaff, eStaff);
+// qDebug("cmdRemoveStaves %d-%d", sStaff, eStaff);
       int sTrack = sStaff * VOICES;
       int eTrack = eStaff * VOICES;
       for (Segment* s = first(); s; s = s->next()) {
-            qDebug(" seg %d <%s>", s->tick(), s->subTypeName());
+//            qDebug(" seg %d <%s>", s->tick(), s->subTypeName());
             for (int track = eTrack - 1; track >= sTrack; --track) {
                   Element* el = s->element(track);
 //                  if (el && !el->generated()) {
                   if (el) {
-                        qDebug("  remove %s track %d", el->name(), track);
+//                        qDebug("  remove %s track %d", el->name(), track);
                         _score->undoRemoveElement(el);
                         }
                   }
@@ -1149,7 +1149,6 @@ void MStaff::setTrack(int track)
 
 void Measure::insertMStaff(MStaff* staff, int idx)
       {
-printf("insertMStaff %d\n", idx);
       staves.insert(idx, staff);
       for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx)
             staves[staffIdx]->setTrack(staffIdx * VOICES);
@@ -1161,7 +1160,6 @@ printf("insertMStaff %d\n", idx);
 
 void Measure::removeMStaff(MStaff* /*staff*/, int idx)
       {
-printf("removeMStaff %d\n", idx);
       staves.removeAt(idx);
       for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx)
             staves[staffIdx]->setTrack(staffIdx * VOICES);
@@ -1490,39 +1488,8 @@ qDebug("drop staffList");
             case REPEAT_MEASURE:
                   {
                   delete e;
-                  //
-                  // see also cmdDeleteSelection()
-                  //
-                  _score->select(0, SELECT_SINGLE, 0);
-                  for (Segment* s = first(); s; s = s->next()) {
-                        if (s->segmentType() & Segment::SegChordRest) {
-                              int strack = staffIdx * VOICES;
-                              int etrack = strack + VOICES;
-                              for (int track = strack; track < etrack; ++track) {
-                                    Element* el = s->element(track);
-                                    if (el)
-                                          _score->undoRemoveElement(el);
-                                    }
-                              if (s->isEmpty())
-                                    _score->undoRemoveElement(s);
-                              }
-                        }
-                  //
-                  // add repeat measure
-                  //
-
-                  Segment* seg = undoGetSegment(Segment::SegChordRest, tick());
-                  RepeatMeasure* rm = new RepeatMeasure(_score);
-                  rm->setTrack(staffIdx * VOICES);
-                  rm->setParent(seg);
-                  _score->undoAddElement(rm);
-                  foreach(Element* el, _el) {
-                        if (el->type() == SLUR && el->staffIdx() == staffIdx)
-                              _score->undoRemoveElement(el);
-                        }
-                  return rm;
+                  return cmdInsertRepeatMeasure(staffIdx);
                   }
-
             case ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
@@ -1559,6 +1526,43 @@ void Measure::cmdRemoveEmptySegment(Segment* s)
       {
       if (s->isEmpty())
             _score->undoRemoveElement(s);
+      }
+
+//---------------------------------------------------------
+//   cmdInsertRepeatMeasure
+//---------------------------------------------------------
+RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
+      {
+      //
+      // see also cmdDeleteSelection()
+      //
+      _score->select(0, SELECT_SINGLE, 0);
+      for (Segment* s = first(); s; s = s->next()) {
+            if (s->segmentType() & Segment::SegChordRest) {
+                  int strack = staffIdx * VOICES;
+                  int etrack = strack + VOICES;
+                  for (int track = strack; track < etrack; ++track) {
+                        Element* el = s->element(track);
+                        if (el)
+                              _score->undoRemoveElement(el);
+                        }
+                  if (s->isEmpty())
+                        _score->undoRemoveElement(s);
+                  }
+            }
+      //
+      // add repeat measure
+      //
+      Segment* seg = undoGetSegment(Segment::SegChordRest, tick());
+      RepeatMeasure* rm = new RepeatMeasure(_score);
+      rm->setTrack(staffIdx * VOICES);
+      rm->setParent(seg);
+      _score->undoAddElement(rm);
+      foreach(Element* el, _el) {
+            if (el->type() == SLUR && el->staffIdx() == staffIdx)
+                  _score->undoRemoveElement(el);
+            }
+      return rm;
       }
 
 //---------------------------------------------------------
@@ -1910,6 +1914,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Spanner* spanner = score()->findSpanner(id);
                   if (spanner) {
                         spanner->setTick2(e.tick());
+                        spanner->setTrack2(e.track());
                         if (spanner->type() == OTTAVA) {
                               Ottava* o = static_cast<Ottava*>(spanner);
                               o->staff()->updateOttava(o);

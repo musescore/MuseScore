@@ -459,15 +459,26 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
             links->append(nks);
             nks->setLinks(links);
 
-            if (ks) {
-                  qDebug("  changeElement");
+            if (ks)
                   undo(new ChangeElement(ks, nks));
-                  }
-            else {
-                  qDebug("  addElement");
+            else
                   undo(new AddElement(nks));
-                  }
             updateNoteLines(s, track);
+            //
+            // change all following generated keysigs
+            //
+            for (Measure* m = measure->nextMeasure(); m; m = m->nextMeasure()) {
+                  Segment* s = m->undoGetSegment(Segment::SegKeySig, m->tick());
+                  if (!s)
+                        continue;
+                  KeySig* ks = static_cast<KeySig*>(s->element(track));
+                  if (!ks)
+                        continue;
+                  if (ks && !ks->generated())
+                        break;
+                  if (ks->keySigEvent() != st)
+                        undo(new ChangeKeySig(ks, st, ks->showCourtesy(), ks->showNaturals()));
+                  }
             }
       }
 
@@ -1703,7 +1714,7 @@ void ChangeElement::flip()
                   ks->staff()->setKey(ks->tick(),ks->keySigEvent());
                   ks->insertIntoKeySigChain();
                   ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
-                  // newElement->staff()->setUpdateKeymap(true);
+                  newElement->staff()->setUpdateKeymap(true);
                   }
             }
       else if (newElement->type() == Element::DYNAMIC)
@@ -2489,6 +2500,18 @@ void ChangeStyle::flip()
       score->setLayoutAll(true);
 
       style = tmp;
+      }
+
+//---------------------------------------------------------
+//   ChangeStyleVal::flip
+//---------------------------------------------------------
+
+void ChangeStyleVal::flip()
+      {
+      QVariant v = score->style(idx);
+      score->style()->set(idx, value);
+      score->setLayoutAll(true);
+      value = v;
       }
 
 //---------------------------------------------------------

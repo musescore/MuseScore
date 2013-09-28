@@ -172,7 +172,8 @@ void Preferences::init()
       checkUpdateStartup      = 0;
 
       followSong              = true;
-      importCharset           = "GBK";
+      importCharsetOve        = "GBK";
+      importCharsetGP         = "UTF-8";
       importStyleFile         = "";
       shortestNote            = MScore::division/4;
 
@@ -313,7 +314,8 @@ void Preferences::write()
       s.setValue("defaultPlayDuration", MScore::defaultPlayDuration);
       s.setValue("importStyleFile", importStyleFile);
       s.setValue("shortestNote", shortestNote);
-      s.setValue("importCharset", importCharset);
+      s.setValue("importCharsetOve", importCharsetOve);
+      s.setValue("importCharsetGP", importCharsetGP);
       s.setValue("warnPitchRange", MScore::warnPitchRange);
       s.setValue("followSong", followSong);
 
@@ -453,7 +455,8 @@ void Preferences::read()
       MScore::defaultPlayDuration = s.value("defaultPlayDuration", MScore::defaultPlayDuration).toInt();
       importStyleFile        = s.value("importStyleFile", importStyleFile).toString();
       shortestNote           = s.value("shortestNote", shortestNote).toInt();
-      importCharset          = s.value("importCharset", importCharset).toString();
+      importCharsetOve          = s.value("importCharsetOve", importCharsetOve).toString();
+      importCharsetGP          = s.value("importCharsetGP", importCharsetGP).toString();
       MScore::warnPitchRange = s.value("warnPitchRange", MScore::warnPitchRange).toBool();
       followSong             = s.value("followSong", followSong).toBool();
 
@@ -947,14 +950,18 @@ void PreferenceDialog::updateValues()
       useImportBuildinStyle->setChecked(prefs.importStyleFile.isEmpty());
       useImportStyleFile->setChecked(!prefs.importStyleFile.isEmpty());
 
-      importCharsetList->clear();
       QList<QByteArray> charsets = QTextCodec::availableCodecs();
       qSort(charsets.begin(), charsets.end());
       int idx = 0;
+      importCharsetListOve->clear();
+      importCharsetListGP->clear();
       foreach (QByteArray charset, charsets) {
-            importCharsetList->addItem(charset);
-            if (charset == prefs.importCharset)
-                  importCharsetList->setCurrentIndex(idx);
+            importCharsetListOve->addItem(charset);
+            importCharsetListGP->addItem(charset);
+            if (charset == prefs.importCharsetOve)
+                  importCharsetListOve->setCurrentIndex(idx);
+            if (charset == prefs.importCharsetGP)
+                  importCharsetListGP->setCurrentIndex(idx);
             idx++;
             }
 
@@ -1397,7 +1404,8 @@ void PreferenceDialog::apply()
             }
       prefs.shortestNote = ticks;
 
-      prefs.importCharset = importCharsetList->currentText();
+      prefs.importCharsetOve = importCharsetListOve->currentText();
+      prefs.importCharsetGP = importCharsetListGP->currentText();
       MScore::warnPitchRange = warnPitchRange->isChecked();
 
       prefs.useOsc  = oscServer->isChecked();

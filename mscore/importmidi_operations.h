@@ -66,7 +66,7 @@ struct TrackOperations
 
 struct TrackMeta
       {
-      QString staffName;
+      std::string staffName;    // will be converted to unicode later
       QString instrumentName;
       bool isDrumTrack;
       int initLyricTrackIndex;
@@ -100,10 +100,11 @@ class MidiImportOperations
       TrackOperations trackOperations(int trackIndex) const;
       int count() const { return operations_.size(); }
       MidiData& midiData() { return midiData_; }
+      QString charset() const;
       void adaptForPercussion(int trackIndex);
                   // lyrics
-      void addTrackLyrics(const std::multimap<ReducedFraction, QString> &trackLyrics);
-      const QList<std::multimap<ReducedFraction, QString> >* getLyrics();
+      void addTrackLyrics(const std::multimap<ReducedFraction, std::string> &trackLyrics);
+      const QList<std::multimap<ReducedFraction, std::string> > *getLyrics();
 
    private:
       QList<TrackOperations> operations_;

@@ -275,7 +275,7 @@ void Selection::updateSelectedElements()
       int endTrack   = _staffEnd * VOICES;
 
       for (int st = startTrack; st < endTrack; ++st) {
-            for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1()) {
+            for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
                   if (s->segmentType() == Segment::SegEndBarLine)  // do not select end bar line
                         continue;
                   Element* e = s->element(st);

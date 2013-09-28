@@ -156,6 +156,7 @@ enum P_ID {
       P_TIMESIG_GLOBAL,
       P_SPANNER_TICK,
       P_SPANNER_TICK2,
+      P_SPANNER_TRACK2,
 
       P_USER_OFF2,
       P_BEGIN_TEXT_PLACE,

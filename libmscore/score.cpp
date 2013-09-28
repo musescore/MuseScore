@@ -478,11 +478,13 @@ void Score::fixTicks()
                   mb->setTick(tick);
                   continue;
                   }
-            Measure* m = static_cast<Measure*>(mb);
+            Measure* m       = static_cast<Measure*>(mb);
             int mtick        = m->tick();
             int diff         = tick - mtick;
             int measureTicks = m->ticks();
             m->moveTicks(diff);
+            if (m->mmRest())
+                  m->mmRest()->moveTicks(diff);
 
             if (!parentScore()) {
                   //
@@ -2854,10 +2856,11 @@ void Score::select(Element* e, SelectType type, int staffIdx)
             if (e->type() == Element::MEASURE) {
                   Measure* m = static_cast<Measure*>(e);
                   int tick  = m->tick();
-                  int etick = tick + m->ticks();
+                  // int etick = tick + m->ticks();
                   if (_selection.state() == SEL_NONE) {
                         _selection.setStartSegment(m->tick2segment(tick));
-                        _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                        // _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                        _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                         }
                   else {
                         select(0, SELECT_SINGLE, 0);
@@ -2897,7 +2900,8 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         _selection.setStaffStart(staffIdx);
                         _selection.setStaffEnd(staffIdx + 1);
                         _selection.setStartSegment(m->tick2segment(tick));
-                        _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                        // _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                        _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                         }
                   else if (_selection.state() == SEL_RANGE) {
                         if (staffIdx < _selection.staffStart())
@@ -2909,14 +2913,16 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               activeIsFirst = true;
                               }
                         else if (etick >= _selection.tickEnd())
-                              _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                              //_selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                              _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                         else {
                               if (_selection.activeSegment() == _selection.startSegment()) {
                                     _selection.setStartSegment(m->tick2segment(tick));
                                     activeIsFirst = true;
                                     }
                               else
-                                    _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                                    //_selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
+                                    _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                               }
                         }
                   else if (_selection.isSingle()) {
@@ -2943,9 +2949,9 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               if (el && el->isChordRest())
                                     break;
                               if (reverse)
-                                    seg = seg->prev1();
+                                    seg = seg->prev1MM();
                               else
-                                    seg = seg->next1();
+                                    seg = seg->next1MM();
                               if (!seg)
                                     break;
                               }
@@ -3507,12 +3513,14 @@ void Score::insertTime(int tick, int len)
                         //
                         undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
                        }
-                  else if (tick < s->tick()) {
+                  else if (tick <= s->tick()) {
                         //
                         //  case b:
                         //       +----spanner--------
                         //  +---add---
-                        //
+                        // and
+                        //            +----spanner--------
+                        //  +---add---+
                         undoChangeProperty(s, P_SPANNER_TICK, s->tick() + len);
                         undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
                         }

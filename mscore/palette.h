@@ -38,14 +38,14 @@ class Palette;
 //---------------------------------------------------------
 
 struct PaletteCell {
-      Element* element;
+      Element* element = 0;
       QString name;           // used for tool tip
       QString tag;
-      bool drawStaff;
-      double x, y;
-      double xoffset, yoffset;      // in spatium units of "gscore"
-      qreal mag;
-      bool readOnly;
+      bool drawStaff = false;
+      double x = 0.0, y = 0.0;
+      double xoffset = 0.0, yoffset = 0.0;      // in spatium units of "gscore"
+      qreal mag = 1.0;
+      bool readOnly = true;
       };
 
 //---------------------------------------------------------
@@ -189,7 +189,7 @@ class Palette : public QWidget {
       int gridWidth() const          { return hgrid;        }
       int gridHeight() const         { return vgrid;        }
       bool moreElements() const      { return _moreElements; }
-      void setMoreElements(bool val) { _moreElements = val; }
+      void setMoreElements(bool val);
 
       virtual int heightForWidth(int) const;
       virtual QSize sizeHint() const;
