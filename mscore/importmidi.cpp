@@ -125,13 +125,16 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
       switch (mm.metaType()) {
             case META_TEXT:
             case META_LYRIC: {
-                  const QString s((char*)data);
-                  cs->addLyrics(tick, staffIdx, s);
+                  std::string text = MidiCharset::fromUchar(data);
+                  cs->addLyrics(tick, staffIdx, MidiCharset::convertToCharset(text));
                   }
                   break;
             case META_TRACK_NAME:
+                  {
+                  std::string text = MidiCharset::fromUchar(data);
                   if (name.isEmpty())
-                        name = (const char*)data;
+                        name = MidiCharset::convertToCharset(text);
+                  }
                   break;
             case META_TEMPO:
                   {
@@ -826,7 +829,7 @@ QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
       QList<TrackMeta> tracksMeta;
       for (int i = 0; i < tracks.size(); ++i) {
             const MTrack &mt = tracks[i];
-            QString trackName;
+            std::string trackName;
             for (const auto &ie: mt.mtrack->events()) {
                   const MidiEvent &e = ie.second;
                   if ((e.type() == ME_META) && (e.metaType() == META_TRACK_NAME)) {
