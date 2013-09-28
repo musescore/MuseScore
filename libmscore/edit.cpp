@@ -1785,6 +1785,10 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
       int tick;
       int idx;
       if (measure) {
+            if (measure->type() == Element::MEASURE && static_cast<Measure*>(measure)->isMMRest()) {
+                  measure = static_cast<Measure*>(measure)->prev()->next();
+                  deselectAll();
+                  }
             tick = measure->tick();
             idx  = measureIdx(measure);
             }
