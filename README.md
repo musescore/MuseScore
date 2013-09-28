@@ -5,7 +5,7 @@ Links
 * Build status: [![Build Status](https://secure.travis-ci.org/musescore/MuseScore.png)](http://travis-ci.org/musescore/MuseScore)
 
 Packages
-* **aeolus** Clone of [Aeolus](http://users.skynet.be/solaris/linuxaudio/aeolus.html)
+* **aeolus** Clone of [Aeolus](http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/)
 
 * **awl** Audio Widget Library, from the MusE project
 
@@ -34,6 +34,8 @@ Packages
 * **share** Files moved to /usr/share/... on install
 
 * **test** Old tests. Should move to mtest
+
+* **vtest** Visual tests. Compare reference images with current implementation
 
 * **thirdparty** Contains projects which are included for convenience, usually to integrate them into the build system to make them available for all supported platforms.
 
