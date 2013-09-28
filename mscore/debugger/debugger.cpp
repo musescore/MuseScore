@@ -455,6 +455,10 @@ void Debugger::updateList(Score* s)
                         if (mb->type() != Element::MEASURE)
                               continue;
                         Measure* measure = (Measure*) mb;
+                        if (measure->mmRest()) {
+                              ElementItem* mmi = new ElementItem(mi, measure->mmRest());
+                              addMeasure(mmi, measure->mmRest());
+                              }
                         addMeasure(mi, measure);
                         }
                   }
@@ -2576,6 +2580,7 @@ SystemView::SystemView()
       {
       mb.setupUi(addWidget());
       connect(mb.spanner, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(elementClicked(QTreeWidgetItem*)));
+      connect(mb.measureList, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(measureClicked(QListWidgetItem*)));
       }
 
 //---------------------------------------------------------
@@ -2594,6 +2599,11 @@ void SystemView::setElement(Element* e)
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             mb.spanner->addTopLevelItem(item);
             }
+      mb.measureList->clear();
+      for (MeasureBase* m : vs->measures()) {
+            ElementListWidgetItem* item = new ElementListWidgetItem(m);
+            mb.measureList->addItem(item);
+            }
       }
 
 //---------------------------------------------------------
@@ -2606,6 +2616,15 @@ void SystemView::elementClicked(QTreeWidgetItem* item)
       emit elementChanged(e);
       }
 
+//---------------------------------------------------------
+//   measureClicked
+//---------------------------------------------------------
+
+void SystemView::measureClicked(QListWidgetItem* i)
+      {
+      ElementListWidgetItem* item = (ElementListWidgetItem*)i;
+      emit elementChanged(item->element());
+      }
 
 }
 

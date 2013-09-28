@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>6</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
+   <property name="rightMargin">
+    <number>8</number>
+   </property>
+   <property name="bottomMargin">
     <number>8</number>
    </property>
    <item>
@@ -49,6 +58,16 @@
          </property>
         </column>
        </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string notr="true">MeasureList</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListWidget" name="measureList"/>
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout">

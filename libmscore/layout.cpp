@@ -546,7 +546,7 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
-      // printf("======doLayout\n");
+//      printf("======doLayout\n");
 
       int idx = styleSt(ST_MusicalSymbolFont) == "Gonville" ? 1 : 0;
 
@@ -1359,9 +1359,9 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
       for (; curMeasure;) {
             MeasureBase* nextMeasure;
             if (curMeasure->type() == Element::MEASURE && !_showVBox)
-                  nextMeasure = curMeasure->nextMeasure();
+                  nextMeasure = curMeasure->nextMeasureMM();
             else
-                  nextMeasure = curMeasure->next();
+                  nextMeasure = curMeasure->nextMM();
 
             // System* oldSystem = curMeasure->system();
             curMeasure->setSystem(system);
