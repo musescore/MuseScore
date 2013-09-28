@@ -478,11 +478,13 @@ void Score::fixTicks()
                   mb->setTick(tick);
                   continue;
                   }
-            Measure* m = static_cast<Measure*>(mb);
+            Measure* m       = static_cast<Measure*>(mb);
             int mtick        = m->tick();
             int diff         = tick - mtick;
             int measureTicks = m->ticks();
             m->moveTicks(diff);
+            if (m->mmRest())
+                  m->mmRest()->moveTicks(diff);
 
             if (!parentScore()) {
                   //
@@ -2854,7 +2856,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
             if (e->type() == Element::MEASURE) {
                   Measure* m = static_cast<Measure*>(e);
                   int tick  = m->tick();
-                  int etick = tick + m->ticks();
+                  // int etick = tick + m->ticks();
                   if (_selection.state() == SEL_NONE) {
                         _selection.setStartSegment(m->tick2segment(tick));
                         // _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
