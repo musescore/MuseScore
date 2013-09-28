@@ -836,6 +836,22 @@ class ChangeStyle : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   ChangeStyleVal
+//---------------------------------------------------------
+
+class ChangeStyleVal : public UndoCommand {
+      Score* score;
+      StyleIdx idx;
+      QVariant value;
+
+      void flip();
+
+   public:
+      ChangeStyleVal(Score* s, StyleIdx i, const QVariant& v) : score(s), idx(i), value(v) {}
+      UNDO_NAME("ChangeStyleVal");
+      };
+
+//---------------------------------------------------------
 //   ChangeChordStaffMove
 //---------------------------------------------------------
 
