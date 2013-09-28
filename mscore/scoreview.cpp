@@ -5112,8 +5112,10 @@ void ScoreView::cmdInsertMeasures(int n, Element::ElementType type)
       _score->startCmd();
       for (int i = 0; i < n; ++i)
             mb = _score->insertMeasure(type, mb);
-      if (mb)
-           _score->select(mb, SELECT_SINGLE, 0);
+
+      // measure may be part of mm rest:
+      if (!_score->styleB(ST_createMultiMeasureRests) && type == Element::MEASURE)
+            _score->select(mb, SELECT_SINGLE, 0);
       _score->endCmd();
       }
 
