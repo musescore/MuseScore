@@ -1786,7 +1786,8 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
       int idx;
       if (measure) {
             if (measure->type() == Element::MEASURE && static_cast<Measure*>(measure)->isMMRest()) {
-                  measure = static_cast<Measure*>(measure)->prev()->next();
+                  measure = static_cast<Measure*>(measure)->prev();
+                  measure = measure ? measure->next() : firstMeasure();
                   deselectAll();
                   }
             tick = measure->tick();
