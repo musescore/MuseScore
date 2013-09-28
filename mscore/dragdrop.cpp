@@ -396,6 +396,8 @@ void ScoreView::dropEvent(QDropEvent* event)
                         _score->addRefresh(el->canvasBoundingRect());
                         _score->addRefresh(dragElement->canvasBoundingRect());
 
+                        if (!el->acceptDrop(this, pos, dragElement))
+                              break;
                         Element* dropElement = el->drop(dropData);
                         _score->addRefresh(el->canvasBoundingRect());
                         if (dropElement) {
