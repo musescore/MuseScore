@@ -1133,8 +1133,10 @@ void Score::upDown(bool up, UpDownMode mode)
                   case PERCUSSION_STAFF_GROUP:
                         {
                         Drumset* ds = part->instr()->drumset();
-                        newPitch    = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
-                        newTpc      = oNote->tpc();
+                        if(ds) {
+                              newPitch    = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
+                              newTpc      = oNote->tpc();
+                              }
                         }
                         break;
                   case TAB_STAFF_GROUP:

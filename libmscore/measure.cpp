@@ -3459,13 +3459,15 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
                               {
                               Drumset* drumset = instrument->drumset();
                               int pitch = note->pitch();
-                              if (!drumset->isValid(pitch)) {
-                                    // qDebug("unmapped drum note %d", pitch);
-                                    }
-                              else {
-                                    note->setHeadGroup(drumset->noteHead(pitch));
-                                    note->setLine(drumset->line(pitch));
-                                    continue;
+                              if(drumset) {
+                                    if (!drumset->isValid(pitch)) {
+                                          // qDebug("unmapped drum note %d", pitch);
+                                          }
+                                    else {
+                                          note->setHeadGroup(drumset->noteHead(pitch));
+                                          note->setLine(drumset->line(pitch));
+                                          continue;
+                                          }
                                     }
                               }
                               break;
