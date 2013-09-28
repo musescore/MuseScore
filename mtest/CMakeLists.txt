@@ -50,6 +50,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_clef.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_lrhand.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_lyrics.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_inner.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp

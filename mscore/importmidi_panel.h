@@ -58,6 +58,7 @@ class ImportMidiPanel : public QWidget
       bool isMidiFileExists() const;
       void showOrHideStaffNameCol(const QList<TrackMeta> &tracksMeta);
       void showOrHideLyricsCol(const QList<TrackData> &tracksData);
+      void fillCharsetList();
 
       Ui::ImportMidiPanel *ui;
       QTimer *updateUiTimer;
