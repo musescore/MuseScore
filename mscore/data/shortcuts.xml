@@ -938,5 +938,9 @@
     <key>next-beat-TEXT</key>
     <seq>;</seq>
     </SC>
+  <SC>
+    <key>toggle-mmrest</key>
+    <seq>M</seq>
+    </SC>
   </Shortcuts>
 
