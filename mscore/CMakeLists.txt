@@ -46,7 +46,7 @@ QT4_WRAP_UI (ui_headers
       fretdprops.ui stafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui layer.ui
       omrpanel.ui startdialog.ui masterpalette.ui pluginManager.ui harmonyedit.ui pathlistdialog.ui
-      note_groups.ui importmidi_panel.ui
+      note_groups.ui importmidi_panel.ui resourceManager.ui
 
       debugger/barline.ui
       debugger/harmony.ui
@@ -155,6 +155,7 @@ QT4_WRAP_CPP (mocs
       importmidi_inner.h importmidi_data.h importmidi_swing.h
       debugger/debugger.h importmidi_fraction.h importmidi_drum.h
       importmidi_lrhand.h importmidi_lyrics.h importmidi_trview.h
+      resourceManager.h downloadUtils.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -270,6 +271,7 @@ add_executable ( ${ExecutableName}
       importmidi_data.cpp importmidi_swing.cpp importmidi_fraction.cpp importmidi_drum.cpp
       importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp importmidi_trview.cpp
       importmidi_inner.cpp
+      resourceManager.cpp downloadUtils.cpp
 
       ${OMR_FILES}
       ${AUDIO}
