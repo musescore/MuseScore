@@ -713,6 +713,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                           slur->setStartElement(cr1);
                                           slur->setEndElement(cr2);
                                           slur->setTrack(cr1->track());
+                                          slur->setTrack2(cr2->track());
                                           score->addElement(slur);
                                           }
                                     }

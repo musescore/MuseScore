@@ -2159,10 +2159,10 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
 
 	        Slur* slur = new Slur(score_);
 	        slur->setSlurDirection(slurPtr->getShowOnTop()? MScore::UP : MScore::DOWN);
-              slur->setTick(absStartTick);
-              slur->setTick2(absEndTick);
+		slur->setTick(absStartTick);
+		slur->setTick2(absEndTick);
 	        slur->setTrack(track);
-	        // slur->setTrack2(track+endContainer->getOffsetStaff());
+		slur->setTrack2(track+endContainer->getOffsetStaff());
 
 	        score_->addSpanner(slur);
 		}

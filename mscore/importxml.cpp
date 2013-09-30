@@ -4157,6 +4157,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               //slur[slurNo]->setStart(tick, trk + voice);
                               //slur[slurNo]->setTrack((staff + relStaff) * VOICES);
                               slur[slurNo]->setTrack(track);
+                              slur[slurNo]->setTrack2(track);
                               score->addElement(slur[slurNo]);
                               if (endSlur) {
                                     slur[slurNo]->setTick(cr->tick());
@@ -4168,10 +4169,12 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
                                     slur[slurNo]->setTick2(cr->tick());
+                                    slur[slurNo]->setTrack2(track);
                                     slur[slurNo]->setEndElement(cr);
                                     }
                               else {
                                     slur[slurNo]->setTick2(cr->tick());
+                                    slur[slurNo]->setTrack2(track);
                                     slur[slurNo]->setEndElement(cr);
                                     slur[slurNo] = 0;
                                     }
