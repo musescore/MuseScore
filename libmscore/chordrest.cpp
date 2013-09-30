@@ -294,6 +294,7 @@ bool ChordRest::readProperties(XmlReader& e)
                   if (atype == "start") {
                         slur->setTick(e.tick());
                         slur->setTrack(e.track());
+                        slur->setTrack2(e.track());
                         slur->setStartElement(this);
                         slur->setAnchor(Spanner::ANCHOR_SEGMENT);
                         }
@@ -303,6 +304,7 @@ bool ChordRest::readProperties(XmlReader& e)
                         Chord* start = static_cast<Chord*>(slur->startElement());
                         if (start)
                               slur->setTrack(start->track());
+                        slur->setTrack2(e.track());
                         if (start && start->type() == CHORD && start->noteType() != NOTE_NORMAL) {
                               start->add(slur);
                               slur->setAnchor(Spanner::ANCHOR_CHORD);

@@ -1930,6 +1930,7 @@ void GuitarPro4::read(QFile* fp)
                               Slur* slur = new Slur(score);
                               slur->setParent(0);
                               slur->setTrack(staffIdx * VOICES);
+                              slur->setTrack2(staffIdx * VOICES);
                               slur->setTick(cr->tick());
                               slur->setTick2(cr->tick());
                               slurs[staffIdx] = slur;
@@ -1939,6 +1940,7 @@ void GuitarPro4::read(QFile* fp)
                               Slur* s = slurs[staffIdx];
                               slurs[staffIdx] = 0;
                               s->setTick2(cr->tick());
+                              s->setTrack2(cr->track());
                               }
                         else if (slurs[staffIdx] && hasSlur) {
                               }
