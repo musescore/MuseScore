@@ -76,6 +76,8 @@
 #include "drumtools.h"
 #include "editstafftype.h"
 #include "texttools.h"
+#include "textpalette.h"
+#include "resourceManager.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -83,7 +85,7 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/volta.h"
 #include "libmscore/lasso.h"
-#include "textpalette.h"
+
 #include "driver.h"
 
 // #include "effects/freeverb/freeverb.h"
@@ -1038,6 +1040,7 @@ MuseScore::MuseScore()
 
       menuPlugins->addSeparator();
 
+
       //---------------------
       //    Menu Help
       //---------------------
@@ -1074,6 +1077,9 @@ MuseScore::MuseScore()
       menuHelp->addSeparator();
       menuHelp->addAction(tr("Report a bug"), this, SLOT(reportBug()));
 #endif
+
+      menuHelp->addSeparator();
+      menuHelp->addAction(getAction("resource-manager"));
 
       setCentralWidget(envelope);
 
@@ -1308,7 +1314,7 @@ int MuseScore::appendScore(Score* score)
       {
       int index = scoreList.size();
       for (int i = 0; i < scoreList.size(); ++i) {
-            if (scoreList[i]->filePath() == score->filePath()) {
+            if (scoreList[i]->filePath() == score->filePath() && score->fileInfo()->exists()) {
                   removeTab(i);
                   index = i;
                   break;
@@ -1997,16 +2003,23 @@ void setMscoreLocale(QString localeName)
             }
 
       QTranslator* translator = new QTranslator;
-      QString lp = mscoreGlobalShare + "locale/" + QString("mscore_") + localeName;
-      if (MScore::debugMode)
-            qDebug("load translator <%s>", qPrintable(lp));
 
-      if (!translator->load(lp) && MScore::debugMode)
-            qDebug("load translator <%s> failed", qPrintable(lp));
-      else {
-            qApp->installTranslator(translator);
-            translatorList.append(translator);
+      // load translator from userspace
+      QString lp = dataPath + "/locale/" + QString("mscore_") + localeName;
+      if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
+      bool success = translator->load(lp);
+      if (!success) {
+            if (MScore::debugMode) qDebug("load translator <%s> failed", qPrintable(lp));
+            // fallback to default translation
+            lp = mscoreGlobalShare + "locale/" + QString("mscore_") + localeName;
+            if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
+            success = translator->load(lp);
+            if (!success && MScore::debugMode) qDebug("load translator <%s> failed", qPrintable(lp));
             }
+      if(success) {
+           qApp->installTranslator(translator);
+           translatorList.append(translator);
+           }
 
       QString resourceDir;
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
@@ -4080,6 +4093,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "plugin-manager") {
             PluginManager pm(0);
             pm.exec();
+            }
+      else if(cmd == "resource-manager"){
+            ResourceManager r(0);
+            r.exec();
             }
       else if (cmd == "media")
             showMediaDialog();
