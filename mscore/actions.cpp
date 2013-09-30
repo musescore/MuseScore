@@ -2030,6 +2030,13 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Show inspector")
          ),
       Shortcut(
+         STATE_ALL,
+         0,
+         "resource-manager",
+         Qt::ApplicationShortcut,
+         QT_TRANSLATE_NOOP("action", "Resource Manager")
+         ),
+      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "omr",
