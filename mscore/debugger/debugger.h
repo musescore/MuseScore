@@ -744,7 +744,8 @@ class SystemView : public ShowElementBase {
       Ui::SystemBase mb;
 
    private slots:
-      void elementClicked(QTreeWidgetItem* item);
+      void elementClicked(QTreeWidgetItem*);
+      void measureClicked(QListWidgetItem*);
 
    public:
       SystemView();
