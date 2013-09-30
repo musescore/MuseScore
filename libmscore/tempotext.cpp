@@ -182,7 +182,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
 QVariant TempoText::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_TEMPO:             return 2.0;
+            case P_TEMPO:             return 120;
             case P_TEMPO_FOLLOW_TEXT: return false;
             case P_PLACEMENT:         return ABOVE;
             default:                  return Text::propertyDefault(id);
