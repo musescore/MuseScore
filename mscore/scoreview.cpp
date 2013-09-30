@@ -4145,6 +4145,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
       slur->setTick(cr1->tick());
       slur->setTick2(cr2->tick());
       slur->setTrack(cr1->track());
+      slur->setTrack2(cr2->track());
       slur->setParent(0);
       _score->undoAddElement(slur);
       slur->layout();
