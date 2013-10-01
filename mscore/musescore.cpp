@@ -288,6 +288,8 @@ void MuseScore::closeEvent(QCloseEvent* ev)
             seq->stopWait();
             seq->exit();
             }
+      if (instrList)
+            instrList->writeSettings();
 
       ev->accept();
       if (preferences.dirty)
