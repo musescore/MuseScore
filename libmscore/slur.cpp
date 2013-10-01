@@ -1010,8 +1010,6 @@ void Slur::write(Xml& xml) const
       {
       xml.stag(QString("Slur id=\"%1\"").arg(id()));
       SlurTie::writeProperties(xml);
-      if (track2() != track())
-            xml.tag("track2", track2());
       xml.etag();
       }
 

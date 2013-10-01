@@ -174,7 +174,7 @@ void TestCopyPaste::copypaste(const char* idx)
 
 //---------------------------------------------------------
 //   copypaste
-//    copy measure 2, paste into measure 4
+//    copy measure 2 from first staff, paste into staff 2
 //---------------------------------------------------------
 
 void TestCopyPaste::copypastestaff(const char* idx)
