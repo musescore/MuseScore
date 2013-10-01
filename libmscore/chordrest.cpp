@@ -293,10 +293,12 @@ bool ChordRest::readProperties(XmlReader& e)
                   Slur* slur = static_cast<Slur*>(spanner);
                   if (atype == "start") {
                         slur->setTick(e.tick());
-                        slur->setTrack(e.track());
-                        slur->setTrack2(e.track());
+                        slur->setTrack(track());
                         slur->setStartElement(this);
                         slur->setAnchor(Spanner::ANCHOR_SEGMENT);
+                        //spanner was added in read114 with wrong tick
+                        score()->removeSpanner(slur);
+                        score()->addSpanner(slur);
                         }
                   else if (atype == "stop") {
                         slur->setTick2(e.tick());
@@ -304,7 +306,7 @@ bool ChordRest::readProperties(XmlReader& e)
                         Chord* start = static_cast<Chord*>(slur->startElement());
                         if (start)
                               slur->setTrack(start->track());
-                        slur->setTrack2(e.track());
+                        slur->setTrack2(track());
                         if (start && start->type() == CHORD && start->noteType() != NOTE_NORMAL) {
                               start->add(slur);
                               slur->setAnchor(Spanner::ANCHOR_CHORD);
