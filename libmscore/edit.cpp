@@ -1417,6 +1417,8 @@ void Score::cmdDeleteSelection()
       if (selection().state() == SEL_RANGE) {
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
+            int stick1 = s1->tick();
+            int stick2 = s2->tick();
 
             Segment* ss1 = s1;
             if (ss1->segmentType() != Segment::SegChordRest)
@@ -1501,6 +1503,15 @@ void Score::cmdDeleteSelection()
                               setRest(tick, track, f, false, tuplet);
                               }
                         }
+                  }
+            s1 = tick2segment(stick1);
+            s2 = tick2segment(stick2);
+            if (s1 == 0 || s2 == 0)
+                  deselectAll();
+            else {
+                  _selection.setStartSegment(s1);
+                  _selection.setEndSegment(s2);
+                  _selection.updateSelectedElements();
                   }
             }
       else {
