@@ -40,7 +40,7 @@ void splitByFixedPitch(std::multimap<int, MTrack> &tracks,
                            + (int)trackOpers.LHRH.splitPitchNote;
       std::multimap<ReducedFraction, MidiChord> leftHandChords;
 
-      for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ++i) {
+      for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ) {
             auto &notes = i->second.notes;
             QList<MidiNote> leftHandNotes;
             for (auto j = notes.begin(); j != notes.end(); ) {
@@ -54,6 +54,11 @@ void splitByFixedPitch(std::multimap<int, MTrack> &tracks,
                   }
             if (!leftHandNotes.empty())
                   addNewLeftHandChord(leftHandChords, leftHandNotes, i);
+            if (notes.isEmpty()) {
+                  i = srcTrack.chords.erase(i);
+                  continue;
+                  }
+            ++i;
             }
       if (!leftHandChords.empty())
             insertNewLeftHandTrack(tracks, it, leftHandChords);
@@ -67,7 +72,7 @@ void splitByHandWidth(std::multimap<int, MTrack> &tracks,
       const int octave = 12;
       std::multimap<ReducedFraction, MidiChord> leftHandChords;
                   // chords after MIDI import are sorted by onTime values
-      for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ++i) {
+      for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ) {
             auto &notes = i->second.notes;
             QList<MidiNote> leftHandNotes;
             const int minPitch = notes.front().pitch;
@@ -97,6 +102,11 @@ void splitByHandWidth(std::multimap<int, MTrack> &tracks,
                   }
             if (!leftHandNotes.empty())
                   addNewLeftHandChord(leftHandChords, leftHandNotes, i);
+            if (notes.isEmpty()) {
+                  i = srcTrack.chords.erase(i);
+                  continue;
+                  }
+            ++i;
             }
       if (!leftHandChords.empty())
             insertNewLeftHandTrack(tracks, it, leftHandChords);
