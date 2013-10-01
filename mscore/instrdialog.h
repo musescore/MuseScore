@@ -139,6 +139,7 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentDialogBase {
       InstrumentsDialog(QWidget* parent = 0);
       void setScore(Score* s) { cs = s; }
       void genPartList();
+      void writeSettings();
       };
 
 //---------------------------------------------------------

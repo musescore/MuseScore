@@ -46,6 +46,7 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
 void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
 
 //---------------------------------------------------------
@@ -388,6 +389,15 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       downButton->setEnabled(false);
       belowButton->setEnabled(false);
       linkedButton->setEnabled(false);
+
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup("Instruments");
+            resize(settings.value("size", QSize(800, 500)).toSize());
+            move(settings.value("pos", QPoint(10, 10)).toPoint());
+            settings.endGroup();
+            }
+
       connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
       }
 
@@ -923,9 +933,9 @@ void MuseScore::editInstrList()
                   firstStaff = s;
                   break;
                   }
-      }
+            }
       //normalize the keyevent to concert pitch if necessary
-      if(firstStaff && !rootScore->styleB(ST_concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
+      if (firstStaff && !rootScore->styleB(ST_concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
                   int interval = firstStaff->part()->instr()->transpose().chromatic;
                   for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                         int tick = i->first;
@@ -1349,5 +1359,18 @@ void InstrumentsDialog::filterInstrumentsByGenre(QTreeWidget *instrumentList, QS
                   }
             ++iList;
             }
+      }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void InstrumentsDialog::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup("Instruments");
+      settings.setValue("size", size());
+      settings.setValue("pos", pos());
+      settings.endGroup();
       }
 }
