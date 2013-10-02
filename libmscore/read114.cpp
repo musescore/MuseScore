@@ -178,8 +178,13 @@ void Staff::read114(XmlReader& e)
                   setInvisible(e.readInt());
             else if (tag == "slashStyle")
                   e.skipCurrentElement();
-            else if (tag == "cleflist")
+            else if (tag == "cleflist") {
                   clefs.read(e, _score);
+                  if (clefs.empty()) {
+                        ClefType ct = Clef::clefType("0");
+                        clefs.setClef(0, ClefTypeList(ct, ct));
+                        }
+                  }
             else if (tag == "keylist")
                   _keymap.read(e, _score);
             else if (tag == "bracket") {
