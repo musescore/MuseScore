@@ -1673,6 +1673,16 @@ Segment* Score::firstSegment(Segment::SegmentTypes segType) const
       }
 
 //---------------------------------------------------------
+//   firstSegmentMM
+//---------------------------------------------------------
+
+Segment* Score::firstSegmentMM(Segment::SegmentTypes segType) const
+      {
+      Measure* m = firstMeasureMM();
+      return m ? m->first(segType) : 0;
+      }
+
+//---------------------------------------------------------
 //   lastSegment
 //---------------------------------------------------------
 

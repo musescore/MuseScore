@@ -1138,7 +1138,7 @@ void MuseScore::addTempo()
       ChordRest* cr = cs->getSelectedChordRest();
       if (!cr)
             return;
-      double bps = 2.0;
+//      double bps = 2.0;
 
       SigEvent event = cs->sigmap()->timesig(cr->tick());
       Fraction f = event.nominal();
