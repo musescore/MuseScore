@@ -641,7 +641,7 @@ void Score::doLayout()
 
       int tracks = nstaves * VOICES;
       for (int track = 0; track < tracks; ++track) {
-            for (Segment* segment = firstSegment(); segment; segment = segment->next1()) {
+            for (Segment* segment = firstSegmentMM(); segment; segment = segment->next1MM()) {
                   if (track == tracks-1) {
                         for (Element* e : segment->annotations())
                               e->layout();
@@ -687,11 +687,14 @@ void Score::doLayout()
                   sp->setTick2(lastMeasure()->endTick());
                   sp->staff()->updateOttava(static_cast<Ottava*>(sp));
                   }
-            if (sp->tick() == -1) {
-                  qDebug("bad spanner id %d %s %d - %d", sp->id(), sp->name(), sp->tick(), sp->tick2());
+            // 1.3 scores can have ties in this list
+            if (sp->type() != Element::TIE) {
+                  if (sp->tick() == -1) {
+                        qDebug("bad spanner id %d %s %d - %d", sp->id(), sp->name(), sp->tick(), sp->tick2());
+                        }
+                  else
+                        sp->layout();
                   }
-            else
-                  sp->layout();
             }
 
       if (layoutMode() != LayoutLine) {
