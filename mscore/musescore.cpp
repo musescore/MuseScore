@@ -4738,6 +4738,8 @@ int main(int argc, char* av[])
       Shortcut::init();
       preferences.init();
 
+      QNetworkProxyFactory::setUseSystemConfiguration(true);
+
       QWidget wi(0);
       MScore::PDPI = wi.physicalDpiX();         // physical resolution
       MScore::DPI  = MScore::PDPI;             // logical drawing resolution
