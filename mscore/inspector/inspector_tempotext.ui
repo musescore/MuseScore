@@ -38,7 +38,7 @@
       </font>
      </property>
      <property name="text">
-      <string>TempoText</string>
+      <string>Tempo Marking</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
