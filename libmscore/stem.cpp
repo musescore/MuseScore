@@ -240,6 +240,15 @@ void Stem::updateGrips(int* grips, QRectF* grip) const
       }
 
 //---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Stem::startEdit(MuseScoreView*, const QPointF&)
+      {
+      undoPushProperty(P_USER_LEN);
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
