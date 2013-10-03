@@ -1749,7 +1749,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             }
 
       // qDebug("wedge list:");
-      QMap<Spanner*, QPair<int, int> >::const_iterator i = spanners.constBegin();
+      auto i = spanners.constBegin();
       while (i != spanners.constEnd()) {
             Spanner* sp = i.key();
             int tick1 = i.value().first;
@@ -2825,6 +2825,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             if (type == "crescendo" || type == "diminuendo") {
                   if (hairpin) {
                         qDebug("overlapping wedge not supported");
+                        spanners.remove(hairpin);
                         delete hairpin;
                         hairpin = 0;
                         }
