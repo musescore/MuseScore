@@ -33,6 +33,8 @@ class Stem : public Element {
       qreal _userLen;
       qreal _len;             // allways positive
 
+      virtual void startEdit(MuseScoreView*, const QPointF&);
+
    public:
       Stem(Score*);
       Stem &operator=(const Stem&);
