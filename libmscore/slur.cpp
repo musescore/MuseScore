@@ -1085,7 +1085,7 @@ void Slur::layout()
             return;
             }
       if (track2() == -1)
-            setTrack2(tick());
+            setTrack2(track());
 
       qreal _spatium = spatium();
 
