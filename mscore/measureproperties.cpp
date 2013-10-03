@@ -41,6 +41,8 @@ MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(bboxClicked(QAbstractButton*)));
       connect(nextButton, SIGNAL(clicked()), SLOT(gotoNextMeasure()));
       connect(previousButton, SIGNAL(clicked()), SLOT(gotoPreviousMeasure()));
+      nextButton->setEnabled(_m->nextMeasure() != 0);
+      previousButton->setEnabled(_m->prevMeasure() != 0);
       }
 
 //---------------------------------------------------------
@@ -51,6 +53,8 @@ void MeasureProperties::gotoNextMeasure()
       {
       if (m->nextMeasure())
             setMeasure(m->nextMeasure());
+      nextButton->setEnabled(m->nextMeasure() != 0);
+      previousButton->setEnabled(m->prevMeasure() != 0);
       }
 
 //---------------------------------------------------------
@@ -61,6 +65,8 @@ void MeasureProperties::gotoPreviousMeasure()
       {
       if (m->prevMeasure())
             setMeasure(m->prevMeasure());
+      nextButton->setEnabled(m->nextMeasure() != 0);
+      previousButton->setEnabled(m->prevMeasure() != 0);
       }
 
 //---------------------------------------------------------
