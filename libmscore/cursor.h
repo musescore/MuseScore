@@ -51,7 +51,7 @@ class Cursor : public QObject {
 
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
-      Q_PROPERTY(Ms::Score* score     READ score    WRITE setScore)
+      Q_PROPERTY(Ms::Score* score READ score    WRITE setScore)
 
       Score* _score;
       int _track;
