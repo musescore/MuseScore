@@ -83,7 +83,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -147,6 +147,14 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionReload">
+   <property name="text">
+    <string>R</string>
+   </property>
+   <property name="toolTip">
+    <string>reload current plugin source</string>
    </property>
   </action>
  </widget>

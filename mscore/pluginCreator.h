@@ -48,6 +48,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void runClicked();
       void stopClicked();
       void loadPlugin();
+      void load();
       void savePlugin();
       void newPlugin();
       void textChanged();
