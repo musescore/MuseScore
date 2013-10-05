@@ -393,7 +393,7 @@ Score::~Score()
       {
       foreach(MuseScoreView* v, viewer)
             v->removeScore();
-      deselectAll();
+      // deselectAll();
       for (MeasureBase* m = _measures.first(); m;) {
             MeasureBase* nm = m->next();
             delete m;

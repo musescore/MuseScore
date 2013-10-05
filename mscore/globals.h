@@ -48,7 +48,7 @@ enum ScoreState {
       STATE_EDIT                 = 1 <<  5,
       STATE_TEXT_EDIT            = 1 <<  6,
       STATE_LYRICS_EDIT          = 1 <<  7,
-      STATE_HARMONY_FIGBASS_EDIT = 1 << 8,
+      STATE_HARMONY_FIGBASS_EDIT = 1 <<  8,
       STATE_PLAY                 = 1 <<  9,
       STATE_FOTO                 = 1 << 10,
       STATE_LOCK                 = 1 << 11,
