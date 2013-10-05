@@ -2472,19 +2472,21 @@ void MuseScore::changeState(ScoreState val)
                   }
             }
 
+      bool enable = (val != STATE_DISABLED) && (val != STATE_LOCK);
+
       foreach (const Shortcut* s, Shortcut::shortcuts()) {
             QAction* a = s->action();
             if (!a)
                   continue;
-            if (strcmp(s->key(), "undo") == 0)
+            if (enable && strcmp(s->key(), "undo") == 0)
                   a->setEnabled((s->state() & val) && (cs ? cs->undo()->canUndo() : false));
-            else if (strcmp(s->key(), "redo") == 0)
+            else if (enable && strcmp(s->key(), "redo") == 0)
                   a->setEnabled((s->state() & val) && (cs ? cs->undo()->canRedo() : false));
-            else if (strcmp(s->key(), "cut") == 0)
+            else if (enable && strcmp(s->key(), "cut") == 0)
                   a->setEnabled(cs && cs->selection().state());
-            else if (strcmp(s->key(), "copy") == 0)
+            else if (enable && strcmp(s->key(), "copy") == 0)
                   a->setEnabled(cs && cs->selection().state());
-            else if (strcmp(s->key(), "synth-control") == 0) {
+            else if (enable && strcmp(s->key(), "synth-control") == 0) {
                   Driver* driver = seq ? seq->driver() : 0;
                   // a->setEnabled(driver && driver->getSynth());
                   if (MScore::debugMode)
@@ -2497,7 +2499,6 @@ void MuseScore::changeState(ScoreState val)
                   }
             }
 
-      bool enable = (val != STATE_DISABLED) && (val != STATE_LOCK);
 
       // disabling top level menu entries does not
       // work for MAC
