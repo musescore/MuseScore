@@ -40,15 +40,21 @@ MuseScore {
             //           c  g  d  e
             var keyo = [ 0, 7, 2, 4 ];
 
-            var notes = measures * numerator;
+            var realMeasures = Math.floor((measures * 4 + numerator - 1) / numerator);
+            console.log(realMeasures);
+            var notes = realMeasures * numerator;
 
             for (var i = 0; i < notes; ++i) {
                 var idx    = Math.random() * 6;
                 var octave = Math.floor(Math.random() * 2);
                 var pitch  = cdur[Math.floor(idx)] + octave * 12 + 60;
                 var pitch  = pitch + keyo[key];
-
                 var note   = cursor.addNote(pitch);
+                if (i % 12 == 11) {
+                    var lb = newElement(Element.LAYOUT_BREAK);
+                    lb.layoutBreakType = LayoutBreak.LINE;
+                    cursor.add(lb);
+                    }
                 cursor.next();
                 }
             Qt.quit();

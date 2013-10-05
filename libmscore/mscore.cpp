@@ -25,6 +25,7 @@
 #include "repeat.h"
 #include "jump.h"
 #include "marker.h"
+#include "layoutbreak.h"
 
 namespace Ms {
 
@@ -96,6 +97,7 @@ void MScore::init()
       qRegisterMetaType<JumpType>("JumpType");
       qRegisterMetaType<MarkerType>("MarkerType");
       qRegisterMetaType<BeamMode>("BeamMode");
+      qRegisterMetaType<LayoutBreak::LayoutBreakType>("LayoutBreakType");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm

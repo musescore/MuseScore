@@ -489,14 +489,14 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case T_LAYOUT_BREAK:
-                  switch(LayoutBreakType(data.toInt())) {
-                        case LAYOUT_BREAK_LINE:
+                  switch(LayoutBreak::LayoutBreakType(data.toInt())) {
+                        case LayoutBreak::LINE:
                               tag(name, QVariant("line"));
                               break;
-                        case LAYOUT_BREAK_PAGE:
+                        case LayoutBreak::PAGE:
                               tag(name, QVariant("page"));
                               break;
-                        case LAYOUT_BREAK_SECTION:
+                        case LayoutBreak::SECTION:
                               tag(name, QVariant("section"));
                               break;
                         }

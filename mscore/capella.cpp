@@ -992,7 +992,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             Measure* m = score->tick2measure(mtick-1);
             if (m && !m->lineBreak()) {
                   LayoutBreak* lb = new LayoutBreak(score);
-                  lb->setLayoutBreakType(LAYOUT_BREAK_LINE);
+                  lb->setLayoutBreakType(LayoutBreak::LINE);
                   lb->setTrack(-1);       // this are system elements
                   m->add(lb);
                   }

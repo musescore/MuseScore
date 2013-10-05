@@ -47,6 +47,7 @@
 #include "libmscore/figuredbass.h"
 #include "libmscore/accidental.h"
 #include "libmscore/lyrics.h"
+#include "libmscore/layoutbreak.h"
 #include "qmlplugin.h"
 
 namespace Ms {
@@ -172,6 +173,7 @@ QQmlEngine* MuseScore::qml()
             qmlRegisterType<Text>       ("MuseScore", 1, 0, "MText");
             qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
             qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
+            qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
 
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
