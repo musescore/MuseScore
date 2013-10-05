@@ -248,6 +248,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       InsertMeasuresDialog* insertMeasuresDialog;
       MasterPalette* masterPalette;
       PluginCreator* pluginCreator;
+      PluginManager* pluginManager;
 
       QMenu* _fileMenu;
       QMenu* menuEdit;
@@ -502,6 +503,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateDrumTools();
       void showWebPanel(bool on);
       void showPluginCreator(QAction*);
+      void showPluginManager(QAction*);
 
       void updateTabNames();
       QProgressBar* showProgressBar();

@@ -16,6 +16,8 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
+
 //---------------------------------------------------------
 //   PluginManager
 //---------------------------------------------------------
@@ -52,6 +54,7 @@ PluginManager::PluginManager(QWidget* parent)
             pluginList->setCurrentRow(0);
             pluginListItemChanged(pluginList->item(0), 0);
             }
+      readSettings();
       }
 
 //---------------------------------------------------------
@@ -144,5 +147,32 @@ void PluginManager::definePluginShortcutClicked()
       pluginShortcut->setText(s->keysToString());
       prefs.dirty = true;
       }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void PluginManager::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup("PluginManager");
+      settings.setValue("geometry", saveGeometry());
+      settings.endGroup();
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void PluginManager::readSettings()
+      {
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup("PluginManager");
+            restoreGeometry(settings.value("geometry").toByteArray());
+            settings.endGroup();
+            }
+      }
+
 }
 

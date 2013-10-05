@@ -32,6 +32,8 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       bool shortcutsChanged;
       Preferences prefs;
 
+      void readSettings();
+
       virtual void closeEvent(QCloseEvent*);
       virtual void accept();
 
@@ -45,6 +47,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
 
    public:
       PluginManager(QWidget* parent = 0);
+      void writeSettings();
       };
 
 
