@@ -21,6 +21,7 @@
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/segment.h"
+#include "libmscore/timesig.h"
 #include "cursor.h"
 
 namespace Ms {
@@ -57,8 +58,6 @@ void Cursor::rewind(int type)
             Measure* m = _score->firstMeasure();
             if (m) {
                   _segment = m->first(Segment::SegChordRest);
-//                  while (_segment && _segment->element(_track) == 0)
-//                        _segment = _segment->next1(SegChordRest);
                   firstChordRestInTrack();
                   }
             }
@@ -124,11 +123,24 @@ void Cursor::add(Element* s)
             return;
       s->setTrack(_track);
       s->setParent(_segment);
-      if (s->isChordRest()) {
+      if (s->isChordRest())
             s->score()->undoAddCR(static_cast<ChordRest*>(s), _segment->measure(), _segment->tick());
+      else if (s->type() == Element::KEYSIG) {
+            Segment* ns = _segment->measure()->undoGetSegment(Segment::SegKeySig, _segment->tick());
+            s->setParent(ns);
+            _score->undoAddElement(s);
             }
-      else
-            s->score()->undoAddElement(s);
+      else if (s->type() == Element::TIMESIG) {
+            Measure* m = _segment->measure();
+            int tick = m->tick();
+            _score->cmdAddTimeSig(m, _track, static_cast<TimeSig*>(s), false);
+            m = _score->tick2measure(tick);
+            _segment = m->first(Segment::SegChordRest);
+            firstChordRestInTrack();
+            }
+      else {
+            _score->undoAddElement(s);
+            }
       s->score()->setLayoutAll(true);
       }
 

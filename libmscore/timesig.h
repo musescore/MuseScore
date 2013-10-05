@@ -88,6 +88,7 @@ class TimeSig : public Element {
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TSIG_NORMAL);
+      Q_INVOKABLE void setSig(int z, int n, TimeSigType st = TSIG_NORMAL) { setSig(Fraction(z, n), st); }
       int numerator() const              { return _sig.numerator(); }
       int denominator() const            { return _sig.denominator(); }
 
