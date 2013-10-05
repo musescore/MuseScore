@@ -391,19 +391,25 @@ void Image::read(XmlReader& e)
       qDebug("storePath <%s>", qPrintable(_storePath));
 
       QString path;
-      if (_linkPath.isEmpty() || !load(_linkPath)) {
-            // if could not load img from _linkPath, retrieve from store
+      bool    loaded = false;
+      // if a store path is given, attempt to get the image from the store
+      if (!_storePath.isEmpty()) {
             _storeItem = imageStore.getImage(_storePath);
             if (_storeItem) {
                   _storeItem->reference(this);
+                  loaded = true;
                   }
-            // if not in store, try to load from _storePath for backward compatibility
+            // if no image in store, attempt to load from path (for backward compatibility)
             else
-                  load(_storePath);
+                  loaded = load(_storePath);
             path = _storePath;
             }
-      else
+      // if no succes from store path, attempt loading from link path (for .mscx files)
+      if (!loaded) {
+            _linkIsValid = load(_linkPath);
             path = _linkPath;
+            }
+
       if (path.endsWith(".svg"))
             setImageType(IMAGE_SVG);
       else
