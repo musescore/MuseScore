@@ -56,6 +56,9 @@ PluginCreator::PluginCreator(QWidget* parent)
       actionOpen->setShortcut(QKeySequence(QKeySequence::Open));
       fileTools->addAction(actionOpen);
 
+      actionReload->setIcon(*icons[fileOpen_ICON]);
+      fileTools->addAction(actionReload);
+
       actionSave->setIcon(*icons[fileSave_ICON]);
       actionSave->setShortcut(QKeySequence(QKeySequence::Save));
       fileTools->addAction(actionSave);
@@ -86,6 +89,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       connect(run,        SIGNAL(clicked()),     SLOT(runClicked()));
       connect(stop,       SIGNAL(clicked()),     SLOT(stopClicked()));
       connect(actionOpen, SIGNAL(triggered()),   SLOT(loadPlugin()));
+      connect(actionReload, SIGNAL(triggered()), SLOT(load()));
       connect(actionSave, SIGNAL(triggered()),   SLOT(savePlugin()));
       connect(actionNew,  SIGNAL(triggered()),   SLOT(newPlugin()));
       connect(actionQuit, SIGNAL(triggered()),   SLOT(close()));
@@ -371,6 +375,11 @@ void PluginCreator::loadPlugin()
                   return;
             }
       path = mscore->getPluginFilename(true);
+      load();
+      }
+
+void PluginCreator::load()
+      {
       if (path.isEmpty())
             return;
       QFile f(path);
