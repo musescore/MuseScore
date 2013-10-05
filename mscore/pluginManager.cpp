@@ -13,6 +13,7 @@
 
 #include "pluginManager.h"
 #include "shortcutcapturedialog.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -141,9 +142,12 @@ void PluginManager::definePluginShortcutClicked()
             return;
       if (rv == 2)            // replace
             s->clear();
+
       s->addShortcut(sc.getKey());
       QAction* action = s->action();
       action->setShortcuts(s->keys());
+      mscore->addAction(action);
+
       pluginShortcut->setText(s->keysToString());
       prefs.dirty = true;
       }
