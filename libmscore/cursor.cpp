@@ -138,6 +138,11 @@ void Cursor::add(Element* s)
             _segment = m->first(Segment::SegChordRest);
             firstChordRestInTrack();
             }
+      else if (s->type() == Element::LAYOUT_BREAK) {
+            Measure* m = _segment->measure();
+            s->setParent(m);
+            _score->undoAddElement(s);
+            }
       else {
             _score->undoAddElement(s);
             }
