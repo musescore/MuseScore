@@ -121,13 +121,13 @@ void MeasureBase::add(Element* e)
                         }
                   }
             switch (b->layoutBreakType()) {
-                  case LAYOUT_BREAK_PAGE:
+                  case LayoutBreak::PAGE:
                         _pageBreak = true;
                         break;
-                  case LAYOUT_BREAK_LINE:
+                  case LayoutBreak::LINE:
                         _lineBreak = true;
                         break;
-                  case LAYOUT_BREAK_SECTION:
+                  case LayoutBreak::SECTION:
                         _sectionBreak = b;
 //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
                         score()->setLayoutAll(true);
@@ -150,13 +150,13 @@ void MeasureBase::remove(Element* el)
       if (el->type() == LAYOUT_BREAK) {
             LayoutBreak* lb = static_cast<LayoutBreak*>(el);
             switch (lb->layoutBreakType()) {
-                  case LAYOUT_BREAK_PAGE:
+                  case LayoutBreak::PAGE:
                         _pageBreak = false;
                         break;
-                  case LAYOUT_BREAK_LINE:
+                  case LayoutBreak::LINE:
                         _lineBreak = false;
                         break;
-                  case LAYOUT_BREAK_SECTION:
+                  case LayoutBreak::SECTION:
                         _sectionBreak = 0;
                         score()->tempomap()->setPause(endTick(), 0);
                         score()->setLayoutAll(true);
@@ -264,13 +264,13 @@ void MeasureBase::layout0()
                   continue;
             LayoutBreak* e = static_cast<LayoutBreak*>(element);
             switch (e->layoutBreakType()) {
-                  case LAYOUT_BREAK_PAGE:
+                  case LayoutBreak::PAGE:
                         _pageBreak = true;
                         break;
-                  case LAYOUT_BREAK_LINE:
+                  case LayoutBreak::LINE:
                         _lineBreak = true;
                         break;
-                  case LAYOUT_BREAK_SECTION:
+                  case LayoutBreak::SECTION:
                         _sectionBreak = e;
                         break;
                   }
@@ -353,7 +353,7 @@ bool MeasureBase::setProperty(P_ID id, const QVariant& property)
 //   setProperty
 //---------------------------------------------------------
 
-void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
+void MeasureBase::undoSetBreak(bool v, LayoutBreak::LayoutBreakType type)
       {
       if (v) {
             LayoutBreak* lb = new LayoutBreak(_score);
