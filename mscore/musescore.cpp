@@ -370,6 +370,7 @@ MuseScore::MuseScore()
       cv                    = 0;
       se                    = 0;    // script engine
       pluginCreator         = 0;
+      pluginManager         = 0;
       _qml                  = 0;
       pluginMapper          = 0;
       debugger              = 0;
@@ -1034,7 +1035,10 @@ MuseScore::MuseScore()
 
       QMenu* menuPlugins = mb->addMenu(tr("&Plugins"));
       menuPlugins->setObjectName("Plugins");
-      menuPlugins->addAction(getAction("plugin-manager"));
+
+      a = getAction("plugin-manager");
+      a->setCheckable(true);
+      menuPlugins->addAction(a);
 
       a = getAction("plugin-creator");
       a->setCheckable(true);
@@ -3502,6 +3506,28 @@ void MuseScore::showPluginCreator(QAction* a)
       }
 
 //---------------------------------------------------------
+//   showPluginManager
+//---------------------------------------------------------
+
+void MuseScore::showPluginManager(QAction* a)
+      {
+#ifdef SCRIPT_INTERFACE
+      bool on = a->isChecked();
+      if (on) {
+            if (pluginManager == 0) {
+                  pluginManager = new PluginManager(0);
+                  connect(pluginManager, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
+                  }
+            pluginManager->show();
+            }
+      else {
+            if (pluginManager)
+                  pluginManager->hide();
+            }
+#endif
+      }
+
+//---------------------------------------------------------
 //   showMediaDialog
 //---------------------------------------------------------
 
@@ -4092,10 +4118,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showWebPanel(a->isChecked());
       else if (cmd == "plugin-creator")
             showPluginCreator(a);
-      else if (cmd == "plugin-manager") {
-            PluginManager pm(0);
-            pm.exec();
-            }
+      else if (cmd == "plugin-manager")
+            showPluginManager(a);
       else if(cmd == "resource-manager"){
             ResourceManager r(0);
             r.exec();
