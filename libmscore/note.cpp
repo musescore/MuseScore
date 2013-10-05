@@ -1071,8 +1071,8 @@ Element* Note::drop(const DropData& data)
                   return 0;
 
             case LYRICS:
-                  e->setParent(ch->segment());
-                  e->setTrack(trackZeroVoice(track()));
+                  e->setParent(ch);
+                  e->setTrack(track());
                   score()->undoAddElement(e);
                   return e;
 
