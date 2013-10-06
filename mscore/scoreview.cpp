@@ -5280,6 +5280,12 @@ void ScoreView::searchMeasure(int n)
       for (Measure* measure = _score->firstMeasure(); measure; measure = measure->nextMeasure()) {
             if (++i < n)
                   continue;
+            if (_score->styleB(ST_createMultiMeasureRests) && measure->mmRestCount() <= 0) {
+                  if (measure->hasMMRest())
+                        measure = measure->mmRest();
+                  else
+                        measure = measure->prevMeasureMM();
+                  }
             gotoMeasure(measure);
             break;
             }
