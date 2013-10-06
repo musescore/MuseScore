@@ -302,12 +302,12 @@ void PluginCreator::runClicked()
             view->setWidth(item->width());
             view->setHeight(item->height());
             item->setParentItem(view->contentItem());
-            view->show();
 
             if (item->pluginType() == "dock") {
                   dock = new QDockWidget("Plugin", 0);
                   dock->setAttribute(Qt::WA_DeleteOnClose);
                   dock->setWidget(QWidget::createWindowContainer(view));
+                  dock->widget()->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
                   Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
                   if (item->dockArea() == "left")
                         area = Qt::LeftDockWidgetArea;
@@ -319,16 +319,17 @@ void PluginCreator::runClicked()
                   connect(dock, SIGNAL(destroyed()), SLOT(closePlugin()));
                   dock->widget()->setAttribute(Qt::WA_DeleteOnClose);
                   }
+            view->show();
             view->raise();
             connect(view, SIGNAL(destroyed()), SLOT(closePlugin()));
             }
 
-      connect(qml,  SIGNAL(quit()),      SLOT(closePlugin()));
+      connect(qml,  SIGNAL(quit()), SLOT(closePlugin()));
 
-      if (mscore->currentScore())
+      if (mscore->currentScore() && item->pluginType() != "dock")
             mscore->currentScore()->startCmd();
       item->runPlugin();
-      if (mscore->currentScore())
+      if (mscore->currentScore() && item->pluginType() != "dock")
             mscore->currentScore()->endCmd();
       mscore->endCmd();
       }

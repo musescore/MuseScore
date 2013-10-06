@@ -386,7 +386,6 @@ void MuseScore::pluginTriggered(int idx)
             //view->setWidth(p->width());
             //view->setHeight(p->height());
             view->setResizeMode(QQuickView::SizeRootObjectToView);
-            view->show();
             if (p->pluginType() == "dock") {
                   QDockWidget* dock = new QDockWidget("Plugin", 0);
                   dock->setAttribute(Qt::WA_DeleteOnClose);
@@ -401,6 +400,7 @@ void MuseScore::pluginTriggered(int idx)
                   dock->setWidget(w);
                   addDockWidget(area, dock);
                   connect(engine, SIGNAL(quit()), dock, SLOT(close()));
+                  view->show();
                   }
             else {
                   connect(engine, SIGNAL(quit()), view, SLOT(close()));
@@ -408,10 +408,11 @@ void MuseScore::pluginTriggered(int idx)
                   }
             }
 
-      if (cs)
+      // dont call startCmd for non modal dialog
+      if (cs && p->pluginType() != "dock")
             cs->startCmd();
       p->runPlugin();
-      if (cs)
+      if (cs && p->pluginType() != "dock")
             cs->endCmd();
       endCmd();
       }

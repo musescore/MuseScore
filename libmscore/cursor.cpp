@@ -146,7 +146,7 @@ void Cursor::add(Element* s)
       else {
             _score->undoAddElement(s);
             }
-      s->score()->setLayoutAll(true);
+      _score->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
