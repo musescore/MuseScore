@@ -1,10 +1,20 @@
-import QtQuick 2.0
+import QtQuick 2.1
 import MuseScore 1.0
+import QtQuick.Controls 1.0
+import QtQuick.Layouts 1.0
 
 MuseScore {
       version:  "1.0"
       description: "Create random score."
-      menuPath: "Plugins.random"
+      menuPath: "Plugins.random2"
+      pluginType: "dock"
+      dockArea:   "left"
+      width:  150
+      // height: 75
+
+      property variant octaves : 2;
+
+      onRun: { }
 
       function addNote(key, cursor) {
             var cdur = [ 0, 2, 4, 5, 7, 9, 11 ];
@@ -18,15 +28,15 @@ MuseScore {
             cursor.addNote(pitch);
             }
 
-      onRun: {
+      function createScore() {
             var measures    = 18;
             var numerator   = 3;
             var denominator = 4;
-            var octaves     = 2;
             var key         = 3;
 
             var score = newScore("Random.mscz", "Piano", measures);
 
+            score.startCmd()
             score.addText("title", "==Random==");
             score.addText("subtitle", "subtitle");
 
@@ -53,7 +63,6 @@ MuseScore {
             var notes = realMeasures * numerator;
 
             for (var i = 0; i < notes; ++i) {
-
                 if (Math.random() < 0.5) {
                     cursor.setDuration(1, 8);
                     addNote(key, cursor);
@@ -71,7 +80,36 @@ MuseScore {
                     }
                 cursor.next();
                 }
-            Qt.quit();
+            score.endCmd()
             }
-      }
+    GridLayout {
+        anchors.fill: parent
+        columns: 2
+        rowSpacing: 5
+
+
+        Text {
+            text: "Octaves"
+            color: "white"
+            }
+
+        SpinBox {
+            minimumValue: 1
+            maximumValue: 3
+            stepSize:     1
+            Layout.fillWidth: true
+            Layout.preferredHeight: 25
+
+            }
+
+        Button {
+            text: "create"
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            onClicked: {
+                createScore()
+                }
+            }
+        }
+    }
 
