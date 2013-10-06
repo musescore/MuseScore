@@ -779,6 +779,7 @@ class Score : public QObject {
       Q_INVOKABLE Ms::Measure* firstMeasure() const;
       Ms::Measure* firstMeasureMM() const;
       Q_INVOKABLE Ms::Measure* lastMeasure() const;
+      Ms::Measure* lastMeasureMM() const;
       int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
