@@ -406,7 +406,7 @@
     </SC>
   <SC>
     <key>append-measures</key>
-    <seq>Ctrl+Shift+B</seq>
+    <seq>Alt+Shift+B</seq>
     </SC>
   <SC>
     <key>insert-measure</key>
@@ -691,10 +691,6 @@
   <SC>
     <key>revision</key>
     <seq>Ctrl+F11</seq>
-    </SC>
-  <SC>
-    <key>show-omr</key>
-    <seq>Ctrl+O</seq>
     </SC>
   <SC>
     <key>fullscreen</key>
