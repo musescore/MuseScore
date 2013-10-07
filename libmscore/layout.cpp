@@ -2135,7 +2135,7 @@ void Score::layoutLinear()
       qreal xo = 0;
 
       Measure* fm = firstMeasure();
-      for(MeasureBase* m = first(); m != fm ; m = m->next()) {
+      for (MeasureBase* m = first(); m != fm ; m = m->next()) {
             if (m->type() == Element::HBOX)
                   xo += point(static_cast<Box*>(m)->boxWidth());
             }
@@ -2152,17 +2152,22 @@ void Score::layoutLinear()
                   curMeasure = curMeasure->next();
                   continue;
                   }
+            if (styleB(ST_createMultiMeasureRests) && t == Element::MEASURE) {
+                  Measure* m = static_cast<Measure*>(mb);
+                  if (m->hasMMRest())
+                        mb = m->mmRest();
+                  }
             mb->setSystem(system);
             system->measures().append(mb);
             }
       if (system->measures().isEmpty())
             return;
-      addSystemHeader(firstMeasure(), true);
-      removeGeneratedElements(firstMeasure(), lastMeasure());
+      addSystemHeader(firstMeasureMM(), true);
+      removeGeneratedElements(firstMeasureMM(), lastMeasureMM());
 
       QPointF pos(0.0, 0.0);
       bool isFirstMeasure = true;
-      foreach(MeasureBase* mb, system->measures()) {
+      foreach (MeasureBase* mb, system->measures()) {
             qreal w = 0.0;
             if (mb->type() == Element::MEASURE) {
                   if(isFirstMeasure) {
