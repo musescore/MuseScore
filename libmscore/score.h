@@ -720,6 +720,7 @@ class Score : public QObject {
       void cmdTransposeStaff(int staffIdx, Interval, bool useDoubleSharpsFlats);
       void cmdConcertPitchChanged(bool, bool useSharpsFlats);
 
+      void setTempomap(TempoMap* tm);
       TempoMap* tempomap() const;
       TimeSigMap* sigmap() const;
 
