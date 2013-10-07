@@ -8040,7 +8040,7 @@
                   <description>Electric Guitar</description>
                   <musicXMLid>pluck.guitar.electric</musicXMLid>
                   <StringData>
-                        <frets>19</frets>
+                        <frets>24</frets>
                         <string>40</string>
                         <string>45</string>
                         <string>50</string>
