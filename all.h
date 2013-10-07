@@ -140,6 +140,7 @@
 #include <QSpacerItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QtConcurrent>
+#include <QScreen>
 
 #include <QSvgRenderer>
 #include <QSvgGenerator>
