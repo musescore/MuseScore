@@ -5276,19 +5276,21 @@ void ScoreView::searchPage(int n)
 
 void ScoreView::searchMeasure(int n)
       {
+      if (n <= 0)
+            return;
+      --n;
       int i = 0;
-      for (Measure* measure = _score->firstMeasure(); measure; measure = measure->nextMeasure()) {
-            if (++i < n)
-                  continue;
-            if (_score->styleB(ST_createMultiMeasureRests) && measure->mmRestCount() <= 0) {
-                  if (measure->hasMMRest())
-                        measure = measure->mmRest();
-                  else
-                        measure = measure->prevMeasureMM();
-                  }
-            gotoMeasure(measure);
-            break;
+      Measure* measure;
+      for (measure = _score->firstMeasureMM(); measure; measure = measure->nextMeasureMM()) {
+            int nn = _score->styleB(ST_createMultiMeasureRests) && measure->isMMRest()
+               ? measure->mmRestCount() : 1;
+            if (n >= i && n < (i+nn))
+                  break;
+            i += nn;
             }
+      if (!measure)
+            measure = score()->lastMeasureMM();
+      gotoMeasure(measure);
       }
 
 //---------------------------------------------------------
