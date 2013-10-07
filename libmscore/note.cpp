@@ -730,7 +730,10 @@ void Note::read(XmlReader& e)
             else if (tag == "ghost")
                   setGhost(e.readInt());
             else if (tag == "headType")
-                  setProperty(P_HEAD_TYPE, Ms::getProperty(P_HEAD_TYPE, e));
+                  if (score()->mscVersion() <= 114)
+                        setProperty(P_HEAD_TYPE, Ms::getProperty(P_HEAD_TYPE, e).toInt() - 1);
+                  else
+                        setProperty(P_HEAD_TYPE, Ms::getProperty(P_HEAD_TYPE, e).toInt());
             else if (tag == "veloType")
                   setProperty(P_VELO_TYPE, Ms::getProperty(P_VELO_TYPE, e));
             else if (tag == "line")
