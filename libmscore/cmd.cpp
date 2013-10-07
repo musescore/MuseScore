@@ -2351,13 +2351,13 @@ void Score::cmd(const QAction* a)
       else if (cmd == "voice-x34")
             cmdExchangeVoice(2, 3);
       else if (cmd == "system-break" || cmd == "page-break" || cmd == "section-break") {
-            LayoutBreakType type;
+            LayoutBreak::LayoutBreakType type;
             if (cmd == "system-break")
-                  type = LAYOUT_BREAK_LINE;
+                  type = LayoutBreak::LINE;
             else if (cmd == "page-break")
-                  type = LAYOUT_BREAK_PAGE;
+                  type = LayoutBreak::PAGE;
             else
-                  type = LAYOUT_BREAK_SECTION;
+                  type = LayoutBreak::SECTION;
 
             Element* e = selection().element();
             if (e && e->type() == Element::BAR_LINE && e->parent()->type() == Element::SEGMENT) {

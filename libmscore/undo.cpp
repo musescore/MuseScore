@@ -1020,7 +1020,10 @@ void Score::undoAddElement(Element* element)
                || element->type() == Element::PEDAL
                || element->type() == Element::VOLTA) {
                   // ne->setParent(0);  ???
-                  undo(new AddElement(ne));
+                  Spanner* nsp = static_cast<Spanner*>(ne);
+                  Spanner* sp = static_cast<Spanner*>(element);
+                  nsp->setTrack2(staffIdx * VOICES + (sp->track2() % VOICES));
+                  undo(new AddElement(nsp));
                   }
             else if (element->type() == Element::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
                   Tremolo* tremolo = static_cast<Tremolo*>(element);

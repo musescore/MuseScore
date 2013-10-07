@@ -369,17 +369,17 @@ Palette* MuseScore::newBreaksPalette()
       sp->setDrawGrid(true);
 
       LayoutBreak* lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LAYOUT_BREAK_LINE);
+      lb->setLayoutBreakType(LayoutBreak::LINE);
       PaletteCell* cell = sp->append(lb, tr("Line break"));
       cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LAYOUT_BREAK_PAGE);
+      lb->setLayoutBreakType(LayoutBreak::PAGE);
       cell = sp->append(lb, tr("Page break"));
       cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LAYOUT_BREAK_SECTION);
+      lb->setLayoutBreakType(LayoutBreak::SECTION);
       cell = sp->append(lb, tr("Section break"));
       cell->mag = 1.2;
 
@@ -1138,7 +1138,7 @@ void MuseScore::addTempo()
       ChordRest* cr = cs->getSelectedChordRest();
       if (!cr)
             return;
-      double bps = 2.0;
+//      double bps = 2.0;
 
       SigEvent event = cs->sigmap()->timesig(cr->tick());
       Fraction f = event.nominal();

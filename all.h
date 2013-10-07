@@ -148,6 +148,7 @@
 #include <QNetworkReply>
 #include <QNetworkCookie>
 #include <QNetworkCookieJar>
+#include <QNetworkProxyFactory>
 #include <QHostAddress>
 #include <QUdpSocket>
 

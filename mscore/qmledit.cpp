@@ -327,20 +327,22 @@ QmlEdit::QmlEdit(QWidget* parent)
       setTextCursor(c);
 
       static const Binding bindings[] = {
+#if 0
             { "start",       Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_E, SLOT(start()) },
             { "end",         Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_X, SLOT(end()) },
             { "startOfLine", Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_S, SLOT(startOfLine()) },
             { "endOfLine",   Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_D, SLOT(endOfLine())   },
             { "up",          Qt::CTRL+Qt::Key_E, 0, SLOT(upLine())     },
-            { "down",        /*Qt::CTRL+Qt::Key_X*/0, 0, SLOT(downLine())   },
+            { "down",        Qt::CTRL+Qt::Key_X, 0, SLOT(downLine())   },
             { "right",       Qt::CTRL+Qt::Key_D, 0, SLOT(right())      },
             { "left",        Qt::CTRL+Qt::Key_S, 0, SLOT(left())       },
             { "rightWord",   Qt::CTRL+Qt::Key_F, 0, SLOT(rightWord())  },
-            { "leftWord",    /*Qt::CTRL+Qt::Key_A*/0, 0, SLOT(leftWord())   },
+            { "leftWord",    Qt::CTRL+Qt::Key_A, 0, SLOT(leftWord())   },
             { "pick",        Qt::Key_F8,         0, SLOT(pick())       },
             { "put",         Qt::Key_F9,         0, SLOT(put())        },
             { "delLine",     Qt::CTRL+Qt::Key_Y, 0, SLOT(delLine())    },
             { "delWord",     Qt::CTRL+Qt::Key_T, 0, SLOT(delWord())    }
+#endif
             };
       setTabChangesFocus(false);
       setBackgroundVisible(false);
@@ -357,6 +359,8 @@ QmlEdit::QmlEdit(QWidget* parent)
             const Binding& b = bindings[i];
             QAction* a = new QAction(b.name, this);
             a->setShortcut(QKeySequence(b.key1, b.key2));
+            a->setShortcutContext(Qt::WidgetShortcut);
+            a->setPriority(QAction::HighPriority);
             addAction(a);
             connect(a, SIGNAL(triggered()), b.slot);
             }
@@ -589,6 +593,7 @@ void QmlEdit::delWord()
 
 void QmlEdit::downLine()
       {
+      printf("down line\n");
       move(QTextCursor::Down);
       }
 

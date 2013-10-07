@@ -1429,9 +1429,9 @@ qDebug("drop staffList");
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (
-                        (lb->layoutBreakType() == LAYOUT_BREAK_PAGE && _pageBreak)
-                     || (lb->layoutBreakType() == LAYOUT_BREAK_LINE && _lineBreak)
-                     || (lb->layoutBreakType() == LAYOUT_BREAK_SECTION && _sectionBreak)
+                        (lb->layoutBreakType() == LayoutBreak::PAGE && _pageBreak)
+                     || (lb->layoutBreakType() == LayoutBreak::LINE && _lineBreak)
+                     || (lb->layoutBreakType() == LayoutBreak::SECTION && _sectionBreak)
                      ) {
                         //
                         // if break already set
@@ -1439,12 +1439,12 @@ qDebug("drop staffList");
                         delete lb;
                         break;
                         }
-                  // make sure there is only LAYOUT_BREAK_LINE or LAYOUT_BREAK_PAGE
-                  if ((lb->layoutBreakType() != LAYOUT_BREAK_SECTION) && (_pageBreak || _lineBreak)) {
+                  // make sure there is only LayoutBreak::LINE or LayoutBreak::PAGE
+                  if ((lb->layoutBreakType() != LayoutBreak::SECTION) && (_pageBreak || _lineBreak)) {
                         foreach(Element* le, _el) {
                               if (le->type() == LAYOUT_BREAK
-                                 && (static_cast<LayoutBreak*>(le)->layoutBreakType() == LAYOUT_BREAK_LINE
-                                  || static_cast<LayoutBreak*>(le)->layoutBreakType() == LAYOUT_BREAK_PAGE)) {
+                                 && (static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::LINE
+                                  || static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::PAGE)) {
                                     score()->undoChangeElement(le, e);
                                     break;
                                     }
@@ -1914,7 +1914,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Spanner* spanner = score()->findSpanner(id);
                   if (spanner) {
                         spanner->setTick2(e.tick());
-                        spanner->setTrack2(e.track());
+                        if(spanner->track2() == -1)
+                              spanner->setTrack2(e.track());
                         if (spanner->type() == OTTAVA) {
                               Ottava* o = static_cast<Ottava*>(spanner);
                               o->staff()->updateOttava(o);

@@ -106,7 +106,11 @@ bool Portaudio::init()
       out.device           = idx;
       out.channelCount     = 2;
       out.sampleFormat     = paFloat32;
+#ifdef Q_OS_MAC
       out.suggestedLatency = 0.020;
+#else // on windows, this small latency causes some problem
+      out.suggestedLatency = 0.100;
+#endif
       out.hostApiSpecificStreamInfo = 0;
 
       err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 0, 0, paCallback, (void*)this);

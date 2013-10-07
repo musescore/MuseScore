@@ -154,7 +154,13 @@ void Tie::slurPos(SlurPos* sp)
       qreal _spatium = spatium();
 
       Chord* sc   = startNote()->chord();
+      Q_ASSERT(sc);
       sp->system1 = sc->measure()->system();
+      if (!sp->system1) {
+            Measure* m = sc->measure();
+            printf("no system: measure is %d has %d count %d\n", m->isMMRest(), m->hasMMRest(), m->mmRestCount());
+            }
+      Q_ASSERT(sp->system1);
 
       qreal xo;
       qreal yo;

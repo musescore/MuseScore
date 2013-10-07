@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for a in 01 02 03 04 05 06 07 08 09 10 11 12; do
+for a in 01 02 03 04 05 06 07 08 09 10 11 12 50; do
       echo cp ../../../build.debug/mtest/libmscore/copypaste/copypaste${a}.mscx copypaste${a}-ref.mscx
       cp ../../../build.debug/mtest/libmscore/copypaste/copypaste${a}.mscx copypaste${a}-ref.mscx
       done

@@ -8588,6 +8588,7 @@
                   <Channel>
                         <program value="32"/>
                   </Channel>
+                  <genre>common</genre>
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="electric-bass">

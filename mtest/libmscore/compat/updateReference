@@ -11,5 +11,6 @@ cp $P/title-test.mscx title-ref.mscx
 cp $P/notes_useroffset-test.mscx notes_useroffset-ref.mscx
 cp $P/tremolo2notes-test.mscx tremolo2notes-ref.mscx
 cp $P/accidentals-test.mscx accidentals-ref.mscx
+cp $P/slurs-test.mscx slurs-ref.mscx
 
 

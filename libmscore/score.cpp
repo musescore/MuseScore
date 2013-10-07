@@ -393,7 +393,7 @@ Score::~Score()
       {
       foreach(MuseScoreView* v, viewer)
             v->removeScore();
-      deselectAll();
+      // deselectAll();
       for (MeasureBase* m = _measures.first(); m;) {
             MeasureBase* nm = m->next();
             delete m;
@@ -1663,12 +1663,44 @@ Measure* Score::lastMeasure() const
       }
 
 //---------------------------------------------------------
+//   lastMeasureMM
+//---------------------------------------------------------
+
+Measure* Score::lastMeasureMM() const
+      {
+      MeasureBase* mb = _measures.last();
+      for (; mb; mb = mb->prev()) {
+            if (mb->type() != Element::MEASURE)
+                  continue;
+            if (!styleB(ST_createMultiMeasureRests))
+                  break;
+            Measure* m = static_cast<Measure*>(mb);
+            if (m->mmRestCount() < 0)
+                  continue;
+            if (m->hasMMRest())
+                  mb = m->mmRest();
+            break;
+            }
+      return static_cast<Measure*>(mb);
+      }
+
+//---------------------------------------------------------
 //   firstSegment
 //---------------------------------------------------------
 
 Segment* Score::firstSegment(Segment::SegmentTypes segType) const
       {
       Measure* m = firstMeasure();
+      return m ? m->first(segType) : 0;
+      }
+
+//---------------------------------------------------------
+//   firstSegmentMM
+//---------------------------------------------------------
+
+Segment* Score::firstSegmentMM(Segment::SegmentTypes segType) const
+      {
+      Measure* m = firstMeasureMM();
       return m ? m->first(segType) : 0;
       }
 
@@ -3243,19 +3275,15 @@ qreal Score::loHeight() const
 
 void Score::cmdSelectAll()
       {
-      MeasureBase* mb = _measures.last();
-      if (mb) {   // check for empty score
-            _selection.setState(SEL_RANGE);
-            int tick = mb->tick();
-            if (mb->type() == Element::MEASURE)
-                  tick += static_cast<Measure*>(mb)->ticks();
-            Segment* s1 = tick2segment(0);
-            Segment* s2 = tick2segment(tick);
-            _selection.setRange(s1, s2, 0, nstaves());
-            _selection.updateSelectedElements();
-            setUpdateAll(true);
-            end();
-            }
+      if (_measures.size() == 0)
+            return;
+      _selection.setState(SEL_RANGE);
+      Segment* s1 = firstMeasureMM()->first();
+      Segment* s2 = lastMeasureMM()->last();
+      _selection.setRange(s1, s2, 0, nstaves());
+      _selection.updateSelectedElements();
+      setUpdateAll(true);
+      end();
       }
 
 //---------------------------------------------------------

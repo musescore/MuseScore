@@ -4035,6 +4035,7 @@ void ScoreView::cmdAddSlur()
                         slur->setTick(cr1->tick());
                         slur->setTick2(cr2->tick());
                         slur->setTrack(cr1->track());
+                        slur->setTrack2(cr2->track());
                         slur->setParent(0);
                         _score->undoAddElement(slur);
                         }
@@ -4132,6 +4133,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             slur->setStartChord(static_cast<Chord*>(cr1));
             slur->setEndChord(static_cast<Chord*>(cr2));
             slur->setTrack(cr1->track());
+            slur->setTrack2(cr2->track());
             slur->setParent(cr1);
             score()->undoAddElement(slur);
             _score->endCmd();
@@ -5278,6 +5280,12 @@ void ScoreView::searchMeasure(int n)
       for (Measure* measure = _score->firstMeasure(); measure; measure = measure->nextMeasure()) {
             if (++i < n)
                   continue;
+            if (_score->styleB(ST_createMultiMeasureRests) && measure->mmRestCount() <= 0) {
+                  if (measure->hasMMRest())
+                        measure = measure->mmRest();
+                  else
+                        measure = measure->prevMeasureMM();
+                  }
             gotoMeasure(measure);
             break;
             }

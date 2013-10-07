@@ -318,7 +318,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
       if (mef.lastOfSystem) {
             Ms::LayoutBreak* lb = new Ms::LayoutBreak(score);
             lb->setTrack(0);
-            lb->setLayoutBreakType(Ms::LAYOUT_BREAK_LINE);
+            lb->setLayoutBreakType(Ms::LayoutBreak::LINE);
             currentMeasure->add(lb);
             }
 

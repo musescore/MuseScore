@@ -21,17 +21,23 @@ namespace Ms {
 
 // layout break subtypes:
 
-enum LayoutBreakType {
-      LAYOUT_BREAK_PAGE, LAYOUT_BREAK_LINE, LAYOUT_BREAK_SECTION
-      };
-
 //---------------------------------------------------------
 //   @@ LayoutBreak
 ///    symbols for line break, page break etc.
+//
+//   @P layoutBreakType enum PAGE, LINE, SECTION
 //---------------------------------------------------------
 
 class LayoutBreak : public Element {
       Q_OBJECT
+
+   public:
+      enum LayoutBreakType {
+            PAGE, LINE, SECTION
+            };
+   private:
+      Q_PROPERTY(LayoutBreakType layoutBreakType READ layoutBreakType WRITE undoSetLayoutBreakType)
+      Q_ENUMS(LayoutBreakType)
 
       LayoutBreakType _layoutBreakType;
       qreal lw;
@@ -46,7 +52,7 @@ class LayoutBreak : public Element {
       virtual void spatiumChanged(qreal oldValue, qreal newValue);
 
    public:
-      LayoutBreak(Score*);
+      LayoutBreak(Score* = 0);
       virtual LayoutBreak* clone() const { return new LayoutBreak(*this); }
 
       virtual ElementType type() const { return LAYOUT_BREAK; }
@@ -54,6 +60,7 @@ class LayoutBreak : public Element {
 
       void setLayoutBreakType(LayoutBreakType);
       LayoutBreakType layoutBreakType() const  { return _layoutBreakType; }
+      void undoSetLayoutBreakType(LayoutBreakType);
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
@@ -74,4 +81,7 @@ class LayoutBreak : public Element {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::LayoutBreak::LayoutBreakType)
+
 #endif

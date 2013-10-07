@@ -64,7 +64,7 @@ class KeySig : public Element {
       virtual void layout();
       virtual qreal mag() const;
 
-      void setSig(int oldSig, int newSig);
+      Q_INVOKABLE void setSig(int oldSig, int newSig);
       void setOldSig(int oldSig);
 
       Segment* segment() const            { return (Segment*)parent(); }

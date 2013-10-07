@@ -825,7 +825,7 @@
     </SC>
   <SC>
     <key>rest-TAB</key>
-    <seq>'</seq>
+    <seq>;</seq>
     </SC>
   <SC>
     <key>string-above</key>

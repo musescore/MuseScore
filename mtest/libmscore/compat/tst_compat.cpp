@@ -64,7 +64,7 @@ void TestCompat::compat_data()
       QTest::newRow("notes_useroffset") << "notes_useroffset";
       QTest::newRow("tremolo2notes") << "tremolo2notes";
       QTest::newRow("accidentals") << "accidentals";
-//      QTest::newRow("slurs") << "slurs";
+      QTest::newRow("slurs") << "slurs";
       }
 
 //---------------------------------------------------------

@@ -95,13 +95,13 @@ Score* QmlPlugin::newScore(const QString& name, const QString& part, int measure
             msc->endCmd();
             }
       Score* score = new Score(MScore::defaultStyle());
-      int view = msc->appendScore(score);
-      msc->setCurrentView(0, view);
-      qApp->processEvents();
       score->setName(name);
       score->appendPart(part);
       score->appendMeasures(measures);
       score->doLayout();
+      int view = msc->appendScore(score);
+      msc->setCurrentView(0, view);
+      qApp->processEvents();
       score->startCmd();
       return score;
       }
