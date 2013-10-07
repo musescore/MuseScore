@@ -4765,8 +4765,8 @@ int main(int argc, char* av[])
 
       QNetworkProxyFactory::setUseSystemConfiguration(true);
 
-      QWidget wi(0);
-      MScore::PDPI = wi.physicalDpiX();         // physical resolution
+      QScreen* screen = QGuiApplication::primaryScreen();
+      MScore::PDPI = screen->physicalDotsPerInch();        // physical resolution
       MScore::DPI  = MScore::PDPI;             // logical drawing resolution
       MScore::init();                          // initialize libmscore
 
