@@ -2044,6 +2044,7 @@ void setMscoreLocale(QString localeName)
             qApp->installTranslator(qtTranslator);
             translatorList.append(qtTranslator);
             }
+      QLocale::setDefault(QLocale(localeName));
       // initShortcuts();
       }
 
@@ -4873,10 +4874,10 @@ int main(int argc, char* av[])
       //    fall back to "C" locale
       //
 
-#ifndef Q_OS_WIN
-      setenv("LANG", "C", 1);
-#endif
-      QLocale::setDefault(QLocale(QLocale::C));
+      //#ifndef Q_OS_WIN
+      //setenv("LANG", "C", 1);
+      //#endif
+      //QLocale::setDefault(QLocale(QLocale::C));
 
       if (MScore::debugMode) {
             QStringList sl(QCoreApplication::libraryPaths());
