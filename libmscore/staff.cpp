@@ -643,6 +643,23 @@ void LinkedStaves::remove(Staff* staff)
       }
 
 //---------------------------------------------------------
+//   isLinked
+///  return true if staff is different and
+///  linked to this staff
+//---------------------------------------------------------
+bool Staff::isLinked(Staff* staff)
+      {
+      if (staff == this || !_linkedStaves)
+            return false;
+
+      for(Staff* s : _linkedStaves->staves()) {
+            if(s == staff)
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   primaryStaff
 ///   if there are linked staves, the primary staff is
 ///   the one who is played back
