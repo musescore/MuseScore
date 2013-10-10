@@ -57,8 +57,6 @@ void ResourceManager::displayLanguages()
             }
       int rowCount = result.object().keys().size();
       rowCount -= 2; //version and type
-      qDebug() << result.object().keys().size();
-      qDebug() << result.toJson();
       languagesTable->setRowCount(rowCount);
 
       int row = 0;
@@ -66,8 +64,6 @@ void ResourceManager::displayLanguages()
       QPushButton* updateButtons[rowCount];
       QPushButton* temp;
       languagesTable->verticalHeader()->show();
-
-      QCryptographicHash hash(QCryptographicHash::Sha1);
 
       for (QString key : result.object().keys()) {
             if (!result.object().value(key).isObject())
