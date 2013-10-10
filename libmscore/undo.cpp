@@ -1022,7 +1022,10 @@ void Score::undoAddElement(Element* element)
                   // ne->setParent(0);  ???
                   Spanner* nsp = static_cast<Spanner*>(ne);
                   Spanner* sp = static_cast<Spanner*>(element);
-                  nsp->setTrack2(staffIdx * VOICES + (sp->track2() % VOICES));
+                  int staffIdx1 = sp->track() / VOICES;
+                  int staffIdx2 = sp->track2() / VOICES;
+                  int diff = staffIdx2 - staffIdx1;
+                  nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
                   undo(new AddElement(nsp));
                   }
             else if (element->type() == Element::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
