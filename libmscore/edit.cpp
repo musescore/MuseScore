@@ -1429,6 +1429,11 @@ void Score::cmdDeleteSelection()
             int tick2   = s2 ? s2->tick() : INT_MAX;
             int track1  = selection().staffStart() * VOICES;
             int track2  = selection().staffEnd() * VOICES;
+            for (auto i : _spanner.findOverlapping(stick1, stick2 - 1)) {
+                  Spanner* sp = i.value;
+                  if (sp->track() >= track1 && sp->track() < track2)
+                        undoRemoveElement(sp);
+                  }
             for (int track = track1; track < track2; ++track) {
                   Fraction f;
                   int tick  = -1;
