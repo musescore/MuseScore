@@ -172,8 +172,9 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                            || tag == "Volta") {
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->setAnchor(Spanner::ANCHOR_SEGMENT);
-                              sp->read(e);
+                              sp->read(e);                              
                               sp->setTrack(dstStaffIdx * VOICES);
+                              sp->setTrack2(dstStaffIdx * VOICES);
                               sp->setTick(e.tick() - tickStart + dstTick);
                               addSpanner(sp);
                               }
