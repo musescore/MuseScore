@@ -2737,7 +2737,6 @@ void RemoveMeasures::undo()
             if (m == lm)
                   break;
             }
-      fm->score()->insertTime(fm->tick(), ticks);
       fm->score()->fixTicks();
       fm->score()->connectTies();
       fm->score()->setLayoutAll(true);
@@ -2757,6 +2756,7 @@ void RemoveMeasures::redo()
             if (m == lm)
                   break;
             }
+      // insertTime is undoable by itself
       fm->score()->insertTime(fm->tick(), -ticks);
       fm->score()->fixTicks();
       }
