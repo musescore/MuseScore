@@ -1417,8 +1417,8 @@ void Score::cmdDeleteSelection()
       if (selection().state() == SEL_RANGE) {
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
-            int stick1 = s1->tick();
-            int stick2 = s2->tick();
+            int stick1 = selection().tickStart();
+            int stick2 = selection().tickEnd();
 
             Segment* ss1 = s1;
             if (ss1->segmentType() != Segment::SegChordRest)
