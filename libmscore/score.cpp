@@ -2649,6 +2649,17 @@ void Score::sortStaves(QList<int>& dst)
             if (m->hasMMRest())
                   m->mmRest()->sortStaves(dst);
             }
+      for (auto i : _spanner.map()) {
+            Spanner* sp = i.second;
+            int voice    = sp->voice();
+            int staffIdx = sp->staffIdx();
+            int idx = dst.indexOf(staffIdx);
+            if (idx >=0) {
+                  sp->setTrack(idx * VOICES + voice);
+                  if (sp->track2() != -1)
+                        sp->setTrack2(idx * VOICES +(sp->track2() % VOICES)); // at least keep the voice...
+                  }
+            }
       }
 
 //---------------------------------------------------------
