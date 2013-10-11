@@ -2489,21 +2489,23 @@ void ScoreView::normalPaste()
 
             if (type != Element::INVALID) {
                   Element* el = Element::create(type, _score);
-                  el->read(e);
                   if (el) {
-                        for (Element* target : els) {
-                              Element* nel = el->clone();
-                              _score->addRefresh(target->abbox());   // layout() ?!
-                              DropData ddata;
-                              ddata.view       = this;
-                              ddata.element    = nel;
-                              ddata.duration   = duration;
-                              target->drop(ddata);
-                              if (_score->selection().element())
-                                    _score->addRefresh(_score->selection().element()->abbox());
+                        el->read(e);
+                        if (el) {
+                              for (Element* target : els) {
+                                    Element* nel = el->clone();
+                                    _score->addRefresh(target->abbox());   // layout() ?!
+                                    DropData ddata;
+                                    ddata.view       = this;
+                                    ddata.element    = nel;
+                                    ddata.duration   = duration;
+                                    target->drop(ddata);
+                                    if (_score->selection().element())
+                                          _score->addRefresh(_score->selection().element()->abbox());
+                                    }
                               }
+                              delete el;
                         }
-                        delete el;
                   }
             else
                   qDebug("cannot read type");
