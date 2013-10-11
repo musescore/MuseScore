@@ -221,6 +221,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                                       // it will not fit
                                           ne->setReadPos(QPointF());
                                           ne->setTrack(track == -1 ? 0 : track);
+                                          ne->setScore(score);
                                           ns->add(ne);
                                           }
                                     }
