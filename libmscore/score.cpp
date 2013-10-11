@@ -2494,6 +2494,17 @@ void Score::insertStaff(Staff* staff, int idx)
       {
       _staves.insert(idx, staff);
       staff->part()->insertStaff(staff);
+      for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
+            Spanner* s = i->second;
+            if (s->staffIdx() >= idx) {
+                  int t = s->track() + VOICES;
+                  s->setTrack(t < ntracks() ? t : ntracks() - 1);
+                  if (s->track2() != -1) {
+                        t = s->track2() + VOICES;
+                        s->setTrack2(t < ntracks() ? t : s->track());
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -2584,6 +2595,14 @@ void Score::cmdRemoveStaff(int staffIdx)
             Spanner* s = i->second;
             if (s->staffIdx() == staffIdx)
                   sl.append(s);
+            if (s->staffIdx() > staffIdx) {
+                  int t = s->track() - VOICES;
+                  s->setTrack(t >=0 ? t : 0);
+                  if (s->track2() != -1) {
+                        t = s->track2() - VOICES;
+                        s->setTrack2(t >=0 ? t : s->track());
+                        }
+                  }
             }
       for (auto i : sl)
             undoRemoveElement(i);
@@ -2618,6 +2637,18 @@ void Score::cmdRemoveStaff(int staffIdx)
 
 void Score::removeStaff(Staff* staff)
       {
+      int idx = staffIdx(staff);
+      for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
+            Spanner* s = i->second;
+            if (s->staffIdx() > idx) {
+                  int t = s->track() - VOICES;
+                  s->setTrack(t >=0 ? t : 0);
+                  if (s->track2() != -1) {
+                        t = s->track2() - VOICES;
+                        s->setTrack2(t >=0 ? t : s->track());
+                        }
+                  }
+            }
       _staves.removeAll(staff);
       staff->part()->removeStaff(staff);
       }
