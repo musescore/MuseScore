@@ -157,6 +157,11 @@ Harmony::Harmony(const Harmony& h)
       _parsedForm = h._parsedForm ? new ParsedChord(*h._parsedForm) : 0;
       _textName   = h._textName;
       _userName   = h._userName;
+      foreach(const TextSegment* s, h.textList) {
+            TextSegment* ns = new TextSegment();
+            ns->set(s->text, s->font, s->x, s->y);
+            textList.append(ns);
+            }
       }
 
 //---------------------------------------------------------
