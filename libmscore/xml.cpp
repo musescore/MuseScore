@@ -742,6 +742,18 @@ void Xml::writeHtml(QString s)
             *this << sl[i] << "\n";
       }
 
+//---------------------------------------------------------
+//   spannerValues
+//---------------------------------------------------------
+
+const SpannerValues* XmlReader::spannerValues(int id)
+      {
+      for (const SpannerValues& v : _spannerValues) {
+            if (v.spannerId == id)
+                  return &v;
+            }
+      return 0;
+      }
 
 }
 

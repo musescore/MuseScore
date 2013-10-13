@@ -860,7 +860,7 @@ class Score : public QObject {
       void createRevision();
       QByteArray readCompressedToBuffer();
       QByteArray readToBuffer();
-      void writeSegments(Xml& xml, const Measure*, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
+      void writeSegments(Xml& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
 
       const QMap<QString, QString>& metaTags() const;
       QMap<QString, QString>& metaTags();
