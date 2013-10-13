@@ -1216,20 +1216,24 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                   if (segment->segmentType() & (Segment::SegChordRest)) {
                         for (auto i : _spanner.map()) {     // TODO: dont search whole list
                               Spanner* s = i.second;
-                              if (s->track() != track || s->generated())
+                              if (s->generated())
                                     continue;
 
-                              int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
-                              if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
-                                    if (needTick) {
-                                          xml.tag("tick", segment->tick() - xml.tickDiff);
-                                          xml.curTick = segment->tick();
-                                          needTick = false;
+                              if (s->track() == track) {
+                                    int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
+                                    if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
+                                          if (needTick) {
+                                                xml.tag("tick", segment->tick() - xml.tickDiff);
+                                                xml.curTick = segment->tick();
+                                                needTick = false;
+                                                }
+                                          s->setId(++xml.spannerId);
+                                          s->write(xml);
                                           }
-                                    s->setId(++xml.spannerId);
-                                    s->write(xml);
                                     }
-                              if (s->tick2() == segment->tick() && (!clip || s->tick() >= fs->tick())) {
+                              else if (s->tick2() == segment->tick()
+                                 && (s->track2() == track)
+                                 && (!clip || s->tick() >= fs->tick())) {
                                     if (needTick) {
                                           xml.tag("tick", segment->tick() - xml.tickDiff);
                                           xml.curTick = segment->tick();
