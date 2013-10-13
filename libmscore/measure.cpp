@@ -1729,7 +1729,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
             }
       Q_ASSERT(first());
       Q_ASSERT(last());
-      score()->writeSegments(xml, this, strack, etrack, first(), last()->next1(), writeSystemElements, false, false);
+      score()->writeSegments(xml, strack, etrack, first(), last()->next1(), writeSystemElements, false, false);
       xml.etag();
       }
 
@@ -1925,8 +1925,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                               score()->updateHairpin(hp);
                               }
                         }
-                  else
-                        qDebug("Measure::read(): cannot find spanner %d", id);
+                  else {
+                        // remember "endSpanner" values
+                        SpannerValues sv;
+                        sv.spannerId = id;
+                        sv.track2    = e.track();
+                        sv.tick2     = e.tick();
+                        e.addSpannerValues(sv);
+                        }
                   e.readNext();
                   }
             else if (tag == "HairPin"
@@ -1942,6 +1948,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                   sp->setAnchor(Spanner::ANCHOR_SEGMENT);
                   sp->read(e);
                   score()->addSpanner(sp);
+                  //
+                  // check if we already saw "endSpanner"
+                  //
+                  const SpannerValues* sv = e.spannerValues(sp->id());
+                  if (sv) {
+                        sp->setTick2(sv->tick2);
+                        sp->setTrack2(sv->track2);
+                        }
                   }
             else if (tag == "RepeatMeasure") {
                   RepeatMeasure* rm = new RepeatMeasure(score());
