@@ -1914,7 +1914,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Spanner* spanner = score()->findSpanner(id);
                   if (spanner) {
                         spanner->setTick2(e.tick());
-                        if(spanner->track2() == -1)
+                        // if (spanner->track2() == -1)
                               spanner->setTrack2(e.track());
                         if (spanner->type() == OTTAVA) {
                               Ottava* o = static_cast<Ottava*>(spanner);
