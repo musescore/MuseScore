@@ -1175,7 +1175,7 @@ qDebug("createRevision\n");
 //          can be zero
 //---------------------------------------------------------
 
-void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
+void Score::writeSegments(Xml& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
       for (int track = strack; track < etrack; ++track) {
@@ -1219,6 +1219,9 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                               if (s->generated())
                                     continue;
 
+                              if (s->id() == -1)
+                                    s->setId(++xml.spannerId);
+
                               if (s->track() == track) {
                                     int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
                                     if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
@@ -1227,7 +1230,6 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                                                 xml.curTick = segment->tick();
                                                 needTick = false;
                                                 }
-                                          s->setId(++xml.spannerId);
                                           s->write(xml);
                                           }
                                     }
@@ -1239,7 +1241,6 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                                           xml.curTick = segment->tick();
                                           needTick = false;
                                           }
-                                    Q_ASSERT(s->id() != -1);
                                     xml.tagE(QString("endSpanner id=\"%1\"").arg(s->id()));
                                     }
                               }
