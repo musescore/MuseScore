@@ -1468,6 +1468,7 @@ void SpannerView::setElement(Element* e)
       sp.tick->setValue(spanner->tick());
       sp.tick2->setValue(spanner->tick2());
       sp.anchor->setCurrentIndex(int(spanner->anchor()));
+      sp.track2->setValue(spanner->track2());
 
       sp.segments->clear();
       foreach(const Element* e, spanner->spannerSegments()) {

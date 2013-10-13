@@ -28,6 +28,7 @@
 #include "beam.h"
 #include "mscore.h"
 #include "page.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -108,6 +109,30 @@ void SlurSegment::updateGrips(int* n, QRectF* r) const
       }
 
 //---------------------------------------------------------
+//   searchCR
+//---------------------------------------------------------
+
+static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
+      {
+      // for (Segment* s = segment; s; s = s->next1MM(Segment::SegChordRest)) {
+      for (Segment* s = segment; s; s = s->next(Segment::SegChordRest)) {     // restrict search to measure
+            if (startTrack > endTrack) {
+                  for (int t = startTrack-1; t >= endTrack; --t) {
+                        if (s->element(t))
+                              return static_cast<ChordRest*>(s->element(t));
+                        }
+                  }
+            else {
+                  for (int t = startTrack; t < endTrack; ++t) {
+                        if (s->element(t))
+                              return static_cast<ChordRest*>(s->element(t));
+                        }
+                  }
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   edit
 //    return true if event is accepted
 //---------------------------------------------------------
@@ -140,7 +165,18 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             cr = prevChordRest(e);
       else if (key == Qt::Key_Right)
             cr = nextChordRest(e);
-
+      else if (key == Qt::Key_Up) {
+            Part* part     = e->staff()->part();
+            int startTrack = part->startTrack();
+            int endTrack   = e->track();
+            cr = searchCR(e->segment(), endTrack, startTrack);
+            }
+      else if (key == Qt::Key_Down) {
+            int startTrack = e->track() + 1;
+            Part* part     = e->staff()->part();
+            int endTrack   = part->endTrack();
+            cr = searchCR(e->segment(), startTrack, endTrack);
+            }
       if (cr == 0 || cr == e1)
             return true;
       changeAnchor(viewer, curGrip, cr);
@@ -172,8 +208,10 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   tie->setEndNote(static_cast<Note*>(element));
                   static_cast<Note*>(element)->setTieBack(tie);
                   }
-            else if (spanner()->anchor() == Spanner::ANCHOR_SEGMENT)
+            else if (spanner()->anchor() == Spanner::ANCHOR_SEGMENT) {
                   spanner()->setTick2(static_cast<Chord*>(element)->tick());
+                  spanner()->setTrack2(element->track());
+                  }
             }
 
       int segments  = spanner()->spannerSegments().size();
@@ -1032,7 +1070,7 @@ void Slur::read(XmlReader& e)
             else if (!SlurTie::readProperties(e))
                   e.unknown();
             }
-      if(track2() == -1)
+      if (track2() == -1)
             setTrack2(track());
       }
 
