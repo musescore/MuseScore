@@ -152,12 +152,6 @@ void SpannerSegment::reset()
 Spanner::Spanner(Score* s)
    : Element(s)
       {
-      _anchor       = ANCHOR_SEGMENT;
-      _startElement = 0;
-      _endElement   = 0;
-      _tick         = -1;
-      _tick2        = -1;
-      _id           = 0;
       }
 
 Spanner::Spanner(const Spanner& s)
@@ -168,7 +162,8 @@ Spanner::Spanner(const Spanner& s)
       _endElement   = s._endElement;
       _tick         = s._tick;
       _tick2        = s._tick2;
-      _id           = 0;
+      _track2       = s._track2;
+      _id           = -1;
       }
 
 Spanner::~Spanner()

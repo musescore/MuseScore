@@ -748,6 +748,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               if (res) {
                                     Volta* volta = new Volta(score);
                                     volta->setTrack(track);
+                                    volta->setTrack2(track);
                                     // TODO also support endings such as "1 - 3"
                                     volta->setText(QString("%1.").arg(vo->to));
                                     volta->endings().append(vo->to);
