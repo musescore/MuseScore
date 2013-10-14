@@ -216,7 +216,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     if ((e->track() == srcTrack && track != -1)
                                        || (e->systemFlag() && srcTrack == 0)
                                        ) {
-                                          Element* ne = e->clone();
+                                          Element* ne = e->linkedClone();
                                           ne->setUserOff(QPointF());  // reset user offset as most likely
                                                                       // it will not fit
                                           ne->setReadPos(QPointF());
