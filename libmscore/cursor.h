@@ -29,7 +29,7 @@ class Measure;
 //---------------------------------------------------------
 //   @@ Cursor
 //   @P track    int          current track
-//   @P staffIdx int          current staff (track * 4)
+//   @P staffIdx int          current staff (track / 4)
 //   @P voice    int          current voice (track % 4)
 //   @P element  Element*     current element at track, read only
 //   @P segment  Segment*     current segment, read only
