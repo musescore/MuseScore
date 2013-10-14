@@ -684,6 +684,9 @@ void Slur::slurPos(SlurPos* sp)
 
       sp->system1 = scr->measure()->system();
       sp->system2 = ecr->measure()->system();
+      if (sp->system1 == 0 || sp->system2 == 0)
+            return;
+
       sp->p1      = scr->pagePos() - sp->system1->pagePos();
       sp->p2      = ecr->pagePos() - sp->system2->pagePos();
 

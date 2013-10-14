@@ -1015,13 +1015,19 @@ void MuseScore::editInstrList()
                   rootScore->undoInsertPart(part, staffIdx);
                   for(Staff* s : nonLinked) {
                         int si = rootScore->staffIdx(s);
-                        for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure())
+                        for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
                               m->cmdAddStaves(si, si + 1, true);
+                              if (m->hasMMRest())
+                                    m->mmRest()->cmdAddStaves(si, si + 1, true);
+                              }
                         }
                   for(Staff* s : linked) {
                         int si = rootScore->staffIdx(s);
-                        for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure())
+                        for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
                               m->cmdAddStaves(si, si + 1, false);
+                              if (m->hasMMRest())
+                                    m->mmRest()->cmdAddStaves(si, si + 1, true);
+                              }
                         }
                   int sidx = rootScore->staffIdx(part);
                   int eidx = sidx + part->nstaves();
@@ -1049,6 +1055,8 @@ void MuseScore::editInstrList()
                                           continue;
                                     Measure* m = (Measure*)mb;
                                     m->cmdRemoveStaves(sidx, eidx);
+                                    if (m->hasMMRest())
+                                          m->mmRest()->cmdRemoveStaves(sidx, eidx);
                                     }
 /*                              foreach(Beam* e, rootScore->beams()) {
                                     int staffIdx = e->staffIdx();
@@ -1068,6 +1076,8 @@ void MuseScore::editInstrList()
                               for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
                                     // do not create whole measure rests for linked staves
                                     m->cmdAddStaves(staffIdx, staffIdx+1, !sli->linked());
+                                    if (m->hasMMRest())
+                                          m->mmRest()->cmdAddStaves(staffIdx, staffIdx+1, !sli->linked());
                                     }
 
                               rootScore->adjustBracketsIns(staffIdx, staffIdx+1);
