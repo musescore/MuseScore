@@ -918,7 +918,8 @@ void Score::undoAddElement(Element* element)
          && et != Element::STAFF_TEXT
          && et != Element::TREMOLO
          && et != Element::ARPEGGIO
-         && et != Element::SYMBOL)
+         && et != Element::SYMBOL
+         && et != Element::HARMONY)
             ) {
             undo(new AddElement(element));
             return;
@@ -1002,7 +1003,8 @@ void Score::undoAddElement(Element* element)
             else if (element->type() == Element::SYMBOL
                || element->type() == Element::IMAGE
                || element->type() == Element::DYNAMIC
-               || element->type() == Element::STAFF_TEXT) {
+               || element->type() == Element::STAFF_TEXT
+               || element->type() == Element::HARMONY) {
                   Segment* segment = static_cast<Segment*>(element->parent());
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
