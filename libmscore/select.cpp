@@ -467,7 +467,6 @@ QByteArray Selection::staffMimeData() const
       xml.header();
       xml.clipboardmode = true;
 
-
       int ticks  = tickEnd() - tickStart();
       int staves = staffEnd() - staffStart();
       xml.stag(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart()).arg(ticks).arg(staffStart()).arg(staves));

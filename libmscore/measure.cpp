@@ -2539,7 +2539,7 @@ void Measure::sortStaves(QList<int>& dst)
       for (Segment* s = first(); s; s = s->next())
             s->sortStaves(dst);
 
-      foreach(Element* e, _el) {
+      foreach (Element* e, _el) {
             if (e->track() == -1)
                   continue;
             int voice    = e->voice();

@@ -850,13 +850,13 @@ void Chord::write(Xml& xml) const
             c->writeBeam(xml);
             c->write(xml);
             }
-
       for (Element* e : _el) {
             if (e->type() == Element::SLUR) {
                   static_cast<Slur*>(e)->setId(++xml.spannerId);
                   e->write(xml);
                   }
             }
+
       xml.stag("Chord");
       ChordRest::writeProperties(xml);
       switch (_noteType) {

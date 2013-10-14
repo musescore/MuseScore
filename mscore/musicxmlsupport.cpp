@@ -237,10 +237,10 @@ void domNotImplemented(const QDomElement& e)
       QString s = domElementPath(e);
       if (!docName.isEmpty())
             qDebug("<%s>:", qPrintable(docName));
-      qDebug("%s: Node not implemented: <%s>, type %d\n",
+      qDebug("%s: Node not implemented: <%s>, type %d",
              qPrintable(s), qPrintable(e.tagName()), e.nodeType());
       if (e.isText())
-            qDebug("  text node <%s>\n", qPrintable(e.toText().data()));
+            qDebug("  text node <%s>", qPrintable(e.toText().data()));
       }
 
 
