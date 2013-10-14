@@ -586,6 +586,14 @@ void Harmony::endEdit()
       Text::endEdit();
       setHarmony(text());
       layout();
+      if (links()) {
+                  foreach(Element* e, *links()) {
+                        if (e == this)
+                              continue;
+                        Harmony* h = static_cast<Harmony*>(e);
+                        h->setHarmony(text());
+                        }
+                  }
       score()->setLayoutAll(true);
       }
 
