@@ -70,6 +70,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
 
 void Score::write(Xml& xml, bool selectionOnly)
       {
+      clearSpannerIds();
       xml.stag("Score");
 
 #ifdef OMR
@@ -1219,9 +1220,6 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                               if (s->generated())
                                     continue;
 
-                              if (s->id() == -1)
-                                    s->setId(++xml.spannerId);
-
                               if (s->track() == track) {
                                     int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
                                     if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
@@ -1230,10 +1228,12 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                                 xml.curTick = segment->tick();
                                                 needTick = false;
                                                 }
+                                          if (s->id() == -1)
+                                                s->setId(++xml.spannerId);
                                           s->write(xml);
                                           }
                                     }
-                              else if (s->tick2() == segment->tick()
+                              if (s->tick2() == segment->tick()
                                  && (s->track2() == track)
                                  && (!clip || s->tick() >= fs->tick())) {
                                     if (needTick) {
@@ -1241,6 +1241,8 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                           xml.curTick = segment->tick();
                                           needTick = false;
                                           }
+                                    if (s->id() == -1)
+                                          s->setId(++xml.spannerId);
                                     xml.tagE(QString("endSpanner id=\"%1\"").arg(s->id()));
                                     }
                               }
@@ -1346,5 +1348,14 @@ Tuplet* Score::searchTuplet(XmlReader& /*e*/, int /*id*/)
       return 0;
       }
 
+//---------------------------------------------------------
+//   clearSpannerIds
+//---------------------------------------------------------
+
+void Score::clearSpannerIds()
+      {
+      for (auto i : _spanner.map())
+            i.second->setId(-1);
+      }
 }
 

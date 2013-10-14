@@ -949,6 +949,7 @@ class Score : public QObject {
       bool isSpannerStartEnd(int tick, int track) const;
       void removeSpanner(Spanner*);
       void addSpanner(Spanner*);
+      void clearSpannerIds();
 
       ChordRest* findCR(int tick, int track) const;
       void layoutSpanner();

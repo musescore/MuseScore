@@ -78,6 +78,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="tick">
+          <property name="minimum">
+           <number>-1000</number>
+          </property>
           <property name="maximum">
            <number>999999</number>
           </property>
@@ -117,7 +120,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="track2"/>
+         <widget class="QSpinBox" name="track2">
+          <property name="minimum">
+           <number>-1000</number>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
