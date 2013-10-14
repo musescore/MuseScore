@@ -692,8 +692,9 @@ void Score::doLayout()
                   if (sp->tick() == -1) {
                         qDebug("bad spanner id %d %s %d - %d", sp->id(), sp->name(), sp->tick(), sp->tick2());
                         }
-                  else
+                  else {
                         sp->layout();
+                        }
                   }
             }
 
