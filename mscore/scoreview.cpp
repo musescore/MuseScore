@@ -1362,7 +1362,7 @@ void ScoreView::moveCursor()
       System* system = segment->measure()->system();
       if (system == 0) {
             // a new measure was appended but no layout took place
-            qDebug("zero SYSTEM");
+            // or this measure was skipped by a multi measure rest
             return;
             }
       int staffIdx    = track == -1 ? 0 : track / VOICES;
@@ -3761,6 +3761,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             return;
 
       System* sys = m->system();
+      if (!sys)
+            return;
 
       QPointF p(el->canvasPos());
       QRectF r(imatrix.mapRect(geometry()));
@@ -4900,6 +4902,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       else
             score()->putNote(pos, !addFlag);
       _score->endCmd();
+
       adjustCanvasPosition(is.cr(), false);
       }
 
