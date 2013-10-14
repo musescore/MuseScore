@@ -154,30 +154,23 @@ p, li { white-space: pre-wrap; }
           </TimeSig>
         <Tempo>
           <tempo>1.66667</tempo>
+          <lid>1</lid>
           <style>Tempo</style>
           <text>𝅘𝅥 = 100</text>
           </Tempo>
         <Dynamic>
           <subtype>pp</subtype>
           <velocity>33</velocity>
+          <lid>2</lid>
           <style>Dynamics</style>
           </Dynamic>
-        <Chord>
-          <lid>1</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>2</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
         <Chord>
           <lid>3</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>4</lid>
-            <pitch>74</pitch>
-            <tpc>16</tpc>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
             </Note>
           </Chord>
         <Chord>
@@ -185,12 +178,21 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           <Note>
             <lid>6</lid>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>7</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>8</lid>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
           </Chord>
         <Rest>
-          <lid>7</lid>
+          <lid>9</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
@@ -198,23 +200,13 @@ p, li { white-space: pre-wrap; }
         <HairPin id="2">
           <subtype>0</subtype>
           <veloChange>10</veloChange>
-          <lid>73</lid>
+          <lid>77</lid>
           <Segment>
             <subtype>0</subtype>
             <off2 x="0" y="0"/>
             <pos x="34.0159" y="6.60645"/>
             </Segment>
           </HairPin>
-        <Chord>
-          <lid>8</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>9</lid>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <endSpanner id="2"/>
         <Chord>
           <lid>10</lid>
           <durationType>quarter</durationType>
@@ -224,11 +216,21 @@ p, li { white-space: pre-wrap; }
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
           <lid>12</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>13</lid>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>14</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>15</lid>
             <Fingering>
               <pos x="1.05809" y="-4.67501"/>
               <style>Fingering</style>
@@ -239,13 +241,13 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         <Chord>
-          <lid>14</lid>
+          <lid>16</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>sforzato</subtype>
             </Articulation>
           <Note>
-            <lid>15</lid>
+            <lid>17</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
@@ -255,53 +257,32 @@ p, li { white-space: pre-wrap; }
         <Harmony>
           <root>15</root>
           <name>7</name>
+          <lid>18</lid>
           <pos x="0" y="-3.22581"/>
           </Harmony>
         <Chord>
-          <lid>16</lid>
+          <lid>19</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>17</lid>
+            <lid>20</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
-          <lid>18</lid>
+          <lid>21</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>19</lid>
+            <lid>22</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
         <StaffText>
+          <lid>23</lid>
           <style>System</style>
           <text>system-text</text>
           </StaffText>
-        <Chord>
-          <lid>20</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>21</lid>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>22</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>23</lid>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="4">
-        <Slur id="3">
-          <lid>74</lid>
-          </Slur>
         <Chord>
           <lid>24</lid>
           <durationType>quarter</durationType>
@@ -320,6 +301,11 @@ p, li { white-space: pre-wrap; }
             <tpc>15</tpc>
             </Note>
           </Chord>
+        </Measure>
+      <Measure number="4">
+        <Slur id="3">
+          <lid>78</lid>
+          </Slur>
         <Chord>
           <lid>28</lid>
           <durationType>quarter</durationType>
@@ -329,12 +315,30 @@ p, li { white-space: pre-wrap; }
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <endSpanner id="3"/>
         <Chord>
           <lid>30</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>31</lid>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>32</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>33</lid>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <endSpanner id="3"/>
+        <Chord>
+          <lid>34</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>35</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
@@ -346,10 +350,10 @@ p, li { white-space: pre-wrap; }
           <pause>3</pause>
           </LayoutBreak>
         <Chord>
-          <lid>32</lid>
+          <lid>36</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>33</lid>
+            <lid>37</lid>
             <Tie id="4">
               </Tie>
             <pitch>67</pitch>
@@ -357,247 +361,247 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         <Chord>
-          <lid>34</lid>
+          <lid>38</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>35</lid>
+            <lid>39</lid>
             <endSpanner id="4"/>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
-          <lid>36</lid>
+          <lid>40</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>37</lid>
+            <lid>41</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
         <Rest>
-          <lid>38</lid>
+          <lid>42</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="6">
-        <Rest>
-          <lid>39</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="7">
-        <Rest>
-          <lid>40</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="8">
-        <Rest>
-          <lid>41</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="9">
-        <Rest>
-          <lid>42</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="10">
         <Rest>
           <lid>43</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="11">
+      <Measure number="7">
         <Rest>
           <lid>44</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="12">
+      <Measure number="8">
         <Rest>
           <lid>45</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="13">
+      <Measure number="9">
         <Rest>
           <lid>46</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="14">
+      <Measure number="10">
         <Rest>
           <lid>47</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="15">
+      <Measure number="11">
         <Rest>
           <lid>48</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="16">
+      <Measure number="12">
         <Rest>
           <lid>49</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="17">
+      <Measure number="13">
         <Rest>
           <lid>50</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="18">
+      <Measure number="14">
         <Rest>
           <lid>51</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="19">
+      <Measure number="15">
         <Rest>
           <lid>52</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="20">
+      <Measure number="16">
         <Rest>
           <lid>53</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="21">
+      <Measure number="17">
         <Rest>
           <lid>54</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="22">
+      <Measure number="18">
         <Rest>
           <lid>55</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="23">
+      <Measure number="19">
         <Rest>
           <lid>56</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="24">
+      <Measure number="20">
         <Rest>
           <lid>57</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="25">
+      <Measure number="21">
         <Rest>
           <lid>58</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="26">
+      <Measure number="22">
         <Rest>
           <lid>59</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="27">
+      <Measure number="23">
         <Rest>
           <lid>60</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="28">
+      <Measure number="24">
         <Rest>
           <lid>61</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="29">
+      <Measure number="25">
         <Rest>
           <lid>62</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="30">
+      <Measure number="26">
         <Rest>
           <lid>63</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="31">
+      <Measure number="27">
         <Rest>
           <lid>64</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="32">
-        <Chord>
+      <Measure number="28">
+        <Rest>
           <lid>65</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>66</lid>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="29">
+        <Rest>
+          <lid>66</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="30">
+        <Rest>
           <lid>67</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>68</lid>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="31">
+        <Rest>
+          <lid>68</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="32">
         <Chord>
           <lid>69</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>70</lid>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>71</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>72</lid>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>73</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>74</lid>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
           </Chord>
         <Rest>
-          <lid>71</lid>
+          <lid>75</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>72</lid>
+          <lid>76</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -608,36 +612,18 @@ p, li { white-space: pre-wrap; }
           <transposingClefType>G8vb</transposingClefType>
           </Clef>
         <TimeSig>
-          <lid>75</lid>
+          <lid>79</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>76</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>77</lid>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>78</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>79</lid>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
-        <Chord>
           <lid>80</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>81</lid>
-            <pitch>59</pitch>
-            <tpc>19</tpc>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
@@ -645,6 +631,24 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           <Note>
             <lid>83</lid>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>84</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>85</lid>
+            <pitch>59</pitch>
+            <tpc>19</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>86</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>87</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             </Note>
@@ -652,30 +656,12 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>84</lid>
+          <lid>88</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="3">
-        <Chord>
-          <lid>85</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>86</lid>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>87</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>88</lid>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
         <Chord>
           <lid>89</lid>
           <durationType>quarter</durationType>
@@ -694,222 +680,222 @@ p, li { white-space: pre-wrap; }
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <Chord>
+          <lid>93</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>94</lid>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>95</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>96</lid>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
         </Measure>
       <Measure number="4">
-        <Rest>
-          <lid>93</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="5">
-        <Rest>
-          <lid>94</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="6">
-        <Rest>
-          <lid>95</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="7">
-        <Rest>
-          <lid>96</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="8">
         <Rest>
           <lid>97</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="9">
+      <Measure number="5">
         <Rest>
           <lid>98</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="10">
+      <Measure number="6">
         <Rest>
           <lid>99</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="11">
+      <Measure number="7">
         <Rest>
           <lid>100</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="12">
+      <Measure number="8">
         <Rest>
           <lid>101</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="13">
+      <Measure number="9">
         <Rest>
           <lid>102</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="14">
+      <Measure number="10">
         <Rest>
           <lid>103</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="15">
+      <Measure number="11">
         <Rest>
           <lid>104</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="16">
+      <Measure number="12">
         <Rest>
           <lid>105</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="17">
+      <Measure number="13">
         <Rest>
           <lid>106</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="18">
+      <Measure number="14">
         <Rest>
           <lid>107</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="19">
+      <Measure number="15">
         <Rest>
           <lid>108</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="20">
+      <Measure number="16">
         <Rest>
           <lid>109</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="21">
+      <Measure number="17">
         <Rest>
           <lid>110</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="22">
+      <Measure number="18">
         <Rest>
           <lid>111</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="23">
+      <Measure number="19">
         <Rest>
           <lid>112</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="24">
+      <Measure number="20">
         <Rest>
           <lid>113</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="25">
+      <Measure number="21">
         <Rest>
           <lid>114</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="26">
+      <Measure number="22">
         <Rest>
           <lid>115</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="27">
+      <Measure number="23">
         <Rest>
           <lid>116</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="28">
+      <Measure number="24">
         <Rest>
           <lid>117</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="29">
+      <Measure number="25">
         <Rest>
           <lid>118</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="30">
+      <Measure number="26">
         <Rest>
           <lid>119</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="31">
+      <Measure number="27">
         <Rest>
           <lid>120</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="32">
-        <Chord>
+      <Measure number="28">
+        <Rest>
           <lid>121</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>122</lid>
-            <pitch>53</pitch>
-            <tpc>13</tpc>
-            </Note>
-          </Chord>
-        <Chord>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="29">
+        <Rest>
+          <lid>122</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="30">
+        <Rest>
           <lid>123</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>124</lid>
-            <pitch>52</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="31">
+        <Rest>
+          <lid>124</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="32">
         <Chord>
           <lid>125</lid>
           <durationType>quarter</durationType>
@@ -919,14 +905,32 @@ p, li { white-space: pre-wrap; }
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <Rest>
+        <Chord>
           <lid>127</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>128</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>129</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>130</lid>
+            <pitch>53</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        <Rest>
+          <lid>131</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>128</lid>
+          <lid>132</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -1041,30 +1045,23 @@ p, li { white-space: pre-wrap; }
             </TimeSig>
           <Tempo>
             <tempo>1.66667</tempo>
+            <lid>1</lid>
             <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
+            <lid>2</lid>
             <style>Dynamics</style>
             </Dynamic>
-          <Chord>
-            <lid>1</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>2</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
           <Chord>
             <lid>3</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>4</lid>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1072,12 +1069,21 @@ p, li { white-space: pre-wrap; }
             <durationType>quarter</durationType>
             <Note>
               <lid>6</lid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>7</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>8</lid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Rest>
-            <lid>7</lid>
+            <lid>9</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
@@ -1085,18 +1091,8 @@ p, li { white-space: pre-wrap; }
           <HairPin id="5">
             <subtype>0</subtype>
             <veloChange>10</veloChange>
-            <lid>73</lid>
+            <lid>77</lid>
             </HairPin>
-          <Chord>
-            <lid>8</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>9</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <endSpanner id="5"/>
           <Chord>
             <lid>10</lid>
             <durationType>quarter</durationType>
@@ -1106,11 +1102,21 @@ p, li { white-space: pre-wrap; }
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <endSpanner id="5"/>
           <Chord>
             <lid>12</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>13</lid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>14</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>15</lid>
               <Fingering>
                 <pos x="1.05809" y="-4.67501"/>
                 <style>Fingering</style>
@@ -1121,13 +1127,13 @@ p, li { white-space: pre-wrap; }
               </Note>
             </Chord>
           <Chord>
-            <lid>14</lid>
+            <lid>16</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>sforzato</subtype>
               </Articulation>
             <Note>
-              <lid>15</lid>
+              <lid>17</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -1137,52 +1143,31 @@ p, li { white-space: pre-wrap; }
           <Harmony>
             <root>15</root>
             <name>7</name>
+            <lid>18</lid>
             </Harmony>
           <Chord>
-            <lid>16</lid>
+            <lid>19</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>20</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <lid>18</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>22</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <StaffText>
+            <lid>23</lid>
             <style>System</style>
             <text>system-text</text>
             </StaffText>
-          <Chord>
-            <lid>20</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>21</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>22</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>23</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          </Measure>
-        <Measure number="4">
-          <Slur id="6">
-            <lid>74</lid>
-            </Slur>
           <Chord>
             <lid>24</lid>
             <durationType>quarter</durationType>
@@ -1201,6 +1186,11 @@ p, li { white-space: pre-wrap; }
               <tpc>15</tpc>
               </Note>
             </Chord>
+          </Measure>
+        <Measure number="4">
+          <Slur id="6">
+            <lid>78</lid>
+            </Slur>
           <Chord>
             <lid>28</lid>
             <durationType>quarter</durationType>
@@ -1210,7 +1200,6 @@ p, li { white-space: pre-wrap; }
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <endSpanner id="6"/>
           <Chord>
             <lid>30</lid>
             <durationType>quarter</durationType>
@@ -1220,13 +1209,32 @@ p, li { white-space: pre-wrap; }
               <tpc>15</tpc>
               </Note>
             </Chord>
-          </Measure>
-        <Measure number="5">
           <Chord>
             <lid>32</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>33</lid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <endSpanner id="6"/>
+          <Chord>
+            <lid>34</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>35</lid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="5">
+          <Chord>
+            <lid>36</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>37</lid>
               <Tie id="7">
                 </Tie>
               <pitch>67</pitch>
@@ -1234,247 +1242,247 @@ p, li { white-space: pre-wrap; }
               </Note>
             </Chord>
           <Chord>
-            <lid>34</lid>
+            <lid>38</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>35</lid>
+              <lid>39</lid>
               <endSpanner id="7"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <lid>36</lid>
+            <lid>40</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>37</lid>
+              <lid>41</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Rest>
-            <lid>38</lid>
+            <lid>42</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="6">
-          <Rest>
-            <lid>39</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="7">
-          <Rest>
-            <lid>40</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="8">
-          <Rest>
-            <lid>41</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="9">
-          <Rest>
-            <lid>42</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="10">
           <Rest>
             <lid>43</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="11">
+        <Measure number="7">
           <Rest>
             <lid>44</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="12">
+        <Measure number="8">
           <Rest>
             <lid>45</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="13">
+        <Measure number="9">
           <Rest>
             <lid>46</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="14">
+        <Measure number="10">
           <Rest>
             <lid>47</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="15">
+        <Measure number="11">
           <Rest>
             <lid>48</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="16">
+        <Measure number="12">
           <Rest>
             <lid>49</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="17">
+        <Measure number="13">
           <Rest>
             <lid>50</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="18">
+        <Measure number="14">
           <Rest>
             <lid>51</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="19">
+        <Measure number="15">
           <Rest>
             <lid>52</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="20">
+        <Measure number="16">
           <Rest>
             <lid>53</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="21">
+        <Measure number="17">
           <Rest>
             <lid>54</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="22">
+        <Measure number="18">
           <Rest>
             <lid>55</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="23">
+        <Measure number="19">
           <Rest>
             <lid>56</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="24">
+        <Measure number="20">
           <Rest>
             <lid>57</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="25">
+        <Measure number="21">
           <Rest>
             <lid>58</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="26">
+        <Measure number="22">
           <Rest>
             <lid>59</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="27">
+        <Measure number="23">
           <Rest>
             <lid>60</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="28">
+        <Measure number="24">
           <Rest>
             <lid>61</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="29">
+        <Measure number="25">
           <Rest>
             <lid>62</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="30">
+        <Measure number="26">
           <Rest>
             <lid>63</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="31">
+        <Measure number="27">
           <Rest>
             <lid>64</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="32">
-          <Chord>
+        <Measure number="28">
+          <Rest>
             <lid>65</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>66</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="29">
+          <Rest>
+            <lid>66</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="30">
+          <Rest>
             <lid>67</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>68</lid>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="31">
+          <Rest>
+            <lid>68</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="32">
           <Chord>
             <lid>69</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>70</lid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>71</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>72</lid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>73</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>74</lid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Rest>
-            <lid>71</lid>
+            <lid>75</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>72</lid>
+            <lid>76</lid>
             </BarLine>
           </Measure>
         </Staff>
@@ -1584,41 +1592,24 @@ p, li { white-space: pre-wrap; }
             <transposingClefType>G8vb</transposingClefType>
             </Clef>
           <TimeSig>
-            <lid>75</lid>
+            <lid>79</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Tempo>
             <tempo>1.66667</tempo>
+            <lid>1</lid>
             <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
-          <Chord>
-            <lid>76</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>77</lid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>78</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>79</lid>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
           <Chord>
             <lid>80</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>81</lid>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
@@ -1626,6 +1617,24 @@ p, li { white-space: pre-wrap; }
             <durationType>quarter</durationType>
             <Note>
               <lid>83</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>84</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>85</lid>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>86</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>87</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -1633,34 +1642,12 @@ p, li { white-space: pre-wrap; }
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>84</lid>
+            <lid>88</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
         <Measure number="3">
-          <Chord>
-            <lid>85</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>86</lid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>87</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>88</lid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <StaffText>
-            <style>System</style>
-            <text>system-text</text>
-            </StaffText>
           <Chord>
             <lid>89</lid>
             <durationType>quarter</durationType>
@@ -1679,222 +1666,227 @@ p, li { white-space: pre-wrap; }
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <StaffText>
+            <lid>23</lid>
+            <style>System</style>
+            <text>system-text</text>
+            </StaffText>
+          <Chord>
+            <lid>93</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>94</lid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>95</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>96</lid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
           </Measure>
         <Measure number="4">
-          <Rest>
-            <lid>93</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="5">
-          <Rest>
-            <lid>94</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="6">
-          <Rest>
-            <lid>95</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="7">
-          <Rest>
-            <lid>96</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="8">
           <Rest>
             <lid>97</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="9">
+        <Measure number="5">
           <Rest>
             <lid>98</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="10">
+        <Measure number="6">
           <Rest>
             <lid>99</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="11">
+        <Measure number="7">
           <Rest>
             <lid>100</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="12">
+        <Measure number="8">
           <Rest>
             <lid>101</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="13">
+        <Measure number="9">
           <Rest>
             <lid>102</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="14">
+        <Measure number="10">
           <Rest>
             <lid>103</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="15">
+        <Measure number="11">
           <Rest>
             <lid>104</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="16">
+        <Measure number="12">
           <Rest>
             <lid>105</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="17">
+        <Measure number="13">
           <Rest>
             <lid>106</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="18">
+        <Measure number="14">
           <Rest>
             <lid>107</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="19">
+        <Measure number="15">
           <Rest>
             <lid>108</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="20">
+        <Measure number="16">
           <Rest>
             <lid>109</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="21">
+        <Measure number="17">
           <Rest>
             <lid>110</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="22">
+        <Measure number="18">
           <Rest>
             <lid>111</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="23">
+        <Measure number="19">
           <Rest>
             <lid>112</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="24">
+        <Measure number="20">
           <Rest>
             <lid>113</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="25">
+        <Measure number="21">
           <Rest>
             <lid>114</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="26">
+        <Measure number="22">
           <Rest>
             <lid>115</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="27">
+        <Measure number="23">
           <Rest>
             <lid>116</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="28">
+        <Measure number="24">
           <Rest>
             <lid>117</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="29">
+        <Measure number="25">
           <Rest>
             <lid>118</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="30">
+        <Measure number="26">
           <Rest>
             <lid>119</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="31">
+        <Measure number="27">
           <Rest>
             <lid>120</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
-        <Measure number="32">
-          <Chord>
+        <Measure number="28">
+          <Rest>
             <lid>121</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>122</lid>
-              <pitch>53</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="29">
+          <Rest>
+            <lid>122</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="30">
+          <Rest>
             <lid>123</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>124</lid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="31">
+          <Rest>
+            <lid>124</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="32">
           <Chord>
             <lid>125</lid>
             <durationType>quarter</durationType>
@@ -1904,14 +1896,32 @@ p, li { white-space: pre-wrap; }
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <Rest>
+          <Chord>
             <lid>127</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>128</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>129</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>130</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <lid>131</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>128</lid>
+            <lid>132</lid>
             </BarLine>
           </Measure>
         </Staff>
