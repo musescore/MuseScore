@@ -100,12 +100,13 @@ class Spanner : public Element {
       Q_PROPERTY(Anchor anchor  READ anchor  WRITE setAnchor)
 
       QList<SpannerSegment*> segments;
-      Anchor _anchor;
-      Element* _startElement;
-      Element* _endElement;
-      int _tick, _tick2;
+      Anchor _anchor = ANCHOR_SEGMENT;
+      Element* _startElement = 0;
+      Element* _endElement = 0;
+      int _tick = -1;
+      int _tick2 = -1;
       int _track2 = -1;
-      int _id;                // used for xml serialization
+      int _id = -1;           // used for xml serialization
 
       static QList<QPointF> userOffsets;
       static QList<QPointF> userOffsets2;
