@@ -4110,10 +4110,12 @@ void ExportMusicXml::write(QIODevice* dev)
 
                   if (!previousMeasure)
                         currentSystem = TopSystem;
-                  else if (m->parent()->parent() != previousMeasure->parent()->parent())
-                        currentSystem = NewPage;
-                  else if (m->parent() != previousMeasure->parent())
-                        currentSystem = NewSystem;
+                  else if (m->parent() && previousMeasure->parent()) {
+                        if (m->parent()->parent() != previousMeasure->parent()->parent())
+                              currentSystem = NewPage;
+                        else if (m->parent() != previousMeasure->parent())
+                              currentSystem = NewSystem;
+                        }
 
                   bool prevMeasLineBreak = false;
                   bool prevMeasPageBreak = false;
