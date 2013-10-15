@@ -439,6 +439,28 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                         }
                   }
             }
+
+      for (auto i : score->spanner()) {
+            Spanner* s = i.second;
+            int staffIdx = s->staffIdx();
+            int dstTrack = -1;
+            int dstTrack2 = -1;
+            if(s->type() != Element::VOLTA) {
+                  //export other spanner if staffidx matches
+                  if (srcStaffIdx == staffIdx) {
+                        dstTrack = dstStaffIdx * VOICES + s->voice();
+                        dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+                        }
+                  }
+            if (dstTrack == -1)
+                  continue;
+            Spanner* ns = static_cast<Spanner*>(s->linkedClone());
+            ns->setScore(score);
+            ns->setParent(0);
+            ns->setTrack(dstTrack);
+            ns->setTrack2(dstTrack2);
+            score->addSpanner(ns);
+            }
       }
 
 }
