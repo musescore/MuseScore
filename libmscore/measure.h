@@ -277,7 +277,7 @@ class Measure : public MeasureBase {
 
       bool isEmpty() const;
 
-      void layoutChords0(Segment* segment, int startTrack);
+//      void layoutChords0(Segment* segment, int startTrack);
       void layoutChords10(Segment* segment, int startTrack, AccidentalState*);
       void updateAccidentals(Segment* segment, int staffIdx, AccidentalState*);
       void layoutStage1();

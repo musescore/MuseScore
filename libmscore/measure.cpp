@@ -288,6 +288,7 @@ struct AcEl {
       qreal x;
       };
 
+#if 0
 //---------------------------------------------------------
 //   layoutChords0
 //---------------------------------------------------------
@@ -306,6 +307,7 @@ void Measure::layoutChords0(Segment* segment, int startTrack)
             layoutCR0(cr, staffMag);
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   layoutCR0
@@ -3344,7 +3346,6 @@ void Measure::layoutX(qreal stretch)
 //---------------------------------------------------------
 //   layoutStage1
 //    compute multi measure rest break
-//    call layoutChords0
 //---------------------------------------------------------
 
 void Measure::layoutStage1()
@@ -3357,14 +3358,19 @@ void Measure::layoutStage1()
                         setBreakMMRest(true);
                   else if (!breakMultiMeasureRest()) {
                         for (Segment* s = first(); s; s = s->next()) {
-                              int n = s->annotations().size();
-                              for (int i = 0; i < n; ++i) {
-                                    Element* e = s->annotations().at(i);
+                              if (!s->annotations().empty()) {                  // break on any annotation
+                                    printf(" 1 ===break %d\n", no());
+                                    setBreakMMRest(true);
+                                    break;
+                                    }
+#if 0
+                              for (Element* e : s->annotations()) {
                                     if (e->type() == REHEARSAL_MARK || e->type() == TEMPO_TEXT) {
                                           setBreakMMRest(true);
                                           break;
                                           }
                                     }
+#endif
                               if (breakMultiMeasureRest())      // optimize
                                     break;
                               }
@@ -3377,7 +3383,9 @@ void Measure::layoutStage1()
                   Element* e = segment->element(track);
 
                   if (e && !e->generated()) {
-                        if (segment->segmentType() & (Segment::SegKeySig | Segment::SegStartRepeatBarLine | Segment::SegTimeSig))
+                        if (segment->segmentType() & (Segment::SegStartRepeatBarLine))
+                              setBreakMMRest(true);
+                        if (segment->segmentType() & (Segment::SegKeySig | Segment::SegTimeSig) && tick())
                               setBreakMMRest(true);
                         else if (segment->segmentType() == Segment::SegClef) {
                               if (segment->tick() == endTick()) {
@@ -3385,36 +3393,44 @@ void Measure::layoutStage1()
                                     if (m)
                                           m->setBreakMMRest(true);
                                     }
-                              else
+                              else if (tick())
                                     setBreakMMRest(true);
                               }
                         }
 
-                  if (segment->segmentType() == Segment::SegChordRest)
-                        layoutChords0(segment, staffIdx * VOICES);
+                  if (segment->segmentType() == Segment::SegChordRest) {
+                        Staff* staff     = score()->staff(staffIdx);
+                        qreal staffMag  = staff->mag();
+
+                        int endTrack = track + VOICES;
+                        for (int t = track; t < endTrack; ++t) {
+                              ChordRest* cr = static_cast<ChordRest*>(segment->element(t));
+                              if (!cr)
+                                    continue;
+                              layoutCR0(cr, staffMag);
+                              }
+                        }
                   }
             }
 
-      if (!breakMultiMeasureRest()) {
-            for (auto i = score()->spanner().lower_bound(tick()); i != score()->spanner().upper_bound(tick()); ++i) {
-               Spanner* sp = i->second;
-               if (sp->type() == Element::VOLTA)
-                     setBreakMMRest(true);
-                     break;
-               }
+      if (!score()->styleB(ST_createMultiMeasureRests) || breakMultiMeasureRest())
+            return;
+
+      // break mm rest on any spanner
+
+      auto sl = score()->spannerMap().findOverlapping(tick(), endTick());
+      if (!sl.empty()) {
+            setBreakMMRest(true);
             }
-      if (!breakMultiMeasureRest() && this != score()->lastMeasure()) {
-            auto i = score()->spanner().upper_bound(tick());
-            std::reverse_iterator<std::map<int,Spanner*>::const_iterator> revit (i);
-            for (; revit != score()->spanner().rend(); revit++) {
-                  Spanner* sp = revit->second;
-                  if (sp->type() == Element::VOLTA)
-                        if(sp->tick2() == tick())
-                              setBreakMMRest(true);
-                        break;
+#if 0
+      for (auto i : sl) {
+            Spanner* sp = i.value;
+            if (sp->type() == Element::VOLTA) {
+                  setBreakMMRest(true);
+                  break;
                   }
             }
-
+#endif
       MeasureBase* mb = prev();
       if (mb && mb->type() == Element::MEASURE) {
             Measure* pm = static_cast<Measure*>(mb);
