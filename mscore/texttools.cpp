@@ -282,8 +282,9 @@ void TextTools::updateText()
 void TextTools::layoutText()
       {
       QRectF r(_textElement->canvasBoundingRect());
-      _textElement->layout();
-      _textElement->score()->addRefresh(_textElement->canvasBoundingRect() | r);
+//      _textElement->layout();
+      _textElement->score()->setLayoutAll(true);
+//      _textElement->score()->addRefresh(_textElement->canvasBoundingRect() | r);
       _textElement->score()->end();
       }
 
