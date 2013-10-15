@@ -2609,9 +2609,9 @@ ChangeMeasureProperties::ChangeMeasureProperties(
 
 void ChangeMeasureProperties::flip()
       {
-      bool a   = measure->breakMultiMeasureRest();
+      bool a   = measure->getBreakMultiMeasureRest();
       int r    = measure->repeatCount();
-      qreal s = measure->userStretch();
+      qreal s  = measure->userStretch();
       int o    = measure->noOffset();
       bool ir  = measure->irregular();
 

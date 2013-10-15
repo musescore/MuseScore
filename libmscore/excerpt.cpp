@@ -185,7 +185,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   nm->setIrregular(m->irregular());
                   nm->setNo(m->no());
                   nm->setNoOffset(m->noOffset());
-                  nm->setBreakMultiMeasureRest(m->breakMultiMeasureRest());
+                  nm->setBreakMultiMeasureRest(m->getBreakMultiMeasureRest());
                   nm->setEndBarLineType(
                      m->endBarLineType(),
                      m->endBarLineGenerated(),
