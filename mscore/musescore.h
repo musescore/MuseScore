@@ -342,6 +342,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* lastCmd;
       Shortcut* lastShortcut;
 
+      QAction* countInAction;
       QAction* metronomeAction;
       QAction* loopAction;
       QAction* loopInAction;
@@ -610,6 +611,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updatePlayMode();
       bool loop() const         	 { return loopAction->isChecked(); }
       bool metronome() const         { return metronomeAction->isChecked(); }
+      bool countIn() const           { return countInAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
       void loadFiles();

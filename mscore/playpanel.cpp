@@ -54,6 +54,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       setScore(0);
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
+      countInButton->setDefaultAction(getAction("countin"));
       metronomeButton->setDefaultAction(getAction("metronome"));
       loopButton->setDefaultAction(getAction("loop"));
       loopInButton->setDefaultAction(getAction("loop-in"));
@@ -62,7 +63,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
-      connect(relTempoBox,     SIGNAL(editingFinished()),  SLOT(relTempoChanged()));
+      connect(relTempoBox,  SIGNAL(editingFinished()),        SLOT(relTempoChanged()));
       connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));
       }
 
