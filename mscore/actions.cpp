@@ -2080,6 +2080,15 @@ Shortcut Shortcut::sc[] = {
          metronome_ICON
          ),
       Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         0,
+         "countin",
+         QT_TRANSLATE_NOOP("action","Count-in"),
+         QT_TRANSLATE_NOOP("action","Toggle count-in playback"),
+         QT_TRANSLATE_NOOP("action","Play count-in at playback start"),
+         countin_ICON
+         ),
+      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "figured-bass",
