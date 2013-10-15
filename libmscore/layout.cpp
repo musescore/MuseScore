@@ -900,6 +900,16 @@ System* Score::getNextSystem(bool isFirstSystem, bool isVbox)
       }
 
 //---------------------------------------------------------
+//   noSpanner
+//---------------------------------------------------------
+
+static bool noSpanner(Measure* m)
+      {
+      auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
+      return sl.empty();
+      }
+
+//---------------------------------------------------------
 //   createMMRests
 //---------------------------------------------------------
 
@@ -913,7 +923,7 @@ void Score::createMMRests()
             Measure* lm = nm;
             int n = 0;
             Fraction len;
-            while (nm->isEmpty()) {
+            while (nm->isEmpty() && noSpanner(nm)) {
                   m->setMMRestCount(0);
                   MeasureBase* mb = _showVBox ? nm->next() : nm->nextMeasure();
                   if (nm->breakMultiMeasureRest() && n)
