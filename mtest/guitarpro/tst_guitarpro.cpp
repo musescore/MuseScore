@@ -33,6 +33,7 @@ class TestGuitarPro : public QObject, public MTest
 private slots:
       void initTestCase();
       void gpTestIrrTuplet() { gpReadTest("testIrrTuplet", "gp4"); }
+      void gpSlur() { gpReadTest("slur", "gp4"); }
       };
 
 //---------------------------------------------------------
