@@ -3359,7 +3359,6 @@ void Measure::layoutStage1()
                   else if (!breakMultiMeasureRest()) {
                         for (Segment* s = first(); s; s = s->next()) {
                               if (!s->annotations().empty()) {                  // break on any annotation
-                                    printf(" 1 ===break %d\n", no());
                                     setBreakMMRest(true);
                                     break;
                                     }
@@ -3417,11 +3416,6 @@ void Measure::layoutStage1()
             return;
 
       // break mm rest on any spanner
-
-      auto sl = score()->spannerMap().findOverlapping(tick(), endTick());
-      if (!sl.empty()) {
-            setBreakMMRest(true);
-            }
 #if 0
       for (auto i : sl) {
             Spanner* sp = i.value;
