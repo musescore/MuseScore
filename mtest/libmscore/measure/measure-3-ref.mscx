@@ -814,7 +814,7 @@ p, li { white-space: pre-wrap; }
             <duration z="2" n="4"/>
             </Rest>
           <BarLine>
-            <subtype>end</subtype>
+            <subtype>normal</subtype>
             <span>1</span>
             <lid>19</lid>
             </BarLine>
@@ -825,6 +825,10 @@ p, li { white-space: pre-wrap; }
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         </Staff>
       <name>Flute</name>

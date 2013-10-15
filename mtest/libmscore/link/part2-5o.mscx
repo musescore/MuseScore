@@ -1043,7 +1043,6 @@ p, li { white-space: pre-wrap; }
             </Rest>
           </Measure>
         <Measure number="2">
-          <breakMultiMeasureRest/>
           <Tempo>
             <tempo>1.66667</tempo>
             <style>Tempo</style>
@@ -1594,7 +1593,6 @@ p, li { white-space: pre-wrap; }
             </Rest>
           </Measure>
         <Measure number="2">
-          <breakMultiMeasureRest/>
           <Tempo>
             <tempo>1.66667</tempo>
             <style>Tempo</style>

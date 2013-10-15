@@ -1050,7 +1050,6 @@ p, li { white-space: pre-wrap; }
             </Text>
           </VBox>
         <Measure number="1">
-          <breakMultiMeasureRest/>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
@@ -1611,7 +1610,6 @@ p, li { white-space: pre-wrap; }
             </Text>
           </VBox>
         <Measure number="1">
-          <breakMultiMeasureRest/>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
