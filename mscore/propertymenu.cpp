@@ -78,15 +78,6 @@ namespace Ms {
 void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
       {
       if (!e->generated() || e->type() == Element::BAR_LINE) {
-#if 0
-            if (e->type() != Element::LAYOUT_BREAK) {
-                  if (e->visible())
-                        popup->addAction(tr("Set Invisible"))->setData("invisible");
-                  else
-                        popup->addAction(tr("Set Visible"))->setData("invisible");
-                  popup->addAction(tr("Color..."))->setData("color");
-                  }
-#endif
             if (e->flag(ELEMENT_HAS_TAG)) {
                   popup->addSeparator();
 
@@ -111,12 +102,6 @@ void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
 
 void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
       {
-#if 0
-      if (e->visible())
-            popup->addAction(tr("Set Invisible"))->setData("invisible");
-      else
-            popup->addAction(tr("Set Visible"))->setData("invisible");
-#endif
       if (e->flag(ELEMENT_HAS_TAG)) {
             popup->addSeparator();
 
@@ -349,7 +334,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "frame-text") {
             Text* s = new Text(score());
-//            s->setSubtype(TEXT_FRAME);
             s->setTextStyleType(TEXT_STYLE_FRAME);
             s->setParent(e);
             score()->undoAddElement(s);

@@ -59,7 +59,6 @@ HelpBrowser::HelpBrowser(QWidget* parent)
       bl->addWidget(reload);
 
       toolbar->setLayout(bl);
-
       }
 
 //---------------------------------------------------------
