@@ -319,40 +319,41 @@ void SlurSegment::editDrag(const EditData& ed)
             // move anchor for slurs
             //
             Spanner* spanner = static_cast<Spanner*>(slurTie());
-            Element* e = ed.view->elementNear(ed.pos);
             SpannerSegmentType st = spannerSegmentType();
+            Qt::KeyboardModifiers km = qApp->keyboardModifiers();
             if (
                (ed.curGrip == GRIP_START  && (st == SEGMENT_SINGLE || st == SEGMENT_BEGIN))
                || (ed.curGrip == GRIP_END && (st == SEGMENT_SINGLE || st == SEGMENT_END))
                ) {
-                  if (e && e->type() == NOTE) {
+                  Element* e = ed.view->elementNear(ed.pos);
+                  if (ed.curGrip == GRIP_END && spanner->type() == TIE && e && e->type() == NOTE) {
                         Note* note = static_cast<Note*>(e);
-                        Chord* chord = note->chord();
-                        if ((spanner->type() == SLUR)
-                           && ((ed.curGrip == GRIP_END && chord != spanner->endCR())
-                           || (ed.curGrip == GRIP_START && chord != spanner->startCR())))
-                              {
-                              changeAnchor(ed.view, ed.curGrip, chord);
-                              QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
-                              ups[ed.curGrip].off = p1 / _spatium;
-                              return;
-                              }
-                        if (ed.curGrip == GRIP_END && spanner->type() == TIE) {
-                              Tie* tie = static_cast<Tie*>(spanner);
-                              if (tie->startNote()->pitch() == note->pitch()) {
-                                    ed.view->setDropTarget(note);
-                                    if (note != tie->endNote()) {
-                                          changeAnchor(ed.view, ed.curGrip, note);
-                                          // tie->endNote()->setTieBack(0);
-                                          // tie->setEndNote(note);
-                                          // note->setTieBack(tie);
-                                          return;
-                                          }
+                        Tie* tie = static_cast<Tie*>(spanner);
+                        if (tie->startNote()->pitch() == note->pitch()) {
+                              ed.view->setDropTarget(note);
+                              if (note != tie->endNote()) {
+                                    changeAnchor(ed.view, ed.curGrip, note);
+                                    return;
                                     }
                               }
                         }
-                  else
+                  else if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+                        int staffIdx, pitch;
+                        Segment* s = 0;
+                        QPointF offset;
+                        QPointF pos = ed.pos;
+                        pos.rx() -= score()->noteHeadWidth() * .5;
+                        score()->pos2measure(pos, &staffIdx, &pitch, &s, &offset);
+                        if (s && s->segmentType() == Segment::SegChordRest) {
+                              Chord* c = static_cast<Chord*>(s->element(spanner->track()));
+                              if (c && c->type() == CHORD && c != spanner->endCR()) {
+                                    changeAnchor(ed.view, ed.curGrip, c);
+                                    QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
+                                    ups[ed.curGrip].off = p1 / _spatium;
+                                    }
+                              }
                         ed.view->setDropTarget(0);
+                        }
                   }
             }
       else if (ed.curGrip == GRIP_BEZIER1 || ed.curGrip == GRIP_BEZIER2)
