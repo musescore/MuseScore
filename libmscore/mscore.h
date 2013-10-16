@@ -344,13 +344,14 @@ class MScore : public QObject {
       static MStyle* defaultStyle();
       static MStyle* baseStyle();
       static void setDefaultStyle(MStyle*);
-      static const QString& globalShare() { return _globalShare; }
-      static qreal hRaster()              { return _hRaster;     }
-      static qreal vRaster()              { return _vRaster;     }
-      static void setHRaster(int val)     { _hRaster = val;      }
-      static void setVRaster(int val)     { _vRaster = val;      }
-      static void setNudgeStep10(qreal val)     { nudgeStep10 = val;      }
-      static void setNudgeStep50(qreal val)     { nudgeStep50 = val;      }
+      static const QString& globalShare()   { return _globalShare; }
+      static qreal hRaster()                { return _hRaster;     }
+      static qreal vRaster()                { return _vRaster;     }
+      static void setHRaster(int val)       { _hRaster = val;      }
+      static void setVRaster(int val)       { _vRaster = val;      }
+      static void setNudgeStep(qreal val)   { nudgeStep = val;     }
+      static void setNudgeStep10(qreal val) { nudgeStep10 = val;   }
+      static void setNudgeStep50(qreal val) { nudgeStep50 = val;   }
 
       static QColor selectColor[4];
       static QColor defaultColor;

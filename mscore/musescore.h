@@ -381,7 +381,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showMixer(bool);
       void showSynthControl(bool);
       void showSearchDialog();
-      void helpBrowser() const;
       void helpBrowser(const QUrl&) const;
       void splitWindow(bool horizontal);
       void removeSessionFile();
@@ -647,6 +646,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PluginCreator* getPluginCreator()   { return pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
       void showMessage(const QString& s, int timeout);
+      void helpBrowser(const QString = QString()) const;
       };
 
 extern MuseScore* mscore;

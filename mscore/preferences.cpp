@@ -195,8 +195,9 @@ void Preferences::init()
       sfPath          = QDir(QString("%1%2;%3/%4").arg(mscoreGlobalShare).arg("sound").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absolutePath();
       sfzPath         = QDir(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("sfz_files_directory",  "SfzFiles"))).absolutePath();
 
+      MScore::setNudgeStep(.1);         // cursor key (default 0.1)
       MScore::setNudgeStep10(1.0);      // Ctrl + cursor key (default 1.0)
-      MScore::setNudgeStep50(0.01);      // Alt  + cursor key (default 0.01)
+      MScore::setNudgeStep50(0.01);     // Alt  + cursor key (default 0.01)
 
       MScore::setHRaster(2);        // _spatium / value
       MScore::setVRaster(2);
