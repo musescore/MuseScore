@@ -989,6 +989,9 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       createElementPropertyMenu(obj, popup);
 
       popup->addSeparator();
+      a = popup->addAction(tr("Help"));
+      popup->addSeparator();
+      a->setData("help");
       a = popup->addAction(tr("Debugger"));
       a->setData("list");
       a = popup->exec(pos);
@@ -1001,6 +1004,8 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             }
       if (cmd == "list")
             mscore->showElementContext(obj);
+      else if (cmd == "help")
+            mscore->helpBrowser(obj->name());
       else if (cmd == "edit") {
             if (obj->isEditable()) {
                   startEdit(obj);

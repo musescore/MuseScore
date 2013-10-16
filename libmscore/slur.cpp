@@ -146,9 +146,13 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             sl->layout();
             return true;
             }
+      if (key == Qt::Key_Home) {
+            ups[curGrip].off = QPointF();
+            sl->layout();
+            return true;
+            }
       if (slurTie()->type() != SLUR)
             return false;
-
 
       if (!((modifiers & Qt::ShiftModifier)
          && ((spannerSegmentType() == SEGMENT_SINGLE)
@@ -350,6 +354,7 @@ void SlurSegment::editDrag(const EditData& ed)
                                     changeAnchor(ed.view, ed.curGrip, c);
                                     QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
                                     ups[ed.curGrip].off = p1 / _spatium;
+                                    slurTie()->layout();
                                     }
                               }
                         ed.view->setDropTarget(0);

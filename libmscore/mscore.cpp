@@ -124,7 +124,6 @@ void MScore::init()
 
       defaultColor        = Qt::black;
       dropColor           = Qt::red;
-      nudgeStep           = .1;       // in spatium units (default 0.1)
       defaultPlayDuration = 300;      // ms
       warnPitchRange      = true;
       replaceFractions    = true;

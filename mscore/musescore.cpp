@@ -1172,7 +1172,7 @@ QString MuseScore::getLocaleISOCode() const
 //    show local help
 //---------------------------------------------------------
 
-void MuseScore::helpBrowser() const
+void MuseScore::helpBrowser(QString tag) const
       {
       QString lang = getLocaleISOCode();
 
@@ -1182,15 +1182,18 @@ void MuseScore::helpBrowser() const
       if (MScore::debugMode)
             qDebug("open handbook for language <%s>", qPrintable(lang));
 
-      QString mscoreHelp(mscoreGlobalShare + QString("manual/") + lang + QString("/manual.html"));
-      helpBrowser(QUrl::fromLocalFile(mscoreHelp));
+      QString path(mscoreGlobalShare + "manual/reference-" + lang + ".pdf");
+      if (!QFile::exists(path))
+            path = mscoreGlobalShare + "manual/reference-en" + ".pdf";
+      qDebug("helpBrowser::load <%s>\n", qPrintable(path));
+      QUrl url(QUrl::fromLocalFile(path));
+      if (!tag.isEmpty())
+            url.setFragment(tag);
       }
 
 void MuseScore::helpBrowser(const QUrl& url) const
       {
-      HelpBrowser* hb = new HelpBrowser(0);
-      hb->setContent(url);
-      hb->show();
+      QDesktopServices::openUrl(url);
       }
 
 //---------------------------------------------------------
@@ -1232,8 +1235,7 @@ void MuseScore::helpBrowser1() const
 
       //track visits. see: http://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
       help += QString("?utm_source=software&utm_medium=menu&utm_content=r%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
-      QUrl url(help);
-      helpBrowser(url);
+      helpBrowser(QUrl(help));
       }
 
 //---------------------------------------------------------
