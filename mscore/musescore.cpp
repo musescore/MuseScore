@@ -477,6 +477,10 @@ MuseScore::MuseScore()
       metronomeAction->setCheckable(true);
       metronomeAction->setChecked(false);
 
+      countInAction = getAction("countin");
+      countInAction->setCheckable(true);
+      countInAction->setChecked(false);
+
       _statusBar->addPermanentWidget(new QWidget(this), 2);
       _statusBar->addPermanentWidget(new QWidget(this), 100);
       _statusBar->addPermanentWidget(_modeText, 0);
@@ -4228,6 +4232,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   loopAction->trigger();
             }
       else if (cmd == "metronome")  // no action
+            ;
+      else if (cmd == "countin")    // no action
             ;
       else if (cmd == "viewmode") {
             if (cs) {

@@ -151,7 +151,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout">
+      <layout class="QHBoxLayout" stretch="0,0,0,0,0">
        <property name="spacing">
         <number>1</number>
        </property>
@@ -210,11 +210,22 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="metronomeButton">
-         <property name="text">
-          <string notr="true">M</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QToolButton" name="countInButton">
+           <property name="text">
+            <string notr="true">C</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="metronomeButton">
+           <property name="text">
+            <string notr="true">M</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <spacer>
@@ -942,6 +953,17 @@
    <header>awl/volslider.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>posSlider</tabstop>
+  <tabstop>rewindButton</tabstop>
+  <tabstop>playButton</tabstop>
+  <tabstop>countInButton</tabstop>
+  <tabstop>metronomeButton</tabstop>
+  <tabstop>loopInButton</tabstop>
+  <tabstop>loopButton</tabstop>
+  <tabstop>loopOutButton</tabstop>
+  <tabstop>relTempoBox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
