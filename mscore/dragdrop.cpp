@@ -392,12 +392,23 @@ void ScoreView::dropEvent(QDropEvent* event)
                                     delete dragElement;
                                     break;
                                     }
+                              else {
+                                    if (seg) {
+                                          dragElement->setTrack(staffIdx * VOICES);
+                                          dragElement->setParent(seg);
+                                          score()->undoAddElement(dragElement);
+                                          break;
+                                          }
+                                    qDebug("cannot drop here (2)");
+                                    }
                              }
                         _score->addRefresh(el->canvasBoundingRect());
                         _score->addRefresh(dragElement->canvasBoundingRect());
 
-                        if (!el->acceptDrop(this, pos, dragElement))
+                        if (!el->acceptDrop(this, pos, dragElement)) {
+                              qDebug("drop %s onto %s not accepted", dragElement->name(), el->name());
                               break;
+                              }
                         Element* dropElement = el->drop(dropData);
                         _score->addRefresh(el->canvasBoundingRect());
                         if (dropElement) {
