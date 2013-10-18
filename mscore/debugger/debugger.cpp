@@ -362,6 +362,8 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
                   new ElementItem(mi, ms->_vspacerUp);
             if (ms->_vspacerDown)
                   new ElementItem(mi, ms->_vspacerDown);
+            if (ms->noText())
+                  new ElementItem(mi, ms->noText());
             }
       for (Segment* segment = measure->first(); segment; segment = segment->next()) {
             ElementItem* segItem = new ElementItem(mi, segment);
