@@ -629,6 +629,7 @@ void Measure::layout2()
                         if (t == 0 && (staffIdx == nn || score()->styleB(ST_measureNumberAllStaffs))) {
                               t = new Text(score());
                               t->setFlag(ELEMENT_ON_STAFF, true);
+                              // t->setFlag(ELEMENT_MOVABLE, false); ??
                               t->setTrack(staffIdx * VOICES);
                               t->setGenerated(true);
                               t->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
@@ -1697,13 +1698,6 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   xml.tag("stretch", _userStretch);
             if (_noOffset)
                   xml.tag("noOffset", _noOffset);
-#if 0
-            if (_noText && !_noText->generated()) {
-                  xml.stag("MeasureNumber");
-                  _noText->writeProperties(xml);
-                  xml.etag();
-                  }
-#endif
             }
       qreal _spatium = spatium();
       MStaff* mstaff = staves[staff];
@@ -2151,8 +2145,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Text* noText = new Text(score());
                   noText->read(e);
                   noText->setFlag(ELEMENT_ON_STAFF, true);
-                  if (noText->track() == -1)
-                        noText->setTrack(0);
+                  // noText->setFlag(ELEMENT_MOVABLE, false); ??
+                  noText->setTrack(e.track());
                   noText->setParent(this);
                   staves[noText->staffIdx()]->setNoText(noText);
                   }
