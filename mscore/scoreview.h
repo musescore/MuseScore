@@ -48,6 +48,8 @@ class MeasureBase;
 class Staff;
 class OmrView;
 
+enum class POS;
+
 enum {
       TEXT_TITLE,
       TEXT_SUBTITLE,
@@ -280,6 +282,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       void endFotoDrag();
       void endFotoDragEdit();
 
+      void posChanged(POS pos, unsigned tick);
+      void loopToggled(bool);
+
    public slots:
       void setViewRect(const QRectF&);
 
@@ -422,13 +427,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       int loopInPos()                          { return _curLoopIn->tick();  }
       int loopOutPos()                         { return _curLoopOut->tick(); }
-      void setLoopInCursor();
-      void setLoopOutCursor();
-      virtual void updateLoopCursors();
-      void showLoopCursors();
-      void hideLoopCursors();
+      virtual void moveCursor() override;
 
-      virtual void moveCursor();
       virtual void layoutChanged();
       virtual void dataChanged(const QRectF&);
       virtual void updateAll();

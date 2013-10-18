@@ -68,7 +68,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       }
 
 PlayPanel::~PlayPanel()
-{
+      {
       QSettings settings;
       // if widget is visible, store geometry and pos into settings
       // if widget is not visible/closed, pos is not reliable (and anyway
@@ -77,7 +77,7 @@ PlayPanel::~PlayPanel()
             settings.setValue("playPanel/pos", pos());
             settings.setValue("playPanel/geometry", saveGeometry());
             }
-}
+      }
 
 //---------------------------------------------------------
 //   relTempoChanged
@@ -150,7 +150,7 @@ void PlayPanel::setScore(Score* s)
             setTempo(cs->tempomap()->tempo(0));
             setRelTempo(cs->tempomap()->relTempo());
             setEndpos(cs->repeatList()->ticks());
-            int tick = cs->playPos();
+            int tick = cs->pos(POS::CURRENT);
             heartBeat(tick, tick, 0);
             }
       else {
@@ -218,7 +218,7 @@ void PlayPanel::volumeChanged(double val, int)
 
 void PlayPanel::setPos(int utick)
       {
-      if(!cs)
+      if (!cs)
             return;
       if (cachedTickPosition != utick)
             emit posChange(utick);

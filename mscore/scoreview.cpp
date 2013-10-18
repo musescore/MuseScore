@@ -662,12 +662,13 @@ ScoreView::ScoreView(QWidget* parent)
       QColor cIn(Qt::green);
       cIn.setAlpha(80);
       _curLoopIn->setColor(cIn);
-      _curLoopIn->setTick(-1);
+//      _curLoopIn->setTick(-1);
+
       _curLoopOut = new TextCursor;
       QColor cOut(Qt::red);
       cOut.setAlpha(80);
       _curLoopOut->setColor(cOut);
-      _curLoopOut->setTick(-1);
+//      _curLoopOut->setTick(-1);
 
       //---setup state machine-------------------------------------------------
       sm          = new QStateMachine(this);
@@ -905,6 +906,8 @@ ScoreView::ScoreView(QWidget* parent)
                   qDebug("no valid pixmap %s", qPrintable(preferences.fgWallpaper));
             setForeground(pm);
             }
+
+      connect(getAction("loop"), SIGNAL(toggled(bool)), SLOT(loopToggled(bool)));
       }
 
 //---------------------------------------------------------
@@ -913,8 +916,10 @@ ScoreView::ScoreView(QWidget* parent)
 
 void ScoreView::setScore(Score* s)
       {
-      if (_score)
+      if (_score) {
             _score->removeViewer(this);
+            disconnect(s, SIGNAL(posChanged(POS, int)), this, SLOT(posChanged(POS,int)));
+            }
 
       _score = s;
       _score->addViewer(this);
@@ -928,6 +933,11 @@ void ScoreView::setScore(Score* s)
       lasso->setScore(s);
       _foto->setScore(s);
       if (s) {
+            setLoopCursor(_curLoopIn,  s->pos(POS::LEFT),  true);
+            setLoopCursor(_curLoopOut, s->pos(POS::RIGHT), false);
+            loopToggled(getAction("loop")->isChecked());
+
+            connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
             s->setLayoutMode(LayoutPage);
             s->setLayoutAll(true);
             s->update();
@@ -1449,7 +1459,6 @@ void ScoreView::setCursorOn(bool val)
 
 void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
       {
-//      qDebug ("setLoopCursor :  tick=%d, isInPos=%d",tick, isInPos);
       //
       // set mark height for whole system
       //
@@ -1517,74 +1526,9 @@ void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
             x = x - _spatium;
             }
       curLoop->setTick(tick);
+      update(_matrix.mapRect(curLoop->rect()).toRect().adjusted(-1,-1,1,1));
       curLoop->setRect(QRectF(x, y, w, h));
       update(_matrix.mapRect(curLoop->rect()).toRect().adjusted(-1,-1,1,1));
-      }
-
-//---------------------------------------------------------
-//   setLoopInCursor
-//    adjust the cursor shape and position to mark the beginning of the loop
-//---------------------------------------------------------
-
-void ScoreView::setLoopInCursor()
-      {
-      if (_score->loopInTick() < 0)
-            _score->setLoopInTick(-1);
-      setLoopCursor(_curLoopIn, _score->loopInTick(), true);
-      update();
-      }
-
-//---------------------------------------------------------
-//   setLoopOutCursor
-//    adjust the cursor shape and position to mark the end of the loop
-//---------------------------------------------------------
-
-void ScoreView::setLoopOutCursor()
-      {
-      if (_score->loopOutTick() < 0)
-            _score->setLoopOutTick(-1);
-      setLoopCursor(_curLoopOut, _score->loopOutTick(),false);
-      update();
-      }
-
-//---------------------------------------------------------
-//   updateLoopCursors
-//    update loop cursors Y and Y position (for example when changing view mode)
-//---------------------------------------------------------
-
-void ScoreView::updateLoopCursors()
-      {
-      setLoopInCursor();    // In pos
-      setLoopOutCursor();   // Out pos
-      }
-
-//---------------------------------------------------------
-//   showLoopCursors
-//    show the In/Out marks for the loop
-//---------------------------------------------------------
-
-void ScoreView::showLoopCursors()
-      {
-      if (_curLoopIn->tick() < 0)
-            setLoopInCursor();
-      if (_curLoopOut->tick() < 0)
-            setLoopOutCursor();
-      _curLoopIn->setVisible(true);
-      _curLoopOut->setVisible(true);
-      //qDebug("====  Show loop in tick = %d",_curLoopIn->tick());
-      update();
-      }
-
-//---------------------------------------------------------
-//   hideLoopCursors
-//    hide the In/Out marks for the loop
-//---------------------------------------------------------
-
-void ScoreView::hideLoopCursors()
-      {
-      _curLoopIn->setVisible(false);
-      _curLoopOut->setVisible(false);
-      update();
       }
 
 //---------------------------------------------------------
@@ -3117,7 +3061,7 @@ void ScoreView::startNoteEntry()
             }
 
       // set cursor after setting the stafftype-dependent state
-      _score->moveCursor();
+//      _score->moveCursor();
       setCursorOn(true);
       }
 
@@ -5576,6 +5520,35 @@ Element* ScoreView::elementNear(QPointF p)
 #endif
       Element* e = ll.at(0);
       return e;
+      }
+
+//---------------------------------------------------------
+//   posChanged
+//---------------------------------------------------------
+
+void ScoreView::posChanged(POS pos, unsigned tick)
+      {
+      switch (pos) {
+            case POS::CURRENT:
+                  break;
+            case POS::LEFT:
+                  setLoopCursor(_curLoopIn, _score->pos(POS::LEFT), true);
+                  break;
+            case POS::RIGHT:
+                  setLoopCursor(_curLoopOut, _score->pos(POS::RIGHT), false);
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
+//   loopToggled
+//---------------------------------------------------------
+
+void ScoreView::loopToggled(bool val)
+      {
+      _curLoopIn->setVisible(val);
+      _curLoopOut->setVisible(val);
+      update();
       }
 
 }
