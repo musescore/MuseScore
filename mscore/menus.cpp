@@ -339,15 +339,15 @@ Palette* MuseScore::newRepeatsPalette()
 
       jp = new Jump(gscore);
       jp->setJumpType(JumpType::DS_AL_CODA);
-      sp->append(jp, tr("D.S al Coda"));
+      sp->append(jp, tr("D.S. al Coda"));
 
       jp = new Jump(gscore);
       jp->setJumpType(JumpType::DS_AL_FINE);
-      sp->append(jp, tr("D.S al Fine"));
+      sp->append(jp, tr("D.S. al Fine"));
 
       jp = new Jump(gscore);
       jp->setJumpType(JumpType::DS);
-      sp->append(jp, tr("D.S"));
+      sp->append(jp, tr("D.S."));
 
       mk = new Marker(gscore);
       mk->setMarkerType(MarkerType::TOCODA);
@@ -363,7 +363,7 @@ Palette* MuseScore::newBreaksPalette()
       {
       qreal _spatium = gscore->spatium();
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaks && Spacer"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaks && Spacers"));
       sp->setMag(1.0);
       sp->setGrid(42, 36);
       sp->setDrawGrid(true);
@@ -552,7 +552,7 @@ Palette* MuseScore::newBracketsPalette()
 Palette* MuseScore::newBreathPalette()
       {
       Palette* sp = new Palette();
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breath && Pauses"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaths && Pauses"));
       sp->setGrid(42, 40);
       sp->setDrawGrid(true);
       sp->setDrawGrid(true);
