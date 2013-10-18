@@ -50,18 +50,14 @@ PianoItem::PianoItem(Note* n, NoteEvent* e)
       {
       Chord* chord = n->chord();
       int tieLen, ticks;
-      if (chord->isGrace()) {
-            chord = static_cast<Chord*>(chord->parent());
-            tieLen = 0;
-            ticks = chord->duration().ticks();
-            }
-      else {
-            ticks = chord->duration().ticks();
-            tieLen = n->playTicks() - ticks;
-            }
+      ticks  = chord->duration().ticks();
+      tieLen = n->playTicks() - ticks;
+
       setFlags(flags() | QGraphicsItem::ItemIsSelectable);
+
       int pitch = n->pitch() + e->pitch();
       int len   = ticks * e->len() / 1000 + tieLen;
+
       setRect(0, 0, len, keyHeight/2);
       setBrush(QBrush());
       setSelected(_note->selected());
