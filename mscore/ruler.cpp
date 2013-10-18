@@ -183,7 +183,8 @@ Pos Ruler::pix2pos(int x) const
 
 int Ruler::pos2pix(const Pos& p) const
       {
-      return lrint((p.time(_timeType) + 480) * _xmag) - _xpos - 5;
+//      return lrint((p.time(_timeType) + 480) * _xmag) - _xpos - 5;
+      return lrint((p.time(_timeType) + 480) * _xmag) - _xpos - 1;
       }
 
 //---------------------------------------------------------
@@ -193,8 +194,6 @@ int Ruler::pos2pix(const Pos& p) const
 void Ruler::paintEvent(QPaintEvent* e)
       {
       QPainter p(this);
-// p.fillRect(e->rect(), Qt::yellow);  // debug
-
       const QRect& r = e->rect();
 
       static const int mag[7] = {
@@ -295,7 +294,6 @@ void Ruler::paintEvent(QPaintEvent* e)
       if (_cursor.valid()) {
             int xp = pos2pix(_cursor);
             if (xp >= x && xp < x+w)
-//                  p.drawLine(xp, 0, xp, rulerHeight-1);
                   p.drawLine(xp, 0, xp, rulerHeight);
             }
       static const QColor lcColors[3] = { Qt::red, Qt::blue, Qt::blue };
@@ -320,54 +318,31 @@ void Ruler::paintEvent(QPaintEvent* e)
 
 void Ruler::mousePressEvent(QMouseEvent* e)
       {
-      if (e->buttons() & Qt::LeftButton) {
-            _locator[0] = pix2pos(e->pos().x());
-            emit locatorMoved(0);
-            update();
-            }
-      else if (e->buttons() & Qt::MidButton) {
-            _locator[1] = pix2pos(e->pos().x());
-            emit locatorMoved(1);
-            update();
-            }
-      else if (e->buttons() & Qt::RightButton) {
-            _locator[2] = pix2pos(e->pos().x());
-            emit locatorMoved(2);
-            update();
-            }
-      }
-
-//---------------------------------------------------------
-//   mouseReleaseEvent
-//---------------------------------------------------------
-
-void Ruler::mouseReleaseEvent(QMouseEvent*)
-      {
+      moveLocator(e);
       }
 
 //---------------------------------------------------------
 //   mouseMoveEvent
 //---------------------------------------------------------
 
-void Ruler::mouseMoveEvent(QMouseEvent* event)
+void Ruler::mouseMoveEvent(QMouseEvent* e)
       {
-      if (event->buttons() == 0) {
-            _cursor = pix2pos(event->pos().x());
-            emit posChanged(_cursor);
-            }
-      else if (event->buttons() & Qt::LeftButton) {
-            _locator[0] = pix2pos(event->pos().x());
-            emit locatorMoved(0);
-            }
-      else if (event->buttons() & Qt::MidButton) {
-            _locator[1] = pix2pos(event->pos().x());
-            emit locatorMoved(1);
-            }
-      else if (event->buttons() & Qt::RightButton) {
-            _locator[2] = pix2pos(event->pos().x());
-            emit locatorMoved(2);
-            }
-      update();
+      moveLocator(e);
+      }
+
+//---------------------------------------------------------
+//   moveLocator
+//---------------------------------------------------------
+
+void Ruler::moveLocator(QMouseEvent* e)
+      {
+      Pos pos(pix2pos(e->pos().x()));
+      if (e->buttons() & Qt::LeftButton)
+            emit locatorMoved(0, pos);
+      else if (e->buttons() & Qt::MidButton)
+            emit locatorMoved(1, pos);
+      else if (e->buttons() & Qt::RightButton)
+            emit locatorMoved(2, pos);
       }
 
 //---------------------------------------------------------

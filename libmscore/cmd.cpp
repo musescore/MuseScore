@@ -198,46 +198,6 @@ void Score::endUndoRedo()
       }
 
 //---------------------------------------------------------
-//   moveCursor
-//---------------------------------------------------------
-
-void Score::moveCursor()
-      {
-      foreach (MuseScoreView* v, viewer)
-            v->moveCursor();
-      }
-
-//---------------------------------------------------------
-//   update loop cursors is all views
-//---------------------------------------------------------
-
-void Score::updateLoopCursors()
-      {
-      foreach (MuseScoreView* v, viewer)
-            v->updateLoopCursors();
-      }
-
-//---------------------------------------------------------
-//   show loop cursors is all views
-//---------------------------------------------------------
-
-void Score::showLoopCursors()
-      {
-      foreach (MuseScoreView* v, viewer)
-            v->showLoopCursors();
-      }
-
-//---------------------------------------------------------
-//   hide loop cursors is all views
-//---------------------------------------------------------
-
-void Score::hideLoopCursors()
-      {
-      foreach (MuseScoreView* v, viewer)
-            v->hideLoopCursors();
-      }
-
-//---------------------------------------------------------
 //   cmdAddSpanner
 //   drop VOLTA, OTTAVA, TRILL, PEDAL, DYNAMIC
 //        HAIRPIN, and TEXTLINE

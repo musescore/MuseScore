@@ -101,6 +101,8 @@ enum class ClefType : signed char;
 
 extern bool showRubberBand;
 
+enum class POS { CURRENT, LEFT, RIGHT };
+
 enum {
       PAD_NOTE00,
       PAD_NOTE0,
@@ -334,9 +336,11 @@ class Score : public QObject {
       QList<Part*> _parts;
       QList<Staff*> _staves;
 
-      int _playPos;     ///< sequencer seek position
-      int _loopInTick;    ///< In tick for loop play position
-      int _loopOutTick;   ///< Out tick for loop play position
+      int _pos[3];            ///< 0 - current, 1 - left loop, 2 - right loop
+
+//      int _playPos;           ///< sequencer seek position
+//      int _loopInTick;        ///< In tick for loop play position
+//      int _loopOutTick;       ///< Out tick for loop play position
 
       bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
                                       ///< indicating if playPos after expanded repeats
@@ -433,6 +437,9 @@ class Score : public QObject {
    protected:
       void createPlayEvents(Chord*);
       SynthesizerState _synthesizerState;
+
+   signals:
+      void posChanged(POS, unsigned);
 
    public:
       void setDirty(bool val);
@@ -635,13 +642,6 @@ class Score : public QObject {
 
       bool playlistDirty();
       void setPlaylistDirty(bool val) { _playlistDirty = val; }
-      int loopInTick() { return _loopInTick; }
-      int loopOutTick() { return _loopOutTick; }
-      void setLoopInTick(int tick);
-      void setLoopOutTick(int tick);
-      void updateLoopCursors();
-      void showLoopCursors();
-      void hideLoopCursors();
 
       void cmd(const QAction*);
       int fileDivision(int t) const { return (t * MScore::division + _fileDivision/2) / _fileDivision; }
@@ -687,8 +687,15 @@ class Score : public QObject {
       const TextStyle& textStyle(int idx) const { return _style.textStyle(idx); }
       const TextStyle& textStyle(const QString& s) const  { return _style.textStyle(s); }
 
-      int playPos() const                      { return _playPos;    }
-      void setPlayPos(int val)                 { _playPos = val;     }
+      int playPos() const                      { return pos(POS::CURRENT);   }
+      void setPlayPos(int tick)                { setPos(POS::CURRENT, tick); }
+      int loopInTick() const                   { return pos(POS::LEFT);      }
+      int loopOutTick() const                  { return pos(POS::RIGHT);     }
+      void setLoopInTick(int tick)             { setPos(POS::LEFT, tick);    }
+      void setLoopOutTick(int tick)            { setPos(POS::RIGHT, tick);   }
+
+      int pos(POS pos) const                   {  return _pos[int(pos)]; }
+      void setPos(POS pos, int tick);
 
       bool noteEntryMode() const               { return _is.noteEntryMode; }
       int inputPos() const;
@@ -899,7 +906,6 @@ class Score : public QObject {
       void addViewer(MuseScoreView* v)      { viewer.append(v);    }
       void removeViewer(MuseScoreView* v)   { viewer.removeAll(v); }
       const QList<MuseScoreView*>& getViewer() const { return viewer;       }
-      void moveCursor();
       bool playNote() const                 { return _playNote; }
       void setPlayNote(bool v)              { _playNote = v;    }
       bool excerptsChanged() const          { return _excerptsChanged; }

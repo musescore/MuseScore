@@ -15,6 +15,7 @@
 #include "piano.h"
 #include "ruler.h"
 #include "pianoview.h"
+#include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
@@ -61,11 +62,12 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addAction(getAction("play"));
       tb->addSeparator();
 
-      QAction* a = getAction("follow");
-      a->setCheckable(true);
-      a->setChecked(preferences.followSong);
-      tb->addAction(a);
+      tb->addAction(getAction("loop"));
       tb->addSeparator();
+      tb->addAction(getAction("repeat"));
+      tb->addAction(getAction("follow"));
+      tb->addSeparator();
+      tb->addAction(getAction("metronome"));
 
       showWave = new QAction(tr("Wave"), tb);
       showWave->setToolTip(tr("show wave display"));
@@ -88,8 +90,11 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addSeparator();
       tb->addWidget(new QLabel(tr("Cursor:")));
       pos = new Awl::PosLabel;
+      pos->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
+
       tb->addWidget(pos);
       Awl::PitchLabel* pl = new Awl::PitchLabel();
+      pl->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
       tb->addWidget(pl);
 
       tb->addSeparator();
@@ -171,7 +176,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(gv,          SIGNAL(xposChanged(int)),   SLOT(setXpos(int)));
       connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(setXpos(int)));
 
-      connect(ruler,       SIGNAL(locatorMoved(int)),  SLOT(moveLocator(int)));
+      connect(ruler,       SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
       connect(veloType,    SIGNAL(activated(int)),     SLOT(veloTypeChanged(int)));
       connect(velocity,    SIGNAL(valueChanged(int)),  SLOT(velocityChanged(int)));
       connect(gv->scene(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
@@ -180,7 +185,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       resize(800, 400);
 
       QActionGroup* ag = new QActionGroup(this);
-      a = new QAction(this);
+      QAction* a = new QAction(this);
       a->setData("delete");
       a->setShortcut(Qt::Key_Delete);
       ag->addAction(a);
@@ -233,10 +238,6 @@ void PianorollEditor::setStaff(Staff* st)
       TimeSigMap*  sl = _score->sigmap();
       for (int i = 0; i < 3; ++i)
             locator[i].setContext(tl, sl);
-
-      locator[0].setTick(480 * 5 + 240);  // some random test values
-      locator[1].setTick(480 * 3 + 240);
-      locator[2].setTick(480 * 12 + 240);
 
       gv->setStaff(staff, locator);
       ruler->setScore(_score, locator);
@@ -435,15 +436,11 @@ void PianorollEditor::keyReleased(int /*pitch*/)
 
 void PianorollEditor::heartBeat(Seq* seq)
       {
-      unsigned t = seq->getCurTick();
-      if (locator[0].tick() != t) {
-            locator[0].setTick(t);
-            gv->moveLocator(0);
-            if (waveView)
-                  waveView->moveLocator(0);
-            ruler->update();
+      unsigned tick = seq->getCurTick();
+      if (locator[0].tick() != tick) {
+            posChanged(POS::CURRENT, tick);
             if (preferences.followSong)
-                  gv->ensureVisible(t);
+                  gv->ensureVisible(tick);
             }
       }
 
@@ -451,14 +448,10 @@ void PianorollEditor::heartBeat(Seq* seq)
 //   moveLocator
 //---------------------------------------------------------
 
-void PianorollEditor::moveLocator(int i)
+void PianorollEditor::moveLocator(int i, const Pos& pos)
       {
-      if (locator[i].valid()) {
-            seq->seek(locator[i].tick());
-            gv->moveLocator(i);
-            if (waveView)
-                  waveView->moveLocator(i);
-            }
+      if (locator[i].valid())
+            score()->setPos(POS(i), pos.tick());
       }
 
 //---------------------------------------------------------
@@ -491,22 +484,6 @@ void PianorollEditor::dataChanged(const QRectF&)
       }
 
 //---------------------------------------------------------
-//   moveCursor
-//---------------------------------------------------------
-
-void PianorollEditor::moveCursor()
-      {
-      }
-
-//---------------------------------------------------------
-//   updateLoopCursor
-//---------------------------------------------------------
-
-void PianorollEditor::updateLoopCursors()
-      {
-      }
-
-//---------------------------------------------------------
 //   adjustCanvasPosition
 //---------------------------------------------------------
 
@@ -520,10 +497,16 @@ void PianorollEditor::adjustCanvasPosition(const Element*, bool)
 
 void PianorollEditor::setScore(Score* s)
       {
-      if (_score)
+      if (_score) {
             _score->removeViewer(this);
+            disconnect(s, SIGNAL(posChanged(POS,unsigned)), this, SLOT(posChanged(POS,unsigned)));
+            }
       _score = s;
       _score->addViewer(this);
+      setLocator(POS::CURRENT, _score->pos(POS::CURRENT));
+      setLocator(POS::LEFT,    _score->pos(POS::LEFT));
+      setLocator(POS::RIGHT,   _score->pos(POS::RIGHT));
+      connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
       }
 
 //---------------------------------------------------------
@@ -663,5 +646,21 @@ void PianorollEditor::showWaveView(bool val)
                   waveView->setVisible(false);
             }
       }
-}
 
+//---------------------------------------------------------
+//   posChanged
+//    position in score has changed
+//---------------------------------------------------------
+
+void PianorollEditor::posChanged(POS pos, unsigned tick)
+      {
+      if (locator[int(pos)].tick() == unsigned(tick))
+            return;
+      setLocator(pos, tick);
+      gv->moveLocator(int(pos));
+      if (waveView)
+            waveView->moveLocator(int(pos));
+      ruler->update();
+      }
+
+}

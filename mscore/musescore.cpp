@@ -1560,10 +1560,6 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       showMessage(cs->filePath(), 2000);
       if (_navigator && _navigator->widget())
             navigator()->setScoreView(view);
-      if (loop()) {
-            cs->updateLoopCursors();
-            cv->showLoopCursors();
-            }
       }
 
 //---------------------------------------------------------
@@ -3927,8 +3923,8 @@ void MuseScore::cmd(QAction* a)
 void MuseScore::endCmd()
       {
       if (cs) {
-            if (cv->noteEntryMode())
-                  cs->moveCursor();
+//            if (cv->noteEntryMode())
+//                  cs->moveCursor();
             setPos(cs->inputState().tick());
             updateInputState(cs);
             updateUndoRedo();
@@ -3959,7 +3955,7 @@ void MuseScore::endCmd()
             if (e == 0 && cs->inputState().noteEntryMode)
                   e = cs->inputState().cr();
 
-            cs->updateLoopCursors();
+//            cs->updateLoopCursors();
             cs->end();
             }
       else {
@@ -4211,25 +4207,18 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "tempo")
             addTempo();
       else if (cmd == "loop") {
-            qDebug("loopAction = %d", loopAction->isChecked());
             if (loop()) {
-                  if(cs->selection().state() == SEL_RANGE)
+                  if (cs->selection().state() == SEL_RANGE)
                         seq->setLoopSelection();
-                  cs->showLoopCursors();
-                  }
-            else {
-                  cs->hideLoopCursors();
                   }
             }
       else if (cmd == "loop-in") {
             seq->setLoopIn();
-            if (!loopAction->isChecked())
-                  loopAction->trigger();
+            loopAction->setChecked(true);
             }
       else if (cmd == "loop-out") {
             seq->setLoopOut();
-            if (!loopAction->isChecked())
-                  loopAction->trigger();
+            loopAction->setChecked(true);
             }
       else if (cmd == "metronome")  // no action
             ;
@@ -4245,10 +4234,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         cs->setLayoutMode(LayoutPage);
                         viewModeCombo->setCurrentIndex(0);
                         }
-                  if (loop())
-                        cs->showLoopCursors();
-                  else
-                        cs->hideLoopCursors();
                   cs->doLayout();
                   cs->setUpdateAll(true);
                   }
