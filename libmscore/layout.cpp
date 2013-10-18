@@ -554,7 +554,7 @@ void Score::doLayout()
 
       if (idx != _symIdx) {
             _symIdx = idx;
-            _noteHeadWidth  = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
+            _noteHeadWidth = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
             }
 
       if (layoutFlags & LAYOUT_FIX_TICKS)

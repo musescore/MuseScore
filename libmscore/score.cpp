@@ -296,43 +296,43 @@ void Score::init()
             addStaffType(st);
             }
 
-      _mscVersion     = MSCVERSION;
-      _created        = false;
+      _mscVersion             = MSCVERSION;
+      _created                = false;
 
-      _updateAll      = true;
-      _layoutAll      = true;
-      layoutFlags     = 0;
-      _undoRedo       = false;
-      _playNote       = false;
-      _excerptsChanged = false;
-      _instrumentsChanged = false;
-      _selectionChanged   = false;
+      _updateAll              = true;
+      _layoutAll              = true;
+      layoutFlags             = 0;
+      _undoRedo               = false;
+      _playNote               = false;
+      _excerptsChanged        = false;
+      _instrumentsChanged     = false;
+      _selectionChanged       = false;
 
-      keyState             = 0;
-      _showInvisible       = true;
-      _showUnprintable     = true;
-      _showFrames          = true;
-      _showPageborders     = false;
-      _showInstrumentNames = true;
-      _showVBox            = true;
+      keyState                = 0;
+      _showInvisible          = true;
+      _showUnprintable        = true;
+      _showFrames             = true;
+      _showPageborders        = false;
+      _showInstrumentNames    = true;
+      _showVBox               = true;
 
-      _printing       = false;
-      _playlistDirty  = false;
-      _autosaveDirty  = false;
-      _dirty          = false;
-      _saved          = false;
-      _playPos        = 0;
-      _loopInTick     = -1;
-      _loopOutTick    = -1;
-      _fileDivision   = MScore::division;
-      _defaultsRead   = false;
-      _omr            = 0;
-      _audio          = 0;
-      _showOmr        = false;
-      _sigmap         = 0;
-      _tempomap       = 0;
-      _layoutMode     = LayoutPage;
-      _noteHeadWidth  = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
+      _printing               = false;
+      _playlistDirty          = false;
+      _autosaveDirty          = false;
+      _dirty                  = false;
+      _saved                  = false;
+      _pos[int(POS::CURRENT)] = 0;
+      _pos[int(POS::LEFT)]    = 0;
+      _pos[int(POS::RIGHT)]   = 0;
+      _fileDivision           = MScore::division;
+      _defaultsRead           = false;
+      _omr                    = 0;
+      _audio                  = 0;
+      _showOmr                = false;
+      _sigmap                 = 0;
+      _tempomap               = 0;
+      _layoutMode             = LayoutPage;
+      _noteHeadWidth          = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
       }
 
 //---------------------------------------------------------
@@ -2905,7 +2905,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
             Element* ee = e;
             if (ee->type() == Element::NOTE)
                   ee = ee->parent();
-            setPlayPos(static_cast<ChordRest*>(ee)->segment()->tick());
+            setPos(POS::CURRENT, static_cast<ChordRest*>(ee)->segment()->tick());
             }
       if (MScore::debugMode)
             qDebug("select element <%s> type %d(state %d) staff %d",
@@ -3656,35 +3656,18 @@ void Score::insertTime(int tick, int len)
             }
       }
 
-
 //---------------------------------------------------------
-//   set Loop In position
+//   setPos
 //---------------------------------------------------------
 
-void Score::setLoopInTick(int tick)
+void Score::setPos(POS pos, int tick)
       {
-//      qDebug ("setLoopInTick : tick = %d", tick);
-      if(!lastMeasure())
-            return;
-      if ((tick < 0) || (tick > lastMeasure()->endTick()-1))
+      if (tick < 0)
             tick = 0;
-      _loopInTick = tick;
-      }
-
-//---------------------------------------------------------
-//   set Loop Out position
-//---------------------------------------------------------
-
-void Score::setLoopOutTick(int tick)
-      {
-//      qDebug ("setLoopOutTick : tick = %d", tick);
-      if(!lastMeasure())
-            return;
-      int lastTick = lastMeasure()->endTick()-1;
-      if ((tick > lastTick) || (tick < 0))
-            _loopOutTick = lastTick;
-      else
-            _loopOutTick = tick;
+      if (tick != _pos[int(pos)]) {
+            _pos[int(pos)] = tick;
+            emit posChanged(pos, unsigned(tick));
+            }
       }
 
 }

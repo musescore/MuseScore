@@ -50,16 +50,16 @@ class Ruler : public QWidget {
 
       virtual void paintEvent(QPaintEvent*);
       virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseReleaseEvent(QMouseEvent*);
       virtual void mouseMoveEvent(QMouseEvent* event);
       virtual void leaveEvent(QEvent*);
 
       Pos pix2pos(int x) const;
       int pos2pix(const Pos& p) const;
+      void moveLocator(QMouseEvent*);
 
    signals:
       void posChanged(const Pos&);
-      void locatorMoved(int);
+      void locatorMoved(int idx, const Pos&);
 
    public slots:
       void setXpos(int);

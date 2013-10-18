@@ -23,6 +23,8 @@ namespace Awl {
 
 namespace Ms {
 
+enum class POS;
+
 class Score;
 class Staff;
 class PianoView;
@@ -61,11 +63,12 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       void velocityChanged(int);
       void keyPressed(int);
       void keyReleased(int);
-      void moveLocator(int);
+      void moveLocator(int, const Pos&);
       void cmd(QAction*);
       void rangeChanged(int min, int max);
       void setXpos(int x);
       void showWaveView(bool);
+      void posChanged(POS pos, unsigned tick);
 
    public slots:
       void changeSelection(int);
@@ -80,10 +83,6 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
 
       virtual void dataChanged(const QRectF&);
       virtual void updateAll();
-      virtual void moveCursor();
-      virtual void updateLoopCursors();
-      virtual void showLoopCursors() {}
-      virtual void hideLoopCursors() {}
       virtual void adjustCanvasPosition(const Element*, bool);
       virtual void setScore(Score*);
       virtual void removeScore();
@@ -99,6 +98,8 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual void startEdit(Element*, int);
       virtual Element* elementNear(QPointF);
       virtual void drawBackground(QPainter* /*p*/, const QRectF& /*r*/) const {}
+
+      void setLocator(POS pos, int tick) { locator[int(pos)].setTick(tick); }
       };
 
 

@@ -39,6 +39,8 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
       virtual void hideEvent (QHideEvent* event);
+      void updateTimeLabel(int sec);
+      void updatePosLabel(int utick);
 
    private slots:
       void volumeChanged(double,int);
@@ -65,9 +67,6 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
       void setEndpos(int);
       void setScore(Score* s);
-   private:
-      void updateTimeLabel(int sec);
-      void updatePosLabel(int utick);
       };
 
 

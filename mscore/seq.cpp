@@ -930,7 +930,6 @@ void Seq::seek(int utick)
       if (cs == 0)
             return;
 
-      qDebug ("seek : utick=%d",utick);
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
       int tick     = cs->repeatList()->utick2tick(utick);
@@ -1348,13 +1347,11 @@ void Seq::setLoopIn()
                   --ppos;                 // We have to go back one pos to get the correct note that has just been played
             tick = cs->repeatList()->utick2tick(ppos->first);
             }
-      else {
+      else
             tick = cs->pos();             // Otherwise, use the selected note.
-            }
       if (tick >= cs->loopOutTick())   // If In pos >= Out pos, reset Out pos to end of score
-            cs->setLoopOutTick(-1);
-      cs->setLoopInTick(tick);
-      qDebug ("seq::setLoopIn() : tick = %d\n",tick);
+            cs->setPos(POS::RIGHT, cs->lastMeasure()->endTick() - 1);
+      cs->setPos(POS::LEFT, tick);
       }
 
 //---------------------------------------------------------
@@ -1367,13 +1364,11 @@ void Seq::setLoopOut()
       if (state == TRANSPORT_PLAY) {    // If in playback mode, set the Out position where note is being played
             tick = cs->repeatList()->utick2tick(playPos->first);
             }
-      else {
+      else
             tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
-            }
       if (tick <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
-            cs->setLoopInTick(-1);
-      cs->setLoopOutTick(tick);
-      qDebug ("seq::setLoopOut() : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n", tick, cs->pos(), cs->inputState().ticks());
+            cs->setPos(POS::LEFT, 0);
+      cs->setPos(POS::RIGHT, tick);
       if (state == TRANSPORT_PLAY)
             guiToSeq(SeqMsg(SEQ_SEEK, tick));
       }
@@ -1386,7 +1381,5 @@ void Seq::setLoopSelection()
       {
       cs->setLoopInTick(cs->selection().tickStart());
       cs->setLoopOutTick(cs->selection().tickEnd());
-      cs->updateLoopCursors();
-      qDebug ("setLoopSelection : loopInTick = %d  loopOutTick = %d\n",cs->selection().tickStart(), cs->selection().tickEnd());
       }
 }
