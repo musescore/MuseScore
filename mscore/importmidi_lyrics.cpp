@@ -181,7 +181,7 @@ void extractLyricsToMidiData(const MidiFile *mf)
             }
       }
 
-void setInitialIndexes(QList<MTrack> &tracks)
+void assignLyricsToTracks(QList<MTrack> &tracks)
       {
       std::set<int> usedTracks;
       const auto *lyricTracks = preferences.midiImportOperations.getLyrics();

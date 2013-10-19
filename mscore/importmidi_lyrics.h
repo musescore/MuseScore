@@ -9,7 +9,7 @@ class MTrack;
 
 namespace MidiLyrics {
 
-void setInitialIndexes(QList<MTrack> &tracks);
+void assignLyricsToTracks(QList<MTrack> &tracks);
 void setLyrics(const MidiFile *mf, const QList<MTrack> &tracks);
 QList<std::string> makeLyricsListForUI();
 
