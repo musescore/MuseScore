@@ -1094,9 +1094,10 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
       addChordsBetweenTupletNotes(tuplets, nonTuplets);
       sortNotesByPitch(startBarChordIt, endBarChordIt);
       sortTupletsByAveragePitch(tuplets);
-      if (operations.useMultipleVoices)
+      if (operations.useMultipleVoices) {
             splitFirstTupletChords(tuplets, chords);
-      minimizeOffTimeError(tuplets, chords, nonTuplets);
+            minimizeOffTimeError(tuplets, chords, nonTuplets);
+            }
       assignVoices(chords, tuplets, nonTuplets, startBarTick, endBarTick, regularRaster);
 
       return convertToData(tuplets);
