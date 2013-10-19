@@ -237,7 +237,7 @@ void setLyrics(const MidiFile *mf, const QList<MTrack> &tracks)
             }
       }
 
-QList<std::string> makeLyricsList()
+QList<std::string> makeLyricsListForUI()
       {
       QList<std::string> list;
       const auto *lyrics = preferences.midiImportOperations.getLyrics();
