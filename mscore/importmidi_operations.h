@@ -101,13 +101,14 @@ class MidiImportOperations
       int count() const { return operations_.size(); }
       MidiData& midiData() { return midiData_; }
       QString charset() const;
-      void adaptForPercussion(int trackIndex);
+      void adaptForPercussion(int trackIndex, bool isDrumTrack);
                   // lyrics
       void addTrackLyrics(const std::multimap<ReducedFraction, std::string> &trackLyrics);
       const QList<std::multimap<ReducedFraction, std::string> > *getLyrics();
 
    private:
       QList<TrackOperations> operations_;
+      TrackOperations defaultOpers;
       int currentTrack_ = -1;
       QString currentMidiFile_;
       MidiData midiData_;
