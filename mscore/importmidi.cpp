@@ -922,7 +922,7 @@ QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
       const MidiFile *mf = midiData.midiFile(fileName);
       const auto tracks = createMTrackList(lastTick, mockScore.sigmap(), mf);
       QList<MTrack> trackList = prepareTrackList(tracks);
-      MidiLyrics::setInitialIndexes(trackList);
+      MidiLyrics::assignLyricsToTracks(trackList);
 
       return getTracksMeta(trackList, mf);
       }
