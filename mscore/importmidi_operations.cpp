@@ -36,14 +36,14 @@ void MidiImportOperations::setCurrentMidiFile(const QString &fileName)
 TrackOperations MidiImportOperations::currentTrackOperations() const
       {
       if (!isValidIndex(currentTrack_))
-            return TrackOperations();
+            return defaultOpers;
       return operations_[currentTrack_];
       }
 
 TrackOperations MidiImportOperations::trackOperations(int trackIndex) const
       {
       if (!isValidIndex(trackIndex))
-            return TrackOperations();
+            return defaultOpers;
       return operations_[trackIndex];
       }
 
@@ -52,11 +52,13 @@ QString MidiImportOperations::charset() const
       return midiData_.charset(currentMidiFile_);
       }
 
-void MidiImportOperations::adaptForPercussion(int trackIndex)
+void MidiImportOperations::adaptForPercussion(int trackIndex, bool isDrumTrack)
       {
                   // small hack: don't use multiple voices for tuplets
       if (isValidIndex(trackIndex))
-            operations_[trackIndex].useMultipleVoices = false;
+            operations_[trackIndex].useMultipleVoices = !isDrumTrack;
+      else
+            defaultOpers.useMultipleVoices = !isDrumTrack;
       }
 
 void MidiImportOperations::addTrackLyrics(const std::multimap<ReducedFraction, std::string> &trackLyrics)
