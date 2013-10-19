@@ -226,7 +226,7 @@ void setLyricsFromOperations(const QList<MTrack> &tracks)
             }
       }
 
-void setLyrics(const MidiFile *mf, const QList<MTrack> &tracks)
+void setLyricsToScore(const MidiFile *mf, const QList<MTrack> &tracks)
       {
       if (preferences.midiImportOperations.count() == 0) {
             extractLyricsToMidiData(mf);
