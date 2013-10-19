@@ -15,9 +15,9 @@ struct TrackCol {
       enum {
             DO_IMPORT = 0,
             TRACK_NUMBER,
-            LYRICS,
             STAFF_NAME,
             INSTRUMENT,
+            LYRICS,
             COL_COUNT
             };
       };
