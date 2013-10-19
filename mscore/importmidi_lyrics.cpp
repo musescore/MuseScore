@@ -220,7 +220,7 @@ QList<std::string> makeLyricsListForUI()
       const auto *lyrics = preferences.midiImportOperations.getLyrics();
       if (!lyrics)
             return list;
-      const unsigned int symbolLimit = 20;
+      const unsigned int symbolLimit = 16;
 
       for (const auto &trackLyric: *lyrics) {
             std::string lyricText;
