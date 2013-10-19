@@ -865,9 +865,9 @@ void convertMidi(Score *score, const MidiFile *mf)
       quantizeAllTracks(tracks, sigmap, lastTick);
       MChord::removeOverlappingNotes(tracks);
       LRHand::splitIntoLeftRightHands(tracks);
-      MChord::splitUnequalChords(tracks);
       MidiDrum::splitDrumVoices(tracks);
       MidiDrum::splitDrumTracks(tracks);
+      MChord::splitUnequalChords(tracks);
                   // no more track insertion/reordering/deletion from now
       QList<MTrack> trackList = prepareTrackList(tracks);
       createInstruments(score, trackList);

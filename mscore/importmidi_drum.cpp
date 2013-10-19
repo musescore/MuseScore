@@ -24,41 +24,44 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                   continue;
                               // all chords of drum track have voice == 0
                               // because useMultipleVoices == false (see MidiImportOperations)
-            for (auto chordIt = chords.begin(); chordIt != chords.end(); ) {
-                  auto &chord = chordIt->second;
+            for (auto &chordEvent: chords) {
+                  const auto &onTime = chordEvent.first;
+                  auto &chord = chordEvent.second;
                   auto &notes = chord.notes;
                   MidiChord newChord;
+                  newChord.voice = 1;
+                              // search for the drumset pitches with voice = 1
                   for (auto it = notes.begin(); it != notes.end(); ) {
-                        if (drumset->isValid(it->pitch) && drumset->voice(it->pitch) != 0) {
-                              newChord.voice = drumset->voice(it->pitch);
+                        if (drumset->isValid(it->pitch) && drumset->voice(it->pitch) == 1) {
                               newChord.notes.push_back(*it);
-
                               it = notes.erase(it);
                               continue;
                               }
                         ++it;
                         }
                   if (!newChord.notes.isEmpty()) {
-                        newChordEvents.push_back({chordIt->first, newChord});
-
                         const auto tupletIt = MidiTuplet::findTupletContainsTime(
-                                          chordIt->second.voice, chordIt->first, track.tuplets);
+                                          chord.voice, onTime, track.tuplets);
                         const auto newTupletIt = MidiTuplet::findTupletContainsTime(
-                                          newChord.voice, chordIt->first, track.tuplets);
+                                          newChord.voice, onTime, track.tuplets);
                         if (tupletIt != track.tuplets.end()
                                     && newTupletIt == track.tuplets.end()) {
-                              MidiTuplet::TupletData newTupletData = tupletIt->second;
-                              newTupletData.voice = newChord.voice;
-                              track.tuplets.insert({tupletIt->first, newTupletData});
+                              if (notes.isEmpty()) {
+                                                // small C++11 hack: remove constness of const_iterator
+                                    auto nonConstIt = track.tuplets.erase(tupletIt, tupletIt);
+                                    nonConstIt->second.voice = newChord.voice;
+                                    }
+                              else {
+                                    MidiTuplet::TupletData newTupletData = tupletIt->second;
+                                    newTupletData.voice = newChord.voice;
+                                    track.tuplets.insert({tupletIt->first, newTupletData});
+                                    }
                               }
-                        if (notes.isEmpty()) {
-                              MidiTuplet::removeEmptyTuplets(track);
-
-                              chordIt = chords.erase(chordIt);
-                              continue;
-                              }
+                        if (notes.isEmpty())
+                              chord = newChord;
+                        else
+                              newChordEvents.push_back({onTime, newChord});
                         }
-                  ++chordIt;
                   }
             for (const auto &event: newChordEvents)
                   chords.insert(event);
