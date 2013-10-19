@@ -40,28 +40,6 @@ bool isLyricEvent(const MidiEvent &e)
                                      || e.metaType() == META_LYRIC);
       }
 
-bool isLyricsTrack(const MidiTrack &lyricsTrack)
-      {
-      bool lyricsFlag = false;
-
-      for (const auto &i: lyricsTrack.events()) {
-            const auto& e = i.second;
-            if (isLyricEvent(e)) {
-                  const uchar* data = (uchar*)e.edata();
-                              // no charset handling here
-                  std::string text = MidiCharset::fromUchar(data);
-                  if (isLyricText(text)) {
-                        if (!lyricsFlag)
-                              lyricsFlag = true;
-                        }
-                  }
-            else if (e.type() == ME_NOTE)
-                  return false;
-            }
-
-      return lyricsFlag;
-      }
-
 std::multimap<ReducedFraction, std::string>
 extractLyricsFromTrack(const MidiTrack &lyricsTrack, int division)
       {
@@ -174,10 +152,9 @@ void addLyricsToScore(const std::multimap<ReducedFraction, std::string> &lyricTr
 void extractLyricsToMidiData(const MidiFile *mf)
       {
       for (const auto &t: mf->tracks()) {
-            if (!isLyricsTrack(t))
-                  continue;
-            preferences.midiImportOperations.addTrackLyrics(
-                                     extractLyricsFromTrack(t, mf->division()));
+            const auto lyrics = extractLyricsFromTrack(t, mf->division());
+            if (!lyrics.empty())
+                  preferences.midiImportOperations.addTrackLyrics(lyrics);
             }
       }
 

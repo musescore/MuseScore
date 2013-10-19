@@ -119,16 +119,12 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             return;
             }
       const uchar* data = (uchar*)mm.edata();
-      const int staffIdx      = staff->idx();
       Score* cs         = staff->score();
 
       switch (mm.metaType()) {
             case META_TEXT:
-            case META_LYRIC: {
-                  std::string text = MidiCharset::fromUchar(data);
-                  cs->addLyrics(tick, staffIdx, MidiCharset::convertToCharset(text));
-                  }
-                  break;
+            case META_LYRIC:
+                  break;      // lyric and text are added in importmidi_lyrics.cpp
             case META_TRACK_NAME:
                   {
                   std::string text = MidiCharset::fromUchar(data);
