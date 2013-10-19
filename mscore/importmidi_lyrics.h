@@ -11,7 +11,7 @@ namespace MidiLyrics {
 
 void setInitialIndexes(QList<MTrack> &tracks);
 void setLyrics(const MidiFile *mf, const QList<MTrack> &tracks);
-QList<std::string> makeLyricsList();
+QList<std::string> makeLyricsListForUI();
 
 } // namespace MidiLyrics
 } // namespace Ms
