@@ -881,7 +881,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       createNotes(lastTick, trackList, mf->midiType());
       createTimeSignatures(score);
       score->connectTies();
-      MidiLyrics::setLyrics(mf, trackList);
+      MidiLyrics::setLyricsToScore(mf, trackList);
       }
 
 void loadMidiData(MidiFile &mf)
