@@ -1124,13 +1124,17 @@ findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
       return tupletEvents;
       }
 
+// tuplets with no chords are removed
+// tuplets with single chord with chord.onTime = tuplet.onTime
+//    and chord.len = tuplet.len are removed as well
+
 void removeEmptyTuplets(MTrack &track)
       {
       if (track.tuplets.empty())
             return;
       for (auto it = track.tuplets.begin(); it != track.tuplets.end(); ) {
             const auto &tupletData = it->second;
-            bool containsChord = false;
+            bool ok = false;
             for (const auto &chord: track.chords) {
                   if (tupletData.voice != chord.second.voice)
                         continue;
@@ -1139,11 +1143,22 @@ void removeEmptyTuplets(MTrack &track)
                   if (onTime + len > tupletData.onTime
                               && onTime + len <= tupletData.onTime + tupletData.len) {
                                     // tuplet contains at least one chord
-                        containsChord = true;
-                        break;
+                                    // check now for notes with len == tupletData.len
+                        if (onTime == tupletData.onTime) {
+                              for (const auto &note: chord.second.notes) {
+                                    if (note.len != tupletData.len) {
+                                          ok = true;
+                                          break;
+                                          }
+                                    }
+                              }
+                        else {
+                              ok = true;
+                              break;
+                              }
                         }
                   }
-            if (!containsChord) {
+            if (!ok) {
                   it = track.tuplets.erase(it);
                   continue;
                   }

@@ -68,56 +68,57 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
             }
       }
 
-std::map<int, MTrack> splitDrumTrack(MTrack &drumTrack)
+MTrack& getNewTrack(std::map<int, MTrack> &newTracks,
+                    const MTrack &drumTrack,
+                    int pitch)
+      {
+      auto newTrackIt = newTracks.find(pitch);
+      if (newTrackIt == newTracks.end()) {
+            newTrackIt = newTracks.insert({pitch, drumTrack}).first;
+            MTrack &newTrack = newTrackIt->second;
+                        // chords and tuplets are copied and then cleared -
+                        // not very efficient way but it's more safe for possible
+                        // future additions of new fields in MTrack
+            newTrack.chords.clear();
+            newTrack.tuplets.clear();
+            newTrack.name = smDrumset->name(pitch);
+            }
+      return newTrackIt->second;
+      }
+
+std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
       {
       std::map<int, MTrack> newTracks;         // <percussion note pitch, track>
       if (drumTrack.chords.empty())
             return newTracks;
 
-      while (!drumTrack.chords.empty()) {
-            int pitch = -1;
-            MTrack *curTrack = nullptr;
-            for (auto it = drumTrack.chords.begin(); it != drumTrack.chords.end(); ) {
-                  MidiChord &chord = it->second;
-                  for (auto noteIt = chord.notes.begin(); noteIt != chord.notes.end(); ) {
-                        if (pitch == -1) {
-                              pitch = noteIt->pitch;
-                              MTrack newTrack = drumTrack;
-                              newTrack.chords.clear();
-                              newTrack.tuplets.clear();
-                              newTrack.name = smDrumset->name(pitch);
-                              newTracks.insert({pitch, newTrack});
-                              curTrack = &newTracks.find(pitch)->second;
-                              }
-                        if (noteIt->pitch == pitch) {
-                              MidiChord newChord;
-                              newChord.voice = chord.voice;
-                              newChord.notes.push_back(*noteIt);
-                              curTrack->chords.insert({it->first, newChord});
+      for (const auto &chordEvent: drumTrack.chords) {
+            const auto &onTime = chordEvent.first;
+            const MidiChord &chord = chordEvent.second;
 
-                              const auto tupletIt = MidiTuplet::findTupletContainsTime(
-                                                chord.voice, it->first, drumTrack.tuplets);
-                              if (tupletIt != drumTrack.tuplets.end()) {
-                                    auto newTupletIt = MidiTuplet::findTupletContainsTime(
-                                                      newChord.voice, it->first, curTrack->tuplets);
-                                    if (newTupletIt == curTrack->tuplets.end()) {
-                                          MidiTuplet::TupletData newTupletData = tupletIt->second;
-                                          newTupletData.voice = newChord.voice;
-                                          curTrack->tuplets.insert({tupletIt->first, newTupletData});
-                                          }
-                                    }
-                              noteIt = chord.notes.erase(noteIt);
-                              continue;
+            for (const auto &note: chord.notes) {
+                  MidiChord newChord;
+                  newChord.voice = chord.voice;
+                  newChord.notes.push_back(note);
+                  MTrack &newTrack = getNewTrack(newTracks, drumTrack, note.pitch);
+                  newTrack.chords.insert({onTime, newChord});
+
+                  const auto tupletIt = MidiTuplet::findTupletContainsTime(
+                                    chord.voice, onTime, drumTrack.tuplets);
+                  if (tupletIt != drumTrack.tuplets.end()) {
+                        const auto newTupletIt = MidiTuplet::findTupletContainsTime(
+                                          newChord.voice, onTime, newTrack.tuplets);
+                        if (newTupletIt == newTrack.tuplets.end()) {
+                              MidiTuplet::TupletData newTupletData = tupletIt->second;
+                              newTupletData.voice = newChord.voice;
+                              newTrack.tuplets.insert({tupletIt->first, newTupletData});
                               }
-                        ++noteIt;
                         }
-                  if (chord.notes.isEmpty()) {
-                        it = drumTrack.chords.erase(it);
-                        continue;
-                        }
-                  ++it;
                   }
             }
+
+      for (auto &track: newTracks)
+            MidiTuplet::removeEmptyTuplets(track.second);
 
       return newTracks;
       }
