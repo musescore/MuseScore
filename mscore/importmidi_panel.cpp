@@ -348,7 +348,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   clearMidiPrefOperations();
                   const QList<TrackMeta> tracksMeta = extractMidiTracksMeta(fileName);
                   tracksModel->reset(tracksMeta);
-                  tracksModel->setLyricsList(MidiLyrics::makeLyricsList());
+                  tracksModel->setLyricsList(MidiLyrics::makeLyricsListForUI());
                   showOrHideStaffNameCol(tracksMeta);
                   operationsModel->reset(tracksMeta.size());
                   for (int i = 0; i != tracksModel->trackCount(); ++i)
@@ -360,7 +360,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
             else {            // load previously saved data (tracks, operations) for this MIDI file
                   preferences.midiImportOperations.setCurrentMidiFile(midiFile);
                   tracksModel->reset(trackData);
-                  tracksModel->setLyricsList(MidiLyrics::makeLyricsList());
+                  tracksModel->setLyricsList(MidiLyrics::makeLyricsListForUI());
                   restoreTableViewState(fileName);
                   }
             ui->comboBoxCharset->setCurrentText(preferences.midiImportOperations.charset());

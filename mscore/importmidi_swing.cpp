@@ -148,12 +148,6 @@ void SwingDetector::applySwing()
                   el->setTuplet(nullptr);
                   }
             }
-      if (elements.size() == 3) {
-                  // remove central rest
-            ChordRest *cr = elements[1];
-            cr->score()->removeElement(cr);
-            delete cr;
-            }
 
       const ChordRest *first = elements.front();
       const int startTick = first->segment()->tick();
@@ -161,6 +155,13 @@ void SwingDetector::applySwing()
       last->segment()->remove(last);
       Segment *s = last->measure()->getSegment(last, startTick + MScore::division / 2);
       s->add(last);
+
+      if (elements.size() == 3) {
+                  // remove central rest
+            ChordRest *cr = elements[1];
+            cr->score()->removeElement(cr);
+            delete cr;
+            }
 
       if (tuplet) {
                   // delete tuplet
