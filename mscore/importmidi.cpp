@@ -101,8 +101,7 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                         // pass current track index through MidiImportOperations
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
-            if (mtrack.mtrack->drumTrack())
-                  opers.adaptForPercussion(mtrack.indexOfOperation);
+            opers.adaptForPercussion(mtrack.indexOfOperation, mtrack.mtrack->drumTrack());
             mtrack.tuplets = MidiTuplet::findAllTuplets(mtrack.chords, sigmap, lastTick);
             Quantize::quantizeChords(mtrack.chords, mtrack.tuplets, sigmap);
             }
@@ -119,16 +118,12 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             return;
             }
       const uchar* data = (uchar*)mm.edata();
-      const int staffIdx      = staff->idx();
       Score* cs         = staff->score();
 
       switch (mm.metaType()) {
             case META_TEXT:
-            case META_LYRIC: {
-                  std::string text = MidiCharset::fromUchar(data);
-                  cs->addLyrics(tick, staffIdx, MidiCharset::convertToCharset(text));
-                  }
-                  break;
+            case META_LYRIC:
+                  break;      // lyric and text are added in importmidi_lyrics.cpp
             case META_TRACK_NAME:
                   {
                   std::string text = MidiCharset::fromUchar(data);
@@ -870,9 +865,9 @@ void convertMidi(Score *score, const MidiFile *mf)
       quantizeAllTracks(tracks, sigmap, lastTick);
       MChord::removeOverlappingNotes(tracks);
       LRHand::splitIntoLeftRightHands(tracks);
-      MChord::splitUnequalChords(tracks);
       MidiDrum::splitDrumVoices(tracks);
       MidiDrum::splitDrumTracks(tracks);
+      MChord::splitUnequalChords(tracks);
                   // no more track insertion/reordering/deletion from now
       QList<MTrack> trackList = prepareTrackList(tracks);
       createInstruments(score, trackList);
@@ -881,7 +876,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       createNotes(lastTick, trackList, mf->midiType());
       createTimeSignatures(score);
       score->connectTies();
-      MidiLyrics::setLyrics(mf, trackList);
+      MidiLyrics::setLyricsToScore(mf, trackList);
       }
 
 void loadMidiData(MidiFile &mf)
@@ -922,7 +917,7 @@ QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
       const MidiFile *mf = midiData.midiFile(fileName);
       const auto tracks = createMTrackList(lastTick, mockScore.sigmap(), mf);
       QList<MTrack> trackList = prepareTrackList(tracks);
-      MidiLyrics::setInitialIndexes(trackList);
+      MidiLyrics::assignLyricsToTracks(trackList);
 
       return getTracksMeta(trackList, mf);
       }

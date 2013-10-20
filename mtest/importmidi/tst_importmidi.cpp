@@ -219,6 +219,15 @@ class TestImportMidi : public QObject, public MTest
             mf("swing_shuffle");
             preferences.midiImportOperations.clear();
             }
+      void swingClef()
+            {
+            TrackOperations opers;
+            opers.swing = MidiOperation::Swing::SWING;
+            opers.changeClef = true;
+            preferences.midiImportOperations.appendTrackOperations(opers);
+            mf("swing_clef");
+            preferences.midiImportOperations.clear();
+            }
 
       // percussion
       void percDrums() { mf("perc_drums"); }
