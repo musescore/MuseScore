@@ -4761,7 +4761,8 @@ int main(int argc, char* av[])
 
       QScreen* screen = QGuiApplication::primaryScreen();
       MScore::PDPI = screen->physicalDotsPerInch();        // physical resolution
-      MScore::DPI  = MScore::PDPI;             // logical drawing resolution
+      //MScore::DPI  = MScore::PDPI;                       // logical drawing resolution
+      MScore::DPI  = screen->logicalDotsPerInch();         // logical drawing resolution
       MScore::init();                          // initialize libmscore
 
       if (MScore::debugMode)
