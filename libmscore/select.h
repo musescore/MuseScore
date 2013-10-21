@@ -69,6 +69,7 @@ class Selection {
       int _activeTrack;
 
       QByteArray staffMimeData() const;
+      QByteArray symbolListMimeData() const;
 
    public:
       Selection()                      { _score = 0; _state = SEL_NONE; }
