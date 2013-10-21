@@ -16,27 +16,29 @@
 */
 
 #include "mscore.h"
-#include "note.h"
+#include "barline.h"
+#include "beam.h"
 #include "chord.h"
+#include "figuredbass.h"
+#include "harmony.h"
+#include "input.h"
+#include "limits.h"
+#include "lyrics.h"
+#include "measure.h"
+#include "note.h"
+#include "page.h"
 #include "rest.h"
 #include "score.h"
-#include "slur.h"
-#include "system.h"
+#include "segment.h"
 #include "select.h"
 #include "sig.h"
-#include "utils.h"
+#include "slur.h"
+#include "system.h"
 #include "text.h"
-#include "segment.h"
-#include "input.h"
-#include "measure.h"
-#include "page.h"
-#include "barline.h"
-#include "xml.h"
-#include "lyrics.h"
-#include "limits.h"
-#include "tuplet.h"
-#include "beam.h"
 #include "textline.h"
+#include "tuplet.h"
+#include "utils.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -445,6 +447,8 @@ QByteArray Selection::mimeData() const
                               e = static_cast<TextLineSegment*>(e)->textLine();
                         a = e->mimeData(QPointF());
                         }
+                  else
+                        a = symbolListMimeData();
                   break;
             case SEL_NONE:
                   break;
@@ -479,6 +483,233 @@ QByteArray Selection::staffMimeData() const
             int endTrack   = startTrack + VOICES;
             score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
+            }
+
+      xml.etag();
+      buffer.close();
+      return buffer.buffer();
+      }
+
+//---------------------------------------------------------
+//   symbolListMimeData
+//---------------------------------------------------------
+
+QByteArray Selection::symbolListMimeData() const
+      {
+
+      struct MAPDATA {
+            Element* e;
+            Segment* s;
+            };
+
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      Xml xml(&buffer);
+      xml.header();
+      xml.clipboardmode = true;
+
+      int         topTrack    = 1000000;
+      int         bottomTrack = 0;
+      Segment*    firstSeg;
+      int         firstTick   = 0x7FFFFFFF;
+      MAPDATA     mapData;
+      Segment*    seg;
+      int         track;
+      std::multimap<long, MAPDATA> map;
+
+      // scan selection element list, inserting relevant elements in a tick-sorted map
+      foreach (Element* e, _el) {
+            switch (e->type()) {
+/* All these element types are ignored:
+
+Enabling copying of more element types requires enabling pasting in Score::pasteSymbols() in libmscore/paste.cpp
+
+                  case Element::SYMBOL:
+                  case Element::TEXT:
+                  case Element::INSTRUMENT_NAME:
+                  case Element::SLUR_SEGMENT:
+                  case Element::STAFF_LINES:
+                  case Element::BAR_LINE:
+                  case Element::STEM_SLASH:
+                  case Element::LINE:
+                  case Element::BRACKET:
+                  case Element::ARPEGGIO:
+                  case Element::ACCIDENTAL:
+                  case Element::STEM:
+                  case Element::NOTE:
+                  case Element::CLEF:
+                  case Element::KEYSIG:
+                  case Element::TIMESIG:
+                  case Element::REST:
+                  case Element::BREATH:
+                  case Element::GLISSANDO:
+                  case Element::REPEAT_MEASURE:
+                  case Element::IMAGE:
+                  case Element::TIE:
+                  case Element::CHORDLINE:
+                  case Element::DYNAMIC:
+                  case Element::BEAM:
+                  case Element::HOOK:
+                  case Element::MARKER:
+                  case Element::JUMP:
+                  case Element::FINGERING:
+                  case Element::TUPLET:
+                  case Element::TEMPO_TEXT:
+                  case Element::STAFF_TEXT:
+                  case Element::REHEARSAL_MARK:
+                  case Element::INSTRUMENT_CHANGE:
+                  case Element::FRET_DIAGRAM:
+                  case Element::BEND:
+                  case Element::TREMOLOBAR:
+                  case Element::VOLTA:
+                  case Element::HAIRPIN_SEGMENT:
+                  case Element::OTTAVA_SEGMENT:
+                  case Element::TRILL_SEGMENT:
+                  case Element::TEXTLINE_SEGMENT:
+                  case Element::VOLTA_SEGMENT:
+                  case Element::PEDAL_SEGMENT:
+                  case Element::LAYOUT_BREAK:
+                  case Element::SPACER:
+                  case Element::STAFF_STATE:
+                  case Element::LEDGER_LINE:
+                  case Element::NOTEHEAD:
+                  case Element::NOTEDOT:
+                  case Element::TREMOLO:
+                  case Element::MEASURE:
+                  case Element::SELECTION:
+                  case Element::LASSO:
+                  case Element::SHADOW_NOTE:
+                  case Element::RUBBERBAND:
+                  case Element::TAB_DURATION_SYMBOL:
+                  case Element::FSYMBOL:
+                  case Element::PAGE:
+                  case Element::HAIRPIN:
+                  case Element::OTTAVA:
+                  case Element::PEDAL:
+                  case Element::TRILL:
+                  case Element::TEXTLINE:
+                  case Element::NOTELINE:
+                  case Element::SEGMENT:
+                  case Element::SYSTEM:
+                  case Element::COMPOUND:
+                  case Element::CHORD:
+                  case Element::SLUR:
+                  case Element::ELEMENT:
+                  case Element::ELEMENT_LIST:
+                  case Element::STAFF_LIST:
+                  case Element::MEASURE_LIST:
+                  case Element::LAYOUT:
+                  case Element::HBOX:
+                  case Element::VBOX:
+                  case Element::TBOX:
+                  case Element::FBOX:
+                  case Element::ACCIDENTAL_BRACKET:
+                  case Element::ICON:
+                  case Element::OSSIA:
+                  case Element::BAGPIPE_EMBELLISHMENT:
+                        continue;
+*/
+                  case Element::ARTICULATION:
+                        // ignore articulations not attached to chords/rest
+                        if (e->parent()->type() == Element::CHORD) {
+                              Chord* par = static_cast<Chord*>( (static_cast<Articulation*>(e))->parent() );
+                              seg = par->segment();
+                              break;
+                              }
+                        else if (e->parent()->type() == Element::REST) {
+                              Rest* par = static_cast<Rest*>( (static_cast<Articulation*>(e))->parent() );
+                              seg = par->segment();
+                              break;
+                              }
+                        continue;
+                  case Element::FIGURED_BASS:
+                        seg = (static_cast<FiguredBass*>(e))->segment();
+                        break;
+                  case Element::HARMONY:
+                        // ignore chord names not attached to segment
+                        if (e->parent()->type() == Element::SEGMENT) {
+                              seg = static_cast<Segment*>( (static_cast<Harmony*>(e))->parent() );
+                              break;
+                              }
+                        continue;
+                  case Element::LYRICS:
+                        seg = (static_cast<Lyrics*>(e))->segment();
+                        break;
+                  default:
+                        continue;
+                  }
+            track = e->track();
+            if (track < topTrack)
+                  topTrack = track;
+            if (track > bottomTrack)
+                  bottomTrack = track;
+            if (seg->tick() < firstTick) {
+                  firstSeg  = seg;
+                  firstTick = seg->tick();
+                  }
+            mapData.e = e;
+            mapData.s = seg;
+            map.insert(std::pair<long,MAPDATA>( ((long)track << 32) + seg->tick(), mapData));
+            }
+
+      xml.stag(QString("SymbolList version=\"" MSC_VERSION "\" fromtrack=\"%1\" totrack=\"%2\"")
+                  .arg(topTrack).arg(bottomTrack));
+      // scan the map, outputting elements each with a relative <track> tag on track change,
+      // a delta tick and the number of CR segments to skip
+      int   currTrack = -1;
+      for (auto iter = map.cbegin(); iter != map.cend(); ++iter) {
+//            int   currTick;
+            int   numSegs;
+            int   track = (int)(iter->first >> 32);
+            if (currTrack != track) {
+                  xml.tag("trackOffset", track - topTrack);
+                  currTrack = track;
+//                  currTick  = firstTick;
+                  seg       = firstSeg;
+                  }
+//            xml.tag("tickDelta", (int)(iter->first & 0xFFFFFFFF) - currTick);
+//            currTick = (int)(iter->first & 0xFFFFFFFF);
+            numSegs = 0;
+            // with figured bass, we need to look for the proper segment
+            // not only according to ChordRest elements, but also annotations
+            if (iter->second.e->type() == Element::FIGURED_BASS) {
+                  bool done = false;
+                  for ( ; seg; seg = seg->next1()) {
+                        if (seg->segmentType() == Segment::SegChordRest) {
+                              // if no ChordRest in right track, look in anotations
+                              if (seg->element(currTrack) == nullptr) {
+                                    foreach (Element* el, seg->annotations()) {
+                                          // do annotations include our element?
+                                          if (el == iter->second.e) {
+                                                done = true;
+                                                break;
+                                                }
+                                          // do annotations include any f.b.?
+                                          if (el->type() == Element::FIGURED_BASS && el->track() == track) {
+                                                numSegs++;  //yes: it counts as a step
+                                                break;
+                                                }
+                                          }
+                                    if (done)
+                                          break;
+                                    continue;               // segment is not relevant: no ChordRest nor f.b.
+                                    }
+                              else {
+                                    if (iter->second.s == seg)
+                                          break;
+                                    }
+                              numSegs++;
+                              }
+                        }
+                  }
+            else {
+                  while (iter->second.s != seg) {
+                              seg = seg->nextCR(currTrack);
+                              numSegs++;
+                              }
+                  }
+            xml.tag("segDelta", numSegs);
+            iter->second.e->write(xml);
             }
 
       xml.etag();
