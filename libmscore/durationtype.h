@@ -40,7 +40,7 @@ class TDuration {
       bool isValid() const                  { return _val != V_INVALID; }
       bool isZero() const                   { return _val == V_ZERO; }
       void setVal(int tick);
-      void setType(DurationType t)          { _val = t; }
+      void setType(DurationType t);
       void setType(const QString&);
 
       int ticks() const;

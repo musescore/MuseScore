@@ -1579,11 +1579,13 @@ void Measure::adjustToLen(Fraction nf)
       int ol = len().ticks();
       int nl = nf.ticks();
 
+      score()->undo(new ChangeMeasureLen(this, nf));
+
       int staves = score()->nstaves();
       int diff   = nl - ol;
 
       if (nl > ol) {
-            // move EndBarLine
+            // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
             for (Segment* s = first(); s; s = s->next()) {
                   if (s->segmentType() & (Segment::SegEndBarLine|Segment::SegTimeSigAnnounce|Segment::SegKeySigAnnounce)) {
                         s->setTick(tick() + nl);
@@ -1600,65 +1602,61 @@ void Measure::adjustToLen(Fraction nf)
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = segment->element(track);
-                        if (e && e->type() == REST) {
-                              ++rests;
-                              rest = static_cast<Rest*>(e);
+                        if (e) {
+                              if (e->type() == REST) {
+                                    ++rests;
+                                    rest = static_cast<Rest*>(e);
+                                    }
+                              else if (e->type() == CHORD)
+                                    ++chords;
                               }
-                        else if (e && e->type() == CHORD)
-                              ++chords;
                         }
                   }
-            if (rests == 1 && chords == 0 && rest->durationType().type() == TDuration::V_MEASURE) {
-                  rest->setDuration(Fraction::fromTicks(nl));
-                  continue;
+            if (rests == 1 && chords == 0) {
+                  if (rest->durationType().type() == TDuration::V_MEASURE) {
+                        rest->setDuration(nf);
+                        continue;
+                        }
+                  else if (_timesig == nf) {
+                        score()->undo(new ChangeChordRestLen(rest, TDuration(TDuration::V_MEASURE)));
+                        continue;
+                        }
                   }
-            if ((_timesig == _len) && (rests == 1) && (chords == 0)) {
-                  rest->setDurationType(TDuration::V_MEASURE);    // whole measure rest
-                  }
-            else {
-                  int strack = staffIdx * VOICES;
-                  int etrack = strack + VOICES;
+            int strack = staffIdx * VOICES;
+            int etrack = strack + VOICES;
 
-                  for (int trk = strack; trk < etrack; ++trk) {
-                        int n = diff;
-                        bool rFlag = false;
-                        if (n < 0)  {
-                              for (Segment* segment = last(); segment;) {
-                                    Segment* pseg = segment->prev();
-                                    Element* e = segment->element(trk);
-                                    if (e && e->isChordRest()) {
-                                          ChordRest* cr = static_cast<ChordRest*>(e);
-                                          if (cr->durationType() == TDuration::V_MEASURE)
-                                                n = nl;
-                                          else
-                                                n += cr->actualTicks();
-                                          score()->undoRemoveElement(e);
-                                          if (segment->isEmpty())
-                                                score()->undoRemoveElement(segment);
-                                          if (n >= 0)
-                                                break;
-                                          }
-                                    segment = pseg;
+            for (int trk = strack; trk < etrack; ++trk) {
+                  int n = diff;
+                  bool rFlag = false;
+                  if (n < 0)  {
+                        for (Segment* segment = last(); segment;) {
+                              Segment* pseg = segment->prev();
+                              Element* e = segment->element(trk);
+                              if (e && e->isChordRest()) {
+                                    ChordRest* cr = static_cast<ChordRest*>(e);
+                                    if (cr->durationType() == TDuration::V_MEASURE)
+                                          n = nl;
+                                    else
+                                          n += cr->actualTicks();
+                                    score()->undoRemoveElement(e);
+                                    if (segment->isEmpty())
+                                          score()->undoRemoveElement(segment);
+                                    if (n >= 0)
+                                          break;
                                     }
-                              rFlag = true;
+                              segment = pseg;
                               }
-                        int voice = trk % VOICES;
-                        if ((n > 0) && (rFlag || voice == 0)) {
-                              // add rest to measure
-                              int rtick = tick() + nl - n;
-                              Segment* seg = undoGetSegment(Segment::SegChordRest, rtick);
-                              TDuration d;
-                              d.setVal(n);
-                              rest = new Rest(score(), d);
-                              rest->setDuration(d.fraction());
-                              rest->setTrack(staffIdx * VOICES + voice);
-                              rest->setParent(seg);
-                              score()->undoAddElement(rest);
-                              }
+                        rFlag = true;
+                        }
+                  int voice = trk % VOICES;
+                  if ((n > 0) && (rFlag || voice == 0)) {
+                        // add rest to measure
+                        int rtick = tick() + nl - n;
+                        int track = staffIdx * VOICES + voice;
+                        score()->setRest(rtick, track, Fraction::fromTicks(n), true, 0);
                         }
                   }
             }
-      score()->undo(new ChangeMeasureLen(this, nf));
       if (diff < 0) {
             //
             //  CHECK: do not remove all slurs
