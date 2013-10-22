@@ -37,6 +37,8 @@ struct MidiOperation
             SPLIT_DRUMS,
             SHOW_STAFF_BRACKET,
 
+            REMOVE_DRUM_RESTS,
+
             PICKUP_MEASURE,
 
             SWING,
