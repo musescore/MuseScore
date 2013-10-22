@@ -396,7 +396,7 @@ void ScoreView::doDragFoto(QMouseEvent* ev)
       {
       QPointF p = toLogical(ev->pos());
       QRectF r;
-      r.setCoords(startMove.x(), startMove.y(), p.x(), p.y());
+      r.setCoords(data.startMove.x(), data.startMove.y(), p.x(), p.y());
       _foto->setRect(r.normalized());
 
       QRectF rr(_foto->rect());
@@ -432,7 +432,7 @@ void ScoreView::endFotoDrag()
 void ScoreView::doFotoDragEdit(QMouseEvent* ev)
       {
       QPointF p     = toLogical(ev->pos());
-      QPointF delta = p - startMove;
+      QPointF delta = p - data.startMove;
       _score->setLayoutAll(false);
       score()->addRefresh(_foto->abbox());
       EditData ed;
@@ -441,7 +441,7 @@ void ScoreView::doFotoDragEdit(QMouseEvent* ev)
       ed.view    = this;
       _foto->editDrag(ed);
       updateGrips();
-      startMove = p;
+      data.startMove = p;
       _score->end();
       if (mscore->getInspector())
             mscore->getInspector()->setElement(_foto);
@@ -461,10 +461,10 @@ void ScoreView::endFotoDragEdit()
 
 bool ScoreView::fotoEditElementDragTransition(QMouseEvent* ev)
       {
-      startMove = imatrix.map(QPointF(ev->pos()));
+      data.startMove = imatrix.map(QPointF(ev->pos()));
       int i;
       for (i = 0; i < grips; ++i) {
-            if (grip[i].contains(startMove)) {
+            if (grip[i].contains(data.startMove)) {
                   curGrip = i;
                   switch(curGrip) {
                         case 0:
@@ -505,7 +505,7 @@ bool ScoreView::fotoScoreViewDragTest(QMouseEvent* me)
             if (grip[i].contains(p))
                   return false;
             }
-      startMove = p;
+      data.startMove = p;
       return true;
       }
 
@@ -522,7 +522,7 @@ bool ScoreView::fotoScoreViewDragRectTest(QMouseEvent* me)
             if (grip[i].contains(p))
                   return false;
             }
-      startMove = p;
+      data.startMove = p;
       return true;
       }
 
@@ -533,12 +533,12 @@ bool ScoreView::fotoScoreViewDragRectTest(QMouseEvent* me)
 void ScoreView::doDragFotoRect(QMouseEvent* ev)
       {
       QPointF p(toLogical(ev->pos()));
-      QPointF delta = p - startMove;
+      QPointF delta = p - data.startMove;
       _score->setLayoutAll(false);
       score()->addRefresh(_foto->abbox());
       _foto->setRect(_foto->rect().translated(delta));
       score()->addRefresh(_foto->abbox());
-      startMove = p;
+      data.startMove = p;
       updateGrips();
       _score->end();
       if (mscore->getInspector())
@@ -691,7 +691,7 @@ bool ScoreView::fotoRectHit(const QPoint& pos)
             if (grip[i].contains(p))
                   return false;
             }
-      startMove = p;
+      data.startMove = p;
       return _foto->rect().contains(p);
       }
 

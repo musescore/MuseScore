@@ -180,7 +180,7 @@ class Note : public Element {
       QList<Spanner*> _spannerFor;
       QList<Spanner*> _spannerBack;
 
-      virtual QRectF drag(const EditData& s);
+      virtual QRectF drag(EditData*) override;
       void endDrag();
       void endEdit();
       void addSpanner(Spanner*);

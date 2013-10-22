@@ -1325,6 +1325,22 @@ class ChangeSpannerElements : public UndoCommand {
       UNDO_NAME("ChangeSpannerElements");
       };
 
+//---------------------------------------------------------
+//   ChangeParent
+//---------------------------------------------------------
+
+class ChangeParent : public UndoCommand {
+      Element* element;
+      Element* parent;
+      int staffIdx;
+
+      void flip();
+
+   public:
+      ChangeParent(Element* e, Element* p, int si) : element(e), parent(p), staffIdx(si) {}
+      UNDO_NAME("ChangeParent");
+      };
+
 }     // namespace Ms
 #endif
 

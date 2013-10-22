@@ -72,6 +72,8 @@ class Dynamic : public Text {
       int _velocity;          // associated midi velocity 0-127
       DynamicRange _dynRange;   // DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
 
+      virtual QRectF drag(EditData*) override;
+
    public:
       Dynamic(Score*);
       Dynamic(const Dynamic&);

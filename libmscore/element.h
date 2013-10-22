@@ -121,6 +121,7 @@ struct DropData {
 struct EditData {
       MuseScoreView* view;
       int curGrip;
+      QPointF startMove;
       QPointF delta;
       QPointF pos;
       bool hRaster;
@@ -412,7 +413,7 @@ class Element : public QObject {
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
 
-      virtual QRectF drag(const EditData&);
+      virtual QRectF drag(EditData*);
       virtual void endDrag()                  {}
       virtual QLineF dragAnchor() const       { return QLineF(); }
 

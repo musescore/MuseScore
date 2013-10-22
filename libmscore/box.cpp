@@ -530,10 +530,10 @@ Element* Box::drop(const DropData& data)
 //   drag
 //---------------------------------------------------------
 
-QRectF HBox::drag(const EditData& data)
+QRectF HBox::drag(EditData* data)
       {
       QRectF r(canvasBoundingRect());
-      qreal diff = data.delta.x();
+      qreal diff = data->delta.x();
       qreal x1   = userOff().x() + diff;
       if (parent()->type() == VBOX) {
             VBox* vb = static_cast<VBox*>(parent());
@@ -544,7 +544,7 @@ QRectF HBox::drag(const EditData& data)
                   x1 = x2;
             }
       setUserOff(QPointF(x1, 0.0));
-      setStartDragPosition(data.pos);
+      setStartDragPosition(data->pos);
       return canvasBoundingRect() | r;
       }
 
