@@ -31,7 +31,7 @@ bool ScoreView::testElementDragTransition(QMouseEvent* ev)
             return false;
       if (curElement->type() == Element::MEASURE) {
             System* dragSystem = (System*)(curElement->parent());
-            int staffIdx  = getStaff(dragSystem, startMove);
+            int staffIdx  = getStaff(dragSystem, data.startMove);
             dragStaff = score()->staff(staffIdx);
             if (staffIdx == 0)
                   return false;
@@ -47,7 +47,7 @@ bool ScoreView::testElementDragTransition(QMouseEvent* ev)
 void ScoreView::startDrag()
       {
       dragElement = curElement;
-      startMove  -= dragElement->userOff();
+      data.startMove  -= dragElement->userOff();
       _score->startCmd();
 
       if (dragElement->type() == Element::MEASURE) {
@@ -66,17 +66,18 @@ void ScoreView::startDrag()
 
 void ScoreView::doDragElement(QMouseEvent* ev)
       {
-      QPointF delta = toLogical(ev->pos()) - startMove;
+      QPointF delta = toLogical(ev->pos()) - data.startMove;
 
       QPointF pt(delta);
       if (qApp->keyboardModifiers() == Qt::ShiftModifier)
             pt.setX(dragElement->userOff().x());
       else if (qApp->keyboardModifiers() == Qt::ControlModifier)
             pt.setY(dragElement->userOff().y());
-      EditData data;
+
       data.hRaster = mscore->hRaster();
       data.vRaster = mscore->vRaster();
-      data.pos     = pt;
+      data.delta   = pt;
+      data.pos     = toLogical(ev->pos());
 
       if (dragElement->type() == Element::MEASURE) {
             qreal dist      = dragStaff->userDist() + delta.y();
@@ -89,15 +90,18 @@ void ScoreView::doDragElement(QMouseEvent* ev)
                   dist = -styleDist + _spatium;
 
             dragStaff->setUserDist(dist);
-            startMove += delta;
+            data.startMove += delta;
             _score->doLayoutSystems();
             _score->layoutSpanner();
             update();
             return;
             }
 
-      foreach(Element* e, _score->selection().elements())
-            _score->addRefresh(e->drag(data));
+      for (Element* e : _score->selection().elements()) {
+            QRectF r = e->drag(&data);
+            _score->addRefresh(r);
+            }
+
       if (_score->playNote()) {
             Element* e = _score->selection().element();
             if (e)

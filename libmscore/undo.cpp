@@ -3268,6 +3268,21 @@ void ChangeSpannerElements::flip()
       spanner->score()->setLayoutAll(true);
       }
 
+//---------------------------------------------------------
+//   ChangeParent
+//---------------------------------------------------------
+
+void ChangeParent::flip()
+      {
+      Element* p = element->parent();
+      int si = element->staffIdx();
+      p->remove(element);
+      element->setParent(parent);
+      element->setTrack(staffIdx * VOICES);
+      parent->add(element);
+      staffIdx = si;
+      parent = p;
+      }
 
 }
 

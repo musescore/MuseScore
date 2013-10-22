@@ -1047,7 +1047,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       Segment* seg;
       QPointF offset;
 
-      if (!_score->pos2measure(startMove, &staffIdx, &pitch, &seg, &offset))
+      if (!_score->pos2measure(data.startMove, &staffIdx, &pitch, &seg, &offset))
             return;
       if (staffIdx == -1) {
             qDebug("ScoreView::measurePopup: staffIdx == -1!");
@@ -3094,8 +3094,8 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
       {
       QPoint gp = ev->globalPos();
 
-      startMove = toLogical(ev->pos());
-      Element* e = elementNear(startMove);
+      data.startMove = toLogical(ev->pos());
+      Element* e = elementNear(data.startMove);
       if (e) {
             if (!e->selected()) {
                   // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
@@ -3125,7 +3125,7 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
 
 void ScoreView::dragScoreView(QMouseEvent* ev)
       {
-      QPoint d = ev->pos() - _matrix.map(startMove).toPoint();
+      QPoint d = ev->pos() - _matrix.map(data.startMove).toPoint();
       int dx   = d.x();
       int dy   = d.y();
 
@@ -3194,7 +3194,7 @@ void ScoreView::select(QMouseEvent* ev)
       int dragStaffIdx = 0;
       if (type == Element::MEASURE) {
             System* dragSystem = (System*)(curElement->parent());
-            dragStaffIdx  = getStaff(dragSystem, startMove);
+            dragStaffIdx  = getStaff(dragSystem, data.startMove);
             }
       if ((ev->type() == QEvent::MouseButtonRelease) && ((!curElement->selected() || addSelect)))
             return;
@@ -3238,12 +3238,12 @@ void ScoreView::select(QMouseEvent* ev)
 bool ScoreView::mousePress(QMouseEvent* ev)
       {
       startMoveI = ev->pos();
-      startMove  = imatrix.map(QPointF(startMoveI));
-      curElement = elementNear(startMove);
+      data.startMove  = imatrix.map(QPointF(startMoveI));
+      curElement = elementNear(data.startMove);
 
       if (curElement && curElement->type() == Element::MEASURE) {
             System* dragSystem = (System*)(curElement->parent());
-            int dragStaffIdx  = getStaff(dragSystem, startMove);
+            int dragStaffIdx  = getStaff(dragSystem, data.startMove);
             if (dragStaffIdx < 0)
                   curElement = 0;
             }
@@ -3267,10 +3267,10 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* event)
 
 bool ScoreView::editElementDragTransition(QMouseEvent* ev)
       {
-      startMove = toLogical(ev->pos());
-      Element* e = elementNear(startMove);
+      data.startMove = toLogical(ev->pos());
+      Element* e = elementNear(data.startMove);
       if (e && (e == editObject) && (editObject->isText())) {
-            if (editObject->mousePress(startMove, ev)) {
+            if (editObject->mousePress(data.startMove, ev)) {
                   _score->addRefresh(editObject->canvasBoundingRect());
                   _score->end();
                   }
@@ -3279,7 +3279,7 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
       int i;
       qreal a = grip[0].width() * 1.0;
       for (i = 0; i < grips; ++i) {
-            if (grip[i].adjusted(-a, -a, a, a).contains(startMove)) {
+            if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
                   curGrip = i;
                   updateGrips();
                   score()->end();
@@ -3295,10 +3295,10 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
 
 void ScoreView::onEditPasteTransition(QMouseEvent* ev)
       {
-      startMove = imatrix.map(QPointF(ev->pos()));
-      Element* e = elementNear(startMove);
+      data.startMove = imatrix.map(QPointF(ev->pos()));
+      Element* e = elementNear(data.startMove);
       if (e == editObject) {
-            if (editObject->mousePress(startMove, ev)) {
+            if (editObject->mousePress(data.startMove, ev)) {
                   _score->addRefresh(editObject->canvasBoundingRect());
                   _score->end();
                   }
@@ -3316,7 +3316,7 @@ bool ScoreView::editScoreViewDragTransition(QMouseEvent* ev)
       Element* e = elementNear(p);
 
       if (e == 0 || e->type() == Element::MEASURE) {
-            startMove   = p;
+            data.startMove   = p;
 //TODOxxx            dragElement = e;
             return true;
             }
@@ -3334,7 +3334,7 @@ bool ScoreView::editSelectTransition(QMouseEvent* ev)
       Element* e = elementNear(p);
 
       if (e != editObject) {
-            startMove   = p;
+            data.startMove   = p;
 //TODOxxx            dragElement = e;
             return true;
             }
@@ -3350,7 +3350,7 @@ void ScoreView::doDragLasso(QMouseEvent* ev)
       QPointF p = toLogical(ev->pos());
       _score->addRefresh(lasso->canvasBoundingRect());
       QRectF r;
-      r.setCoords(startMove.x(), startMove.y(), p.x(), p.y());
+      r.setCoords(data.startMove.x(), data.startMove.y(), p.x(), p.y());
       lasso->setRect(r.normalized());
       QRectF _lassoRect(lasso->rect());
       r = _matrix.mapRect(_lassoRect);

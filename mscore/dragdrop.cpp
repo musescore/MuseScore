@@ -383,37 +383,34 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::HARMONY:
                         {
                         Element* el = elementAt(pos);
-                        if (el == 0) {
+                        if (el == 0 || el->type() == Element::MEASURE) {
                               int staffIdx;
                               Segment* seg;
                               el = _score->pos2measure(pos, &staffIdx, 0, &seg, 0);
-                              if (el == 0) {
-                                    qDebug("cannot drop here");
-                                    delete dragElement;
-                                    break;
+                              if (el && el->type() == Element::MEASURE) {
+                                    dragElement->setTrack(staffIdx * VOICES);
+                                    dragElement->setParent(seg);
+                                    score()->undoAddElement(dragElement);
                                     }
                               else {
-                                    if (seg) {
-                                          dragElement->setTrack(staffIdx * VOICES);
-                                          dragElement->setParent(seg);
-                                          score()->undoAddElement(dragElement);
-                                          break;
-                                          }
-                                    qDebug("cannot drop here (2)");
+                                    qDebug("cannot drop here");
+                                    delete dragElement;
                                     }
-                             }
-                        _score->addRefresh(el->canvasBoundingRect());
-                        _score->addRefresh(dragElement->canvasBoundingRect());
-
-                        if (!el->acceptDrop(this, pos, dragElement)) {
-                              qDebug("drop %s onto %s not accepted", dragElement->name(), el->name());
-                              break;
                               }
-                        Element* dropElement = el->drop(dropData);
-                        _score->addRefresh(el->canvasBoundingRect());
-                        if (dropElement) {
-                              _score->select(dropElement, SELECT_SINGLE, 0);
-                              _score->addRefresh(dropElement->canvasBoundingRect());
+                        else {
+                              _score->addRefresh(el->canvasBoundingRect());
+                              _score->addRefresh(dragElement->canvasBoundingRect());
+
+                              if (!el->acceptDrop(this, pos, dragElement)) {
+                                    qDebug("drop %s onto %s not accepted", dragElement->name(), el->name());
+                                    break;
+                                    }
+                              Element* dropElement = el->drop(dropData);
+                              _score->addRefresh(el->canvasBoundingRect());
+                              if (dropElement) {
+                                    _score->select(dropElement, SELECT_SINGLE, 0);
+                                    _score->addRefresh(dropElement->canvasBoundingRect());
+                                    }
                               }
                         }
                         event->acceptProposedAction();

@@ -920,7 +920,7 @@ void Note::read(XmlReader& e)
 //   drag
 //---------------------------------------------------------
 
-QRectF Note::drag(const EditData& data)
+QRectF Note::drag(EditData* data)
       {
       if (staff()->isDrumStaff())
             return QRect();
@@ -930,7 +930,7 @@ QRectF Note::drag(const EditData& data)
       qreal _spatium = spatium();
       bool tab = staff()->isTabStaff();
       qreal step = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
-      _lineOffset = lrint(data.pos.y() / step);
+      _lineOffset = lrint(data->pos.y() / step);
       score()->setLayoutAll(true);
       return bb.translated(chord()->pagePos());
       }

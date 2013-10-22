@@ -101,7 +101,7 @@ class HBox : public Box {
 
       virtual void layout();
 
-      virtual QRectF drag(const EditData& s);
+      virtual QRectF drag(EditData*) override;
       virtual void endEditDrag();
       void layout2();
       virtual bool isMovable() const;
