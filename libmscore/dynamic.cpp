@@ -20,6 +20,7 @@
 #include "style.h"
 #include "mscore.h"
 #include "chord.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -117,7 +118,7 @@ static Dyn dynList[] = {
 Dynamic::Dynamic(Score* s)
    : Text(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _velocity = -1;
       _dynRange = DYNAMIC_PART;
       setTextStyleType(TEXT_STYLE_DYNAMICS);
@@ -127,9 +128,9 @@ Dynamic::Dynamic(Score* s)
 Dynamic::Dynamic(const Dynamic& d)
    : Text(d)
       {
-      _dynamicType   = d._dynamicType;
-      _velocity  = d._velocity;
-      _dynRange  = d._dynRange;
+      _dynamicType = d._dynamicType;
+      _velocity    = d._velocity;
+      _dynRange    = d._dynRange;
       }
 
 //---------------------------------------------------------
@@ -202,6 +203,8 @@ void Dynamic::layout()
       Text::layout();
 
       Segment* s = segment();
+      if (!s)
+            return;
       for (int voice = 0; voice < VOICES; ++voice) {
             int t = (track() & ~0x3) + voice;
             Chord* c = static_cast<Chord*>(s->element(t));
@@ -257,6 +260,10 @@ void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
       Text::startEdit(v, p);
       }
 
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
 void Dynamic::endEdit()
       {
       Text::endEdit();
@@ -286,6 +293,35 @@ QLineF Dynamic::dragAnchor() const
       qreal yp = measure()->system()->staffYpage(staffIdx());
       QPointF p(xp, yp);
       return QLineF(p, canvasPos());
+      }
+
+//---------------------------------------------------------
+//   drag
+//---------------------------------------------------------
+
+QRectF Dynamic::drag(EditData* ed)
+      {
+      QRectF f = Element::drag(ed);
+
+      //
+      // move anchor
+      //
+      Qt::KeyboardModifiers km = qApp->keyboardModifiers();
+      if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+            int si;
+            Segment* seg = 0;
+            _score->pos2measure(ed->pos, &si, 0, &seg, 0);
+            if (seg && (seg != segment() || staffIdx() != si)) {
+                  QPointF pos1(pagePos());
+                  score()->undo(new ChangeParent(this, seg, si));
+                  setUserOff(QPointF());
+                  layout();
+                  QPointF pos2(pagePos());
+                  setUserOff(pos1 - pos2);
+                  ed->startMove = pos2;
+                  }
+            }
+      return f;
       }
 
 //---------------------------------------------------------

@@ -32,7 +32,7 @@ class Rest : public ChordRest {
       int dotline;            // depends on rest symbol
       qreal _mmWidth;         // width of multi measure rest
 
-      virtual QRectF drag(const EditData&) override;
+      virtual QRectF drag(EditData*) override;
       virtual qreal upPos()   const override;
       virtual qreal downPos() const override;
       virtual qreal centerX() const override;

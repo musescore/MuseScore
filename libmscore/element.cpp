@@ -466,20 +466,20 @@ QColor Element::curColor() const
 ///   Return update Rect relative to canvas.
 //---------------------------------------------------------
 
-QRectF Element::drag(const EditData& data)
+QRectF Element::drag(EditData* data)
       {
       QRectF r(canvasBoundingRect());
 
-      qreal x = data.pos.x();
-      qreal y = data.pos.y();
+      qreal x = data->delta.x();
+      qreal y = data->delta.y();
 
       qreal _spatium = spatium();
-      if (data.hRaster) {
+      if (data->hRaster) {
             qreal hRaster = _spatium / MScore::hRaster();
             int n = lrint(x / hRaster);
             x = hRaster * n;
             }
-      if (data.vRaster) {
+      if (data->vRaster) {
             qreal vRaster = _spatium / MScore::vRaster();
             int n = lrint(y / vRaster);
             y = vRaster * n;

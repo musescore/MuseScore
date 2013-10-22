@@ -169,8 +169,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       Staff* dragStaff;
       qreal staffUserDist;    // valid while dragging a staff
 
+      EditData data;
       Element* curElement;    // current item at mouse press
-      QPointF startMove;      // position of last mouse press
       QPoint  startMoveI;
 
       QPointF dragOffset;
