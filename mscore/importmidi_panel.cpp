@@ -117,7 +117,7 @@ void ImportMidiPanel::tweakUi()
                                                              QHeaderView::Stretch);
       ui->tableViewTracks->horizontalHeader()->setResizeMode(TrackCol::INSTRUMENT,
                                                              QHeaderView::Stretch);
-      ui->treeViewOperations->header()->resizeSection(0, 285);
+      ui->treeViewOperations->header()->resizeSection(0, 300);
       ui->treeViewOperations->setAllColumnsShowFocus(true);
       ui->comboBoxCharset->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 
