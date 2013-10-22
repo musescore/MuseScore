@@ -59,7 +59,8 @@ struct TrackOperations
       bool useMultipleVoices = true;
       bool changeClef = true;
       MidiOperation::Swing swing = MidiOperation::Swing::NONE;
-      SplitDrums drums;
+      SplitDrums splitDrums;
+      bool removeDrumRests = true;
       bool pickupMeasure = true;
       int lyricTrackIndex = -1;     // empty lyric
       };
