@@ -183,7 +183,7 @@ OperationsModel::OperationsModel()
 
 
       Node *removeDrumRests = new Node;
-      removeDrumRests->name = "Remove rests between notes on drum stave";
+      removeDrumRests->name = "Remove rests and ties between notes";
       removeDrumRests->oper.type = MidiOperation::Type::REMOVE_DRUM_RESTS;
       removeDrumRests->oper.value = TrackOperations().removeDrumRests;
       removeDrumRests->parent = root.get();
