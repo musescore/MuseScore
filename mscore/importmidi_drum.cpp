@@ -185,7 +185,7 @@ ReducedFraction endOfBarForTick(const ReducedFraction &tick, const TimeSigMap *s
       return ReducedFraction::fromTicks(sigmap->bar2tick(bar + 1, 0));
       }
 
-ReducedFraction findLargerNoteLen(const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+ReducedFraction findOptimalNoteLen(const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
                                   const std::multimap<ReducedFraction, MidiChord> &chords,
                                   const TimeSigMap *sigmap)
       {
@@ -221,17 +221,13 @@ void removeRests(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
             bool changed = false;
                         // all chords here with the same voice should have different onTime values
             for (auto it = track.chords.begin(); it != track.chords.end(); ++it) {
-                  auto newLen = findLargerNoteLen(it, track.chords, sigmap);
-                  const auto maxNoteLen = MChord::maxNoteLen(it->second.notes);
-
-                  if (newLen > maxNoteLen) {
-                                    // minimize number of rests
-                        for (auto &note: it->second.notes) {
-                              if (note.len == maxNoteLen)       // multiple notes can have max len
-                                    note.len = newLen;
+                  const auto newLen = findOptimalNoteLen(it, track.chords, sigmap);
+                  for (auto &note: it->second.notes) {
+                        if (note.len != newLen) {
+                              note.len = newLen;
+                              if (!changed)
+                                    changed = true;
                               }
-                        if (!changed)
-                              changed = true;
                         }
                   }
             if (changed)
