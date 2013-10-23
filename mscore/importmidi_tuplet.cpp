@@ -1136,17 +1136,18 @@ void removeEmptyTuplets(MTrack &track)
             const auto &tupletData = it->second;
             bool ok = false;
             for (const auto &chord: track.chords) {
+                  if (chord.first >= tupletData.onTime + tupletData.len)
+                        break;
                   if (tupletData.voice != chord.second.voice)
                         continue;
                   const ReducedFraction &onTime = chord.first;
-                  const ReducedFraction len = MChord::maxNoteLen(chord.second.notes);
-                  if (onTime + len > tupletData.onTime
-                              && onTime + len <= tupletData.onTime + tupletData.len) {
+                  if (onTime >= tupletData.onTime
+                              && onTime < tupletData.onTime + tupletData.len) {
                                     // tuplet contains at least one chord
                                     // check now for notes with len == tupletData.len
                         if (onTime == tupletData.onTime) {
                               for (const auto &note: chord.second.notes) {
-                                    if (note.len != tupletData.len) {
+                                    if (note.len < tupletData.len) {
                                           ok = true;
                                           break;
                                           }
