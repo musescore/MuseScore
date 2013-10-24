@@ -544,7 +544,7 @@ QRectF HBox::drag(EditData* data)
                   x1 = x2;
             }
       setUserOff(QPointF(x1, 0.0));
-      setStartDragPosition(data->pos);
+      setStartDragPosition(data->delta);
       return canvasBoundingRect() | r;
       }
 

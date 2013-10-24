@@ -22,6 +22,7 @@
 #include "symbol.h"
 #include "durationtype.h"
 #include "noteevent.h"
+#include "pitchspelling.h"
 
 class QPainter;
 
@@ -47,12 +48,14 @@ class StaffTypeTablature;
 //---------------------------------------------------------
 
 struct NoteVal {
-      int pitch;
-      int tpc;
-      int fret;
-      int string;
-      int headGroup;
-      NoteVal();
+      int pitch = -1;
+      int tpc = INVALID_TPC;
+      int fret = FRET_NONE;
+      int string = STRING_NONE;
+      int headGroup = 0;
+
+      NoteVal() {}
+      NoteVal(int p) : pitch(p) {}
       };
 
 //---------------------------------------------------------
