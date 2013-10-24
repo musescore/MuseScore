@@ -164,8 +164,8 @@ QRectF BSymbol::drag(EditData* data)
       foreach(const Element* e, _leafs)
             r |= e->canvasBoundingRect();
 
-      qreal x = data->pos.x();
-      qreal y = data->pos.y();
+      qreal x = data->delta.x();
+      qreal y = data->delta.y();
 
       qreal _spatium = spatium();
       if (data->hRaster) {

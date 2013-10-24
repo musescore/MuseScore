@@ -61,7 +61,7 @@ void ShadowNote::draw(QPainter* painter) const
       qreal x2 = x1 + 2 * ms * mag();
 
       ms *= .5;
-      if (_line < 100 && _line > -100 && !ps.rest) {
+      if (_line < 100 && _line > -100 && !ps.rest()) {
             for (int i = -2; i >= _line; i -= 2) {
                   qreal y = ms * mag() * (i - _line);
                   painter->drawLine(QLineF(x1, y, x2, y));
@@ -93,7 +93,7 @@ void ShadowNote::layout()
 
       InputState ps = score()->inputState();
       QRectF r(x1, -lw * .5, x2 - x1, lw);
-      if (_line < 100 && _line > -100 && !ps.rest) {
+      if (_line < 100 && _line > -100 && !ps.rest()) {
             for (int i = -2; i >= _line; i -= 2)
                   b |= r.translated(QPointF(0, _spatium * .5 * (i - _line)));
             for (int i = 10; i <= _line; i += 2)

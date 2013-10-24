@@ -448,8 +448,8 @@ MuseScore::MuseScore()
 
       _positionLabel = new QLabel;
       _positionLabel->setObjectName("decoration widget");  // this prevents animations
-
-      _positionLabel->setText("001:01:000");
+      _positionLabel->setText("  1:01.000");
+      _positionLabel->setToolTip(tr("bar:beat.tick"));
 
       _modeText = new QLabel;
       _modeText->setAutoFillBackground(false);
@@ -2913,7 +2913,7 @@ void MuseScore::setPos(int t)
       TimeSigMap* s = cs->sigmap();
       int bar, beat, tick;
       s->tickValues(t, &bar, &beat, &tick);
-      _positionLabel->setText(tr("Bar %1 Beat %2.%3")
+      _positionLabel->setText(tr("%1:%2.%3")
          .arg(bar + 1,  3, 10, QLatin1Char(' '))
          .arg(beat + 1, 2, 10, QLatin1Char(' '))
          .arg(tick,     3, 10, QLatin1Char('0'))
@@ -2944,7 +2944,7 @@ void MuseScore::undo()
                   // enter note entry mode
                   cv->postCmd("note-input");
                   }
-            else if (!cs->inputState().noteEntryMode && cv->noteEntryMode()) {
+            else if (!cs->noteEntryMode() && cv->noteEntryMode()) {
                   // leave note entry mode
                   cv->postCmd("escape");
                   }
@@ -2978,7 +2978,7 @@ void MuseScore::redo()
                   // enter note entry mode
                   cv->postCmd("note-input");
                   }
-            else if (!cs->inputState().noteEntryMode && cv->noteEntryMode()) {
+            else if (!cs->noteEntryMode() && cv->noteEntryMode()) {
                   // leave note entry mode
                   cv->postCmd("escape");
                   }
@@ -3923,8 +3923,6 @@ void MuseScore::cmd(QAction* a)
 void MuseScore::endCmd()
       {
       if (cs) {
-//            if (cv->noteEntryMode())
-//                  cs->moveCursor();
             setPos(cs->inputState().tick());
             updateInputState(cs);
             updateUndoRedo();
@@ -3952,10 +3950,8 @@ void MuseScore::endCmd()
             QAction* action = getAction("concert-pitch");
             action->setChecked(cs->styleB(ST_concertPitch));
 
-            if (e == 0 && cs->inputState().noteEntryMode)
+            if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
-
-//            cs->updateLoopCursors();
             cs->end();
             }
       else {

@@ -99,19 +99,6 @@ const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
       };
 
 //---------------------------------------------------------
-//   NoteVal
-//---------------------------------------------------------
-
-NoteVal::NoteVal()
-      {
-      pitch     = -1;
-      tpc       = INVALID_TPC,
-      fret      = FRET_NONE;
-      string    = STRING_NONE;
-      headGroup = 0;
-      }
-
-//---------------------------------------------------------
 //   noteHeadSym
 //---------------------------------------------------------
 
@@ -930,7 +917,7 @@ QRectF Note::drag(EditData* data)
       qreal _spatium = spatium();
       bool tab = staff()->isTabStaff();
       qreal step = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
-      _lineOffset = lrint(data->pos.y() / step);
+      _lineOffset = lrint(data->delta.y() / step);
       score()->setLayoutAll(true);
       return bb.translated(chord()->pagePos());
       }

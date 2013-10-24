@@ -18,42 +18,53 @@
 
 namespace Ms {
 
+class Element;
 class Slur;
 class ChordRest;
 class Drumset;
 class Segment;
+class Score;
 
 //---------------------------------------------------------
 //   InputState
 //---------------------------------------------------------
 
 class InputState {
-      TDuration   _duration;        // currently duration
-      int         _drumNote;
-      Drumset*    _drumset;
-      int         _track;
-      Segment*    _segment;         // current segment
-      int         _string;          // visual string selected for input (TAB staves only)
-      bool        _repitchMode;
+      Score*      _score;
+      TDuration   _duration = TDuration::V_INVALID;        // currently duration
+      int         _drumNote = -1;
+      Drumset*    _drumset = 0;
+      int         _track = 0;
+      Segment*    _lastSegment = 0;
+      Segment*    _segment = 0;         // current segment
+      int         _string = VISUAL_STRING_NONE;          // visual string selected for input (TAB staves only)
+      bool        _repitchMode = false;
+
+      bool _rest = false;              // rest mode
+      NoteType _noteType = NOTE_NORMAL;
+      BeamMode _beamMode = BeamMode::AUTO;
+      bool _noteEntryMode = false;
+      Slur* _slur = 0;
+
+      Segment* nextInputPos() const;
 
    public:
-      bool rest;              // rest mode
-      NoteType noteType;
-      BeamMode beamMode;
-      bool noteEntryMode;
-      Slur* slur;
+      InputState(Score* s) : _score(s) {}
 
-      InputState();
-      int ticks() const                   { return _duration.ticks(); }
       ChordRest* cr() const;
 
       int tick() const;
+
       void setDuration(const TDuration& d) { _duration = d;          }
       TDuration duration() const           { return _duration;       }
       void setDots(int n)                  { _duration.setDots(n);   }
+      int ticks() const                    { return _duration.ticks(); }
 
       Segment* segment() const            { return _segment;        }
       void setSegment(Segment* s)         { _segment = s;           }
+
+      Segment* lastSegment() const        { return _lastSegment;        }
+      void setLastSegment(Segment* s)     { _lastSegment = s;           }
 
       Drumset* drumset() const;
 
@@ -71,6 +82,26 @@ class InputState {
       void setRepitchMode(bool val)       { _repitchMode = val;     }
 
       StaffGroup staffGroup() const;
+
+      bool rest() const                   { return _rest; }
+      void setRest(bool v)                { _rest = v; }
+
+      NoteType noteType() const           { return _noteType; }
+      void setNoteType(NoteType t)        { _noteType = t; }
+
+      BeamMode beamMode() const           { return _beamMode; }
+      void setBeamMode(BeamMode m)        { _beamMode = m; }
+
+      bool noteEntryMode() const          { return _noteEntryMode; }
+      void setNoteEntryMode(bool v)       { _noteEntryMode = v; }
+
+      Slur* slur() const                  { return _slur; }
+      void setSlur(Slur* s)               { _slur = s; }
+
+      void update(Element* e);
+      void moveInputPos(Element* e);
+      void moveToNextInputPos();
+      bool endOfScore() const;
       };
 
 

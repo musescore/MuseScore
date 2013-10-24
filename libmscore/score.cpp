@@ -340,7 +340,7 @@ void Score::init()
 //---------------------------------------------------------
 
 Score::Score()
-   : QObject(0), _selection(this)
+   : QObject(0), _is(this), _selection(this)
       {
       _parentScore = 0;
       init();
@@ -350,7 +350,7 @@ Score::Score()
       }
 
 Score::Score(const MStyle* s)
-   : _selection(this)
+   : _is(this), _selection(this)
       {
       _parentScore = 0;
       init();
@@ -371,7 +371,7 @@ Score::Score(const MStyle* s)
 //
 
 Score::Score(Score* parent)
-   : _selection(this)
+   : _is(this), _selection(this)
       {
       _parentScore = parent;
       init();
@@ -861,28 +861,6 @@ bool Score::isSavable() const
       {
       // TODO: check if file can be created if it does not exist
       return info.isWritable() || !info.exists();
-      }
-
-//---------------------------------------------------------
-//   setInputState
-//---------------------------------------------------------
-
-void Score::setInputState(const InputState& st)
-      {
-      _is = st;
-      }
-
-//---------------------------------------------------------
-//   setInputTrack
-//---------------------------------------------------------
-
-void Score::setInputTrack(int v)
-      {
-      if (v < 0) {
-            qDebug("setInputTrack: bad value: %d", v);
-            return;
-            }
-      _is.setTrack(v);
       }
 
 //---------------------------------------------------------
@@ -2769,7 +2747,7 @@ void Score::padToggle(int n)
                   _is.setDuration(TDuration::V_128TH);
                   break;
             case PAD_REST:
-                  _is.rest = !_is.rest;
+                  _is.setRest(!_is.rest());
                   break;
             case PAD_DOT:
                   if (_is.duration().dots() == 1)
@@ -2791,7 +2769,7 @@ void Score::padToggle(int n)
             // rest flag
             //
             if (noteEntryMode())
-                  _is.rest = false;
+                  _is.setRest(false);
             }
 
       if (noteEntryMode() || !selection().isSingle()) {
@@ -2825,63 +2803,6 @@ void Score::padToggle(int n)
             }
       else
             changeCRlen(cr, _is.duration());
-      }
-
-//---------------------------------------------------------
-//   setInputState
-//---------------------------------------------------------
-
-void Score::setInputState(Element* e)
-      {
-// qDebug("setInputState %s", e ? e->name() : "--");
-
-      if (e == 0)
-            return;
-      if (e && e->type() == Element::CHORD)
-            e = static_cast<Chord*>(e)->upNote();
-
-      _is.setDrumNote(-1);
-//      _is.setDrumset(0);
-      if (e->type() == Element::NOTE) {
-            Note* note    = static_cast<Note*>(e);
-            Chord* chord  = note->chord();
-            _is.setDuration(chord->durationType());
-            _is.rest      = false;
-            _is.setTrack(note->track());
-            _is.noteType  = note->noteType();
-            _is.beamMode  = chord->beamMode();
-            }
-      else if (e->type() == Element::REST) {
-            Rest* rest   = static_cast<Rest*>(e);
-            if (rest->durationType().type() == TDuration::V_MEASURE)
-                  _is.setDuration(TDuration::V_QUARTER);
-            else
-                  _is.setDuration(rest->durationType());
-            _is.rest     = true;
-            _is.setTrack(rest->track());
-            _is.beamMode = rest->beamMode();
-            _is.noteType = NOTE_NORMAL;
-            }
-      else {
-/*            _is.rest     = false;
-            _is.setDots(0);
-            _is.setDuration(TDuration::V_INVALID);
-            _is.noteType = NOTE_INVALID;
-            _is.beamMode = BEAM_INVALID;
-            _is.noteType = NOTE_NORMAL;
-*/
-            }
-      if (e->type() == Element::NOTE || e->type() == Element::REST) {
-            const Instrument* instr   = e->staff()->part()->instr();
-            if (instr->useDrumset()) {
-                  if (e->type() == Element::NOTE)
-                        _is.setDrumNote(static_cast<Note*>(e)->pitch());
-                  else
-                        _is.setDrumNote(-1);
-//                  _is.setDrumset(instr->drumset());
-                  }
-            }
-//      mscore->updateInputState(this);
       }
 
 //---------------------------------------------------------
@@ -2930,8 +2851,10 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   selState = SEL_LIST;
                   if (e->type() == Element::NOTE)
                         e = e->parent();
-                  if (e->type() == Element::REST || e->type() == Element::CHORD)
+                  if (e->type() == Element::REST || e->type() == Element::CHORD) {
+                        _is.setLastSegment(_is.segment());
                         _is.setSegment(static_cast<ChordRest*>(e)->segment());
+                        }
                   }
             _selection.setActiveSegment(0);
             _selection.setActiveTrack(0);

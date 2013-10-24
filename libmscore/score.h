@@ -381,12 +381,7 @@ class Score : public QObject {
       void moveUp(Chord*);
       void moveDown(Chord*);
 
-      void moveInputPos(Element* s);
-      void moveToPrevInputPos();
-      void moveToNextInputPos();
-
       void padToggle(int n);
-
       void addTempo();
       void addMetronome();
 
@@ -442,6 +437,12 @@ class Score : public QObject {
       void posChanged(POS, unsigned);
 
    public:
+      Score();
+      Score(const MStyle*);
+      Score(Score*);                // used for excerpts
+      ~Score();
+
+      Score* clone();
       void setDirty(bool val);
 
       void rebuildBspTree();
@@ -462,12 +463,6 @@ class Score : public QObject {
       void cmdAddStretch(qreal);
       void transpose(Note* n, Interval, bool useSharpsFlats);
 
-      Score();
-      Score(const MStyle*);
-      Score(Score*);                // used for excerpts
-      ~Score();
-
-      Score* clone();
       bool appendScore(Score*);
 
       int pageIdx(Page* page) const { return _pages.indexOf(page); }
@@ -559,7 +554,7 @@ class Score : public QObject {
 
       void cmdAddSpanner(Spanner* e, const QPointF& pos);
 
-      Note* addNote(Chord*, int pitch);
+//      Note* addNote(Chord*, int pitch);
       Note* addNote(Chord*, NoteVal &noteVal);
 
       void deleteItem(Element*);
@@ -569,7 +564,6 @@ class Score : public QObject {
       void putNote(const QPointF& pos, bool replace);
       void putNote(const Position& pos, bool replace);
       void repitchNote(const Position& pos, bool replace);
-      void setInputState(Element* obj);
 
       Q_INVOKABLE void startCmd();        // start undoable command
       Q_INVOKABLE void endCmd();          // end undoable command
@@ -697,12 +691,13 @@ class Score : public QObject {
       int pos(POS pos) const                   {  return _pos[int(pos)]; }
       void setPos(POS pos, int tick);
 
-      bool noteEntryMode() const               { return _is.noteEntryMode; }
+      bool noteEntryMode() const               { return _is.noteEntryMode(); }
+      void setNoteEntryMode(bool val)          { _is.setNoteEntryMode(val); }
       int inputPos() const;
       int inputTrack() const                   { return _is.track(); }
       InputState& inputState()                 { return _is;         }
-      void setInputState(const InputState& st);
-      void setInputTrack(int);
+      void setInputState(const InputState& st) { _is = st;           }
+      void setInputTrack(int t)                { _is.setTrack(t);    }
 
       void spatiumChanged(qreal oldValue, qreal newValue);
 
