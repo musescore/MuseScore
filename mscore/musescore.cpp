@@ -448,8 +448,7 @@ MuseScore::MuseScore()
 
       _positionLabel = new QLabel;
       _positionLabel->setObjectName("decoration widget");  // this prevents animations
-      _positionLabel->setText("  1:01.000");
-      _positionLabel->setToolTip(tr("bar:beat.tick"));
+      _positionLabel->setToolTip(tr("measure.beat.tick"));
 
       _modeText = new QLabel;
       _modeText->setAutoFillBackground(false);
@@ -2913,9 +2912,9 @@ void MuseScore::setPos(int t)
       TimeSigMap* s = cs->sigmap();
       int bar, beat, tick;
       s->tickValues(t, &bar, &beat, &tick);
-      _positionLabel->setText(tr("%1:%2.%3")
+      _positionLabel->setText(QString("%1:%2:%3")
          .arg(bar + 1,  3, 10, QLatin1Char(' '))
-         .arg(beat + 1, 2, 10, QLatin1Char(' '))
+         .arg(beat + 1, 2, 10, QLatin1Char('0'))
          .arg(tick,     3, 10, QLatin1Char('0'))
          );
       }
