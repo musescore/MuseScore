@@ -341,14 +341,18 @@ void Score::expandVoice()
 Note* Score::addPitch(int pitch, bool addFlag)
       {
       if (addFlag) {
-            moveToPrevInputPos();
-            if (_is.cr() == 0 || _is.cr()->type() != Element::CHORD)
+            qDebug("Score::addPitch at %d", _is.lastSegment()->tick());
+            Chord* c = static_cast<Chord*>(_is.lastSegment()->element(_is.track()));
+
+            if (c == 0 || c->type() != Element::CHORD) {
+                  qDebug("Score::addPitch: cr %s", c ? c->name() : "zero");
                   return 0;
-            Chord* chord = static_cast<Chord*>(_is.cr());
-            Note* n = addNote(chord, pitch);
-            setLayoutAll(true);
-            //moveToNextInputPos();
-            return n;
+                  }
+            NoteVal val(pitch);
+            Note* note = addNote(c, val);
+            if (_is.lastSegment() == _is.segment())
+                  _is.moveToNextInputPos();
+            return note;
             }
       expandVoice();
 
@@ -397,29 +401,29 @@ Note* Score::addPitch(int pitch, bool addFlag)
                   }
             }
 
-      if (_is.slur) {
+      if (_is.slur()) {
             //
             // extend slur
             //
             ChordRest* e = searchNote(_is.tick(), _is.track());
             if (e) {
                   int stick = 0;
-                  Element* ee = _is.slur->startElement();
+                  Element* ee = _is.slur()->startElement();
                   if (ee->isChordRest())
                         stick = static_cast<ChordRest*>(ee)->tick();
                   else if (ee->type() == Element::NOTE)
                         stick = static_cast<Note*>(ee)->chord()->tick();
                   if (stick == e->tick()) {
-                        _is.slur->setTick(stick);
+                        _is.slur()->setTick(stick);
                         }
                   else
-                        _is.slur->setTick2(e->tick());
+                        _is.slur()->setTick2(e->tick());
                   }
             else
                   qDebug("addPitch: cannot find slur note");
             setLayoutAll(true);
             }
-      moveToNextInputPos();
+      _is.moveToNextInputPos();
       return note;
       }
 
@@ -462,7 +466,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
 
             select(note, SELECT_SINGLE, 0);
             }
-      moveToNextInputPos();
+      _is.moveToNextInputPos();
       endCmd();
       }
 
@@ -1632,57 +1636,6 @@ bool Score::processMidiInput()
       }
 
 //---------------------------------------------------------
-//   moveInputPos
-//---------------------------------------------------------
-
-void Score::moveInputPos(Element* e)
-      {
-      if (e == 0)
-            return;
-      Segment* s;
-      if (e->isChordRest())
-            s = static_cast<ChordRest*>(e)->segment();
-      else
-            s = static_cast<Segment*>(e);
-      if (s->type() == Element::SEGMENT)
-            _is.setSegment(s);
-      }
-
-//---------------------------------------------------------
-//   moveToPrevInputPos
-//   Derived from moveToNextInputPos()
-//---------------------------------------------------------
-
-void Score::moveToPrevInputPos()
-      {
-      Segment* s = _is.segment();
-      Measure* m = s->measure();
-      int track  = _is.track();
-      for (s = s->prev1(Segment::SegChordRest); s; s = s->prev1(Segment::SegChordRest)) {
-            if (s->element(track) || s->measure() != m)
-                  break;
-            }
-      moveInputPos(s);
-      }
-
-//---------------------------------------------------------
-//   moveToNextInputPos
-//   TODO: special case: note is first note of tie: goto to last note of tie
-//---------------------------------------------------------
-
-void Score::moveToNextInputPos()
-      {
-      Segment* s = _is.segment();
-      Measure* m = s->measure();
-      int track  = _is.track();
-      for (s = s->next1(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
-            if (s->element(track) || s->measure() != m)
-                  break;
-            }
-      moveInputPos(s);
-      }
-
-//---------------------------------------------------------
 //   move
 //    move current selection
 //---------------------------------------------------------
@@ -1694,7 +1647,7 @@ Element* Score::move(const QString& cmd)
             cr = selection().activeCR();
       else
             cr = selection().lastChordRest();
-      if (cr == 0 && inputState().noteEntryMode)
+      if (cr == 0 && noteEntryMode())
             cr = inputState().cr();
 
       // no chord/rest found? look for another type of element
@@ -1768,7 +1721,7 @@ Element* Score::move(const QString& cmd)
       Element* el = 0;
       if (cmd == "next-chord") {
             if (noteEntryMode())
-                  moveToNextInputPos();
+                  _is.moveToNextInputPos();
             el = nextChordRest(cr);
             }
       else if (cmd == "prev-chord") {
@@ -1793,29 +1746,29 @@ Element* Score::move(const QString& cmd)
                         }
                   if (s && !s->element(track))
                         s = m->first(Segment::SegChordRest);
-                  moveInputPos(s);
+                  _is.moveInputPos(s);
                   }
             el = prevChordRest(cr);
             }
       else if (cmd == "next-measure") {
             el = nextMeasure(cr);
-            if (noteEntryMode() && el && el->isChordRest())
-                  moveInputPos(el);
+            if (noteEntryMode())
+                  _is.moveInputPos(el);
             }
       else if (cmd == "prev-measure") {
             el = prevMeasure(cr);
-            if (noteEntryMode() && el && el->isChordRest())
-                  moveInputPos(el);
+            if (noteEntryMode())
+                  _is.moveInputPos(el);
             }
       else if (cmd == "next-track") {
             el = nextTrack(cr);
-            if (noteEntryMode() && el && el->isChordRest())
-                  moveInputPos(el);
+            if (noteEntryMode())
+                  _is.moveInputPos(el);
             }
       else if (cmd == "prev-track") {
             el = prevTrack(cr);
-            if (noteEntryMode() && el && el->isChordRest())
-                  moveInputPos(el);
+            if (noteEntryMode())
+                  _is.moveInputPos(el);
             }
       if (el) {
             if (el->type() == Element::CHORD)
@@ -1837,7 +1790,7 @@ Element* Score::selectMove(const QString& cmd)
             cr = selection().activeCR();
       else
             cr = selection().lastChordRest();
-      if (cr == 0 && inputState().noteEntryMode)
+      if (cr == 0 && noteEntryMode())
             cr = inputState().cr();
       if (cr == 0)
             return 0;

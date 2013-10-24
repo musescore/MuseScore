@@ -289,7 +289,7 @@ void ScoreView::editKey(QKeyEvent* ev)
 void MuseScore::updateInputState(Score* score)
       {
       InputState& is = score->inputState();
-      if (is.noteEntryMode) {
+      if (is.noteEntryMode()) {
             Staff* staff = score->staff(is.track() / VOICES);
             switch (staff->staffType()->group()) {
                   case STANDARD_STAFF_GROUP:
@@ -304,7 +304,7 @@ void MuseScore::updateInputState(Score* score)
                   }
             }
 
-      getAction("pad-rest")->setChecked(is.rest);
+      getAction("pad-rest")->setChecked(is.rest());
       getAction("pad-dot")->setChecked(is.duration().dots() == 1);
       getAction("pad-dotdot")->setChecked(is.duration().dots() == 2);
 
@@ -326,17 +326,17 @@ void MuseScore::updateInputState(Score* score)
       getAction("voice-3")->setChecked(voice == 2);
       getAction("voice-4")->setChecked(voice == 3);
 
-      getAction("acciaccatura")->setChecked(is.noteType == NOTE_ACCIACCATURA);
-      getAction("appoggiatura")->setChecked(is.noteType == NOTE_APPOGGIATURA);
-      getAction("grace4")->setChecked(is.noteType  == NOTE_GRACE4);
-      getAction("grace16")->setChecked(is.noteType == NOTE_GRACE16);
-      getAction("grace32")->setChecked(is.noteType == NOTE_GRACE32);
+      getAction("acciaccatura")->setChecked(is.noteType() == NOTE_ACCIACCATURA);
+      getAction("appoggiatura")->setChecked(is.noteType() == NOTE_APPOGGIATURA);
+      getAction("grace4")->setChecked(is.noteType()  == NOTE_GRACE4);
+      getAction("grace16")->setChecked(is.noteType() == NOTE_GRACE16);
+      getAction("grace32")->setChecked(is.noteType() == NOTE_GRACE32);
 
-      getAction("beam-start")->setChecked(is.beamMode == BeamMode::BEGIN);
-      getAction("beam-mid")->setChecked(is.beamMode   == BeamMode::MID);
-      getAction("no-beam")->setChecked(is.beamMode    == BeamMode::NONE);
-      getAction("beam32")->setChecked(is.beamMode     == BeamMode::BEGIN32);
-      getAction("auto-beam")->setChecked(is.beamMode  == BeamMode::AUTO);
+      getAction("beam-start")->setChecked(is.beamMode() == BeamMode::BEGIN);
+      getAction("beam-mid")->setChecked(is.beamMode()   == BeamMode::MID);
+      getAction("no-beam")->setChecked(is.beamMode()    == BeamMode::NONE);
+      getAction("beam32")->setChecked(is.beamMode()     == BeamMode::BEGIN32);
+      getAction("auto-beam")->setChecked(is.beamMode()  == BeamMode::AUTO);
       getAction("repitch")->setChecked(is.repitchMode());
       }
 }

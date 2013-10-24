@@ -317,9 +317,9 @@ void UndoStack::redo()
 //---------------------------------------------------------
 
 SaveState::SaveState(Score* s)
+   : undoInputState(s), redoInputState(s->inputState())
       {
       score          = s;
-      redoInputState = score->inputState();
       redoSelection  = score->selection();
       }
 

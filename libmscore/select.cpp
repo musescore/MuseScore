@@ -398,7 +398,7 @@ void Selection::updateState()
       else if (_state == SEL_NONE)
             setState(SEL_LIST);
       if (!_score->noteEntryMode())
-             _score->setInputState(e);
+             _score->inputState().update(e);
       }
 
 //---------------------------------------------------------

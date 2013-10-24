@@ -343,25 +343,6 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
       }
 
 //---------------------------------------------------------
-//   addNote from pitch
-//---------------------------------------------------------
-
-Note* Score::addNote(Chord* chord, int pitch)
-      {
-      Note* note = new Note(this);
-      note->setParent(chord);
-      note->setTrack(chord->track());
-      note->setPitch(pitch);
-      note->setTpcFromPitch();
-      undoAddElement(note);
-      _playNote = true;
-      select(note, SELECT_SINGLE, 0);
-      if (!chord->staff()->isTabStaff())
-            moveToNextInputPos();
-      return note;
-      }
-
-//---------------------------------------------------------
 //   addNote from NoteVal
 //---------------------------------------------------------
 
@@ -377,7 +358,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       _playNote = true;
       select(note, SELECT_SINGLE, 0);
       if (!chord->staff()->isTabStaff())
-            moveToNextInputPos();
+            _is.moveToNextInputPos();
       return note;
       }
 
@@ -691,7 +672,7 @@ void Score::putNote(const Position& p, bool replace)
 
       switch(st->staffType()->group()) {
             case PERCUSSION_STAFF_GROUP: {
-                  if (_is.rest)
+                  if (_is.rest())
                         break;
                   Drumset* ds   = instr->drumset();
                   nval.pitch    = _is.drumNote();
@@ -704,7 +685,7 @@ void Score::putNote(const Position& p, bool replace)
                   break;
                   }
             case TAB_STAFF_GROUP: {
-                  if (_is.rest)
+                  if (_is.rest())
                         return;
                   stringData = instr->stringData();
                   tab = (StaffTypeTablature*)st->staffType();
@@ -745,7 +726,7 @@ void Score::putNote(const Position& p, bool replace)
             if (!replace
                && (d == _is.duration())
                && (cr->type() == Element::CHORD)
-               && !_is.rest)
+               && !_is.rest())
                   {
                   if (st->isTabStaff()) {      // TAB
                         // if a note on same string already exists, update to new pitch/fret
@@ -800,12 +781,12 @@ void Score::putNote(const Position& p, bool replace)
       else {
             // if not adding, replace current chord (or create a new one)
 
-            if (_is.rest)
+            if (_is.rest())
                   nval.pitch = -1;
             setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection);
             }
       if (!st->isTabStaff())
-            moveToNextInputPos();
+            _is.moveToNextInputPos();
       }
 
 //---------------------------------------------------------
@@ -832,7 +813,7 @@ void Score::repitchNote(const Position& p, bool replace)
             while(next && next->type() != Element::CHORD)
                   next = nextChordRest(next);
             if(next)
-                  moveInputPos(next->segment());
+                  _is.moveInputPos(next->segment());
             return;
             }
       else {
@@ -851,8 +832,8 @@ void Score::repitchNote(const Position& p, bool replace)
       ChordRest* next = nextChordRest(_is.cr());
       while(next && next->type() != Element::CHORD)
             next = nextChordRest(next);
-      if(next)
-            moveInputPos(next->segment());
+      if (next)
+            _is.moveInputPos(next->segment());
       }
 
 //---------------------------------------------------------
@@ -1708,8 +1689,8 @@ void Score::cmdEnterRest(const TDuration& d)
       int track = _is.track();
       NoteVal nval;
       setNoteRest(_is.segment(), track, nval, d.fraction(), MScore::AUTO);
-      moveToNextInputPos();
-      _is.rest = false;  // continue with normal note entry
+      _is.moveToNextInputPos();
+      _is.setRest(false);  // continue with normal note entry
       endCmd();
       }
 
@@ -1784,8 +1765,8 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
       _is.setSegment(ncr ? ncr->segment() : 0);
       if (doSelect)
             select(ncr, SELECT_SINGLE, 0);
-//      if (ncr)
-//            emit posChanged(ncr->tick());
+      if (ncr)
+            setPos(POS::CURRENT, ncr->tick());
       }
 
 //---------------------------------------------------------
