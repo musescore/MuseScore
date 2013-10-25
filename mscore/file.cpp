@@ -168,7 +168,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   msg += QT_TRANSLATE_NOOP(file, "bad format");
                   break;
             case Score::FILE_UNKNOWN_TYPE:
-                  msg += QT_TRANSLATE_NOOP(file, "unknown format");
+                  msg += QT_TRANSLATE_NOOP(file, "unknown type");
                   break;
             case Score::FILE_NO_ROOTFILE:
                   break;
@@ -1986,10 +1986,11 @@ void MuseScore::addImage(Score* score, Element* e)
          0,
          tr("MuseScore: InsertImage"),
          "",            // lastOpenPath,
-         tr("All Supported Files (*.svg *.jpg *.png *.xpm);;"
+         tr("All Supported Files (*.svg *.jpg *.jpeg *.png *.gif *.xpm);;"
             "Scalable vector graphics (*.svg);;"
-            "JPEG (*.jpg);;"
+            "JPEG (*.jpg *.jpeg);;"
             "PNG (*.png);;"
+            "GIF (*.gif);;"
             "XPM (*.xpm);;"
             "All Files (*)"
             )
@@ -2003,7 +2004,7 @@ void MuseScore::addImage(Score* score, Element* e)
 
       if (suffix == "svg")
             s->setImageType(IMAGE_SVG);
-      else if (suffix == "jpg" || suffix == "png" || suffix == "xpm")
+      else if (suffix == "jpg" || suffix == "jpeg" || suffix == "png" || suffix == "gif" || suffix == "xpm")
             s->setImageType(IMAGE_RASTER);
       else
             return;
@@ -2159,7 +2160,7 @@ void WallpaperPreview::setImage(const QString& path)
 
 QString MuseScore::getWallpaper(const QString& caption)
       {
-      QString filter = tr("Images (*.jpg *.gif *.png);;All (*)");
+      QString filter = tr("Images (*.jpg *.jpeg *.png *.gif );;All (*)");
       QString d = mscoreGlobalShare + "/wallpaper";
 
       if (preferences.nativeDialogs) {
