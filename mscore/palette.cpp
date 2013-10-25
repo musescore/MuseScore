@@ -753,7 +753,9 @@ void Palette::dragEnterEvent(QDragEnterEvent* event)
                   QString suffix(fi.suffix().toLower());
                   if (suffix == "svg"
                      || suffix == "jpg"
+                     || suffix == "jpeg"
                      || suffix == "png"
+                     || suffix == "gif"
                      || suffix == "xpm"
                      ) {
                         event->acceptProposedAction();
