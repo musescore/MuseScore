@@ -168,7 +168,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   msg += QT_TRANSLATE_NOOP(file, "bad format");
                   break;
             case Score::FILE_UNKNOWN_TYPE:
-                  msg += QT_TRANSLATE_NOOP(file, "unknown format");
+                  msg += QT_TRANSLATE_NOOP(file, "unknown type");
                   break;
             case Score::FILE_NO_ROOTFILE:
                   break;
