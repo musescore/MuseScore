@@ -252,7 +252,12 @@ void Measure::dump() const
 void Measure::remove(Segment* el)
       {
 #ifndef NDEBUG
-      Q_ASSERT(!score()->undoRedo());
+      if (score()->undoRedo()) {
+            qDebug("remove segment <%s> in undo/redo", el->subTypeName());
+            abort();
+            }
+
+      // Q_ASSERT(!score()->undoRedo());
       Q_ASSERT(el->type() == SEGMENT);
       if (el->prev()) {
             Q_ASSERT(el->prev()->next() == el);
@@ -2321,7 +2326,8 @@ bool Measure::setStartRepeatBarLine(bool val)
                   }
             else if (bl && !val) {
                   // barline were we do not need one:
-                  score()->undoRemoveElement(bl);
+                  if (!score()->undoRedo())                       // DEBUG
+                        score()->undoRemoveElement(bl);
                   changed = true;
                   }
             if (bl && val && span) {
