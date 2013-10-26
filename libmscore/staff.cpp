@@ -172,6 +172,7 @@ Staff::Staff(Score* s)
       _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
+      _color          = MScore::defaultColor;
       setClef(0, ClefType::G);
       }
 
@@ -190,6 +191,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _barLineTo      = (lines()-1)*2;
       _updateKeymap   = true;
       _linkedStaves   = 0;
+      _color          = MScore::defaultColor;
       setClef(0, ClefType::G);
       }
 
@@ -402,6 +404,8 @@ void Staff::write(Xml& xml) const
             }
       if (_userDist != 0.0)
             xml.tag("distOffset", _userDist / spatium());
+      if (color() != Qt::black)
+            xml.tag("color", color());
       xml.etag();
       }
 
@@ -474,6 +478,8 @@ void Staff::read(XmlReader& e)
                               linkTo(score()->staff(v));
                         }
                   }
+            else if (tag == "color")
+                  _color = e.readColor();
             else
                   e.unknown();
             }
@@ -862,5 +868,15 @@ void Staff::updateOttava(Ottava* o)
       pitchOffsets().setPitchOffset(o->tick(), o->pitchShift());
       pitchOffsets().setPitchOffset(o->tick2()+1, 0);
       }
+
+//---------------------------------------------------------
+//   undoSetColor
+//---------------------------------------------------------
+
+void Staff::undoSetColor(const QColor& val)
+      {
+//      score()->undoChangeProperty(this, P_COLOR, val);
+      }
+
 }
 

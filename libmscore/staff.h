@@ -102,6 +102,7 @@ class Staff : public QObject {
       bool _small;
       bool _invisible;
       bool _updateKeymap;
+      QColor _color;
 
       qreal _userDist;        ///< user edited extra distance
 
@@ -210,6 +211,10 @@ class Staff : public QObject {
       bool genKeySig();
       bool showLedgerLines();
       const ClefList& clefList() const { return clefs; }
+
+      QColor color() const                { return _color; }
+      void setColor(const QColor& val)    { _color = val;    }
+      void undoSetColor(const QColor& val);
       };
 
 }     // namespace Ms
