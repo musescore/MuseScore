@@ -1986,12 +1986,10 @@ void MuseScore::addImage(Score* score, Element* e)
          0,
          tr("MuseScore: InsertImage"),
          "",            // lastOpenPath,
-         tr("All Supported Files (*.svg *.jpg *.jpeg *.png *.gif *.xpm);;"
+         tr("All Supported Files (*.svg *.jpg *.jpeg *.png);;"
             "Scalable vector graphics (*.svg);;"
             "JPEG (*.jpg *.jpeg);;"
             "PNG (*.png);;"
-            "GIF (*.gif);;"
-            "XPM (*.xpm);;"
             "All Files (*)"
             )
          );
@@ -2004,7 +2002,7 @@ void MuseScore::addImage(Score* score, Element* e)
 
       if (suffix == "svg")
             s->setImageType(IMAGE_SVG);
-      else if (suffix == "jpg" || suffix == "jpeg" || suffix == "png" || suffix == "gif" || suffix == "xpm")
+      else if (suffix == "jpg" || suffix == "jpeg" || suffix == "png")
             s->setImageType(IMAGE_RASTER);
       else
             return;
@@ -2160,7 +2158,7 @@ void WallpaperPreview::setImage(const QString& path)
 
 QString MuseScore::getWallpaper(const QString& caption)
       {
-      QString filter = tr("Images (*.jpg *.jpeg *.png *.gif );;All (*)");
+      QString filter = tr("Images (*.jpg *.jpeg *.png);;All (*)");
       QString d = mscoreGlobalShare + "/wallpaper";
 
       if (preferences.nativeDialogs) {
