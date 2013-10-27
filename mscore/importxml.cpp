@@ -2026,7 +2026,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       if (implicit == "yes")
             measure->setIrregular(true);
 
-      int cv = 0; // current voice for chords, default is 0
+      QString cv = "1"; // current voice for chords, default is 1
       QList<GraceNoteInfo> graceNotesInfos;
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "attributes")
@@ -4520,7 +4520,7 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
  \a Staff is the number of first staff of the part this note belongs to.
  */
 
-void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, int& currentVoice, QDomElement e, QList<GraceNoteInfo>& gni)
+void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement e, QList<GraceNoteInfo>& gni)
       {
       int ticks = 0;
 #ifdef DEBUG_TICK
@@ -4529,6 +4529,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
       QDomNode pn = e; // TODO remove pn
       QDomElement org_e = e; // save e for later
       QDomElement domElemNotations;
+      QString strVoice = "1";
       int voice = 0;
       int move  = 0;
 
@@ -4561,7 +4562,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             QString tag(e2.tagName());
             QString s(e2.text());
             if (tag == "voice")
-                  voice = s.toInt() - 1;
+                  strVoice = s;
             else if (tag == "staff")
                   relStaff = s.toInt() - 1;
             else if (tag == "grace") {
@@ -4579,10 +4580,10 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
       // Bug fix for Sibelius 7.1.3 which does not write <voice> for notes with <chord>
       if (!chord)
             // remember voice
-            currentVoice = voice;
+            currentVoice = strVoice;
       else
             // use voice from last note w/o <chord>
-            voice = currentVoice;
+            strVoice = currentVoice;
 
       // Musicxml voices are counted for all staffs of an
       // instrument. They are not limited. In mscore voices are associated
@@ -4597,23 +4598,23 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
       // qDebug("voice mapper before: relStaff=%d voice=%d staff=%d\n", relStaff, voice, staff);
       int s; // staff mapped by voice mapper
       int v; // voice mapped by voice mapper
-      if (voicelist.value(voice).overlaps()) {
+      if (voicelist.value(strVoice).overlaps()) {
             // for overlapping voices, the staff does not change
             // and the voice is mapped and staff-dependent
             s = relStaff;
-            v = voicelist.value(voice).voice(s);
+            v = voicelist.value(strVoice).voice(s);
             }
       else {
             // for non-overlapping voices, both staff and voice are
             // set by the voice mapper
-            s = voicelist.value(voice).staff();
-            v = voicelist.value(voice).voice();
+            s = voicelist.value(strVoice).staff();
+            v = voicelist.value(strVoice).voice();
             }
 
       // qDebug("voice mapper before: relStaff=%d voice=%d s=%d v=%d", relStaff, voice, s, v);
       if (s < 0 || v < 0) {
-            qDebug("ImportMusicXml: too many voices (staff %d, relStaff %d, voice %d at line %d col %d)",
-                   staff + 1, relStaff, voice + 1, e.lineNumber(), e.columnNumber());
+            qDebug("ImportMusicXml: too many voices (staff %d, relStaff %d, voice %s at line %d col %d)",
+                   staff + 1, relStaff, qPrintable(voice), e.lineNumber(), e.columnNumber());
             return;
             }
       else {
