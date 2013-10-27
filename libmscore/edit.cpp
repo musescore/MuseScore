@@ -734,7 +734,7 @@ void Score::putNote(const Position& p, bool replace)
                               if(note->string() == nval.string) {       // if string is the same
                                     // if adding a new digit will keep fret number within fret limit,
                                     // add a digit to existing fret number
-                                    if (stringData && tab->useNumbers() && note->fret() >= 1) {
+                                    if (stringData) {
                                           int fret = note->fret() * 10 + nval.fret;
                                           if (fret <= stringData->frets() ) {
                                                 nval.fret = fret;
