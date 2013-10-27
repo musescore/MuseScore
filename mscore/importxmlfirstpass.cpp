@@ -10,8 +10,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-// TODO: create typedefs for QMap<QString, VoiceDesc> and friends
-
 #include "importxmlfirstpass.h"
 #include "musicxmlsupport.h"
 
@@ -290,7 +288,7 @@ QString MusicXmlPart::toString() const
       QString res;
       res = QString("part id '%1' name '%2'\n").arg(id).arg(name);
 
-      for (QMap<QString, VoiceDesc>::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
+      for (VoiceList::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
             res += QString("voice %1 map staff data %2\n")
                   .arg(i.key() + 1)
                   .arg(i.value().toString());
@@ -329,7 +327,7 @@ MxmlReaderFirstPass::MxmlReaderFirstPass()
 // 1) assign voice to staves it is found in (allocateStaves)
 // 2) assign voice numbers (allocateVoices)
 
-static void allocateStaves(QMap<QString, VoiceDesc>& vcLst)
+static void allocateStaves(VoiceList& vcLst)
       {
       // initialize
       int voicesAllocated[MAX_STAVES]; // number of voices allocated on each staff
@@ -342,7 +340,7 @@ static void allocateStaves(QMap<QString, VoiceDesc>& vcLst)
             // find the regular voice containing the highest number of chords and rests that has not been handled yet
             int max = 0;
             QString key;
-            for (QMap<QString, VoiceDesc>::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
+            for (VoiceList::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
                   if (!j.value().overlaps() && j.value().numberChordRests() > max && j.value().staff() == -1) {
                         max = j.value().numberChordRests();
                         key = j.key();
@@ -369,7 +367,7 @@ static void allocateStaves(QMap<QString, VoiceDesc>& vcLst)
                   // find the overlapping voice containing the highest number of chords and rests that has not been handled yet
                   int max = 0;
                   QString key;
-                  for (QMap<QString, VoiceDesc>::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
+                  for (VoiceList::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
                         if (j.value().overlaps() && j.value().numberChordRests(h) > max && j.value().staffAlloc(h) == -1) {
                               max = j.value().numberChordRests(h);
                               key = j.key();
@@ -394,14 +392,14 @@ static void allocateStaves(QMap<QString, VoiceDesc>& vcLst)
 // for each staff, the voices are number 1, 2, 3, 4
 // in the same order they are numbered in the MusicXML file
 
-static void allocateVoices(QMap<QString, VoiceDesc>& vcLst)
+static void allocateVoices(VoiceList& vcLst)
       {
       int nextVoice[MAX_STAVES]; // number of voices allocated on each staff
       for (int i = 0; i < MAX_STAVES; ++i)
             nextVoice[i] = 0;
       // handle regular (non-overlapping) voices
       // a voice is allocated on one specific staff
-      for (QMap<QString, VoiceDesc>::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
+      for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
             int staff = i.value().staff();
             QString key   = i.key();
             if (staff >= 0) {
@@ -411,7 +409,7 @@ static void allocateVoices(QMap<QString, VoiceDesc>& vcLst)
             }
       // handle overlapping voices
       // each voice may be in every staff
-      for (QMap<QString, VoiceDesc>::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
+      for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
             for (int j = 0; j < MAX_STAVES; ++j) {
                   int staffAlloc = i.value().staffAlloc(j);
                   QString key   = i.key();
@@ -425,9 +423,9 @@ static void allocateVoices(QMap<QString, VoiceDesc>& vcLst)
 
 //  copy the overlap data from the overlap detector to the voice list
 
-static void copyOverlapData(VoiceOverlapDetector& vod, QMap<QString, VoiceDesc>& vcLst)
+static void copyOverlapData(VoiceOverlapDetector& vod, VoiceList& vcLst)
       {
-      for (QMap<QString, VoiceDesc>::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
+      for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
             QString key = i.key();
             if (vod.stavesOverlap(key))
                   vcLst[key].setOverlap(true);
@@ -650,7 +648,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
       // debug: print results
       /*
       qDebug("voiceMapperStats: new staff");
-      for (QMap<QString, VoiceDesc>::const_iterator i = parts[partNr].voicelist.constBegin();
+      for (VoiceList::const_iterator i = parts[partNr].voicelist.constBegin();
            i != parts[partNr].voicelist.constEnd(); ++i) {
             qDebug("voiceMapperStats: voice %s staff data %s",
                    qPrintable(i.key()), qPrintable(i.value().toString()));
