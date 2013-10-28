@@ -1793,7 +1793,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
       else {
             measure = last();
             if (measure)
-                  tick = measure->tick() + measure->ticks();
+                  tick = measure->endTick();
             else
                   tick = 0;
             idx  = -1;
@@ -1904,9 +1904,10 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                         undoAddElement(nClef);
                         }
                   if (createEndBar) {
-                        Measure* lm = score->lastMeasure();
-                        if (lm)
-                              lm->setEndBarLineType(END_BAR, endBarGenerated);
+                        // Measure* lm = score->lastMeasure();
+                        // if (lm)
+                        //      lm->setEndBarLineType(END_BAR, endBarGenerated);
+                        m->setEndBarLineType(END_BAR, endBarGenerated);
                         }
                   score->fixTicks();
                   }

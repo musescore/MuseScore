@@ -58,6 +58,17 @@ namespace Ms {
 
 static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSystemElements)
       {
+      //
+      // special case multi measure rest
+      //
+      if (m->score()->styleB(ST_createMultiMeasureRests)) {
+            if (m->type() == Element::MEASURE) {
+                  Measure* mm = static_cast<Measure*>(m);
+                  Segment* s = mm->findSegment(Segment::SegEndBarLine, mm->endTick());
+                  if (s == 0)
+                        mm->createEndBarLines();
+                  }
+            }
       if (m->type() == Element::MEASURE || staffIdx == 0)
            m->write(xml, staffIdx, writeSystemElements);
       if (m->type() == Element::MEASURE)
@@ -1274,15 +1285,12 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
-#if 0 // TODO MM
-                  if ((segment->segmentType() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
-                        xml.stag("BarLine");
-                        xml.tag("subtype", m->endBarLineType());
-                        xml.tag("visible", m->endBarLineVisible());
-                        xml.etag();
+                  Measure* m = segment->measure();
+                  if ((segment->segmentType() == Segment::SegEndBarLine) && (m->mmRestCount() < 0)) {
+                        BarLine* bl = static_cast<BarLine*>(e);
+                        bl->setBarLineType(m->endBarLineType());
+                        bl->setVisible(m->endBarLineVisible());
                         }
-                  else
-#endif
                   e->write(xml);
                   segment->write(xml);    // write only once
                   }
