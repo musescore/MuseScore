@@ -39,13 +39,13 @@
       <Staff id="1">
         <type>0</type>
         </Staff>
-      <trackName>drum</trackName>
+      <trackName>Drum Set</trackName>
       <Instrument>
         <longName pos="0">
 <html><head><meta name="qrichtext" content="1" /><style type="text/css">
 p, li { white-space: pre-wrap; }
 </style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->drum<!--EndFragment--></p></body></html>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Drum Set<!--EndFragment--></p></body></html>
           </longName>
         <trackName></trackName>
         <useDrumset>1</useDrumset>
@@ -242,24 +242,215 @@ p, li { white-space: pre-wrap; }
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <sigN>2</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
-          </Rest>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>68</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>74</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>38</pitch>
+            <tpc>16</tpc>
+            <velocity>90</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>79</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>77</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>76</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>76</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>38</pitch>
+            <tpc>16</tpc>
+            <velocity>85</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>78</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>79</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <tick>0</tick>
+        <Chord>
+          <track>1</track>
+          <durationType>half</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>73</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <durationType>half</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>65</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         </Measure>
       <Measure number="1">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="1">
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -269,14 +460,14 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>78</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -286,14 +477,14 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>71</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -305,7 +496,7 @@ p, li { white-space: pre-wrap; }
               </Events>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <velocity>64</velocity>
+            <velocity>91</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
@@ -316,14 +507,65 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>76</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>75</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>77</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -335,7 +577,7 @@ p, li { white-space: pre-wrap; }
               </Events>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <velocity>64</velocity>
+            <velocity>90</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
@@ -346,14 +588,14 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>78</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -363,80 +605,16 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>16th</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>16th</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>38</pitch>
-            <tpc>16</tpc>
-            <velocity>64</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>16th</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>79</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <tick>1920</tick>
         <Chord>
           <track>1</track>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -449,13 +627,13 @@ p, li { white-space: pre-wrap; }
               </Events>
             <pitch>36</pitch>
             <tpc>14</tpc>
-            <velocity>64</velocity>
+            <velocity>62</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
           <track>1</track>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -468,14 +646,14 @@ p, li { white-space: pre-wrap; }
               </Events>
             <pitch>36</pitch>
             <tpc>14</tpc>
-            <velocity>64</velocity>
+            <velocity>70</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         </Measure>
       <Measure number="1">
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -485,14 +663,14 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>73</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -502,14 +680,14 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>79</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -521,7 +699,7 @@ p, li { white-space: pre-wrap; }
               </Events>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <velocity>64</velocity>
+            <velocity>87</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
@@ -532,14 +710,65 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>76</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>79</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>73</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -551,7 +780,7 @@ p, li { white-space: pre-wrap; }
               </Events>
             <pitch>38</pitch>
             <tpc>16</tpc>
-            <velocity>64</velocity>
+            <velocity>87</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
@@ -562,14 +791,14 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>77</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
             <Events>
@@ -579,80 +808,16 @@ p, li { white-space: pre-wrap; }
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>74</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Chord>
-          <durationType>16th</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>16th</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>38</pitch>
-            <tpc>16</tpc>
-            <velocity>64</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>16th</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            <velocity>64</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <tick>2880</tick>
+        <tick>3840</tick>
         <Chord>
           <track>1</track>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -665,13 +830,13 @@ p, li { white-space: pre-wrap; }
               </Events>
             <pitch>36</pitch>
             <tpc>14</tpc>
-            <velocity>64</velocity>
+            <velocity>60</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
           <track>1</track>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -684,7 +849,210 @@ p, li { white-space: pre-wrap; }
               </Events>
             <pitch>36</pitch>
             <tpc>14</tpc>
-            <velocity>64</velocity>
+            <velocity>63</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="1">
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>76</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>75</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>38</pitch>
+            <tpc>16</tpc>
+            <velocity>92</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>74</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>74</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>75</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>38</pitch>
+            <tpc>16</tpc>
+            <velocity>91</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>75</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>75</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <tick>5760</tick>
+        <Chord>
+          <track>1</track>
+          <durationType>half</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>67</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <durationType>half</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>63</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>

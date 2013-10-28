@@ -231,6 +231,7 @@ class TestImportMidi : public QObject, public MTest
 
       // percussion
       void percDrums() { mf("perc_drums"); }
+      void percRemoveTies() { mf("perc_remove_ties"); }
 
       // clef changes along the score
       void clefTied() { mf("clef_tied"); }

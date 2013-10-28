@@ -5,11 +5,13 @@
 namespace Ms {
 
 class MTrack;
+class TimeSigMap;
 
 namespace MidiDrum {
 
 void splitDrumVoices(std::multimap<int, MTrack> &tracks);
 void splitDrumTracks(std::multimap<int, MTrack> &tracks);
+void removeRests(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap);
 void setStaffBracketForDrums(QList<MTrack> &tracks);
 
 } // namespace MidiDrum
