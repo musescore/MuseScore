@@ -162,8 +162,6 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
                            || suffix == "jpg"
                            || suffix == "jpeg"
                            || suffix == "png"
-                           || suffix == "gif"
-                           || suffix == "xpm"
                            ) {
                               event->acceptProposedAction();
                               break;
@@ -300,8 +298,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                      && suffix != "jpg"
                      && suffix != "jpeg"
                      && suffix != "png"
-                     && suffix != "gif"
-                     && suffix != "xpm"
                      )
                         return;
                   //
