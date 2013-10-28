@@ -39,17 +39,17 @@ void NoteList::addNote(const int startTick, const int endTick, const int staff)
             _staffNoteLists[staff] << StartStop(startTick, endTick);
       }
 
-void NoteList::dump(const int voice) const
+void NoteList::dump(const QString& voice) const
       {
       // dump contents
       for (int i = 0; i < MAX_STAVES; ++i) {
-            printf("voice %d staff %d:", voice, i);
+            printf("voice %s staff %d:", qPrintable(voice), i);
             for (int j = 0; j < _staffNoteLists.at(i).size(); ++j)
                   printf(" %d-%d", _staffNoteLists.at(i).at(j).first, _staffNoteLists.at(i).at(j).second);
             printf("\n");
             }
       // show overlap
-      printf("overlap voice %d:", voice);
+      printf("overlap voice %s:", qPrintable(voice));
       for (int i = 0; i < MAX_STAVES - 1; ++i)
             for (int j = i + 1; j < MAX_STAVES; ++j)
                   stavesOverlap(i, j);
@@ -101,7 +101,7 @@ VoiceOverlapDetector::VoiceOverlapDetector()
       // printf("VoiceOverlapDetector::VoiceOverlapDetector(staves %d)\n", MAX_STAVES);
       }
 
-void VoiceOverlapDetector::addNote(int startTick, int endTick, int voice, int staff)
+void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const QString& voice, const int staff)
       {
       // if necessary, create the note list for voice
       if (!_noteLists.contains(voice))
@@ -112,7 +112,7 @@ void VoiceOverlapDetector::addNote(int startTick, int endTick, int voice, int st
 void VoiceOverlapDetector::dump() const
       {
       // printf("VoiceOverlapDetector::dump()\n");
-      QMapIterator<int, NoteList> i(_noteLists);
+      QMapIterator<QString, NoteList> i(_noteLists);
       while (i.hasNext()) {
             i.next();
             i.value().dump(i.key());
@@ -125,7 +125,7 @@ void VoiceOverlapDetector::newMeasure()
       _noteLists.clear();
       }
 
-bool VoiceOverlapDetector::stavesOverlap(const int voice) const
+bool VoiceOverlapDetector::stavesOverlap(const QString& voice) const
       {
       if (_noteLists.contains(voice))
             return _noteLists.value(voice).anyStaffOverlaps();
