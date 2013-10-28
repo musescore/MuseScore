@@ -963,7 +963,7 @@ void Score::createMMRests()
                   len += nm->len();
                   lm = nm;
                   nm = static_cast<Measure*>(mb);
-                  if (!mb || (mb->type() != Element::MEASURE))
+                  if (!nm || (nm->type() != Element::MEASURE))
                         break;
                   }
 
@@ -972,15 +972,17 @@ void Score::createMMRests()
                   // create a multi measure rest from m to lm (inclusive)
                   // attach the measure to m
                   //
+
                   for (Measure* mm = m->nextMeasure(); mm; mm = mm->nextMeasure()) {
                         mm->setMMRestCount(-1);
                         if (mm == lm)
                               break;
                         }
+
                   Measure* mmr;
                   if (m->mmRest()) {
                         mmr = m->mmRest();
-                        if (m->len() != len) {
+                        if (mmr->len() != len) {
                               Segment* s = mmr->findSegment(Segment::SegEndBarLine, mmr->endTick());
                               mmr->setLen(len);
                               if (s)

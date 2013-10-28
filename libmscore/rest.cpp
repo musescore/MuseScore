@@ -75,7 +75,7 @@ void Rest::draw(QPainter* painter) const
 
       if (parent() && measure() && measure()->isMMRest()) {
             //only on voice 1
-            if((track() % VOICES) != 0)
+            if ((track() % VOICES) != 0)
                   return;
             Measure* m = measure();
             int n      = m->mmRestCount();
