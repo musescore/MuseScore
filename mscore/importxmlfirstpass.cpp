@@ -288,7 +288,7 @@ QString MusicXmlPart::toString() const
       QString res;
       res = QString("part id '%1' name '%2'\n").arg(id).arg(name);
 
-      for (QMap<int, VoiceDesc>::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
+      for (VoiceList::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
             res += QString("voice %1 map staff data %2\n")
                   .arg(i.key() + 1)
                   .arg(i.value().toString());
@@ -327,7 +327,7 @@ MxmlReaderFirstPass::MxmlReaderFirstPass()
 // 1) assign voice to staves it is found in (allocateStaves)
 // 2) assign voice numbers (allocateVoices)
 
-static void allocateStaves(QMap<int, VoiceDesc>& vcLst)
+static void allocateStaves(VoiceList& vcLst)
       {
       // initialize
       int voicesAllocated[MAX_STAVES]; // number of voices allocated on each staff
@@ -339,14 +339,14 @@ static void allocateStaves(QMap<int, VoiceDesc>& vcLst)
       for (int i = 0; i < vcLst.size(); ++i) {
             // find the regular voice containing the highest number of chords and rests that has not been handled yet
             int max = 0;
-            int key = -1;
-            for (QMap<int, VoiceDesc>::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
+            QString key;
+            for (VoiceList::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
                   if (!j.value().overlaps() && j.value().numberChordRests() > max && j.value().staff() == -1) {
                         max = j.value().numberChordRests();
                         key = j.key();
                         }
                   }
-            if (key >= 0) {
+            if (key != "") {
                   int prefSt = vcLst.value(key).preferredStaff();
                   if (voicesAllocated[prefSt] < VOICES) {
                         vcLst[key].setStaff(prefSt);
@@ -366,14 +366,14 @@ static void allocateStaves(QMap<int, VoiceDesc>& vcLst)
             for (int i = 0; i < vcLst.size(); ++i) {
                   // find the overlapping voice containing the highest number of chords and rests that has not been handled yet
                   int max = 0;
-                  int key = -1;
-                  for (QMap<int, VoiceDesc>::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
+                  QString key;
+                  for (VoiceList::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
                         if (j.value().overlaps() && j.value().numberChordRests(h) > max && j.value().staffAlloc(h) == -1) {
                               max = j.value().numberChordRests(h);
                               key = j.key();
                               }
                         }
-                  if (key >= 0) {
+                  if (key != "") {
                         int prefSt = h;
                         if (voicesAllocated[prefSt] < VOICES) {
                               vcLst[key].setStaffAlloc(prefSt, 1);
@@ -392,16 +392,16 @@ static void allocateStaves(QMap<int, VoiceDesc>& vcLst)
 // for each staff, the voices are number 1, 2, 3, 4
 // in the same order they are numbered in the MusicXML file
 
-static void allocateVoices(QMap<int, VoiceDesc>& vcLst)
+static void allocateVoices(VoiceList& vcLst)
       {
       int nextVoice[MAX_STAVES]; // number of voices allocated on each staff
       for (int i = 0; i < MAX_STAVES; ++i)
             nextVoice[i] = 0;
       // handle regular (non-overlapping) voices
       // a voice is allocated on one specific staff
-      for (QMap<int, VoiceDesc>::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
+      for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
             int staff = i.value().staff();
-            int key   = i.key();
+            QString key   = i.key();
             if (staff >= 0) {
                   vcLst[key].setVoice(nextVoice[staff]);
                   nextVoice[staff]++;
@@ -409,10 +409,10 @@ static void allocateVoices(QMap<int, VoiceDesc>& vcLst)
             }
       // handle overlapping voices
       // each voice may be in every staff
-      for (QMap<int, VoiceDesc>::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
+      for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
             for (int j = 0; j < MAX_STAVES; ++j) {
                   int staffAlloc = i.value().staffAlloc(j);
-                  int key   = i.key();
+                  QString key   = i.key();
                   if (staffAlloc >= 0) {
                         vcLst[key].setVoice(j, nextVoice[j]);
                         nextVoice[j]++;
@@ -423,10 +423,10 @@ static void allocateVoices(QMap<int, VoiceDesc>& vcLst)
 
 //  copy the overlap data from the overlap detector to the voice list
 
-static void copyOverlapData(VoiceOverlapDetector& vod, QMap<int, VoiceDesc>& vcLst)
+static void copyOverlapData(VoiceOverlapDetector& vod, VoiceList& vcLst)
       {
-      for (QMap<int, VoiceDesc>::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
-            int key = i.key();
+      for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
+            QString key = i.key();
             if (vod.stavesOverlap(key))
                   vcLst[key].setOverlap(true);
             }
@@ -549,9 +549,9 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                               if (ee.tagName() == "note") {
                                     bool chord = false;
                                     bool grace = false;
-                                    int voice = -1;
+                                    QString voice = "1";    // correct default for missing voice
                                     QString pitch = "    ";
-                                    int staff = -1;
+                                    int staff = 0;          // correct default for missing staff
                                     bool rest = false;
                                     for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
                                           QString tag(eee.tagName());
@@ -561,7 +561,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                           else if (tag == "grace")
                                                 grace = true;
                                           else if (tag == "voice")
-                                                voice = s.toInt() - 1;
+                                                voice = s;
                                           else if (tag == "staff")
                                                 staff = s.toInt() - 1;
                                           else if (tag == "pitch")
@@ -571,9 +571,6 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                           }
                                     if (rest)
                                           pitch = "rest";
-                                    // set correct defaults for missing elements
-                                    if (voice == -1) voice = 0;
-                                    if (staff == -1) staff = 0;
                                     if (!chord) {
                                           // count the chords (only the first note in a chord is counted)
                                           if (0 <= staff && staff < MAX_STAVES) {
@@ -651,10 +648,10 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
       // debug: print results
       /*
       qDebug("voiceMapperStats: new staff");
-      for (QMap<int, VoiceDesc>::const_iterator i = parts[partNr].voicelist.constBegin();
+      for (VoiceList::const_iterator i = parts[partNr].voicelist.constBegin();
            i != parts[partNr].voicelist.constEnd(); ++i) {
-            qDebug("voiceMapperStats: voice %d staff data %s",
-                   i.key() + 1, qPrintable(i.value().toString()));
+            qDebug("voiceMapperStats: voice %s staff data %s",
+                   qPrintable(i.key()), qPrintable(i.value().toString()));
             }
       */
       }
