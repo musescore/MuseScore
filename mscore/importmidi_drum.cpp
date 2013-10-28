@@ -5,6 +5,7 @@
 #include "libmscore/drumset.h"
 #include "importmidi_chord.h"
 #include "importmidi_tuplet.h"
+#include "libmscore/score.h"
 
 
 namespace Ms {
@@ -22,8 +23,9 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
             const Drumset* const drumset = track.mtrack->drumTrack() ? smDrumset : 0;
             if (!drumset)
                   continue;
-                              // all chords of drum track have voice == 0
+                              // all chords of drum track should have voice == 0
                               // because useMultipleVoices == false (see MidiImportOperations)
+                              // also, all chords should have different onTime values
             for (auto &chordEvent: chords) {
                   const auto &onTime = chordEvent.first;
                   auto &chord = chordEvent.second;
@@ -130,7 +132,7 @@ void splitDrumTracks(std::multimap<int, MTrack> &tracks)
                   continue;
             const auto operations = preferences.midiImportOperations.trackOperations(
                                                             it->second.indexOfOperation);
-            if (!operations.drums.doSplit)
+            if (!operations.splitDrums.doSplit)
                   continue;
             const auto newTracks = splitDrumTrack(it->second);
             const int trackIndex = it->first;
@@ -163,7 +165,7 @@ void setStaffBracketForDrums(QList<MTrack> &tracks)
             if (track.mtrack->drumTrack()) {
                   if (opIndex != track.indexOfOperation) {
                         setBracket(firstDrumStaff, counter);
-                        if (opers.trackOperations(track.indexOfOperation).drums.showStaffBracket) {
+                        if (opers.trackOperations(track.indexOfOperation).splitDrums.showStaffBracket) {
                               opIndex = track.indexOfOperation;
                               firstDrumStaff = track.staff;
                               }
@@ -174,6 +176,63 @@ void setStaffBracketForDrums(QList<MTrack> &tracks)
                   setBracket(firstDrumStaff, counter);
             }
       setBracket(firstDrumStaff, counter);
+      }
+
+ReducedFraction endOfBarForTick(const ReducedFraction &tick, const TimeSigMap *sigmap)
+      {
+      int bar, beat, tickInBar;
+      sigmap->tickValues(tick.ticks(), &bar, &beat, &tickInBar);
+      return ReducedFraction::fromTicks(sigmap->bar2tick(bar + 1, 0));
+      }
+
+ReducedFraction findOptimalNoteLen(const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+                                  const std::multimap<ReducedFraction, MidiChord> &chords,
+                                  const TimeSigMap *sigmap)
+      {
+      const auto &onTime = chordIt->first;
+      auto barEnd = endOfBarForTick(onTime, sigmap);
+                  // let's find new offTime = min(next chord onTime, barEnd)
+      auto offTime = barEnd;
+      auto next = chordIt;
+      ++next;
+      while (next != chords.end()) {
+            if (next->first > barEnd)
+                  break;
+            if (next->second.voice == chordIt->second.voice) {
+                  offTime = next->first;
+                  break;
+                  }
+            ++next;
+            }
+
+      return offTime - onTime;
+      }
+
+void removeRests(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
+      {
+      const auto &opers = preferences.midiImportOperations;
+
+      for (auto &trackItem: tracks) {
+            MTrack &track = trackItem.second;
+            if (!track.mtrack->drumTrack())
+                  continue;
+            if (!opers.trackOperations(track.indexOfOperation).removeDrumRests)
+                  continue;
+            bool changed = false;
+                        // all chords here with the same voice should have different onTime values
+            for (auto it = track.chords.begin(); it != track.chords.end(); ++it) {
+                  const auto newLen = findOptimalNoteLen(it, track.chords, sigmap);
+                  for (auto &note: it->second.notes) {
+                        if (note.len != newLen) {
+                              note.len = newLen;
+                              if (!changed)
+                                    changed = true;
+                              }
+                        }
+                  }
+            if (changed)
+                  MidiTuplet::removeEmptyTuplets(track);
+            }
       }
 
 } // namespace MidiDrum
