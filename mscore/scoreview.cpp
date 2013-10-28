@@ -2931,15 +2931,19 @@ void ScoreView::cmd(const QAction* a)
 
       else if(cmd == "string-above") {
             int   strg = _score->inputState().string();
-            if(strg > 0)
+            if(strg > 0) {
                   _score->inputState().setString(strg-1);
+                  moveCursor();
+                  }
             }
       else if(cmd == "string-below") {
             InputState  is          = _score->inputState();
             int         maxStrg     = _score->staff(is.track() / VOICES)->lines() - 1;
             int         strg        = is.string();
-            if(strg < maxStrg)
+            if(strg < maxStrg) {
                   _score->inputState().setString(strg+1);
+                  moveCursor();
+                  }
             }
       else if(cmd == "fret-0")
             cmdAddFret(0);
