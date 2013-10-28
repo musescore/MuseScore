@@ -90,10 +90,13 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
                   trackData.opers.LHRH.doIt = operValue.toBool();
                   break;
             case MidiOperation::Type::SPLIT_DRUMS:
-                  trackData.opers.drums.doSplit = operValue.toBool();
+                  trackData.opers.splitDrums.doSplit = operValue.toBool();
                   break;
             case MidiOperation::Type::SHOW_STAFF_BRACKET:
-                  trackData.opers.drums.showStaffBracket = operValue.toBool();
+                  trackData.opers.splitDrums.showStaffBracket = operValue.toBool();
+                  break;
+            case MidiOperation::Type::REMOVE_DRUM_RESTS:
+                  trackData.opers.removeDrumRests = operValue.toBool();
                   break;
             case MidiOperation::Type::LHRH_METHOD:
                   trackData.opers.LHRH.method = (MidiOperation::LHRHMethod)operValue.toInt();
@@ -198,7 +201,7 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
 
             // MidiOperation::Type::SPLIT_DRUMS
             for (int i = 1; i != trackCount_; ++i) {
-                  if (tracksData_[i].opers.drums.doSplit != opers.opers.drums.doSplit) {
+                  if (tracksData_[i].opers.splitDrums.doSplit != opers.opers.splitDrums.doSplit) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::SPLIT_DRUMS);
                         break;
                         }
@@ -206,8 +209,16 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
 
             // MidiOperation::Type::SHOW_STAFF_BRACKET
             for (int i = 1; i != trackCount_; ++i) {
-                  if (tracksData_[i].opers.drums.showStaffBracket != opers.opers.drums.showStaffBracket) {
+                  if (tracksData_[i].opers.splitDrums.showStaffBracket != opers.opers.splitDrums.showStaffBracket) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::SHOW_STAFF_BRACKET);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::REMOVE_DRUM_RESTS
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.removeDrumRests != opers.opers.removeDrumRests) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::REMOVE_DRUM_RESTS);
                         break;
                         }
                   }
