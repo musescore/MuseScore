@@ -19,7 +19,7 @@
 
 namespace Ms {
 
-typedef QMap<int, VoiceDesc> VoiceList;
+typedef QMap<QString, VoiceDesc> VoiceList;
 
 class MusicXmlPart {
 public:

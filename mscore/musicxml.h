@@ -152,7 +152,7 @@ struct GraceNoteInfo {
 
 class MusicXml {
       Score* score;
-      QMap<int, VoiceDesc> voicelist;
+      QMap<QString, VoiceDesc> voicelist;
       QVector<int> measureLength;               ///< Length of each measure in ticks
       QVector<int> measureStart;                ///< Start tick of each measure
       Fraction fractionTSig;                    ///< Current timesig as fraction
@@ -215,7 +215,7 @@ class MusicXml {
                     QMap<int, Lyrics*>& defyLyrics,
                     QList<Lyrics*>& unNumbrdLyrics);
       void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
-      void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, int& currentVoice, QDomElement node, QList<GraceNoteInfo>&);
+      void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement node, QList<GraceNoteInfo>&);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       int xmlClef(QDomElement, int staffIdx, Measure*);
       void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion);
