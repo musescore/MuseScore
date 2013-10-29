@@ -68,7 +68,7 @@ void ScoreView::startEdit()
       setFocus();
       if (!_score->undo()->active())
             _score->startCmd();
-      editObject->startEdit(this, startMove);
+      editObject->startEdit(this, data.startMove);
       curGrip = -1;
       updateGrips();
       _score->end();
@@ -120,7 +120,7 @@ void ScoreView::endEdit()
 void ScoreView::doDragEdit(QMouseEvent* ev)
       {
       QPointF p     = toLogical(ev->pos());
-      QPointF delta = p - startMove;
+      QPointF delta = p - data.startMove;
 
       if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
             p.setX(0.0);
@@ -151,7 +151,7 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
             ed.vRaster = false;
             editObject->editDrag(ed);
             updateGrips();
-            startMove = p;
+            data.startMove = p;
             }
       QRectF r(editObject->canvasBoundingRect());
       _score->addRefresh(r);

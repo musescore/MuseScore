@@ -28,6 +28,7 @@
 #include "beam.h"
 #include "mscore.h"
 #include "page.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -108,6 +109,30 @@ void SlurSegment::updateGrips(int* n, QRectF* r) const
       }
 
 //---------------------------------------------------------
+//   searchCR
+//---------------------------------------------------------
+
+static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
+      {
+      // for (Segment* s = segment; s; s = s->next1MM(Segment::SegChordRest)) {
+      for (Segment* s = segment; s; s = s->next(Segment::SegChordRest)) {     // restrict search to measure
+            if (startTrack > endTrack) {
+                  for (int t = startTrack-1; t >= endTrack; --t) {
+                        if (s->element(t))
+                              return static_cast<ChordRest*>(s->element(t));
+                        }
+                  }
+            else {
+                  for (int t = startTrack; t < endTrack; ++t) {
+                        if (s->element(t))
+                              return static_cast<ChordRest*>(s->element(t));
+                        }
+                  }
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   edit
 //    return true if event is accepted
 //---------------------------------------------------------
@@ -121,9 +146,13 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             sl->layout();
             return true;
             }
+      if (key == Qt::Key_Home) {
+            ups[curGrip].off = QPointF();
+            sl->layout();
+            return true;
+            }
       if (slurTie()->type() != SLUR)
             return false;
-
 
       if (!((modifiers & Qt::ShiftModifier)
          && ((spannerSegmentType() == SEGMENT_SINGLE)
@@ -140,7 +169,18 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             cr = prevChordRest(e);
       else if (key == Qt::Key_Right)
             cr = nextChordRest(e);
-
+      else if (key == Qt::Key_Up) {
+            Part* part     = e->staff()->part();
+            int startTrack = part->startTrack();
+            int endTrack   = e->track();
+            cr = searchCR(e->segment(), endTrack, startTrack);
+            }
+      else if (key == Qt::Key_Down) {
+            int startTrack = e->track() + 1;
+            Part* part     = e->staff()->part();
+            int endTrack   = part->endTrack();
+            cr = searchCR(e->segment(), startTrack, endTrack);
+            }
       if (cr == 0 || cr == e1)
             return true;
       changeAnchor(viewer, curGrip, cr);
@@ -172,8 +212,10 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   tie->setEndNote(static_cast<Note*>(element));
                   static_cast<Note*>(element)->setTieBack(tie);
                   }
-            else if (spanner()->anchor() == Spanner::ANCHOR_SEGMENT)
+            else if (spanner()->anchor() == Spanner::ANCHOR_SEGMENT) {
                   spanner()->setTick2(static_cast<Chord*>(element)->tick());
+                  spanner()->setTrack2(element->track());
+                  }
             }
 
       int segments  = spanner()->spannerSegments().size();
@@ -281,40 +323,42 @@ void SlurSegment::editDrag(const EditData& ed)
             // move anchor for slurs
             //
             Spanner* spanner = static_cast<Spanner*>(slurTie());
-            Element* e = ed.view->elementNear(ed.pos);
             SpannerSegmentType st = spannerSegmentType();
+            Qt::KeyboardModifiers km = qApp->keyboardModifiers();
             if (
                (ed.curGrip == GRIP_START  && (st == SEGMENT_SINGLE || st == SEGMENT_BEGIN))
                || (ed.curGrip == GRIP_END && (st == SEGMENT_SINGLE || st == SEGMENT_END))
                ) {
-                  if (e && e->type() == NOTE) {
+                  Element* e = ed.view->elementNear(ed.pos);
+                  if (ed.curGrip == GRIP_END && spanner->type() == TIE && e && e->type() == NOTE) {
                         Note* note = static_cast<Note*>(e);
-                        Chord* chord = note->chord();
-                        if ((spanner->type() == SLUR)
-                           && ((ed.curGrip == GRIP_END && chord != spanner->endCR())
-                           || (ed.curGrip == GRIP_START && chord != spanner->startCR())))
-                              {
-                              changeAnchor(ed.view, ed.curGrip, chord);
-                              QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
-                              ups[ed.curGrip].off = p1 / _spatium;
-                              return;
-                              }
-                        if (ed.curGrip == GRIP_END && spanner->type() == TIE) {
-                              Tie* tie = static_cast<Tie*>(spanner);
-                              if (tie->startNote()->pitch() == note->pitch()) {
-                                    ed.view->setDropTarget(note);
-                                    if (note != tie->endNote()) {
-                                          changeAnchor(ed.view, ed.curGrip, note);
-                                          // tie->endNote()->setTieBack(0);
-                                          // tie->setEndNote(note);
-                                          // note->setTieBack(tie);
-                                          return;
-                                          }
+                        Tie* tie = static_cast<Tie*>(spanner);
+                        if (tie->startNote()->pitch() == note->pitch()) {
+                              ed.view->setDropTarget(note);
+                              if (note != tie->endNote()) {
+                                    changeAnchor(ed.view, ed.curGrip, note);
+                                    return;
                                     }
                               }
                         }
-                  else
+                  else if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+                        int staffIdx, pitch;
+                        Segment* s = 0;
+                        QPointF offset;
+                        QPointF pos = ed.pos;
+                        pos.rx() -= score()->noteHeadWidth() * .5;
+                        score()->pos2measure(pos, &staffIdx, &pitch, &s, &offset);
+                        if (s && s->segmentType() == Segment::SegChordRest) {
+                              Chord* c = static_cast<Chord*>(s->element(spanner->track()));
+                              if (c && c->type() == CHORD && c != spanner->endCR()) {
+                                    changeAnchor(ed.view, ed.curGrip, c);
+                                    QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
+                                    ups[ed.curGrip].off = p1 / _spatium;
+                                    slurTie()->layout();
+                                    }
+                              }
                         ed.view->setDropTarget(0);
+                        }
                   }
             }
       else if (ed.curGrip == GRIP_BEZIER1 || ed.curGrip == GRIP_BEZIER2)
@@ -646,6 +690,9 @@ void Slur::slurPos(SlurPos* sp)
 
       sp->system1 = scr->measure()->system();
       sp->system2 = ecr->measure()->system();
+      if (sp->system1 == 0 || sp->system2 == 0)
+            return;
+
       sp->p1      = scr->pagePos() - sp->system1->pagePos();
       sp->p2      = ecr->pagePos() - sp->system2->pagePos();
 
@@ -1032,7 +1079,7 @@ void Slur::read(XmlReader& e)
             else if (!SlurTie::readProperties(e))
                   e.unknown();
             }
-      if(track2() == -1)
+      if (track2() == -1)
             setTrack2(track());
       }
 

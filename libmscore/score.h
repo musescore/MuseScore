@@ -101,6 +101,8 @@ enum class ClefType : signed char;
 
 extern bool showRubberBand;
 
+enum class POS { CURRENT, LEFT, RIGHT };
+
 enum {
       PAD_NOTE00,
       PAD_NOTE0,
@@ -334,9 +336,11 @@ class Score : public QObject {
       QList<Part*> _parts;
       QList<Staff*> _staves;
 
-      int _playPos;     ///< sequencer seek position
-      int _loopInTick;    ///< In tick for loop play position
-      int _loopOutTick;   ///< Out tick for loop play position
+      int _pos[3];            ///< 0 - current, 1 - left loop, 2 - right loop
+
+//      int _playPos;           ///< sequencer seek position
+//      int _loopInTick;        ///< In tick for loop play position
+//      int _loopOutTick;       ///< Out tick for loop play position
 
       bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
                                       ///< indicating if playPos after expanded repeats
@@ -377,12 +381,7 @@ class Score : public QObject {
       void moveUp(Chord*);
       void moveDown(Chord*);
 
-      void moveInputPos(Element* s);
-      void moveToPrevInputPos();
-      void moveToNextInputPos();
-
       void padToggle(int n);
-
       void addTempo();
       void addMetronome();
 
@@ -434,7 +433,16 @@ class Score : public QObject {
       void createPlayEvents(Chord*);
       SynthesizerState _synthesizerState;
 
+   signals:
+      void posChanged(POS, unsigned);
+
    public:
+      Score();
+      Score(const MStyle*);
+      Score(Score*);                // used for excerpts
+      ~Score();
+
+      Score* clone();
       void setDirty(bool val);
 
       void rebuildBspTree();
@@ -455,12 +463,6 @@ class Score : public QObject {
       void cmdAddStretch(qreal);
       void transpose(Note* n, Interval, bool useSharpsFlats);
 
-      Score();
-      Score(const MStyle*);
-      Score(Score*);                // used for excerpts
-      ~Score();
-
-      Score* clone();
       bool appendScore(Score*);
 
       int pageIdx(Page* page) const { return _pages.indexOf(page); }
@@ -552,7 +554,7 @@ class Score : public QObject {
 
       void cmdAddSpanner(Spanner* e, const QPointF& pos);
 
-      Note* addNote(Chord*, int pitch);
+//      Note* addNote(Chord*, int pitch);
       Note* addNote(Chord*, NoteVal &noteVal);
 
       void deleteItem(Element*);
@@ -562,7 +564,6 @@ class Score : public QObject {
       void putNote(const QPointF& pos, bool replace);
       void putNote(const Position& pos, bool replace);
       void repitchNote(const Position& pos, bool replace);
-      void setInputState(Element* obj);
 
       Q_INVOKABLE void startCmd();        // start undoable command
       Q_INVOKABLE void endCmd();          // end undoable command
@@ -635,13 +636,6 @@ class Score : public QObject {
 
       bool playlistDirty();
       void setPlaylistDirty(bool val) { _playlistDirty = val; }
-      int loopInTick() { return _loopInTick; }
-      int loopOutTick() { return _loopOutTick; }
-      void setLoopInTick(int tick);
-      void setLoopOutTick(int tick);
-      void updateLoopCursors();
-      void showLoopCursors();
-      void hideLoopCursors();
 
       void cmd(const QAction*);
       int fileDivision(int t) const { return (t * MScore::division + _fileDivision/2) / _fileDivision; }
@@ -687,19 +681,28 @@ class Score : public QObject {
       const TextStyle& textStyle(int idx) const { return _style.textStyle(idx); }
       const TextStyle& textStyle(const QString& s) const  { return _style.textStyle(s); }
 
-      int playPos() const                      { return _playPos;    }
-      void setPlayPos(int val)                 { _playPos = val;     }
+      int playPos() const                      { return pos(POS::CURRENT);   }
+      void setPlayPos(int tick)                { setPos(POS::CURRENT, tick); }
+      int loopInTick() const                   { return pos(POS::LEFT);      }
+      int loopOutTick() const                  { return pos(POS::RIGHT);     }
+      void setLoopInTick(int tick)             { setPos(POS::LEFT, tick);    }
+      void setLoopOutTick(int tick)            { setPos(POS::RIGHT, tick);   }
 
-      bool noteEntryMode() const               { return _is.noteEntryMode; }
+      int pos(POS pos) const                   {  return _pos[int(pos)]; }
+      void setPos(POS pos, int tick);
+
+      bool noteEntryMode() const               { return _is.noteEntryMode(); }
+      void setNoteEntryMode(bool val)          { _is.setNoteEntryMode(val); }
       int inputPos() const;
       int inputTrack() const                   { return _is.track(); }
       InputState& inputState()                 { return _is;         }
-      void setInputState(const InputState& st);
-      void setInputTrack(int);
+      void setInputState(const InputState& st) { _is = st;           }
+      void setInputTrack(int t)                { _is.setTrack(t);    }
 
       void spatiumChanged(qreal oldValue, qreal newValue);
 
       void pasteStaff(XmlReader&, ChordRest* dst);
+      void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
       int mscVersion() const    { return _mscVersion; }
@@ -720,6 +723,7 @@ class Score : public QObject {
       void cmdTransposeStaff(int staffIdx, Interval, bool useDoubleSharpsFlats);
       void cmdConcertPitchChanged(bool, bool useSharpsFlats);
 
+      void setTempomap(TempoMap* tm);
       TempoMap* tempomap() const;
       TimeSigMap* sigmap() const;
 
@@ -859,7 +863,7 @@ class Score : public QObject {
       void createRevision();
       QByteArray readCompressedToBuffer();
       QByteArray readToBuffer();
-      void writeSegments(Xml& xml, const Measure*, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
+      void writeSegments(Xml& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
 
       const QMap<QString, QString>& metaTags() const;
       QMap<QString, QString>& metaTags();
@@ -898,7 +902,6 @@ class Score : public QObject {
       void addViewer(MuseScoreView* v)      { viewer.append(v);    }
       void removeViewer(MuseScoreView* v)   { viewer.removeAll(v); }
       const QList<MuseScoreView*>& getViewer() const { return viewer;       }
-      void moveCursor();
       bool playNote() const                 { return _playNote; }
       void setPlayNote(bool v)              { _playNote = v;    }
       bool excerptsChanged() const          { return _excerptsChanged; }
@@ -948,6 +951,7 @@ class Score : public QObject {
       bool isSpannerStartEnd(int tick, int track) const;
       void removeSpanner(Spanner*);
       void addSpanner(Spanner*);
+      void clearSpannerIds();
 
       ChordRest* findCR(int tick, int track) const;
       void layoutSpanner();

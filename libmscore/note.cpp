@@ -99,19 +99,6 @@ const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
       };
 
 //---------------------------------------------------------
-//   NoteVal
-//---------------------------------------------------------
-
-NoteVal::NoteVal()
-      {
-      pitch     = -1;
-      tpc       = INVALID_TPC,
-      fret      = FRET_NONE;
-      string    = STRING_NONE;
-      headGroup = 0;
-      }
-
-//---------------------------------------------------------
 //   noteHeadSym
 //---------------------------------------------------------
 
@@ -730,7 +717,10 @@ void Note::read(XmlReader& e)
             else if (tag == "ghost")
                   setGhost(e.readInt());
             else if (tag == "headType")
-                  setProperty(P_HEAD_TYPE, Ms::getProperty(P_HEAD_TYPE, e));
+                  if (score()->mscVersion() <= 114)
+                        setProperty(P_HEAD_TYPE, Ms::getProperty(P_HEAD_TYPE, e).toInt() - 1);
+                  else
+                        setProperty(P_HEAD_TYPE, Ms::getProperty(P_HEAD_TYPE, e).toInt());
             else if (tag == "veloType")
                   setProperty(P_VELO_TYPE, Ms::getProperty(P_VELO_TYPE, e));
             else if (tag == "line")
@@ -917,7 +907,7 @@ void Note::read(XmlReader& e)
 //   drag
 //---------------------------------------------------------
 
-QRectF Note::drag(const EditData& data)
+QRectF Note::drag(EditData* data)
       {
       if (staff()->isDrumStaff())
             return QRect();
@@ -927,7 +917,7 @@ QRectF Note::drag(const EditData& data)
       qreal _spatium = spatium();
       bool tab = staff()->isTabStaff();
       qreal step = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
-      _lineOffset = lrint(data.pos.y() / step);
+      _lineOffset = lrint(data->delta.y() / step);
       score()->setLayoutAll(true);
       return bb.translated(chord()->pagePos());
       }

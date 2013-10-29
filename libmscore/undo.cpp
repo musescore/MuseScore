@@ -317,9 +317,9 @@ void UndoStack::redo()
 //---------------------------------------------------------
 
 SaveState::SaveState(Score* s)
+   : undoInputState(s), redoInputState(s->inputState())
       {
       score          = s;
-      redoInputState = score->inputState();
       redoSelection  = score->selection();
       }
 
@@ -918,7 +918,8 @@ void Score::undoAddElement(Element* element)
          && et != Element::STAFF_TEXT
          && et != Element::TREMOLO
          && et != Element::ARPEGGIO
-         && et != Element::SYMBOL)
+         && et != Element::SYMBOL
+         && et != Element::HARMONY)
             ) {
             undo(new AddElement(element));
             return;
@@ -1002,7 +1003,8 @@ void Score::undoAddElement(Element* element)
             else if (element->type() == Element::SYMBOL
                || element->type() == Element::IMAGE
                || element->type() == Element::DYNAMIC
-               || element->type() == Element::STAFF_TEXT) {
+               || element->type() == Element::STAFF_TEXT
+               || element->type() == Element::HARMONY) {
                   Segment* segment = static_cast<Segment*>(element->parent());
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
@@ -1022,7 +1024,10 @@ void Score::undoAddElement(Element* element)
                   // ne->setParent(0);  ???
                   Spanner* nsp = static_cast<Spanner*>(ne);
                   Spanner* sp = static_cast<Spanner*>(element);
-                  nsp->setTrack2(staffIdx * VOICES + (sp->track2() % VOICES));
+                  int staffIdx1 = sp->track() / VOICES;
+                  int staffIdx2 = sp->track2() / VOICES;
+                  int diff = staffIdx2 - staffIdx1;
+                  nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
                   undo(new AddElement(nsp));
                   }
             else if (element->type() == Element::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
@@ -1191,15 +1196,13 @@ void Score::undoRemoveElement(Element* element)
       QList<Segment*> segments;
       foreach (Element* e, element->linkList()) {
             undo(new RemoveElement(e));
-            //if (e->type() == Element::KEYSIG)                  // TODO: should be done in undo()/redo()
-            //      e->score()->cmdUpdateNotes();
             if (!e->isChordRest() && e->parent() && (e->parent()->type() == Element::SEGMENT)) {
                   Segment* s = static_cast<Segment*>(e->parent());
                   if (!segments.contains(s))
                         segments.append(s);
                   }
             }
-      foreach(Segment* s, segments) {
+      for (Segment* s : segments) {
             if (s->isEmpty())
                   undo(new RemoveElement(s));
             }
@@ -2285,12 +2288,13 @@ void ChangePageFormat::flip()
 //   ChangeStaff
 //---------------------------------------------------------
 
-ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, qreal _userDist, StaffType* st)
+ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, qreal _userDist, QColor _color, StaffType* st)
       {
       staff     = _staff;
       small     = _small;
       invisible = _invisible;
       userDist  = _userDist;
+      color     = _color;
       staffType = st;
       }
 
@@ -2306,16 +2310,19 @@ void ChangeStaff::flip()
       int oldSmall      = staff->small();
       bool oldInvisible = staff->invisible();
       qreal oldUserDist = staff->userDist();
+      QColor oldColor   = staff->color();
       StaffType* st     = staff->staffType();
 
       staff->setSmall(small);
       staff->setInvisible(invisible);
       staff->setUserDist(userDist);
+      staff->setColor(color);
       staff->setStaffType(staffType);
 
       small     = oldSmall;
       invisible = oldInvisible;
       userDist  = oldUserDist;
+      color     = oldColor;
       staffType = st;
 
       Score* score = staff->score();
@@ -2604,9 +2611,9 @@ ChangeMeasureProperties::ChangeMeasureProperties(
 
 void ChangeMeasureProperties::flip()
       {
-      bool a   = measure->breakMultiMeasureRest();
+      bool a   = measure->getBreakMultiMeasureRest();
       int r    = measure->repeatCount();
-      qreal s = measure->userStretch();
+      qreal s  = measure->userStretch();
       int o    = measure->noOffset();
       bool ir  = measure->irregular();
 
@@ -2734,7 +2741,6 @@ void RemoveMeasures::undo()
             if (m == lm)
                   break;
             }
-      fm->score()->insertTime(fm->tick(), ticks);
       fm->score()->fixTicks();
       fm->score()->connectTies();
       fm->score()->setLayoutAll(true);
@@ -2754,6 +2760,7 @@ void RemoveMeasures::redo()
             if (m == lm)
                   break;
             }
+      // insertTime is undoable by itself
       fm->score()->insertTime(fm->tick(), -ticks);
       fm->score()->fixTicks();
       }
@@ -3263,6 +3270,21 @@ void ChangeSpannerElements::flip()
       spanner->score()->setLayoutAll(true);
       }
 
+//---------------------------------------------------------
+//   ChangeParent
+//---------------------------------------------------------
+
+void ChangeParent::flip()
+      {
+      Element* p = element->parent();
+      int si = element->staffIdx();
+      p->remove(element);
+      element->setParent(parent);
+      element->setTrack(staffIdx * VOICES);
+      parent->add(element);
+      staffIdx = si;
+      parent = p;
+      }
 
 }
 

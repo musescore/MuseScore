@@ -362,6 +362,8 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
                   new ElementItem(mi, ms->_vspacerUp);
             if (ms->_vspacerDown)
                   new ElementItem(mi, ms->_vspacerDown);
+            if (ms->noText())
+                  new ElementItem(mi, ms->noText());
             }
       for (Segment* segment = measure->first(); segment; segment = segment->next()) {
             ElementItem* segItem = new ElementItem(mi, segment);
@@ -1468,6 +1470,7 @@ void SpannerView::setElement(Element* e)
       sp.tick->setValue(spanner->tick());
       sp.tick2->setValue(spanner->tick2());
       sp.anchor->setCurrentIndex(int(spanner->anchor()));
+      sp.track2->setValue(spanner->track2());
 
       sp.segments->clear();
       foreach(const Element* e, spanner->spannerSegments()) {

@@ -466,20 +466,20 @@ QColor Element::curColor() const
 ///   Return update Rect relative to canvas.
 //---------------------------------------------------------
 
-QRectF Element::drag(const EditData& data)
+QRectF Element::drag(EditData* data)
       {
       QRectF r(canvasBoundingRect());
 
-      qreal x = data.pos.x();
-      qreal y = data.pos.y();
+      qreal x = data->delta.x();
+      qreal y = data->delta.y();
 
       qreal _spatium = spatium();
-      if (data.hRaster) {
+      if (data->hRaster) {
             qreal hRaster = _spatium / MScore::hRaster();
             int n = lrint(x / hRaster);
             x = hRaster * n;
             }
-      if (data.vRaster) {
+      if (data->vRaster) {
             qreal vRaster = _spatium / MScore::vRaster();
             int n = lrint(y / vRaster);
             y = vRaster * n;
@@ -879,6 +879,8 @@ void StaffLines::layout()
 
 //      qDebug("StaffLines::layout:: dist %f st %p\n", dist, st);
 
+      setColor(staff() ? staff()->color() : MScore::defaultColor);
+
       lw = score()->styleS(ST_staffLineWidth).val() * _spatium;
       bbox().setRect(0.0, -lw*.5, width(), lines * dist + lw);
       }
@@ -919,6 +921,7 @@ void StaffLines::draw(QPainter* painter) const
             y = _pos.y() + (lines+4) * dist;
             painter->drawLine(QLineF(x1, y, x2, y));
             }
+
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
       painter->drawLines(ll);
       }

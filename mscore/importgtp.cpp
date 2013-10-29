@@ -1934,6 +1934,7 @@ void GuitarPro4::read(QFile* fp)
                               slur->setTick(cr->tick());
                               slur->setTick2(cr->tick());
                               slurs[staffIdx] = slur;
+                              score->addElement(slur);
                               }
                         else if (slurs[staffIdx] && !hasSlur) {
                               // TODO: check slur

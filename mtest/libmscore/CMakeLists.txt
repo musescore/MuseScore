@@ -12,9 +12,9 @@
 #=============================================================================
 
 subdirs(
-      hairpin note compat link measure beam split join splitstaff
-      timesig layout element midi dynamic plugins copypaste tuplet
-      repeat concertpitch keysig clef
+      beam clef compat concertpitch copypaste copypastesymbollist dynamic element
+      hairpin join keysig layout link measure midi note plugins repeat split
+      splitstaff timesig tuplet
       )
 
 

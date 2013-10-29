@@ -75,7 +75,7 @@ void Rest::draw(QPainter* painter) const
 
       if (parent() && measure() && measure()->isMMRest()) {
             //only on voice 1
-            if((track() % VOICES) != 0)
+            if ((track() % VOICES) != 0)
                   return;
             Measure* m = measure();
             int n      = m->mmRestCount();
@@ -165,9 +165,9 @@ void Rest::setUserOffset(qreal x, qreal y)
 //   drag
 //---------------------------------------------------------
 
-QRectF Rest::drag(const EditData& data)
+QRectF Rest::drag(EditData* data)
       {
-      QPointF s(data.pos);
+      QPointF s(data->delta);
       QRectF r(abbox());
 
       // Limit horizontal drag range

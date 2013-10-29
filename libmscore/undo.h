@@ -734,13 +734,14 @@ class ChangeStaff : public UndoCommand {
       bool        small;
       bool        invisible;
       qreal       userDist;
+      QColor      color;
       StaffType*  staffType;
 
       void flip();
 
    public:
-      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, StaffType*);
-      UNDO_NAME("ChangeStaff");
+      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color, StaffType*);
+      UNDO_NAME("ChangeStaff")
       };
 
 //---------------------------------------------------------
@@ -1323,6 +1324,22 @@ class ChangeSpannerElements : public UndoCommand {
       ChangeSpannerElements(Spanner* s, Element* se, Element* ee)
          : spanner(s), startElement(se), endElement(ee) {}
       UNDO_NAME("ChangeSpannerElements");
+      };
+
+//---------------------------------------------------------
+//   ChangeParent
+//---------------------------------------------------------
+
+class ChangeParent : public UndoCommand {
+      Element* element;
+      Element* parent;
+      int staffIdx;
+
+      void flip();
+
+   public:
+      ChangeParent(Element* e, Element* p, int si) : element(e), parent(p), staffIdx(si) {}
+      UNDO_NAME("ChangeParent");
       };
 
 }     // namespace Ms

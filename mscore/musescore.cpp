@@ -448,8 +448,7 @@ MuseScore::MuseScore()
 
       _positionLabel = new QLabel;
       _positionLabel->setObjectName("decoration widget");  // this prevents animations
-
-      _positionLabel->setText("001:01:000");
+      _positionLabel->setToolTip(tr("measure:beat:tick"));
 
       _modeText = new QLabel;
       _modeText->setAutoFillBackground(false);
@@ -476,6 +475,10 @@ MuseScore::MuseScore()
       metronomeAction = getAction("metronome");
       metronomeAction->setCheckable(true);
       metronomeAction->setChecked(false);
+
+      countInAction = getAction("countin");
+      countInAction->setCheckable(true);
+      countInAction->setChecked(false);
 
       _statusBar->addPermanentWidget(new QWidget(this), 2);
       _statusBar->addPermanentWidget(new QWidget(this), 100);
@@ -1011,7 +1014,7 @@ MuseScore::MuseScore()
 
       menuLayout->addAction(getAction("reset-stretch"));
       menuLayout->addAction(getAction("reset-beammode"));
-//      menuLayout->addAction(tr("Breaks && Spacer..."), this, SLOT(showLayoutBreakPalette()));
+//      menuLayout->addAction(tr("Breaks && Spacers..."), this, SLOT(showLayoutBreakPalette()));
 
       //---------------------
       //    Menu Style
@@ -1172,7 +1175,7 @@ QString MuseScore::getLocaleISOCode() const
 //    show local help
 //---------------------------------------------------------
 
-void MuseScore::helpBrowser() const
+void MuseScore::helpBrowser(QString tag) const
       {
       QString lang = getLocaleISOCode();
 
@@ -1182,15 +1185,18 @@ void MuseScore::helpBrowser() const
       if (MScore::debugMode)
             qDebug("open handbook for language <%s>", qPrintable(lang));
 
-      QString mscoreHelp(mscoreGlobalShare + QString("manual/") + lang + QString("/manual.html"));
-      helpBrowser(QUrl::fromLocalFile(mscoreHelp));
+      QString path(mscoreGlobalShare + "manual/reference-" + lang + ".pdf");
+      if (!QFile::exists(path))
+            path = mscoreGlobalShare + "manual/reference-en" + ".pdf";
+      qDebug("helpBrowser::load <%s>\n", qPrintable(path));
+      QUrl url(QUrl::fromLocalFile(path));
+      if (!tag.isEmpty())
+            url.setFragment(tag);
       }
 
 void MuseScore::helpBrowser(const QUrl& url) const
       {
-      HelpBrowser* hb = new HelpBrowser(0);
-      hb->setContent(url);
-      hb->show();
+      QDesktopServices::openUrl(url);
       }
 
 //---------------------------------------------------------
@@ -1232,8 +1238,7 @@ void MuseScore::helpBrowser1() const
 
       //track visits. see: http://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
       help += QString("?utm_source=software&utm_medium=menu&utm_content=r%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
-      QUrl url(help);
-      helpBrowser(url);
+      helpBrowser(QUrl(help));
       }
 
 //---------------------------------------------------------
@@ -1554,10 +1559,6 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       showMessage(cs->filePath(), 2000);
       if (_navigator && _navigator->widget())
             navigator()->setScoreView(view);
-      if (loop()) {
-            cs->updateLoopCursors();
-            cv->showLoopCursors();
-            }
       }
 
 //---------------------------------------------------------
@@ -2044,6 +2045,7 @@ void setMscoreLocale(QString localeName)
             qApp->installTranslator(qtTranslator);
             translatorList.append(qtTranslator);
             }
+      QLocale::setDefault(QLocale(localeName));
       // initShortcuts();
       }
 
@@ -2712,7 +2714,7 @@ void MuseScore::readSettings()
 
 void MuseScore::play(Element* e) const
       {
-      if (!mscore->playEnabled())
+      if (noSeq || !mscore->playEnabled())
             return;
 
       if (e->type() == Element::NOTE) {
@@ -2736,6 +2738,8 @@ void MuseScore::play(Element* e) const
 
 void MuseScore::play(Element* e, int pitch) const
       {
+      if (noSeq)
+            return;
       if (mscore->playEnabled() && e->type() == Element::NOTE) {
             Note* note = static_cast<Note*>(e);
             int tick = note->chord()->tick();
@@ -2910,9 +2914,9 @@ void MuseScore::setPos(int t)
       TimeSigMap* s = cs->sigmap();
       int bar, beat, tick;
       s->tickValues(t, &bar, &beat, &tick);
-      _positionLabel->setText(tr("Bar %1 Beat %2.%3")
+      _positionLabel->setText(QString("%1:%2:%3")
          .arg(bar + 1,  3, 10, QLatin1Char(' '))
-         .arg(beat + 1, 2, 10, QLatin1Char(' '))
+         .arg(beat + 1, 2, 10, QLatin1Char('0'))
          .arg(tick,     3, 10, QLatin1Char('0'))
          );
       }
@@ -2941,7 +2945,7 @@ void MuseScore::undo()
                   // enter note entry mode
                   cv->postCmd("note-input");
                   }
-            else if (!cs->inputState().noteEntryMode && cv->noteEntryMode()) {
+            else if (!cs->noteEntryMode() && cv->noteEntryMode()) {
                   // leave note entry mode
                   cv->postCmd("escape");
                   }
@@ -2975,7 +2979,7 @@ void MuseScore::redo()
                   // enter note entry mode
                   cv->postCmd("note-input");
                   }
-            else if (!cs->inputState().noteEntryMode && cv->noteEntryMode()) {
+            else if (!cs->noteEntryMode() && cv->noteEntryMode()) {
                   // leave note entry mode
                   cv->postCmd("escape");
                   }
@@ -3920,8 +3924,6 @@ void MuseScore::cmd(QAction* a)
 void MuseScore::endCmd()
       {
       if (cs) {
-            if (cv->noteEntryMode())
-                  cs->moveCursor();
             setPos(cs->inputState().tick());
             updateInputState(cs);
             updateUndoRedo();
@@ -3937,7 +3939,7 @@ void MuseScore::endCmd()
                   excerptsChanged(cs->rootScore());
                   cs->rootScore()->setExcerptsChanged(false);
                   }
-            if (cs->instrumentsChanged()) {
+            if (!noSeq && cs->instrumentsChanged()) {
                   seq->initInstruments();
                   cs->setInstrumentsChanged(false);
                   }
@@ -3949,10 +3951,8 @@ void MuseScore::endCmd()
             QAction* action = getAction("concert-pitch");
             action->setChecked(cs->styleB(ST_concertPitch));
 
-            if (e == 0 && cs->inputState().noteEntryMode)
+            if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
-
-            cs->updateLoopCursors();
             cs->end();
             }
       else {
@@ -4204,27 +4204,22 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "tempo")
             addTempo();
       else if (cmd == "loop") {
-            qDebug("loopAction = %d", loopAction->isChecked());
             if (loop()) {
-                  if(cs->selection().state() == SEL_RANGE)
+                  if (cs->selection().state() == SEL_RANGE)
                         seq->setLoopSelection();
-                  cs->showLoopCursors();
-                  }
-            else {
-                  cs->hideLoopCursors();
                   }
             }
       else if (cmd == "loop-in") {
             seq->setLoopIn();
-            if (!loopAction->isChecked())
-                  loopAction->trigger();
+            loopAction->setChecked(true);
             }
       else if (cmd == "loop-out") {
             seq->setLoopOut();
-            if (!loopAction->isChecked())
-                  loopAction->trigger();
+            loopAction->setChecked(true);
             }
       else if (cmd == "metronome")  // no action
+            ;
+      else if (cmd == "countin")    // no action
             ;
       else if (cmd == "viewmode") {
             if (cs) {
@@ -4236,10 +4231,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         cs->setLayoutMode(LayoutPage);
                         viewModeCombo->setCurrentIndex(0);
                         }
-                  if (loop())
-                        cs->showLoopCursors();
-                  else
-                        cs->hideLoopCursors();
                   cs->doLayout();
                   cs->setUpdateAll(true);
                   }
@@ -4765,13 +4756,33 @@ int main(int argc, char* av[])
 
       QNetworkProxyFactory::setUseSystemConfiguration(true);
 
-      QWidget wi(0);
-      MScore::PDPI = wi.physicalDpiX();         // physical resolution
-      MScore::DPI  = MScore::PDPI;             // logical drawing resolution
+      QScreen* screen = QGuiApplication::primaryScreen();
+      MScore::PDPI = screen->physicalDotsPerInch();        // physical resolution
+      //MScore::DPI  = MScore::PDPI;                       // logical drawing resolution
+      MScore::DPI  = screen->logicalDotsPerInch();         // logical drawing resolution
       MScore::init();                          // initialize libmscore
 
       if (MScore::debugMode)
             qDebug("DPI %f", MScore::DPI);
+
+      qDebug() << "Information for screen:" << screen->name();
+      qDebug() << "  Available geometry:" << screen->availableGeometry().x() << screen->availableGeometry().y() << screen->availableGeometry().width() << "x" << screen->availableGeometry().height();
+      qDebug() << "  Available size:" << screen->availableSize().width() << "x" << screen->availableSize().height();
+      qDebug() << "  Available virtual geometry:" << screen->availableVirtualGeometry().x() << screen->availableVirtualGeometry().y() << screen->availableVirtualGeometry().width() << "x" << screen->availableVirtualGeometry().height();
+      qDebug() << "  Available virtual size:" << screen->availableVirtualSize().width() << "x" << screen->availableVirtualSize().height();
+      qDebug() << "  Depth:" << screen->depth() << "bits";
+      qDebug() << "  Geometry:" << screen->geometry().x() << screen->geometry().y() << screen->geometry().width() << "x" << screen->geometry().height();
+      qDebug() << "  Logical DPI:" << screen->logicalDotsPerInch();
+      qDebug() << "  Logical DPI X:" << screen->logicalDotsPerInchX();
+      qDebug() << "  Logical DPI Y:" << screen->logicalDotsPerInchY();
+      qDebug() << "  Physical DPI:" << screen->physicalDotsPerInch();
+      qDebug() << "  Physical DPI X:" << screen->physicalDotsPerInchX();
+      qDebug() << "  Physical DPI Y:" << screen->physicalDotsPerInchY();
+      qDebug() << "  Physical size:" << screen->physicalSize().width() << "x" << screen->physicalSize().height() << "mm";
+      qDebug() << "  Refresh rate:" << screen->refreshRate() << "Hz";
+      qDebug() << "  Size:" << screen->size().width() << "x" << screen->size().height();
+      qDebug() << "  Virtual geometry:" << screen->virtualGeometry().x() << screen->virtualGeometry().y() << screen->virtualGeometry().width() << "x" << screen->virtualGeometry().height();
+      qDebug() << "  Virtual size:" << screen->virtualSize().width() << "x" << screen->virtualSize().height();
 
       preferences.readDefaultStyle();
 
@@ -4873,10 +4884,10 @@ int main(int argc, char* av[])
       //    fall back to "C" locale
       //
 
-#ifndef Q_OS_WIN
-      setenv("LANG", "C", 1);
-#endif
-      QLocale::setDefault(QLocale(QLocale::C));
+      //#ifndef Q_OS_WIN
+      //setenv("LANG", "C", 1);
+      //#endif
+      //QLocale::setDefault(QLocale(QLocale::C));
 
       if (MScore::debugMode) {
             QStringList sl(QCoreApplication::libraryPaths());

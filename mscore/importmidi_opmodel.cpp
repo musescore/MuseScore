@@ -32,6 +32,7 @@ struct Controller {
       Node *showStaffBracket = nullptr;
       Node *pickupMeasure = nullptr;
       Node *clef = nullptr;
+      Node *removeDrumRests = nullptr;
 
       int trackCount = 0;
       bool isDrumTrack = false;
@@ -181,10 +182,19 @@ OperationsModel::OperationsModel()
       controller->clef = changeClef;
 
 
+      Node *removeDrumRests = new Node;
+      removeDrumRests->name = "Remove rests and ties between notes";
+      removeDrumRests->oper.type = MidiOperation::Type::REMOVE_DRUM_RESTS;
+      removeDrumRests->oper.value = TrackOperations().removeDrumRests;
+      removeDrumRests->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(removeDrumRests));
+      controller->removeDrumRests = removeDrumRests;
+
+
       Node *splitDrums = new Node;
       splitDrums->name = "Split drum set";
       splitDrums->oper.type = MidiOperation::Type::SPLIT_DRUMS;
-      splitDrums->oper.value = TrackOperations().drums.doSplit;;
+      splitDrums->oper.value = TrackOperations().splitDrums.doSplit;;
       splitDrums->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(splitDrums));
       controller->splitDrums = splitDrums;
@@ -193,7 +203,7 @@ OperationsModel::OperationsModel()
       Node *showStaffBracket = new Node;
       showStaffBracket->name = "Show staff bracket";
       showStaffBracket->oper.type = MidiOperation::Type::SHOW_STAFF_BRACKET;
-      showStaffBracket->oper.value = TrackOperations().drums.showStaffBracket;
+      showStaffBracket->oper.value = TrackOperations().splitDrums.showStaffBracket;
       showStaffBracket->parent = splitDrums;
       splitDrums->children.push_back(std::unique_ptr<Node>(showStaffBracket));
       controller->showStaffBracket = showStaffBracket;
@@ -514,9 +524,11 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                         node->oper.value = opers.opers.pickupMeasure; break;
 
                   case MidiOperation::Type::SPLIT_DRUMS:
-                        node->oper.value = opers.opers.drums.doSplit; break;
+                        node->oper.value = opers.opers.splitDrums.doSplit; break;
                   case MidiOperation::Type::SHOW_STAFF_BRACKET:
-                        node->oper.value = opers.opers.drums.showStaffBracket; break;
+                        node->oper.value = opers.opers.splitDrums.showStaffBracket; break;
+                  case MidiOperation::Type::REMOVE_DRUM_RESTS:
+                        node->oper.value = opers.opers.removeDrumRests; break;
                   }
             }
       for (const auto &nodePtr: node->children)
@@ -613,6 +625,8 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   LHRHdoIt->visible = !isDrumTrack;
             if (splitDrums)
                   splitDrums->visible = isDrumTrack;
+            if (removeDrumRests)
+                  removeDrumRests->visible = isDrumTrack;
             if (multipleVoices)
                   multipleVoices->visible = !isDrumTrack;
             if (clef)

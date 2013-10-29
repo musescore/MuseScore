@@ -49,14 +49,6 @@ void ExampleView::updateAll()
       update();
       }
 
-void ExampleView::moveCursor()
-      {
-      }
-
-void ExampleView::updateLoopCursors()
-      {
-      }
-
 void ExampleView::adjustCanvasPosition(const Element* el, bool playBack)
       {
       }

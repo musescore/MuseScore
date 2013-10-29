@@ -3,5 +3,6 @@
 MSCORE=../../build.debug/mtest/guitarpro
 
 cp   $MSCORE/testIrrTuplet.gp4.mscx testIrrTuplet.gp4-ref.mscx
+cp   $MSCORE/slur.gp4.mscx slur.gp4-ref.mscx
 
 

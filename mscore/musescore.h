@@ -342,6 +342,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* lastCmd;
       Shortcut* lastShortcut;
 
+      QAction* countInAction;
       QAction* metronomeAction;
       QAction* loopAction;
       QAction* loopInAction;
@@ -381,7 +382,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showMixer(bool);
       void showSynthControl(bool);
       void showSearchDialog();
-      void helpBrowser() const;
       void helpBrowser(const QUrl&) const;
       void splitWindow(bool horizontal);
       void removeSessionFile();
@@ -610,6 +610,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updatePlayMode();
       bool loop() const         	 { return loopAction->isChecked(); }
       bool metronome() const         { return metronomeAction->isChecked(); }
+      bool countIn() const           { return countInAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
       void loadFiles();
@@ -647,6 +648,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PluginCreator* getPluginCreator()   { return pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
       void showMessage(const QString& s, int timeout);
+      void helpBrowser(const QString = QString()) const;
       };
 
 extern MuseScore* mscore;

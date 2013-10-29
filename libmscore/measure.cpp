@@ -252,7 +252,12 @@ void Measure::dump() const
 void Measure::remove(Segment* el)
       {
 #ifndef NDEBUG
-      Q_ASSERT(!score()->undoRedo());
+      if (score()->undoRedo()) {
+            qDebug("remove segment <%s> in undo/redo", el->subTypeName());
+            abort();
+            }
+
+      // Q_ASSERT(!score()->undoRedo());
       Q_ASSERT(el->type() == SEGMENT);
       if (el->prev()) {
             Q_ASSERT(el->prev()->next() == el);
@@ -288,6 +293,7 @@ struct AcEl {
       qreal x;
       };
 
+#if 0
 //---------------------------------------------------------
 //   layoutChords0
 //---------------------------------------------------------
@@ -306,6 +312,7 @@ void Measure::layoutChords0(Segment* segment, int startTrack)
             layoutCR0(cr, staffMag);
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   layoutCR0
@@ -627,6 +634,7 @@ void Measure::layout2()
                         if (t == 0 && (staffIdx == nn || score()->styleB(ST_measureNumberAllStaffs))) {
                               t = new Text(score());
                               t->setFlag(ELEMENT_ON_STAFF, true);
+                              // t->setFlag(ELEMENT_MOVABLE, false); ??
                               t->setTrack(staffIdx * VOICES);
                               t->setGenerated(true);
                               t->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
@@ -1576,11 +1584,13 @@ void Measure::adjustToLen(Fraction nf)
       int ol = len().ticks();
       int nl = nf.ticks();
 
+      score()->undo(new ChangeMeasureLen(this, nf));
+
       int staves = score()->nstaves();
       int diff   = nl - ol;
 
       if (nl > ol) {
-            // move EndBarLine
+            // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
             for (Segment* s = first(); s; s = s->next()) {
                   if (s->segmentType() & (Segment::SegEndBarLine|Segment::SegTimeSigAnnounce|Segment::SegKeySigAnnounce)) {
                         s->setTick(tick() + nl);
@@ -1597,65 +1607,61 @@ void Measure::adjustToLen(Fraction nf)
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = segment->element(track);
-                        if (e && e->type() == REST) {
-                              ++rests;
-                              rest = static_cast<Rest*>(e);
+                        if (e) {
+                              if (e->type() == REST) {
+                                    ++rests;
+                                    rest = static_cast<Rest*>(e);
+                                    }
+                              else if (e->type() == CHORD)
+                                    ++chords;
                               }
-                        else if (e && e->type() == CHORD)
-                              ++chords;
                         }
                   }
-            if (rests == 1 && chords == 0 && rest->durationType().type() == TDuration::V_MEASURE) {
-                  rest->setDuration(Fraction::fromTicks(nl));
-                  continue;
+            if (rests == 1 && chords == 0) {
+                  if (rest->durationType().type() == TDuration::V_MEASURE) {
+                        rest->setDuration(nf);
+                        continue;
+                        }
+                  else if (_timesig == nf) {
+                        score()->undo(new ChangeChordRestLen(rest, TDuration(TDuration::V_MEASURE)));
+                        continue;
+                        }
                   }
-            if ((_timesig == _len) && (rests == 1) && (chords == 0)) {
-                  rest->setDurationType(TDuration::V_MEASURE);    // whole measure rest
-                  }
-            else {
-                  int strack = staffIdx * VOICES;
-                  int etrack = strack + VOICES;
+            int strack = staffIdx * VOICES;
+            int etrack = strack + VOICES;
 
-                  for (int trk = strack; trk < etrack; ++trk) {
-                        int n = diff;
-                        bool rFlag = false;
-                        if (n < 0)  {
-                              for (Segment* segment = last(); segment;) {
-                                    Segment* pseg = segment->prev();
-                                    Element* e = segment->element(trk);
-                                    if (e && e->isChordRest()) {
-                                          ChordRest* cr = static_cast<ChordRest*>(e);
-                                          if (cr->durationType() == TDuration::V_MEASURE)
-                                                n = nl;
-                                          else
-                                                n += cr->actualTicks();
-                                          score()->undoRemoveElement(e);
-                                          if (segment->isEmpty())
-                                                score()->undoRemoveElement(segment);
-                                          if (n >= 0)
-                                                break;
-                                          }
-                                    segment = pseg;
+            for (int trk = strack; trk < etrack; ++trk) {
+                  int n = diff;
+                  bool rFlag = false;
+                  if (n < 0)  {
+                        for (Segment* segment = last(); segment;) {
+                              Segment* pseg = segment->prev();
+                              Element* e = segment->element(trk);
+                              if (e && e->isChordRest()) {
+                                    ChordRest* cr = static_cast<ChordRest*>(e);
+                                    if (cr->durationType() == TDuration::V_MEASURE)
+                                          n = nl;
+                                    else
+                                          n += cr->actualTicks();
+                                    score()->undoRemoveElement(e);
+                                    if (segment->isEmpty())
+                                          score()->undoRemoveElement(segment);
+                                    if (n >= 0)
+                                          break;
                                     }
-                              rFlag = true;
+                              segment = pseg;
                               }
-                        int voice = trk % VOICES;
-                        if ((n > 0) && (rFlag || voice == 0)) {
-                              // add rest to measure
-                              int rtick = tick() + nl - n;
-                              Segment* seg = undoGetSegment(Segment::SegChordRest, rtick);
-                              TDuration d;
-                              d.setVal(n);
-                              rest = new Rest(score(), d);
-                              rest->setDuration(d.fraction());
-                              rest->setTrack(staffIdx * VOICES + voice);
-                              rest->setParent(seg);
-                              score()->undoAddElement(rest);
-                              }
+                        rFlag = true;
+                        }
+                  int voice = trk % VOICES;
+                  if ((n > 0) && (rFlag || voice == 0)) {
+                        // add rest to measure
+                        int rtick = tick() + nl - n;
+                        int track = staffIdx * VOICES + voice;
+                        score()->setRest(rtick, track, Fraction::fromTicks(n), true, 0);
                         }
                   }
             }
-      score()->undo(new ChangeMeasureLen(this, nf));
       if (diff < 0) {
             //
             //  CHECK: do not remove all slurs
@@ -1695,13 +1701,6 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   xml.tag("stretch", _userStretch);
             if (_noOffset)
                   xml.tag("noOffset", _noOffset);
-#if 0
-            if (_noText && !_noText->generated()) {
-                  xml.stag("MeasureNumber");
-                  _noText->writeProperties(xml);
-                  xml.etag();
-                  }
-#endif
             }
       qreal _spatium = spatium();
       MStaff* mstaff = staves[staff];
@@ -1729,7 +1728,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
             }
       Q_ASSERT(first());
       Q_ASSERT(last());
-      score()->writeSegments(xml, this, strack, etrack, first(), last()->next1(), writeSystemElements, false, false);
+      score()->writeSegments(xml, strack, etrack, first(), last()->next1(), writeSystemElements, false, false);
       xml.etag();
       }
 
@@ -1914,7 +1913,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Spanner* spanner = score()->findSpanner(id);
                   if (spanner) {
                         spanner->setTick2(e.tick());
-                        if(spanner->track2() == -1)
+                        // if (spanner->track2() == -1)
                               spanner->setTrack2(e.track());
                         if (spanner->type() == OTTAVA) {
                               Ottava* o = static_cast<Ottava*>(spanner);
@@ -1925,8 +1924,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                               score()->updateHairpin(hp);
                               }
                         }
-                  else
-                        qDebug("Measure::read(): cannot find spanner %d", id);
+                  else {
+                        // remember "endSpanner" values
+                        SpannerValues sv;
+                        sv.spannerId = id;
+                        sv.track2    = e.track();
+                        sv.tick2     = e.tick();
+                        e.addSpannerValues(sv);
+                        }
                   e.readNext();
                   }
             else if (tag == "HairPin"
@@ -1942,6 +1947,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                   sp->setAnchor(Spanner::ANCHOR_SEGMENT);
                   sp->read(e);
                   score()->addSpanner(sp);
+                  //
+                  // check if we already saw "endSpanner"
+                  //
+                  const SpannerValues* sv = e.spannerValues(sp->id());
+                  if (sv) {
+                        sp->setTick2(sv->tick2);
+                        sp->setTrack2(sv->track2);
+                        }
                   }
             else if (tag == "RepeatMeasure") {
                   RepeatMeasure* rm = new RepeatMeasure(score());
@@ -2135,8 +2148,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Text* noText = new Text(score());
                   noText->read(e);
                   noText->setFlag(ELEMENT_ON_STAFF, true);
-                  if (noText->track() == -1)
-                        noText->setTrack(0);
+                  // noText->setFlag(ELEMENT_MOVABLE, false); ??
+                  noText->setTrack(e.track());
                   noText->setParent(this);
                   staves[noText->staffIdx()]->setNoText(noText);
                   }
@@ -2313,7 +2326,8 @@ bool Measure::setStartRepeatBarLine(bool val)
                   }
             else if (bl && !val) {
                   // barline were we do not need one:
-                  score()->undoRemoveElement(bl);
+                  if (!score()->undoRedo())                       // DEBUG
+                        score()->undoRemoveElement(bl);
                   changed = true;
                   }
             if (bl && val && span) {
@@ -2525,7 +2539,7 @@ void Measure::sortStaves(QList<int>& dst)
       for (Segment* s = first(); s; s = s->next())
             s->sortStaves(dst);
 
-      foreach(Element* e, _el) {
+      foreach (Element* e, _el) {
             if (e->track() == -1)
                   continue;
             int voice    = e->voice();
@@ -3330,7 +3344,6 @@ void Measure::layoutX(qreal stretch)
 //---------------------------------------------------------
 //   layoutStage1
 //    compute multi measure rest break
-//    call layoutChords0
 //---------------------------------------------------------
 
 void Measure::layoutStage1()
@@ -3343,14 +3356,18 @@ void Measure::layoutStage1()
                         setBreakMMRest(true);
                   else if (!breakMultiMeasureRest()) {
                         for (Segment* s = first(); s; s = s->next()) {
-                              int n = s->annotations().size();
-                              for (int i = 0; i < n; ++i) {
-                                    Element* e = s->annotations().at(i);
+                              if (!s->annotations().empty()) {                  // break on any annotation
+                                    setBreakMMRest(true);
+                                    break;
+                                    }
+#if 0
+                              for (Element* e : s->annotations()) {
                                     if (e->type() == REHEARSAL_MARK || e->type() == TEMPO_TEXT) {
                                           setBreakMMRest(true);
                                           break;
                                           }
                                     }
+#endif
                               if (breakMultiMeasureRest())      // optimize
                                     break;
                               }
@@ -3363,7 +3380,9 @@ void Measure::layoutStage1()
                   Element* e = segment->element(track);
 
                   if (e && !e->generated()) {
-                        if (segment->segmentType() & (Segment::SegKeySig | Segment::SegStartRepeatBarLine | Segment::SegTimeSig))
+                        if (segment->segmentType() & (Segment::SegStartRepeatBarLine))
+                              setBreakMMRest(true);
+                        if (segment->segmentType() & (Segment::SegKeySig | Segment::SegTimeSig) && tick())
                               setBreakMMRest(true);
                         else if (segment->segmentType() == Segment::SegClef) {
                               if (segment->tick() == endTick()) {
@@ -3371,36 +3390,39 @@ void Measure::layoutStage1()
                                     if (m)
                                           m->setBreakMMRest(true);
                                     }
-                              else
+                              else if (tick())
                                     setBreakMMRest(true);
                               }
                         }
 
-                  if (segment->segmentType() == Segment::SegChordRest)
-                        layoutChords0(segment, staffIdx * VOICES);
+                  if (segment->segmentType() == Segment::SegChordRest) {
+                        Staff* staff     = score()->staff(staffIdx);
+                        qreal staffMag  = staff->mag();
+
+                        int endTrack = track + VOICES;
+                        for (int t = track; t < endTrack; ++t) {
+                              ChordRest* cr = static_cast<ChordRest*>(segment->element(t));
+                              if (!cr)
+                                    continue;
+                              layoutCR0(cr, staffMag);
+                              }
+                        }
                   }
             }
 
-      if (!breakMultiMeasureRest()) {
-            for (auto i = score()->spanner().lower_bound(tick()); i != score()->spanner().upper_bound(tick()); ++i) {
-               Spanner* sp = i->second;
-               if (sp->type() == Element::VOLTA)
-                     setBreakMMRest(true);
-                     break;
-               }
-            }
-      if (!breakMultiMeasureRest() && this != score()->lastMeasure()) {
-            auto i = score()->spanner().upper_bound(tick());
-            std::reverse_iterator<std::map<int,Spanner*>::const_iterator> revit (i);
-            for (; revit != score()->spanner().rend(); revit++) {
-                  Spanner* sp = revit->second;
-                  if (sp->type() == Element::VOLTA)
-                        if(sp->tick2() == tick())
-                              setBreakMMRest(true);
-                        break;
+      if (!score()->styleB(ST_createMultiMeasureRests) || breakMultiMeasureRest())
+            return;
+
+      // break mm rest on any spanner
+#if 0
+      for (auto i : sl) {
+            Spanner* sp = i.value;
+            if (sp->type() == Element::VOLTA) {
+                  setBreakMMRest(true);
+                  break;
                   }
             }
-
+#endif
       MeasureBase* mb = prev();
       if (mb && mb->type() == Element::MEASURE) {
             Measure* pm = static_cast<Measure*>(mb);

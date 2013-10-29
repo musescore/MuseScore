@@ -484,6 +484,7 @@ void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrac
                s->track() >= startTrack && s->track() < endTrack) {
                   Spanner* ns = static_cast<Spanner*>(s->clone());
                   ns->setTick(ns->tick() - first->tick());
+                  ns->setTick2(ns->tick2() - first->tick());
                   spanner.push_back(ns);
                   }
             }
@@ -509,6 +510,7 @@ bool ScoreRange::write(int track, Measure* m) const
       Score* score = m->score();
       for (Spanner* s : spanner) {
             s->setTick(s->tick() + m->tick());
+            s->setTick2(s->tick2() + m->tick());
             score->undoAddElement(s);
             }
       for (const Annotation& a : annotations) {

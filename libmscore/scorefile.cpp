@@ -58,6 +58,17 @@ namespace Ms {
 
 static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSystemElements)
       {
+      //
+      // special case multi measure rest
+      //
+      if (m->score()->styleB(ST_createMultiMeasureRests)) {
+            if (m->type() == Element::MEASURE) {
+                  Measure* mm = static_cast<Measure*>(m);
+                  Segment* s = mm->findSegment(Segment::SegEndBarLine, mm->endTick());
+                  if (s == 0)
+                        mm->createEndBarLines();
+                  }
+            }
       if (m->type() == Element::MEASURE || staffIdx == 0)
            m->write(xml, staffIdx, writeSystemElements);
       if (m->type() == Element::MEASURE)
@@ -70,6 +81,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
 
 void Score::write(Xml& xml, bool selectionOnly)
       {
+      clearSpannerIds();
       xml.stag("Score");
 
 #ifdef OMR
@@ -1175,7 +1187,7 @@ qDebug("createRevision\n");
 //          can be zero
 //---------------------------------------------------------
 
-void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
+void Score::writeSegments(Xml& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
       for (int track = strack; track < etrack; ++track) {
@@ -1216,26 +1228,32 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                   if (segment->segmentType() & (Segment::SegChordRest)) {
                         for (auto i : _spanner.map()) {     // TODO: dont search whole list
                               Spanner* s = i.second;
-                              if (s->track() != track || s->generated())
+                              if (s->generated())
                                     continue;
 
-                              int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
-                              if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
-                                    if (needTick) {
-                                          xml.tag("tick", segment->tick() - xml.tickDiff);
-                                          xml.curTick = segment->tick();
-                                          needTick = false;
+                              if (s->track() == track) {
+                                    int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
+                                    if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
+                                          if (needTick) {
+                                                xml.tag("tick", segment->tick() - xml.tickDiff);
+                                                xml.curTick = segment->tick();
+                                                needTick = false;
+                                                }
+                                          if (s->id() == -1)
+                                                s->setId(++xml.spannerId);
+                                          s->write(xml);
                                           }
-                                    s->setId(++xml.spannerId);
-                                    s->write(xml);
                                     }
-                              if (s->tick2() == segment->tick() && (!clip || s->tick() >= fs->tick())) {
+                              if (s->tick2() == segment->tick()
+                                 && (s->track2() == track || s->track2() == -1)
+                                 && (!clip || s->tick() >= fs->tick())) {
                                     if (needTick) {
                                           xml.tag("tick", segment->tick() - xml.tickDiff);
                                           xml.curTick = segment->tick();
                                           needTick = false;
                                           }
-                                    Q_ASSERT(s->id() != -1);
+                                    if (s->id() == -1)
+                                          s->setId(++xml.spannerId);
                                     xml.tagE(QString("endSpanner id=\"%1\"").arg(s->id()));
                                     }
                               }
@@ -1267,15 +1285,12 @@ void Score::writeSegments(Xml& xml, const Measure* m, int strack, int etrack,
                         cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
-#if 0 // TODO MM
-                  if ((segment->segmentType() == Segment::SegEndBarLine) && m && (m->multiMeasure() > 0)) {
-                        xml.stag("BarLine");
-                        xml.tag("subtype", m->endBarLineType());
-                        xml.tag("visible", m->endBarLineVisible());
-                        xml.etag();
+                  Measure* m = segment->measure();
+                  if ((segment->segmentType() == Segment::SegEndBarLine) && (m->mmRestCount() < 0)) {
+                        BarLine* bl = static_cast<BarLine*>(e);
+                        bl->setBarLineType(m->endBarLineType());
+                        bl->setVisible(m->endBarLineVisible());
                         }
-                  else
-#endif
                   e->write(xml);
                   segment->write(xml);    // write only once
                   }
@@ -1341,5 +1356,14 @@ Tuplet* Score::searchTuplet(XmlReader& /*e*/, int /*id*/)
       return 0;
       }
 
+//---------------------------------------------------------
+//   clearSpannerIds
+//---------------------------------------------------------
+
+void Score::clearSpannerIds()
+      {
+      for (auto i : _spanner.map())
+            i.second->setId(-1);
+      }
 }
 

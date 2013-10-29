@@ -148,6 +148,10 @@ Seq::Seq()
       playTime  = 0;
       metronomeVolume = 0.3;
 
+      inCountIn         = false;
+      countInPlayPos    = countInEvents.cbegin();
+      countInPlayTime   = 0;
+
       meterValue[0]     = 0.0;
       meterValue[1]     = 0.0;
       meterPeakValue[0] = 0.0;
@@ -542,9 +546,9 @@ void Seq::processMessages()
 //   metronome
 //---------------------------------------------------------
 
-void Seq::metronome(unsigned n, float* p)
+void Seq::metronome(unsigned n, float* p, bool force)
       {
-      if (!mscore->metronome()) {
+      if (!mscore->metronome() && !force) {
             tickRest = 0;
             tackRest = 0;
             return;
@@ -575,6 +579,57 @@ void Seq::metronome(unsigned n, float* p)
       }
 
 //---------------------------------------------------------
+//   addCountInClicks
+//---------------------------------------------------------
+
+void Seq::addCountInClicks()
+      {
+      int         plPos       = playPos->first;
+      Measure*    m           = cs->tick2measure(plPos);
+      int         msrTick     = m->tick();
+      Fraction    ts          = cs->sigmap()->timesig(msrTick).nominal();
+      int         numerator   = ts.numerator();
+      int         tw          = MScore::division * 4 / ts.denominator();
+      NPlayEvent  event;
+      int         tick;
+
+      // if time sig is 3*n/d, convert to 3d units (6/8, 9/8, 6/4, ...)
+      if (numerator > 3 && numerator % 3 == 0) {
+            numerator   /= 3;
+            tw          *= 3;
+            }
+      int numOfClicks = numerator;                          // default to a full measure of 'clicks'
+      int lastPause   = tw;                                 // the number of ticks to wait after the last 'click'
+      // if not at the beginning of a measure, add clicks for the initial measure part
+      if (msrTick < plPos) {
+            int delta    = plPos - msrTick;
+            int addClick = (delta + tw-1) / tw;             // round num. of clicks up
+            numOfClicks += addClick;
+            lastPause    = delta - (addClick-1) * tw;       // anything after last click time is final pause
+            }
+      // or if measure not complete (anacrusis), add clicks for the missing measure part
+      else if (m->ticks() < tw * numerator) {
+            int delta    = tw*numerator - m->ticks();
+            int addClick = (delta + tw-1) / tw;
+            numOfClicks += addClick;
+            lastPause    = delta - (addClick-1) * tw;
+            }
+      // add count-in events
+      for (int i = tick = 0; i < numOfClicks; i++, tick += tw) {
+            event.setType( (i % numerator) == 0 ? ME_TICK1 : ME_TICK2);
+            countInEvents.insert( std::pair<int,NPlayEvent>(tick, event));
+            }
+      // add 1 empty event at the end to wait after the last click
+      tick += lastPause - tw;
+      event.setType(ME_INVALID);
+      event.setPitch(0);
+      countInEvents.insert( std::pair<int,NPlayEvent>(tick, event));
+      // initialize play parameters to count-in events
+      countInPlayPos  = countInEvents.cbegin();
+      countInPlayTime = 0;
+      }
+
+//---------------------------------------------------------
 //   process
 //---------------------------------------------------------
 
@@ -586,6 +641,10 @@ void Seq::process(unsigned n, float* buffer)
       if (driverState != state) {
             if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY) {
                   state = TRANSPORT_PLAY;
+                  if (mscore->countIn() && cs->playMode() == PLAYMODE_SYNTHESIZER) {
+                        countInEvents.clear();
+                        inCountIn = true;
+                        }
                   emit toGui('1');
                   }
             else if (state == TRANSPORT_PLAY && driverState == TRANSPORT_STOP) {
@@ -620,35 +679,65 @@ void Seq::process(unsigned n, float* buffer)
       if (state == TRANSPORT_PLAY) {
             if(!cs)
                   return;
+            EventMap::const_iterator* pPlayPos = &playPos;
+            EventMap* pEvents   = &events;
+            int*      pPlayTime = &playTime;
+            //
+            // in count-in?
+            //
+            if (inCountIn) {
+                  if (countInEvents.size() == 0)
+                        addCountInClicks();
+                  pEvents   = &countInEvents;
+                  pPlayPos  = &countInPlayPos;
+                  pPlayTime = &countInPlayTime;
+                  }
             //
             // play events for one segment
             //
             unsigned framePos = 0;
-            int endTime = playTime + frames;
-            for (; playPos != events.cend();) {
-                  int f = cs->utick2utime(playPos->first) * MScore::sampleRate;
-                  if (f >= endTime)
-                        break;
-                  int n = f - playTime;
-                  if (n < 0) {
-                        qDebug("%d:  %d - %d\n", playPos->first, f, playTime);
-						n = 0;
+            int endTime = *pPlayTime + frames;
+            for ( ; *pPlayPos != pEvents->cend(); ) {
+                  int n;
+                  if (inCountIn) {
+                        qreal bps = curTempo();
+                        qreal tickssec = bps * MScore::division;
+                        qreal secs = (*pPlayPos)->first / tickssec;
+                        int f = secs * MScore::sampleRate;
+                        if (f >= endTime)
+                              break;
+                        n = f - *pPlayTime;
+                        if (n < 0) {
+                              qDebug("Count-in: %d:  %d - %d\n", (*pPlayPos)->first, f, *pPlayTime);
+                              n = 0;
+                              }
                         }
-                  if (mscore->loop()) {
-                        int tickLoop = cs->repeatList()->tick2utick(cs->loopOutTick());
-                        if (tickLoop < cs->lastMeasure()->endTick()-1)
-                              if (playPos->first >= tickLoop) {
-                                    qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d", playPos->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), tickLoop, playTime);
-                                    emit toGui('3');   // Exit this function to avoid segmentation fault in Scoreview
-                                    return;
-                                    }
+                  else {
+                        int f = cs->utick2utime(playPos->first) * MScore::sampleRate;
+                        if (f >= endTime)
+                              break;
+                        n = f - *pPlayTime;
+                        if (n < 0) {
+                              qDebug("%d:  %d - %d\n", (*pPlayPos)->first, f, *pPlayTime);
+                              n = 0;
+                              }
+                        if (mscore->loop()) {
+                              int tickLoop = cs->repeatList()->tick2utick(cs->loopOutTick());
+                              if (tickLoop < cs->lastMeasure()->endTick()-1)
+                                    if ((*pPlayPos)->first >= tickLoop) {
+                                          qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d",
+                                                (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), tickLoop, *pPlayTime);
+                                          emit toGui('3');   // Exit this function to avoid segmentation fault in Scoreview
+                                          return;
+                                          }
+                              }
                         }
                   if (n) {
                         if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
-                              metronome(n, p);
+                              metronome(n, p, inCountIn);
                               _synti->process(n, p);
                               p += n * 2;
-                              playTime  += n;
+                              *pPlayTime  += n;
                               frames    -= n;
                               framePos  += n;
                               }
@@ -663,28 +752,28 @@ void Seq::process(unsigned n, float* buffer)
                                           *p++ = pcm[0][i];
                                           *p++ = pcm[1][i];
                                           }
-                                    playTime += rn;
+                                    *pPlayTime += rn;
                                     frames   -= rn;
                                     framePos += rn;
                                     n        -= rn;
                                     }
                               }
                         }
-                  const NPlayEvent& event = playPos->second;
+                  const NPlayEvent& event = (*pPlayPos)->second;
                   playEvent(event);
                   if (event.type() == ME_TICK1)
                         tickRest = tickLength;
                   else if (event.type() == ME_TICK2)
                         tackRest = tackLength;
                   mutex.lock();
-                  ++playPos;
+                  ++(*pPlayPos);
                   mutex.unlock();
                   }
             if (frames) {
                   if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
-                        metronome(frames, p);
+                        metronome(frames, p, inCountIn);
                         _synti->process(frames, p);
-                        playTime += frames;
+                        *pPlayTime += frames;
                         }
                   else {
                         int n = frames;
@@ -698,15 +787,19 @@ void Seq::process(unsigned n, float* buffer)
                                     *p++ = pcm[0][i];
                                     *p++ = pcm[1][i];
                                     }
-                              playTime += rn;
-                              frames   -= rn;
-                              framePos += rn;
-                              n        -= rn;
+                              *pPlayTime += rn;
+                              frames     -= rn;
+                              framePos   += rn;
+                              n          -= rn;
                               }
                         }
                   }
-            if (playPos == events.cend())
-                  _driver->stopTransport();
+            if (*pPlayPos == pEvents->cend()) {
+                  if (inCountIn)
+                        inCountIn = false;
+                  else
+                        _driver->stopTransport();
+                  }
             }
       else {
             _synti->process(frames, p);
@@ -837,7 +930,6 @@ void Seq::seek(int utick)
       if (cs == 0)
             return;
 
-      qDebug ("seek : utick=%d",utick);
       if (events.empty() || cs->playlistDirty() || playlistChanged)
             collectEvents();
       int tick     = cs->repeatList()->utick2tick(utick);
@@ -1162,7 +1254,7 @@ void Seq::heartBeatTimeout()
                   }
             }
 
-      if (state != TRANSPORT_PLAY)
+      if (state != TRANSPORT_PLAY || inCountIn)
             return;
       int endTime = playTime;
 
@@ -1255,13 +1347,11 @@ void Seq::setLoopIn()
                   --ppos;                 // We have to go back one pos to get the correct note that has just been played
             tick = cs->repeatList()->utick2tick(ppos->first);
             }
-      else {
+      else
             tick = cs->pos();             // Otherwise, use the selected note.
-            }
       if (tick >= cs->loopOutTick())   // If In pos >= Out pos, reset Out pos to end of score
-            cs->setLoopOutTick(-1);
-      cs->setLoopInTick(tick);
-      qDebug ("seq::setLoopIn() : tick = %d\n",tick);
+            cs->setPos(POS::RIGHT, cs->lastMeasure()->endTick() - 1);
+      cs->setPos(POS::LEFT, tick);
       }
 
 //---------------------------------------------------------
@@ -1274,13 +1364,11 @@ void Seq::setLoopOut()
       if (state == TRANSPORT_PLAY) {    // If in playback mode, set the Out position where note is being played
             tick = cs->repeatList()->utick2tick(playPos->first);
             }
-      else {
+      else
             tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
-            }
       if (tick <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
-            cs->setLoopInTick(-1);
-      cs->setLoopOutTick(tick);
-      qDebug ("seq::setLoopOut() : loopOutPos = %d  ;  cs->pos() = %d  + cs->inputState().ticks() = %d\n", tick, cs->pos(), cs->inputState().ticks());
+            cs->setPos(POS::LEFT, 0);
+      cs->setPos(POS::RIGHT, tick);
       if (state == TRANSPORT_PLAY)
             guiToSeq(SeqMsg(SEQ_SEEK, tick));
       }
@@ -1293,7 +1381,5 @@ void Seq::setLoopSelection()
       {
       cs->setLoopInTick(cs->selection().tickStart());
       cs->setLoopOutTick(cs->selection().tickEnd());
-      cs->updateLoopCursors();
-      qDebug ("setLoopSelection : loopInTick = %d  loopOutTick = %d\n",cs->selection().tickStart(), cs->selection().tickEnd());
       }
 }

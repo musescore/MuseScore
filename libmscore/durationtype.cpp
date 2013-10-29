@@ -507,5 +507,15 @@ void TDuration::print() const
       qDebug("   %s,dots=%d)", s, _dots);
       }
 
+//---------------------------------------------------------
+//   setType
+//---------------------------------------------------------
+
+void TDuration::setType(DurationType t)
+      {
+      _val = t;
+      if (_val == V_MEASURE)
+            _dots = 0;
+      }
 }
 

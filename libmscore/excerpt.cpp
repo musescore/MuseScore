@@ -185,7 +185,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   nm->setIrregular(m->irregular());
                   nm->setNo(m->no());
                   nm->setNoOffset(m->noOffset());
-                  nm->setBreakMultiMeasureRest(m->breakMultiMeasureRest());
+                  nm->setBreakMultiMeasureRest(m->getBreakMultiMeasureRest());
                   nm->setEndBarLineType(
                      m->endBarLineType(),
                      m->endBarLineGenerated(),
@@ -216,11 +216,12 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     if ((e->track() == srcTrack && track != -1)
                                        || (e->systemFlag() && srcTrack == 0)
                                        ) {
-                                          Element* ne = e->clone();
+                                          Element* ne = e->linkedClone();
                                           ne->setUserOff(QPointF());  // reset user offset as most likely
                                                                       // it will not fit
                                           ne->setReadPos(QPointF());
                                           ne->setTrack(track == -1 ? 0 : track);
+                                          ne->setScore(score);
                                           ns->add(ne);
                                           }
                                     }
@@ -437,6 +438,28 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               }
                         }
                   }
+            }
+
+      for (auto i : score->spanner()) {
+            Spanner* s = i.second;
+            int staffIdx = s->staffIdx();
+            int dstTrack = -1;
+            int dstTrack2 = -1;
+            if(s->type() != Element::VOLTA) {
+                  //export other spanner if staffidx matches
+                  if (srcStaffIdx == staffIdx) {
+                        dstTrack = dstStaffIdx * VOICES + s->voice();
+                        dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+                        }
+                  }
+            if (dstTrack == -1)
+                  continue;
+            Spanner* ns = static_cast<Spanner*>(s->linkedClone());
+            ns->setScore(score);
+            ns->setParent(0);
+            ns->setTrack(dstTrack);
+            ns->setTrack2(dstTrack2);
+            score->addSpanner(ns);
             }
       }
 

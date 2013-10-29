@@ -554,7 +554,7 @@ void Score::doLayout()
 
       if (idx != _symIdx) {
             _symIdx = idx;
-            _noteHeadWidth  = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
+            _noteHeadWidth = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
             }
 
       if (layoutFlags & LAYOUT_FIX_TICKS)
@@ -692,8 +692,9 @@ void Score::doLayout()
                   if (sp->tick() == -1) {
                         qDebug("bad spanner id %d %s %d - %d", sp->id(), sp->name(), sp->tick(), sp->tick2());
                         }
-                  else
+                  else {
                         sp->layout();
+                        }
                   }
             }
 
@@ -899,6 +900,47 @@ System* Score::getNextSystem(bool isFirstSystem, bool isVbox)
       }
 
 //---------------------------------------------------------
+// validMMRestMeasure
+//    return true if this might be a measure in a
+//    multi measure rest
+//---------------------------------------------------------
+
+static bool validMMRestMeasure(Measure* m)
+      {
+      if (!m->isEmpty())
+            return false;
+      auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
+      if (!sl.empty())
+            return false;
+      for (Segment* s = m->first(); s; s = s->next()) {
+            for (Element* e : s->annotations()) {
+                  if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT)
+                        return false;
+                  }
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//  breakMultiMeasureRest
+//    return true if this measure should start a new
+//    multi measure rest
+//---------------------------------------------------------
+
+static bool breakMultiMeasureRest(Measure* m)
+      {
+      if (m->breakMultiMeasureRest())
+            return true;
+      for (Segment* s = m->first(); s; s = s->next()) {
+            for (Element* e : s->annotations()) {
+                  if (e->type() == Element::REHEARSAL_MARK || e->type() == Element::TEMPO_TEXT)
+                        return true;
+                  }
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   createMMRests
 //---------------------------------------------------------
 
@@ -912,16 +954,16 @@ void Score::createMMRests()
             Measure* lm = nm;
             int n = 0;
             Fraction len;
-            while (nm->isEmpty()) {
+            while (validMMRestMeasure(nm)) {
                   m->setMMRestCount(0);
                   MeasureBase* mb = _showVBox ? nm->next() : nm->nextMeasure();
-                  if (nm->breakMultiMeasureRest() && n)
+                  if (breakMultiMeasureRest(nm) && n)
                         break;
                   ++n;
                   len += nm->len();
                   lm = nm;
                   nm = static_cast<Measure*>(mb);
-                  if (!mb || (mb->type() != Element::MEASURE))
+                  if (!nm || (nm->type() != Element::MEASURE))
                         break;
                   }
 
@@ -930,15 +972,17 @@ void Score::createMMRests()
                   // create a multi measure rest from m to lm (inclusive)
                   // attach the measure to m
                   //
+
                   for (Measure* mm = m->nextMeasure(); mm; mm = mm->nextMeasure()) {
                         mm->setMMRestCount(-1);
                         if (mm == lm)
                               break;
                         }
+
                   Measure* mmr;
                   if (m->mmRest()) {
                         mmr = m->mmRest();
-                        if (m->len() != len) {
+                        if (mmr->len() != len) {
                               Segment* s = mmr->findSegment(Segment::SegEndBarLine, mmr->endTick());
                               mmr->setLen(len);
                               if (s)
@@ -1026,13 +1070,24 @@ void Score::createMMRests()
                                     }
                               }
                         }
+                  //
+                  // check for rehearsal mark and tempo text
+                  //
+                  cs = m->findSegment(Segment::SegChordRest, m->tick());
+                  for (Element* e : cs->annotations()) {
+                        if (e->type() == Element::REHEARSAL_MARK || e->type() == Element::TEMPO_TEXT) {
+                              s->add(e->clone());
+                              break;
+                              }
+                        }
+
                   mmr->setNext(nm);
                   mmr->setPrev(m->prev());
                   m->setMMRest(mmr);
                   m = lm;
                   }
             else if (m->mmRest()) {
-                  delete m->mmRest();
+//                  delete m->mmRest();   // referenced by undo/redo ?
                   m->setMMRest(0);
                   }
             }
@@ -1457,7 +1512,11 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                   if (st == Segment::SegEndBarLine)
                         continue;
                   if (st == Segment::SegStartRepeatBarLine && m != sm) {
-                        undoRemoveElement(seg);
+                        if (!undoRedo())
+                              undoRemoveElement(seg);
+                        else
+                              qDebug("remove repeat segment in undo/redo");
+                        continue;
                         }
                   for (int staffIdx = 0;  staffIdx < nstaves(); ++staffIdx) {
                         Element* el = seg->element(staffIdx * VOICES);
@@ -1886,94 +1945,56 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
             //
             //    compute repeat bar lines
             //
-//            if (!undoRedo()) {
-                  bool firstMeasure = true;
-                  const QList<MeasureBase*>& ml = system->measures();
-                  MeasureBase* lmb = ml.back();
-#if 0 // MM
-                  if (lmb->type() == Element::MEASURE) {
-                        if (static_cast<Measure*>(lmb)->multiMeasure() > 0) {
-                              for (;;lmb = lmb->next()) {
-                                    if (lmb->next() == 0)
-                                          break;
-                                    if ((lmb->next()->type() == Element::MEASURE) && ((Measure*)(lmb->next()))->multiMeasure() >= 0)
-                                          break;
-                                    }
-                              }
-                        }
-#endif
-                  for (MeasureBase* mb = ml.front(); mb; mb = mb->next()) {
-                        if (mb->type() != Element::MEASURE) {
-                              if (mb == lmb)
-                                    break;
-                              continue;
-                              }
-                        Measure* m = static_cast<Measure*>(mb);
-                        // first measure repeat?
-                        bool fmr = firstMeasure && (m->repeatFlags() & RepeatStart);
+            bool firstMeasure = true;
+            const QList<MeasureBase*>& ml = system->measures();
+            MeasureBase* lmb = ml.back();
 
-                        if (mb == ml.back()) {       // last measure in system?
-                              //
-                              // if last bar has a courtesy key signature,
-                              // create a double bar line as end bar line
-                              //
-                              BarLineType bl = hasCourtesyKeysig ? DOUBLE_BAR : NORMAL_BAR;
-                              if (m->repeatFlags() & RepeatEnd)
-                                    m->setEndBarLineType(END_REPEAT, true);
-                              else if (m->endBarLineGenerated())
-                                    m->setEndBarLineType(bl, true);
-                              if (m->setStartRepeatBarLine(fmr))
-                                    m->setDirty();
-                              }
-                        else {
-                              MeasureBase* mb = m->next();
-                              while (mb && mb->type() != Element::MEASURE && (mb != ml.back()))
-                                    mb = mb->next();
+            for (MeasureBase* mb : ml) {
+                  if (mb->type() != Element::MEASURE)
+                        continue;
+                  Measure* m = static_cast<Measure*>(mb);
+                  // first measure repeat?
+                  bool fmr = firstMeasure && (m->repeatFlags() & RepeatStart);
 
-                              Measure* nm = 0;
-                              if (mb && mb->type() == Element::MEASURE)
-                                    nm = static_cast<Measure*>(mb);
-
-                              needRelayout |= m->setStartRepeatBarLine(fmr);
-                              if (m->repeatFlags() & RepeatEnd) {
-                                    if (nm && (nm->repeatFlags() & RepeatStart))
-                                          m->setEndBarLineType(END_START_REPEAT, true);
-                                    else
-                                          m->setEndBarLineType(END_REPEAT, true);
-                                    }
-                              else if (nm && (nm->repeatFlags() & RepeatStart))
-                                    m->setEndBarLineType(START_REPEAT, true);
-                              else if (m->endBarLineGenerated())
-                                    m->setEndBarLineType(NORMAL_BAR, true);
-                              }
-                        if (m->createEndBarLines())
+                  if (mb == lmb) {       // last measure in system?
+                        //
+                        // if last bar has a courtesy key signature,
+                        // create a double bar line as end bar line
+                        //
+                        BarLineType bl = hasCourtesyKeysig ? DOUBLE_BAR : NORMAL_BAR;
+                        if (m->repeatFlags() & RepeatEnd)
+                              m->setEndBarLineType(END_REPEAT, true);
+                        else if (m->endBarLineGenerated())
+                              m->setEndBarLineType(bl, true);
+                        if (m->setStartRepeatBarLine(fmr))
                               m->setDirty();
-                        firstMeasure = false;
-                        if (mb == lmb)
-                              break;
                         }
-#if 0 // MM
-                  foreach (MeasureBase* mb, ml) {
-                        if (mb->type() != Element::MEASURE)
-                              continue;
-                        Measure* m = static_cast<Measure*>(mb);
-                        int nn = m->multiMeasure() - 1;
-                        if (nn > 0) {
-                              // skip to last rest measure of multi measure rest
-                              Measure* mm = m;
-                              for (int k = 0; k < nn; ++k)
-                                    mm = mm->nextMeasure();
-                              if (mm) {
-                                    m->setMmEndBarLineType(mm->endBarLineType());
-                                    if (m->createEndBarLines())
-                                          m->setDirty();
-                                    }
-                              }
-                        }
-#endif
+                  else {
+                        MeasureBase* mb = m->next();
+                        while (mb && mb->type() != Element::MEASURE && (mb != lmb))
+                              mb = mb->next();
 
+                        Measure* nm = 0;
+                        if (mb && mb->type() == Element::MEASURE)
+                              nm = static_cast<Measure*>(mb);
+
+                        needRelayout |= m->setStartRepeatBarLine(fmr);
+                        if (m->repeatFlags() & RepeatEnd) {
+                              if (nm && (nm->repeatFlags() & RepeatStart))
+                                    m->setEndBarLineType(END_START_REPEAT, true);
+                              else
+                                    m->setEndBarLineType(END_REPEAT, true);
+                              }
+                        else if (nm && (nm->repeatFlags() & RepeatStart))
+                              m->setEndBarLineType(START_REPEAT, true);
+                        else if (m->endBarLineGenerated())
+                              m->setEndBarLineType(NORMAL_BAR, true);
+                        }
+                  if (m->createEndBarLines())
+                        m->setDirty();
+                  firstMeasure = false;
                   }
-//            }
+            }
 
       minWidth          = 0.0;
       qreal totalWeight = 0.0;
@@ -2135,7 +2156,7 @@ void Score::layoutLinear()
       qreal xo = 0;
 
       Measure* fm = firstMeasure();
-      for(MeasureBase* m = first(); m != fm ; m = m->next()) {
+      for (MeasureBase* m = first(); m != fm ; m = m->next()) {
             if (m->type() == Element::HBOX)
                   xo += point(static_cast<Box*>(m)->boxWidth());
             }
@@ -2152,17 +2173,22 @@ void Score::layoutLinear()
                   curMeasure = curMeasure->next();
                   continue;
                   }
+            if (styleB(ST_createMultiMeasureRests) && t == Element::MEASURE) {
+                  Measure* m = static_cast<Measure*>(mb);
+                  if (m->hasMMRest())
+                        mb = m->mmRest();
+                  }
             mb->setSystem(system);
             system->measures().append(mb);
             }
       if (system->measures().isEmpty())
             return;
-      addSystemHeader(firstMeasure(), true);
-      removeGeneratedElements(firstMeasure(), lastMeasure());
+      addSystemHeader(firstMeasureMM(), true);
+      removeGeneratedElements(firstMeasureMM(), lastMeasureMM());
 
       QPointF pos(0.0, 0.0);
       bool isFirstMeasure = true;
-      foreach(MeasureBase* mb, system->measures()) {
+      foreach (MeasureBase* mb, system->measures()) {
             qreal w = 0.0;
             if (mb->type() == Element::MEASURE) {
                   if(isFirstMeasure) {

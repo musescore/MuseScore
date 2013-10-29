@@ -54,6 +54,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       setScore(0);
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
+      countInButton->setDefaultAction(getAction("countin"));
       metronomeButton->setDefaultAction(getAction("metronome"));
       loopButton->setDefaultAction(getAction("loop"));
       loopInButton->setDefaultAction(getAction("loop-in"));
@@ -62,12 +63,12 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
-      connect(relTempoBox,     SIGNAL(editingFinished()),  SLOT(relTempoChanged()));
+      connect(relTempoBox,  SIGNAL(editingFinished()),        SLOT(relTempoChanged()));
       connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));
       }
 
 PlayPanel::~PlayPanel()
-{
+      {
       QSettings settings;
       // if widget is visible, store geometry and pos into settings
       // if widget is not visible/closed, pos is not reliable (and anyway
@@ -76,7 +77,7 @@ PlayPanel::~PlayPanel()
             settings.setValue("playPanel/pos", pos());
             settings.setValue("playPanel/geometry", saveGeometry());
             }
-}
+      }
 
 //---------------------------------------------------------
 //   relTempoChanged
@@ -149,7 +150,7 @@ void PlayPanel::setScore(Score* s)
             setTempo(cs->tempomap()->tempo(0));
             setRelTempo(cs->tempomap()->relTempo());
             setEndpos(cs->repeatList()->ticks());
-            int tick = cs->playPos();
+            int tick = cs->pos(POS::CURRENT);
             heartBeat(tick, tick, 0);
             }
       else {
@@ -217,7 +218,7 @@ void PlayPanel::volumeChanged(double val, int)
 
 void PlayPanel::setPos(int utick)
       {
-      if(!cs)
+      if (!cs)
             return;
       if (cachedTickPosition != utick)
             emit posChange(utick);

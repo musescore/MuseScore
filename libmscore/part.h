@@ -59,6 +59,9 @@ class Part : public QObject {
       void setId(const QString& s)              { _id = s; }
       QString id() const                        { return _id; }
 
+      int startTrack() const;
+      int endTrack() const;
+
       QTextDocumentFragment longName(int tick = 0) const;
       QTextDocumentFragment shortName(int tick = 0) const;
       QString instrumentName(int tick = 0) const;

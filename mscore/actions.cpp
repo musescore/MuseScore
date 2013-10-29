@@ -869,7 +869,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-fretframe",
-         QT_TRANSLATE_NOOP("action","Insert Fret Diagram Frame"),
+         QT_TRANSLATE_NOOP("action","Insert Fretboard Diagram Frame"),
          fframe_ICON
          ),
       Shortcut(
@@ -2078,6 +2078,15 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Toggle metronome playback"),
          QT_TRANSLATE_NOOP("action","Play metronome during playback"),
          metronome_ICON
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
+         0,
+         "countin",
+         QT_TRANSLATE_NOOP("action","Count-in"),
+         QT_TRANSLATE_NOOP("action","Toggle count-in playback"),
+         QT_TRANSLATE_NOOP("action","Play count-in at playback start"),
+         countin_ICON
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,

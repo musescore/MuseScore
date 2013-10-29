@@ -25,6 +25,7 @@
 #include "libmscore/audio.h"
 #include "scoreview.h"
 #include "omr/omr.h"
+#include "libmscore/tempo.h"
 
 namespace Ms {
 
@@ -36,6 +37,7 @@ MediaDialog::MediaDialog(QWidget* parent)
    : QDialog()
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowTitle(tr("MuseScore: Additional Media"));
       scanFileButton->setIcon(*icons[fileOpen_ICON]);
       audioFileButton->setIcon(*icons[fileOpen_ICON]);
@@ -137,6 +139,69 @@ void MediaDialog::addAudioPressed()
       audio->setData(ba);
       score->setAudio(audio);
       score->setDirty(true);
+      mscore->updatePlayMode();
+
+#if 0
+      QString wavPath = QDir::tempPath() + "/score.wav";
+      mscore->saveAs(score, true, wavPath, "wav");
+      QString program = "D:/HACK/sonic-annotator/bologna.bat";
+      QStringList arguments;
+      arguments << QDir::toNativeSeparators(path)<< QDir::toNativeSeparators(wavPath);
+      QProcess myProcess(this);
+      myProcess.start(program, arguments);
+      myProcess.waitForFinished();
+      qDebug() << myProcess.readAll();
+#endif
+
+      QFileInfo fi(path);
+      QFile syncFile(fi.absolutePath() + "/" + fi.baseName() + ".txt");
+
+      TempoMap* tmo = score->tempomap();
+
+      if (!syncFile.open(QIODevice::ReadOnly))
+            return;
+
+      qreal t = 0;
+      int tick = 0;
+      qreal lastTempo = tmo->tempo(0);
+      TempoMap* tmn = new TempoMap();
+      tmn->setTempo(0, lastTempo);
+      int resolution = 25;
+      while (!syncFile.atEnd()) {
+            for (int i = 0; !syncFile.atEnd() && i < resolution-1; i++)
+                  syncFile.readLine();
+
+            if (syncFile.atEnd())
+                  break;
+
+            QByteArray line = syncFile.readLine();
+            QString s(line);
+            QStringList sl = s.split(":");
+
+            qreal tScore = sl[0].trimmed().toDouble();
+            qreal tPerformance = sl[1].trimmed().toDouble();
+
+            // timestamp of last
+            int scoreTick = tmo->time2tick(tScore);
+            qreal deltaError = tmo->tick2time(scoreTick) - tScore;
+            int dt = scoreTick - tick;
+            qreal deltaTime = tPerformance - t;
+
+            if (deltaTime > 0) {
+                  qreal tempo = dt / (480 * deltaTime);
+                  if(tempo != lastTempo) {
+                  qDebug() << tempo;
+                        tmn->setTempo(tick, tempo);
+                        lastTempo = tempo;
+                        }
+                  }
+
+            t = tPerformance - deltaError;
+            tick = scoreTick;
+            }
+      score->setTempomap(tmn);
+      syncFile.close();
+      QMessageBox::information(0, "Done", "Done");
       }
 
 //---------------------------------------------------------

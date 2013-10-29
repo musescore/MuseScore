@@ -343,25 +343,6 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
       }
 
 //---------------------------------------------------------
-//   addNote from pitch
-//---------------------------------------------------------
-
-Note* Score::addNote(Chord* chord, int pitch)
-      {
-      Note* note = new Note(this);
-      note->setParent(chord);
-      note->setTrack(chord->track());
-      note->setPitch(pitch);
-      note->setTpcFromPitch();
-      undoAddElement(note);
-      _playNote = true;
-      select(note, SELECT_SINGLE, 0);
-      if (!chord->staff()->isTabStaff())
-            moveToNextInputPos();
-      return note;
-      }
-
-//---------------------------------------------------------
 //   addNote from NoteVal
 //---------------------------------------------------------
 
@@ -377,7 +358,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       _playNote = true;
       select(note, SELECT_SINGLE, 0);
       if (!chord->staff()->isTabStaff())
-            moveToNextInputPos();
+            _is.moveToNextInputPos();
       return note;
       }
 
@@ -691,7 +672,7 @@ void Score::putNote(const Position& p, bool replace)
 
       switch(st->staffType()->group()) {
             case PERCUSSION_STAFF_GROUP: {
-                  if (_is.rest)
+                  if (_is.rest())
                         break;
                   Drumset* ds   = instr->drumset();
                   nval.pitch    = _is.drumNote();
@@ -704,7 +685,7 @@ void Score::putNote(const Position& p, bool replace)
                   break;
                   }
             case TAB_STAFF_GROUP: {
-                  if (_is.rest)
+                  if (_is.rest())
                         return;
                   stringData = instr->stringData();
                   tab = (StaffTypeTablature*)st->staffType();
@@ -745,7 +726,7 @@ void Score::putNote(const Position& p, bool replace)
             if (!replace
                && (d == _is.duration())
                && (cr->type() == Element::CHORD)
-               && !_is.rest)
+               && !_is.rest())
                   {
                   if (st->isTabStaff()) {      // TAB
                         // if a note on same string already exists, update to new pitch/fret
@@ -753,7 +734,7 @@ void Score::putNote(const Position& p, bool replace)
                               if(note->string() == nval.string) {       // if string is the same
                                     // if adding a new digit will keep fret number within fret limit,
                                     // add a digit to existing fret number
-                                    if (stringData && tab->useNumbers() && note->fret() >= 1) {
+                                    if (stringData) {
                                           int fret = note->fret() * 10 + nval.fret;
                                           if (fret <= stringData->frets() ) {
                                                 nval.fret = fret;
@@ -800,12 +781,12 @@ void Score::putNote(const Position& p, bool replace)
       else {
             // if not adding, replace current chord (or create a new one)
 
-            if (_is.rest)
+            if (_is.rest())
                   nval.pitch = -1;
             setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection);
             }
       if (!st->isTabStaff())
-            moveToNextInputPos();
+            _is.moveToNextInputPos();
       }
 
 //---------------------------------------------------------
@@ -832,7 +813,7 @@ void Score::repitchNote(const Position& p, bool replace)
             while(next && next->type() != Element::CHORD)
                   next = nextChordRest(next);
             if(next)
-                  moveInputPos(next->segment());
+                  _is.moveInputPos(next->segment());
             return;
             }
       else {
@@ -847,12 +828,13 @@ void Score::repitchNote(const Position& p, bool replace)
                   undoRemoveElement(chord->notes().first());
             }
       undoAddElement(note);
+      select(note);
       // move to next Chord
       ChordRest* next = nextChordRest(_is.cr());
       while(next && next->type() != Element::CHORD)
             next = nextChordRest(next);
-      if(next)
-            moveInputPos(next->segment());
+      if (next)
+            _is.moveInputPos(next->segment());
       }
 
 //---------------------------------------------------------
@@ -1417,8 +1399,8 @@ void Score::cmdDeleteSelection()
       if (selection().state() == SEL_RANGE) {
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
-            int stick1 = s1->tick();
-            int stick2 = s2->tick();
+            int stick1 = selection().tickStart();
+            int stick2 = selection().tickEnd();
 
             Segment* ss1 = s1;
             if (ss1->segmentType() != Segment::SegChordRest)
@@ -1429,6 +1411,11 @@ void Score::cmdDeleteSelection()
             int tick2   = s2 ? s2->tick() : INT_MAX;
             int track1  = selection().staffStart() * VOICES;
             int track2  = selection().staffEnd() * VOICES;
+            for (auto i : _spanner.findOverlapping(stick1, stick2 - 1)) {
+                  Spanner* sp = i.value;
+                  if (sp->track() >= track1 && sp->track() < track2)
+                        undoRemoveElement(sp);
+                  }
             for (int track = track1; track < track2; ++track) {
                   Fraction f;
                   int tick  = -1;
@@ -1703,8 +1690,8 @@ void Score::cmdEnterRest(const TDuration& d)
       int track = _is.track();
       NoteVal nval;
       setNoteRest(_is.segment(), track, nval, d.fraction(), MScore::AUTO);
-      moveToNextInputPos();
-      _is.rest = false;  // continue with normal note entry
+      _is.moveToNextInputPos();
+      _is.setRest(false);  // continue with normal note entry
       endCmd();
       }
 
@@ -1779,8 +1766,8 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
       _is.setSegment(ncr ? ncr->segment() : 0);
       if (doSelect)
             select(ncr, SELECT_SINGLE, 0);
-//      if (ncr)
-//            emit posChanged(ncr->tick());
+      if (ncr)
+            setPos(POS::CURRENT, ncr->tick());
       }
 
 //---------------------------------------------------------
@@ -1807,7 +1794,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
       else {
             measure = last();
             if (measure)
-                  tick = measure->tick() + measure->ticks();
+                  tick = measure->endTick();
             else
                   tick = 0;
             idx  = -1;
@@ -1918,9 +1905,10 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                         undoAddElement(nClef);
                         }
                   if (createEndBar) {
-                        Measure* lm = score->lastMeasure();
-                        if (lm)
-                              lm->setEndBarLineType(END_BAR, endBarGenerated);
+                        // Measure* lm = score->lastMeasure();
+                        // if (lm)
+                        //      lm->setEndBarLineType(END_BAR, endBarGenerated);
+                        m->setEndBarLineType(END_BAR, endBarGenerated);
                         }
                   score->fixTicks();
                   }

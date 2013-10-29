@@ -986,7 +986,7 @@ void SFont::load_phdr (int size)
             presets.append(p);
             char str[21];
             READSTR (str);
-            p->name   = str;
+            p->name   = QString::fromLatin1(str);
 
             p->num  = READW();
             p->bank = READW();
