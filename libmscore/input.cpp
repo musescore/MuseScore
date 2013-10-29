@@ -130,7 +130,6 @@ void InputState::moveInputPos(Element* e)
       if (s->type() == Element::SEGMENT) {
             _lastSegment = _segment;
             _segment = s;
-            _score->setPos(POS::CURRENT, _segment->tick());
             }
       }
 
@@ -158,10 +157,8 @@ void InputState::moveToNextInputPos()
       {
       Segment* s   = nextInputPos();
       _lastSegment = _segment;
-      if (s) {
-            _segment     = s;
-            _score->setPos(POS::CURRENT, _segment->tick());
-            }
+      if (s)
+            _segment = s;
       }
 
 //---------------------------------------------------------

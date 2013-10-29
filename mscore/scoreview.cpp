@@ -5133,7 +5133,6 @@ void ScoreView::cmdRepeatSelection()
                         bool addTo = false;
                         Chord* c = static_cast<Note*>(el)->chord();
                         for (Note* note : c->notes()) {
-                              printf("   addPitch %d - %d\n", note->pitch(), addTo);
                               _score->addPitch(note->pitch(), addTo);
                               addTo = true;
                               }
