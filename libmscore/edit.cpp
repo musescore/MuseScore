@@ -828,6 +828,7 @@ void Score::repitchNote(const Position& p, bool replace)
                   undoRemoveElement(chord->notes().first());
             }
       undoAddElement(note);
+      select(note);
       // move to next Chord
       ChordRest* next = nextChordRest(_is.cr());
       while(next && next->type() != Element::CHORD)

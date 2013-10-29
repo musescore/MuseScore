@@ -1072,7 +1072,7 @@ void Score::upDown(bool up, UpDownMode mode)
             while (note->tieBack())
                   note = note->tieBack()->startNote();
             for (; note; note = note->tieFor() ? note->tieFor()->endNote() : 0) {
-                  if (el.indexOf(note) == -1) {
+                  if (!el.contains(note)) {
                         el.append(note);
                         if (tick == -1)
                               tick = note->chord()->tick();
@@ -2043,7 +2043,6 @@ void Score::cmd(const QAction* a)
             upDown(false, UP_DOWN_DIATONIC);
       else if (cmd == "move-up") {
             setLayoutAll(false);
-            Element* el = selection().element(); // single selection
             if (el && el->type() == Element::NOTE) {
                   Note* note = static_cast<Note*>(el);
                   moveUp(note->chord());
@@ -2051,14 +2050,12 @@ void Score::cmd(const QAction* a)
             }
       else if (cmd == "move-down") {
             setLayoutAll(false);
-            Element* el = selection().element(); // single selection
             if (el && el->type() == Element::NOTE) {
                   Note* note = static_cast<Note*>(el);
                   moveDown(note->chord());
                   }
             }
       else if (cmd == "up-chord") {
-            Element* el = selection().element(); // single selection
             if (el && (el->type() == Element::NOTE || el->type() == Element::REST)) {
                   Element* e = upAlt(el);
                   if (e) {
@@ -2071,7 +2068,6 @@ void Score::cmd(const QAction* a)
             setLayoutAll(false);
             }
       else if (cmd == "down-chord") {
-            Element* el = selection().element(); // single selection
             if (el && (el->type() == Element::NOTE || el->type() == Element::REST)) {
                   Element* e = downAlt(el);
                   if (e) {
@@ -2084,7 +2080,6 @@ void Score::cmd(const QAction* a)
             setLayoutAll(false);
             }
       else if (cmd == "top-chord" ) {
-            Element* el = selection().element(); // single selection
             if (el && el->type() == Element::NOTE) {
                   Element* e = upAltCtrl(static_cast<Note*>(el));
                   if (e) {
@@ -2097,7 +2092,6 @@ void Score::cmd(const QAction* a)
             setLayoutAll(false);
             }
       else if (cmd == "bottom-chord") {
-            Element* el = selection().element(); // single selection
             if (el && el->type() == Element::NOTE) {
                   Element* e = downAltCtrl(static_cast<Note*>(el));
                   if (e) {
@@ -2272,9 +2266,8 @@ void Score::cmd(const QAction* a)
             else
                   type = LayoutBreak::SECTION;
 
-            Element* e = selection().element();
-            if (e && e->type() == Element::BAR_LINE && e->parent()->type() == Element::SEGMENT) {
-                  Measure* measure = static_cast<Measure*>(e->parent()->parent());
+            if (el && el->type() == Element::BAR_LINE && el->parent()->type() == Element::SEGMENT) {
+                  Measure* measure = static_cast<Measure*>(el->parent()->parent());
                   if (measure->isMMRest()) {
                         // if measure is mm rest, then propagate to last original measure
                         measure = measure->nextMeasure();
