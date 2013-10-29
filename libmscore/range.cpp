@@ -387,13 +387,13 @@ bool TrackList::write(int track, Measure* measure) const
                                           qDebug("Tracklist::write: premature end of measure list in track %d, rest %d/%d",
                                              track, duration.numerator(), duration.denominator());
                                           ++i;
-                                          printf("%d elements missing\n", n-i);
+                                          qDebug("%d elements missing", n-i);
                                           for (; i < n; ++i) {
                                                 Element* e = at(i);
-                                                printf("    <%s>\n", e->name());
+                                                qDebug("    <%s>", e->name());
                                                 if (e->isChordRest()) {
                                                       ChordRest* cr = static_cast<ChordRest*>(e);
-                                                      printf("       %d/%d\n",
+                                                      qDebug("       %d/%d",
                                                          cr->duration().numerator(),
                                                          cr->duration().denominator());
                                                       }
