@@ -115,11 +115,14 @@ void Score::endCmd()
             return;
             }
 
-      foreach(Score* s, scoreList()) {
+      foreach (Score* s, scoreList()) {
             if (s->layoutAll()) {
                   s->_updateAll  = true;
                   s->doLayout();
                   }
+            const InputState& is = s->inputState();
+            if (is.noteEntryMode() && is.segment())
+                  s->setPos(POS::CURRENT, is.segment()->tick());
             }
 
       bool noUndo = undo()->current()->childCount() <= 1;
@@ -192,6 +195,9 @@ void Score::endUndoRedo()
                   score->setUndoRedo(false);
                   score->setUpdateAll(true);
                   }
+            const InputState& is = score->inputState();
+            if (is.noteEntryMode() && is.segment())
+                  score->setPos(POS::CURRENT, is.segment()->tick());
             score->setPlaylistDirty(true);
             }
       end();
