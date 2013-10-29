@@ -474,7 +474,7 @@ Palette* MuseScore::newNoteHeadsPalette()
                   sym = noteHeads[0][i][3];
             NoteHead* nh = new NoteHead(gscore);
             nh->setSym(sym);
-            sp->append(nh, qApp->translate("symbol", Sym::id2name(sym)));
+            sp->append(nh, Sym::id2userName(sym));
             }
       Icon* ik = new Icon(gscore);
       ik->setIconType(ICON_BRACKETS);
