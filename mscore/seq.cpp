@@ -58,6 +58,8 @@ static OggVorbis_File vf;
 
 static const int AUDIO_BUFFER_SIZE = 1024 * 512;  // 2 MB
 
+static const int MIN_CLICKS   = 3;        // the minimum number of 'clicks' in a count-in
+
 //---------------------------------------------------------
 //   VorbisData
 //---------------------------------------------------------
@@ -587,40 +589,63 @@ void Seq::addCountInClicks()
       int         plPos       = playPos->first;
       Measure*    m           = cs->tick2measure(plPos);
       int         msrTick     = m->tick();
-      Fraction    ts          = cs->sigmap()->timesig(msrTick).nominal();
-      int         numerator   = ts.numerator();
-      int         tw          = MScore::division * 4 / ts.denominator();
+      qreal       tempo       = cs->tempomap()->tempo(msrTick);
+      Fraction    timeSig     = cs->sigmap()->timesig(msrTick).nominal();
+      int         numerator   = timeSig.numerator();
+      int         denominator = timeSig.denominator();
+      int         clickTicks  = MScore::division * 4 / denominator;
       NPlayEvent  event;
       int         tick;
+      bool        triplets    = false;          // whether to play click-clack in triplets or not
 
-      // if time sig is 3*n/d, convert to 3d units (6/8, 9/8, 6/4, ...)
+      // COMPOUND METER: if time sig is 3*n/d, convert to 3d units
+      // note: 3/8, 3/16, ... are NOT considered compound
       if (numerator > 3 && numerator % 3 == 0) {
-            numerator   /= 3;
-            tw          *= 3;
+            // if denominator longer than 1/8 OR tempo for compound unit slower than 60MM
+            // (i.e. each denom. unit slower than 180MM = tempo 3.0)
+            // then do not count as compound, but beat click-clack-clack triplets
+            if (denominator < 8 || tempo * denominator / 4 < 3.0)
+                  triplets = true;
+            // otherwise, count as compound meter (one beat every 3 denominator units)
+            else {
+                  numerator   /= 3;
+                  clickTicks  *= 3;
+                  }
             }
+
+      // NUMBER OF TICKS
       int numOfClicks = numerator;                          // default to a full measure of 'clicks'
-      int lastPause   = tw;                                 // the number of ticks to wait after the last 'click'
+      int lastPause   = clickTicks;                         // the number of ticks to wait after the last 'click'
       // if not at the beginning of a measure, add clicks for the initial measure part
       if (msrTick < plPos) {
             int delta    = plPos - msrTick;
-            int addClick = (delta + tw-1) / tw;             // round num. of clicks up
+            int addClick = (delta + clickTicks-1) / clickTicks;     // round num. of clicks up
             numOfClicks += addClick;
-            lastPause    = delta - (addClick-1) * tw;       // anything after last click time is final pause
+            lastPause    = delta - (addClick-1) * clickTicks;       // anything after last click time is final pause
             }
       // or if measure not complete (anacrusis), add clicks for the missing measure part
-      else if (m->ticks() < tw * numerator) {
-            int delta    = tw*numerator - m->ticks();
-            int addClick = (delta + tw-1) / tw;
+      else if (m->ticks() < clickTicks * numerator) {
+            int delta    = clickTicks*numerator - m->ticks();
+            int addClick = (delta + clickTicks-1) / clickTicks;
             numOfClicks += addClick;
-            lastPause    = delta - (addClick-1) * tw;
+            lastPause    = delta - (addClick-1) * clickTicks;
             }
+/*
+      // MIN_CLICKS: be sure to have at least MIN_CLICKS clicks: if less, add full measures
+      while (numOfClicks < MIN_CLICKS)
+            numOfClicks += numerator;
+*/
+      // click-clack-clack triplets
+      if (triplets)
+            numerator = 3;
+
       // add count-in events
-      for (int i = tick = 0; i < numOfClicks; i++, tick += tw) {
+      for (int i = tick = 0; i < numOfClicks; i++, tick += clickTicks) {
             event.setType( (i % numerator) == 0 ? ME_TICK1 : ME_TICK2);
             countInEvents.insert( std::pair<int,NPlayEvent>(tick, event));
             }
       // add 1 empty event at the end to wait after the last click
-      tick += lastPause - tw;
+      tick += lastPause - clickTicks;
       event.setType(ME_INVALID);
       event.setPitch(0);
       countInEvents.insert( std::pair<int,NPlayEvent>(tick, event));
