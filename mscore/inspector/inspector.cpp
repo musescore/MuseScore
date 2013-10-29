@@ -25,6 +25,7 @@
 #include "inspectorJump.h"
 #include "inspectorGlissando.h"
 #include "inspectorNote.h"
+#include "inspectorRange.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -220,6 +221,9 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case Element::DYNAMIC:
                               ie = new InspectorDynamic(this);
+                              break;
+                        case Element::RANGE:
+                              ie = new InspectorRange(this);
                               break;
                         default:
                               ie = new InspectorElement(this);

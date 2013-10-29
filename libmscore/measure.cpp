@@ -75,6 +75,7 @@
 #include "accidental.h"
 #include "layout.h"
 #include "icon.h"
+#include "rangesymbol.h"
 
 namespace Ms {
 
@@ -2160,6 +2161,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                   noText->setTrack(e.track());
                   noText->setParent(this);
                   staves[noText->staffIdx()]->setNoText(noText);
+                  }
+            else if (tag == "Range") {
+                  Range* range = new Range(score());
+                  range->read(e);
+                  segment = getSegment(Segment::SegRange, e.tick());
+                  range->setParent(segment);          // a parent segment is needed for setTrack() to work
+                  range->setTrack(trackZeroVoice(e.track()));
+                  segment->add(range);
                   }
             else if (Element::readProperties(e))
                   ;
