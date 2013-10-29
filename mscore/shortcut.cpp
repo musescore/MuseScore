@@ -240,7 +240,7 @@ QAction* Shortcut::action() const
       if (_state == STATE_NEVER)
             return 0;
 
-      _action = new QAction(_text, 0);
+      _action = new QAction(text(), 0);
       _action->setData(_key);
       _action->setIconVisibleInMenu (false);
 
