@@ -290,7 +290,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             else
                   popup->addAction(tr("Set Visible"))->setData("invisible");
             popup->addAction(tr("Color..."))->setData("color");
-            popup->addAction(tr("Fret Diagram Properties..."))->setData("fret-props");
+            popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
             }
       else if (e->type() == Element::GLISSANDO) {
             genPropertyMenu1(e, popup);
