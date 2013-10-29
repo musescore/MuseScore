@@ -60,6 +60,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       small->setChecked(staff->small());
       invisible->setChecked(staff->invisible());
       spinExtraDistance->setValue(s->userDist() / score->spatium());
+      color->setColor(s->color());
       partName->setText(part->partName());
 
       updateInstrument();
@@ -224,6 +225,7 @@ void EditStaff::apply()
       bool s            = small->isChecked();
       bool inv          = invisible->isChecked();
       qreal userDist    = spinExtraDistance->value();
+      QColor col        = color->color();
       int staffIdx      = staffType->itemData(staffType->currentIndex()).toInt();
       StaffType* st     = score->staffType(staffIdx);
 
@@ -244,8 +246,8 @@ void EditStaff::apply()
             emit instrumentChanged();
             }
 
-      if (s != staff->small() || inv != staff->invisible() || userDist != staff->userDist() || st  != staff->staffType())
-            score->undo(new ChangeStaff(staff, s, inv, userDist * score->spatium(), st));
+      if (s != staff->small() || inv != staff->invisible() || userDist != staff->userDist() || st  != staff->staffType() || col != staff->color())
+            score->undo(new ChangeStaff(staff, s, inv, userDist * score->spatium(), col, st));
 
       if (updateNeeded)
             score->cmdUpdateNotes();
