@@ -448,7 +448,7 @@ MuseScore::MuseScore()
 
       _positionLabel = new QLabel;
       _positionLabel->setObjectName("decoration widget");  // this prevents animations
-      _positionLabel->setToolTip(tr("measure.beat.tick"));
+      _positionLabel->setToolTip(tr("measure:beat:tick"));
 
       _modeText = new QLabel;
       _modeText->setAutoFillBackground(false);

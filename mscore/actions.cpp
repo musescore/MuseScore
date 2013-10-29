@@ -869,7 +869,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "insert-fretframe",
-         QT_TRANSLATE_NOOP("action","Insert Fret Diagram Frame"),
+         QT_TRANSLATE_NOOP("action","Insert Fretboard Diagram Frame"),
          fframe_ICON
          ),
       Shortcut(
