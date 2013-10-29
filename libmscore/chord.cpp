@@ -1624,7 +1624,7 @@ void Chord::layoutPitched()
             if (s && s->element(track()) && s->element(track())->type() == CHORD
                && static_cast<Chord*>(s->element(track()))->ledgerLines()) {
                   // TODO: detect case were one chord is above staff, the other below
-                  lll = qMax(_spatium * 0.8, lll);
+                  lll = qMax(_spatium * 0.8f, lll);
                   }
             }
 

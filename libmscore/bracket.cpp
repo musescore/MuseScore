@@ -61,7 +61,7 @@ qreal Bracket::width() const
       else if (bracketType() == BRACKET_SQUARE)
             w = point(score()->styleS(ST_staffLineWidth) + Spatium(0.5));
       else if (bracketType() == BRACKET_LINE)
-            w = point(0.67 * score()->styleS(ST_bracketWidth) + score()->styleS(ST_bracketDistance));
+            w = point(0.67f * score()->styleS(ST_bracketWidth) + score()->styleS(ST_bracketDistance));
       return w;
       }
 
