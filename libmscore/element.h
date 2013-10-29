@@ -188,6 +188,7 @@ class Element : public QObject {
             NOTE,             // and this requires stems to be drawn before notes
             CLEF,
             KEYSIG,
+            RANGE,
             TIMESIG,
             REST,
             BREATH,
