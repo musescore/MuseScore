@@ -57,7 +57,7 @@
      </item>
      <item>
       <property name="text">
-       <string>Arpeggio &amp; Glissando</string>
+       <string>Arpeggios &amp; Glissandi</string>
       </property>
      </item>
      <item>
@@ -117,12 +117,12 @@
      </item>
      <item>
       <property name="text">
-       <string>Breaks &amp; Spacer</string>
+       <string>Breaks &amp; Spacers</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Bagpipe</string>
+       <string>Bagpipe Embellishments</string>
       </property>
      </item>
      <item>
