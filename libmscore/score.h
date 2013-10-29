@@ -702,6 +702,7 @@ class Score : public QObject {
       void spatiumChanged(qreal oldValue, qreal newValue);
 
       void pasteStaff(XmlReader&, ChordRest* dst);
+      void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
       int mscVersion() const    { return _mscVersion; }

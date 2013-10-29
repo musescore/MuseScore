@@ -2468,8 +2468,38 @@ void ScoreView::normalPaste()
                   _score->pasteStaff(e, cr);
                   }
             }
-      else if (ms->hasFormat(mimeSymbolListFormat) && _score->selection().isSingle())
-            errorMessage->showMessage(tr("cannot paste symbol list to element"), "pasteSymbollist");
+
+
+      else if (ms->hasFormat(mimeSymbolListFormat)) {
+            ChordRest* cr = 0;
+            if (_score->selection().state() == SEL_RANGE)
+                  cr = _score->selection().firstChordRest();
+            else if (_score->selection().isSingle()) {
+                  Element* e = _score->selection().element();
+                  if (e->type() != Element::NOTE && e->type() != Element::REST) {
+                        qDebug("cannot paste to %s", e->name());
+                        return;
+                        }
+                  if (e->type() == Element::NOTE)
+                        e = static_cast<Note*>(e)->chord();
+                  cr  = static_cast<ChordRest*>(e);
+                  }
+            if (cr == 0)
+                  errorMessage->showMessage(tr("no destination to paste"), "pasteDestination");
+            else if (cr->tuplet())
+                  errorMessage->showMessage(tr("cannot paste into tuplet"), "pasteTuplet");
+            else {
+                  QByteArray data(ms->data(mimeSymbolListFormat));
+                  qDebug("paste <%s>", data.data());
+                  XmlReader e(data);
+//            QPointF dragOffset;
+//            Fraction duration(1, 4);
+//            Element::ElementType type = Element::readType(e, &dragOffset, &duration);
+                  _score->pasteSymbols(e, cr);
+                  }
+            }
+
+
       else {
             qDebug("cannot paste selState %d staffList %d",
                _score->selection().state(), ms->hasFormat(mimeStaffListFormat));
