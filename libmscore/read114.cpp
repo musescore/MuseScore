@@ -612,9 +612,9 @@ Score::FileError Score::read114(XmlReader& e)
 
       // adjust some styles
       if (style(ST_lyricsDistance) == MScore::baseStyle()->value(ST_lyricsDistance))
-            style()->set(ST_lyricsDistance, 2.0);
+            style()->set(ST_lyricsDistance, 2.0f);
       if (style(ST_voltaY) == MScore::baseStyle()->value(ST_voltaY))
-            style()->set(ST_voltaY, -2.0);
+            style()->set(ST_voltaY, -2.0f);
       if (style(ST_hideEmptyStaves).toBool() == true) // http://musescore.org/en/node/16228
             style()->set(ST_dontHideStavesInFirstSystem, false);
       if (style(ST_useGermanNoteNames).toBool())
