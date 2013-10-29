@@ -11,59 +11,59 @@
 //=============================================================================
 
 #include "score.h"
-#include "utils.h"
-#include "key.h"
-#include "clef.h"
-#include "navigate.h"
-#include "slur.h"
-#include "tie.h"
-#include "note.h"
-#include "rest.h"
-#include "chord.h"
-#include "text.h"
-#include "sig.h"
-#include "staff.h"
-#include "part.h"
-#include "style.h"
-#include "page.h"
-#include "barline.h"
-#include "tuplet.h"
-#include "xml.h"
-#include "ottava.h"
-#include "trill.h"
-#include "pedal.h"
-#include "hairpin.h"
-#include "textline.h"
-#include "keysig.h"
-#include "volta.h"
-#include "dynamic.h"
-#include "box.h"
-#include "harmony.h"
-#include "system.h"
-#include "stafftext.h"
-#include "articulation.h"
-#include "layoutbreak.h"
-#include "drumset.h"
-#include "beam.h"
-#include "lyrics.h"
-#include "pitchspelling.h"
-#include "measure.h"
-#include "tempo.h"
-#include "sig.h"
-#include "undo.h"
-#include "timesig.h"
-#include "repeat.h"
-#include "tempotext.h"
-#include "clef.h"
-#include "noteevent.h"
-#include "breath.h"
-#include "tablature.h"
-#include "stafftype.h"
-#include "segment.h"
-#include "chordlist.h"
 #include "mscore.h"
+
 #include "accidental.h"
+#include "articulation.h"
+#include "barline.h"
+#include "beam.h"
+#include "box.h"
+#include "breath.h"
+#include "chord.h"
+#include "chordlist.h"
+#include "clef.h"
+#include "drumset.h"
+#include "dynamic.h"
+#include "figuredbass.h"
+#include "hairpin.h"
+#include "harmony.h"
+#include "key.h"
+#include "keysig.h"
+#include "layoutbreak.h"
+#include "lyrics.h"
+#include "measure.h"
+#include "navigate.h"
+#include "note.h"
+#include "noteevent.h"
+#include "ottava.h"
+#include "page.h"
+#include "part.h"
+#include "pedal.h"
+#include "pitchspelling.h"
+#include "repeat.h"
+#include "rest.h"
+#include "segment.h"
 #include "sequencer.h"
+#include "sig.h"
+#include "slur.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "stafftext.h"
+#include "style.h"
+#include "system.h"
+#include "tablature.h"
+#include "tempo.h"
+#include "tempotext.h"
+#include "text.h"
+#include "textline.h"
+#include "tie.h"
+#include "timesig.h"
+#include "trill.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "utils.h"
+#include "volta.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -195,6 +195,8 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                                     }
                               e.readNext();
                               }
+/* unused: Lyrics are now part of <Chord>
+ * and parenting lyrics to segment is wrong anyway!
                         else if (tag == "Lyrics") {
                               Lyrics* lyrics = new Lyrics(this);
                               lyrics->setTrack(e.track());
@@ -211,6 +213,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                                     qDebug("no segment found for lyrics");
                                     }
                               }
+*/
                         else if (tag == "Harmony") {
                               Harmony* harmony = new Harmony(this);
                               harmony->setTrack(e.track());
@@ -439,5 +442,208 @@ void Score::pasteChordRest(ChordRest* cr, int tick)
             }
       }
 
-}
 
+//---------------------------------------------------------
+//   pasteSymbols
+//
+//    pastes a list of symbols into cr and following ChordRest's
+//
+//    (Note: info about delta ticks is currently ignored)
+//---------------------------------------------------------
+
+void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
+      {
+      Segment* currSegm = dst->segment();
+//      int   currTick    = dst->tick();
+//      int   destTick    = 0;              // the tick and track to place the pasted element at
+      int   destTrack   = 0;
+      bool  done        = false;
+      Segment* startSegm= currSegm;
+//      int   startTick   = currTick;       // the initial tick and track where to start pasting
+      int   startTrack  = dst->track();
+      int   maxTrack    = ntracks();
+
+      while (e.readNextStartElement()) {
+            if (done)
+                  break;
+            if (e.name() != "SymbolList") {
+                  e.unknown();
+                  break;
+                  }
+            QString version = e.attribute("version", "NONE");
+            if(version != MSC_VERSION)
+                  break;
+
+            while (e.readNextStartElement()) {
+                  if (done)
+                        break;
+                  const QStringRef& tag(e.name());
+
+                  if (tag == "trackOffset") {
+                        destTrack = startTrack + e.readInt();
+//                        currTick  = startTick;
+                        currSegm  = startSegm;
+                        }
+//                  else if (tag == "tickDelta")
+//                        destTick = currTick + e.readInt();
+                  else if (tag == "segDelta") {
+                        for (int numOfSegm = e.readInt(); currSegm && numOfSegm > 0; numOfSegm--)
+                              currSegm = currSegm->nextCR(destTrack);
+                        }
+                  else {
+                        // check the intended dest. track and segment exist
+                        if (destTrack >= maxTrack || currSegm == nullptr) {
+                              qDebug("PasteSymbols: no track or segment for %s", tag.toUtf8().data());
+                              e.skipCurrentElement();       // ignore
+                              continue;
+                              }
+//                        // advance to dest. tick (or near)
+//                        if (destTick > currTick) {
+//                              while ( (currSegm=currSegm->nextCR())->tick() < destTick )
+//                                    ;
+//                              }
+                        // check there is a segment element in the required track
+                        if (currSegm->element(destTrack) == nullptr) {
+                              qDebug("PasteSymbols: no track element for %s", tag.toUtf8().data());
+                              e.skipCurrentElement();
+                              continue;
+                              }
+                        ChordRest* cr = static_cast<ChordRest*>(currSegm->element(destTrack));
+                        if (tag == "Articulation") {
+                              Articulation* el = new Articulation(this);
+                              el->read(e);
+                              el->setTrack(destTrack);
+                              el->setParent(cr);
+                              undoAddElement(el);
+                              }
+                        else if (tag == "FiguredBass") {
+                              // FiguredBass always belongs to first staff voice
+                              destTrack = trackZeroVoice(destTrack);
+                              int ticks;
+                              FiguredBass* el = new FiguredBass(this);
+                              el->setTrack(destTrack);
+                              el->read(e);
+                              el->setTrack(destTrack);
+                              // if f.b. is off-note, we have to locate a place before currSegm
+                              // where an on-note f.b. element could (potentially) be
+                              // (while having an off-note f.b. without an on-note one before it
+                              // is un-idiomatic, possible mismatch in rhythmic patterns between
+                              // copy source and paste destination does not allow to be too picky)
+                              if (!el->onNote()) {
+                                    FiguredBass* onNoteFB = nullptr;
+                                    Segment*     prevSegm = currSegm;
+                                    bool         done = false;
+                                    while (prevSegm) {
+                                          if (done)
+                                                break;
+                                          prevSegm = prevSegm->prev1(Segment::SegChordRest);
+                                          // if there is a ChordRest in the dest. track
+                                          // this segment is a (potential) f.b. location
+                                          if (prevSegm->element(destTrack) != nullptr) {
+                                                done = true;
+                                                }
+                                          // in any case, look for a f.b. in annotations:
+                                          // if there is a f.b. element in the right track,
+                                          // this is an (actual) f.b. location
+                                          foreach (Element* a, prevSegm->annotations()) {
+                                                if (a->type() == Element::FIGURED_BASS && a->track() == destTrack) {
+                                                      onNoteFB = static_cast<FiguredBass*>(a);
+                                                      done = true;
+                                                      }
+                                                }
+                                          }
+                                    if (!prevSegm) {
+                                          qDebug("PasteSymbols: can't place off-note FiguredBass");
+                                          delete el;
+                                          continue;
+                                          }
+                                    // by default, split on-note duration in half: half on-note and half off-note
+                                    int totTicks = currSegm->tick() - prevSegm->tick();
+                                    int destTick = prevSegm->tick() + totTicks / 2;
+                                    ticks        = totTicks / 2;
+                                    if (onNoteFB)
+                                          onNoteFB->setTicks(totTicks / 2);
+                                    // look for a segment at this tick; if none, create one
+                                    Segment * nextSegm = prevSegm;
+                                    while (nextSegm && nextSegm->tick() < destTick)
+                                          nextSegm = nextSegm->next1(Segment::SegChordRest);
+                                    if (!nextSegm || nextSegm->tick() > destTick) {      // no ChordRest segm at this tick
+                                          nextSegm = new Segment(prevSegm->measure(), Segment::SegChordRest, destTick);
+                                          if (!nextSegm) {
+                                                qDebug("PasteSymbols: can't find or create destination segment for FiguredBass");
+                                                delete el;
+                                                continue;
+                                                }
+                                          undoAddElement(nextSegm);
+                                          }
+                                    currSegm = nextSegm;
+                                    }
+                              else
+                                    // by default, assign to FiguredBass element the duration of the chord it refers to
+                                    ticks = static_cast<ChordRest*>(currSegm->element(destTrack))->durationTicks();
+                              // in both cases, look for an existing f.b. element in segment and remove it, if found
+                              FiguredBass* oldFB = nullptr;
+                              foreach (Element* a, currSegm->annotations()) {
+                                    if (a->type() == Element::FIGURED_BASS && a->track() == destTrack) {
+                                          oldFB = static_cast<FiguredBass*>(a);
+                                          break;
+                                          }
+                                    }
+                              if (oldFB)
+                                    undoRemoveElement(oldFB);
+                              el->setParent(currSegm);
+                              el->setTicks(ticks);
+                              undoAddElement(el);
+                              }
+                        else if (tag == "Harmony") {
+                              Harmony* el = new Harmony(this);
+                              el->setTrack(trackZeroVoice(destTrack));
+                              el->read(e);
+                              el->setTrack(trackZeroVoice(destTrack));
+                              // transpose
+                              Part* partDest = staff(track2staff(destTrack))->part();
+                              Interval interval = partDest->instr()->transpose();
+                              if (!styleB(ST_concertPitch) && !interval.isZero()) {
+                                    interval.flip();
+                                    int rootTpc = transposeTpc(el->rootTpc(), interval, false);
+                                    int baseTpc = transposeTpc(el->baseTpc(), interval, false);
+                                    undoTransposeHarmony(el, rootTpc, baseTpc);
+                                    }
+                              el->setParent(currSegm);
+                              undoAddElement(el);
+                              }
+                        else if (tag == "Lyrics") {
+                              while (cr->type() != Element::CHORD && currSegm) {
+                                    currSegm = currSegm->nextCR(destTrack);
+                                    if (currSegm)
+                                          cr = static_cast<ChordRest*>(currSegm->element(destTrack));
+                                    else
+                                          break;
+                                    }
+                              if (currSegm == nullptr) {
+                                    qDebug("PasteSymbols: no segment for Lyrics");
+                                    e.skipCurrentElement();
+                                    continue;
+                                    }
+                              if (cr->type() != Element::CHORD) {
+                                    qDebug("PasteSymbols: can't paste Lyrics to rest");
+                                    e.skipCurrentElement();
+                                    continue;
+                                    }
+                              Lyrics* el = new Lyrics(this);
+                              el->setTrack(destTrack);
+                              el->read(e);
+                              el->setTrack(destTrack);
+                              el->setParent(cr);
+                              undoAddElement(el);
+                              }
+                        else {
+                              qDebug("PasteSymbols: element %s not handled", tag.toUtf8().data());
+                              e.skipCurrentElement();    // ignore
+                              }
+                        }
+                  }
+            }
+      }
+
+}
