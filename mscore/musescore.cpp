@@ -2012,16 +2012,21 @@ void setMscoreLocale(QString localeName)
       QTranslator* translator = new QTranslator;
 
       // load translator from userspace
-      QString lp = dataPath + "/locale/" + QString("mscore_") + localeName;
+      QString userlp = dataPath + "/locale/" + QString("mscore_") + localeName;
+      QString defaultlp = mscoreGlobalShare + "locale/" + QString("mscore_") + localeName;
+      QString lp = defaultlp;
+
+      QFileInfo userFi(userlp + ".qm");
+      QFileInfo defaultFi(defaultlp + ".qm");
+      qDebug() << userFi.exists();
+      qDebug() << userFi.lastModified() << defaultFi.lastModified();
+      if(userFi.exists() && userFi.lastModified() > defaultFi.lastModified())
+            lp = userlp;
+
       if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
       bool success = translator->load(lp);
-      if (!success) {
-            if (MScore::debugMode) qDebug("load translator <%s> failed", qPrintable(lp));
-            // fallback to default translation
-            lp = mscoreGlobalShare + "locale/" + QString("mscore_") + localeName;
-            if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
-            success = translator->load(lp);
-            if (!success && MScore::debugMode) qDebug("load translator <%s> failed", qPrintable(lp));
+      if (!success && MScore::debugMode) {
+            qDebug("load translator <%s> failed", qPrintable(lp));
             }
       if(success) {
            qApp->installTranslator(translator);
