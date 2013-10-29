@@ -2714,7 +2714,7 @@ void MuseScore::readSettings()
 
 void MuseScore::play(Element* e) const
       {
-      if (!mscore->playEnabled())
+      if (noSeq || !mscore->playEnabled())
             return;
 
       if (e->type() == Element::NOTE) {
@@ -2738,6 +2738,8 @@ void MuseScore::play(Element* e) const
 
 void MuseScore::play(Element* e, int pitch) const
       {
+      if (noSeq)
+            return;
       if (mscore->playEnabled() && e->type() == Element::NOTE) {
             Note* note = static_cast<Note*>(e);
             int tick = note->chord()->tick();
@@ -3937,7 +3939,7 @@ void MuseScore::endCmd()
                   excerptsChanged(cs->rootScore());
                   cs->rootScore()->setExcerptsChanged(false);
                   }
-            if (cs->instrumentsChanged()) {
+            if (!noSeq && cs->instrumentsChanged()) {
                   seq->initInstruments();
                   cs->setInstrumentsChanged(false);
                   }
