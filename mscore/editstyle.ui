@@ -4319,7 +4319,7 @@ p, li { white-space: pre-wrap; }
              <item row="1" column="0">
               <widget class="QLabel" name="label_79">
                <property name="text">
-                <string>Distance to fret diagram:</string>
+                <string>Distance to fretboard diagram:</string>
                </property>
               </widget>
              </item>

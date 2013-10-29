@@ -3592,7 +3592,7 @@ static void annotations(ExportMusicXml* exp, Xml&, int strack, int etrack, int t
       if (seg->segmentType() == Segment::SegChordRest) {
 
             const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
-            // if (fd) qDebug("annotations seg %p found fret diagram %p", seg, fd);
+            // if (fd) qDebug("annotations seg %p found fretboard diagram %p", seg, fd);
 
             foreach(const Element* e, seg->annotations()) {
 
@@ -3637,7 +3637,7 @@ static void annotations(ExportMusicXml* exp, Xml&, int strack, int etrack, int t
                   } // foreach
             if (fd)
                   // found fd but no harmony, cannot write (MusicXML would be invalid)
-                  qDebug("annotations seg %p found fret diagram %p w/o harmony: cannot write",
+                  qDebug("annotations seg %p found fretboard diagram %p w/o harmony: cannot write",
                          seg, fd);
             }
       }

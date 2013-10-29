@@ -575,7 +575,7 @@ Palette* MuseScore::newBreathPalette()
 Palette* MuseScore::newArpeggioPalette()
       {
       Palette* sp = new Palette();
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggio && Glissando"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggios && Glissandi"));
       sp->setGrid(27, 60);
       sp->setDrawGrid(true);
 
@@ -674,7 +674,7 @@ Palette* MuseScore::newGraceNotePalette()
 Palette* MuseScore::newBagpipeEmbellishmentPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe Embellishments"));
       sp->setMag(0.8);
       sp->setGrid(60, 80);
 
@@ -1069,7 +1069,7 @@ void MuseScore::populatePalette()
       fret->setMarker(0, 'X');
       fret->setMarker(3, 'O');
       fret->setMarker(4, 'O');
-      sp->append(fret, tr("Fret Diagram"));
+      sp->append(fret, tr("Fretboard Diagram"));
 
       paletteBox->addPalette(sp);
       }
