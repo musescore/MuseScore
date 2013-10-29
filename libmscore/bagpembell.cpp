@@ -99,13 +99,13 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Half D throw"), "D C" },
 
       // Regular Doublings (continued)
-      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on low G",  "HG LG D" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on low A",  "HG LA D" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on B",      "HG B D" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on C",      "HG C D" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on D",      "HG D E" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on E",      "HG E F" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on F",      "HG F HG" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on low G"),  "HG LG D" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on low A"),  "HG LA D" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on B"),      "HG B D" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on C"),      "HG C D" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on D"),      "HG D E" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on E"),      "HG E F" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Doubling on F"),      "HG F HG" },
 
       // Thumb Doublings
       { QT_TRANSLATE_NOOP("bagpipe", "Thumb doubling on low G"), "HA LG D" },
@@ -292,13 +292,13 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "G grace note triple strike on F"), "HG F E F E F E" },
 
       // Thumb Triple Strikes
-      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on low A",  "HA LA LG LA LG LA LG" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on B",      "HA B LG B LG B LG" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on C",      "HA C LG C LG C LG" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on D",      "HA D LG D LG D LG" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on D",      "HA D C D C D C" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on E",      "HA E LA E LA E LA" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on F",      "HA F E F E F E" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on low A"),  "HA LA LG LA LG LA LG" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on B"),      "HA B LG B LG B LG" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on C"),      "HA C LG C LG C LG" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on D"),      "HA D LG D LG D LG" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on D"),      "HA D C D C D C" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on E"),      "HA E LA E LA E LA" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on F"),      "HA F E F E F E" },
       { QT_TRANSLATE_NOOP("bagpipe", "Thumb triple strike on high G"), "HA HG F HG F HG F" },
 
       };
