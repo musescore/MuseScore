@@ -1125,7 +1125,7 @@ void MuseScore::editInstrList()
 
                               // use selected staff type
                               if (st != staff->staffType())
-                                    rootScore->undo(new ChangeStaff(staff, staff->small(), staff->invisible(), staff->userDist(), st));
+                                    rootScore->undo(new ChangeStaff(staff, staff->small(), staff->invisible(), staff->userDist(), staff->color(), st));
                               if (updateNeeded)
                                     rootScore->cmdUpdateNotes();
                               }
