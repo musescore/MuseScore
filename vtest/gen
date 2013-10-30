@@ -3,7 +3,7 @@
 #
 # "compare" - image magick compare program
 #
-SRC="mmrest-1 mmrest-2 mmrest-4 mmrest-5 mmrest-6\
+SRC="mmrest-1 mmrest-2 mmrest-4 mmrest-5 mmrest-6 mmrest-7 mmrest-8 mmrest-9\
  fmrest-1 fmrest-2 fmrest-3 fmrest-4 fmrest-5 measure-repeat-1 \
  noteheadposition-1 valign-1"
 
