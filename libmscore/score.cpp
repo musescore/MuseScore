@@ -1432,8 +1432,8 @@ void Score::removeElement(Element* element)
                this, element, element->name(), parent, parent ? parent->name() : "");
             }
 #endif
-      if (element->parent() && element->parent()->type() == Element::SEGMENT)
-            static_cast<Segment*>(element->parent())->measure()->setDirty();
+      if (parent && parent->type() == Element::SEGMENT)
+            static_cast<Segment*>(parent)->measure()->setDirty();
 
       // special for MEASURE, HBOX, VBOX
       // their parent is not static
