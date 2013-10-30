@@ -1342,6 +1342,21 @@ class ChangeParent : public UndoCommand {
       UNDO_NAME("ChangeParent");
       };
 
+//---------------------------------------------------------
+//   ChangeMMRest
+//---------------------------------------------------------
+
+class ChangeMMRest : public UndoCommand {
+      Measure* m;
+      Measure* mmrest;
+
+      void flip();
+
+   public:
+      ChangeMMRest(Measure* _m, Measure* _mmr) : m(_m), mmrest(_mmr) {}
+      UNDO_NAME("ChangeMMRest");
+      };
+
 }     // namespace Ms
 #endif
 

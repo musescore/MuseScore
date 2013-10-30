@@ -254,7 +254,7 @@ void Measure::remove(Segment* el)
 #ifndef NDEBUG
       if (score()->undoRedo()) {
             qDebug("remove segment <%s> in undo/redo", el->subTypeName());
-            abort();
+            // abort(); can happen for mmrest
             }
 
       // Q_ASSERT(!score()->undoRedo());
@@ -899,6 +899,10 @@ void Measure::add(Element* el)
                   _el.push_back(el);
                   break;
 
+            case MEASURE:
+                  _mmRest = static_cast<Measure*>(el);
+                  break;
+
             default:
                   MeasureBase::add(el);
                   break;
@@ -957,6 +961,10 @@ void Measure::remove(Element* el)
                               }
                         }
                   qDebug("Measure::remove: %s %p not found", el->name(), el);
+                  break;
+
+            case MEASURE:
+                  _mmRest = 0;
                   break;
 
             default:
@@ -3725,6 +3733,34 @@ QVariant Measure::propertyDefault(P_ID propertyId) const
                   break;
             }
       return MeasureBase::getProperty(propertyId);
+      }
+
+//-------------------------------------------------------------------
+//   mmRestFirst
+//    this is a multi measure rest
+//    returns first measure of replaced sequence of empty measures
+//-------------------------------------------------------------------
+
+Measure* Measure::mmRestFirst() const
+      {
+      Q_ASSERT(isMMRest());
+      if (prev())
+            return static_cast<Measure*>(prev()->next());
+      return score()->firstMeasure();
+      }
+
+//-------------------------------------------------------------------
+//   mmRestLast
+//    this is a multi measure rest
+//    returns last measure of replaced sequence of empty measures
+//-------------------------------------------------------------------
+
+Measure* Measure::mmRestLast() const
+      {
+      Q_ASSERT(isMMRest());
+      if (next())
+            return static_cast<Measure*>(next()->prev());
+      return score()->lastMeasure();
       }
 
 }

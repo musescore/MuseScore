@@ -911,5 +911,15 @@ void Segment::removeAnnotation(Element* e)
                   }
             }
       }
+
+//---------------------------------------------------------
+//   clearAnnotations
+//---------------------------------------------------------
+
+void Segment::clearAnnotations()
+      {
+      _annotations.clear();
+      }
+
 }
 
