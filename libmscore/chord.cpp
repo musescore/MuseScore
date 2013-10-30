@@ -1180,13 +1180,16 @@ void Chord::layoutStem1()
       if (hasStem && (_noteType == NOTE_ACCIACCATURA)) {
             if (_stemSlash == 0) {
                   StemSlash* slash = new StemSlash(score());
-                  slash->setParent(this);
-                  slash->setGenerated(true);
-                  score()->undoAddElement(slash);
+                  add(slash);
+
+                  // slash->setParent(this);
+                  // slash->setGenerated(true);
+                  // score()->undoAddElement(slash);
                   }
             }
       else if (_stemSlash)
-            score()->undoRemoveElement(_stemSlash);
+            // score()->undoRemoveElement(_stemSlash);
+            setStemSlash(0);
       }
 
 //---------------------------------------------------------
