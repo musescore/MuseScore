@@ -909,9 +909,9 @@ static bool validMMRestMeasure(Measure* m)
       {
       if (!m->isEmpty())
             return false;
-      auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
-      if (!sl.empty())
-            return false;
+      //auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
+      //if (!sl.empty())
+      //      return false;
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
                   if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT)
@@ -931,6 +931,9 @@ static bool breakMultiMeasureRest(Measure* m)
       {
       if (m->breakMultiMeasureRest())
             return true;
+      auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
+      if (!sl.empty())
+            return false;
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
                   if (e->type() == Element::REHEARSAL_MARK || e->type() == Element::TEMPO_TEXT)
