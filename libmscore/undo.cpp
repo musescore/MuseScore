@@ -3286,5 +3286,16 @@ void ChangeParent::flip()
       parent = p;
       }
 
+//---------------------------------------------------------
+//   ChangeMMRest
+//---------------------------------------------------------
+
+void ChangeMMRest::flip()
+      {
+      Measure* mmr = m->mmRest();
+      m->setMMRest(mmrest);
+      mmrest = mmr;
+      }
+
 }
 

@@ -129,6 +129,7 @@ class Segment : public Element {
             return (ChordRest*)(_elist.value(track));
             };
       const QList<Element*>& elist() const { return _elist; }
+      QList<Element*>& elist()             { return _elist; }
 
       void removeElement(int track);
       void setElement(int track, Element* el);
@@ -165,6 +166,7 @@ class Segment : public Element {
       bool splitsTuplet() const;
 
       const std::vector<Element*>& annotations() const { return _annotations;        }
+      void clearAnnotations();
       void removeAnnotation(Element* e);
       bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
 
