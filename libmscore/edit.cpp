@@ -1251,7 +1251,7 @@ void Score::deleteItem(Element* el)
                   Measure* m = lb->measure();
                   if (m->isMMRest()) {
                         // propagate to original measure
-                        m = static_cast<Measure*>(m->next()->prev());
+                        m = m->mmRestLast();
                         foreach(Element* e, *m->el()) {
                               if (e->type() == Element::LAYOUT_BREAK) {
                                     undoRemoveElement(e);
@@ -1264,16 +1264,39 @@ void Score::deleteItem(Element* el)
 
             case Element::CLEF:
                   {
-                  undoRemoveElement(el);
                   Clef* clef = static_cast<Clef*>(el);
                   Measure* m = clef->measure();
                   if (m->isMMRest()) {
                         // propagate to original measure
-                        m = static_cast<Measure*>(m->next()->prev());
+                        m = m->mmRestLast();
                         Segment* s = m->findSegment(Segment::SegClef, clef->segment()->tick());
                         if (s && s->element(clef->track()))
                               undoRemoveElement(s->element(clef->track()));
                         }
+                  else
+                        undoRemoveElement(el);
+                  }
+                  break;
+
+            case Element::REHEARSAL_MARK:
+            case Element::TEMPO_TEXT:
+                  {
+                  Segment* s = static_cast<Segment*>(el->parent());
+                  Measure* m = s->measure();
+                  if (m->isMMRest()) {
+                        // propagate to original measure/element
+                        m = m->mmRestFirst();
+                        Segment* ns = m->findSegment(Segment::SegChordRest, s->tick());
+                        for (Element* e : ns->annotations()) {
+                              if (e->type() == el->type() && e->track() == el->track()) {
+                                    el = e;
+                                    undoRemoveElement(el);
+                                    break;
+                                    }
+                              }
+                        }
+                  else
+                        undoRemoveElement(el);
                   }
                   break;
 

@@ -295,6 +295,8 @@ class Measure : public MeasureBase {
       void setMMRest(Measure* m)    { _mmRest = m;         }
       int mmRestCount() const       { return _mmRestCount; }    // number of measures _mmRest spans
       void setMMRestCount(int n)    { _mmRestCount = n;    }
+      Measure* mmRestFirst() const;
+      Measure* mmRestLast() const;
       };
 
 }     // namespace Ms

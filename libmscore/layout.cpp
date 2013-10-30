@@ -995,6 +995,7 @@ void Score::createMMRests()
                   else {
                         mmr = new Measure(this);
                         mmr->setLen(len);
+                        undo(new ChangeMMRest(m, mmr));
                         }
 
                   mmr->setMMRestCount(n);
@@ -1004,27 +1005,31 @@ void Score::createMMRests()
                   mmr->setLineBreak(lm->lineBreak());
                   mmr->setSectionBreak(lm->sectionBreak());
                   mmr->setEndBarLineType(lm->endBarLineType(), false, lm->endBarLineVisible(), lm->endBarLineColor());
+
                   qDeleteAll(*mmr->el());
                   mmr->el()->clear();
                   for (Element* e : *lm->el())
                         mmr->add(e->clone());
 
-                  Segment* s = mmr->getSegment(Segment::SegChordRest, m->tick());
+                  Segment* s = mmr->undoGetSegment(Segment::SegChordRest, m->tick());
                   for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                         int track = staffIdx * VOICES;
                         if (s->element(track) == 0) {
                               Rest* r = new Rest(this);
                               r->setDurationType(TDuration::V_MEASURE);
                               r->setTrack(track);
-                              s->add(r);
+                              r->setParent(s);
+                              undo(new AddElement(r));
                               }
                         }
                   //
                   // check for clefs
                   //
                   Segment* cs = lm->findSegment(Segment::SegClef, lm->endTick());
+                  Segment* ns = mmr->findSegment(Segment::SegClef, lm->endTick());
                   if (cs) {
-                        Segment* ns = mmr->getSegment(Segment::SegClef, lm->endTick());
+                        if (ns == 0)
+                              ns = mmr->undoGetSegment(Segment::SegClef, lm->endTick());
                         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                               int track = staffIdx * VOICES;
                               Clef* clef = static_cast<Clef*>(cs->element(track));
@@ -1037,30 +1042,42 @@ void Score::createMMRests()
                                     }
                               }
                         }
+                  else if (ns)
+                        undo(new RemoveElement(ns));
                   //
                   // check for time signature
                   //
                   cs = m->findSegment(Segment::SegTimeSig, m->tick());
+                  ns = mmr->findSegment(Segment::SegTimeSig, m->tick());
                   if (cs) {
-                        Segment* ns = mmr->getSegment(Segment::SegTimeSig, m->tick());
+                        if (ns == 0)
+                              ns = mmr->undoGetSegment(Segment::SegTimeSig, m->tick());
                         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                               int track = staffIdx * VOICES;
                               TimeSig* ts = static_cast<TimeSig*>(cs->element(track));
                               if (ts) {
-                                    if (ns->element(track) == 0)
-                                          ns->add(ts->clone());
+                                    if (ns->element(track) == 0) {
+                                          TimeSig* nts = ts->clone();
+                                          nts->setParent(ns);
+                                          undo(new AddElement(nts));
+                                          }
                                     else {
                                           //TODO: check if same time signature
                                           }
                                     }
                               }
                         }
+                  else if (ns)
+                        undo(new RemoveElement(ns));
+
                   //
                   // check for key signature
                   //
                   cs = m->findSegment(Segment::SegKeySig, m->tick());
+                  ns = mmr->findSegment(Segment::SegKeySig, m->tick());
                   if (cs) {
-                        Segment* ns = mmr->getSegment(Segment::SegKeySig, m->tick());
+                        if (ns == 0)
+                              ns = mmr->undoGetSegment(Segment::SegKeySig, m->tick());
                         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                               int track = staffIdx * VOICES;
                               KeySig* ts = static_cast<KeySig*>(cs->element(track));
@@ -1073,25 +1090,50 @@ void Score::createMMRests()
                                     }
                               }
                         }
+                  else if (ns)
+                        undo(new RemoveElement(ns));
+
                   //
                   // check for rehearsal mark and tempo text
                   //
                   cs = m->findSegment(Segment::SegChordRest, m->tick());
                   for (Element* e : cs->annotations()) {
-                        if (e->type() == Element::REHEARSAL_MARK || e->type() == Element::TEMPO_TEXT) {
-                              s->add(e->clone());
-                              break;
+                        if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT)
+                              continue;
+
+                        bool found = false;
+                        for (Element* ee : s->annotations()) {
+                              if (ee->type() == e->type() && ee->track() == e->track()) {
+                                    found = true;
+                                    break;
+                                    }
                               }
+                        if (!found) {
+                              Element* ne = e->clone();
+                              ne->setParent(s);
+                              undo(new AddElement(ne));
+                              }
+                        }
+                  for (Element* e : s->annotations()) {
+                        if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT)
+                              continue;
+                        bool found = false;
+                        for (Element* ee : cs->annotations()) {
+                              if (ee->type() == e->type() && ee->track() == e->track()) {
+                                    found = true;
+                                    break;
+                                    }
+                              }
+                        if (!found)
+                              undo(new RemoveElement(e));
                         }
 
                   mmr->setNext(nm);
                   mmr->setPrev(m->prev());
-                  m->setMMRest(mmr);
                   m = lm;
                   }
             else if (m->mmRest()) {
-//                  delete m->mmRest();   // referenced by undo/redo ?
-                  m->setMMRest(0);
+                  undo(new ChangeMMRest(m, 0));
                   }
             }
       }
