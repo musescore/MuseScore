@@ -1283,7 +1283,7 @@ void ScoreView::updateAll()
 
 void ScoreView::moveCursor(int tick)
       {
-      Measure* measure = score()->tick2measure(tick);
+      Measure* measure = score()->tick2measureMM(tick);
       if (measure == 0)
             return;
       int offset = 0;

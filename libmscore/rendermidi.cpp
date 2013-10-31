@@ -549,7 +549,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                   int track = chord->track();
                   while (seg2 && !seg2->element(track))
                         seg2 = seg2->next(st);
-                  Chord* c2 = static_cast<Chord*>(seg2->element(track));
+                  Chord* c2 = seg2 ? static_cast<Chord*>(seg2->element(track)) : 0;
                   if (c2 && c2->type() == Element::CHORD) {
                         int tnotes = qMin(notes, c2->notes().size());
                         n /= 2;
