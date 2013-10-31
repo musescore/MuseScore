@@ -258,9 +258,19 @@ void Range::layout()
             _bottomPos.setX(0);
             }
 
-      // compute line from top to bottom note
-      _line.setLine(_topPos.x() + headWdt*0.5, _topPos.y() + 0.75*_spatium,
-           _bottomPos.x() + headWdt*0.5, _bottomPos.y() - 0.75*_spatium);
+      // compute line from top note centre to bottom note centre
+      QLineF fullLine(_topPos.x() + headWdt*0.5, _topPos.y(),
+            _bottomPos.x() + headWdt*0.5, _bottomPos.y());
+      // shorten line on each side by offsets
+      qreal yDelta = _bottomPos.y() - _topPos.y();
+      if (yDelta != 0.0) {
+            qreal off = _spatium * .75;
+            QPointF p1 = fullLine.pointAt(off / yDelta);
+            QPointF p2 = fullLine.pointAt(1 - (off / yDelta));
+            _line = QLineF(p1, p2);
+            }
+      else
+            _line = fullLine;
 
       QRectF headRect = QRectF(0, -0.5*_spatium, headWdt, 1*_spatium);
       setbbox(headRect.translated(_topPos).united(headRect.translated(_bottomPos)));
