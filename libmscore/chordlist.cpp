@@ -467,9 +467,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
       {
       QString tok1, tok1L, tok2, tok2L;
       QString extensionDigits = "123456789";
-      QString special = "()[], ";
+      QString special = "()[],/\\ ";
       QString leading = "([ ";
-      QString trailing = ")], ";
+      QString trailing = ")],/\\ ";
       QString initial;
       bool take6 = false, take7 = false, take9 = false, take11 = false, take13 = false;
 #if 0

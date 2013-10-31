@@ -517,12 +517,15 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       else
             preferMinor = false;
       *base = INVALID_TPC;
-      int slash = s.indexOf('/');
+      int slash = s.lastIndexOf('/');
       if (slash != -1) {
             QString bs = s.mid(slash+1);
-            s = s.mid(idx, slash - idx);
+            s = s.mid(idx, slash - idx).simplified();
             int dummy;
             *base = convertRoot(bs, _baseSpelling, dummy);
+            if (*base == INVALID_TPC)
+                  // if no TPC after slash, reassemble chord
+                  s = s + "/" + bs;
             }
       else
             s = s.mid(idx).simplified();
