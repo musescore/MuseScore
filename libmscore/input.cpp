@@ -17,6 +17,7 @@
 #include "score.h"
 #include "chord.h"
 #include "rest.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -60,15 +61,6 @@ int InputState::tick() const
 ChordRest* InputState::cr() const
       {
       return _segment ? static_cast<ChordRest*>(_segment->element(_track)) : 0;
-      }
-
-//---------------------------------------------------------
-//   setTrack
-//---------------------------------------------------------
-
-void InputState::setTrack(int v)
-      {
-      _track = v;
       }
 
 //---------------------------------------------------------
@@ -122,15 +114,34 @@ void InputState::moveInputPos(Element* e)
       {
       if (e == 0)
             return;
+
       Segment* s;
       if (e->isChordRest())
             s = static_cast<ChordRest*>(e)->segment();
       else
             s = static_cast<Segment*>(e);
       if (s->type() == Element::SEGMENT) {
+            if (s->measure()->isMMRest()) {
+                  Measure* m = s->measure()->mmRestFirst();
+                  s = m->findSegment(Segment::SegChordRest, m->tick());
+                  }
             _lastSegment = _segment;
             _segment = s;
             }
+      }
+
+//---------------------------------------------------------
+//   setSegment
+//---------------------------------------------------------
+
+void InputState::setSegment(Segment* s)
+      {
+      if (s && s->measure()->isMMRest()) {
+            Measure* m = s->measure()->mmRestFirst();
+            s = m->findSegment(Segment::SegChordRest, m->tick());
+            }
+      _segment = s;
+      _lastSegment = s;
       }
 
 //---------------------------------------------------------
