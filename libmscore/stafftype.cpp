@@ -722,7 +722,7 @@ qreal StaffTypeTablature::chordStemLength(const Chord *chord) const
       else {
             bool shrt = (minimStyle() == TAB_MINIM_SHORTER) && (chord->durationType().type() == TDuration::V_HALF);
             stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
-                        * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0);
+                        * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * chord->mag();
             }
       return stemLen;
       }
