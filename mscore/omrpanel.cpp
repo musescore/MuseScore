@@ -50,7 +50,7 @@ void MuseScore::showOmrPanel(bool visible)
 //---------------------------------------------------------
 
 OmrPanel::OmrPanel(QWidget* parent)
-   : QDockWidget(tr("Omr Panel"), parent)
+   : QDockWidget(tr("OMR Panel"), parent)
       {
       setObjectName("omrpanel");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
