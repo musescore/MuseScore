@@ -40,7 +40,7 @@ extern Driver* getPulseAudioDriver(Seq*);
 Driver* driverFactory(Seq* seq, QString driverName)
       {
       Driver* driver = 0;
-#if 0 // DEBUG
+#if 1 // DEBUG: force "no audio"
       bool useJackFlag       = (preferences.useJackAudio || preferences.useJackMidi);
       bool useAlsaFlag       = preferences.useAlsaAudio;
       bool usePortaudioFlag  = preferences.usePortaudioAudio;
