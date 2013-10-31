@@ -1671,26 +1671,25 @@ void Chord::layoutTablature()
       qreal _spatium  = spatium();
       qreal minNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
 
+      for (Chord* c : _graceNotes)
+            c->layoutTablature();
+
       while (_ledgerLines) {
             LedgerLine* l = _ledgerLines->next();
             delete _ledgerLines;
             _ledgerLines = l;
             }
 
-      qreal lll       = 0.0;                    // space to leave at left of chord
-      qreal rrr       = 0.0;                    // space to leave at right of chord
-      Note* upnote    = upNote();
-      qreal headWidth = symbols[score()->symIdx()][quartheadSym].width(magS());
-      StaffTypeTablature* tab = 0;
+      qreal lll         = 0.0;                  // space to leave at left of chord
+      qreal rrr         = 0.0;                  // space to leave at right of chord
+      Note* upnote      = upNote();
+      qreal headWidth   = symbols[score()->symIdx()][quartheadSym].width(magS());
+      StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+      qreal lineDist    = tab->lineDistance().val() *_spatium;
+      qreal stemX       = tab->chordStemPosX(this) *_spatium;
 
-      //
-      // TABLATURE STAVES
-      //
-      tab = (StaffTypeTablature*)staff()->staffType();
-      qreal lineDist = tab->lineDistance().val();
-      qreal stemX = tab->chordStemPosX(this) *_spatium;
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i) {
+      int numOfNotes = _notes.size();
+      for (int i = 0; i < numOfNotes; ++i) {
             Note* note = _notes.at(i);
             note->layout();
             // set headWidth to max fret text width
@@ -1699,8 +1698,7 @@ void Chord::layoutTablature()
                   headWidth = fretWidth;
             // centre fret string on stem
             qreal x = stemX - fretWidth*0.5;
-            note->setPos(x, _spatium * tab->physStringToVisual(note->string()) * lineDist);
-            // note->layout2();              // needed? it is repeated later right before computing bbox
+            note->setPos(x, tab->physStringToVisual(note->string()) * lineDist);
             }
       // horiz. spacing: leave half width at each side of the (potential) stem
       qreal halfHeadWidth = headWidth * 0.5;
@@ -1739,8 +1737,9 @@ void Chord::layoutTablature()
       _stemSlash = 0;
 
       if (!tab->genDurations()            // if tab is not set for duration symbols
-         || (track2voice(track()))) {         // or not in first voice
-            //
+            || track2voice(track())       // or not in first voice
+            || isGrace()) {               // or chord is a grace (no dur. symbols for graces
+            //                            // wich are not used in hist. tabs anyway)
             // no tab duration symbols
             //
             delete _tabDur;   // delete an existing duration symbol
@@ -1766,6 +1765,7 @@ void Chord::layoutTablature()
                   else
                         _tabDur->setDuration(durationType().type(), dots(), tab);
                   _tabDur->setParent(this);
+//                  _tabDur->setMag(mag());     // useless to set grace mag: graces have no dur. symbol
                   _tabDur->layout();
                   }
             else {                    // symbol not needed: if exists, delete
@@ -1813,7 +1813,21 @@ void Chord::layoutTablature()
             }
 
       _space.setLw(lll);
-      _space.setRw(rrr + ipos().x());
+      _space.setRw(rrr);
+
+      int numOfGraces = _graceNotes.size();
+      if (numOfGraces) {
+            qreal x = -(_space.lw() + minNoteDistance);
+            qreal graceMag = score()->styleD(ST_graceNoteMag);
+            for (int i = numOfGraces-1; i >= 0; --i) {
+                  Chord* c = _graceNotes[i];
+                  x -= c->space().rw();
+                  c->setPos(x, 0);
+                  x -= c->space().lw() + minNoteDistance * graceMag;
+                  }
+            if (-x > _space.lw())
+                  _space.setLw(-x);
+            }
 
       for (Element* e : _el) {
             e->layout();
@@ -1825,7 +1839,7 @@ void Chord::layoutTablature()
             }
       // bbox();
 
-      for (int i = 0; i < _notes.size(); ++i)
+      for (int i = 0; i < numOfNotes; ++i)
             _notes.at(i)->layout2();
       QRectF bb;
       processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
