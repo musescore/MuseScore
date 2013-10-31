@@ -1037,8 +1037,9 @@ void Score::cmdFlip()
                   undoChangeProperty(slur, P_SLUR_DIRECTION, dir);
                   }
             else if (e->type() == Element::HAIRPIN_SEGMENT) {
-                  int st = static_cast<Hairpin*>(e)->hairpinType() == 0 ? 1 : 0;
-                  e->score()->undoChangeProperty(e, P_SUBTYPE, st);
+                  Hairpin* h = static_cast<HairpinSegment*>(e)->hairpin();
+                  int st = h->hairpinType() == 0 ? 1 : 0;
+                  undoChangeProperty(h, P_HAIRPIN_TYPE, st);
                   }
             else if (e->type() == Element::ARTICULATION) {
                   Articulation* a = static_cast<Articulation*>(e);
