@@ -240,7 +240,8 @@ class SeekTransition : public QMouseEventTransition
             return false;
             }
       virtual void onTransition(QEvent*) {
-            seq->seek(cr->tick());
+            if (seq)
+                  seq->seek(cr->tick());
             canvas->setCursorVisible(true);
             }
    public:
@@ -830,52 +831,54 @@ ScoreView::ScoreView(QWidget* parent)
       s->addTransition(new DragTransition(this));
 
       //----------------------setup play state
-      s = states[PLAY];
-      // s->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-      s->addTransition(new CommandTransition("play", states[NORMAL]));
-      s->addTransition(new CommandTransition("escape", states[NORMAL]));
-      s->addTransition(new SeekTransition(this, states[PLAY]));
-      QSignalTransition* st = new QSignalTransition(seq, SIGNAL(stopped()));
-      st->setTargetState(states[NORMAL]);
-      s->addTransition(st);
-      connect(s, SIGNAL(entered()), mscore, SLOT(setPlayState()));
-      connect(s, SIGNAL(entered()), seq, SLOT(start()));
-      connect(s, SIGNAL(exited()),  seq, SLOT(stop()));
+      if (seq) {
+            s = states[PLAY];
+            // s->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
+            s->addTransition(new CommandTransition("play", states[NORMAL]));
+            s->addTransition(new CommandTransition("escape", states[NORMAL]));
+            s->addTransition(new SeekTransition(this, states[PLAY]));
+            QSignalTransition* st = new QSignalTransition(seq, SIGNAL(stopped()));
+            st->setTargetState(states[NORMAL]);
+            s->addTransition(st);
+            connect(s, SIGNAL(entered()), mscore, SLOT(setPlayState()));
+            connect(s, SIGNAL(entered()), seq, SLOT(start()));
+            connect(s, SIGNAL(exited()),  seq, SLOT(stop()));
 
-      QState* s1 = new QState(s);
-      s1->setObjectName("play-normal");
-      connect(s1, SIGNAL(entered()), SLOT(enterState()));
-      connect(s1, SIGNAL(exited()), SLOT(exitState()));
-      QState* s2 = new QState(s);
-      connect(s2, SIGNAL(entered()), SLOT(enterState()));
-      connect(s2, SIGNAL(exited()), SLOT(exitState()));
-      s2->setObjectName("play-drag");
+            QState* s1 = new QState(s);
+            s1->setObjectName("play-normal");
+            connect(s1, SIGNAL(entered()), SLOT(enterState()));
+            connect(s1, SIGNAL(exited()), SLOT(exitState()));
+            QState* s2 = new QState(s);
+            connect(s2, SIGNAL(entered()), SLOT(enterState()));
+            connect(s2, SIGNAL(exited()), SLOT(exitState()));
+            s2->setObjectName("play-drag");
 
-      s1->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-      s1->addTransition(new ScoreViewDragTransition(this, s2));      // ->stateDrag
+            s1->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
+            s1->addTransition(new ScoreViewDragTransition(this, s2));      // ->stateDrag
 
-      // drag during play state
-      s2->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
-      cl = new QEventTransition(this, QEvent::MouseButtonRelease);
-      cl->setTargetState(s1);
-      s2->addTransition(cl);
-      connect(s2, SIGNAL(entered()), SLOT(deselectAll()));
-      s2->addTransition(new DragTransition(this));
+            // drag during play state
+            s2->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
+            cl = new QEventTransition(this, QEvent::MouseButtonRelease);
+            cl->setTargetState(s1);
+            s2->addTransition(cl);
+            connect(s2, SIGNAL(entered()), SLOT(deselectAll()));
+            s2->addTransition(new DragTransition(this));
 
-      s->setInitialState(s1);
-      s->addTransition(new ScoreViewDragTransition(this, s2));
+            s->setInitialState(s1);
+            s->addTransition(new ScoreViewDragTransition(this, s2));
 
-      // setup editPlay state
-      s = states[ENTRY_PLAY];
-      s->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-      s->addTransition(new CommandTransition("play", states[NOTE_ENTRY]));
-      s->addTransition(new CommandTransition("escape", states[NOTE_ENTRY]));
-      st = new QSignalTransition(seq, SIGNAL(stopped()));
-      st->setTargetState(states[NOTE_ENTRY]);
-      s->addTransition(st);
-      connect(s, SIGNAL(entered()), mscore, SLOT(setPlayState()));
-      connect(s, SIGNAL(entered()), seq, SLOT(start()));
-      connect(s, SIGNAL(exited()),  seq, SLOT(stop()));
+            // setup editPlay state
+            s = states[ENTRY_PLAY];
+            s->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
+            s->addTransition(new CommandTransition("play", states[NOTE_ENTRY]));
+            s->addTransition(new CommandTransition("escape", states[NOTE_ENTRY]));
+            st = new QSignalTransition(seq, SIGNAL(stopped()));
+            st->setTargetState(states[NOTE_ENTRY]);
+            s->addTransition(st);
+            connect(s, SIGNAL(entered()), mscore, SLOT(setPlayState()));
+            connect(s, SIGNAL(entered()), seq, SLOT(start()));
+            connect(s, SIGNAL(exited()),  seq, SLOT(stop()));
+            }
 
       setupFotoMode();
 
@@ -1365,6 +1368,10 @@ void ScoreView::moveCursor()
       {
       const InputState& is = _score->inputState();
       Segment* segment = is.segment();
+      if (segment && score()->styleB(ST_createMultiMeasureRests) && segment->measure()->hasMMRest()) {
+            Measure* m = segment->measure()->mmRest();
+            segment = m->findSegment(Segment::SegChordRest, m->tick());
+            }
       if (!segment)
             return;
 
@@ -1400,8 +1407,8 @@ void ScoreView::moveCursor()
       // if on a TAB staff and InputState::_string makes sense,
       // draw cursor around single string
       if (staff->isTabStaff() && strg > VISUAL_STRING_NONE && strg < lines) {
-            h = lineDist * 1.5;         // 1 space above strg for letters and 1/2 sp. below strg for numbers
-            y += lineDist * (strg-1);    // star 1 sp. above strg to include letter position
+            h = lineDist * 1.5;       // 1 space above strg for letters and 1/2 sp. below strg for numbers
+            y += lineDist * (strg-1); // star 1 sp. above strg to include letter position
             }
       // otherwise, draw cursor across whole staff
       else {
@@ -3122,7 +3129,8 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
 //TODO?                  select(ev);
                   }
             Element::ElementType type = e->type();
-            seq->stopNotes();       // stop now because we dont get a mouseRelease event
+            if (seq)
+                  seq->stopNotes();       // stop now because we dont get a mouseRelease event
             if (type == Element::MEASURE)
                   measurePopup(gp, static_cast<Measure*>(e));
             else {
