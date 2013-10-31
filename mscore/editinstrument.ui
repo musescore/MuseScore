@@ -109,7 +109,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Midi Program</string>
+         <string>MIDI Program</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>

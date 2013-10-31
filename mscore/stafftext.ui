@@ -50,7 +50,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Switch one ore more voices to a specified channel:</string>
+          <string>Switch one or more voices to a specified channel:</string>
          </property>
         </widget>
        </item>
@@ -853,7 +853,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Midi Action</string>
+       <string>MIDI Action</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>

@@ -621,7 +621,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             settings.setValue("/Export/lameMP3LibPath", "");
             if(!noGui)
                   QMessageBox::warning(0,
-                               tr("Error opening lame library"),
+                               tr("Error opening LAME library"),
                                tr("Could not open MP3 encoding library!"),
                                QString::null, QString::null);
             qDebug("Could not open MP3 encoding library!\n");
@@ -633,7 +633,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             settings.setValue("/Export/lameMP3LibPath", "");
             if(!noGui)
                   QMessageBox::warning(0,
-                               tr("Error opening lame library"),
+                               tr("Error opening LAME library"),
                                tr("Not a valid or supported MP3 encoding library!"),
                                QString::null, QString::null);
             qDebug("Not a valid or supported MP3 encoding library!\n");

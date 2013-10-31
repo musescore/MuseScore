@@ -563,7 +563,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>SoundFonts Folders:</string>
+             <string>Soundfonts Folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -592,7 +592,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>Sfz Files Folders:</string>
+             <string>SFZ Files Folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
