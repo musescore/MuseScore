@@ -138,7 +138,7 @@
        <item>
         <widget class="QGroupBox" name="midiAction">
          <property name="title">
-          <string>Midi Action</string>
+          <string>MIDI Action</string>
          </property>
          <property name="flat">
           <bool>false</bool>

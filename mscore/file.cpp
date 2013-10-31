@@ -1067,7 +1067,7 @@ QString MuseScore::getScanFile(const QString& d)
 
 QString MuseScore::getAudioFile(const QString& d)
       {
-      QString filter = tr("OGG Audio File (*.ogg);;All (*)");
+      QString filter = tr("Ogg Audio File (*.ogg);;All (*)");
       QString defaultPath = d.isEmpty() ? QDir::homePath() : d;
       if (preferences.nativeDialogs) {
             QString s = QFileDialog::getOpenFileName(
@@ -1083,7 +1083,7 @@ QString MuseScore::getAudioFile(const QString& d)
             loadAudioDialog = new QFileDialog(this);
             loadAudioDialog->setFileMode(QFileDialog::ExistingFile);
             loadAudioDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-            loadAudioDialog->setWindowTitle(tr("MuseScore: Choose OGG Audio File"));
+            loadAudioDialog->setWindowTitle(tr("MuseScore: Choose Ogg Audio File"));
             loadAudioDialog->setNameFilter(filter);
             loadAudioDialog->setDirectory(defaultPath);
 
@@ -1486,7 +1486,7 @@ bool MuseScore::exportFile()
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio (*.wav)"));
-      fl.append(tr("Flac Audio (*.flac)"));
+      fl.append(tr("FLAC Audio (*.flac)"));
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
       fl.append(tr("MP3 Audio (*.mp3)"));
@@ -1539,7 +1539,7 @@ bool MuseScore::exportParts()
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio (*.wav)"));
-      fl.append(tr("Flac Audio (*.flac)"));
+      fl.append(tr("FLAC Audio (*.flac)"));
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
       fl.append(tr("MP3 Audio (*.mp3)"));

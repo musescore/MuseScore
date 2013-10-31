@@ -1155,7 +1155,7 @@ Shortcut Shortcut::sc[] = {
        /* no stroke: 4th*/
         "grace4",
         QT_TRANSLATE_NOOP("action","Grace: quarter"),
-        QT_TRANSLATE_NOOP("action","Add quarter grace node"),
+        QT_TRANSLATE_NOOP("action","Add quarter grace note"),
         QT_TRANSLATE_NOOP("action","Grace: quarter"),
          grace4_ICON
         ),

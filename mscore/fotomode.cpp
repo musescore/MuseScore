@@ -651,7 +651,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             bool ok;
             double resolution = QInputDialog::getDouble(this,
                tr("MuseScore: Set Output Resolution"),
-               tr("Set output resolution for png/svg"),
+               tr("Set output resolution for PNG/SVG"),
                preferences.pngResolution,
                16.0, 2400.0, 1,
                &ok
