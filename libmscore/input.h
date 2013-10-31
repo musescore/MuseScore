@@ -61,7 +61,7 @@ class InputState {
       int ticks() const                    { return _duration.ticks(); }
 
       Segment* segment() const            { return _segment;        }
-      void setSegment(Segment* s)         { _segment = s;           }
+      void setSegment(Segment* s);
 
       Segment* lastSegment() const        { return _lastSegment;        }
       void setLastSegment(Segment* s)     { _lastSegment = s;           }
@@ -73,7 +73,7 @@ class InputState {
 
       int voice() const                   { return _track % VOICES; }
       int track() const                   { return _track;          }
-      void setTrack(int v);
+      void setTrack(int v)                { _track = v;             }
 
       int string() const                  { return _string;             }
       void setString(int val)             { _string = val;              }

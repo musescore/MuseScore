@@ -40,7 +40,7 @@ extern Driver* getPulseAudioDriver(Seq*);
 Driver* driverFactory(Seq* seq, QString driverName)
       {
       Driver* driver = 0;
-
+#if 0 // DEBUG
       bool useJackFlag       = (preferences.useJackAudio || preferences.useJackMidi);
       bool useAlsaFlag       = preferences.useAlsaAudio;
       bool usePortaudioFlag  = preferences.usePortaudioAudio;
@@ -117,6 +117,7 @@ Driver* driverFactory(Seq* seq, QString driverName)
             else
                   useJACK = true;
             }
+#endif
 #endif
       if (driver == 0)
             qDebug("no audio driver found");
