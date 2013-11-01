@@ -469,7 +469,7 @@
          <item>
           <widget class="QCheckBox" name="transposeChordNames">
            <property name="text">
-            <string>Transpose chord names</string>
+            <string>Transpose chord symbols</string>
            </property>
            <property name="checked">
             <bool>true</bool>
