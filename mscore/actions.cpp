@@ -1436,8 +1436,8 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "harmony-properties",
-         QT_TRANSLATE_NOOP("action","Harmony Properties"),
-         QT_TRANSLATE_NOOP("action","Show harmony properties for chord")
+         QT_TRANSLATE_NOOP("action","Chord Name Properties"),
+         QT_TRANSLATE_NOOP("action","Show properties for chord name")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -2458,13 +2458,13 @@ Shortcut Shortcut::sc[] = {
          STATE_HARMONY_FIGBASS_EDIT,
          0,
          "prev-beat-TEXT",
-         QT_TRANSLATE_NOOP("action","Previous beat (Harmony)")
+         QT_TRANSLATE_NOOP("action","Previous beat (Chord name)")
          ),
       Shortcut(
          STATE_HARMONY_FIGBASS_EDIT,
          0,
          "next-beat-TEXT",
-         QT_TRANSLATE_NOOP("action","Next beat (Harmony)")
+         QT_TRANSLATE_NOOP("action","Next beat (Chord name)")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
