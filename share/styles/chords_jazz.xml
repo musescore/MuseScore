@@ -140,6 +140,7 @@
     <sym value="(" name="s("/>
     <sym value=")" name="s)"/>
     <sym value="," name="s,"/>
+    <sym value="/" name="s/"/>
 
     <sym code="0xe18a" name="striangle"/>
 
@@ -247,6 +248,16 @@
     <render>m:0:-&ext; m:0:-2 ) m:0:2 m:0:&ext;</render>
     </token>
 
+  <token class="extension">
+    <name>,</name>
+    <render>m:0:-&ext; m:0:-1 , m:0:1 m:0:&ext;</render>
+    </token>
+
+  <token class="extension">
+    <name>/</name>
+    <render>m:0:-&ext; m:0:-1 / m:0:1 m:0:&ext;</render>
+    </token>
+
   <token class="modifier">
     <name>(</name>
     <render>m:1:-&mod; s( m:0:&mod;</render>
@@ -260,6 +271,11 @@
   <token class="modifier">
     <name>,</name>
     <render>m:0:-&mod; s, m:0:&mod;</render>
+    </token>
+
+  <token class="modifier">
+    <name>/</name>
+    <render>m:0:-&mod; s/ m:0:&mod;</render>
     </token>
 
   <token class="modifier">
@@ -361,9 +377,10 @@
     <name>3</name>
     <render>m:0:-&modn; s3 m:0:&modn;</render>
     </token>
-<!-- kludge: 4 used with sus mostly, so lower it accordingly -->
+
   <token class="modifier">
     <name>4</name>
+    <!-- kludge: 4 used with sus mostly, so lower it accordingly -->
     <render>m:0:0 s4 m:0:0</render>
     </token>
 
@@ -444,5 +461,15 @@
                   so you can get all major seventh chords to render as "ma7" by creating a chord definition
                   with no id or render tag, and just the single name "ma7"
 -->
+
+  <chord>
+    <name>6/9</name>
+    <render>m:1:-2 s6 m:-2.5:0 s/ m:-2:7 s9 m:0:-5</render>
+    </chord>
+
+  <chord>
+    <name>6,9</name>
+    <render>s6 m:0:-&mod; s, m:0:&mod; s9</render>
+    </chord>
 
   </museScore>
