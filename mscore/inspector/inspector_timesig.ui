@@ -72,7 +72,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>timesig</string>
+        <string>time sig.</string>
        </property>
       </widget>
      </item>
@@ -161,7 +161,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>global timesig</string>
+        <string>global time sig.</string>
        </property>
       </widget>
      </item>
