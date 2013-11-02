@@ -1,5 +1,5 @@
 # Aeolus instrument definition file
-# Created by Aeolus-0.6.6 at Sat May 13 01:44:55 2006
+# Created by Aeolus-0.8.4 at Fri Sep 20 14:06:16 2013
 
 # Tuning parameters
 # base tuning in Hz followed by temperament as follows
@@ -29,67 +29,67 @@
 #
 /divis/new    III      1  1
 /rank         C  17  III_principal_8.ae0
-/rank         W  20  gemshorn8.ae0
-/rank         R  17  quintadena.ae0
-/rank         L  26  suabile.ae0
-/rank         R  21  rohrflute4.ae0
+/rank         W  20  suabile.ae0
+/rank         R  17  Gamba8.ae0
+/rank         L  26  FlatCeleste8.ae0
+/rank         R  21  III_principal_4.ae0
 /rank         R  30  III_flautodolce4.ae0
-/rank         C  20  quintflute.ae0
-/rank         L  31  superoctave2.ae0
-/rank         R  23  sifflet1.ae0
-/rank         L  13  III_cymbel.ae0
+/rank         C  20  superoctave2.ae0
+/rank         L  31  III_cymbel.ae0
+/rank         L  26  flute_cornet.ae0
+/rank         L  13  new_oboe_16.ae0
 /rank         R  27  new_oboe_fa.ae0
 /swell
 /tremul       4.0  0.4
 /divis/end
 
 /divis/new    II       2  2
-/rank         L  23  rohrflute8.ae0
-/rank         C  21  harmflute8.ae0
-/rank         R  19  II_flautodolce4.ae0
+/rank         L  23  lieblich_bourdon.ae0
+/rank         C  21  rohrflute8.ae0
+/rank         R  19  harmflute4.ae0
 /rank         C  25  nasard.ae0
 /rank         L  23  ottavina2.ae0
 /rank         R  24  tertia.ae0
-/rank         L  26  sesqualtera.ae0
-/rank         R  30  septime.ae0
-/rank         R  22  none.ae0
+/rank         R  30  larigot.ae0
+/rank         R  22  sifflet1.ae0
+/rank         R  23  cromhorne16.ae0
 /rank         W  24  cromhorne.ae0
-/rank         L  18  I_melodia.ae0
+/rank         L  18  VoxHumana.ae0
 /swell
 /tremul       5.0  0.3
 /divis/end
 
 /divis/new    I        3  3
-/rank         C  10  I_principal_8.ae0
-/rank         R  14  I_principal_4.ae0
-/rank         L  16  I_octave_2.ae0
-/rank         R  19  I_octave_1.ae0
-/rank         C  21  I_quinte_513.ae0
-/rank         R  19  I_quinte_223.ae0
-/rank         L  22  tibia8.ae0
-/rank         C  13  celesta.ae0
-/rank         C   5  flute8.ae0
-/rank         R   8  flute4.ae0
-/rank         R  10  flute2.ae0
-/rank         C   4  I_cymbel.ae0
-/rank         L  18  I_mixtur5fach.ae0
-/rank         W   0  I_trumpet.ae0
+/rank         C  10  I_principal_16.ae0
+/rank         R  14  I_principal_8.ae0
+/rank         L  16  Gedact8.ae0
+/rank         R  19  I_quinte_513.ae0
+/rank         C  21  I_principal_4.ae0
+/rank         R  19  rohrflute4.ae0
+/rank         L  22  I_quinte_223.ae0
+/rank         C  13  I_octave_2.ae0
+/rank         C   5  I_mixtur5fach.ae0
+/rank         R   8  MountedCornetV.ae0
+/rank         R  10  sesqualtera.ae0
+/rank         L  26  trumpet16.ae0
+/rank         L  18  trumpet8.ae0
+/rank         W   0  tromba8.ae0
 /divis/end
 
 /divis/new    P        4  4
-/rank         C  20  bourdon16.ae0
+/rank         C  20  bourdon32.ae0
 /rank         C  28  P_principal_16.ae0
-/rank         R  17  P_principal_8.ae0
-/rank         C  21  P_principal_4.ae0
-/rank         L  10  P_octave_2.ae0
-/rank         R  15  P_octave_1.ae0
-/rank         L  22  P_quinte_513.ae0
-/rank         R  26  P_quinte_223.ae0
+/rank         R  17  bourdon16.ae0
+/rank         C  21  P_Dulciana16.ae0
+/rank         L  10  P_principal_8.ae0
+/rank         R  15  bourdon8.ae0
+/rank         L  22  P_principal_4.ae0
+/rank         R  26  bourdon4.ae0
 /rank         C  18  P_mixtur5fach.ae0
-/rank         C  30  bassoon.ae0
-/rank         W  10  trombone.ae0
-/rank         W  15  bombarde.ae0
-/rank         L   5  P_trumpet.ae0
+/rank         C  30  bombarde.ae0
+/rank         W  10  trombone1.ae0
+/rank         W  15  P_trumpet.ae0
+/rank         L   5  P_trumpet4.ae0
 /divis/end
 
 # Interface groups
