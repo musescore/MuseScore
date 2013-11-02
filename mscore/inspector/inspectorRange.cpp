@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2011 Werner Schweer
+//  Copyright (C) 2011-2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -10,16 +10,10 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "libmscore/score.h"
-//#include "libmscore/chord.h"
-//#include "libmscore/note.h"
-//#include "libmscore/notedot.h"
-//#include "libmscore/beam.h"
-//#include "libmscore/stem.h"
-//#include "libmscore/hook.h"
-#include "libmscore/rangesymbol.h"
 #include "inspector.h"
 #include "inspectorRange.h"
+#include "libmscore/rangesymbol.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -104,6 +98,7 @@ InspectorRange::InspectorRange(QWidget* parent)
             };
 
       mapSignals();
+      connect(r.updateRange, SIGNAL(clicked()), this, SLOT(updateRange()) );
 
       }
 
@@ -122,5 +117,32 @@ void InspectorRange::setElement()
 //      InspectorBase::setElement();
       }
 */
+//---------------------------------------------------------
+//   valueChanged
+//---------------------------------------------------------
+
+void InspectorRange::valueChanged(int idx)
+      {
+      InspectorBase::valueChanged(idx);
+      // if either tpc or octave is changed, notes can have been swapped
+      // (to keep top above bottom): reload data
+      if (idx >= TOPTPC && idx <= BOTTOMOCTAVE) {
+            setElement();
+            }
+      }
+
+}
+
+//---------------------------------------------------------
+//   on updateRage clicked
+//---------------------------------------------------------
+
+void Ms::InspectorRange::updateRange()
+{
+      Range* range = static_cast<Range*>(inspector->element());
+      range->updateRange();
+      range->layout();              // redo layout
+      setElement();                 // set Inspector values to range properties
+      valueChanged(TOPTPC);         // force score to notice new range properties
 }
 

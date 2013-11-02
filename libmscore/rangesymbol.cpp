@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2013 Werner Schweer
+//  Copyright (C) 2002-2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -26,15 +26,16 @@ static const Note::NoteHeadGroup    NOTEHEADGROUP_DEFAULT   = Note::HEAD_NORMAL;
 static const Note::NoteHeadType     NOTEHEADTYPE_DEFAULT    = Note::HEAD_AUTO;
 static const MScore::DirectionH     DIR_DEFAULT             = MScore::DH_AUTO;
 static const bool                   HASLINE_DEFAULT         = true;
-static const qreal                  LINEWIDTH_DEFAULT       = 0.18;
+static const qreal                  LINEWIDTH_DEFAULT       = 0.12;
 static const qreal                  LEDGEROFFSET_DEFAULT    = 0.25;
+static const qreal                  LINEOFFSET_DEFAULT      = 0.8;      // the distance between note head and line
 
 //---------------------------------------------------------
 //   Range
 //---------------------------------------------------------
 
 Range::Range(Score* s)
-  : Element(s)
+: Element(s), _topAccid(s), _bottomAccid(s)
       {
       _noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
       _noteHeadType     = NOTEHEADTYPE_DEFAULT;
@@ -43,6 +44,10 @@ Range::Range(Score* s)
       _lineWidth        = LINEWIDTH_DEFAULT;
       _topPitch = _bottomPitch = -1;
       _topTpc = _bottomTpc = INVALID_TPC;
+      _topAccid.setParent(this);
+      _bottomAccid.setParent(this);
+//      _topAccid.setFlags(0);
+//      _bottomAccid.setFlags(0);
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       }
 
@@ -61,19 +66,12 @@ void Range::setTrack(int t)
       Element::setTrack(t);
       // if not initialized and there is a segment and a staff,
       // initialize pitches and tpc's to first and last staff line
+      // (for use in palettes)
       if (_topTpc == INVALID_TPC || _bottomTpc == INVALID_TPC) {
             if (segm && stf) {
-/*
-                  int numOfLines    = stf->lines();
-                  int tick          = segm->tick();
-                  ClefType clf      = stf->clef(tick);
-                  int key           = stf->key(tick).accidentalType();
-                  _topPitch         = line2pitch(0, clf, key);
-                  _topTpc           = pitch2tpc(_topPitch, key, PREFER_NEAREST);
-                  _bottomPitch      = line2pitch( (numOfLines-1) * 2, clf, key);
-                  _bottomTpc        = pitch2tpc(_bottomPitch, key, PREFER_NEAREST);
-*/
                   updateRange();
+                  _topAccid.setTrack(t);
+                  _bottomAccid.setTrack(t);
                   }
             else
                   _topPitch   = _bottomPitch = _topTpc = _bottomTpc = -1;
@@ -90,7 +88,7 @@ void Range::setTopPitch(int val)
       {
       int deltaPitch    = val - topPitch();
       // if deltaPitch is not an integer number of octaves, adjust tpc
-      // (to avoid 'wild' tpc changes)
+      // (to avoid 'wild' tpc changes with octave changes)
       if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
             int newTpc        = topTpc() + deltaPitch * TPC_DELTA_SEMITONE;
             // reduce newTpc into acceptable range via enharmonic
@@ -108,7 +106,7 @@ void Range::setBottomPitch(int val)
       {
       int deltaPitch    = val - bottomPitch();
       // if deltaPitch is not an integer number of octaves, adjust tpc
-      // (to avoid 'wild' tpc changes)
+      // (to avoid 'wild' tpc changes with octave changes)
       if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
             int newTpc        = bottomTpc() + deltaPitch * TPC_DELTA_SEMITONE;
             // reduce newTpc into acceptable range via enharmonic
@@ -171,6 +169,16 @@ void Range::write(Xml& xml) const
       xml.tag("topTpc",     _topTpc);
       xml.tag("bottomPitch",_bottomPitch);
       xml.tag("bottomTpc",  _bottomTpc);
+      if (_topAccid.accidentalType() != Accidental::ACC_NONE) {
+            xml.stag("topAccidental");
+            _topAccid.write(xml);
+            xml.etag();
+            }
+      if (_bottomAccid.accidentalType() != Accidental::ACC_NONE) {
+            xml.stag("bottomAccidental");
+            _bottomAccid.write(xml);
+            xml.etag();
+            }
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -187,20 +195,36 @@ void Range::read(XmlReader& e)
                   setProperty(P_HEAD_GROUP, Ms::getProperty(P_HEAD_GROUP, e));
             else if (tag == "headType")
                   setProperty(P_HEAD_TYPE, Ms::getProperty(P_HEAD_TYPE, e).toInt());
-            else if (e.name() == "mirror")
+            else if (tag == "mirror")
                   setProperty(P_MIRROR_HEAD, Ms::getProperty(P_MIRROR_HEAD, e).toInt());
-            else if (e.name() == "hasLine")
+            else if (tag == "hasLine")
                   setHasLine(e.readInt());
-            else if (e.name() == "lineWidth")
+            else if (tag == "lineWidth")
                   setProperty(P_LINE_WIDTH, Ms::getProperty(P_LINE_WIDTH, e).toReal());
-            else if (e.name() == "topPitch")
+            else if (tag == "topPitch")
                   _topPitch = e.readInt();
-            else if (e.name() == "bottomPitch")
+            else if (tag == "bottomPitch")
                   _bottomPitch = e.readInt();
-            else if (e.name() == "topTpc")
+            else if (tag == "topTpc")
                   _topTpc = e.readInt();
-            else if (e.name() == "bottomTpc")
+            else if (tag == "bottomTpc")
                   _bottomTpc = e.readInt();
+            else if (tag == "topAccidental") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Accidental")
+                              _topAccid.read(e);
+                        else
+                              e.skipCurrentElement();
+                        }
+                  }
+            else if (tag == "bottomAccidental") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Accidental")
+                              _bottomAccid.read(e);
+                        else
+                              e.skipCurrentElement();
+                        }
+                  }
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -212,50 +236,153 @@ void Range::read(XmlReader& e)
 
 void Range::layout()
       {
-      ClefType clf;
-      qreal headWdt     = headWidth();
-      int   line;
-      qreal lineDist;
-      int   numOfLines;
-      Segment* segm     = segment();
+      int         bottomLine, topLine;
+      ClefType    clf;
+      qreal       headWdt     = headWidth();
+      int         key;
+      qreal       lineDist;
+      int         numOfLines;
+      Segment*    segm        = segment();
+      qreal       _spatium    = spatium();
+      Staff*      stf         = nullptr;
       if (segm && track() > -1) {
             int tick    = segm->tick();
-            Staff* stf  = score()->staff(staffIdx());
-            lineDist    = stf->lineDistance();
+            stf         = score()->staff(staffIdx());
+            lineDist    = stf->lineDistance() * _spatium;
             numOfLines  = stf->lines();
             clf         = stf->clef(tick);
             }
       else {                              // for use in palettes
-            lineDist    = 1;
+            lineDist    = _spatium;
             numOfLines  = 3;
             clf         = ClefType::G;
             }
-      qreal _spatium    = spatium();
 
-      // set top and bottom note Y pos (if pitch == -1, set to some default)
+      //
+      // NOTE HEADS Y POS (if pitch == -1, set to some default - for use in palettes)
+      //
+      qreal xAccidOffTop    = 0;
+      qreal xAccidOffBottom = 0;
+      if (stf)
+            key = stf->key(segm->tick()).accidentalType();
+      else
+            key = KEY_C;
+
+      // top note head
       if (_topPitch == -1)
             _topPos.setY(0);                          // if uninitialized, set to top staff line
       else {
-            line  = absStep(_topTpc, _topPitch);
-            line  = relStep(line, clf);
-            _topPos.setY(line * lineDist * _spatium * 0.5);
-            }
-      if (_bottomPitch == -1)
-            _bottomPos.setY( (numOfLines-1) * lineDist * _spatium); // if uninitialized, set to last staff line
-      else {
-            line  = absStep(_bottomTpc, _bottomPitch);
-            line  = relStep(line, clf);
-            _bottomPos.setY(line * lineDist * _spatium * 0.5);
+            topLine  = absStep(_topTpc, _topPitch);
+            topLine  = relStep(topLine, clf);
+            _topPos.setY(topLine * lineDist * 0.5);
+            // compute accidental
+            Accidental::AccidentalType accidType;
+            // if (13 <= (tpc - key) <= 19) there is no accidental)
+            if (_topTpc - key >= 13 && _topTpc - key <= 19)
+                  accidType = Accidental::ACC_NONE;
+            else {
+                  AccidentalVal accidVal = AccidentalVal( (_topTpc - TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
+                  accidType = Accidental::value2subtype(accidVal);
+                  if (accidType == Accidental::ACC_NONE)
+                        accidType = Accidental::ACC_NATURAL;
+                  }
+            _topAccid.setAccidentalType(accidType);
+            if (accidType != Accidental::ACC_NONE)
+                  _topAccid.layout();
+            else
+                  _topAccid.setbbox(QRect());
+            _topAccid.rypos() = _topPos.y();
             }
 
-      // set top and bottom note X pos
-      if (_dir == MScore::DH_AUTO || _dir == MScore::DH_LEFT) {
-            _topPos.setX(0);
-            _bottomPos.setX(_dir == MScore::DH_AUTO ? 0 : headWdt);
+      // bottom note head
+      if (_bottomPitch == -1)
+            _bottomPos.setY( (numOfLines-1) * lineDist);          // if uninitialized, set to last staff line
+      else {
+            bottomLine  = absStep(_bottomTpc, _bottomPitch);
+            bottomLine  = relStep(bottomLine, clf);
+            _bottomPos.setY(bottomLine * lineDist * 0.5);
+            // compute accidental
+            Accidental::AccidentalType accidType;
+            if (_bottomTpc - key >= 13 && _bottomTpc - key <= 19)
+                  accidType = Accidental::ACC_NONE;
+            else {
+                  AccidentalVal accidVal = AccidentalVal( (_bottomTpc - TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
+                  accidType = Accidental::value2subtype(accidVal);
+                  if (accidType == Accidental::ACC_NONE)
+                        accidType = Accidental::ACC_NATURAL;
+                  }
+            _bottomAccid.setAccidentalType(accidType);
+            if (accidType != Accidental::ACC_NONE)
+                  _bottomAccid.layout();
+            else
+                  _bottomAccid.setbbox(QRect());
+            _bottomAccid.rypos() = _bottomPos.y();
+            }
+
+      //
+      // NOTE HEAD X POS
+      //
+      // Note: manages colliding accidentals
+      //
+      qreal accNoteDist = point(score()->styleS(ST_accidentalNoteDistance));
+      qreal accAccDist  = 0.25 * _spatium;
+      xAccidOffTop      = _topAccid.width() + accNoteDist;
+      xAccidOffBottom   = _bottomAccid.width() + accNoteDist;
+      qreal xAccidOff   = max(xAccidOffTop, xAccidOffBottom);
+      // if top accidental extends down more than bottom accidental extends up,
+      // bottom accidental needs to be displaced
+      // TO DO : ADD UNDERCUT FLATS!
+      bool collision = _topAccid.ipos().y() + _topAccid.bbox().y() + _topAccid.height()
+                  > _bottomAccid.ipos().y() + _bottomAccid.bbox().y();
+      if (collision) {
+            // place bottom accid. at the left edge and top accid. right after it
+            _bottomAccid.rxpos()    = 0.0;
+            _topAccid.rxpos()       = xAccidOffBottom -accNoteDist + accAccDist;
+            switch (_dir) {
+                  case MScore::DH_AUTO:               // note heads one above the other
+                        // place both note heads right after the top accidental
+                        _topPos.setX(_topAccid.ipos().x() + xAccidOffTop);
+                        _bottomPos.setX(_topPos.x());
+                        break;
+                  case MScore::DH_LEFT:               // top note head at the left of bottom note head
+                        // place the top head right after the top accid. and the bottom head right after the top head
+                        _topPos.setX(_topAccid.ipos().x() + xAccidOffTop);
+                        _bottomPos.setX(_topPos.x() + headWdt);
+                        break;
+                  case MScore::DH_RIGHT:              // top note head at the right of bottom note head
+                        // place the bottom head right after the top accid. and the top head right after the bottom head
+                        _bottomPos.setX(_topAccid.ipos().x() + xAccidOffTop);
+                        _topPos.setX(_bottomPos.x() + headWdt);
+                        break;
+                  }
             }
       else {
-            _topPos.setX(headWdt);
-            _bottomPos.setX(0);
+            switch (_dir) {
+                  case MScore::DH_AUTO:               // note heads one above the other
+                        // align accid.s to their right margin
+                        _topAccid.rxpos()       = xAccidOff - xAccidOffTop;
+                        _bottomAccid.rxpos()    = xAccidOff - xAccidOffBottom;
+                        // place note heads right after accid. right margin
+                        _topPos.setX(xAccidOff);
+                        _bottomPos.setX(xAccidOff);
+                        break;
+                  case MScore::DH_LEFT:               // top note head at the left of bottom note head
+                        // place top accid. at the left edge, top head after accid.,
+                        // bottom head after top head and bottom accid before bottom head
+                        _topAccid.rxpos() = 0;
+                        _topPos.setX(xAccidOffTop);
+                        _bottomPos.setX(xAccidOffTop + headWdt);
+                        _bottomAccid.rxpos() = xAccidOffTop + headWdt - xAccidOffBottom;
+                        break;
+                  case MScore::DH_RIGHT:              // top note head at the right of bottom note head
+                        // place bottom accid. at the left edge, bottom head after accid.,
+                        // top head after bottom head and top accid before top head
+                        _bottomAccid.rxpos() = 0;
+                        _bottomPos.setX(xAccidOffBottom);
+                        _topPos.setX(xAccidOff + headWdt);
+                        _topAccid.rxpos() = xAccidOffBottom + headWdt - xAccidOffTop;
+                        break;
+                  }
             }
 
       // compute line from top note centre to bottom note centre
@@ -264,7 +391,7 @@ void Range::layout()
       // shorten line on each side by offsets
       qreal yDelta = _bottomPos.y() - _topPos.y();
       if (yDelta != 0.0) {
-            qreal off = _spatium * .75;
+            qreal off = _spatium * LINEOFFSET_DEFAULT;
             QPointF p1 = fullLine.pointAt(off / yDelta);
             QPointF p2 = fullLine.pointAt(1 - (off / yDelta));
             _line = QLineF(p1, p2);
@@ -273,7 +400,10 @@ void Range::layout()
             _line = fullLine;
 
       QRectF headRect = QRectF(0, -0.5*_spatium, headWdt, 1*_spatium);
-      setbbox(headRect.translated(_topPos).united(headRect.translated(_bottomPos)));
+      setbbox(headRect.translated(_topPos).united(headRect.translated(_bottomPos))
+            .united(_topAccid.bbox().translated(_topAccid.ipos()))
+            .united(_bottomAccid.bbox().translated(_bottomAccid.ipos()))
+            );
       }
 
 //---------------------------------------------------------
@@ -289,6 +419,7 @@ void Range::draw(QPainter* p) const
       symbols[score()->symIdx()][noteHead()].draw(p, magS(), _bottomPos);
       if (_hasLine)
             p->drawLine(_line);
+
       // draw ledger lines (if not in a palette)
       if (segment() && track() > -1) {
             Staff* stf        = score()->staff(staffIdx());
@@ -321,6 +452,19 @@ void Range::draw(QPainter* p) const
 Space Range::space() const
       {
       return Space(spatium() * 0.75, width() + spatium() * 0.5);
+      }
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Range::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
+      {
+      func(data, this);
+      if (_topAccid.accidentalType() != Accidental::ACC_NONE)
+            func(data, &_topAccid);
+      if (_bottomAccid.accidentalType() != Accidental::ACC_NONE)
+            func(data, &_bottomAccid);
       }
 
 //---------------------------------------------------------
@@ -379,9 +523,8 @@ QPointF Range::pagePos() const
 
 void Range::normalize()
       {
-      int temp;
       if (_topPitch < _bottomPitch) {
-            temp        = _topPitch;
+            int temp    = _topPitch;
             _topPitch   = _bottomPitch;
             _bottomPitch= temp;
             temp        = _topTpc;
@@ -393,7 +536,7 @@ void Range::normalize()
 //---------------------------------------------------------
 //   updateRange
 //
-//    scans the staff contents up to next section break to update the range pitches
+//    scans the staff contents up to next section break to update the range pitches/tpc's
 //---------------------------------------------------------
 
 void Range::updateRange()
@@ -506,14 +649,12 @@ bool Range::setProperty(P_ID propertyId, const QVariant& v)
             case P_LINE_WIDTH:
                   setLineWidth(v.toReal());
                   break;
-            // changing either tpc requires adjusting corresponding pitch
             case P_TPC:
                   setTopTpc(v.toInt());
                   break;
             case P_FBPARENTHESIS1:        // recycled property = _bottomTpc
                   setBottomTpc(v.toInt());
                   break;
-            // changing either pitch requires adjusting corresponding tpc
             case P_PITCH:
                   setTopPitch(v.toInt());
                   break;
@@ -547,7 +688,7 @@ QVariant Range::propertyDefault(P_ID id) const
             case P_MIRROR_HEAD:     return DIR_DEFAULT;
             case P_GHOST:           return HASLINE_DEFAULT;
             case P_LINE_WIDTH:      return LINEWIDTH_DEFAULT;
-            case P_TPC:             break;
+            case P_TPC:             break;      // no defaults for pitches, tpc's and octaves
             case P_FBPARENTHESIS1:  break;
             case P_PITCH:           break;
             case P_FBPARENTHESIS2:  break;
