@@ -31,11 +31,14 @@ class InspectorRange : public InspectorBase {
       Ui::InspectorRange   r;
       Ui::InspectorSegment s;
 
-      void block(bool);
-
    public:
       InspectorRange(QWidget* parent);
 //      virtual void setElement();
+
+   protected slots:
+      void updateRange();
+      virtual void valueChanged(int idx);
+
       };
 
 

@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2013 Werner Schweer
+//  Copyright (C) 2002-2013 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -13,6 +13,7 @@
 #ifndef __RANGE_H__
 #define __RANGE_H__
 
+#include "accidental.h"
 #include "element.h"
 #include "note.h"
 
@@ -32,6 +33,7 @@ class Range : public Element {
       MScore::DirectionH      _dir;
       bool  _hasLine;
       qreal _lineWidth;                     // in spatium
+      Accidental  _topAccid, _bottomAccid;
       int   _topPitch, _bottomPitch;
       int   _topTpc, _bottomTpc;
 
@@ -78,13 +80,14 @@ class Range : public Element {
       void  updateRange();                // scan staff up to next section break and update range pitches
 
       // re-implemented virtual functions
-      virtual Space space() const;
-      virtual void draw(QPainter*) const;
-      virtual void layout();
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
-      virtual QPointF pagePos() const;      ///< position in page coordinates
-      virtual void setTrack(int val);
+      virtual void      draw(QPainter*) const;
+      virtual void      layout();
+      virtual QPointF   pagePos() const;      ///< position in page coordinates
+      virtual void      read(XmlReader&);
+      virtual void      scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual void      setTrack(int val);
+      virtual Space     space() const;
+      virtual void      write(Xml&) const;
 
       // properties
       QVariant getProperty(P_ID ) const;
