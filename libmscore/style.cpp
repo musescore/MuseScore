@@ -275,15 +275,15 @@ void initStyle(MStyle* s)
          ALIGN_CENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsLong"),   ff, 12, false, false, false,
+         TR( "Instruments Long"),   ff, 12, false, false, false,
          ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsShort"),   ff, 12, false, false, false,
+         TR( "Instruments Short"),   ff, 12, false, false, false,
          ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsExcerpt"), ff, 18, false, false, false,
+         TR( "Instruments Excerpt"), ff, 18, false, false, false,
          ALIGN_LEFT | ALIGN_TOP, QPointF(), OA, QPointF()));
 
       AS(TextStyle(

@@ -1478,7 +1478,7 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
             xmlKind = pc->xmlKind();
             xmlDegrees = pc->xmlDegrees();
             }
-      // these fields are not read from chord symbol files
+      // these fields are not read from chord description files
       // so get them from the parsed representation in all cases
       xmlText = pc->xmlText();
       xmlSymbols = pc->xmlSymbols();
@@ -1714,7 +1714,7 @@ bool ChordList::read(const QString& name)
             return false;
       QFile f(path);
       if (!f.open(QIODevice::ReadOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "cannot open chord symbol:\n%1\n%2");
+            QString s = QT_TRANSLATE_NOOP("file", "cannot open chord description:\n%1\n%2");
             MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
             qDebug("ChordList::read failed: <%s>", qPrintable(path));
             return false;
@@ -1751,7 +1751,7 @@ bool ChordList::write(const QString& name) const
       QFile f(info.filePath());
 
       if (!f.open(QIODevice::WriteOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Open Chord Symbol\n%1\nfailed: %2");
+            QString s = QT_TRANSLATE_NOOP("file", "Open Chord Description\n%1\nfailed: %2");
             MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
             return false;
             }
@@ -1763,7 +1763,7 @@ bool ChordList::write(const QString& name) const
       write(xml);
       xml.etag();
       if (f.error() != QFile::NoError) {
-            QString s = QT_TRANSLATE_NOOP("file", "Write Chord Symbol failed: %1");
+            QString s = QT_TRANSLATE_NOOP("file", "Write Chord Description failed: %1");
             MScore::lastError = s.arg(f.errorString());
             }
       return true;
