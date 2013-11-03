@@ -18,6 +18,7 @@
 namespace Ms {
 
 class Chord;
+class Note;
 
 //---------------------------------------------------------
 //   StringData
@@ -28,6 +29,8 @@ class StringData {
       int         _frets;
 
       static bool bFretting;
+
+      void        sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord* chord, int* count) const;
 
 public:
       StringData();
