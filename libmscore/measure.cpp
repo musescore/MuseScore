@@ -3459,20 +3459,22 @@ void Measure::updateAccidentals(Segment* segment, int staffIdx, AccidentalState*
             if (!chord || chord->type() != CHORD)
                  continue;
 
-            for (Chord* ch : chord->graceNotes()) {
-                  for (Note* note : ch->notes())
-                        note->updateAccidental(tversatz);
-                  }
-
             // TAB_STAFF is different, as each note has to be fretted
             // in the context of the all of the chords of the whole segment
 
             if (staffGroup == TAB_STAFF_GROUP) {
+                  for (Chord* ch : chord->graceNotes())
+                        instrument->stringData()->fretChords(ch);
                   instrument->stringData()->fretChords(chord);
                   continue;               // skip other staff type cases
                   }
 
             // PITCHED_ and PERCUSSION_STAFF can go note by note
+
+            for (Chord* ch : chord->graceNotes()) {
+                  for (Note* note : ch->notes())
+                        note->updateAccidental(tversatz);
+                  }
 
             for (Note* note : chord->notes()) {
                   switch(staffGroup) {
