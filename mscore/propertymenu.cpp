@@ -148,7 +148,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::TREMOLOBAR) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("TremoloBar Properties..."))->setData("tr-props");
+            popup->addAction(tr("Tremolo Bar Properties..."))->setData("tr-props");
             }
       else if (e->type() == Element::HBOX) {
             QMenu* textMenu = popup->addMenu(tr("Add"));

@@ -492,7 +492,7 @@ void Note::remove(Element* e)
                   if (!_el.remove(e))
                         qDebug("Note::remove(): cannot find %s\n", e->name());
                   break;
-	      case TIE:
+              case TIE:
                   {
                   Tie* tie = static_cast<Tie*>(e);
                   setTieFor(0);

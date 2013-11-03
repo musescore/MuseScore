@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Bend Properties</string>
+   <string>MuseScore: Tremolo Bar Properties</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="verticalSpacing">

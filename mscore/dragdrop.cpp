@@ -239,7 +239,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case Element::ARPEGGIO:
                   case Element::BREATH:
                   case Element::GLISSANDO:
-                  case Element::Element::BRACKET:
+                  case Element::BRACKET:
                   case Element::ARTICULATION:
                   case Element::CHORDLINE:
                   case Element::BEND:
