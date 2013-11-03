@@ -275,15 +275,15 @@ void initStyle(MStyle* s)
          ALIGN_CENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsLong"),   ff, 12, false, false, false,
+         TR( "Instruments Long"),   ff, 12, false, false, false,
          ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsShort"),   ff, 12, false, false, false,
+         TR( "Instruments Short"),   ff, 12, false, false, false,
          ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsExcerpt"), ff, 18, false, false, false,
+         TR( "Instruments Excerpt"), ff, 18, false, false, false,
          ALIGN_LEFT | ALIGN_TOP, QPointF(), OA, QPointF()));
 
       AS(TextStyle(
@@ -1026,9 +1026,9 @@ void StyleData::load(XmlReader& e)
                   }
             }
 
-      // if we just specified a new chord description file
+      // if we just specified a new chord symbol file
       // and didn't encounter a ChordList tag
-      // then load the chord description file
+      // then load the chord symbol file
       QString newChordDescriptionFile = value(ST_chordDescriptionFile).toString();
       if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
             if (!newChordDescriptionFile.startsWith("chords_") && value(ST_chordStyle).toString() == "std") {
@@ -1036,7 +1036,7 @@ void StyleData::load(XmlReader& e)
                   // but treat as "old" (114) score just in case
                   set(ST_chordStyle, QVariant(QString("custom")));
                   set(ST_chordsXmlFile, QVariant(true));
-                  qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
+                  qDebug("StyleData::load: custom chord symbol file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
                   }
             if (value(ST_chordStyle).toString() == "custom")
                   _customChordList = true;

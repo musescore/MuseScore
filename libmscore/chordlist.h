@@ -171,7 +171,7 @@ class ParsedChord {
 
 struct ChordDescription {
       int id;                 // Chord id number (Band In A Box Chord Number)
-      QStringList names;      // list of alternative chord names
+      QStringList names;      // list of alternative chord symbols
                               // that will by recognized from keyboard entry (without root/base)
       QList<ParsedChord> parsedChords;
                               // parsed forms of primary name (optionally also include parsed forms of other names)

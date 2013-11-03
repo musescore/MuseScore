@@ -72,8 +72,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             articulationTable->setItem(i, 0, item);
 
             QComboBox* cb = new QComboBox();
-            cb->addItem(tr("TopStaff"), A_TOP_STAFF);
-            cb->addItem(tr("BottomStaff"), A_BOTTOM_STAFF);
+            cb->addItem(tr("Top Staff"), A_TOP_STAFF);
+            cb->addItem(tr("Bottom Staff"), A_BOTTOM_STAFF);
             cb->addItem(tr("Chord"), A_CHORD);
             articulationTable->setCellWidget(i, 1, cb);
             }

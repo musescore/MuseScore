@@ -712,7 +712,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
 //   fromXml
 //    construct harmony directly from XML
 //    build name first
-//    then generate chord description from that
+//    then generate chord symbol from that
 //---------------------------------------------------------
 
 const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kindText, const QString& symbols, const QString& parens, const QList<HDegree>& dl)
@@ -727,7 +727,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kin
 //---------------------------------------------------------
 //   descr
 //    look up id in chord list
-//    return chord description if found, or null
+//    return chord symbol if found, or null
 //---------------------------------------------------------
 
 const ChordDescription* Harmony::descr() const
@@ -739,7 +739,7 @@ const ChordDescription* Harmony::descr() const
 //   descr
 //    look up name in chord list
 //    optionally look up by parsed chord as fallback
-//    return chord description if found, or null
+//    return chord symbol if found, or null
 //---------------------------------------------------------
 
 const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* pc) const
@@ -767,9 +767,9 @@ const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* p
 //---------------------------------------------------------
 //   getDescription
 //    look up id in chord list
-//    return chord description if found
+//    return chord symbol if found
 //    if not found, and chord is parseable,
-//    generate a new chord description
+//    generate a new chord symbol
 //    and add to chord list
 //---------------------------------------------------------
 
@@ -804,7 +804,7 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 
 //---------------------------------------------------------
 //   generateDescription
-//    generate new chord description from _textName
+//    generate new chord symbol from _textName
 //    add to chord list using private id
 //---------------------------------------------------------
 
