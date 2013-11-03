@@ -128,6 +128,13 @@ struct EditData {
       bool vRaster;
       };
 
+
+struct ElementName {
+      const char* name;
+      const char* userName;
+      ElementName(const char* _name, const char* _userName) : name(_name), userName(_userName) {}
+};
+
 //-------------------------------------------------------------------
 //    @@ Element
 ///   \brief Base class of score layout elements
