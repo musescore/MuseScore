@@ -112,7 +112,7 @@
      </item>
      <item>
       <property name="text">
-       <string>Chordnames</string>
+       <string>Chord Symbols</string>
       </property>
      </item>
      <item>
@@ -172,7 +172,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>14</number>
      </property>
      <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -4140,7 +4140,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
-          <string>Chordnames</string>
+          <string>Chord Symbols</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -4214,7 +4214,7 @@ p, li { white-space: pre-wrap; }
              <item row="0" column="0">
               <widget class="QLabel" name="label_54">
                <property name="text">
-                <string>Chord description file:</string>
+                <string>Chord symbols style file:</string>
                </property>
               </widget>
              </item>

@@ -626,7 +626,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                         seg = (static_cast<FiguredBass*>(e))->segment();
                         break;
                   case Element::HARMONY:
-                        // ignore chord names not attached to segment
+                        // ignore chord sybols not attached to segment
                         if (e->parent()->type() == Element::SEGMENT) {
                               seg = static_cast<Segment*>( (static_cast<Harmony*>(e))->parent() );
                               break;

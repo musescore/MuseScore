@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>199</width>
+    <width>202</width>
     <height>300</height>
    </rect>
   </property>
@@ -57,28 +57,28 @@
    <item row="3" column="0" colspan="2">
     <widget class="QCheckBox" name="showStaves">
      <property name="text">
-      <string>MarkStaves</string>
+      <string>Mark staves</string>
      </property>
     </widget>
    </item>
    <item row="2" column="0" colspan="2">
     <widget class="QCheckBox" name="showSlices">
      <property name="text">
-      <string>MarkSlices</string>
+      <string>Mark slices</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0" colspan="2">
     <widget class="QCheckBox" name="showBarlines">
      <property name="text">
-      <string>Mark Barlines</string>
+      <string>Mark barlines</string>
      </property>
     </widget>
    </item>
    <item row="0" column="0" colspan="2">
     <widget class="QCheckBox" name="showLines">
      <property name="text">
-      <string>Show Lines</string>
+      <string>Show lines</string>
      </property>
     </widget>
    </item>
