@@ -174,25 +174,23 @@ void StringData::fretChords(Chord * chord) const
       for(nString=0; nString<strings(); nString++)
             bUsed[nString] = false;
       // we also need the notes sorted in order of string (from highest to lowest) and then pitch
-      Segment* seg = chord->segment();
       QMap<int, Note *> sortedNotes;
-      int   idx = 0;
-      int   key;
-      // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
-      int trk;
-      int trkFrom = (chord->track() / VOICES) * VOICES;
-      int trkTo   = trkFrom + VOICES;
-      for(trk = trkFrom; trk < trkTo; ++trk) {
-            Element* ch = seg->elist().at(trk);
-            if (ch && ch->type() == Element::CHORD)
-                  foreach(Note * note, static_cast<Chord*>(ch)->notes()) {
-                        key = note->string()*100000;
-                        if(key < 0)                         // in case string is -1
-                              key = -key;
-                        key -= note->pitch() * 100 + idx;  // disambiguate notes of equal pitch
-                        sortedNotes.insert(key, note);
-                        idx++;
-                        }
+      int   count = 0;
+      // if chord parent is not a segment, the chord is special (usually a grace chord):
+      // fret it by itself, ignoring the segment
+      if (chord->parent()->type() != Element::SEGMENT)
+            sortChordNotes(sortedNotes, chord, &count);
+      else {
+            // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
+            Segment* seg = chord->segment();
+            int trk;
+            int trkFrom = (chord->track() / VOICES) * VOICES;
+            int trkTo   = trkFrom + VOICES;
+            for(trk = trkFrom; trk < trkTo; ++trk) {
+                  Element* ch = seg->elist().at(trk);
+                  if (ch && ch->type() == Element::CHORD)
+                        sortChordNotes(sortedNotes, static_cast<Chord*>(ch), &count);
+                  }
             }
 
       // scan chord notes from highest, matching with strings from the highest
@@ -261,6 +259,25 @@ void StringData::fretChords(Chord * chord) const
             }
       bFretting = false;
       }
+
+//---------------------------------------------------------
+//   sortChordNotes
+//   Adds to sortedNotes the notes of Chord in string/pitch order
+//---------------------------------------------------------
+
+void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *chord, int* count) const
+{
+      int   key;
+
+      foreach(Note * note, chord->notes()) {
+            key = note->string()*100000;
+            if(key < 0)                               // in case string is -1
+                  key = -key;
+            key -= note->pitch() * 100 + *count;      // disambiguate notes of equal pitch
+            sortedNotes.insert(key, note);
+            (*count)++;
+            }
+}
 
 //---------------------------------------------------------
 //   MusicXMLStepAltOct2Pitch
