@@ -182,7 +182,7 @@ void PluginCreator::setState(PCState newState)
 
 void PluginCreator::setTitle(const QString& s)
       {
-      QString t(tr("MuseScore Plugin Editor"));
+      QString t(tr("MuseScore Plugin Creator"));
       if (s.isEmpty())
             setWindowTitle(t);
       else

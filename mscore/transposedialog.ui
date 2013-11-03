@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>415</height>
+    <height>483</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -469,7 +469,7 @@
          <item>
           <widget class="QCheckBox" name="transposeChordNames">
            <property name="text">
-            <string>Transpose chord names</string>
+            <string>Transpose chord symbols</string>
            </property>
            <property name="checked">
             <bool>true</bool>
