@@ -937,7 +937,7 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
 
 QString MuseScore::getChordStyleFilename(bool open)
       {
-      QString filter = tr("MuseScore Chord Style File (*.xml)");
+      QString filter = tr("Chord Symbols Style File (*.xml)");
       if (open)
             filter.append(tr(";;All Files (*)"));
 
@@ -950,14 +950,14 @@ QString MuseScore::getChordStyleFilename(bool open)
             QString fn;
             if (open) {
                   fn = QFileDialog::getOpenFileName(
-                     this, tr("MuseScore: Load Chord Style"),
+                     this, tr("MuseScore: Load Chord Symbols Style"),
                      defaultPath,
                      filter
                      );
                   }
             else {
                   fn = QFileDialog::getSaveFileName(
-                     this, tr("MuseScore: Save Chord Style"),
+                     this, tr("MuseScore: Save Chord Symbols Style"),
                      defaultPath,
                      filter
                      );
@@ -978,7 +978,7 @@ QString MuseScore::getChordStyleFilename(bool open)
                   loadChordStyleDialog = new QFileDialog(this);
                   loadChordStyleDialog->setFileMode(QFileDialog::ExistingFile);
                   loadChordStyleDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-                  loadChordStyleDialog->setWindowTitle(tr("MuseScore: Load Chord Style"));
+                  loadChordStyleDialog->setWindowTitle(tr("MuseScore: Load Chord Symbols Style"));
                   loadChordStyleDialog->setNameFilter(filter);
                   loadChordStyleDialog->setDirectory(defaultPath);
 
@@ -1984,7 +1984,7 @@ void MuseScore::addImage(Score* score, Element* e)
       {
       QString fn = QFileDialog::getOpenFileName(
          0,
-         tr("MuseScore: InsertImage"),
+         tr("MuseScore: Insert Image"),
          "",            // lastOpenPath,
          tr("All Supported Files (*.svg *.jpg *.jpeg *.png);;"
             "Scalable vector graphics (*.svg);;"

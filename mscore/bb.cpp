@@ -473,7 +473,7 @@ Score::FileError importBB(Score* score, const QString& name)
       measure->add(text);
 
       //---------------------------------------------------
-      //    create chord names
+      //    create chord symbols
       //---------------------------------------------------
 
       static const int table[] = {

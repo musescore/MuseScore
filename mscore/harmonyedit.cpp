@@ -42,7 +42,7 @@ ChordStyleEditor::ChordStyleEditor(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
-      setWindowTitle(tr("MuseScore: Chord Style Editor"));
+      setWindowTitle(tr("MuseScore: Chord Symbols Style Editor"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       fileButton->setIcon(*icons[fileOpen_ICON]);

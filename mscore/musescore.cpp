@@ -2566,7 +2566,7 @@ void MuseScore::changeState(ScoreState val)
                   showModeText(tr("lyrics edit mode"));
                   break;
             case STATE_HARMONY_FIGBASS_EDIT:
-                  showModeText(tr("chords/fig.bass edit mode"));
+                  showModeText(tr("chord symbol/figured bass edit mode"));
                   break;
             case STATE_PLAY:
                   showModeText(tr("play"));
