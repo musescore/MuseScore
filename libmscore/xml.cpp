@@ -701,7 +701,7 @@ void Xml::htmlToString(XmlReader& e, int level, QString* s)
                         return;
                   case QXmlStreamReader::Characters:
                         if (!e.isWhitespace())
-                              *s += e.text().toString();
+                              *s += e.text().toString().toHtmlEscaped();
                         break;
                   case QXmlStreamReader::Comment:
                         break;
