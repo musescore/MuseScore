@@ -945,11 +945,13 @@ void Note::endDrag()
                         -_lineOffset : _lineOffset);
             _lineOffset = 0;
             // get a fret number for same pitch on new string
-            nFret       = staff->part()->instr()->stringData()->fret(_pitch, nString);
+            StringData* strData = staff->part()->instr()->stringData();
+            nFret       = strData->fret(_pitch, nString);
             if (nFret < 0)                      // no fret?
                   return;                       // no party!
             score()->undoChangeProperty(this, P_FRET, nFret);
             score()->undoChangeProperty(this, P_STRING, nString);
+            strData->fretChords(chord());
             }
       else {
             // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
