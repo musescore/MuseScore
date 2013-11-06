@@ -42,7 +42,7 @@ Rest::Rest(Score* s)
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _beamMode  = BeamMode::NONE;
       dotline    = -1;
-      _sym       = rest4Sym;
+      _sym       = SymId::restQuarter;
       }
 
 Rest::Rest(Score* s, const TDuration& d)
@@ -51,7 +51,7 @@ Rest::Rest(Score* s, const TDuration& d)
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _beamMode  = BeamMode::NONE;
       dotline    = -1;
-      _sym       = rest4Sym;
+      _sym       = SymId::restQuarter;
       setDurationType(d);
       if (d.fraction().isValid())
             setDuration(d.fraction());
@@ -112,7 +112,7 @@ void Rest::draw(QPainter* painter) const
             y  = -_spatium * .5 - (staff()->height()*.5);
             painter->drawGlyphRun(QPointF((x2 - x1) * .5 + x1 - r.width() * .5, y), glyphs);
 #else
-            QFont font = fontId2font(0);
+            QFont font = score()->scoreFont()->font();
             font.setPixelSize(lrint(20.0 * spatium()/(PPI * SPATIUM20)));
             painter->setFont(font);
             QFontMetricsF fm(font);
@@ -124,14 +124,14 @@ void Rest::draw(QPainter* painter) const
             }
       else {
             qreal mag = magS();
-            symbols[score()->symIdx()][_sym].draw(painter, mag);
+            drawSymbol(_sym, painter);
             int dots = durationType().dots();
             if (dots) {
                   qreal y = dotline * _spatium * .5;
                   for (int i = 1; i <= dots; ++i) {
-                        qreal x = symbols[score()->symIdx()][_sym].width(mag)
+                        qreal x = score()->sym(_sym).width(mag)
                                    + point(score()->styleS(ST_dotNoteDistance)) * i;
-                        symbols[score()->symIdx()][dotSym].draw(painter, mag, QPointF(x, y));
+                        drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
                         }
                   }
             }
@@ -148,7 +148,7 @@ void Rest::setUserOffset(qreal x, qreal y)
       {
       qreal _spatium = spatium();
       int line = lrint(y/_spatium);
-
+#if 0
       if (_sym == wholerestSym && (line <= -2 || line >= 3))
             _sym = outsidewholerestSym;
       else if (_sym == outsidewholerestSym && (line > -2 && line < 4))
@@ -157,7 +157,7 @@ void Rest::setUserOffset(qreal x, qreal y)
             _sym = outsidehalfrestSym;
       else if (_sym == outsidehalfrestSym && (line > -3 && line < 3))
             _sym = halfrestSym;
-
+#endif
       setUserOff(QPointF(x, qreal(line) * _spatium));
       }
 
@@ -273,41 +273,44 @@ Element* Rest::drop(const DropData& data)
 //   getSymbol
 //---------------------------------------------------------
 
-int Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoffset)
+SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoffset)
       {
       *yoffset = 2;
       switch(type) {
             case TDuration::V_LONG:
-                  return longarestSym;
+                  return SymId::restLonga;
             case TDuration::V_BREVE:
-                  return breverestSym;
+                  return SymId::restDoubleWhole;
             case TDuration::V_MEASURE:
                   if (duration() >= Fraction(2, 1))
-                        return breverestSym;
+                        return SymId::restDoubleWhole;
                   // fall trough
             case TDuration::V_WHOLE:
                   *yoffset = 1;
-                  return (line <= -2 || line >= (lines - 1)) ? outsidewholerestSym : wholerestSym;
+                  return (line <= -2 || line >= (lines - 1)) ? SymId::restWhole : SymId::restWhole;
             case TDuration::V_HALF:
-                  return (line <= -3 || line >= (lines - 2)) ? outsidehalfrestSym : halfrestSym;
+                  return (line <= -3 || line >= (lines - 2)) ? SymId::restHalf : SymId::restHalf;
             case TDuration::V_QUARTER:
-                  return rest4Sym;
+                  return SymId::restQuarter;
             case TDuration::V_EIGHT:
-                  return rest8Sym;
+                  return SymId::rest8th;
             case TDuration::V_16TH:
-                  return rest16Sym;
+                  return SymId::rest16th;
             case TDuration::V_32ND:
-                  return rest32Sym;
+                  return SymId::rest32nd;
             case TDuration::V_64TH:
-                  return rest64Sym;
+                  return SymId::rest64th;
             case TDuration::V_128TH:
-                  return rest128Sym;
+                  return SymId::rest128th;
             case TDuration::V_256TH:
-                  qDebug("Rest: no symbol for 1/256");
-                  return rest128Sym;
+                  return SymId::rest256th;
+            case TDuration::V_512TH:
+                  return SymId::rest512th;
+            case TDuration::V_1024TH:
+                  return SymId::rest1024th;
             default:
                   qDebug("unknown rest type %d", type);
-                  return rest4Sym;
+                  return SymId::restQuarter;
             }
       }
 
@@ -366,6 +369,8 @@ void Rest::layout()
             case TDuration::V_32ND:
                   dotline = -3;
                   break;
+            case TDuration::V_1024TH:
+            case TDuration::V_512TH:
             case TDuration::V_256TH:
             case TDuration::V_128TH:
                   dotline = -5;
@@ -398,7 +403,7 @@ void Rest::layout()
             rs = Spatium(score()->styleS(ST_dotNoteDistance)
                + dots() * score()->styleS(ST_dotDotDistance));
             }
-      setbbox(symbols[score()->symIdx()][_sym].bbox(magS()));
+      setbbox(score()->sym(_sym).bbox(magS()));
       _space.setRw(width() + point(rs));
       }
 
@@ -448,7 +453,9 @@ int Rest::computeLineOffset()
                   case TDuration::V_128TH:
                         lineOffset = up ? -8 : 8;
                         break;
-                  case TDuration::V_256TH:             // not available
+                  case TDuration::V_1024TH:
+                  case TDuration::V_512TH:
+                  case TDuration::V_256TH:
                         lineOffset = up ? -10 : 6;
                         break;
                   default:
@@ -471,7 +478,9 @@ int Rest::computeLineOffset()
                   case TDuration::V_32ND:
                   case TDuration::V_64TH:
                   case TDuration::V_128TH:
-                  case TDuration::V_256TH:             // not available
+                  case TDuration::V_256TH:
+                  case TDuration::V_512TH:
+                  case TDuration::V_1024TH:
                         if (lines == 1)
                               lineOffset = -4;
                         break;
@@ -488,7 +497,7 @@ int Rest::computeLineOffset()
 
 qreal Rest::centerX() const
       {
-      return symbols[score()->symIdx()][_sym].width(magS())*.5;
+      return score()->sym(_sym).width(magS())*.5;
       }
 
 //---------------------------------------------------------
@@ -497,7 +506,7 @@ qreal Rest::centerX() const
 
 qreal Rest::upPos() const
       {
-      return symbols[score()->symIdx()][_sym].bbox(magS()).y();
+      return score()->sym(_sym).bbox(magS()).y();
       }
 
 //---------------------------------------------------------
@@ -506,7 +515,7 @@ qreal Rest::upPos() const
 
 qreal Rest::downPos() const
       {
-      return symbols[score()->symIdx()][_sym].bbox(magS()).y() + symbols[score()->symIdx()][_sym].height(magS());
+      return score()->sym(_sym).bbox(magS()).y() + score()->sym(_sym).height(magS());
       }
 
 //---------------------------------------------------------

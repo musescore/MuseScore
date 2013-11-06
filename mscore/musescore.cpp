@@ -4446,30 +4446,6 @@ void MuseScore::changeScore(int step)
       }
 
 //---------------------------------------------------------
-//   sym2pixmap
-//---------------------------------------------------------
-
-QPixmap sym2pixmap(const Sym* s, qreal mag)
-      {
-      QString string = s->toString();
-      QRectF  bb(s->getBbox());
-      bb.setRect(bb.x() * mag, bb.y() * mag, bb.width() * mag, bb.height() * mag);
-
-      bb.adjust(-5, -5, 5, 5);
-      int w = lrint(bb.width());
-      int h = lrint(bb.height());
-      QPixmap pm(w, h);
-      pm.fill(QColor(0, 0, 0, 0));
-      QPainter painter;
-      painter.begin(&pm);
-      QPalette p(mscore->palette());
-      painter.setPen(p.text().color());
-      s->draw(&painter, mag, -bb.topLeft() + QPointF(2.0, 2.0));
-      painter.end();
-      return pm;
-      }
-
-//---------------------------------------------------------
 //   switchLayoutMode
 //---------------------------------------------------------
 

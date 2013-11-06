@@ -28,7 +28,7 @@ struct BagpipeEmbellishmentInfo {
       QString name;
       QString notes;
       };
-      
+
 //---------------------------------------------------------
 //   BagpipeEmbellishmentInfo
 //    name, staff line and pitch for a bagpipe note
@@ -40,6 +40,9 @@ struct BagpipeNoteInfo {
       int pitch;
       };
 
+struct BEDrawingDataX;
+struct BEDrawingDataY;
+
 //---------------------------------------------------------
 //   BagpipeEmbellishment
 //    dummy element, used for drag&drop
@@ -49,6 +52,8 @@ class BagpipeEmbellishment : public Element {
       Q_OBJECT
 
       int _embelType;
+      void drawGraceNote(QPainter*, const BEDrawingDataX&, const BEDrawingDataY&,
+         SymId, const qreal x, const bool drawFlag) const;
 
    public:
       BagpipeEmbellishment(Score* s) : Element(s), _embelType(0) { }

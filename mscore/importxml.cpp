@@ -2786,9 +2786,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   s->setAlign(ALIGN_LEFT | ALIGN_BASELINE);
                   s->setOffsetType(OFFSET_SPATIUM);
                   if (type == "start")
-                        s->setSym(pedalPedSym);
+                        s->setSym(SymId(pedalPedSym));
                   else if (type == "stop")
-                        s->setSym(pedalasteriskSym);
+                        s->setSym(SymId(pedalasteriskSym));
                   else
                         qDebug("unknown pedal %s", type.toLatin1().data());
                   if (hasYoffset) s->setYoff(yoffset);

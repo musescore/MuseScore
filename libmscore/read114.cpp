@@ -151,14 +151,14 @@ static const StyleVal2 style114[] = {
 static SymId resolveSymCompatibility(SymId i, QString programVersion)
       {
       if (!programVersion.isEmpty() && programVersion < "1.1")
-            i = SymId(i + 5);
-      switch(i) {
-            case 197:   return pedalPedSym;
-            case 191:   return pedalasteriskSym;
-            case 193:   return pedaldotSym;
-            case 192:   return pedaldashSym;
-            case 139:   return trillSym;
-            default:    return noSym;
+            i = SymId(int(i) + 5);
+      switch(int(i)) {
+            case 197:   return SymId(pedalPedSym);
+            case 191:   return SymId(pedalasteriskSym);
+            case 193:   return SymId(pedaldotSym);
+            case 192:   return SymId(pedaldashSym);
+            case 139:   return SymId(trillSym);
+            default:    return SymId::noSym;
             }
       }
 

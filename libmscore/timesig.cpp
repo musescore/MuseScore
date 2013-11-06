@@ -273,16 +273,16 @@ void TimeSig::layout1()
       // C and Ccut are placed at the middle of the staff: use yoff directly
       if (sigType ==  TSIG_FOUR_FOUR) {
             pz = QPointF(0.0, yoff);
-            Sym& sym = symbols[score()->symIdx()][fourfourmeterSym];
+            Sym& sym = score()->sym(SymId(fourfourmeterSym));
             setbbox(sym.bbox(mag).translated(pz));
-            _numeratorString = sym.toString();
+            _numeratorString = score()->scoreFont()->toString(SymId(fourfourmeterSym));
             _denominatorString.clear();
             }
       else if (sigType == TSIG_ALLA_BREVE) {
             pz = QPointF(0.0, yoff);
-            Sym& sym = symbols[score()->symIdx()][allabreveSym];
+            Sym& sym = score()->sym(SymId(allabreveSym));
             setbbox(sym.bbox(mag).translated(pz));
-            _numeratorString = sym.toString();
+            _numeratorString = score()->scoreFont()->toString(SymId(allabreveSym));
             _denominatorString.clear();
             }
       else {
@@ -290,7 +290,7 @@ void TimeSig::layout1()
                   _numeratorString   = QString("%1").arg(_sig.numerator());   // build numerator string
                   _denominatorString = QString("%1").arg(_sig.denominator()); // build denominator string
                   }
-            QFont font = fontId2font(symIdx2fontId(score()->symIdx()));
+            QFont font = score()->scoreFont()->font();
             font.setPixelSize(lrint(20.0 * MScore::DPI/PPI));
             QFontMetricsF fm(font);
             QRectF numRect = fm.tightBoundingRect(_numeratorString);          // get 'tight' bounding boxes for strings
@@ -329,7 +329,7 @@ void TimeSig::draw(QPainter* painter) const
       if (staff() && !staff()->staffType()->genTimesig())
             return;
       painter->setPen(curColor());
-      QFont font = fontId2font(symIdx2fontId(score()->symIdx()));
+      QFont font = score()->scoreFont()->font();
       font.setPixelSize(lrint(20.0 * MScore::DPI/PPI));
       painter->setFont(font);
       qreal mag  = spatium() / (MScore::DPI * SPATIUM20);

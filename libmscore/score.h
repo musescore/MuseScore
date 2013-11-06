@@ -96,8 +96,10 @@ struct PageContext;
 class BarLine;
 class Bracket;
 class KeyList;
+
 enum class OttavaType;
 enum class ClefType : signed char;
+enum class SymId;
 
 extern bool showRubberBand;
 
@@ -264,7 +266,7 @@ class Score : public QObject {
       QList<Layer> _layer;
       int _currentLayer;
 
-      int _symIdx;                  // used symbol set, derived from style
+      ScoreFont* _scoreFont;
       int _pageNumberOffset;        ///< Offset for page numbers.
 
       MeasureBaseList _measures;          // here are the notes
@@ -554,7 +556,6 @@ class Score : public QObject {
 
       void cmdAddSpanner(Spanner* e, const QPointF& pos);
 
-//      Note* addNote(Chord*, int pitch);
       Note* addNote(Chord*, NoteVal &noteVal);
 
       void deleteItem(Element*);
@@ -851,7 +852,6 @@ class Score : public QObject {
       void addStaffType(int idx, StaffType*);
 
       void addLayoutFlags(LayoutFlags val)               { layoutFlags |= val; }
-      int symIdx() const                                 { return _symIdx; }
       void updateHairpin(Hairpin*);       // add/modify hairpin to pitchOffset list
       void removeHairpin(Hairpin*);       // remove hairpin from pitchOffset list
       Volta* searchVolta(int tick) const;
@@ -942,7 +942,7 @@ class Score : public QObject {
       Q_INVOKABLE Ms::Cursor* newCursor();
       qreal computeMinWidth(Segment* fs);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
-      Sym& sym(int id) { return symbols[symIdx()][id]; }
+      Sym& sym(SymId id);
 
       qreal noteHeadWidth() const            { return _noteHeadWidth; }
 
@@ -957,6 +957,9 @@ class Score : public QObject {
       ChordRest* findCR(int tick, int track) const;
       void layoutSpanner();
       void insertTime(int tickPos, int tickLen);
+
+      ScoreFont* scoreFont() const    { return _scoreFont; }
+      void setScoreFont(ScoreFont* f) { _scoreFont = f;    }
 
       friend class ChangeSynthesizerState;
       friend class Chord;

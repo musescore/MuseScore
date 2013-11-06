@@ -1,0 +1,707 @@
+{
+    "accidentals.doublesharp": {
+        "codepoint": "U+e11c"
+    },
+    "accidentals.flat": {
+        "codepoint": "U+e114"
+    },
+    "accidentals.flat.arrowboth": {
+        "codepoint": "U+e1bd"
+    },
+    "accidentals.flat.arrowdown": {
+        "codepoint": "U+e1bc"
+    },
+    "accidentals.flat.arrowup": {
+        "codepoint": "U+e1bb"
+    },
+    "accidentals.flat.slash": {
+        "codepoint": "U+e115"
+    },
+    "accidentals.flat.slashslash": {
+        "codepoint": "U+e116"
+    },
+    "accidentals.flatflat": {
+        "codepoint": "U+e11a"
+    },
+    "accidentals.flatflat.slash": {
+        "codepoint": "U+e11b"
+    },
+    "accidentals.koron": {
+        "codepoint": "U+e1d5"
+    },
+    "accidentals.leftparen": {
+        "codepoint": "U+e11e"
+    },
+    "accidentals.mirroredflat": {
+        "codepoint": "U+e118"
+    },
+    "accidentals.mirroredflat.backslash": {
+        "codepoint": "U+e119"
+    },
+    "accidentals.mirroredflat.flat": {
+        "codepoint": "U+e117"
+    },
+    "accidentals.natural": {
+        "codepoint": "U+e113"
+    },
+    "accidentals.natural.arrowboth": {
+        "codepoint": "U+e1c0"
+    },
+    "accidentals.natural.arrowdown": {
+        "codepoint": "U+e1bf"
+    },
+    "accidentals.natural.arrowup": {
+        "codepoint": "U+e1be"
+    },
+    "accidentals.rightparen": {
+        "codepoint": "U+e11d"
+    },
+    "accidentals.sharp": {
+        "codepoint": "U+e10e"
+    },
+    "accidentals.sharp.arrowboth": {
+        "codepoint": "U+e1c3"
+    },
+    "accidentals.sharp.arrowdown": {
+        "codepoint": "U+e1c2"
+    },
+    "accidentals.sharp.arrowup": {
+        "codepoint": "U+e1c1"
+    },
+    "accidentals.sharp.slashslash.stem": {
+        "codepoint": "U+e10f"
+    },
+    "accidentals.sharp.slashslash.stemstemstem": {
+        "codepoint": "U+e112"
+    },
+    "accidentals.sharp.slashslashslash.stem": {
+        "codepoint": "U+e111"
+    },
+    "accidentals.sharp.slashslashslash.stemstem": {
+        "codepoint": "U+e110"
+    },
+    "accidentals.sori": {
+        "codepoint": "U+e1d4"
+    },
+    "accordion.accBayanbase": {
+        "codepoint": "U+e1b3"
+    },
+    "accordion.accDiscant": {
+        "codepoint": "U+e1af"
+    },
+    "accordion.accDot": {
+        "codepoint": "U+e1b0"
+    },
+    "accordion.accFreebase": {
+        "codepoint": "U+e1b1"
+    },
+    "accordion.accOldEE": {
+        "codepoint": "U+e1b4"
+    },
+    "accordion.accStdbase": {
+        "codepoint": "U+e1b2"
+    },
+    "arrowheads.close.01": {
+        "codepoint": "U+e123"
+    },
+    "arrowheads.close.0M1": {
+        "codepoint": "U+e124"
+    },
+    "arrowheads.close.11": {
+        "codepoint": "U+e125"
+    },
+    "arrowheads.close.1M1": {
+        "codepoint": "U+e126"
+    },
+    "arrowheads.open.01": {
+        "codepoint": "U+e11f"
+    },
+    "arrowheads.open.0M1": {
+        "codepoint": "U+e120"
+    },
+    "arrowheads.open.11": {
+        "codepoint": "U+e121"
+    },
+    "arrowheads.open.1M1": {
+        "codepoint": "U+e122"
+    },
+    "articTenuto": {
+        "codepoint": "U+e166"
+    },
+    "brackettips.dleft": {
+        "codepoint": "U+e1b6"
+    },
+    "brackettips.dright": {
+        "codepoint": "U+e1ae"
+    },
+    "brackettips.uleft": {
+        "codepoint": "U+e1b5"
+    },
+    "brackettips.uright": {
+        "codepoint": "U+e1ad"
+    },
+    "clefs.C": {
+        "codepoint": "U+e19a"
+    },
+    "clefs.C_change": {
+        "codepoint": "U+e19b"
+    },
+    "clefs.F": {
+        "codepoint": "U+e19c"
+    },
+    "clefs.F_change": {
+        "codepoint": "U+e19d"
+    },
+    "clefs.G": {
+        "codepoint": "U+e19e"
+    },
+    "clefs.G_change": {
+        "codepoint": "U+e19f"
+    },
+    "clefs.percussion": {
+        "codepoint": "U+e1a0"
+    },
+    "clefs.percussion_change": {
+        "codepoint": "U+e1a1"
+    },
+    "clefs.tab": {
+        "codepoint": "U+e1a2"
+    },
+    "clefs.tab_change": {
+        "codepoint": "U+e1a3"
+    },
+    "comma": {
+        "codepoint": "U+2c"
+    },
+    "dots.dot": {
+        "codepoint": "U+e127"
+    },
+    "eight": {
+        "codepoint": "U+38"
+    },
+    "f": {
+        "codepoint": "U+66"
+    },
+    "five": {
+        "codepoint": "U+35"
+    },
+    "flags.d3": {
+        "codepoint": "U+e194"
+    },
+    "flags.d4": {
+        "codepoint": "U+e197"
+    },
+    "flags.d5": {
+        "codepoint": "U+e198"
+    },
+    "flags.d6": {
+        "codepoint": "U+e199"
+    },
+    "flags.d7": {
+        "codepoint": "U+e1b7"
+    },
+    "flags.dgrace": {
+        "codepoint": "U+e196"
+    },
+    "flags.u3": {
+        "codepoint": "U+e190"
+    },
+    "flags.u4": {
+        "codepoint": "U+e191"
+    },
+    "flags.u5": {
+        "codepoint": "U+e192"
+    },
+    "flags.u6": {
+        "codepoint": "U+e193"
+    },
+    "flags.u7": {
+        "codepoint": "U+e1b8"
+    },
+    "flags.ugrace": {
+        "codepoint": "U+e195"
+    },
+    "four": {
+        "codepoint": "U+34"
+    },
+    "hyphen": {
+        "codepoint": "U+2d"
+    },
+    "m": {
+        "codepoint": "U+6d"
+    },
+    "nine": {
+        "codepoint": "U+39"
+    },
+    "noteheadBlack": {
+        "codepoint": "U+e12d"
+    },
+    "noteheads.d0fa": {
+        "codepoint": "U+e14b"
+    },
+    "noteheads.d1do": {
+        "codepoint": "U+e13e"
+    },
+    "noteheads.d1fa": {
+        "codepoint": "U+e14d"
+    },
+    "noteheads.d1re": {
+        "codepoint": "U+e144"
+    },
+    "noteheads.d1ti": {
+        "codepoint": "U+e155"
+    },
+    "noteheads.d1triangle": {
+        "codepoint": "U+e132"
+    },
+    "noteheads.d2do": {
+        "codepoint": "U+e140"
+    },
+    "noteheads.d2fa": {
+        "codepoint": "U+e14f"
+    },
+    "noteheads.d2re": {
+        "codepoint": "U+e146"
+    },
+    "noteheads.d2ti": {
+        "codepoint": "U+e157"
+    },
+    "noteheads.d2triangle": {
+        "codepoint": "U+e135"
+    },
+    "noteheads.dM2": {
+        "codepoint": "U+e129"
+    },
+    "noteheads.dM2alt": {
+        "codepoint": "U+e1c5"
+    },
+    "noteheads.s0": {
+        "codepoint": "U+e12b"
+    },
+    "noteheads.s0cross": {
+        "codepoint": "U+e139"
+    },
+    "noteheads.s0diamond": {
+        "codepoint": "U+e12e"
+    },
+    "noteheads.s0do": {
+        "codepoint": "U+e13d"
+    },
+    "noteheads.s0la": {
+        "codepoint": "U+e150"
+    },
+    "noteheads.s0mi": {
+        "codepoint": "U+e147"
+    },
+    "noteheads.s0re": {
+        "codepoint": "U+e142"
+    },
+    "noteheads.s0slash": {
+        "codepoint": "U+e136"
+    },
+    "noteheads.s0ti": {
+        "codepoint": "U+e153"
+    },
+    "noteheads.s0triangle": {
+        "codepoint": "U+e131"
+    },
+    "noteheads.s1": {
+        "codepoint": "U+e12c"
+    },
+    "noteheads.s1cross": {
+        "codepoint": "U+e13a"
+    },
+    "noteheads.s1diamond": {
+        "codepoint": "U+e12f"
+    },
+    "noteheads.s1la": {
+        "codepoint": "U+e151"
+    },
+    "noteheads.s1mi": {
+        "codepoint": "U+e148"
+    },
+    "noteheads.s1slash": {
+        "codepoint": "U+e137"
+    },
+    "noteheads.s2cross": {
+        "codepoint": "U+e13b"
+    },
+    "noteheads.s2diamond": {
+        "codepoint": "U+e130"
+    },
+    "noteheads.s2la": {
+        "codepoint": "U+e152"
+    },
+    "noteheads.s2mi": {
+        "codepoint": "U+e149"
+    },
+    "noteheads.s2slash": {
+        "codepoint": "U+e138"
+    },
+    "noteheads.s2xcircle": {
+        "codepoint": "U+e13c"
+    },
+    "noteheads.sM1": {
+        "codepoint": "U+e12a"
+    },
+    "noteheads.sM1alt": {
+        "codepoint": "U+e1c6"
+    },
+    "noteheads.sM1double": {
+        "codepoint": "U+e1ba"
+    },
+    "noteheads.u0fa": {
+        "codepoint": "U+e14a"
+    },
+    "noteheads.u1do": {
+        "codepoint": "U+e13f"
+    },
+    "noteheads.u1fa": {
+        "codepoint": "U+e14c"
+    },
+    "noteheads.u1re": {
+        "codepoint": "U+e143"
+    },
+    "noteheads.u1ti": {
+        "codepoint": "U+e154"
+    },
+    "noteheads.u1triangle": {
+        "codepoint": "U+e133"
+    },
+    "noteheads.u2do": {
+        "codepoint": "U+e141"
+    },
+    "noteheads.u2fa": {
+        "codepoint": "U+e14e"
+    },
+    "noteheads.u2re": {
+        "codepoint": "U+e145"
+    },
+    "noteheads.u2ti": {
+        "codepoint": "U+e156"
+    },
+    "noteheads.u2triangle": {
+        "codepoint": "U+e134"
+    },
+    "noteheads.uM2": {
+        "codepoint": "U+e128"
+    },
+    "noteheads.uM2alt": {
+        "codepoint": "U+e1c4"
+    },
+    "one": {
+        "codepoint": "U+31"
+    },
+    "p": {
+        "codepoint": "U+70"
+    },
+    "pedal.*": {
+        "codepoint": "U+e1a6"
+    },
+    "pedal..": {
+        "codepoint": "U+e1a8"
+    },
+    "pedal.M": {
+        "codepoint": "U+e1a7"
+    },
+    "pedal.P": {
+        "codepoint": "U+e1a9"
+    },
+    "pedal.Ped": {
+        "codepoint": "U+e1ac"
+    },
+    "pedal.d": {
+        "codepoint": "U+e1aa"
+    },
+    "pedal.e": {
+        "codepoint": "U+e1ab"
+    },
+    "period": {
+        "codepoint": "U+2e"
+    },
+    "plus": {
+        "codepoint": "U+2b"
+    },
+    "r": {
+        "codepoint": "U+72"
+    },
+    "rests.0": {
+        "codepoint": "U+e100"
+    },
+    "rests.0o": {
+        "codepoint": "U+e102"
+    },
+    "rests.1": {
+        "codepoint": "U+e101"
+    },
+    "rests.1o": {
+        "codepoint": "U+e103"
+    },
+    "rests.2": {
+        "codepoint": "U+e107"
+    },
+    "rests.2classical": {
+        "codepoint": "U+e108"
+    },
+    "rests.3": {
+        "codepoint": "U+e109"
+    },
+    "rests.4": {
+        "codepoint": "U+e10a"
+    },
+    "rests.5": {
+        "codepoint": "U+e10b"
+    },
+    "rests.6": {
+        "codepoint": "U+e10c"
+    },
+    "rests.7": {
+        "codepoint": "U+e10d"
+    },
+    "rests.M1": {
+        "codepoint": "U+e106"
+    },
+    "rests.M2": {
+        "codepoint": "U+e105"
+    },
+    "rests.M3": {
+        "codepoint": "U+e104"
+    },
+    "s": {
+        "codepoint": "U+73"
+    },
+    "scripts.arpeggio": {
+        "codepoint": "U+e17e"
+    },
+    "scripts.arpeggio.arrow.1": {
+        "codepoint": "U+e181"
+    },
+    "scripts.arpeggio.arrow.M1": {
+        "codepoint": "U+e180"
+    },
+    "scripts.caesura.curved": {
+        "codepoint": "U+e18e"
+    },
+    "scripts.caesura.straight": {
+        "codepoint": "U+e18f"
+    },
+    "scripts.coda": {
+        "codepoint": "U+e178"
+    },
+    "scripts.dfermata": {
+        "codepoint": "U+e159"
+    },
+    "scripts.dlongfermata": {
+        "codepoint": "U+e15d"
+    },
+    "scripts.dmarcato": {
+        "codepoint": "U+e16a"
+    },
+    "scripts.downbow": {
+        "codepoint": "U+e16e"
+    },
+    "scripts.downmordent": {
+        "codepoint": "U+e18b"
+    },
+    "scripts.downprall": {
+        "codepoint": "U+e18a"
+    },
+    "scripts.dpedalheel": {
+        "codepoint": "U+e173"
+    },
+    "scripts.dpedaltoe": {
+        "codepoint": "U+e175"
+    },
+    "scripts.dportato": {
+        "codepoint": "U+e168"
+    },
+    "scripts.dshortfermata": {
+        "codepoint": "U+e15b"
+    },
+    "scripts.dstaccatissimo": {
+        "codepoint": "U+e165"
+    },
+    "scripts.dverylongfermata": {
+        "codepoint": "U+e15f"
+    },
+    "scripts.espr": {
+        "codepoint": "U+e162"
+    },
+    "scripts.flageolet": {
+        "codepoint": "U+e176"
+    },
+    "scripts.lcomma": {
+        "codepoint": "U+e17b"
+    },
+    "scripts.lineprall": {
+        "codepoint": "U+e18d"
+    },
+    "scripts.lvarcomma": {
+        "codepoint": "U+e17d"
+    },
+    "scripts.mordent": {
+        "codepoint": "U+e184"
+    },
+    "scripts.open": {
+        "codepoint": "U+e16b"
+    },
+    "scripts.prall": {
+        "codepoint": "U+e183"
+    },
+    "scripts.pralldown": {
+        "codepoint": "U+e189"
+    },
+    "scripts.prallmordent": {
+        "codepoint": "U+e186"
+    },
+    "scripts.prallprall": {
+        "codepoint": "U+e185"
+    },
+    "scripts.prallup": {
+        "codepoint": "U+e18c"
+    },
+    "scripts.rcomma": {
+        "codepoint": "U+e17a"
+    },
+    "scripts.reverseturn": {
+        "codepoint": "U+e16f"
+    },
+    "scripts.rvarcomma": {
+        "codepoint": "U+e17c"
+    },
+    "scripts.segno": {
+        "codepoint": "U+e177"
+    },
+    "scripts.sforzato": {
+        "codepoint": "U+e161"
+    },
+    "scripts.snappizzicato": {
+        "codepoint": "U+e1b9"
+    },
+    "scripts.staccato": {
+        "codepoint": "U+e163"
+    },
+    "scripts.stopped": {
+        "codepoint": "U+e16c"
+    },
+    "scripts.thumb": {
+        "codepoint": "U+e160"
+    },
+    "scripts.trilelement": {
+        "codepoint": "U+e182"
+    },
+    "scripts.trill": {
+        "codepoint": "U+e171"
+    },
+    "scripts.trill_element": {
+        "codepoint": "U+e17f"
+    },
+    "scripts.turn": {
+        "codepoint": "U+e170"
+    },
+    "scripts.ufermata": {
+        "codepoint": "U+e158"
+    },
+    "scripts.ulongfermata": {
+        "codepoint": "U+e15c"
+    },
+    "scripts.umarcato": {
+        "codepoint": "U+e169"
+    },
+    "scripts.upbow": {
+        "codepoint": "U+e16d"
+    },
+    "scripts.upedalheel": {
+        "codepoint": "U+e172"
+    },
+    "scripts.upedaltoe": {
+        "codepoint": "U+e174"
+    },
+    "scripts.upmordent": {
+        "codepoint": "U+e188"
+    },
+    "scripts.uportato": {
+        "codepoint": "U+e167"
+    },
+    "scripts.upprall": {
+        "codepoint": "U+e187"
+    },
+    "scripts.ushortfermata": {
+        "codepoint": "U+e15a"
+    },
+    "scripts.ustaccatissimo": {
+        "codepoint": "U+e164"
+    },
+    "scripts.uverylongfermata": {
+        "codepoint": "U+e15e"
+    },
+    "scripts.varcoda": {
+        "codepoint": "U+e179"
+    },
+    "seven": {
+        "codepoint": "U+37"
+    },
+    "six": {
+        "codepoint": "U+36"
+    },
+    "space": {
+        "codepoint": "U+20"
+    },
+    "three": {
+        "codepoint": "U+33"
+    },
+    "timesig.C22": {
+        "codepoint": "U+e1a5"
+    },
+    "timesig.C44": {
+        "codepoint": "U+e1a4"
+    },
+    "timesig.Cdot": {
+        "codepoint": "U+e1c7"
+    },
+    "timesig.O": {
+        "codepoint": "U+e1c8"
+    },
+    "timesig.Ocut": {
+        "codepoint": "U+e1c9"
+    },
+    "timesig.Odot": {
+        "codepoint": "U+e1ca"
+    },
+    "two": {
+        "codepoint": "U+32"
+    },
+    "uniE1CB": {
+        "codepoint": "U+e1cb"
+    },
+    "uniE1CC": {
+        "codepoint": "U+e1cc"
+    },
+    "uniE1CD": {
+        "codepoint": "U+e1cd"
+    },
+    "uniE1CE": {
+        "codepoint": "U+e1ce"
+    },
+    "uniE1CF": {
+        "codepoint": "U+e1cf"
+    },
+    "uniE1D0": {
+        "codepoint": "U+e1d0"
+    },
+    "uniE1D1": {
+        "codepoint": "U+e1d1"
+    },
+    "uniE1D2": {
+        "codepoint": "U+e1d2"
+    },
+    "uniE1D3": {
+        "codepoint": "U+e1d3"
+    },
+    "z": {
+        "codepoint": "U+7a"
+    },
+    "zero": {
+        "codepoint": "U+30"
+    }
+}

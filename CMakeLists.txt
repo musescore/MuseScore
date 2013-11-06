@@ -374,6 +374,7 @@ subdirs(
 
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
 add_subdirectory(miditools EXCLUDE_FROM_ALL)
+add_subdirectory(fonttools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
 
 if (USE_PORTMIDI)

@@ -1647,5 +1647,19 @@ void Element::scriptSetUserOff(const QPointF& o)
       score()->undoChangeProperty(this, P_USER_OFF, o * spatium());
       }
 
+//void Element::draw(SymId id, QPainter* p) const { score()->scoreFont()->draw(id, p, magS()); }
+
+//---------------------------------------------------------
+//   drawSymbol
+//---------------------------------------------------------
+
+void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o) const
+      {
+      score()->scoreFont()->draw(id, p, magS(), o);
+      }
+void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const
+      {
+      score()->scoreFont()->draw(id, p, magS(), o, n);
+      }
 }
 

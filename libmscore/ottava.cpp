@@ -39,12 +39,12 @@ struct OttavaDefault {
 
 // order is important, should be the same than OttavaType
 static const OttavaDefault ottavaDefault[] = {
-      { octave8va,  octave8,  QPointF(0.0, .7),    1.0, Element::ABOVE,  12, "8va"  },
-      { octave8vb,  octave8,  QPointF(0.0, -1.0), -1.0, Element::BELOW, -12, "8vb"  },
-      { octave15ma, octave15, QPointF(0.0, .7),    1.0, Element::ABOVE,  24, "15ma" },
-      { octave15mb, octave15, QPointF(0.0, -1.0), -1.0, Element::BELOW, -24, "15mb" },
-      { octave22ma, octave22, QPointF(0.0, .7),    1.0, Element::ABOVE,  36, "22ma" },
-      { octave22mb, octave22, QPointF(0.0, -1.0), -1.0, Element::BELOW, -36, "22mb" }
+      { SymId::ottavaAlta,        SymId::ottava,       QPointF(0.0, .7),    1.0, Element::ABOVE,  12, "8va"  },
+      { SymId::ottavaBassaBa,     SymId::ottava,       QPointF(0.0, -1.0), -1.0, Element::BELOW, -12, "8vb"  },
+      { SymId::quindicesimaAlta,  SymId::quindicesima, QPointF(0.0, .7),    1.0, Element::ABOVE,  24, "15ma" },
+      { SymId::quindicesimaBassa, SymId::quindicesima, QPointF(0.0, -1.0), -1.0, Element::BELOW, -24, "15mb" },
+      { SymId::ventiduesimaAlta,  SymId::ventiduesima, QPointF(0.0, .7),    1.0, Element::ABOVE,  36, "22ma" },
+      { SymId::ventiduesimaBassa, SymId::ventiduesima, QPointF(0.0, -1.0), -1.0, Element::BELOW, -36, "22mb" }
       };
 
 //---------------------------------------------------------
@@ -396,9 +396,9 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_BEGIN_SYMBOL:
             case P_CONTINUE_SYMBOL:
                   if (_numbersOnly)
-                        return ottavaDefault[int(_ottavaType)].numbersOnlyId;
+                        return int(ottavaDefault[int(_ottavaType)].numbersOnlyId);
                   else
-                        return ottavaDefault[int(_ottavaType)].id;
+                        return int(ottavaDefault[int(_ottavaType)].id);
 
             case P_BEGIN_SYMBOL_OFFSET:
             case P_CONTINUE_SYMBOL_OFFSET:

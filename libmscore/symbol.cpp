@@ -29,7 +29,7 @@ namespace Ms {
 Symbol::Symbol(Score* s)
    : BSymbol(s)
       {
-      _sym = sharpSym;        // arbitrary valid default
+      _sym = SymId::accidentalSharp;        // arbitrary valid default
       setZ(SYMBOL * 100);
       }
 
@@ -72,7 +72,7 @@ void Symbol::layout()
             e->layout();
       ElementLayout::layout(this);
       BSymbol::layout();
-      setbbox(symbols[score()->symIdx()][_sym].bbox(magS()));
+      setbbox(score()->sym(_sym).bbox(magS()));
       }
 
 //---------------------------------------------------------
@@ -83,7 +83,7 @@ void Symbol::draw(QPainter* p) const
       {
       if (type() != NOTEDOT || !staff()->isTabStaff()) {
             p->setPen(curColor());
-            symbols[score()->symIdx()][_sym].draw(p, magS());
+            drawSymbol(_sym, p);
             }
       }
 
@@ -106,7 +106,7 @@ void Symbol::write(Xml& xml) const
 void Symbol::read(XmlReader& e)
       {
       QPointF pos;
-      SymId s = noSym;
+      SymId s = SymId::noSym;
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -117,14 +117,13 @@ void Symbol::read(XmlReader& e)
                   else if (val == "acc old ee")
                         val = "accordion.accOldEE";
                   s = Sym::name2id(val);
-                  if (s == noSym) {
+                  if (s == SymId::noSym) {
                         // if symbol name not found, fall back to mnames
                         s = Sym::userName2id(val);
-                        if (s == noSym) {
-                              qDebug("unknown symbol <%s> (%d symbols), falling back to default symbol",
-                                 qPrintable(val), symbols[0].size());
+                        if (s == SymId::noSym) {
+                              qDebug("unknown symbol <%s>, falling back to default symbol", qPrintable(val));
                               // set a default symbol, or layout() will crash
-                              s = s1miHeadSym;
+                              s = SymId::noteheadBlack;
                               }
                         }
                   }
@@ -145,7 +144,7 @@ void Symbol::read(XmlReader& e)
             else if (!BSymbol::readProperties(e))
                   e.unknown();
             }
-      if (s == noSym)
+      if (s == SymId::noSym)
             qDebug("unknown symbol");
       setPos(pos);
       setSym(s);

@@ -19,11 +19,11 @@
 
 namespace Ms {
 
-int Breath::symList[Breath::breathSymbols] = {
-      rcommaSym,
-      lcommaSym,
-      caesuraCurvedSym,
-      caesuraStraight
+SymId Breath::symList[Breath::breathSymbols] = {
+      SymId(rcommaSym),
+      SymId(lcommaSym),
+      SymId(caesuraCurvedSym),
+      SymId(caesuraStraight)
       };
 
 //---------------------------------------------------------
@@ -43,7 +43,7 @@ Breath::Breath(Score* s)
 
 void Breath::layout()
       {
-      setbbox(symbols[score()->symIdx()][symList[breathType()]].bbox(magS()));
+      setbbox(score()->sym(symList[breathType()]).bbox(magS()));
       }
 
 //---------------------------------------------------------
@@ -79,7 +79,7 @@ void Breath::read(XmlReader& e)
 void Breath::draw(QPainter* p) const
       {
       p->setPen(curColor());
-      symbols[score()->symIdx()][symList[breathType()]].draw(p, magS());
+      drawSymbol(symList[_breathType], p);
       }
 
 //---------------------------------------------------------

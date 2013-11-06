@@ -72,12 +72,14 @@ int TDuration::ticks() const
       int t;
       switch(_val) {
             case V_QUARTER:   t = MScore::division;        break;
-            case V_EIGHT:     t = MScore::division / 2;    break;
+            case V_1024TH:    t = MScore::division / 256;  break;
+            case V_512TH:     t = MScore::division / 128;  break;
             case V_256TH:     t = MScore::division / 64;   break;
             case V_128TH:     t = MScore::division / 32;   break;
             case V_64TH:      t = MScore::division / 16;   break;
             case V_32ND:      t = MScore::division / 8;    break;
             case V_16TH:      t = MScore::division / 4;    break;
+            case V_EIGHT:     t = MScore::division / 2;    break;
             case V_HALF:      t = MScore::division * 2;    break;
             case V_WHOLE:     t = MScore::division * 4;    break;
             case V_BREVE:     t = MScore::division * 8;    break;
@@ -489,18 +491,20 @@ void TDuration::print() const
       qDebug("TDuration(");
       const char* s = "?";
       switch(_val) {
-            case V_LONG:      s = "Long"; break;
-            case V_BREVE:     s = "Breve"; break;
-            case V_WHOLE:     s = "Whole"; break;
-            case V_HALF:      s = "Half"; break;
+            case V_LONG:      s = "Long";    break;
+            case V_BREVE:     s = "Breve";   break;
+            case V_WHOLE:     s = "Whole";   break;
+            case V_HALF:      s = "Half";    break;
             case V_QUARTER:   s = "Quarter"; break;
-            case V_EIGHT:     s = "Eight"; break;
-            case V_16TH:      s = "16th"; break;
-            case V_32ND:      s = "32th"; break;
-            case V_64TH:      s = "64th"; break;
-            case V_128TH:     s = "128th"; break;
-            case V_256TH:     s = "256th"; break;
-            case V_ZERO:      s = "Zero"; break;
+            case V_EIGHT:     s = "Eight";   break;
+            case V_16TH:      s = "16th";    break;
+            case V_32ND:      s = "32th";    break;
+            case V_64TH:      s = "64th";    break;
+            case V_128TH:     s = "128th";   break;
+            case V_256TH:     s = "256th";   break;
+            case V_512TH:     s = "512th";   break;
+            case V_1024TH:    s = "1024th";  break;
+            case V_ZERO:      s = "Zero";    break;
             case V_MEASURE:   s = "Measure"; break;
             case V_INVALID:   s = "Invalid"; break;
             };

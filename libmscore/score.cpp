@@ -287,8 +287,9 @@ void Score::init()
             _repeatList = 0;
             }
 
-      _revisions      = new Revisions;
-      _symIdx         = 0;
+      _revisions = new Revisions;
+      _scoreFont = ScoreFont::fontFactory("emmentaler");
+
       _pageNumberOffset = 0;
       int numOfPresets = StaffType::numOfPresets();
       for (int idx = 0; idx < numOfPresets; idx++) {
@@ -332,7 +333,7 @@ void Score::init()
       _sigmap                 = 0;
       _tempomap               = 0;
       _layoutMode             = LayoutPage;
-      _noteHeadWidth          = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
+      _noteHeadWidth          = sym(SymId::noteheadBlack).width(spatium() / (MScore::DPI * SPATIUM20));
       }
 
 //---------------------------------------------------------
@@ -1242,7 +1243,7 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       scanElements(data, spatiumHasChanged, true);
       foreach (Staff* staff, _staves)
             staff->spatiumChanged(oldValue, newValue);
-      _noteHeadWidth = symbols[_symIdx][quartheadSym].width(newValue / (MScore::DPI * SPATIUM20));
+      _noteHeadWidth = sym(SymId::noteheadBlack).width(newValue / (MScore::DPI * SPATIUM20));
       }
 
 void Score::setSpatium(qreal v)
@@ -3593,5 +3594,6 @@ void Score::setPos(POS pos, int tick)
             }
       }
 
+Sym& Score::sym(SymId id) { return _scoreFont->sym(id); }
 }
 

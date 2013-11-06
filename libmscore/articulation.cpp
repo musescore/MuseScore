@@ -28,22 +28,23 @@ namespace Ms {
 //---------------------------------------------------------
 
 ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
-      { ufermataSym, dfermataSym,
+      { SymId::fermataAbove, SymId::fermataBelow,
             "fermata", QT_TRANSLATE_NOOP("articulation", "fermata"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { ushortfermataSym, dshortfermataSym,
+      { SymId::fermataShortAbove, SymId::fermataShortBelow,
             "shortfermata", QT_TRANSLATE_NOOP("articulation", "shortfermata"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { ulongfermataSym, dlongfermataSym,
+      { SymId::fermataLongAbove, SymId::fermataLongBelow,
             "longfermata", QT_TRANSLATE_NOOP("articulation", "longfermata"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { uverylongfermataSym, dverylongfermataSym,
+      { SymId::fermataVeryLongAbove, SymId::fermataVeryLongBelow,
             "verylongfermata", QT_TRANSLATE_NOOP("articulation", "verylongfermata"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
+#if 0
       { thumbSym, thumbSym,
             "thumb", QT_TRANSLATE_NOOP("articulation", "thumb"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
@@ -56,18 +57,22 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             "espressivo", QT_TRANSLATE_NOOP("articulation", "espressivo"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { staccatoSym, staccatoSym,
+#endif
+      { SymId::articStaccato, SymId::articStaccato,
             "staccato", QT_TRANSLATE_NOOP("articulation", "staccato"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
+#if 0
       { ustaccatissimoSym,   dstaccatissimoSym,
             "staccatissimo", QT_TRANSLATE_NOOP("articulation", "staccatissimo"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { tenutoSym, tenutoSym,
+#endif
+      { SymId::articTenuto, SymId::articTenuto,
             "tenuto", QT_TRANSLATE_NOOP("articulation", "tenuto"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
+#if 0
       { dportatoSym, uportatoSym,
             "portato", QT_TRANSLATE_NOOP("articulation", "portato"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
@@ -96,10 +101,12 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             "reverseturn", QT_TRANSLATE_NOOP("articulation", "reverseturn"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { turnSym, turnSym,
+#endif
+      { SymId::ornamentTurn, SymId::ornamentTurn,
             "turn", QT_TRANSLATE_NOOP("articulation", "turn"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
+#if 0
       { trillSym, trillSym,
             "trill", QT_TRANSLATE_NOOP("articulation", "trill"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
@@ -168,6 +175,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             "popping", QT_TRANSLATE_NOOP("articulation", "popping"),
             1.0, ARTICULATION_SHOW_IN_TABLATURE
             },
+#endif
 	};
 
 //---------------------------------------------------------
@@ -302,7 +310,7 @@ void Articulation::setSubtype(const QString& s)
                   }
             if (i == n) {
                   st = 0;
-                  qDebug("Articulation: unknown <%s>\n", qPrintable(s));
+                  qDebug("Articulation: unknown <%s>", qPrintable(s));
                   }
             }
       setArticulationType(ArticulationType(st));
@@ -358,7 +366,7 @@ void Articulation::draw(QPainter* painter) const
                   }
             }
       painter->setPen(curColor());
-      symbols[score()->symIdx()][sym].draw(painter, magS());
+      drawSymbol(sym, painter);
       }
 
 //---------------------------------------------------------

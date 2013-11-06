@@ -1336,7 +1336,7 @@ void ScoreView::moveCursor(int tick)
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
       qreal mag = _spatium / (MScore::DPI * SPATIUM20);
-      double w  = _spatium * 2.0 + symbols[score()->symIdx()][quartheadSym].width(mag);
+      double w  = _spatium * 2.0 + score()->sym(SymId::noteheadBlack).width(mag);
       double h  = 6 * _spatium;
       //
       // set cursor height for whole system
@@ -1398,7 +1398,7 @@ void ScoreView::moveCursor()
 
       double h;
       qreal mag       = _spatium / (MScore::DPI * SPATIUM20);
-      double w        = _spatium * 2.0 + symbols[score()->symIdx()][quartheadSym].width(mag);
+      double w        = _spatium * 2.0 + score()->sym(SymId::noteheadBlack).width(mag);
       Staff* staff    = _score->staff(staffIdx);
       double lineDist = staff->staffType()->lineDistance().val() * _spatium;
       int lines       = staff->lines();
@@ -1492,7 +1492,7 @@ void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
       double _spatium = score()->spatium();
 
       qreal mag = _spatium / (MScore::DPI * SPATIUM20);
-      double w  = (_spatium * 2.0 + symbols[score()->symIdx()][quartheadSym].width(mag))/3;
+      double w  = (_spatium * 2.0 + score()->sym(SymId::noteheadBlack).width(mag))/3;
       double h  = 6 * _spatium;
       //
       // set cursor height for whole system
@@ -1550,18 +1550,16 @@ void ScoreView::setShadowNote(const QPointF& p)
                   }
             }
       shadowNote->setLine(line);
-      Sym* s;
+      SymId s;
       if (is.rest()) {
             int yo;
             TDuration d(is.duration());
             Rest rest(gscore, d.type());
             rest.setDuration(d.fraction());
-            int id = rest.getSymbol(is.duration().type(), 0,
-               staff->lines(), &yo);
-            s = &symbols[0][id];
+            s = rest.getSymbol(is.duration().type(), 0, staff->lines(), &yo);
             }
       else
-            s = noteHeadSym(true, noteheadGroup, noteHead);
+            s = noteHeads[0][noteheadGroup][noteHead];
       shadowNote->setSym(s);
       shadowNote->layout();
       shadowNote->setPos(pos.pos);
