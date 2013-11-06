@@ -37,6 +37,7 @@ class MuseScoreView;
 class Segment;
 class TextStyle;
 class Element;
+enum class SymId;
 
 //---------------------------------------------------------
 //   ElementFlag
@@ -560,6 +561,10 @@ class Element : public QObject {
       void undoPushProperty(P_ID);
 
       virtual void styleChanged() {}
+
+//      void draw(SymId id, QPainter* p) const;
+      void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF()) const;
+      void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;
       };
 
 //---------------------------------------------------------

@@ -61,10 +61,17 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       articulationTable->setColumnWidth(1, 180);
       articulationTable->setRowCount(ARTICULATIONS);
 
+      musicalSymbolFont->clear();
+      int idx = 0;
+      for (auto i : ScoreFont::scoreFonts()) {
+            musicalSymbolFont->addItem(i.name(), idx);
+            ++idx;
+            }
+
       for (int i = 0; i < ARTICULATIONS; ++i) {
             ArticulationInfo* ai = &Articulation::articulationList[i];
 
-            QPixmap ct = sym2pixmap(&symbols[0][ai->upSym], 3.0);
+            QPixmap ct = cs->scoreFont()->sym2pixmap(ai->upSym, 3.0);
             QIcon icon(ct);
             QTableWidgetItem* item = new QTableWidgetItem(icon, qApp->translate("articulation", qPrintable(ai->name)));
 
@@ -179,7 +186,6 @@ void EditStyle::apply()
       {
       getValues();
       cs->undo(new ChangeStyle(cs, lstyle));
-      cs->setLayoutAll(true);
       cs->update();
       }
 
@@ -315,7 +321,8 @@ void EditStyle::getValues()
       lstyle.set(ST_SlurMidWidth,            Spatium(slurMidLineWidth->value()));
       lstyle.set(ST_SlurDottedWidth,         Spatium(slurDottedLineWidth->value()));
 
-      lstyle.set(ST_MusicalSymbolFont,       musicalSymbolFont->currentText());
+      int idx1 = musicalSymbolFont->itemData(musicalSymbolFont->currentIndex()).toInt();
+      lstyle.set(ST_MusicalSymbolFont, ScoreFont::scoreFonts().at(idx1).name());
 
       lstyle.set(ST_showHeader,      showHeader->isChecked());
       lstyle.set(ST_headerStyled,    headerStyled->isChecked());
@@ -588,7 +595,15 @@ void EditStyle::setValues()
       slurEndLineWidth->setValue(lstyle.value(ST_SlurEndWidth).toDouble());
       slurMidLineWidth->setValue(lstyle.value(ST_SlurMidWidth).toDouble());
       slurDottedLineWidth->setValue(lstyle.value(ST_SlurDottedWidth).toDouble());
-      musicalSymbolFont->setCurrentIndex(lstyle.value(ST_MusicalSymbolFont).toString() == "Emmentaler" ? 0 : 1);
+
+      QString mfont(lstyle.value(ST_MusicalSymbolFont).toString());
+      int idx = 0;
+      for (auto i : ScoreFont::scoreFonts()) {
+            if (i.name().toLower() == mfont.toLower()) {
+                  musicalSymbolFont->setCurrentIndex(idx);
+                  break;
+                  }
+            }
 
       showHeader->setChecked(lstyle.value(ST_showHeader).toBool());
       headerStyled->setChecked(lstyle.value(ST_headerStyled).toBool());

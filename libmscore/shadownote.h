@@ -32,7 +32,7 @@ class ShadowNote : public Element {
       Q_OBJECT
 
       int _line;
-      Sym* sym;
+      SymId sym;
 
    public:
       ShadowNote(Score*);
@@ -42,7 +42,7 @@ class ShadowNote : public Element {
       int line() const                  { return _line;   }
       void setLine(int n)               { _line = n;      }
       virtual void draw(QPainter*) const;
-      void setSym(Sym* s)               { sym = s;     }
+      void setSym(SymId id)             { sym = id;     }
       };
 
 

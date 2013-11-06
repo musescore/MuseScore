@@ -546,16 +546,7 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
-//      printf("======doLayout\n");
-
-      int idx = styleSt(ST_MusicalSymbolFont) == "Gonville" ? 1 : 0;
-
-      initSymbols(idx);
-
-      if (idx != _symIdx) {
-            _symIdx = idx;
-            _noteHeadWidth = symbols[_symIdx][quartheadSym].width(spatium() / (MScore::DPI * SPATIUM20));
-            }
+      _noteHeadWidth = sym(SymId::noteheadBlack).width(spatium() / (MScore::DPI * SPATIUM20));
 
       if (layoutFlags & LAYOUT_FIX_TICKS)
             fixTicks();

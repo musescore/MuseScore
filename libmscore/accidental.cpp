@@ -29,43 +29,46 @@ struct Acc {
       const char* name;       // translated name
       AccidentalVal offset;   // semitone offset
       int centOffset;
-      int sym;
-      Acc(const char* t, const char* n, AccidentalVal o, int o2, int s)
+      SymId sym;
+      Acc(const char* t, const char* n, AccidentalVal o, int o2, SymId s)
          : tag(t), name(n), offset(o), centOffset(o2), sym(s) {}
       };
 
-Acc accList[] = {
-      Acc("none",                QT_TRANSLATE_NOOP("accidental", "none"),                NATURAL, 0, -1),
-      Acc("sharp",               QT_TRANSLATE_NOOP("accidental", "sharp"),               SHARP,   0, sharpSym),
-      Acc("flat",                QT_TRANSLATE_NOOP("accidental", "flat"),                FLAT,    0, flatSym),
-      Acc("double sharp",        QT_TRANSLATE_NOOP("accidental", "double sharp"),        SHARP2,  0, sharpsharpSym),
-      Acc("double flat",         QT_TRANSLATE_NOOP("accidental", "double flat"),         FLAT2,   0, flatflatSym),
-      Acc("natural",             QT_TRANSLATE_NOOP("accidental", "natural"),             NATURAL, 0, naturalSym),
+#define TRA(x) QT_TRANSLATE_NOOP("accidental", x)
+static Acc accList[] = {
+      Acc("none",                TRA("none"),                NATURAL, 0,    SymId::noSym),
+      Acc("sharp",               TRA("sharp"),               SHARP,   0,    SymId::accidentalSharp),
+      Acc("flat",                TRA("flat"),                FLAT,    0,    SymId::accidentalFlat),
+      Acc("double sharp",        TRA("double sharp"),        SHARP2,  0,    SymId::accidentalSharpSharp),
+      Acc("double flat",         TRA("double flat"),         FLAT2,   0,    SymId::accidentalDoubleFlat),
+      Acc("natural",             TRA("natural"),             NATURAL, 0,    SymId::accidentalNatural),
+#if 0
+      Acc("flat-slash",          TRA("flat-slash"),          NATURAL, -50,  flatslashSym),
+      Acc("flat-slash2",         TRA("flat-slash2"),         NATURAL, 0,    flatslash2Sym),
+      Acc("mirrored-flat2",      TRA("mirrored-flat2"),      NATURAL, -150, mirroredflat2Sym),
+      Acc("mirrored-flat",       TRA("mirrored-flat"),       NATURAL, -50,  mirroredflatSym),
+      Acc("mirrored-flat-slash", TRA("mirrored-flat-slash"), NATURAL, 0,    mirroredflatslashSym),
+      Acc("flat-flat-slash",     TRA("flat-flat-slash"),     NATURAL, -150, flatflatslashSym),
 
-      Acc("flat-slash",          QT_TRANSLATE_NOOP("accidental", "flat-slash"),          NATURAL, -50, flatslashSym),
-      Acc("flat-slash2",         QT_TRANSLATE_NOOP("accidental", "flat-slash2"),         NATURAL, 0, flatslash2Sym),
-      Acc("mirrored-flat2",      QT_TRANSLATE_NOOP("accidental", "mirrored-flat2"),      NATURAL, -150, mirroredflat2Sym),
-      Acc("mirrored-flat",       QT_TRANSLATE_NOOP("accidental", "mirrored-flat"),       NATURAL, -50, mirroredflatSym),
-      Acc("mirrored-flat-slash", QT_TRANSLATE_NOOP("accidental", "mirrored-flat-slash"), NATURAL, 0, mirroredflatslashSym),
-      Acc("flat-flat-slash",     QT_TRANSLATE_NOOP("accidental", "flat-flat-slash"),     NATURAL, -150, flatflatslashSym),
+      Acc("sharp-slash",         TRA("sharp-slash"),         NATURAL, 50,   sharpslashSym),
+      Acc("sharp-slash2",        TRA("sharp-slash2"),        NATURAL, 0,    sharpslash2Sym),
+      Acc("sharp-slash3",        TRA("sharp-slash3"),        NATURAL, 0,    sharpslash3Sym),
+      Acc("sharp-slash4",        TRA("sharp-slash4"),        NATURAL, 150,  sharpslash4Sym),
 
-      Acc("sharp-slash",         QT_TRANSLATE_NOOP("accidental", "sharp-slash"),         NATURAL, 50, sharpslashSym),
-      Acc("sharp-slash2",        QT_TRANSLATE_NOOP("accidental", "sharp-slash2"),        NATURAL, 0, sharpslash2Sym),
-      Acc("sharp-slash3",        QT_TRANSLATE_NOOP("accidental", "sharp-slash3"),        NATURAL, 0, sharpslash3Sym),
-      Acc("sharp-slash4",        QT_TRANSLATE_NOOP("accidental", "sharp-slash4"),        NATURAL, 150, sharpslash4Sym),
-
-      Acc("sharp arrow up",      QT_TRANSLATE_NOOP("accidental", "sharp arrow up"),      NATURAL, -50, sharpArrowUpSym),
-      Acc("sharp arrow down",    QT_TRANSLATE_NOOP("accidental", "sharp arrow down"),    NATURAL, -150, sharpArrowDownSym),
-      Acc("sharp arrow both",    QT_TRANSLATE_NOOP("accidental", "sharp arrow both"),    NATURAL, 0, sharpArrowBothSym),
-      Acc("flat arrow up",       QT_TRANSLATE_NOOP("accidental", "flat arrow up"),       NATURAL, 50, flatArrowUpSym),
-      Acc("flat arrow down",     QT_TRANSLATE_NOOP("accidental", "flat arrow down"),     NATURAL, -50, flatArrowDownSym),
-      Acc("flat arrow both",     QT_TRANSLATE_NOOP("accidental", "flat arrow both"),     NATURAL, 0, flatArrowBothSym),
-      Acc("natural arrow up",    QT_TRANSLATE_NOOP("accidental", "natural arrow up"),    NATURAL, 50, naturalArrowUpSym),
-      Acc("natural arrow down",  QT_TRANSLATE_NOOP("accidental", "natural arrow down"),  NATURAL, 150, naturalArrowDownSym),
-      Acc("natural arrow both",  QT_TRANSLATE_NOOP("accidental", "natural arrow both"),  NATURAL, 0, naturalArrowBothSym),
-      Acc("sori",                QT_TRANSLATE_NOOP("accidental", "sori"),                NATURAL, 50, soriSym),
-      Acc("koron",               QT_TRANSLATE_NOOP("accidental", "koron"),               NATURAL, -50, koronSym)
+      Acc("sharp arrow up",      TRA("sharp arrow up"),      NATURAL, -50,  sharpArrowUpSym),
+      Acc("sharp arrow down",    TRA("sharp arrow down"),    NATURAL, -150, sharpArrowDownSym),
+      Acc("sharp arrow both",    TRA("sharp arrow both"),    NATURAL, 0,    sharpArrowBothSym),
+      Acc("flat arrow up",       TRA("flat arrow up"),       NATURAL, 50,   flatArrowUpSym),
+      Acc("flat arrow down",     TRA("flat arrow down"),     NATURAL, -50,  flatArrowDownSym),
+      Acc("flat arrow both",     TRA("flat arrow both"),     NATURAL, 0,    flatArrowBothSym),
+      Acc("natural arrow up",    TRA("natural arrow up"),    NATURAL, 50,   naturalArrowUpSym),
+      Acc("natural arrow down",  TRA("natural arrow down"),  NATURAL, 150,  naturalArrowDownSym),
+      Acc("natural arrow both",  TRA("natural arrow both"),  NATURAL, 0,    naturalArrowBothSym),
+#endif
+      Acc("sori",                TRA("sori"),                NATURAL, 50,   SymId::accidentalSori),
+      Acc("koron",               TRA("koron"),               NATURAL, -50,  SymId::accidentalKoron)
       };
+#undef TRA
 
 //---------------------------------------------------------
 //   Accidental
@@ -272,7 +275,7 @@ void Accidental::setSubtype(const QString& tag)
 //   symbol
 //---------------------------------------------------------
 
-int Accidental::symbol() const
+SymId Accidental::symbol() const
       {
       return accList[accidentalType()].sym;
       }
@@ -299,23 +302,23 @@ void Accidental::layout()
       m = magS();
       QPointF pos;
       if (_hasBracket) {
-            SymElement e(leftparenSym, 0.0);
+            SymElement e(SymId::noteheadParenthesisLeft, 0.0);
             el.append(e);
-            r |= symbols[score()->symIdx()][leftparenSym].bbox(m);
-            pos = symbols[score()->symIdx()][leftparenSym].attach(m);
+            r |= score()->sym(SymId::noteheadParenthesisLeft).bbox(m);
+            pos = score()->sym(SymId::noteheadParenthesisRight).attach(m);
             }
 
-      int s = symbol();
+      SymId s = symbol();
       SymElement e(s, pos.x());
       el.append(e);
-      r |= symbols[score()->symIdx()][s].bbox(m);
-      pos += symbols[score()->symIdx()][s].attach(m);
+      r |= score()->sym(s).bbox(m);
+      pos += score()->sym(s).attach(m);
 
       if (_hasBracket) {
             qreal x = pos.x();     // symbols[s].width(m) + symbols[s].bbox(m).x();
-            SymElement e(rightparenSym, x);
+            SymElement e(SymId::noteheadParenthesisRight, x);
             el.append(e);
-            r |= symbols[score()->symIdx()][rightparenSym].bbox(m).translated(x, 0.0);
+            r |= score()->sym(SymId::noteheadParenthesisRight).bbox(m).translated(x, 0.0);
             }
       setbbox(r);
       }
@@ -382,7 +385,7 @@ void Accidental::draw(QPainter* painter) const
             return;
       painter->setPen(curColor());
       foreach(const SymElement& e, el)
-            symbols[score()->symIdx()][e.sym].draw(painter, magS(), QPointF(e.x, 0.0));
+            score()->scoreFont()->draw(e.sym, painter, magS(), QPointF(e.x, 0.0));
       }
 
 //---------------------------------------------------------
@@ -476,8 +479,8 @@ AccidentalBracket::AccidentalBracket(Score* s)
       {
       Symbol* s1 = new Symbol(score());
       Symbol* s2 = new Symbol(score());
-      s1->setSym(leftparenSym);
-      s2->setSym(rightparenSym);
+      s1->setSym(SymId::noteheadParenthesisLeft);
+      s2->setSym(SymId::noteheadParenthesisRight);
       addElement(s1, -s1->bbox().x(), 0.0);
       addElement(s2, s2->bbox().width() - s2->bbox().x(), 0.0);
       }

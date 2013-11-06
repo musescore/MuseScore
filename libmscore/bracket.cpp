@@ -107,12 +107,11 @@ void Bracket::layout()
       else if (bracketType() == BRACKET_NORMAL) {
             qreal mags = 1.0;
             qreal _spatium = spatium();
-            int idx = score()->symIdx();
             qreal w = score()->styleS(ST_bracketWidth).val() * _spatium * .5;
             qreal x = -w;
-            w      += symbols[idx][brackettipsRightUp].width(mags);
+            w      += score()->sym(SymId(brackettipsRightUp)).width(mags);
             qreal bd = _spatium * .25;
-            qreal y = -symbols[idx][brackettipsRightUp].height(mags) - bd;
+            qreal y = - score()->sym(SymId(brackettipsRightUp)).height(mags) - bd;
             qreal h = (-y + h2) * 2;
             bbox().setRect(x, y, w, h);
             }
@@ -157,13 +156,11 @@ void Bracket::draw(QPainter* painter) const
             painter->setPen(pen);
             qreal bd   = _spatium * .25;
             painter->drawLine(QLineF(0.0, -bd, 0.0, h + bd));
-            int idx = score()->symIdx();
-            qreal mags = 1.0;
             qreal x    =  -w * .5;
             qreal y1   = -bd;
             qreal y2   = h + bd;
-            symbols[idx][brackettipsRightUp].draw(painter,   mags, QPointF(x, y1));
-            symbols[idx][brackettipsRightDown].draw(painter, mags, QPointF(x, y2));
+            drawSymbol(SymId(brackettipsRightUp), painter, QPointF(x, y1));
+            drawSymbol(SymId(brackettipsRightDown), painter, QPointF(x, y2));
             }
       else if (bracketType() == BRACKET_SQUARE) {
             qreal h = 2 * h2;

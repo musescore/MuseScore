@@ -17,7 +17,7 @@
 namespace Ms {
 
 // Embellishment names and note sequences
-      
+
 BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
 
       // Single Grace notes
@@ -31,7 +31,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Single grace F"), "F" },
       { QT_TRANSLATE_NOOP("bagpipe", "Single grace high G"), "HG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Single grace high A"), "HA" },
-      
+
       // Double Grace notes
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "D LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "D LA" },
@@ -42,14 +42,14 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "E B" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "E C" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "E D" },
-      
+
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F LA" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F B" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F C" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F D" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "F E" },
-      
+
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG LA" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG B" },
@@ -57,7 +57,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG D" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG E" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HG F" },
-      
+
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA LA" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA B" },
@@ -66,7 +66,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA E" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA F" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double grace"), "HA HG" },
-      
+
       // Half Doublings
       { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on low G"), "LG D" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half doubling on low A"), "LA D" },
@@ -81,7 +81,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       // Regular Doublings
       { QT_TRANSLATE_NOOP("bagpipe", "Doubling on high G"), "HG F" },
       { QT_TRANSLATE_NOOP("bagpipe", "Doubling on high A"), "HA HG" },
-      
+
       // Half Strikes
       { QT_TRANSLATE_NOOP("bagpipe", "Half strike on low A"), "LA LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half strike on B"), "B LG" },
@@ -91,7 +91,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Half strike on E"), "E LA" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half strike on F"), "F E" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half strike on high G"), "HG F" },
-      
+
       // Regular Grip
       { QT_TRANSLATE_NOOP("bagpipe", "Grip"), "D LG" },
 
@@ -125,7 +125,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "G grace note on D"), "HG D C" },
       { QT_TRANSLATE_NOOP("bagpipe", "G grace note on E"), "HG E LA" },
       { QT_TRANSLATE_NOOP("bagpipe", "G grace note on F"), "HG F E" },
-      
+
       // Regular Double Strikes
       { QT_TRANSLATE_NOOP("bagpipe", "Double strike on low A"), "LG LA LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Double strike on B"), "LG B LG" },
@@ -163,7 +163,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Heavy D throw"), "LG D LG C" },
       { QT_TRANSLATE_NOOP("bagpipe", "Taorluath"), "LG D LG E" },
       { QT_TRANSLATE_NOOP("bagpipe", "Taorluath"), "LG B LG E" },
-      
+
       // Half Double Strikes
       { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on low A"), "LA LG LA LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on B"), "B LG B LG" },
@@ -174,7 +174,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on F"), "F E F E" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on high G"), "HG F HG F" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half double strike on high A"), "HA HG HA HG" },
-      
+
       // Half Grips
       { QT_TRANSLATE_NOOP("bagpipe", "Half grip on low A"), "LA LG D LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half grip on B"), "B LG D LG" },
@@ -185,7 +185,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Half grip on F"), "F LG F LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half grip on high G"), "HG LG D LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half grip on high A"), "HA LG D LG" },
-      
+
       // Half Peles
       { QT_TRANSLATE_NOOP("bagpipe", "Half pele on low A"), "LA E LA LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half pele on B"), "B E B LG" },
@@ -230,7 +230,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Pele on D"), "HG D E D C" },
       { QT_TRANSLATE_NOOP("bagpipe", "Pele on E"), "HG E F E LA" },
       { QT_TRANSLATE_NOOP("bagpipe", "Pele on F"), "HG F HG F E" },
- 
+
       // Thumb Grace Note Peles
       { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on low A"), "HA LA E LA LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Thumb grace note pele on B"), "HA B E B LG" },
@@ -270,7 +270,7 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on F"), "E F E F E" },
       { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on high G"), "F HG F HG F" },
       { QT_TRANSLATE_NOOP("bagpipe", "Triple strike on high A"), "HG HA HG HA HG" },
-      
+
       // Half Triple Strikes
       { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on low A"), "LA LG LA LG LA LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Half triple strike on B"), "B LG B LG B LG" },
@@ -326,7 +326,7 @@ int BagpipeEmbellishment::nEmbellishments()
       {
       return sizeof(BagpipeEmbellishmentList) / sizeof(*BagpipeEmbellishmentList);
       }
-      
+
 //---------------------------------------------------------
 //   getNoteList
 //     return notes as list of indices in BagpipeNoteInfoList
@@ -377,36 +377,39 @@ void BagpipeEmbellishment::read(XmlReader& e)
                   e.unknown();
             }
       }
-      
+
 //---------------------------------------------------------
 //   BEDrawingDataX
 //      BagpipeEmbellishment drawing data in the x direction
 //      shared between ::draw() and ::layout()
 //---------------------------------------------------------
-      
+
 struct BEDrawingDataX {
-      const Sym& headsym;     // grace note head symbol
-      const Sym& flagsym;     // grace note flag symbol
+      const SymId headsym;     // grace note head symbol
+      const SymId flagsym;     // grace note flag symbol
       const qreal mags;       // grace head magnification
-      const qreal headw;      // grace head width
-      const qreal headp;      // horizontal head pitch
+      qreal headw;            // grace head width
+      qreal headp;            // horizontal head pitch
       const qreal spatium;    // spatium
       const qreal lw;         // line width for stem
-      const qreal xl;         // calc x for stem of leftmost note
+      qreal xl;               // calc x for stem of leftmost note
       const qreal xcorr;      // correction to align flag with top of stem
 
-      BEDrawingDataX(const Sym& hs, const Sym& fs, const qreal m, const qreal s, const int nn)
+      BEDrawingDataX(SymId hs, SymId fs, const qreal m, const qreal s, const int nn)
          :  headsym(hs),
             flagsym(fs),
             mags(     0.75 * m),
-            headw(    hs.width(mags)),
-            headp(    1.4 * hs.width(mags)),
             spatium(  s),
             lw(       0.1 * s),
-            xl(       (1 - 1.4 * (nn - 1)) * hs.width(mags) / 2),
-            xcorr(    0.1 * s) {}
+            xcorr(    0.1 * s)
+            {
+            qreal w = gscore->scoreFont()->sym(hs).width(mags);
+            headw = w;
+            headp = 1.4 * w;
+            xl    = (1 - 1.4 * (nn - 1)) * w / 2;
+            }
 };
-      
+
 //---------------------------------------------------------
 //   BEDrawingDataY
 //      BagpipeEmbellishment drawing data in the y direction
@@ -419,7 +422,7 @@ struct BEDrawingDataY {
       const qreal y2;         // bottom of stem
       const qreal ycorr;      // correction to align flag with top of stem
       const qreal bw;         // line width for beam
-      
+
       BEDrawingDataY(const int l, const qreal s)
          :  y1b(   -8 * s / 2),
             y1f(    (l - 6) * s / 2),
@@ -427,12 +430,12 @@ struct BEDrawingDataY {
             ycorr( -0.2 * s),
             bw(     0.3 * s) {}
 };
-      
+
 //---------------------------------------------------------
 //   debug support (disabled)
 //---------------------------------------------------------
 
-static void printBBox(const char* name, const QRectF b)
+static void printBBox(const char* /*name*/, const QRectF /*b*/)
       {
       /*
       qDebug("bbox%s left %f bot %f right %f top %f",
@@ -444,7 +447,7 @@ static void printBBox(const char* name, const QRectF b)
        */
       }
 
-static void symMetrics(const char* name, const Sym& headsym)
+static void symMetrics(const char* /*name*/, const Sym& /*headsym*/)
       {
       /*
       qDebug("%s", name);
@@ -458,7 +461,7 @@ static void symMetrics(const char* name, const Sym& headsym)
              headsym.getAttach().y());
        */
       }
-      
+
 //---------------------------------------------------------
 //   layout
 //      calculate and set bounding box
@@ -469,21 +472,21 @@ void BagpipeEmbellishment::layout()
       if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
             // qDebug("BagpipeEmbellishment::layout st %d", _embelType);
       }
-      const Sym& headsym = symbols[score()->symIdx()][quartheadSym];
-      const Sym& flagsym = symbols[score()->symIdx()][thirtysecondflagSym];
-            
+      SymId headsym = SymId(quartheadSym);
+      SymId flagsym = SymId(thirtysecondflagSym);
+
       noteList nl = getNoteList();
       BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
 
       setbbox(QRectF());
       if (_embelType == 0) {
-            symMetrics("headsym", headsym);
-            symMetrics("flagsym", flagsym);
+            // symMetrics("headsym", headsym);
+            // symMetrics("flagsym", flagsym);
             // qDebug("mags %f headw %f headp %f spatium %f", dx.mags, dx.headw, dx.headp, dx.spatium);
             }
-            
+
       bool drawFlag = nl.size() == 1;
-            
+
       // draw the notes including stem, (optional) flag and (optional) ledger line
       qreal x = dx.xl;
       foreach (int note, nl) {
@@ -491,7 +494,7 @@ void BagpipeEmbellishment::layout()
             BEDrawingDataY dy(line, score()->spatium());
 
             // head
-            addbbox(headsym.bbox(dx.mags).translated(QPointF(x - dx.lw * .5 - dx.headw, dy.y2)));
+            addbbox(score()->sym(headsym).bbox(dx.mags).translated(QPointF(x - dx.lw * .5 - dx.headw, dy.y2)));
             if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
                   printBBox(" notehead", bbox());
                   }
@@ -505,7 +508,7 @@ void BagpipeEmbellishment::layout()
 
             // flag
             if (drawFlag) {
-                  addbbox(flagsym.bbox(dx.mags).translated(QPointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
+                  addbbox(score()->sym(flagsym).bbox(dx.mags).translated(QPointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
                   printBBox(" notehead + stem + flag", bbox());
                   }
 
@@ -516,7 +519,7 @@ void BagpipeEmbellishment::layout()
                         printBBox(" notehead + stem + ledger line", bbox());
                         }
                   }
-            
+
             // move x to next note x position
             x += dx.headp;
             }
@@ -528,7 +531,7 @@ void BagpipeEmbellishment::layout()
 //      x1,y is one side of the top beam
 //      x2,y is the other side of the top beam
 //---------------------------------------------------------
-      
+
 static void drawBeams(QPainter* painter, const qreal spatium,
                       const qreal x1, const qreal x2, qreal y)
       {
@@ -547,17 +550,20 @@ static void drawBeams(QPainter* painter, const qreal spatium,
 //      x,y2 is the bottom of the stem
 //---------------------------------------------------------
 
-static void drawGraceNote(QPainter* painter, const BEDrawingDataX& dx, const BEDrawingDataY& dy,
-                          const Sym& flagsym, const qreal x, const bool drawFlag)
+void BagpipeEmbellishment::drawGraceNote(QPainter* painter,
+   const BEDrawingDataX& dx,
+   const BEDrawingDataY& dy,
+   SymId flagsym, const qreal x, const bool drawFlag) const
       {
       // draw head
-      dx.headsym.draw(painter, dx.mags, QPointF(x - dx.headw, dy.y2));
+//      drawSymbol(headsym, painter, dx.mags, QPointF(x - dx.headw, dy.y2));
+      drawSymbol(dx.headsym, painter, QPointF(x - dx.headw, dy.y2));
       // draw stem
       qreal y1 =  drawFlag ? dy.y1f : dy.y1b;          // top of stems actually used
       painter->drawLine(QLineF(x - dx.lw * .5, y1, x - dx.lw * .5, dy.y2));
       if (drawFlag) {
             // draw flag
-            flagsym.draw(painter, dx.mags, QPointF(x - dx.lw * .5 + dx.xcorr, y1 + dy.ycorr));
+            drawSymbol(flagsym, painter, QPointF(x - dx.lw * .5 + dx.xcorr, y1 + dy.ycorr));
             }
       }
 
@@ -570,8 +576,8 @@ static void drawGraceNote(QPainter* painter, const BEDrawingDataX& dx, const BED
 
 void BagpipeEmbellishment::draw(QPainter* painter) const
       {
-      const Sym& headsym = symbols[score()->symIdx()][quartheadSym];
-      const Sym& flagsym = symbols[score()->symIdx()][thirtysecondflagSym];
+      SymId headsym = SymId(quartheadSym);
+      SymId flagsym = SymId(thirtysecondflagSym);
 
       noteList nl = getNoteList();
       BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());

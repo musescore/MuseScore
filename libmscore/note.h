@@ -41,6 +41,7 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffTypeTablature;
+enum class SymId;
 
 //---------------------------------------------------------
 //   NoteVal
@@ -215,7 +216,7 @@ class Note : public Element {
       qreal tabHeadHeight(StaffTypeTablature* tab = 0) const;
       QPointF attach() const;
 
-      int noteHead() const;
+      SymId noteHead() const;
       NoteHeadGroup headGroup() const     { return _headGroup; }
       NoteHeadType headType() const       { return _headType;  }
       void setHeadGroup(NoteHeadGroup val);
@@ -351,7 +352,7 @@ class Note : public Element {
       virtual void setScore(Score* s);
       };
 
-extern Sym* noteHeadSym(bool up, int group, int n);
+//extern Sym* noteHeadSym(bool up, int group, int n);
 extern const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES];
 
 

@@ -25,7 +25,8 @@ class TDuration {
    public:
       enum DurationType {
             V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHT, V_16TH,
-            V_32ND, V_64TH, V_128TH, V_256TH, V_ZERO, V_MEASURE,  V_INVALID
+            V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
+            V_ZERO, V_MEASURE,  V_INVALID
             };
    private:
       DurationType _val;

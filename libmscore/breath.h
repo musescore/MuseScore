@@ -19,6 +19,8 @@ class QPainter;
 
 namespace Ms {
 
+enum class SymId;
+
 //---------------------------------------------------------
 //   @@ Breath
 ///    brathT() is index in symList
@@ -29,24 +31,24 @@ class Breath : public Element {
 
       int _breathType;
       static const int breathSymbols = 4;
-      static int symList[breathSymbols];
+      static SymId symList[breathSymbols];
 
    public:
       Breath(Score* s);
-      virtual Breath* clone() const { return new Breath(*this); }
+      virtual ElementType type() const override { return BREATH; }
+      virtual Breath* clone() const override    { return new Breath(*this); }
 
-      virtual ElementType type() const { return BREATH; }
-      int breathType() const    { return _breathType; }
-      void setBreathType(int v) { _breathType = v; }
+      int breathType() const           { return _breathType; }
+      void setBreathType(int v)        { _breathType = v; }
 
       Segment* segment() const         { return (Segment*)parent(); }
-      virtual Space space() const;
+      virtual Space space() const override;
 
-      virtual void draw(QPainter*) const;
-      virtual void layout();
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
-      virtual QPointF pagePos() const;      ///< position in page coordinates
+      virtual void draw(QPainter*) const override;
+      virtual void layout() override;
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
+      virtual QPointF pagePos() const override;      ///< position in page coordinates
       };
 
 

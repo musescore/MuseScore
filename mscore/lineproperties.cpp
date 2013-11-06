@@ -40,7 +40,7 @@ static void populateLineSymbolComboBox(QComboBox* cb)
       {
       cb->clear();
       cb->addItem(cb->tr("no symbol"), noSym);
-      for (int i = 0; i < lastSym; ++i)
+      for (int i = 0; i < int(SymId::lastSym); ++i)
             cb->addItem(Sym::id2userName(SymId(i)), i);
       }
 
@@ -85,9 +85,9 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
 
       beginTextRb->setChecked(tl->beginText());
       continueTextRb->setChecked(tl->continueText());
-      beginSymbolRb->setChecked(tl->beginSymbol() != -1);
-      continueSymbolRb->setChecked(tl->continueSymbol() != -1);
-      endSymbolRb->setChecked(tl->endSymbol() != -1);
+      beginSymbolRb->setChecked(tl->beginSymbol() != SymId::noSym);
+      continueSymbolRb->setChecked(tl->continueSymbol() != SymId::noSym);
+      endSymbolRb->setChecked(tl->endSymbol() != SymId::noSym);
 
       bool bt = beginTextRb->isChecked();
       beginText->setEnabled(bt);
@@ -110,9 +110,9 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       beginText->setText(tl->beginText() ? tl->beginText()->text() : "");
       continueText->setText(tl->continueText() ? tl->continueText()->text() : "");
 
-      setLineSymbolComboBox(beginSymbol, tl->beginSymbol());
-      setLineSymbolComboBox(continueSymbol, tl->continueSymbol());
-      setLineSymbolComboBox(endSymbol, tl->endSymbol());
+      setLineSymbolComboBox(beginSymbol, int(tl->beginSymbol()));
+      setLineSymbolComboBox(continueSymbol, int(tl->continueSymbol()));
+      setLineSymbolComboBox(endSymbol, int(tl->endSymbol()));
 
       beginSymbolX->setValue(tl->beginSymbolOffset().x());
       beginSymbolY->setValue(tl->beginSymbolOffset().y());
@@ -195,13 +195,13 @@ void LineProperties::accept()
             tl->setContinueText(0);
 
       SymId sym = SymId(beginSymbol->itemData(beginSymbol->currentIndex()).toInt());
-      tl->setBeginSymbol(beginSymbolRb->isChecked() ? sym : noSym);
+      tl->setBeginSymbol(beginSymbolRb->isChecked() ? sym : SymId::noSym);
 
       sym = SymId(continueSymbol->itemData(continueSymbol->currentIndex()).toInt());
-      tl->setContinueSymbol(continueSymbolRb->isChecked() ? sym : noSym);
+      tl->setContinueSymbol(continueSymbolRb->isChecked() ? sym : SymId::noSym);
 
       sym = SymId(endSymbol->itemData(endSymbol->currentIndex()).toInt());
-      tl->setEndSymbol(endSymbolRb->isChecked() ? sym : noSym);
+      tl->setEndSymbol(endSymbolRb->isChecked() ? sym : SymId::noSym);
 
       PlaceText p = PLACE_ABOVE;
       switch(beginTextPlace->currentIndex()) {

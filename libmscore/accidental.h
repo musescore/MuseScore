@@ -26,15 +26,16 @@ class QPainter;
 namespace Ms {
 
 class Note;
+enum class SymId;
 
 //---------------------------------------------------------
 //   SymElement
 //---------------------------------------------------------
 
 struct SymElement {
-      int sym;
+      SymId sym;
       qreal x;
-      SymElement(int _sym, qreal _x) : sym(_sym), x(_x) {}
+      SymElement(SymId _sym, qreal _x) : sym(_sym), x(_x) {}
       };
 
 //---------------------------------------------------------
@@ -46,7 +47,7 @@ struct SymElement {
 //---------------------------------------------------------
 
 class Accidental : public Element {
-public:
+   public:
       enum AccidentalRole {
             ACC_AUTO,               // layout created accidental
             ACC_USER                // user created accidental
@@ -86,7 +87,7 @@ public:
             };
 
 
-private:
+   private:
       Q_OBJECT
       Q_PROPERTY(bool               hasBracket READ hasBracket WRITE undoSetHasBracket)
       Q_PROPERTY(bool               small      READ small      WRITE undoSetSmall)
@@ -118,7 +119,7 @@ private:
       virtual bool isEditable() const                    { return true; }
       virtual void startEdit(MuseScoreView*, const QPointF&) { setGenerated(false); }
 
-      int symbol() const;
+      SymId symbol() const;
       Note* note() const                  { return (Note*)parent(); }
 
       bool hasBracket() const             { return _hasBracket;     }

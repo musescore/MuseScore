@@ -30,9 +30,8 @@ namespace Ms {
 void TrillSegment::draw(QPainter* painter) const
       {
       qreal mag  = magS();
-      int idx    = score()->symIdx();
-      QRectF b2(symbols[idx][trillelementSym].bbox(mag));
-      qreal w2   = symbols[idx][trillelementSym].width(mag);
+      QRectF b2(score()->sym(SymId(trillelementSym)).bbox(mag));
+      qreal w2   = score()->sym(SymId(trillelementSym)).width(mag);
 
       qreal x2   = pos2().x();
 
@@ -49,15 +48,15 @@ void TrillSegment::draw(QPainter* painter) const
 
       painter->setPen(color);
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
-            int sym = 0;
+            SymId sym = SymId::noSym;
             qreal x0 = 0.0, x1 = 0.0, y = 0.0;
             int n = 0;
             QRectF b1;
 
             switch(trill()->trillType()) {
                   case Trill::TRILL_LINE:
-                        sym  = trillSym;
-                        b1   = symbols[idx][sym].bbox(mag);
+                        sym  = SymId(trillSym);
+                        b1   = score()->sym(sym).bbox(mag);
                         x0   = -b1.x();
                         x1   = x0 + b1.width();
                         n    = int(floor((x2-x1) / w2));
@@ -65,31 +64,31 @@ void TrillSegment::draw(QPainter* painter) const
                         break;
 
                   case Trill::UPPRALL_LINE:
-                        sym  = upprallSym;
-                        b1   = symbols[idx][sym].bbox(mag);
+                        sym  = SymId(upprallSym);
+                        b1   = score()->sym(sym).bbox(mag);
                         x0   = -b1.x();
                         x1   = b1.width();
                         n    = int(floor((x2-x1) / w2));
                         y    = -b1.height();
                         break;
                   case Trill::DOWNPRALL_LINE:
-                        sym  = downprallSym;
-                        b1   = symbols[idx][sym].bbox(mag);
+                        sym  = SymId(downprallSym);
+                        b1   = score()->sym(sym).bbox(mag);
                         x0   = -b1.x();
                         x1   = b1.width();
                         n    = int(floor((x2-x1) / w2));
                         y    = -b1.height();
                         break;
                   case Trill::PRALLPRALL_LINE:
-                        sym  = prallprallSym;
-                        b1   = symbols[idx][sym].bbox(mag);
+                        sym  = SymId(prallprallSym);
+                        b1   = score()->sym(sym).bbox(mag);
                         x0   = -b1.x();
                         x1   = b1.width();
                         n    = int(floor((x2-x1) / w2));
                         y    = -b1.height();
                         break;
                   case Trill::PURE_LINE:
-                        sym = noSym;
+                        sym = SymId::noSym;
                         x0 = 0;
                         x1 = 0;
                         n    = int(floor((x2-x1) / w2));
@@ -97,14 +96,14 @@ void TrillSegment::draw(QPainter* painter) const
                   }
             if (n <= 0)
                   n = 1;
-            if (sym != noSym)
-                  symbols[idx][sym].draw(painter, mag, QPointF(x0, y));
-            symbols[idx][trillelementSym].draw(painter, mag,  QPointF(x1, b2.y() * .9), n);
+            if (sym != SymId::noSym)
+                  drawSymbol(sym, painter, QPointF(x0, y));
+            drawSymbol(SymId(trillelementSym), painter, QPointF(x1, b2.y() * .9), n);
             }
       else {
             qreal x1 = 0.0;
             int n = int(floor((x2-x1) / w2));
-            symbols[idx][trillelementSym].draw(painter, mag,  QPointF(x1, b2.y() * .9), n);
+            drawSymbol(SymId(trillelementSym), painter, QPointF(x1, b2.y() * .9), n);
             }
       }
 
@@ -139,7 +138,7 @@ void TrillSegment::remove(Element* e)
 
 void TrillSegment::layout()
       {
-      QRectF b1(symbols[score()->symIdx()][trillSym].bbox(magS()));
+      QRectF b1(score()->sym(SymId(trillSym)).bbox(magS()));
       QRectF rr(b1.translated(-b1.x(), 0.0));
       rr |= QRectF(0.0, rr.y(), pos2().x(), rr.height());
       setbbox(rr);

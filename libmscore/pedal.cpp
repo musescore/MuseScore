@@ -108,7 +108,7 @@ void PedalSegment::styleChanged()
 Pedal::Pedal(Score* s)
    : TextLine(s)
       {
-      setBeginSymbol(pedalPedSym);
+      setBeginSymbol(SymId(pedalPedSym));
       setBeginSymbolOffset(QPointF(0.0, -.2));
 
       setEndHook(true);
@@ -128,7 +128,7 @@ Pedal::Pedal(Score* s)
 void Pedal::read(XmlReader& e)
       {
       if (score()->mscVersion() >= 110) {
-            setBeginSymbol(noSym);
+            setBeginSymbol(SymId::noSym);
             setEndHook(false);
             }
       setId(e.intAttribute("id", -1));

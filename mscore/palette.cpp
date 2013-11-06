@@ -58,7 +58,7 @@ static bool needsStaff(Element* e)
             case Element::KEYSIG:
             case Element::TIMESIG:
             case Element::REST:
-            case Element::BAGPIPE_EMBELLISHMENT:
+//            case Element::BAGPIPE_EMBELLISHMENT:
                   return true;
             default:
                   return false;
@@ -490,7 +490,7 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
 
 PaletteCell* Palette::append(SymId symIdx)
       {
-      if (!symbols[0][symIdx].isValid())
+      if (!gscore->sym(symIdx).isValid())
             return 0;
       Symbol* s = new Symbol(gscore);
       s->setSym(symIdx);
