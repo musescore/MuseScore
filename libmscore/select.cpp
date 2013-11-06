@@ -515,7 +515,7 @@ QByteArray Selection::symbolListMimeData() const
       MAPDATA     mapData;
       Segment*    seg;
       int         track;
-      std::multimap<long, MAPDATA> map;
+      std::multimap<qint64, MAPDATA> map;
 
       // scan selection element list, inserting relevant elements in a tick-sorted map
       foreach (Element* e, _el) {
@@ -649,7 +649,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   }
             mapData.e = e;
             mapData.s = seg;
-            map.insert(std::pair<long,MAPDATA>( ((long)track << 32) + seg->tick(), mapData));
+            map.insert(std::pair<qint64,MAPDATA>( ((qint64)track << 32) + seg->tick(), mapData));
             }
 
       xml.stag(QString("SymbolList version=\"" MSC_VERSION "\" fromtrack=\"%1\" totrack=\"%2\"")
