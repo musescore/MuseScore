@@ -98,11 +98,11 @@ void Arpeggio::layout()
             case ArpeggioType::UP:
             case ArpeggioType::DOWN:
             default:
-                  bbox().setRect(0.0, y1, symbols[score()->symIdx()][arpeggioSym].width(magS()), y2-y1);
+                  bbox().setRect(0.0, y1, score()->sym(SymId(arpeggioSym)).width(magS()), y2-y1);
                   return;
             case ArpeggioType::UP_STRAIGHT:
             case ArpeggioType::DOWN_STRAIGHT:
-                  bbox().setRect(0.0, y1, symbols[score()->symIdx()][close11arrowHeadSym].width(magS()), y2-y1);
+                  bbox().setRect(0.0, y1, score()->sym(SymId(close11arrowHeadSym)).width(magS()), y2-y1);
                   return;
             case ArpeggioType::BRACKET:
                   {
@@ -127,32 +127,31 @@ void Arpeggio::draw(QPainter* p) const
       qreal y1 = _spatium - _userLen1;
       qreal y2 = _height  + _userLen2;
       qreal x1;
-      qreal m = magS();
       switch (arpeggioType()) {
             case ArpeggioType::NORMAL:
                   for (qreal y = y1; y < y2; y += _spatium)
-                        symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
+                        drawSymbol(SymId(arpeggioSym), p, QPointF(0.0, y));
                   break;
 
             case ArpeggioType::UP:
-                  symbols[score()->symIdx()][arpeggioarrowupSym].draw(p, m, QPointF(0.0, y1));
+                  drawSymbol(SymId(arpeggioarrowupSym), p, QPointF(0.0, y1));
                   for (qreal y = y1 + _spatium; y < y2; y += _spatium)
-                        symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
+                        drawSymbol(SymId(arpeggioSym), p, QPointF(0.0, y));
                   break;
 
             case ArpeggioType::DOWN:
                   {
                   qreal y = y1;
                   for (; y < y2 - _spatium; y += _spatium)
-                        symbols[score()->symIdx()][arpeggioSym].draw(p, m, QPointF(0.0, y));
-                  symbols[score()->symIdx()][arpeggioarrowdownSym].draw(p, m, QPointF(0.0, y));
+                        drawSymbol(SymId(arpeggioSym), p, QPointF(0.0, y));
+                  drawSymbol(SymId(arpeggioarrowdownSym), p, QPointF(0.0, y));
                   }
                   break;
 
             case ArpeggioType::UP_STRAIGHT:
                   y1-= _spatium * .5;
                   x1 = _spatium * .5;
-                  symbols[score()->symIdx()][close11arrowHeadSym].draw(p, m, QPointF(x1, y1 - (_spatium * .5)));
+                  drawSymbol(SymId(close11arrowHeadSym), p, QPointF(x1, y1 - (_spatium * .5)));
                   p->save();
                   p->setPen(QPen(curColor(),
                      score()->styleS(ST_ArpeggioLineWidth).val() * _spatium,
@@ -165,7 +164,7 @@ void Arpeggio::draw(QPainter* p) const
                   y1-= _spatium;
                   y2-= _spatium * .5;
                   x1 = _spatium * .5;
-                  symbols[score()->symIdx()][close1M1arrowHeadSym].draw(p, m, QPointF(x1, y2 + (_spatium * .5)));
+                  drawSymbol(SymId(close1M1arrowHeadSym), p, QPointF(x1, y2 + (_spatium * .5)));
                   p->save();
                   p->setPen(QPen(curColor(),
                      score()->styleS(ST_ArpeggioLineWidth).val() * _spatium,

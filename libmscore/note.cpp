@@ -65,36 +65,36 @@ namespace Ms {
 
 const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
       {     // down stem
-      { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadSym        },
-      { wholecrossedheadSym,  halfcrossedheadSym,  crossedheadSym,    wholecrossedheadSym  },
-      { wholediamondheadSym,  halfdiamondheadSym,  diamondheadSym,    wholediamondheadSym  },
-      { s0triangleHeadSym,    d1triangleHeadSym,   d2triangleHeadSym, s0triangleHeadSym    },
-      { s0miHeadSym,          s1miHeadSym,         s2miHeadSym,       noSym                },
-      { wholeslashheadSym,    halfslashheadSym,    quartslashheadSym, wholeslashheadSym    },
-      { xcircledheadSym,      xcircledheadSym,     xcircledheadSym,   xcircledheadSym      },
-      { s0doHeadSym,          d1doHeadSym,         d2doHeadSym,       noSym                },
-      { s0reHeadSym,          d1reHeadSym,         d2reHeadSym,       noSym                },
-      { d0faHeadSym,          d1faHeadSym,         d2faHeadSym,       noSym                },
-      { s0laHeadSym,          s1laHeadSym,         s2laHeadSym,       noSym                },
-      { s0tiHeadSym,          d1tiHeadSym,         d2tiHeadSym,       noSym                },
-      { s0solHeadSym,         s1solHeadSym,        s2solHeadSym,      noSym                },
-      { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadaltSym     },
+      { SymId(wholeheadSym),         SymId(halfheadSym),         SymId(quartheadSym),      SymId(brevisheadSym)        },
+      { SymId(wholecrossedheadSym),  SymId(halfcrossedheadSym),  SymId(crossedheadSym),    SymId(wholecrossedheadSym)  },
+      { SymId(wholediamondheadSym),  SymId(halfdiamondheadSym),  SymId(diamondheadSym),    SymId(wholediamondheadSym)  },
+      { SymId(s0triangleHeadSym),    SymId(d1triangleHeadSym),   SymId(d2triangleHeadSym), SymId(s0triangleHeadSym)    },
+      { SymId(s0miHeadSym),          SymId(s1miHeadSym),         SymId(s2miHeadSym),       SymId(noSym)                },
+      { SymId(wholeslashheadSym),    SymId(halfslashheadSym),    SymId(quartslashheadSym), SymId(wholeslashheadSym)    },
+      { SymId(xcircledheadSym),      SymId(xcircledheadSym),     SymId(xcircledheadSym),   SymId(xcircledheadSym)      },
+      { SymId(s0doHeadSym),          SymId(d1doHeadSym),         SymId(d2doHeadSym),       SymId(noSym)                },
+      { SymId(s0reHeadSym),          SymId(d1reHeadSym),         SymId(d2reHeadSym),       SymId(noSym)                },
+      { SymId(d0faHeadSym),          SymId(d1faHeadSym),         SymId(d2faHeadSym),       SymId(noSym)                },
+      { SymId(s0laHeadSym),          SymId(s1laHeadSym),         SymId(s2laHeadSym),       SymId(noSym)                },
+      { SymId(s0tiHeadSym),          SymId(d1tiHeadSym),         SymId(d2tiHeadSym),       SymId(noSym)                },
+      { SymId(s0solHeadSym),         SymId(s1solHeadSym),        SymId(s2solHeadSym),      SymId(noSym)                },
+      { SymId(wholeheadSym),         SymId(halfheadSym),         SymId(quartheadSym),      SymId(brevisheadaltSym)     },
       },
       {     // up stem
-      { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadSym        },
-      { wholecrossedheadSym,  halfcrossedheadSym,  crossedheadSym,    wholecrossedheadSym  },
-      { wholediamondheadSym,  halfdiamondheadSym,  diamondheadSym,    wholediamondheadSym  },
-      { s0triangleHeadSym,    u1triangleHeadSym,   u2triangleHeadSym, s0triangleHeadSym    },
-      { s0miHeadSym,          s1miHeadSym,         s2miHeadSym,       noSym                },
-      { wholeslashheadSym,    halfslashheadSym,    quartslashheadSym, wholeslashheadSym    },
-      { xcircledheadSym,      xcircledheadSym,     xcircledheadSym,   xcircledheadSym      },
-      { s0doHeadSym,          u1doHeadSym,         u2doHeadSym,       noSym                },
-      { s0reHeadSym,          u1reHeadSym,         u2reHeadSym,       noSym                },
-      { u0faHeadSym,          u1faHeadSym,         u2faHeadSym,       noSym                },
-      { s0laHeadSym,          s1laHeadSym,         s2laHeadSym,       noSym                },
-      { s0tiHeadSym,          u1tiHeadSym,         u2tiHeadSym,       noSym                },
-      { s0solHeadSym,         s1solHeadSym,        s2solHeadSym,      noSym                },
-      { wholeheadSym,         halfheadSym,         quartheadSym,      brevisheadaltSym     },
+      { SymId(wholeheadSym),         SymId(halfheadSym),         SymId(quartheadSym),      SymId(brevisheadSym)        },
+      { SymId(wholecrossedheadSym),  SymId(halfcrossedheadSym),  SymId(crossedheadSym),    SymId(wholecrossedheadSym)  },
+      { SymId(wholediamondheadSym),  SymId(halfdiamondheadSym),  SymId(diamondheadSym),    SymId(wholediamondheadSym)  },
+      { SymId(s0triangleHeadSym),    SymId(u1triangleHeadSym),   SymId(u2triangleHeadSym), SymId(s0triangleHeadSym)    },
+      { SymId(s0miHeadSym),          SymId(s1miHeadSym),         SymId(s2miHeadSym),       SymId(noSym)                },
+      { SymId(wholeslashheadSym),    SymId(halfslashheadSym),    SymId(quartslashheadSym), SymId(wholeslashheadSym)    },
+      { SymId(xcircledheadSym),      SymId(xcircledheadSym),     SymId(xcircledheadSym),   SymId(xcircledheadSym)      },
+      { SymId(s0doHeadSym),          SymId(u1doHeadSym),         SymId(u2doHeadSym),       SymId(noSym)                },
+      { SymId(s0reHeadSym),          SymId(u1reHeadSym),         SymId(u2reHeadSym),       SymId(noSym)                },
+      { SymId(u0faHeadSym),          SymId(u1faHeadSym),         SymId(u2faHeadSym),       SymId(noSym)                },
+      { SymId(s0laHeadSym),          SymId(s1laHeadSym),         SymId(s2laHeadSym),       SymId(noSym)                },
+      { SymId(s0tiHeadSym),          SymId(u1tiHeadSym),         SymId(u2tiHeadSym),       SymId(noSym)                },
+      { SymId(s0solHeadSym),         SymId(s1solHeadSym),        SymId(s2solHeadSym),      SymId(noSym)                },
+      { SymId(wholeheadSym),         SymId(halfheadSym),         SymId(quartheadSym),      SymId(brevisheadaltSym)     },
       }
       };
 
@@ -102,10 +102,10 @@ const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
 //   noteHeadSym
 //---------------------------------------------------------
 
-Sym* noteHeadSym(bool up, int group, int type)
-      {
-      return &symbols[0][noteHeads[up][group][type]];
-      }
+//Sym* noteHeadSym(bool up, int group, int type)
+//      {
+//      return &symbols[0][noteHeads[up][group][type]];
+//      }
 
 //---------------------------------------------------------
 //   write
@@ -292,7 +292,7 @@ void Note::undoSetTpc(int tpc)
 //   noteHead
 //---------------------------------------------------------
 
-int Note::noteHead() const
+SymId Note::noteHead() const
       {
       int hg, ht;
       if (chord()) {
@@ -306,8 +306,8 @@ int Note::noteHead() const
       if (_headType != HEAD_AUTO)
             ht = _headType;
 
-      int t = noteHeads[hg][int(_headGroup)][ht];
-      if (t == -1) {
+      SymId t = noteHeads[hg][int(_headGroup)][ht];
+      if (t == SymId::noSym) {
             qDebug("invalid note head %d/%d", _headGroup, _headType);
             t = noteHeads[hg][0][ht];
             }
@@ -323,8 +323,8 @@ int Note::noteHead() const
 
 qreal Note::headWidth() const
       {
-      int head  = noteHead();
-      qreal val = symbols[score()->symIdx()][head].width(magS());
+      SymId head  = noteHead();
+      qreal val = score()->sym(head).width(magS());
       return val;
       }
 
@@ -354,7 +354,7 @@ qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
 
 qreal Note::headHeight() const
       {
-      return symbols[score()->symIdx()][noteHead()].height(magS());
+      return score()->sym(noteHead()).height(magS());
       }
 
 qreal Note::tabHeadHeight(StaffTypeTablature *tab) const
@@ -370,7 +370,7 @@ qreal Note::tabHeadHeight(StaffTypeTablature *tab) const
 
 QPointF Note::attach() const
       {
-      return symbols[score()->symIdx()][noteHead()].attach(magS());
+      return score()->sym(noteHead()).attach(magS());
       }
 
 //---------------------------------------------------------
@@ -588,7 +588,7 @@ void Note::draw(QPainter* painter) const
                   else if (i < in->minPitchA() || i > in->maxPitchA())
                         painter->setPen(Qt::darkYellow);
                   }
-            symbols[score()->symIdx()][noteHead()].draw(painter, magS());
+            drawSymbol(noteHead(), painter);
             }
       }
 
@@ -1007,7 +1007,7 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8B)
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
-         || (noteType() == NOTE_NORMAL && type == BAGPIPE_EMBELLISHMENT)
+//         || (noteType() == NOTE_NORMAL && type == BAGPIPE_EMBELLISHMENT)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
@@ -1147,10 +1147,10 @@ Element* Note::drop(const DropData& data)
                               break;
                         case ICON_BRACKETS:
                               {
-                              Symbol* s = new Symbol(score(), leftparenSym);
+                              Symbol* s = new Symbol(score(), SymId::noteheadParenthesisLeft);
                               s->setParent(this);
                               score()->undoAddElement(s);
-                              s = new Symbol(score(), rightparenSym);
+                              s = new Symbol(score(), SymId::noteheadParenthesisRight);
                               s->setParent(this);
                               score()->undoAddElement(s);
                               }
@@ -1160,6 +1160,7 @@ Element* Note::drop(const DropData& data)
                   delete e;
                   break;
 
+#if 0
             case BAGPIPE_EMBELLISHMENT:
                   {
                   BagpipeEmbellishment* b = static_cast<BagpipeEmbellishment*>(e);
@@ -1173,6 +1174,7 @@ Element* Note::drop(const DropData& data)
                   }
                   delete e;
                   break;
+#endif
 
             case NOTE:
                   {
@@ -1257,7 +1259,7 @@ void Note::layout()
             bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
             }
       else {
-            setbbox(symbols[score()->symIdx()][noteHead()].bbox(magS()));
+            setbbox(score()->sym(noteHead()).bbox(magS()));
             if (parent() == 0)
                   return;
             }
@@ -1350,7 +1352,7 @@ void Note::layout2()
                   continue;
             e->setMag(mag());
             e->layout();
-            if (e->type() == SYMBOL && static_cast<Symbol*>(e)->sym() == rightparenSym) {
+            if (e->type() == SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
                   qreal w = headWidth();
                   if (staff()->isTabStaff()) {
                         StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();

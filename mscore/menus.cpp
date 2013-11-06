@@ -422,7 +422,7 @@ Palette* MuseScore::newFingeringPalette()
             f->setText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
-      Symbol* symbol = new Symbol(gscore, thumbSym);
+      Symbol* symbol = new Symbol(gscore, SymId(thumbSym));
       sp->append(symbol, tr("Thumb"));
       return sp;
       }
@@ -683,6 +683,7 @@ Palette* MuseScore::newBagpipeEmbellishmentPalette()
             b->setEmbelType(i);
             sp->append(b, BagpipeEmbellishment::BagpipeEmbellishmentList[i].name);
             }
+
       return sp;
       }
 
@@ -794,7 +795,7 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginSymbol(noSym);
+      pedal->setBeginSymbol(SymId::noSym);
       pedal->setBeginHook(true);
       pedal->setBeginHookType(HOOK_45);
       pedal->setEndHookType(HOOK_45);
@@ -802,7 +803,7 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginSymbol(noSym);
+      pedal->setBeginSymbol(SymId::noSym);
       pedal->setBeginHook(true);
       pedal->setBeginHookType(HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
@@ -1053,14 +1054,14 @@ void MuseScore::populatePalette()
       sp->setGrid(42, 45);
       sp->setDrawGrid(true);
 
-      sp->append(accDiscantSym);
-      sp->append(accDotSym);
-      sp->append(accFreebaseSym);
-      sp->append(accStdbaseSym);
-      sp->append(accBayanbaseSym);
-      sp->append(accOldEESym);
-      sp->append(accpushSym);
-      sp->append(accpullSym);
+      sp->append(SymId(accDiscantSym));
+      sp->append(SymId(accDotSym));
+      sp->append(SymId(accFreebaseSym));
+      sp->append(SymId(accStdbaseSym));
+      sp->append(SymId(accBayanbaseSym));
+      sp->append(SymId(accOldEESym));
+      sp->append(SymId(accpushSym));
+      sp->append(SymId(accpullSym));
 
       FretDiagram* fret = new FretDiagram(gscore);
       fret->setDot(5, 1);

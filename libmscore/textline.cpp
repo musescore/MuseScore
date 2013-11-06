@@ -83,7 +83,7 @@ void TextLineSegment::draw(QPainter* painter) const
             }
       qreal mag = magS();
       qreal l = 0.0;
-      int sym = (spannerSegmentType() == SEGMENT_MIDDLE || spannerSegmentType() == SEGMENT_END)
+      SymId sym = (spannerSegmentType() == SEGMENT_MIDDLE || spannerSegmentType() == SEGMENT_END)
          ? tl->continueSymbol() : tl->beginSymbol();
       if (_text) {
             SpannerSegmentType st = spannerSegmentType();
@@ -99,25 +99,25 @@ void TextLineSegment::draw(QPainter* painter) const
             _text->draw(painter);
             painter->translate(-_text->pos());
             }
-      else if (sym != noSym) {
-            const QRectF& bb = symbols[score()->symIdx()][sym].bbox(mag);
+      else if (sym != SymId::noSym) {
+            const QRectF& bb = score()->sym(sym).bbox(mag);
             qreal h = bb.height() * .5;
             QPointF o = tl->beginSymbolOffset() * _spatium;
             painter->setPen(color);
-            symbols[score()->symIdx()][sym].draw(painter, mag, QPointF(o.x(), h + o.y()));
+            drawSymbol(sym, painter, QPointF(o.x(), h + o.y()));
             l = bb.width() + textlineTextDistance;
             }
 
       QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
       painter->setPen(pen);
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END) {
-            if (tl->endSymbol() != noSym) {
-                  int sym = tl->endSymbol();
-                  const QRectF& bb = symbols[score()->symIdx()][sym].bbox(mag);
+            if (tl->endSymbol() != SymId::noSym) {
+                  SymId sym = tl->endSymbol();
+                  const QRectF& bb = score()->sym(sym).bbox(mag);
                   qreal h = bb.height() * .5;
                   QPointF o = tl->endSymbolOffset() * _spatium;
                   pp2.setX(pp2.x() - bb.width() + textlineTextDistance);
-                  symbols[score()->symIdx()][sym].draw(painter, mag, QPointF(pp2.x() + textlineTextDistance + o.x(), h + o.y()));
+                  drawSymbol(sym, painter, QPointF(pp2.x() + textlineTextDistance + o.x(), h + o.y()));
                   }
             }
 
@@ -212,7 +212,7 @@ void TextLineSegment::layout1()
       qreal y1 = point(-textLine()->lineWidth());
       qreal y2 = -y1;
 
-      int sym = textLine()->beginSymbol();
+      SymId sym = textLine()->beginSymbol();
       if (_text) {
             qreal h = _text->height();
             if (textLine()->beginTextPlace() == PLACE_ABOVE)
@@ -224,8 +224,8 @@ void TextLineSegment::layout1()
                   y2 = h * .5;
                   }
             }
-      else if (sym != noSym) {
-            qreal hh = symbols[score()->symIdx()][sym].height(magS()) * .5;
+      else if (sym != SymId::noSym) {
+            qreal hh = score()->sym(sym).height(magS()) * .5;
             y1 = -hh;
             y2 = hh;
             }
@@ -362,9 +362,9 @@ TextLine::TextLine(Score* s)
 
       _beginTextPlace    = PLACE_LEFT;
       _continueTextPlace = PLACE_LEFT;
-      _beginSymbol       = noSym;
-      _continueSymbol    = noSym;
-      _endSymbol         = noSym;
+      _beginSymbol       = SymId::noSym;
+      _continueSymbol    = SymId::noSym;
+      _endSymbol         = SymId::noSym;
       }
 
 TextLine::TextLine(const TextLine& e)
@@ -503,15 +503,15 @@ void TextLine::writeProperties(Xml& xml) const
             _continueText->writeProperties(xml);
             xml.etag();
             }
-      if (QVariant(_beginSymbol) != propertyDefault(P_BEGIN_SYMBOL)) {
+      if (QVariant(int(_beginSymbol)) != propertyDefault(P_BEGIN_SYMBOL)) {
             writeProperty(xml, P_BEGIN_SYMBOL);
             writeProperty(xml, P_BEGIN_SYMBOL_OFFSET);
             }
-      if (QVariant(_continueSymbol) != propertyDefault(P_CONTINUE_SYMBOL)) {
+      if (QVariant(int(_continueSymbol)) != propertyDefault(P_CONTINUE_SYMBOL)) {
             writeProperty(xml, P_CONTINUE_SYMBOL);
             writeProperty(xml, P_CONTINUE_SYMBOL_OFFSET);
             }
-      if (QVariant(_endSymbol) != propertyDefault(P_END_SYMBOL)) {
+      if (QVariant(int(_endSymbol)) != propertyDefault(P_END_SYMBOL)) {
             writeProperty(xml, P_END_SYMBOL);
             writeProperty(xml, P_END_SYMBOL_OFFSET);
             }
@@ -648,11 +648,11 @@ QVariant TextLine::getProperty(P_ID id) const
             case P_END_HOOK_TYPE:
                   return _endHookType;
             case P_BEGIN_SYMBOL:
-                  return _beginSymbol;
+                  return int(_beginSymbol);
             case P_CONTINUE_SYMBOL:
-                  return _continueSymbol;
+                  return int(_continueSymbol);
             case P_END_SYMBOL:
-                  return _endSymbol;
+                  return int(_endSymbol);
             case P_BEGIN_SYMBOL_OFFSET:
                   return _beginSymbolOffset;
             case P_CONTINUE_SYMBOL_OFFSET:
@@ -741,7 +741,7 @@ QVariant TextLine::propertyDefault(P_ID id) const
             case P_BEGIN_SYMBOL:
             case P_CONTINUE_SYMBOL:
             case P_END_SYMBOL:
-                  return noSym;
+                  return int(SymId::noSym);
             case P_BEGIN_SYMBOL_OFFSET:
             case P_CONTINUE_SYMBOL_OFFSET:
             case P_END_SYMBOL_OFFSET:

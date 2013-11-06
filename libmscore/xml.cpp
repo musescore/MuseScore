@@ -48,7 +48,7 @@ XmlReader::XmlReader(QIODevice* d, const QString& s)
       }
 
 XmlReader::XmlReader(const QString& d, const QString& s)
-   : QXmlStreamReader(d)
+   : QXmlStreamReader(d), docName(s)
       {
       _tick  = 0;
       _track = 0;

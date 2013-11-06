@@ -36,7 +36,7 @@ namespace Ms {
 void SymbolDialog::createSymbolPalette()
       {
       sp = new Palette();
-      for (int i = 0; i < lastSym; ++i)
+      for (int i = 0; i < int(SymId::lastSym); ++i)
             sp->append(SymId(i));
       }
 

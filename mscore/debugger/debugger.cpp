@@ -1263,7 +1263,7 @@ void RestView::setElement(Element* e)
             if (track < tracks)
                   break;
             }
-      rb.sym->setValue(rest->sym());
+      rb.sym->setValue(int(rest->sym()));
       rb.dotline->setValue(rest->getDotline());
       rb.mmWidth->setValue(rest->mmWidth());
       }

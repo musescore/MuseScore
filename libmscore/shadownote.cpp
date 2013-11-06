@@ -26,7 +26,7 @@ ShadowNote::ShadowNote(Score* s)
    : Element(s)
       {
       _line = 1000;
-      sym   = 0;
+      sym   = SymId::noSym;
       }
 
 //---------------------------------------------------------
@@ -35,7 +35,7 @@ ShadowNote::ShadowNote(Score* s)
 
 void ShadowNote::draw(QPainter* painter) const
       {
-      if (!visible() || sym == 0)
+      if (!visible() || sym == SymId::noSym)
             return;
 
       QPointF ap(pagePos());
@@ -53,11 +53,11 @@ void ShadowNote::draw(QPainter* painter) const
       QPen pen(MScore::selectColor[voice].lighter(140), lw);
       painter->setPen(pen);
 
-      sym->draw(painter, magS());
+      drawSymbol(sym, painter);
 
       qreal ms = spatium();
 
-      qreal x1 = sym->width(magS())*.5 - (ms * mag());
+      qreal x1 = score()->sym(sym).width(magS())*.5 - (ms * mag());
       qreal x2 = x1 + 2 * ms * mag();
 
       ms *= .5;
@@ -80,15 +80,15 @@ void ShadowNote::draw(QPainter* painter) const
 
 void ShadowNote::layout()
       {
-      if (sym == 0) {
+      if (sym == SymId::noSym) {
             setbbox(QRectF());
             return;
             }
-      QRectF b = sym->bbox(magS());
+      QRectF b = score()->sym(sym).bbox(magS());
       qreal _spatium = spatium();
       qreal lw = point(score()->styleS(ST_ledgerLineWidth));
 
-      qreal x1 = sym->width(magS())*.5 - (_spatium * mag()) - lw * .5;
+      qreal x1 = score()->sym(sym).width(magS())*.5 - (_spatium * mag()) - lw * .5;
       qreal x2 = x1 + 2 * _spatium * mag() + lw * .5;
 
       InputState ps = score()->inputState();

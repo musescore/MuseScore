@@ -2502,8 +2502,10 @@ void ChangeStyle::flip()
 
       if (score->style(ST_concertPitch) != style.value(ST_concertPitch))
             score->cmdConcertPitchChanged(style.value(ST_concertPitch).toBool(), true);
-      if (score->style(ST_MusicalSymbolFont) != style.value(ST_MusicalSymbolFont))
+      if (score->style(ST_MusicalSymbolFont) != style.value(ST_MusicalSymbolFont)) {
+            score->setScoreFont(ScoreFont::fontFactory(style.value(ST_MusicalSymbolFont).toString()));
             score->scanElements(0, updateTimeSigs);
+            }
 
       score->setStyle(style);
       score->scanElements(0, updateTextStyle2);

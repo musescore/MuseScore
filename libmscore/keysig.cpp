@@ -83,7 +83,7 @@ void KeySig::setCustom(const QList<KeySym*>& symbols)
 //   add
 //---------------------------------------------------------
 
-void KeySig::addLayout(int sym, qreal x, int line)
+void KeySig::addLayout(SymId sym, qreal x, int line)
       {
       KeySym* ks = new KeySym;
       ks->sym    = sym;
@@ -110,7 +110,7 @@ void KeySig::layout()
       if (isCustom()) {
             foreach(KeySym* ks, keySymbols) {
                   ks->pos = ks->spos * _spatium;
-                  addbbox(symbols[score()->symIdx()][ks->sym].bbox(magS()).translated(ks->pos));
+                  addbbox(score()->sym(ks->sym).bbox(magS()).translated(ks->pos));
                   }
             return;
             }
@@ -185,7 +185,7 @@ void KeySig::layout()
       if (prefixNaturals) {
             for (int i = 0; i < 7; ++i) {
                   if (naturals & (1 << i)) {
-                        addLayout(naturalSym, xo, lines[i + coffset]);
+                        addLayout(SymId::accidentalNatural, xo, lines[i + coffset]);
                         xo += 1.0;
                         }
                   }
@@ -195,21 +195,21 @@ void KeySig::layout()
       static const qreal fspread = 1.0;
 
       switch(t1) {
-            case 7:  addLayout(sharpSym, xo + 6.0 * sspread, lines[6]);
-            case 6:  addLayout(sharpSym, xo + 5.0 * sspread, lines[5]);
-            case 5:  addLayout(sharpSym, xo + 4.0 * sspread, lines[4]);
-            case 4:  addLayout(sharpSym, xo + 3.0 * sspread, lines[3]);
-            case 3:  addLayout(sharpSym, xo + 2.0 * sspread, lines[2]);
-            case 2:  addLayout(sharpSym, xo + 1.0 * sspread, lines[1]);
-            case 1:  addLayout(sharpSym, xo,                 lines[0]);
+            case 7:  addLayout(SymId::accidentalSharp, xo + 6.0 * sspread, lines[6]);
+            case 6:  addLayout(SymId::accidentalSharp, xo + 5.0 * sspread, lines[5]);
+            case 5:  addLayout(SymId::accidentalSharp, xo + 4.0 * sspread, lines[4]);
+            case 4:  addLayout(SymId::accidentalSharp, xo + 3.0 * sspread, lines[3]);
+            case 3:  addLayout(SymId::accidentalSharp, xo + 2.0 * sspread, lines[2]);
+            case 2:  addLayout(SymId::accidentalSharp, xo + 1.0 * sspread, lines[1]);
+            case 1:  addLayout(SymId::accidentalSharp, xo,                 lines[0]);
                      break;
-            case -7: addLayout(flatSym, xo + 6.0 * fspread, lines[13]);
-            case -6: addLayout(flatSym, xo + 5.0 * fspread, lines[12]);
-            case -5: addLayout(flatSym, xo + 4.0 * fspread, lines[11]);
-            case -4: addLayout(flatSym, xo + 3.0 * fspread, lines[10]);
-            case -3: addLayout(flatSym, xo + 2.0 * fspread, lines[9]);
-            case -2: addLayout(flatSym, xo + 1.0 * fspread, lines[8]);
-            case -1: addLayout(flatSym, xo,                 lines[7]);
+            case -7: addLayout(SymId::accidentalFlat, xo + 6.0 * fspread, lines[13]);
+            case -6: addLayout(SymId::accidentalFlat, xo + 5.0 * fspread, lines[12]);
+            case -5: addLayout(SymId::accidentalFlat, xo + 4.0 * fspread, lines[11]);
+            case -4: addLayout(SymId::accidentalFlat, xo + 3.0 * fspread, lines[10]);
+            case -3: addLayout(SymId::accidentalFlat, xo + 2.0 * fspread, lines[9]);
+            case -2: addLayout(SymId::accidentalFlat, xo + 1.0 * fspread, lines[8]);
+            case -1: addLayout(SymId::accidentalFlat, xo,                 lines[7]);
             case 0:
                   break;
             default:
@@ -227,7 +227,7 @@ void KeySig::layout()
                   }
             for (int i = 0; i < 7; ++i) {
                   if (naturals & (1 << i)) {
-                        addLayout(naturalSym, xo, lines[i + coffset]);
+                        addLayout(SymId::accidentalNatural, xo, lines[i + coffset]);
                         xo += 1.0;
                         }
                   }
@@ -237,7 +237,7 @@ void KeySig::layout()
       setbbox(QRectF());
       foreach(KeySym* ks, keySymbols) {
             ks->pos = ks->spos * _spatium;
-            addbbox(symbols[score()->symIdx()][ks->sym].bbox(magS()).translated(ks->pos));
+            addbbox(score()->sym(ks->sym).bbox(magS()).translated(ks->pos));
             }
       }
 
@@ -249,7 +249,7 @@ void KeySig::draw(QPainter* p) const
       {
       p->setPen(curColor());
       foreach(const KeySym* ks, keySymbols)
-            symbols[score()->symIdx()][ks->sym].draw(p, magS(), QPointF(ks->pos.x(), ks->pos.y()));
+            drawSymbol(ks->sym, p, QPointF(ks->pos.x(), ks->pos.y()));
       }
 
 //---------------------------------------------------------
@@ -334,7 +334,7 @@ void KeySig::write(Xml& xml) const
             xml.tag("custom", _sig.customType());
             foreach(const KeySym* ks, keySymbols) {
                   xml.stag("KeySym");
-                  xml.tag("sym", ks->sym);
+                  xml.tag("sym", int(ks->sym));
                   xml.tag("pos", ks->spos);
                   xml.etag();
                   }
@@ -367,7 +367,7 @@ void KeySig::read(XmlReader& e)
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "sym")
-                              ks->sym = e.readInt();
+                              ks->sym = SymId(e.readInt());
                         else if (tag == "pos")
                               ks->spos = e.readPoint();
                         else

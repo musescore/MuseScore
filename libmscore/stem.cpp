@@ -95,7 +95,7 @@ void Stem::layout()
             else {                              // non-TAB
                   // move stem start to note attach point
                   Note* n  = up() ? chord()->downNote() : chord()->upNote();
-                  const Sym& sym = symbols[score()->symIdx()][n->noteHead()];
+                  const Sym& sym = score()->sym(n->noteHead());
                   if (n->mirror())
                         _up *= -1;
                   y1 -= sym.attach(n->magS()).y() * _up;
@@ -192,8 +192,7 @@ void Stem::draw(QPainter* painter) const
       int nDots = chord()->dots();
       if (nDots > 0 && !stt->stemThrough()) {
             qreal y =  ( (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (_up ? -1.0 : 1.0);
-            symbols[score()->symIdx()][dotSym].draw(painter, magS(),
-                        QPointF(STAFFTYPE_TAB_DEFAULTDOTDIST_X * sp, y), nDots);
+            drawSymbol(SymId(dotSym), painter, QPointF(STAFFTYPE_TAB_DEFAULTDOTDIST_X * sp, y), nDots);
             }
       }
 
