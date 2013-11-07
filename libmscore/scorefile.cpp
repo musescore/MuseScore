@@ -628,7 +628,7 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       e.setDocName(info.completeBaseName());
 
       FileError retval = read1(e, ignoreVersionError);
-      _noteHeadWidth = sym(SymId(quartheadSym)).width(spatium() / (MScore::DPI * SPATIUM20));
+      _noteHeadWidth = sym(SymId::noteheadBlack).width(spatium() / (MScore::DPI * SPATIUM20));
 
 #ifdef OMR
       //

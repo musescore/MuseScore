@@ -1600,7 +1600,7 @@ void Chord::layoutPitched()
       if (dots()) {
             qreal x = dotPosX() + minNoteDistance
                + (dots()-1) * score()->styleS(ST_dotDotDistance).val() * _spatium;
-            x += score()->sym(SymId(dotSym)).width(1.0);
+            x += score()->sym(SymId::augmentationDot).width(1.0);
             rrr = qMax(rrr, x);
             }
 
@@ -1797,7 +1797,7 @@ void Chord::layoutTablature()
       if (dots()) {
             qreal x = dotPosX() + minNoteDistance
                + (dots()-1) * score()->styleS(ST_dotDotDistance).val() * _spatium;
-            x += score()->sym(SymId(dotSym)).width(1.0);
+            x += score()->sym(SymId::augmentationDot).width(1.0);
             if (x > rrr)
                   rrr = x;
             }

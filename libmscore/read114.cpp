@@ -153,11 +153,11 @@ static SymId resolveSymCompatibility(SymId i, QString programVersion)
       if (!programVersion.isEmpty() && programVersion < "1.1")
             i = SymId(int(i) + 5);
       switch(int(i)) {
-            case 197:   return SymId(pedalPedSym);
-            case 191:   return SymId(pedalasteriskSym);
-            case 193:   return SymId(pedaldotSym);
-            case 192:   return SymId(pedaldashSym);
-            case 139:   return SymId(trillSym);
+            case 197:   return SymId::keyboardPedalPed;
+//TODO::smufl            case 191:   return SymId(pedalasteriskSym);
+//            case 193:   return SymId(pedaldotSym);
+//            case 192:   return SymId(pedaldashSym);
+            case 139:   return SymId::ornamentTrill;
             default:    return SymId::noSym;
             }
       }

@@ -34,7 +34,7 @@ NoteDot::NoteDot(Score* s)
 
 void NoteDot::layout()
       {
-      setbbox(score()->sym(SymId(dotSym)).bbox(magS()));
+      setbbox(score()->sym(SymId::augmentationDot).bbox(magS()));
       }
 
 //---------------------------------------------------------
@@ -47,7 +47,7 @@ void NoteDot::draw(QPainter* p) const
             return;
       if (!staff()->isTabStaff() || ((StaffTypeTablature*)staff()->staffType())->stemThrough()) {
             p->setPen(curColor());
-            drawSymbol(SymId(dotSym), p);
+            drawSymbol(SymId::augmentationDot, p);
             }
       }
 

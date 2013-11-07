@@ -472,8 +472,8 @@ void BagpipeEmbellishment::layout()
       if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
             // qDebug("BagpipeEmbellishment::layout st %d", _embelType);
       }
-      SymId headsym = SymId(quartheadSym);
-      SymId flagsym = SymId(thirtysecondflagSym);
+      SymId headsym = SymId::noteheadBlack;
+      SymId flagsym = SymId::flag32ndUp;
 
       noteList nl = getNoteList();
       BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
@@ -576,8 +576,8 @@ void BagpipeEmbellishment::drawGraceNote(QPainter* painter,
 
 void BagpipeEmbellishment::draw(QPainter* painter) const
       {
-      SymId headsym = SymId(quartheadSym);
-      SymId flagsym = SymId(thirtysecondflagSym);
+      SymId headsym = SymId::noteheadBlack;
+      SymId flagsym = SymId::flag32ndUp;
 
       noteList nl = getNoteList();
       BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());

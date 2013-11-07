@@ -39,7 +39,7 @@ namespace Ms {
 static void populateLineSymbolComboBox(QComboBox* cb)
       {
       cb->clear();
-      cb->addItem(cb->tr("no symbol"), noSym);
+      cb->addItem(cb->tr("no symbol"), int(SymId::noSym));
       for (int i = 0; i < int(SymId::lastSym); ++i)
             cb->addItem(Sym::id2userName(SymId(i)), i);
       }

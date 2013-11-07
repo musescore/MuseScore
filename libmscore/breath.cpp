@@ -20,10 +20,10 @@
 namespace Ms {
 
 SymId Breath::symList[Breath::breathSymbols] = {
-      SymId(rcommaSym),
-      SymId(lcommaSym),
-      SymId(caesuraCurvedSym),
-      SymId(caesuraStraight)
+      SymId::breathMark,
+      SymId::breathMark,      // TODO-smufl SymId(lcommaSym),
+      SymId::caesura,         // SymId(caesuraCurvedSym),
+      SymId::caesura
       };
 
 //---------------------------------------------------------

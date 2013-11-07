@@ -1,28 +1,19 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
-//  $Id:$
+//  Music Composition & Notation
 //
-//  Copyright (C) 2009 Werner Schweer and others
+//  Copyright (C) 2009-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 //
 //    q+d hack to create an font description file from
-//    lilipond tables embedded in mscore-20.ttf
+//    lilipond tables embedded in mscore.ttf
 //
-//    usage: genft mscore-20.ttf > symbols.xml
 //
 
 #include <ft2build.h>
@@ -49,155 +40,185 @@ QMap<QString, int> namemap;
 //---------------------------------------------------------
 
 QMap<QString, QString> nmap {
-      { "space", "space" },
-      { "plus", "plus" },
-      { "comma", "comma" },
-      { "hyphen", "hyphen" },
-      { "period", "period" },
-      { "zero", "zero" },
-      { "one", "one" },
-      { "two", "two" },
-      { "three", "three" },
-      { "four", "four" },
-      { "five", "five" },
-      { "six", "six" },
-      { "seven", "seven" },
-      { "eight", "eight" },
-      { "nine", "nine" },
-      { "f", "f" },
-      { "m", "m" },
-      { "p", "p" },
-      { "r", "r" },
-      { "s", "s" },
-      { "z", "z" },
-      { "rests.0", "rests.0" },
-      { "rests.1", "rests.1" },
-      { "rests.0o", "rests.0o" },
-      { "rests.1o", "rests.1o" },
-      { "rests.M3", "rests.M3" },
-      { "rests.M2", "rests.M2" },
-      { "rests.M1", "rests.M1" },
-      { "rests.2", "rests.2" },
-      { "rests.2classical", "rests.2classical" },
-      { "rests.3", "rests.3" },
-      { "rests.4", "rests.4" },
-      { "rests.5", "rests.5" },
-      { "rests.6", "rests.6" },
-      { "rests.7", "rests.7" },
-      { "accidentals.sharp", "accidentals.sharp" },
-      { "accidentals.sharp.slashslash.stem", "accidentals.sharp.slashslash.stem" },
-      { "accidentals.sharp.slashslashslash.stemstem", "accidentals.sharp.slashslashslash.stemstem" },
-      { "accidentals.sharp.slashslashslash.stem", "accidentals.sharp.slashslashslash.stem" },
-      { "accidentals.sharp.slashslash.stemstemstem", "accidentals.sharp.slashslash.stemstemstem" },
-      { "accidentals.natural", "accidentals.natural" },
-      { "accidentals.flat", "accidentals.flat" },
-      { "accidentals.flat.slash", "accidentals.flat.slash" },
-      { "accidentals.flat.slashslash", "accidentals.flat.slashslash" },
-      { "accidentals.mirroredflat.flat", "accidentals.mirroredflat.flat" },
-      { "accidentals.mirroredflat", "accidentals.mirroredflat" },
-      { "accidentals.mirroredflat.backslash", "accidentals.mirroredflat.backslash" },
-      { "accidentals.flatflat", "accidentals.flatflat" },
-      { "accidentals.flatflat.slash", "accidentals.flatflat.slash" },
-      { "accidentals.doublesharp", "accidentals.doublesharp" },
-      { "accidentals.rightparen", "accidentals.rightparen" },
-      { "accidentals.leftparen", "accidentals.leftparen" },
-      { "arrowheads.open.01", "arrowheads.open.01" },
-      { "arrowheads.open.0M1", "arrowheads.open.0M1" },
-      { "arrowheads.open.11", "arrowheads.open.11" },
-      { "arrowheads.open.1M1", "arrowheads.open.1M1" },
-      { "arrowheads.close.01", "arrowheads.close.01" },
-      { "arrowheads.close.0M1", "arrowheads.close.0M1" },
-      { "arrowheads.close.11", "arrowheads.close.11" },
-      { "arrowheads.close.1M1", "arrowheads.close.1M1" },
-      { "dots.dot", "dots.dot" },
-      { "noteheads.uM2", "noteheads.uM2" },
-      { "noteheads.dM2", "noteheads.dM2" },
-      { "noteheads.sM1", "noteheads.sM1" },
-      { "noteheads.s0", "noteheads.s0" },
-      { "noteheads.s1", "noteheads.s1" },
-      { "noteheads.s2", "noteheadBlack" },
-      { "noteheads.s0diamond", "noteheads.s0diamond" },
-      { "noteheads.s1diamond", "noteheads.s1diamond" },
-      { "noteheads.s2diamond", "noteheads.s2diamond" },
-      { "noteheads.s0triangle", "noteheads.s0triangle" },
-      { "noteheads.d1triangle", "noteheads.d1triangle" },
-      { "noteheads.u1triangle", "noteheads.u1triangle" },
-      { "noteheads.u2triangle", "noteheads.u2triangle" },
-      { "noteheads.d2triangle", "noteheads.d2triangle" },
-      { "noteheads.s0slash", "noteheads.s0slash" },
-      { "noteheads.s1slash", "noteheads.s1slash" },
-      { "noteheads.s2slash", "noteheads.s2slash" },
-      { "noteheads.s0cross", "noteheads.s0cross" },
-      { "noteheads.s1cross", "noteheads.s1cross" },
-      { "noteheads.s2cross", "noteheads.s2cross" },
-      { "noteheads.s2xcircle", "noteheads.s2xcircle" },
-      { "noteheads.s0do", "noteheads.s0do" },
-      { "noteheads.d1do", "noteheads.d1do" },
-      { "noteheads.u1do", "noteheads.u1do" },
-      { "noteheads.d2do", "noteheads.d2do" },
-      { "noteheads.u2do", "noteheads.u2do" },
-      { "noteheads.s0re", "noteheads.s0re" },
-      { "noteheads.u1re", "noteheads.u1re" },
-      { "noteheads.d1re", "noteheads.d1re" },
-      { "noteheads.u2re", "noteheads.u2re" },
-      { "noteheads.d2re", "noteheads.d2re" },
-      { "noteheads.s0mi", "noteheads.s0mi" },
-      { "noteheads.s1mi", "noteheads.s1mi" },
-      { "noteheads.s2mi", "noteheads.s2mi" },
-      { "noteheads.u0fa", "noteheads.u0fa" },
-      { "noteheads.d0fa", "noteheads.d0fa" },
-      { "noteheads.u1fa", "noteheads.u1fa" },
-      { "noteheads.d1fa", "noteheads.d1fa" },
-      { "noteheads.u2fa", "noteheads.u2fa" },
-      { "noteheads.d2fa", "noteheads.d2fa" },
-      { "noteheads.s0la", "noteheads.s0la" },
-      { "noteheads.s1la", "noteheads.s1la" },
-      { "noteheads.s2la", "noteheads.s2la" },
-      { "noteheads.s0ti", "noteheads.s0ti" },
-      { "noteheads.u1ti", "noteheads.u1ti" },
-      { "noteheads.d1ti", "noteheads.d1ti" },
-      { "noteheads.u2ti", "noteheads.u2ti" },
-      { "noteheads.d2ti", "noteheads.d2ti" },
-      { "scripts.ufermata", "scripts.ufermata" },
-      { "scripts.dfermata", "scripts.dfermata" },
-      { "scripts.ushortfermata", "scripts.ushortfermata" },
-      { "scripts.dshortfermata", "scripts.dshortfermata" },
-      { "scripts.ulongfermata", "scripts.ulongfermata" },
-      { "scripts.dlongfermata", "scripts.dlongfermata" },
-      { "scripts.uverylongfermata", "scripts.uverylongfermata" },
-      { "scripts.dverylongfermata", "scripts.dverylongfermata" },
-      { "scripts.thumb", "scripts.thumb" },
-      { "scripts.sforzato", "scripts.sforzato" },
-      { "scripts.espr", "scripts.espr" },
-      { "scripts.staccato", "scripts.staccato" },
-      { "scripts.ustaccatissimo", "scripts.ustaccatissimo" },
-      { "scripts.dstaccatissimo", "scripts.dstaccatissimo" },
-      { "scripts.tenuto",   "articTenuto" },
-      { "scripts.uportato", "scripts.uportato" },
-      { "scripts.dportato", "scripts.dportato" },
-      { "scripts.umarcato", "scripts.umarcato" },
-      { "scripts.dmarcato", "scripts.dmarcato" },
-      { "scripts.open", "scripts.open" },
-      { "scripts.stopped", "scripts.stopped" },
-      { "scripts.upbow", "scripts.upbow" },
-      { "scripts.downbow", "scripts.downbow" },
-      { "scripts.reverseturn", "scripts.reverseturn" },
-      { "scripts.turn", "scripts.turn" },
-      { "scripts.trill", "scripts.trill" },
-      { "scripts.upedalheel", "scripts.upedalheel" },
-      { "scripts.dpedalheel", "scripts.dpedalheel" },
-      { "scripts.upedaltoe", "scripts.upedaltoe" },
-      { "scripts.dpedaltoe", "scripts.dpedaltoe" },
-      { "scripts.flageolet", "scripts.flageolet" },
-      { "scripts.segno", "scripts.segno" },
-      { "scripts.coda", "scripts.coda" },
-      { "scripts.varcoda", "scripts.varcoda" },
-      { "scripts.rcomma", "scripts.rcomma" },
-      { "scripts.lcomma", "scripts.lcomma" },
-      { "scripts.rvarcomma", "scripts.rvarcomma" },
-      { "scripts.lvarcomma", "scripts.lvarcomma" },
-      { "scripts.arpeggio", "scripts.arpeggio" },
-      { "scripts.trill_element", "scripts.trill_element" },
+/*    { "space",        "space"    }, */
+/*    { "plus",         "plus"     }, */
+/*    { "comma",        "comma"    }, */
+/*    { "hyphen",       "hyphen"   }, */
+/*    { "period",       "period"   }, */
+
+      { "zero",         "timeSig0" },
+      { "one",          "timeSig1" },
+      { "two",          "timeSig2" },
+      { "three",        "timeSig3" },
+      { "four",         "timeSig4" },
+      { "five",         "timeSig5" },
+      { "six",          "timeSig6" },
+      { "seven",        "timeSig7" },
+      { "eight",        "timeSig8" },
+      { "nine",         "timeSig9" },
+
+      { "f",            "dynamicForte"       },
+      { "m",            "dynamicMezzo"       },
+      { "p",            "dynamicPiano"       },
+      { "r",            "dynamicRinforzando" },
+      { "s",            "dynamicSubito"      },
+      { "z",            "dynamicZ"           },
+
+      { "rests.0",          "restWhole" },
+      { "rests.1",          "restHalf"  },
+
+//    { "rests.0o", "rests.0o" },   // outside staff
+//    { "rests.1o", "rests.1o" },
+
+//  { "rests.M3", "rests.M3" },   // longer than longa
+
+      { "rests.M2",                 "restLonga" },
+      { "rests.M1",                 "restDoubleWhole" },
+      { "rests.2",                  "restQuarter" },
+      { "rests.2classical",         "restQuarterOld" },
+      { "rests.3",                  "rest8th" },
+      { "rests.4",                  "rest16th" },
+      { "rests.5",                  "rest32nd" },
+      { "rests.6",                  "rest64th" },
+      { "rests.7",                  "rest128th" },
+
+      { "accidentals.sharp",                 "accidentalSharp"         },
+      { "accidentals.sharp.slashslash.stem", "accidentalQuarterSharp4" },
+
+//    { "accidentals.sharp.slashslashslash.stemstem", "accidentals.sharp.slashslashslash.stemstem" },
+
+//      { "accidentals.sharp.slashslashslash.stem", "accidentals.sharp.slashslashslash.stem" },
+      { "accidentals.natural",      "accidentalNatural"     },
+      { "accidentals.flat",         "accidentalFlat"        },
+      { "accidentals.flatflat",     "accidentalDoubleFlat"  },
+      { "accidentals.doublesharp",  "accidentalDoubleSharp" },
+
+//      { "accidentals.sharp.slashslash.stemstemstem", "accidentals.sharp.slashslash.stemstemstem" },
+//      { "accidentals.flat.slash", "accidentals.flat.slash" },
+//      { "accidentals.flat.slashslash", "accidentals.flat.slashslash" },
+//      { "accidentals.mirroredflat.flat", "accidentals.mirroredflat.flat" },
+//      { "accidentals.mirroredflat", "accidentals.mirroredflat" },
+//      { "accidentals.mirroredflat.backslash", "accidentals.mirroredflat.backslash" },
+//      { "accidentals.flatflat.slash", "accidentals.flatflat.slash" },
+
+//      { "accidentals.rightparen", "accidentals.rightparen" },
+//      { "accidentals.leftparen", "accidentals.leftparen" },
+//      { "arrowheads.open.01", "arrowheads.open.01" },
+//      { "arrowheads.open.0M1", "arrowheads.open.0M1" },
+//      { "arrowheads.open.11", "arrowheads.open.11" },
+//      { "arrowheads.open.1M1", "arrowheads.open.1M1" },
+//      { "arrowheads.close.01", "arrowheads.close.01" },
+//      { "arrowheads.close.0M1", "arrowheads.close.0M1" },
+//      { "arrowheads.close.11", "arrowheads.close.11" },
+//      { "arrowheads.close.1M1", "arrowheads.close.1M1" },
+
+      { "dots.dot",      "augmentationDot" },
+
+//      { "noteheads.uM2", "noteheads.uM2" },
+//      { "noteheads.dM2", "noteheads.dM2" },
+
+      { "noteheads.sM1",            "noteheadDoubleWhole" },
+      { "noteheads.s0",             "noteheadWhole" },
+      { "noteheads.s1",             "noteheadHalf" },
+      { "noteheads.s2",             "noteheadBlack" },
+
+      { "noteheads.s0diamond",      "noteheadDiamondWhole" },
+      { "noteheads.s1diamond",      "noteheadDiamondHalf" },
+      { "noteheads.s2diamond",      "noteheadDiamondBlack" },
+
+      { "noteheads.s0triangle",     "noteheadTriangleUpWhole" },
+      { "noteheads.d1triangle",     "noteheadTriangleUpHalf" },
+//      { "noteheads.u1triangle",     "" },
+      { "noteheads.u2triangle",     "noteheadTriangleUpBlack" },
+//      { "noteheads.d2triangle",     "notehead" },
+
+      { "noteheads.s0slash",        "noteheadSlashWhite" },
+      { "noteheads.s1slash",        "noteheadSlashWhite" },
+      { "noteheads.s2slash",        "noteheadSlashHorizontalEnds" },
+
+      { "noteheads.s0cross",        "noteheadXWhole" },
+      { "noteheads.s1cross",        "noteheadXHalf" },
+      { "noteheads.s2cross",        "noteheadXBlack" },
+
+      { "noteheads.s2xcircle",      "noteheadCircleX" },
+#if 0
+      { "noteheads.s0do",           "notehead" },
+      { "noteheads.d1do",           "notehead" },
+      { "noteheads.u1do",           "notehead" },
+      { "noteheads.d2do",           "notehead" },
+      { "noteheads.u2do",           "notehead" },
+
+      { "noteheads.s0re",           "notehead" },
+      { "noteheads.u1re",           "notehead" },
+      { "noteheads.d1re",           "notehead" },
+      { "noteheads.u2re",           "notehead" },
+      { "noteheads.d2re",           "notehead" },
+
+      { "noteheads.s0mi",           "notehead" },
+      { "noteheads.s1mi",           "notehead" },
+      { "noteheads.s2mi",           "notehead" },
+
+      { "noteheads.u0fa",           "notehead" },
+      { "noteheads.d0fa",           "notehead" },
+      { "noteheads.u1fa",           "notehead" },
+      { "noteheads.d1fa",           "notehead" },
+      { "noteheads.u2fa",           "notehead" },
+      { "noteheads.d2fa",           "notehead" },
+
+      { "noteheads.s0la",           "notehead" },
+      { "noteheads.s1la",           "notehead" },
+      { "noteheads.s2la",           "notehead" },
+
+      { "noteheads.s0ti",           "notehead" },
+      { "noteheads.u1ti",           "notehead" },
+      { "noteheads.d1ti",           "notehead" },
+      { "noteheads.u2ti",           "notehead" },
+      { "noteheads.d2ti",           "notehead" },
+#endif
+
+      { "scripts.ufermata",         "fermataAbove" },
+      { "scripts.dfermata",         "fermataBelow" },
+      { "scripts.ushortfermata",    "fermataShortAbove" },
+      { "scripts.dshortfermata",    "fermataShortBelow" },
+      { "scripts.ulongfermata",     "fermataLongAbove" },
+      { "scripts.dlongfermata",     "fermataLongBelow" },
+      { "scripts.uverylongfermata", "fermataVeryLongAbove" },
+      { "scripts.dverylongfermata", "fermataVeryLongBelow" },
+      { "scripts.thumb",            "stringsThumbPosition" },
+      { "scripts.sforzato",         "articAccent" },
+//      { "scripts.espr",             "scripts.espr" },     "<>" ?
+      { "scripts.staccato",         "articStaccato" },
+      { "scripts.ustaccatissimo",   "articStaccatissimoAbove" },
+      { "scripts.dstaccatissimo",   "articStaccatissimoBelow" },
+      { "scripts.tenuto",           "articTenuto" },
+      { "scripts.uportato",         "articTenuroSlurBelow" },     // spelling bug!
+      { "scripts.dportato",         "articTenutoSlurAbove" },
+      { "scripts.umarcato",         "articMarcatoAbove" },
+      { "scripts.dmarcato",         "articMarcatoBelow" },
+      { "scripts.open",             "brassMuteOpen" },
+      { "scripts.stopped",          "brassMuteClosed" },
+      { "scripts.upbow",            "stringsUpBow" },
+      { "scripts.downbow",          "stringsDownBow" },
+      { "scripts.reverseturn",      "ornamentTurnInverted" },
+      { "scripts.turn",             "ornamentTurn" },
+      { "scripts.trill",            "ornamentTrill" },
+      { "scripts.upedalheel",       "keyboardPedalHeel1" },
+      { "scripts.dpedalheel",       "keyboardPedalHeel2" },
+      { "scripts.upedaltoe",        "keyboardPedalToe1" },
+      { "scripts.dpedaltoe",        "keyboardPedalToe2" },
+      { "scripts.flageolet",        "stringsHarmonic" },
+      { "scripts.segno",            "segno" },
+      { "scripts.coda",             "coda" },
+      { "scripts.varcoda",          "codaSquare" },
+      { "scripts.rcomma",           "breathMark" },
+//      { "scripts.lcomma",           "scripts.lcomma" },
+//      { "scripts.rvarcomma",        "scripts.rvarcomma" },
+//      { "scripts.lvarcomma",        "scripts.lvarcomma" },
+
+      { "scripts.arpeggio",         "wiggleArpeggiatoUp" },
+
+      { "scripts.trill_element", "wiggleTrill" },
+#if 0
       { "scripts.arpeggio.arrow.M1", "scripts.arpeggio.arrow.M1" },
       { "scripts.arpeggio.arrow.1", "scripts.arpeggio.arrow.1" },
       { "scripts.trilelement", "scripts.trilelement" },
@@ -212,78 +233,92 @@ QMap<QString, QString> nmap {
       { "scripts.downmordent", "scripts.downmordent" },
       { "scripts.prallup", "scripts.prallup" },
       { "scripts.lineprall", "scripts.lineprall" },
-      { "scripts.caesura.curved", "scripts.caesura.curved" },
-      { "scripts.caesura.straight", "scripts.caesura.straight" },
-      { "flags.u3", "flags.u3" },
-      { "flags.u4", "flags.u4" },
-      { "flags.u5", "flags.u5" },
-      { "flags.u6", "flags.u6" },
-      { "flags.d3", "flags.d3" },
-      { "flags.ugrace", "flags.ugrace" },
-      { "flags.dgrace", "flags.dgrace" },
-      { "flags.d4", "flags.d4" },
-      { "flags.d5", "flags.d5" },
-      { "flags.d6", "flags.d6" },
-      { "clefs.C", "clefs.C" },
-      { "clefs.C_change", "clefs.C_change" },
-      { "clefs.F", "clefs.F" },
-      { "clefs.F_change", "clefs.F_change" },
-      { "clefs.G", "clefs.G" },
-      { "clefs.G_change", "clefs.G_change" },
-      { "clefs.percussion", "clefs.percussion" },
-      { "clefs.percussion_change", "clefs.percussion_change" },
-      { "clefs.tab", "clefs.tab" },
-      { "clefs.tab_change", "clefs.tab_change" },
-      { "timesig.C44", "timesig.C44" },
-      { "timesig.C22", "timesig.C22" },
-      { "pedal.*", "pedal.*" },
-      { "pedal.M", "pedal.M" },
-      { "pedal..", "pedal.." },
-      { "pedal.P", "pedal.P" },
-      { "pedal.d", "pedal.d" },
-      { "pedal.e", "pedal.e" },
-      { "pedal.Ped", "pedal.Ped" },
-      { "brackettips.uright", "brackettips.uright" },
-      { "brackettips.dright", "brackettips.dright" },
-      { "accordion.accDiscant", "accordion.accDiscant" },
-      { "accordion.accDot", "accordion.accDot" },
-      { "accordion.accFreebase", "accordion.accFreebase" },
-      { "accordion.accStdbase", "accordion.accStdbase" },
-      { "accordion.accBayanbase", "accordion.accBayanbase" },
-      { "accordion.accOldEE", "accordion.accOldEE" },
-      { "brackettips.uleft", "brackettips.uleft" },
-      { "brackettips.dleft", "brackettips.dleft" },
-      { "flags.d7", "flags.d7" },
-      { "flags.u7", "flags.u7" },
-      { "scripts.snappizzicato", "scripts.snappizzicato" },
-      { "noteheads.sM1double", "noteheads.sM1double" },
-      { "accidentals.flat.arrowup", "accidentals.flat.arrowup" },
-      { "accidentals.flat.arrowdown", "accidentals.flat.arrowdown" },
-      { "accidentals.flat.arrowboth", "accidentals.flat.arrowboth" },
-      { "accidentals.natural.arrowup", "accidentals.natural.arrowup" },
-      { "accidentals.natural.arrowdown", "accidentals.natural.arrowdown" },
-      { "accidentals.natural.arrowboth", "accidentals.natural.arrowboth" },
-      { "accidentals.sharp.arrowup", "accidentals.sharp.arrowup" },
-      { "accidentals.sharp.arrowdown", "accidentals.sharp.arrowdown" },
-      { "accidentals.sharp.arrowboth", "accidentals.sharp.arrowboth" },
-      { "noteheads.uM2alt", "noteheads.uM2alt" },
-      { "noteheads.dM2alt", "noteheads.dM2alt" },
-      { "noteheads.sM1alt", "noteheads.sM1alt" },
-      { "timesig.Cdot", "timesig.Cdot" },
-      { "timesig.O", "timesig.O" },
-      { "timesig.Ocut", "timesig.Ocut" },
-      { "timesig.Odot", "timesig.Odot" },
-      { "uniE1CB", "uniE1CB" },
-      { "uniE1CC", "uniE1CC" },
-      { "uniE1CD", "uniE1CD" },
-      { "uniE1CE", "uniE1CE" },
-      { "uniE1CF", "uniE1CF" },
-      { "uniE1D0", "uniE1D0" },
-      { "uniE1D1", "uniE1D1" },
-      { "uniE1D2", "uniE1D2" },
-      { "uniE1D3", "uniE1D3" },
-      { "accidentals.sori", "accidentals.sori" },
-      { "accidentals.koron", "accidentals.koron" },
+#endif
+
+//      { "scripts.caesura.curved",   "scripts.caesura.curved" },
+      { "scripts.caesura.straight", "caesura" },
+
+      { "flags.u3",                 "flag8thUp" },
+      { "flags.u4",                 "flag16thUp" },
+      { "flags.u5",                 "flag32ndUp" },
+      { "flags.u6",                 "flag64thUp" },
+      { "flags.d3",                 "flag8thDown" },
+//    { "flags.ugrace", "flags.ugrace" },
+//    { "flags.dgrace", "flags.dgrace" },
+      { "flags.d4",                 "flag16thDown" },
+      { "flags.d5",                 "flag32ndDown" },
+      { "flags.d6",                 "flag64thDown" },
+
+      { "clefs.C",                  "cClef" },
+//    { "clefs.C_change", "clefs.C_change" },
+      { "clefs.F", "fClef" },
+//    { "clefs.F_change", "clefs.F_change" },
+      { "clefs.G", "gClef" },
+//    { "clefs.G_change", "clefs.G_change" },
+      { "clefs.percussion", "unpitchedPercussionClef1" },
+//    { "clefs.percussion_change", "clefs.percussion_change" },
+      { "clefs.tab", "6stringTabClefSerif" },
+//    { "clefs.tab_change", "clefs.tab_change" },
+      { "timesig.C44", "timeSigCommon" },
+      { "timesig.C22", "timeSigCutCommon" },
+
+      { "pedal.*", "keyboardPedalUp" },
+//    { "pedal.M", "pedal.M" },
+//    { "pedal..", "pedal.." },
+      { "pedal.P", "keyboardPedalP" },
+//    { "pedal.d", "pedal.d" },
+//    { "pedal.e", "pedal.e" },
+      { "pedal.Ped", "keyboardPedalPed" },
+
+      { "brackettips.uright", "bracketTop" },
+      { "brackettips.dright", "bracketBottom" },
+
+//      { "accordion.accDiscant",   "accordion.accDiscant" },
+//      { "accordion.accDot",       "accordion.accDot" },
+//      { "accordion.accFreebase",  "accordion.accFreebase" },
+//      { "accordion.accStdbase",   "accordion.accStdbase" },
+//      { "accordion.accBayanbase", "accordion.accBayanbase" },
+//      { "accordion.accOldEE",     "accordion.accOldEE" },
+
+      { "brackettips.uleft", "reversedBracketTop" },
+      { "brackettips.dleft", "reversedBracketBottom" },
+
+      { "flags.d7", "flag128thDown" },
+      { "flags.u7", "flag128thUp"   },
+
+#if 0
+      { "scripts.snappizzicato",          "scripts.snappizzicato" },
+      { "noteheads.sM1double",            "noteheads.sM1double" },
+      { "accidentals.flat.arrowup",       "accidentals.flat.arrowup" },
+      { "accidentals.flat.arrowdown",     "accidentals.flat.arrowdown" },
+      { "accidentals.flat.arrowboth",     "accidentals.flat.arrowboth" },
+      { "accidentals.natural.arrowup",    "accidentals.natural.arrowup" },
+      { "accidentals.natural.arrowdown",  "accidentals.natural.arrowdown" },
+      { "accidentals.natural.arrowboth",  "accidentals.natural.arrowboth" },
+      { "accidentals.sharp.arrowup",      "accidentals.sharp.arrowup" },
+      { "accidentals.sharp.arrowdown",    "accidentals.sharp.arrowdown" },
+      { "accidentals.sharp.arrowboth",    "accidentals.sharp.arrowboth" },
+      { "noteheads.uM2alt",               "noteheads.uM2alt" },
+      { "noteheads.dM2alt",               "noteheads.dM2alt" },
+      { "noteheads.sM1alt",               "noteheads.sM1alt" },
+      { "timesig.Cdot",                   "timesig.Cdot" },
+      { "timesig.O",                      "timesig.O" },
+      { "timesig.Ocut",                   "timesig.Ocut" },
+      { "timesig.Odot",                   "timesig.Odot" },
+#endif
+
+//      { "uniE1CB", "uniE1CB" },
+//      { "uniE1CC", "uniE1CC" },
+//      { "uniE1CD", "uniE1CD" },
+//      { "uniE1CE", "uniE1CE" },
+//      { "uniE1CF", "uniE1CF" },
+//      { "uniE1D0", "uniE1D0" },
+//      { "uniE1D1", "uniE1D1" },
+//      { "uniE1D2", "uniE1D2" },
+//      { "uniE1D3", "uniE1D3" },
+
+      { "accidentals.sori", "accidentalSori" },
+      { "accidentals.koron", "accidentalKoron" },
       };
 
 //---------------------------------------------------------
@@ -393,6 +428,7 @@ static void genJson()
       QMapIterator<QString, int> i(namemap);
       while (i.hasNext()) {
             i.next();
+
             if (!nmap.contains(i.key())) {
                   printf("not found: <%s>\n", qPrintable(i.key()));
                   continue;
@@ -450,8 +486,8 @@ int main(int, char* argv[])
             }
 //      char* p = getTable((char*)"LILC", face);
 //      parseLILC(p);
-      // p = getTable("LILY", face);      // global values, not used now
-      // p = getTable("LILF", face);      // subfont table, not used now
+      // p = getTable("LILY", face);      // global values, not used
+      // p = getTable("LILF", face);      // subfont table, not used
       genJson();
       return 0;
       }

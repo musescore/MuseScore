@@ -30,8 +30,8 @@ namespace Ms {
 void TrillSegment::draw(QPainter* painter) const
       {
       qreal mag  = magS();
-      QRectF b2(score()->sym(SymId(trillelementSym)).bbox(mag));
-      qreal w2   = score()->sym(SymId(trillelementSym)).width(mag);
+      QRectF b2(score()->sym(SymId::wiggleTrill).bbox(mag));
+      qreal w2   = score()->sym(SymId::wiggleTrill).width(mag);
 
       qreal x2   = pos2().x();
 
@@ -55,14 +55,14 @@ void TrillSegment::draw(QPainter* painter) const
 
             switch(trill()->trillType()) {
                   case Trill::TRILL_LINE:
-                        sym  = SymId(trillSym);
+                        sym  = SymId::ornamentTrill;
                         b1   = score()->sym(sym).bbox(mag);
                         x0   = -b1.x();
                         x1   = x0 + b1.width();
                         n    = int(floor((x2-x1) / w2));
                         y    = 0.0;
                         break;
-
+#if 0 // TODO-smufl
                   case Trill::UPPRALL_LINE:
                         sym  = SymId(upprallSym);
                         b1   = score()->sym(sym).bbox(mag);
@@ -87,6 +87,7 @@ void TrillSegment::draw(QPainter* painter) const
                         n    = int(floor((x2-x1) / w2));
                         y    = -b1.height();
                         break;
+#endif
                   case Trill::PURE_LINE:
                         sym = SymId::noSym;
                         x0 = 0;
@@ -98,12 +99,12 @@ void TrillSegment::draw(QPainter* painter) const
                   n = 1;
             if (sym != SymId::noSym)
                   drawSymbol(sym, painter, QPointF(x0, y));
-            drawSymbol(SymId(trillelementSym), painter, QPointF(x1, b2.y() * .9), n);
+            drawSymbol(SymId::wiggleTrill, painter, QPointF(x1, b2.y() * .9), n);
             }
       else {
             qreal x1 = 0.0;
             int n = int(floor((x2-x1) / w2));
-            drawSymbol(SymId(trillelementSym), painter, QPointF(x1, b2.y() * .9), n);
+            drawSymbol(SymId::wiggleTrill, painter, QPointF(x1, b2.y() * .9), n);
             }
       }
 
@@ -138,7 +139,7 @@ void TrillSegment::remove(Element* e)
 
 void TrillSegment::layout()
       {
-      QRectF b1(score()->sym(SymId(trillSym)).bbox(magS()));
+      QRectF b1(score()->sym(SymId::ornamentTrill).bbox(magS()));
       QRectF rr(b1.translated(-b1.x(), 0.0));
       rr |= QRectF(0.0, rr.y(), pos2().x(), rr.height());
       setbbox(rr);
