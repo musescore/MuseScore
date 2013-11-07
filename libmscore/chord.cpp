@@ -1250,7 +1250,16 @@ void Chord::layoutStem()
                               hookIdx = -hookIdx;
                         if (hookIdx) {
                               _hook->setHookType(hookIdx);
-                              _hook->setPos(_stem->pos().x(), _stem->pos().y() + (up() ? -_stem->len() : _stem->len()));
+                              qreal x = _stem->pos().x();
+                              qreal y = _stem->pos().y();
+                              if (up()) {
+                                    y -= _stem->len() - _stem->bbox().y();
+                                    x -= _stem->width();
+                                    }
+                              else {
+                                    y += _stem->len();
+                                    }
+                              _hook->setPos(x, y);
                               _hook->adjustReadPos();
                               }
                         return;
@@ -1336,7 +1345,7 @@ void Chord::layoutStem()
 
                         // if stem ends below bottom line (with some exceptions), shorten it
                         if (shortenStem && (sel > staffHeight)
-                                    && (hookIdx == 0 || tab || downnote->mirror()))
+                           && (hookIdx == 0 || tab || downnote->mirror()))
                               sel -= (sel - staffHeight)  * progression.val();
                         if (sel < staffHlfHgt)                    // if stem ends above ('<') staff mid position,
                               sel = staffHlfHgt;                  // stretch it to mid position
@@ -1376,7 +1385,16 @@ void Chord::layoutStem()
             // if (isGrace())
             //      abort();
             if (_hook) {
-                  _hook->setPos(_stem ->hookPos());
+                  QPointF p(_stem->hookPos());
+                  if (up()) {
+                        p.ry() -= _hook->bbox().top();
+                        p.rx() -= _stem->width();
+                        }
+                  else {
+                        p.ry() -= _hook->bbox().bottom();
+                        p.rx() -= _stem->width();
+                        }
+                  _hook->setPos(p);
                   _hook->adjustReadPos();
                   }
             if (_stemSlash)

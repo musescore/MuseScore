@@ -546,6 +546,7 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
+      _scoreFont = ScoreFont::fontFactory(_style.value(ST_MusicalSymbolFont).toString());
       _noteHeadWidth = sym(SymId::noteheadBlack).width(spatium() / (MScore::DPI * SPATIUM20));
 
       if (layoutFlags & LAYOUT_FIX_TICKS)

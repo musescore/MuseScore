@@ -346,7 +346,6 @@ QPointF Stem::hookPos() const
 
       qreal xoff = lineWidth() * .5;
       p.rx() += xoff;
-
       return p;
       }
 
