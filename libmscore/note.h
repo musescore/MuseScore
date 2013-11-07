@@ -106,7 +106,6 @@ class Note : public Element {
             HEAD_NORMAL = 0, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI,
             HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI,
             HEAD_SOL,
-            HEAD_BREVIS_ALT,
             HEAD_GROUPS,
             HEAD_INVALID = -1
             };

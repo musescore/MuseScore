@@ -109,9 +109,9 @@ void Bracket::layout()
             qreal _spatium = spatium();
             qreal w = score()->styleS(ST_bracketWidth).val() * _spatium * .5;
             qreal x = -w;
-            w      += score()->sym(SymId(brackettipsRightUp)).width(mags);
+            w      += score()->sym(SymId::bracketTop).width(mags);
             qreal bd = _spatium * .25;
-            qreal y = - score()->sym(SymId(brackettipsRightUp)).height(mags) - bd;
+            qreal y = - score()->sym(SymId::bracketTop).height(mags) - bd;
             qreal h = (-y + h2) * 2;
             bbox().setRect(x, y, w, h);
             }
@@ -159,8 +159,8 @@ void Bracket::draw(QPainter* painter) const
             qreal x    =  -w * .5;
             qreal y1   = -bd;
             qreal y2   = h + bd;
-            drawSymbol(SymId(brackettipsRightUp), painter, QPointF(x, y1));
-            drawSymbol(SymId(brackettipsRightDown), painter, QPointF(x, y2));
+            drawSymbol(SymId::bracketTop, painter, QPointF(x, y1));
+            drawSymbol(SymId::bracketBottom, painter, QPointF(x, y2));
             }
       else if (bracketType() == BRACKET_SQUARE) {
             qreal h = 2 * h2;

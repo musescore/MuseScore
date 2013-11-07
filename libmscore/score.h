@@ -942,7 +942,7 @@ class Score : public QObject {
       Q_INVOKABLE Ms::Cursor* newCursor();
       qreal computeMinWidth(Segment* fs);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
-      Sym& sym(SymId id);
+      const Sym& sym(SymId id) const;
 
       qreal noteHeadWidth() const            { return _noteHeadWidth; }
 

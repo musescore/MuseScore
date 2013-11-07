@@ -65,36 +65,38 @@ namespace Ms {
 
 const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
       {     // down stem
-      { SymId(wholeheadSym),         SymId(halfheadSym),         SymId(quartheadSym),      SymId(brevisheadSym)        },
-      { SymId(wholecrossedheadSym),  SymId(halfcrossedheadSym),  SymId(crossedheadSym),    SymId(wholecrossedheadSym)  },
-      { SymId(wholediamondheadSym),  SymId(halfdiamondheadSym),  SymId(diamondheadSym),    SymId(wholediamondheadSym)  },
+      { SymId::noteheadWhole,        SymId::noteheadHalf,        SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
+      { SymId::noteheadXWhole,       SymId::noteheadXHalf,       SymId::noteheadXBlack,    SymId::noteheadXWhole       },
+      { SymId::noteheadDiamondWhole, SymId::noteheadDiamondHalf, SymId::noteheadDiamondBlack, SymId::noteheadDiamondWhole  },
+#if 0
       { SymId(s0triangleHeadSym),    SymId(d1triangleHeadSym),   SymId(d2triangleHeadSym), SymId(s0triangleHeadSym)    },
-      { SymId(s0miHeadSym),          SymId(s1miHeadSym),         SymId(s2miHeadSym),       SymId(noSym)                },
+      { SymId(s0miHeadSym),          SymId(s1miHeadSym),         SymId(s2miHeadSym),       SymId::noSym                },
       { SymId(wholeslashheadSym),    SymId(halfslashheadSym),    SymId(quartslashheadSym), SymId(wholeslashheadSym)    },
       { SymId(xcircledheadSym),      SymId(xcircledheadSym),     SymId(xcircledheadSym),   SymId(xcircledheadSym)      },
-      { SymId(s0doHeadSym),          SymId(d1doHeadSym),         SymId(d2doHeadSym),       SymId(noSym)                },
-      { SymId(s0reHeadSym),          SymId(d1reHeadSym),         SymId(d2reHeadSym),       SymId(noSym)                },
-      { SymId(d0faHeadSym),          SymId(d1faHeadSym),         SymId(d2faHeadSym),       SymId(noSym)                },
-      { SymId(s0laHeadSym),          SymId(s1laHeadSym),         SymId(s2laHeadSym),       SymId(noSym)                },
-      { SymId(s0tiHeadSym),          SymId(d1tiHeadSym),         SymId(d2tiHeadSym),       SymId(noSym)                },
-      { SymId(s0solHeadSym),         SymId(s1solHeadSym),        SymId(s2solHeadSym),      SymId(noSym)                },
-      { SymId(wholeheadSym),         SymId(halfheadSym),         SymId(quartheadSym),      SymId(brevisheadaltSym)     },
+      { SymId(s0doHeadSym),          SymId(d1doHeadSym),         SymId(d2doHeadSym),       SymId::noSym                },
+      { SymId(s0reHeadSym),          SymId(d1reHeadSym),         SymId(d2reHeadSym),       SymId::noSym                },
+      { SymId(d0faHeadSym),          SymId(d1faHeadSym),         SymId(d2faHeadSym),       SymId::noSym                },
+      { SymId(s0laHeadSym),          SymId(s1laHeadSym),         SymId(s2laHeadSym),       SymId::noSym                },
+      { SymId(s0tiHeadSym),          SymId(d1tiHeadSym),         SymId(d2tiHeadSym),       SymId::noSym                },
+      { SymId(s0solHeadSym),         SymId(s1solHeadSym),        SymId(s2solHeadSym),      SymId::noSym                },
+#endif
       },
       {     // up stem
-      { SymId(wholeheadSym),         SymId(halfheadSym),         SymId(quartheadSym),      SymId(brevisheadSym)        },
-      { SymId(wholecrossedheadSym),  SymId(halfcrossedheadSym),  SymId(crossedheadSym),    SymId(wholecrossedheadSym)  },
-      { SymId(wholediamondheadSym),  SymId(halfdiamondheadSym),  SymId(diamondheadSym),    SymId(wholediamondheadSym)  },
+      { SymId::noteheadWhole,        SymId::noteheadHalf,        SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
+      { SymId::noteheadXWhole,       SymId::noteheadXHalf,       SymId::noteheadXBlack,    SymId::noteheadXWhole       },
+      { SymId::noteheadDiamondWhole, SymId::noteheadDiamondHalf, SymId::noteheadDiamondBlack, SymId::noteheadDiamondWhole  },
+#if 0 // TODO-smufl
       { SymId(s0triangleHeadSym),    SymId(u1triangleHeadSym),   SymId(u2triangleHeadSym), SymId(s0triangleHeadSym)    },
-      { SymId(s0miHeadSym),          SymId(s1miHeadSym),         SymId(s2miHeadSym),       SymId(noSym)                },
+      { SymId(s0miHeadSym),          SymId(s1miHeadSym),         SymId(s2miHeadSym),       SymId::noSym                },
       { SymId(wholeslashheadSym),    SymId(halfslashheadSym),    SymId(quartslashheadSym), SymId(wholeslashheadSym)    },
       { SymId(xcircledheadSym),      SymId(xcircledheadSym),     SymId(xcircledheadSym),   SymId(xcircledheadSym)      },
-      { SymId(s0doHeadSym),          SymId(u1doHeadSym),         SymId(u2doHeadSym),       SymId(noSym)                },
-      { SymId(s0reHeadSym),          SymId(u1reHeadSym),         SymId(u2reHeadSym),       SymId(noSym)                },
-      { SymId(u0faHeadSym),          SymId(u1faHeadSym),         SymId(u2faHeadSym),       SymId(noSym)                },
-      { SymId(s0laHeadSym),          SymId(s1laHeadSym),         SymId(s2laHeadSym),       SymId(noSym)                },
-      { SymId(s0tiHeadSym),          SymId(u1tiHeadSym),         SymId(u2tiHeadSym),       SymId(noSym)                },
-      { SymId(s0solHeadSym),         SymId(s1solHeadSym),        SymId(s2solHeadSym),      SymId(noSym)                },
-      { SymId(wholeheadSym),         SymId(halfheadSym),         SymId(quartheadSym),      SymId(brevisheadaltSym)     },
+      { SymId(s0doHeadSym),          SymId(u1doHeadSym),         SymId(u2doHeadSym),       SymId::noSym                },
+      { SymId(s0reHeadSym),          SymId(u1reHeadSym),         SymId(u2reHeadSym),       SymId::noSym                },
+      { SymId(u0faHeadSym),          SymId(u1faHeadSym),         SymId(u2faHeadSym),       SymId::noSym                },
+      { SymId(s0laHeadSym),          SymId(s1laHeadSym),         SymId(s2laHeadSym),       SymId::noSym                },
+      { SymId(s0tiHeadSym),          SymId(u1tiHeadSym),         SymId(u2tiHeadSym),       SymId::noSym                },
+      { SymId(s0solHeadSym),         SymId(s1solHeadSym),        SymId(s2solHeadSym),      SymId::noSym                },
+#endif
       }
       };
 

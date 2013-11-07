@@ -97,30 +97,12 @@ void Rest::draw(QPainter* painter) const
             painter->drawLine(QLineF(x1, y-_spatium, x1, y+_spatium));
             painter->drawLine(QLineF(x2, y-_spatium, x2, y+_spatium));
 
-#ifdef USE_GLYPHS
-            QRawFont rfont = fontId2RawFont(0);
-            rfont.setPixelSize(20.0 * spatium()/(PPI * SPATIUM20));
-
-            QGlyphRun glyphs;
-            QVector<quint32> idx = rfont.glyphIndexesForString(QString("%1").arg(n));
-            glyphs.setGlyphIndexes(idx);
-            QVector<QPointF> adv = rfont.advancesForGlyphIndexes(idx);
-            adv.insert(0, QPointF());
-            glyphs.setPositions(adv);
-            glyphs.setRawFont(rfont);
-            QRectF r = glyphs.boundingRect();
-            y  = -_spatium * .5 - (staff()->height()*.5);
-            painter->drawGlyphRun(QPointF((x2 - x1) * .5 + x1 - r.width() * .5, y), glyphs);
-#else
-            QFont font = score()->scoreFont()->font();
-            font.setPixelSize(lrint(20.0 * spatium()/(PPI * SPATIUM20)));
-            painter->setFont(font);
-            QFontMetricsF fm(font);
+            painter->setFont(score()->scoreFont()->font());
+            QFontMetricsF fm(score()->scoreFont()->font());
             y  = -_spatium * .5 - (staff()->height()*.5) - fm.ascent();
             painter->drawText(QRectF(center(x1, x2), y, .0, .0),
                Qt::AlignHCenter|Qt::TextDontClip,
                QString("%1").arg(n));
-#endif
             }
       else {
             qreal mag = magS();

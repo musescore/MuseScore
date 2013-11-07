@@ -603,6 +603,7 @@ void EditStyle::setValues()
                   musicalSymbolFont->setCurrentIndex(idx);
                   break;
                   }
+            ++idx;
             }
 
       showHeader->setChecked(lstyle.value(ST_showHeader).toBool());

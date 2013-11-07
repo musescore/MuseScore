@@ -148,9 +148,6 @@ void MScore::init()
       //
 #if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
       static const char* fonts[] = {
-            "mscore/mscore-20.ttf",
-            "gonville/gonville-20.ttf",
-            "bravura/Bravura.otf",
             "MuseJazz.ttf",
             "FreeSans.ttf",
             "FreeSerifMscore.ttf",
