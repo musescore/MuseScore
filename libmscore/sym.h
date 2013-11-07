@@ -1524,293 +1524,14 @@ enum class SymId {
       lastSym
       };
 
-
-enum {
-      noSym                = int(SymId::noSym),
-      clefEightSym         = int(SymId::noteheadBlack),
-      clefOneSym           = int(SymId::noteheadBlack),
-      clefFiveSym          = int(SymId::noteheadBlack),
-      wholerestSym         = int(SymId::noteheadBlack),
-      halfrestSym          = int(SymId::noteheadBlack),
-      outsidewholerestSym  = int(SymId::noteheadBlack),
-      outsidehalfrestSym   = int(SymId::noteheadBlack),
-      longarestSym         = int(SymId::noteheadBlack),
-      breverestSym         = int(SymId::noteheadBlack),
-      rest4Sym             = int(SymId::noteheadBlack),
-      rest8Sym             = int(SymId::noteheadBlack),
-      clasquartrestSym     = int(SymId::noteheadBlack),
-      rest16Sym            = int(SymId::noteheadBlack),
-      rest32Sym            = int(SymId::noteheadBlack),
-      rest64Sym            = int(SymId::noteheadBlack),
-      rest128Sym           = int(SymId::noteheadBlack),
-      rest_M3              = int(SymId::noteheadBlack),
-      varcodaSym           = int(SymId::noteheadBlack),
-      brackettipsRightUp   = int(SymId::noteheadBlack),
-      brackettipsRightDown = int(SymId::noteheadBlack),
-      brackettipsLeftUp    = int(SymId::noteheadBlack),
-      brackettipsLeftDown  = int(SymId::noteheadBlack),
-      zeroSym              = int(SymId::noteheadBlack),
-      oneSym               = int(SymId::noteheadBlack),
-      twoSym               = int(SymId::noteheadBlack),
-      threeSym             = int(SymId::noteheadBlack),
-      fourSym              = int(SymId::noteheadBlack),
-      fiveSym              = int(SymId::noteheadBlack),
-      sixSym               = int(SymId::noteheadBlack),
-      sevenSym             = int(SymId::noteheadBlack),
-      eightSym             = int(SymId::noteheadBlack),
-      nineSym              = int(SymId::noteheadBlack),
-
-      sharpSym             = int(SymId::noteheadBlack),
-      sharpArrowUpSym      = int(SymId::noteheadBlack),
-      sharpArrowDownSym    = int(SymId::noteheadBlack),
-      sharpArrowBothSym    = int(SymId::noteheadBlack),
-      sharpslashSym        = int(SymId::noteheadBlack),
-      sharpslash2Sym       = int(SymId::noteheadBlack),
-      sharpslash3Sym       = int(SymId::noteheadBlack),
-      sharpslash4Sym       = int(SymId::noteheadBlack),
-
-      naturalSym           = int(SymId::noteheadBlack),
-      naturalArrowUpSym    = int(SymId::noteheadBlack),
-      naturalArrowDownSym  = int(SymId::noteheadBlack),
-      naturalArrowBothSym  = int(SymId::noteheadBlack),
-      flatSym              = int(SymId::noteheadBlack),
-      flatArrowUpSym       = int(SymId::noteheadBlack),
-      flatArrowDownSym     = int(SymId::noteheadBlack),
-      flatArrowBothSym     = int(SymId::noteheadBlack),
-
-      flatslashSym         = int(SymId::noteheadBlack),
-      flatslash2Sym        = int(SymId::noteheadBlack),
-      mirroredflat2Sym     = int(SymId::noteheadBlack),
-      mirroredflatSym      = int(SymId::noteheadBlack),
-      mirroredflatslashSym = int(SymId::noteheadBlack),
-      flatflatSym          = int(SymId::noteheadBlack),
-      flatflatslashSym     = int(SymId::noteheadBlack),
-      sharpsharpSym        = int(SymId::noteheadBlack),
-      soriSym              = int(SymId::noteheadBlack),
-      koronSym             = int(SymId::noteheadBlack),
-
-      rightparenSym        = int(SymId::noteheadBlack),
-      leftparenSym         = int(SymId::noteheadBlack),
-      dotSym               = int(SymId::augmentationDot),
-
-      longaupSym           = int(SymId::noteheadBlack),
-      longadownSym         = int(SymId::noteheadBlack),
-      brevisheadSym        = int(SymId::noteheadBlack),
-      brevisdoubleheadSym  = int(SymId::noteheadBlack),
-      wholeheadSym         = int(SymId::noteheadBlack),
-      halfheadSym          = int(SymId::noteheadBlack),
-      quartheadSym         = int(SymId::noteheadBlack),
-      wholediamondheadSym  = int(SymId::noteheadBlack),
-      halfdiamondheadSym   = int(SymId::noteheadBlack),
-      diamondheadSym       = int(SymId::noteheadBlack),
-      s0triangleHeadSym    = int(SymId::noteheadBlack),
-      d1triangleHeadSym    = int(SymId::noteheadBlack),
-      u1triangleHeadSym    = int(SymId::noteheadBlack),
-      u2triangleHeadSym    = int(SymId::noteheadBlack),
-      d2triangleHeadSym    = int(SymId::noteheadBlack),
-      wholeslashheadSym    = int(SymId::noteheadBlack),
-      halfslashheadSym     = int(SymId::noteheadBlack),
-      quartslashheadSym    = int(SymId::noteheadBlack),
-      wholecrossedheadSym  = int(SymId::noteheadBlack),
-      halfcrossedheadSym   = int(SymId::noteheadBlack),
-      crossedheadSym       = int(SymId::noteheadBlack),
-      xcircledheadSym      = int(SymId::noteheadBlack),
-      s0doHeadSym          = int(SymId::noteheadBlack),
-      d1doHeadSym          = int(SymId::noteheadBlack),
-      u1doHeadSym          = int(SymId::noteheadBlack),
-      d2doHeadSym          = int(SymId::noteheadBlack),
-      u2doHeadSym          = int(SymId::noteheadBlack),
-      s0reHeadSym          = int(SymId::noteheadBlack),
-      u1reHeadSym          = int(SymId::noteheadBlack),
-      d1reHeadSym          = int(SymId::noteheadBlack),
-      u2reHeadSym          = int(SymId::noteheadBlack),
-      d2reHeadSym          = int(SymId::noteheadBlack),
-      s0miHeadSym          = int(SymId::noteheadBlack),
-      s1miHeadSym          = int(SymId::noteheadBlack),
-      s2miHeadSym          = int(SymId::noteheadBlack),
-      u0faHeadSym          = int(SymId::noteheadBlack),
-      d0faHeadSym          = int(SymId::noteheadBlack),
-      u1faHeadSym          = int(SymId::noteheadBlack),
-      d1faHeadSym          = int(SymId::noteheadBlack),
-      u2faHeadSym          = int(SymId::noteheadBlack),
-      d2faHeadSym          = int(SymId::noteheadBlack),
-      s0laHeadSym          = int(SymId::noteheadBlack),
-      s1laHeadSym          = int(SymId::noteheadBlack),
-      s2laHeadSym          = int(SymId::noteheadBlack),
-      s0tiHeadSym          = int(SymId::noteheadBlack),
-      u1tiHeadSym          = int(SymId::noteheadBlack),
-      d1tiHeadSym          = int(SymId::noteheadBlack),
-      u2tiHeadSym          = int(SymId::noteheadBlack),
-      d2tiHeadSym          = int(SymId::noteheadBlack),
-
-      s0solHeadSym         = int(SymId::noteheadBlack),
-      s1solHeadSym         = int(SymId::noteheadBlack),
-      s2solHeadSym         = int(SymId::noteheadBlack),
-
-      open01arrowHeadSym   = int(SymId::noteheadBlack),
-      open0M1arrowHeadSym  = int(SymId::noteheadBlack),
-      open11arrowHeadSym   = int(SymId::noteheadBlack),
-      open1M1arrowHeadSym  = int(SymId::noteheadBlack),
-      close01arrowHeadSym  = int(SymId::noteheadBlack),
-      close0M1arrowHeadSym = int(SymId::noteheadBlack),
-      close11arrowHeadSym  = int(SymId::noteheadBlack),
-      close1M1arrowHeadSym = int(SymId::noteheadBlack),
-
-      ufermataSym          = int(SymId::noteheadBlack),
-      dfermataSym          = int(SymId::noteheadBlack),
-
-      snappizzicatoSym     = int(SymId::noteheadBlack),
-      thumbSym             = int(SymId::noteheadBlack),
-      ushortfermataSym     = int(SymId::noteheadBlack),
-      dshortfermataSym     = int(SymId::noteheadBlack),
-      ulongfermataSym      = int(SymId::noteheadBlack),
-      dlongfermataSym      = int(SymId::noteheadBlack),
-      uverylongfermataSym  = int(SymId::noteheadBlack),
-      dverylongfermataSym  = int(SymId::noteheadBlack),
-
-      sforzatoaccentSym    = int(SymId::noteheadBlack),
-      esprSym              = int(SymId::noteheadBlack),
-      staccatoSym          = int(SymId::noteheadBlack),
-      ustaccatissimoSym    = int(SymId::noteheadBlack),
-      dstaccatissimoSym    = int(SymId::noteheadBlack),
-      tenutoSym            = int(SymId::noteheadBlack),
-      uportatoSym          = int(SymId::noteheadBlack),
-      dportatoSym          = int(SymId::noteheadBlack),
-      umarcatoSym          = int(SymId::noteheadBlack),
-      dmarcatoSym          = int(SymId::noteheadBlack),
-      ouvertSym            = int(SymId::noteheadBlack),
-      halfopenSym          = int(SymId::noteheadBlack),
-      plusstopSym          = int(SymId::noteheadBlack),
-      upbowSym             = int(SymId::noteheadBlack),
-      downbowSym           = int(SymId::noteheadBlack),
-      reverseturnSym       = int(SymId::noteheadBlack),
-      turnSym              = int(SymId::noteheadBlack),
-      trillSym             = int(SymId::noteheadBlack),
-      upedalheelSym        = int(SymId::noteheadBlack),
-      dpedalheelSym        = int(SymId::noteheadBlack),
-
-      upedaltoeSym         = int(SymId::noteheadBlack),
-      dpedaltoeSym         = int(SymId::noteheadBlack),
-      flageoletSym         = int(SymId::noteheadBlack),
-      segnoSym             = int(SymId::noteheadBlack),
-      varsegnoSym          = int(SymId::noteheadBlack),
-      codaSym              = int(SymId::noteheadBlack),
-
-      rcommaSym            = int(SymId::noteheadBlack),
-      lcommaSym            = int(SymId::noteheadBlack),
-      lvarcommaSym         = int(SymId::noteheadBlack),
-      rvarcommaSym         = int(SymId::noteheadBlack),
-
-      arpeggioSym          = int(SymId::noteheadBlack),
-      trillelementSym      = int(SymId::noteheadBlack),
-      arpeggioarrowdownSym = int(SymId::noteheadBlack),
-      arpeggioarrowupSym   = int(SymId::noteheadBlack),
-      trilelementSym       = int(SymId::noteheadBlack),
-      prallSym             = int(SymId::noteheadBlack),
-      mordentSym           = int(SymId::noteheadBlack),
-      prallprallSym        = int(SymId::noteheadBlack),
-      prallmordentSym      = int(SymId::noteheadBlack),
-      upprallSym           = int(SymId::noteheadBlack),
-
-      downprallSym         = int(SymId::noteheadBlack),
-      upmordentSym         = int(SymId::noteheadBlack),
-      downmordentSym       = int(SymId::noteheadBlack),
-      lineprallSym         = int(SymId::noteheadBlack),
-      pralldownSym         = int(SymId::noteheadBlack),
-      prallupSym           = int(SymId::noteheadBlack),
-      schleiferSym         = int(SymId::noteheadBlack),
-
-      caesuraCurvedSym     = int(SymId::noteheadBlack),
-      caesuraStraight      = int(SymId::noteheadBlack),
-
-      eighthflagSym        = int(SymId::noteheadBlack),
-      sixteenthflagSym     = int(SymId::noteheadBlack),
-      thirtysecondflagSym  = int(SymId::noteheadBlack),
-      sixtyfourthflagSym   = int(SymId::noteheadBlack),
-      flag128Sym           = int(SymId::noteheadBlack),
-      deighthflagSym       = int(SymId::noteheadBlack),
-      gracedashSym         = int(SymId::noteheadBlack),
-      dgracedashSym        = int(SymId::noteheadBlack),
-      dsixteenthflagSym    = int(SymId::noteheadBlack),
-      dthirtysecondflagSym = int(SymId::noteheadBlack),
-      dsixtyfourthflagSym  = int(SymId::noteheadBlack),
-      dflag128Sym          = int(SymId::noteheadBlack),
-      altoclefSym          = int(SymId::noteheadBlack),
-      caltoclefSym         = int(SymId::noteheadBlack),
-      bassclefSym          = int(SymId::noteheadBlack),
-      cbassclefSym         = int(SymId::noteheadBlack),
-      trebleclefSym        = int(SymId::noteheadBlack),
-      ctrebleclefSym       = int(SymId::noteheadBlack),
-      percussionclefSym    = int(SymId::noteheadBlack),
-      cpercussionclefSym   = int(SymId::noteheadBlack),
-      tabclefSym           = int(SymId::noteheadBlack),
-      ctabclefSym          = int(SymId::noteheadBlack),
-      fourfourmeterSym     = int(SymId::noteheadBlack),
-      allabreveSym         = int(SymId::noteheadBlack),
-      pedalasteriskSym     = int(SymId::noteheadBlack),
-      pedaldashSym         = int(SymId::noteheadBlack),
-      pedaldotSym          = int(SymId::noteheadBlack),
-      pedalPSym            = int(SymId::noteheadBlack),
-      pedaldSym            = int(SymId::noteheadBlack),
-      pedaleSym            = int(SymId::noteheadBlack),
-      pedalPedSym          = int(SymId::noteheadBlack),
-      accDiscantSym        = int(SymId::noteheadBlack),
-      accDotSym            = int(SymId::noteheadBlack),
-      accFreebaseSym       = int(SymId::noteheadBlack),
-      accStdbaseSym        = int(SymId::noteheadBlack),
-      accBayanbaseSym      = int(SymId::noteheadBlack),
-      accOldEESym          = int(SymId::noteheadBlack),
-      accpushSym           = int(SymId::noteheadBlack),
-      accpullSym           = int(SymId::noteheadBlack),
-
-      letterfSym           = int(SymId::noteheadBlack),
-      lettermSym           = int(SymId::noteheadBlack),
-      letterpSym           = int(SymId::noteheadBlack),
-      letterrSym           = int(SymId::noteheadBlack),
-      lettersSym           = int(SymId::noteheadBlack),
-      letterzSym           = int(SymId::noteheadBlack),
-
-      letterTSym           = int(SymId::noteheadBlack),
-      letterSSym           = int(SymId::noteheadBlack),
-      letterPSym           = int(SymId::noteheadBlack),
-
-      plusSym              = int(SymId::noteheadBlack),
-      commaSym             = int(SymId::noteheadBlack),
-      hyphenSym            = int(SymId::noteheadBlack),
-      periodSym            = int(SymId::noteheadBlack),
-      spaceSym             = int(SymId::noteheadBlack),
-
-      longaupaltSym        = int(SymId::noteheadBlack),
-      longadownaltSym      = int(SymId::noteheadBlack),
-      brevisheadaltSym     = int(SymId::noteheadBlack),
-
-      timesigcdotSym       = int(SymId::noteheadBlack),
-      timesigoSym          = int(SymId::noteheadBlack),
-      timesigocutSym       = int(SymId::noteheadBlack),
-      timesigodotSym       = int(SymId::noteheadBlack),
-
-      tabclef2Sym          = int(SymId::noteheadBlack),
-
-      octave8              = int(SymId::noteheadBlack),
-      octave8va            = int(SymId::noteheadBlack),
-      octave8vb            = int(SymId::noteheadBlack),
-      octave15             = int(SymId::noteheadBlack),
-      octave15ma           = int(SymId::noteheadBlack),
-      octave15mb           = int(SymId::noteheadBlack),
-      octave22             = int(SymId::noteheadBlack),
-      octave22ma           = int(SymId::noteheadBlack),
-      octave22mb           = int(SymId::noteheadBlack)
-      };
-
-
 //---------------------------------------------------------
 //   Sym
 //---------------------------------------------------------
 
 class Sym {
-      int _code = -1;
+      int _code = 0;
       qreal w;
-      QRectF _bbox;
+      QRectF  _bbox;
       QPointF _attach;
 
    public:
@@ -1824,11 +1545,11 @@ class Sym {
       QPointF attach(qreal mag) const      { return _attach * mag;   }
       int code() const                     { return _code;    }
       void setCode(int c)                  { _code = c;   }
-      void setAttach(const QPointF& r)     { _attach = r; }
       bool isValid() const                 { return _code != 0; }
-      QRectF bbox() const                  { return _bbox; }
+      QRectF bbox() const                  { return _bbox;   }
       void setbbox(const QRectF& r)        { _bbox = r;      }
       QPointF getAttach() const            { return _attach; }
+      void setAttach(const QPointF& r)     { _attach = r; }
 
       static SymId name2id(const QString& s)     { return lnhash.value(s, SymId::noSym); }     // return noSym if not found
       static const char* id2name(SymId id);
@@ -1868,8 +1589,7 @@ class ScoreFont {
       const QString& fontPath() const       { return _fontPath;       }
       const QString& filename() const       { return _filename;       }
 
-      Sym& sym(SymId id)             { return _symbols[int(id)]; }
-      const Sym& sym(SymId id) const { return _symbols[int(id)]; }
+      const Sym& sym(SymId id) const;
 
       static ScoreFont* fontFactory(QString);
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }

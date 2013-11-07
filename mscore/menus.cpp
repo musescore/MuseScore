@@ -422,7 +422,7 @@ Palette* MuseScore::newFingeringPalette()
             f->setText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
-      Symbol* symbol = new Symbol(gscore, SymId(thumbSym));
+      Symbol* symbol = new Symbol(gscore, SymId::stringsThumbPosition);
       sp->append(symbol, tr("Thumb"));
       return sp;
       }
@@ -470,8 +470,8 @@ Palette* MuseScore::newNoteHeadsPalette()
 
       for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
             SymId sym = noteHeads[0][i][1];
-            if (i == Note::HEAD_BREVIS_ALT)
-                  sym = noteHeads[0][i][3];
+//TODO::smufl            if (i == Note::HEAD_BREVIS_ALT)
+//                  sym = noteHeads[0][i][3];
             NoteHead* nh = new NoteHead(gscore);
             nh->setSym(sym);
             sp->append(nh, Sym::id2userName(sym));
@@ -1054,7 +1054,7 @@ void MuseScore::populatePalette()
       sp->setGrid(42, 45);
       sp->setDrawGrid(true);
 
-      sp->append(SymId(accDiscantSym));
+/*      sp->append(SymId(accDiscantSym));
       sp->append(SymId(accDotSym));
       sp->append(SymId(accFreebaseSym));
       sp->append(SymId(accStdbaseSym));
@@ -1062,6 +1062,7 @@ void MuseScore::populatePalette()
       sp->append(SymId(accOldEESym));
       sp->append(SymId(accpushSym));
       sp->append(SymId(accpullSym));
+*/
 
       FretDiagram* fret = new FretDiagram(gscore);
       fret->setDot(5, 1);

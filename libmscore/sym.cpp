@@ -3221,7 +3221,6 @@ ScoreFont* ScoreFont::fontFactory(QString s)
       Q_ASSERT(f);
 
       if (!f->loaded) {
-printf("load font <%s>\n", qPrintable(s));
             if (-1 == QFontDatabase::addApplicationFont(f->fontPath() + f->filename())) {
                   qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(f->filename()));
                   if (!MScore::debugMode)
@@ -3257,14 +3256,15 @@ printf("load font <%s>\n", qPrintable(s));
                         qDebug("codepoint not recognized for glyph %s", qPrintable(i));
                   if (Sym::lnhash.contains(i)) {
                         SymId symId = Sym::lnhash.value(i);
-                        if (!fm.inFont(code)) {
-                              qDebug("Sym: character 0x%x(%d) are not in font <%s>", code, code, qPrintable(f->_font.family()));
-                              continue;
-                              }
                         Sym* sym = &f->_symbols[int(symId)];
                         sym->setCode(code);
-                        sym->setWidth(fm.width(code));
-                        sym->setbbox(fm.boundingRect(code));
+                        if (fm.inFont(code)) {
+                              sym->setWidth(fm.width(code));
+                              sym->setbbox(fm.boundingRect(code));
+                              }
+                        else {
+                              // qDebug("Sym: character 0x%x(%s) are not in font <%s>", code, qPrintable(i), qPrintable(f->_font.family()));
+                              }
                         }
                   else
                         qDebug("unknown glyph: %s", qPrintable(i));
@@ -3279,16 +3279,37 @@ printf("load font <%s>\n", qPrintable(s));
                      qPrintable(error.errorString()));
             QJsonObject oo = o.value("glyphs").toObject();
             for (auto i : oo.keys()) {
-                  printf("  %s\n", qPrintable(i));
                   QJsonObject ooo = oo.value(i).toObject();
+                  SymId symId = Sym::lnhash.value(i, SymId::noSym);
+                  if (symId == SymId::noSym)
+                        qDebug("ScoreFont: symId not found <%s>", qPrintable(i));
+                  Sym* sym = &f->_symbols[int(symId)];
                   for (auto i : ooo.keys()) {
-                        printf("     %s\n", qPrintable(i));
+                        if (i == "stemDownNW") {
+                              //qreal x = ooo.value(i).toArray().at(0).toDouble();
+                              //qreal y = ooo.value(i).toArray().at(1).toDouble();
+                              }
+                        else if (i == "stemUpSE") {
+                              qreal x = ooo.value(i).toArray().at(0).toDouble();
+                              qreal y = ooo.value(i).toArray().at(1).toDouble();
+                              sym->setAttach(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
+                              }
                         }
                   }
             f->loaded = true;
             }
       return f;
       }
+#if 0
+Sym& ScoreFont::sym(SymId id)
+      {
+      return _symbols[int(id)];
+      }
+#endif
 
+const Sym& ScoreFont::sym(SymId id) const
+      {
+      return _symbols[int(id)];
+      }
 }
 

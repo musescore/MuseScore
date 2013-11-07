@@ -108,7 +108,7 @@ void PedalSegment::styleChanged()
 Pedal::Pedal(Score* s)
    : TextLine(s)
       {
-      setBeginSymbol(SymId(pedalPedSym));
+      setBeginSymbol(SymId::keyboardPedalPed);
       setBeginSymbolOffset(QPointF(0.0, -.2));
 
       setEndHook(true);

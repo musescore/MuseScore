@@ -206,11 +206,11 @@ void Glissando::draw(QPainter* painter) const
             }
       else if (glissandoType() == GlissandoType::WAVY) {
             qreal mags = magS();
-            QRectF b = score()->sym(SymId(trillelementSym)).bbox(mags);
-            qreal w  = score()->sym(SymId(trillelementSym)).width(mags);
+            QRectF b = score()->sym(SymId::wiggleTrill).bbox(mags);
+            qreal w  = score()->sym(SymId::wiggleTrill).width(mags);
             int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
             qreal x  = (l - n*w) * 0.5;   // centre line in available space
-            drawSymbol(SymId(trillelementSym), painter, QPointF(x, b.height()*.5), n);
+            drawSymbol(SymId::wiggleTrill, painter, QPointF(x, b.height()*.5), n);
             }
       if (_showText) {
             const TextStyle& st = score()->textStyle(TEXT_STYLE_GLISSANDO);

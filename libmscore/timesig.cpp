@@ -228,6 +228,31 @@ void TimeSig::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   toTimeSigString
+//---------------------------------------------------------
+
+QString TimeSig::toTimeSigString(const QString& s) const
+      {
+      QString d;
+      ScoreFont* f = score()->scoreFont();
+      for (int i = 0; i < s.size(); ++i) {
+            switch (s[i].toLatin1()) {
+                  case '0': d += QChar(f->sym(SymId::timeSig0).code()); break;
+                  case '1': d += QChar(f->sym(SymId::timeSig1).code()); break;
+                  case '2': d += QChar(f->sym(SymId::timeSig2).code()); break;
+                  case '3': d += QChar(f->sym(SymId::timeSig3).code()); break;
+                  case '4': d += QChar(f->sym(SymId::timeSig4).code()); break;
+                  case '5': d += QChar(f->sym(SymId::timeSig5).code()); break;
+                  case '6': d += QChar(f->sym(SymId::timeSig6).code()); break;
+                  case '7': d += QChar(f->sym(SymId::timeSig7).code()); break;
+                  case '8': d += QChar(f->sym(SymId::timeSig8).code()); break;
+                  case '9': d += QChar(f->sym(SymId::timeSig9).code()); break;
+                  }
+            }
+      return d;
+      }
+
+//---------------------------------------------------------
 //   layout1
 //---------------------------------------------------------
 
@@ -253,9 +278,6 @@ void TimeSig::layout1()
                   setbbox(QRectF());
                   // leave everything else as it is:
                   // draw() will anyway skip any drawing if staff type has no time sigs
-//                sigType = TSIG_NORMAL;
-//                _numeratorString.clear();
-//                _denominatorString.clear();
                   return;
                   }
             // update to real staff values
@@ -273,16 +295,16 @@ void TimeSig::layout1()
       // C and Ccut are placed at the middle of the staff: use yoff directly
       if (sigType ==  TSIG_FOUR_FOUR) {
             pz = QPointF(0.0, yoff);
-            Sym& sym = score()->sym(SymId(fourfourmeterSym));
+            const Sym& sym = score()->sym(SymId::timeSigCommon);
             setbbox(sym.bbox(mag).translated(pz));
-            _numeratorString = score()->scoreFont()->toString(SymId(fourfourmeterSym));
+            _numeratorString = score()->scoreFont()->toString(SymId::timeSigCommon);
             _denominatorString.clear();
             }
       else if (sigType == TSIG_ALLA_BREVE) {
             pz = QPointF(0.0, yoff);
-            Sym& sym = score()->sym(SymId(allabreveSym));
+            const Sym& sym = score()->sym(SymId::timeSigCutCommon);
             setbbox(sym.bbox(mag).translated(pz));
-            _numeratorString = score()->scoreFont()->toString(SymId(allabreveSym));
+            _numeratorString = score()->scoreFont()->toString(SymId::timeSigCutCommon);
             _denominatorString.clear();
             }
       else {
@@ -290,11 +312,12 @@ void TimeSig::layout1()
                   _numeratorString   = QString("%1").arg(_sig.numerator());   // build numerator string
                   _denominatorString = QString("%1").arg(_sig.denominator()); // build denominator string
                   }
+            QString ns = toTimeSigString(_numeratorString);
+            QString ds = toTimeSigString(_denominatorString);
             QFont font = score()->scoreFont()->font();
-            font.setPixelSize(lrint(20.0 * MScore::DPI/PPI));
             QFontMetricsF fm(font);
-            QRectF numRect = fm.tightBoundingRect(_numeratorString);          // get 'tight' bounding boxes for strings
-            QRectF denRect = fm.tightBoundingRect(_denominatorString);
+            QRectF numRect = fm.tightBoundingRect(ns);          // get 'tight' bounding boxes for strings
+            QRectF denRect = fm.tightBoundingRect(ds);
 
             // position numerator and denominator; vertical displacement:
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)
@@ -302,12 +325,12 @@ void TimeSig::layout1()
 
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
-            pz = QPointF(0.0, yoff - displ);
+            pz = QPointF(0.0, yoff - displ - _spatium);
             // denom. horiz. posit.: centred around centre of numerator
             // vert. position:       base line is lowered by displ and by the whole height of a digit
 
             qreal spatium2 = _spatium * 2.0;
-            pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + spatium2);
+            pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + spatium2 - _spatium);
 
             setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
             addbbox(denRect.translated(pn));
@@ -329,15 +352,15 @@ void TimeSig::draw(QPainter* painter) const
       if (staff() && !staff()->staffType()->genTimesig())
             return;
       painter->setPen(curColor());
-      QFont font = score()->scoreFont()->font();
-      font.setPixelSize(lrint(20.0 * MScore::DPI/PPI));
-      painter->setFont(font);
+      painter->setFont(score()->scoreFont()->font());
       qreal mag  = spatium() / (MScore::DPI * SPATIUM20);
       qreal imag = 1.0 / mag;
 
       painter->scale(mag, mag);
-      painter->drawText(pz, _numeratorString);    // use positions and strings computed in layout()
-      painter->drawText(pn, _denominatorString);
+      QString ns = toTimeSigString(_numeratorString);
+      QString ds = toTimeSigString(_denominatorString);
+      painter->drawText(pz, ns);    // use positions and strings computed in layout()
+      painter->drawText(pn, ds);
       painter->scale(imag, imag);
       }
 
