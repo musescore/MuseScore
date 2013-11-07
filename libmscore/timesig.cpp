@@ -57,10 +57,8 @@ qreal TimeSig::mag() const
 
 void TimeSig::setSig(const Fraction& f, TimeSigType st)
       {
-      if (_sig != f) {
-//            customText = false;
-            _sig       = f;
-            }
+      if (_sig != f)
+            _sig = f;
       if (st == TSIG_FOUR_FOUR || st == TSIG_ALLA_BREVE)
             customText = false;
       _timeSigType = st;
@@ -247,6 +245,7 @@ QString TimeSig::toTimeSigString(const QString& s) const
                   case '7': d += QChar(f->sym(SymId::timeSig7).code()); break;
                   case '8': d += QChar(f->sym(SymId::timeSig8).code()); break;
                   case '9': d += QChar(f->sym(SymId::timeSig9).code()); break;
+                  default:  d += s[i]; break;
                   }
             }
       return d;
