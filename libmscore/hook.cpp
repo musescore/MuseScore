@@ -43,6 +43,7 @@ void Hook::setHookType(int i)
             case 4:    setSym(SymId::flag64thUp);    break;
             case 5:    setSym(SymId::flag128thUp);   break;
             case 6:    setSym(SymId::flag256thUp);   break;
+            case 7:    setSym(SymId::flag512thUp);   break;
 
             case -1:   setSym(SymId::flag8thDown);   break;
             case -2:   setSym(SymId::flag16thDown);  break;
@@ -50,6 +51,7 @@ void Hook::setHookType(int i)
             case -4:   setSym(SymId::flag64thDown);  break;
             case -5:   setSym(SymId::flag128thDown); break;
             case -6:   setSym(SymId::flag256thDown); break;
+            case -7:   setSym(SymId::flag512thDown); break;
             default:
                   qDebug("no hook for subtype %d\n", i);
                   break;
@@ -73,7 +75,7 @@ void Hook::layout()
 void Hook::draw(QPainter* painter) const
       {
       // hide if belonging to the second chord of a cross-measure pair
-      if(chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
+      if (chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
             return;
       Symbol::draw(painter);
       }
