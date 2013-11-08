@@ -4889,6 +4889,7 @@ int main(int argc, char* av[])
       mscore = new MuseScore();
       mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
+      gscore->setScoreFont(ScoreFont::fontFactory("Bravura"));
 
       if (writeWorkspaceFile) {
             Workspace::writeBuiltinWorkspace();
