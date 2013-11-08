@@ -490,6 +490,12 @@ bool FileIO::remove()
       return file.remove();
       }
 
+bool FileIO::exists()
+      {
+      QFile file(mSource);
+      return file.exists();
+      }
+
 //---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
