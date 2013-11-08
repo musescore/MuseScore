@@ -37,6 +37,7 @@ class FileIO : public QObject {
       explicit FileIO(QObject *parent = 0);
 
       Q_INVOKABLE QString read();
+      Q_INVOKABLE bool exists();
       Q_INVOKABLE bool write(const QString& data);
       Q_INVOKABLE bool remove();
       Q_INVOKABLE QString tempPath() {QDir dir; return dir.tempPath();};
