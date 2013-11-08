@@ -3300,15 +3300,20 @@ ScoreFont* ScoreFont::fontFactory(QString s)
             }
       return f;
       }
-#if 0
-Sym& ScoreFont::sym(SymId id)
-      {
-      return _symbols[int(id)];
-      }
-#endif
+
+//---------------------------------------------------------
+//   sym
+//    Get symbol for SymId.
+//    Use font 0 (Bravura) as fallback, if sym does not
+//    exist.
+//---------------------------------------------------------
 
 const Sym& ScoreFont::sym(SymId id) const
       {
+      if (id == SymId::noSym)
+            return _symbols[0];
+      if (!_symbols[int(id)].isValid() && (this != &_scoreFonts[0]))
+            return _scoreFonts[0]._symbols[int(id)];
       return _symbols[int(id)];
       }
 }

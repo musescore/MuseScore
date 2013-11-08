@@ -2195,7 +2195,6 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         }
                   pos.ry() = line * _spStaff2;                          // convert staff position to sp distance
                   }
-
             a->setPos(pos);
             a->adjustReadPos();
             return QPointF(pos);

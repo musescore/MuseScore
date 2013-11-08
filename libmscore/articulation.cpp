@@ -366,7 +366,7 @@ void Articulation::draw(QPainter* painter) const
                   }
             }
       painter->setPen(curColor());
-      drawSymbol(sym, painter);
+      drawSymbol(sym, painter, QPointF(-0.5 * width(), _up ? 0.0 : height()));
       }
 
 //---------------------------------------------------------
