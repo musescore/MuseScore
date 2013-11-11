@@ -105,13 +105,12 @@ void Bracket::layout()
             setbbox(path.boundingRect());
             }
       else if (bracketType() == BRACKET_NORMAL) {
-            qreal mags = 1.0;
             qreal _spatium = spatium();
             qreal w = score()->styleS(ST_bracketWidth).val() * _spatium * .5;
             qreal x = -w;
-            w      += score()->sym(SymId::bracketTop).width(mags);
+            w      += symWidth(SymId::bracketTop);
             qreal bd = _spatium * .25;
-            qreal y = - score()->sym(SymId::bracketTop).height(mags) - bd;
+            qreal y = - symHeight(SymId::bracketTop) - bd;
             qreal h = (-y + h2) * 2;
             bbox().setRect(x, y, w, h);
             }

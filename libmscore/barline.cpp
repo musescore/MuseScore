@@ -278,11 +278,9 @@ void BarLine::draw(QPainter* painter) const
 
             case END_REPEAT:
                   {
-                  qreal mags = magS();
                   qreal lw2  = point(score()->styleS(ST_endBarWidth));
                   qreal d1   = point(score()->styleS(ST_endBarDistance));
-                  const Sym& dotsym = score()->sym(SymId::augmentationDot);
-                  qreal dotw = dotsym.width(mags);
+                  qreal dotw = symWidth(SymId::augmentationDot);
                   qreal x1   =  dotw + d1 + lw * .5;
                   qreal x2   =  dotw + d1 + lw + d1 + lw2 * .5;
 
@@ -302,11 +300,9 @@ void BarLine::draw(QPainter* painter) const
 
             case END_START_REPEAT:
                   {
-                  qreal mags = magS();
                   qreal lw2  = point(score()->styleS(ST_endBarWidth));
                   qreal d1   = point(score()->styleS(ST_endBarDistance));
-                  const Sym& dotsym = score()->sym(SymId::augmentationDot);
-                  qreal dotw = dotsym.width(mags);
+                  qreal dotw = symWidth(SymId::augmentationDot);
 
                   qreal x1   =  dotw + d1 + lw * .5;                                // thin bar
                   qreal x2   =  dotw + d1 + lw + d1 + lw2 * .5;                     // thick bar
@@ -746,7 +742,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
       qreal _spatium = score->spatium();
       qreal dw = score->styleS(ST_barWidth).val() * _spatium;
 
-      qreal dotwidth = score->sym(SymId::augmentationDot).width(mag);
+      qreal dotwidth = score->scoreFont()->width(SymId::augmentationDot, mag);
       switch(type) {
             case DOUBLE_BAR:
                   dw  = (score->styleS(ST_doubleBarWidth) * 2
@@ -799,15 +795,14 @@ void BarLine::layout()
             QRectF r(0.0, y1, dw, y2-y1);
 
             if (score()->styleB(ST_repeatBarTips)) {
-                  qreal mags = magS();
                   switch (barLineType()) {
                         case START_REPEAT:
-                              r |= score()->sym(SymId::bracketTop).bbox(mags).translated(0, y1);
-                              r |= score()->sym(SymId::bracketBottom).bbox(mags).translated(0, y2);
+                              r |= symBbox(SymId::bracketTop).translated(0, y1);
+                              r |= symBbox(SymId::bracketBottom).translated(0, y2);
                               break;
                         case END_REPEAT:
-                              r |= score()->sym(SymId::reversedBracketTop).bbox(mags).translated(0, y1);
-                              r |= score()->sym(SymId::reversedBracketBottom).bbox(mags).translated(0, y2);
+                              r |= symBbox(SymId::reversedBracketTop).translated(0, y1);
+                              r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
                               break;
 
                         case END_START_REPEAT:
@@ -815,14 +810,13 @@ void BarLine::layout()
                               qreal lw   = point(score()->styleS(ST_barWidth));
                               qreal lw2  = point(score()->styleS(ST_endBarWidth));
                               qreal d1   = point(score()->styleS(ST_endBarDistance));
-                              const Sym& dotsym = score()->sym(SymId::augmentationDot);
-                              qreal dotw = dotsym.width(mags);
+                              qreal dotw = symWidth(SymId::augmentationDot);
                               qreal x   =  dotw + 2 * d1 + lw + lw2 * .5;                     // thick bar
 
-                              r |= score()->sym(SymId::bracketTop).bbox(mags).translated(x, y1);
-                              r |= score()->sym(SymId::bracketBottom).bbox(mags).translated(x, y2);
-                              r |= score()->sym(SymId::reversedBracketTop).bbox(mags).translated(x, y1);
-                              r |= score()->sym(SymId::reversedBracketBottom).bbox(mags).translated(x, y2);
+                              r |= symBbox(SymId::bracketTop).translated(x, y1);
+                              r |= symBbox(SymId::bracketBottom).translated(x, y2);
+                              r |= symBbox(SymId::reversedBracketTop).translated(x, y1);
+                              r |= symBbox(SymId::reversedBracketBottom).translated(x, y2);
                               }
                               break;
 

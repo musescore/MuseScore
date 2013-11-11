@@ -65,7 +65,7 @@ void Hook::setHookType(int i)
 void Hook::layout()
       {
       ElementLayout::layout(this);
-      setbbox(score()->sym(_sym).bbox(magS()));
+      setbbox(symBbox(_sym));
       }
 
 //---------------------------------------------------------

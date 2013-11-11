@@ -37,6 +37,7 @@ QVector<ScoreFont> ScoreFont::_scoreFonts = {
 
 QHash<QString, SymId> Sym::lnhash;
 QVector<const char*> Sym::symNames = {
+      "noSym",
       "4stringTabClef",
       "4stringTabClefSerif",
       "4stringTabClefTall",
@@ -1530,7 +1531,17 @@ QVector<const char*> Sym::symNames = {
       "windTightEmbouchure",
       "windTrillKey",
       "windVeryRelaxedEmbouchure",
-      "windVeryTightEmbouchure"
+      "windVeryTightEmbouchure",
+
+      // MuseScore local symbols
+      "ornamentPrallMordent"
+      "ornamentUpPrall",
+      "ornamentUpMordent",
+      "ornamentPrallDown",
+      "ornamentDownPrall",
+      "ornamentDownMordent",
+      "ornamentPrallUp",
+      "ornamentLinePrall"
       };
 
 QVector<QString> Sym::symUserNames = {
@@ -3027,30 +3038,18 @@ QVector<QString> Sym::symUserNames = {
       "windTightEmbouchure",
       "windTrillKey",
       "windVeryRelaxedEmbouchure",
-      "windVeryTightEmbouchure"
+      "windVeryTightEmbouchure",
+
+      // MuseScore local symbols
+      "ornamentPrallMordent"
+      "ornamentUpPrall",
+      "ornamentUpMordent",
+      "ornamentPrallDown",
+      "ornamentDownPrall",
+      "ornamentDownMordent",
+      "ornamentPrallUp",
+      "ornamentLinePrall"
       };
-
-//---------------------------------------------------------
-//   Sym
-//---------------------------------------------------------
-
-Sym::Sym(int c, const QPointF& a, const QRectF& b)
-   : _code(c)
-      {
-      qreal ds = MScore::DPI/PPI;
-      _bbox.setRect(b.x() * ds, b.y() * ds, b.width() * ds, b.height() * ds);
-      _attach = a * ds;
-      w = _bbox.width();
-      }
-
-//---------------------------------------------------------
-//   bbox
-//---------------------------------------------------------
-
-const QRectF Sym::bbox(qreal mag) const
-      {
-      return QRectF(_bbox.x() * mag, _bbox.y() * mag, _bbox.width() * mag, _bbox.height() * mag);
-      }
 
 //---------------------------------------------------------
 //   sym2pixmap
@@ -3059,8 +3058,7 @@ const QRectF Sym::bbox(qreal mag) const
 QPixmap ScoreFont::sym2pixmap(SymId id, qreal mag)
       {
       QString string = toString(id);
-      const Sym& s = sym(id);
-      QRectF  bb(s.bbox());
+      QRectF  bb(bbox(id, mag));
       bb.setRect(bb.x() * mag, bb.y() * mag, bb.width() * mag, bb.height() * mag);
 
       bb.adjust(-5, -5, 5, 5);
@@ -3089,33 +3087,16 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos)
       painter->scale(imag, imag);
       }
 
-//---------------------------------------------------------
-//   toString
-//---------------------------------------------------------
-
-QString ScoreFont::toString(SymId id) const
-      {
-      int code = sym(id).code();
-      QString s;
-      if (code & 0xffff0000) {
-            s = QChar(QChar::highSurrogate(code));
-            s += QChar(QChar::lowSurrogate(code));
-            }
-      else
-            s = QChar(code);
-      return s;
-      }
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
       {
-      painter->scale(mag, mag);
+      QString s = toString(id);
+      QString d;
+      for (int i = 0; i < n; ++i)
+            d += s;
       qreal imag = 1.0 / mag;
+      painter->scale(mag, mag);
       painter->setFont(_font);
-      painter->drawText(pos * imag, QString(n, sym(id).code()));
+      painter->drawText(pos * imag, d);
       painter->scale(imag, imag);
       }
 
@@ -3152,7 +3133,7 @@ QString ScoreFont::symToHtml(SymId s, int leftMargin, const TextStyle* ts, qreal
               "</p>"
             "</body>"
           "</html>"
-      "</data>").arg(family).arg(size).arg(leftMargin).arg(sym(s).code());
+      "</data>").arg(family).arg(size).arg(leftMargin).arg(toString(s));
       }
 
 QString ScoreFont::symToHtml(SymId s1, SymId s2, int leftMargin)
@@ -3176,7 +3157,7 @@ QString ScoreFont::symToHtml(SymId s1, SymId s2, int leftMargin)
               "</p>"
             "</body>"
           "</html>"
-      "</data>").arg(family).arg(size).arg(leftMargin).arg(sym(s1).code()).arg(sym(s2).code());
+      "</data>").arg(family).arg(size).arg(leftMargin).arg(toString(s1)).arg(toString(s2));
       }
 
 //---------------------------------------------------------
@@ -3185,8 +3166,6 @@ QString ScoreFont::symToHtml(SymId s1, SymId s2, int leftMargin)
 
 const char* Sym::id2name(SymId id)
       {
-      if (id == SymId::noSym)
-            return "noSym";
       return symNames[int(id)];
       }
 
@@ -3206,6 +3185,132 @@ void initScoreFonts()
       }
 
 //---------------------------------------------------------
+//   codeToString
+//---------------------------------------------------------
+
+static QString codeToString(int code)
+      {
+      QString s;
+      if (code & 0xffff0000) {
+            s = QChar(QChar::highSurrogate(code));
+            s += QChar(QChar::lowSurrogate(code));
+            }
+      else
+            s = QChar(code);
+      return s;
+      }
+
+//---------------------------------------------------------
+//   load
+//---------------------------------------------------------
+
+void ScoreFont::load()
+      {
+      if (-1 == QFontDatabase::addApplicationFont(fontPath() + filename())) {
+            qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(filename()));
+            if (!MScore::debugMode)
+                  exit(-1);
+            }
+
+      _font.setWeight(QFont::Normal);  // if not set we get system default
+      _font.setItalic(false);
+      _font.setFamily(family());
+      _font.setStyleStrategy(QFont::NoFontMerging);
+
+      // horizontal hinting is bad as note hooks do not attach to stems
+      // properly at some magnifications
+      _font.setHintingPreference(QFont::PreferVerticalHinting);
+
+      qreal size = 20.0 * MScore::DPI / PPI;
+      _font.setPixelSize(lrint(size));
+
+      QFile fi(fontPath() + "glyphnames.json");
+      if (!fi.open(QIODevice::ReadOnly))
+            qDebug("ScoreFont: open glyph names file <%s> failed", qPrintable(fi.fileName()));
+      QJsonParseError error;
+      QJsonObject o = QJsonDocument::fromJson(fi.readAll(), &error).object();
+      if (error.error != QJsonParseError::NoError)
+            qDebug("Json parse error in <%s>: %s", qPrintable(fi.fileName()),
+               qPrintable(error.errorString()));
+
+      _fm = new QFontMetricsF(_font);
+      for (auto i : o.keys()) {
+            bool ok;
+            int code = o.value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
+            if (!ok)
+                  qDebug("codepoint not recognized for glyph %s", qPrintable(i));
+            if (Sym::lnhash.contains(i)) {
+                  SymId symId = Sym::lnhash.value(i);
+                  Sym* sym = &_symbols[int(symId)];
+                  sym->setString(codeToString(code));
+                  }
+            else
+                  qDebug("unknown glyph: %s", qPrintable(i));
+            }
+      fi.close();
+      fi.setFileName(fontPath() + "metadata.json");
+      if (!fi.open(QIODevice::ReadOnly))
+            qDebug("ScoreFont: open glyph metadata file <%s> failed", qPrintable(fi.fileName()));
+      o = QJsonDocument::fromJson(fi.readAll(), &error).object();
+      if (error.error != QJsonParseError::NoError)
+            qDebug("Json parse error in <%s>: %s", qPrintable(fi.fileName()),
+               qPrintable(error.errorString()));
+      QJsonObject oo = o.value("glyphs").toObject();
+      for (auto i : oo.keys()) {
+            QJsonObject ooo = oo.value(i).toObject();
+            SymId symId = Sym::lnhash.value(i, SymId::noSym);
+            if (symId == SymId::noSym)
+                  qDebug("ScoreFont: symId not found <%s>", qPrintable(i));
+            Sym* sym = &_symbols[int(symId)];
+            for (auto i : ooo.keys()) {
+                  if (i == "stemDownNW") {
+                        //qreal x = ooo.value(i).toArray().at(0).toDouble();
+                        //qreal y = ooo.value(i).toArray().at(1).toDouble();
+                        }
+                  else if (i == "stemUpSE") {
+                        qreal x = ooo.value(i).toArray().at(0).toDouble();
+                        qreal y = ooo.value(i).toArray().at(1).toDouble();
+                        sym->setAttach(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
+                        }
+                  }
+            }
+      // create missing composed glyphs
+
+      struct Composed {
+            SymId id;
+            std::vector<SymId> rids;
+            } composed[] = {
+
+            { SymId::ornamentPrallMordent,
+                  {
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentMiddleVerticalStroke,
+                  SymId::ornamentZigZagLineWithRightEnd
+                  } },
+            { SymId::ornamentUpPrall, {}},
+            { SymId::ornamentUpMordent, {}},
+            { SymId::ornamentPrallDown, {}},
+            { SymId::ornamentDownPrall, {}},
+            { SymId::ornamentDownMordent, {}},
+            { SymId::ornamentPrallUp, {}},
+            { SymId::ornamentLinePrall, {}}
+            };
+
+      for (const Composed& c : composed) {
+            if (!_symbols[int(c.id)].isValid()) {
+                  Sym* sym = &_symbols[int(c.id)];
+                  QString s;
+                  for (SymId id : c.rids)
+                        s += _symbols[int(id)].string();
+                  sym->setString(s);
+                  }
+            }
+
+      loaded = true;
+      }
+
+//---------------------------------------------------------
 //   fontFactory
 //---------------------------------------------------------
 
@@ -3220,84 +3325,8 @@ ScoreFont* ScoreFont::fontFactory(QString s)
             }
       Q_ASSERT(f);
 
-      if (!f->loaded) {
-            if (-1 == QFontDatabase::addApplicationFont(f->fontPath() + f->filename())) {
-                  qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(f->filename()));
-                  if (!MScore::debugMode)
-                        exit(-1);
-                  }
-
-            f->_font.setWeight(QFont::Normal);  // if not set we get system default
-            f->_font.setItalic(false);
-            f->_font.setFamily(f->family());
-            f->_font.setStyleStrategy(QFont::NoFontMerging);
-
-            // horizontal hinting is bad as note hooks do not attach to stems
-            // properly at some magnifications
-            f->_font.setHintingPreference(QFont::PreferVerticalHinting);
-
-            qreal size = 20.0 * MScore::DPI / PPI;
-            f->_font.setPixelSize(lrint(size));
-
-            QFile fi(f->fontPath() + "glyphnames.json");
-            if (!fi.open(QIODevice::ReadOnly))
-                  qDebug("ScoreFont: open glyph names file <%s> failed", qPrintable(fi.fileName()));
-            QJsonParseError error;
-            QJsonObject o = QJsonDocument::fromJson(fi.readAll(), &error).object();
-            if (error.error != QJsonParseError::NoError)
-                  qDebug("Json parse error in <%s>: %s", qPrintable(fi.fileName()),
-                     qPrintable(error.errorString()));
-
-            QFontMetricsF fm(f->_font);
-            for (auto i : o.keys()) {
-                  bool ok;
-                  int code = o.value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
-                  if (!ok)
-                        qDebug("codepoint not recognized for glyph %s", qPrintable(i));
-                  if (Sym::lnhash.contains(i)) {
-                        SymId symId = Sym::lnhash.value(i);
-                        Sym* sym = &f->_symbols[int(symId)];
-                        sym->setCode(code);
-                        if (fm.inFont(code)) {
-                              sym->setWidth(fm.width(code));
-                              sym->setbbox(fm.boundingRect(code));
-                              }
-                        else {
-                              // qDebug("Sym: character 0x%x(%s) are not in font <%s>", code, qPrintable(i), qPrintable(f->_font.family()));
-                              }
-                        }
-                  else
-                        qDebug("unknown glyph: %s", qPrintable(i));
-                  }
-            fi.close();
-            fi.setFileName(f->fontPath() + "metadata.json");
-            if (!fi.open(QIODevice::ReadOnly))
-                  qDebug("ScoreFont: open glyph metadata file <%s> failed", qPrintable(fi.fileName()));
-            o = QJsonDocument::fromJson(fi.readAll(), &error).object();
-            if (error.error != QJsonParseError::NoError)
-                  qDebug("Json parse error in <%s>: %s", qPrintable(fi.fileName()),
-                     qPrintable(error.errorString()));
-            QJsonObject oo = o.value("glyphs").toObject();
-            for (auto i : oo.keys()) {
-                  QJsonObject ooo = oo.value(i).toObject();
-                  SymId symId = Sym::lnhash.value(i, SymId::noSym);
-                  if (symId == SymId::noSym)
-                        qDebug("ScoreFont: symId not found <%s>", qPrintable(i));
-                  Sym* sym = &f->_symbols[int(symId)];
-                  for (auto i : ooo.keys()) {
-                        if (i == "stemDownNW") {
-                              //qreal x = ooo.value(i).toArray().at(0).toDouble();
-                              //qreal y = ooo.value(i).toArray().at(1).toDouble();
-                              }
-                        else if (i == "stemUpSE") {
-                              qreal x = ooo.value(i).toArray().at(0).toDouble();
-                              qreal y = ooo.value(i).toArray().at(1).toDouble();
-                              sym->setAttach(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
-                              }
-                        }
-                  }
-            f->loaded = true;
-            }
+      if (!f->loaded)
+            f->load();
       return f;
       }
 
@@ -3310,11 +3339,20 @@ ScoreFont* ScoreFont::fontFactory(QString s)
 
 const Sym& ScoreFont::sym(SymId id) const
       {
-      if (id == SymId::noSym)
-            return _symbols[0];
       if (!_symbols[int(id)].isValid() && (this != &_scoreFonts[0]))
             return _scoreFonts[0]._symbols[int(id)];
       return _symbols[int(id)];
       }
+
+//---------------------------------------------------------
+//   bbox
+//---------------------------------------------------------
+
+const QRectF ScoreFont::bbox(SymId id, qreal mag) const
+      {
+      QRectF r(_fm->tightBoundingRect(sym(id).string()));
+      return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
+      }
+
 }
 

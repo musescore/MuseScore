@@ -1336,7 +1336,7 @@ void ScoreView::moveCursor(int tick)
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
       qreal mag = _spatium / (MScore::DPI * SPATIUM20);
-      double w  = _spatium * 2.0 + score()->sym(SymId::noteheadBlack).width(mag);
+      double w  = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
       double h  = 6 * _spatium;
       //
       // set cursor height for whole system
@@ -1398,7 +1398,7 @@ void ScoreView::moveCursor()
 
       double h;
       qreal mag       = _spatium / (MScore::DPI * SPATIUM20);
-      double w        = _spatium * 2.0 + score()->sym(SymId::noteheadBlack).width(mag);
+      double w        = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
       Staff* staff    = _score->staff(staffIdx);
       double lineDist = staff->staffType()->lineDistance().val() * _spatium;
       int lines       = staff->lines();
@@ -1492,7 +1492,7 @@ void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
       double _spatium = score()->spatium();
 
       qreal mag = _spatium / (MScore::DPI * SPATIUM20);
-      double w  = (_spatium * 2.0 + score()->sym(SymId::noteheadBlack).width(mag))/3;
+      double w  = (_spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag))/3;
       double h  = 6 * _spatium;
       //
       // set cursor height for whole system

@@ -43,7 +43,7 @@ Breath::Breath(Score* s)
 
 void Breath::layout()
       {
-      setbbox(score()->sym(symList[breathType()]).bbox(magS()));
+      setbbox(symBbox(symList[breathType()]));
       }
 
 //---------------------------------------------------------

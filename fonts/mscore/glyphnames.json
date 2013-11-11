@@ -230,6 +230,24 @@
     "noteheadXWhole": {
         "codepoint": "U+e139"
     },
+    "ornamentMordent": {
+        "codepoint": "U+e183"
+    },
+    "ornamentMordentInverted": {
+        "codepoint": "U+e184"
+    },
+    "ornamentPrallMordent": {
+        "codepoint": "U+e186"
+    },
+    "ornamentPrecompSlideTrillAnglebert": {
+        "codepoint": "U+e187"
+    },
+    "ornamentPrecompSlideTrillBach": {
+        "codepoint": "U+e188"
+    },
+    "ornamentTremblement": {
+        "codepoint": "U+e185"
+    },
     "ornamentTrill": {
         "codepoint": "U+e171"
     },

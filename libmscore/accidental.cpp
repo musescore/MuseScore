@@ -39,7 +39,7 @@ static Acc accList[] = {
       Acc("none",                TRA("none"),                NATURAL, 0,    SymId::noSym),
       Acc("sharp",               TRA("sharp"),               SHARP,   0,    SymId::accidentalSharp),
       Acc("flat",                TRA("flat"),                FLAT,    0,    SymId::accidentalFlat),
-      Acc("double sharp",        TRA("double sharp"),        SHARP2,  0,    SymId::accidentalSharpSharp),
+      Acc("double sharp",        TRA("double sharp"),        SHARP2,  0,    SymId::accidentalDoubleSharp),
       Acc("double flat",         TRA("double flat"),         FLAT2,   0,    SymId::accidentalDoubleFlat),
       Acc("natural",             TRA("natural"),             NATURAL, 0,    SymId::accidentalNatural),
 #if 0
@@ -304,21 +304,21 @@ void Accidental::layout()
       if (_hasBracket) {
             SymElement e(SymId::noteheadParenthesisLeft, 0.0);
             el.append(e);
-            r |= score()->sym(SymId::noteheadParenthesisLeft).bbox(m);
-            pos = score()->sym(SymId::noteheadParenthesisRight).attach(m);
+            r |= symBbox(SymId::noteheadParenthesisLeft);
+            pos = symAttach(SymId::noteheadParenthesisRight);
             }
 
       SymId s = symbol();
       SymElement e(s, pos.x());
       el.append(e);
-      r |= score()->sym(s).bbox(m);
-      pos += score()->sym(s).attach(m);
+      r |= symBbox(s);
+//      pos += symAttach(s);   ???
 
       if (_hasBracket) {
             qreal x = pos.x();     // symbols[s].width(m) + symbols[s].bbox(m).x();
             SymElement e(SymId::noteheadParenthesisRight, x);
             el.append(e);
-            r |= score()->sym(SymId::noteheadParenthesisRight).bbox(m).translated(x, 0.0);
+            r |= symBbox(SymId::noteheadParenthesisRight).translated(x, 0.0);
             }
       setbbox(r);
       }

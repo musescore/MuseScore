@@ -445,7 +445,7 @@ void FiguredBassItem::layout()
       QFontMetrics      fm(f);
 
       QString           str = QString();
-      x = score()->sym(SymId::noteheadBlack).width(magS()) * .5;
+      x = symWidth(SymId::noteheadBlack) * .5;
       x1 = x2 = 0.0;
 
       // create display text

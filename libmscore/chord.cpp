@@ -1618,7 +1618,7 @@ void Chord::layoutPitched()
       if (dots()) {
             qreal x = dotPosX() + minNoteDistance
                + (dots()-1) * score()->styleS(ST_dotDotDistance).val() * _spatium;
-            x += score()->sym(SymId::augmentationDot).width(1.0);
+            x += symWidth(SymId::augmentationDot);
             rrr = qMax(rrr, x);
             }
 
@@ -1704,7 +1704,7 @@ void Chord::layoutTablature()
       qreal lll         = 0.0;                  // space to leave at left of chord
       qreal rrr         = 0.0;                  // space to leave at right of chord
       Note* upnote      = upNote();
-      qreal headWidth   = score()->sym(SymId::noteheadBlack).width(magS());
+      qreal headWidth   = symWidth(SymId::noteheadBlack);
       StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
       qreal lineDist    = tab->lineDistance().val() *_spatium;
       qreal stemX       = tab->chordStemPosX(this) *_spatium;
@@ -1815,7 +1815,7 @@ void Chord::layoutTablature()
       if (dots()) {
             qreal x = dotPosX() + minNoteDistance
                + (dots()-1) * score()->styleS(ST_dotDotDistance).val() * _spatium;
-            x += score()->sym(SymId::augmentationDot).width(1.0);
+            x += symWidth(SymId::augmentationDot);
             if (x > rrr)
                   rrr = x;
             }

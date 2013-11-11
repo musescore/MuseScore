@@ -333,7 +333,7 @@ void Score::init()
       _sigmap                 = 0;
       _tempomap               = 0;
       _layoutMode             = LayoutPage;
-      _noteHeadWidth          = sym(SymId::noteheadBlack).width(spatium() / (MScore::DPI * SPATIUM20));
+      _noteHeadWidth          = 0.0;      // set in doLayout()
       }
 
 //---------------------------------------------------------
@@ -1243,7 +1243,7 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       scanElements(data, spatiumHasChanged, true);
       foreach (Staff* staff, _staves)
             staff->spatiumChanged(oldValue, newValue);
-      _noteHeadWidth = sym(SymId::noteheadBlack).width(newValue / (MScore::DPI * SPATIUM20));
+      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / (MScore::DPI * SPATIUM20));
       }
 
 void Score::setSpatium(qreal v)
@@ -3594,7 +3594,16 @@ void Score::setPos(POS pos, int tick)
             }
       }
 
-const Sym& Score::sym(SymId id) const { return _scoreFont->sym(id); }
+//---------------------------------------------------------
+//   sym
+//---------------------------------------------------------
+
+#if 0
+const Sym& Score::sym(SymId id) const
+      {
+      return _scoreFont->sym(id);
+     }
+#endif
 
 }
 
