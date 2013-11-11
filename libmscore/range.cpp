@@ -406,15 +406,17 @@ bool TrackList::write(int track, Measure* measure) const
                               }
                         }
                   }
-            else if (e->type() == Element::KEYSIG) {
-                  // keysig has to be at start of measure
-                  }
+//            else if (e->type() == Element::KEYSIG) {
+//                  // keysig has to be at start of measure
+//                  }
             else if (e->type() == Element::BAR_LINE)
                   ;
             else {
-                  if (m == 0)
+                  if (m == nullptr)
                         break;
-                  segment = m->getSegment(e, m->tick() + pos.ticks());
+                  // add the element in its own segment;
+                  // but KeySig has to be at start of (current) measure
+                  segment = m->getSegment(e, m->tick() + e->type() == Element::KEYSIG ? 0 : pos.ticks());
                   Element* ne = e->clone();
                   ne->setScore(score);
                   ne->setTrack(track);
