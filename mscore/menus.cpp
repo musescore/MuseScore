@@ -131,7 +131,7 @@ Palette* MuseScore::newBeamPalette()
 Palette* MuseScore::newFramePalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Frames"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Frames && Measures"));
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
 
@@ -493,7 +493,7 @@ Palette* MuseScore::newNoteHeadsPalette()
 Palette* MuseScore::newArticulationsPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Articulations"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Articulations && Ornaments"));
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
@@ -939,7 +939,7 @@ Palette* MuseScore::newTextPalette()
 
       Harmony* harmony = new Harmony(gscore);
       harmony->setText("C7");
-      sp->append(harmony, tr("Chord Name"));
+      sp->append(harmony, tr("Chord Symbol"));
       return sp;
       }
 
