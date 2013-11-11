@@ -307,7 +307,7 @@ void Harmony::read(XmlReader& e)
       // TODO: now that we can render arbitrary chords,
       // we could try to construct a full representation from a degree list.
       // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
-      // or constructed in the Chord Name Properties dialog.
+      // or constructed in the Chord Symbol Properties dialog.
 
       if (_rootTpc != INVALID_TPC) {
             if (_id > 0)
