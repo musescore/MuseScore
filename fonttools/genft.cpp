@@ -40,11 +40,11 @@ QMap<QString, int> namemap;
 //---------------------------------------------------------
 
 QMap<QString, QString> nmap {
-/*    { "space",        "space"    }, */
-/*    { "plus",         "plus"     }, */
-/*    { "comma",        "comma"    }, */
-/*    { "hyphen",       "hyphen"   }, */
-/*    { "period",       "period"   }, */
+//    { "space",        "space"    },
+//    { "plus",         "plus"     },
+//    { "comma",        "comma"    },
+//    { "hyphen",       "hyphen"   },
+//    { "period",       "period"   },
 
       { "zero",         "timeSig0" },
       { "one",          "timeSig1" },
@@ -70,7 +70,7 @@ QMap<QString, QString> nmap {
 //    { "rests.0o", "rests.0o" },   // outside staff
 //    { "rests.1o", "rests.1o" },
 
-//  { "rests.M3", "rests.M3" },   // longer than longa
+//    { "rests.M3", "rests.M3" },   // longer than longa
 
       { "rests.M2",                 "restLonga" },
       { "rests.M1",                 "restDoubleWhole" },
@@ -186,7 +186,7 @@ QMap<QString, QString> nmap {
       { "scripts.dverylongfermata", "fermataVeryLongBelow" },
       { "scripts.thumb",            "stringsThumbPosition" },
       { "scripts.sforzato",         "articAccent" },
-//      { "scripts.espr",             "scripts.espr" },     "<>" ?
+//    { "scripts.espr",             "scripts.espr" },     "<>" ?
       { "scripts.staccato",         "articStaccato" },
       { "scripts.ustaccatissimo",   "articStaccatissimoAbove" },
       { "scripts.dstaccatissimo",   "articStaccatissimoBelow" },
@@ -211,31 +211,33 @@ QMap<QString, QString> nmap {
       { "scripts.coda",             "coda" },
       { "scripts.varcoda",          "codaSquare" },
       { "scripts.rcomma",           "breathMark" },
-//      { "scripts.lcomma",           "scripts.lcomma" },
-//      { "scripts.rvarcomma",        "scripts.rvarcomma" },
-//      { "scripts.lvarcomma",        "scripts.lvarcomma" },
+//    { "scripts.lcomma",           "scripts.lcomma" },
+//    { "scripts.rvarcomma",        "scripts.rvarcomma" },
+//    { "scripts.lvarcomma",        "scripts.lvarcomma" },
 
       { "scripts.arpeggio",         "wiggleArpeggiatoUp" },
 
       { "scripts.trill_element", "wiggleTrill" },
-#if 0
-      { "scripts.arpeggio.arrow.M1", "scripts.arpeggio.arrow.M1" },
-      { "scripts.arpeggio.arrow.1", "scripts.arpeggio.arrow.1" },
-      { "scripts.trilelement", "scripts.trilelement" },
-      { "scripts.prall", "scripts.prall" },
-      { "scripts.mordent", "scripts.mordent" },
-      { "scripts.prallprall", "scripts.prallprall" },
-      { "scripts.prallmordent", "scripts.prallmordent" },
-      { "scripts.upprall", "scripts.upprall" },
-      { "scripts.upmordent", "scripts.upmordent" },
-      { "scripts.pralldown", "scripts.pralldown" },
-      { "scripts.downprall", "scripts.downprall" },
-      { "scripts.downmordent", "scripts.downmordent" },
-      { "scripts.prallup", "scripts.prallup" },
-      { "scripts.lineprall", "scripts.lineprall" },
-#endif
 
-//      { "scripts.caesura.curved",   "scripts.caesura.curved" },
+//      { "scripts.arpeggio.arrow.M1", "scripts.arpeggio.arrow.M1" },
+//      { "scripts.arpeggio.arrow.1",  "scripts.arpeggio.arrow.1" },
+//      { "scripts.trilelement",       "scripts.trilelement" },
+      { "scripts.prall",             "ornamentMordent" },
+      { "scripts.mordent",           "ornamentMordentInverted" },
+      { "scripts.prallprall",        "ornamentTremblement" },
+      { "scripts.prallmordent",      "ornamentPrallMordent" },
+
+      { "scripts.upprall",           "ornamentUpPrall", //"ornamentPrecompSlideTrillAnglebert" },
+      { "scripts.upmordent",         "ornamentUpMordent", // "ornamentPrecompSlideTrillBach" },
+
+      { "scripts.pralldown",         "ornamentPrallDown"   },
+      { "scripts.downprall",         "ornamentDownPrall"   },
+      { "scripts.downmordent",       "ornamentDownMordent" },
+      { "scripts.prallup",           "ornamentPrallUp"     },
+      { "scripts.lineprall",         "ornamentLinePrall"   },
+
+
+//    { "scripts.caesura.curved",   "scripts.caesura.curved" },
       { "scripts.caesura.straight", "caesura" },
 
       { "flags.u3",                 "flag8thUp" },
@@ -307,15 +309,15 @@ QMap<QString, QString> nmap {
       { "timesig.Odot",                   "timesig.Odot" },
 #endif
 
-//      { "uniE1CB", "uniE1CB" },
-//      { "uniE1CC", "uniE1CC" },
-//      { "uniE1CD", "uniE1CD" },
-//      { "uniE1CE", "uniE1CE" },
-//      { "uniE1CF", "uniE1CF" },
-//      { "uniE1D0", "uniE1D0" },
-//      { "uniE1D1", "uniE1D1" },
-//      { "uniE1D2", "uniE1D2" },
-//      { "uniE1D3", "uniE1D3" },
+//    { "uniE1CB", "uniE1CB" },
+//    { "uniE1CC", "uniE1CC" },
+//    { "uniE1CD", "uniE1CD" },
+//    { "uniE1CE", "uniE1CE" },
+//    { "uniE1CF", "uniE1CF" },
+//    { "uniE1D0", "uniE1D0" },
+//    { "uniE1D1", "uniE1D1" },
+//    { "uniE1D2", "uniE1D2" },
+      { "uniE1D3", "ornamentPrecompSlide" },
 
       { "accidentals.sori", "accidentalSori" },
       { "accidentals.koron", "accidentalKoron" },

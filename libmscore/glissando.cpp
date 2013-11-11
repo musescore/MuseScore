@@ -205,9 +205,8 @@ void Glissando::draw(QPainter* painter) const
             painter->drawLine(QLineF(0.0, 0.0, l, 0.0));
             }
       else if (glissandoType() == GlissandoType::WAVY) {
-            qreal mags = magS();
-            QRectF b = score()->sym(SymId::wiggleTrill).bbox(mags);
-            qreal w  = score()->sym(SymId::wiggleTrill).width(mags);
+            QRectF b = symBbox(SymId::wiggleTrill);
+            qreal w  = symWidth(SymId::wiggleTrill);
             int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
             qreal x  = (l - n*w) * 0.5;   // centre line in available space
             drawSymbol(SymId::wiggleTrill, painter, QPointF(x, b.height()*.5), n);

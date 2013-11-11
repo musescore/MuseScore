@@ -403,7 +403,7 @@ struct BEDrawingDataX {
             lw(       0.1 * s),
             xcorr(    0.1 * s)
             {
-            qreal w = gscore->scoreFont()->sym(hs).width(mags);
+            qreal w = gscore->scoreFont()->width(hs, mags);
             headw = w;
             headp = 1.4 * w;
             xl    = (1 - 1.4 * (nn - 1)) * w / 2;
@@ -494,7 +494,7 @@ void BagpipeEmbellishment::layout()
             BEDrawingDataY dy(line, score()->spatium());
 
             // head
-            addbbox(score()->sym(headsym).bbox(dx.mags).translated(QPointF(x - dx.lw * .5 - dx.headw, dy.y2)));
+            addbbox(score()->scoreFont()->bbox(headsym, dx.mags).translated(QPointF(x - dx.lw * .5 - dx.headw, dy.y2)));
             if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
                   printBBox(" notehead", bbox());
                   }
@@ -508,7 +508,7 @@ void BagpipeEmbellishment::layout()
 
             // flag
             if (drawFlag) {
-                  addbbox(score()->sym(flagsym).bbox(dx.mags).translated(QPointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
+                  addbbox(score()->scoreFont()->bbox(flagsym, dx.mags).translated(QPointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
                   printBBox(" notehead + stem + flag", bbox());
                   }
 

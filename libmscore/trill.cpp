@@ -29,9 +29,8 @@ namespace Ms {
 
 void TrillSegment::draw(QPainter* painter) const
       {
-      qreal mag  = magS();
-      QRectF b2(score()->sym(SymId::wiggleTrill).bbox(mag));
-      qreal w2   = score()->sym(SymId::wiggleTrill).width(mag);
+      QRectF b2(symBbox(SymId::wiggleTrill));
+      qreal w2   = symWidth(SymId::wiggleTrill);
 
       qreal x2   = pos2().x();
 
@@ -56,7 +55,7 @@ void TrillSegment::draw(QPainter* painter) const
             switch(trill()->trillType()) {
                   case Trill::TRILL_LINE:
                         sym  = SymId::ornamentTrill;
-                        b1   = score()->sym(sym).bbox(mag);
+                        b1   = symBbox(sym);
                         x0   = -b1.x();
                         x1   = x0 + b1.width();
                         n    = int(floor((x2-x1) / w2));
@@ -139,7 +138,7 @@ void TrillSegment::remove(Element* e)
 
 void TrillSegment::layout()
       {
-      QRectF b1(score()->sym(SymId::ornamentTrill).bbox(magS()));
+      QRectF b1(symBbox(SymId::ornamentTrill));
       QRectF rr(b1.translated(-b1.x(), 0.0));
       rr |= QRectF(0.0, rr.y(), pos2().x(), rr.height());
       setbbox(rr);

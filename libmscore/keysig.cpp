@@ -110,7 +110,7 @@ void KeySig::layout()
       if (isCustom()) {
             foreach(KeySym* ks, keySymbols) {
                   ks->pos = ks->spos * _spatium;
-                  addbbox(score()->sym(ks->sym).bbox(magS()).translated(ks->pos));
+                  addbbox(symBbox(ks->sym).translated(ks->pos));
                   }
             return;
             }
@@ -237,7 +237,7 @@ void KeySig::layout()
       setbbox(QRectF());
       foreach(KeySym* ks, keySymbols) {
             ks->pos = ks->spos * _spatium;
-            addbbox(score()->sym(ks->sym).bbox(magS()).translated(ks->pos));
+            addbbox(symBbox(ks->sym).translated(ks->pos));
             }
       }
 

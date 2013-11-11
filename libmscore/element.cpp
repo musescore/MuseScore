@@ -1657,9 +1657,46 @@ void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o) const
       {
       score()->scoreFont()->draw(id, p, magS(), o);
       }
+
 void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const
       {
       score()->scoreFont()->draw(id, p, magS(), o, n);
+      }
+
+//---------------------------------------------------------
+//   symHeight
+//---------------------------------------------------------
+
+qreal Element::symHeight(SymId id) const
+      {
+      return score()->scoreFont()->height(id, magS());
+      }
+
+//---------------------------------------------------------
+//   symWidth
+//---------------------------------------------------------
+
+qreal Element::symWidth(SymId id) const
+      {
+      return score()->scoreFont()->width(id, magS());
+      }
+
+//---------------------------------------------------------
+//   symBbox
+//---------------------------------------------------------
+
+QRectF Element::symBbox(SymId id) const
+      {
+      return score()->scoreFont()->bbox(id, magS());
+      }
+
+//---------------------------------------------------------
+//   symAttach
+//---------------------------------------------------------
+
+QPointF Element::symAttach(SymId id) const
+      {
+      return score()->scoreFont()->attach(id, magS());
       }
 }
 

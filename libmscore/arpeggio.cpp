@@ -98,11 +98,11 @@ void Arpeggio::layout()
             case ArpeggioType::UP:
             case ArpeggioType::DOWN:
             default:
-                  bbox().setRect(0.0, y1, score()->sym(SymId::wiggleArpeggiatoUp).width(magS()), y2-y1);
+                  bbox().setRect(0.0, y1, symWidth(SymId::wiggleArpeggiatoUp), y2-y1);
                   return;
             case ArpeggioType::UP_STRAIGHT:
             case ArpeggioType::DOWN_STRAIGHT:
-//TODO-smufl                  bbox().setRect(0.0, y1, score()->sym(SymId(close11arrowHeadSym)).width(magS()), y2-y1);
+//TODO-smufl                  bbox().setRect(0.0, y1, symWidth(SymId(close11arrowHeadSym)), y2-y1);
                   return;
             case ArpeggioType::BRACKET:
                   {

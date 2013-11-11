@@ -105,14 +105,12 @@ void Rest::draw(QPainter* painter) const
                QString("%1").arg(n));
             }
       else {
-            qreal mag = magS();
             drawSymbol(_sym, painter);
             int dots = durationType().dots();
             if (dots) {
                   qreal y = dotline * _spatium * .5;
                   for (int i = 1; i <= dots; ++i) {
-                        qreal x = score()->sym(_sym).width(mag)
-                                   + point(score()->styleS(ST_dotNoteDistance)) * i;
+                        qreal x = symWidth(_sym) + point(score()->styleS(ST_dotNoteDistance)) * i;
                         drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
                         }
                   }
@@ -385,7 +383,7 @@ void Rest::layout()
             rs = Spatium(score()->styleS(ST_dotNoteDistance)
                + dots() * score()->styleS(ST_dotDotDistance));
             }
-      setbbox(score()->sym(_sym).bbox(magS()));
+      setbbox(symBbox(_sym));
       _space.setRw(width() + point(rs));
       }
 
@@ -479,7 +477,7 @@ int Rest::computeLineOffset()
 
 qreal Rest::centerX() const
       {
-      return score()->sym(_sym).width(magS())*.5;
+      return symWidth(_sym) * .5;
       }
 
 //---------------------------------------------------------
@@ -488,7 +486,7 @@ qreal Rest::centerX() const
 
 qreal Rest::upPos() const
       {
-      return score()->sym(_sym).bbox(magS()).y();
+      return symBbox(_sym).y();
       }
 
 //---------------------------------------------------------
@@ -497,7 +495,7 @@ qreal Rest::upPos() const
 
 qreal Rest::downPos() const
       {
-      return score()->sym(_sym).bbox(magS()).y() + score()->sym(_sym).height(magS());
+      return symBbox(_sym).y() + symHeight(_sym);
       }
 
 //---------------------------------------------------------
