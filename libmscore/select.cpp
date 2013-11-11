@@ -655,20 +655,17 @@ Enabling copying of more element types requires enabling pasting in Score::paste
       xml.stag(QString("SymbolList version=\"" MSC_VERSION "\" fromtrack=\"%1\" totrack=\"%2\"")
                   .arg(topTrack).arg(bottomTrack));
       // scan the map, outputting elements each with a relative <track> tag on track change,
-      // a delta tick and the number of CR segments to skip
+      // a relative tick and the number of CR segments to skip
       int   currTrack = -1;
       for (auto iter = map.cbegin(); iter != map.cend(); ++iter) {
-//            int   currTick;
             int   numSegs;
             int   track = (int)(iter->first >> 32);
             if (currTrack != track) {
                   xml.tag("trackOffset", track - topTrack);
                   currTrack = track;
-//                  currTick  = firstTick;
                   seg       = firstSeg;
                   }
-//            xml.tag("tickDelta", (int)(iter->first & 0xFFFFFFFF) - currTick);
-//            currTick = (int)(iter->first & 0xFFFFFFFF);
+            xml.tag("tickOffset", (int)(iter->first & 0xFFFFFFFF) - firstTick);
             numSegs = 0;
             // with figured bass, we need to look for the proper segment
             // not only according to ChordRest elements, but also annotations
