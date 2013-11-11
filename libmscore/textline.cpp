@@ -81,7 +81,6 @@ void TextLineSegment::draw(QPainter* painter) const
             color = textLine()->curColor();
             normalColor = true;
             }
-      qreal mag = magS();
       qreal l = 0.0;
       SymId sym = (spannerSegmentType() == SEGMENT_MIDDLE || spannerSegmentType() == SEGMENT_END)
          ? tl->continueSymbol() : tl->beginSymbol();
@@ -100,7 +99,7 @@ void TextLineSegment::draw(QPainter* painter) const
             painter->translate(-_text->pos());
             }
       else if (sym != SymId::noSym) {
-            const QRectF& bb = score()->sym(sym).bbox(mag);
+            const QRectF& bb = symBbox(sym);
             qreal h = bb.height() * .5;
             QPointF o = tl->beginSymbolOffset() * _spatium;
             painter->setPen(color);
@@ -113,7 +112,7 @@ void TextLineSegment::draw(QPainter* painter) const
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END) {
             if (tl->endSymbol() != SymId::noSym) {
                   SymId sym = tl->endSymbol();
-                  const QRectF& bb = score()->sym(sym).bbox(mag);
+                  const QRectF& bb = symBbox(sym);
                   qreal h = bb.height() * .5;
                   QPointF o = tl->endSymbolOffset() * _spatium;
                   pp2.setX(pp2.x() - bb.width() + textlineTextDistance);
@@ -225,7 +224,7 @@ void TextLineSegment::layout1()
                   }
             }
       else if (sym != SymId::noSym) {
-            qreal hh = score()->sym(sym).height(magS()) * .5;
+            qreal hh = symHeight(sym) * .5;
             y1 = -hh;
             y2 = hh;
             }

@@ -57,7 +57,7 @@ void ShadowNote::draw(QPainter* painter) const
 
       qreal ms = spatium();
 
-      qreal x1 = score()->sym(sym).width(magS())*.5 - (ms * mag());
+      qreal x1 = symWidth(sym) * .5 - (ms * mag());
       qreal x2 = x1 + 2 * ms * mag();
 
       ms *= .5;
@@ -84,11 +84,11 @@ void ShadowNote::layout()
             setbbox(QRectF());
             return;
             }
-      QRectF b = score()->sym(sym).bbox(magS());
+      QRectF b(symBbox(sym));
       qreal _spatium = spatium();
       qreal lw = point(score()->styleS(ST_ledgerLineWidth));
 
-      qreal x1 = score()->sym(sym).width(magS())*.5 - (_spatium * mag()) - lw * .5;
+      qreal x1 = symWidth(sym) * .5 - (_spatium * mag()) - lw * .5;
       qreal x2 = x1 + 2 * _spatium * mag() + lw * .5;
 
       InputState ps = score()->inputState();

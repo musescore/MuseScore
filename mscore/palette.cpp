@@ -490,7 +490,7 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
 
 PaletteCell* Palette::append(SymId symIdx)
       {
-      if (!gscore->sym(symIdx).isValid())
+      if (!gscore->scoreFont()->isValid(symIdx))
             return 0;
       Symbol* s = new Symbol(gscore);
       s->setSym(symIdx);

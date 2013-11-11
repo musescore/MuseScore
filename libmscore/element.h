@@ -562,9 +562,12 @@ class Element : public QObject {
 
       virtual void styleChanged() {}
 
-//      void draw(SymId id, QPainter* p) const;
       void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF()) const;
       void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;
+      qreal symHeight(SymId id) const;
+      qreal symWidth(SymId id) const;
+      QRectF symBbox(SymId id) const;
+      QPointF symAttach(SymId id) const;
       };
 
 //---------------------------------------------------------

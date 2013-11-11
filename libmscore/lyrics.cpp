@@ -206,7 +206,7 @@ void Lyrics::layout()
       // left align if syllable has a number or is a melisma
       //
       if (_ticks == 0 && (textStyle().align() & ALIGN_HCENTER) && !_verseNumber)
-            x += score()->sym(SymId::noteheadBlack).width(magS()) * .5;
+            x += symWidth(SymId::noteheadBlack) * .5;
       else if (_ticks || ((textStyle().align() & ALIGN_HCENTER) && _verseNumber))
             x += width() * .5;
       rxpos() += x;

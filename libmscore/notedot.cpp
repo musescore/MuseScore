@@ -34,7 +34,7 @@ NoteDot::NoteDot(Score* s)
 
 void NoteDot::layout()
       {
-      setbbox(score()->sym(SymId::augmentationDot).bbox(magS()));
+      setbbox(symBbox(SymId::augmentationDot));
       }
 
 //---------------------------------------------------------

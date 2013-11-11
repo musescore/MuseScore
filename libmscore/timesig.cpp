@@ -235,16 +235,16 @@ QString TimeSig::toTimeSigString(const QString& s) const
       ScoreFont* f = score()->scoreFont();
       for (int i = 0; i < s.size(); ++i) {
             switch (s[i].toLatin1()) {
-                  case '0': d += QChar(f->sym(SymId::timeSig0).code()); break;
-                  case '1': d += QChar(f->sym(SymId::timeSig1).code()); break;
-                  case '2': d += QChar(f->sym(SymId::timeSig2).code()); break;
-                  case '3': d += QChar(f->sym(SymId::timeSig3).code()); break;
-                  case '4': d += QChar(f->sym(SymId::timeSig4).code()); break;
-                  case '5': d += QChar(f->sym(SymId::timeSig5).code()); break;
-                  case '6': d += QChar(f->sym(SymId::timeSig6).code()); break;
-                  case '7': d += QChar(f->sym(SymId::timeSig7).code()); break;
-                  case '8': d += QChar(f->sym(SymId::timeSig8).code()); break;
-                  case '9': d += QChar(f->sym(SymId::timeSig9).code()); break;
+                  case '0': d += f->toString(SymId::timeSig0); break;
+                  case '1': d += f->toString(SymId::timeSig1); break;
+                  case '2': d += f->toString(SymId::timeSig2); break;
+                  case '3': d += f->toString(SymId::timeSig3); break;
+                  case '4': d += f->toString(SymId::timeSig4); break;
+                  case '5': d += f->toString(SymId::timeSig5); break;
+                  case '6': d += f->toString(SymId::timeSig6); break;
+                  case '7': d += f->toString(SymId::timeSig7); break;
+                  case '8': d += f->toString(SymId::timeSig8); break;
+                  case '9': d += f->toString(SymId::timeSig9); break;
                   default:  d += s[i]; break;
                   }
             }
@@ -289,20 +289,17 @@ void TimeSig::layout1()
       // determine middle staff position:
 
       qreal yoff = _spatium * (numOfLines-1) *.5 * lineDist;
-      qreal mag  = magS();
 
       // C and Ccut are placed at the middle of the staff: use yoff directly
       if (sigType ==  TSIG_FOUR_FOUR) {
             pz = QPointF(0.0, yoff);
-            const Sym& sym = score()->sym(SymId::timeSigCommon);
-            setbbox(sym.bbox(mag).translated(pz));
+            setbbox(symBbox(SymId::timeSigCommon).translated(pz));
             _numeratorString = score()->scoreFont()->toString(SymId::timeSigCommon);
             _denominatorString.clear();
             }
       else if (sigType == TSIG_ALLA_BREVE) {
             pz = QPointF(0.0, yoff);
-            const Sym& sym = score()->sym(SymId::timeSigCutCommon);
-            setbbox(sym.bbox(mag).translated(pz));
+            setbbox(symBbox(SymId::timeSigCutCommon).translated(pz));
             _numeratorString = score()->scoreFont()->toString(SymId::timeSigCutCommon);
             _denominatorString.clear();
             }

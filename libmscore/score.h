@@ -942,9 +942,6 @@ class Score : public QObject {
       Q_INVOKABLE Ms::Cursor* newCursor();
       qreal computeMinWidth(Segment* fs);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
-      const Sym& sym(SymId id) const;
-
-      qreal noteHeadWidth() const            { return _noteHeadWidth; }
 
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
       SpannerMap& spannerMap() { return _spanner; }
@@ -960,6 +957,8 @@ class Score : public QObject {
 
       ScoreFont* scoreFont() const    { return _scoreFont; }
       void setScoreFont(ScoreFont* f) { _scoreFont = f;    }
+      qreal noteHeadWidth() const            { return _noteHeadWidth; }
+//      const Sym& sym(SymId id) const;
 
       friend class ChangeSynthesizerState;
       friend class Chord;

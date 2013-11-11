@@ -64,15 +64,11 @@ void Symbol::setAbove(bool val)
 
 void Symbol::layout()
       {
-//      qreal m = parent() ? parent()->mag() : 1.0;
-//      if (_small)
-//            m *= score()->styleD(ST_smallNoteMag);
-//      setMag(m);
       foreach(Element* e, leafs())
             e->layout();
       ElementLayout::layout(this);
       BSymbol::layout();
-      setbbox(score()->sym(_sym).bbox(magS()));
+      setbbox(symBbox(_sym));
       }
 
 //---------------------------------------------------------
@@ -106,8 +102,6 @@ void Symbol::write(Xml& xml) const
 void Symbol::read(XmlReader& e)
       {
       QPointF pos;
-      SymId s = SymId::noSym;
-
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name") {
@@ -116,7 +110,7 @@ void Symbol::read(XmlReader& e)
                         val = "accordion.accDot";
                   else if (val == "acc old ee")
                         val = "accordion.accOldEE";
-                  s = Sym::name2id(val);
+                  SymId s = Sym::name2id(val);
                   if (s == SymId::noSym) {
                         // if symbol name not found, fall back to mnames
                         s = Sym::userName2id(val);
@@ -144,8 +138,6 @@ void Symbol::read(XmlReader& e)
             else if (!BSymbol::readProperties(e))
                   e.unknown();
             }
-      if (s == SymId::noSym)
-            qDebug("unknown symbol");
       setPos(pos);
       setSym(s);
       }

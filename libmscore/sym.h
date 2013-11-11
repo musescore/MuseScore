@@ -23,10 +23,11 @@ class TextStyle;
 
 //---------------------------------------------------------
 //   SymId
+//    must be in sync with symNames
 //---------------------------------------------------------
 
 enum class SymId {
-      noSym = -1,
+      noSym,
       fourStringTabClef,
       fourStringTabClefSerif,
       fourStringTabClefTall,
@@ -266,7 +267,7 @@ enum class SymId {
       articStaccato,
       articStressAbove,
       articStressBelow,
-      articTenuroSlurBelow,
+      articTenutoSlurBelow,
       articTenuto,
       articTenutoSlurAbove,
       articUnstressAbove,
@@ -1521,6 +1522,16 @@ enum class SymId {
       windTrillKey,
       windVeryRelaxedEmbouchure,
       windVeryTightEmbouchure,
+
+      // MuseScore local symbols
+      ornamentPrallMordent,
+      ornamentUpPrall,
+      ornamentUpMordent,
+      ornamentPrallDown,
+      ornamentDownPrall,
+      ornamentDownMordent,
+      ornamentPrallUp,
+      ornamentLinePrall,
       lastSym
       };
 
@@ -1529,27 +1540,17 @@ enum class SymId {
 //---------------------------------------------------------
 
 class Sym {
-      int _code = 0;
-      qreal w;
-      QRectF  _bbox;
+      QString _string;
       QPointF _attach;
 
    public:
       Sym() { }
-      Sym(int c, const QPointF&, const QRectF&);
 
-      const QRectF bbox(qreal mag) const;
-      qreal height(qreal mag) const        { return _bbox.height() * mag; }
-      qreal width(qreal mag) const         { return w * mag;  }
-      void setWidth(qreal val)             { w = val;         }
-      QPointF attach(qreal mag) const      { return _attach * mag;   }
-      int code() const                     { return _code;    }
-      void setCode(int c)                  { _code = c;   }
-      bool isValid() const                 { return _code != 0; }
-      QRectF bbox() const                  { return _bbox;   }
-      void setbbox(const QRectF& r)        { _bbox = r;      }
-      QPointF getAttach() const            { return _attach; }
-      void setAttach(const QPointF& r)     { _attach = r; }
+      const QString& string() const              { return _string;    }
+      void setString(const QString& s)           { _string = s;       }
+      bool isValid() const                       { return !_string.isEmpty(); }
+      QPointF attach() const                     { return _attach;   }
+      void setAttach(const QPointF& r)           { _attach = r; }
 
       static SymId name2id(const QString& s)     { return lnhash.value(s, SymId::noSym); }     // return noSym if not found
       static const char* id2name(SymId id);
@@ -1568,6 +1569,7 @@ class Sym {
 
 class ScoreFont {
       QFont _font;
+      QFontMetricsF* _fm = 0;
       QVector<Sym> _symbols;
       QString _name;
       QString _family;
@@ -1576,6 +1578,8 @@ class ScoreFont {
       bool loaded = false;
 
       static QVector<ScoreFont> _scoreFonts;
+      const Sym& sym(SymId id) const;
+      void load();
 
    public:
       ScoreFont() {}
@@ -1589,19 +1593,24 @@ class ScoreFont {
       const QString& fontPath() const       { return _fontPath;       }
       const QString& filename() const       { return _filename;       }
 
-      const Sym& sym(SymId id) const;
-
       static ScoreFont* fontFactory(QString);
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
 
       const QFont& font() const { return _font; }
-      QString toString(SymId id) const;
+      const QString& toString(SymId id) const { return _symbols[int(id)].string(); }
 
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
+
       QString symToHtml(SymId, int leftMargin=0, const TextStyle* ts = 0, qreal sp=10.0);
       QString symToHtml(SymId, SymId, int leftMargin=0);
       QPixmap sym2pixmap(SymId id, qreal mag);
+
+      qreal height(SymId id, qreal mag) const   { return _fm->tightBoundingRect(toString(id)).height() * mag; }
+      qreal width(SymId id, qreal mag) const    { return _fm->tightBoundingRect(toString(id)).width() * mag;  }
+      const QRectF bbox(SymId id, qreal mag) const;
+      QPointF attach(SymId id, qreal mag) const { return _symbols[int(id)].attach() * mag; }
+      bool isValid(SymId id) const              { return _symbols[int(id)].isValid(); }
       };
 
 extern void initScoreFonts();

@@ -858,7 +858,7 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
                   line->setPos(p1);
                   if (sysIdx1 == sysIdx2) {
                         // single segment
-                        qreal headWidth = score()->sym(SymId::noteheadBlack).width(1.0);
+                        qreal headWidth = score()->noteHeadWidth();
                         qreal len = seg->pagePos().x() - l->pagePos().x() - x1 + headWidth;
                         line->setLen(Spatium(len / _spatium));
                         Lyrics* nl = searchNextLyrics(seg, staffIdx, l->no());

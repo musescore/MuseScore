@@ -325,9 +325,7 @@ SymId Note::noteHead() const
 
 qreal Note::headWidth() const
       {
-      SymId head  = noteHead();
-      qreal val = score()->sym(head).width(magS());
-      return val;
+      return symWidth(noteHead());
       }
 
 qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
@@ -356,7 +354,7 @@ qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
 
 qreal Note::headHeight() const
       {
-      return score()->sym(noteHead()).height(magS());
+      return symHeight(noteHead());
       }
 
 qreal Note::tabHeadHeight(StaffTypeTablature *tab) const
@@ -372,7 +370,7 @@ qreal Note::tabHeadHeight(StaffTypeTablature *tab) const
 
 QPointF Note::attach() const
       {
-      return score()->sym(noteHead()).attach(magS());
+      return symAttach(noteHead());
       }
 
 //---------------------------------------------------------
@@ -1261,7 +1259,7 @@ void Note::layout()
             bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
             }
       else {
-            setbbox(score()->sym(noteHead()).bbox(magS()));
+            setbbox(symBbox(noteHead()));
             if (parent() == 0)
                   return;
             }
