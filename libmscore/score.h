@@ -96,6 +96,7 @@ struct PageContext;
 class BarLine;
 class Bracket;
 class KeyList;
+class ScoreFont;
 
 enum class OttavaType;
 enum class ClefType : signed char;
@@ -958,7 +959,6 @@ class Score : public QObject {
       ScoreFont* scoreFont() const    { return _scoreFont; }
       void setScoreFont(ScoreFont* f) { _scoreFont = f;    }
       qreal noteHeadWidth() const            { return _noteHeadWidth; }
-//      const Sym& sym(SymId id) const;
 
       friend class ChangeSynthesizerState;
       friend class Chord;
