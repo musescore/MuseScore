@@ -66,6 +66,7 @@ Sequencer* MScore::seq = 0;
 
 extern void initStaffTypes();
 extern void initDrumset();
+extern void initScoreFonts();
 
 //---------------------------------------------------------
 //   init

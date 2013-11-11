@@ -13,6 +13,7 @@
 #include "score.h"
 #include "xml.h"
 #include "bagpembell.h"
+#include "sym.h"
 
 namespace Ms {
 

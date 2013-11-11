@@ -19,6 +19,7 @@
 #include "chord.h"
 #include "rest.h"
 #include "score.h"
+#include "sym.h"
 
 namespace Ms {
 

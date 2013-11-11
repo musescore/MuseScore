@@ -14,13 +14,13 @@
 #define __SYMBOL_H__
 
 #include "bsymbol.h"
-#include "sym.h"
 
 class QPainter;
 
 namespace Ms {
 
 class Segment;
+enum class SymId;
 
 //---------------------------------------------------------
 //   @@ Symbol

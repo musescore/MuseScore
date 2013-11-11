@@ -48,6 +48,7 @@
 #include "ledgerline.h"
 #include "drumset.h"
 #include "key.h"
+#include "sym.h"
 
 namespace Ms {
 

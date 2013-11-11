@@ -22,6 +22,7 @@
 #include "measure.h"
 #include "tablature.h"
 #include "stafftype.h"
+#include "sym.h"
 
 namespace Ms {
 
