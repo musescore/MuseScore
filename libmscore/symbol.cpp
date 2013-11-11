@@ -139,7 +139,6 @@ void Symbol::read(XmlReader& e)
                   e.unknown();
             }
       setPos(pos);
-      setSym(s);
       }
 
 //---------------------------------------------------------

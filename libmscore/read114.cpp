@@ -31,6 +31,7 @@
 #include "dynamic.h"
 #include "drumset.h"
 #include "style.h"
+#include "sym.h"
 
 namespace Ms {
 

@@ -13,6 +13,7 @@
 #include "notedot.h"
 #include "score.h"
 #include "staff.h"
+#include "sym.h"
 
 namespace Ms {
 

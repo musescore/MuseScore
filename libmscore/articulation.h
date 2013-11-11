@@ -14,14 +14,14 @@
 #define __ARTICULATION_H__
 
 #include "mscore.h"
-#include "symbol.h"
-#include "sym.h"
+#include "element.h"
 
 class QPainter;
 
 namespace Ms {
 
 class ChordRest;
+enum class SymId;
 
 //---------------------------------------------------------
 //   ArticulationInfo

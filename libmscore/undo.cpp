@@ -71,6 +71,7 @@
 #include "stafftext.h"
 #include "chordline.h"
 #include "tremolo.h"
+#include "sym.h"
 
 namespace Ms {
 

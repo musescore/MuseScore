@@ -20,6 +20,7 @@
 #include "undo.h"
 #include "page.h"
 #include "barline.h"
+#include "sym.h"
 
 namespace Ms {
 

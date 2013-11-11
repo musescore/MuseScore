@@ -66,6 +66,7 @@
 #include "audio.h"
 #include "instrtemplate.h"
 #include "cursor.h"
+#include "sym.h"
 
 namespace Ms {
 
