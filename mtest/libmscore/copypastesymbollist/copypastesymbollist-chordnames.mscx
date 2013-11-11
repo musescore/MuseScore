@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="1.24">
   <programVersion>2.0.0</programVersion>
-  <programRevision>e5de291</programRevision>
+  <programRevision>fa034c3</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -358,17 +358,10 @@
         </Measure>
       <Measure number="7">
         <Chord>
-          <durationType>half</durationType>
+          <durationType>whole</durationType>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>74</pitch>
-            <tpc>16</tpc>
             </Note>
           </Chord>
         <BarLine>
