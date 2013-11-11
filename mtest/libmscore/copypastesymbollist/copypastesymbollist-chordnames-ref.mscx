@@ -270,9 +270,6 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <Harmony>
-          <root>16</root>
-          </Harmony>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -286,6 +283,9 @@
           </BarLine>
         </Measure>
       <Measure number="6">
+        <Harmony>
+          <root>16</root>
+          </Harmony>
         <Beam id="3">
           <l1>11</l1>
           <l2>16</l2>
@@ -306,9 +306,6 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <Harmony>
-          <root>14</root>
-          </Harmony>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>3</Beam>
@@ -345,9 +342,6 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <Harmony>
-          <root>15</root>
-          </Harmony>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>4</Beam>
@@ -370,20 +364,21 @@
           </BarLine>
         </Measure>
       <Measure number="7">
+        <Harmony>
+          <root>14</root>
+          </Harmony>
         <Chord>
-          <durationType>half</durationType>
+          <durationType>whole</durationType>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>74</pitch>
-            <tpc>16</tpc>
-            </Note>
-          </Chord>
+        <tick>12480</tick>
+        <Harmony>
+          <root>15</root>
+          </Harmony>
+        <tick>13440</tick>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
