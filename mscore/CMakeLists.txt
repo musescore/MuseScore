@@ -494,8 +494,8 @@ endif (MINGW)
 
 if (APPLE)
      install (FILES
-      ../fonts/gonville-20.ttf
-      ../fonts/mscore-20.ttf
+      ../fonts/gonville/gonville-20.ttf
+      ../fonts/mscore/mscore.otf
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerifMscore.ttf
       ../fonts/FreeSans.ttf

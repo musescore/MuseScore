@@ -3205,6 +3205,7 @@ static QString codeToString(int code)
 
 void ScoreFont::load()
       {
+#if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
       if (-1 == QFontDatabase::addApplicationFont(fontPath() + filename())) {
             qDebug("ScoreFont: fatal error: cannot load internal font <%s>", qPrintable(fontPath() + filename()));
             if (!QFile(fontPath() + filename()).exists())
@@ -3212,7 +3213,7 @@ void ScoreFont::load()
             if (!MScore::debugMode)
                   exit(-1);
             }
-
+#endif
       _font.setWeight(QFont::Normal);  // if not set we get system default
       _font.setItalic(false);
       _font.setFamily(family());
