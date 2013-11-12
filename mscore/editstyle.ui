@@ -214,7 +214,7 @@
               </item>
               <item>
                <property name="text">
-                <string>Bravura</string>
+                <string notr="true">Bravura</string>
                </property>
               </item>
              </widget>
