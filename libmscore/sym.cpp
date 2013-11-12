@@ -1534,7 +1534,7 @@ QVector<const char*> Sym::symNames = {
       "windVeryTightEmbouchure",
 
       // MuseScore local symbols
-      "ornamentPrallMordent"
+      "ornamentPrallMordent",
       "ornamentUpPrall",
       "ornamentUpMordent",
       "ornamentPrallDown",
@@ -1545,6 +1545,7 @@ QVector<const char*> Sym::symNames = {
       };
 
 QVector<QString> Sym::symUserNames = {
+      "noSym",
       "4stringTabClef",
       "4stringTabClefSerif",
       "4stringTabClefTall",
@@ -3041,7 +3042,7 @@ QVector<QString> Sym::symUserNames = {
       "windVeryTightEmbouchure",
 
       // MuseScore local symbols
-      "ornamentPrallMordent"
+      "ornamentPrallMordent",
       "ornamentUpPrall",
       "ornamentUpMordent",
       "ornamentPrallDown",
@@ -3177,10 +3178,8 @@ const char* Sym::id2name(SymId id)
 void initScoreFonts()
       {
       int index = 0;
-      for (auto i : Sym::symNames) {
-            Sym::lnhash.insert(i, SymId(index));
-            ++index;
-            }
+      for (auto i : Sym::symNames)
+            Sym::lnhash.insert(i, SymId(index++));
       ScoreFont::fontFactory("Bravura");       // load reference font
       }
 
@@ -3207,7 +3206,9 @@ static QString codeToString(int code)
 void ScoreFont::load()
       {
       if (-1 == QFontDatabase::addApplicationFont(fontPath() + filename())) {
-            qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(filename()));
+            qDebug("ScoreFont: fatal error: cannot load internal font <%s>", qPrintable(fontPath() + filename()));
+            if (!QFile(fontPath() + filename()).exists())
+                  qDebug("   file not found");
             if (!MScore::debugMode)
                   exit(-1);
             }

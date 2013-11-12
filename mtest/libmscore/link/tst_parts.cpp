@@ -24,6 +24,7 @@
 #include "libmscore/fingering.h"
 #include "libmscore/image.h"
 #include "libmscore/element.h"
+#include "libmscore/sym.h"
 #include "mtest/testutils.h"
 
 #define DIR QString("libmscore/link/")
@@ -523,7 +524,7 @@ Score* TestParts::doAddSymbol()
       Note* note   = chord->upNote();
       DropData dd;
       dd.view = 0;
-      Symbol* b = new Symbol(score, accDiscantSym);
+      Symbol* b = new Symbol(score, SymId::gClef);
       dd.element = b;
 
       score->startCmd();

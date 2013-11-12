@@ -217,7 +217,7 @@ QMap<QString, QString> nmap {
 
       { "scripts.arpeggio",         "wiggleArpeggiatoUp" },
 
-      { "scripts.trill_element", "wiggleTrill" },
+      { "scripts.trill_element",    "wiggleTrill" },
 
 //      { "scripts.arpeggio.arrow.M1", "scripts.arpeggio.arrow.M1" },
 //      { "scripts.arpeggio.arrow.1",  "scripts.arpeggio.arrow.1" },
@@ -227,8 +227,8 @@ QMap<QString, QString> nmap {
       { "scripts.prallprall",        "ornamentTremblement" },
       { "scripts.prallmordent",      "ornamentPrallMordent" },
 
-      { "scripts.upprall",           "ornamentUpPrall", //"ornamentPrecompSlideTrillAnglebert" },
-      { "scripts.upmordent",         "ornamentUpMordent", // "ornamentPrecompSlideTrillBach" },
+      { "scripts.upprall",           "ornamentUpPrall",   }, // "ornamentPrecompSlideTrillAnglebert"
+      { "scripts.upmordent",         "ornamentUpMordent", },  // "ornamentPrecompSlideTrillBach"
 
       { "scripts.pralldown",         "ornamentPrallDown"   },
       { "scripts.downprall",         "ornamentDownPrall"   },
@@ -288,8 +288,8 @@ QMap<QString, QString> nmap {
       { "flags.d7", "flag128thDown" },
       { "flags.u7", "flag128thUp"   },
 
+      { "scripts.snappizzicato",          "pluckedSnapPizzicatoAbove" },
 #if 0
-      { "scripts.snappizzicato",          "scripts.snappizzicato" },
       { "noteheads.sM1double",            "noteheads.sM1double" },
       { "accidentals.flat.arrowup",       "accidentals.flat.arrowup" },
       { "accidentals.flat.arrowdown",     "accidentals.flat.arrowdown" },
@@ -320,7 +320,8 @@ QMap<QString, QString> nmap {
       { "uniE1D3", "ornamentPrecompSlide" },
 
       { "accidentals.sori", "accidentalSori" },
-      { "accidentals.koron", "accidentalKoron" },
+      { "accidentals.koron", "accidentalKoron" }
+
       };
 
 //---------------------------------------------------------
