@@ -4783,10 +4783,10 @@ int main(int argc, char* av[])
             qDebug() << "  Virtual size:" << screen->virtualSize().width() << "x" << screen->virtualSize().height();
             }
 
-      preferences.readDefaultStyle();
-
       if (!useFactorySettings)
             preferences.read();
+
+      preferences.readDefaultStyle();
 
       if (converterDpi == 0)
             converterDpi = preferences.pngResolution;
