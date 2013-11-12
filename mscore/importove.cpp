@@ -1797,7 +1797,7 @@ void OveToMScore::convertArticulation(
 	}
 	case OVE::Articulation_Plus_Sign :{
 		Articulation* a = new Articulation(score_);
-		a->setArticulationType(Articulation_Plusstop);
+     	      a->setArticulationType(Articulation_Plusstop);
 		cr->add(a);
 		break;
 	}

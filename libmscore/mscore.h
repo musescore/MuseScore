@@ -83,13 +83,13 @@ enum ArticulationType {
       Articulation_Verylongfermata,
       Articulation_Thumb,
       Articulation_Sforzatoaccent,
-      Articulation_Espressivo,
+//      Articulation_Espressivo,
       Articulation_Staccato,
       Articulation_Staccatissimo,
       Articulation_Tenuto,
       Articulation_Portato,
       Articulation_Marcato,
-      Articulation_Ouvert,
+      Articulation_Ouvert,              //TODO-smufl
       Articulation_Plusstop,
       Articulation_Upbow,
       Articulation_Downbow,
@@ -109,9 +109,9 @@ enum ArticulationType {
       Articulation_LinePrall,
       Articulation_Schleifer,
       Articulation_Snappizzicato,
-      Articulation_Tapping,
-      Articulation_Slapping,
-      Articulation_Popping,
+//      Articulation_Tapping,
+//      Articulation_Slapping,
+//      Articulation_Popping,
       ARTICULATIONS
       };
 

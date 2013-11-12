@@ -441,6 +441,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
       Articulation* a = new Articulation(chord->score());
       chord->add(a);
       switch (beatEffect) {
+#if 0 // TODO-smufl
             case 1:
                   a->setArticulationType(Articulation_Tapping);
                   break;
@@ -450,8 +451,9 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
             case 3:
                   a->setArticulationType(Articulation_Popping);
                   break;
+#endif
             default:
-                  qDebug("GuitarPro import: unknown beat effect %d\n", beatEffect);
+                  qDebug("GuitarPro import: unknown beat effect %d", beatEffect);
             }
       }
 
