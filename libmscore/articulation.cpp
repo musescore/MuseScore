@@ -154,11 +154,12 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             "schleifer", QT_TRANSLATE_NOOP("articulation", "schleifer"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-#if 0
-      { snappizzicatoSym, snappizzicatoSym,
+      { SymId::pluckedSnapPizzicatoAbove, SymId::pluckedSnapPizzicatoAbove,
             "snappizzicato", QT_TRANSLATE_NOOP("articulation", "snappizzicato"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
+
+#if 0
       { letterTSym, letterTSym,
             "tapping", QT_TRANSLATE_NOOP("articulation", "tapping"),
             1.0, ARTICULATION_SHOW_IN_TABLATURE
@@ -185,7 +186,7 @@ Articulation::Articulation(Score* s)
       _up = true;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       setArticulationType(Articulation_Fermata);
-      }
+       }
 
 //---------------------------------------------------------
 //   setArticulationType

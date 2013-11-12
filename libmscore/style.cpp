@@ -597,14 +597,14 @@ StyleData::StyleData()
       _articulationAnchor[Articulation_Verylongfermata] = A_TOP_STAFF;
       _articulationAnchor[Articulation_Thumb]           = A_CHORD;
       _articulationAnchor[Articulation_Sforzatoaccent]  = A_CHORD;
-      _articulationAnchor[Articulation_Espressivo]      = A_CHORD;
+//      _articulationAnchor[Articulation_Espressivo]      = A_CHORD;
       _articulationAnchor[Articulation_Staccato]        = A_CHORD;
       _articulationAnchor[Articulation_Staccatissimo]   = A_CHORD;
       _articulationAnchor[Articulation_Tenuto]          = A_CHORD;
       _articulationAnchor[Articulation_Portato]         = A_CHORD;
       _articulationAnchor[Articulation_Marcato]         = A_CHORD;
-      _articulationAnchor[Articulation_Ouvert]          = A_CHORD;
-      _articulationAnchor[Articulation_Plusstop]        = A_CHORD;
+//      _articulationAnchor[Articulation_Ouvert]          = A_CHORD;
+//      _articulationAnchor[Articulation_Plusstop]        = A_CHORD;
       _articulationAnchor[Articulation_Upbow]           = A_TOP_STAFF;
       _articulationAnchor[Articulation_Downbow]         = A_TOP_STAFF;
       _articulationAnchor[Articulation_Reverseturn]     = A_TOP_STAFF;
@@ -622,10 +622,10 @@ StyleData::StyleData()
       _articulationAnchor[Articulation_PrallUp]         = A_TOP_STAFF;
       _articulationAnchor[Articulation_LinePrall]       = A_TOP_STAFF;
       _articulationAnchor[Articulation_Schleifer]       = A_TOP_STAFF;
-      _articulationAnchor[Articulation_Snappizzicato]   = A_TOP_STAFF;
-      _articulationAnchor[Articulation_Tapping]         = A_TOP_STAFF;
-      _articulationAnchor[Articulation_Slapping]        = A_TOP_STAFF;
-      _articulationAnchor[Articulation_Popping]         = A_TOP_STAFF;
+//      _articulationAnchor[Articulation_Snappizzicato]   = A_TOP_STAFF;
+//      _articulationAnchor[Articulation_Tapping]         = A_TOP_STAFF;
+//      _articulationAnchor[Articulation_Slapping]        = A_TOP_STAFF;
+//      _articulationAnchor[Articulation_Popping]         = A_TOP_STAFF;
       _spatium = SPATIUM20 * MScore::DPI;
       };
 

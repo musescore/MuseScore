@@ -230,20 +230,32 @@
     "noteheadXWhole": {
         "codepoint": "U+e139"
     },
+    "ornamentDownMordent": {
+        "codepoint": "U+e18b"
+    },
+    "ornamentDownPrall": {
+        "codepoint": "U+e18a"
+    },
+    "ornamentLinePrall": {
+        "codepoint": "U+e18d"
+    },
     "ornamentMordent": {
         "codepoint": "U+e183"
     },
     "ornamentMordentInverted": {
         "codepoint": "U+e184"
     },
+    "ornamentPrallDown": {
+        "codepoint": "U+e189"
+    },
     "ornamentPrallMordent": {
         "codepoint": "U+e186"
     },
-    "ornamentPrecompSlideTrillAnglebert": {
-        "codepoint": "U+e187"
+    "ornamentPrallUp": {
+        "codepoint": "U+e18c"
     },
-    "ornamentPrecompSlideTrillBach": {
-        "codepoint": "U+e188"
+    "ornamentPrecompSlide": {
+        "codepoint": "U+e1d3"
     },
     "ornamentTremblement": {
         "codepoint": "U+e185"
@@ -256,6 +268,15 @@
     },
     "ornamentTurnInverted": {
         "codepoint": "U+e16f"
+    },
+    "ornamentUpMordent": {
+        "codepoint": "U+e188"
+    },
+    "ornamentUpPrall": {
+        "codepoint": "U+e187"
+    },
+    "pluckedSnapPizzicatoAbove": {
+        "codepoint": "U+e1b9"
     },
     "rest128th": {
         "codepoint": "U+e10d"
