@@ -580,6 +580,49 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       }
 
 //---------------------------------------------------------
+//   readRootFile
+//---------------------------------------------------------
+
+QString readRootFile(MQZipReader* uz, QList<QString>& images)
+      {
+      QString rootfile;
+
+      QByteArray cbuf = uz->fileData("META-INF/container.xml");
+      if (cbuf.isEmpty()) {
+            qDebug("can't find container.xml");
+            return rootfile;
+            }
+
+      XmlReader e(cbuf);
+
+      while (e.readNextStartElement()) {
+            if (e.name() != "container") {
+                  e.unknown();
+                  continue;
+                  }
+            while (e.readNextStartElement()) {
+                  if (e.name() != "rootfiles") {
+                        e.unknown();
+                        continue;
+                        }
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+
+                        if (tag == "rootfile") {
+                              if (rootfile.isEmpty())
+                                    rootfile = e.attribute("full-path");
+                              }
+                        else if (tag == "file")
+                              images.append(e.readElementText());
+                        else
+                              e.unknown();
+                        }
+                  }
+            }
+      return rootfile;
+      }
+
+//---------------------------------------------------------
 //   loadCompressedMsc
 //    return false on error
 //---------------------------------------------------------
@@ -592,23 +635,9 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
             MScore::lastError = QT_TRANSLATE_NOOP("file", "file not found");
             return FILE_NOT_FOUND;
             }
-      QByteArray cbuf = uz.fileData("META-INF/container.xml");
 
-      QString rootfile;
-      XmlReader e(cbuf);
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-
-            if (tag == "rootfile") {
-                  rootfile = e.attribute("full-path");
-                  e.skipCurrentElement();
-                  }
-            else if (tag == "file") {
-                  QString image(e.readElementText());
-                  QByteArray dbuf = uz.fileData(image);
-                  imageStore.add(image, dbuf);
-                  }
-            }
+      QList<QString> sl;
+      QString rootfile = readRootFile(&uz, sl);
       if (rootfile.isEmpty())
             return FILE_NO_ROOTFILE;
 
@@ -623,8 +652,7 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
                         }
                   }
             }
-      e.clear();
-      e.addData(dbuf);
+      XmlReader e(dbuf);
       e.setDocName(info.completeBaseName());
 
       FileError retval = read1(e, ignoreVersionError);
@@ -1082,37 +1110,9 @@ void Score::print(QPainter* painter, int pageNo)
 QByteArray Score::readCompressedToBuffer()
       {
       MQZipReader uz(filePath());
-
-      QByteArray cbuf = uz.fileData("META-INF/container.xml");
-
-      XmlReader e(cbuf);
-      QString rootfile;
       QList<QString> images;
+      QString rootfile = readRootFile(&uz, images);
 
-      while (e.readNextStartElement()) {
-            if (e.name() != "container") {
-                  e.unknown();
-                  continue;
-                  }
-            while (e.readNextStartElement()) {
-                  if (e.name() != "rootfiles") {
-                        e.unknown();
-                        continue;
-                        }
-                  while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-
-                        if (tag == "rootfile") {
-                              if (rootfile.isEmpty())
-                                    rootfile = e.attribute("full-path");
-                              }
-                        else if (tag == "file")
-                              images.append(e.readElementText());
-                        else
-                              e.unknown();
-                        }
-                  }
-            }
       //
       // load images
       //
@@ -1122,7 +1122,7 @@ QByteArray Score::readCompressedToBuffer()
             }
 
       if (rootfile.isEmpty()) {
-            qDebug("can't find rootfile in: %s\n", qPrintable(filePath()));
+            qDebug("=can't find rootfile in: %s\n", qPrintable(filePath()));
             return QByteArray();
             }
       return uz.fileData(rootfile);

@@ -262,6 +262,12 @@ QString Articulation::subtypeName() const
 
 void Articulation::setSubtype(const QString& s)
       {
+      if (s.isEmpty()) {
+            qDebug("Articulation::setSubtype: empty subtype");
+            setArticulationType(Articulation_Fermata);
+            return;
+            }
+
       if (s[0].isDigit()) {         // for backward compatibility
             setArticulationType(ArticulationType(s.toInt()));
             return;

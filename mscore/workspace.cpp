@@ -293,6 +293,8 @@ void Workspace::write()
             writeFailed(_path);
       }
 
+extern QString readRootFile(MQZipReader*, QList<QString>&);
+
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
@@ -309,36 +311,8 @@ void Workspace::read()
       _readOnly = !fi.isWritable();
 
       MQZipReader f(_path);
-      QByteArray ba = f.fileData("META-INF/container.xml");
-
-      XmlReader e(ba, _path);
-
-      // extract first rootfile
-      QString rootfile = "";
       QList<QString> images;
-      while (e.readNextStartElement()) {
-            if (e.name() != "container")
-                  e.unknown();
-            while (e.readNextStartElement()) {
-                  if (e.name() != "rootfiles") {
-                        e.unknown();
-                        break;
-                        }
-                  while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "rootfile") {
-                              if (rootfile.isEmpty())
-                                    rootfile = e.attribute("full-path");
-                              e.readNext();
-                              e.readNext();
-                              }
-                        else if (tag == "file")
-                              images.append(e.readElementText());
-                        else
-                              e.unknown();
-                        }
-                  }
-            }
+      QString rootfile = readRootFile(&f, images);
       //
       // load images
       //
@@ -350,9 +324,8 @@ void Workspace::read()
             return;
             }
 
-      ba = f.fileData(rootfile);
-      e.clear();
-      e.addData(ba);
+      QByteArray ba = f.fileData(rootfile);
+      XmlReader e(ba);
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {

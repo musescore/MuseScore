@@ -42,29 +42,30 @@ static Acc accList[] = {
       Acc("double sharp",        TRA("double sharp"),        SHARP2,  0,    SymId::accidentalDoubleSharp),
       Acc("double flat",         TRA("double flat"),         FLAT2,   0,    SymId::accidentalDoubleFlat),
       Acc("natural",             TRA("natural"),             NATURAL, 0,    SymId::accidentalNatural),
-#if 0
-      Acc("flat-slash",          TRA("flat-slash"),          NATURAL, -50,  flatslashSym),
-      Acc("flat-slash2",         TRA("flat-slash2"),         NATURAL, 0,    flatslash2Sym),
-      Acc("mirrored-flat2",      TRA("mirrored-flat2"),      NATURAL, -150, mirroredflat2Sym),
-      Acc("mirrored-flat",       TRA("mirrored-flat"),       NATURAL, -50,  mirroredflatSym),
-      Acc("mirrored-flat-slash", TRA("mirrored-flat-slash"), NATURAL, 0,    mirroredflatslashSym),
-      Acc("flat-flat-slash",     TRA("flat-flat-slash"),     NATURAL, -150, flatflatslashSym),
 
-      Acc("sharp-slash",         TRA("sharp-slash"),         NATURAL, 50,   sharpslashSym),
-      Acc("sharp-slash2",        TRA("sharp-slash2"),        NATURAL, 0,    sharpslash2Sym),
-      Acc("sharp-slash3",        TRA("sharp-slash3"),        NATURAL, 0,    sharpslash3Sym),
-      Acc("sharp-slash4",        TRA("sharp-slash4"),        NATURAL, 150,  sharpslash4Sym),
+//TODO-smufl
+      Acc("flat-slash",          TRA("flat-slash"),          NATURAL, -50,  SymId::noSym),
+      Acc("flat-slash2",         TRA("flat-slash2"),         NATURAL, 0,    SymId::noSym),
+      Acc("mirrored-flat2",      TRA("mirrored-flat2"),      NATURAL, -150, SymId::noSym),
+      Acc("mirrored-flat",       TRA("mirrored-flat"),       NATURAL, -50,  SymId::noSym),
+      Acc("mirrored-flat-slash", TRA("mirrored-flat-slash"), NATURAL, 0,    SymId::noSym),
+      Acc("flat-flat-slash",     TRA("flat-flat-slash"),     NATURAL, -150, SymId::noSym),
 
-      Acc("sharp arrow up",      TRA("sharp arrow up"),      NATURAL, -50,  sharpArrowUpSym),
-      Acc("sharp arrow down",    TRA("sharp arrow down"),    NATURAL, -150, sharpArrowDownSym),
-      Acc("sharp arrow both",    TRA("sharp arrow both"),    NATURAL, 0,    sharpArrowBothSym),
-      Acc("flat arrow up",       TRA("flat arrow up"),       NATURAL, 50,   flatArrowUpSym),
-      Acc("flat arrow down",     TRA("flat arrow down"),     NATURAL, -50,  flatArrowDownSym),
-      Acc("flat arrow both",     TRA("flat arrow both"),     NATURAL, 0,    flatArrowBothSym),
-      Acc("natural arrow up",    TRA("natural arrow up"),    NATURAL, 50,   naturalArrowUpSym),
-      Acc("natural arrow down",  TRA("natural arrow down"),  NATURAL, 150,  naturalArrowDownSym),
-      Acc("natural arrow both",  TRA("natural arrow both"),  NATURAL, 0,    naturalArrowBothSym),
-#endif
+      Acc("sharp-slash",         TRA("sharp-slash"),         NATURAL, 50,   SymId::noSym),
+      Acc("sharp-slash2",        TRA("sharp-slash2"),        NATURAL, 0,    SymId::noSym),
+      Acc("sharp-slash3",        TRA("sharp-slash3"),        NATURAL, 0,    SymId::noSym),
+      Acc("sharp-slash4",        TRA("sharp-slash4"),        NATURAL, 150,  SymId::noSym),
+
+      Acc("sharp arrow up",      TRA("sharp arrow up"),      NATURAL, -50,  SymId::noSym),
+      Acc("sharp arrow down",    TRA("sharp arrow down"),    NATURAL, -150, SymId::noSym),
+      Acc("sharp arrow both",    TRA("sharp arrow both"),    NATURAL, 0,    SymId::noSym),
+      Acc("flat arrow up",       TRA("flat arrow up"),       NATURAL, 50,   SymId::noSym),
+      Acc("flat arrow down",     TRA("flat arrow down"),     NATURAL, -50,  SymId::noSym),
+      Acc("flat arrow both",     TRA("flat arrow both"),     NATURAL, 0,    SymId::noSym),
+      Acc("natural arrow up",    TRA("natural arrow up"),    NATURAL, 50,   SymId::noSym),
+      Acc("natural arrow down",  TRA("natural arrow down"),  NATURAL, 150,  SymId::noSym),
+      Acc("natural arrow both",  TRA("natural arrow both"),  NATURAL, 0,    SymId::noSym),
+
       Acc("sori",                TRA("sori"),                NATURAL, 50,   SymId::accidentalSori),
       Acc("koron",               TRA("koron"),               NATURAL, -50,  SymId::accidentalKoron)
       };
