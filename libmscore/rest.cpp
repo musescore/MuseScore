@@ -99,7 +99,7 @@ void Rest::draw(QPainter* painter) const
 
             painter->setFont(score()->scoreFont()->font());
             QFontMetricsF fm(score()->scoreFont()->font());
-            y  = -_spatium * .5 - (staff()->height()*.5) - fm.ascent();
+            y  = -_spatium * 1.5 - (staff()->height()*.5) - fm.ascent();
             painter->drawText(QRectF(center(x1, x2), y, .0, .0),
                Qt::AlignHCenter|Qt::TextDontClip,
                QString("%1").arg(n));
