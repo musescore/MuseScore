@@ -52,6 +52,7 @@ void TestTranspose::undoTranspose()
       QString writeFile1("undoTranspose01-test.mscx");
       QString reference1(DIR  + "undoTranspose01-ref.mscx");
       QString writeFile2("undoTranspose02-test.mscx");
+      QString reference2(DIR  + "undoTranspose02-ref.mscx");
 
       Score* score = readScore(readFile);
 
@@ -67,7 +68,7 @@ void TestTranspose::undoTranspose()
 
       // undo
       score->undo()->undo();
-      QVERIFY(saveCompareScore(score, writeFile2, readFile));
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
       }
