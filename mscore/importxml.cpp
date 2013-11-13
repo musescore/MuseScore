@@ -2706,7 +2706,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   }
             else {
                   t = new Text(score);
-                  t->setTextStyleType(TEXT_STYLE_TECHNIK);
+                  t->setTextStyleType(TEXT_STYLE_TECHNIQUE);
                   }
             if (!fontSize.isEmpty() || !fontStyle.isEmpty() || !fontWeight.isEmpty()) {
                   if (!fontSize.isEmpty()) {
