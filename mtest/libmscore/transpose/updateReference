@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/transpose/undoTranspose.mscx .
+cp ../../../build.debug/mtest/libmscore/transpose/undoTranspose01-ref.mscx .
+
+
