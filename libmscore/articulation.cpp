@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2013 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -78,14 +78,14 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             "marcato", QT_TRANSLATE_NOOP("articulation", "marcato"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-//      { ouvertSym, ouvertSym,
-//            "ouvert", QT_TRANSLATE_NOOP("articulation", "ouvert"),
-//            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
-//            },
-//      { plusstopSym, plusstopSym,
-//            "plusstop", QT_TRANSLATE_NOOP("articulation", "plusstop"),
-//            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
-//            },
+      { SymId::brassMuteOpen, SymId::brassMuteOpen,
+            "ouvert", QT_TRANSLATE_NOOP("articulation", "ouvert"),
+            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            },
+      { SymId::brassMuteClosed, SymId::brassMuteClosed,
+            "plusstop", QT_TRANSLATE_NOOP("articulation", "plusstop"),
+            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            },
       { SymId::stringsUpBow, SymId::stringsUpBow,
             "upbow", QT_TRANSLATE_NOOP("articulation", "upbow"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
