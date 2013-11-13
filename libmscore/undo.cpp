@@ -1809,7 +1809,11 @@ void ChangeKeySig::flip()
       keysig->setKeySigEvent(ks);
       keysig->setShowCourtesy(showCourtesy);
       keysig->setShowNaturals(showNaturals);
-//      keysig->staff()->setKey(keysig->segment()->tick(), ks);
+
+      // update keymap if keysig was not generated
+      // this is needed during undo
+      if (!keysig->generated())
+            keysig->staff()->setKey(keysig->segment()->tick(), ks);
 
       showCourtesy = sc;
       showNaturals = sn;
