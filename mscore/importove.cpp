@@ -2276,7 +2276,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
 		int absTick = mtt_->getTick(measure->no(), expressionPtr->getTick());
 		Text* t = new Text(score_);
 
-		t->setTextStyleType(TEXT_STYLE_TECHNIK);
+		t->setTextStyleType(TEXT_STYLE_TECHNIQUE);
 		t->setText(expressionPtr->getText());
 		t->setTrack(track);
 

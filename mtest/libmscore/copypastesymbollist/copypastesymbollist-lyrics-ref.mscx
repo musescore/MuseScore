@@ -91,7 +91,7 @@
         <Chord>
           <durationType>half</durationType>
           <Lyrics>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>Nel</text>
             </Lyrics>
           <Note>
@@ -103,7 +103,7 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>mez</text>
             </Lyrics>
           <Note>
@@ -115,7 +115,7 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>zo</text>
             </Lyrics>
           <Note>
@@ -132,7 +132,7 @@
         <Chord>
           <durationType>half</durationType>
           <Lyrics>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>del</text>
             </Lyrics>
           <Note>
@@ -144,7 +144,7 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>cam</text>
             </Lyrics>
           <Note>
@@ -175,7 +175,7 @@
           <Lyrics>
             <syllabic>end</syllabic>
             <ticks>480</ticks>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>min</text>
             </Lyrics>
           <Note>
@@ -203,7 +203,7 @@
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Lyrics>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>di</text>
             </Lyrics>
           <Note>
@@ -220,7 +220,7 @@
           <Beam>2</Beam>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>no</text>
             </Lyrics>
           <Note>
@@ -233,7 +233,7 @@
           <Beam>2</Beam>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>stra</text>
             </Lyrics>
           <Note>
@@ -246,7 +246,7 @@
           <Beam>2</Beam>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>vi</text>
             </Lyrics>
           <Note>
@@ -272,7 +272,7 @@
           <durationType>whole</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>ta.</text>
             </Lyrics>
           <Note>
@@ -289,7 +289,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>Nel</text>
             </Lyrics>
           <Note>
@@ -301,7 +301,7 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>mez</text>
             </Lyrics>
           <Note>
@@ -313,7 +313,7 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>zo</text>
             </Lyrics>
           <Note>
@@ -324,7 +324,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>del</text>
             </Lyrics>
           <Note>
@@ -347,7 +347,7 @@
           <Beam>3</Beam>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>cam</text>
             </Lyrics>
           <Note>
@@ -369,7 +369,7 @@
           <Lyrics>
             <syllabic>end</syllabic>
             <ticks>480</ticks>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>min</text>
             </Lyrics>
           <Note>
@@ -401,7 +401,7 @@
           <durationType>eighth</durationType>
           <Beam>4</Beam>
           <Lyrics>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>di</text>
             </Lyrics>
           <Note>
@@ -414,7 +414,7 @@
           <Beam>4</Beam>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>no</text>
             </Lyrics>
           <Note>
@@ -427,7 +427,7 @@
           <Beam>4</Beam>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>stra</text>
             </Lyrics>
           <Note>
@@ -445,7 +445,7 @@
           <durationType>half</durationType>
           <Lyrics>
             <syllabic>begin</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>vi</text>
             </Lyrics>
           <Note>
@@ -470,7 +470,7 @@
           <durationType>whole</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>ta.</text>
             </Lyrics>
           <Note>

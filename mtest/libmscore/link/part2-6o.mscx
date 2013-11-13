@@ -1023,7 +1023,7 @@ p, li { white-space: pre-wrap; }
             <text>testpart2</text>
             </Text>
           <Text>
-            <style>InstrumentsExcerpt</style>
+            <style>Instrument Name (Part)</style>
             <text>Alto</text>
             </Text>
           </VBox>
@@ -1572,7 +1572,7 @@ p, li { white-space: pre-wrap; }
             <text>testpart2</text>
             </Text>
           <Text>
-            <style>InstrumentsExcerpt</style>
+            <style>Instrument Name (Part)</style>
             <text>Tenor</text>
             </Text>
           </VBox>
