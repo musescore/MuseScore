@@ -11,10 +11,6 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      beam clef compat concertpitch copypaste copypastesymbollist dynamic element
-      hairpin join keysig layout link measure midi note plugins repeat split
-      splitstaff timesig transpose tuplet
-      )
+set(TARGET tst_transpose)
 
-
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
