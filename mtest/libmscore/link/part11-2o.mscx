@@ -162,7 +162,7 @@ p, li { white-space: pre-wrap; }
           <Note>
             <lid>3</lid>
             <Symbol>
-              <name>accordion.accStdbase</name>
+              <name>accidentalSharp</name>
               </Symbol>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -804,7 +804,7 @@ p, li { white-space: pre-wrap; }
             <Note>
               <lid>3</lid>
               <Symbol>
-                <name>accordion.accStdbase</name>
+                <name>accidentalSharp</name>
                 </Symbol>
               <pitch>72</pitch>
               <tpc>14</tpc>

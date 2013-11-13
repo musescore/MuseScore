@@ -158,7 +158,7 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           <Note>
             <Symbol>
-              <name>accordion.accStdbase</name>
+              <name>accidentalSharp</name>
               </Symbol>
             <pitch>72</pitch>
             <tpc>14</tpc>
