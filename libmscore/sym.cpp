@@ -3290,13 +3290,57 @@ void ScoreFont::load()
                   SymId::ornamentMiddleVerticalStroke,
                   SymId::ornamentZigZagLineWithRightEnd
                   } },
-            { SymId::ornamentUpPrall, {}},
-            { SymId::ornamentUpMordent, {}},
-            { SymId::ornamentPrallDown, {}},
-            { SymId::ornamentDownPrall, {}},
-            { SymId::ornamentDownMordent, {}},
-            { SymId::ornamentPrallUp, {}},
-            { SymId::ornamentLinePrall, {}}
+            { SymId::ornamentUpPrall,
+                  {
+                  SymId::ornamentBottomLeftConcaveStroke,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineWithRightEnd
+                  }},
+            { SymId::ornamentUpMordent,
+                  {
+                  SymId::ornamentBottomLeftConcaveStroke,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentMiddleVerticalStroke,
+                  SymId::ornamentZigZagLineWithRightEnd
+                  }},
+            { SymId::ornamentPrallDown,
+                  {
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentBottomRightConcaveStroke,
+                  }},
+            { SymId::ornamentDownPrall,
+                  {
+                  SymId::ornamentLeftVerticalStroke,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineWithRightEnd
+                  }},
+            { SymId::ornamentDownMordent,
+                  {
+                  SymId::ornamentLeftVerticalStroke,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentMiddleVerticalStroke,
+                  SymId::ornamentZigZagLineWithRightEnd
+                  }},
+            { SymId::ornamentPrallUp,
+                  {
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentTopRightConvexStroke,
+                  }},
+            { SymId::ornamentLinePrall,
+                  {
+                  SymId::ornamentLeftVerticalStroke,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineNoRightEnd,
+                  SymId::ornamentZigZagLineWithRightEnd
+                  }}
             };
 
       for (const Composed& c : composed) {
