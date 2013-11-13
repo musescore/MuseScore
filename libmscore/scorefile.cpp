@@ -609,8 +609,10 @@ QString readRootFile(MQZipReader* uz, QList<QString>& images)
                         const QStringRef& tag(e.name());
 
                         if (tag == "rootfile") {
-                              if (rootfile.isEmpty())
+                              if (rootfile.isEmpty()) {
                                     rootfile = e.attribute("full-path");
+                                    e.skipCurrentElement();
+                                    }
                               }
                         else if (tag == "file")
                               images.append(e.readElementText());
