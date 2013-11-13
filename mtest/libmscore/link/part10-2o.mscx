@@ -787,7 +787,7 @@ p, li { white-space: pre-wrap; }
             <text>fingering</text>
             </Text>
           <Text>
-            <style>InstrumentsExcerpt</style>
+            <style>Instrument Name (Part)</style>
             <text>Alto</text>
             </Text>
           </VBox>
@@ -1165,7 +1165,7 @@ p, li { white-space: pre-wrap; }
             <text>fingering</text>
             </Text>
           <Text>
-            <style>InstrumentsExcerpt</style>
+            <style>Instrument Name (Part)</style>
             <text>Tenor</text>
             </Text>
           </VBox>

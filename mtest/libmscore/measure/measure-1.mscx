@@ -449,7 +449,7 @@ p, li { white-space: pre-wrap; }
             <text>measure</text>
             </Text>
           <Text>
-            <style>InstrumentsExcerpt</style>
+            <style>Instrument Name (Part)</style>
             <text>Piano</text>
             </Text>
           </VBox>
@@ -694,7 +694,7 @@ p, li { white-space: pre-wrap; }
             <text>measure</text>
             </Text>
           <Text>
-            <style>InstrumentsExcerpt</style>
+            <style>Instrument Name (Part)</style>
             <text>Flute</text>
             </Text>
           </VBox>

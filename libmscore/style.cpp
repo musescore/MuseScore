@@ -263,11 +263,11 @@ void initStyle(MStyle* s)
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(MM(1), MM(-2)), OA, QPointF(0.0, 100.0)));
 
       AS(TextStyle(
-         TR("Lyrics odd lines"), ff, 11, false, false, false,
+         TR("Lyrics Odd Lines"), ff, 11, false, false, false,
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, QPointF(), true));
 
       AS(TextStyle(
-         TR("Lyrics even lines"), ff, 11, false, false, false,
+         TR("Lyrics Even Lines"), ff, 11, false, false, false,
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, QPointF(), true));
 
       AS(TextStyle(
@@ -275,15 +275,15 @@ void initStyle(MStyle* s)
          ALIGN_CENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsLong"),   ff, 12, false, false, false,
+         TR( "Instrument Name (Long)"),   ff, 12, false, false, false,
          ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsShort"),   ff, 12, false, false, false,
+         TR( "Instrument Name (Short)"),   ff, 12, false, false, false,
          ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
-         TR( "InstrumentsExcerpt"), ff, 18, false, false, false,
+         TR( "Instrument Name (Part)"), ff, 18, false, false, false,
          ALIGN_LEFT | ALIGN_TOP, QPointF(), OA, QPointF()));
 
       AS(TextStyle(
@@ -293,7 +293,7 @@ void initStyle(MStyle* s)
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Technik"), ff, 12, false, true, false,
+         TR( "Technique"), ff, 12, false, true, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS));
 
       AS(TextStyle(
@@ -313,7 +313,7 @@ void initStyle(MStyle* s)
          ALIGN_HCENTER | ALIGN_TOP, QPointF(0, 6)));
 
       AS(TextStyle(
-         TR( "Tuplets"), ff,  10, false, true, false,
+         TR( "Tuplet"), ff,  10, false, true, false,
          ALIGN_CENTER, QPointF(), OA, QPointF(), true));
 
       AS(TextStyle(
@@ -326,7 +326,7 @@ void initStyle(MStyle* s)
          ALIGN_LEFT, QPointF(0, -4.0), OS, QPointF(), true));
 
       AS(TextStyle(
-         TR( "Chordname"), ff,  12, false, false, false,
+         TR( "Chord Symbol"), ff,  12, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true));
 
       AS(TextStyle(
@@ -358,7 +358,7 @@ void initStyle(MStyle* s)
          TR( "Frame"), ff, 12, false, false, false, ALIGN_LEFT | ALIGN_TOP));
 
       AS(TextStyle(
-         TR( "TextLine"), ff,  12, false, false, false,
+         TR( "Text Line"), ff,  12, false, false, false,
          ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, QPointF(), true));
 
       AS(TextStyle(
@@ -638,7 +638,7 @@ StyleData::StyleData(const StyleData& s)
       _textStyles      = s._textStyles;
       _pageFormat.copy(s._pageFormat);
       _spatium         = s._spatium;
-      for (int i = 0; i < ARTICULATIONS; ++i)
+      for (int i = 0; i < (int)ARTICULATIONS; ++i)
             _articulationAnchor[i] = s._articulationAnchor[i];
       }
 

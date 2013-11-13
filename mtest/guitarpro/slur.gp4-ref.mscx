@@ -215,7 +215,7 @@ p, li { white-space: pre-wrap; }
         <VBox>
           <height>10</height>
           <Text>
-            <style>InstrumentsExcerpt</style>
+            <style>Instrument Name (Part)</style>
             <text>Track 1</text>
             </Text>
           </VBox>

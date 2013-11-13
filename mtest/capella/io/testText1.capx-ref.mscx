@@ -84,12 +84,12 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>Lyrics</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>Lyrics</text>
             </Lyrics>
           <Note>
@@ -100,12 +100,12 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>first</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>second</text>
             </Lyrics>
           <Note>
@@ -118,12 +118,12 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <style>Lyrics odd lines</style>
+            <style>Lyrics Odd Lines</style>
             <text>line</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
-            <style>Lyrics even lines</style>
+            <style>Lyrics Even Lines</style>
             <text>line</text>
             </Lyrics>
           <Note>
