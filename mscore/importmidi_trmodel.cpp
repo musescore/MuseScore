@@ -557,15 +557,15 @@ QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int r
       if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
             switch (section) {
                   case TrackCol::DO_IMPORT:
-                        return "Import";
+                        return QCoreApplication::translate("MIDI import track list", "Import");
                   case TrackCol::TRACK_NUMBER:
-                        return "Track";
+                        return QCoreApplication::translate("MIDI import track list", "Track");
                   case TrackCol::LYRICS:
-                        return "Lyrics";
+                        return QCoreApplication::translate("MIDI import track list", "Lyrics");
                   case TrackCol::STAFF_NAME:
-                        return "Staff Name";
+                        return QCoreApplication::translate("MIDI import track list", "Staff Name");
                   case TrackCol::INSTRUMENT:
-                        return "Sound";
+                        return QCoreApplication::translate("MIDI import track list", "Sound");
                   default:
                         break;
                   }

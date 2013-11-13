@@ -49,37 +49,37 @@ OperationsModel::OperationsModel()
                   // - initialize opeations with their default values
                   // - string lists below should match Operation enum values
       Node *quantValue = new Node;
-      quantValue->name = "Quantization";
+      quantValue->name = QCoreApplication::translate("MIDI import operations", "Quantization");
       quantValue->oper.type = MidiOperation::Type::QUANT_VALUE;
       quantValue->oper.value = (int)TrackOperations().quantize.value;
-      quantValue->values.push_back("Value from preferences");
-      quantValue->values.push_back("Quarter");
-      quantValue->values.push_back("Eighth");
-      quantValue->values.push_back("16th");
-      quantValue->values.push_back("32nd");
-      quantValue->values.push_back("64th");
-      quantValue->values.push_back("128th");
+      quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "Value from preferences"));
+      quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "Quarter"));
+      quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "Eighth"));
+      quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "16th"));
+      quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "32nd"));
+      quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "64th"));
+      quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "128th"));
       quantValue->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(quantValue));
       controller->quantValue = quantValue;
 
 
       Node *reduceToShorter = new Node;
-      reduceToShorter->name = "Reduce to shortest note in bar";
+      reduceToShorter->name = QCoreApplication::translate("MIDI import operations", "Reduce to shortest note in bar");
       reduceToShorter->oper.type = MidiOperation::Type::QUANT_REDUCE;
       reduceToShorter->oper.value = Quantization().reduceToShorterNotesInBar;
       reduceToShorter->parent = quantValue;
       quantValue->children.push_back(std::unique_ptr<Node>(reduceToShorter));
 
       Node *useDots = new Node;
-      useDots->name = "Use dots";
+      useDots->name = QCoreApplication::translate("MIDI import operations", "Use dots");
       useDots->oper.type = MidiOperation::Type::USE_DOTS;
       useDots->oper.value = TrackOperations().useDots;
       useDots->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(useDots));
 
       Node *useMultipleVoices = new Node;
-      useMultipleVoices->name = "Multiple voices";
+      useMultipleVoices->name = QCoreApplication::translate("MIDI import operations", "Multiple voices");
       useMultipleVoices->oper.type = MidiOperation::Type::USE_MULTIPLE_VOICES;
       useMultipleVoices->oper.value = TrackOperations().useMultipleVoices;
       useMultipleVoices->parent = root.get();
@@ -90,7 +90,7 @@ OperationsModel::OperationsModel()
       // ------------- tuplets --------------
 
       Node *searchTuplets = new Node;
-      searchTuplets->name = "Search tuplets";
+      searchTuplets->name = QCoreApplication::translate("MIDI import operations", "Search tuplets");
       searchTuplets->oper.type = MidiOperation::Type::TUPLET_SEARCH;
       searchTuplets->oper.value = TrackOperations().tuplets.doSearch;
       searchTuplets->parent = root.get();
@@ -99,7 +99,7 @@ OperationsModel::OperationsModel()
 
 
       Node *duplets = new Node;
-      duplets->name = "Duplets (2)";
+      duplets->name = QCoreApplication::translate("MIDI import operations", "Duplets (2)");
       duplets->oper.type = MidiOperation::Type::TUPLET_2;
       duplets->oper.value = TrackOperations().tuplets.duplets;
       duplets->parent = searchTuplets;
@@ -108,7 +108,7 @@ OperationsModel::OperationsModel()
 
 
       Node *triplets = new Node;
-      triplets->name = "Triplets (3)";
+      triplets->name = QCoreApplication::translate("MIDI import operations", "Triplets (3)");
       triplets->oper.type = MidiOperation::Type::TUPLET_3;
       triplets->oper.value = TrackOperations().tuplets.triplets;
       triplets->parent = searchTuplets;
@@ -117,7 +117,7 @@ OperationsModel::OperationsModel()
 
 
       Node *quadruplets = new Node;
-      quadruplets->name = "Quadruplets (4)";
+      quadruplets->name = QCoreApplication::translate("MIDI import operations", "Quadruplets (4)");
       quadruplets->oper.type = MidiOperation::Type::TUPLET_4;
       quadruplets->oper.value = TrackOperations().tuplets.quadruplets;
       quadruplets->parent = searchTuplets;
@@ -126,7 +126,7 @@ OperationsModel::OperationsModel()
 
 
       Node *quintuplets = new Node;
-      quintuplets->name = "Quintuplets (5)";
+      quintuplets->name = QCoreApplication::translate("MIDI import operations", "Quintuplets (5)");
       quintuplets->oper.type = MidiOperation::Type::TUPLET_5;
       quintuplets->oper.value = TrackOperations().tuplets.quintuplets;
       quintuplets->parent = searchTuplets;
@@ -135,7 +135,7 @@ OperationsModel::OperationsModel()
 
 
       Node *septuplets = new Node;
-      septuplets->name = "Septuplets (7)";
+      septuplets->name = QCoreApplication::translate("MIDI import operations", "Septuplets (7)");
       septuplets->oper.type = MidiOperation::Type::TUPLET_7;
       septuplets->oper.value = TrackOperations().tuplets.septuplets;
       septuplets->parent = searchTuplets;
@@ -144,7 +144,7 @@ OperationsModel::OperationsModel()
 
 
       Node *nonuplets = new Node;
-      nonuplets->name = "Nonuplets (9)";
+      nonuplets->name = QCoreApplication::translate("MIDI import operations", "Nonuplets (9)");
       nonuplets->oper.type = MidiOperation::Type::TUPLET_9;
       nonuplets->oper.value = TrackOperations().tuplets.nonuplets;
       nonuplets->parent = searchTuplets;
@@ -154,7 +154,7 @@ OperationsModel::OperationsModel()
       // ------------------------------------
 
       Node *pickupMeasure = new Node;
-      pickupMeasure->name = "Recognize pickup measure";
+      pickupMeasure->name = QCoreApplication::translate("MIDI import operations", "Recognize pickup measure");
       pickupMeasure->oper.type = MidiOperation::Type::PICKUP_MEASURE;
       pickupMeasure->oper.value = TrackOperations().pickupMeasure;
       pickupMeasure->parent = root.get();
@@ -163,18 +163,18 @@ OperationsModel::OperationsModel()
 
 
       Node *swing = new Node;
-      swing->name = "Detect swing";
+      swing->name = QCoreApplication::translate("MIDI import operations", "Detect swing");
       swing->oper.type = MidiOperation::Type::SWING;
       swing->oper.value = (int)TrackOperations().swing;
-      swing->values.push_back("None (1:1)");
-      swing->values.push_back("Swing (2:1)");
-      swing->values.push_back("Shuffle (3:1)");
+      swing->values.push_back(QCoreApplication::translate("MIDI import operations", "None (1:1)"));
+      swing->values.push_back(QCoreApplication::translate("MIDI import operations", "Swing (2:1)"));
+      swing->values.push_back(QCoreApplication::translate("MIDI import operations", "Shuffle (3:1)"));
       swing->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(swing));
 
 
       Node *changeClef = new Node;
-      changeClef->name = "Allow clef changes within a staff";
+      changeClef->name = QCoreApplication::translate("MIDI import operations", "Allow clef changes within a staff");
       changeClef->oper.type = MidiOperation::Type::CHANGE_CLEF;
       changeClef->oper.value = TrackOperations().changeClef;
       changeClef->parent = root.get();
@@ -183,7 +183,7 @@ OperationsModel::OperationsModel()
 
 
       Node *removeDrumRests = new Node;
-      removeDrumRests->name = "Remove rests and ties between notes";
+      removeDrumRests->name = QCoreApplication::translate("MIDI import operations", "Remove rests and ties between notes");
       removeDrumRests->oper.type = MidiOperation::Type::REMOVE_DRUM_RESTS;
       removeDrumRests->oper.value = TrackOperations().removeDrumRests;
       removeDrumRests->parent = root.get();
@@ -192,7 +192,7 @@ OperationsModel::OperationsModel()
 
 
       Node *splitDrums = new Node;
-      splitDrums->name = "Split drum set";
+      splitDrums->name = QCoreApplication::translate("MIDI import operations", "Split drum set");
       splitDrums->oper.type = MidiOperation::Type::SPLIT_DRUMS;
       splitDrums->oper.value = TrackOperations().splitDrums.doSplit;;
       splitDrums->parent = root.get();
@@ -201,7 +201,7 @@ OperationsModel::OperationsModel()
 
 
       Node *showStaffBracket = new Node;
-      showStaffBracket->name = "Show staff bracket";
+      showStaffBracket->name = QCoreApplication::translate("MIDI import operations", "Show staff bracket");
       showStaffBracket->oper.type = MidiOperation::Type::SHOW_STAFF_BRACKET;
       showStaffBracket->oper.value = TrackOperations().splitDrums.showStaffBracket;
       showStaffBracket->parent = splitDrums;
@@ -210,7 +210,7 @@ OperationsModel::OperationsModel()
 
 
       Node *doLHRH = new Node;
-      doLHRH->name = "Left/right hand separation";
+      doLHRH->name = QCoreApplication::translate("MIDI import operations", "Left/right hand separation");
       doLHRH->oper.type = MidiOperation::Type::DO_LHRH_SEPARATION;
       doLHRH->oper.value = LHRHSeparation().doIt;
       doLHRH->parent = root.get();
@@ -219,52 +219,52 @@ OperationsModel::OperationsModel()
 
 
       Node *LHRHMethod = new Node;
-      LHRHMethod->name = "Separation method";
+      LHRHMethod->name = QCoreApplication::translate("MIDI import operations", "Separation method");
       LHRHMethod->oper.type = MidiOperation::Type::LHRH_METHOD;
       LHRHMethod->oper.value = (int)LHRHSeparation().method;
-      LHRHMethod->values.push_back("Hand width");
-      LHRHMethod->values.push_back("Fixed pitch");
+      LHRHMethod->values.push_back(QCoreApplication::translate("MIDI import operations", "Hand width"));
+      LHRHMethod->values.push_back(QCoreApplication::translate("MIDI import operations", "Fixed pitch"));
       LHRHMethod->parent = doLHRH;
       doLHRH->children.push_back(std::unique_ptr<Node>(LHRHMethod));
       controller->LHRHMethod = LHRHMethod;
 
 
       Node *LHRHPitchOctave = new Node;
-      LHRHPitchOctave->name = "Split pitch octave";
+      LHRHPitchOctave->name = QCoreApplication::translate("MIDI import operations", "Split pitch octave");
       LHRHPitchOctave->oper.type = MidiOperation::Type::LHRH_SPLIT_OCTAVE;
       LHRHPitchOctave->oper.value = (int)LHRHSeparation().splitPitchOctave;
-      LHRHPitchOctave->values.push_back("C-1");
-      LHRHPitchOctave->values.push_back("C0");
-      LHRHPitchOctave->values.push_back("C1");
-      LHRHPitchOctave->values.push_back("C2");
-      LHRHPitchOctave->values.push_back("C3");
-      LHRHPitchOctave->values.push_back("C4");
-      LHRHPitchOctave->values.push_back("C5");
-      LHRHPitchOctave->values.push_back("C6");
-      LHRHPitchOctave->values.push_back("C7");
-      LHRHPitchOctave->values.push_back("C8");
-      LHRHPitchOctave->values.push_back("C9");
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C-1"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C0"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C1"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C2"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C3"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C4"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C5"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C6"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C7"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C8"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C9"));
       LHRHPitchOctave->parent = LHRHMethod;
       LHRHMethod->children.push_back(std::unique_ptr<Node>(LHRHPitchOctave));
       controller->LHRHPitchOctave = LHRHPitchOctave;
 
 
       Node *LHRHPitchNote = new Node;
-      LHRHPitchNote->name = "Split pitch note";
+      LHRHPitchNote->name = QCoreApplication::translate("MIDI import operations", "Split pitch note");
       LHRHPitchNote->oper.type = MidiOperation::Type::LHRH_SPLIT_NOTE;
       LHRHPitchNote->oper.value = (int)LHRHSeparation().splitPitchNote;
-      LHRHPitchNote->values.push_back("C");
-      LHRHPitchNote->values.push_back("C#");
-      LHRHPitchNote->values.push_back("D");
-      LHRHPitchNote->values.push_back("D#");
-      LHRHPitchNote->values.push_back("E");
-      LHRHPitchNote->values.push_back("F");
-      LHRHPitchNote->values.push_back("F#");
-      LHRHPitchNote->values.push_back("G");
-      LHRHPitchNote->values.push_back("G#");
-      LHRHPitchNote->values.push_back("A");
-      LHRHPitchNote->values.push_back("A#");
-      LHRHPitchNote->values.push_back("B");
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "C"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "C#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "D"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "D#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "E"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "F"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "F#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "G"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "G#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "A"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "A#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "B"));
       LHRHPitchNote->parent = LHRHMethod;
       LHRHMethod->children.push_back(std::unique_ptr<Node>(LHRHPitchNote));
       controller->LHRHPitchNote = LHRHPitchNote;
@@ -416,9 +416,10 @@ QVariant OperationsModel::headerData(int section, Qt::Orientation orientation, i
             {
             switch (section) {
                   case OperationCol::OPER_NAME:
-                        return "Selected track [" + trackLabel + "] operations";
+                        return QCoreApplication::translate("MIDI import operations",
+                                         "Selected track [%1] operations").arg(trackLabel);
                   case OperationCol::VALUE:
-                        return "Value";
+                        return QCoreApplication::translate("MIDI import operations", "Value");
                   default:
                         break;
                   }
