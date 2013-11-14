@@ -138,10 +138,10 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       if (chord->isGrace()) {
             chord = static_cast<Chord*>(chord->parent());
             tieLen = 0;
-            ticks = chord->duration().ticks();
+            ticks = chord->actualTicks();
             }
       else {
-            ticks = chord->duration().ticks();
+            ticks = chord->actualTicks();
             tieLen = note->playTicks() - ticks;
             }
       int tick1 = chord->tick() + tickOffset;
@@ -541,9 +541,10 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       //
       Tremolo* tremolo = chord->tremolo();
       if (tremolo) {
-            int n = 1 << tremolo->lines();
-            int l = 1000 / n;
+            //int n = 1 << tremolo->lines();
+            //int l = 1000 / n;
             if (chord->tremoloChordType() == TremoloFirstNote) {
+                  int t = MScore::division / (1 << tremolo->lines());
                   Segment::SegmentTypes st = Segment::SegChordRest;
                   Segment* seg2 = seg->next(st);
                   int track = chord->track();
@@ -552,15 +553,19 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                   Chord* c2 = seg2 ? static_cast<Chord*>(seg2->element(track)) : 0;
                   if (c2 && c2->type() == Element::CHORD) {
                         int tnotes = qMin(notes, c2->notes().size());
+                        int tticks = chord->actualTicks() * 2; // use twice the size
+                        int n = tticks / t;
                         n /= 2;
+                        int l = 2000 * t / tticks;
                         for (int k = 0; k < tnotes; ++k) {
                               NoteEventList* events = &ell[k];
                               events->clear();
                               int p1 = chord->notes()[k]->pitch();
                               int p2 = c2->notes()[k]->pitch();
+                              int dpitch = p2 - p1;
                               for (int i = 0; i < n; ++i) {
-                                    events->append(NoteEvent(p1, l * i * 2, l));
-                                    events->append(NoteEvent(p2, l * i * 2 + l, l));
+                                    events->append(NoteEvent(0, l * i * 2, l));
+                                    events->append(NoteEvent(dpitch, l * i * 2 + l, l));
                                     }
                               }
                         }
@@ -568,8 +573,15 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                         qDebug("Chord::renderTremolo: cannot find 2. chord\n");
                   }
             else if (chord->tremoloChordType() == TremoloSecondNote) {
+                  for (int k = 0; k < notes; ++k) {
+                        NoteEventList* events = &(ell)[k];
+                        events->clear();
+                        }
                   }
             else if (chord->tremoloChordType() == TremoloSingle) {
+                  int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+                  int n = chord->durationTicks() / t;
+                  int l = 1000 / n;
                   for (int k = 0; k < notes; ++k) {
                         NoteEventList* events = &(ell)[k];
                         events->clear();
@@ -595,11 +607,13 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                   end   = -1;
                   step  = -1;
                   }
+            int j = 0;
             for (int i = start; i != end; i += step) {
                   NoteEventList* events = &(ell)[i];
                   events->clear();
-                  int ot = (l * i * 1000) / chord->upNote()->playTicks();
+                  int ot = (l * j * 1000) / chord->upNote()->playTicks();
                   events->append(NoteEvent(0, ot, 1000 - ot));
+                  j++;
                   }
             }
 
@@ -658,7 +672,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       for (int i = 0; i < notes; ++i) {
             NoteEventList* el = &ell[i];
             int nn = el->size();
-            if (nn == 0) {
+            if (nn == 0 && chord->tremoloChordType() != TremoloSecondNote) {
                   el->append(NoteEvent(0, ontime, 1000-ontime));
                   ++nn;
                   }
