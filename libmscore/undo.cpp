@@ -1419,6 +1419,7 @@ void RemoveElement::redo()
       {
       element->score()->removeElement(element);
       if (element->isChordRest()) {
+            undoRemoveTuplet(static_cast<ChordRest*>(element));
             if (element->type() == Element::CHORD) {
                   Chord* chord = static_cast<Chord*>(element);
                   Note* endNote = 0; // find one instance of endNote
@@ -1435,15 +1436,8 @@ void RemoveElement::redo()
                         endNote->score()->updateAccidentals(m,eChord->staffIdx());
                         }
                   }
-            undoRemoveTuplet(static_cast<ChordRest*>(element));
-<<<<<<< HEAD
-      else if (element->type() == Element::KEYSIG) {
-=======
             }
-      if (element->type() == Element::MEASURE)
-            element->score()->setLayoutAll(true);    //DEBUG
-      if (element->type() == Element::KEYSIG) {
->>>>>>> update accidentals of tied back note when tie is deleted
+      else if (element->type() == Element::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(element);
             if (!ks->generated())
                   ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
