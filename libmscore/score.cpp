@@ -2575,14 +2575,6 @@ void Score::cmdRemoveStaff(int staffIdx)
             Spanner* s = i->second;
             if (s->staffIdx() == staffIdx)
                   sl.append(s);
-            if (s->staffIdx() > staffIdx) {
-                  int t = s->track() - VOICES;
-                  s->setTrack(t >=0 ? t : 0);
-                  if (s->track2() != -1) {
-                        t = s->track2() - VOICES;
-                        s->setTrack2(t >=0 ? t : s->track());
-                        }
-                  }
             }
       for (auto i : sl)
             undoRemoveElement(i);
