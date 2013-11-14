@@ -5,9 +5,9 @@
 #
 SRC="mmrest-1 mmrest-2 mmrest-4 mmrest-5 mmrest-6 mmrest-7 mmrest-8 mmrest-9\
  fmrest-1 fmrest-2 fmrest-3 fmrest-4 fmrest-5 measure-repeat-1 \
- noteheadposition-1 valign-1 emmentaler-1 bravura-1 emmentaler-2 bravura-2
-  emmentaler-3 bravura-3 emmentaler-5 bravura-5"
-# emmentaler-3 bravura-3 emmentaler-4 bravura-4 emmentaler-5 bravura-5"
+ noteheadposition-1 valign-1 emmentaler-1 bravura-1 emmentaler-2 bravura-2\
+ emmentaler-3 bravura-3 emmentaler-4 bravura-4 emmentaler-5 bravura-5\
+ emmentaler-6 bravura-6 emmentaler-7 bravura-7"
 
 MSCORE=../build.debug/mscore/mscore
 DPI=130

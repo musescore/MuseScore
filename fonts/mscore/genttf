@@ -1,0 +1,5 @@
+#!/usr/local/bin/fontforge -lang=ff
+
+Open($1)
+Generate($1:r + ".ttf")
+

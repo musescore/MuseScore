@@ -9,7 +9,7 @@
         <file>data/paper5.png</file>
         <file>data/table.svg</file>
 
-        <file alias="fonts/mscore/mscore.otf">../fonts/mscore/mscore.otf</file>
+        <file alias="fonts/mscore/mscore.ttf">../fonts/mscore/mscore.ttf</file>
         <file alias="/fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
         <file alias="/fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
 
