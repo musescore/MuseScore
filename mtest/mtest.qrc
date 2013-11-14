@@ -1,7 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
    <qresource prefix="/">
-      <file alias="fonts/mscore/mscore.otf">../fonts/mscore/mscore.otf</file>
+      <file alias="fonts/mscore/mscore.otf">../fonts/mscore/mscore.ttf</file>
       <file alias="fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
       <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
       <file alias="fonts/bravura/Bravura.otf">../fonts/bravura/Bravura.otf</file>
