@@ -408,7 +408,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                   switch (index.column()) {
                         case TrackCol::TRACK_NUMBER:
                               if (trackIndex == -1)
-                                    return "All";
+                                    return QCoreApplication::translate("MIDI import operations", "All");
                               return trackIndex + 1;
                         case TrackCol::LYRICS:
                               {
