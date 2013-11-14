@@ -1396,6 +1396,8 @@ void RemoveElement::undo()
                   foreach(Note* note, chord->notes()) {
                         if (note->tieBack())
                               note->tieBack()->setEndNote(note);
+                        if (note->tieFor() && note->tieFor()->endNote()) 
+                              note->tieFor()->endNote()->setTieBack(note->tieFor());
                         }
                   }
             undoAddTuplet(static_cast<ChordRest*>(element));
@@ -1416,8 +1418,25 @@ void RemoveElement::undo()
 void RemoveElement::redo()
       {
       element->score()->removeElement(element);
-      if (element->isChordRest())
+      if (element->isChordRest()) {
             undoRemoveTuplet(static_cast<ChordRest*>(element));
+            if (element->type() == Element::CHORD) {
+                  Chord* chord = static_cast<Chord*>(element);
+                  Note* endNote = 0; // find one instance of endNote
+                  foreach(Note* note, chord->notes()) {
+                        if (note->tieFor() && note->tieFor()->endNote()) {
+                              endNote = note->tieFor()->endNote();
+                              note->tieFor()->endNote()->setTieBack(0);
+                              }
+                        }
+                  if (endNote) {
+                        // update accidentals in endNotes's measure
+                        Chord* eChord = endNote->chord();
+                        Measure* m = eChord->segment()->measure();
+                        endNote->score()->updateAccidentals(m,eChord->staffIdx());
+                        }
+                  }
+            }
       else if (element->type() == Element::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(element);
             if (!ks->generated())
