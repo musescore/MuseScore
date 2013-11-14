@@ -479,6 +479,7 @@ void Chord::remove(Element* e)
                         if (tremolo->chord2())
                               tremolo->chord2()->setDurationType(d);
                         tremolo->chord2()->setTremolo(0);
+                        tremolo->chord2()->setTremoloChordType(TremoloSingle);
                         }
                   _tremolo = 0;
                   }
