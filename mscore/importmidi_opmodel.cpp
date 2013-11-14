@@ -65,7 +65,7 @@ OperationsModel::OperationsModel()
 
 
       Node *reduceToShorter = new Node;
-      reduceToShorter->name = QCoreApplication::translate("MIDI import operations", "Reduce to shortest note in bar");
+      reduceToShorter->name = QCoreApplication::translate("MIDI import operations", "Reduce to shortest note in measure");
       reduceToShorter->oper.type = MidiOperation::Type::QUANT_REDUCE;
       reduceToShorter->oper.value = Quantization().reduceToShorterNotesInBar;
       reduceToShorter->parent = quantValue;
