@@ -515,8 +515,13 @@ void Note::remove(Element* e)
                   {
                   Tie* tie = static_cast<Tie*>(e);
                   setTieFor(0);
-                  if (tie->endNote())
+                  if (tie->endNote()) {
                         tie->endNote()->setTieBack(0);
+                        // update accidentals for endNote
+                        Chord* chord = tie->endNote()->chord();
+                        Measure *m = chord->segment()->measure();
+                        score()->updateAccidentals(m,chord->staffIdx());
+                        }
                   int n = tie->spannerSegments().size();
                   for (int i = 0; i < n; ++i) {
                         SpannerSegment* ss = tie->spannerSegments().at(i);
