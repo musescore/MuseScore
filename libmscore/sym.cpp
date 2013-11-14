@@ -25,8 +25,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 QVector<ScoreFont> ScoreFont::_scoreFonts = {
-      ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.otf"),
-      ScoreFont("Goneville",  "Gonville-20", ":/fonts/gonville/", "gonville-20.ttf"),
+      ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"),
+//      ScoreFont("Goneville",  "Gonville-20", ":/fonts/gonville/", "gonville-20.ttf"),
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf")
       };
 

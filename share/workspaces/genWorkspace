@@ -1,0 +1,3 @@
+#!/bin/bash
+
+../../build.debug/mscore/mscore -w
