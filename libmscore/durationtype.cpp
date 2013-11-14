@@ -512,9 +512,9 @@ void TDuration::print() const
             case V_WHOLE:     s = "Whole";   break;
             case V_HALF:      s = "Half";    break;
             case V_QUARTER:   s = "Quarter"; break;
-            case V_EIGHT:     s = "Eight";   break;
+            case V_EIGHT:     s = "Eighth";   break;
             case V_16TH:      s = "16th";    break;
-            case V_32ND:      s = "32th";    break;
+            case V_32ND:      s = "32nd";    break;
             case V_64TH:      s = "64th";    break;
             case V_128TH:     s = "128th";   break;
             case V_256TH:     s = "256th";   break;
