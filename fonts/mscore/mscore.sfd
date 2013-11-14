@@ -1,7 +1,10 @@
 SplineFontDB: 3.0
-FontName: MScore-20
+FontName: MScore
 FullName: MScore
-Copyright: This font is distributed under the GNU General Public License. As a special exception, if you create a document which uses this font, and embed this font or unaltered portions of this font into the document, this font does not by itself cause the resulting document to be covered by the GNU General Public License.
+FamilyName: MScore
+Weight: Regular
+Copyright: 
+Version: 
 ItalicAngle: 0
 UnderlinePosition: -99
 UnderlineWidth: 49
@@ -10,12 +13,12 @@ Descent: 205
 LayerCount: 2
 Layer: 0 1 "Back"  1
 Layer: 1 1 "Fore"  0
-XUID: [1021 577 2134738168 4204088]
+XUID: [1021 577 2134738168 4915929]
 OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
-CreationTime: 1384441572
-ModificationTime: 1384441744
+CreationTime: 1384442002
+ModificationTime: 1384444790
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
@@ -67,7 +70,7 @@ ShortTable: maxp 16
   0
   0
 EndShort
-LangName: 1033 "" "" "" "FontForge 2.0 : MScore : 12-4-2010" 
+LangName: 1033 
 GaspTable: 2 8 2 65535 3 0
 Encoding: Custom
 Compacted: 1
