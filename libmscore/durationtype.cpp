@@ -106,6 +106,8 @@ QString TDuration::name() const
       switch(_val) {
             case V_QUARTER:   return "quarter";
             case V_EIGHT:     return "eighth";
+            case V_1024TH:    return "1024th";
+            case V_512TH:     return "512th";
             case V_256TH:     return "256th";
             case V_128TH:     return "128th";
             case V_64TH:      return "64th";
@@ -131,6 +133,8 @@ int TDuration::headType() const
       {
       int headType = Note::HEAD_WHOLE;
       switch(_val) {
+            case V_1024TH:
+            case V_512TH:
             case V_256TH:
             case V_128TH:
             case V_64TH:
@@ -171,8 +175,10 @@ int TDuration::hooks() const
       static const int table[] = {
          // V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHT, V_16TH,
             0,      0,       0,       0,      0,         1,       2,
-         // V_32ND, V_64TH, V_128TH, V_256TH, V_MEASURE, V_ZERO, V_INVALID
-            3,      4,       5,       6,      0,         0,       0
+         // V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
+            3,      4,       5,       6,      7,       8,
+         // V_ZERO, V_MEASURE, V_INVALID
+            0,      0,       0
             };
       return table[_val];
       }
@@ -184,6 +190,8 @@ int TDuration::hooks() const
 bool TDuration::hasStem() const
       {
       switch(_val) {
+            case V_1024TH:
+            case V_512TH:
             case V_256TH:
             case V_128TH:
             case V_64TH:
@@ -219,6 +227,10 @@ void TDuration::setType(const QString& s)
             _val = V_QUARTER;
       else if (s == "eighth")
             _val = V_EIGHT;
+      else if (s == "1024th")
+            _val = V_1024TH;
+      else if (s == "512th")
+            _val = V_512TH;
       else if (s == "256th")
             _val = V_256TH;
       else if (s == "128th")
@@ -330,6 +342,8 @@ Fraction TDuration::fraction() const
       int z = 1;
       unsigned n;
       switch(_val) {
+            case V_1024TH:    n = 1024;     break;
+            case V_512TH:     n = 512;      break;
             case V_256TH:     n = 256;      break;
             case V_128TH:     n = 128;      break;
             case V_64TH:      n = 64;       break;
@@ -373,6 +387,8 @@ TDuration::TDuration(const Fraction& _f)
             case 64:    _val = V_64TH; break;
             case 128:   _val = V_128TH; break;
             case 256:   _val = V_256TH; break;
+            case 512:   _val = V_512TH; break;
+            case 1024:  _val = V_1024TH; break;
             default:    _val = V_INVALID; break;
             }
 
@@ -496,9 +512,9 @@ void TDuration::print() const
             case V_WHOLE:     s = "Whole";   break;
             case V_HALF:      s = "Half";    break;
             case V_QUARTER:   s = "Quarter"; break;
-            case V_EIGHT:     s = "Eight";   break;
+            case V_EIGHT:     s = "Eighth";   break;
             case V_16TH:      s = "16th";    break;
-            case V_32ND:      s = "32th";    break;
+            case V_32ND:      s = "32nd";    break;
             case V_64TH:      s = "64th";    break;
             case V_128TH:     s = "128th";   break;
             case V_256TH:     s = "256th";   break;
