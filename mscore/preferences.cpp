@@ -1450,7 +1450,7 @@ bool Preferences::readDefaultStyle()
       {
       if (defaultStyleFile.isEmpty())
             return false;
-      MStyle* style = new MStyle;
+      MStyle* style = new MStyle(*MScore::defaultStyle());
       QFile f(defaultStyleFile);
       if (!f.open(QIODevice::ReadOnly))
             return false;
