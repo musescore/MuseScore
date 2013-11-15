@@ -319,6 +319,15 @@ QMap<QString, QString> nmap {
 //    { "uniE1D2", "uniE1D2" },
       { "uniE1D3", "ornamentPrecompSlide" },
 
+      { "uniE1D6", "gClef15mb" },     // new glyphs for smufl compatibility
+      { "uniE1D7", "gClef8vb"  },
+      { "uniE1D8", "gClef8va"  },
+      { "uniE1D9", "gClef15ma" },
+      { "uniE1DA", "fClef15mb" },
+      { "uniE1DB", "fClef8vb"  },
+      { "uniE1DC", "fClef8va"  },
+      { "uniE1DD", "fClef15ma" },
+
       { "accidentals.sori", "accidentalSori" },
       { "accidentals.koron", "accidentalKoron" }
 
