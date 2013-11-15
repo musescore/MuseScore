@@ -544,7 +544,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             //int n = 1 << tremolo->lines();
             //int l = 1000 / n;
             if (chord->tremoloChordType() == TremoloFirstNote) {
-                  int t = MScore::division / (1 << tremolo->lines());
+                  int t = MScore::division / (1 << tremolo->lines() + chord->durationType().hooks());
                   Segment::SegmentTypes st = Segment::SegChordRest;
                   Segment* seg2 = seg->next(st);
                   int track = chord->track();
