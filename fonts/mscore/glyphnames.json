@@ -209,23 +209,17 @@
     "mensuralBrevis": {
         "codepoint": "U+e1c6"
     },
-    "noteDoBlack": {
+    "noteShapeTriangleUpBlack": {
         "codepoint": "U+e140"
     },
-    "noteDoHalf": {
+    "noteShapeTriangleUpWhite": {
         "codepoint": "U+e13e"
     },
-    "noteDoWhole": {
-        "codepoint": "U+e13d"
+    "noteShapeTriangleRightBlack": {
+        "codepoint": "U+e14f"
     },
-    "noteFaBlack": {
-        "codepoint": "U+e14e"
-    },
-    "noteFaHalf": {
-        "codepoint": "U+e14c"
-    },
-    "noteFaWhole": {
-        "codepoint": "U+e14a"
+    "noteShapeTriangleRightWhite": {
+        "codepoint": "U+e14d"
     },
     "noteheadBlack": {
         "codepoint": "U+e12d"
@@ -299,50 +293,35 @@
     "noteheadXWhole": {
         "codepoint": "U+e139"
     },
-    "noteLaBlack": {
+    "noteShapeSquareBlack": {
         "codepoint": "U+e152"
     },
-    "noteLaHalf": {
+    "noteShapeSquareWhite": {
         "codepoint": "U+e151"
     },
-    "noteLaWhole": {
-        "codepoint": "U+e150"
-    },
-    "noteMiBlack": {
+    "noteShapeDiamondBlack": {
         "codepoint": "U+e149"
     },
-    "noteMiHalf": {
+    "noteShapeDiamondWhite": {
         "codepoint": "U+e148"
     },
-    "noteMiWhole": {
-        "codepoint": "U+e147"
-    },
-    "noteReBlack": {
+    "noteShapeMoonBlack": {
         "codepoint": "U+e145"
     },
-    "noteReHalf": {
+    "noteShapeMoonWhite": {
         "codepoint": "U+e143"
     },
-    "noteReWhole": {
-        "codepoint": "U+e142"
-    },
-    "noteSoBlack": {
+    "noteShapeRoundBlack": {
         "codepoint": "U+e1ce"
     },
-    "noteSoHalf": {
+    "noteShapeRoundWhite": {
         "codepoint": "U+e1cd"
     },
-    "noteSoWhole": {
-        "codepoint": "U+e1cc"
-    },
-    "noteTiBlack": {
+    "noteShapeTriangleRoundBlack": {
         "codepoint": "U+e156"
     },
-    "noteTiHalf": {
+    "noteShapeTriangleRoundWhite": {
         "codepoint": "U+e154"
-    },
-    "noteTiWhole": {
-        "codepoint": "U+e153"
     },
     "ornamentDownMordent": {
         "codepoint": "U+e18b"
