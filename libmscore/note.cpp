@@ -64,41 +64,60 @@ namespace Ms {
 //---------------------------------------------------------
 
 const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
-      {     // down stem
-      { SymId::noteheadWhole,        SymId::noteheadHalf,        SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
-      { SymId::noteheadXWhole,       SymId::noteheadXHalf,       SymId::noteheadXBlack,    SymId::noteheadXWhole       },
-      { SymId::noteheadDiamondWhole, SymId::noteheadDiamondHalf, SymId::noteheadDiamondBlack, SymId::noteheadDiamondWhole  },
-#if 0
-      { SymId(s0triangleHeadSym),    SymId(d1triangleHeadSym),   SymId(d2triangleHeadSym), SymId(s0triangleHeadSym)    },
-      { SymId(s0miHeadSym),          SymId(s1miHeadSym),         SymId(s2miHeadSym),       SymId::noSym                },
-      { SymId(wholeslashheadSym),    SymId(halfslashheadSym),    SymId(quartslashheadSym), SymId(wholeslashheadSym)    },
-      { SymId(xcircledheadSym),      SymId(xcircledheadSym),     SymId(xcircledheadSym),   SymId(xcircledheadSym)      },
-      { SymId(s0doHeadSym),          SymId(d1doHeadSym),         SymId(d2doHeadSym),       SymId::noSym                },
-      { SymId(s0reHeadSym),          SymId(d1reHeadSym),         SymId(d2reHeadSym),       SymId::noSym                },
-      { SymId(d0faHeadSym),          SymId(d1faHeadSym),         SymId(d2faHeadSym),       SymId::noSym                },
-      { SymId(s0laHeadSym),          SymId(s1laHeadSym),         SymId(s2laHeadSym),       SymId::noSym                },
-      { SymId(s0tiHeadSym),          SymId(d1tiHeadSym),         SymId(d2tiHeadSym),       SymId::noSym                },
-      { SymId(s0solHeadSym),         SymId(s1solHeadSym),        SymId(s2solHeadSym),      SymId::noSym                },
-#endif
-      },
-      {     // up stem
-      { SymId::noteheadWhole,        SymId::noteheadHalf,        SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
-      { SymId::noteheadXWhole,       SymId::noteheadXHalf,       SymId::noteheadXBlack,    SymId::noteheadXWhole       },
-      { SymId::noteheadDiamondWhole, SymId::noteheadDiamondHalf, SymId::noteheadDiamondBlack, SymId::noteheadDiamondWhole  },
-#if 0 // TODO-smufl
-      { SymId(s0triangleHeadSym),    SymId(u1triangleHeadSym),   SymId(u2triangleHeadSym), SymId(s0triangleHeadSym)    },
-      { SymId(s0miHeadSym),          SymId(s1miHeadSym),         SymId(s2miHeadSym),       SymId::noSym                },
-      { SymId(wholeslashheadSym),    SymId(halfslashheadSym),    SymId(quartslashheadSym), SymId(wholeslashheadSym)    },
-      { SymId(xcircledheadSym),      SymId(xcircledheadSym),     SymId(xcircledheadSym),   SymId(xcircledheadSym)      },
-      { SymId(s0doHeadSym),          SymId(u1doHeadSym),         SymId(u2doHeadSym),       SymId::noSym                },
-      { SymId(s0reHeadSym),          SymId(u1reHeadSym),         SymId(u2reHeadSym),       SymId::noSym                },
-      { SymId(u0faHeadSym),          SymId(u1faHeadSym),         SymId(u2faHeadSym),       SymId::noSym                },
-      { SymId(s0laHeadSym),          SymId(s1laHeadSym),         SymId(s2laHeadSym),       SymId::noSym                },
-      { SymId(s0tiHeadSym),          SymId(u1tiHeadSym),         SymId(u2tiHeadSym),       SymId::noSym                },
-      { SymId(s0solHeadSym),         SymId(s1solHeadSym),        SymId(s2solHeadSym),      SymId::noSym                },
-#endif
-      }
-      };
+   // previous non-SMUFL data kept in comments for future reference
+   {     // down stem
+      { SymId::noteheadWhole,       SymId::noteheadHalf,          SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
+      { SymId::noteheadXWhole,      SymId::noteheadXHalf,         SymId::noteheadXBlack,    SymId::noteheadXWhole       },
+      { SymId::noteheadDiamondWhole,SymId::noteheadDiamondHalf,   SymId::noteheadDiamondBlack, SymId::noteheadDiamondWhole  },
+//    { SymId(s0triangleHeadSym),   SymId(d1triangleHeadSym),     SymId(d2triangleHeadSym), SymId(s0triangleHeadSym)    },
+      { SymId::noteheadTriangleDownWhole, SymId::noteheadTriangleDownHalf, SymId::noteheadTriangleDownBlack, SymId::noteheadTriangleDownDoubleWhole },
+//    { SymId(s0miHeadSym),         SymId(s1miHeadSym),           SymId(s2miHeadSym),           SymId::noSym            },
+      { SymId::noteMiWhole,         SymId::noteMiHalf,            SymId::noteMiBlack,           SymId::noSym            },
+//    { SymId(wholeslashheadSym),   SymId(halfslashheadSym),      SymId(quartslashheadSym),     SymId(wholeslashheadSym)},
+      { SymId::noteheadSlashDiamondWhite, SymId::noteheadSlashWhite, SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashDiamondWhite},
+//    { SymId(xcircledheadSym),     SymId(xcircledheadSym),       SymId(xcircledheadSym),       SymId(xcircledheadSym)  },
+      { SymId::noteheadCircleXWhole,SymId::noteheadCircleXHalf,   SymId::noteheadCircleX,       SymId::noteheadCircleXDoubleWhole},
+//    { SymId(s0doHeadSym),         SymId(d1doHeadSym),           SymId(d2doHeadSym),           SymId::noSym            },
+      { SymId::noteDoWhole,         SymId::noteDoHalf,            SymId::noteDoBlack,           SymId::noSym            },
+//    { SymId(s0reHeadSym),         SymId(d1reHeadSym),           SymId(d2reHeadSym),           SymId::noSym            },
+      { SymId::noteReWhole,         SymId::noteReHalf,            SymId::noteReBlack,           SymId::noSym            },
+//    { SymId(d0faHeadSym),         SymId(d1faHeadSym),           SymId(d2faHeadSym),           SymId::noSym            },
+      { SymId::noteFaWhole,         SymId::noteFaHalf,            SymId::noteFaBlack,           SymId::noSym            },
+//    { SymId(s0laHeadSym),         SymId(s1laHeadSym),           SymId(s2laHeadSym),           SymId::noSym            },
+      { SymId::noteLaWhole,         SymId::noteLaHalf,            SymId::noteLaBlack,           SymId::noSym            },
+//    { SymId(s0tiHeadSym),         SymId(d1tiHeadSym),           SymId(d2tiHeadSym),           SymId::noSym            },
+      { SymId::noteTiWhole,         SymId::noteTiHalf,            SymId::noteTiBlack,           SymId::noSym            },
+//    { SymId(s0solHeadSym),        SymId(s1solHeadSym),          SymId(s2solHeadSym),          SymId::noSym            },
+      { SymId::noteSoWhole,         SymId::noteSoHalf,            SymId::noteSoBlack,           SymId::noSym            },
+      { SymId::noteheadWhole,       SymId::noteheadHalf,          SymId::noteheadBlack,         SymId::mensuralBrevis   },
+   },
+   {     // up stem
+      { SymId::noteheadWhole,       SymId::noteheadHalf,          SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
+      { SymId::noteheadXWhole,      SymId::noteheadXHalf,         SymId::noteheadXBlack,    SymId::noteheadXWhole       },
+      { SymId::noteheadDiamondWhole,SymId::noteheadDiamondHalf,   SymId::noteheadDiamondBlack, SymId::noteheadDiamondWhole  },
+//    { SymId(s0triangleHeadSym),   SymId(d1triangleHeadSym),     SymId(d2triangleHeadSym), SymId(s0triangleHeadSym)    },
+      { SymId::noteheadTriangleDownWhole, SymId::noteheadTriangleDownHalf, SymId::noteheadTriangleDownBlack, SymId::noteheadTriangleDownDoubleWhole },
+//    { SymId(s0miHeadSym),         SymId(s1miHeadSym),           SymId(s2miHeadSym),           SymId::noSym            },
+      { SymId::noteMiWhole,         SymId::noteMiHalf,            SymId::noteMiBlack,           SymId::noSym            },
+//    { SymId(wholeslashheadSym),   SymId(halfslashheadSym),      SymId(quartslashheadSym),     SymId(wholeslashheadSym)},
+      { SymId::noteheadSlashDiamondWhite, SymId::noteheadSlashWhite, SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashDiamondWhite},
+//    { SymId(xcircledheadSym),     SymId(xcircledheadSym),       SymId(xcircledheadSym),       SymId(xcircledheadSym)  },
+      { SymId::noteheadCircleXWhole,SymId::noteheadCircleXHalf,   SymId::noteheadCircleX,       SymId::noteheadCircleXDoubleWhole},
+//    { SymId(s0doHeadSym),         SymId(d1doHeadSym),           SymId(d2doHeadSym),           SymId::noSym            },
+      { SymId::noteDoWhole,         SymId::noteDoHalf,            SymId::noteDoBlack,           SymId::noSym            },
+//    { SymId(s0reHeadSym),         SymId(d1reHeadSym),           SymId(d2reHeadSym),           SymId::noSym            },
+      { SymId::noteReWhole,         SymId::noteReHalf,            SymId::noteReBlack,           SymId::noSym            },
+//    { SymId(d0faHeadSym),         SymId(d1faHeadSym),           SymId(d2faHeadSym),           SymId::noSym            },
+      { SymId::noteFaWhole,         SymId::noteFaHalf,            SymId::noteFaBlack,           SymId::noSym            },
+//    { SymId(s0laHeadSym),         SymId(s1laHeadSym),           SymId(s2laHeadSym),           SymId::noSym            },
+      { SymId::noteLaWhole,         SymId::noteLaHalf,            SymId::noteLaBlack,           SymId::noSym            },
+//    { SymId(s0tiHeadSym),         SymId(d1tiHeadSym),           SymId(d2tiHeadSym),           SymId::noSym            },
+      { SymId::noteTiWhole,         SymId::noteTiHalf,            SymId::noteTiBlack,           SymId::noSym            },
+//    { SymId(s0solHeadSym),        SymId(s1solHeadSym),          SymId(s2solHeadSym),          SymId::noSym            },
+      { SymId::noteSoWhole,         SymId::noteSoHalf,            SymId::noteSoBlack,           SymId::noSym            },
+      { SymId::noteheadWhole,       SymId::noteheadHalf,          SymId::noteheadBlack,         SymId::mensuralBrevis   },
+   }
+};
 
 //---------------------------------------------------------
 //   noteHeadSym
@@ -296,22 +315,22 @@ void Note::undoSetTpc(int tpc)
 
 SymId Note::noteHead() const
       {
-      int hg, ht;
+      int up, ht;
       if (chord()) {
-            hg = chord()->up();
+            up = chord()->up();
             ht = chord()->durationType().headType();
             }
       else {
-            hg = 1;
+            up = 1;
             ht = HEAD_QUARTER;
             }
       if (_headType != HEAD_AUTO)
             ht = _headType;
 
-      SymId t = noteHeads[hg][int(_headGroup)][ht];
+      SymId t = noteHeads[up][int(_headGroup)][ht];
       if (t == SymId::noSym) {
             qDebug("invalid note head %d/%d", _headGroup, _headType);
-            t = noteHeads[hg][0][ht];
+            t = noteHeads[up][0][ht];
             }
       return t;
       }
