@@ -3,19 +3,19 @@
         "codepoint": "U+E07B"
     }, 
     "4stringTabClefSerif": {
-        "codepoint": "U+E07B"
+        "codepoint": "U+F406"
     }, 
     "4stringTabClefTall": {
-        "codepoint": "U+E07B"
+        "codepoint": "U+F405"
     }, 
     "6stringTabClef": {
         "codepoint": "U+E07A"
     }, 
     "6stringTabClefSerif": {
-        "codepoint": "U+E07A"
+        "codepoint": "U+F404"
     }, 
     "6stringTabClefTall": {
-        "codepoint": "U+E07A"
+        "codepoint": "U+F403"
     }, 
     "accdnLH2Ranks16Round": {
         "codepoint": "U+E966"
