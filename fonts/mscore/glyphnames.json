@@ -104,6 +104,18 @@
     "fClef": {
         "codepoint": "U+e19c"
     },
+    "fClef15ma": {
+        "codepoint": "U+e1dd"
+    },
+    "fClef15mb": {
+        "codepoint": "U+e1da"
+    },
+    "fClef8va": {
+        "codepoint": "U+e1dc"
+    },
+    "fClef8vb": {
+        "codepoint": "U+e1db"
+    },
     "fermataAbove": {
         "codepoint": "U+e158"
     },
@@ -160,6 +172,18 @@
     },
     "gClef": {
         "codepoint": "U+e19e"
+    },
+    "gClef15ma": {
+        "codepoint": "U+e1d9"
+    },
+    "gClef15mb": {
+        "codepoint": "U+e1d6"
+    },
+    "gClef8va": {
+        "codepoint": "U+e1d8"
+    },
+    "gClef8vb": {
+        "codepoint": "U+e1d7"
     },
     "keyboardPedalHeel1": {
         "codepoint": "U+e172"
