@@ -2011,13 +2011,30 @@ void setMscoreLocale(QString localeName)
 
       QTranslator* translator = new QTranslator;
 
-      // load translator from userspace
-      QString userlp = dataPath + "/locale/" + QString("mscore_") + localeName;
-      QString defaultlp = mscoreGlobalShare + "locale/" + QString("mscore_") + localeName;
+      // find the most recent translation file
+      // try to replicate QTranslator.load algorithm in our particular case
+      QString userPrefix = dataPath + "/locale/mscore_";
+      QString defaultPrefix = mscoreGlobalShare + "locale/mscore_";
+      QString userlp = userPrefix + localeName;
+
+      QString defaultlp = defaultPrefix + localeName;
       QString lp = defaultlp;
 
       QFileInfo userFi(userlp + ".qm");
       QFileInfo defaultFi(defaultlp + ".qm");
+
+      if(!defaultFi.exists()) { // try with a shorter locale name
+            QString shortLocaleName = localeName.left(localeName.lastIndexOf("_"));
+            QString shortDefaultlp = defaultPrefix + shortLocaleName;
+            QFileInfo shortDefaultFi(shortDefaultlp + ".qm");
+            if(shortDefaultFi.exists()) {
+                  userlp = userPrefix + shortLocaleName;
+                  userFi = QFileInfo(userlp + ".qm");
+                  defaultFi = shortDefaultFi;
+                  defaultlp = shortDefaultlp;
+            }
+      }
+
       qDebug() << userFi.exists();
       qDebug() << userFi.lastModified() << defaultFi.lastModified();
       if(userFi.exists() && userFi.lastModified() > defaultFi.lastModified())

@@ -49,6 +49,7 @@ install(FILES
       mscore_ja.qm
       mscore_ko.qm
       mscore_lt.qm
+      mscore_mn_MN.qm
       mscore_nl.qm
       mscore_nb.qm
       mscore_pl.qm
