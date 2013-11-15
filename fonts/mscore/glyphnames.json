@@ -206,10 +206,40 @@
     "keyboardPedalUp": {
         "codepoint": "U+e1a6"
     },
+    "mensuralBrevis": {
+        "codepoint": "U+e1c6"
+    },
+    "noteDoBlack": {
+        "codepoint": "U+e140"
+    },
+    "noteDoHalf": {
+        "codepoint": "U+e13e"
+    },
+    "noteDoWhole": {
+        "codepoint": "U+e13d"
+    },
+    "noteFaBlack": {
+        "codepoint": "U+e14e"
+    },
+    "noteFaHalf": {
+        "codepoint": "U+e14c"
+    },
+    "noteFaWhole": {
+        "codepoint": "U+e14a"
+    },
     "noteheadBlack": {
         "codepoint": "U+e12d"
     },
     "noteheadCircleX": {
+        "codepoint": "U+e13c"
+    },
+    "noteheadCircleXDoubleWhole": {
+        "codepoint": "U+e13c"
+    },
+    "noteheadCircleXHalf": {
+        "codepoint": "U+e13c"
+    },
+    "noteheadCircleXWhole": {
         "codepoint": "U+e13c"
     },
     "noteheadDiamondBlack": {
@@ -227,11 +257,26 @@
     "noteheadHalf": {
         "codepoint": "U+e12c"
     },
+    "noteheadSlashDiamondWhite": {
+        "codepoint": "U+e136"
+    },
     "noteheadSlashHorizontalEnds": {
         "codepoint": "U+e138"
     },
     "noteheadSlashWhite": {
         "codepoint": "U+e137"
+    },
+    "noteheadTriangleDownBlack": {
+        "codepoint": "U+e134"
+    },
+    "noteheadTriangleDownDoubleWhole": {
+        "codepoint": "U+e131"
+    },
+    "noteheadTriangleDownHalf": {
+        "codepoint": "U+e132"
+    },
+    "noteheadTriangleDownWhole": {
+        "codepoint": "U+e131"
     },
     "noteheadTriangleUpBlack": {
         "codepoint": "U+e134"
@@ -253,6 +298,51 @@
     },
     "noteheadXWhole": {
         "codepoint": "U+e139"
+    },
+    "noteLaBlack": {
+        "codepoint": "U+e152"
+    },
+    "noteLaHalf": {
+        "codepoint": "U+e151"
+    },
+    "noteLaWhole": {
+        "codepoint": "U+e150"
+    },
+    "noteMiBlack": {
+        "codepoint": "U+e149"
+    },
+    "noteMiHalf": {
+        "codepoint": "U+e148"
+    },
+    "noteMiWhole": {
+        "codepoint": "U+e147"
+    },
+    "noteReBlack": {
+        "codepoint": "U+e145"
+    },
+    "noteReHalf": {
+        "codepoint": "U+e143"
+    },
+    "noteReWhole": {
+        "codepoint": "U+e142"
+    },
+    "noteSoBlack": {
+        "codepoint": "U+e1ce"
+    },
+    "noteSoHalf": {
+        "codepoint": "U+e1cd"
+    },
+    "noteSoWhole": {
+        "codepoint": "U+e1cc"
+    },
+    "noteTiBlack": {
+        "codepoint": "U+e156"
+    },
+    "noteTiHalf": {
+        "codepoint": "U+e154"
+    },
+    "noteTiWhole": {
+        "codepoint": "U+e153"
     },
     "ornamentDownMordent": {
         "codepoint": "U+e18b"
