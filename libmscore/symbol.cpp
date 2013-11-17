@@ -110,16 +110,17 @@ void Symbol::read(XmlReader& e)
                         val = "accordion.accDot";
                   else if (val == "acc old ee")
                         val = "accordion.accOldEE";
-                  SymId s = Sym::name2id(val);
-                  if (s == SymId::noSym) {
+                  SymId symId = Sym::name2id(val);
+                  if (symId == SymId::noSym) {
                         // if symbol name not found, fall back to mnames
-                        s = Sym::userName2id(val);
-                        if (s == SymId::noSym) {
-                              qDebug("unknown symbol <%s>, falling back to default symbol", qPrintable(val));
+                        symId = Sym::userName2id(val);
+                        if (symId == SymId::noSym) {
+                              qDebug("unknown symbol <%symId>, falling back to default symbol", qPrintable(val));
                               // set a default symbol, or layout() will crash
-                              s = SymId::noteheadBlack;
+                              symId = SymId::noteheadBlack;
                               }
                         }
+                  setSym(symId);
                   }
             else if (tag == "Symbol") {
                   Symbol* s = new Symbol(score());
@@ -129,7 +130,7 @@ void Symbol::read(XmlReader& e)
                   }
             else if (tag == "Image") {
                   Image* image = new Image(score());
-                  QString path;
+//                  QString path;
                   image->read(e);
                   add(image);
                   }
