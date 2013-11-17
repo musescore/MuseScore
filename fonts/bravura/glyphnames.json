@@ -740,9 +740,6 @@
     "articStressBelow": {
         "codepoint": "U+E4F2"
     }, 
-    "articTenuroSlurBelow": {
-        "codepoint": "U+E4F0"
-    }, 
     "articTenuto": {
         "alternate_codepoint": "U+1D17D", 
         "codepoint": "U+E4E2"
@@ -750,6 +747,9 @@
     "articTenutoSlurAbove": {
         "alternate_codepoint": "U+1D182", 
         "codepoint": "U+E4EF"
+    }, 
+    "articTenutoSlurBelow": {
+        "codepoint": "U+E4F0"
     }, 
     "articUnstressAbove": {
         "codepoint": "U+E4F3"
@@ -2031,47 +2031,6 @@
         "alternate_codepoint": "U+1D1BB", 
         "codepoint": "U+E99B"
     }, 
-    "mensuralProlation1": {
-        "alternate_codepoint": "U+1D1C7", 
-        "codepoint": "U+E9D0"
-    }, 
-    "mensuralProlation10": {
-        "alternate_codepoint": "U+1D1CE", 
-        "codepoint": "U+E9D9"
-    }, 
-    "mensuralProlation11": {
-        "codepoint": "U+E9DA"
-    }, 
-    "mensuralProlation2": {
-        "alternate_codepoint": "U+1D1C8", 
-        "codepoint": "U+E9D1"
-    }, 
-    "mensuralProlation3": {
-        "alternate_codepoint": "U+1D1C9", 
-        "codepoint": "U+E9D2"
-    }, 
-    "mensuralProlation4": {
-        "codepoint": "U+E9D3"
-    }, 
-    "mensuralProlation5": {
-        "alternate_codepoint": "U+1D1CA", 
-        "codepoint": "U+E9D4"
-    }, 
-    "mensuralProlation6": {
-        "alternate_codepoint": "U+1D1CB", 
-        "codepoint": "U+E9D5"
-    }, 
-    "mensuralProlation7": {
-        "alternate_codepoint": "U+1D1CC", 
-        "codepoint": "U+E9D6"
-    }, 
-    "mensuralProlation8": {
-        "codepoint": "U+E9D7"
-    }, 
-    "mensuralProlation9": {
-        "alternate_codepoint": "U+1D1CD", 
-        "codepoint": "U+E9D8"
-    }, 
     "mensuralProportion1": {
         "codepoint": "U+E9DB"
     }, 
@@ -2135,6 +2094,47 @@
     }, 
     "mensuralSignum": {
         "codepoint": "U+E9A7"
+    }, 
+    "mensuralTempPerfProlPerf": {
+        "alternate_codepoint": "U+1D1C7", 
+        "codepoint": "U+E9D0"
+    }, 
+    "mensuralTempPerfProlImp": {
+        "alternate_codepoint": "U+1D1C8", 
+        "codepoint": "U+E9D1"
+    }, 
+    "mensuralTempPerfProlImpDimin": {
+        "alternate_codepoint": "U+1D1C9", 
+        "codepoint": "U+E9D2"
+    }, 
+    "mensuralTempPerfProlPerfDimin": {
+        "codepoint": "U+E9D3"
+    }, 
+    "mensuralTempImpProlPerf": {
+        "alternate_codepoint": "U+1D1CA", 
+        "codepoint": "U+E9D4"
+    }, 
+    "mensuralTempImpProlImp": {
+        "alternate_codepoint": "U+1D1CB", 
+        "codepoint": "U+E9D5"
+    }, 
+    "mensuralTempImpProlImpRev": {
+        "alternate_codepoint": "U+1D1CC", 
+        "codepoint": "U+E9D6"
+    }, 
+    "mensuralTempImpProlPerfDimin": {
+        "codepoint": "U+E9D7"
+    }, 
+    "mensuralTempImpProlImpDimin": {
+        "alternate_codepoint": "U+1D1CD", 
+        "codepoint": "U+E9D8"
+    }, 
+    "mensuralTempImpProlImpDiminRev": {
+        "alternate_codepoint": "U+1D1CE", 
+        "codepoint": "U+E9D9"
+    }, 
+    "mensuralTempImpProlPerfRev": {
+        "codepoint": "U+E9DA"
     }, 
     "miscDoNotCopy": {
         "codepoint": "U+EB33"
@@ -2325,7 +2325,7 @@
         "codepoint": "U+E200"
     }, 
     "noteDoubleWholeAlt": {
-        "codepoint": "U+E200"
+        "codepoint": "U+F400"
     }, 
     "noteEBlack": {
         "codepoint": "U+E1D3"

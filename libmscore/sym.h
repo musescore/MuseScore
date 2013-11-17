@@ -267,9 +267,9 @@ enum class SymId {
       articStaccato,
       articStressAbove,
       articStressBelow,
-      articTenutoSlurBelow,
       articTenuto,
       articTenutoSlurAbove,
+      articTenutoSlurBelow,
       articUnstressAbove,
       articUnstressBelow,
       augmentationDot,
@@ -669,17 +669,6 @@ enum class SymId {
       mensuralMinimaBlackUp,
       mensuralMinimaWhiteDown,
       mensuralMinimaWhiteUp,
-      mensuralProlation1,
-      mensuralProlation10,
-      mensuralProlation11,
-      mensuralProlation2,
-      mensuralProlation3,
-      mensuralProlation4,
-      mensuralProlation5,
-      mensuralProlation6,
-      mensuralProlation7,
-      mensuralProlation8,
-      mensuralProlation9,
       mensuralProportion1,
       mensuralProportion2,
       mensuralProportion3,
@@ -698,6 +687,17 @@ enum class SymId {
       mensuralSemiminimaWhiteDown,
       mensuralSemiminimaWhiteUp,
       mensuralSignum,
+      mensuralTempPerfProlPerf,
+      mensuralTempPerfProlImp,
+      mensuralTempPerfProlImpDimin,
+      mensuralTempPerfProlPerfDimin,
+      mensuralTempImpProlPerf,
+      mensuralTempImpProlImp,
+      mensuralTempImpProlImpRev,
+      mensuralTempImpProlPerfDimin,
+      mensuralTempImpProlImpDimin,
+      mensuralTempImpProlImpDiminRev,
+      mensuralTempImpProlPerfRev,
       miscDoNotCopy,
       miscDoNotPhotocopy,
       miscEyeglasses,
@@ -1553,14 +1553,17 @@ class Sym {
       void setAttach(const QPointF& r)           { _attach = r; }
 
       static SymId name2id(const QString& s)     { return lnhash.value(s, SymId::noSym); }     // return noSym if not found
+      static SymId oldName2id(const QString s)   { return lonhash.value(s, SymId::noSym);}
       static const char* id2name(SymId id);
 
       static QString id2userName(SymId id)       { return symUserNames[int(id)]; }
-      static SymId userName2id(const QString& s) { return (SymId)(symUserNames.indexOf(s)); }
+      static SymId userName2id(const QString& s) { int val = symUserNames.indexOf(s);
+                                                   return (val == -1) ? SymId::noSym : (SymId)(val); }
 
       static QVector<const char*> symNames;
       static QVector<QString> symUserNames;
       static QHash<QString, SymId> lnhash;
+      static QHash<QString, SymId> lonhash;
       };
 
 //---------------------------------------------------------
