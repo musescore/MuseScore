@@ -48,7 +48,7 @@ InspectorNote::InspectorNote(QWidget* parent)
             Note::HEAD_SOL,
             Note::HEAD_LA,
             Note::HEAD_TI,
-//TODO-smufl            Note::HEAD_BREVIS_ALT
+            Note::HEAD_BREVIS_ALT
             };
 
       //
