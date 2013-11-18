@@ -330,23 +330,23 @@ Score::FileError Score::read114(XmlReader& e)
                   // convert 1.2 text styles
                   if (s.name() == "Chordname")
                         s.setName("Chord Symbol");
-                  if (s.name() == "Lyrics odd lines")
+                  else if (s.name() == "Lyrics odd lines")
                         s.setName("Lyrics Odd Lines");
-                  if (s.name() == "Lyrics even lines")
+                  else if (s.name() == "Lyrics even lines")
                         s.setName("Lyrics Even Lines");
-                  if (s.name() == "InstrumentsLong")
+                  else if (s.name() == "InstrumentsLong")
                         s.setName("Instrument Name (Long)");
-                  if (s.name() == "InstrumentsShort")
+                  else if (s.name() == "InstrumentsShort")
                         s.setName("Instrument Name (Short)");
-                  if (s.name() == "InstrumentsExcerpt")
+                  else if (s.name() == "InstrumentsExcerpt")
                         s.setName("Instrument Name (Part)");
-                  if (s.name() == "Poet")
+                  else if (s.name() == "Poet")
                         s.setName("Lyricist");
-                  if (s.name() == "Technik")
+                  else if (s.name() == "Technik")
                         s.setName("Technique");
-                  if (s.name() == "TextLine")
+                  else if (s.name() == "TextLine")
                         s.setName("Text Line");
-                  if (s.name() == "Tuplets")
+                  else if (s.name() == "Tuplets")
                         s.setName("Tuplet");
 
                   if (s.name() == "Lyrics Odd Lines" || s.name() == "Lyrics Even Lines")
