@@ -20,12 +20,45 @@
     "accidentalQuarterSharp4": {
         "codepoint": "U+e10f"
     },
+    "accidentalQuarterFlat4": {
+        "codepoint": "U+E118"
+    }, 
+    "accidentalThreeQuartersFlatCouper": {
+        "codepoint": "U+E117"
+    }, 
+    "accidentalThreeQuartersSharp2": {
+        "codepoint": "U+E112"
+    }, 
     "accidentalSharp": {
         "codepoint": "U+e10e"
     },
     "accidentalSori": {
         "codepoint": "U+e1d4"
     },
+    "arrowheadBlackDown": {
+        "codepoint": "U+E126"
+    }, 
+    "arrowheadBlackLeft": {
+        "codepoint": "U+E124"
+    }, 
+    "arrowheadBlackRight": {
+        "codepoint": "U+E123"
+    }, 
+    "arrowheadBlackUp": {
+        "codepoint": "U+E125"
+    }, 
+    "arrowheadWhiteDown": {
+        "codepoint": "U+E122"
+    }, 
+    "arrowheadWhiteLeft": {
+        "codepoint": "U+E120"
+    }, 
+    "arrowheadWhiteRight": {
+        "codepoint": "U+E11f"
+    }, 
+    "arrowheadWhiteUp": {
+        "codepoint": "U+E121"
+    }, 
     "articAccent": {
         "codepoint": "U+e161"
     },
@@ -44,14 +77,14 @@
     "articStaccato": {
         "codepoint": "U+e163"
     },
-    "articTenuroSlurBelow": {
-        "codepoint": "U+e167"
-    },
     "articTenuto": {
         "codepoint": "U+e166"
     },
     "articTenutoSlurAbove": {
         "codepoint": "U+e168"
+    },
+    "articTenutoSlurBelow": {
+        "codepoint": "U+e167"
     },
     "augmentationDot": {
         "codepoint": "U+e127"
@@ -185,6 +218,12 @@
     "gClef8vb": {
         "codepoint": "U+e1d7"
     },
+    "graceNoteSlashStemDown": {
+        "codepoint": "U+e196"
+    }, 
+    "graceNoteSlashStemUp": {
+        "codepoint": "U+e195"
+    }, 
     "keyboardPedalHeel1": {
         "codepoint": "U+e172"
     },
@@ -208,6 +247,27 @@
     },
     "mensuralBrevis": {
         "codepoint": "U+e1c6"
+    },
+    "mensuralLongaDownLeft": {
+        "codepoint": "U+e1c5"
+    },
+    "mensuralLongaUpRight": {
+        "codepoint": "U+e1c4"
+    },
+    "mensuralTempImpProlPerf": {
+        "codepoint": "U+e1c7"
+    },
+    "mensuralTempPerfProlImp": {
+        "codepoint": "U+e1c8"
+    },
+    "mensuralTempPerfProlImpDimin": {
+        "codepoint": "U+e1c9"
+    },
+    "mensuralTempPerfProlPerfDimin": {
+        "codepoint": "U+e1ca"
+    },
+    "noteDoubleWholeAlt": {
+        "codepoint": "U+e12a"
     },
     "noteShapeTriangleUpBlack": {
         "codepoint": "U+e140"
@@ -246,11 +306,17 @@
         "codepoint": "U+e12e"
     },
     "noteheadDoubleWhole": {
-        "codepoint": "U+e12a"
+        "codepoint": "U+e1ba"
     },
     "noteheadHalf": {
         "codepoint": "U+e12c"
     },
+    "noteheadParenthesisLeft": {
+        "codepoint": "U+e11e"
+    }, 
+    "noteheadParenthesisRight": {
+        "codepoint": "U+e11d"
+    }, 
     "noteheadSlashDiamondWhite": {
         "codepoint": "U+e136"
     },
@@ -272,6 +338,9 @@
     "noteheadTriangleDownWhole": {
         "codepoint": "U+e131"
     },
+    "noteheadTriangleLeftBlack": {
+        "codepoint": "U+e14f"
+    }, 
     "noteheadTriangleUpBlack": {
         "codepoint": "U+e134"
     },
@@ -281,6 +350,12 @@
     "noteheadTriangleUpWhole": {
         "codepoint": "U+e131"
     },
+    "noteheadTriangleUpRightBlack": {
+        "codepoint": "U+e14e"
+    }, 
+    "noteheadTriangleUpRightWhite": {
+        "codepoint": "U+e14c"
+    }, 
     "noteheadWhole": {
         "codepoint": "U+e12b"
     },
@@ -413,6 +488,9 @@
     "segno": {
         "codepoint": "U+e177"
     },
+    "segnoSerpent1": {
+        "codepoint": "U+e1cf"
+    },
     "stringsDownBow": {
         "codepoint": "U+e16e"
     },
@@ -464,10 +542,19 @@
     "unpitchedPercussionClef1": {
         "codepoint": "U+e1a0"
     },
+    "wiggleArpeggiatoDownArrow": {
+        "codepoint": "U+e180"
+    },
     "wiggleArpeggiatoUp": {
         "codepoint": "U+e17e"
     },
+    "wiggleArpeggiatoUpArrow": {
+        "codepoint": "U+e181"
+    },
     "wiggleTrill": {
         "codepoint": "U+e17f"
+    },
+    "wiggleTrillFastest": {
+        "codepoint": "U+e182"
     }
 }

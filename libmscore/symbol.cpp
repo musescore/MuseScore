@@ -110,16 +110,21 @@ void Symbol::read(XmlReader& e)
                         val = "accordion.accDot";
                   else if (val == "acc old ee")
                         val = "accordion.accOldEE";
-                  SymId s = Sym::name2id(val);
-                  if (s == SymId::noSym) {
-                        // if symbol name not found, fall back to mnames
-                        s = Sym::userName2id(val);
-                        if (s == SymId::noSym) {
-                              qDebug("unknown symbol <%s>, falling back to default symbol", qPrintable(val));
+                  SymId symId = Sym::name2id(val);
+                  if (symId == SymId::noSym) {
+                        // if symbol name not found, fall back to user names
+                        // TODO : does it make sense? user names are probably localized
+                        symId = Sym::userName2id(val);
+                        // if not found, look into old names
+                        if (symId == SymId::noSym)
+                              symId = Sym::oldName2id(val);
+                        if (symId == SymId::noSym) {
+                              qDebug("unknown symbol <%symId>, falling back to default symbol", qPrintable(val));
                               // set a default symbol, or layout() will crash
-                              s = SymId::noteheadBlack;
+                              symId = SymId::noteheadBlack;
                               }
                         }
+                  setSym(symId);
                   }
             else if (tag == "Symbol") {
                   Symbol* s = new Symbol(score());
@@ -129,7 +134,7 @@ void Symbol::read(XmlReader& e)
                   }
             else if (tag == "Image") {
                   Image* image = new Image(score());
-                  QString path;
+//                  QString path;
                   image->read(e);
                   add(image);
                   }
