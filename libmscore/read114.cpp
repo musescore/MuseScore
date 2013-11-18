@@ -349,7 +349,7 @@ Score::FileError Score::read114(XmlReader& e)
                   if (s.name() == "Tuplets")
                         s.setName("Tuplet");
 
-                  if (s.name() == "Lyrics odd lines" || s.name() == "Lyrics even lines")
+                  if (s.name() == "Lyrics Odd Lines" || s.name() == "Lyrics Even Lines")
                         s.setAlign((s.align() & ~ ALIGN_VMASK) | Align(ALIGN_BASELINE));
 
                   _style.setTextStyle(s);
