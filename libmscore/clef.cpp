@@ -250,17 +250,17 @@ void Clef::layout1()
                   yoff = 0.0;
                   break;
             case ClefType::TAB:                            // TAB clef
-                  symbol->setSym(SymId::sixStringTabClefTall);
+                  symbol->setSym(SymId::sixStringTabClef);
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = curLineDist * (curLines - 1) * .5;
-                  break;                              // TAB clef alternate style
-            case ClefType::TAB2:
+                  break;
+            case ClefType::TAB2:                           // TAB clef alternate style
                   symbol->setSym(SymId::sixStringTabClefSerif);
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = curLineDist * (curLines - 1) * .5;
                   break;
             case ClefType::PERC:                           // percussion clefs
-            case ClefType::PERC2:
+            case ClefType::PERC2:         // no longer supported: fall back to same glyph as PERC
                   symbol->setSym(SymId::unpitchedPercussionClef1);
                   yoff = curLineDist * (curLines - 1) * 0.5;
                   break;
