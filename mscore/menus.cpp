@@ -628,13 +628,14 @@ Palette* MuseScore::newClefsPalette()
       sp->setMag(0.8);
       sp->setGrid(33, 60);
       sp->setYOffset(1.0);
-      static const ClefType clefs[21] = {
+      // Up to ClefType::MAX-1, because ClefType::PERC2 is no longer supported
+      static const ClefType clefs[(int)(ClefType::MAX)-1] = {
             ClefType::G, ClefType::G1, ClefType::G2, ClefType::G3, ClefType::G4,
             ClefType::C1, ClefType::C2, ClefType::C3, ClefType::C4, ClefType::C5,
             ClefType::F, ClefType::F_8VA, ClefType::F_15MA, ClefType::F8, ClefType::F15, ClefType::F_B, ClefType::F_C,
-            ClefType::PERC, ClefType::TAB, ClefType::TAB2, ClefType::PERC2
+            ClefType::PERC, ClefType::TAB, ClefType::TAB2
             };
-      for (int i = 0; i < 20; ++i) {
+      for (int i = 0; i < (int)(ClefType::MAX)-1; ++i) {
             ClefType j = clefs[i];
             Clef* k = new Ms::Clef(gscore);
             k->setClefType(ClefTypeList(j, j));
