@@ -277,9 +277,9 @@ QVector<const char*> Sym::symNames = {
       "articStaccato",
       "articStressAbove",
       "articStressBelow",
-      "articTenuroSlurBelow",
       "articTenuto",
       "articTenutoSlurAbove",
+      "articTenutoSlurBelow",
       "articUnstressAbove",
       "articUnstressBelow",
       "augmentationDot",
@@ -679,17 +679,6 @@ QVector<const char*> Sym::symNames = {
       "mensuralMinimaBlackUp",
       "mensuralMinimaWhiteDown",
       "mensuralMinimaWhiteUp",
-      "mensuralProlation1",
-      "mensuralProlation10",
-      "mensuralProlation11",
-      "mensuralProlation2",
-      "mensuralProlation3",
-      "mensuralProlation4",
-      "mensuralProlation5",
-      "mensuralProlation6",
-      "mensuralProlation7",
-      "mensuralProlation8",
-      "mensuralProlation9",
       "mensuralProportion1",
       "mensuralProportion2",
       "mensuralProportion3",
@@ -708,6 +697,17 @@ QVector<const char*> Sym::symNames = {
       "mensuralSemiminimaWhiteDown",
       "mensuralSemiminimaWhiteUp",
       "mensuralSignum",
+      "mensuralTempPerfProlPerf",
+      "mensuralTempPerfProlImp",
+      "mensuralTempPerfProlImpDimin",
+      "mensuralTempPerfProlPerfDimin",
+      "mensuralTempImpProlPerf",
+      "mensuralTempImpProlImp",
+      "mensuralTempImpProlImpRev",
+      "mensuralTempImpProlPerfDimin",
+      "mensuralTempImpProlImpDimin",
+      "mensuralTempImpProlImpDiminRev",
+      "mensuralTempImpProlPerfRev",
       "miscDoNotCopy",
       "miscDoNotPhotocopy",
       "miscEyeglasses",
@@ -1785,9 +1785,9 @@ QVector<QString> Sym::symUserNames = {
       "articStaccato",
       "articStressAbove",
       "articStressBelow",
-      "articTenuroSlurBelow",
       "articTenuto",
       "articTenutoSlurAbove",
+      "articTenutoSlurBelow",
       "articUnstressAbove",
       "articUnstressBelow",
       "augmentationDot",
@@ -2187,17 +2187,6 @@ QVector<QString> Sym::symUserNames = {
       "mensuralMinimaBlackUp",
       "mensuralMinimaWhiteDown",
       "mensuralMinimaWhiteUp",
-      "mensuralProlation1",
-      "mensuralProlation10",
-      "mensuralProlation11",
-      "mensuralProlation2",
-      "mensuralProlation3",
-      "mensuralProlation4",
-      "mensuralProlation5",
-      "mensuralProlation6",
-      "mensuralProlation7",
-      "mensuralProlation8",
-      "mensuralProlation9",
       "mensuralProportion1",
       "mensuralProportion2",
       "mensuralProportion3",
@@ -2216,6 +2205,17 @@ QVector<QString> Sym::symUserNames = {
       "mensuralSemiminimaWhiteDown",
       "mensuralSemiminimaWhiteUp",
       "mensuralSignum",
+      "mensuralTempPerfProlPerf",
+      "mensuralTempPerfProlImp",
+      "mensuralTempPerfProlImpDimin",
+      "mensuralTempPerfProlPerfDimin",
+      "mensuralTempImpProlPerf",
+      "mensuralTempImpProlImp",
+      "mensuralTempImpProlImpRev",
+      "mensuralTempImpProlPerfDimin",
+      "mensuralTempImpProlImpDimin",
+      "mensuralTempImpProlImpDiminRev",
+      "mensuralTempImpProlPerfRev",
       "miscDoNotCopy",
       "miscDoNotPhotocopy",
       "miscEyeglasses",
@@ -3053,6 +3053,263 @@ QVector<QString> Sym::symUserNames = {
       };
 
 //---------------------------------------------------------
+//   Conversion table of old symbol names (1.3)
+//    The mapping corresponds to fonts/mscore/glyphnames.json and must be in sync with it
+//    symNames must be in sync with enum class SymId
+//---------------------------------------------------------
+
+struct oldName {
+      const char* name;
+      SymId symId;
+      };
+
+QHash<QString, SymId> Sym::lonhash;
+QVector<oldName> oldNames = {
+      {"rests.0",                               SymId::restWhole },
+      {"rests.1",                               SymId::restHalf },
+      {"rests.0o",                              SymId::restWhole },    // whole rest outside staff missing in SMuFL
+      {"rests.1o",                              SymId::restHalf },     // half rest outside staff missing in SMuFL
+//    {"rests.M3",                              SymId::noSym },        // double longa rest missing in SMuFL
+      {"rests.M1",                              SymId::restDoubleWhole },
+      {"rests.M2",                              SymId::restLonga },
+      {"rests.2",                               SymId::restQuarter },
+      {"rests.2classical",                      SymId::restQuarterOld },
+      {"rests.3",                               SymId::rest8th },
+      {"rests.4",                               SymId::rest16th },
+      {"rests.5",                               SymId::rest32nd },
+      {"rests.6",                               SymId::rest64th },
+      {"rests.7",                               SymId::rest128th },
+
+      {"accidentals.sharp",                     SymId::accidentalSharp },
+      {"accidentals.sharp.arrowup",             SymId::accidentalSharpOneArrowUp },
+      {"accidentals.sharp.arrowdown",           SymId::accidentalSharpOneArrowDown },
+//    {"accidentals.sharp.arrowboth",           SymId::noSym },         // sharp with both arrows missing in SMuFL
+      {"accidentals.sharp.slashslash.stem",     SymId::accidentalQuarterSharp4 },
+//    {"accidentals.sharp.slashslashslash.stemstem",  SymId::noSym },   // sharp with 3 slashes missing in SMULF
+//    {"accidentals.sharp.slashslashslash.stem",      SymId::noSym },   // sharp with 3 slashes - 1 stem missing inSMULF
+      {"accidentals.sharp.slashslash.stemstemstem",   SymId::accidentalThreeQuartersSharp2 },
+      {"accidentals.natural",                   SymId::accidentalNatural },
+      {"accidentals.natural.arrowup",           SymId::accidentalNaturalOneArrowUp },
+      {"accidentals.natural.arrowdown",         SymId::accidentalNaturalOneArrowUp },
+//    {"accidentals.natural.arrowboth",         SymId::noSym },         // natural with both arrows missing in SMuFL
+      {"accidentals.flat",                      SymId::accidentalFlat },
+      {"accidentals.flat.arrowup",              SymId::accidentalFlatOneArrowUp },
+      {"accidentals.flat.arrowdown",            SymId::accidentalFlatOneArrowDown },
+//    {"accidentals.flat.arrowboth",            SymId::noSym },         // flat with both arrows missing in SMuFL
+//    {"accidentals.flat.slash",                SymId::noSym },         // flat with slash missing in SMuFL
+//    {"accidentals.flat.slashslash",           SymId::noSym },         // flat with 2 slashes missing in SMuFL
+      {"accidentals.mirroredflat.flat",         SymId::accidentalThreeQuartersFlatCouper },
+      {"accidentals.mirroredflat",              SymId::accidentalQuarterFlat4 },    // more than one candidate in SMuFL: first occurring chosen
+//    {"accidentals.mirroredflat.backslash",    SymId::noSym },         // mirrored-slashed flat missing in SMuFL
+      {"accidentals.flatflat",                  SymId::accidentalDoubleFlat },
+//    {"accidentals.flatflat.slash",            SymId::noSym },         // slashes double falt missing in SMuFL
+      {"accidentals.doublesharp",               SymId::accidentalDoubleSharp },
+      {"accidentals.sori",                      SymId::accidentalSori },
+      {"accidentals.koron",                     SymId::accidentalKoron },
+      {"accidentals.rightparen",                SymId::noteheadParenthesisRight },  // SMULF parenth. for note heads used instead
+      {"accidentals.leftparen",                 SymId::noteheadParenthesisLeft },   //    "
+
+      {"arrowheads.open.01",                    SymId::arrowheadWhiteRight }, // similar, not identical in SMuFL
+      {"arrowheads.open.0M1",                   SymId::arrowheadWhiteLeft },  //    "
+      {"arrowheads.open.11",                    SymId::arrowheadWhiteUp },    //    "
+      {"arrowheads.open.1M1",                   SymId::arrowheadWhiteDown },  //    "
+      {"arrowheads.close.01",                   SymId::arrowheadBlackRight },
+      {"arrowheads.close.0M1",                  SymId::arrowheadBlackLeft },
+      {"arrowheads.close.11",                   SymId::arrowheadBlackUp },
+      {"arrowheads.close.1M1",                  SymId::arrowheadBlackDown },
+
+      {"dots.dot",                              SymId::augmentationDot },
+      {"noteheads.uM2",                         SymId::mensuralLongaUpRight },
+      {"noteheads.dM2",                         SymId::mensuralLongaDownLeft },
+      {"noteheads.sM1",                         SymId::noteDoubleWholeAlt },
+      {"noteheads.sM1double",                   SymId::noteheadDoubleWhole },
+      {"noteheads.s0",                          SymId::noteheadWhole },
+      {"noteheads.s1",                          SymId::noteheadHalf },
+      {"noteheads.s2",                          SymId::noteheadBlack },
+      {"noteheads.s0diamond",                   SymId::noteheadDiamondWhole },
+      {"noteheads.s1diamond",                   SymId::noteheadDiamondHalf },
+      {"noteheads.s2diamond",                   SymId::noteheadDiamondBlack },
+      {"noteheads.s0triangle",                  SymId::noteheadTriangleDownWhole },
+      {"noteheads.d1triangle",                  SymId::noteheadTriangleDownHalf },
+      {"noteheads.u1triangle",                  SymId::noteheadTriangleDownHalf },
+      {"noteheads.u2triangle",                  SymId::noteheadTriangleDownBlack },
+      {"noteheads.d2triangle",                  SymId::noteheadTriangleDownBlack },
+      {"noteheads.s0slash",                     SymId::noteheadSlashDiamondWhite },
+      {"noteheads.s1slash",                     SymId::noteheadSlashWhite },
+      {"noteheads.s2slash",                     SymId::noteheadSlashHorizontalEnds },
+      {"noteheads.s0cross",                     SymId::noteheadXWhole },
+      {"noteheads.s1cross",                     SymId::noteheadXHalf },
+      {"noteheads.s2cross",                     SymId::noteheadXBlack },
+      {"noteheads.s2xcircle",                   SymId::noteheadCircleX },
+//    {"noteheads.s0do",                        SymId::noSym },         // Whole DO triangle up missing in SMuFL
+      {"noteheads.d1do",                        SymId::noteShapeTriangleUpWhite },
+      {"noteheads.u1do",                        SymId::noteShapeTriangleUpWhite },
+      {"noteheads.d2do",                        SymId::noteShapeTriangleUpBlack },
+      {"noteheads.u2do",                        SymId::noteShapeTriangleUpBlack },
+//    {"noteheads.s0re",                        SymId::noSym },         // Whole moon-shaped RE missing in SMuFL
+      {"noteheads.u1re",                        SymId::noteShapeMoonWhite },
+      {"noteheads.d1re",                        SymId::noteShapeMoonWhite },
+      {"noteheads.u2re",                        SymId::noteShapeMoonBlack },
+      {"noteheads.d2re",                        SymId::noteShapeMoonBlack },
+//    {"noteheads.s0mi",                        SymId::noSym },         // Whole diamond-shaped MI missing in SMuFL
+      {"noteheads.s1mi",                        SymId::noteShapeDiamondWhite },
+      {"noteheads.s2mi",                        SymId::noteShapeDiamondBlack },
+//    {"noteheads.u0fa",                        SymId::noSym },         // Whole triangle-left shaped (up) FA missing in SMuFL
+//    {"noteheads.d0fa",                        SymId::noSym },         // Whole triangle-left shaped (dn) FA missing in SMuFL
+      {"noteheads.u1fa",                        SymId::noteheadTriangleUpRightWhite },
+      {"noteheads.d1fa",                        SymId::noteShapeTriangleRightWhite },
+      {"noteheads.u2fa",                        SymId::noteheadTriangleUpRightBlack },
+      {"noteheads.d2fa",                        SymId::noteheadTriangleLeftBlack },
+//    {"noteheads.s0la",                        SymId::noSym },         // Whole rectangle shaped LA missing in SMuFL
+      {"noteheads.s1la",                        SymId::noteShapeSquareWhite },
+      {"noteheads.s2la",                        SymId::noteShapeSquareBlack },
+//    {"noteheads.s0ti",                        SymId::noSym },         // Whole rounded-triangle shaped TI missing in SMuFL
+      {"noteheads.u1ti",                        SymId::noteShapeTriangleRoundWhite },
+      {"noteheads.d1ti",                        SymId::noteShapeTriangleRoundWhite },
+      {"noteheads.u2ti",                        SymId::noteShapeTriangleRoundBlack },
+      {"noteheads.d2ti",                        SymId::noteShapeTriangleRoundBlack },
+//    {"noteheads.s0sol",                       SymId::noSym },         // Whole rounded shaped SOL missing in SMuFL
+      {"noteheads.s1sol",                       SymId::noteShapeRoundWhite },
+      {"noteheads.s2sol",                       SymId::noteShapeRoundBlack },
+
+      {"scripts.ufermata",                      SymId::fermataAbove },
+      {"scripts.dfermata",                      SymId::fermataBelow },
+      {"scripts.snappizzicato",                 SymId::pluckedSnapPizzicatoAbove },
+      {"scripts.ushortfermata",                 SymId::fermataShortAbove },
+      {"scripts.dshortfermata",                 SymId::fermataShortBelow },
+      {"scripts.ulongfermata",                  SymId::fermataLongAbove },
+      {"scripts.dlongfermata",                  SymId::fermataLongBelow },
+      {"scripts.uverylongfermata",              SymId::fermataVeryLongAbove },
+      {"scripts.dverylongfermata",              SymId::fermataVeryLongBelow },
+      {"scripts.thumb",                         SymId::stringsThumbPosition },
+      {"scripts.sforzato",                      SymId::articAccent },
+//    {"scripts.espr",                          SymId::noSym },         // <> 'espressivo' removed and not present in SMuFL
+      {"scripts.staccato",                      SymId::articStaccato },
+      {"scripts.ustaccatissimo",                SymId::articStaccatissimoAbove },
+      {"scripts.dstaccatissimo",                SymId::articStaccatissimoBelow },
+      {"scripts.tenuto",                        SymId::articTenuto },
+      {"scripts.uportato",                      SymId::articTenutoSlurAbove },
+      {"scripts.dportato",                      SymId::articTenutoSlurBelow },
+      {"scripts.umarcato",                      SymId::articMarcatoAbove },
+      {"scripts.dmarcato",                      SymId::articMarcatoBelow },
+      {"scripts.open",                          SymId::brassMuteOpen },
+      {"scripts.halfopen",                      SymId::brassMuteHalfClosed }, // CHECK!!!
+      {"scripts.stopped",                       SymId::brassMuteClosed },
+      {"scripts.upbow",                         SymId::stringsUpBow },
+      {"scripts.downbow",                       SymId::stringsDownBow },
+      {"scripts.reverseturn",                   SymId::ornamentTurnInverted },
+      {"scripts.turn",                          SymId::ornamentTurn },
+      {"scripts.trill",                         SymId::ornamentTrill },
+      {"scripts.upedalheel",                    SymId::keyboardPedalHeel1 },
+      {"scripts.dpedalheel",                    SymId::keyboardPedalHeel2 },
+      {"scripts.upedaltoe",                     SymId::keyboardPedalToe1 },
+      {"scripts.dpedaltoe",                     SymId::keyboardPedalToe2 },
+      {"scripts.flageolet",                     SymId::stringsHarmonic },
+
+      {"scripts.segno",                         SymId::segno },
+      {"scripts.varsegno",                      SymId::segnoSerpent1 }, // not identical to SMuFL, but very similar
+      {"scripts.coda",                          SymId::coda },
+      {"scripts.varcoda",                       SymId::codaSquare },
+      {"scripts.rcomma",                        SymId::breathMark },
+//    {"scripts.lcomma",                        SymId::noSym },         // reversed breath missing in SMuFL
+//    {"scripts.rvarcomma",                     SymId::noSym },         // straight breath missing in SMuFL
+//    {"scripts.lvarcomma",                     SymId::noSym },         // reversed straight breath missing in SMuFL
+      {"scripts.arpeggio",                      SymId::wiggleArpeggiatoUp },
+      {"scripts.trill_element",                 SymId::wiggleTrill },
+      {"scripts.arpeggio.arrow.M1",             SymId::wiggleArpeggiatoDownArrow },
+      {"scripts.arpeggio.arrow.1",              SymId::wiggleArpeggiatoUpArrow },
+      {"scripts.trilelement",                   SymId::wiggleTrillFastest },
+      {"scripts.prall",                         SymId::ornamentMordent },
+      {"scripts.mordent",                       SymId::ornamentMordentInverted },
+      {"scripts.prallprall",                    SymId::ornamentTremblement },
+      {"scripts.prallmordent",                  SymId::ornamentPrallMordent },
+      {"scripts.upprall",                       SymId::ornamentUpPrall },
+      {"scripts.upmordent",                     SymId::ornamentUpMordent },
+      {"scripts.pralldown",                     SymId::ornamentPrallDown },
+      {"scripts.downprall",                     SymId::ornamentDownPrall },
+      {"scripts.downmordent",                   SymId::ornamentDownMordent },
+      {"scripts.prallup",                       SymId::ornamentPrallUp },
+      {"scripts.lineprall",                     SymId::ornamentLinePrall },
+      {"scripts.schleifer",                     SymId::ornamentPrecompSlide },
+//    {"scripts.caesura.straight",              SymId::noSym },         // straight ceasura missing in SMuFL
+      {"scripts.caesura.curved",                SymId::caesura },
+
+      {"flags.u3",                              SymId::flag8thUp },
+      {"flags.u4",                              SymId::flag16thUp },
+      {"flags.u5",                              SymId::flag32ndUp },
+      {"flags.u6",                              SymId::flag64thUp },
+      {"flags.u7",                              SymId::flag128thUp },
+      {"flags.d3",                              SymId::flag8thDown },
+      {"flags.ugrace",                          SymId::graceNoteSlashStemUp },
+      {"flags.dgrace",                          SymId::graceNoteSlashStemDown },
+      {"flags.d4",                              SymId::flag16thDown },
+      {"flags.d5",                              SymId::flag32ndDown },
+      {"flags.d6",                              SymId::flag16thDown },
+      {"flags.d7",                              SymId::flag128thDown },
+
+      {"clefs.C",                               SymId::cClef },
+//    {"clefs.C_change",                        SymId::noSym },         // change clefs missing in SMuFL
+      {"clefs.F",                               SymId::fClef },
+//    {"clefs.F_change",                        SymId::noSym },         // change clefs missing in SMuFL
+      {"clefs.G",                               SymId::gClef },
+//    {"clefs.G_change",                        SymId::noSym },         // change clefs missing in SMuFL
+      {"clefs.percussion",                      SymId::unpitchedPercussionClef1 },
+//    {"clefs.percussion_change",               SymId::noSym },         // change clefs missing in SMuFL
+      {"clefs.tab",                             SymId::sixStringTabClef },
+//    {"clefs.tab_change",                      SymId::noSym },         // change clefs missing in SMuFL, but fourStringTabclef could be used
+      {"timesig.C44",                           SymId::timeSigCommon },
+      {"timesig.C22",                           SymId::timeSigCutCommon },
+      {"pedal.*",                               SymId::keyboardPedalUp },
+//    {"pedal.M",                               SymId::noSym },         // "Ped." components missing in SMuFL
+//    {"pedal..",                               SymId::noSym },         //    "
+//    {"pedal.P",                               SymId::noSym },         //    "
+//    {"pedal.d",                               SymId::noSym },         //    "
+//    {"pedal.e",                               SymId::noSym },         //    "
+      {"pedal.Ped",                             SymId::keyboardPedalPed },
+      {"brackettips.uright",                    SymId::bracketTop },
+      {"brackettips.dright",                    SymId::bracketBottom },
+      {"brackettips.uleft",                     SymId::reversedBracketTop },
+      {"brackettips.dleft",                     SymId::reversedBracketBottom },
+//    {"accordion.accDot",                      SymId::noSym },         // components for accordean symbols missing in SMuFL
+//    {"accordion.accFreebase",                 SymId::noSym },         //    "
+//    {"accordion.accStdbase",                  SymId::noSym },         //    "
+//    {"accordion.accBayanbase",                SymId::noSym },         //    "
+//    {"accordion.accOldEE",                    SymId::noSym },         //    "
+//    {"accordion.accDiscant",                  SymId::noSym },         //    "
+//    {"accordion.push",                        SymId::???? },
+//    {"accordion.pull",                        SymId::???? },
+//    {"space",                                 SymId::noSym },         // punctuation missing in SMuFL?
+//    {"plus",                                  SymId::noSym },         //    "
+//    {"comma",                                 SymId::noSym },         //    "
+//    {"hyphen",                                SymId::noSym },         //    "
+//    {"period",                                SymId::noSym },         //    "
+      {"zero",                                  SymId::timeSig0 },
+      {"one",                                   SymId::timeSig1 },
+      {"two",                                   SymId::timeSig2 },
+      {"three",                                 SymId::timeSig3 },
+      {"four",                                  SymId::timeSig4 },
+      {"five",                                  SymId::timeSig5 },
+      {"six",                                   SymId::timeSig6 },
+      {"seven",                                 SymId::timeSig7 },
+      {"eight",                                 SymId::timeSig8 },
+      {"nine",                                  SymId::timeSig9 },
+      {"f",                                     SymId::dynamicForte },
+      {"m",                                     SymId::dynamicMezzo },
+      {"p",                                     SymId::dynamicRinforzando },
+      {"r",                                     SymId::dynamicPiano },
+      {"s",                                     SymId::dynamicSubito },
+      {"z",                                     SymId::dynamicZ },
+      {"noteheads.uM2alt",                      SymId::mensuralLongaUpRight },
+      {"noteheads.dM2alt",                      SymId::mensuralLongaDownLeft },
+      {"noteheads.sM1alt",                      SymId::mensuralBrevis },
+      {"timesig.Cdot",                          SymId::mensuralTempImpProlPerf },
+      {"timesig.O",                             SymId::mensuralTempPerfProlImp },
+      {"timesig.Ocut",                          SymId::mensuralTempPerfProlImpDimin },
+      {"timesig.Odot",                          SymId::mensuralTempPerfProlPerfDimin },
+      {"clefs.tab2",                            SymId::sixStringTabClefSerif }
+};
+
+//---------------------------------------------------------
 //   sym2pixmap
 //---------------------------------------------------------
 
@@ -3181,6 +3438,8 @@ void initScoreFonts()
       for (auto i : Sym::symNames)
             Sym::lnhash.insert(i, SymId(index++));
       ScoreFont::fontFactory("Bravura");       // load reference font
+      for (oldName i : oldNames)
+            Sym::lonhash.insert(i.name, SymId(i.symId));
       }
 
 //---------------------------------------------------------
