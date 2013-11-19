@@ -1605,14 +1605,12 @@ void Chord::layoutPitched()
             ll->layout();
 
       if (_arpeggio) {
-            qreal headHeight = upnote->headHeight();
-            _arpeggio->layout();
-            lll    += _arpeggio->width() + _spatium * .5;
-            qreal y = upNote()->pos().y() - headHeight * .5;
-            qreal h = downNote()->pos().y() + downNote()->headHeight() - y;
-            _arpeggio->setHeight(h);
-            _arpeggio->setPos(-lll, y);
+            _arpeggio->layout();    // only for width() !
+            lll        += _arpeggio->width() + _spatium * .5;
+            qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
+            _arpeggio->setPos(-lll, y1);
             _arpeggio->adjustReadPos();
+            // _arpeggio->layout() called in layoutArpeggio2()
 
             // handle the special case of _arpeggio->span() > 1
             // in layoutArpeggio2() after page layout has done so we
@@ -1924,19 +1922,17 @@ void Chord::layoutArpeggio2()
       {
       if (!_arpeggio)
             return;
-      Note* upnote      = upNote();
-      qreal headHeight = upnote->headHeight();
-      qreal y          = upNote()->pagePos().y() - headHeight * .5;
+      qreal y           = upNote()->pagePos().y() - upNote()->headHeight() * .5;
       int span          = _arpeggio->span();
-      Note* dnote       = downNote();
       int btrack        = track() + (span - 1) * VOICES;
       ChordRest* bchord = static_cast<ChordRest*>(segment()->element(btrack));
+      Note* dnote       = (bchord && bchord->type() == CHORD) ? static_cast<Chord*>(bchord)->downNote() : downNote();
 
-      if (bchord && bchord->type() == CHORD)
-            dnote = static_cast<Chord*>(bchord)->downNote();
-      qreal h = dnote->pagePos().y() + downNote()->headHeight() - y;
+      qreal h = dnote->pagePos().y() + dnote->headHeight() * .5 - y;
       _arpeggio->setHeight(h);
+      _arpeggio->layout();
 
+#if 0 // collect notes for arpeggio
       QList<Note*> notes;
       int n = _notes.size();
       for (int j = n - 1; j >= 0; --j) {
@@ -1959,6 +1955,7 @@ void Chord::layoutArpeggio2()
                         }
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------

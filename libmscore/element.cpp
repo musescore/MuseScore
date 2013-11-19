@@ -1663,6 +1663,11 @@ void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const
       score()->scoreFont()->draw(id, p, magS(), o, n);
       }
 
+void Element::drawSymbols(const QString& s, QPainter* p, const QPointF& o) const
+      {
+      score()->scoreFont()->draw(s, p, magS(), o);
+      }
+
 //---------------------------------------------------------
 //   symHeight
 //---------------------------------------------------------

@@ -265,7 +265,7 @@ void Articulation::setSubtype(const QString& s)
       {
       if (s.isEmpty()) {
             qDebug("Articulation::setSubtype: empty subtype");
-            setArticulationType(Articulation_Fermata);
+            setArticulationType(Articulation_Fermata);            // something to debug...
             return;
             }
 
