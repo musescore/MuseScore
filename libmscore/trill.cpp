@@ -29,11 +29,6 @@ namespace Ms {
 
 void TrillSegment::draw(QPainter* painter) const
       {
-      QRectF b2(symBbox(SymId::wiggleTrill));
-      qreal w2   = symWidth(SymId::wiggleTrill);
-
-      qreal x2   = pos2().x();
-
       QColor color;
       if (flag(ELEMENT_DROP_TARGET))
             color = MScore::dropColor;
@@ -41,70 +36,10 @@ void TrillSegment::draw(QPainter* painter) const
             color = MScore::selectColor[0];
       else if (!visible())
             color = Qt::gray;
-      else {
+      else
             color = trill()->curColor();
-            }
-
       painter->setPen(color);
-      if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
-            SymId sym = SymId::noSym;
-            qreal x0 = 0.0, x1 = 0.0, y = 0.0;
-            int n = 0;
-            QRectF b1;
-
-            switch(trill()->trillType()) {
-                  case Trill::TRILL_LINE:
-                        sym  = SymId::ornamentTrill;
-                        b1   = symBbox(sym);
-                        x0   = -b1.x();
-                        x1   = x0 + b1.width();
-                        n    = int(floor((x2-x1) / w2));
-                        y    = 0.0;
-                        break;
-#if 0 // TODO-smufl
-                  case Trill::UPPRALL_LINE:
-                        sym  = SymId(upprallSym);
-                        b1   = score()->sym(sym).bbox(mag);
-                        x0   = -b1.x();
-                        x1   = b1.width();
-                        n    = int(floor((x2-x1) / w2));
-                        y    = -b1.height();
-                        break;
-                  case Trill::DOWNPRALL_LINE:
-                        sym  = SymId(downprallSym);
-                        b1   = score()->sym(sym).bbox(mag);
-                        x0   = -b1.x();
-                        x1   = b1.width();
-                        n    = int(floor((x2-x1) / w2));
-                        y    = -b1.height();
-                        break;
-                  case Trill::PRALLPRALL_LINE:
-                        sym  = SymId(prallprallSym);
-                        b1   = score()->sym(sym).bbox(mag);
-                        x0   = -b1.x();
-                        x1   = b1.width();
-                        n    = int(floor((x2-x1) / w2));
-                        y    = -b1.height();
-                        break;
-#endif
-                  case Trill::PURE_LINE:
-                        sym = SymId::noSym;
-                        x0 = 0;
-                        x1 = 0;
-                        n    = int(floor((x2-x1) / w2));
-                        y = 0.0;
-                  }
-            if (n <= 0)
-                  n = 1;
-            if (sym != SymId::noSym)
-                  drawSymbol(sym, painter, QPointF(x0, y));
-            drawSymbol(SymId::wiggleTrill, painter, QPointF(x1, b2.y() * .9), n);
-            }
-      else {
-            qreal x1 = 0.0;
-            int n = int(floor((x2-x1) / w2));
-            drawSymbol(SymId::wiggleTrill, painter, QPointF(x1, b2.y() * .9), n);
-            }
+      drawSymbols(_symbols, painter);
       }
 
 //---------------------------------------------------------
@@ -133,15 +68,55 @@ void TrillSegment::remove(Element* e)
       }
 
 //---------------------------------------------------------
+//   symbolLine
+//---------------------------------------------------------
+
+void TrillSegment::symbolLine(SymId start, SymId fill)
+      {
+      qreal x1 = 0;
+      qreal x2 = pos2().x();
+      qreal w   = x2 - x1;
+      qreal mag = magS();
+      ScoreFont* f = score()->scoreFont();
+
+      _symbols.clear();
+      _symbols.append(f->toString(start));
+      qreal w1 = f->bbox(start, mag).width();
+      qreal w2 = f->width(fill, mag);
+      int n    = lrint((w - w1) / w2);
+      for (int i = 0; i < n; ++i)
+           _symbols.append(f->toString(fill));
+      QRectF r(f->bbox(_symbols, mag));
+      setbbox(r);
+      }
+
+void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
+      {
+      qreal x1 = 0;
+      qreal x2 = pos2().x();
+      qreal w   = x2 - x1;
+      qreal mag = magS();
+      ScoreFont* f = score()->scoreFont();
+
+      _symbols.clear();
+      _symbols.append(f->toString(start));
+      _symbols.append(f->toString(end));
+      qreal w1 = f->bbox(start, mag).width();
+      qreal w2 = f->width(fill, mag);
+      qreal w3 = f->width(end, mag);
+      int n    = lrint((w - w1 - w3) / w2);
+      for (int i = 0; i < n; ++i)
+           _symbols.insert(1, f->toString(fill));
+      QRectF r(f->bbox(_symbols, mag));
+      setbbox(r);
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void TrillSegment::layout()
       {
-      QRectF b1(symBbox(SymId::ornamentTrill));
-      QRectF rr(b1.translated(-b1.x(), 0.0));
-      rr |= QRectF(0.0, rr.y(), pos2().x(), rr.height());
-      setbbox(rr);
       if (parent())
             rypos() += score()->styleS(ST_trillY).val() * spatium();
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
@@ -153,7 +128,26 @@ void TrillSegment::layout()
                   a->setPos(_spatium*1.3, -2.2*_spatium);
                   a->adjustReadPos();
                   }
+            switch (trill()->trillType()) {
+                  case Trill::TRILL_LINE:
+                        symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
+                        break;
+                  case Trill::PRALLPRALL_LINE:
+                  case Trill::PURE_LINE:
+                        symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+                        break;
+                  case Trill::UPPRALL_LINE:
+                        symbolLine(SymId::ornamentBottomLeftConcaveStroke,
+                           SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                        break;
+                  case Trill::DOWNPRALL_LINE:
+                        symbolLine(SymId::ornamentLeftVerticalStroke,
+                           SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                        break;
+                  }
             }
+      else
+            symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
       adjustReadPos();
       }
 

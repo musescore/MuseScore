@@ -3474,9 +3474,9 @@ static QString codeToString(int code)
 void ScoreFont::load()
       {
 #if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
-      if (-1 == QFontDatabase::addApplicationFont(fontPath() + filename())) {
-            qDebug("ScoreFont: fatal error: cannot load internal font <%s>", qPrintable(fontPath() + filename()));
-            if (!QFile(fontPath() + filename()).exists())
+      if (-1 == QFontDatabase::addApplicationFont(_fontPath + _filename)) {
+            qDebug("ScoreFont: fatal error: cannot load internal font <%s>", qPrintable(_fontPath + _filename));
+            if (!QFile(_fontPath + _filename).exists())
                   qDebug("   file not found");
             if (!MScore::debugMode)
                   exit(-1);
@@ -3484,7 +3484,7 @@ void ScoreFont::load()
 #endif
       _font.setWeight(QFont::Normal);  // if not set we get system default
       _font.setItalic(false);
-      _font.setFamily(family());
+      _font.setFamily(_family);
       _font.setStyleStrategy(QFont::NoFontMerging);
 
       // horizontal hinting is bad as note hooks do not attach to stems
@@ -3494,7 +3494,7 @@ void ScoreFont::load()
       qreal size = 20.0 * MScore::DPI / PPI;
       _font.setPixelSize(lrint(size));
 
-      QFile fi(fontPath() + "glyphnames.json");
+      QFile fi(_fontPath + "glyphnames.json");
       if (!fi.open(QIODevice::ReadOnly))
             qDebug("ScoreFont: open glyph names file <%s> failed", qPrintable(fi.fileName()));
       QJsonParseError error;
@@ -3518,7 +3518,7 @@ void ScoreFont::load()
                   qDebug("unknown glyph: %s", qPrintable(i));
             }
       fi.close();
-      fi.setFileName(fontPath() + "metadata.json");
+      fi.setFileName(_fontPath + "metadata.json");
       if (!fi.open(QIODevice::ReadOnly))
             qDebug("ScoreFont: open glyph metadata file <%s> failed", qPrintable(fi.fileName()));
       o = QJsonDocument::fromJson(fi.readAll(), &error).object();
