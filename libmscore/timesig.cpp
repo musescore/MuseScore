@@ -322,16 +322,11 @@ void TimeSig::draw(QPainter* painter) const
       if (staff() && !staff()->staffType()->genTimesig())
             return;
       painter->setPen(curColor());
-      painter->setFont(score()->scoreFont()->font());
-      qreal mag  = spatium() / (MScore::DPI * SPATIUM20);
-      qreal imag = 1.0 / mag;
-
-      painter->scale(mag, mag);
       QString ns = toTimeSigString(_numeratorString);
       QString ds = toTimeSigString(_denominatorString);
-      painter->drawText(pz, ns);    // use positions and strings computed in layout()
-      painter->drawText(pn, ds);
-      painter->scale(imag, imag);
+
+      drawSymbols(ns, painter, pz);
+      drawSymbols(ds, painter, pn);
       }
 
 //---------------------------------------------------------

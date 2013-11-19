@@ -1667,10 +1667,6 @@ void Element::drawSymbols(const QString& s, QPainter* p, const QPointF& o) const
       {
       score()->scoreFont()->draw(s, p, magS(), o);
       }
-void Element::drawSymbolsCenterAligned(const QString& s, QPainter* p, const QPointF& o) const
-      {
-      score()->scoreFont()->drawCenterAligned(s, p, magS(), o);
-      }
 
 //---------------------------------------------------------
 //   symHeight
@@ -1697,6 +1693,11 @@ qreal Element::symWidth(SymId id) const
 QRectF Element::symBbox(SymId id) const
       {
       return score()->scoreFont()->bbox(id, magS());
+      }
+
+QRectF Element::symBbox(const QString& s) const
+      {
+      return score()->scoreFont()->bbox(s, magS());
       }
 
 //---------------------------------------------------------
