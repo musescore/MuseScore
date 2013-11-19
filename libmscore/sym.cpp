@@ -3270,7 +3270,7 @@ QVector<oldName> oldNames = {
       {"brackettips.dright",                    SymId::bracketBottom },
       {"brackettips.uleft",                     SymId::reversedBracketTop },
       {"brackettips.dleft",                     SymId::reversedBracketBottom },
-//    {"accordion.accDot",                      SymId::noSym },         // components for accordean symbols missing in SMuFL
+//    {"accordion.accDot",                      SymId::noSym },         // components for accordion symbols missing in SMuFL
 //    {"accordion.accFreebase",                 SymId::noSym },         //    "
 //    {"accordion.accStdbase",                  SymId::noSym },         //    "
 //    {"accordion.accBayanbase",                SymId::noSym },         //    "
@@ -3295,8 +3295,8 @@ QVector<oldName> oldNames = {
       {"nine",                                  SymId::timeSig9 },
       {"f",                                     SymId::dynamicForte },
       {"m",                                     SymId::dynamicMezzo },
-      {"p",                                     SymId::dynamicRinforzando },
-      {"r",                                     SymId::dynamicPiano },
+      {"p",                                     SymId::dynamicPiano },
+      {"r",                                     SymId::dynamicRinforzando },
       {"s",                                     SymId::dynamicSubito },
       {"z",                                     SymId::dynamicZ },
       {"noteheads.uM2alt",                      SymId::mensuralLongaUpRight },
