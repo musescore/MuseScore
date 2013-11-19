@@ -301,22 +301,20 @@ void Accidental::layout()
       setMag(m);
 
       m = magS();
-      QPointF pos;
       if (_hasBracket) {
             SymElement e(SymId::noteheadParenthesisLeft, 0.0);
             el.append(e);
             r |= symBbox(SymId::noteheadParenthesisLeft);
-            pos = symAttach(SymId::noteheadParenthesisRight);
             }
 
       SymId s = symbol();
-      SymElement e(s, pos.x());
+      qreal x = r.x()+r.width();
+      SymElement e(s, x);
       el.append(e);
-      r |= symBbox(s);
-//      pos += symAttach(s);   ???
+      r |= symBbox(s).translated(x, 0.0);
 
       if (_hasBracket) {
-            qreal x = pos.x();     // symbols[s].width(m) + symbols[s].bbox(m).x();
+            x = r.x()+r.width();
             SymElement e(SymId::noteheadParenthesisRight, x);
             el.append(e);
             r |= symBbox(SymId::noteheadParenthesisRight).translated(x, 0.0);
