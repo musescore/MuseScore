@@ -67,7 +67,6 @@ class TimeSig : public Element {
       Groups _groups;
 
       void layout1();
-      QString toTimeSigString(const QString&) const;
 
    public:
       TimeSig(Score* = 0);
