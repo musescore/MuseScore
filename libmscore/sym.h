@@ -1601,7 +1601,6 @@ class ScoreFont {
 
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
       void draw(const QString&, QPainter*, qreal mag, const QPointF& pos = QPointF()) const;
-      void drawCenterAligned(const QString&, QPainter*, qreal mag, const QPointF& pos = QPointF()) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
 
       QString symToHtml(SymId, int leftMargin=0, const TextStyle* ts = 0, qreal sp=10.0);

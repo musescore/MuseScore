@@ -3354,16 +3354,6 @@ void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPoin
       painter->scale(imag, imag);
       }
 
-void ScoreFont::drawCenterAligned(const QString& s, QPainter* painter, qreal mag, const QPointF& pos) const
-      {
-      qreal imag = 1.0 / mag;
-      painter->scale(mag, mag);
-      painter->setFont(_font);
-//      painter->drawText(QRectF(pos * mag, QSizeF(0.0, 0.0)), Qt::AlignHCenter | Qt::AlignBaseline | Qt::TextDontClip, s);
-      painter->drawText(QRectF(pos * mag, QSizeF(0.0, 0.0)), Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, s);
-      painter->scale(imag, imag);
-      }
-
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
       {
       QString s = toString(id);

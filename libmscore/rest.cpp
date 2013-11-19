@@ -99,8 +99,11 @@ void Rest::draw(QPainter* painter) const
 
             painter->setFont(score()->scoreFont()->font());
             QFontMetricsF fm(score()->scoreFont()->font());
-            y  = -_spatium * .5 - staff()->height() *.5;
-            drawSymbolsCenterAligned(toTimeSigString(QString("%1").arg(n)), painter, QPointF(center(x1, x2), y));
+            QString s = toTimeSigString(QString("%1").arg(n));
+            y  = -_spatium * 1.5 - staff()->height() *.5;
+            qreal x = center(x1, x2);
+            x -= symBbox(s).width() * .5;
+            drawSymbols(s, painter, QPointF(x, y));
             }
       else {
             drawSymbol(_sym, painter);
