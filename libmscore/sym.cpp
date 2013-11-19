@@ -3345,6 +3345,15 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos)
       painter->scale(imag, imag);
       }
 
+void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPointF& pos) const
+      {
+      qreal imag = 1.0 / mag;
+      painter->scale(mag, mag);
+      painter->setFont(_font);
+      painter->drawText(pos * imag, s);
+      painter->scale(imag, imag);
+      }
+
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
       {
       QString s = toString(id);
@@ -3656,6 +3665,12 @@ const Sym& ScoreFont::sym(SymId id) const
 const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       {
       QRectF r(_fm->tightBoundingRect(sym(id).string()));
+      return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
+      }
+
+const QRectF ScoreFont::bbox(const QString& s, qreal mag) const
+      {
+      QRectF r(_fm->tightBoundingRect(s));
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }
 

@@ -111,17 +111,19 @@ void Symbol::read(XmlReader& e)
                   else if (val == "acc old ee")
                         val = "accordion.accOldEE";
                   SymId symId = Sym::name2id(val);
-                  if (symId == SymId::noSym) {
-                        // if symbol name not found, fall back to user names
-                        // TODO : does it make sense? user names are probably localized
-                        symId = Sym::userName2id(val);
-                        // if not found, look into old names
-                        if (symId == SymId::noSym)
-                              symId = Sym::oldName2id(val);
+                  if (val != "noSym") {
                         if (symId == SymId::noSym) {
-                              qDebug("unknown symbol <%symId>, falling back to default symbol", qPrintable(val));
-                              // set a default symbol, or layout() will crash
-                              symId = SymId::noteheadBlack;
+                              // if symbol name not found, fall back to user names
+                              // TODO : does it make sense? user names are probably localized
+                              symId = Sym::userName2id(val);
+                              // if not found, look into old names
+                              if (symId == SymId::noSym)
+                                    symId = Sym::oldName2id(val);
+                              if (symId == SymId::noSym) {
+                                    qDebug("unknown symbol <%s>, falling back to default symbol", qPrintable(val));
+                                    // set a default symbol, or layout() will crash
+                                    symId = SymId::noteheadBlack;
+                                    }
                               }
                         }
                   setSym(symId);

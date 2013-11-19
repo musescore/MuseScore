@@ -37,6 +37,10 @@ class Arpeggio : public Element {
       qreal _userLen2;
       qreal _height;
       int _span;              // spanning staves
+      QString symbols;
+
+      void symbolLine(SymId start, SymId fill);
+      void symbolLine2(SymId end, SymId fill);
 
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       virtual QLineF dragAnchor() const;

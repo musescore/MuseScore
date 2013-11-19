@@ -124,7 +124,7 @@ bool AlsaMidiDriver::init()
       int error = snd_seq_open(&alsaSeq, "hw", SND_SEQ_OPEN_DUPLEX, SND_SEQ_NONBLOCK);
       if (error < 0) {
             if (error == ENOENT)
-                  qDebug("open ALSA sequencer failed: %s\n", snd_strerror(error));
+                  qDebug("open ALSA sequencer failed: %s", snd_strerror(error));
             return false;
             }
 
@@ -143,7 +143,7 @@ bool AlsaMidiDriver::init()
          | SND_SEQ_PORT_CAP_NO_EXPORT,
          SND_SEQ_PORT_TYPE_APPLICATION);
       if (rv < 0) {
-            qDebug("Alsa: create MuseScore port failed: %s\n", snd_strerror(error));
+            qDebug("Alsa: create MuseScore port failed: %s", snd_strerror(error));
             return false;
             }
       dst.port   = rv;
@@ -157,7 +157,7 @@ bool AlsaMidiDriver::init()
       snd_seq_port_subscribe_set_sender(subs, &src);
       error = snd_seq_subscribe_port(alsaSeq, subs);
       if (error < 0) {
-            qDebug("Alsa: Subscribe System failed: %s\n", snd_strerror(error));
+            qDebug("Alsa: Subscribe System failed: %s", snd_strerror(error));
             return false;
             }
       midiOutPorts = new Port[preferences.midiPorts];
@@ -180,8 +180,8 @@ bool AlsaMidiDriver::init()
       QList<PortName> ol = outputPorts();
       foreach(PortName pn, ol) {
             if (MScore::debugMode)
-                  qDebug("connect to midi output <%s>\n", qPrintable(pn.name));
-            qDebug("Output <%s>\n", qPrintable(pn.name));
+                  qDebug("connect to midi output <%s>", qPrintable(pn.name));
+            qDebug("Output <%s>", qPrintable(pn.name));
             }
 #endif
 
@@ -189,7 +189,7 @@ bool AlsaMidiDriver::init()
       QList<PortName> il = inputPorts();
       foreach(PortName pn, il) {
             if (MScore::debugMode)
-                  qDebug("connect to midi input <%s>\n", qPrintable(pn.name));
+                  qDebug("connect to midi input <%s>", qPrintable(pn.name));
             connect(pn.port, midiInPort);
             }
       return true;
@@ -282,7 +282,7 @@ bool AlsaMidiDriver::connect(Port src, Port dst)
 
       int rv = snd_seq_subscribe_port(alsaSeq, sub);
       if (rv < 0) {
-            qDebug("AlsaMidi::connect(%d:%d, %d:%d) failed: %s\n",
+            qDebug("AlsaMidi::connect(%d:%d, %d:%d) failed: %s",
                src.alsaClient(), src.alsaPort(),
                dst.alsaClient(), dst.alsaPort(),
                snd_strerror(rv));
@@ -382,7 +382,7 @@ void AlsaMidiDriver::read()
                   qDebug("MidiIn: ");
                   switch(ev->type) {
                         case SND_SEQ_EVENT_NOTEON:
-                              qDebug("noteOn ch:%2d 0x%02x 0x%02x\n",
+                              qDebug("noteOn ch:%2d 0x%02x 0x%02x",
                                  ev->data.note.channel,
                                  ev->data.note.note,
                                  ev->data.note.velocity);
@@ -423,7 +423,6 @@ void AlsaMidiDriver::read()
                         case SND_SEQ_EVENT_SENSING:
                               break;
                         }
-                  qDebug("\n");
                   }
             snd_seq_free_event(ev);
             }
@@ -442,7 +441,7 @@ void AlsaMidiDriver::write(const Event& e)
       int b     = e.dataB();
 
       if (midiOutputTrace)
-            qDebug("midiOut: %2d %02x %02x %02x\n", port, e.type(), a, b);
+            qDebug("midiOut: %2d %02x %02x %02x", port, e.type(), a, b);
 
       snd_seq_event_t event;
       memset(&event, 0, sizeof(event));
@@ -497,7 +496,7 @@ void AlsaMidiDriver::write(const Event& e)
                   return;
                   }
             default:
-                  qDebug("MidiAlsaDriver::putEvent(): event type 0x%02x not implemented\n", e.type());
+                  qDebug("MidiAlsaDriver::putEvent(): event type 0x%02x not implemented", e.type());
                   return;
             }
       putEvent(&event);
@@ -523,13 +522,13 @@ bool AlsaMidiDriver::putEvent(snd_seq_event_t* event)
                         return true;
                         }
                   else {
-                        qDebug("MidiAlsaDevice::%p putEvent(): midi write error: %s\n",
+                        qDebug("MidiAlsaDevice::%p putEvent(): midi write error: %s",
                            this, snd_strerror(error));
                         //exit(-1);
                         }
                   }
             else
-                  qDebug("MidiAlsaDevice::putEvent(): midi write returns %d, expected %d: %s\n",
+                  qDebug("MidiAlsaDevice::putEvent(): midi write returns %d, expected %d: %s",
                      error, len, snd_strerror(error));
             } while (error == -12);
       return true;

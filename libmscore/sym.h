@@ -1603,6 +1603,7 @@ class ScoreFont {
       const QString& toString(SymId id) const { return _symbols[int(id)].string(); }
 
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
+      void draw(const QString&, QPainter*, qreal mag, const QPointF& pos = QPointF()) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
 
       QString symToHtml(SymId, int leftMargin=0, const TextStyle* ts = 0, qreal sp=10.0);
@@ -1610,8 +1611,10 @@ class ScoreFont {
       QPixmap sym2pixmap(SymId id, qreal mag);
 
       qreal height(SymId id, qreal mag) const   { return _fm->tightBoundingRect(toString(id)).height() * mag; }
-      qreal width(SymId id, qreal mag) const    { return _fm->tightBoundingRect(toString(id)).width() * mag;  }
+//      qreal width(SymId id, qreal mag) const    { return _fm->tightBoundingRect(toString(id)).width() * mag;  }
+      qreal width(SymId id, qreal mag) const    { return _fm->width(toString(id)) * mag;  }
       const QRectF bbox(SymId id, qreal mag) const;
+      const QRectF bbox(const QString& s, qreal mag) const;
       QPointF attach(SymId id, qreal mag) const { return _symbols[int(id)].attach() * mag; }
       bool isValid(SymId id) const              { return _symbols[int(id)].isValid(); }
       };
