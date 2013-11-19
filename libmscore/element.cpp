@@ -1667,6 +1667,10 @@ void Element::drawSymbols(const QString& s, QPainter* p, const QPointF& o) const
       {
       score()->scoreFont()->draw(s, p, magS(), o);
       }
+void Element::drawSymbolsCenterAligned(const QString& s, QPainter* p, const QPointF& o) const
+      {
+      score()->scoreFont()->drawCenterAligned(s, p, magS(), o);
+      }
 
 //---------------------------------------------------------
 //   symHeight
@@ -1703,5 +1707,32 @@ QPointF Element::symAttach(SymId id) const
       {
       return score()->scoreFont()->attach(id, magS());
       }
+
+//---------------------------------------------------------
+//   toTimeSigString
+//---------------------------------------------------------
+
+QString Element::toTimeSigString(const QString& s) const
+      {
+      QString d;
+      ScoreFont* f = score()->scoreFont();
+      for (int i = 0; i < s.size(); ++i) {
+            switch (s[i].toLatin1()) {
+                  case '0': d += f->toString(SymId::timeSig0); break;
+                  case '1': d += f->toString(SymId::timeSig1); break;
+                  case '2': d += f->toString(SymId::timeSig2); break;
+                  case '3': d += f->toString(SymId::timeSig3); break;
+                  case '4': d += f->toString(SymId::timeSig4); break;
+                  case '5': d += f->toString(SymId::timeSig5); break;
+                  case '6': d += f->toString(SymId::timeSig6); break;
+                  case '7': d += f->toString(SymId::timeSig7); break;
+                  case '8': d += f->toString(SymId::timeSig8); break;
+                  case '9': d += f->toString(SymId::timeSig9); break;
+                  default:  d += s[i]; break;
+                  }
+            }
+      return d;
+      }
+
 }
 
