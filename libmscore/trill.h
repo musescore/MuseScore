@@ -29,6 +29,11 @@ class Accidental;
 class TrillSegment : public LineSegment {
       Q_OBJECT
 
+      QString _symbols;
+
+      void symbolLine(SymId start, SymId fill);
+      void symbolLine(SymId start, SymId fill, SymId end);
+
    protected:
    public:
       TrillSegment(Score* s) : LineSegment(s) {}
@@ -45,6 +50,9 @@ class TrillSegment : public LineSegment {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all) override;
+
+      QString symbols() const           { return _symbols; }
+      void setSymbols(const QString& s) { _symbols = s; }
       };
 
 //---------------------------------------------------------

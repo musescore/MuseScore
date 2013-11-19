@@ -1592,9 +1592,6 @@ class ScoreFont {
             }
 
       const QString& name() const           { return _name;           }
-      const QString& family() const         { return _family;         }
-      const QString& fontPath() const       { return _fontPath;       }
-      const QString& filename() const       { return _filename;       }
 
       static ScoreFont* fontFactory(QString);
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
@@ -1611,7 +1608,6 @@ class ScoreFont {
       QPixmap sym2pixmap(SymId id, qreal mag);
 
       qreal height(SymId id, qreal mag) const   { return _fm->tightBoundingRect(toString(id)).height() * mag; }
-//      qreal width(SymId id, qreal mag) const    { return _fm->tightBoundingRect(toString(id)).width() * mag;  }
       qreal width(SymId id, qreal mag) const    { return _fm->width(toString(id)) * mag;  }
       const QRectF bbox(SymId id, qreal mag) const;
       const QRectF bbox(const QString& s, qreal mag) const;
