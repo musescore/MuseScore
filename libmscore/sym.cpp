@@ -25,10 +25,12 @@ namespace Ms {
 //---------------------------------------------------------
 
 QVector<ScoreFont> ScoreFont::_scoreFonts = {
+      ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"),
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"),
-//      ScoreFont("Goneville",  "Gonville-20", ":/fonts/gonville/", "gonville-20.ttf"),
-      ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf")
+//      ScoreFont("Goneville",  "Gonville-20", ":/fonts/gonville/", "gonville-20.ttf")
       };
+
+static const int FONTFACTORY_BRAVURA_INDEX = 0;
 
 //---------------------------------------------------------
 //   table of symbol names
@@ -3338,10 +3340,11 @@ QPixmap ScoreFont::sym2pixmap(SymId id, qreal mag)
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const
       {
+      Sym sm = sym(id);
       qreal imag = 1.0 / mag;
       painter->scale(mag, mag);
       painter->setFont(_font);
-      painter->drawText(pos * imag, toString(id));
+      painter->drawText(pos * imag, sm.string());
       painter->scale(imag, imag);
       }
 
@@ -3356,7 +3359,8 @@ void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPoin
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
       {
-      QString s = toString(id);
+      Sym sm = sym(id);
+      QString s = sm.string();
       QString d;
       for (int i = 0; i < n; ++i)
             d += s;
@@ -3653,8 +3657,8 @@ ScoreFont* ScoreFont::fontFactory(QString s)
 
 const Sym& ScoreFont::sym(SymId id) const
       {
-      if (!_symbols[int(id)].isValid() && (this != &_scoreFonts[0]))
-            return _scoreFonts[0]._symbols[int(id)];
+      if (!_symbols[int(id)].isValid() && (this != &_scoreFonts[FONTFACTORY_BRAVURA_INDEX]))
+            return _scoreFonts[FONTFACTORY_BRAVURA_INDEX]._symbols[int(id)];
       return _symbols[int(id)];
       }
 
