@@ -292,23 +292,18 @@ void TimeSig::layout1()
             // position numerator and denominator; vertical displacement:
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)
             // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
-
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
-            pz = QPointF(0.0, yoff - displ - _spatium);
-            // denom. horiz. posit.: centred around centre of numerator
-            // vert. position:       base line is lowered by displ and by the whole height of a digit
+            // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
+            pz = QPointF(0.0, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
 
-            qreal spatium2 = _spatium * 2.0;
-            pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + spatium2 - _spatium);
+            // denominator: horiz: centred around centre of numerator | vert: one space below centre line
+            pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + _spatium);
 
             setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
             addbbox(denRect.translated(pn));
             }
-      qreal im = (MScore::DPI * SPATIUM20) / _spatium;
 
-      pz *= im;                           // convert positions to raster units
-      pn *= im;
       _needLayout = false;
       // adjustReadPos();
       }
