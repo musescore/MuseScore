@@ -3577,17 +3577,6 @@ PaletteBox* MuseScore::getPaletteBox()
             QAction* a = getAction("toggle-palette");
             connect(paletteBox, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
             addDockWidget(Qt::LeftDockWidgetArea, paletteBox);
-
-#if 0
-            if (!useFactorySettings) {
-                  QFile f(dataPath + "/" + "mscore-palette.xml");
-                  if (f.exists()) {
-                        if (paletteBox->read(&f))
-                              return paletteBox;
-                        }
-                  }
-            populatePalette();
-#endif
             }
       return paletteBox;
       }
