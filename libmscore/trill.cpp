@@ -29,16 +29,7 @@ namespace Ms {
 
 void TrillSegment::draw(QPainter* painter) const
       {
-      QColor color;
-      if (flag(ELEMENT_DROP_TARGET))
-            color = MScore::dropColor;
-      else if (selected() && !(score() && score()->printing()))
-            color = MScore::selectColor[0];
-      else if (!visible())
-            color = Qt::gray;
-      else
-            color = trill()->curColor();
-      painter->setPen(color);
+      painter->setPen(curColor(trill()));
       drawSymbols(_symbols, painter);
       }
 
@@ -125,7 +116,7 @@ void TrillSegment::layout()
                   a->layout();
                   a->setMag(a->mag() * .6);
                   qreal _spatium = spatium();
-                  a->setPos(_spatium*1.3, -2.2*_spatium);
+                  a->setPos(_spatium * 1.3, -2.2 * _spatium);
                   a->adjustReadPos();
                   }
             switch (trill()->trillType()) {

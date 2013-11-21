@@ -438,10 +438,19 @@ Staff* Element::staff() const
 
 QColor Element::curColor() const
       {
+      return curColor(this);
+      }
+
+//---------------------------------------------------------
+//   curColor
+//---------------------------------------------------------
+
+QColor Element::curColor(const Element* proxy) const
+      {
       // the default element color is always interpreted as black in
       // printing
       if (score() && score()->printing())
-            return (_color == MScore::defaultColor) ? Qt::black : _color;
+            return (proxy->color() == MScore::defaultColor) ? Qt::black : proxy->color();
 
       if (flag(ELEMENT_DROP_TARGET))
             return MScore::dropColor;
@@ -458,7 +467,7 @@ QColor Element::curColor() const
             }
       if (!_visible)
             return Qt::gray;
-      return _color;
+      return proxy->color();
       }
 
 //---------------------------------------------------------
