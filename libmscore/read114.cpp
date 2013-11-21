@@ -327,10 +327,29 @@ Score::FileError Score::read114(XmlReader& e)
                   TextStyle s;
                   s.read(e);
 
-                  // Change 1.2 Poet to Lyricist
-                  if (s.name() == "Poet")
+                  // convert 1.2 text styles
+                  if (s.name() == "Chordname")
+                        s.setName("Chord Symbol");
+                  else if (s.name() == "Lyrics odd lines")
+                        s.setName("Lyrics Odd Lines");
+                  else if (s.name() == "Lyrics even lines")
+                        s.setName("Lyrics Even Lines");
+                  else if (s.name() == "InstrumentsLong")
+                        s.setName("Instrument Name (Long)");
+                  else if (s.name() == "InstrumentsShort")
+                        s.setName("Instrument Name (Short)");
+                  else if (s.name() == "InstrumentsExcerpt")
+                        s.setName("Instrument Name (Part)");
+                  else if (s.name() == "Poet")
                         s.setName("Lyricist");
-                  if (s.name() == "Lyrics odd lines" || s.name() == "Lyrics even lines")
+                  else if (s.name() == "Technik")
+                        s.setName("Technique");
+                  else if (s.name() == "TextLine")
+                        s.setName("Text Line");
+                  else if (s.name() == "Tuplets")
+                        s.setName("Tuplet");
+
+                  if (s.name() == "Lyrics Odd Lines" || s.name() == "Lyrics Even Lines")
                         s.setAlign((s.align() & ~ ALIGN_VMASK) | Align(ALIGN_BASELINE));
 
                   _style.setTextStyle(s);
