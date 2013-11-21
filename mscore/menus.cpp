@@ -217,17 +217,34 @@ Palette* MuseScore::newKeySigPalette()
 //   newAccidentalsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newAccidentalsPalette()
+Palette* MuseScore::newAccidentalsPalette(bool basic)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Accidentals"));
       sp->setGrid(33, 36);
       sp->setDrawGrid(true);
 
-      for (int i = Accidental::ACC_SHARP; i < Accidental::ACC_END; ++i) {
-            Accidental* s = new Accidental(gscore);
-            s->setAccidentalType(Accidental::AccidentalType(i));
-            sp->append(s, s->subtypeUserName());
+      if (basic) {
+            static Accidental::AccidentalType types[] = {
+                  Accidental::ACC_NONE,
+                  Accidental::ACC_SHARP,
+                  Accidental::ACC_FLAT,
+                  Accidental::ACC_SHARP2,
+                  Accidental::ACC_FLAT2,
+                  Accidental::ACC_NATURAL
+                  };
+            for (auto i : types) {
+                  Accidental* s = new Accidental(gscore);
+                  s->setAccidentalType(Accidental::AccidentalType(i));
+                  sp->append(s, s->subtypeUserName());
+                  }
+            }
+      else {
+            for (int i = Accidental::ACC_SHARP; i < Accidental::ACC_END; ++i) {
+                  Accidental* s = new Accidental(gscore);
+                  s->setAccidentalType(Accidental::AccidentalType(i));
+                  sp->append(s, s->subtypeUserName());
+                  }
             }
       AccidentalBracket* ab = new AccidentalBracket(gscore);
       sp->append(ab, QT_TRANSLATE_NOOP("Palette", "round bracket"));
@@ -988,11 +1005,13 @@ Palette* MuseScore::newTimePalette()
       }
 
 //---------------------------------------------------------
-//   populatePalette
+//   setAdvancedPalette
 //---------------------------------------------------------
 
-void MuseScore::populatePalette()
+void MuseScore::setAdvancedPalette()
       {
+      mscore->getPaletteBox();
+      paletteBox->clear();
       paletteBox->addPalette(newGraceNotePalette());
       paletteBox->addPalette(newClefsPalette());
       paletteBox->addPalette(newKeySigPalette());
@@ -1064,6 +1083,57 @@ void MuseScore::populatePalette()
       sp->append(SymId(accpushSym));
       sp->append(SymId(accpullSym));
 */
+
+      FretDiagram* fret = new FretDiagram(gscore);
+      fret->setDot(5, 1);
+      fret->setDot(2, 2);
+      fret->setDot(1, 3);
+      fret->setMarker(0, 'X');
+      fret->setMarker(3, 'O');
+      fret->setMarker(4, 'O');
+      sp->append(fret, tr("Fretboard Diagram"));
+
+      paletteBox->addPalette(sp);
+      }
+
+//---------------------------------------------------------
+//   setBasicPalette
+//---------------------------------------------------------
+
+void MuseScore::setBasicPalette()
+      {
+      mscore->getPaletteBox();
+      paletteBox->clear();
+      paletteBox->addPalette(newGraceNotePalette());
+      paletteBox->addPalette(newClefsPalette());
+      paletteBox->addPalette(newKeySigPalette());
+      paletteBox->addPalette(newTimePalette());
+      paletteBox->addPalette(newBarLinePalette());
+      paletteBox->addPalette(newLinesPalette());
+      paletteBox->addPalette(newArpeggioPalette());
+      paletteBox->addPalette(newBreathPalette());
+      paletteBox->addPalette(newBracketsPalette());
+      paletteBox->addPalette(newArticulationsPalette());
+      paletteBox->addPalette(newAccidentalsPalette(true));
+      paletteBox->addPalette(newDynamicsPalette());
+      paletteBox->addPalette(newFingeringPalette());
+      paletteBox->addPalette(newNoteHeadsPalette());
+      paletteBox->addPalette(newTremoloPalette());
+      paletteBox->addPalette(newRepeatsPalette());
+      paletteBox->addPalette(newTextPalette());
+      paletteBox->addPalette(newBreaksPalette());
+//      paletteBox->addPalette(newBagpipeEmbellishmentPalette());
+      paletteBox->addPalette(newBeamPalette());
+      paletteBox->addPalette(newFramePalette());
+
+      //-----------------------------------
+      //    Symbols
+      //-----------------------------------
+
+      Palette* sp = new Palette;
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Symbols"));
+      sp->setGrid(42, 45);
+      sp->setDrawGrid(true);
 
       FretDiagram* fret = new FretDiagram(gscore);
       fret->setDot(5, 1);

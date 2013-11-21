@@ -543,7 +543,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool eventFilter(QObject *, QEvent *);
       void setMidiRecordId(int id) { _midiRecordId = id; }
       int midiRecordId() const { return _midiRecordId; }
-      void populatePalette();
+      void setAdvancedPalette();
+      void setBasicPalette();
       void excerptsChanged(Score*);
       bool processMidiRemote(MidiRemoteType type, int data);
       ScoreTab* getTab1() const { return tab1; }
@@ -639,7 +640,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newGraceNotePalette();
       static Palette* newBagpipeEmbellishmentPalette();
       static Palette* newKeySigPalette();
-      static Palette* newAccidentalsPalette();
+      static Palette* newAccidentalsPalette(bool basic = false);
       static Palette* newBarLinePalette();
       static Palette* newLinesPalette();
 

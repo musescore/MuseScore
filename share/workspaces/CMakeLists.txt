@@ -18,8 +18,8 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-install(FILES
-      basic.workspace
-      advanced.workspace
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}workspaces
-      )
+#install(FILES
+#      basic.workspace
+#      advanced.workspace
+#      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}workspaces
+#      )

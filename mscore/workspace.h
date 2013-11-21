@@ -33,6 +33,8 @@ class Workspace : public QObject {
       Q_OBJECT
 
       static QList<Workspace*> _workspaces;
+      static Workspace _advancedWorkspace;
+      static Workspace _basicWorkspace;
 
       QString _name;
       QString _path;
@@ -44,6 +46,9 @@ class Workspace : public QObject {
 
    public:
       Workspace();
+      Workspace(const QString& n, const QString& p, bool d, bool r)
+         : _name(n), _path(p), _dirty(d), _readOnly(r) {}
+
       QString path() const           { return _path;  }
       void setPath(const QString& s) { _path = s;     }
       QString name() const           { return _name;  }
