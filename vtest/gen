@@ -9,6 +9,7 @@ SRC="mmrest-1 bravura-mmrest mmrest-2 mmrest-4 mmrest-5 mmrest-6 mmrest-7 mmrest
  emmentaler-3 bravura-3 emmentaler-4 bravura-4 emmentaler-5 bravura-5\
  emmentaler-6 bravura-6 emmentaler-7 bravura-7\
  emmentaler-8 bravura-8"
+# SRC="emmentaler-8 bravura-8"
 
 MSCORE=../build.debug/mscore/mscore
 DPI=130

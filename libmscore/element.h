@@ -463,6 +463,7 @@ class Element : public QObject {
 
       QColor color() const             { return _color; }
       QColor curColor() const;
+      QColor curColor(const Element* proxy) const;
       void setColor(const QColor& c)     { _color = c;    }
       void undoSetColor(const QColor& c);
 
