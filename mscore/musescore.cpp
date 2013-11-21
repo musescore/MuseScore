@@ -4594,8 +4594,6 @@ int main(int argc, char* av[])
       QStringList argv =  QCoreApplication::arguments();
       argv.removeFirst();
 
-      bool writeWorkspaceFile = false;
-
       for (int i = 0; i < argv.size();) {
             QString s = argv[i];
             if (s[0] != '-') {
@@ -4658,10 +4656,6 @@ int main(int argc, char* av[])
                         if (argv.size() - i < 2)
                               usage();
                         styleFile = argv.takeAt(i + 1);
-                        break;
-                  case 'w':
-                        writeWorkspaceFile = true;
-                        converterMode = true;
                         break;
                   case 'F':
                         useFactorySettings = true;
@@ -4896,11 +4890,6 @@ int main(int argc, char* av[])
       mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
       gscore->setScoreFont(ScoreFont::fontFactory("Bravura"));
-
-      if (writeWorkspaceFile) {
-            Workspace::writeBuiltinWorkspace();
-            return 0;
-            }
 
       if (!noSeq) {
             if (!seq->init()) {

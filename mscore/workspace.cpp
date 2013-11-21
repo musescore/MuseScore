@@ -34,6 +34,14 @@ bool Workspace::workspacesRead = false;
 QList<Workspace*> Workspace::_workspaces;
 Workspace* Workspace::currentWorkspace;
 
+Workspace Workspace::_advancedWorkspace {
+      QString("Advanced"), QString("Advanced"), false, true
+      };
+
+Workspace Workspace::_basicWorkspace {
+      QString("Basic"), QString("Basic"), false, true
+      };
+
 //---------------------------------------------------------
 //   undoWorkspace
 //---------------------------------------------------------
@@ -301,10 +309,17 @@ extern QString readRootFile(MQZipReader*, QList<QString>&);
 
 void Workspace::read()
       {
+      if (_path == "Advanced") {
+            mscore->setAdvancedPalette();
+            return;
+            }
+      if (_path == "Basic") {
+            mscore->setBasicPalette();
+            return;
+            }
       if (_path.isEmpty() || !QFile(_path).exists()) {
-            PaletteBox* paletteBox = mscore->getPaletteBox();
-            paletteBox->clear();
-            mscore->populatePalette();
+            qDebug("cannot read workspace <%s>", qPrintable(_path));
+            mscore->setAdvancedPalette();       // set default palette
             return;
             }
       QFileInfo fi(_path);
@@ -380,21 +395,24 @@ void Workspace::save()
 QList<Workspace*>& Workspace::workspaces()
       {
       if (!workspacesRead) {
+            _workspaces.append(&_advancedWorkspace);
+            _workspaces.append(&_basicWorkspace);
+
             QStringList path;
             path << mscoreGlobalShare + "workspaces";
             path << dataPath + "/workspaces";
             QStringList nameFilters;
             nameFilters << "*.workspace";
 
-            foreach(QString s, path) {
+            foreach (const QString& s, path) {
                   QDir dir(s);
                   QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
 
-                  foreach (QString entry, pl) {
+                  foreach (const QString& entry, pl) {
                         Workspace* p = 0;
                         QFileInfo fi(s + "/" + entry);
                         QString name(fi.baseName());
-                        foreach(Workspace* w, _workspaces) {
+                        foreach (Workspace* w, _workspaces) {
                               if (w->name() == name) {
                                     p = w;
                                     break;
@@ -437,20 +455,5 @@ Workspace* Workspace::createNewWorkspace(const QString& name)
       return p;
       }
 
-//---------------------------------------------------------
-//   writeBuiltinWorkspace
-//---------------------------------------------------------
-
-void Workspace::writeBuiltinWorkspace()
-      {
-      PaletteBox* paletteBox = mscore->getPaletteBox();
-      paletteBox->clear();
-      mscore->populatePalette();
-
-      Workspace ws;
-      ws.setName("advanced");
-      ws.setPath("advanced.workspace");
-      ws.write();
-      }
 }
 
