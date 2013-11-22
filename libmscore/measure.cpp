@@ -75,7 +75,7 @@
 #include "accidental.h"
 #include "layout.h"
 #include "icon.h"
-#include "rangesymbol.h"
+#include "partrange.h"
 
 namespace Ms {
 
@@ -2162,10 +2162,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   noText->setParent(this);
                   staves[noText->staffIdx()]->setNoText(noText);
                   }
-            else if (tag == "Range") {
-                  Range* range = new Range(score());
+            else if (tag == "PartRange") {
+                  PartRange* range = new PartRange(score());
                   range->read(e);
-                  segment = getSegment(Segment::SegRange, e.tick());
+                  segment = getSegment(Segment::SegPartRange, e.tick());
                   range->setParent(segment);          // a parent segment is needed for setTrack() to work
                   range->setTrack(trackZeroVoice(e.track()));
                   segment->add(range);
