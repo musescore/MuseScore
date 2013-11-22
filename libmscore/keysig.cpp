@@ -390,7 +390,7 @@ void KeySig::read(XmlReader& e)
             else if (!Element::readProperties(e))
                   e.unknown();
             }
-      if (_sig.invalid() && subtype)
+      if (_sig.invalid())
             _sig.initFromSubtype(subtype);     // for backward compatibility
       }
 
