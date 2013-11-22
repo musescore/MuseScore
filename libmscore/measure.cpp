@@ -3322,6 +3322,14 @@ void Measure::layoutX(qreal stretch)
                                                 x1 = qMax(x1, ss->x() + e->x() + e->width());
                                           }
                                     }
+
+                              Segment* ns = s->next();
+                              while (ns && ns->segmentType() != Segment::SegEndBarLine) {
+                                    ns = ns->next();
+                                    }
+                              if (ns)
+                                    x2 = ns->x();
+
                               rest->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s->x();
                               rest->adjustReadPos();
                               }
