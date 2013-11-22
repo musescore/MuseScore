@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>InspectorRange</class>
- <widget class="QWidget" name="InspectorRange">
+ <class>InspectorPartRange</class>
+ <widget class="QWidget" name="InspectorPartRange">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -38,7 +38,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Range</string>
+      <string>Part Range</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

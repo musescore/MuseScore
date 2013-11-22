@@ -11,8 +11,8 @@
 //=============================================================================
 
 #include "inspector.h"
-#include "inspectorRange.h"
-#include "libmscore/rangesymbol.h"
+#include "inspectorPartRange.h"
+#include "libmscore/partrange.h"
 #include "libmscore/score.h"
 
 namespace Ms {
@@ -27,10 +27,10 @@ enum {
       };
 
 //---------------------------------------------------------
-//   InspectorRange
+//   InspectorPartRange
 //---------------------------------------------------------
 
-InspectorRange::InspectorRange(QWidget* parent)
+InspectorPartRange::InspectorPartRange(QWidget* parent)
    : InspectorBase(parent)
       {
       b.setupUi(addWidget());
@@ -106,9 +106,9 @@ InspectorRange::InspectorRange(QWidget* parent)
 //   setElement
 //---------------------------------------------------------
 /*
-void InspectorRange::setElement()
+void InspectorPartRange::setElement()
       {
-      Range* range = static_cast<Range*>(inspector->element());
+      PartRange* range = static_cast<Range*>(inspector->element());
 
 //      int octave = range->topPitch() / 12;
 //      static_cast<QSpinBox*>(iList[TOPOCTAVE].w)->setValue(octave);
@@ -121,7 +121,7 @@ void InspectorRange::setElement()
 //   valueChanged
 //---------------------------------------------------------
 
-void InspectorRange::valueChanged(int idx)
+void InspectorPartRange::valueChanged(int idx)
       {
       InspectorBase::valueChanged(idx);
       // if either tpc or octave is changed, notes can have been swapped
@@ -137,9 +137,9 @@ void InspectorRange::valueChanged(int idx)
 //   on updateRage clicked
 //---------------------------------------------------------
 
-void Ms::InspectorRange::updateRange()
+void Ms::InspectorPartRange::updateRange()
 {
-      Range* range = static_cast<Range*>(inspector->element());
+      PartRange* range = static_cast<PartRange*>(inspector->element());
       range->updateRange();
       range->layout();              // redo layout
       setElement();                 // set Inspector values to range properties

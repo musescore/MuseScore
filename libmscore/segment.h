@@ -59,7 +59,7 @@ class Segment : public Element {
             SegInvalid            = 0x0,
             SegClef               = 0x1,
             SegKeySig             = 0x2,
-            SegRange              = 0x4,
+            SegPartRange          = 0x4,
             SegTimeSig            = 0x8,
             SegStartRepeatBarLine = 0x10,
             SegBarLine            = 0x20,

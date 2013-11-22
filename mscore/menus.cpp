@@ -74,7 +74,7 @@
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
 #include "libmscore/bagpembell.h"
-#include "libmscore/rangesymbol.h"
+#include "libmscore/partrange.h"
 
 namespace Ms {
 
@@ -501,8 +501,8 @@ Palette* MuseScore::newNoteHeadsPalette()
       QIcon icon(action->icon());
       ik->setAction("add-brackets", icon);
       sp->append(ik, s->help());
-      Range* r = new Range(gscore);
-      sp->append(r, tr("Range"));
+      PartRange* r = new PartRange(gscore);
+      sp->append(r, tr("Part Range"));
       return sp;
       }
 
