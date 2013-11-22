@@ -1612,7 +1612,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   else {
                         // create broken segment
                         int n = crl.size();
-                        qreal len = point(score()->styleS(ST_beamMinLen));
+                        qreal len = beamMinLen;
                         //
                         // find direction (by default, segment points to right)
                         //
