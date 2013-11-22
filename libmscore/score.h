@@ -30,6 +30,7 @@
 #include "segment.h"
 #include "accidental.h"
 #include "note.h"
+#include <QKeyEvent>
 #include "spannermap.h"
 #include "pitchspelling.h"
 
@@ -554,7 +555,6 @@ class Score : public QObject {
 
       void addElement(Element*);
       void removeElement(Element*);
-
       void cmdAddSpanner(Spanner* e, const QPointF& pos);
 
       Note* addNote(Chord*, NoteVal &noteVal);
@@ -876,6 +876,8 @@ class Score : public QObject {
       void cmdUpdateNotes();
       void cmdUpdateAccidentals(Measure* m, int staffIdx);
       void updateAccidentals(Measure* m, int staffIdx);
+      bool updateAcc2;
+      void updatePitches(Segment*, int, int, int, int, Accidental::AccidentalType);
       QMap<int, LinkedElements*>& links();
       bool concertPitch() const { return styleB(ST_concertPitch); }
       void layoutFingering(Fingering*);

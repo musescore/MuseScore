@@ -97,6 +97,10 @@
     <seq>Alt+9</seq>
     </SC>
   <SC>
+    <key>delete-accidental</key>
+    <seq>Alt+Del</seq>
+    </SC>
+  <SC>
     <key>interval-2</key>
     <seq>Shift+2</seq>
     </SC>
