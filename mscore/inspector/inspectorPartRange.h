@@ -10,29 +10,29 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_RANGE_H__
-#define __INSPECTOR_RANGE_H__
+#ifndef __INSPECTOR_PARTRANGE_H__
+#define __INSPECTOR_PARTRANGE_H__
 
 #include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_range.h"
+#include "ui_inspector_partrange.h"
 #include "ui_inspector_segment.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorRange
+//   InspectorPartRange
 //---------------------------------------------------------
 
-class InspectorRange : public InspectorBase {
+class InspectorPartRange : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement   b;
-      Ui::InspectorRange   r;
+      Ui::InspectorPartRange   r;
       Ui::InspectorSegment s;
 
    public:
-      InspectorRange(QWidget* parent);
+      InspectorPartRange(QWidget* parent);
 //      virtual void setElement();
 
    protected slots:

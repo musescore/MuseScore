@@ -10,13 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "rangesymbol.h"
+#include "partrange.h"
 #include "chord.h"
 #include "measure.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "sym.h"
 #include "system.h"
 #include "utils.h"
 
@@ -31,10 +32,10 @@ static const qreal                  LEDGEROFFSET_DEFAULT    = 0.25;
 static const qreal                  LINEOFFSET_DEFAULT      = 0.8;      // the distance between note head and line
 
 //---------------------------------------------------------
-//   Range
+//   PartRange
 //---------------------------------------------------------
 
-Range::Range(Score* s)
+PartRange::PartRange(Score* s)
 : Element(s), _topAccid(s), _bottomAccid(s)
       {
       _noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
@@ -58,7 +59,7 @@ Range::Range(Score* s)
 //    initialize top and bottom 'notes' to top and bottom staff lines
 //---------------------------------------------------------
 
-void Range::setTrack(int t)
+void PartRange::setTrack(int t)
       {
       Segment*    segm  = segment();
       Staff*      stf   = score()->staff(track2staff(t));
@@ -84,7 +85,7 @@ void Range::setTrack(int t)
 //    setting either pitch requires to adjust the corresponding tpc
 //---------------------------------------------------------
 
-void Range::setTopPitch(int val)
+void PartRange::setTopPitch(int val)
       {
       int deltaPitch    = val - topPitch();
       // if deltaPitch is not an integer number of octaves, adjust tpc
@@ -102,7 +103,7 @@ void Range::setTopPitch(int val)
       normalize();
       }
 
-void Range::setBottomPitch(int val)
+void PartRange::setBottomPitch(int val)
       {
       int deltaPitch    = val - bottomPitch();
       // if deltaPitch is not an integer number of octaves, adjust tpc
@@ -127,7 +128,7 @@ void Range::setBottomPitch(int val)
 //    (but remaining in the same octave)
 //---------------------------------------------------------
 
-void Range::setTopTpc(int val)
+void PartRange::setTopTpc(int val)
       {
       int octave        = topPitch() / PITCH_DELTA_OCTAVE;
       int deltaTpc      = val - topTpc();
@@ -140,7 +141,7 @@ void Range::setTopTpc(int val)
       normalize();
       }
 
-void Range::setBottomTpc(int val)
+void PartRange::setBottomTpc(int val)
       {
       int octave        = bottomPitch() / PITCH_DELTA_OCTAVE;
       int deltaTpc      = val - bottomTpc();
@@ -157,9 +158,9 @@ void Range::setBottomTpc(int val)
 //   write
 //---------------------------------------------------------
 
-void Range::write(Xml& xml) const
+void PartRange::write(Xml& xml) const
       {
-      xml.stag("Range");
+      xml.stag("PartRange");
       xml.tag(P_HEAD_GROUP, _noteHeadGroup, NOTEHEADGROUP_DEFAULT);
       xml.tag(P_HEAD_TYPE,  _noteHeadType,  NOTEHEADTYPE_DEFAULT);
       xml.tag(P_MIRROR_HEAD,_dir,           DIR_DEFAULT);
@@ -187,7 +188,7 @@ void Range::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Range::read(XmlReader& e)
+void PartRange::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -234,7 +235,7 @@ void Range::read(XmlReader& e)
 //   layout
 //---------------------------------------------------------
 
-void Range::layout()
+void PartRange::layout()
       {
       int         bottomLine, topLine;
       ClefType    clf;
@@ -410,13 +411,13 @@ void Range::layout()
 //   draw
 //---------------------------------------------------------
 
-void Range::draw(QPainter* p) const
+void PartRange::draw(QPainter* p) const
       {
       qreal _spatium = spatium();
       qreal lw = lineWidth() * _spatium;
       p->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
-      symbols[score()->symIdx()][noteHead()].draw(p, magS(), _topPos);
-      symbols[score()->symIdx()][noteHead()].draw(p, magS(), _bottomPos);
+      drawSymbol(noteHead(), p, _topPos);
+      drawSymbol(noteHead(), p, _bottomPos);
       if (_hasLine)
             p->drawLine(_line);
 
@@ -449,7 +450,7 @@ void Range::draw(QPainter* p) const
 //   space
 //---------------------------------------------------------
 
-Space Range::space() const
+Space PartRange::space() const
       {
       return Space(spatium() * 0.75, width() + spatium() * 0.5);
       }
@@ -458,7 +459,7 @@ Space Range::space() const
 //   scanElements
 //---------------------------------------------------------
 
-void Range::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
+void PartRange::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
       {
       func(data, this);
       if (_topAccid.accidentalType() != Accidental::ACC_NONE)
@@ -471,7 +472,7 @@ void Range::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/
 //   noteHead
 //---------------------------------------------------------
 
-int Range::noteHead() const
+SymId PartRange::noteHead() const
       {
       int hg, ht;
             hg = 1;
@@ -479,10 +480,10 @@ int Range::noteHead() const
       if (_noteHeadType != Note::HEAD_AUTO)
             ht = _noteHeadType;
 
-      int t = noteHeads[hg][int(_noteHeadGroup)][ht];
-      if (t == -1) {
+      SymId t = noteHeads[hg][int(_noteHeadGroup)][ht];
+      if (t == SymId::noSym) {
             qDebug("invalid note head %d/%d", _noteHeadGroup, _noteHeadType);
-            t = noteHeads[hg][0][ht];
+            t = noteHeads[0][0][ht];
             }
       return t;
       }
@@ -493,18 +494,19 @@ int Range::noteHead() const
 //    returns the width of the note head symbol
 //---------------------------------------------------------
 
-qreal Range::headWidth() const
+qreal PartRange::headWidth() const
       {
-      int head  = noteHead();
-      qreal val = symbols[score()->symIdx()][head].width(magS());
-      return val;
+//      int head  = noteHead();
+//      qreal val = symbols[score()->symIdx()][head].width(magS());
+//      return val;
+      return symWidth(noteHead());
       }
 
 //---------------------------------------------------------
 //   pagePos
 //---------------------------------------------------------
 
-QPointF Range::pagePos() const
+QPointF PartRange::pagePos() const
       {
       if (parent() == 0)
             return pos();
@@ -521,7 +523,7 @@ QPointF Range::pagePos() const
 //    makes sure _topPitch is not < _bottomPitch
 //---------------------------------------------------------
 
-void Range::normalize()
+void PartRange::normalize()
       {
       if (_topPitch < _bottomPitch) {
             int temp    = _topPitch;
@@ -539,7 +541,7 @@ void Range::normalize()
 //    scans the staff contents up to next section break to update the range pitches/tpc's
 //---------------------------------------------------------
 
-void Range::updateRange()
+void PartRange::updateRange()
       {
       if (!segment())
             return;
@@ -594,7 +596,7 @@ void Range::updateRange()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Range::getProperty(P_ID propertyId) const
+QVariant PartRange::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_HEAD_GROUP:
@@ -628,7 +630,7 @@ QVariant Range::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Range::setProperty(P_ID propertyId, const QVariant& v)
+bool PartRange::setProperty(P_ID propertyId, const QVariant& v)
       {
       bool  rv = true;
 
@@ -680,7 +682,7 @@ bool Range::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Range::propertyDefault(P_ID id) const
+QVariant PartRange::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_HEAD_GROUP:      return NOTEHEADGROUP_DEFAULT;

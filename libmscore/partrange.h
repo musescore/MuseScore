@@ -22,10 +22,10 @@ class QPainter;
 namespace Ms {
 
 //---------------------------------------------------------
-//   @@ Range
+//   @@ PartRange
 //---------------------------------------------------------
 
-class Range : public Element {
+class PartRange : public Element {
       Q_OBJECT
 
       Note::NoteHeadGroup     _noteHeadGroup;
@@ -46,11 +46,11 @@ class Range : public Element {
 
    public:
 
-      Range(Score* s);
-      virtual Range* clone() const                    { return new Range(*this); }
+      PartRange(Score* s);
+      virtual PartRange* clone() const                    { return new PartRange(*this); }
 
       // getters and setters
-      virtual ElementType type() const                { return RANGE;         }
+      virtual ElementType type() const                { return PART_RANGE;    }
       Note::NoteHeadGroup noteHeadGroup() const       { return _noteHeadGroup;}
       Note::NoteHeadType noteHeadType() const         { return _noteHeadType; }
       MScore::DirectionH direction() const            { return _dir;          }
@@ -75,7 +75,7 @@ class Range : public Element {
 
       // some utility functions
       Segment* segment() const                        { return (Segment*)parent(); }
-      int noteHead() const;
+      SymId noteHead() const;
       qreal headWidth() const;
       void  updateRange();                // scan staff up to next section break and update range pitches
 
