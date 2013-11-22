@@ -85,7 +85,10 @@ else()
     endif()
     list(APPEND _components Qt${_component})
   endforeach()
-  find_package(Qt4 ${QT_MIN_VERSION} REQUIRED ${_components})
+# ise
+  #find_package(Qt4 ${QT_MIN_VERSION} REQUIRED ${_components})
+    set(Qt5Transitional_FOUND TRUE)
+# end ise
   include_directories(${QT_INCLUDES})
 
   if(QT4_FOUND)
