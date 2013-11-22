@@ -18,7 +18,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
 CreationTime: 1385043608
-ModificationTime: 1385080014
+ModificationTime: 1385126309
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -6476,7 +6476,7 @@ SplineSet
  18 -167 18 -167 12 -160 c 256,45,46
  5 -152 5 -152 5 -141 c 258,17,-1
 EndSplineSet
-Validated: 8404993
+Validated: 16385
 EndChar
 
 StartChar: accidentals.flat.slash
@@ -6531,7 +6531,7 @@ SplineSet
  -102 203 -102 203 -91 209 c 258,67,-1
  -4 253 l 257,17,-1
 EndSplineSet
-Validated: 8388609
+Validated: 1
 EndChar
 
 StartChar: accidentals.flat.slashslash
@@ -7272,7 +7272,7 @@ SplineSet
  41 106 41 106 39 42 c 258,76,-1
  37 -37 l 258,68,69
 EndSplineSet
-Validated: 8404993
+Validated: 16385
 EndChar
 
 StartChar: accidentals.flatflat.slash
@@ -7670,7 +7670,7 @@ SplineSet
  41 106 41 106 39 42 c 258,102,-1
  37 -37 l 258,94,95
 EndSplineSet
-Validated: 8404993
+Validated: 16385
 EndChar
 
 StartChar: accidentals.doublesharp
@@ -17878,7 +17878,7 @@ SplineSet
  311 231 311 231 348 250 c 256,70,71
  384 270 384 270 422 270 c 256,0,1
 EndSplineSet
-Validated: 8404993
+Validated: 16385
 EndChar
 
 StartChar: scripts.turn
@@ -18104,7 +18104,7 @@ SplineSet
  560 79 560 79 520 40 c 256,70,71
  479 0 479 0 422 0 c 256,0,1
 EndSplineSet
-Validated: 8404993
+Validated: 16385
 EndChar
 
 StartChar: scripts.trill
@@ -18595,7 +18595,7 @@ SplineSet
  227 95 227 95 227 70 c 256,94,95
  227 40 227 40 242 40 c 256,85,86
 EndSplineSet
-Validated: 8404993
+Validated: 16385
 EndChar
 
 StartChar: scripts.upedalheel
@@ -20300,7 +20300,7 @@ SplineSet
  200 10 l 258,38,39
  191 -1 191 -1 179 -1 c 256,0,1
 EndSplineSet
-Validated: 8388609
+Validated: 1
 EndChar
 
 StartChar: scripts.trill_element
@@ -20470,7 +20470,7 @@ SplineSet
  200 210 l 258,38,39
  191 199 191 199 179 199 c 256,0,1
 EndSplineSet
-Validated: 8404993
+Validated: 16385
 EndChar
 
 StartChar: scripts.arpeggio.arrow.M1
@@ -20511,7 +20511,7 @@ SplineSet
  227.5 115.5 227.5 115.5 239.5 129.5 c 258,47,-1
  266 162 l 258,0,1
 EndSplineSet
-Validated: 524321
+Validated: 33
 EndChar
 
 StartChar: scripts.arpeggio.arrow.1
@@ -20552,16 +20552,16 @@ SplineSet
  9.5 88.5 9.5 88.5 -2.5 74.5 c 258,47,-1
  -28.5 42.5 l 258,0,1
 EndSplineSet
-Validated: 524289
+Validated: 1
 EndChar
 
 StartChar: scripts.trilelement
 Encoding: 57730 57730 154
-Width: 105
+Width: 214
 VWidth: 1152
-Flags: W
+Flags: WO
 HStem: 128 256
-VStem: -124 248
+VStem: 203 248
 TtInstrs:
 SVTCA[y-axis]
 PUSHB_1
@@ -20593,21 +20593,20 @@ EndTTInstrs
 LayerCount: 2
 Fore
 SplineSet
--82 129 m 257,0,-1
- -90 117 l 257,1,-1
- -124 139 l 257,2,-1
- -52 247 l 258,3,4
- -46 256 -46 256 -35 256 c 256,5,6
- -26 256 -26 256 -19 249 c 258,7,-1
- 82 127 l 257,8,-1
- 90 139 l 257,9,-1
- 124 117 l 257,10,-1
- 52 9 l 258,11,12
- 46 0 46 0 35 0 c 256,13,14
- 26 0 26 0 19 7 c 258,15,-1
- -82 129 l 257,0,-1
+27 129 m 257,0,-1
+ 19 117 l 257,1,-1
+ -15 139 l 257,2,-1
+ 57 247 l 258,3,4
+ 63 256 63 256 74 256 c 256,5,6
+ 83 256 83 256 90 249 c 258,7,-1
+ 191 127 l 257,8,-1
+ 199 139 l 257,9,-1
+ 233 117 l 257,10,-1
+ 161 9 l 258,11,12
+ 155 0 155 0 144 0 c 256,13,14
+ 135 0 135 0 128 7 c 258,15,-1
+ 27 129 l 257,0,-1
 EndSplineSet
-Validated: 1
 EndChar
 
 StartChar: scripts.prall
@@ -20734,6 +20733,36 @@ IUP[y]
 IUP[x]
 EndTTInstrs
 LayerCount: 2
+Back
+SplineSet
+477 175 m 258,0,1
+ 483 184 483 184 494 184 c 256,2,3
+ 502 184 502 184 508 178 c 256,4,5
+ 514 172 514 172 514 164 c 256,6,7
+ 514 157 514 157 511 153 c 258,8,-1
+ 416 9 l 258,9,10
+ 410 0 410 0 398 0 c 256,11,12
+ 389 0 389 0 383 7 c 258,13,-1
+ 283 129 l 257,14,-1
+ 203 9 l 258,15,16
+ 197 0 197 0 185 0 c 256,17,18
+ 176 0 176 0 170 7 c 258,19,-1
+ 69 129 l 257,20,-1
+ 37 81 l 258,21,22
+ 31 72 31 72 20 72 c 256,23,24
+ 12 72 12 72 6 78 c 256,25,26
+ 0 84 0 84 0 92 c 256,27,28
+ 0 99 0 99 3 103 c 258,29,-1
+ 98 247 l 258,30,31
+ 104 256 104 256 116 256 c 256,32,33
+ 125 256 125 256 131 249 c 258,34,-1
+ 231 127 l 257,35,-1
+ 311 247 l 258,36,37
+ 317 256 317 256 329 256 c 256,38,39
+ 338 256 338 256 344 249 c 258,40,-1
+ 445 127 l 257,41,-1
+ 477 175 l 258,0,1
+EndSplineSet
 Fore
 SplineSet
 477 175 m 258,0,1
@@ -21099,7 +21128,7 @@ SplineSet
  660 127 l 257,53,-1
  692 175 l 258,0,1
 EndSplineSet
-Validated: 540673
+Validated: 16385
 EndChar
 
 StartChar: scripts.prallmordent
@@ -21271,7 +21300,7 @@ SplineSet
  492 119 l 257,75,-1
  492 -26 l 258,0,1
 EndSplineSet
-Validated: 540673
+Validated: 16385
 EndChar
 
 StartChar: scripts.upprall
@@ -21452,7 +21481,7 @@ SplineSet
  78 -172 78 -172 72 -178 c 256,62,63
  66 -184 66 -184 58 -184 c 256,0,1
 EndSplineSet
-Validated: 540673
+Validated: 16385
 EndChar
 
 StartChar: scripts.upmordent
@@ -21673,7 +21702,7 @@ SplineSet
  78 -172 78 -172 72 -178 c 256,84,85
  66 -184 66 -184 58 -184 c 256,0,1
 EndSplineSet
-Validated: 540673
+Validated: 16385
 EndChar
 
 StartChar: scripts.pralldown
@@ -21850,7 +21879,7 @@ SplineSet
  767 -84 767 -84 747.5 -134 c 256,62,63
  728 -184 728 -184 709 -184 c 256,0,1
 EndSplineSet
-Validated: 540673
+Validated: 16385
 EndChar
 
 StartChar: scripts.downprall
@@ -21904,7 +21933,7 @@ SplineSet
  38 72 38 72 19 122 c 256,64,65
  0 173 0 173 0 220 c 256,0,1
 EndSplineSet
-Validated: 524289
+Validated: 1
 EndChar
 
 StartChar: scripts.downmordent
@@ -21972,7 +22001,7 @@ SplineSet
  38 72 38 72 19 122 c 256,86,87
  0 173 0 173 0 220 c 256,0,1
 EndSplineSet
-Validated: 524289
+Validated: 1
 EndChar
 
 StartChar: scripts.prallup
@@ -22095,7 +22124,7 @@ SplineSet
  727 369 727 369 747 320 c 256,64,65
  767 271 767 271 767 220 c 256,0,1
 EndSplineSet
-Validated: 540673
+Validated: 16385
 EndChar
 
 StartChar: scripts.lineprall
@@ -22225,7 +22254,7 @@ SplineSet
  660 127 l 257,61,-1
  692 175 l 258,0,1
 EndSplineSet
-Validated: 540673
+Validated: 16385
 EndChar
 
 StartChar: scripts.caesura.curved
@@ -28454,7 +28483,7 @@ SplineSet
  0 188 0 188 34.5 226.5 c 256,42,43
  69 265 69 265 120 271 c 257,22,-1
 EndSplineSet
-Validated: 540673
+Validated: 16385
 EndChar
 
 StartChar: noteheads.sM1double
@@ -33432,7 +33461,7 @@ SplineSet
  315 -680 l 258,243,244
  315 -672 315 -672 323 -672 c 256,177,178
 EndSplineSet
-Validated: 8914945
+Validated: 2049
 EndChar
 
 StartChar: uniE1D7
@@ -33559,7 +33588,7 @@ SplineSet
  303.5 -852 303.5 -852 286 -842 c 258,176,-1
  220.5 -804 l 257,164,165
 EndSplineSet
-Validated: 8914945
+Validated: 2049
 EndChar
 
 StartChar: uniE1D8
@@ -33686,7 +33715,7 @@ SplineSet
  428 829 428 829 428 916 c 0,175,176
  428 982 428 982 408 1045 c 1,167,168
 EndSplineSet
-Validated: 8914945
+Validated: 2049
 EndChar
 
 StartChar: uniE1D9
@@ -33848,7 +33877,7 @@ SplineSet
  428 829 428 829 428 916 c 0,243,244
  428 982 428 982 408 1045 c 1,235,236
 EndSplineSet
-Validated: 8914945
+Validated: 2049
 EndChar
 
 StartChar: uniE1DA
@@ -34002,7 +34031,7 @@ SplineSet
  0 121 0 121 69.5 195 c 256,206,207
  139 269 139 269 238 269 c 256,154,155
 EndSplineSet
-Validated: 8912897
+Validated: 1
 EndChar
 
 StartChar: uniE1DB
@@ -34121,7 +34150,7 @@ SplineSet
  0 121 0 121 69.5 195 c 256,138,139
  139 269 139 269 238 269 c 256,86,87
 EndSplineSet
-Validated: 8914945
+Validated: 2049
 EndChar
 
 StartChar: uniE1DC
@@ -34240,7 +34269,7 @@ SplineSet
  277.5 399 277.5 399 260 409 c 258,139,-1
  194.5 447 l 257,127,128
 EndSplineSet
-Validated: 8914945
+Validated: 2049
 EndChar
 
 StartChar: uniE1DD
@@ -34394,7 +34423,7 @@ SplineSet
  265 571 l 258,206,207
  265 579 265 579 273 579 c 256,140,141
 EndSplineSet
-Validated: 8912897
+Validated: 1
 EndChar
 EndChars
 EndSplineFont

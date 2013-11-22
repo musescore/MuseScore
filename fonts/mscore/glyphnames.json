@@ -25,13 +25,13 @@
     },
     "accidentalQuarterFlat4": {
         "codepoint": "U+E118"
-    }, 
+    },
     "accidentalThreeQuartersFlatCouper": {
         "codepoint": "U+E117"
-    }, 
+    },
     "accidentalThreeQuartersSharp2": {
         "codepoint": "U+E112"
-    }, 
+    },
     "accidentalSharp": {
         "codepoint": "U+e10e"
     },
@@ -40,28 +40,28 @@
     },
     "arrowheadBlackDown": {
         "codepoint": "U+E126"
-    }, 
+    },
     "arrowheadBlackLeft": {
         "codepoint": "U+E124"
-    }, 
+    },
     "arrowheadBlackRight": {
         "codepoint": "U+E123"
-    }, 
+    },
     "arrowheadBlackUp": {
         "codepoint": "U+E125"
-    }, 
+    },
     "arrowheadWhiteDown": {
         "codepoint": "U+E122"
-    }, 
+    },
     "arrowheadWhiteLeft": {
         "codepoint": "U+E120"
-    }, 
+    },
     "arrowheadWhiteRight": {
         "codepoint": "U+E11f"
-    }, 
+    },
     "arrowheadWhiteUp": {
         "codepoint": "U+E121"
-    }, 
+    },
     "articAccent": {
         "codepoint": "U+e161"
     },
@@ -223,10 +223,10 @@
     },
     "graceNoteSlashStemDown": {
         "codepoint": "U+e196"
-    }, 
+    },
     "graceNoteSlashStemUp": {
         "codepoint": "U+e195"
-    }, 
+    },
     "keyboardPedalHeel1": {
         "codepoint": "U+e172"
     },
@@ -316,10 +316,10 @@
     },
     "noteheadParenthesisLeft": {
         "codepoint": "U+e11e"
-    }, 
+    },
     "noteheadParenthesisRight": {
         "codepoint": "U+e11d"
-    }, 
+    },
     "noteheadSlashDiamondWhite": {
         "codepoint": "U+e136"
     },
@@ -343,7 +343,7 @@
     },
     "noteheadTriangleLeftBlack": {
         "codepoint": "U+e14f"
-    }, 
+    },
     "noteheadTriangleUpBlack": {
         "codepoint": "U+e134"
     },
@@ -355,10 +355,10 @@
     },
     "noteheadTriangleUpRightBlack": {
         "codepoint": "U+e14e"
-    }, 
+    },
     "noteheadTriangleUpRightWhite": {
         "codepoint": "U+e14c"
-    }, 
+    },
     "noteheadWhole": {
         "codepoint": "U+e12b"
     },
@@ -559,5 +559,11 @@
     },
     "wiggleTrillFastest": {
         "codepoint": "U+e182"
+    },
+    "ornamentZigZagLineNoRightEnd": {
+        "codepoint": "U+e182"
+    },
+    "ornamentZigZagLineWithRightEnd": {
+        "codepoint": "U+e183"
     }
 }

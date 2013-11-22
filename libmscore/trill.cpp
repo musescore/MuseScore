@@ -128,12 +128,22 @@ void TrillSegment::layout()
                         symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
                         break;
                   case Trill::UPPRALL_LINE:
-                        symbolLine(SymId::ornamentBottomLeftConcaveStroke,
-                           SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                        if (score()->scoreFont()->isValid(SymId::ornamentBottomLeftConcaveStroke))
+                              symbolLine(SymId::ornamentBottomLeftConcaveStroke,
+                                 SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                        else
+                              symbolLine(SymId::ornamentUpPrall,
+                                 // SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                                 SymId::ornamentZigZagLineNoRightEnd);
                         break;
                   case Trill::DOWNPRALL_LINE:
-                        symbolLine(SymId::ornamentLeftVerticalStroke,
-                           SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                        if (score()->scoreFont()->isValid(SymId::ornamentLeftVerticalStroke))
+                              symbolLine(SymId::ornamentLeftVerticalStroke,
+                                 SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                        else
+                              symbolLine(SymId::ornamentDownPrall,
+                                 // SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                                 SymId::ornamentZigZagLineNoRightEnd);
                         break;
                   }
             }
