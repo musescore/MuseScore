@@ -1523,7 +1523,7 @@ enum class SymId {
       windVeryRelaxedEmbouchure,
       windVeryTightEmbouchure,
 
-      // MuseScore local symbols
+      // MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
       ornamentPrallMordent,
       ornamentUpPrall,
       ornamentUpMordent,
