@@ -39,13 +39,9 @@ include (FindPulseAudio)
 include (FindLame)
 include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
-# ise
-include(Qt5CoreMacros)
-include(Qt5WidgetsMacros)
-# end ise
 
 # for debugging the make system uncomment next line:
-set(CMAKE_VERBOSE_MAKEFILE ON)
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
 
@@ -415,8 +411,6 @@ include_directories(
    ${VORBIS_INCDIR}
    ${SNDFILE_INCDIR}
    ${LAME_INCLUDE_DIR}
-## ise
-#C:/Qt/5.1.1/mingw48_32/include
 )
 
 ##
