@@ -452,7 +452,17 @@ Score::FileError Score::read114(XmlReader& e)
                      s->barLineSpan(), n - idx);
                   s->setBarLineSpan(n - idx);
                   }
-
+            // first clef can be implicit in 1.3 #22607
+            if(s->clefList().count(0) == 0) {
+                  Segment* seg = firstMeasure()->getSegment(Segment::SegClef, 0);
+                  ClefType ct = Clef::clefType("0");
+                  Clef* clef = new Clef(this);
+                  clef->setClefType(ct);
+                  clef->setTrack(track);
+                  clef->setParent(seg);
+                  clef->setGenerated(false);
+                  seg->add(clef);
+                  }
             for (auto i = s->clefList().cbegin(); i != s->clefList().cend(); ++i) {
                   int tick = i->first;
                   ClefType clefId = i->second._concertClef;
