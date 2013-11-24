@@ -417,6 +417,10 @@
     <seq>Ctrl+Ins</seq>
     </SC>
   <SC>
+    <key>delete-accidental</key>
+    <seq>Alt+Del</seq>
+  </SC>
+  <SC>
     <key>duplet</key>
     <seq>Ctrl+2</seq>
     </SC>

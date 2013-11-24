@@ -2166,6 +2166,12 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          STATE_NORMAL,
+         A_CMD,
+         "delete-accidental",
+         QT_TRANSLATE_NOOP("action","Delete Selected Accidentals")
+         ),
+      Shortcut(
+         STATE_NORMAL,
          0,
          "lock",
          QT_TRANSLATE_NOOP("action","Lock Score")
