@@ -16,6 +16,8 @@
 */
 
 #include "clef.h"
+#include "measure.h"
+#include "partrange.h"
 #include "xml.h"
 #include "sym.h"
 #include "symbol.h"
@@ -317,7 +319,7 @@ void Clef::draw(QPainter* painter) const
 
 bool Clef::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == CLEF;
+      return (e->type() == CLEF || (/*!generated() &&*/ e->type() == PART_RANGE) );
       }
 
 //---------------------------------------------------------
@@ -334,6 +336,18 @@ Element* Clef::drop(const DropData& data)
             if (clefType() != stype) {
                   score()->undoChangeClef(staff(), segment(), stype);
                   c = this;
+                  }
+            }
+      else if (e->type() == PART_RANGE) {
+            /*if (!generated())*/ {
+                  Measure*    meas  = measure();
+                  Segment*    segm  = meas->getSegment(Segment::SegPartRange, meas->tick());
+                  if (segm->element(track()))
+                        score()->undoRemoveElement(segm->element(track()));
+                  PartRange* r = new PartRange(score());
+                  r->setParent(segm);
+                  r->setTrack(track());
+                  score()->undoAddElement(r);
                   }
             }
       delete e;
