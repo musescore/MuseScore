@@ -1622,7 +1622,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               ;
                         else if (c1 == n - 1)       // last => point to left
                               len = -len;
-                        else {
+                        else if (!(cr1->isGrace())) {
                               // if inside group
                               // PRO: this algorithm is simple(r) and finds the right direction in
                               // the great majority of cases, without attempting to 'understand'
