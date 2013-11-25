@@ -186,8 +186,9 @@ class Element : public QObject {
             ACCIDENTAL,
             STEM,             // list STEM before NOTE: notes in TAB might 'break' stems
             NOTE,             // and this requires stems to be drawn before notes
-            CLEF,
-            KEYSIG,
+            CLEF,             // elements from CLEF to TIMESIG need to be in the order
+            KEYSIG,           // in which they appear in a measure
+            AMBITUS,
             TIMESIG,
             REST,
             BREATH,

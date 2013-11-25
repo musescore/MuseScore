@@ -74,6 +74,7 @@
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
 #include "libmscore/bagpembell.h"
+#include "libmscore/ambitus.h"
 
 namespace Ms {
 
@@ -714,7 +715,7 @@ Palette* MuseScore::newLinesPalette()
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Lines"));
       sp->setMag(.8);
-      sp->setGrid(82, 23);
+      sp->setGrid(82, 35);
       sp->setDrawGrid(true);
 
       qreal w = gscore->spatium() * 8;
@@ -860,6 +861,10 @@ Palette* MuseScore::newLinesPalette()
       line->setLen(w);
       line->setDiagonal(true);
       sp->append(line, QT_TRANSLATE_NOOP("Palette", "Line"));
+
+      Ambitus* a = new Ambitus(gscore);
+      sp->append(a, QT_TRANSLATE_NOOP("Palette", "Ambitus"));
+
       return sp;
       }
 
