@@ -504,6 +504,17 @@ void Segment::add(Element* el)
                   _elist[track] = el;
                   empty = false;
                   break;
+            case AMBITUS:
+                  Q_ASSERT(_segmentType == SegAmbitus);
+                  if (_elist[track]) {
+                        qDebug("%p Segment %s add(%s) there is already an %s at %s(%d) track %d. score %p",
+                           this, subTypeName(), el->name(), _elist[track]->name(),
+                           score()->sigmap()->pos(tick()), tick(), track, score());
+                        return;
+                        }
+                  _elist[track] = el;
+                  empty = false;
+                  break;
 
             default:
                   qDebug("Segment::add() unknown %s", el->name());
@@ -586,6 +597,7 @@ void Segment::remove(Element* el)
             case KEYSIG:
             case BAR_LINE:
             case BREATH:
+            case AMBITUS:
                   _elist[track] = 0;
                   break;
 

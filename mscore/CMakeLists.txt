@@ -113,6 +113,7 @@ QT4_WRAP_UI (ui_headers
       inspector/inspector_textline.ui
       inspector/inspector_slur.ui
       inspector/inspector_text.ui
+      inspector/inspector_ambitus.ui
       ${SCRIPT_UI}
       )
 
@@ -147,7 +148,7 @@ QT4_WRAP_CPP (mocs
       inspector/inspectorTrill.h
       inspector/inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
       inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
-      inspector/inspectorNote.h
+      inspector/inspectorNote.h inspector/inspectorAmbitus.h
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
       importmidi_panel.h importmidi_operations.h
       importmidi_opmodel.h importmidi_trmodel.h importmidi_opdelegate.h
@@ -262,8 +263,8 @@ add_executable ( ${ExecutableName}
       inspector/inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
       musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp pluginManager.cpp inspector/inspectorJump.cpp inspector/inspectorMarker.cpp
-      inspector/inspectorGlissando.cpp inspector/inspectorNote.cpp paletteBoxButton.cpp
-      driver.cpp exportmidi.cpp noteGroups.cpp
+      inspector/inspectorGlissando.cpp inspector/inspectorNote.cpp inspector/inspectorAmbitus.cpp
+      paletteBoxButton.cpp driver.cpp exportmidi.cpp noteGroups.cpp
       pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp
       importmidi_panel.cpp importmidi_operations.cpp miconengine.cpp
       importmidi_opmodel.cpp importmidi_trmodel.cpp importmidi_opdelegate.cpp

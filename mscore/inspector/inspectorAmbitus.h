@@ -10,49 +10,35 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_NOTE_H__
-#define __INSPECTOR_NOTE_H__
+#ifndef __INSPECTOR_PARTRANGE_H__
+#define __INSPECTOR_PARTRANGE_H__
 
 #include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_note.h"
-#include "ui_inspector_chord.h"
+#include "ui_inspector_ambitus.h"
 #include "ui_inspector_segment.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorNote
+//   InspectorAmbitus
 //---------------------------------------------------------
 
-class InspectorNote : public InspectorBase {
+class InspectorAmbitus : public InspectorBase {
       Q_OBJECT
 
-      UiInspectorElement b;
-      Ui::InspectorNote    n;
-      Ui::InspectorChord   c;
+      UiInspectorElement   b;
+      Ui::InspectorAmbitus r;
       Ui::InspectorSegment s;
 
-      QToolButton* dot1;
-      QToolButton* dot2;
-      QToolButton* dot3;
-      QToolButton* hook;
-      QToolButton* stem;
-      QToolButton* beam;
-
-      void block(bool);
-
-   private slots:
-      void dot1Clicked();
-      void dot2Clicked();
-      void dot3Clicked();
-      void hookClicked();
-      void stemClicked();
-      void beamClicked();
-
    public:
-      InspectorNote(QWidget* parent);
-      virtual void setElement();
+      InspectorAmbitus(QWidget* parent);
+//      virtual void setElement();
+
+   protected slots:
+      void updateRange();
+      virtual void valueChanged(int idx);
+
       };
 
 

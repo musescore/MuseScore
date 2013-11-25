@@ -57,17 +57,18 @@ class Segment : public Element {
    public:
       enum SegmentType {
             SegInvalid            = 0x0,
-            SegClef               = 0x1,
-            SegKeySig             = 0x2,
-            SegTimeSig            = 0x4,
-            SegStartRepeatBarLine = 0x8,
-            SegBarLine            = 0x10,
-            SegChordRest          = 0x20,
-            SegBreath             = 0x40,
-            SegEndBarLine         = 0x80,
-            SegTimeSigAnnounce    = 0x100,
-            SegKeySigAnnounce     = 0x200,
-            SegAll                = 0xfff,
+            SegClef               = 0x1,        // type from SegClef to SegTimeSig
+            SegKeySig             = 0x2,        // need to be in the order in which they
+            SegAmbitus            = 0x4,        // appear in a measure
+            SegTimeSig            = 0x8,
+            SegStartRepeatBarLine = 0x10,
+            SegBarLine            = 0x20,
+            SegChordRest          = 0x40,
+            SegBreath             = 0x80,
+            SegEndBarLine         = 0x100,
+            SegTimeSigAnnounce    = 0x200,
+            SegKeySigAnnounce     = 0x400,
+            SegAll                = 0xffff
             };
       typedef QFlags<SegmentType> SegmentTypes;
 
