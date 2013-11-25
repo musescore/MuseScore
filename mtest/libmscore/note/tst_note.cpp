@@ -105,16 +105,16 @@ void TestNote::note()
       QCOMPARE(n->dotPosition(), MScore::AUTO);
       delete n;
   // headGroup
-      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
-            note->setHeadGroup(Note::NoteHeadGroup(i));
+      for (int i = 0; i < int (NoteHeadGroup::HEAD_GROUPS); ++i) {
+            note->setHeadGroup(NoteHeadGroup(i));
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headGroup()), i);
             delete n;
             }
 
   // headType
-      for (int i = 0; i < HEAD_TYPES; ++i) {
-            note->setHeadType(Note::NoteHeadType(i));
+      for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
+            note->setHeadType(NoteHeadType(i));
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headType()), i);
             delete n;
@@ -221,15 +221,15 @@ void TestNote::note()
       delete n;
 
   // headGroup
-      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
-            note->setProperty(P_HEAD_GROUP, int(i));
+      for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
+            note->setProperty(P_HEAD_GROUP, i);
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headGroup()), i);
             delete n;
             }
 
   // headType
-      for (int i = 0; i < HEAD_TYPES; ++i) {
+      for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
             note->setProperty(P_HEAD_TYPE, i);
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headType()), i);
