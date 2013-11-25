@@ -23,8 +23,8 @@
 
 namespace Ms {
 
-static const Note::NoteHeadGroup    NOTEHEADGROUP_DEFAULT   = Note::HEAD_NORMAL;
-static const Note::NoteHeadType     NOTEHEADTYPE_DEFAULT    = Note::HEAD_AUTO;
+static const NoteHeadGroup          NOTEHEADGROUP_DEFAULT   = NoteHeadGroup::HEAD_NORMAL;
+static const NoteHeadType           NOTEHEADTYPE_DEFAULT    = NoteHeadType::HEAD_AUTO;
 static const MScore::DirectionH     DIR_DEFAULT             = MScore::DH_AUTO;
 static const bool                   HASLINE_DEFAULT         = true;
 static const qreal                  LINEWIDTH_DEFAULT       = 0.12;
@@ -161,8 +161,8 @@ void Ambitus::setBottomTpc(int val)
 void Ambitus::write(Xml& xml) const
       {
       xml.stag("Ambitus");
-      xml.tag(P_HEAD_GROUP, _noteHeadGroup, NOTEHEADGROUP_DEFAULT);
-      xml.tag(P_HEAD_TYPE,  _noteHeadType,  NOTEHEADTYPE_DEFAULT);
+      xml.tag(P_HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
+      xml.tag(P_HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
       xml.tag(P_MIRROR_HEAD,_dir,           DIR_DEFAULT);
       xml.tag("hasLine",    _hasLine,       true);
       xml.tag(P_LINE_WIDTH, _lineWidth,     LINEWIDTH_DEFAULT);
@@ -474,16 +474,16 @@ void Ambitus::scanElements(void* data, void (*func)(void*, Element*), bool /*all
 
 SymId Ambitus::noteHead() const
       {
-      int hg, ht;
-            hg = 1;
-            ht = Note::HEAD_QUARTER;
-      if (_noteHeadType != Note::HEAD_AUTO)
+      int hg = 1;
+      NoteHeadType ht  = NoteHeadType::HEAD_QUARTER;
+
+      if (_noteHeadType != NoteHeadType::HEAD_AUTO)
             ht = _noteHeadType;
 
-      SymId t = noteHeads[hg][int(_noteHeadGroup)][ht];
+      SymId t = noteHeads[hg][int(_noteHeadGroup)][int(ht)];
       if (t == SymId::noSym) {
             qDebug("invalid note head %d/%d", _noteHeadGroup, _noteHeadType);
-            t = noteHeads[0][0][ht];
+            t = noteHeads[0][0][int(ht)];
             }
       return t;
       }
@@ -600,9 +600,9 @@ QVariant Ambitus::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_HEAD_GROUP:
-                  return noteHeadGroup();
+                  return int(noteHeadGroup());
             case P_HEAD_TYPE:
-                  return noteHeadType();
+                  return int(noteHeadType());
             case P_MIRROR_HEAD:
                   return direction();
             case P_GHOST:                 // recycled property = _hasLine
@@ -637,10 +637,10 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
             case P_HEAD_GROUP:
-                  setNoteHeadGroup( Note::NoteHeadGroup(v.toInt()) );
+                  setNoteHeadGroup( NoteHeadGroup(v.toInt()) );
                   break;
             case P_HEAD_TYPE:
-                  setNoteHeadType( Note::NoteHeadType(v.toInt()) );
+                  setNoteHeadType( NoteHeadType(v.toInt()) );
                   break;
             case P_MIRROR_HEAD:
                   setDirection( MScore::DirectionH(v.toInt()) );
@@ -685,8 +685,8 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Ambitus::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_HEAD_GROUP:      return NOTEHEADGROUP_DEFAULT;
-            case P_HEAD_TYPE:       return NOTEHEADTYPE_DEFAULT;
+            case P_HEAD_GROUP:      return int(NOTEHEADGROUP_DEFAULT);
+            case P_HEAD_TYPE:       return int(NOTEHEADTYPE_DEFAULT);
             case P_MIRROR_HEAD:     return DIR_DEFAULT;
             case P_GHOST:           return HASLINE_DEFAULT;
             case P_LINE_WIDTH:      return LINEWIDTH_DEFAULT;
