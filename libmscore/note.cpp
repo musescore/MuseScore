@@ -62,7 +62,7 @@ namespace Ms {
 //    note head groups
 //---------------------------------------------------------
 
-const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadType::HEAD_TYPES)] = {
+static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadType::HEAD_TYPES)] = {
    // previous non-SMUFL data kept in comments for future reference
    {     // down stem
       { SymId::noteheadWhole,       SymId::noteheadHalf,          SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
@@ -119,13 +119,13 @@ const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadType::HEAD
 };
 
 //---------------------------------------------------------
-//   noteHeadSym
+//   noteHead
 //---------------------------------------------------------
 
-//Sym* noteHeadSym(bool up, int group, int type)
-//      {
-//      return &symbols[0][noteHeads[up][group][type]];
-//      }
+SymId Note::noteHead(int direction, NoteHeadGroup g, NoteHeadType t)
+      {
+      return noteHeads[direction][int(g)][int(t)];
+      };
 
 //---------------------------------------------------------
 //   write
@@ -344,10 +344,10 @@ SymId Note::noteHead() const
       if (_headType != NoteHeadType::HEAD_AUTO)
             ht = _headType;
 
-      SymId t = noteHeads[up][int(_headGroup)][int(ht)];
+      SymId t = noteHead(up, _headGroup, ht);
       if (t == SymId::noSym) {
             qDebug("invalid note head %d/%d", _headGroup, _headType);
-            t = noteHeads[up][0][int(ht)];
+            t = noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
             }
       return t;
       }
