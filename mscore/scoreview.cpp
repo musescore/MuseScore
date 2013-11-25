@@ -1536,10 +1536,10 @@ void ScoreView::setShadowNote(const QPointF& p)
       shadowNote->setVisible(true);
       Staff* staff      = score()->staff(pos.staffIdx);
       shadowNote->setMag(staff->mag());
-      const Instrument* instr = staff->part()->instr();
-      int noteheadGroup = 0;
-      int line          = pos.line;
-      int noteHead      = is.duration().headType();
+      const Instrument* instr     = staff->part()->instr();
+      NoteHeadGroup noteheadGroup = NoteHeadGroup::HEAD_NORMAL;
+      int line                    = pos.line;
+      NoteHeadType noteHead       = is.duration().headType();
 
       if (instr->useDrumset()) {
             Drumset* ds  = instr->drumset();
@@ -1559,7 +1559,7 @@ void ScoreView::setShadowNote(const QPointF& p)
             s = rest.getSymbol(is.duration().type(), 0, staff->lines(), &yo);
             }
       else
-            s = noteHeads[0][noteheadGroup][noteHead];
+            s = noteHeads[0][int(noteheadGroup)][int(noteHead)];
       shadowNote->setSym(s);
       shadowNote->layout();
       shadowNote->setPos(pos.pos);

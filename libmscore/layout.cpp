@@ -154,8 +154,8 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
       bool isLeft   = notes[startIdx]->chord()->up();
       int move1     = notes[startIdx]->chord()->staffMove();
       bool mirror   = false;
-      int lastHeadGroup  = -1;
-      int lastHeadType  = -1;
+      NoteHeadGroup lastHeadGroup  = NoteHeadGroup::HEAD_INVALID;
+      NoteHeadType lastHeadType    = NoteHeadType::HEAD_AUTO;
 
       for (int idx = startIdx; idx != endIdx; idx += incIdx) {
             Note* note    = notes[idx];
@@ -163,8 +163,9 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
             int move      = chord->staffMove();
             int line      = note->line();
             int ticks     = chord->actualTicks();
-            int headGroup = note->headGroup();
-            int headType  =  (note->headType() == Note::HEAD_AUTO) ? note->chord()->durationType().headType() : note->headType() - 1;
+            NoteHeadGroup headGroup = note->headGroup();
+            NoteHeadType headType   =  (note->headType() == NoteHeadType::HEAD_AUTO)
+               ? note->chord()->durationType().headType() : NoteHeadType(int(note->headType()) - 1);
 
             bool conflict = (qAbs(ll - line) < 2) && (move1 == move);
             bool sameHead = (ll == line) && (headGroup == lastHeadGroup) && (headType == lastHeadType);
@@ -262,8 +263,8 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
                         x = stemX - hw + stemWidth5 * 2;
                   }
             else {
-                  int ht = chord->durationType().headType();
-                  if (ht == Note::HEAD_WHOLE || ht == Note::HEAD_BREVIS) {
+                  NoteHeadType ht = chord->durationType().headType();
+                  if (ht == NoteHeadType::HEAD_WHOLE || ht == NoteHeadType::HEAD_BREVIS) {
                         // center whole note
                         qreal xd = (hw - noteHeadWidth() * chord->mag()) * .5;
                         if (_up)

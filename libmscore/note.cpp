@@ -47,7 +47,6 @@
 #include "harmony.h"
 #include "fingering.h"
 #include "bend.h"
-#include "mscore.h"
 #include "accidental.h"
 #include "page.h"
 #include "icon.h"
@@ -63,7 +62,7 @@ namespace Ms {
 //    note head groups
 //---------------------------------------------------------
 
-const SymId noteHeads[2][Note::HEAD_GROUPS][HEAD_TYPES] = {
+const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadType::HEAD_TYPES)] = {
    // previous non-SMUFL data kept in comments for future reference
    {     // down stem
       { SymId::noteheadWhole,       SymId::noteheadHalf,          SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
@@ -141,6 +140,23 @@ void NoteHead::write(Xml& xml) const
       }
 
 //---------------------------------------------------------
+//   headGroup
+//---------------------------------------------------------
+
+NoteHeadGroup NoteHead::headGroup() const
+      {
+      NoteHeadGroup group = NoteHeadGroup::HEAD_INVALID;
+
+      for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
+            if (noteHeads[0][i][1] == _sym || noteHeads[0][i][3] == _sym) {
+                  group = (NoteHeadGroup)i;
+                        break;
+                  }
+            }
+      return group;
+      }
+
+//---------------------------------------------------------
 //   Note
 //---------------------------------------------------------
 
@@ -166,8 +182,8 @@ Note::Note(Score* s)
       _tieFor            = 0;
       _tieBack           = 0;
       _tpc               = INVALID_TPC;
-      _headGroup         = HEAD_NORMAL;
-      _headType          = HEAD_AUTO;
+      _headGroup         = NoteHeadGroup::HEAD_NORMAL;
+      _headType          = NoteHeadType::HEAD_AUTO;
 
       _hidden            = false;
       _subchannel        = 0;
@@ -315,22 +331,23 @@ void Note::undoSetTpc(int tpc)
 
 SymId Note::noteHead() const
       {
-      int up, ht;
+      int up;
+      NoteHeadType ht;
       if (chord()) {
             up = chord()->up();
             ht = chord()->durationType().headType();
             }
       else {
             up = 1;
-            ht = HEAD_QUARTER;
+            ht = NoteHeadType::HEAD_QUARTER;
             }
-      if (_headType != HEAD_AUTO)
+      if (_headType != NoteHeadType::HEAD_AUTO)
             ht = _headType;
 
-      SymId t = noteHeads[up][int(_headGroup)][ht];
+      SymId t = noteHeads[up][int(_headGroup)][int(ht)];
       if (t == SymId::noSym) {
             qDebug("invalid note head %d/%d", _headGroup, _headType);
-            t = noteHeads[up][0][ht];
+            t = noteHeads[up][0][int(ht)];
             }
       return t;
       }
@@ -1107,34 +1124,27 @@ Element* Note::drop(const DropData& data)
 
             case NOTEHEAD:
                   {
-                  Symbol* s = (Symbol*)e;
-                  NoteHeadGroup group = HEAD_INVALID;
-
-                  for (int i = 0; i < HEAD_GROUPS; ++i) {
-                        if (noteHeads[0][i][1] == s->sym() || noteHeads[0][i][3] == s->sym()) {
-                              group = (NoteHeadGroup)i;
-                              break;
-                              }
-                        }
-                  if (group == HEAD_INVALID) {
+                  NoteHead* s = static_cast<NoteHead*>(e);
+                  NoteHeadGroup group = s->headGroup();
+                  if (group == NoteHeadGroup::HEAD_INVALID) {
                         qDebug("unknown note head\n");
-                        group = HEAD_NORMAL;
+                        group = NoteHeadGroup::HEAD_NORMAL;
                         }
                   delete s;
 
                   if (group != _headGroup) {
                         if (links()) {
                               foreach(Element* e, *links()) {
-                                    e->score()->undoChangeProperty(e, P_HEAD_GROUP, group);
+                                    e->score()->undoChangeProperty(e, P_HEAD_GROUP, int(group));
                                     Note* note = static_cast<Note*>(e);
                                     if (note->staff() && note->staff()->isTabStaff()
-                                       && group == HEAD_CROSS) {
+                                       && group == NoteHeadGroup::HEAD_CROSS) {
                                           e->score()->undoChangeProperty(e, P_GHOST, true);
                                           }
                                     }
                               }
                         else
-                              score()->undoChangeProperty(this, P_HEAD_GROUP, group);
+                              score()->undoChangeProperty(this, P_HEAD_GROUP, int(group));
                         score()->select(this);
                         }
                   }
@@ -1171,10 +1181,12 @@ Element* Note::drop(const DropData& data)
                               break;
                         case ICON_BRACKETS:
                               {
-                              Symbol* s = new Symbol(score(), SymId::noteheadParenthesisLeft);
+                              Symbol* s = new Symbol(score());
+                              s->setSym(SymId::noteheadParenthesisLeft);
                               s->setParent(this);
                               score()->undoAddElement(s);
-                              s = new Symbol(score(), SymId::noteheadParenthesisRight);
+                              s = new Symbol(score());
+                              s->setSym(SymId::noteheadParenthesisRight);
                               s->setParent(this);
                               score()->undoAddElement(s);
                               }
@@ -1622,7 +1634,7 @@ void Note::setString(int val)
 
 void Note::setHeadGroup(NoteHeadGroup val)
       {
-      Q_ASSERT(val >= 0 && val < HEAD_GROUPS);
+      Q_ASSERT(int(val) >= 0 && int(val) < int(NoteHeadGroup::HEAD_GROUPS));
       _headGroup = val;
       }
 
@@ -1794,7 +1806,7 @@ QVariant Note::getProperty(P_ID propertyId) const
             case P_DOT_POSITION:
                   return dotPosition();
             case P_HEAD_GROUP:
-                  return headGroup();
+                  return int(headGroup());
             case P_VELO_OFFSET:
                   return veloOffset();
             case P_TUNING:
@@ -1806,7 +1818,7 @@ QVariant Note::getProperty(P_ID propertyId) const
             case P_GHOST:
                   return ghost();
             case P_HEAD_TYPE:
-                  return headType();
+                  return int(headType());
             case P_VELO_TYPE:
                   return veloType();
             case P_PLAY:
@@ -1980,7 +1992,7 @@ void Note::undoSetDotPosition(MScore::Direction val)
 
 void Note::undoSetHeadGroup(NoteHeadGroup val)
       {
-      undoChangeProperty(P_HEAD_GROUP, val);
+      undoChangeProperty(P_HEAD_GROUP, int(val));
       }
 
 //---------------------------------------------------------
@@ -1998,7 +2010,7 @@ void Note::setHeadType(NoteHeadType t)
 
 void Note::undoSetHeadType(NoteHeadType val)
       {
-      undoChangeProperty(P_HEAD_TYPE, val);
+      undoChangeProperty(P_HEAD_TYPE, int(val));
       }
 
 //---------------------------------------------------------
@@ -2016,6 +2028,7 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_DOT_POSITION:
                   return MScore::AUTO;
             case P_HEAD_GROUP:
+                  return int(NoteHeadGroup::HEAD_NORMAL);
             case P_VELO_OFFSET:
                   return 0;
             case P_TUNING:
@@ -2024,7 +2037,7 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_STRING:
                   return -1;
             case P_HEAD_TYPE:
-                  return Note::HEAD_AUTO;
+                  return int(NoteHeadType::HEAD_AUTO);
             case P_VELO_TYPE:
                   return MScore::OFFSET_VAL;
             case P_PLAY:

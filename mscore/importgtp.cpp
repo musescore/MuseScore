@@ -1021,7 +1021,7 @@ void GuitarPro1::readNote(int string, Note* note)
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
-            note->setHeadGroup(Note::HEAD_CROSS);
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setGhost(true);
             }
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
@@ -1593,7 +1593,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
-            note->setHeadGroup(Note::HEAD_CROSS);
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setGhost(true);
             }
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
@@ -2086,7 +2086,7 @@ void GuitarPro5::readNote(int string, Note* note)
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
-            note->setHeadGroup(Note::HEAD_CROSS);
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setGhost(true);
             }
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);

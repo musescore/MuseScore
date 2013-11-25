@@ -129,9 +129,9 @@ qDebug("TDuration::name(): invalid duration type %d", _val);
 //   headType
 //---------------------------------------------------------
 
-int TDuration::headType() const
+NoteHeadType TDuration::headType() const
       {
-      int headType = Note::HEAD_WHOLE;
+      NoteHeadType headType = NoteHeadType::HEAD_WHOLE;
       switch(_val) {
             case V_1024TH:
             case V_512TH:
@@ -142,25 +142,25 @@ int TDuration::headType() const
             case V_16TH:
             case V_EIGHT:
             case V_QUARTER:
-                  headType = Note::HEAD_QUARTER;
+                  headType = NoteHeadType::HEAD_QUARTER;
                   break;
             case V_HALF:
-                  headType = Note::HEAD_HALF;
+                  headType = NoteHeadType::HEAD_HALF;
                   break;
             case V_MEASURE:
             case V_WHOLE:
-                  headType = Note::HEAD_WHOLE;
+                  headType = NoteHeadType::HEAD_WHOLE;
                   break;
             case V_BREVE:
-                  headType = Note::HEAD_BREVIS;
+                  headType = NoteHeadType::HEAD_BREVIS;
                   break;
             case V_LONG:
-                  headType = Note::HEAD_BREVIS;
+                  headType = NoteHeadType::HEAD_BREVIS;
                   break;
             default:
             case V_INVALID:
             case V_ZERO:
-                  headType = Note::HEAD_QUARTER;
+                  headType = NoteHeadType::HEAD_QUARTER;
                   break;
             }
       return headType;

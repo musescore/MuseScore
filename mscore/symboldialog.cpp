@@ -29,6 +29,8 @@
 
 namespace Ms {
 
+extern Score* gscore;
+
 //---------------------------------------------------------
 //   createSymbolPalette
 //---------------------------------------------------------
@@ -36,8 +38,25 @@ namespace Ms {
 void SymbolDialog::createSymbolPalette()
       {
       sp = new Palette();
-      for (int i = 0; i < int(SymId::lastSym); ++i)
-            sp->append(SymId(i));
+      createSymbols();
+      }
+
+//---------------------------------------------------------
+//   createSymbols
+//---------------------------------------------------------
+
+void SymbolDialog::createSymbols()
+      {
+      int currentIndex = fontList->currentIndex();
+      const ScoreFont* f = &ScoreFont::scoreFonts()[currentIndex];
+      sp->clear();
+      for (int i = 0; i < int(SymId::lastSym); ++i) {
+            if (f->isValid(SymId(i))) {
+                  Symbol* s = new Symbol(gscore);
+                  s->setSym(SymId(i), f);
+                  sp->append(s, Sym::id2userName(SymId(i)));
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -48,10 +67,21 @@ SymbolDialog::SymbolDialog(QWidget* parent)
    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
       {
       setupUi(this);
+      int idx = 0;
+      int currentIndex = 0;
+      for (const ScoreFont& f : ScoreFont::scoreFonts()) {
+            fontList->addItem(f.name());
+            if (f.name() == "Bravura")
+                  currentIndex = idx;
+            ++idx;
+            }
+      fontList->setCurrentIndex(currentIndex);
+
       setWindowTitle(tr("MuseScore: Symbols"));
       QLayout* l = new QVBoxLayout();
       frame->setLayout(l);
       createSymbolPalette();
+
       QScrollArea* sa = new PaletteScrollArea(sp);
       l->addWidget(sa);
 
@@ -59,7 +89,9 @@ SymbolDialog::SymbolDialog(QWidget* parent)
       sp->setDrawGrid(true);
       sp->setSelectable(true);
 
+
       connect(systemFlag, SIGNAL(stateChanged(int)), SLOT(systemFlagChanged(int)));
+      connect(fontList, SIGNAL(currentIndexChanged(int)), SLOT(systemFontChanged(int)));
 
       sa->setWidget(sp);
       }
@@ -78,6 +110,15 @@ void SymbolDialog::systemFlagChanged(int state)
 //            if (e)
 //                  e->setSystemFlag(sysFlag);
 //            }
+      }
+
+//---------------------------------------------------------
+//   systemFontChanged
+//---------------------------------------------------------
+
+void SymbolDialog::systemFontChanged(int)
+      {
+      createSymbols();
       }
 
 }

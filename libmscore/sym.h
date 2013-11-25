@@ -1581,7 +1581,7 @@ class ScoreFont {
       bool loaded = false;
 
       static QVector<ScoreFont> _scoreFonts;
-      const Sym& sym(SymId id) const;
+      const Sym& sym(SymId id) const { return _symbols[int(id)]; }
       void load();
 
    public:

@@ -384,8 +384,6 @@ class MScore : public QObject {
       static bool testMode;
       };
 
-static const int HEAD_TYPES = 4;
-
 //---------------------------------------------------------
 //   center
 //---------------------------------------------------------

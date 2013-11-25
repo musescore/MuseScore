@@ -440,7 +440,8 @@ Palette* MuseScore::newFingeringPalette()
             f->setText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
-      Symbol* symbol = new Symbol(gscore, SymId::stringsThumbPosition);
+      Symbol* symbol = new Symbol(gscore);
+      symbol->setSym(SymId::stringsThumbPosition);
       sp->append(symbol, tr("Thumb"));
       return sp;
       }
@@ -486,7 +487,7 @@ Palette* MuseScore::newNoteHeadsPalette()
       sp->setGrid(33, 36);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < Note::HEAD_GROUPS; ++i) {
+      for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
             SymId sym = noteHeads[0][i][1];
 //TODO::smufl            if (i == Note::HEAD_BREVIS_ALT)
 //                  sym = noteHeads[0][i][3];

@@ -61,7 +61,6 @@ class BSymbol : public Element, public ElementLayout {
       void setSystemFlag(bool val)        { _systemFlag = val;  }
       };
 
-
 }     // namespace Ms
 #endif
 

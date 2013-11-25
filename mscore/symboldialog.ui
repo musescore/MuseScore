@@ -52,6 +52,16 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Font:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="fontList"/>
+     </item>
     </layout>
    </item>
   </layout>
