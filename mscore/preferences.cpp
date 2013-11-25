@@ -486,8 +486,12 @@ void Preferences::read()
       dir.mkpath(myImagesPath);
       dir.mkpath(myTemplatesPath);
       dir.mkpath(myPluginsPath);
-//      dir.mkpath(mySoundFontsPath);
-//      dir.mkpath(mySfzFilesPath);
+      foreach (QString path, sfPath.split(";")) {
+            dir.mkpath(path);
+            }
+      foreach (QString path, sfzPath.split(";")) {
+            dir.mkpath(path);
+            }
 
       MScore::setHRaster(s.value("hraster", MScore::hRaster()).toInt());
       MScore::setVRaster(s.value("vraster", MScore::vRaster()).toInt());
