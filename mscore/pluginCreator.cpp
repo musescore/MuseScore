@@ -262,9 +262,10 @@ static void qmlMsgHandler(QtMsgType type, const char* msg)
             case QtFatalMsg:
                   s = QString("Fatal: %1\n").arg(msg);
                   break;
-            case QtTraceMsg:
+/* Qt5.2?           case QtTraceMsg:
                   s = QString("Trace: %1\n").arg(msg);
                   break;
+            */
             }
       mscore->getPluginCreator()->msg(s);
       }
