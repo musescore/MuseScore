@@ -43,8 +43,16 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       timesig = t;
+
       zText->setText(timesig->numeratorString());
       nText->setText(timesig->denominatorString());
+      // set validators for numerator and denominator strings
+      // which only accept '+', '(', ')' and digits
+      QRegExp rx("[0-9+()]*");
+      QValidator *validator = new QRegExpValidator(rx, this);
+      zText->setValidator(validator);
+      nText->setValidator(validator);
+
       Fraction nominal = timesig->sig() * timesig->stretch();
       nominal.reduce();
       zNominal->setValue(nominal.numerator());

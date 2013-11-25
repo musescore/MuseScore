@@ -16,7 +16,16 @@
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>9</number>
+     </property>
+     <property name="topMargin">
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>9</number>
+     </property>
+     <property name="bottomMargin">
       <number>9</number>
      </property>
      <item>
@@ -219,9 +228,19 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <tabstops>
+  <tabstop>textButton</tabstop>
+  <tabstop>zText</tabstop>
+  <tabstop>nText</tabstop>
+  <tabstop>fourfourButton</tabstop>
+  <tabstop>allaBreveButton</tabstop>
+  <tabstop>zNominal</tabstop>
+  <tabstop>nNominal</tabstop>
+  <tabstop>zActual</tabstop>
+  <tabstop>nActual</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
