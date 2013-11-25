@@ -524,7 +524,8 @@ Score* TestParts::doAddSymbol()
       Note* note   = chord->upNote();
       DropData dd;
       dd.view = 0;
-      Symbol* b = new Symbol(score, SymId::gClef);
+      Symbol* b  = new Symbol(score);
+      b->setSym(SymId::gClef);
       dd.element = b;
 
       score->startCmd();
