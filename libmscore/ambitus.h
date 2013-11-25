@@ -21,6 +21,8 @@ class QPainter;
 
 namespace Ms {
 
+enum class NoteHeadGroup;
+
 //---------------------------------------------------------
 //   @@ Ambitus
 //---------------------------------------------------------
@@ -28,9 +30,9 @@ namespace Ms {
 class Ambitus : public Element {
       Q_OBJECT
 
-      Note::NoteHeadGroup     _noteHeadGroup;
-      Note::NoteHeadType      _noteHeadType;
-      MScore::DirectionH      _dir;
+      NoteHeadGroup       _noteHeadGroup;
+      NoteHeadType        _noteHeadType;
+      MScore::DirectionH  _dir;
       bool  _hasLine;
       qreal _lineWidth;                     // in spatium
       Accidental  _topAccid, _bottomAccid;
@@ -51,8 +53,8 @@ class Ambitus : public Element {
 
       // getters and setters
       virtual ElementType type() const                { return AMBITUS;    }
-      Note::NoteHeadGroup noteHeadGroup() const       { return _noteHeadGroup;}
-      Note::NoteHeadType noteHeadType() const         { return _noteHeadType; }
+      NoteHeadGroup noteHeadGroup() const             { return _noteHeadGroup;}
+      NoteHeadType noteHeadType() const               { return _noteHeadType; }
       MScore::DirectionH direction() const            { return _dir;          }
       bool hasLine() const                            { return _hasLine;      }
       qreal lineWidth() const                         { return _lineWidth;    }
@@ -63,8 +65,8 @@ class Ambitus : public Element {
       int topTpc() const                              { return _topTpc;       }
       int bottomTpc() const                           { return _bottomTpc;    }
 
-      void setNoteHeadGroup(Note::NoteHeadGroup val)  { _noteHeadGroup = val; }
-      void setNoteHeadType (Note::NoteHeadType val)   { _noteHeadType  = val; }
+      void setNoteHeadGroup(NoteHeadGroup val)        { _noteHeadGroup = val; }
+      void setNoteHeadType (NoteHeadType val)         { _noteHeadType  = val; }
       void setDirection    (MScore::DirectionH val)   { _dir = val;           }
       void setHasLine      (bool val)                 { _hasLine = val;       }
       void setLineWidth    (qreal val)                { _lineWidth = val;     }
