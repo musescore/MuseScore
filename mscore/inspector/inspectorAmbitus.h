@@ -15,24 +15,24 @@
 
 #include "inspector.h"
 #include "inspectorBase.h"
-#include "ui_inspector_partrange.h"
+#include "ui_inspector_ambitus.h"
 #include "ui_inspector_segment.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorPartRange
+//   InspectorAmbitus
 //---------------------------------------------------------
 
-class InspectorPartRange : public InspectorBase {
+class InspectorAmbitus : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement   b;
-      Ui::InspectorPartRange   r;
+      Ui::InspectorAmbitus r;
       Ui::InspectorSegment s;
 
    public:
-      InspectorPartRange(QWidget* parent);
+      InspectorAmbitus(QWidget* parent);
 //      virtual void setElement();
 
    protected slots:

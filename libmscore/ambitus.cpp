@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "partrange.h"
+#include "ambitus.h"
 #include "chord.h"
 #include "measure.h"
 #include "score.h"
@@ -32,10 +32,10 @@ static const qreal                  LEDGEROFFSET_DEFAULT    = 0.25;
 static const qreal                  LINEOFFSET_DEFAULT      = 0.8;      // the distance between note head and line
 
 //---------------------------------------------------------
-//   PartRange
+//   Ambitus
 //---------------------------------------------------------
 
-PartRange::PartRange(Score* s)
+Ambitus::Ambitus(Score* s)
 : Element(s), _topAccid(s), _bottomAccid(s)
       {
       _noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
@@ -55,11 +55,11 @@ PartRange::PartRange(Score* s)
 //---------------------------------------------------------
 //   setTrack
 //
-//    when the range element is assigned a track,
+//    when the Ambitus element is assigned a track,
 //    initialize top and bottom 'notes' to top and bottom staff lines
 //---------------------------------------------------------
 
-void PartRange::setTrack(int t)
+void Ambitus::setTrack(int t)
       {
       Segment*    segm  = segment();
       Staff*      stf   = score()->staff(track2staff(t));
@@ -85,7 +85,7 @@ void PartRange::setTrack(int t)
 //    setting either pitch requires to adjust the corresponding tpc
 //---------------------------------------------------------
 
-void PartRange::setTopPitch(int val)
+void Ambitus::setTopPitch(int val)
       {
       int deltaPitch    = val - topPitch();
       // if deltaPitch is not an integer number of octaves, adjust tpc
@@ -103,7 +103,7 @@ void PartRange::setTopPitch(int val)
       normalize();
       }
 
-void PartRange::setBottomPitch(int val)
+void Ambitus::setBottomPitch(int val)
       {
       int deltaPitch    = val - bottomPitch();
       // if deltaPitch is not an integer number of octaves, adjust tpc
@@ -128,7 +128,7 @@ void PartRange::setBottomPitch(int val)
 //    (but remaining in the same octave)
 //---------------------------------------------------------
 
-void PartRange::setTopTpc(int val)
+void Ambitus::setTopTpc(int val)
       {
       int octave        = topPitch() / PITCH_DELTA_OCTAVE;
       int deltaTpc      = val - topTpc();
@@ -141,7 +141,7 @@ void PartRange::setTopTpc(int val)
       normalize();
       }
 
-void PartRange::setBottomTpc(int val)
+void Ambitus::setBottomTpc(int val)
       {
       int octave        = bottomPitch() / PITCH_DELTA_OCTAVE;
       int deltaTpc      = val - bottomTpc();
@@ -158,9 +158,9 @@ void PartRange::setBottomTpc(int val)
 //   write
 //---------------------------------------------------------
 
-void PartRange::write(Xml& xml) const
+void Ambitus::write(Xml& xml) const
       {
-      xml.stag("PartRange");
+      xml.stag("Ambitus");
       xml.tag(P_HEAD_GROUP, _noteHeadGroup, NOTEHEADGROUP_DEFAULT);
       xml.tag(P_HEAD_TYPE,  _noteHeadType,  NOTEHEADTYPE_DEFAULT);
       xml.tag(P_MIRROR_HEAD,_dir,           DIR_DEFAULT);
@@ -188,7 +188,7 @@ void PartRange::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void PartRange::read(XmlReader& e)
+void Ambitus::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -235,7 +235,7 @@ void PartRange::read(XmlReader& e)
 //   layout
 //---------------------------------------------------------
 
-void PartRange::layout()
+void Ambitus::layout()
       {
       int         bottomLine, topLine;
       ClefType    clf;
@@ -411,7 +411,7 @@ void PartRange::layout()
 //   draw
 //---------------------------------------------------------
 
-void PartRange::draw(QPainter* p) const
+void Ambitus::draw(QPainter* p) const
       {
       qreal _spatium = spatium();
       qreal lw = lineWidth() * _spatium;
@@ -450,7 +450,7 @@ void PartRange::draw(QPainter* p) const
 //   space
 //---------------------------------------------------------
 
-Space PartRange::space() const
+Space Ambitus::space() const
       {
       return Space(spatium() * 0.75, width() + spatium() * 0.5);
       }
@@ -459,7 +459,7 @@ Space PartRange::space() const
 //   scanElements
 //---------------------------------------------------------
 
-void PartRange::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
+void Ambitus::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
       {
       func(data, this);
       if (_topAccid.accidentalType() != Accidental::ACC_NONE)
@@ -472,7 +472,7 @@ void PartRange::scanElements(void* data, void (*func)(void*, Element*), bool /*a
 //   noteHead
 //---------------------------------------------------------
 
-SymId PartRange::noteHead() const
+SymId Ambitus::noteHead() const
       {
       int hg, ht;
             hg = 1;
@@ -494,7 +494,7 @@ SymId PartRange::noteHead() const
 //    returns the width of the note head symbol
 //---------------------------------------------------------
 
-qreal PartRange::headWidth() const
+qreal Ambitus::headWidth() const
       {
 //      int head  = noteHead();
 //      qreal val = symbols[score()->symIdx()][head].width(magS());
@@ -506,7 +506,7 @@ qreal PartRange::headWidth() const
 //   pagePos
 //---------------------------------------------------------
 
-QPointF PartRange::pagePos() const
+QPointF Ambitus::pagePos() const
       {
       if (parent() == 0)
             return pos();
@@ -523,7 +523,7 @@ QPointF PartRange::pagePos() const
 //    makes sure _topPitch is not < _bottomPitch
 //---------------------------------------------------------
 
-void PartRange::normalize()
+void Ambitus::normalize()
       {
       if (_topPitch < _bottomPitch) {
             int temp    = _topPitch;
@@ -541,7 +541,7 @@ void PartRange::normalize()
 //    scans the staff contents up to next section break to update the range pitches/tpc's
 //---------------------------------------------------------
 
-void PartRange::updateRange()
+void Ambitus::updateRange()
       {
       if (!segment())
             return;
@@ -596,7 +596,7 @@ void PartRange::updateRange()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant PartRange::getProperty(P_ID propertyId) const
+QVariant Ambitus::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_HEAD_GROUP:
@@ -630,7 +630,7 @@ QVariant PartRange::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool PartRange::setProperty(P_ID propertyId, const QVariant& v)
+bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
       {
       bool  rv = true;
 
@@ -682,7 +682,7 @@ bool PartRange::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant PartRange::propertyDefault(P_ID id) const
+QVariant Ambitus::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_HEAD_GROUP:      return NOTEHEADGROUP_DEFAULT;

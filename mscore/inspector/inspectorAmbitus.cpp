@@ -11,8 +11,8 @@
 //=============================================================================
 
 #include "inspector.h"
-#include "inspectorPartRange.h"
-#include "libmscore/partrange.h"
+#include "inspectorAmbitus.h"
+#include "libmscore/ambitus.h"
 #include "libmscore/score.h"
 
 namespace Ms {
@@ -27,10 +27,10 @@ enum {
       };
 
 //---------------------------------------------------------
-//   InspectorPartRange
+//   InspectorAmbitus
 //---------------------------------------------------------
 
-InspectorPartRange::InspectorPartRange(QWidget* parent)
+InspectorAmbitus::InspectorAmbitus(QWidget* parent)
    : InspectorBase(parent)
       {
       b.setupUi(addWidget());
@@ -106,9 +106,9 @@ InspectorPartRange::InspectorPartRange(QWidget* parent)
 //   setElement
 //---------------------------------------------------------
 /*
-void InspectorPartRange::setElement()
+void InspectorAmbitus::setElement()
       {
-      PartRange* range = static_cast<Range*>(inspector->element());
+      Ambitus* range = static_cast<Range*>(inspector->element());
 
 //      int octave = range->topPitch() / 12;
 //      static_cast<QSpinBox*>(iList[TOPOCTAVE].w)->setValue(octave);
@@ -121,7 +121,7 @@ void InspectorPartRange::setElement()
 //   valueChanged
 //---------------------------------------------------------
 
-void InspectorPartRange::valueChanged(int idx)
+void InspectorAmbitus::valueChanged(int idx)
       {
       InspectorBase::valueChanged(idx);
       // if either tpc or octave is changed, notes can have been swapped
@@ -137,9 +137,9 @@ void InspectorPartRange::valueChanged(int idx)
 //   on updateRage clicked
 //---------------------------------------------------------
 
-void Ms::InspectorPartRange::updateRange()
+void Ms::InspectorAmbitus::updateRange()
 {
-      PartRange* range = static_cast<PartRange*>(inspector->element());
+      Ambitus* range = static_cast<Ambitus*>(inspector->element());
       range->updateRange();
       range->layout();              // redo layout
       setElement();                 // set Inspector values to range properties

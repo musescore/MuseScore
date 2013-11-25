@@ -57,9 +57,9 @@ class Segment : public Element {
    public:
       enum SegmentType {
             SegInvalid            = 0x0,
-            SegClef               = 0x1,
-            SegKeySig             = 0x2,
-            SegPartRange          = 0x4,
+            SegClef               = 0x1,        // type from SegClef to SegTimeSig
+            SegKeySig             = 0x2,        // need to be in the order in which they
+            SegAmbitus            = 0x4,        // appear in a measure
             SegTimeSig            = 0x8,
             SegStartRepeatBarLine = 0x10,
             SegBarLine            = 0x20,
