@@ -504,8 +504,8 @@ void Segment::add(Element* el)
                   _elist[track] = el;
                   empty = false;
                   break;
-            case PART_RANGE:
-                  Q_ASSERT(_segmentType == SegPartRange);
+            case AMBITUS:
+                  Q_ASSERT(_segmentType == SegAmbitus);
                   if (_elist[track]) {
                         qDebug("%p Segment %s add(%s) there is already an %s at %s(%d) track %d. score %p",
                            this, subTypeName(), el->name(), _elist[track]->name(),
@@ -597,7 +597,7 @@ void Segment::remove(Element* el)
             case KEYSIG:
             case BAR_LINE:
             case BREATH:
-            case PART_RANGE:
+            case AMBITUS:
                   _elist[track] = 0;
                   break;
 

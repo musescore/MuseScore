@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __RANGE_H__
-#define __RANGE_H__
+#ifndef __AMBITUS_H__
+#define __AMBITUS_H__
 
 #include "accidental.h"
 #include "element.h"
@@ -22,10 +22,10 @@ class QPainter;
 namespace Ms {
 
 //---------------------------------------------------------
-//   @@ PartRange
+//   @@ Ambitus
 //---------------------------------------------------------
 
-class PartRange : public Element {
+class Ambitus : public Element {
       Q_OBJECT
 
       Note::NoteHeadGroup     _noteHeadGroup;
@@ -46,11 +46,11 @@ class PartRange : public Element {
 
    public:
 
-      PartRange(Score* s);
-      virtual PartRange* clone() const                    { return new PartRange(*this); }
+      Ambitus(Score* s);
+      virtual Ambitus* clone() const                    { return new Ambitus(*this); }
 
       // getters and setters
-      virtual ElementType type() const                { return PART_RANGE;    }
+      virtual ElementType type() const                { return AMBITUS;    }
       Note::NoteHeadGroup noteHeadGroup() const       { return _noteHeadGroup;}
       Note::NoteHeadType noteHeadType() const         { return _noteHeadType; }
       MScore::DirectionH direction() const            { return _dir;          }

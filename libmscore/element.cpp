@@ -82,7 +82,7 @@
 #include "jump.h"
 #include "noteline.h"
 #include "bagpembell.h"
-#include "partrange.h"
+#include "ambitus.h"
 
 namespace Ms {
 
@@ -109,7 +109,7 @@ static const ElementName elementNames[] = {
       ElementName("Note",                 QT_TRANSLATE_NOOP("elementName", "Note")),
       ElementName("Clef",                 QT_TRANSLATE_NOOP("elementName", "Clef")),
       ElementName("KeySig",               QT_TRANSLATE_NOOP("elementName", "Key Signature")),
-      ElementName("PartRange",            QT_TRANSLATE_NOOP("elementName", "PartRange")),
+      ElementName("Ambitus",              QT_TRANSLATE_NOOP("elementName", "Ambitus")),
       ElementName("TimeSig",              QT_TRANSLATE_NOOP("elementName", "Time Signature")),
       ElementName("Rest",                 QT_TRANSLATE_NOOP("elementName", "Rest")),
       ElementName("Breath",               QT_TRANSLATE_NOOP("elementName", "Breath")),
@@ -1336,7 +1336,7 @@ Element* Element::create(ElementType type, Score* score)
             case OSSIA:               return new Ossia(score);
             case IMAGE:             return new Image(score);
             case BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(score);
-            case PART_RANGE:        return new PartRange(score);
+            case AMBITUS:           return new Ambitus(score);
 
             case TEXTLINE_SEGMENT:    // return new TextLineSegment(score);
 
