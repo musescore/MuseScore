@@ -20,6 +20,7 @@ class QPainter;
 namespace Ms {
 
 class Segment;
+class ScoreFont;
 enum class SymId;
 
 //---------------------------------------------------------
@@ -32,10 +33,10 @@ class Symbol : public BSymbol {
 
    protected:
       SymId _sym;
+      const ScoreFont* _scoreFont = nullptr;
 
    public:
       Symbol(Score* s);
-      Symbol(Score* s, SymId sy);
       Symbol(const Symbol&);
 
       Symbol &operator=(const Symbol&);
@@ -43,17 +44,17 @@ class Symbol : public BSymbol {
       virtual Symbol* clone() const     { return new Symbol(*this); }
       virtual ElementType type() const  { return SYMBOL; }
 
-      void setSym(SymId s) { _sym  = s;    }
-      SymId sym() const    { return _sym;  }
+      void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf;    }
+      SymId sym() const                 { return _sym;  }
 
-      virtual void draw(QPainter*) const;
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
-      virtual void layout();
+      virtual void draw(QPainter*) const override;
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
+      virtual void layout() override;
       void setAbove(bool);
 
-      virtual qreal baseLine() const { return 0.0; }
-      Segment* segment() const       { return (Segment*)parent(); }
+      virtual qreal baseLine() const    { return 0.0; }
+      Segment* segment() const          { return (Segment*)parent(); }
       };
 
 //---------------------------------------------------------

@@ -1095,7 +1095,7 @@ void ShowNoteWidget::setElement(Element* e)
       nb.fret->setValue(note->fret());
       nb.mirror->setChecked(note->mirror());
       nb.tpc->setValue(note->tpc());
-      nb.headGroup->setValue(note->headGroup());
+      nb.headGroup->setValue(int(note->headGroup()));
       nb.hidden->setChecked(note->hidden());
       nb.subchannel->setValue(note->subchannel());
 

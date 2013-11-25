@@ -33,12 +33,14 @@ Symbol::Symbol(Score* s)
       setZ(SYMBOL * 100);
       }
 
+#if 0
 Symbol::Symbol(Score* s, SymId sy)
    : BSymbol(s)
       {
       _sym = sy;
       setZ(SYMBOL * 100);
       }
+#endif
 
 Symbol::Symbol(const Symbol& s)
    : BSymbol(s)
@@ -68,7 +70,7 @@ void Symbol::layout()
             e->layout();
       ElementLayout::layout(this);
       BSymbol::layout();
-      setbbox(symBbox(_sym));
+      setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
       }
 
 //---------------------------------------------------------
@@ -79,7 +81,10 @@ void Symbol::draw(QPainter* p) const
       {
       if (type() != NOTEDOT || !staff()->isTabStaff()) {
             p->setPen(curColor());
-            drawSymbol(_sym, p);
+            if (_scoreFont)
+                  _scoreFont->draw(_sym, p, magS(), QPointF());
+            else
+                  drawSymbol(_sym, p);
             }
       }
 
@@ -91,6 +96,8 @@ void Symbol::write(Xml& xml) const
       {
       xml.stag(name());
       xml.tag("name", Sym::id2name(_sym));
+      if (_scoreFont)
+            xml.tag("font", _scoreFont->name());
       BSymbol::writeProperties(xml);
       xml.etag();
       }
@@ -128,6 +135,8 @@ void Symbol::read(XmlReader& e)
                         }
                   setSym(symId);
                   }
+            else if (tag == "font")
+                  _scoreFont = ScoreFont::fontFactory(e.readElementText());
             else if (tag == "Symbol") {
                   Symbol* s = new Symbol(score());
                   s->read(e);

@@ -28,6 +28,7 @@ namespace Ms {
 class Palette;
 class Element;
 
+
 //---------------------------------------------------------
 //   SymbolDialog
 //---------------------------------------------------------
@@ -37,9 +38,11 @@ class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
 
       Palette* sp;
       void createSymbolPalette();
+      void createSymbols();
 
    private slots:
-      void systemFlagChanged(int state);
+      void systemFlagChanged(int);
+      void systemFontChanged(int);
 
    public:
       SymbolDialog(QWidget* parent = 0);

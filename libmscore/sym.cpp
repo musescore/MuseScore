@@ -3645,20 +3645,6 @@ ScoreFont* ScoreFont::fontFactory(QString s)
       }
 
 //---------------------------------------------------------
-//   sym
-//    Get symbol for SymId.
-//    Use font 0 (Bravura) as fallback, if sym does not
-//    exist.
-//---------------------------------------------------------
-
-const Sym& ScoreFont::sym(SymId id) const
-      {
-      if (!_symbols[int(id)].isValid() && (this != &_scoreFonts[0]))
-            return _scoreFonts[0]._symbols[int(id)];
-      return _symbols[int(id)];
-      }
-
-//---------------------------------------------------------
 //   bbox
 //---------------------------------------------------------
 

@@ -17,6 +17,8 @@
 
 namespace Ms {
 
+enum class NoteHeadType;
+
 //---------------------------------------------------------
 //   TDuration
 //---------------------------------------------------------
@@ -58,7 +60,7 @@ class TDuration {
       TDuration operator+(const TDuration& t) const { return TDuration(*this) += t; }
 
       QString name() const;
-      int headType() const;               // note head type
+      NoteHeadType headType() const;
       int hooks() const;
       bool hasStem() const;
       TDuration shift(int val) const;

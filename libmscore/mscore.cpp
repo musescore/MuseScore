@@ -83,8 +83,8 @@ void MScore::init()
       qRegisterMetaType<Accidental::AccidentalRole>("AccidentalRole");
       qRegisterMetaType<Accidental::AccidentalType>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
-      qRegisterMetaType<Note::NoteHeadGroup>("NoteHeadGroup");
-      qRegisterMetaType<Note::NoteHeadType>("NoteHeadType");
+      qRegisterMetaType<NoteHeadGroup>("NoteHeadGroup");
+      qRegisterMetaType<NoteHeadType>("NoteHeadType");
       qRegisterMetaType<Segment::SegmentType>("SegmentType");
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");

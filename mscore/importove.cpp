@@ -465,70 +465,70 @@ ClefType OveClefToClef(OVE::ClefType type){
 	return clef;
 }
 
-Note::NoteHeadGroup getHeadGroup(OVE::NoteHeadType type) {
-    Note::NoteHeadGroup headGroup = Note::HEAD_NORMAL;
+NoteHeadGroup getHeadGroup(OVE::NoteHeadType type) {
+    NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
 	switch (type) {
 	case OVE::NoteHead_Standard: {
-		headGroup = Note::HEAD_NORMAL;
+		headGroup = NoteHeadGroup::HEAD_NORMAL;
 		break;
 	}
 	case OVE::NoteHead_Invisible: {
 		break;
 	}
 	case OVE::NoteHead_Rhythmic_Slash: {
-		headGroup = Note::HEAD_SLASH;
+		headGroup = NoteHeadGroup::HEAD_SLASH;
 		break;
 	}
 	case OVE::NoteHead_Percussion: {
-		headGroup = Note::HEAD_XCIRCLE;
+		headGroup = NoteHeadGroup::HEAD_XCIRCLE;
 		break;
 	}
 	case OVE::NoteHead_Closed_Rhythm: {
-		headGroup = Note::HEAD_CROSS;
+		headGroup = NoteHeadGroup::HEAD_CROSS;
 		break;
 	}
 	case OVE::NoteHead_Open_Rhythm: {
-		headGroup = Note::HEAD_CROSS;
+		headGroup = NoteHeadGroup::HEAD_CROSS;
 		break;
 	}
 	case OVE::NoteHead_Closed_Slash: {
-		headGroup = Note::HEAD_SLASH;
+		headGroup = NoteHeadGroup::HEAD_SLASH;
 		break;
 	}
 	case OVE::NoteHead_Open_Slash: {
-		headGroup = Note::HEAD_SLASH;
+		headGroup = NoteHeadGroup::HEAD_SLASH;
 		break;
 	}
 	case OVE::NoteHead_Closed_Do: {
-		headGroup = Note::HEAD_DO;
+		headGroup = NoteHeadGroup::HEAD_DO;
 		break;
 	}
 	case OVE::NoteHead_Open_Do: {
-		headGroup = Note::HEAD_DO;
+		headGroup = NoteHeadGroup::HEAD_DO;
 		break;
 	}
 	case OVE::NoteHead_Closed_Re: {
-		headGroup = Note::HEAD_RE;
+		headGroup = NoteHeadGroup::HEAD_RE;
 		break;
 	}
 	case OVE::NoteHead_Open_Re: {
-		headGroup = Note::HEAD_RE;
+		headGroup = NoteHeadGroup::HEAD_RE;
 		break;
 	}
 	case OVE::NoteHead_Closed_Mi: {
-		headGroup = Note::HEAD_MI;
+		headGroup = NoteHeadGroup::HEAD_MI;
 		break;
 	}
 	case OVE::NoteHead_Open_Mi: {
-		headGroup = Note::HEAD_MI;
+		headGroup = NoteHeadGroup::HEAD_MI;
 		break;
 	}
 	case OVE::NoteHead_Closed_Fa: {
-		headGroup = Note::HEAD_FA;
+		headGroup = NoteHeadGroup::HEAD_FA;
 		break;
 	}
 	case OVE::NoteHead_Open_Fa: {
-		headGroup = Note::HEAD_FA;
+		headGroup = NoteHeadGroup::HEAD_FA;
 		break;
 	}
 	case OVE::NoteHead_Closed_Sol: {
@@ -538,19 +538,19 @@ Note::NoteHeadGroup getHeadGroup(OVE::NoteHeadType type) {
 		break;
 	}
 	case OVE::NoteHead_Closed_La: {
-		headGroup = Note::HEAD_LA;
+		headGroup = NoteHeadGroup::HEAD_LA;
 		break;
 	}
 	case OVE::NoteHead_Open_La: {
-		headGroup = Note::HEAD_LA;
+		headGroup = NoteHeadGroup::HEAD_LA;
 		break;
 	}
 	case OVE::NoteHead_Closed_Ti: {
-		headGroup = Note::HEAD_TI;
+		headGroup = NoteHeadGroup::HEAD_TI;
 		break;
 	}
 	case OVE::NoteHead_Open_Ti: {
-		headGroup = Note::HEAD_TI;
+		headGroup = NoteHeadGroup::HEAD_TI;
 		break;
 	}
 	default: {

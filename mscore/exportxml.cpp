@@ -2290,29 +2290,29 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             QColor noteheadColor = note->color();
             if (noteheadColor != MScore::defaultColor)
                   noteheadTagname += " color=\"" + noteheadColor.name().toUpper() + "\"";
-            if (note->headGroup() == 5)
+            if (note->headGroup() == NoteHeadGroup::HEAD_SLASH)
                   xml.tag(noteheadTagname, "slash");
-            else if (note->headGroup() == 3)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_TRIANGLE)
                   xml.tag(noteheadTagname, "triangle");
-            else if (note->headGroup() == 2)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_DIAMOND)
                   xml.tag(noteheadTagname, "diamond");
-            else if (note->headGroup() == 1)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_CROSS)
                   xml.tag(noteheadTagname, "x");
-            else if (note->headGroup() == 6)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_XCIRCLE)
                   xml.tag(noteheadTagname, "circle-x");
-            else if (note->headGroup() == 7)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_DO)
                   xml.tag(noteheadTagname, "do");
-            else if (note->headGroup() == 8)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_RE)
                   xml.tag(noteheadTagname, "re");
-            else if (note->headGroup() == 4)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_MI)
                   xml.tag(noteheadTagname, "mi");
-            else if (note->headGroup() == 9)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_FA)
                   xml.tag(noteheadTagname, "fa");
-            else if (note->headGroup() == 10)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_LA)
                   xml.tag(noteheadTagname, "la");
-            else if (note->headGroup() == 11)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_TI)
                   xml.tag(noteheadTagname, "ti");
-            else if (note->headGroup() == 12)
+            else if (note->headGroup() == NoteHeadGroup::HEAD_SOL)
                   xml.tag(noteheadTagname, "so");
             else if (noteheadColor != MScore::defaultColor)
                   xml.tag(noteheadTagname, "normal");
@@ -3999,7 +3999,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   Drumset* drumset = part->instr()->drumset();
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
-                        if (di.notehead >= 0) {
+                        if (di.notehead != NoteHeadGroup::HEAD_INVALID) {
                               xml.stag(QString("score-instrument id=\"P%1-I%2\"").arg(idx+1).arg(i + 1));
                               xml.tag("instrument-name", di.name);
                               xml.etag();
@@ -4007,7 +4007,7 @@ void ExportMusicXml::write(QIODevice* dev)
                         }
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
-                        if (di.notehead >= 0) {
+                        if (di.notehead != NoteHeadGroup::HEAD_INVALID) {
                               xml.stag(QString("midi-instrument id=\"P%1-I%2\"").arg(idx+1).arg(i + 1));
                               if (part->midiChannel() >= 0) // <0 is not valid
                                     xml.tag("midi-channel", part->midiChannel() + 1);

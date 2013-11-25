@@ -364,7 +364,7 @@ Note* Score::addPitch(int pitch, bool addFlag)
 
       // insert note
       MScore::Direction stemDirection = MScore::AUTO;
-      Note::NoteHeadGroup headGroup = Note::HEAD_NORMAL;
+      NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
       int track               = _is.track();
       if (_is.drumNote() != -1) {
             pitch         = _is.drumNote();
