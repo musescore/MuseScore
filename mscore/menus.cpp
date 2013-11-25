@@ -488,7 +488,7 @@ Palette* MuseScore::newNoteHeadsPalette()
       sp->setDrawGrid(true);
 
       for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
-            SymId sym = noteHeads[0][i][1];
+            SymId sym = Note::noteHead(0, NoteHeadGroup::HEAD_NORMAL, NoteHeadType::HEAD_HALF);
 //TODO::smufl            if (i == Note::HEAD_BREVIS_ALT)
 //                  sym = noteHeads[0][i][3];
             NoteHead* nh = new NoteHead(gscore);

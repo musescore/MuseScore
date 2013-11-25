@@ -1559,7 +1559,7 @@ void ScoreView::setShadowNote(const QPointF& p)
             s = rest.getSymbol(is.duration().type(), 0, staff->lines(), &yo);
             }
       else
-            s = noteHeads[0][int(noteheadGroup)][int(noteHead)];
+            s = Note::noteHead(0, noteheadGroup, noteHead);
       shadowNote->setSym(s);
       shadowNote->layout();
       shadowNote->setPos(pos.pos);

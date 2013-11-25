@@ -363,9 +363,11 @@ class Note : public Element {
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s);
+
+      static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
       };
 
-extern const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadType::HEAD_TYPES)];
+// extern const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadType::HEAD_TYPES)];
 
 
 }     // namespace Ms
