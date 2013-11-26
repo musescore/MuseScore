@@ -387,22 +387,64 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
 
 void Score::beamGraceNotes(Chord* mainNote)
       {
-      // TODO: support beam mode
-      bool beam = false;
+      ChordRest* a1    = 0;      // start of (potential) beam
+      Beam* beam       = 0;      // current beam
+      BeamMode bm = BeamMode::AUTO;
       foreach (ChordRest* cr, mainNote->graceNotes()) {
-            if (cr->durationType().hooks() > 0)
-                  beam = true;
-            cr->removeDeleteBeam();
+            bm = Groups::endBeam(cr);
+            if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NONE)) {
+                  if (beam) {
+                        beam->layoutGraceNotes();
+                        beam = 0;
+                        }
+                  if (a1) {
+                        a1->removeDeleteBeam();
+                        a1 = 0;
+                        }
+                  cr->removeDeleteBeam();
+                  continue;
+                  }
+            if (beam) {
+                  bool beamEnd = bm == BeamMode::BEGIN;
+                  if (!beamEnd) {
+                        cr->removeDeleteBeam(true);
+                        beam->add(cr);
+                        cr = 0;
+                        beamEnd = (bm == BeamMode::END);
+                        }
+                  if (beamEnd) {
+                        beam->layoutGraceNotes();
+                        beam = 0;
+                        }
+                  }
+            if (!cr)
+                  continue;
+            if (a1 == 0)
+                  a1 = cr;
+            else {
+                  if (!beamModeMid(bm) && (bm == BeamMode::BEGIN)) {
+                        a1->removeDeleteBeam();
+                        a1 = cr;
+                        }
+                  else {
+                        beam = a1->beam();
+                        if (beam == 0 || beam->elements().front() != a1) {
+                              beam = new Beam(this);
+                              beam->setGenerated(true);
+                              beam->setTrack(mainNote->track());
+                              a1->removeDeleteBeam(true);
+                              beam->add(a1);
+                              }
+                        cr->removeDeleteBeam(true);
+                        beam->add(cr);
+                        a1 = 0;
+                        }
+                  }
             }
-      if (mainNote->graceNotes().size() < 2 || !beam)
-            return;
-      Beam* b = new Beam(this);
-      b->setTrack(mainNote->track());
-      b->setGenerated(true);
-      foreach (ChordRest* cr, mainNote->graceNotes())
-            b->add(cr);
-
-      b->layoutGraceNotes();
+      if (beam)
+            beam->layoutGraceNotes();
+      else if (a1)
+            a1->removeDeleteBeam();
       }
 
 //---------------------------------------------------------
