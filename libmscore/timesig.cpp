@@ -286,8 +286,12 @@ void TimeSig::layout1()
             QString ds = toTimeSigString(_denominatorString);
             QFont font = score()->scoreFont()->font();
             QFontMetricsF fm(font);
+            qreal mag = magS();
             QRectF numRect = fm.tightBoundingRect(ns);          // get 'tight' bounding boxes for strings
             QRectF denRect = fm.tightBoundingRect(ds);
+            // really Qt does not provide a QRectF::scale() method?!!
+            numRect = QRect(numRect.x()*mag, numRect.y()*mag, numRect.width()*mag, numRect.height()*mag);
+            denRect = QRect(denRect.x()*mag, denRect.y()*mag, denRect.width()*mag, denRect.height()*mag);
 
             // position numerator and denominator; vertical displacement:
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)
