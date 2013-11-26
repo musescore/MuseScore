@@ -104,6 +104,7 @@ class Palette : public QWidget {
 
       int hgrid, vgrid;
       int currentIdx;
+      int dragIdx;
       int selectedIdx;
       QPoint dragStartPosition;
       int dragSrcIdx;
@@ -153,7 +154,6 @@ class Palette : public QWidget {
          qreal mag = 1.0);
       PaletteCell* add(int idx, Element*, const QString& name,
          const QString tag = QString(), qreal mag = 1.0);
-      PaletteCell* append(SymId sym);
 
       void emitChanged()             { emit changed(); }
       void setGrid(int, int);

@@ -68,6 +68,9 @@ TimeDialog::TimeDialog(QWidget* parent)
             Fraction sig(4,4);
             groups->setSig(sig, Groups::endings(sig));
             }
+      for (int i = 0; i < sp->size(); ++i)      // cells can be changed
+            sp->setCellReadOnly(i, false);
+
       sp->setSelected(2);
       paletteChanged(2);
       }
