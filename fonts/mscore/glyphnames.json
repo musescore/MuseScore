@@ -257,17 +257,38 @@
     "mensuralLongaUpRight": {
         "codepoint": "U+e1c4"
     },
-    "mensuralTempImpProlPerf": {
-        "codepoint": "U+e1c7"
+    "mensuralTempPerfProlPerf": {
+        "codepoint": "U+E9D0"
     },
     "mensuralTempPerfProlImp": {
-        "codepoint": "U+e1c8"
+        "codepoint": "U+E9D1"
     },
     "mensuralTempPerfProlImpDimin": {
-        "codepoint": "U+e1c9"
+        "codepoint": "U+E9D2"
     },
     "mensuralTempPerfProlPerfDimin": {
-        "codepoint": "U+e1ca"
+        "codepoint": "U+E9D3"
+    },
+    "mensuralTempImpProlPerf": {
+        "codepoint": "U+E9D4"
+    },
+    "mensuralTempImpProlImp": {
+        "codepoint": "U+E9D5"
+    },
+    "mensuralTempImpProlImpRev": {
+        "codepoint": "U+E9D6"
+    },
+    "mensuralTempImpProlPerfDimin": {
+        "codepoint": "U+E9D7"
+    },
+    "mensuralTempImpProlImpDimin": {
+        "codepoint": "U+E9D8"
+    },
+    "mensuralTempImpProlImpDiminRev": {
+        "codepoint": "U+E9D9"
+    },
+    "mensuralTempImpProlPerfRev": {
+        "codepoint": "U+E9DA"
     },
     "noteDoubleWholeAlt": {
         "codepoint": "U+e1ba"
@@ -537,10 +558,19 @@
         "codepoint": "U+39"
     },
     "timeSigCommon": {
-        "codepoint": "U+e1a4"
+        "codepoint": "U+E09A"
     },
     "timeSigCutCommon": {
-        "codepoint": "U+e1a5"
+        "codepoint": "U+E09B"
+    },
+    "timeSigParensLeftSmall": {
+        "codepoint": "U+E0A2"
+    },
+    "timeSigParensRightSmall": {
+        "codepoint": "U+E0A3"
+    },
+    "timeSigPlusSmall": {
+        "codepoint": "U+E09D"
     },
     "unpitchedPercussionClef1": {
         "codepoint": "U+e1a0"

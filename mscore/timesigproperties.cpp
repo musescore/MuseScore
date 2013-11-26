@@ -71,6 +71,31 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
                   break;
             }
 
+      // set C and cut C radio button texts
+      ScoreFont* scoreFont = t->score()->scoreFont();
+      QFont font = scoreFont->font();
+      fourfourButton->setFont(font);
+      fourfourButton->setText(scoreFont->toString(SymId::timeSigCommon));
+      allaBreveButton->setFont(font);
+      allaBreveButton->setText(scoreFont->toString(SymId::timeSigCutCommon));
+      // set other time sig combo strings
+      otherCombo->setFont(font);
+      for (int symId=(int)SymId::mensuralTempPerfProlPerf;
+                  symId <= (int)SymId::mensuralTempImpProlPerfRev; symId++) {
+            const QString& str = scoreFont->toString((SymId)symId);
+            // if scor font supports the symbol, add it
+            if (str.size() > 0) {
+                  otherCombo->addItem(str, symId);
+                  // if time sig matches this symbol string, set as selected
+                  if (timesig->timeSigType() == TSIG_NORMAL && timesig->denominatorString().isEmpty()
+                  && timesig->numeratorString() == str) {
+                        textButton->setChecked(false);
+                        otherButton->setChecked(true);
+                        otherCombo->setCurrentIndex(otherCombo->count()-1);
+                        }
+                  }
+            }
+
       Groups g = t->groups();
       if (g.empty())
             g = Groups::endings(timesig->sig());     // initialize with default
@@ -95,6 +120,15 @@ void TimeSigProperties::accept()
             ts = TSIG_FOUR_FOUR;
       else if (allaBreveButton->isChecked())
             ts = TSIG_ALLA_BREVE;
+      else if (otherButton->isChecked()) {
+            // if other symbol, set as normal text...
+            ts = TSIG_NORMAL;
+            ScoreFont* scoreFont = timesig->score()->scoreFont();
+            SymId symId = (SymId)( otherCombo->itemData(otherCombo->currentIndex()).toInt() );
+            // ...and set numerator to font string for symbol and denominator to empty string
+            timesig->setNumeratorString(scoreFont->toString(symId));
+            timesig->setDenominatorString(QString());
+            }
 
       Fraction actual(zActual->value(), nActual->value());
       Fraction nominal(zNominal->value(), nNominal->value());
