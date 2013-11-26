@@ -71,29 +71,36 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
                   break;
             }
 
-      // set C and cut C radio button texts
+      // set ID's of other symbols
+      static const SymId prolatioSymbols[] = {
+            SymId::mensuralTempPerfProlPerf,
+            SymId::mensuralTempPerfProlImp,
+            SymId::mensuralTempPerfProlImpDimin,
+            SymId::mensuralTempPerfProlPerfDimin,
+            SymId::mensuralTempImpProlPerf,
+//            SymId::mensuralTempImpProlImp,          // same shape as common time
+            SymId::mensuralTempImpProlImpRev,
+            SymId::mensuralTempImpProlPerfDimin,
+//            SymId::mensuralTempImpProlImpDimin,     // same shape as alla breve
+            SymId::mensuralTempImpProlImpDiminRev,
+            SymId::mensuralTempImpProlPerfRev,
+            };
+
       ScoreFont* scoreFont = t->score()->scoreFont();
-      QFont font = scoreFont->font();
-      fourfourButton->setFont(font);
-      fourfourButton->setText(scoreFont->toString(SymId::timeSigCommon));
-      allaBreveButton->setFont(font);
-      allaBreveButton->setText(scoreFont->toString(SymId::timeSigCutCommon));
-      // set other time sig combo strings
-      otherCombo->setFont(font);
-      for (int symId=(int)SymId::mensuralTempPerfProlPerf;
-                  symId <= (int)SymId::mensuralTempImpProlPerfRev; symId++) {
-            const QString& str = scoreFont->toString((SymId)symId);
-            // if scor font supports the symbol, add it
+      int idx = 0;
+      for (SymId symId : prolatioSymbols) {
+            const QString& str = scoreFont->toString(symId);
             if (str.size() > 0) {
-                  otherCombo->addItem(str, symId);
+                  otherCombo->setItemData(idx, (int)symId);
                   // if time sig matches this symbol string, set as selected
                   if (timesig->timeSigType() == TSIG_NORMAL && timesig->denominatorString().isEmpty()
                   && timesig->numeratorString() == str) {
                         textButton->setChecked(false);
                         otherButton->setChecked(true);
-                        otherCombo->setCurrentIndex(otherCombo->count()-1);
+                        otherCombo->setCurrentIndex(idx);
                         }
                   }
+            idx++;
             }
 
       Groups g = t->groups();

@@ -290,8 +290,8 @@ void TimeSig::layout1()
             QRectF numRect = fm.tightBoundingRect(ns);          // get 'tight' bounding boxes for strings
             QRectF denRect = fm.tightBoundingRect(ds);
             // really Qt does not provide a QRectF::scale() method?!!
-            numRect = QRect(numRect.x()*mag, numRect.y()*mag, numRect.width()*mag, numRect.height()*mag);
-            denRect = QRect(denRect.x()*mag, denRect.y()*mag, denRect.width()*mag, denRect.height()*mag);
+            numRect = QRect(numRect.x()*mag, numRect.y()*mag, fm.width(ns)*mag, numRect.height()*mag);
+            denRect = QRect(denRect.x()*mag, denRect.y()*mag, fm.width(ds)*mag, denRect.height()*mag);
 
             // position numerator and denominator; vertical displacement:
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)

@@ -1,6 +1,5 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-      <qresource>
+<RCC>
+    <qresource prefix="/">
         <file>data/shortcuts.xml</file>
         <file>data/paper1.png</file>
         <file>data/paper2.png</file>
@@ -8,19 +7,15 @@
         <file>data/paper4.png</file>
         <file>data/paper5.png</file>
         <file>data/table.svg</file>
-
         <file alias="fonts/mscore/mscore.ttf">../fonts/mscore/mscore.ttf</file>
         <file alias="/fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
         <file alias="/fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
-
         <file alias="fonts/gonville/gonville-20.ttf">../fonts/gonville/gonville-20.ttf</file>
         <file alias="/fonts/gonville/glyphnames.json">../fonts/gonville/glyphnames.json</file>
         <file alias="/fonts/gonville/metadata.json">../fonts/gonville/metadata.json</file>
-
         <file alias="fonts/bravura/Bravura.otf">../fonts/bravura/Bravura.otf</file>
         <file alias="fonts/bravura/glyphnames.json">../fonts/bravura/glyphnames.json</file>
         <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>
-
         <file alias="fonts/MuseJazz.ttf">../fonts/MuseJazz.ttf</file>
         <file alias="fonts/FreeSerifMscore.ttf">../fonts/FreeSerifMscore.ttf</file>
         <file alias="fonts/FreeSerifBold.ttf">../fonts/FreeSerifBold.ttf</file>
@@ -29,7 +24,6 @@
         <file alias="fonts/mscoreTab.ttf">../fonts/mscoreTab.ttf</file>
         <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
         <file alias="fonts/mscore-BC.ttf">../fonts/mscore-BC.ttf</file>
-
         <file alias="data/instruments.xml">../share/templates/instruments.xml</file>
         <file>data/splash.jpg</file>
         <file alias="data/Promenade_Example.mscz">../demos/promenade.mscz</file>
@@ -144,5 +138,16 @@
         <file>data/icons/media-playback-repeats.svg</file>
         <file>data/icons/sound-while-editing.svg</file>
         <file>data/icons/brackets.svg</file>
+        <file>data/icons/timesig_allabreve.svg</file>
+        <file>data/icons/timesig_common.svg</file>
+        <file>data/icons/timesig_prolatio01.svg</file>
+        <file>data/icons/timesig_prolatio02.svg</file>
+        <file>data/icons/timesig_prolatio03.svg</file>
+        <file>data/icons/timesig_prolatio04.svg</file>
+        <file>data/icons/timesig_prolatio05.svg</file>
+        <file>data/icons/timesig_prolatio07.svg</file>
+        <file>data/icons/timesig_prolatio08.svg</file>
+        <file>data/icons/timesig_prolatio10.svg</file>
+        <file>data/icons/timesig_prolatio11.svg</file>
     </qresource>
 </RCC>
