@@ -102,14 +102,12 @@ SymbolDialog::SymbolDialog(QWidget* parent)
 
 void SymbolDialog::systemFlagChanged(int state)
       {
-//      bool sysFlag = false;
-//      if (state == Qt::Checked)
-//            sysFlag = true;
-//      for (int i = 0; i < sp->size(); ++i) {
-//            Element* e = sp->element(i);
-//            if (e)
-//                  e->setSystemFlag(sysFlag);
-//            }
+      bool sysFlag = state == Qt::Checked;
+      for (int i = 0; i < sp->size(); ++i) {
+            Element* e = sp->element(i);
+            if (e && e->type() == Element::SYMBOL)
+                  static_cast<Symbol*>(e)->setSystemFlag(sysFlag);
+            }
       }
 
 //---------------------------------------------------------

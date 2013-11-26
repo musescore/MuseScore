@@ -239,17 +239,17 @@ Element* Palette::element(int idx)
 void Palette::mousePressEvent(QMouseEvent* ev)
       {
       dragStartPosition = ev->pos();
-      int i = idx(dragStartPosition);
-      if (i == -1)
+      dragIdx = idx(dragStartPosition);
+      if (dragIdx == -1)
             return;
       if (_selectable) {
-            if (i != selectedIdx) {
-                  update(idxRect(i) | idxRect(selectedIdx));
-                  selectedIdx = i;
+            if (dragIdx != selectedIdx) {
+                  update(idxRect(dragIdx) | idxRect(selectedIdx));
+                  selectedIdx = dragIdx;
                   }
-            emit boxClicked(i);
+            emit boxClicked(dragIdx);
             }
-      PaletteCell* cell = cells[i];
+      PaletteCell* cell = cells[dragIdx];
       if (cell && (cell->tag == "ShowMore"))
             emit displayMore(_name);
       }
@@ -409,7 +409,7 @@ QRect Palette::idxRect(int i)
 
 void Palette::mouseMoveEvent(QMouseEvent* ev)
       {
-      if ((currentIdx != -1) && (ev->buttons() & Qt::LeftButton)
+      if ((currentIdx != -1) && (dragIdx == currentIdx) && (ev->buttons() & Qt::LeftButton)
          && (ev->pos() - dragStartPosition).manhattanLength() > QApplication::startDragDistance()) {
             PaletteCell* cell = cells[currentIdx];
             if (cell && cell->element) {
@@ -486,15 +486,6 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
             idx = cells.size() - 1;
             }
       return add(idx, s, name, tag, mag);
-      }
-
-PaletteCell* Palette::append(SymId symIdx)
-      {
-      if (!gscore->scoreFont()->isValid(symIdx))
-            return 0;
-      Symbol* s = new Symbol(gscore);
-      s->setSym(symIdx);
-      return append(s, Sym::id2userName(symIdx));
       }
 
 //---------------------------------------------------------
