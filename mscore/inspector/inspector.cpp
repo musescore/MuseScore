@@ -396,10 +396,10 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
             { P_LEADING_SPACE,  0, 1, s.leadingSpace,   s.resetLeadingSpace  },
             { P_TRAILING_SPACE, 0, 1, s.trailingSpace,  s.resetTrailingSpace },
             { P_SHOW_COURTESY,  0, 0, t.showCourtesy,   t.resetShowCourtesy  },
-            { P_TIMESIG,        0, 0, t.timesigZ,       t.resetTimesig       },
-            { P_TIMESIG,        1, 0, t.timesigN,       t.resetTimesig       },
-            { P_TIMESIG_GLOBAL, 0, 0, t.globalTimesigZ, t.resetGlobalTimesig },
-            { P_TIMESIG_GLOBAL, 1, 0, t.globalTimesigN, t.resetGlobalTimesig }
+//            { P_TIMESIG,        0, 0, t.timesigZ,       t.resetTimesig       },
+//            { P_TIMESIG,        1, 0, t.timesigN,       t.resetTimesig       },
+//            { P_TIMESIG_GLOBAL, 0, 0, t.globalTimesigZ, t.resetGlobalTimesig },
+//            { P_TIMESIG_GLOBAL, 1, 0, t.globalTimesigN, t.resetGlobalTimesig }
             };
       mapSignals();
       }
