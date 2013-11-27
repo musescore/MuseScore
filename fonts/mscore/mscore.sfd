@@ -18,7 +18,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
 CreationTime: 1385043608
-ModificationTime: 1385126309
+ModificationTime: 1385511739
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -80,7 +80,7 @@ DisplaySize: -128
 AntiAlias: 1
 FitToEm: 1
 ExtremaBound: 10
-WinInfo: 128 8 6
+WinInfo: 40 8 6
 BeginPrivate: 0
 EndPrivate
 Grid
@@ -8515,7 +8515,7 @@ EndChar
 
 StartChar: dots.dot
 Encoding: 57639 57639 63
-Width: 352
+Width: 116
 Flags: W
 HStem: -58 116<17.533 98.467>
 VStem: 0 116<-40.467 40.467>
@@ -8566,7 +8566,6 @@ SplineSet
  34 -58 34 -58 17 -41 c 256,14,15
  0 -24 0 -24 0 0 c 256,0,1
 EndSplineSet
-Validated: 1
 EndChar
 
 StartChar: noteheads.uM2
@@ -20559,7 +20558,7 @@ StartChar: scripts.trilelement
 Encoding: 57730 57730 154
 Width: 214
 VWidth: 1152
-Flags: WO
+Flags: W
 HStem: 128 256
 VStem: 203 248
 TtInstrs:
