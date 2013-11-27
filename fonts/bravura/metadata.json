@@ -1,7 +1,7 @@
 {
     "fontName": "Bravura", 
-    "fontVersion": 0.3, 
-
+    "fontVersion": 0.7, 
+    
     "engravingDefaults": {
         "arrowShaftThickness": 0.16, 
         "barlineSeparation": 0.4, 
@@ -29,8 +29,19 @@
         "tieEndpointThickness": 0.1, 
         "tieMidpointThickness": 0.22
     }, 
-
     "glyphs": {
+        "flag1024thDown": {
+            "stemDownSW": [
+                0.0, 
+                -4.684
+            ]
+        }, 
+        "flag1024thUp": {
+            "stemUpNW": [
+                0.0, 
+                4.516
+            ]
+        }, 
         "flag128thDown": {
             "stemDownSW": [
                 0.0, 
@@ -115,16 +126,16 @@
                 0.028
             ]
         }, 
-        "flags1024thDown": {
-            "stemDownSW": [
-                0.0, 
-                -4.684
+        "gClefLigatedNumberAbove": {
+            "numeralBottom": [
+                2.224, 
+                3.468
             ]
         }, 
-        "flags1024thUp": {
-            "stemUpNW": [
-                0.0, 
-                4.516
+        "gClefLigatedNumberBelow": {
+            "numeralBottom": [
+                1.052, 
+                -2.616
             ]
         }, 
         "noteABlack": {
