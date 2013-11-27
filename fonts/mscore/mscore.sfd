@@ -18,7 +18,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
 CreationTime: 1385043608
-ModificationTime: 1385405092
+ModificationTime: 1385512906
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -79,7 +79,7 @@ DisplaySize: -72
 AntiAlias: 1
 FitToEm: 1
 ExtremaBound: 10
-WinInfo: 57480 8 10
+WinInfo: 57608 8 10
 BeginPrivate: 0
 EndPrivate
 Grid
@@ -8514,7 +8514,7 @@ EndChar
 
 StartChar: dots.dot
 Encoding: 57639 57639 63
-Width: 352
+Width: 116
 Flags: W
 HStem: -58 116<17.533 98.467>
 VStem: 0 116<-40.467 40.467>
@@ -8565,7 +8565,6 @@ SplineSet
  34 -58 34 -58 17 -41 c 256,14,15
  0 -24 0 -24 0 0 c 256,0,1
 EndSplineSet
-Validated: 1
 EndChar
 
 StartChar: noteheads.uM2
@@ -34552,7 +34551,7 @@ Flags: W
 LayerCount: 2
 Fore
 Refer: 188 57764 N 1 0 0 1 0 0 2
-Validated: 98305
+Validated: 32769
 EndChar
 
 StartChar: uniE9D6
@@ -34679,7 +34678,7 @@ Flags: W
 LayerCount: 2
 Fore
 Refer: 189 57765 N 1 0 0 1 0 0 2
-Validated: 98305
+Validated: 32769
 EndChar
 
 StartChar: uniE9D9
@@ -34803,7 +34802,7 @@ Flags: W
 LayerCount: 2
 Fore
 Refer: 4 43 S 1 0 0 1 0 -256 2
-Validated: 98305
+Validated: 32769
 EndChar
 
 StartChar: uniE0A2
@@ -34814,7 +34813,7 @@ Flags: W
 LayerCount: 2
 Fore
 Refer: 54 57630 S 1 0 0 1 180 0 2
-Validated: 98305
+Validated: 32769
 EndChar
 
 StartChar: uniE0A3
@@ -34825,7 +34824,7 @@ Flags: W
 LayerCount: 2
 Fore
 Refer: 53 57629 N 1 0 0 1 0 0 2
-Validated: 98305
+Validated: 32769
 EndChar
 
 StartChar: uniE09A
