@@ -43,8 +43,16 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       timesig = t;
+
       zText->setText(timesig->numeratorString());
       nText->setText(timesig->denominatorString());
+      // set validators for numerator and denominator strings
+      // which only accept '+', '(', ')' and digits
+      QRegExp rx("[0-9+()]*");
+      QValidator *validator = new QRegExpValidator(rx, this);
+      zText->setValidator(validator);
+      nText->setValidator(validator);
+
       Fraction nominal = timesig->sig() * timesig->stretch();
       nominal.reduce();
       zNominal->setValue(nominal.numerator());
@@ -61,6 +69,38 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
             case TSIG_ALLA_BREVE:
                   allaBreveButton->setChecked(true);
                   break;
+            }
+
+      // set ID's of other symbols
+      static const SymId prolatioSymbols[] = {
+            SymId::mensuralTempPerfProlPerf,
+            SymId::mensuralTempPerfProlImp,
+            SymId::mensuralTempPerfProlImpDimin,
+            SymId::mensuralTempPerfProlPerfDimin,
+            SymId::mensuralTempImpProlPerf,
+//            SymId::mensuralTempImpProlImp,          // same shape as common time
+            SymId::mensuralTempImpProlImpRev,
+            SymId::mensuralTempImpProlPerfDimin,
+//            SymId::mensuralTempImpProlImpDimin,     // same shape as alla breve
+            SymId::mensuralTempImpProlImpDiminRev,
+            SymId::mensuralTempImpProlPerfRev,
+            };
+
+      ScoreFont* scoreFont = t->score()->scoreFont();
+      int idx = 0;
+      for (SymId symId : prolatioSymbols) {
+            const QString& str = scoreFont->toString(symId);
+            if (str.size() > 0) {
+                  otherCombo->setItemData(idx, (int)symId);
+                  // if time sig matches this symbol string, set as selected
+                  if (timesig->timeSigType() == TSIG_NORMAL && timesig->denominatorString().isEmpty()
+                  && timesig->numeratorString() == str) {
+                        textButton->setChecked(false);
+                        otherButton->setChecked(true);
+                        otherCombo->setCurrentIndex(idx);
+                        }
+                  }
+            idx++;
             }
 
       Groups g = t->groups();
@@ -87,6 +127,15 @@ void TimeSigProperties::accept()
             ts = TSIG_FOUR_FOUR;
       else if (allaBreveButton->isChecked())
             ts = TSIG_ALLA_BREVE;
+      else if (otherButton->isChecked()) {
+            // if other symbol, set as normal text...
+            ts = TSIG_NORMAL;
+            ScoreFont* scoreFont = timesig->score()->scoreFont();
+            SymId symId = (SymId)( otherCombo->itemData(otherCombo->currentIndex()).toInt() );
+            // ...and set numerator to font string for symbol and denominator to empty string
+            timesig->setNumeratorString(scoreFont->toString(symId));
+            timesig->setDenominatorString(QString());
+            }
 
       Fraction actual(zActual->value(), nActual->value());
       Fraction nominal(zNominal->value(), nNominal->value());

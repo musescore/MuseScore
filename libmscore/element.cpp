@@ -1731,6 +1731,7 @@ QString Element::toTimeSigString(const QString& s) const
       ScoreFont* f = score()->scoreFont();
       for (int i = 0; i < s.size(); ++i) {
             switch (s[i].toLatin1()) {
+                  case '+': d += f->toString(SymId::timeSigPlusSmall); break;
                   case '0': d += f->toString(SymId::timeSig0); break;
                   case '1': d += f->toString(SymId::timeSig1); break;
                   case '2': d += f->toString(SymId::timeSig2); break;
@@ -1741,6 +1742,8 @@ QString Element::toTimeSigString(const QString& s) const
                   case '7': d += f->toString(SymId::timeSig7); break;
                   case '8': d += f->toString(SymId::timeSig8); break;
                   case '9': d += f->toString(SymId::timeSig9); break;
+                  case '(': d += f->toString(SymId::timeSigParensLeftSmall); break;
+                  case ')': d += f->toString(SymId::timeSigParensRightSmall); break;
                   default:  d += s[i]; break;
                   }
             }

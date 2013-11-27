@@ -138,6 +138,17 @@
       <file>data/icons/go-previous.svg</file>
       <file>data/icons/help-contents.svg</file>
       <file>data/icons/view-refresh.svg</file>
+      <file>data/icons/timesig_allabreve.svg</file>
+      <file>data/icons/timesig_common.svg</file>
+      <file>data/icons/timesig_prolatio01.svg</file>
+      <file>data/icons/timesig_prolatio02.svg</file>
+      <file>data/icons/timesig_prolatio03.svg</file>
+      <file>data/icons/timesig_prolatio04.svg</file>
+      <file>data/icons/timesig_prolatio05.svg</file>
+      <file>data/icons/timesig_prolatio07.svg</file>
+      <file>data/icons/timesig_prolatio08.svg</file>
+      <file>data/icons/timesig_prolatio10.svg</file>
+      <file>data/icons/timesig_prolatio11.svg</file>
 
       <file>schema/license.html</file>
       <file>schema/musicxml.xsd</file>

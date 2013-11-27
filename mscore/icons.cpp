@@ -129,7 +129,18 @@ static const char* iconNames[] = {
       "go-previous.svg",
       "go-next.svg",
       "view-refresh.svg",
-      "brackets.svg"
+      "brackets.svg",
+      "timesig_allabreve.svg",
+      "timesig_common.svg",
+      "timesig_prolatio01.svg",
+      "timesig_prolatio02.svg",
+      "timesig_prolatio03.svg",
+      "timesig_prolatio04.svg",
+      "timesig_prolatio05.svg",
+      "timesig_prolatio07.svg",
+      "timesig_prolatio08.svg",
+      "timesig_prolatio10.svg",
+      "timesig_prolatio11.svg"
       };
 
 void genIcons()
