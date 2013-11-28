@@ -13,11 +13,11 @@ class ReducedFraction
       ReducedFraction(int z, int n);
       explicit ReducedFraction(const Fraction &);
 
-      Fraction fraction() const { return f; }
-      int numerator() const { return f.numerator(); }
-      int denominator() const { return f.denominator(); }
+      Fraction fraction() const { return Fraction(numerator_, denominator_); }
+      int numerator() const { return numerator_; }
+      int denominator() const { return denominator_; }
 
-      static ReducedFraction fromTicks(int v);
+      static ReducedFraction fromTicks(int ticks);
       ReducedFraction reduced() const;
       ReducedFraction absValue() const;
       int ticks() const;
@@ -45,7 +45,8 @@ class ReducedFraction
       bool operator!=(const ReducedFraction&) const;
 
    private:
-      Fraction f;
+      int numerator_;
+      int denominator_;
       };
 
 ReducedFraction toMuseScoreTicks(int tick, int oldDivision);
