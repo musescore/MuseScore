@@ -165,6 +165,7 @@ InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      insmeasures->selectAll();
       }
 
 //---------------------------------------------------------
@@ -1757,6 +1758,7 @@ MeasuresDialog::MeasuresDialog(QWidget* parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      measures->selectAll();
       }
 
 //---------------------------------------------------------
