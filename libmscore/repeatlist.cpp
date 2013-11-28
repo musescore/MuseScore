@@ -192,7 +192,7 @@ int RepeatList::tick2utick(int tick) const
             if (tick >= s->tick && tick < (s->tick + s->len))
                   return s->utick + (tick - s->tick);
             }
-      return 0;
+      return last()->utick + (tick - last()->tick);
       }
 
 //---------------------------------------------------------

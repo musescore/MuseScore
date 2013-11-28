@@ -750,8 +750,8 @@ void Seq::process(unsigned n, float* buffer)
                               int tickLoop = cs->repeatList()->tick2utick(cs->loopOutTick());
                               if (tickLoop < cs->lastMeasure()->endTick()-1)
                                     if ((*pPlayPos)->first >= tickLoop) {
-                                          qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d",
-                                                (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), tickLoop, *pPlayTime);
+qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d",
+   (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), tickLoop, *pPlayTime);
                                           emit toGui('3');   // Exit this function to avoid segmentation fault in Scoreview
                                           return;
                                           }
@@ -1396,6 +1396,11 @@ void Seq::setLoopOut()
       cs->setPos(POS::RIGHT, tick);
       if (state == TRANSPORT_PLAY)
             guiToSeq(SeqMsg(SEQ_SEEK, tick));
+      }
+
+void Seq::setPos(POS, unsigned tick)
+      {
+      printf("seq: setPos %d\n", tick);
       }
 
 //---------------------------------------------------------

@@ -342,10 +342,6 @@ class Score : public QObject {
 
       int _pos[3];            ///< 0 - current, 1 - left loop, 2 - right loop
 
-//      int _playPos;           ///< sequencer seek position
-//      int _loopInTick;        ///< In tick for loop play position
-//      int _loopOutTick;       ///< Out tick for loop play position
-
       bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
                                       ///< indicating if playPos after expanded repeats
                                       ///< has been calculated.

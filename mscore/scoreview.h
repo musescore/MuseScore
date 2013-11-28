@@ -47,6 +47,7 @@ class Text;
 class MeasureBase;
 class Staff;
 class OmrView;
+class TextCursor;
 
 enum class POS;
 
@@ -58,28 +59,6 @@ enum {
       TEXT_SYSTEM,
       TEXT_STAFF,
       TEXT_REHEARSAL_MARK
-      };
-
-//---------------------------------------------------------
-//   TextCursor
-//---------------------------------------------------------
-
-class TextCursor {
-      QRectF _rect;
-      bool _visible;
-      QColor _color;
-      int _tick;
-
-   public:
-      TextCursor()                   { _visible = false; }
-      QRectF rect() const            { return _rect;     }
-      void setRect(const QRectF& r)  { _rect = r;        }
-      bool visible() const           { return _visible;  }
-      void setVisible(bool val)      { _visible = val;   }
-      QColor color() const           { return _color;    }
-      void setColor(const QColor& c) { _color = c;       }
-      int tick() const               { return _tick;     }
-      void setTick(int val)          { _tick = val;      }
       };
 
 //---------------------------------------------------------
@@ -271,7 +250,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paintPageBorder(QPainter& p, Page* page);
       bool dropCanvas(Element*);
       void editCmd(const QString&);
-      void setLoopCursor(TextCursor *curLoop, int tick, bool isInPos);
+      void setLoopCursor(TextCursor* curLoop, int tick, bool isInPos);
 
    private slots:
       void enterState();
@@ -425,8 +404,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void midiNoteReceived(int pitch, bool);
       void setEditPos(const QPointF&);
 
-      int loopInPos()                          { return _curLoopIn->tick();  }
-      int loopOutPos()                         { return _curLoopOut->tick(); }
       virtual void moveCursor() override;
 
       virtual void layoutChanged();

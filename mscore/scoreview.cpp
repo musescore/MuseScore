@@ -65,9 +65,11 @@
 #include "libmscore/clef.h"
 #include "scoretab.h"
 #include "measureproperties.h"
+#include "textcursor.h"
+#include "navigator.h"
+
 #include "libmscore/pitchspelling.h"
 #include "libmscore/notedot.h"
-
 #include "libmscore/articulation.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/stafftext.h"
@@ -78,7 +80,6 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/stafftype.h"
 
-#include "navigator.h"
 #include "inspector/inspector.h"
 
 namespace Ms {
@@ -653,23 +654,18 @@ ScoreView::ScoreView(QWidget* parent)
       lasso       = new Lasso(_score);
       _foto       = new Lasso(_score);
 
-      _cursor     = new TextCursor;
+      _cursor     = new TextCursor(this);
+      _cursor->setType(CursorType::POS);
+
       shadowNote  = 0;
       grips       = 0;
       editObject  = 0;
       addSelect   = false;
 
-      _curLoopIn  = new TextCursor;
-      QColor cIn(Qt::green);
-      cIn.setAlpha(80);
-      _curLoopIn->setColor(cIn);
-//      _curLoopIn->setTick(-1);
-
-      _curLoopOut = new TextCursor;
-      QColor cOut(Qt::red);
-      cOut.setAlpha(80);
-      _curLoopOut->setColor(cOut);
-//      _curLoopOut->setTick(-1);
+      _curLoopIn  = new TextCursor(this);
+      _curLoopIn->setType(CursorType::LOOP_IN);
+      _curLoopOut = new TextCursor(this);
+      _curLoopOut->setType(CursorType::LOOP_OUT);
 
       //---setup state machine-------------------------------------------------
       sm          = new QStateMachine(this);
@@ -936,8 +932,8 @@ void ScoreView::setScore(Score* s)
       lasso->setScore(s);
       _foto->setScore(s);
       if (s) {
-            setLoopCursor(_curLoopIn,  s->pos(POS::LEFT),  true);
-            setLoopCursor(_curLoopOut, s->pos(POS::RIGHT), false);
+            _curLoopIn->move(s->pos(POS::LEFT));
+            _curLoopOut->move(s->pos(POS::RIGHT));
             loopToggled(getAction("loop")->isChecked());
 
             connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
@@ -1597,13 +1593,9 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       vp.setTransform(_matrix);
       vp.setClipping(false);
 
-      if (_curLoopIn && _curLoopIn->visible())
-            vp.fillRect(_curLoopIn->rect(), _curLoopIn->color());
-      if (_curLoopOut && _curLoopOut->visible())
-            vp.fillRect(_curLoopOut->rect(), _curLoopOut->color());
-
-      if (_cursor && _cursor->visible())
-            vp.fillRect(_cursor->rect(), _cursor->color());
+      _curLoopIn->paint(&vp);
+      _curLoopOut->paint(&vp);
+      _cursor->paint(&vp);
 
       lasso->draw(&vp);
       if (fotoMode())
@@ -5557,10 +5549,10 @@ void ScoreView::posChanged(POS pos, unsigned tick)
                   moveCursor();
                   break;
             case POS::LEFT:
-                  setLoopCursor(_curLoopIn, _score->pos(POS::LEFT), true);
+                  _curLoopIn->move(_score->pos(POS::LEFT));
                   break;
             case POS::RIGHT:
-                  setLoopCursor(_curLoopOut, _score->pos(POS::RIGHT), false);
+                  _curLoopOut->move(_score->pos(POS::RIGHT));
                   break;
             }
       }
@@ -5571,10 +5563,14 @@ void ScoreView::posChanged(POS pos, unsigned tick)
 
 void ScoreView::loopToggled(bool val)
       {
+      printf("loop toggled %d - %d\n", _score->pos(POS::LEFT), _score->pos(POS::RIGHT));
+      if (_score->pos(POS::LEFT) == 0 && _score->pos(POS::RIGHT) == 0)
+            _score->setPos(POS::RIGHT, _score->lastMeasure()->endTick());
+      _curLoopIn->move(_score->loopInTick());
+      _curLoopOut->move(_score->loopOutTick());
       _curLoopIn->setVisible(val);
       _curLoopOut->setVisible(val);
       update();
       }
-
 }
 
