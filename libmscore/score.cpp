@@ -3587,16 +3587,5 @@ void Score::setPos(POS pos, int tick)
             }
       }
 
-//---------------------------------------------------------
-//   sym
-//---------------------------------------------------------
-
-#if 0
-const Sym& Score::sym(SymId id) const
-      {
-      return _scoreFont->sym(id);
-     }
-#endif
-
 }
 

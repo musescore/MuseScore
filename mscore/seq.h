@@ -41,6 +41,7 @@ struct Channel;
 class ScoreView;
 class MasterSynthesizer;
 class Segment;
+enum class POS;
 
 //---------------------------------------------------------
 //   SeqMsg
@@ -115,7 +116,7 @@ class Seq : public QObject, public Sequencer {
       int playTime;                       // current play position in samples
       int countInPlayTime;
       int endTick;
-      
+
       EventMap::const_iterator playPos;   // moved in real time thread
       EventMap::const_iterator countInPlayPos;
       EventMap::const_iterator guiPos;    // moved in gui thread
@@ -151,6 +152,7 @@ class Seq : public QObject, public Sequencer {
       void stopNotes(int channel = -1);
       void start();
       void stop();
+      void setPos(POS, unsigned);
 
    signals:
       void started();
