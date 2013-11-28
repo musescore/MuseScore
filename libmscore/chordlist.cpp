@@ -1702,7 +1702,7 @@ bool ChordList::read(const QString& name)
       // default to chords_std.xml
       QFileInfo fi(path);
       if (!fi.exists())
-#if defined(Q_WS_IOS)
+#if defined(Q_OS_IOS)
             path = QString("%1/%2").arg(MScore::globalShare()).arg("chords_std.xml");
 #elif defined(Q_OS_ANDROID)
             path = QString(":/styles/chords_std.xml");
