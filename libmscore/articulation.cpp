@@ -34,15 +34,15 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::fermataShortAbove, SymId::fermataShortBelow,
-            "shortfermata", QT_TRANSLATE_NOOP("articulation", "shortfermata"),
+            "shortfermata", QT_TRANSLATE_NOOP("articulation", "short fermata"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::fermataLongAbove, SymId::fermataLongBelow,
-            "longfermata", QT_TRANSLATE_NOOP("articulation", "longfermata"),
+            "longfermata", QT_TRANSLATE_NOOP("articulation", "long fermata"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::fermataVeryLongAbove, SymId::fermataVeryLongBelow,
-            "verylongfermata", QT_TRANSLATE_NOOP("articulation", "verylongfermata"),
+            "verylongfermata", QT_TRANSLATE_NOOP("articulation", "very long fermata"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::stringsThumbPosition, SymId::stringsThumbPosition,
@@ -83,19 +83,19 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::brassMuteClosed, SymId::brassMuteClosed,
-            "plusstop", QT_TRANSLATE_NOOP("articulation", "plusstop"),
+            "plusstop", QT_TRANSLATE_NOOP("articulation", "plus stop"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::stringsUpBow, SymId::stringsUpBow,
-            "upbow", QT_TRANSLATE_NOOP("articulation", "upbow"),
+            "upbow", QT_TRANSLATE_NOOP("articulation", "up bow"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::stringsDownBow, SymId::stringsDownBow,
-            "downbow", QT_TRANSLATE_NOOP("articulation", "downbow"),
+            "downbow", QT_TRANSLATE_NOOP("articulation", "down bow"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::ornamentTurnInverted, SymId::ornamentTurnInverted,
-            "reverseturn", QT_TRANSLATE_NOOP("articulation", "reverseturn"),
+            "reverseturn", QT_TRANSLATE_NOOP("articulation", "reverse turn"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::ornamentTurn, SymId::ornamentTurn,
@@ -115,39 +115,39 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::ornamentTremblement, SymId::ornamentTremblement,
-            "prallprall", QT_TRANSLATE_NOOP("articulation", "prallprall"),
+            "prallprall", QT_TRANSLATE_NOOP("articulation", "prall prall"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::ornamentPrallMordent, SymId::ornamentPrallMordent,
-            "prallmordent", QT_TRANSLATE_NOOP("articulation", "prallmordent"),
+            "prallmordent", QT_TRANSLATE_NOOP("articulation", "prall mordent"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::ornamentUpPrall, SymId::ornamentUpPrall,
-            "upprall", QT_TRANSLATE_NOOP("articulation", "upprall"),
+            "upprall", QT_TRANSLATE_NOOP("articulation", "up prall"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
 	{ SymId::ornamentDownPrall, SymId::ornamentDownPrall,
-            "downprall", QT_TRANSLATE_NOOP("articulation", "downprall"),
+            "downprall", QT_TRANSLATE_NOOP("articulation", "down prall"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
 	{ SymId::ornamentUpMordent, SymId::ornamentUpMordent,
-            "upmordent", QT_TRANSLATE_NOOP("articulation", "upmordent"),
+            "upmordent", QT_TRANSLATE_NOOP("articulation", "up mordent"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
 	{ SymId::ornamentDownMordent, SymId::ornamentDownMordent,
-            "downmordent", QT_TRANSLATE_NOOP("articulation", "downmordent"),
+            "downmordent", QT_TRANSLATE_NOOP("articulation", "down mordent"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
 	{ SymId::ornamentPrallDown, SymId::ornamentPrallDown,
-            "pralldown", QT_TRANSLATE_NOOP("articulation", "pralldown"),
+            "pralldown", QT_TRANSLATE_NOOP("articulation", "prall down"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
 	{ SymId::ornamentPrallUp, SymId::ornamentPrallUp,
-            "prallup", QT_TRANSLATE_NOOP("articulation", "prallup"),
+            "prallup", QT_TRANSLATE_NOOP("articulation", "prall up"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
 	{ SymId::ornamentLinePrall, SymId::ornamentLinePrall,
-            "lineprall", QT_TRANSLATE_NOOP("articulation", "lineprall"),
+            "lineprall", QT_TRANSLATE_NOOP("articulation", "line prall"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
 	{ SymId::ornamentPrecompSlide, SymId::ornamentPrecompSlide,
@@ -155,7 +155,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::pluckedSnapPizzicatoAbove, SymId::pluckedSnapPizzicatoAbove,
-            "snappizzicato", QT_TRANSLATE_NOOP("articulation", "snappizzicato"),
+            "snappizzicato", QT_TRANSLATE_NOOP("articulation", "snap pizzicato"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
 

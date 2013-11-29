@@ -236,7 +236,7 @@ void EditStyle::getValues()
       lstyle.set(ST_clefBarlineDistance,     Spatium(clefBarlineDistance->value()));
       lstyle.set(ST_staffLineWidth,          Spatium(staffLineWidth->value()));
       lstyle.set(ST_beamWidth,               Spatium(beamWidth->value()));
-      lstyle.set(ST_beamDistance,            beamDistance->value());
+      lstyle.set(ST_beamDistance,            beamDistance->value() * 0.01);
       lstyle.set(ST_beamMinLen,              Spatium(beamMinLen->value()));
       lstyle.set(ST_beamNoSlope,             beamNoSlope->isChecked());
 
@@ -483,7 +483,7 @@ void EditStyle::setValues()
       staffLineWidth->setValue(lstyle.value(ST_staffLineWidth).toDouble());
 
       beamWidth->setValue(lstyle.value(ST_beamWidth).toDouble());
-      beamDistance->setValue(lstyle.value(ST_beamDistance).toDouble());
+      beamDistance->setValue(lstyle.value(ST_beamDistance).toDouble() * 100.0);
       beamMinLen->setValue(lstyle.value(ST_beamMinLen).toDouble());
       beamNoSlope->setChecked(lstyle.value(ST_beamNoSlope).toBool());
 
