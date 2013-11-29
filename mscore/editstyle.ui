@@ -2903,6 +2903,9 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="1" column="1">
            <widget class="QDoubleSpinBox" name="beamDistance">
+            <property name="suffix">
+             <string>%</string>
+            </property>
             <property name="singleStep">
              <double>0.100000000000000</double>
             </property>
@@ -3282,6 +3285,9 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="1" column="1">
            <widget class="QDoubleSpinBox" name="hairpinLineWidth">
+            <property name="suffix">
+             <string extracomment="spatium unit">sp</string>
+            </property>
             <property name="singleStep">
              <double>0.010000000000000</double>
             </property>
@@ -3309,6 +3315,9 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="2" column="1">
            <widget class="QDoubleSpinBox" name="hairpinHeight">
+            <property name="suffix">
+             <string extracomment="spatium unit">sp</string>
+            </property>
             <property name="singleStep">
              <double>0.100000000000000</double>
             </property>
@@ -3323,6 +3332,9 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="3" column="1">
            <widget class="QDoubleSpinBox" name="hairpinContinueHeight">
+            <property name="suffix">
+             <string extracomment="spatium unit">sp</string>
+            </property>
             <property name="singleStep">
              <double>0.100000000000000</double>
             </property>
@@ -4956,6 +4968,9 @@ p, li { white-space: pre-wrap; }
              </item>
              <item row="0" column="1">
               <widget class="QDoubleSpinBox" name="tupletMaxSlope">
+               <property name="suffix">
+                <string extracomment="spatium unit">sp</string>
+               </property>
                <property name="minimum">
                 <double>0.100000000000000</double>
                </property>
