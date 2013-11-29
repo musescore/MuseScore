@@ -300,7 +300,6 @@ void Beam::layout1()
             maxMove = -1000;
             isGrace = false;
 
-            int upCount = 0;
             int mUp     = 0;
             int mDown   = 0;
             int upDnLimit = staff()->lines() - 1;           // was '4' hard-coded in following code
@@ -308,21 +307,19 @@ void Beam::layout1()
             foreach (ChordRest* cr, _elements) {
                   if (cr->type() == CHORD) {
                         c2 = static_cast<Chord*>(cr);
-                        if (c2->line() != upDnLimit)
-                              upCount += c2->up() ? 1 : -1;
                         if (c1 == 0)
                               c1 = c2;
-                        int i = c2->staffMove();
+                        int i = c1->staffMove();
                         if (i < minMove)
                               minMove = i;
                         if (i > maxMove)
                               maxMove = i;
-                        int line = c2->upLine();
-                        if ((line - upDnLimit) > mUp)
-                              mUp = line - upDnLimit;
-                        line = c2->downLine();
-                        if (upDnLimit - line > mDown)
-                              mDown = upDnLimit - line;
+                        int line = c1->upLine();
+                        if ((upDnLimit - line) > mUp)
+                              mUp = upDnLimit - line;
+                        line = c1->downLine();
+                        if (line - upDnLimit > mDown)
+                              mDown = line - upDnLimit;
                         }
                   if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
                         maxDuration = cr->durationType();
@@ -339,8 +336,10 @@ void Beam::layout1()
                         _up = !(c1->voice() % 2);
                   else if (!twoBeamedNotes()) {
                         // highest or lowest note determines stem direction
+                        // interval higher is bigger -> downstem
+                        // interval lower is  bigger -> upstem
                         // down-stems is preferred if equal
-                        _up = mUp > mDown;
+                        _up = mUp < mDown;
                         }
                   }
 
