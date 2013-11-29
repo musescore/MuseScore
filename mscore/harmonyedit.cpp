@@ -584,6 +584,8 @@ void ChordStyleEditor::accept()
 
 void HarmonyCanvas::updateChordDescription()
       {
+      if (!chordDescription)
+            return;
       chordDescription->renderList.clear();
 
       int idx = 0;
