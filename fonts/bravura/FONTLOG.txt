@@ -7,7 +7,7 @@ Basic Font Information
 ----------------------
 Bravura is a Unicode typeface designed by Steinberg for its in-development music notation and scoring application.
 
-It is compliant with version 0.6 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+It is compliant with version 0.7 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
 More information about Steinberg's scoring application can be found at:
 
@@ -103,3 +103,23 @@ Changelog
 - Added open, half-open and closed wah/volume pedals, left- and right-hand tapping glyphs for guitar (U+E8AD–U+E8B1).
 - Added new range for arrows and arrowheads (U+EB00–U+EB1F), including moving the up/down/right/left arrows from the vocal techniques range (previously U+E687–U+E68A) into this new range.
 - Redesigned 'do not copy' glyph (U+E833) to be a bit more aggressive.
+
+27 November 2013 (Daniel Spreadbury) Bravura version 0.7
+- Bravura 0.7 is designed to be compliant with SMuFL 0.7; its version number has been bumped such that it matches the version number of SMuFL it implements
+- Bravura now defines three stylistic sets: ss01 is for glyphs for use on small staves (i.e. different optical size); ss02 is for short up-stem flags to avoid augmentation dots; ss03 is for straight flags
+- The Bravura distribution now includes a JSON metadata file describing various recommended metrics and engraving defaults for applications that wish to use Bravura; the specification for this metadata file is documented in the main SMuFL specification
+- Significantly expanded the repertoire of glyphs for Medieval and Renaissance notation, with new ranges for clefs, accidentals and ligatures, plus considerable reworking of the notes and prolations ranges.
+- Significantly expanded the repertoire of glyphs for plainchant notation, with new ranges for staves, divisions, clefs and articulations, and a wider range of neumes.
+- Added range for Daseian notation, as found in the ninth century treatises Musica enchiriadis and Scolica enchiriadis.
+- Added new range of control characters for adjusting the staff position of staff-relative glyphs; no ligatures using these control characters are yet defined in Bravura, however.
+- Added control characters for time signature digits to allow digits to be stacked vertically, and ligatures for numerator and denominator digits.
+- Added narrow and wide staff line glyphs, intended for fonts designed for text-based applications.
+- Added C clef ottava bassa, and recommended stylistic alternate for G clef ottava bassa with parentheses around the 8.
+- Added square double whole note (breve) notehead.
+- Added new combining harp string noise for stem glyph, and corresponding precomposed stem glyph.
+- Added four further quarter-tone accidental symbols to "other microtonal accidentals" group.
+- Added some percussion playing technique symbols from Dante Agostino’s method books.
+- Added a golpe (tap the pick guard) glyph from Claude Worm’s flamenco guitar method book.
+- Added short and long fermata glyphs as used by Henze.
+- Added combining glyphs for accordion couplers, allowing the creation of any coupler diagram not explicitly encoded.
+- Added 'pf' dynamic.
