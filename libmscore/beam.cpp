@@ -309,15 +309,15 @@ void Beam::layout1()
                         c2 = static_cast<Chord*>(cr);
                         if (c1 == 0)
                               c1 = c2;
-                        int i = c1->staffMove();
+                        int i = c2->staffMove();
                         if (i < minMove)
                               minMove = i;
                         if (i > maxMove)
                               maxMove = i;
-                        int line = c1->upLine();
+                        int line = c2->upLine();
                         if ((upDnLimit - line) > mUp)
                               mUp = upDnLimit - line;
-                        line = c1->downLine();
+                        line = c2->downLine();
                         if (line - upDnLimit > mDown)
                               mDown = line - upDnLimit;
                         }
