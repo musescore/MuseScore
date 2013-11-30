@@ -185,51 +185,51 @@ int fractionPart(int lcmPart, int numerator, int denominator)
       checkDivisionOverflow(lcmPart, denominator);
       const int part = lcmPart / denominator;
       checkMultiplicationOverflow(numerator, part);
-      return part;
+      return numerator * part;
       }
 
 ReducedFraction& ReducedFraction::operator+=(const ReducedFraction& val)
       {
-      this->reduce();
+      reduce();
       ReducedFraction value = val;
       value.reduce();
 
       const int tmp = lcm(denominator_, val.denominator_);
-      numerator_ = numerator_ * fractionPart(tmp, numerator_, denominator_)
-                  + val.numerator_ * fractionPart(tmp, val.numerator_, val.denominator_);
+      numerator_ = fractionPart(tmp, numerator_, denominator_)
+                  + fractionPart(tmp, val.numerator_, val.denominator_);
       denominator_ = tmp;
       return *this;
       }
 
 ReducedFraction& ReducedFraction::operator-=(const ReducedFraction& val)
       {
-      this->reduce();
+      reduce();
       ReducedFraction value = val;
       value.reduce();
 
       const int tmp = lcm(denominator_, val.denominator_);
-      numerator_ = numerator_ * fractionPart(tmp, numerator_, denominator_)
-                  - val.numerator_ * fractionPart(tmp, val.numerator_, val.denominator_);
+      numerator_ = fractionPart(tmp, numerator_, denominator_)
+                  - fractionPart(tmp, val.numerator_, val.denominator_);
       denominator_ = tmp;
       return *this;
       }
 
 ReducedFraction& ReducedFraction::operator*=(const ReducedFraction& val)
       {
-      this->reduce();
+      reduce();
       ReducedFraction value = val;
       value.reduce();
 
       checkMultiplicationOverflow(numerator_, val.numerator_);
       checkMultiplicationOverflow(denominator_, val.denominator_);
       numerator_ *= val.numerator_;
-      denominator_  *= val.denominator_;
+      denominator_ *= val.denominator_;
       return *this;
       }
 
 ReducedFraction& ReducedFraction::operator*=(int val)
       {
-      this->reduce();
+      reduce();
       checkMultiplicationOverflow(numerator_, val);
       numerator_ *= val;
       return *this;
@@ -237,7 +237,7 @@ ReducedFraction& ReducedFraction::operator*=(int val)
 
 ReducedFraction& ReducedFraction::operator/=(const ReducedFraction& val)
       {
-      this->reduce();
+      reduce();
       ReducedFraction value = val;
       value.reduce();
 
@@ -250,7 +250,7 @@ ReducedFraction& ReducedFraction::operator/=(const ReducedFraction& val)
 
 ReducedFraction& ReducedFraction::operator/=(int val)
       {
-      this->reduce();
+      reduce();
       checkMultiplicationOverflow(denominator_, val);
       denominator_ *= val;
       return *this;
@@ -259,43 +259,43 @@ ReducedFraction& ReducedFraction::operator/=(int val)
 bool ReducedFraction::operator<(const ReducedFraction& val) const
       {
       const int v = lcm(denominator_, val.denominator_);
-      return numerator_ * fractionPart(v, numerator_, denominator_)
-                  < val.numerator_ * fractionPart(v, val.numerator_, val.denominator_);
+      return fractionPart(v, numerator_, denominator_)
+                  < fractionPart(v, val.numerator_, val.denominator_);
       }
 
 bool ReducedFraction::operator<=(const ReducedFraction& val) const
       {
       const int v = lcm(denominator_, val.denominator_);
-      return numerator_ * fractionPart(v, numerator_, denominator_)
-                  <= val.numerator_ * fractionPart(v, val.numerator_, val.denominator_);
+      return fractionPart(v, numerator_, denominator_)
+                  <= fractionPart(v, val.numerator_, val.denominator_);
       }
 
 bool ReducedFraction::operator>(const ReducedFraction& val) const
       {
       const int v = lcm(denominator_, val.denominator_);
-      return numerator_ * fractionPart(v, numerator_, denominator_)
-                  > val.numerator_ * fractionPart(v, val.numerator_, val.denominator_);
+      return fractionPart(v, numerator_, denominator_)
+                  > fractionPart(v, val.numerator_, val.denominator_);
       }
 
 bool ReducedFraction::operator>=(const ReducedFraction& val) const
       {
       const int v = lcm(denominator_, val.denominator_);
-      return numerator_ * fractionPart(v, numerator_, denominator_)
-                  >= val.numerator_ * fractionPart(v, val.numerator_, val.denominator_);
+      return fractionPart(v, numerator_, denominator_)
+                  >= fractionPart(v, val.numerator_, val.denominator_);
       }
 
 bool ReducedFraction::operator==(const ReducedFraction& val) const
       {
       const int v = lcm(denominator_, val.denominator_);
-      return numerator_ * fractionPart(v, numerator_, denominator_)
-                  == val.numerator_ * fractionPart(v, val.numerator_, val.denominator_);
+      return fractionPart(v, numerator_, denominator_)
+                  == fractionPart(v, val.numerator_, val.denominator_);
       }
 
 bool ReducedFraction::operator!=(const ReducedFraction& val) const
       {
       const int v = lcm(denominator_, val.denominator_);
-      return numerator_ * fractionPart(v, numerator_, denominator_)
-                  != val.numerator_ * fractionPart(v, val.numerator_, val.denominator_);
+      return fractionPart(v, numerator_, denominator_)
+                  != fractionPart(v, val.numerator_, val.denominator_);
       }
 
 
