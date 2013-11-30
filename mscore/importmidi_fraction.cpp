@@ -155,12 +155,18 @@ ReducedFraction ReducedFraction::absValue() const
 
 int ReducedFraction::ticks() const
       {
-      checkMultiplicationOverflow(numerator_, MScore::division * 4);
-      checkAdditionOverflow(numerator_ * MScore::division * 4, denominator_ / 2);
-      const int tmp = numerator_ * MScore::division * 4 + denominator_ / 2;
-      checkDivisionOverflow(tmp, denominator_);
+      int integral = numerator_ / denominator_;
+      int newNumerator = numerator_ % denominator_;
+      int division = MScore::division * 4;
 
-      return tmp / denominator_;
+      checkMultiplicationOverflow(newNumerator, division);
+      checkAdditionOverflow(newNumerator * division, denominator_ / 2);
+      const int tmp = newNumerator * division + denominator_ / 2;
+
+      checkDivisionOverflow(tmp, denominator_);
+      checkMultiplicationOverflow(integral, denominator_);
+      checkAdditionOverflow(tmp / denominator_, integral * division);
+      return tmp / denominator_ + integral * division;
       }
 
 void ReducedFraction::reduce()
