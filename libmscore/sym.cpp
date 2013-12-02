@@ -503,9 +503,9 @@ QVector<const char*> Sym::symNames = {
       "flag8thUpStraight",
       "flagInternalDown",
       "flagInternalUp",
-      "flags1024thDown",
+      "flag1024thDown",
       "flags1024thDownStraight",
-      "flags1024thUp",
+      "flag1024thUp",
       "flags1024thUpStraight",
       "fretboard3String",
       "fretboard3StringNut",
@@ -2011,9 +2011,9 @@ QVector<QString> Sym::symUserNames = {
       "flag8thUpStraight",
       "flagInternalDown",
       "flagInternalUp",
-      "flags1024thDown",
+      "flag1024thDown",
       "flags1024thDownStraight",
-      "flags1024thUp",
+      "flag1024thUp",
       "flags1024thUpStraight",
       "fretboard3String",
       "fretboard3StringNut",
@@ -3514,8 +3514,8 @@ void ScoreFont::load()
                   Sym* sym = &_symbols[int(symId)];
                   sym->setString(codeToString(code));
                   }
-            else
-                  qDebug("unknown glyph: %s", qPrintable(i));
+//            else
+//                  qDebug("unknown glyph: %s", qPrintable(i));
             }
       fi.close();
       fi.setFileName(_fontPath + "metadata.json");

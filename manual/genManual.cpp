@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include <stdio.h>
+#include <QString>
 
 QString srcPath;
 QString dstPath;
