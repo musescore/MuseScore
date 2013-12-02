@@ -90,32 +90,14 @@ void Arpeggio::read(XmlReader& e)
 //    construct a string of symbols aproximating width w
 //---------------------------------------------------------
 
-void Arpeggio::symbolLine(SymId start, SymId fill)
+void Arpeggio::symbolLine(SymId end, SymId fill)
       {
       qreal y1 = -_userLen1;
       qreal y2 = _height + _userLen2;
       qreal w   = y2 - y1;
       qreal mag = magS();
       ScoreFont* f = score()->scoreFont();
-
-      symbols.clear();
-      symbols.append(f->toString(start));
-      qreal w1 = f->bbox(start, mag).width();
-      qreal w2 = f->width(fill, mag);
-      int n    = lrint((w - w1) / w2);
-      for (int i = 0; i < n; ++i)
-           symbols.append(f->toString(fill));
-      QRectF r(f->bbox(symbols, mag));
-      setbbox(QRectF(r.bottom(), -r.x() + y1, r.height(), r.width()));
-      }
-
-void Arpeggio::symbolLine2(SymId end, SymId fill)
-      {
-      qreal y1 = -_userLen1;
-      qreal y2 = _height + _userLen2;
-      qreal w   = y2 - y1;
-      qreal mag = magS();
-      ScoreFont* f = score()->scoreFont();
+      const QString& fillString = f->toString(fill);
 
       symbols.clear();
       symbols.append(f->toString(end));
@@ -123,9 +105,7 @@ void Arpeggio::symbolLine2(SymId end, SymId fill)
       qreal w2 = f->width(fill, mag);
       int n    = lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
-           symbols.prepend(f->toString(fill));
-      QRectF r(f->bbox(symbols, mag));
-      setbbox(QRectF(r.bottom(), -r.x() + y1, r.height(), r.width()));
+           symbols.prepend(fillString);
       }
 
 //---------------------------------------------------------
@@ -138,20 +118,31 @@ void Arpeggio::layout()
       qreal y2 = _height + _userLen2;
 
       switch (arpeggioType()) {
-            case ArpeggioType::NORMAL:
+            case ArpeggioType::NORMAL: {
                   symbolLine(SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
+                  // string is rotated -90 degrees
+                  QRectF r(symBbox(symbols));
+                  setbbox(QRectF(0.0, -r.x() + y1, r.height(), r.width()));
+                  }
                   break;
 
-            case ArpeggioType::UP:
-                  symbolLine2(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+            case ArpeggioType::UP: {
+                  symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+                  // string is rotated -90 degrees
+                  QRectF r(symBbox(symbols));
+                  setbbox(QRectF(0.0, -r.x() + y1, r.height(), r.width()));
+                  }
                   break;
 
-            case ArpeggioType::DOWN:
-                  symbolLine(SymId::wiggleArpeggiatoDownArrow, SymId::wiggleArpeggiatoUp);
+            case ArpeggioType::DOWN: {
+                  symbolLine(SymId::wiggleArpeggiatoDownArrow, SymId::wiggleArpeggiatoDown);
+                  // string is rotated +90 degrees
+                  QRectF r(symBbox(symbols));
+                  setbbox(QRectF(0.0, r.x() + y1, r.height(), r.width()));
+                  }
                   break;
 
-            case ArpeggioType::UP_STRAIGHT:
-                  {
+            case ArpeggioType::UP_STRAIGHT: {
                   qreal _spatium = spatium();
                   qreal x1 = _spatium * .5;
                   qreal w  = symBbox(SymId::arrowheadBlackUp).width();
@@ -160,8 +151,7 @@ void Arpeggio::layout()
                   }
                   break;
 
-            case ArpeggioType::DOWN_STRAIGHT:
-                  {
+            case ArpeggioType::DOWN_STRAIGHT: {
                   qreal _spatium = spatium();
                   qreal x1 = _spatium * .5;
                   qreal w  = symBbox(SymId::arrowheadBlackDown).width();
@@ -170,8 +160,7 @@ void Arpeggio::layout()
                   }
                   break;
 
-            case ArpeggioType::BRACKET:
-                  {
+            case ArpeggioType::BRACKET: {
                   qreal _spatium = spatium();
                   qreal lw = score()->styleS(ST_ArpeggioLineWidth).val() * _spatium * .5;
                   qreal w  = score()->styleS(ST_ArpeggioHookLen).val() * _spatium;
@@ -199,17 +188,22 @@ void Arpeggio::draw(QPainter* p) const
          Qt::SolidLine, Qt::RoundCap));
 
       switch (arpeggioType()) {
-            case ArpeggioType::UP:
-            case ArpeggioType::DOWN:
             case ArpeggioType::NORMAL:
+            case ArpeggioType::UP:
                   {
-                  qreal x = bbox().width();
-                  qreal y = bbox().height() + y1;
-                  p->translate(x, y);
+                  QRectF r(symBbox(symbols));
                   p->rotate(-90.0);
-                  drawSymbols(symbols, p);
+                  drawSymbols(symbols, p, QPointF(-r.right() - y1, -r.bottom() + r.height()));
                   p->rotate(90.0);
-                  p->translate(-x, -y);
+                  }
+                  break;
+
+            case ArpeggioType::DOWN:
+                  {
+                  QRectF r(symBbox(symbols));
+                  p->rotate(90.0);
+                  drawSymbols(symbols, p, QPointF(-r.left() + y1, -r.top() - r.height()));
+                  p->rotate(-90.0);
                   }
                   break;
 
