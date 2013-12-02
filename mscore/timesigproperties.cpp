@@ -73,17 +73,17 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
 
       // set ID's of other symbols
       static const SymId prolatioSymbols[] = {
-            SymId::mensuralTempPerfProlPerf,
-            SymId::mensuralTempPerfProlImp,
-            SymId::mensuralTempPerfProlImpDimin,
-            SymId::mensuralTempPerfProlPerfDimin,
-            SymId::mensuralTempImpProlPerf,
-//            SymId::mensuralTempImpProlImp,          // same shape as common time
-            SymId::mensuralTempImpProlImpRev,
-            SymId::mensuralTempImpProlPerfDimin,
-//            SymId::mensuralTempImpProlImpDimin,     // same shape as alla breve
-            SymId::mensuralTempImpProlImpDiminRev,
-            SymId::mensuralTempImpProlPerfRev,
+            SymId::mensuralProlation1,
+            SymId::mensuralProlation2,
+            SymId::mensuralProlation3,
+            SymId::mensuralProlation4,
+            SymId::mensuralProlation5,
+//            SymId::mensuralProlation6,              // same shape as common time
+            SymId::mensuralProlation7,
+            SymId::mensuralProlation8,
+//            SymId::mensuralProlation9,              // same shape as alla breve
+            SymId::mensuralProlation10,
+            SymId::mensuralProlation11,
             };
 
       ScoreFont* scoreFont = t->score()->scoreFont();
