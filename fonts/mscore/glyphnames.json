@@ -470,6 +470,9 @@
     "pluckedSnapPizzicatoAbove": {
         "codepoint": "U+e1b9"
     },
+    "repeatDot": {
+        "codepoint": "U+e043"
+    },
     "rest128th": {
         "codepoint": "U+e10d"
     },
