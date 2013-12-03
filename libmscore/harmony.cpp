@@ -1131,6 +1131,16 @@ void Harmony::spatiumChanged(qreal oldValue, qreal newValue)
       }
 
 //---------------------------------------------------------
+//   textStyleChanged
+//---------------------------------------------------------
+
+void Harmony::textStyleChanged()
+      {
+      Text::textStyleChanged();
+      render();
+      }
+
+//---------------------------------------------------------
 //   dragAnchor
 //---------------------------------------------------------
 

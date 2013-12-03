@@ -2409,7 +2409,7 @@ static void updateTextStyle(void* a, Element* e)
       QString s = *(QString*)a;
       if (e->isText()) {
             Text* text = static_cast<Text*>(e);
-            if (text->styled() && text->textStyle().name() == s) {
+            if ((text->styled() && text->textStyle().name() == s) || (text->type() == Element::HARMONY && s == "Chord Symbol")) {
                   text->setTextStyle(text->score()->textStyle(s));
                   text->textStyleChanged();
                   }
