@@ -5,6 +5,7 @@ FamilyName: MScore
 Weight: Regular
 Copyright: 
 Version: 
+DefaultBaseFilename: mscore
 ItalicAngle: 0
 UnderlinePosition: -51
 UnderlineWidth: 51
@@ -18,7 +19,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
 CreationTime: 1385043608
-ModificationTime: 1385512906
+ModificationTime: 1386111701
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -79,7 +80,7 @@ DisplaySize: -72
 AntiAlias: 1
 FitToEm: 1
 ExtremaBound: 10
-WinInfo: 57608 8 10
+WinInfo: 57384 8 10
 BeginPrivate: 0
 EndPrivate
 Grid
@@ -89,7 +90,7 @@ Grid
  0 -140.666 l 29
 EndSplineSet
 TeXData: 1 0 0 360448 180224 120149 0 1048576 120149 783286 444596 497025 792723 393216 433062 380633 303038 157286 324010 404750 52429 2506097 1059062 262144
-BeginChars: 65539 262
+BeginChars: 65539 263
 
 StartChar: .notdef
 Encoding: 65536 -1 0
@@ -34936,6 +34937,16 @@ SplineSet
  140 -135 140 -135 152 -178 c 256,80,81
  164 -221 164 -221 205 -236 c 257,71,-1
 EndSplineSet
+EndChar
+
+StartChar: uniE043
+Encoding: 57411 57411 262
+Width: 116
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+Refer: 63 57639 N 1 0 0 1 0 0 2
 EndChar
 EndChars
 EndSplineFont
