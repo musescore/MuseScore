@@ -553,10 +553,6 @@
     <seq>Ctrl+K</seq>
     </SC>
   <SC>
-    <key>harmony-properties</key>
-    <seq>Shift+K</seq>
-    </SC>
-  <SC>
     <key>rehearsalmark-text</key>
     <seq>Ctrl+M</seq>
     </SC>

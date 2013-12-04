@@ -298,8 +298,10 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::HARMONY) {
             genPropertyMenu1(e, popup);
-            popup->addSeparator();
-            popup->addAction(tr("Chord Symbol Properties..."))->setData("ha-props");
+            if (enableExperimental) {
+                  popup->addSeparator();
+                  popup->addAction(tr("Chord Symbol Properties..."))->setData("ha-props");
+                  }
             }
       else if (e->type() == Element::INSTRUMENT_NAME) {
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
