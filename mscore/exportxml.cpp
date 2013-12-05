@@ -91,7 +91,7 @@
 #include "libmscore/breath.h"
 #include "libmscore/chordline.h"
 #include "libmscore/figuredbass.h"
-#include "libmscore/tablature.h"
+#include "libmscore/stringdata.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/qzipwriter_p.h"
 #include "libmscore/fret.h"

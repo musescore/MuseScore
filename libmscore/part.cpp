@@ -20,7 +20,7 @@
 #include "instrtemplate.h"
 #include "text.h"
 #include "measure.h"
-#include "tablature.h"
+#include "stringdata.h"
 #include "stafftype.h"
 #include "sym.h"
 

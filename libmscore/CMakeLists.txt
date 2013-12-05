@@ -64,7 +64,7 @@ add_library (
       score.cpp segment.cpp select.cpp shadownote.cpp slur.cpp tie.cpp
       spacer.cpp spanner.cpp staff.cpp staffstate.cpp
       stafftext.cpp stafftype.cpp stem.cpp style.cpp symbol.cpp
-      sym.cpp system.cpp tablature.cpp tempotext.cpp text.cpp
+      sym.cpp system.cpp stringdata.cpp tempotext.cpp text.cpp
       textframe.cpp textline.cpp timesig.cpp
       tremolobar.cpp tremolo.cpp trill.cpp tuplet.cpp
       utils.cpp velo.cpp volta.cpp xml.cpp mscore.cpp

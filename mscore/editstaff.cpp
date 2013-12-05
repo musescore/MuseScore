@@ -35,7 +35,7 @@
 #include "texteditor.h"
 #include "editpitch.h"
 #include "editstringdata.h"
-#include "libmscore/tablature.h"
+#include "libmscore/stringdata.h"
 
 namespace Ms {
 

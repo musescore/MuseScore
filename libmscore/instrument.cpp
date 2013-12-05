@@ -15,7 +15,7 @@
 #include "drumset.h"
 #include "articulation.h"
 #include "utils.h"
-#include "tablature.h"
+#include "stringdata.h"
 #include "instrtemplate.h"
 #include "mscore.h"
 

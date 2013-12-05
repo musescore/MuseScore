@@ -64,7 +64,7 @@
 #include "clef.h"
 #include "noteevent.h"
 #include "breath.h"
-#include "tablature.h"
+#include "stringdata.h"
 #include "stafftype.h"
 #include "segment.h"
 #include "chordlist.h"
