@@ -23,7 +23,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
-#include "libmscore/tablature.h"
+#include "libmscore/stringdata.h"
 #include "libmscore/clef.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/tempotext.h"

@@ -69,7 +69,7 @@
 #include "duration.h"
 #include "fret.h"
 #include "stafftype.h"
-#include "tablature.h"
+#include "stringdata.h"
 #include "tiemap.h"
 #include "tupletmap.h"
 #include "accidental.h"

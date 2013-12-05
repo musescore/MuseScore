@@ -99,7 +99,7 @@
 #include "libmscore/fret.h"
 #include "libmscore/qzipreader_p.h"
 #include "libmscore/stafftype.h"
-#include "libmscore/tablature.h"
+#include "libmscore/stringdata.h"
 #include "libmscore/drumset.h"
 #include "libmscore/beam.h"
 #include "libmscore/jump.h"

@@ -55,7 +55,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/harmony.h"
 #include "libmscore/navigate.h"
-#include "libmscore/tablature.h"
+#include "libmscore/stringdata.h"
 #include "libmscore/shadownote.h"
 #include "libmscore/sym.h"
 #include "libmscore/lasso.h"
