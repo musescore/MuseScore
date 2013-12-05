@@ -40,7 +40,7 @@
 #include "measure.h"
 #include "tempo.h"
 #include "undo.h"
-#include "tablature.h"
+#include "stringdata.h"
 #include "stafftype.h"
 #include "tupletmap.h"
 #include "tiemap.h"

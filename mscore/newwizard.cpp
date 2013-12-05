@@ -32,7 +32,6 @@
 #include "libmscore/drumset.h"
 #include "libmscore/keysig.h"
 #include "libmscore/measure.h"
-#include "libmscore/tablature.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/timesig.h"
 #include "libmscore/sym.h"

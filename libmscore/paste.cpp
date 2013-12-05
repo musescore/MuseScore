@@ -51,7 +51,7 @@
 #include "stafftext.h"
 #include "style.h"
 #include "system.h"
-#include "tablature.h"
+//#include "stringdata.h"
 #include "tempo.h"
 #include "tempotext.h"
 #include "text.h"

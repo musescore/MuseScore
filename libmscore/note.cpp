@@ -42,7 +42,7 @@
 #include "undo.h"
 #include "part.h"
 #include "stafftype.h"
-#include "tablature.h"
+#include "stringdata.h"
 #include "fret.h"
 #include "harmony.h"
 #include "fingering.h"

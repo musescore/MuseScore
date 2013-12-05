@@ -40,7 +40,7 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/style.h"
 #include "libmscore/system.h"
-#include "libmscore/tablature.h"
+#include "libmscore/stringdata.h"
 #include "libmscore/undo.h"
 #include "libmscore/keysig.h"
 
