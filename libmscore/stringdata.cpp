@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "tablature.h"
+#include "stringdata.h"
 #include "chord.h"
 #include "note.h"
 #include "score.h"

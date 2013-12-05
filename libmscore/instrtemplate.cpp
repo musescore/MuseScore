@@ -16,7 +16,7 @@
 #include "stafftype.h"
 #include "style.h"
 #include "sym.h"
-#include "tablature.h"
+#include "stringdata.h"
 #include "utils.h"
 #include "xml.h"
 

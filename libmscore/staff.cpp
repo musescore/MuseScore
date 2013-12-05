@@ -21,7 +21,7 @@
 #include "segment.h"
 #include "style.h"
 #include "measure.h"
-#include "tablature.h"
+#include "stringdata.h"
 #include "stafftype.h"
 #include "undo.h"
 #include "cleflist.h"

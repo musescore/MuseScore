@@ -14,7 +14,7 @@
 #include "measure.h"
 #include "system.h"
 #include "score.h"
-#include "tablature.h"
+#include "stringdata.h"
 #include "chord.h"
 #include "note.h"
 #include "segment.h"
