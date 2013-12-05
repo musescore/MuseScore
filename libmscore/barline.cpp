@@ -167,8 +167,8 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
       qreal _spatium = spatium();
 
       if (parent() == 0) {    // for use in palette
-            drawSymbol(SymId::augmentationDot, painter, QPointF(x, 1.5 * _spatium));
-            drawSymbol(SymId::augmentationDot, painter, QPointF(x, 2.5 * _spatium));
+            drawSymbol(SymId::repeatDot, painter, QPointF(x, 1.5 * _spatium));
+            drawSymbol(SymId::repeatDot, painter, QPointF(x, 2.5 * _spatium));
             }
       else if (parent()->type() == SEGMENT) {
             System* s = static_cast<Segment*>(parent())->measure()->system();
@@ -189,8 +189,8 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
 
                   qreal staffy  = s->staff(staffIdx1 + i)->y() - dy;
 
-                  drawSymbol(SymId::augmentationDot, painter, QPointF(x, staffy + doty1));
-                  drawSymbol(SymId::augmentationDot, painter, QPointF(x, staffy + doty2));
+                  drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty1));
+                  drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty2));
                   }
             }
       }
@@ -280,7 +280,7 @@ void BarLine::draw(QPainter* painter) const
                   {
                   qreal lw2  = point(score()->styleS(ST_endBarWidth));
                   qreal d1   = point(score()->styleS(ST_endBarDistance));
-                  qreal dotw = symWidth(SymId::augmentationDot);
+                  qreal dotw = symWidth(SymId::repeatDot);
                   qreal x1   =  dotw + d1 + lw * .5;
                   qreal x2   =  dotw + d1 + lw + d1 + lw2 * .5;
 
@@ -302,7 +302,7 @@ void BarLine::draw(QPainter* painter) const
                   {
                   qreal lw2  = point(score()->styleS(ST_endBarWidth));
                   qreal d1   = point(score()->styleS(ST_endBarDistance));
-                  qreal dotw = symWidth(SymId::augmentationDot);
+                  qreal dotw = symWidth(SymId::repeatDot);
 
                   qreal x1   =  dotw + d1 + lw * .5;                                // thin bar
                   qreal x2   =  dotw + d1 + lw + d1 + lw2 * .5;                     // thick bar
@@ -742,7 +742,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
       qreal _spatium = score->spatium();
       qreal dw = score->styleS(ST_barWidth).val() * _spatium;
 
-      qreal dotwidth = score->scoreFont()->width(SymId::augmentationDot, mag);
+      qreal dotwidth = score->scoreFont()->width(SymId::repeatDot, mag);
       switch(type) {
             case DOUBLE_BAR:
                   dw  = (score->styleS(ST_doubleBarWidth) * 2
@@ -810,7 +810,7 @@ void BarLine::layout()
                               qreal lw   = point(score()->styleS(ST_barWidth));
                               qreal lw2  = point(score()->styleS(ST_endBarWidth));
                               qreal d1   = point(score()->styleS(ST_endBarDistance));
-                              qreal dotw = symWidth(SymId::augmentationDot);
+                              qreal dotw = symWidth(SymId::repeatDot);
                               qreal x   =  dotw + 2 * d1 + lw + lw2 * .5;                     // thick bar
 
                               r |= symBbox(SymId::bracketTop).translated(x, y1);
