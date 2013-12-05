@@ -79,9 +79,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             articulationTable->setItem(i, 0, item);
 
             QComboBox* cb = new QComboBox();
-            cb->addItem(tr("Top Staff"), A_TOP_STAFF);
-            cb->addItem(tr("Bottom Staff"), A_BOTTOM_STAFF);
-            cb->addItem(tr("Chord"), A_CHORD);
+            cb->addItem(tr("Above Staff"), A_TOP_STAFF);
+            cb->addItem(tr("Below Staff"), A_BOTTOM_STAFF);
+            cb->addItem(tr("Chord Automatic"), A_CHORD);
+            cb->addItem(tr("Above Chord"), A_TOP_CHORD);
+            cb->addItem(tr("Below Chord"), A_BOTTOM_CHORD);
             articulationTable->setCellWidget(i, 1, cb);
             }
       QButtonGroup* bg = new QButtonGroup(this);

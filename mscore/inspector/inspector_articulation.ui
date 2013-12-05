@@ -99,12 +99,12 @@
        </property>
        <item>
         <property name="text">
-         <string>Top Staff</string>
+         <string>Above Staff</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Bottom Staff</string>
+         <string>Below Staff</string>
         </property>
        </item>
        <item>
@@ -114,12 +114,12 @@
        </item>
        <item>
         <property name="text">
-         <string>Top Chord</string>
+         <string>Above Chord</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Bottom Chord</string>
+         <string>Below Chord</string>
         </property>
        </item>
       </widget>
