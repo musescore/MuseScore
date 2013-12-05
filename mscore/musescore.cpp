@@ -4271,10 +4271,20 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "find")
             showSearchDialog();
+      else if (cmd == "alt-delete"){
+           cv->score()->setProperty("AltModifier", true);
+           foreach(Element* el, cv->score()->selection().elements()) {
+                 if(el->type() == Element::ACCIDENTAL)
+                       cv->score()->changeAccidental(static_cast<Note*>(el->parent()), Accidental::ACC_NONE);
+                 }
+            cv->score()->setProperty("AltModifier", false);
+            }
       else {
             if (cv) {
+                  cv->score()->setProperty("AltModifier", qApp->keyboardModifiers() == Qt::AltModifier); 
                   cv->setFocus();
                   cv->cmd(a);
+                  cv->score()->setProperty("AltModifier", false); 
                   }
             else
                   qDebug("2:unknown cmd <%s>", qPrintable(cmd));

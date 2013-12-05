@@ -463,6 +463,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                                     }
                               break;
                               }
+                        _score->setProperty("AltModifier", qApp->keyboardModifiers() == Qt::AltModifier); 
                         _score->addRefresh(el->canvasBoundingRect());
                         Element* dropElement = el->drop(dropData);
                         _score->addRefresh(el->canvasBoundingRect());
