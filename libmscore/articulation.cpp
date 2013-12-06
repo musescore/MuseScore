@@ -83,7 +83,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::brassMuteClosed, SymId::brassMuteClosed,
-            "plusstop", QT_TRANSLATE_NOOP("articulation", "plus stop"),
+            "plusstop", QT_TRANSLATE_NOOP("articulation", "stopped/pizzicato left hand"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
       { SymId::stringsUpBow, SymId::stringsUpBow,

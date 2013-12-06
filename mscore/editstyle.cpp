@@ -73,15 +73,17 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
             QPixmap ct = cs->scoreFont()->sym2pixmap(ai->upSym, 3.0);
             QIcon icon(ct);
-            QTableWidgetItem* item = new QTableWidgetItem(icon, qApp->translate("articulation", qPrintable(ai->name)));
+            QTableWidgetItem* item = new QTableWidgetItem(icon, qApp->translate("articulation", qPrintable(ai->description)));
 
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             articulationTable->setItem(i, 0, item);
 
             QComboBox* cb = new QComboBox();
-            cb->addItem(tr("Top Staff"), A_TOP_STAFF);
-            cb->addItem(tr("Bottom Staff"), A_BOTTOM_STAFF);
-            cb->addItem(tr("Chord"), A_CHORD);
+            cb->addItem(tr("Above Staff"), A_TOP_STAFF);
+            cb->addItem(tr("Below Staff"), A_BOTTOM_STAFF);
+            cb->addItem(tr("Chord Automatic"), A_CHORD);
+            cb->addItem(tr("Above Chord"), A_TOP_CHORD);
+            cb->addItem(tr("Below Chord"), A_BOTTOM_CHORD);
             articulationTable->setCellWidget(i, 1, cb);
             }
       QButtonGroup* bg = new QButtonGroup(this);
