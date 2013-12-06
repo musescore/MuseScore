@@ -22,6 +22,7 @@
 #include "staff.h"
 #include "part.h"
 #include "utils.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -841,6 +842,7 @@ void Harmony::layout()
             setPos(0.0, 0.0);
             return;
             }
+
       qreal yy = 0.0;
       if (parent()->type() == SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
@@ -849,7 +851,38 @@ void Harmony::layout()
             }
       else if (parent()->type() == FRET_DIAGRAM)
             yy = score()->styleP(ST_harmonyFretDist);
-      setPos(0.0, yy);
+      yy += textStyle().offset(spatium()).y();
+      if (!editMode()) {
+            qreal hb = lineHeight() - Text::baseLine();
+            if (align() & ALIGN_BOTTOM)
+                  yy -= hb;
+            else if (align() & ALIGN_VCENTER) {
+                  yy -= hb;
+                  yy += (height() * .5);
+                  }
+            else if (align() & ALIGN_BASELINE) {
+                  }
+            else { // ALIGN_TOP
+                  yy -= hb;
+                  yy += height();
+                  }
+            }
+
+      qreal xx = textStyle().offset(spatium()).x();
+      if (!editMode()) {
+            qreal cw = symWidth(SymId::noteheadBlack);
+            if (align() & ALIGN_RIGHT) {
+                  xx += cw;
+                  xx -= width();
+                  }
+            else if (align() & ALIGN_HCENTER) {
+                  xx += (cw * .5);
+                  xx -= (width() * .5);
+                  }
+            }
+
+      setPos(xx, yy);
+
 
       if (!readPos().isNull()) {
             // version 114 is measure based
