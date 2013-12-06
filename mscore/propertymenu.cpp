@@ -33,7 +33,6 @@
 #include "glissandoproperties.h"
 #include "fretproperties.h"
 #include "selinstrument.h"
-#include "chordedit.h"
 #include "pianoroll.h"
 #include "editstyle.h"
 #include "editstaff.h"
@@ -295,11 +294,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == Element::GLISSANDO) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Glissando Properties..."))->setData("gliss-props");
-            }
-      else if (e->type() == Element::HARMONY) {
-            genPropertyMenu1(e, popup);
-            popup->addSeparator();
-            popup->addAction(tr("Chord Symbol Properties..."))->setData("ha-props");
             }
       else if (e->type() == Element::INSTRUMENT_NAME) {
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
@@ -593,17 +587,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "gliss-props") {
             GlissandoProperties vp(static_cast<Glissando*>(e));
             vp.exec();
-            }
-       else if (cmd == "ha-props") {
-            Harmony* ha = static_cast<Harmony*>(e);
-            ChordEdit ce(ha->score());
-            ce.setHarmony(ha);
-            int rv = ce.exec();
-            if (rv) {
-                  Harmony* h = ce.harmony()->clone();
-                  h->render();
-                  score()->undoChangeElement(ha, h);
-                  }
             }
       else if (cmd == "staff-props") {
             EditStaff editStaff(e->staff(), 0);

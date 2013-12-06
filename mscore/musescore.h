@@ -394,7 +394,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showAlbumManager();
       void showLayerManager();
       void updateUndoRedo();
-      void cmdAddChordName2();
       void changeScore(int);
       virtual void resizeEvent(QResizeEvent*);
       void updateInspector();
