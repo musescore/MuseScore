@@ -132,7 +132,7 @@ static const ElementName elementNames[] = {
       ElementName("StaffText",            QT_TRANSLATE_NOOP("elementName", "Staff Text")),
       ElementName("RehearsalMark",        QT_TRANSLATE_NOOP("elementName", "Rehearsal Mark")),
       ElementName("InstrumentChange",     QT_TRANSLATE_NOOP("elementName", "Instrument Change")),
-      ElementName("Harmony",              QT_TRANSLATE_NOOP("elementName", "Harmony")),
+      ElementName("Harmony",              QT_TRANSLATE_NOOP("elementName", "Chord Symbol")),
       ElementName("FretDiagram",          QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram")),
       ElementName("Bend",                 QT_TRANSLATE_NOOP("elementName", "Bend")),
       ElementName("TremoloBar",           QT_TRANSLATE_NOOP("elementName", "TremoloBar")),
