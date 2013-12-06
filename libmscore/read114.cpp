@@ -120,6 +120,7 @@ static const StyleVal2 style114[] = {
       { ST_chordDescriptionFile,         QVariant(QString("stdchords.xml")) },
       { ST_chordStyle,                   QVariant(QString("custom")) },
       { ST_chordsXmlFile,                QVariant(true) },
+      { ST_harmonyY,                     QVariant(0.0) },
       { ST_concertPitch,                 QVariant(false) },
       { ST_createMultiMeasureRests,      QVariant(false) },
       { ST_minEmptyMeasures,             QVariant(2) },
