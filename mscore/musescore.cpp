@@ -65,7 +65,6 @@
 #include "selectdialog.h"
 #include "transposedialog.h"
 #include "metaedit.h"
-#include "chordedit.h"
 #include "inspector/inspector.h"
 #include "omrpanel.h"
 #include "shortcut.h"
@@ -4213,8 +4212,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             cs->setShowFrames(getAction(cmd.toLatin1().data())->isChecked());
       else if (cmd == "show-pageborders")
             cs->setShowPageborders(getAction(cmd.toLatin1().data())->isChecked());
-      else if (cmd == "harmony-properties")
-            cmdAddChordName2();
       else if (cmd == "tempo")
             addTempo();
       else if (cmd == "loop") {
@@ -4281,62 +4278,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       if (debugger)
             debugger->reloadClicked();
-      }
-
-//---------------------------------------------------------
-//   cmdAddChordName2
-//---------------------------------------------------------
-
-void MuseScore::cmdAddChordName2()
-      {
-      if (cs == 0 || !cs->checkHasMeasures())
-            return;
-      ChordRest* cr = cs->getSelectedChordRest();
-      if (!cr)
-            return;
-      int rootTpc = 14;
-      if (cr->type() == Element::CHORD) {
-            Chord* chord = static_cast<Chord*>(cr);
-            rootTpc = chord->downNote()->tpc();
-            }
-      Harmony* s = 0;
-      Segment* segment = cr->segment();
-
-      foreach(Element* e, segment->annotations()) {
-            if (e->type() == Element::HARMONY && (e->track() == cr->track())) {
-                  s = static_cast<Harmony*>(e);
-                  break;
-                  }
-            }
-
-      bool created = false;
-      if (s == 0) {
-            s = new Harmony(cs);
-            s->setTrack(cr->track());
-            s->setParent(segment);
-            s->setRootTpc(rootTpc);
-            created = true;
-            }
-      ChordEdit ce(cs);
-      ce.setHarmony(s);
-      int rv = ce.exec();
-      if (rv) {
-            const Harmony* h = ce.harmony();
-            s->setRootTpc(h->rootTpc());
-            s->setBaseTpc(h->baseTpc());
-            s->setId(h->id());
-            s->clearDegrees();
-            for (int i = 0; i < h->numberOfDegrees(); i++)
-                  s->addDegree(h->degree(i));
-            s->render();
-            cs->select(s, SELECT_SINGLE, 0);
-            cs->undoAddElement(s);
-            cs->setLayoutAll(true);
-            }
-      else {
-            if (created)
-                  delete s;
-            }
       }
 
 //---------------------------------------------------------

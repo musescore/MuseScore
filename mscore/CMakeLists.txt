@@ -40,7 +40,7 @@ QT4_WRAP_UI (ui_headers
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui voltaproperties.ui timesigproperties.ui boxproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
-      chordedit.ui transposedialog.ui lineproperties.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
+      transposedialog.ui lineproperties.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
       glissandoprop.ui articulation.ui metaedit.ui palette.ui select.ui
       synthcontrol.ui splitstaff.ui cellproperties.ui keyedit.ui selectinstr.ui
       fretdprops.ui stafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
@@ -129,7 +129,7 @@ QT4_WRAP_CPP (mocs
       timedialog.h symboldialog.h shortcutcapturedialog.h simplebutton.h
       greendotbutton.h recordbutton.h editdrumset.h editstaff.h selinstrument.h
       voltaproperties.h timesigproperties.h boxproperties.h newwizard.h
-      transposedialog.h chordedit.h lineproperties.h
+      transposedialog.h lineproperties.h
       excerptsdialog.h stafftextproperties.h glissandoproperties.h
       articulationprop.h metaedit.h magbox.h
       textprop.h textproperties.h tupletdialog.h
@@ -238,7 +238,7 @@ add_executable ( ${ExecutableName}
       # exportly.cpp
       editdrumset.cpp editstaff.cpp voltaproperties.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
-      chordedit.cpp excerptsdialog.cpp metaedit.cpp magbox.cpp
+      excerptsdialog.cpp metaedit.cpp magbox.cpp
       capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
       textproperties.cpp synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp

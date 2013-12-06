@@ -1434,13 +1434,6 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
-         A_CMD,
-         "harmony-properties",
-         QT_TRANSLATE_NOOP("action","Chord Symbol Properties"),
-         QT_TRANSLATE_NOOP("action","Show properties for chord symbol")
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "rehearsalmark-text",
          QT_TRANSLATE_NOOP("action","Rehearsal Mark"),
