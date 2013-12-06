@@ -130,7 +130,7 @@ class Text : public SimpleText {
       void setModified(bool v);
       void clear();
       QRectF pageRectangle() const;
-      void textStyleChanged();
+      virtual void textStyleChanged();
       virtual void setScore(Score* s);
       friend class TextProperties;
 
