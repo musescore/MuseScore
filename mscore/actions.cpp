@@ -2019,8 +2019,8 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_FOTO,
          0,
          "inspector",
-         QT_TRANSLATE_NOOP("action","Inspector"),
-         QT_TRANSLATE_NOOP("action","Show inspector")
+         QT_TRANSLATE_NOOP("action","Advanced Item Properties"),
+         QT_TRANSLATE_NOOP("action","Show advanced item properties")
          ),
       Shortcut(
          STATE_ALL,

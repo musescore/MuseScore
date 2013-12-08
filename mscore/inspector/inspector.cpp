@@ -75,7 +75,7 @@ void MuseScore::showInspector(bool visible)
 //---------------------------------------------------------
 
 Inspector::Inspector(QWidget* parent)
-   : QDockWidget(tr("Inspector"), parent)
+   : QDockWidget(tr("Adavanced Item Properties"), parent)
       {
       setObjectName("inspector");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
