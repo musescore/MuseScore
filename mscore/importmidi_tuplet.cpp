@@ -1114,7 +1114,7 @@ findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
             const auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
             const auto barFraction = ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
-                  const auto tuplets = findTuplets(startBarTick, endBarTick, barFraction, chords);
+            const auto tuplets = findTuplets(startBarTick, endBarTick, barFraction, chords);
             for (const auto &tupletData: tuplets)
                   tupletEvents.insert({tupletData.onTime, tupletData});
             if (endBarTick > lastTick)
