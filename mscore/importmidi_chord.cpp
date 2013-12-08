@@ -245,5 +245,32 @@ ReducedFraction findMinDuration(const QList<MidiChord> &midiChords,
       return len;
       }
 
+void mergeChordsWithEqualOnTimeAndVoice(std::multimap<int, MTrack> &tracks)
+      {
+      for (auto &track: tracks) {
+            auto &chords = track.second.chords;
+                        // the key is pair<onTime, voice>
+            std::map<std::pair<ReducedFraction, int>,
+                     std::multimap<ReducedFraction, MidiChord>::iterator> onTimes;
+
+            for (auto it = chords.begin(); it != chords.end(); ) {
+                  const auto &onTime = it->first;
+                  const int voice = it->second.voice;
+                  auto fit = onTimes.find({onTime, voice});
+                  if (fit == onTimes.end()) {
+                        onTimes.insert({{onTime, voice}, it});
+                        }
+                  else {
+                        auto &oldNotes = fit->second->second.notes;
+                        auto &newNotes = it->second.notes;
+                        oldNotes.append(newNotes);
+                        it = chords.erase(it);
+                        continue;
+                        }
+                  ++it;
+                  }
+            }
+      }
+
 } // namespace MChord
 } // namespace Ms
