@@ -21,6 +21,7 @@
 #include "mscore.h"
 #include "chord.h"
 #include "undo.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -78,37 +79,37 @@ static Dyn dynList[] = {
 static Dyn dynList[] = {
       // dynamic:
       {  -1,  true,  "other-dynamics", ""     },
-      {   1,  false, "pppppp", u8"\U0000e567" },
-      {   5,  false, "ppppp",  u8"\U0000e568" },
-      {  10,  false, "pppp",   u8"\U0000e569" },
-      {  16,  false, "ppp",    u8"\U0000e56a" },
-      {  33,  false, "pp",     u8"\U0000e56b" },
-      {  49,  false, "p",      u8"\U0000e560" },
-      {  64,  false, "mp",     u8"\U0000e56c" },
-      {  80,  false, "mf",     u8"\U0000e56d" },
-      {  96,  false, "f",      u8"\U0000e562" },
-      { 112,  false, "ff",     u8"\U0000e56e" },
-      { 126,  false, "fff",    u8"\U0000e56f" },
-      { 127,  false, "ffff",   u8"\U0000e570" },
-      { 127,  false, "fffff",  u8"\U0000e571" },
-      { 127,  false, "ffffff", u8"\U0000e572" },
+      {   1,  false, "pppppp", u8"\U0000e4e7" },
+      {   5,  false, "ppppp",  u8"\U0000e4e8" },
+      {  10,  false, "pppp",   u8"\U0000e4e9" },
+      {  16,  false, "ppp",    u8"\U0000e4ea" },
+      {  33,  false, "pp",     u8"\U0000e4eb" },
+      {  49,  false, "p",      u8"\U0000e4e0" },
+      {  64,  false, "mp",     u8"\U0000e4ec" },
+      {  80,  false, "mf",     u8"\U0000e4ed" },
+      {  96,  false, "f",      u8"\U0000e4e2" },
+      { 112,  false, "ff",     u8"\U0000e4ef" },
+      { 126,  false, "fff",    u8"\U0000e4f0" },
+      { 127,  false, "ffff",   u8"\U0000e4f1" },
+      { 127,  false, "fffff",  u8"\U0000e4f2" },
+      { 127,  false, "ffffff", u8"\U0000e4f3" },
 
       // accents:
-      {  0,   true,  "fp",     u8"\U0000e573" },
-      {  0,   true,  "sf",     u8"\U0000e575" },
-      {  0,   true,  "sfz",    u8"\U0000e578"},
-      {  0,   true,  "sff",    u8"\U0000e575\U0000e562"},
-      {  0,   true,  "sffz",   u8"\U0000e579"},
-      {  0,   true,  "sfp",    u8"\U0000e576"},
-      {  0,   true,  "sfpp",   u8"\U0000e577"},
-      {  0,   true,  "rfz",    u8"\U0000e57b"},
-      {  0,   true,  "rf",     u8"\U0000e57a"},
-      {  0,   true,  "fz",     u8"\U0000e574"},
-      {  0,   true,  "m",      u8"\U0000e561"},
-      {  0,   true,  "r",      u8"\U0000e563"},
-      {  0,   true,  "s",      u8"\U0000e564"},
-      {  0,   true,  "z",      u8"\U0000e565"},
-      {  0,   true,  "n",      u8"\U0000e566"}
+      {  0,   true,  "fp",     u8"\U0000e4f4" },
+      {  0,   true,  "sf",     u8"\U0000e4f6" },
+      {  0,   true,  "sfz",    u8"\U0000e4f9"},
+      {  0,   true,  "sff",    u8"\U0000e4f6\U0000e4e2"},
+      {  0,   true,  "sffz",   u8"\U0000e4fa"},
+      {  0,   true,  "sfp",    u8"\U0000e4f7"},
+      {  0,   true,  "sfpp",   u8"\U0000e4f8"},
+      {  0,   true,  "rfz",    u8"\U0000e4fc"},
+      {  0,   true,  "rf",     u8"\U0000e4fb"},
+      {  0,   true,  "fz",     u8"\U0000e4f5"},
+      {  0,   true,  "m",      u8"\U0000e4e1"},
+      {  0,   true,  "r",      u8"\U0000e4e3"},
+      {  0,   true,  "s",      u8"\U0000e4e4"},
+      {  0,   true,  "z",      u8"\U0000e4e5"},
+      {  0,   true,  "n",      u8"\U0000e4e6"}
       };
 
 //---------------------------------------------------------
