@@ -23,6 +23,7 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
             const Drumset* const drumset = track.mtrack->drumTrack() ? smDrumset : 0;
             if (!drumset)
                   continue;
+            bool changed = false;
                               // all chords of drum track should have voice == 0
                               // because useMultipleVoices == false (see MidiImportOperations)
                               // also, all chords should have different onTime values
@@ -49,15 +50,12 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                         if (tupletIt != track.tuplets.end()
                                     && newTupletIt == track.tuplets.end()) {
                               if (notes.isEmpty()) {
-                                                // small C++11 hack: remove constness of const_iterator
-                                    auto nonConstIt = track.tuplets.erase(tupletIt, tupletIt);
-                                    nonConstIt->second.voice = newChord.voice;
+                                    if (!changed)
+                                          changed = true;   // check for empty tuplets later
                                     }
-                              else {
-                                    MidiTuplet::TupletData newTupletData = tupletIt->second;
-                                    newTupletData.voice = newChord.voice;
-                                    track.tuplets.insert({tupletIt->first, newTupletData});
-                                    }
+                              MidiTuplet::TupletData newTupletData = tupletIt->second;
+                              newTupletData.voice = newChord.voice;
+                              track.tuplets.insert({tupletIt->first, newTupletData});
                               }
                         if (notes.isEmpty())
                               chord = newChord;
@@ -67,6 +65,9 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                   }
             for (const auto &event: newChordEvents)
                   chords.insert(event);
+
+            if (changed)
+                  MidiTuplet::removeEmptyTuplets(track);
             }
       }
 
