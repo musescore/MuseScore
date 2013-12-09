@@ -602,10 +602,8 @@ void sortTupletsByAveragePitch(std::vector<TupletInfo> &tuplets)
       std::sort(tuplets.begin(), tuplets.end(), averagePitchComparator);
       }
 
-std::list<std::multimap<ReducedFraction, MidiChord>::iterator>
-findNonTupletChords(const std::vector<TupletInfo> &tuplets,
-                    const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
-                    const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt)
+std::set<std::pair<const ReducedFraction, MidiChord> *>
+findTupletChords(const std::vector<TupletInfo> &tuplets)
       {
       std::set<std::pair<const ReducedFraction, MidiChord> *> tupletChords;
       for (const auto &tupletInfo: tuplets) {
@@ -614,6 +612,29 @@ findNonTupletChords(const std::vector<TupletInfo> &tuplets,
                   tupletChords.insert(&*tupletIt);
                   }
             }
+      return tupletChords;
+      }
+
+std::map<std::pair<const ReducedFraction, MidiChord> *, int>
+findMappedTupletChords(const std::vector<TupletInfo> &tuplets)
+      {
+                  // <chord ID, tupletIndex>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, int> tupletChords;
+      for (int i = 0; i != (int)tuplets.size(); ++i) {
+            for (const auto &tupletChord: tuplets[i].chords) {
+                  auto tupletIt = tupletChord.second;
+                  tupletChords.insert({&*tupletIt, i});
+                  }
+            }
+      return tupletChords;
+      }
+
+std::list<std::multimap<ReducedFraction, MidiChord>::iterator>
+findNonTupletChords(const std::vector<TupletInfo> &tuplets,
+                    const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
+                    const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt)
+      {
+      const auto tupletChords = findTupletChords(tuplets);
       std::list<std::multimap<ReducedFraction, MidiChord>::iterator> nonTuplets;
       for (auto it = startBarChordIt; it != endBarChordIt; ++it) {
             if (tupletChords.find(&*it) == tupletChords.end())
@@ -747,6 +768,7 @@ findBackTiedTuplets(const std::multimap<ReducedFraction, MidiChord> &chords,
       {
       std::vector<TiedTuplet> tiedTuplets;
       std::set<int> usedVoices;
+      const auto tupletChords = findMappedTupletChords(tuplets);
 
       for (int i = 0; i != (int)tuplets.size(); ++i) {
             if (tuplets[i].chords.empty())
@@ -757,6 +779,16 @@ findBackTiedTuplets(const std::multimap<ReducedFraction, MidiChord> &chords,
                   int voice = chordIt->second.voice;
                   if (usedVoices.find(voice) != usedVoices.end())
                         continue;
+                              // don't make back tie to the chord in overlapping tuplet
+                  const auto tupletIt = tupletChords.find(&*chordIt);
+                  if (tupletIt != tupletChords.end()) {
+                        const auto onTime1 = tuplets[tupletIt->second].onTime;
+                        const auto endTime1 = onTime1 + tuplets[tupletIt->second].len;
+                        const auto onTime2 = tuplets[i].onTime;
+                        const auto endTime2 = onTime1 + tuplets[i].len;
+                        if (endTime1 > onTime2 && onTime1 < endTime2) // tuplet intersection
+                              continue;
+                        }
                   if (canTupletBeTied(tuplets[i], chordIt)) {
                         tiedTuplets.push_back({i, voice, &*chordIt});
                         usedVoices.insert(voice);
