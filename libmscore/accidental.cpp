@@ -55,14 +55,14 @@ static Acc accList[] = {
       Acc("sharp-slash3",        TRA("sharp-slash3"),        NATURAL, 0,    SymId::accidentalKucukMucennebSharp),
       Acc("sharp-slash4",        TRA("sharp-slash4"),        NATURAL, 150,  SymId::accidentalThreeQuartersSharp2),
 
-      Acc("sharp arrow up",      TRA("sharp arrow up"),      NATURAL, -50,  SymId::accidentalThreeQuartersSharpArrowUp),
-      Acc("sharp arrow down",    TRA("sharp arrow down"),    NATURAL, -150, SymId::accidentalQuarterSharpArrowDown),
+      Acc("sharp arrow up",      TRA("sharp arrow up"),      NATURAL, 150,  SymId::accidentalThreeQuartersSharpArrowUp),
+      Acc("sharp arrow down",    TRA("sharp arrow down"),    NATURAL, 50,   SymId::accidentalQuarterSharpArrowDown),
       Acc("sharp arrow both",    TRA("sharp arrow both"),    NATURAL, 0,    SymId::noSym), //TODO-smufl
-      Acc("flat arrow up",       TRA("flat arrow up"),       NATURAL, 50,   SymId::accidentalQuarterFlatArrowUp),
-      Acc("flat arrow down",     TRA("flat arrow down"),     NATURAL, -50,  SymId::accidentalThreeQuartersFlatArrowDown),
+      Acc("flat arrow up",       TRA("flat arrow up"),       NATURAL, -50,  SymId::accidentalQuarterFlatArrowUp),
+      Acc("flat arrow down",     TRA("flat arrow down"),     NATURAL, -150, SymId::accidentalThreeQuartersFlatArrowDown),
       Acc("flat arrow both",     TRA("flat arrow both"),     NATURAL, 0,    SymId::noSym), //TODO-smufl
       Acc("natural arrow up",    TRA("natural arrow up"),    NATURAL, 50,   SymId::accidentalQuarterSharpNaturalArrowUp),
-      Acc("natural arrow down",  TRA("natural arrow down"),  NATURAL, 150,  SymId::accidentalQuarterFlatNaturalArrowDown),
+      Acc("natural arrow down",  TRA("natural arrow down"),  NATURAL, -50,  SymId::accidentalQuarterFlatNaturalArrowDown),
       Acc("natural arrow both",  TRA("natural arrow both"),  NATURAL, 0,    SymId::noSym), //TODO-smufl
 
       Acc("sori",                TRA("sori"),                NATURAL, 50,   SymId::accidentalSori),
