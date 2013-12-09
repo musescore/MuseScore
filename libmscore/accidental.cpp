@@ -43,13 +43,12 @@ static Acc accList[] = {
       Acc("double flat",         TRA("double flat"),         FLAT2,   0,    SymId::accidentalDoubleFlat),
       Acc("natural",             TRA("natural"),             NATURAL, 0,    SymId::accidentalNatural),
 
-//TODO-smufl
       Acc("flat-slash",          TRA("flat-slash"),          NATURAL, -50,  SymId::accidentalBakiyeFlat),
       Acc("flat-slash2",         TRA("flat-slash2"),         NATURAL, 0,    SymId::accidentalBuyukMucennebFlat),
       Acc("mirrored-flat2",      TRA("mirrored-flat2"),      NATURAL, -150, SymId::accidentalThreeQuartersFlatCouper),
       Acc("mirrored-flat",       TRA("mirrored-flat"),       NATURAL, -50,  SymId::accidentalQuarterFlat4),
-      Acc("mirrored-flat-slash", TRA("mirrored-flat-slash"), NATURAL, 0,    SymId::noSym),
-      Acc("flat-flat-slash",     TRA("flat-flat-slash"),     NATURAL, -150, SymId::noSym),
+      Acc("mirrored-flat-slash", TRA("mirrored-flat-slash"), NATURAL, 0,    SymId::noSym), //TODO-smufl
+      Acc("flat-flat-slash",     TRA("flat-flat-slash"),     NATURAL, -150, SymId::noSym), //TODO-smufl
 
       Acc("sharp-slash",         TRA("sharp-slash"),         NATURAL, 50,   SymId::accidentalQuarterSharp4),
       Acc("sharp-slash2",        TRA("sharp-slash2"),        NATURAL, 0,    SymId::accidentalBuyukMucennebSharp),
@@ -58,13 +57,13 @@ static Acc accList[] = {
 
       Acc("sharp arrow up",      TRA("sharp arrow up"),      NATURAL, -50,  SymId::accidentalThreeQuartersSharpArrowUp),
       Acc("sharp arrow down",    TRA("sharp arrow down"),    NATURAL, -150, SymId::accidentalQuarterSharpArrowDown),
-      Acc("sharp arrow both",    TRA("sharp arrow both"),    NATURAL, 0,    SymId::noSym),
+      Acc("sharp arrow both",    TRA("sharp arrow both"),    NATURAL, 0,    SymId::noSym), //TODO-smufl
       Acc("flat arrow up",       TRA("flat arrow up"),       NATURAL, 50,   SymId::accidentalQuarterFlatArrowUp),
       Acc("flat arrow down",     TRA("flat arrow down"),     NATURAL, -50,  SymId::accidentalThreeQuartersFlatArrowDown),
-      Acc("flat arrow both",     TRA("flat arrow both"),     NATURAL, 0,    SymId::noSym),
+      Acc("flat arrow both",     TRA("flat arrow both"),     NATURAL, 0,    SymId::noSym), //TODO-smufl
       Acc("natural arrow up",    TRA("natural arrow up"),    NATURAL, 50,   SymId::accidentalQuarterSharpNaturalArrowUp),
       Acc("natural arrow down",  TRA("natural arrow down"),  NATURAL, 150,  SymId::accidentalQuarterFlatNaturalArrowDown),
-      Acc("natural arrow both",  TRA("natural arrow both"),  NATURAL, 0,    SymId::noSym),
+      Acc("natural arrow both",  TRA("natural arrow both"),  NATURAL, 0,    SymId::noSym), //TODO-smufl
 
       Acc("sori",                TRA("sori"),                NATURAL, 50,   SymId::accidentalSori),
       Acc("koron",               TRA("koron"),               NATURAL, -50,  SymId::accidentalKoron)
