@@ -1135,6 +1135,7 @@ void Harmony::render(const TextStyle* st)
 
             if (capoBassTpc != INVALID_TPC)
                   render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseLowerCase);
+
             render(")", x, y);
             }
 
