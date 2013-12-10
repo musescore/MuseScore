@@ -50,7 +50,7 @@
     "accidentalQuarterFlat4": {
         "codepoint": "U+E118"
     },
-    "accidentalThreeQuartersFlatCouper": {
+    "accidentalThreeQuartersFlat2": {
         "codepoint": "U+E117"
     },
     "accidentalThreeQuartersSharp2": {
@@ -62,6 +62,27 @@
     "accidentalSori": {
         "codepoint": "U+e1d4"
     },
+    "accidentalKucukMucennebSharp": {
+        "codepoint": "U+e111"
+    },
+    "accidentalThreeQuartersSharpArrowUp": {
+        "codepoint": "U+e1c1"
+    },
+    "accidentalQuarterSharpArrowDown": {
+        "codepoint": "U+e1c2"
+    },
+    "accidentalQuarterFlatArrowUp": {
+        "codepoint": "U+e1bb"
+    },
+    "accidentalThreeQuartersFlatArrowDown": {
+        "codepoint": "U+e1bc"
+    },
+    "accidentalQuarterSharpNaturalArrowUp": {
+        "codepoint": "U+e1be"
+    },
+    "accidentalQuarterFlatNaturalArrowDown": {
+        "codepoint": "U+e1bf"
+    },                    
     "arrowheadBlackDown": {
         "codepoint": "U+E126"
     },
