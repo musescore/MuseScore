@@ -251,32 +251,36 @@ void Image::draw(QPainter* painter) const
                   svgDoc->render(painter, bbox());
             }
       else if (imageType == IMAGE_RASTER) {
-            painter->save();
-            QSizeF s;
-            if (_sizeIsSpatium)
-                  s = _size * spatium();
-            else
-                  s = _size * MScore::DPMM;
-            if (score()->printing()) {
-                  // use original image size for printing
-                  painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
-                  painter->drawPixmap(QPointF(0, 0), QPixmap::fromImage(*rasterDoc));
-                  }
+            if (rasterDoc == nullptr)
+                  emptyImage = true;
             else {
-                  QTransform t = painter->transform();
-                  QSize ss = QSizeF(s.width() * t.m11(), s.height() * t.m22()).toSize();
-                  t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
-                  painter->setWorldTransform(t);
-                  if ((buffer.size() != ss || _dirty) && rasterDoc && !rasterDoc->isNull()) {
-                        buffer = QPixmap::fromImage(rasterDoc->scaled(ss, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-                        _dirty = false;
-                        }
-                  if (buffer.isNull())
-                        emptyImage = true;
+                  painter->save();
+                  QSizeF s;
+                  if (_sizeIsSpatium)
+                        s = _size * spatium();
                   else
-                        painter->drawPixmap(QPointF(0.0, 0.0), buffer);
+                        s = _size * MScore::DPMM;
+                  if (score()->printing()) {
+                        // use original image size for printing
+                        painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
+                        painter->drawPixmap(QPointF(0, 0), QPixmap::fromImage(*rasterDoc));
+                        }
+                  else {
+                        QTransform t = painter->transform();
+                        QSize ss = QSizeF(s.width() * t.m11(), s.height() * t.m22()).toSize();
+                        t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
+                        painter->setWorldTransform(t);
+                        if ((buffer.size() != ss || _dirty) && rasterDoc && !rasterDoc->isNull()) {
+                              buffer = QPixmap::fromImage(rasterDoc->scaled(ss, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                              _dirty = false;
+                              }
+                        if (buffer.isNull())
+                              emptyImage = true;
+                        else
+                              painter->drawPixmap(QPointF(0.0, 0.0), buffer);
+                        }
+                  painter->restore();
                   }
-            painter->restore();
             }
       if (emptyImage) {
             painter->setBrush(Qt::NoBrush);
