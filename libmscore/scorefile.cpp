@@ -643,6 +643,14 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       if (rootfile.isEmpty())
             return FILE_NO_ROOTFILE;
 
+      //
+      // load images
+      //
+      foreach(const QString& s, sl) {
+            QByteArray dbuf = uz.fileData(s);
+            imageStore.add(s, dbuf);
+            }
+
       QByteArray dbuf = uz.fileData(rootfile);
       if (dbuf.isEmpty()) {
 //            qDebug("root file <%s> is empty", qPrintable(rootfile));

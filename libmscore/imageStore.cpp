@@ -156,6 +156,9 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
                   }
             qDebug("ImageStore::getImage(%s): bad base name <%s>",
                qPrintable(path), qPrintable(s));
+            for (ImageStoreItem* item : *this)
+                  qDebug("    in store: <%s>", qPrintable(item->path()));
+
             return 0;
             }
       QByteArray hash(16, 0);
