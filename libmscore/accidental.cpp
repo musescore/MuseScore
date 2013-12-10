@@ -45,7 +45,7 @@ static Acc accList[] = {
 
       Acc("flat-slash",          TRA("flat-slash"),          NATURAL, -50,  SymId::accidentalBakiyeFlat),
       Acc("flat-slash2",         TRA("flat-slash2"),         NATURAL, 0,    SymId::accidentalBuyukMucennebFlat),
-      Acc("mirrored-flat2",      TRA("mirrored-flat2"),      NATURAL, -150, SymId::accidentalThreeQuartersFlatCouper),
+      Acc("mirrored-flat2",      TRA("mirrored-flat2"),      NATURAL, -150, SymId::accidentalThreeQuartersFlat2),
       Acc("mirrored-flat",       TRA("mirrored-flat"),       NATURAL, -50,  SymId::accidentalQuarterFlat4),
       Acc("mirrored-flat-slash", TRA("mirrored-flat-slash"), NATURAL, 0,    SymId::noSym), //TODO-smufl
       Acc("flat-flat-slash",     TRA("flat-flat-slash"),     NATURAL, -150, SymId::noSym), //TODO-smufl
