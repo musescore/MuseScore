@@ -524,6 +524,8 @@ void Seq::processMessages()
             switch(msg.id) {
                   case SEQ_TEMPO_CHANGE:
                         {
+                        if (!cs)
+                              continue;
                         if (playTime != 0) {
                               int tick = cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate));
                               cs->tempomap()->setRelTempo(msg.realVal);
