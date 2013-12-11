@@ -714,14 +714,8 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
             else {
                   if(seg != firstSegment || !keepChord)
                         undoRemoveElement(cr);
-                  if (seg->isEmpty() && seg != firstSegment)
+                  if (seg != firstSegment && seg->isEmpty() && seg->annotations().size() == 0)
                         undoRemoveElement(seg);
-                  else if (seg != firstSegment) {     // keep _all_ annotations on first segment?
-                        foreach(Element* e, seg->annotations()) {
-                              if (e->track() == cr->track())
-                                    undoRemoveElement(e);
-                              }
-                        }
                   }
             nextTick += td.ticks();
             if (sd < td) {
