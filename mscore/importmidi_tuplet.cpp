@@ -387,7 +387,11 @@ validateTuplets(std::list<int> &indexes,
                              sumLengthOfRests, sumNoteCount);
       }
 
-// try different permutations of tuplet indexes to minimize error
+// Try different permutations of tuplets (as indexes) to minimize quantization error.
+// Because one tuplet can use the same chord as another tuplet -
+// the tuplet order is important: once we choose the tuplet,
+// we mark all its chords as "used", so next tuplets that use these chords
+// will be discarded
 
 std::list<int>
 minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
@@ -404,13 +408,15 @@ minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
       const int PERMUTATION_LIMIT = 50000;
       int counter = 0;
       do {
+                        // create a list of all tuplet indexes,
+                        // the order of them is set by the current permutation
             std::list<int> indexesToValidate;
             for (const auto &i: iIndexGroups) {
                   const auto &group = indexGroups[i];
                   for (const auto &ii: group)
                         indexesToValidate.push_back(ii);
                   }
-
+                        // note: redundant indexes of indexesToValidate are erased here!
             const auto result = validateTuplets(indexesToValidate, tuplets);
             if (counter == 0) {
                   minResult = result;
