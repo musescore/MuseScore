@@ -1732,7 +1732,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
       undoRemoveElement(cr);
       if (clearSegment) {
             Segment* seg = cr->segment();
-            if (seg->isEmpty())
+            if (seg->isEmpty() && seg->annotations().size() == 0)
                   undoRemoveElement(seg);
             }
       if (cr->beam()) {
