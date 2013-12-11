@@ -738,7 +738,7 @@ Measure* System::firstMeasure() const
       {
       if (ml.isEmpty())
             return 0;
-      for (MeasureBase* mb = ml.front(); mb; mb = mb->next()) {
+      for (MeasureBase* mb = ml.front(); mb; mb = mb->nextMM()) {
             if (mb->type() != MEASURE)
                   continue;
             return static_cast<Measure*>(mb);
