@@ -941,7 +941,7 @@ void Score::undoAddElement(Element* element)
                   if (staff->rstaff() != ostaff->rstaff()) {
                         switch (element->type()) {
                               // exclude certain element types except on corresponding staff in part
-                              // these should be same list excluded in cloneStaff()
+                              // this should be same list excluded in cloneStaff()
                               case Element::STAFF_TEXT:
                               case Element::HARMONY:
                                     continue;
@@ -1020,7 +1020,7 @@ void Score::undoAddElement(Element* element)
                   Segment* segment = static_cast<Segment*>(element->parent());
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
+                  Segment* seg     = m->undoGetSegment(Segment::SegChordRest, tick);
                   int ntrack       = staffIdx * VOICES + element->voice();
                   ne->setTrack(ntrack);
                   ne->setParent(seg);
