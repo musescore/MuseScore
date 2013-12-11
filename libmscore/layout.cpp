@@ -1621,9 +1621,9 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                               // if measure is not the first in the system, the clef at
                               // measure start has to be moved to the end of the previous measure
                               //
-                              if (s->firstMeasure() != m && seg->tick() == m->tick()) {
+                              Measure* pm = m->prevMeasure();
+                              if (pm && seg->tick() == m->tick()) {
                                     undoRemoveElement(el);
-                                    Measure* pm = m->prevMeasure();
                                     Segment* s = pm->undoGetSegment(Segment::SegClef, m->tick());
                                     Clef* nc = clef->clone();
                                     nc->setParent(s);
