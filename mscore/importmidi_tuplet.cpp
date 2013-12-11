@@ -387,6 +387,57 @@ validateTuplets(std::list<int> &indexes,
                              sumLengthOfRests, sumNoteCount);
       }
 
+//----------------------------------------------------------------------------------------
+// DEBUG function
+
+bool validateSelectedTuplets(const std::list<int> &bestIndexes,
+                             const std::vector<TupletInfo> &tuplets)
+      {
+      {
+                  // chord IDs of already used chords
+      std::set<std::pair<const ReducedFraction, MidiChord> *> usedChords;
+      for (int i: bestIndexes) {
+            const auto &chords = tuplets[i].chords;
+            for (auto it = chords.begin(); it != chords.end(); ++it) {
+                  if (usedChords.find(&*(it->second)) == usedChords.end())
+                        usedChords.insert(&*(it->second));
+                  else if (!(tuplets[i].firstChordIndex == 0 && it == chords.begin()))
+                        return false;
+                  }
+            }
+      }
+      {
+      const auto operations = preferences.midiImportOperations.currentTrackOperations();
+                  // structure of map: <chord ID, count of use of first tuplet chord with this tick>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
+      for (int i: bestIndexes) {
+            if (tuplets[i].firstChordIndex != 0)
+                  continue;
+            const auto &tupletChord = *tuplets[i].chords.begin();
+            const auto ii = usedFirstTupletNotes.find(&*tupletChord.second);
+            if (ii != usedFirstTupletNotes.end()) {
+                  if (!operations.useMultipleVoices && ii->second > 1) {
+                        return false;
+                        }
+                  else if (ii->second >= tupletChord.second->second.notes.size()
+                           || ii->second >= VOICES - 1) {
+                                    // need to choose next tuplet candidate - no more available voices
+                                    // one voice is reserved for non-tuplet chords
+                        return false;
+                        }
+                  else
+                        ++(ii->second);      // increase chord note counter
+                  }
+            else {
+                  usedFirstTupletNotes.insert({&*tupletChord.second, 1}).first;
+                  }
+            }
+      }
+      return true;
+      }
+
+//----------------------------------------------------------------------------------------
+
 // Try different permutations of tuplets (as indexes) to minimize quantization error.
 // Because one tuplet can use the same chord as another tuplet -
 // the tuplet order is important: once we choose the tuplet,
@@ -429,6 +480,9 @@ minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
             ++counter;
             } while (counter < PERMUTATION_LIMIT &&
                      std::next_permutation(iIndexGroups.begin(), iIndexGroups.end()));
+
+      Q_ASSERT_X(validateSelectedTuplets(bestIndexes, tuplets),
+                 "MIDI tuplets: minimizeQuantError", "Tuplets have common chords but they shouldn't");
 
       return bestIndexes;
       }
