@@ -938,6 +938,17 @@ void Score::undoAddElement(Element* element)
             if (staff == ostaff)
                   ne = element;
             else {
+                  if (staff->rstaff() != ostaff->rstaff()) {
+                        switch (element->type()) {
+                              // exclude certain element types except on corresponding staff in part
+                              // these should be same list excluded in cloneStaff()
+                              case Element::STAFF_TEXT:
+                              case Element::HARMONY:
+                                    continue;
+                              default:
+                                    break;
+                              }
+                        }
                   ne = element->linkedClone();
                   ne->setScore(score);
                   ne->setSelected(false);
