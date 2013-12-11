@@ -42,17 +42,16 @@ class TestMeasure : public QObject, public MTest
    private slots:
       void initTestCase();
 
-//      void insertMeasureMiddle();
-//      void insertMeasureBegin();
+      void insertMeasureMiddle();
+      void insertMeasureBegin();
       void insertMeasureEnd();
-/*      void spanner_a();
+      void spanner_a();
       void spanner_b();
       void spanner_A();
       void spanner_B();
       void spanner_C();
       void spanner_D();
       void minWidth();
-*/
       };
 
 //---------------------------------------------------------
@@ -63,7 +62,7 @@ void TestMeasure::initTestCase()
       {
       initMTest();
       }
-#if 0
+
 //---------------------------------------------------------
 ///   insertMeasureMiddle
 //---------------------------------------------------------
@@ -101,7 +100,6 @@ void TestMeasure::insertMeasureBegin()
       QVERIFY(saveCompareScore(score, "measure-2.mscx", DIR + "measure-2-ref.mscx"));
       delete score;
       }
-#endif
 
 //---------------------------------------------------------
 ///   insertMeasureEnd
@@ -120,14 +118,12 @@ void TestMeasure::insertMeasureEnd()
       QVERIFY(saveCompareScore(score, "measure-3.mscx", DIR + "measure-3-ref.mscx"));
       delete score;
       }
-#if 0
+
 //---------------------------------------------------------
 //   minWidth
 //---------------------------------------------------------
-
 void TestMeasure::minWidth()
       {
-#if 0 //TODO
       Score* score = readScore(DIR + "measure-2.mscx");
       score->doLayout();
       int n = score->systems()->size();
@@ -142,8 +138,8 @@ void TestMeasure::minWidth()
 
       score->doLayout();
 
-      //QCOMPARE(mw1, m1->minWidth1());
-      //QCOMPARE(mw2, m2->minWidth1());
+      QCOMPARE(mw1, m1->minWidth1());
+      QCOMPARE(mw2, m2->minWidth1());
 
       // after second layout nothing should be changed:
       for (int i = 0; i < n; ++i) {
@@ -151,9 +147,7 @@ void TestMeasure::minWidth()
                measuresSystem[i], score->systems()->at(i)->measures().size());
             QCOMPARE(measuresSystem[i], score->systems()->at(i)->measures().size());
             }
-#endif
       }
-
 //---------------------------------------------------------
 ///   spanner_a
 //
@@ -294,7 +288,7 @@ void TestMeasure::spanner_D()
       QVERIFY(saveCompareScore(score, "measure-9.mscx", DIR + "measure-9-ref.mscx"));
       delete score;
       }
-#endif
+
 
 QTEST_MAIN(TestMeasure)
 
