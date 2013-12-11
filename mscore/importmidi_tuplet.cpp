@@ -369,13 +369,13 @@ validateTuplets(std::list<int> &indexes,
       ReducedFraction sumLengthOfRests;
       int sumNoteCount = 0;
 
-      for (const auto &i: indexes) {
+      for (int i: indexes) {
             sumError += tuplets[i].tupletSumError;
             sumLengthOfRests += tuplets[i].sumLengthOfRests;
             sumNoteCount += tuplets[i].chords.size();
             }
                   // add quant error of all chords excluded from tuplets
-      for (const auto &i: indexes) {
+      for (int i: indexes) {
             for (const auto &chord: tuplets[i].chords)
                   excludedChords.erase(&*chord.second);
             }
@@ -856,11 +856,11 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                   }
             if (!removedIndexes.empty()) {
                   MidiChord newTupletChord;
-                  for (const auto &i: leavedIndexes)
+                  for (int i: leavedIndexes)
                         newTupletChord.notes.push_back(notes[i]);
 
                   QList<MidiNote> newNotes;
-                  for (const auto &i: removedIndexes)
+                  for (int i: removedIndexes)
                         newNotes.push_back(notes[i]);
                   notes = newNotes;
                   nonTuplets.push_back(firstChord->second);
