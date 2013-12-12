@@ -294,20 +294,17 @@ void markChordsAsUsed(std::map<std::pair<const ReducedFraction, MidiChord> *, in
       if (tupletChords.empty())
             return;
 
-      auto i = tupletChords.begin();
       if (firstChordIndex == 0) {
+            const auto i = tupletChords.begin();
                         // check is the note of the first tuplet chord in use
-            auto ii = usedFirstTupletNotes.find(&*(i->second));
+            const auto ii = usedFirstTupletNotes.find(&*(i->second));
             if (ii == usedFirstTupletNotes.end())
-                  ii = usedFirstTupletNotes.insert({&*(i->second), 1}).first;
+                  usedFirstTupletNotes.insert({&*(i->second), 1}).first;
             else
                   ++(ii->second);         // increase chord note counter
-            ++i;              // start from the second chord
             }
-      for ( ; i != tupletChords.end(); ++i) {
-                        // mark the chord as used
-            usedChords.insert(&*(i->second));
-            }
+      for (const auto &chord: tupletChords)
+            usedChords.insert(&*chord.second); // mark the chord as used
       }
 
 bool areTupletChordsInUse(
@@ -319,17 +316,16 @@ bool areTupletChordsInUse(
       if (tupletChords.empty())
             return false;
 
-      auto i = tupletChords.begin();
       if (firstChordIndex == 0) {
+            const auto i = tupletChords.begin();
                         // check are first tuplet notes all in use (1 note - 1 voice)
             const auto ii = usedFirstTupletNotes.find(&*(i->second));
             if (ii != usedFirstTupletNotes.end()) {
                   if (!isMoreVoicesAllowed(ii->second, i->second->second.notes.size()))
                         return true;
                   }
-            ++i;
             }
-      for ( ; i != tupletChords.end(); ++i) {
+      for (auto i = tupletChords.begin(); i != tupletChords.end(); ++i) {
             if (usedChords.find(&*(i->second)) != usedChords.end()
                         && !(firstChordIndex == 0 && i == tupletChords.begin())) {
                               // the chord note is in use - cannot use this chord again
