@@ -350,10 +350,13 @@ validateTuplets(std::list<int> &indexes,
                   // select tuplets with min average error
       for (auto it = indexes.begin(); it != indexes.end(); ) {
             const auto &tupletChords = tuplets[*it].chords;
-                        // check for chord notes that are already in use in another tuplets
-            if (tupletChords.empty()
-                        || areTupletChordsInUse(usedFirstTupletNotes, usedChords,
-                                                tupletChords, tuplets[*it].firstChordIndex)) {
+
+            Q_ASSERT_X(!tupletChords.empty(),
+                       "MIDI tuplets: validateTuplets", "Tuplet has no chords but it should");
+
+            // check for chord notes that are already in use in another tuplets
+            if (areTupletChordsInUse(usedFirstTupletNotes, usedChords,
+                                     tupletChords, tuplets[*it].firstChordIndex)) {
                   for (const auto &chord: tupletChords)
                         excludedChords.insert(&*chord.second);
                   it = indexes.erase(it);
