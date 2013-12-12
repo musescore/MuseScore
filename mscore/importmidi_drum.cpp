@@ -7,12 +7,40 @@
 #include "importmidi_tuplet.h"
 #include "libmscore/score.h"
 
+#include <set>
+
 
 namespace Ms {
 
 extern Preferences preferences;
 
 namespace MidiDrum {
+
+//----------------------------------------------------------------------------------------
+// DEBUG functions
+
+bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      std::set<ReducedFraction> onTimes;
+      for (const auto &chordEvent: chords) {
+            if (onTimes.find(chordEvent.first) == onTimes.end())
+                  onTimes.insert(chordEvent.first);
+            else
+                  return false;
+            }
+      return true;
+      }
+
+bool areVoicesNonZero(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      for (const auto &chordEvent: chords) {
+            if (chordEvent.second.voice != 0)
+                  return false;
+            }
+      return true;
+      }
+
+//----------------------------------------------------------------------------------------
 
 void splitDrumVoices(std::multimap<int, MTrack> &tracks)
       {
@@ -27,6 +55,13 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                               // all chords of drum track should have voice == 0
                               // because useMultipleVoices == false (see MidiImportOperations)
                               // also, all chords should have different onTime values
+
+            Q_ASSERT_X(areOnTimeValuesDifferent(chords),
+                       "MChord: splitDrumVoices", "onTime values of chords are equal "
+                                              "but should be different");
+            Q_ASSERT_X(areOnTimeValuesDifferent(chords),
+                       "MChord: splitDrumVoices", "All voices of drum track should be zero here");
+
             for (auto &chordEvent: chords) {
                   const auto &onTime = chordEvent.first;
                   auto &chord = chordEvent.second;
