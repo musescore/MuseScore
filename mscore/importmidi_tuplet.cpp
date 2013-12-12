@@ -272,6 +272,20 @@ TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
       return tupletInfo;
       }
 
+bool isMoreVoicesAllowed(int voicesInUse, int availableVoices)
+      {
+      const auto operations = preferences.midiImportOperations.currentTrackOperations();
+
+      if (!operations.useMultipleVoices && voicesInUse > 1)
+            return false;
+      if (voicesInUse >= availableVoices || voicesInUse >= VOICES - 1) {
+                        // need to choose next tuplet candidate - no more available voices
+                        // one voice is reserved for non-tuplet chords
+            return false;
+            }
+      return true;
+      }
+
 void markChordsAsUsed(std::map<std::pair<const ReducedFraction, MidiChord> *, int> &usedFirstTupletNotes,
                       std::set<std::pair<const ReducedFraction, MidiChord> *> &usedChords,
                       const std::map<ReducedFraction, std::multimap<ReducedFraction, MidiChord>::iterator> &tupletChords,
@@ -305,26 +319,19 @@ bool areTupletChordsInUse(
       if (tupletChords.empty())
             return false;
 
-      const auto operations = preferences.midiImportOperations.currentTrackOperations();
-
       auto i = tupletChords.begin();
       if (firstChordIndex == 0) {
                         // check are first tuplet notes all in use (1 note - 1 voice)
             const auto ii = usedFirstTupletNotes.find(&*(i->second));
             if (ii != usedFirstTupletNotes.end()) {
-                  if (!operations.useMultipleVoices && ii->second > 1)
+                  if (!isMoreVoicesAllowed(ii->second, i->second->second.notes.size()))
                         return true;
-                  else if (ii->second >= i->second->second.notes.size()
-                              || ii->second >= VOICES - 1) {
-                              // need to choose next tuplet candidate - no more available voices
-                              // one voice is reserved for non-tuplet chords
-                        return true;
-                        }
                   }
             ++i;
             }
       for ( ; i != tupletChords.end(); ++i) {
-            if (usedChords.find(&*(i->second)) != usedChords.end()) {
+            if (usedChords.find(&*(i->second)) != usedChords.end()
+                        && !(firstChordIndex == 0 && i == tupletChords.begin())) {
                               // the chord note is in use - cannot use this chord again
                   return true;
                   }
@@ -396,8 +403,7 @@ validateTuplets(std::list<int> &indexes,
 bool validateSelectedTuplets(const std::list<int> &bestIndexes,
                              const std::vector<TupletInfo> &tuplets)
       {
-      {
-                  // chord IDs of already used chords
+      {           // chord IDs of already used chords
       std::set<std::pair<const ReducedFraction, MidiChord> *> usedChords;
       for (int i: bestIndexes) {
             const auto &chords = tuplets[i].chords;
@@ -409,30 +415,21 @@ bool validateSelectedTuplets(const std::list<int> &bestIndexes,
                   }
             }
       }
-      {
-      const auto operations = preferences.midiImportOperations.currentTrackOperations();
-                  // structure of map: <chord ID, count of use of first tuplet chord with this tick>
+      {           // structure of map: <chord ID, count of use of first tuplet chord with this tick>
       std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
       for (int i: bestIndexes) {
             if (tuplets[i].firstChordIndex != 0)
                   continue;
             const auto &tupletChord = *tuplets[i].chords.begin();
             const auto ii = usedFirstTupletNotes.find(&*tupletChord.second);
-            if (ii != usedFirstTupletNotes.end()) {
-                  if (!operations.useMultipleVoices && ii->second > 1) {
-                        return false;
-                        }
-                  else if (ii->second >= tupletChord.second->second.notes.size()
-                           || ii->second >= VOICES - 1) {
-                                    // need to choose next tuplet candidate - no more available voices
-                                    // one voice is reserved for non-tuplet chords
-                        return false;
-                        }
-                  else
-                        ++(ii->second);      // increase chord note counter
+            if (ii == usedFirstTupletNotes.end()) {
+                  usedFirstTupletNotes.insert({&*tupletChord.second, 1}).first;
                   }
             else {
-                  usedFirstTupletNotes.insert({&*tupletChord.second, 1}).first;
+                  if (!isMoreVoicesAllowed(ii->second, tupletChord.second->second.notes.size()))
+                        return false;
+                  else
+                        ++(ii->second);      // increase chord note counter
                   }
             }
       }
