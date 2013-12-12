@@ -4,6 +4,8 @@
 #include "importmidi_clef.h"
 #include "libmscore/mscore.h"
 
+#include <set>
+
 
 namespace Ms {
 namespace MChord {
@@ -88,6 +90,22 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
             }
       }
 
+//----------------------------------------------------------------------------------------
+// DEBUG function
+
+bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      std::set<ReducedFraction> onTimes;
+      for (const auto &chordEvent: chords) {
+            if (onTimes.find(chordEvent.first) == onTimes.end())
+                  onTimes.insert(chordEvent.first);
+            else
+                  return false;
+            }
+      return true;
+      }
+
+//----------------------------------------------------------------------------------------
 
 // based on quickthresh algorithm
 //
@@ -160,6 +178,10 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                         }
                   ++it;
                   }
+
+            Q_ASSERT_X(areOnTimeValuesDifferent(chords),
+                       "MChord: collectChords", "onTime values of chords are equal "
+                                                "but should be different");
             }
       }
 
