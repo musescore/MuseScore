@@ -276,8 +276,9 @@ bool isMoreVoicesAllowed(int voicesInUse, int availableVoices)
       {
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
 
-      if (!operations.useMultipleVoices && voicesInUse > 1)
+      if (!operations.useMultipleVoices && voicesInUse >= 1)
             return false;
+                  // VOICES - 1 limit because one voice is reserved for non-tuplet chords
       if (voicesInUse >= availableVoices || voicesInUse >= VOICES - 1) {
                         // need to choose next tuplet candidate - no more available voices
                         // one voice is reserved for non-tuplet chords
