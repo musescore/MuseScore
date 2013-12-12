@@ -11,10 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      beam chordsymbol clef compat concertpitch copypaste copypastesymbollist dynamic element
-      hairpin join keysig layout link measure midi note plugins repeat split
-      splitstaff timesig tuplet
-      )
+set(TARGET tst_chordsymbol)
 
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 
