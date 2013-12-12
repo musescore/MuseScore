@@ -39,6 +39,8 @@ class TestChordSymbol : public QObject, public MTest {
       void initTestCase();
       void testExtend();
       void testClear();
+      void testAddLink();
+      void testAddPart();
       };
 
 //---------------------------------------------------------
@@ -78,6 +80,7 @@ void TestChordSymbol::testExtend()
       Segment* s = m->first(Segment::SegChordRest);
       ChordRest* cr = s->cr(0);
       score->changeCRlen(cr, TDuration::V_WHOLE);
+      score->doLayout();
       test_post(score, "extend");
       }
 
@@ -87,7 +90,36 @@ void TestChordSymbol::testClear()
       Measure* m = score->firstMeasure();
       score->select(m, SELECT_SINGLE, 0);
       score->cmdDeleteSelection();
+      score->doLayout();
       test_post(score, "clear");
+      }
+
+void TestChordSymbol::testAddLink()
+      {
+      Score* score = test_pre("add-link");
+      Segment* seg = score->firstSegment(Segment::SegChordRest);
+      ChordRest* cr = seg->cr(0);
+      Harmony* harmony = new Harmony(score);
+      harmony->setHarmony("C7");
+      harmony->setTrack(cr->track());
+      harmony->setParent(cr->segment());
+      score->undoAddElement(harmony);
+      score->doLayout();
+      test_post(score, "add-link");
+      }
+
+void TestChordSymbol::testAddPart()
+      {
+      Score* score = test_pre("add-part");
+      Segment* seg = score->firstSegment(Segment::SegChordRest);
+      ChordRest* cr = seg->cr(0);
+      Harmony* harmony = new Harmony(score);
+      harmony->setHarmony("C7");
+      harmony->setTrack(cr->track());
+      harmony->setParent(cr->segment());
+      score->undoAddElement(harmony);
+      score->doLayout();
+      test_post(score, "add-part");
       }
 
 QTEST_MAIN(TestChordSymbol)
