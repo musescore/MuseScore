@@ -1250,7 +1250,11 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                         }      // next tuplet type
                   }
             }
+
       filterTuplets(tuplets);
+
+      Q_ASSERT_X(doTupletChordsHaveSameVoice(tuplets),
+                 "MIDI tuplets: findTuplets", "Tuplet chords have different voices");
 
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
       addChordsBetweenTupletNotes(tuplets, nonTuplets);
