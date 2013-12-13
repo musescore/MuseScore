@@ -1080,6 +1080,20 @@ bool haveTupletsEmptyChords(const std::vector<TupletInfo> &tuplets)
       return false;
       }
 
+bool doTupletChordsHaveSameVoice(const std::vector<TupletInfo> &tuplets)
+      {
+      for (const auto &tuplet: tuplets) {
+            auto it = tuplet.chords.cbegin();
+            const int voice = it->second->second.voice;
+            ++it;
+            for ( ; it != tuplet.chords.cend(); ++it) {
+                  if (it->second->second.voice != voice)
+                        return false;
+                  }
+            }
+      return true;
+      }
+
 // back tied tuplets are not checked here
 
 bool areTupletVoicesOk(const std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
@@ -1159,6 +1173,8 @@ void assignVoices(std::multimap<ReducedFraction, MidiChord> &chords,
 
       Q_ASSERT_X(!haveTupletsEmptyChords(tuplets),
                  "MIDI tuplets: assignVoices", "Empty tuplet chords");
+      Q_ASSERT_X(doTupletChordsHaveSameVoice(tuplets),
+                 "MIDI tuplets: assignVoices", "Tuplet chords have different voices");
       Q_ASSERT_X(areTupletVoicesOk(nonTuplets, tuplets, regularRaster, tiedTuplets),
                  "MIDI tuplets: assignVoices", "Overlapping tuplets of the same voice");
       }
