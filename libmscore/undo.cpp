@@ -944,6 +944,9 @@ void Score::undoAddElement(Element* element)
                               // this should be same list excluded in cloneStaff()
                               case Element::STAFF_TEXT:
                               case Element::HARMONY:
+                              case Element::FIGURED_BASS:
+                              case Element::LYRICS:
+                              case Element::DYNAMIC:
                                     continue;
                               default:
                                     break;

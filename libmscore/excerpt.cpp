@@ -409,6 +409,9 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           // this should be same list excluded in Score::undoAddElement()
                                           case Element::STAFF_TEXT:
                                           case Element::HARMONY:
+                                          case Element::FIGURED_BASS:
+                                          case Element::LYRICS:
+                                          case Element::DYNAMIC:
                                                 continue;
                                           default:
                                                 Element* ne = e->clone();
