@@ -229,8 +229,7 @@ ReducedFraction findOptimalNoteLen(const std::multimap<ReducedFraction, MidiChor
       auto barEnd = endOfBarForTick(onTime, sigmap);
                   // let's find new offTime = min(next chord onTime, barEnd)
       auto offTime = barEnd;
-      auto next = chordIt;
-      ++next;
+      auto next = std::next(chordIt);
       while (next != chords.end()) {
             if (next->first > barEnd)
                   break;
