@@ -61,8 +61,7 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                   auto &firstChord = it->second;
                   const auto &firstOnTime = it->first;
                   for (auto &note1: firstChord.notes) {
-                        auto ii = it;
-                        ++ii;
+                        auto ii = std::next(it);
                         for (; ii != chords.end(); ++ii) {
                               auto &secondChord = ii->second;
                               const auto &secondOnTime = ii->first;
@@ -75,8 +74,7 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                                            firstOnTime.ticks(), note1.len.ticks(),
                                            secondOnTime.ticks(), note2.len.ticks());
                                     note1.len = secondOnTime - firstOnTime;
-                                    ii = chords.end();
-                                    --ii;
+                                    ii = std::prev(chords.end());
                                     break;
                                     }
                               }
@@ -159,8 +157,7 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                               tol = note.len;
                         if (end - beg >= tol) {
                               // add current note to the previous chord
-                              auto prev = it;
-                              --prev;
+                              auto prev = std::prev(it);
                               prev->second.notes.push_back(note);
                               if (it->first >= startTime + curThreshTime - fudgeTime)
                                     curThreshTime += threshExtTime;

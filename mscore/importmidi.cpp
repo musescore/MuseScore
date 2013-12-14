@@ -756,8 +756,7 @@ void createTimeSignatures(Score *score)
 
             const bool pickupMeasure = preferences.midiImportOperations.currentTrackOperations().pickupMeasure;
             if (pickupMeasure && is == score->sigmap()->begin()) {
-                  auto next = is;
-                  ++next;
+                  auto next = std::next(is);
                   if (next != score->sigmap()->end()) {
                         Measure* mm = score->tick2measure(next->first);
                         if (m && mm && m == barFromIndex(score, 0) && mm == barFromIndex(score, 1)
