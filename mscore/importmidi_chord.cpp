@@ -64,6 +64,8 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                         auto ii = std::next(it);
                         for (; ii != chords.end(); ++ii) {
                               auto &secondChord = ii->second;
+                              if (firstChord.voice != secondChord.voice)
+                                    continue;
                               const auto &secondOnTime = ii->first;
                               for (auto &note2: secondChord.notes) {
                                     if (note2.pitch != note1.pitch)
