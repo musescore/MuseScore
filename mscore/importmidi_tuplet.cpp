@@ -1132,6 +1132,21 @@ bool areTupletVoicesOk(const std::list<std::multimap<ReducedFraction, MidiChord>
       return true;
       }
 
+bool doTupletsHaveCommonChords(const std::vector<TupletInfo> &tuplets)
+      {
+      if (tuplets.empty())
+            return false;
+      std::set<std::pair<const ReducedFraction, MidiChord> *> chordsI;
+      for (const auto &tuplet: tuplets) {
+            for (const auto &chord: tuplet.chords) {
+                  if (chordsI.find(&*chord.second) != chordsI.end())
+                        return true;
+                  chordsI.insert(&*chord.second);
+                  }
+            }
+      return false;
+      }
+
 //----------------------------------------------------------------------------------------
 
 void assignVoices(std::multimap<ReducedFraction, MidiChord> &chords,
@@ -1264,6 +1279,10 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
             splitFirstTupletChords(tuplets, chords);
             minimizeOffTimeError(tuplets, chords, nonTuplets);
             }
+
+      Q_ASSERT_X(!doTupletsHaveCommonChords(tuplets),
+                 "MIDI tuplets: findTuplets", "Tuplets have common chords but they shouldn't");
+
       assignVoices(chords, tuplets, nonTuplets, startBarTick, endBarTick, regularRaster);
 
       return convertToData(tuplets);
