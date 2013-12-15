@@ -57,8 +57,8 @@ InspectorNote::InspectorNote(QWidget* parent)
       for (unsigned i = 0; i < sizeof(heads)/sizeof(*heads); ++i)
             n.noteHeadGroup->setItemData(i, QVariant(int(heads[i])));
 
-      // noteHeadType starts at -1
-      for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i)
+      // noteHeadType starts at -1: correct values and count one item more (HEAD_AUTO)
+      for (int i = 0; i <= int(NoteHeadType::HEAD_TYPES); ++i)
             n.noteHeadType->setItemData(i, i-1);
 
       iList = {
