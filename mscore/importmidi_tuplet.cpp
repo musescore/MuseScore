@@ -777,6 +777,7 @@ void setTupletVoice(std::map<ReducedFraction, std::multimap<ReducedFraction, Mid
       for (auto &tupletChord: tupletChords) {
             MidiChord &midiChord = tupletChord.second->second;
             midiChord.voice = voice;
+            midiChord.isInTuplet = true;
             }
       }
 
@@ -1240,6 +1241,32 @@ std::vector<TupletData> convertToData(const std::vector<TupletInfo> &tuplets)
       return tupletsData;
       }
 
+// check is the chord is already in tuplet in prev bar or division
+// it's possible because we use (startDivTick - tol) as a start tick
+
+template <typename Iter>
+Iter findTupletFreeChord(const Iter &startChordIt,
+                         const Iter &endChordIt,
+                         const ReducedFraction &startDivTick)
+      {
+      auto result = startChordIt;
+      for (auto it = startChordIt; it != endChordIt && it->first < startDivTick; ++it) {
+            if (it->second.isInTuplet)
+                  result = std::next(it);
+            }
+      return result;
+      }
+
+void resetTupletVoices(std::vector<TupletInfo> &tuplets)
+      {
+      for (auto &tuplet: tuplets) {
+            for (auto &chord: tuplet.chords) {
+                  if (chord.second->second.voice != 0)
+                        chord.second->second.voice = 0;
+                  }
+            }
+      }
+
 std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                                     const ReducedFraction &endBarTick,
                                     const ReducedFraction &barFraction,
@@ -1251,12 +1278,13 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
       if (!operations.tuplets.doSearch)
             return std::vector<TupletData>();
       const auto tol = Quantize::fixedQuantRaster() / 2;
-      const auto startBarChordIt = MChord::findFirstChordInRange(startBarTick - tol, endBarTick,
-                                                                 chords.begin(), chords.end());
+      auto startBarChordIt = MChord::findFirstChordInRange(startBarTick - tol, endBarTick,
+                                                           chords.begin(), chords.end());
+      startBarChordIt = findTupletFreeChord(startBarChordIt, chords.end(), startBarTick);
       if (startBarChordIt == chords.end()) // no chords in this bar
             return std::vector<TupletData>();
 
-      const auto endBarChordIt = MChord::findEndChordInRange(endBarTick + tol,
+      const auto endBarChordIt = MChord::findEndChordInRange(endBarTick,
                                                              startBarChordIt, chords.end());
       const auto regularRaster = Quantize::findRegularQuantRaster(startBarChordIt, endBarChordIt,
                                                                   endBarTick);
@@ -1272,15 +1300,19 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                   const auto startDivTime = startBarTick + divLen * i;
                   const auto endDivTime = startBarTick + divLen * (i + 1);
                               // check which chords can be inside tuplet period
-                              // [startDivTime - quantValue, endDivTime + quantValue]
-                  const auto startDivChordIt = MChord::findFirstChordInRange(
-                                    startDivTime - regularRaster, endDivTime + regularRaster,
-                                    startBarChordIt, endBarChordIt);
+                              // [startDivTime - tol, endDivTime]
+                  auto startDivChordIt = MChord::findFirstChordInRange(startDivTime - tol, endDivTime,
+                                                                       startBarChordIt, endBarChordIt);
+                  startDivChordIt = findTupletFreeChord(startDivChordIt, endBarChordIt, startDivTime);
                   if (startDivChordIt == endBarChordIt)
                         continue;
+
+                  Q_ASSERT_X(startDivChordIt->second.isInTuplet == false,
+                             "MIDI tuplets: findTuplets", "Voice of the chord has been already set");
+
                               // end iterator, as usual, will point to the next - invalid chord
                   const auto endDivChordIt = MChord::findEndChordInRange(
-                                 endDivTime + regularRaster, startDivChordIt, endBarChordIt);
+                                 endDivTime, startDivChordIt, endBarChordIt);
                               // try different tuplets, nested tuplets are not allowed
                   for (const auto &tupletNumber: tupletNumbers) {
                         const auto tupletNoteLen = divLen / tupletNumber;
@@ -1298,9 +1330,7 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
             }
 
       filterTuplets(tuplets);
-
-      Q_ASSERT_X(doTupletChordsHaveSameVoice(tuplets),
-                 "MIDI tuplets: findTuplets", "Tuplet chords have different voices");
+      resetTupletVoices(tuplets);  // because of tol some chords may have non-zero voices
 
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
       addChordsBetweenTupletNotes(tuplets, nonTuplets);

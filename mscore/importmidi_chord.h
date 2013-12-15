@@ -19,6 +19,7 @@ class MidiNote {
 class MidiChord {
    public:
       int voice = 0;
+      bool isInTuplet = false;
       QList<MidiNote> notes;
       };
 
