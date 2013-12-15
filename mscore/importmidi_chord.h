@@ -50,7 +50,7 @@ Iter findEndChordInRange(const ReducedFraction &endRangeTick,
       {
       auto it = startChordIt;
       for (; it != endChordIt; ++it) {
-            if (it->first > endRangeTick)
+            if (it->first >= endRangeTick)
                   break;
             }
       return it;
