@@ -404,10 +404,21 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           continue;
                                     if (e->track() != srcTrack)
                                           continue;
-                                    Element* ne = e->clone();
-                                    ne->setTrack(dstTrack);
-                                    ne->setParent(seg);
-                                    score->undoAddElement(ne);
+                                    switch (e->type()) {
+                                          // exclude certain element types
+                                          // this should be same list excluded in Score::undoAddElement()
+                                          case Element::STAFF_TEXT:
+                                          case Element::HARMONY:
+                                          case Element::FIGURED_BASS:
+                                          case Element::LYRICS:
+                                          case Element::DYNAMIC:
+                                                continue;
+                                          default:
+                                                Element* ne = e->clone();
+                                                ne->setTrack(dstTrack);
+                                                ne->setParent(seg);
+                                                score->undoAddElement(ne);
+                                          }
                                     }
                               if (oe->type() == Element::CHORD) {
                                     Chord* och = static_cast<Chord*>(ocr);
