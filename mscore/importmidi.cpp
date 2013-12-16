@@ -756,8 +756,7 @@ void createTimeSignatures(Score *score)
 
             const bool pickupMeasure = preferences.midiImportOperations.currentTrackOperations().pickupMeasure;
             if (pickupMeasure && is == score->sigmap()->begin()) {
-                  auto next = is;
-                  ++next;
+                  auto next = std::next(is);
                   if (next != score->sigmap()->end()) {
                         Measure* mm = score->tick2measure(next->first);
                         if (m && mm && m == barFromIndex(score, 0) && mm == barFromIndex(score, 1)
@@ -859,11 +858,12 @@ void convertMidi(Score *score, const MidiFile *mf)
       auto *sigmap = score->sigmap();
 
       auto tracks = createMTrackList(lastTick, sigmap, mf);
-      MChord::collectChords(tracks);
       cleanUpMidiEvents(tracks);
+      MChord::collectChords(tracks);
       MChord::removeOverlappingNotes(tracks);
       quantizeAllTracks(tracks, sigmap, lastTick);
       MChord::removeOverlappingNotes(tracks);
+      MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
       LRHand::splitIntoLeftRightHands(tracks);
       MidiDrum::splitDrumVoices(tracks);
       MidiDrum::splitDrumTracks(tracks);

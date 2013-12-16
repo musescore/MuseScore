@@ -7,12 +7,40 @@
 #include "importmidi_tuplet.h"
 #include "libmscore/score.h"
 
+#include <set>
+
 
 namespace Ms {
 
 extern Preferences preferences;
 
 namespace MidiDrum {
+
+//----------------------------------------------------------------------------------------
+// DEBUG functions
+
+bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      std::set<ReducedFraction> onTimes;
+      for (const auto &chordEvent: chords) {
+            if (onTimes.find(chordEvent.first) == onTimes.end())
+                  onTimes.insert(chordEvent.first);
+            else
+                  return false;
+            }
+      return true;
+      }
+
+bool areVoicesNonZero(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      for (const auto &chordEvent: chords) {
+            if (chordEvent.second.voice != 0)
+                  return false;
+            }
+      return true;
+      }
+
+//----------------------------------------------------------------------------------------
 
 void splitDrumVoices(std::multimap<int, MTrack> &tracks)
       {
@@ -23,9 +51,17 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
             const Drumset* const drumset = track.mtrack->drumTrack() ? smDrumset : 0;
             if (!drumset)
                   continue;
+            bool changed = false;
                               // all chords of drum track should have voice == 0
                               // because useMultipleVoices == false (see MidiImportOperations)
                               // also, all chords should have different onTime values
+
+            Q_ASSERT_X(areOnTimeValuesDifferent(chords),
+                       "MChord: splitDrumVoices", "onTime values of chords are equal "
+                                              "but should be different");
+            Q_ASSERT_X(areOnTimeValuesDifferent(chords),
+                       "MChord: splitDrumVoices", "All voices of drum track should be zero here");
+
             for (auto &chordEvent: chords) {
                   const auto &onTime = chordEvent.first;
                   auto &chord = chordEvent.second;
@@ -49,15 +85,12 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                         if (tupletIt != track.tuplets.end()
                                     && newTupletIt == track.tuplets.end()) {
                               if (notes.isEmpty()) {
-                                                // small C++11 hack: remove constness of const_iterator
-                                    auto nonConstIt = track.tuplets.erase(tupletIt, tupletIt);
-                                    nonConstIt->second.voice = newChord.voice;
+                                    if (!changed)
+                                          changed = true;   // check for empty tuplets later
                                     }
-                              else {
-                                    MidiTuplet::TupletData newTupletData = tupletIt->second;
-                                    newTupletData.voice = newChord.voice;
-                                    track.tuplets.insert({tupletIt->first, newTupletData});
-                                    }
+                              MidiTuplet::TupletData newTupletData = tupletIt->second;
+                              newTupletData.voice = newChord.voice;
+                              track.tuplets.insert({tupletIt->first, newTupletData});
                               }
                         if (notes.isEmpty())
                               chord = newChord;
@@ -67,6 +100,9 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                   }
             for (const auto &event: newChordEvents)
                   chords.insert(event);
+
+            if (changed)
+                  MidiTuplet::removeEmptyTuplets(track);
             }
       }
 
@@ -193,8 +229,7 @@ ReducedFraction findOptimalNoteLen(const std::multimap<ReducedFraction, MidiChor
       auto barEnd = endOfBarForTick(onTime, sigmap);
                   // let's find new offTime = min(next chord onTime, barEnd)
       auto offTime = barEnd;
-      auto next = chordIt;
-      ++next;
+      auto next = std::next(chordIt);
       while (next != chords.end()) {
             if (next->first > barEnd)
                   break;

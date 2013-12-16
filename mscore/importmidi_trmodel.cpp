@@ -528,19 +528,9 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int r
                   result = true;
                   }
             else if (index.column() == TrackCol::LYRICS && role == Qt::EditRole) {
-                  int lyricIndex = value.toInt() - 1;
-                              // reset another tracks with this index
-                  for (int i = 0; i != tracksData_.size(); ++i) {
-                        if (tracksData_[i].opers.lyricTrackIndex == lyricIndex) {
-                              tracksData_[i].opers.lyricTrackIndex = -1;
-                              const auto idx = this->index(rowFromTrackIndex(i), TrackCol::LYRICS);
-                              emit dataChanged(idx, idx);
-                              }
-                        }
-                  trackData->opers.lyricTrackIndex = lyricIndex;
+                  trackData->opers.lyricTrackIndex = value.toInt() - 1;
                   result = true;
                   }
-
             if (result) {
                               // update checkbox of current track row
                   emit dataChanged(index, index);

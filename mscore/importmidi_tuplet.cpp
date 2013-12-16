@@ -272,113 +272,138 @@ TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
       return tupletInfo;
       }
 
-void markChordsAsUsed(std::map<std::pair<const ReducedFraction, MidiChord> *, int> &usedFirstTupletNotes,
-                      std::set<std::pair<const ReducedFraction, MidiChord> *> &usedChords,
-                      const std::map<ReducedFraction, std::multimap<ReducedFraction, MidiChord>::iterator> &tupletChords,
-                      int firstChordIndex)
+bool isMoreVoicesAllowed(int voicesInUse, int availableVoices)
       {
-      if (tupletChords.empty())
+      const auto operations = preferences.midiImportOperations.currentTrackOperations();
+
+      if (!operations.useMultipleVoices && voicesInUse >= 1)
+            return false;
+                  // VOICES - 1 limit because one voice is reserved for non-tuplet chords
+      if (voicesInUse >= availableVoices || voicesInUse >= VOICES - 1) {
+                        // need to choose next tuplet candidate - no more available voices
+                        // one voice is reserved for non-tuplet chords
+            return false;
+            }
+      return true;
+      }
+
+bool isFirstTupletChord(
+            const TupletInfo &tuplet,
+            const std::map<ReducedFraction,
+                           std::multimap<ReducedFraction, MidiChord>::iterator>::const_iterator &it)
+      {
+      return tuplet.firstChordIndex == 0 && it == tuplet.chords.begin();
+      }
+
+void markChordsAsUsed(std::map<std::pair<const ReducedFraction, MidiChord> *, int> &usedFirstTupletNotes,
+                      std::map<std::pair<const ReducedFraction, MidiChord> *, bool> &usedChords,
+                      const TupletInfo &tuplet)
+      {
+      if (tuplet.chords.empty())
             return;
 
-      auto i = tupletChords.begin();
-      if (firstChordIndex == 0) {
+      if (tuplet.firstChordIndex == 0) {
+            const auto i = tuplet.chords.begin();
                         // check is the note of the first tuplet chord in use
-            auto ii = usedFirstTupletNotes.find(&*(i->second));
+            const auto ii = usedFirstTupletNotes.find(&*(i->second));
             if (ii == usedFirstTupletNotes.end())
-                  ii = usedFirstTupletNotes.insert({&*(i->second), 1}).first;
+                  usedFirstTupletNotes.insert({&*(i->second), 1}).first;
             else
                   ++(ii->second);         // increase chord note counter
-            ++i;              // start from the second chord
             }
-      for ( ; i != tupletChords.end(); ++i) {
-                        // mark the chord as used
-            usedChords.insert(&*(i->second));
+      for (auto it = tuplet.chords.begin(); it != tuplet.chords.end(); ++it) {
+            usedChords.insert({&*(it->second),
+                               isFirstTupletChord(tuplet, it)}); // mark the chord as used
             }
       }
 
 bool areTupletChordsInUse(
             const std::map<std::pair<const ReducedFraction, MidiChord> *, int> &usedFirstTupletNotes,
-            const std::set<std::pair<const ReducedFraction, MidiChord> *> &usedChords,
-            const std::map<ReducedFraction, std::multimap<ReducedFraction, MidiChord>::iterator> &tupletChords,
-            int firstChordIndex)
+            const std::map<std::pair<const ReducedFraction, MidiChord> *, bool> &usedChords,
+            const TupletInfo &tuplet)
       {
-      if (tupletChords.empty())
+      if (tuplet.chords.empty())
             return false;
 
-      const auto operations = preferences.midiImportOperations.currentTrackOperations();
-
-      auto i = tupletChords.begin();
-      if (firstChordIndex == 0) {
+      if (tuplet.firstChordIndex == 0) {
+            const auto i = tuplet.chords.begin();
                         // check are first tuplet notes all in use (1 note - 1 voice)
             const auto ii = usedFirstTupletNotes.find(&*(i->second));
             if (ii != usedFirstTupletNotes.end()) {
-                  if (!operations.useMultipleVoices && ii->second > 1)
+                  if (!isMoreVoicesAllowed(ii->second, i->second->second.notes.size()))
                         return true;
-                  else if (ii->second >= i->second->second.notes.size()
-                              || ii->second >= VOICES - 1) {
-                              // need to choose next tuplet candidate - no more available voices
-                              // one voice is reserved for non-tuplet chords
+                  }
+            }
+      for (auto i = tuplet.chords.begin(); i != tuplet.chords.end(); ++i) {
+            const auto fit = usedChords.find(&*(i->second));
+            if (fit != usedChords.end()) {
+                  if (!isFirstTupletChord(tuplet, i) || !fit->second) {
+                                    // the chord note is in use - cannot use this chord again
                         return true;
                         }
-                  }
-            ++i;
-            }
-      for ( ; i != tupletChords.end(); ++i) {
-            if (usedChords.find(&*(i->second)) != usedChords.end()) {
-                              // the chord note is in use - cannot use this chord again
-                  return true;
                   }
             }
       return false;
       }
+
+std::set<std::pair<const ReducedFraction, MidiChord> *>
+validateAndFindExcludedChords(std::list<int> &indexes,
+                              const std::vector<TupletInfo> &tuplets)
+{
+      std::set<std::pair<const ReducedFraction, MidiChord> *> excludedChords;
+
+                  // structure of map: <chord address, count of use of first tuplet chord with this tick>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
+                  // already used chords: <chord address, has chord index 0 in tuplet>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, bool> usedChords;
+
+                  // select tuplets with min average error
+      for (auto it = indexes.begin(); it != indexes.end(); ) {
+
+            Q_ASSERT_X(!tuplets[*it].chords.empty(),
+                       "MIDI tuplets: validateTuplets", "Tuplet has no chords but it should");
+
+            // check for chord notes that are already in use in another tuplets
+            if (areTupletChordsInUse(usedFirstTupletNotes, usedChords, tuplets[*it])) {
+                  for (const auto &chord: tuplets[*it].chords) {
+                        excludedChords.insert(&*chord.second);
+                        }
+                  it = indexes.erase(it);
+                  continue;
+                  }
+                        // we can use this tuplet
+            markChordsAsUsed(usedFirstTupletNotes, usedChords, tuplets[*it]);
+            ++it;
+            }
+
+      for (int i: indexes) {
+            for (const auto &chord: tuplets[i].chords)
+                  excludedChords.erase(&*chord.second);
+            }
+
+      return excludedChords;
+}
 
 // result: <average quant error,
 //          sum length of rests inside all tuplets,
 //          negative total tuplet note count>
 
 std::tuple<double, ReducedFraction, int>
-validateTuplets(std::list<int> &indexes,
-                const std::vector<TupletInfo> &tuplets)
+findTupletError(
+            const std::list<int> &indexes,
+            const std::vector<TupletInfo> &tuplets,
+            const std::set<std::pair<const ReducedFraction, MidiChord> *> &excludedChords)
       {
-      if (tuplets.empty())
-            return std::make_tuple(0.0, ReducedFraction(0, 1), 0);
-                  // structure of map: <chord ID, count of use of first tuplet chord with this tick>
-      std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
-                  // chord IDs of already used chords
-      std::set<std::pair<const ReducedFraction, MidiChord> *> usedChords;
-      std::set<std::pair<const ReducedFraction, MidiChord> *> excludedChords;
-                  // select tuplets with min average error
-      for (auto it = indexes.begin(); it != indexes.end(); ) {
-            const auto &tupletChords = tuplets[*it].chords;
-                        // check for chord notes that are already in use in another tuplets
-            if (tupletChords.empty()
-                        || areTupletChordsInUse(usedFirstTupletNotes, usedChords,
-                                                tupletChords, tuplets[*it].firstChordIndex)) {
-                  for (const auto &chord: tupletChords)
-                        excludedChords.insert(&*chord.second);
-                  it = indexes.erase(it);
-                  continue;
-                  }
-                        // we can use this tuplet
-            markChordsAsUsed(usedFirstTupletNotes, usedChords, tupletChords,
-                             tuplets[*it].firstChordIndex);
-            ++it;
-            }
-
       ReducedFraction sumError;
       ReducedFraction sumLengthOfRests;
       int sumNoteCount = 0;
 
-      for (const auto &i: indexes) {
+      for (int i: indexes) {
             sumError += tuplets[i].tupletSumError;
             sumLengthOfRests += tuplets[i].sumLengthOfRests;
             sumNoteCount += tuplets[i].chords.size();
             }
                   // add quant error of all chords excluded from tuplets
-      for (const auto &i: indexes) {
-            for (const auto &chord: tuplets[i].chords)
-                  excludedChords.erase(&*chord.second);
-            }
       const ReducedFraction &regularRaster = tuplets.front().regularQuant;
       for (const auto &chordIt: excludedChords)
             sumError += findQuantizationError(chordIt->first, regularRaster);
@@ -387,7 +412,65 @@ validateTuplets(std::list<int> &indexes,
                              sumLengthOfRests, sumNoteCount);
       }
 
-// try different permutations of tuplet indexes to minimize error
+std::tuple<double, ReducedFraction, int>
+validateTuplets(std::list<int> &indexes,
+                const std::vector<TupletInfo> &tuplets)
+      {
+      if (tuplets.empty())
+            return std::make_tuple(0.0, ReducedFraction(0, 1), 0);
+
+      const auto excludedChords = validateAndFindExcludedChords(indexes, tuplets);
+      return findTupletError(indexes, tuplets, excludedChords);
+      }
+
+//----------------------------------------------------------------------------------------
+// DEBUG function
+
+bool validateSelectedTuplets(const std::list<int> &bestIndexes,
+                             const std::vector<TupletInfo> &tuplets)
+      {
+      {           // <chord address of already used chords, has this chord index 0 in tuplet>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, bool> usedChords;
+      for (int i: bestIndexes) {
+            const auto &chords = tuplets[i].chords;
+            for (auto it = chords.begin(); it != chords.end(); ++it) {
+                  bool isFirstChord = isFirstTupletChord(tuplets[i], it);
+                  const auto fit = usedChords.find(&*(it->second));
+                  if (fit == usedChords.end())
+                        usedChords.insert({&*(it->second), isFirstChord});
+                  else if (!isFirstChord || !fit->second)
+                        return false;
+                  }
+            }
+      }
+      {           // structure of map: <chord address, count of use of first tuplet chord with this tick>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
+      for (int i: bestIndexes) {
+            if (tuplets[i].firstChordIndex != 0)
+                  continue;
+            const auto &tupletChord = *tuplets[i].chords.begin();
+            const auto ii = usedFirstTupletNotes.find(&*tupletChord.second);
+            if (ii == usedFirstTupletNotes.end()) {
+                  usedFirstTupletNotes.insert({&*tupletChord.second, 1}).first;
+                  }
+            else {
+                  if (!isMoreVoicesAllowed(ii->second, tupletChord.second->second.notes.size()))
+                        return false;
+                  else
+                        ++(ii->second);      // increase chord note counter
+                  }
+            }
+      }
+      return true;
+      }
+
+//----------------------------------------------------------------------------------------
+
+// Try different permutations of tuplets (as indexes) to minimize quantization error.
+// Because one tuplet can use the same chord as another tuplet -
+// the tuplet order is important: once we choose the tuplet,
+// we mark all its chords as "used", so next tuplets that use these chords
+// will be discarded
 
 std::list<int>
 minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
@@ -404,13 +487,15 @@ minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
       const int PERMUTATION_LIMIT = 50000;
       int counter = 0;
       do {
+                        // create a list of all tuplet indexes,
+                        // the order of them is set by the current permutation
             std::list<int> indexesToValidate;
             for (const auto &i: iIndexGroups) {
                   const auto &group = indexGroups[i];
                   for (const auto &ii: group)
                         indexesToValidate.push_back(ii);
                   }
-
+                        // note: redundant indexes of indexesToValidate are erased here!
             const auto result = validateTuplets(indexesToValidate, tuplets);
             if (counter == 0) {
                   minResult = result;
@@ -423,6 +508,9 @@ minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
             ++counter;
             } while (counter < PERMUTATION_LIMIT &&
                      std::next_permutation(iIndexGroups.begin(), iIndexGroups.end()));
+
+      Q_ASSERT_X(validateSelectedTuplets(bestIndexes, tuplets),
+                 "MIDI tuplets: minimizeQuantError", "Tuplets have common chords but they shouldn't");
 
       return bestIndexes;
       }
@@ -602,10 +690,8 @@ void sortTupletsByAveragePitch(std::vector<TupletInfo> &tuplets)
       std::sort(tuplets.begin(), tuplets.end(), averagePitchComparator);
       }
 
-std::list<std::multimap<ReducedFraction, MidiChord>::iterator>
-findNonTupletChords(const std::vector<TupletInfo> &tuplets,
-                    const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
-                    const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt)
+std::set<std::pair<const ReducedFraction, MidiChord> *>
+findTupletChords(const std::vector<TupletInfo> &tuplets)
       {
       std::set<std::pair<const ReducedFraction, MidiChord> *> tupletChords;
       for (const auto &tupletInfo: tuplets) {
@@ -614,6 +700,29 @@ findNonTupletChords(const std::vector<TupletInfo> &tuplets,
                   tupletChords.insert(&*tupletIt);
                   }
             }
+      return tupletChords;
+      }
+
+std::map<std::pair<const ReducedFraction, MidiChord> *, int>
+findMappedTupletChords(const std::vector<TupletInfo> &tuplets)
+      {
+                  // <chord address, tupletIndex>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, int> tupletChords;
+      for (int i = 0; i != (int)tuplets.size(); ++i) {
+            for (const auto &tupletChord: tuplets[i].chords) {
+                  auto tupletIt = tupletChord.second;
+                  tupletChords.insert({&*tupletIt, i});
+                  }
+            }
+      return tupletChords;
+      }
+
+std::list<std::multimap<ReducedFraction, MidiChord>::iterator>
+findNonTupletChords(const std::vector<TupletInfo> &tuplets,
+                    const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
+                    const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt)
+      {
+      const auto tupletChords = findTupletChords(tuplets);
       std::list<std::multimap<ReducedFraction, MidiChord>::iterator> nonTuplets;
       for (auto it = startBarChordIt; it != endBarChordIt; ++it) {
             if (tupletChords.find(&*it) == tupletChords.end())
@@ -668,6 +777,7 @@ void setTupletVoice(std::map<ReducedFraction, std::multimap<ReducedFraction, Mid
       for (auto &tupletChord: tupletChords) {
             MidiChord &midiChord = tupletChord.second->second;
             midiChord.voice = voice;
+            midiChord.isInTuplet = true;
             }
       }
 
@@ -747,6 +857,7 @@ findBackTiedTuplets(const std::multimap<ReducedFraction, MidiChord> &chords,
       {
       std::vector<TiedTuplet> tiedTuplets;
       std::set<int> usedVoices;
+      const auto tupletChords = findMappedTupletChords(tuplets);
 
       for (int i = 0; i != (int)tuplets.size(); ++i) {
             if (tuplets[i].chords.empty())
@@ -757,6 +868,16 @@ findBackTiedTuplets(const std::multimap<ReducedFraction, MidiChord> &chords,
                   int voice = chordIt->second.voice;
                   if (usedVoices.find(voice) != usedVoices.end())
                         continue;
+                              // don't make back tie to the chord in overlapping tuplet
+                  const auto tupletIt = tupletChords.find(&*chordIt);
+                  if (tupletIt != tupletChords.end()) {
+                        const auto onTime1 = tuplets[tupletIt->second].onTime;
+                        const auto endTime1 = onTime1 + tuplets[tupletIt->second].len;
+                        const auto onTime2 = tuplets[i].onTime;
+                        const auto endTime2 = onTime1 + tuplets[i].len;
+                        if (endTime1 > onTime2 && onTime1 < endTime2) // tuplet intersection
+                              continue;
+                        }
                   if (canTupletBeTied(tuplets[i], chordIt)) {
                         tiedTuplets.push_back({i, voice, &*chordIt});
                         usedVoices.insert(voice);
@@ -818,11 +939,11 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                   }
             if (!removedIndexes.empty()) {
                   MidiChord newTupletChord;
-                  for (const auto &i: leavedIndexes)
+                  for (int i: leavedIndexes)
                         newTupletChord.notes.push_back(notes[i]);
 
                   QList<MidiNote> newNotes;
-                  for (const auto &i: removedIndexes)
+                  for (int i: removedIndexes)
                         newNotes.push_back(notes[i]);
                   notes = newNotes;
                   nonTuplets.push_back(firstChord->second);
@@ -979,6 +1100,87 @@ void removeUnusedTuplets(std::vector<TupletInfo> &tuplets,
             }
       }
 
+//----------------------------------------------------------------------------------------
+// DEBUG functions
+
+bool haveTupletsEmptyChords(const std::vector<TupletInfo> &tuplets)
+      {
+      for (const auto &tuplet: tuplets) {
+            if (tuplet.chords.empty())
+                  return true;
+            }
+      return false;
+      }
+
+bool doTupletChordsHaveSameVoice(const std::vector<TupletInfo> &tuplets)
+      {
+      for (const auto &tuplet: tuplets) {
+            auto it = tuplet.chords.cbegin();
+            const int voice = it->second->second.voice;
+            ++it;
+            for ( ; it != tuplet.chords.cend(); ++it) {
+                  if (it->second->second.voice != voice)
+                        return false;
+                  }
+            }
+      return true;
+      }
+
+// back tied tuplets are not checked here
+
+bool areTupletVoicesOk(const std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
+                       const std::vector<TupletInfo> &tuplets,
+                       const ReducedFraction &regularRaster,
+                       const std::vector<TiedTuplet> &tiedTuplets)
+      {
+                  // <voice, intervals>
+      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> intervals;
+
+      for (const auto &tuplet: tuplets) {
+            const int voice = tuplet.chords.begin()->second->second.voice;
+            const auto interval = std::make_pair(tuplet.onTime, tuplet.onTime + tuplet.len);
+            if (haveIntersection(interval, intervals[voice]))
+                  return false;
+            else
+                  intervals[voice].push_back(interval);
+            }
+
+      for (const auto &chord: nonTuplets) {
+            const int voice = chord->second.voice;
+            const auto interval = chordInterval(&*chord, regularRaster);
+            if (haveIntersection(interval, intervals[voice])) {
+                  bool flag = false;      // if chord is tied then it can intersect tuplet
+                  for (const TiedTuplet &tiedTuplet: tiedTuplets) {
+                        if (tiedTuplet.chord == (&*chord) && tiedTuplet.voice == voice) {
+                              flag = true;
+                              break;
+                              }
+                        }
+                  if (!flag)
+                        return false;
+                  }
+            }
+
+      return true;
+      }
+
+bool doTupletsHaveCommonChords(const std::vector<TupletInfo> &tuplets)
+      {
+      if (tuplets.empty())
+            return false;
+      std::set<std::pair<const ReducedFraction, MidiChord> *> chordsI;
+      for (const auto &tuplet: tuplets) {
+            for (const auto &chord: tuplet.chords) {
+                  if (chordsI.find(&*chord.second) != chordsI.end())
+                        return true;
+                  chordsI.insert(&*chord.second);
+                  }
+            }
+      return false;
+      }
+
+//----------------------------------------------------------------------------------------
+
 void assignVoices(std::multimap<ReducedFraction, MidiChord> &chords,
                   std::vector<TupletInfo> &tuplets,
                   std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
@@ -1015,6 +1217,13 @@ void assignVoices(std::multimap<ReducedFraction, MidiChord> &chords,
       setTupletVoices(tuplets, intervals, pendingTuplets, regularRaster);
       setNonTupletVoices(pendingNonTuplets, intervals, regularRaster);
       removeUnusedTuplets(tuplets, pendingTuplets);
+
+      Q_ASSERT_X(!haveTupletsEmptyChords(tuplets),
+                 "MIDI tuplets: assignVoices", "Empty tuplet chords");
+      Q_ASSERT_X(doTupletChordsHaveSameVoice(tuplets),
+                 "MIDI tuplets: assignVoices", "Tuplet chords have different voices");
+      Q_ASSERT_X(areTupletVoicesOk(nonTuplets, tuplets, regularRaster, tiedTuplets),
+                 "MIDI tuplets: assignVoices", "Overlapping tuplets of the same voice");
       }
 
 std::vector<TupletData> convertToData(const std::vector<TupletInfo> &tuplets)
@@ -1032,6 +1241,32 @@ std::vector<TupletData> convertToData(const std::vector<TupletInfo> &tuplets)
       return tupletsData;
       }
 
+// check is the chord is already in tuplet in prev bar or division
+// it's possible because we use (startDivTick - tol) as a start tick
+
+template <typename Iter>
+Iter findTupletFreeChord(const Iter &startChordIt,
+                         const Iter &endChordIt,
+                         const ReducedFraction &startDivTick)
+      {
+      auto result = startChordIt;
+      for (auto it = startChordIt; it != endChordIt && it->first < startDivTick; ++it) {
+            if (it->second.isInTuplet)
+                  result = std::next(it);
+            }
+      return result;
+      }
+
+void resetTupletVoices(std::vector<TupletInfo> &tuplets)
+      {
+      for (auto &tuplet: tuplets) {
+            for (auto &chord: tuplet.chords) {
+                  if (chord.second->second.voice != 0)
+                        chord.second->second.voice = 0;
+                  }
+            }
+      }
+
 std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                                     const ReducedFraction &endBarTick,
                                     const ReducedFraction &barFraction,
@@ -1043,12 +1278,13 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
       if (!operations.tuplets.doSearch)
             return std::vector<TupletData>();
       const auto tol = Quantize::fixedQuantRaster() / 2;
-      const auto startBarChordIt = MChord::findFirstChordInRange(startBarTick - tol, endBarTick,
-                                                                 chords.begin(), chords.end());
+      auto startBarChordIt = MChord::findFirstChordInRange(startBarTick - tol, endBarTick,
+                                                           chords.begin(), chords.end());
+      startBarChordIt = findTupletFreeChord(startBarChordIt, chords.end(), startBarTick);
       if (startBarChordIt == chords.end()) // no chords in this bar
             return std::vector<TupletData>();
 
-      const auto endBarChordIt = MChord::findEndChordInRange(endBarTick + tol,
+      const auto endBarChordIt = MChord::findEndChordInRange(endBarTick,
                                                              startBarChordIt, chords.end());
       const auto regularRaster = Quantize::findRegularQuantRaster(startBarChordIt, endBarChordIt,
                                                                   endBarTick);
@@ -1064,15 +1300,19 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                   const auto startDivTime = startBarTick + divLen * i;
                   const auto endDivTime = startBarTick + divLen * (i + 1);
                               // check which chords can be inside tuplet period
-                              // [startDivTime - quantValue, endDivTime + quantValue]
-                  const auto startDivChordIt = MChord::findFirstChordInRange(
-                                    startDivTime - regularRaster, endDivTime + regularRaster,
-                                    startBarChordIt, endBarChordIt);
+                              // [startDivTime - tol, endDivTime]
+                  auto startDivChordIt = MChord::findFirstChordInRange(startDivTime - tol, endDivTime,
+                                                                       startBarChordIt, endBarChordIt);
+                  startDivChordIt = findTupletFreeChord(startDivChordIt, endBarChordIt, startDivTime);
                   if (startDivChordIt == endBarChordIt)
                         continue;
+
+                  Q_ASSERT_X(startDivChordIt->second.isInTuplet == false,
+                             "MIDI tuplets: findTuplets", "Voice of the chord has been already set");
+
                               // end iterator, as usual, will point to the next - invalid chord
                   const auto endDivChordIt = MChord::findEndChordInRange(
-                                 endDivTime + regularRaster, startDivChordIt, endBarChordIt);
+                                 endDivTime, startDivChordIt, endBarChordIt);
                               // try different tuplets, nested tuplets are not allowed
                   for (const auto &tupletNumber: tupletNumbers) {
                         const auto tupletNoteLen = divLen / tupletNumber;
@@ -1088,7 +1328,9 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                         }      // next tuplet type
                   }
             }
+
       filterTuplets(tuplets);
+      resetTupletVoices(tuplets);  // because of tol some chords may have non-zero voices
 
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
       addChordsBetweenTupletNotes(tuplets, nonTuplets);
@@ -1098,6 +1340,10 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
             splitFirstTupletChords(tuplets, chords);
             minimizeOffTimeError(tuplets, chords, nonTuplets);
             }
+
+      Q_ASSERT_X(!doTupletsHaveCommonChords(tuplets),
+                 "MIDI tuplets: findTuplets", "Tuplets have common chords but they shouldn't");
+
       assignVoices(chords, tuplets, nonTuplets, startBarTick, endBarTick, regularRaster);
 
       return convertToData(tuplets);
@@ -1114,7 +1360,7 @@ findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
             const auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
             const auto barFraction = ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
-                  const auto tuplets = findTuplets(startBarTick, endBarTick, barFraction, chords);
+            const auto tuplets = findTuplets(startBarTick, endBarTick, barFraction, chords);
             for (const auto &tupletData: tuplets)
                   tupletEvents.insert({tupletData.onTime, tupletData});
             if (endBarTick > lastTick)
