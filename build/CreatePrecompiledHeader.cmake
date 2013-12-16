@@ -1,4 +1,4 @@
-macro( precompiled_header includes header_name )
+macro( precompiled_header includes header_name build_pch)
     if( ${CMAKE_COMPILER_IS_GNUCXX})
         message(STATUS "precompiled header generation")
         # Get the compiler flags for this build type
@@ -29,18 +29,21 @@ macro( precompiled_header includes header_name )
         # Prepare the compile flags var for passing to GCC
         separate_arguments( compile_flags )
 
-        set (PCH ${PROJECT_BINARY_DIR}/${header_name}.h.gch)
         set (PCH_HEADER "${PROJECT_BINARY_DIR}/${header_name}.h")
         set (PCH_INCLUDE "-include ${PCH_HEADER}")
 
-        add_custom_command(
-         OUTPUT ${PROJECT_BINARY_DIR}/${header_name}.h.gch
-         COMMAND ${CMAKE_CXX_COMPILER}
-           -x c++-header -g  ${compile_flags} -o ${header_name}.h.gch ${header_name}.h
-         DEPENDS ${PROJECT_BINARY_DIR}/${header_name}.h
-         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-         VERBATIM
-         )
+        if( ${build_pch} )
+            set (PCH ${PROJECT_BINARY_DIR}/${header_name}.h.gch)
+            add_custom_command(
+             OUTPUT ${PROJECT_BINARY_DIR}/${header_name}.h.gch
+             COMMAND ${CMAKE_CXX_COMPILER} -x c++-header -g  ${compile_flags} -o ${header_name}.h.gch ${header_name}.h
+             DEPENDS ${PROJECT_BINARY_DIR}/${header_name}.h
+             WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+             VERBATIM
+             )
+        else ( ${build_pch} )
+            message(STATUS "No precompiled header")
+        endif( ${build_pch} )        
     endif()
 endmacro()
 

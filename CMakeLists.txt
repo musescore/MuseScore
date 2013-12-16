@@ -359,8 +359,12 @@ add_custom_command(
     DEPENDS ${PROJECT_SOURCE_DIR}/all.h
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     )
-
-precompiled_header(QT_INCLUDES all)
+if (MINGW)
+  set(BUILD_PCH false)
+else (MINGW)
+  set(BUILD_PCH true)
+endif(MINGW)
+precompiled_header(QT_INCLUDES all ${BUILD_PCH})
 ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
 ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 
