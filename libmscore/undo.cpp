@@ -938,6 +938,20 @@ void Score::undoAddElement(Element* element)
             if (staff == ostaff)
                   ne = element;
             else {
+                  if (staff->rstaff() != ostaff->rstaff()) {
+                        switch (element->type()) {
+                              // exclude certain element types except on corresponding staff in part
+                              // this should be same list excluded in cloneStaff()
+                              case Element::STAFF_TEXT:
+                              case Element::HARMONY:
+                              case Element::FIGURED_BASS:
+                              case Element::LYRICS:
+                              case Element::DYNAMIC:
+                                    continue;
+                              default:
+                                    break;
+                              }
+                        }
                   ne = element->linkedClone();
                   ne->setScore(score);
                   ne->setSelected(false);
@@ -1009,7 +1023,7 @@ void Score::undoAddElement(Element* element)
                   Segment* segment = static_cast<Segment*>(element->parent());
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
-                  Segment* seg     = m->findSegment(Segment::SegChordRest, tick);
+                  Segment* seg     = m->undoGetSegment(Segment::SegChordRest, tick);
                   int ntrack       = staffIdx * VOICES + element->voice();
                   ne->setTrack(ntrack);
                   ne->setParent(seg);
