@@ -19,6 +19,7 @@ class MidiNote {
 class MidiChord {
    public:
       int voice = 0;
+      bool isInTuplet = false;
       QList<MidiNote> notes;
       };
 
@@ -50,7 +51,7 @@ Iter findEndChordInRange(const ReducedFraction &endRangeTick,
       {
       auto it = startChordIt;
       for (; it != endChordIt; ++it) {
-            if (it->first > endRangeTick)
+            if (it->first >= endRangeTick)
                   break;
             }
       return it;
@@ -66,6 +67,7 @@ ReducedFraction findMinDuration(const QList<MidiChord> &midiChords,
 void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord> &chords);
 void collectChords(std::multimap<int, MTrack> &tracks);
 void removeOverlappingNotes(std::multimap<int, MTrack> &tracks);
+void mergeChordsWithEqualOnTimeAndVoice(std::multimap<int, MTrack> &tracks);
 void splitUnequalChords(std::multimap<int, MTrack> &tracks);
 
 } // namespace MChord
