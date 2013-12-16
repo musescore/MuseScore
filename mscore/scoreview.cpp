@@ -1969,7 +1969,6 @@ void ScoreView::zoom(qreal _mag, const QPointF& pos)
       update();
       }
 
-#if QT_VERSION < 0x050000
 //---------------------------------------------------------
 //   gestureEvent
 //---------------------------------------------------------
@@ -1992,7 +1991,6 @@ bool ScoreView::gestureEvent(QGestureEvent *event)
             }
       return true;
       }
-#endif
 
 //---------------------------------------------------------
 //   wheelEvent
@@ -3940,11 +3938,9 @@ bool ScoreView::event(QEvent* event)
             Element* e = static_cast<CloneEvent*>(event)->element();
             cloneElement(e);
             }
-#if QT_VERSION < 0x050000
       else if (event->type() == QEvent::Gesture) {
             return gestureEvent(static_cast<QGestureEvent*>(event));
             }
-#endif
       return QWidget::event(event);
       }
 
