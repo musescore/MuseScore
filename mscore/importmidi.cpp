@@ -852,6 +852,39 @@ QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
       return tracksMeta;
       }
 
+//----------------------------------------------------------------------------------------
+// DEBUG function
+
+bool doNotesOverlap(const std::multimap<int, MTrack> &tracks)
+      {
+      for (const auto &track: tracks) {
+            const auto &chords = track.second.chords;
+            for (auto it = chords.begin(); it != chords.end(); ++it) {
+                  const auto &firstChord = it->second;
+                  const auto &firstOnTime = it->first;
+                  for (const auto &note1: firstChord.notes) {
+                        auto ii = std::next(it);
+                        for (; ii != chords.end(); ++ii) {
+                              const auto &secondChord = ii->second;
+                              if (firstChord.voice != secondChord.voice)
+                                    continue;
+                              const auto &secondOnTime = ii->first;
+                              for (const auto &note2: secondChord.notes) {
+                                    if (note2.pitch != note1.pitch)
+                                          continue;
+                                    if (secondOnTime >= (firstOnTime + note1.len))
+                                          continue;
+                                    return true;
+                                    }
+                              }
+                        }
+                  } // for note1
+            }
+      return false;
+      }
+
+//----------------------------------------------------------------------------------------
+
 void convertMidi(Score *score, const MidiFile *mf)
       {
       ReducedFraction lastTick;
@@ -862,7 +895,10 @@ void convertMidi(Score *score, const MidiFile *mf)
       MChord::collectChords(tracks);
       MChord::removeOverlappingNotes(tracks);
       quantizeAllTracks(tracks, sigmap, lastTick);
-      MChord::removeOverlappingNotes(tracks);
+
+      Q_ASSERT_X(!doNotesOverlap(tracks),
+                 "convertMidi:", "There are overlapping notes of the same voice that is incorrect");
+
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
       LRHand::splitIntoLeftRightHands(tracks);
       MidiDrum::splitDrumVoices(tracks);
