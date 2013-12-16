@@ -141,6 +141,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QtConcurrent>
 #include <QScreen>
+#include <QGestureEvent>
 
 #include <QSvgRenderer>
 #include <QSvgGenerator>
