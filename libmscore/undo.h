@@ -476,6 +476,7 @@ class ChangeBarLineSpan : public UndoCommand {
 
 class ChangeSingleBarLineSpan : public UndoCommand {
       BarLine* barLine;
+      bool generated;
       int span;
       int spanFrom;
       int spanTo;

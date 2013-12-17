@@ -1994,6 +1994,7 @@ void ChangeBarLineSpan::flip()
 ChangeSingleBarLineSpan::ChangeSingleBarLineSpan(BarLine* _barLine, int _span, int _spanFrom, int _spanTo)
       {
       barLine     = _barLine;
+      generated   = false;          // customized bar lines are uncoditionally set as non-generated
       span        = _span;
       spanFrom    = _spanFrom;
       spanTo      = _spanTo;
@@ -2002,13 +2003,16 @@ ChangeSingleBarLineSpan::ChangeSingleBarLineSpan(BarLine* _barLine, int _span, i
 void ChangeSingleBarLineSpan::flip()
       {
       barLine->score()->addRefresh(barLine->abbox()); // area of this bar line needs redraw
+      bool ngenerated   = barLine->generated();
       int nspan         = barLine->span();
       int nspanFrom     = barLine->spanFrom();
       int nspanTo       = barLine->spanTo();
+      barLine->setGenerated(generated);
       barLine->setSpan(span);
       barLine->setSpanFrom(spanFrom);
       barLine->setSpanTo(spanTo);
       barLine->setCustomSpan(true);
+      generated   = ngenerated;
       span        = nspan;
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
