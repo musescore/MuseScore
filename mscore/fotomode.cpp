@@ -555,17 +555,17 @@ struct MenuEntry {
       };
 
 static const MenuEntry resizeEntry[4] {
-      { "Resize to A", "resizeA" },
-      { "Resize to B", "resizeB" },
-      { "Resize to C", "resizeC" },
-      { "Resize to D", "resizeD" }
+      { QT_TRANSLATE_NOOP("fotomode", "Resize to A"), "resizeA" },
+      { QT_TRANSLATE_NOOP("fotomode", "Resize to B"), "resizeB" },
+      { QT_TRANSLATE_NOOP("fotomode", "Resize to C"), "resizeC" },
+      { QT_TRANSLATE_NOOP("fotomode", "Resize to D"), "resizeD" }
       };
 
 static const MenuEntry setSizeEntry[4] {
-      { "Set size A", "setA" },
-      { "Set size B", "setB" },
-      { "Set size C", "setC" },
-      { "Set size D", "setD" }
+      { QT_TRANSLATE_NOOP("fotomode", "Set size A"), "setA" },
+      { QT_TRANSLATE_NOOP("fotomode", "Set size B"), "setB" },
+      { QT_TRANSLATE_NOOP("fotomode", "Set size C"), "setC" },
+      { QT_TRANSLATE_NOOP("fotomode", "Set size D"), "setD" }
       };
 
 //---------------------------------------------------------
