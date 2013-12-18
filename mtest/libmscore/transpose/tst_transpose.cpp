@@ -31,6 +31,7 @@ class TestTranspose : public QObject, public MTest
    private slots:
       void initTestCase();
       void undoTranspose();
+      void undoDiatonicTranspose();
       };
 
 //---------------------------------------------------------
@@ -63,6 +64,33 @@ void TestTranspose::undoTranspose()
       score->startCmd();
       score->transpose(TRANSPOSE_BY_INTERVAL, TRANSPOSE_UP, 0, 4,
                        true, true, true);
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+void TestTranspose::undoDiatonicTranspose()
+      {
+      QString readFile(DIR + "undoDiatonicTranspose.mscx");
+      QString writeFile1("undoDiatonicTranspose01-test.mscx");
+      QString reference1(DIR  + "undoDiatonicTranspose01-ref.mscx");
+      QString writeFile2("undoDiatonicTranspose02-test.mscx");
+      QString reference2(DIR  + "undoDiatonicTranspose02-ref.mscx");
+
+      Score* score = readScore(readFile);
+
+      // select all
+      score->cmdSelectAll();
+
+      // transpose diatonic fourth down
+      score->startCmd();
+      score->transpose(TRANSPOSE_DIATONICALLY, TRANSPOSE_DOWN, 0, 3,
+                       true, false, false);
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
