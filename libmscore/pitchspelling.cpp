@@ -810,6 +810,10 @@ int pitch2absStepByKey(int pitch, int tpc, int key, int *pAlter)
       if(key > KEY_MAX)       key   -= KEY_DELTA_ENHARMONIC;
 
       int octave = pitch / PITCH_DELTA_OCTAVE;
+      if (tpc == TPC_C_BB || tpc == TPC_C_B)
+            ++octave;
+      else if (tpc == TPC_B_S || tpc == TPC_B_SS)
+            --octave;
       int step = tpc2step(tpc);
       if(pAlter)
             *pAlter = tpc2alterByKey(tpc, key);
