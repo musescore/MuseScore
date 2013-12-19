@@ -132,15 +132,29 @@
       </item>
       <item>
        <widget class="QRadioButton" name="tsCutTime">
+        <property name="toolTip">
+         <string>Cut time</string>
+        </property>
         <property name="text">
-         <string notr="true">cut time</string>
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="musescore.qrc">
+          <normaloff>:/data/icons/timesig_allabreve.svg</normaloff>:/data/icons/timesig_allabreve.svg</iconset>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QRadioButton" name="tsCommonTime">
+        <property name="toolTip">
+         <string>Common time</string>
+        </property>
         <property name="text">
-         <string notr="true">common time</string>
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="musescore.qrc">
+          <normaloff>:/data/icons/timesig_common.svg</normaloff>:/data/icons/timesig_common.svg</iconset>
         </property>
        </widget>
       </item>
@@ -334,6 +348,8 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>
