@@ -547,12 +547,6 @@ TimesigWizard::TimesigWizard(QWidget* parent)
    : QWidget(parent)
       {
       setupUi(this);
-      QPixmap ct = gscore->scoreFont()->sym2pixmap(SymId::timeSigCommon, 3.0);
-      tsCommonTime->setIcon(QIcon(ct));
-      tsCommonTime->setText(QString());
-      ct = gscore->scoreFont()->sym2pixmap(SymId::timeSigCutCommon, 3.0);
-      tsCutTime->setIcon(QIcon(ct));
-      tsCutTime->setText(QString());
       connect(tsCommonTime, SIGNAL(toggled(bool)), SLOT(commonTimeToggled(bool)));
       connect(tsCutTime,    SIGNAL(toggled(bool)), SLOT(cutTimeToggled(bool)));
       connect(tsFraction,   SIGNAL(toggled(bool)), SLOT(fractionToggled(bool)));
