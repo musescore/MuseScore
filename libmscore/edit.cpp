@@ -399,6 +399,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
 
       // create destination measures
       int tick = 0;
+      bool endBarGenerated = fm->endBarLineGenerated();
       for (int i = 0; i < nm; ++i) {
             Measure* m = new Measure(this);
             m->setPrev(nlm);
@@ -407,6 +408,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
             m->setTimesig(ns);
             m->setLen(ns);
             m->setTick(tick);
+            m->setEndBarLineType(NORMAL_BAR, endBarGenerated);
             tick += m->ticks();
             nlm = m;
             if (nfm == 0)
