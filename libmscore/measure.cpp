@@ -2340,12 +2340,27 @@ bool Measure::setStartRepeatBarLine(bool val)
       {
       bool changed = false;
       Segment* s = findSegment(Segment::SegStartRepeatBarLine, tick());
+      int   numStaves = score()->nstaves();
 
-      for (int staffIdx = 0; staffIdx < score()->nstaves();) {
+      for (int staffIdx = 0; staffIdx < numStaves;) {
             int track    = staffIdx * VOICES;
             Staff* staff = score()->staff(staffIdx);
-            BarLine* bl  = s ? static_cast<BarLine*>(s->element(track)) : 0;
-            int span     = staff->barLineSpan();
+            BarLine* bl  = s ? static_cast<BarLine*>(s->element(track)) : nullptr;
+            int span, spanFrom, spanTo;
+            // if there is a bar line and has custom span, take span from it
+            if (bl && bl->customSpan()) {
+                  span     = bl->span();
+                  spanFrom = bl->spanFrom();
+                  spanTo   = bl->spanTo();
+                  }
+            else {
+                  span     = staff->barLineSpan();
+                  spanFrom = staff->barLineFrom();
+                  spanTo   = staff->barLineTo();
+                  }
+            // make sure we do not span more staves than actually exist
+            if (staffIdx + span > numStaves)
+                  span = numStaves - staffIdx;
 
             if (span && val && (bl == 0)) {
                   // no barline were we need one:
@@ -2370,14 +2385,17 @@ bool Measure::setStartRepeatBarLine(bool val)
                   }
             if (bl && val && span) {
                   bl->setSpan(span);
-                  bl->setSpanFrom(staff->barLineFrom());
-                  bl->setSpanTo(staff->barLineTo());
+                  bl->setSpanFrom(spanFrom);
+                  bl->setSpanTo(spanTo);
                   }
 
             ++staffIdx;
             //
             // remove any unwanted barlines:
             //
+            // if spanning several staves but not entering INTO last staff,
+            if (span > 1 && spanTo <= 0)
+                  span--;                 // count one span less
             if (s) {
                   for (int i = 1; i < span; ++i) {
                         BarLine* bl  = static_cast<BarLine*>(s->element(staffIdx * VOICES));
