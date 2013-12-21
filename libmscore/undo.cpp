@@ -2018,6 +2018,7 @@ void ChangeSingleBarLineSpan::flip()
       {
       barLine->score()->addRefresh(barLine->abbox()); // area of this bar line needs redraw
       int nspan         = barLine->span();
+      bool respan = (span != nspan);
       int nspanFrom     = barLine->spanFrom();
       int nspanTo       = barLine->spanTo();
       barLine->setSpan(span);
@@ -2028,9 +2029,17 @@ void ChangeSingleBarLineSpan::flip()
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;
       barLine->layout();                              // update bbox
-      // re-create bar lines for other staves, if span of this bar line decreased
-      if (barLine->parent() && barLine->parent()->type() == Element::SEGMENT)
-            (static_cast<Segment*>(barLine->parent()))->measure()->createEndBarLines();
+      // re-create bar lines for other staves, if span of this bar line changed
+      if (respan && barLine->parent() && barLine->parent()->type() == Element::SEGMENT) {
+            Segment * segm = (static_cast<Segment*>(barLine->parent()));
+            Measure * meas = segm->measure();
+            // if it is a start-reapeat bar line at the beginning of a measure, redo measure start bar lines
+            if (barLine->barLineType() == START_REPEAT && segm->segmentType() == Segment::SegStartRepeatBarLine)
+                  meas->setStartRepeatBarLine(true);
+            // otherwise redo measure end bar lines
+            else
+                  meas->createEndBarLines();
+            }
       barLine->score()->addRefresh(barLine->abbox()); // new area of this bar line needs redraw
       }
 
