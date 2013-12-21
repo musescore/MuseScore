@@ -2340,6 +2340,7 @@ bool Measure::setStartRepeatBarLine(bool val)
       {
       bool changed = false;
       Segment* s = findSegment(Segment::SegStartRepeatBarLine, tick());
+      bool  customSpan = false;
       int   numStaves = score()->nstaves();
 
       for (int staffIdx = 0; staffIdx < numStaves;) {
@@ -2349,14 +2350,26 @@ bool Measure::setStartRepeatBarLine(bool val)
             int span, spanFrom, spanTo;
             // if there is a bar line and has custom span, take span from it
             if (bl && bl->customSpan()) {
-                  span     = bl->span();
-                  spanFrom = bl->spanFrom();
-                  spanTo   = bl->spanTo();
+                  span        = bl->span();
+                  spanFrom    = bl->spanFrom();
+                  spanTo      = bl->spanTo();
+                  customSpan  = bl->customSpan();
                   }
             else {
-                  span     = staff->barLineSpan();
-                  spanFrom = staff->barLineFrom();
-                  spanTo   = staff->barLineTo();
+                  span        = staff->barLineSpan();
+                  spanFrom    = staff->barLineFrom();
+                  spanTo      = staff->barLineTo();
+                  if (span == 0 && customSpan) {
+                        // spanned staves have already been skipped by the loop at the end;
+                        // if a staff with span 0 is found and the previous bar line had custom span
+                        // this staff shall have an aditional bar line, because the previous staff bar
+                        // line has been shortened
+                        int staffLines = staff->lines();
+                        span     = 1;
+                        spanFrom = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                        spanTo   = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (staffLines-1) * 2;
+                        }
+                  customSpan = false;
                   }
             // make sure we do not span more staves than actually exist
             if (staffIdx + span > numStaves)
