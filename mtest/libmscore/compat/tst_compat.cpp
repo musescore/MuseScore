@@ -70,6 +70,7 @@ void TestCompat::compat_data()
       QTest::newRow("accidentals") << "accidentals";
       QTest::newRow("slurs") << "slurs";
       QTest::newRow("clef_missing_first") << "clef_missing_first";
+      QTest::newRow("hor_frame_and_mmrest") << "hor_frame_and_mmrest";
       }
 
 //---------------------------------------------------------
