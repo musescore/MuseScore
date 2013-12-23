@@ -1048,7 +1048,7 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8B)
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
 	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
-//         || (noteType() == NOTE_NORMAL && type == BAGPIPE_EMBELLISHMENT)
+         || (noteType() == NOTE_NORMAL && type == BAGPIPE_EMBELLISHMENT)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
          || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
@@ -1196,7 +1196,6 @@ Element* Note::drop(const DropData& data)
                   delete e;
                   break;
 
-#if 0
             case BAGPIPE_EMBELLISHMENT:
                   {
                   BagpipeEmbellishment* b = static_cast<BagpipeEmbellishment*>(e);
@@ -1210,7 +1209,6 @@ Element* Note::drop(const DropData& data)
                   }
                   delete e;
                   break;
-#endif
 
             case NOTE:
                   {
