@@ -3745,6 +3745,11 @@ void MuseScore::selectSimilar(Element* e, bool sameStaff)
       foreach(Element* e, pattern.el) {
             score->select(e, SELECT_ADD, 0);
             }
+      if (score->selectionChanged()) {
+            score->setSelectionChanged(false);
+            SelState ss = score->selection().state();
+            selectionChanged(ss);
+            }
       }
 
 //---------------------------------------------------------
@@ -3778,6 +3783,11 @@ void MuseScore::selectElementDialog(Element* e)
                         if(!sl.contains(ee))
                               score->select(ee, SELECT_ADD, 0);
                         }
+                  }
+            if (score->selectionChanged()) {
+                  score->setSelectionChanged(false);
+                  SelState ss = score->selection().state();
+                  selectionChanged(ss);
                   }
             }
       }
@@ -4540,6 +4550,7 @@ int main(int argc, char* av[])
 
       for (int i = 0; i < argv.size();) {
             QString s = argv[i];
+          qDebug() << s;
             if (s[0] != '-') {
                   ++i;
                   continue;
