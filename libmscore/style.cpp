@@ -1081,8 +1081,8 @@ bool StyleData::isDefault(StyleIdx idx) const
 
 //---------------------------------------------------------
 //   save
-//    if optimize is true, save only if different to default
-//    style
+//    if optimize is true, save only data which are different
+//    from built-in style ( MScore::baseStyle() )
 //---------------------------------------------------------
 
 void StyleData::save(Xml& xml, bool optimize) const
@@ -1103,7 +1103,7 @@ void StyleData::save(Xml& xml, bool optimize) const
                   }
             }
       for (int i = 0; i < TEXT_STYLES; ++i) {
-            if (!optimize || _textStyles[i] != MScore::defaultStyle()->textStyle(i))
+            if (!optimize || _textStyles[i] != MScore::baseStyle()->textStyle(i))
                   _textStyles[i].write(xml);
             }
       for (int i = TEXT_STYLES; i < _textStyles.size(); ++i)
@@ -1114,7 +1114,7 @@ void StyleData::save(Xml& xml, bool optimize) const
             xml.etag();
             }
       for (int i = 0; i < ARTICULATIONS; ++i) {
-            if (optimize && _articulationAnchor[i] == MScore::defaultStyle()->articulationAnchor(i))
+            if (optimize && _articulationAnchor[i] == MScore::baseStyle()->articulationAnchor(i))
                   continue;
             const ArticulationInfo& ai = Articulation::articulationList[i];
             xml.tag(ai.name + "Anchor", int(_articulationAnchor[i]));
