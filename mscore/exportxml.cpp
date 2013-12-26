@@ -1082,21 +1082,19 @@ static void midipitch2xml(int pitch, char& c, int& alter, int& octave)
 //   tabpitch2xml
 //---------------------------------------------------------
 
-static char TpcNames[] = "FCGDAEB";
-
-static void tabpitch2xml(int pitch, int tpc, char& c, int& alter, int& octave)
+static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter, int& octave)
       {
-      c      = TpcNames[(tpc + 1) % 7];
-      alter  = (tpc + 1) / 7 - 2;
-      octave = pitch / 12 - 1;
+      s      = tpc2stepName(tpc);
+      alter  = tpc2alterByKey(tpc, 0);
+      octave = (pitch - alter) / 12 - 1;
       if (alter < -2 || 2 < alter)
-            qDebug("tabpitch2xml(pitch %d, tpc %d) problem:  step %c, alter %d, octave %d",
-                   pitch, tpc, c, alter, octave);
+            qDebug("tabpitch2xml(pitch %d, tpc %d) problem:  step %s, alter %d, octave %d",
+                   pitch, tpc, qPrintable(s), alter, octave);
       else
-            qDebug("tabpitch2xml(pitch %d, tpc %d) step %c, alter %d, octave %d",
-                   pitch, tpc, c, alter, octave);
+            qDebug("tabpitch2xml(pitch %d, tpc %d) step %s, alter %d, octave %d",
+                   pitch, tpc, qPrintable(s), alter, octave);
       }
-
+      
 //---------------------------------------------------------
 //   pitch2xml
 //---------------------------------------------------------
@@ -2127,12 +2125,11 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
 
             // TODO: following code requires further cleanup and validation
             if (chord->staff() && chord->staff()->isTabStaff()) {
-                  tabpitch2xml(note->pitch(), note->tpc(), c, alter, octave);
-                  buffer[0] = c;
-                  buffer[1] = 0;
+                  QString step;
+                  tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
                   // pitch
                   xml.stag("pitch");
-                  xml.tag("step", QString(buffer));
+                  xml.tag("step", step);
                   if (alter)
                         xml.tag("alter", alter);
                   xml.tag("octave", octave);
