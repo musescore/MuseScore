@@ -495,11 +495,11 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               // the original tickOffset: advance to destTick (or near)
                               //
                               Segment* harmSegm;
-                              for (harmSegm = startSegm; harmSegm->tick() < destTick;
-                                          harmSegm=harmSegm->nextCR())
+                              for (harmSegm = startSegm; harmSegm && (harmSegm->tick() < destTick);
+                                          harmSegm = harmSegm->nextCR())
                                     ;
                               // if destTick overshot, no dest. segment: create one
-                              if (harmSegm->tick() > destTick) {
+                              if (!harmSegm || harmSegm->tick() > destTick) {
                                     Measure* meas     = tick2measure(destTick);
                                     harmSegm          = meas->getSegment(Segment::SegChordRest, destTick);
                               }
