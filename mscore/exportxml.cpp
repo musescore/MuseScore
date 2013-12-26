@@ -2080,42 +2080,27 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             if (note != nl.front())
                   xml.tagE("chord");
 
+            // step / alter / octave
             QString step;
-            int alter;
-            int octave;
-
-            // TODO: following code requires further cleanup and validation
+            int alter = 0;
+            int octave = 0;
             if (chord->staff() && chord->staff()->isTabStaff()) {
                   tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
-                  // pitch
-                  xml.stag("pitch");
-                  xml.tag("step", step);
-                  if (alter)
-                        xml.tag("alter", alter);
-                  xml.tag("octave", octave);
-                  xml.etag();
-                  }
-
+            }
             else {
                   if (!useDrumset) {
                         pitch2xml(note, step, alter, octave);
-                        // pitch
-                        xml.stag("pitch");
-                        xml.tag("step", step);
-                        if (alter)
-                              xml.tag("alter", alter);
-                        xml.tag("octave", octave);
-                        xml.etag();
-                        }
-                  else {
-                        // unpitched
-                        unpitch2xml(note, step, octave);
-                        xml.stag("unpitched");
-                        xml.tag("display-step", step);
-                        xml.tag("display-octave", octave);
-                        xml.etag();
-                        }
                   }
+                  else {
+                        unpitch2xml(note, step, octave);
+                  }
+            }
+            xml.stag(useDrumset ? "unpitched" : "pitch");
+            xml.tag(useDrumset ? "display-step" : "step", step);
+            if (alter)
+                  xml.tag("alter", alter);
+            xml.tag(useDrumset ? "display-octave" : "octave", octave);
+            xml.etag();
 
             // duration
             if (!grace)
@@ -2126,7 +2111,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             if (note->tieFor())
                   xml.tagE("tie type=\"start\"");
 
-            //instrument for unpitched
+            // instrument for unpitched
             if (useDrumset)
                   xml.tagE(QString("instrument id=\"P%1-I%2\"").arg(_score->parts().indexOf(note->staff()->part()) + 1).arg(note->pitch() + 1));
 
