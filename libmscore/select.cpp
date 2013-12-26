@@ -700,7 +700,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                         }
                   }
             else {
-                  while (iter->second.s != seg) {
+                  while (seg && iter->second.s != seg) {
                               seg = seg->nextCR(currTrack);
                               numSegs++;
                               }
