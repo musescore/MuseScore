@@ -279,8 +279,6 @@ class ExportMusicXml {
       void keysig(int key, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
       void barlineRight(Measure* m);
-      void pitch2xml(Note* note, char& c, int& alter, int& octave);
-      void unpitch2xml(Note* note, char& c, int& octave);
       void lyrics(const QList<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
       void calcDivMoveToTick(int t);
@@ -1082,55 +1080,30 @@ static void midipitch2xml(int pitch, char& c, int& alter, int& octave)
 //   tabpitch2xml
 //---------------------------------------------------------
 
-static char TpcNames[] = "FCGDAEB";
-
-static void tabpitch2xml(int pitch, int tpc, char& c, int& alter, int& octave)
+static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter, int& octave)
       {
-      c      = TpcNames[(tpc + 1) % 7];
-      alter  = (tpc + 1) / 7 - 2;
-      octave = pitch / 12 - 1;
+      s      = tpc2stepName(tpc);
+      alter  = tpc2alterByKey(tpc, 0);
+      octave = (pitch - alter) / 12 - 1;
       if (alter < -2 || 2 < alter)
-            qDebug("tabpitch2xml(pitch %d, tpc %d) problem:  step %c, alter %d, octave %d",
-                   pitch, tpc, c, alter, octave);
+            qDebug("tabpitch2xml(pitch %d, tpc %d) problem:  step %s, alter %d, octave %d",
+                   pitch, tpc, qPrintable(s), alter, octave);
       else
-            qDebug("tabpitch2xml(pitch %d, tpc %d) step %c, alter %d, octave %d",
-                   pitch, tpc, c, alter, octave);
+            qDebug("tabpitch2xml(pitch %d, tpc %d) step %s, alter %d, octave %d",
+                   pitch, tpc, qPrintable(s), alter, octave);
       }
-
+      
 //---------------------------------------------------------
 //   pitch2xml
 //---------------------------------------------------------
 
-// TODO cleanup / validation
-// TBD: use tpc/pitch instead (like tabpitch2xml)
+// TODO validation
 
-void ExportMusicXml::pitch2xml(Note* note, char& c, int& alter, int& octave)
+static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       {
-      static char table1[]  = "FEDCBAG";
-
-      Chord* chord = note->chord();
-
-      int tick   = chord->tick();
-
-      int staffIdx = chord->staffIdx() + chord->staffMove();
-      Staff* i   = note->score()->staff(staffIdx);
-
-      ClefType clef   = i->clef(tick);
-      int offset = ClefInfo::pitchOffset(clef) - 45;  // HACK
-
-      int step   = (note->line() - offset + 700) % 7;
-      // step = 6 - ((absoluteStaffLine(note->line(), clef) + 3)%7));
-
-      // c          = "CDEFGA"[absoluteStaffLine(note->line(), clef) % 7];
-      c          = table1[step];
-
-      // printf("====<%c>  <%c>\n", c, "CDEFGAB"[absoluteStaffLine(note->line(), clef) % 7]);
-
-      int pitch  = note->pitch() - 12;
-      octave     = pitch / 12;
-
-      static int table2[7] = { 5, 4, 2, 0, 11, 9, 7 };
-      int npitch = table2[step] + (octave + 1) * 12;
+      s      = tpc2stepName(note->tpc());
+      alter  = tpc2alterByKey(note->tpc(), 0);
+      octave = (note->pitch() - alter) / 12 - 1;
 
       //
       // HACK:
@@ -1138,13 +1111,13 @@ void ExportMusicXml::pitch2xml(Note* note, char& c, int& alter, int& octave)
       // note->pitch() and note->line()
       // note->line() is determined by drumMap
       //
-      if (clef == ClefType::PERC || clef == ClefType::PERC2) {
+      int tick        = note->chord()->tick();
+      Staff* st       = note->staff();
+      ClefType ct     = st->clef(tick);
+      if (ct == ClefType::PERC || ct == ClefType::PERC2) {
             alter = 0;
-            pitch = line2pitch(note->line(), clef, 0);
-            octave = (pitch / 12) - 1;
-            }
-      else
-            alter = note->pitch() - npitch;
+            octave = line2pitch(note->line(), ct, 0) / 12 - 1;
+      }
 
       // correct for ottava lines
       int ottava = 0;
@@ -1154,26 +1127,13 @@ void ExportMusicXml::pitch2xml(Note* note, char& c, int& alter, int& octave)
             case   0: ottava =  0; break;
             case -12: ottava = -1; break;
             case -24: ottava = -2; break;
-            default:  qDebug("pitch2xml() tick=%d pitch()=%d ppitch()=%dd",
+            default:  qDebug("pitch2xml() tick=%d pitch()=%d ppitch()=%d",
                              tick, note->pitch(), note->ppitch());
             }
       octave += ottava;
 
-      //deal with Cb and B#
-      if (alter > 2) {
-            qDebug("pitch2xml problem: alter %d step %d(line %d) octave %d clef %d(offset %d)",
-                   alter, step, note->line(), octave, clef, offset);
-            //HACK:
-            alter  -= 12;
-            octave += 1;
-            }
-      if (alter < -2) {
-            qDebug("pitch2xml problem: alter %d step %d(line %d) octave %d clef %d(offset %d)",
-                   alter, step, note->line(), octave, clef, offset);
-            //HACK:
-            alter  += 12;
-            octave -= 1;
-            }
+      //qDebug("pitch2xml(pitch %d, tpc %d, ottava %d clef %hhd) step    %s, alter    %d, octave    %d",
+      //       note->pitch(), note->tpc(), ottava, clef, qPrintable(s), alter, octave);
       }
 
 // unpitch2xml -- calculate display-step and display-octave for an unpitched note
@@ -1182,7 +1142,7 @@ void ExportMusicXml::pitch2xml(Note* note, char& c, int& alter, int& octave)
 // Finale Notepad 2012 does not import a three line staff with percussion clef correctly
 // Same goes for Sibelius 6 in case of three or five line staff with percussion clef
 
-void ExportMusicXml::unpitch2xml(Note* note, char& step, int& octave)
+static void unpitch2xml(const Note* note, QString& s, int& octave)
       {
       static char table1[]  = "FEDCBAG";
 
@@ -1207,7 +1167,7 @@ void ExportMusicXml::unpitch2xml(Note* note, char& step, int& octave)
       // index in table1 to get step
       int stepIdx     = (line5g + 700) % 7;
       // get step
-      step            = table1[stepIdx];
+      s               = table1[stepIdx];
       // calculate octave, offset "3" correcting for the fact that an octave starts
       // with C instead of F
       octave =(3 - line5g + 700) / 7 + 5 - 100;
@@ -2120,49 +2080,27 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             if (note != nl.front())
                   xml.tagE("chord");
 
-            char c;
-            int alter;
-            int octave;
-            char buffer[2];
-
-            // TODO: following code requires further cleanup and validation
+            // step / alter / octave
+            QString step;
+            int alter = 0;
+            int octave = 0;
             if (chord->staff() && chord->staff()->isTabStaff()) {
-                  tabpitch2xml(note->pitch(), note->tpc(), c, alter, octave);
-                  buffer[0] = c;
-                  buffer[1] = 0;
-                  // pitch
-                  xml.stag("pitch");
-                  xml.tag("step", QString(buffer));
-                  if (alter)
-                        xml.tag("alter", alter);
-                  xml.tag("octave", octave);
-                  xml.etag();
-                  }
-
+                  tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
+            }
             else {
                   if (!useDrumset) {
-                        pitch2xml(note, c, alter, octave);
-                        buffer[0] = c;
-                        buffer[1] = 0;
-                        // pitch
-                        xml.stag("pitch");
-                        xml.tag("step", QString(buffer));
-                        if (alter)
-                              xml.tag("alter", alter);
-                        xml.tag("octave", octave);
-                        xml.etag();
-                        }
-                  else {
-                        // unpitched
-                        unpitch2xml(note, c, octave);
-                        buffer[0] = c;
-                        buffer[1] = 0;
-                        xml.stag("unpitched");
-                        xml.tag("display-step", QString(buffer));
-                        xml.tag("display-octave", octave);
-                        xml.etag();
-                        }
+                        pitch2xml(note, step, alter, octave);
                   }
+                  else {
+                        unpitch2xml(note, step, octave);
+                  }
+            }
+            xml.stag(useDrumset ? "unpitched" : "pitch");
+            xml.tag(useDrumset ? "display-step" : "step", step);
+            if (alter)
+                  xml.tag("alter", alter);
+            xml.tag(useDrumset ? "display-octave" : "octave", octave);
+            xml.etag();
 
             // duration
             if (!grace)
@@ -2173,7 +2111,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             if (note->tieFor())
                   xml.tagE("tie type=\"start\"");
 
-            //instrument for unpitched
+            // instrument for unpitched
             if (useDrumset)
                   xml.tagE(QString("instrument id=\"P%1-I%2\"").arg(_score->parts().indexOf(note->staff()->part()) + 1).arg(note->pitch() + 1));
 
