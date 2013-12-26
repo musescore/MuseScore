@@ -112,6 +112,7 @@ private slots:
       void systemBrackets2() { mxmlIoTest("testSystemBrackets2"); }
       void tablature1() { mxmlIoTest("testTablature1"); }
       void tablature2() { mxmlIoTest("testTablature2"); }
+      void tablature3() { mxmlIoTest("testTablature3"); }
       void tempo1() { mxmlIoTest("testTempo1"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
