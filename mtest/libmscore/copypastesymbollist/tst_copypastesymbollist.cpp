@@ -32,14 +32,15 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       {
       Q_OBJECT
 
-      void copypaste(const char*);
+      void copypaste(const char*, const char*);
 
    private slots:
       void initTestCase();
-      void copypasteArticulation()  { copypaste("articulation"); }
-      void copypasteChordNames()    { copypaste("chordnames"); }     // problems with chord names?
-      void copypasteFiguredBass()   { copypaste("figuredbass"); }
-      void copypasteLyrics()        { copypaste("lyrics"); }
+      void copypasteArticulation()  { copypaste("articulation", "articulation"); }
+      void copypasteChordNames()    { copypaste("chordnames", "chordnames"); }
+      void copypasteChordNames1()    { copypaste("chordnames-01", "chordnames"); }
+      void copypasteFiguredBass()   { copypaste("figuredbass", "figuredbass"); }
+      void copypasteLyrics()        { copypaste("lyrics", "lyrics"); }
 
       };
 
@@ -92,9 +93,9 @@ static void collectMatch(void* data, Element* e)
 //    copy measure 2, paste into measure 4
 //---------------------------------------------------------
 
-void TestCopyPasteSymbolList::copypaste(const char* idx)
+void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
       {
-      Score* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(idx));
+      Score* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
       score->doLayout();
 
       // select all elements of a certain type (copied and slightly adapted from
@@ -176,8 +177,8 @@ void TestCopyPasteSymbolList::copypaste(const char* idx)
       score->endCmd();
       score->doLayout();
 
-      QVERIFY(saveCompareScore(score, QString("copypastesymbollist-%1.mscx").arg(idx),
-         DIR + QString("copypastesymbollist-%1-ref.mscx").arg(idx)));
+      QVERIFY(saveCompareScore(score, QString("copypastesymbollist-%1.mscx").arg(name),
+         DIR + QString("copypastesymbollist-%1-ref.mscx").arg(name)));
       delete score;
       }
 
