@@ -2276,7 +2276,7 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
             // bar line visibility depends on spanned staves,
             // not simply on visibility of first staff
             if (s->segmentType() == Segment::SegBarLine || s->segmentType() == Segment::SegEndBarLine
-                  || Segment::SegStartRepeatBarLine) {
+                  || s->segmentType() == Segment::SegStartRepeatBarLine) {
                   for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                         Element* e = s->element(staffIdx*VOICES);
                         if (e == 0)             // if no element, skip
