@@ -210,7 +210,8 @@ class Staff : public QObject {
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       bool genKeySig();
       bool showLedgerLines();
-      const ClefList& clefList() const { return clefs; }
+
+      ClefList* clefList() { return &clefs; }
 
       QColor color() const                { return _color; }
       void setColor(const QColor& val)    { _color = val;    }
