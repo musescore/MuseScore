@@ -390,8 +390,20 @@ void System::layout2()
       n = _brackets.size();
       for (int i = 0; i < n; ++i) {
             Bracket* b = _brackets.at(i);
-            qreal sy = _staves[b->firstStaff()]->bbox().top();
-            qreal ey = _staves[b->lastStaff()]->bbox().bottom();
+            int staffIdx1 = b->firstStaff();
+            int staffIdx2 = b->lastStaff();
+            qreal sy = 0;                       // assume bracket not visible
+            qreal ey = 0;
+            // if start staff not visible, try next staff
+            while (!_staves[staffIdx1]->show() && staffIdx1 < staffIdx2)
+                  ++staffIdx1;
+            // if end staff not visible, try prev staff
+            while (!_staves[staffIdx2]->show() && staffIdx1 < staffIdx2)
+                  --staffIdx2;
+            if (staffIdx1 < staffIdx2) {        // if at least two staves visible for this bracket
+                  sy = _staves[staffIdx1]->bbox().top();
+                  ey = _staves[staffIdx2]->bbox().bottom();
+                  }
             b->rypos() = sy;
             b->setHeight(ey - sy);
             b->layout();
