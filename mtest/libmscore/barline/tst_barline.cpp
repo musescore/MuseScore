@@ -34,6 +34,7 @@ class TestBarline : public QObject, public MTest
       void initTestCase();
       void barline01();
       void barline02();
+      void barline03();
       };
 
 //---------------------------------------------------------
@@ -156,6 +157,43 @@ void TestBarline::barline02()
             QVERIFY2(!bar->generated(), msg);
       }
 //      QVERIFY(saveCompareScore(score, "barline02.mscx", DIR + "barline02-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   barline03
+///   Sets a staff bar line span involving spanFrom and spanTo and
+///   check tht it is properly applied to start-repeat
+//
+//    NO REFERENCE SCORE IS USED.
+//---------------------------------------------------------
+
+void TestBarline::barline03()
+      {
+      Score* score = readScore(DIR + "barline03.mscx");
+      QVERIFY(score);
+      score->doLayout();
+      score->undoChangeBarLineSpan(score->staff(0), 2, 2, 6);
+      score->doLayout();
+
+      // 'go' to 5th measure
+      Measure* msr = score->firstMeasure();
+      for (int i=0; i < 4; i++)
+            msr = msr->nextMeasure();
+      // check span data of measure-initial start-repeat bar line
+      Segment* seg = msr->findSegment(Segment::SegStartRepeatBarLine, msr->tick());
+      QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
+
+      BarLine* bar = static_cast<BarLine*>(seg->element(0));
+      QVERIFY2(bar != nullptr, "No start-repeat bar line in measure 5.");
+
+      QVERIFY2(bar->span() == 2 && bar->spanFrom() == 2 && bar->spanTo() == 6,
+            "Wrong span data in atart-repeat bar line of measure 5.");
+
+      // check start-repeat bar ine in second staff is gone
+      QVERIFY2(seg->element(1) == nullptr, "Extra start-repeat bar line in 2nd staff of measure 5.");
+
+//      QVERIFY(saveCompareScore(score, "barline03.mscx", DIR + "barline03-ref.mscx"));
       delete score;
       }
 
