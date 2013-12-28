@@ -33,6 +33,7 @@ class TestBarline : public QObject, public MTest
    private slots:
       void initTestCase();
       void barline01();
+      void barline02();
       };
 
 //---------------------------------------------------------
@@ -45,8 +46,8 @@ void TestBarline::initTestCase()
       }
 
 //---------------------------------------------------------
-//   barline01
-//    Check bar line and brackets presence and length with hidden empty staves:
+///  barline01
+///   Check bar line and brackets presence and length with hidden empty staves:
 //    A score with:
 //          3 staves,
 //          bracket across all 3 staves
@@ -117,6 +118,44 @@ void TestBarline::barline01()
       }
 
 //      QVERIFY(saveCompareScore(score, "barline01.mscx", DIR + "barline01-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   barline02
+///   add a 3/4 time signature in the second measure and chech bar line 'generated' status
+//
+//    NO REFERENCE SCORE IS USED.
+//---------------------------------------------------------
+
+void TestBarline::barline02()
+      {
+      char msg[256];
+      Score* score = readScore(DIR + "barline02.mscx");
+      QVERIFY(score);
+      Measure* msr = score->firstMeasure()->nextMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(3, 4), TSIG_NORMAL);
+
+      score->cmdAddTimeSig(msr, 0, ts, false);
+      score->doLayout();
+
+      msr = score->firstMeasure();
+      int msrNo = 1;
+      while ( (msr=msr->nextMeasure()) != nullptr ) {
+            ++msrNo;
+            Segment* seg = msr->findSegment(Segment::SegEndBarLine, msr->tick()+msr->ticks());
+            sprintf(msg, "No SegEndBarLine in measure %d.", msrNo);
+            QVERIFY2(seg != nullptr, msg);
+
+            BarLine* bar = static_cast<BarLine*>(seg->element(0));
+            sprintf(msg, "No bar line in measure %d.", msrNo);
+            QVERIFY2(bar != nullptr, msg);
+
+            sprintf(msg, "Bar line  in measure %d changed into 'generated'.", msrNo);
+            QVERIFY2(!bar->generated(), msg);
+      }
+//      QVERIFY(saveCompareScore(score, "barline02.mscx", DIR + "barline02-ref.mscx"));
       delete score;
       }
 
