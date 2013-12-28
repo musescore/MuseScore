@@ -148,10 +148,13 @@ void Clef::layout()
       int lines      = 5;                       // assume a resonable default
       qreal lineDist = 1.0;
 
-      StaffType* staffType;
-      if (staff() && staff()->staffType()) {
+      Staff* stf = staff();
+      StaffType* staffType = nullptr;
+      if (stf && stf->staffType()) {
             staffType = staff()->staffType();
             if (!staffType->genClef()) {        // if no clef, set empty bbox and do nothing
+                  qDeleteAll(elements);
+                  elements.clear();
                   setbbox(QRectF());
                   return;
                   }
@@ -163,8 +166,46 @@ void Clef::layout()
                   if (ClefInfo::staffGroup(clefType()) != TAB_STAFF_GROUP)
                         setClefType( ClefType(score()->styleI(ST_tabClef)) );
                   }
-            // all staff types: init values from staff type
-            lines = staffType->lines();
+
+            //
+            // all staff types
+            //
+            // courtesy clef
+            //
+            bool showClef = true;
+            Segment* clefSeg = static_cast<Segment*>(parent());
+            if (clefSeg) {
+                  int tick = clefSeg->tick();
+                  // only if there is a clef change
+                  if (stf->clef(tick) != stf->clef(tick-1)) {
+                        // locate clef at the begining of next measure, if any
+                        Clef*       clefNext    = nullptr;
+                        Segment*    clefSegNext = nullptr;
+                        Measure*    meas        = static_cast<Measure*>(clefSeg->parent());
+                        Measure*    measNext    = meas->nextMeasure();
+                        if (measNext) {
+                              clefSegNext = measNext->findSegment(Segment::SegClef, tick);
+                              if (clefSegNext)
+                                    clefNext = static_cast<Clef*>(clefSegNext->element(track()));
+                              }
+                        // show this clef if: it is not a courtesy clef (no next clef or not at the end of the measure)
+                        showClef = !clefNext || (clefSeg->tick() != meas->tick() + meas->ticks())
+                              // if courtesy clef: show if score has courtesy clefs on
+                              || ( score()->styleB(ST_genCourtesyClef)
+                              // AND measure is not at the end of a repeat or of a section
+                              && !( (meas->repeatFlags() & RepeatEnd) || meas->sectionBreak() )
+                              // AND this clef has courtesy clef turned on
+                              && showCourtesy() );
+                        if (!showClef)    {     // if no clef, set empty bbox and do nothing
+                              qDeleteAll(elements);
+                              elements.clear();
+                              setbbox(QRectF());
+                              return;
+                              }
+                        }
+                  }
+
+            lines = staffType->lines();         // init values from staff type
             lineDist = staffType->lineDistance().val();
             }
 

@@ -130,15 +130,22 @@ class InspectorRest : public InspectorBase {
 //   InspectorClef
 //---------------------------------------------------------
 
+class Clef;
+
 class InspectorClef : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement e;
       Ui::InspectorSegment s;
       Ui::InspectorClef    c;
+      Clef* otherClef;        // the courtesy clef for a main clef or viceversa
+                              // used to keep in sync ShowCourtesy setting of both clefs
+   protected slots:
+      virtual void valueChanged(int idx);
 
    public:
       InspectorClef(QWidget* parent);
+      virtual void setElement();
       };
 
 //---------------------------------------------------------

@@ -1959,67 +1959,8 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         }
 
-                  // courtesy clefs
-                  // no courtesy clef if this measure is the end of a repeat
+                  // courtesy clefs: show/hide of courtesy clefs moved to Clef::layout()
 
-                  bool showCourtesyClef = styleB(ST_genCourtesyClef) && nm && !(m->repeatFlags() & RepeatEnd);
-                  for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
-                        Staff* staff = _staves[staffIdx];
-                        ClefType clefType = staff->clef(tick);
-                        if (clefType == staff->clef(tick-1))
-                              continue;
-
-                        bool show = showCourtesyClef;
-                        Clef* clef;
-                        if (showCourtesyClef) {
-                              // locate a clef in next measure and, if found,
-                              // check if it has court. sig turned off
-                              s = nm->findSegment(Segment::SegClef, tick);
-                              if (s) {
-                                    clef = static_cast<Clef*>(s->element(staffIdx*VOICES));
-                                    if (clef && !clef->showCourtesy()) {
-                                          show = false;
-                                          continue;   // this key change has court. sig turned off
-                                          }
-                                    }
-                              }
-                        s = m->findSegment(Segment::SegClef, tick);
-                        if (s)
-                              clef = static_cast<Clef*>(s->element(staffIdx * VOICES));
-                        else
-                              clef = 0;
-                        Clef* nextClef = 0;
-                        Segment* ns = nm->findSegment(Segment::SegClef, tick);
-                        if (ns)
-                              nextClef = static_cast<Clef*>(ns->element(staffIdx * VOICES));
-                        if (clef && !nextClef) {
-                              //
-                              // move original clef to next measure
-                              //
-                              nextClef = clef->clone();
-                              ns = nm->undoGetSegment(Segment::SegClef, tick);
-                              nextClef->setParent(ns);
-                              undoAddElement(nextClef);
-                              }
-                        if (clef && !show) {
-                              undoRemoveElement(clef);
-                              clef = 0;
-                              }
-                        else if (!clef && show) {
-                              s = m->undoGetSegment(Segment::SegClef, tick);
-                              int track = staffIdx * VOICES;
-                              clef = new Clef(this);
-                              clef->setClefType(clefType);
-                              clef->setTrack(track);
-                              clef->setSmall(true);
-                              clef->setParent(s);
-                              undoAddElement(clef);
-                              }
-                        if (clef)
-                              clef->setGenerated(true);
-                        if (nextClef)
-                              nextClef->setGenerated(false);
-                        }
                   }
 
             //
