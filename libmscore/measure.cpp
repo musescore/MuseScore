@@ -2273,17 +2273,38 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
       int tracks = nstaves * VOICES;
       for (Segment* s = first(); s; s = s->next()) {
-            for (int track = 0; track < tracks; ++track) {
-                  int staffIdx = track/VOICES;
-                  if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
-                        track += VOICES - 1;
-                        continue;
+            // bar line visibility depends on spanned staves,
+            // not simply on visibility of first staff
+            if (s->segmentType() == Segment::SegBarLine || s->segmentType() == Segment::SegEndBarLine
+                  || Segment::SegStartRepeatBarLine) {
+                  for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                        Element* e = s->element(staffIdx*VOICES);
+                        if (e == 0)             // if no element, skip
+                              continue;
+                        // if staff not visible
+                        if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
+                              // if bar line spans just this staff...
+                              if (static_cast<BarLine*>(e)->span() <= 1
+                                    // ...or span another staff but without entering INTO it...
+                                    || (static_cast<BarLine*>(e)->span() < 2 &&
+                                          static_cast<BarLine*>(e)->spanTo() < 1) )
+                              continue;         // ...skip
+                              }
+                        e->scanElements(data, func, all);
                         }
-                  Element* e = s->element(track);
-                  if (e == 0)
-                        continue;
-                  e->scanElements(data, func, all);
                   }
+            else
+                  for (int track = 0; track < tracks; ++track) {
+                        int staffIdx = track/VOICES;
+                        if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
+                              track += VOICES - 1;
+                              continue;
+                              }
+                        Element* e = s->element(track);
+                        if (e == 0)
+                              continue;
+                        e->scanElements(data, func, all);
+                        }
             foreach(Element* e, s->annotations()) {
                   if (all || e->systemFlag() || visible(e->staffIdx()))
                         e->scanElements(data,  func, all);

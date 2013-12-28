@@ -133,16 +133,43 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   measure = system->firstMeasure();
                   }
             if (measure) {
+                  // test start and end staff visibility
+                  int   span = _span;
+                  Staff* staff1 = score()->staff(staffIdx1);
+                  Staff* staff2 = score()->staff(staffIdx2);
+                  SysStaff* sysStaff1 = system->staff(staffIdx1);
+                  SysStaff* sysStaff2 = system->staff(staffIdx2);
+                  while (span > 0) {
+                        // if start staff not shown, reduce span and move one staff down
+                        if ( !(sysStaff1->show() && staff1->show()) ) {
+                              span--;
+                              sysStaff1 = system->staff(++staffIdx1);
+                              staff1    = score()->staff(staffIdx1);
+                        }
+                        // if end staff not shown, reduce span and move one staff up
+                        else if ( !(sysStaff2->show() && staff2->show()) ) {
+                              span--;
+                              sysStaff2 = system->staff(--staffIdx2);
+                              staff2    = score()->staff(staffIdx2);
+                        }
+                        // if both staves shown, exit loop
+                        else
+                              break;
+                  }
+                  // if no longer any span, set 0 length and exit
+                  if (span <= 0) {
+                        *y1 = *y2 = 0;
+                        return;
+                  }
+                  // both staffIdx1 and staffIdx2 are shown: compute corresponding line length
                   StaffLines* l1 = measure->staffLines(staffIdx1);
                   StaffLines* l2 = measure->staffLines(staffIdx2);
 
                   if (system)
-                        yp += system->staff(staffIdx1)->y();
+                        yp += sysStaff1->y();
                   *y1 = l1->y1() - yp;
-                  Staff* staff1 = score()->staff(staffIdx1);
                   *y1 += (_spanFrom * staff1->lineDistance() * staff1->spatium()) / 2;
                   *y2 = l2->y1() - yp;
-                  Staff* staff2 = score()->staff(staffIdx2);
                   *y2 += (_spanTo   * staff2->lineDistance() * staff2->spatium()) / 2;
                   }
             }
@@ -201,11 +228,14 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
 
 void BarLine::draw(QPainter* painter) const
       {
-      qreal _spatium = score()->spatium();
-
-      qreal lw = score()->styleS(ST_barWidth).val() * _spatium;
+      // get line length and do nothing if 0 (or near enough)
       qreal y1, y2;
       getY(&y1, &y2);
+      if (y2-y1 < 0.1)
+            return;
+
+      qreal _spatium = score()->spatium();
+      qreal lw = score()->styleS(ST_barWidth).val() * _spatium;
 
       QPen pen(curColor(), lw, Qt::SolidLine, Qt::FlatCap);
       painter->setPen(pen);
