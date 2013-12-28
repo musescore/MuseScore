@@ -1,7 +1,6 @@
 #=============================================================================
 #  MuseScore
 #  Music Composition & Notation
-#  $Id:$
 #
 #  Copyright (C) 2011 Werner Schweer
 #
@@ -11,10 +10,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      beam chordsymbol clef clef_courtesy compat concertpitch copypaste copypastesymbollist dynamic element
-      hairpin join keysig layout link measure midi note plugins repeat split
-      splitstaff timesig transpose tuplet
-      )
+set(TARGET tst_clef_courtesy)
 
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 
