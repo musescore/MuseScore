@@ -35,6 +35,7 @@ class TestBarline : public QObject, public MTest
       void barline01();
       void barline02();
       void barline03();
+      void barline04();
       };
 
 //---------------------------------------------------------
@@ -188,12 +189,49 @@ void TestBarline::barline03()
       QVERIFY2(bar != nullptr, "No start-repeat bar line in measure 5.");
 
       QVERIFY2(bar->span() == 2 && bar->spanFrom() == 2 && bar->spanTo() == 6,
-            "Wrong span data in atart-repeat bar line of measure 5.");
+            "Wrong span data in start-repeat bar line of measure 5.");
 
       // check start-repeat bar ine in second staff is gone
       QVERIFY2(seg->element(1) == nullptr, "Extra start-repeat bar line in 2nd staff of measure 5.");
 
 //      QVERIFY(saveCompareScore(score, "barline03.mscx", DIR + "barline03-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   barline04
+///   Sets custom span parameters to a system-initial start-repeat bar line and
+///   check tht it is properly applied to it and to the start-reapeat bar lines of staves below.
+//
+//    NO REFERENCE SCORE IS USED.
+//---------------------------------------------------------
+
+void TestBarline::barline04()
+      {
+      Score* score = readScore(DIR + "barline04.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // 'go' to 5th measure
+      Measure* msr = score->firstMeasure();
+      for (int i=0; i < 4; i++)
+            msr = msr->nextMeasure();
+      // check span data of measure-initial start-repeat bar line
+      Segment* seg = msr->findSegment(Segment::SegStartRepeatBarLine, msr->tick());
+      QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
+
+      BarLine* bar = static_cast<BarLine*>(seg->element(0));
+      QVERIFY2(bar != nullptr, "No start-repeat bar line in measure 5.");
+
+      score->undoChangeSingleBarLineSpan(bar, 2, 2, 6);
+      score->doLayout();
+      QVERIFY2(bar->span() == 2 && bar->spanFrom() == 2 && bar->spanTo() == 6,
+            "Wrong span data in start-repeat bar line of measure 5.");
+
+      // check start-repeat bar ine in second staff is gone
+      QVERIFY2(seg->element(1) == nullptr, "Extra start-repeat bar line in 2nd staff of measure 5.");
+
+//      QVERIFY(saveCompareScore(score, "barline04.mscx", DIR + "barline04-ref.mscx"));
       delete score;
       }
 
