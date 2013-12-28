@@ -308,7 +308,7 @@ Score* MuseScore::readScore(const QString& name)
       if (name.isEmpty())
             return 0;
 
-      Score* score = new Score(MScore::defaultStyle());
+      Score* score = new Score(MScore::baseStyle());  // start with built-in style
       setMidiPrefOperations(name);
       Score::FileError rv = Ms::readScore(score, name, false);
       if (rv == Score::FILE_TOO_OLD || rv == Score::FILE_TOO_NEW) {
