@@ -36,10 +36,6 @@
     <metaTag name="workTitle">timesig1</metaTag>
     <PageList>
       <Page>
-        <System>
-          </System>
-        <System>
-          </System>
         </Page>
       </PageList>
     <Part>
@@ -97,6 +93,8 @@ p, li { white-space: pre-wrap; }
           </Clef>
         <KeySig>
           <accidental>0</accidental>
+          <showCourtesySig>1</showCourtesySig>
+          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -113,14 +111,9 @@ p, li { white-space: pre-wrap; }
           </BarLine>
         </Measure>
       <Measure number="2">
-        <TimeSig>
-          <sigN>3</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="3" n="4"/>
+          <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
@@ -130,7 +123,7 @@ p, li { white-space: pre-wrap; }
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="3" n="4"/>
+          <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
@@ -140,7 +133,7 @@ p, li { white-space: pre-wrap; }
       <Measure number="4">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="3" n="4"/>
+          <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
@@ -150,27 +143,7 @@ p, li { white-space: pre-wrap; }
       <Measure number="5">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="3" n="4"/>
-          </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
-        </Measure>
-      <Measure number="6">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="3" n="4"/>
-          </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
-        </Measure>
-      <Measure number="7">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="3" n="4"/>
+          <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
