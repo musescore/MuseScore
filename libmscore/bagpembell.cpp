@@ -22,7 +22,6 @@ namespace Ms {
 BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
 
       // Single Grace notes
-      // These don't look really nice due to varying stem length
       { QT_TRANSLATE_NOOP("bagpipe", "Single grace low G"), "LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Single grace low A"), "LA" },
       { QT_TRANSLATE_NOOP("bagpipe", "Single grace B"), "B" },
@@ -386,8 +385,8 @@ void BagpipeEmbellishment::read(XmlReader& e)
 //---------------------------------------------------------
 
 struct BEDrawingDataX {
-      const SymId headsym;     // grace note head symbol
-      const SymId flagsym;     // grace note flag symbol
+      const SymId headsym;    // grace note head symbol
+      const SymId flagsym;    // grace note flag symbol
       const qreal mags;       // grace head magnification
       qreal headw;            // grace head width
       qreal headp;            // horizontal head pitch
@@ -399,15 +398,15 @@ struct BEDrawingDataX {
       BEDrawingDataX(SymId hs, SymId fs, const qreal m, const qreal s, const int nn)
          :  headsym(hs),
             flagsym(fs),
-            mags(     0.75 * m),
-            spatium(  s),
-            lw(       0.1 * s),
-            xcorr(    0.1 * s)
+            mags(   0.75 * m),
+            spatium(s),
+            lw(     0.1 * s),
+            xcorr(  0.1 * s)
             {
             qreal w = gscore->scoreFont()->width(hs, mags);
-            headw = w;
-            headp = 1.4 * w;
-            xl    = (1 - 1.4 * (nn - 1)) * w / 2;
+            headw = 1.2 * w; // using 1.0 the stem xpos is off
+            headp = 1.6 * w;
+            xl    = (1 - 1.6 * (nn - 1)) * w / 2;
             }
 };
 
@@ -425,32 +424,30 @@ struct BEDrawingDataY {
       const qreal bw;         // line width for beam
 
       BEDrawingDataY(const int l, const qreal s)
-         :  y1b(   -8 * s / 2),
-            y1f(    (l - 6) * s / 2),
-            y2(     l * s / 2),
-            ycorr( -0.2 * s),
-            bw(     0.3 * s) {}
+         :  y1b( -8 * s / 2),
+            y1f( (l - 6) * s / 2),
+            y2(   l * s / 2),
+            ycorr(0.8 * s),
+            bw(   0.3 * s) {}
 };
 
 //---------------------------------------------------------
 //   debug support (disabled)
 //---------------------------------------------------------
 
-static void printBBox(const char* /*name*/, const QRectF /*b*/)
+/*
+static void printBBox(const char* name, const QRectF b)
       {
-      /*
       qDebug("bbox%s left %f bot %f right %f top %f",
              name,
              b.left(),
              b.bottom(),
              b.right(),
              b.top());
-       */
       }
 
-static void symMetrics(const char* /*name*/, const Sym& /*headsym*/)
+static void symMetrics(const char* name, const Sym& headsym)
       {
-      /*
       qDebug("%s", name);
       qDebug("bbox left %f bot %f right %f top %f",
              headsym.getBbox().left(),
@@ -460,7 +457,17 @@ static void symMetrics(const char* /*name*/, const Sym& /*headsym*/)
       qDebug("attach x %f y %f",
              headsym.getAttach().x(),
              headsym.getAttach().y());
-       */
+      }
+*/
+      
+//---------------------------------------------------------
+//   mag
+//      return fixed magnification
+//---------------------------------------------------------
+
+qreal BagpipeEmbellishment::mag() const
+      {
+            return 0.7;
       }
 
 //---------------------------------------------------------
@@ -470,9 +477,11 @@ static void symMetrics(const char* /*name*/, const Sym& /*headsym*/)
 
 void BagpipeEmbellishment::layout()
       {
+      /*
       if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-            // qDebug("BagpipeEmbellishment::layout st %d", _embelType);
-      }
+            qDebug("BagpipeEmbellishment::layout st %d", _embelType);
+            }
+       */
       SymId headsym = SymId::noteheadBlack;
       SymId flagsym = SymId::flag32ndUp;
 
@@ -480,11 +489,14 @@ void BagpipeEmbellishment::layout()
       BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
 
       setbbox(QRectF());
-      if (_embelType == 0) {
-            // symMetrics("headsym", headsym);
-            // symMetrics("flagsym", flagsym);
-            // qDebug("mags %f headw %f headp %f spatium %f", dx.mags, dx.headw, dx.headp, dx.spatium);
+      /*
+      if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
+            symMetrics("headsym", headsym);
+            symMetrics("flagsym", flagsym);
+            qDebug("mags %f headw %f headp %f spatium %f xl %f",
+                   dx.mags, dx.headw, dx.headp, dx.spatium, dx.xl);
             }
+       */
 
       bool drawFlag = nl.size() == 1;
 
@@ -496,29 +508,35 @@ void BagpipeEmbellishment::layout()
 
             // head
             addbbox(score()->scoreFont()->bbox(headsym, dx.mags).translated(QPointF(x - dx.lw * .5 - dx.headw, dy.y2)));
+            /*
             if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
                   printBBox(" notehead", bbox());
                   }
+             */
 
             // stem
             // highest top of stems actually used is y1b
             addbbox(QRectF(x - dx.lw * .5 - dx.headw, dy.y1b, dx.lw, dy.y2 - dy.y1b));
+            /*
             if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
                   printBBox(" notehead + stem", bbox());
                   }
+             */
 
             // flag
             if (drawFlag) {
                   addbbox(score()->scoreFont()->bbox(flagsym, dx.mags).translated(QPointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
-                  printBBox(" notehead + stem + flag", bbox());
+                  // printBBox(" notehead + stem + flag", bbox());
                   }
 
             // draw the ledger line for high A
             if (line == -2) {
                   addbbox(QRectF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2 - dx.lw * 2, dx.headw * 2, dx.lw));
+                  /*
                   if (_embelType == 8) {
                         printBBox(" notehead + stem + ledger line", bbox());
                         }
+                   */
                   }
 
             // move x to next note x position
@@ -557,7 +575,6 @@ void BagpipeEmbellishment::drawGraceNote(QPainter* painter,
    SymId flagsym, const qreal x, const bool drawFlag) const
       {
       // draw head
-//      drawSymbol(headsym, painter, dx.mags, QPointF(x - dx.headw, dy.y2));
       drawSymbol(dx.headsym, painter, QPointF(x - dx.headw, dy.y2));
       // draw stem
       qreal y1 =  drawFlag ? dy.y1f : dy.y1b;          // top of stems actually used
