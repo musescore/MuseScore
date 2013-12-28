@@ -2782,6 +2782,7 @@ void RemoveMeasures::undo()
             if (m == lm)
                   break;
             }
+      fm->score()->insertTime(fm->tick(), ticks);
       fm->score()->fixTicks();
       fm->score()->connectTies();
       fm->score()->setLayoutAll(true);
@@ -3336,6 +3337,20 @@ void ChangeMMRest::flip()
       Measure* mmr = m->mmRest();
       m->setMMRest(mmrest);
       mmrest = mmr;
+      }
+
+//---------------------------------------------------------
+//   InsertTime
+//---------------------------------------------------------
+
+void InsertTime::redo()
+      {
+      score->insertTime(tick, len);
+      }
+
+void InsertTime::undo()
+      {
+      score->insertTime(tick, -len);
       }
 
 }

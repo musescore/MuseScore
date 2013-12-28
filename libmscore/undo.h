@@ -1357,6 +1357,24 @@ class ChangeMMRest : public UndoCommand {
       UNDO_NAME("ChangeMMRest");
       };
 
+//---------------------------------------------------------
+//   InsertTime
+//---------------------------------------------------------
+
+class InsertTime : public UndoCommand {
+      Score* score;
+      int tick;
+      int len;
+
+      void redo();
+      void undo();
+
+   public:
+      InsertTime(Score* _score, int _tick, int _len) :
+            score(_score), tick(_tick), len(_len) {}
+      UNDO_NAME("InsertTime");
+      };
+
 }     // namespace Ms
 #endif
 

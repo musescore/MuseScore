@@ -5079,7 +5079,7 @@ void ScoreView::cmdInsertMeasures(int n, Element::ElementType type)
             return;
       _score->startCmd();
       for (int i = 0; i < n; ++i)
-            mb = _score->insertMeasure(type, mb);
+            _score->insertMeasure(type, mb);
 
       // measure may be part of mm rest:
       if (!_score->styleB(ST_createMultiMeasureRests) && type == Element::MEASURE)
