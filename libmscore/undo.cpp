@@ -512,41 +512,42 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   continue;
                   }
 
-            // move clef to last segment of prev measure?
-            //    TODO: section break?
-            Segment* segment = measure->findSegment(seg->segmentType(), tick);
+            Segment* destSeg = measure->findSegment(Segment::SegClef, tick);
 
-            if (firstSeg
-               && measure->prevMeasure()
-               && !(measure->prevMeasure()->repeatFlags() & RepeatEnd)
+            // move measure-initial clef to last segment of prev measure
+
+            if (firstSeg                        // if at start of measure
+               && measure->prevMeasure()        // and there is a previous measure
                ) {
                   measure = measure->prevMeasure();
-                  segment = measure->findSegment(seg->segmentType(), tick);
-                  if (!segment && (seg->segmentType() != Segment::SegClef))
-                        segment = measure->findSegment(Segment::SegClef, tick);
+                  destSeg = measure->findSegment(Segment::SegClef, tick);
                   }
 
-            if (segment) {
-                  if (segment->segmentType() != Segment::SegClef) {
-                        if (segment->prev() && segment->prev()->segmentType() == Segment::SegClef) {
-                              segment = segment->prev();
+            if (destSeg) {
+                  // if destSeg not a Clef seg...
+                  if (destSeg->segmentType() != Segment::SegClef) {
+                        // ...check prev seg is Clef seg: if yes, prev seg is our dest seg
+                        if (destSeg->prev() && destSeg->prev()->segmentType() == Segment::SegClef) {
+                              destSeg = destSeg->prev();
                              }
+                        // if no Clef seg (current or previous), create a new Clef seg
                         else {
                               Segment* s = new Segment(measure, Segment::SegClef, seg->tick());
-                              s->setNext(segment);
-                              s->setPrev(segment->prev());
+                              s->setNext(destSeg);
+                              s->setPrev(destSeg->prev());
                               score->undoAddElement(s);
-                              segment = s;
+                              destSeg = s;
                               }
                         }
                   }
+            // if no dest seg, create a new Clef seg
             else {
-                  segment = new Segment(measure, Segment::SegClef, seg->tick());
-                  score->undoAddElement(segment);
+                  destSeg = new Segment(measure, Segment::SegClef, seg->tick());
+                  score->undoAddElement(destSeg);
                   }
             int staffIdx = staff->idx();
             int track    = staffIdx * VOICES;
-            Clef* clef   = static_cast<Clef*>(segment->element(track));
+            Clef* clef   = static_cast<Clef*>(destSeg->element(track));
 
             if (clef) {
                   //
@@ -577,7 +578,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   clef = new Clef(score);
                   clef->setTrack(track);
                   clef->setClefType(st);
-                  clef->setParent(segment);
+                  clef->setParent(destSeg);
                   score->undo(new AddElement(clef));
                   }
             }
