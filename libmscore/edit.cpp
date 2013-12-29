@@ -1942,7 +1942,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                   undo(new InsertMeasure(mb, im));
                   }
             }
-      undo(new InsertTime(this, tick, measure->ticks()));
+      undoInsertTime(tick, measure->ticks());
 
       if (type == Element::MEASURE && !createEmptyMeasures) {
             //

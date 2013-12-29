@@ -2766,6 +2766,14 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
                   }
             }
       undo(new RemoveMeasures(m1, m2));
+      int ticks = 0;
+      for (Measure* m = m1; m; m = m->nextMeasure()) {
+            ticks += m->ticks();
+            if (m == m2)
+                  break;
+            }
+      undoInsertTime(m1->tick(), -ticks);
+      fixTicks();
       }
 
 //---------------------------------------------------------
@@ -2785,13 +2793,6 @@ RemoveMeasures::RemoveMeasures(Measure* m1, Measure* m2)
 void RemoveMeasures::undo()
       {
       fm->score()->measures()->insert(fm, lm);
-      int ticks = 0;
-      for (Measure* m = fm; m; m = m->nextMeasure()) {
-            ticks += m->ticks();
-            if (m == lm)
-                  break;
-            }
-      fm->score()->insertTime(fm->tick(), ticks);
       fm->score()->fixTicks();
       fm->score()->connectTies();
       fm->score()->setLayoutAll(true);
@@ -2805,15 +2806,6 @@ void RemoveMeasures::undo()
 void RemoveMeasures::redo()
       {
       fm->score()->measures()->remove(fm, lm);
-      int ticks = 0;
-      for (Measure* m = fm; m; m = m->nextMeasure()) {
-            ticks += m->ticks();
-            if (m == lm)
-                  break;
-            }
-      // insertTime is undoable by itself
-      fm->score()->insertTime(fm->tick(), -ticks);
-      fm->score()->fixTicks();
       }
 
 //---------------------------------------------------------
