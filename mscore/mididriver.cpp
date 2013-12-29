@@ -533,7 +533,8 @@ bool AlsaMidiDriver::putEvent(snd_seq_event_t* event)
             } while (error == -12);
       return true;
       }
+}
 
 #endif /* USE_ALSA */
-}
+
 
