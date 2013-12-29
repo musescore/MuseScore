@@ -36,6 +36,7 @@ class TestBarline : public QObject, public MTest
       void barline02();
       void barline03();
       void barline04();
+      void barline05();
       };
 
 //---------------------------------------------------------
@@ -232,6 +233,52 @@ void TestBarline::barline04()
       QVERIFY2(seg->element(1) == nullptr, "Extra start-repeat bar line in 2nd staff of measure 5.");
 
 //      QVERIFY(saveCompareScore(score, "barline04.mscx", DIR + "barline04-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   barline05
+///   Adds a line break in the middle of a end-start-repeat bar line and then checks the two resulting
+///   bar lines (an end-repeat and a start-repeat) are not marked as generated.
+//
+//    NO REFERENCE SCORE IS USED.
+//---------------------------------------------------------
+
+void TestBarline::barline05()
+      {
+      Score* score = readScore(DIR + "barline05.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // 'go' to 4th measure
+      Measure* msr = score->firstMeasure();
+      for (int i=0; i < 3; i++)
+            msr = msr->nextMeasure();
+      // create and add a LineBreak element
+      LayoutBreak* lb = new LayoutBreak(score);
+      lb->setLayoutBreakType(LayoutBreak::LINE);
+      lb->setTrack(-1);             // system-level element
+      lb->setParent(msr);
+      score->undoAddElement(lb);
+      score->doLayout();
+
+      // check an end-repeat bar line has been created at the end of this measure and it is not generated
+      Segment* seg = msr->findSegment(Segment::SegEndBarLine, msr->tick()+msr->ticks());
+      QVERIFY2(seg != nullptr, "No SegEndBarLine segment in measure 4.");
+      BarLine* bar = static_cast<BarLine*>(seg->element(0));
+      QVERIFY2(bar != nullptr, "No end-repeat bar line in measure 4.");
+      QVERIFY2(bar->barLineType() == END_REPEAT, "Bar line at measure 4 is not END-REPEAT");
+      QVERIFY2(!bar->generated(), "End-reapeat bar line in measure 4 is generated.");
+
+      // check an end-repeat bar line has been created at the beginning of the next measure and it is not generated
+      msr = msr->nextMeasure();
+      seg = msr->findSegment(Segment::SegStartRepeatBarLine, msr->tick());
+      QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
+      bar = static_cast<BarLine*>(seg->element(0));
+      QVERIFY2(bar != nullptr, "No start-repeat bar line in measure 5.");
+      QVERIFY2(!bar->generated(), "Start-reapeat bar line in measure 5 is generated.");
+
+//      QVERIFY(saveCompareScore(score, "barline05.mscx", DIR + "barline05-ref.mscx"));
       delete score;
       }
 
