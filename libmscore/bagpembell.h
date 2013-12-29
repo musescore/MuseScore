@@ -61,6 +61,7 @@ class BagpipeEmbellishment : public Element {
       virtual ElementType type() const            { return BAGPIPE_EMBELLISHMENT;           }
       int embelType() const                       { return _embelType;                      }
       void setEmbelType(int val)                  { _embelType = val;                       }
+      virtual qreal mag() const;
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
       virtual void layout();
