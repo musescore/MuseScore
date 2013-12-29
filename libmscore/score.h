@@ -418,7 +418,7 @@ class Score : public QObject {
       void checkSlurs();
       void checkScore();
       bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&);
-      void rewriteMeasures(Measure* fm, const Fraction& ns);
+      bool rewriteMeasures(Measure* fm, const Fraction& ns);
       void updateVelo();
       void addAudioTrack();
       void parseVersion(const QString&);
