@@ -3489,12 +3489,13 @@ bool Score::isSpannerStartEnd(int tick, int track) const
       }
 
 //---------------------------------------------------------
-//   insertTime
+//   undoInsertTime
 //   acts on the linked scores as well
 //---------------------------------------------------------
 
-void Score::insertTime(int tick, int len)
+void Score::undoInsertTime(int tick, int len)
       {
+      qDebug() << "insertTime" << len << "at tick" << tick;
       if (len == 0)
             return;
 
@@ -3572,8 +3573,15 @@ void Score::insertTime(int tick, int len)
                         }
                   }
             }
-        for (Score* score : scoreList()) {
-              for(Staff* staff : score->staves()) {
+            // insert time in (key, clef) maps
+            undo(new InsertTime(this, tick, len));
+      }
+
+
+void Score::insertTime(int tick, int len)
+      {
+      for (Score* score : scoreList()) {
+            for(Staff* staff : score->staves()) {
                   KeyList* kl = staff->keymap();
                   KeyList kl2;
                   for (auto i = kl->upper_bound(tick); i != kl->end();) {

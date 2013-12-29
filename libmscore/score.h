@@ -525,6 +525,7 @@ class Score : public QObject {
       void undoRemoveMeasures(Measure*, Measure*);
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
+      void undoInsertTime(int tick, int len);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len, int tpc = INVALID_TPC);
 
