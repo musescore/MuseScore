@@ -134,6 +134,7 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   }
             if (measure) {
                   // test start and end staff visibility
+                  int   nstaves = score()->nstaves();
                   int   span = _span;
                   Staff* staff1 = score()->staff(staffIdx1);
                   Staff* staff2 = score()->staff(staffIdx2);
@@ -143,12 +144,16 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                         // if start staff not shown, reduce span and move one staff down
                         if ( !(sysStaff1->show() && staff1->show()) ) {
                               span--;
+                              if (staffIdx1 >= nstaves-1)         // running out of staves?
+                                    break;
                               sysStaff1 = system->staff(++staffIdx1);
                               staff1    = score()->staff(staffIdx1);
                         }
                         // if end staff not shown, reduce span and move one staff up
                         else if ( !(sysStaff2->show() && staff2->show()) ) {
                               span--;
+                              if (staffIdx2 == 0)
+                                    break;
                               sysStaff2 = system->staff(--staffIdx2);
                               staff2    = score()->staff(staffIdx2);
                         }
