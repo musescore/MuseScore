@@ -101,6 +101,7 @@ void TextProp::mmToggled(bool val)
       QString unit(val ? tr("mm", "millimeter unit") : tr("sp", "spatium unit"));
       xOffset->setSuffix(unit);
       yOffset->setSuffix(unit);
+      curUnit = val ? 0 : 1;
       }
 
 //---------------------------------------------------------
