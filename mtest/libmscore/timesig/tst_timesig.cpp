@@ -66,12 +66,8 @@ void TestTimesig::timesig02()
       Score* score = readScore(DIR + "timesig-02.mscx");
       QVERIFY(score);
       Measure* m = score->firstMeasure();
-//      Measure* m2= m->nextMeasure();
       TimeSig* ts = new TimeSig(score);
       ts->setSig(Fraction(3, 4), TSIG_NORMAL);
-
-//      bool result = score->rewriteMeasures(m, m2, Fraction(3, 4));
-//      QVERIFY2(result == false, "Time sig change was not blocked!");
 
       score->cmdAddTimeSig(m, 0, ts, false);
       score->doLayout();
