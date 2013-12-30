@@ -54,6 +54,7 @@
 #include "repeat.h"
 #include "bracket.h"
 #include "ottava.h"
+#include "mscore/globals.h"
 
 namespace Ms {
 
@@ -436,11 +437,12 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
 
 static void warnTupletCrossing()
       {
-      QMessageBox::warning(0,
-         QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore"),
-         QT_TRANSLATE_NOOP("addRemoveTimeSig", "cannot rewrite measures:\n"
-         "tuplet would cross measure")
-         );
+      if(!noGui)
+            QMessageBox::warning(0,
+               QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore"),
+               QT_TRANSLATE_NOOP("addRemoveTimeSig", "cannot rewrite measures:\n"
+               "tuplet would cross measure")
+               );
       }
 
 //---------------------------------------------------------
