@@ -13,9 +13,9 @@
 
 #include "globals.h"
 #include "shortcut.h"
-// #include "musescore.h"
 #include "icons.h"
 #include "libmscore/xml.h"
+
 
 namespace Ms {
 
@@ -407,10 +407,10 @@ void Shortcut::load()
       if (!f.exists())
             f.setFileName(":/data/shortcuts.xml");
       if (!f.open(QIODevice::ReadOnly)) {
-            qDebug("cannot open shortcuts");
+            qDebug("cannot open shortcuts <%s>", qPrintable(f.fileName()));
             return;
             }
-      else
+      if (MScore::debugMode)
             qDebug("read shortcuts from <%s>", qPrintable(f.fileName()));
 
       XmlReader e(&f);
