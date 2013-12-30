@@ -4336,7 +4336,7 @@ void ScoreFont::load()
             QJsonObject ooo = oo.value(i).toObject();
             SymId symId = Sym::lnhash.value(i, SymId::noSym);
             if (symId == SymId::noSym)
-                  qDebug("ScoreFont: symId not found <%s>", qPrintable(i));
+                  qDebug("ScoreFont: symId not found <%s> in <%s>", qPrintable(i), qPrintable(fi.fileName()));
             Sym* sym = &_symbols[int(symId)];
             for (auto i : ooo.keys()) {
                   if (i == "stemDownNW") {
