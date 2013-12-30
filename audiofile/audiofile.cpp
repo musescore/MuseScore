@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <audiofile.h>
+#include "audiofile.h"
 
 static sf_count_t getFileLen(void* f) {
       return ((AudioFile*)f)->getFileLen();
