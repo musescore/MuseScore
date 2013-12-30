@@ -56,13 +56,8 @@ class BspTree
       int leafCnt;
       QRectF rect;
 
-      InsertItemBspTreeVisitor* insertVisitor;
-      RemoveItemBspTreeVisitor* removeVisitor;
-      FindItemBspTreeVisitor* findVisitor;
-
    public:
       BspTree();
-      ~BspTree();
 
       void initialize(const QRectF& rect, int depth);
       void clear();
@@ -94,7 +89,6 @@ class BspTreeVisitor
       virtual ~BspTreeVisitor() {}
       virtual void visit(QList<Element*>* items) = 0;
       };
-
 
 }     // namespace Ms
 #endif
