@@ -395,10 +395,10 @@ void System::layout2()
             qreal sy = 0;                       // assume bracket not visible
             qreal ey = 0;
             // if start staff not visible, try next staff
-            while (!_staves[staffIdx1]->show() && staffIdx1 <= staffIdx2)
+            while (staffIdx1 <= staffIdx2 && !_staves[staffIdx1]->show())
                   ++staffIdx1;
             // if end staff not visible, try prev staff
-            while (!_staves[staffIdx2]->show() && staffIdx1 <= staffIdx2)
+            while (staffIdx1 <= staffIdx2 && !_staves[staffIdx2]->show())
                   --staffIdx2;
             // the bracket will be shown IF:
             // it spans at least 2 visible staves (staffIdx1 < staffIdx2) OR
