@@ -4550,7 +4550,6 @@ int main(int argc, char* av[])
 
       for (int i = 0; i < argv.size();) {
             QString s = argv[i];
-          qDebug() << s;
             if (s[0] != '-') {
                   ++i;
                   continue;
