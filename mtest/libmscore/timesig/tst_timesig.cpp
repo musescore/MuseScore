@@ -63,7 +63,7 @@ void TestTimesig::timesig01()
 
 void TestTimesig::timesig02()
       {
-      Score* score = readScore(DIR + "timesig-02.mscz");
+      Score* score = readScore(DIR + "timesig-02.mscx");
       QVERIFY(score);
       Measure* m = score->firstMeasure();
       TimeSig* ts = new TimeSig(score);
@@ -72,7 +72,7 @@ void TestTimesig::timesig02()
       score->cmdAddTimeSig(m, 0, ts, false);
       score->doLayout();
 
-      QVERIFY(saveCompareScore(score, "timesig-02a.mscz", DIR + "timesig-02-ref.mscz"));
+      QVERIFY(saveCompareScore(score, "timesig-02a.mscx", DIR + "timesig-02-ref.mscx"));
       delete score;
 
       }

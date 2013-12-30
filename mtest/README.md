@@ -29,7 +29,7 @@ In these directories, each subdirectory represents a test suite for a particular
 
 The name of a test suite directory should be descriptive. The CPP file for the tests should use the same name as the directory, for example `tst_foo.cpp` in directory `foo`. It's good practice to include a README file in a test suite directory.
 
-Test suite CPP files contain one slot per test case. Each file should be called foo-XX with XX being an incrementing count. If a test case uses a file and a ref file, they should be called `foo-XX` and `foo-XX-ref`, with the extension either .mscx or .mscz. A test case should not reuse a file from another test case.
+Test suite CPP files contain one slot per test case. Each file should be called foo-XX with XX being an incrementing count. If a test case uses a file and a ref file, they should be called `foo-XX` and `foo-XX-ref`, with the extension .mscx. A test case should not reuse a file from another test case.
 
 To create reference or original files, MuseScore can be run with the `-t` command line argument and it will save all the files in the session in test mode. Such files do not contain platform or version information and do contain extra data for tracing (for example, they contains pixel level position for beams).
 
