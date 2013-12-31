@@ -852,8 +852,8 @@ QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
       return tracksMeta;
       }
 
-//----------------------------------------------------------------------------------------
-// DEBUG function
+
+#ifdef QT_DEBUG
 
 bool doNotesOverlap(const std::multimap<int, MTrack> &tracks)
       {
@@ -883,7 +883,8 @@ bool doNotesOverlap(const std::multimap<int, MTrack> &tracks)
       return false;
       }
 
-//----------------------------------------------------------------------------------------
+#endif
+
 
 void convertMidi(Score *score, const MidiFile *mf)
       {
