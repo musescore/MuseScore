@@ -32,6 +32,7 @@ class TestTimesig : public QObject, public MTest
    private slots:
       void initTestCase() { initMTest(); }
       void timesig01();
+      void timesig02();
       };
 
 //---------------------------------------------------------
@@ -52,6 +53,28 @@ void TestTimesig::timesig01()
 
       QVERIFY(saveCompareScore(score, "timesig01.mscx", DIR + "timesig01-ref.mscx"));
       delete score;
+      }
+
+//---------------------------------------------------------
+///   timesig02
+///   Attempt to change a 4/4 measure containing a triplet of minims to a 3/4 time signature
+///   The attempt should fail, the score left unchanged
+//---------------------------------------------------------
+
+void TestTimesig::timesig02()
+      {
+      Score* score = readScore(DIR + "timesig-02.mscx");
+      QVERIFY(score);
+      Measure* m = score->firstMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(3, 4), TSIG_NORMAL);
+
+      score->cmdAddTimeSig(m, 0, ts, false);
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, "timesig-02a.mscx", DIR + "timesig-02-ref.mscx"));
+      delete score;
+
       }
 
 QTEST_MAIN(TestTimesig)

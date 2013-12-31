@@ -54,6 +54,7 @@
 #include "repeat.h"
 #include "bracket.h"
 #include "ottava.h"
+#include "mscore/globals.h"
 
 namespace Ms {
 
@@ -436,11 +437,12 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
 
 static void warnTupletCrossing()
       {
-      QMessageBox::warning(0,
-         QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore"),
-         QT_TRANSLATE_NOOP("addRemoveTimeSig", "cannot rewrite measures:\n"
-         "tuplet would cross measure")
-         );
+      if(!noGui)
+            QMessageBox::warning(0,
+               QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore"),
+               QT_TRANSLATE_NOOP("addRemoveTimeSig", "cannot rewrite measures:\n"
+               "tuplet would cross measure")
+               );
       }
 
 //---------------------------------------------------------
@@ -448,7 +450,7 @@ static void warnTupletCrossing()
 //    rewrite all measures up to the next time signature
 //---------------------------------------------------------
 
-void Score::rewriteMeasures(Measure* fm, const Fraction& ns)
+bool Score::rewriteMeasures(Measure* fm, const Fraction& ns)
       {
       Measure* lm  = fm;
       Measure* fm1 = fm;
@@ -467,7 +469,7 @@ void Score::rewriteMeasures(Measure* fm, const Fraction& ns)
                               Fraction fr(ns);
                               undoChangeProperty(m, P_TIMESIG_NOMINAL, QVariant::fromValue(fr));
                               }
-                        return;
+                        return false;
                         }
                   if (!m || m->type() == Element::MEASURE)
                         break;
@@ -482,6 +484,7 @@ void Score::rewriteMeasures(Measure* fm, const Fraction& ns)
                   }
             lm  = static_cast<Measure*>(m);
             }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -498,6 +501,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       TimeSig* lts = staff(staffIdx)->timeSig(tick);
       Fraction stretch;
       Fraction lsig;                // last signature
+      bool written = true;
       if (lts) {
             stretch = lts->stretch();
             lsig    = lts->sig();
@@ -560,14 +564,17 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         Segment* s = m->findSegment(Segment::SegTimeSig, m->tick());
                         if (!s) {
                               // there is something to rewrite
-                              score->rewriteMeasures(fm->nextMeasure(), ns);
+                              written = score->rewriteMeasures(fm->nextMeasure(), ns);
                               }
                         }
                   else {
-                        score->rewriteMeasures(fm, ns);
+                        written = score->rewriteMeasures(fm, ns);
                         nfm = fm->prev() ? fm->prev()->nextMeasure() : firstMeasure();
                         }
                   }
+
+            if(!written)
+                  break;
 
             seg   = nfm->undoGetSegment(Segment::SegTimeSig, nfm->tick());
             int n = score->nstaves();
