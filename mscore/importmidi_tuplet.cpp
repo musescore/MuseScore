@@ -428,8 +428,8 @@ validateTuplets(std::list<int> &indexes,
       return findTupletError(indexes, tuplets, excludedChords);
       }
 
-//----------------------------------------------------------------------------------------
-// DEBUG function
+
+#ifdef QT_DEBUG
 
 bool validateSelectedTuplets(const std::list<int> &bestIndexes,
                              const std::vector<TupletInfo> &tuplets)
@@ -469,7 +469,8 @@ bool validateSelectedTuplets(const std::list<int> &bestIndexes,
       return true;
       }
 
-//----------------------------------------------------------------------------------------
+#endif
+
 
 // Try different permutations of tuplets (as indexes) to minimize quantization error.
 // Because one tuplet can use the same chord as another tuplet -
@@ -1099,8 +1100,8 @@ void removeUnusedTuplets(std::vector<TupletInfo> &tuplets,
       std::swap(tuplets, newTuplets);
       }
 
-//----------------------------------------------------------------------------------------
-// DEBUG functions
+
+#ifdef QT_DEBUG
 
 bool haveTupletsEmptyChords(const std::vector<TupletInfo> &tuplets)
       {
@@ -1178,7 +1179,8 @@ bool doTupletsHaveCommonChords(const std::vector<TupletInfo> &tuplets)
       return false;
       }
 
-//----------------------------------------------------------------------------------------
+#endif
+
 
 std::vector<std::pair<ReducedFraction, ReducedFraction> >
 findNonTupletIntervals(const std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
@@ -1243,8 +1245,7 @@ findForTiedTuplets(const std::vector<TupletInfo> &tuplets,
       }
 
 
-//----------------------------------------------------------------------------------------
-// DEBUG functions
+#ifdef QT_DEBUG
 
 bool areAllElementsUnique(const std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets)
       {
@@ -1268,7 +1269,7 @@ size_t chordCount(const std::vector<TupletInfo> &tuplets,
       return sum;
       }
 
-//----------------------------------------------------------------------------------------
+#endif
 
 
 // for the case !useMultipleVoices
