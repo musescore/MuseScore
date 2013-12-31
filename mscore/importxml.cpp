@@ -2768,8 +2768,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   if (type == "start") {
                         if (pedal) {
                               qDebug("overlapping pedal lines not supported");
-                              delete pedal;
-                              pedal = 0;
                               }
                         else {
                               pedal = new Pedal(score);
@@ -2779,7 +2777,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                                                 score->spatium(), placement,
                                                 hasYoffset, yoffset);
                               spanners[pedal] = QPair<int, int>(tick, -1);
-                              // qDebug("wedge pedal=%p inserted at first tick %d", pedal, tick);
+                              // qDebug("pedal=%p inserted at first tick %d", pedal, tick);
                               }
                         }
                   else if (type == "stop") {
@@ -2788,12 +2786,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               }
                         else {
                               spanners[pedal].second = tick;
-                              // qDebug("wedge pedal=%p second tick %d", pedal, tick);
+                              // qDebug("pedal=%p second tick %d", pedal, tick);
                               pedal = 0;
                               }
                         }
                   else
-                        qDebug("unknown pedal %s", type.toLatin1().data());
+                        qDebug("unknown pedal %s", qPrintable(type));
                   }
             else {
                   Symbol* s = new Symbol(score);
@@ -2839,9 +2837,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             if (type == "crescendo" || type == "diminuendo") {
                   if (hairpin) {
                         qDebug("overlapping wedge not supported");
-                        spanners.remove(hairpin);
-                        delete hairpin;
-                        hairpin = 0;
                         }
                   else {
                         hairpin = new Hairpin(score);
@@ -2856,7 +2851,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         // hairpin->setUserOff(rx, ry));
                         hairpin->setTrack((staff + rstaff) * VOICES);
                         spanners[hairpin] = QPair<int, int>(tick, -1);
-                        // qDebug("wedge hairpin=%p inserted at first tick %d", hairpin, tick);
+                        // qDebug("hairpin=%p inserted at first tick %d", hairpin, tick);
                         }
                   }
             else if (type == "stop") {
@@ -2865,7 +2860,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         }
                   else {
                         spanners[hairpin].second = tick;
-                        // qDebug("wedge hairpin=%p second tick %d", hairpin, tick);
+                        // qDebug("hairpin=%p second tick %d", hairpin, tick);
                         hairpin = 0;
                         }
                   }
@@ -2877,9 +2872,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             TextLine* b = bracket[n];
             if (type == "start") {
                   if (b) {
-                        qDebug("overlapping bracket with same number?");
-                        delete b;
-                        bracket[n] = 0;
+                        qDebug("overlapping bracket number %d", number);
                         }
                   else {
                         b = new TextLine(score);
@@ -2914,8 +2907,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
 
                         b->setTrack((staff + rstaff) * VOICES);
                         spanners[b] = QPair<int, int>(tick, -1);
-                        qDebug("bracket=%p inserted at first tick %d", b, tick);
                         bracket[n] = b;
+                        //qDebug("bracket=%p inserted at first tick %d", b, tick);
                         }
                   }
             else if (type == "stop") {
@@ -2940,8 +2933,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         if (lineEnd == "up")
                               b->setEndHookHeight(-1 * b->endHookHeight());
                         spanners[b].second = tick;
-                        qDebug("bracket=%p second tick %d", b, tick);
                         bracket[n] = 0;
+                        //qDebug("bracket=%p second tick %d", b, tick);
                         }
                   }
             }
@@ -2950,9 +2943,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             TextLine* b = dashes[n];
             if (type == "start") {
                   if (b) {
-                        printf("overlapping dashes with same number?\n");
-                        delete b;
-                        dashes[n] = 0;
+                        qDebug("overlapping dashes, number %d", number);
                         }
                   else {
                         b = new TextLine(score);
@@ -2976,14 +2967,13 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         b->setLineStyle(Qt::DashLine);
                         b->setTrack((staff + rstaff) * VOICES);
                         spanners[b] = QPair<int, int>(tick, -1);
-                        qDebug("bracket=%p inserted at first tick %d", b, tick);
-                        // b->setTick(tick);
                         dashes[n] = b;
+                        //qDebug("dashes=%p inserted at first tick %d", b, tick);
                         }
                   }
             else if (type == "stop") {
                   if (!b) {
-                        printf("dashes stop without start, number %d\n", number);
+                        qDebug("dashes stop without start, number %d", number);
                         }
                   else {
                         // b->setTick2(tick);
@@ -3002,10 +2992,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         ls2->setUserOff2(QPointF(rx + xoffset, ry + yoffset));
                         */
                         b->setEndHook(false);
-                        // score->add(b);
                         spanners[b].second = tick;
-                        qDebug("bracket=%p second tick %d", b, tick);
                         dashes[n] = 0;
+                        //qDebug("dashes=%p second tick %d", b, tick);
                         }
                   }
             }
@@ -3013,16 +3002,10 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             if (type == "up" || type == "down") {
                   if (ottava) {
                         qDebug("overlapping octave-shift not supported");
-                        //qDebug("delete ottava %p", ottava);
-                        //delete ottava;
-                        //ottava = 0;
                         }
                   else {
                         if (!(ottavasize == 8 || ottavasize == 15)) {
                               qDebug("unknown octave-shift size %d", ottavasize);
-                              qDebug("delete ottava %p", ottava);
-                              delete ottava;
-                              ottava = 0;
                               }
                         else {
                               ottava = new Ottava(score);
@@ -3036,7 +3019,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                                                 score->spatium(), placement,
                                                 hasYoffset, yoffset);
                               spanners[ottava] = QPair<int, int>(tick, -1);
-                              qDebug("ottava=%p inserted at first tick %d", ottava, tick);
+                              //qDebug("ottava=%p inserted at first tick %d", ottava, tick);
                               }
                         }
                   }
@@ -3046,7 +3029,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         }
                   else {
                         spanners[ottava].second = tick;
-                        qDebug("ottava=%p second tick %d", ottava, tick);
+                        //qDebug("ottava=%p second tick %d", ottava, tick);
                         ottava = 0;
                         }
                   }
