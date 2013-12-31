@@ -21,17 +21,17 @@ To see how the CI environment is doing it check `.travis.yml` and `build/run_tes
 
 **Note: You need to have `diff` in your path. For Windows, get a copy of [diffutils for Windows](http://gnuwin32.sourceforge.net/packages/diffutils.htm "diffutils for Windows").**
 
-Test cases convention
+Test case conventions
 ====================
 
 Tests are grouped in directories by feature (like libmscore or mxl). 
-In these directories, each subdirectory represent a test suite for a particular sub feature.
+In these directories, each subdirectory represents a test suite for a particular sub feature.
 
-A test suite directory for a test suite should be descriptive. The CPP file for the tests should use the same name than the directory `tst_foo.cpp`. It's good practise to include a README file in a test suite directory.
+The name of a test suite directory should be descriptive. The CPP file for the tests should use the same name as the directory, for example `tst_foo.cpp` in directory `foo`. It's good practice to include a README file in a test suite directory.
 
-A test suite CPP files contains a signal per test case. Each signal should be called fooXX with XX being incremental. If a test case refers to a file and ref file, they should be call `fooXX.mscx` and `foo-ref.mscx`. A test case should not reuse a file from another test case.
+Test suite CPP files contain one slot per test case. Each file should be called foo-XX with XX being an incrementing count. If a test case uses a file and a ref file, they should be called `foo-XX` and `foo-XX-ref`, with the extension .mscx. A test case should not reuse a file from another test case.
 
-To create reference or original files, MuseScore can be run with the `-t` command line argument and it will save all the files in the session in test mode. Such files do not contain platform specific information, version information, and can be instrumented (for example, they contains pixel level position for beams)
+To create reference or original files, MuseScore can be run with the `-t` command line argument and it will save all the files in the session in test mode. Such files do not contain platform or version information and do contain extra data for tracing (for example, they contains pixel level position for beams).
 
 How to write a test case
 ===============
@@ -39,11 +39,11 @@ How to write a test case
 Import test
 ----------------
 
-* Open a short file in one of the format supported by MuseScore and containing a special case
-* Save in MuseSCore format
+* Open a short file containing an individual case in one of the formats supported by MuseScore
+* Save in MuseScore format
 * Compare with reference file
 
-First the test will fail because there is no reference file. Open the file created by the test case in MuseScore and try to edit it to be sure it's sane. If the file is sane, save it (without your edition) as a reference file.
+At first the test will fail because there is no reference file. Open the file created by the test case in MuseScore and try to edit it to be sure it's valid. If the file is valid, save it (without version number) as a reference file.
 
 Object read write
 ----------------
@@ -71,6 +71,6 @@ Compatibility tests
 
 Most of them are in `mtest/libmscore/compat`
 
-* Read a score file from an older version of MuseScore (currently only 1.2)
+* Read a score file from an older version of MuseScore
 * Write the file
 * Compare with a reference file
