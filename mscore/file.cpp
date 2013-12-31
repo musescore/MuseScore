@@ -194,6 +194,10 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   break;
             }
       int rv = false;
+      if (converterMode) {
+            fprintf(stderr, "%s\n", qPrintable(msg));
+            return rv;
+            }
       if (canIgnore && ask)  {
             QMessageBox msgBox;
             msgBox.setWindowTitle(QT_TRANSLATE_NOOP(file, "MuseScore: Load error"));
@@ -2084,7 +2088,7 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             if (fileName.endsWith(".png"))
                   fileName = fileName.left(fileName.size() - 4);
             fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
-            if(!converterMode) {
+            if (!converterMode) {
                   QFileInfo fip(fileName);
                   if(fip.exists() && !overwrite) {
                         if(noToAll)

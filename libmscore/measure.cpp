@@ -750,7 +750,6 @@ Segment* Measure::findSegment(Segment::SegmentType st, int t)
       Segment* s;
       for (s = first(); s && s->tick() < t; s = s->next())
             ;
-
       for (; s && s->tick() == t; s = s->next()) {
             if (s->segmentType() == st)
                   return s;
@@ -860,10 +859,12 @@ void Measure::add(Element* el)
                                     }
                               }
                         else {
-                              while (s && s->segmentType() <= st) {
-                                    if (s->next() && s->next()->tick() != t)
-                                          break;
-                                    s = s->next();
+                              if (s && s->tick() == t) {
+                                    while (s && s->segmentType() <= st) {
+                                          if (s->next() && s->next()->tick() != t)
+                                                break;
+                                          s = s->next();
+                                          }
                                     }
                               //
                               // place breath _after_ chord
@@ -873,6 +874,7 @@ void Measure::add(Element* el)
                               }
                         }
                   seg->setParent(this);
+
                   _segments.insert(seg, s);
                   if ((seg->segmentType() == Segment::SegTimeSig) && seg->element(0)) {
 #if 0
@@ -1803,20 +1805,20 @@ void Measure::read(XmlReader& e, int staffIdx)
                   BarLine* barLine = new BarLine(score());
                   barLine->setTrack(e.track());
                   barLine->read(e);
-                  if ((e.tick() != tick()) && (e.tick() != (tick() + ticks()))) {
-                        // this is a mid measure bar line
-                        segment = getSegment(Segment::SegBarLine, e.tick());
-                        }
+                  Segment::SegmentType st;
+                  if ((e.tick() != tick()) && (e.tick() != (tick() + ticks())))
+                        st = Segment::SegBarLine;     // this is a mid measure bar line
                   else if (barLine->barLineType() == START_REPEAT)
-                        segment = getSegment(Segment::SegStartRepeatBarLine, e.tick());
+                        st = Segment::SegStartRepeatBarLine;
                   else {
                         setEndBarLineType(barLine->barLineType(), false, true);
                         if(!barLine->customSpan()) {
                               Staff* staff = score()->staff(staffIdx);
                               barLine->setSpan(staff->barLineSpan());
                               }
-                        segment = getSegment(Segment::SegEndBarLine, e.tick());
+                        st = Segment::SegEndBarLine;
                         }
+                  segment = getSegment(st, e.tick());
                   segment->add(barLine);
                   }
             else if (tag == "Chord") {
@@ -3154,7 +3156,6 @@ void Measure::layoutX(qreal stretch)
 
                   clefWidth[staffIdx] = 0.0;
                   }
-
             // set previous seg width before adding in harmony, to allow stretching
             if (segmentIdx) {
                   width[segmentIdx-1] = segmentWidth;

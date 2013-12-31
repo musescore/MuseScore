@@ -1275,6 +1275,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
             else
                   nextMeasure = curMeasure->nextMM();
 
+            Q_ASSERT(nextMeasure != curMeasure);
+
             System* oldSystem = curMeasure->system();
             curMeasure->setSystem(system);
             qreal ww = 0.0;

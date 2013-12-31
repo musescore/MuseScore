@@ -72,7 +72,6 @@ void Segment::setElement(int track, Element* el)
       {
       if (el) {
             el->setParent(this);
-            printf("Segment::setElement %s segment %s\n", el->name(), subTypeName());
             _elist[track] = el;
             empty = false;
             }
