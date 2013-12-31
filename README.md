@@ -77,15 +77,18 @@ MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directo
 **Read the developer handbook for a [complete build walkthrough](http://musescore.org/en/developers-handbook/compilation) and a list of dependencies.**
 
 * unpack source distribution
+
         tar xvofj mscore-x.x.x.tar.bz2
 
 * make
+
         cd mscore-x.x.x
         make release
 
 if something goes wrong, then remove the whole build subdirectory with `make clean` and start new with `make release`
 
 * install as root user
+
         sudo make install
 
 ### Program Documentation
