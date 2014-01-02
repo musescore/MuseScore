@@ -1032,6 +1032,7 @@ MuseScore::MuseScore()
       menuStyle->addAction(getAction("load-style"));
       menuStyle->addAction(getAction("save-style"));
       menuStyle->addAction(getAction("save-default-style"));
+      menuStyle->addAction(getAction("save-default-style-for-parts"));
 
       //---------------------
       //    Menu Plugins
@@ -4168,19 +4169,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   }
             }
       else if (cmd == "save-default-style") {
-            QString name = getStyleFilename(false);
-            if (!name.isEmpty()) {
-                  if (!cs->saveStyle(name)) {
-                        QMessageBox::critical(this,
-                           tr("MuseScore: save style"), MScore::lastError);
-                        }
-                  else {
-                        QFileInfo info(name);
-                        if (info.suffix().isEmpty())
-                              info.setFile(info.filePath() + ".mss");
-                        preferences.defaultStyleFile = info.filePath();
-                        }
-                  }
+            saveDefaultStyle(false);
+            }
+      else if (cmd == "save-default-style-for-parts") {
+            saveDefaultStyle(true);
             }
       else if (cmd == "load-style") {
             QString name = mscore->getStyleFilename(true);
@@ -4288,6 +4280,87 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       if (debugger)
             debugger->reloadClicked();
+      }
+
+//---------------------------------------------------------
+//   saveDefaultStyle
+//---------------------------------------------------------
+
+void MuseScore::saveDefaultStyle(bool forParts)
+      {
+      QString name = getStyleFilename(false);
+      if (!name.isEmpty()) {
+            if (!cs->saveStyle(name)) {
+                  QMessageBox::critical(this,
+                                  tr("MuseScore: save style"), MScore::lastError);
+            }
+            else {
+                  QFileInfo info(name);
+                  if (info.suffix().isEmpty())
+                        info.setFile(info.filePath() + ".mss");
+                  if(forParts)
+                        preferences.defaultStyleFileForParts = info.filePath();
+                  else
+                        preferences.defaultStyleFile = info.filePath();
+                  }
+                  preferences.readDefaultStyle(forParts);
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdAddChordName2
+//---------------------------------------------------------
+
+void MuseScore::cmdAddChordName2()
+      {
+      if (cs == 0 || !cs->checkHasMeasures())
+            return;
+      ChordRest* cr = cs->getSelectedChordRest();
+      if (!cr)
+            return;
+      int rootTpc = 14;
+      if (cr->type() == Element::CHORD) {
+            Chord* chord = static_cast<Chord*>(cr);
+            rootTpc = chord->downNote()->tpc();
+            }
+      Harmony* s = 0;
+      Segment* segment = cr->segment();
+
+      foreach(Element* e, segment->annotations()) {
+            if (e->type() == Element::HARMONY && (e->track() == cr->track())) {
+                  s = static_cast<Harmony*>(e);
+                  break;
+                  }
+            }
+
+      bool created = false;
+      if (s == 0) {
+            s = new Harmony(cs);
+            s->setTrack(cr->track());
+            s->setParent(segment);
+            s->setRootTpc(rootTpc);
+            created = true;
+            }
+      ChordEdit ce(cs);
+      ce.setHarmony(s);
+      int rv = ce.exec();
+      if (rv) {
+            const Harmony* h = ce.harmony();
+            s->setRootTpc(h->rootTpc());
+            s->setBaseTpc(h->baseTpc());
+            s->setId(h->id());
+            s->clearDegrees();
+            for (int i = 0; i < h->numberOfDegrees(); i++)
+                  s->addDegree(h->degree(i));
+            s->render();
+            cs->select(s, SELECT_SINGLE, 0);
+            cs->undoAddElement(s);
+            cs->setLayoutAll(true);
+            }
+      else {
+            if (created)
+                  delete s;
+            }
       }
 
 //---------------------------------------------------------
@@ -4722,8 +4795,8 @@ int main(int argc, char* av[])
 
       if (!useFactorySettings)
             preferences.read();
-
-      preferences.readDefaultStyle();
+      preferences.readDefaultStyle(false);
+      preferences.readDefaultStyle(true);
 
       if (converterDpi == 0)
             converterDpi = preferences.pngResolution;

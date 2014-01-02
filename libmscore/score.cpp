@@ -377,12 +377,11 @@ Score::Score(Score* parent)
       {
       _parentScore = parent;
       init();
-
-      _style = *parent->style();
-      if (!MScore::partStyle.isEmpty()) {
-            QFile f(MScore::partStyle);
-            if (f.open(QIODevice::ReadOnly))
-                  _style.load(&f);
+      if (!MScore::defaultStyleFileForParts.isEmpty()){
+            _style = *MScore::defaultStyleForParts();
+            }
+      else {
+            _style = *parent->style();
             }
       _synthesizerState = parent->_synthesizerState;
       }

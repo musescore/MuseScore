@@ -36,6 +36,7 @@ bool  MScore::debugMode;
 bool  MScore::testMode = false;
 
 MStyle* MScore::_defaultStyle;
+MStyle* MScore::_defaultStyleForParts;
 MStyle* MScore::_baseStyle;
 QString MScore::_globalShare;
 int     MScore::_vRaster;
@@ -55,7 +56,8 @@ qreal   MScore::nudgeStep;
 qreal   MScore::nudgeStep10;
 qreal   MScore::nudgeStep50;
 int     MScore::defaultPlayDuration;
-QString MScore::partStyle;
+QString MScore::defaultStyleFile;
+QString MScore::defaultStyleFileForParts;
 QString MScore::lastError;
 bool    MScore::layoutDebug = false;
 int     MScore::division    = 480;   // pulses per quarter note (PPQ) // ticks per beat
@@ -128,7 +130,8 @@ void MScore::init()
       replaceFractions    = true;
       playRepeats         = true;
       panPlayback         = true;
-      partStyle           = "";
+      defaultStyleFile    = "";
+      defaultStyleFileForParts = "";
 
       lastError           = "";
 
@@ -136,9 +139,11 @@ void MScore::init()
       frameMarginColor    = QColor("#6abed3");
       bgColor.setNamedColor("#dddddd");
 
-      _defaultStyle         = new MStyle();
+      _defaultStyle           = new MStyle();
+      _defaultStyleForParts   = new MStyle();
       Ms::initStyle(_defaultStyle);
-      _baseStyle            = new MStyle(*_defaultStyle);
+      Ms::initStyle(_defaultStyleForParts);
+      _baseStyle              = new MStyle(*_defaultStyle);
 
       //
       //  load internal fonts
@@ -183,6 +188,15 @@ MStyle* MScore::defaultStyle()
       }
 
 //---------------------------------------------------------
+//   defaultStyleForParts
+//---------------------------------------------------------
+
+MStyle* MScore::defaultStyleForParts()
+      {
+      return _defaultStyleForParts;
+      }
+
+//---------------------------------------------------------
 //   baseStyle
 //---------------------------------------------------------
 
@@ -195,10 +209,13 @@ MStyle* MScore::baseStyle()
 //   setDefaultStyle
 //---------------------------------------------------------
 
-void MScore::setDefaultStyle(MStyle* s)
+void MScore::setDefaultStyle(MStyle* s, bool forParts)
       {
-      delete _defaultStyle;
-      _defaultStyle = s;
+      delete (forParts ? _defaultStyleForParts : _defaultStyle);
+      if (forParts)
+            _defaultStyleForParts = s;
+      else
+            _defaultStyle = s;
       }
 
 }
