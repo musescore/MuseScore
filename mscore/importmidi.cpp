@@ -895,6 +895,10 @@ void convertMidi(Score *score, const MidiFile *mf)
       cleanUpMidiEvents(tracks);
       MChord::collectChords(tracks);
       MChord::removeOverlappingNotes(tracks);
+
+      Q_ASSERT_X(!doNotesOverlap(tracks),
+                 "convertMidi:", "There are overlapping notes of the same voice that is incorrect");
+
       quantizeAllTracks(tracks, sigmap, lastTick);
 
       Q_ASSERT_X(!doNotesOverlap(tracks),
