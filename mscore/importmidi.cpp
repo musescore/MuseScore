@@ -878,7 +878,7 @@ bool doNotesOverlap(const std::multimap<int, MTrack> &tracks)
                                     }
                               }
                         }
-                  } // for note1
+                  }
             }
       return false;
       }
