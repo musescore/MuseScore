@@ -12042,7 +12042,6 @@ fehlgeschlagen: </translation>
     <message>
         <source>Rest</source>
         <translation>Pause</translation>
->>>>>>> fix #24030: Styles for Parts
     </message>
     <message>
         <source>Add note D to chord</source>
