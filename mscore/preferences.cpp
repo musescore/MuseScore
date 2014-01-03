@@ -136,11 +136,12 @@ void Preferences::init()
       portaudioDevice    = -1;
       portMidiInput      = "";
 
-      antialiasedDrawing       = true;
-      sessionStart             = SCORE_SESSION;
-      startScore               = ":/data/Promenade_Example.mscz";
-      defaultStyleFile         = "";
-      showSplashScreen         = true;
+      antialiasedDrawing        = true;
+      sessionStart              = SCORE_SESSION;
+      startScore                = ":/data/Promenade_Example.mscz";
+      defaultStyleFile          = "";
+      defaultStyleFileForParts  = "";
+      showSplashScreen          = true;
 
       useMidiRemote      = false;
       for (int i = 0; i < MIDI_REMOTES; ++i)
@@ -276,7 +277,7 @@ void Preferences::write()
             }
       s.setValue("startScore",         startScore);
       s.setValue("defaultStyle",       defaultStyleFile);
-      s.setValue("partStyle",          MScore::partStyle);
+      s.setValue("defaultStyleForParts",       defaultStyleFileForParts);
       s.setValue("showSplashScreen",   showSplashScreen);
 
       s.setValue("midiExpandRepeats",  midiExpandRepeats);
@@ -421,8 +422,9 @@ void Preferences::read()
       antialiasedDrawing = s.value("antialiasedDrawing", antialiasedDrawing).toBool();
 
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
-      MScore::partStyle        = s.value("partStyle", MScore::partStyle).toString();
-
+      defaultStyleFileForParts = s.value("defaultStyleForParts", defaultStyleFileForParts).toString();
+      MScore::defaultStyleFile = s.value("defaultStyle", MScore::defaultStyleFile).toString();
+      MScore::defaultStyleFileForParts = s.value("defaultStyleForParts", MScore::defaultStyleFileForParts).toString();
       showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
       midiExpandRepeats        = s.value("midiExpandRepeats", midiExpandRepeats).toBool();
       MScore::playRepeats      = s.value("playRepeats", MScore::playRepeats).toBool();
@@ -990,6 +992,7 @@ void PreferenceDialog::updateValues()
       animations->setChecked(prefs.animations);
 
       defaultStyle->setText(prefs.defaultStyleFile);
+      partStyle->setText(prefs.defaultStyleFileForParts);
 
       myScores->setText(prefs.myScoresPath);
       myStyles->setText(prefs.myStylesPath);
@@ -1435,7 +1438,10 @@ void PreferenceDialog::apply()
             prefs.defaultStyleFile = defaultStyle->text();
             prefs.readDefaultStyle();
             }
-
+      if (partStyle->text() != prefs.defaultStyleFileForParts) {
+            prefs.defaultStyleFileForParts = partStyle->text();
+            prefs.readDefaultStyle(true);
+            }
       genIcons();
 
       mscore->setIconSize(QSize(prefs.iconWidth, prefs.iconHeight));
@@ -1443,6 +1449,7 @@ void PreferenceDialog::apply()
       preferences = prefs;
       emit preferencesChanged();
       preferences.write();
+      preferences.read();
       mscore->startAutoSave();
       }
 
@@ -1450,17 +1457,19 @@ void PreferenceDialog::apply()
 //   readDefaultStyle
 //---------------------------------------------------------
 
-bool Preferences::readDefaultStyle()
+bool Preferences::readDefaultStyle(bool forParts)
       {
-      if (defaultStyleFile.isEmpty())
+      QString styleFile = forParts ? defaultStyleFileForParts : defaultStyleFile;  // ise last
+      if (styleFile.isEmpty())
             return false;
-      MStyle* style = new MStyle(*MScore::defaultStyle());
-      QFile f(defaultStyleFile);
+      MStyle* style = new MStyle;
+      QFile f(styleFile);
       if (!f.open(QIODevice::ReadOnly))
             return false;
+
       bool rv = style->load(&f);
-      if (rv)
-            MScore::setDefaultStyle(style);     // transfer ownership
+            MScore::setDefaultStyle(style, forParts);  // transfer ownership   // ise
+
       f.close();
       return rv;
       }
