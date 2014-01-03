@@ -318,3 +318,44 @@ void ExcerptsDialog::accept()
       }
 }
 
+//---------------------------------------------------------
+//   Load part style
+//---------------------------------------------------------
+
+void Ms::ExcerptsDialog::on_loadPartsStyleButton_clicked()
+{
+      QString name = mscore->getStyleFilename(true);
+      if (!name.isEmpty()) {
+            if(score->excerpts().count() == 0) {
+                  QMessageBox msgBox;
+                  msgBox.setText(QT_TRANSLATE_NOOP("ExcerptsDialog", "There are no parts."));
+                  msgBox.setInformativeText(QT_TRANSLATE_NOOP("ExcerptsDialog", "Do you want to generate them now?"));
+                  QPushButton* makePartsButton = msgBox.addButton(tr(QT_TRANSLATE_NOOP("ExcerptsDialog", "Generate Parts")), QMessageBox::ActionRole);
+                  QPushButton* abortButton = msgBox.addButton(QMessageBox::Abort);
+                  msgBox.exec();
+
+                  if (msgBox.clickedButton() == makePartsButton) {
+                        if(!excerptList->count())
+                              newAllClicked();
+                        accept();
+                        }
+                  else if (msgBox.clickedButton() == abortButton) {
+                        return;
+                        }
+                  }
+            foreach(Excerpt* excerpt, score->excerpts()){
+                  Score* sc = excerpt->score();
+                  sc->startCmd();
+                  if (!sc->loadStyle(name)) {
+                        QMessageBox::critical(this, tr("MuseScore: load style"), MScore::lastError);
+                        }
+                  else {
+                        score->setSaved(false);
+                        score->setDirty(true);
+                        }
+                   sc->endCmd();
+                   }
+            }
+      raise();
+}
+
