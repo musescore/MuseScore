@@ -90,8 +90,8 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
             }
       }
 
-//----------------------------------------------------------------------------------------
-// DEBUG function
+
+#ifdef QT_DEBUG
 
 bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
       {
@@ -105,7 +105,8 @@ bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &c
       return true;
       }
 
-//----------------------------------------------------------------------------------------
+#endif
+
 
 // based on quickthresh algorithm
 //
