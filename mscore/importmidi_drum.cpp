@@ -16,8 +16,8 @@ extern Preferences preferences;
 
 namespace MidiDrum {
 
-//----------------------------------------------------------------------------------------
-// DEBUG functions
+
+#ifdef QT_DEBUG
 
 bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
       {
@@ -40,7 +40,8 @@ bool areVoicesNonZero(const std::multimap<ReducedFraction, MidiChord> &chords)
       return true;
       }
 
-//----------------------------------------------------------------------------------------
+#endif
+
 
 void splitDrumVoices(std::multimap<int, MTrack> &tracks)
       {

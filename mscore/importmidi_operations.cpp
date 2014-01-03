@@ -55,11 +55,14 @@ QString MidiImportOperations::charset() const
 void MidiImportOperations::adaptForPercussion(int trackIndex, bool isDrumTrack)
       {
                   // small hack: don't use multiple voices for tuplets in percussion tracks
-      if (isValidIndex(trackIndex))
-            operations_[trackIndex].useMultipleVoices = !isDrumTrack;
-      else
+      if (isValidIndex(trackIndex)) {
+            if (isDrumTrack)
+                  operations_[trackIndex].useMultipleVoices = false;
+            }
+      else {
             defaultOpers.useMultipleVoices = isDrumTrack
                         ? false : TrackOperations().useMultipleVoices;
+            }
       }
 
 void MidiImportOperations::addTrackLyrics(const std::multimap<ReducedFraction, std::string> &trackLyrics)
