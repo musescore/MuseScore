@@ -497,7 +497,7 @@ class Element : public QObject {
  */
       virtual bool mousePress(const QPointF&, QMouseEvent*) { return false; }
 
-      mutable int itemDiscovered;     ///< helper flag for bsp
+      mutable bool itemDiscovered;     ///< helper flag for bsp
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 

@@ -55,7 +55,7 @@ class FindItemBspTreeVisitor : public BspTreeVisitor
             for (int i = 0; i < items->size(); ++i) {
                   Element* item = items->at(i);
                   if (!item->itemDiscovered) {
-                        item->itemDiscovered = 1;
+                        item->itemDiscovered = true;
                         foundItems.prepend(item);
                         }
                   }
@@ -138,9 +138,8 @@ QList<Element*> BspTree::items(const QRectF& rect)
       {
       FindItemBspTreeVisitor findVisitor;
       climbTree(&findVisitor, rect);
-      for (Element * e : findVisitor.foundItems) {
-            e->itemDiscovered = 0;
-            }
+      for (Element * e : findVisitor.foundItems)
+            e->itemDiscovered = false;
       return findVisitor.foundItems;
       }
 
@@ -154,9 +153,8 @@ QList<Element*> BspTree::items(const QPointF& pos)
       climbTree(&findVisitor, pos);
 
       QList<Element*> l;
-      for (int i = 0; i < findVisitor.foundItems.size(); ++i) {
-            Element* e = findVisitor.foundItems.at(i);
-            e->itemDiscovered = 0;
+      for (Element* e : findVisitor.foundItems) {
+            e->itemDiscovered = false;
             if (e->contains(pos))
                   l.append(e);
             }

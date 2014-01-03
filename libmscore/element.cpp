@@ -303,7 +303,7 @@ Element::Element(Score* s) :
    _mag(1.0),
    _tag(1),
    _score(s),
-   itemDiscovered(0)
+   itemDiscovered(false)
       {
       }
 
@@ -326,7 +326,7 @@ Element::Element(const Element& e)
       _score      = e._score;
       _bbox       = e._bbox;
       _tag        = e._tag;
-      itemDiscovered = 0;
+      itemDiscovered = false;
       }
 
 //---------------------------------------------------------
