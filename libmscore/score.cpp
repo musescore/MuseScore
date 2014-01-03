@@ -3091,7 +3091,6 @@ void Score::lassoSelect(const QRectF& bbox)
             QList<Element*> el = page->items(frr);
             for (int i = 0; i < el.size(); ++i) {
                   Element* e = el.at(i);
-                  e->itemDiscovered = 0;
                   if (frr.contains(e->abbox())) {
                         if (e->type() != Element::MEASURE && e->selectable())
                               select(e, SELECT_ADD, 0);

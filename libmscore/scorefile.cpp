@@ -1102,7 +1102,6 @@ void Score::print(QPainter* painter, int pageNo)
       QList<Element*> ell = page->items(fr);
       qStableSort(ell.begin(), ell.end(), elementLessThan);
       foreach(const Element* e, ell) {
-            e->itemDiscovered = 0;
             if (!e->visible())
                   continue;
             painter->save();
