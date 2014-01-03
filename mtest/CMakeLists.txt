@@ -77,7 +77,7 @@ target_link_libraries(
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -O2 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -O2 -DNDEBUG -DQT_NO_DEBUG")
 
 string(REPLACE ";" ";-I" INC "${QT_INCLUDES}")
 
