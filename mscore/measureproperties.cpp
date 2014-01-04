@@ -24,6 +24,7 @@
 #include "libmscore/score.h"
 #include "libmscore/repeat.h"
 #include "libmscore/undo.h"
+#include "libmscore/range.h"
 
 namespace Ms {
 
@@ -226,8 +227,13 @@ void MeasureProperties::apply()
             if (int(m->measureNumberMode()) != mode)
                   score->undoChangeProperty(m, P_MEASURE_NUMBER_MODE, mode);
             if (m->len() != len()) {
-                  m->adjustToLen(len());
-                  score->select(m, SELECT_RANGE, 0);
+
+                  ScoreRange range;
+                  range.read(m->first(), m->last(), 0, score->nstaves() * VOICES);
+                  if (range.canWrite(len())) {
+                        m->adjustToLen(len());
+                        score->select(m, SELECT_RANGE, 0);
+                        }
                   }
             }
       score->select(0, SELECT_SINGLE, 0);
