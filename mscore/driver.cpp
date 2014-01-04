@@ -29,7 +29,7 @@
 namespace Ms {
 
 #ifdef USE_PULSEAUDIO
-extern Driver* getPulseAudioDriver(Sequencer*);
+extern Driver* getPulseAudioDriver(Seq*);
 #endif
 
 //---------------------------------------------------------
@@ -37,7 +37,7 @@ extern Driver* getPulseAudioDriver(Sequencer*);
 //    driver can be: jack alsa pulse portaudio
 //---------------------------------------------------------
 
-Driver* driverFactory(Sequencer* seq, QString driverName)
+Driver* driverFactory(Seq* seq, QString driverName)
       {
       Driver* driver = 0;
 #if 1 // DEBUG: force "no audio"
