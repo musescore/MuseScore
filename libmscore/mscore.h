@@ -332,6 +332,7 @@ class MScore : public QObject {
    private:
       static MStyle* _defaultStyle;       // default modified by preferences
       static MStyle* _baseStyle;          // buildin initial style
+      static MStyle* _defaultStyleForParts;       // default style for parts modified by preferences
       static QString _globalShare;
       static int _hRaster, _vRaster;
 
@@ -342,8 +343,9 @@ class MScore : public QObject {
 
       static void init();
       static MStyle* defaultStyle();
+      static MStyle* defaultStyleForParts();
       static MStyle* baseStyle();
-      static void setDefaultStyle(MStyle*);
+      static void setDefaultStyle(MStyle*, bool forParts = false);
       static const QString& globalShare()   { return _globalShare; }
       static qreal hRaster()                { return _hRaster;     }
       static qreal vRaster()                { return _vRaster;     }
@@ -368,7 +370,8 @@ class MScore : public QObject {
       static qreal nudgeStep10;
       static qreal nudgeStep50;
       static int defaultPlayDuration;
-      static QString partStyle;
+      static QString defaultStyleFile;
+      static QString defaultStyleFileForParts;
       static QString lastError;
       static bool layoutDebug;
 
