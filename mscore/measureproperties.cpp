@@ -25,6 +25,7 @@
 #include "libmscore/repeat.h"
 #include "libmscore/undo.h"
 #include "libmscore/range.h"
+#include "globals.h"
 
 namespace Ms {
 
@@ -234,6 +235,13 @@ void MeasureProperties::apply()
                         m->adjustToLen(len());
                         score->select(m, SELECT_RANGE, 0);
                         }
+                  else
+                        if(!noGui)
+                              QMessageBox::warning(0,
+                                 QT_TRANSLATE_NOOP("MeasureProperties", "MuseScore"),
+                                 QT_TRANSLATE_NOOP("MeasureProperties", "cannot change measure length:\n"
+                                 "tuplet would cross measure")
+                                 );
                   }
             }
       score->select(0, SELECT_SINGLE, 0);
