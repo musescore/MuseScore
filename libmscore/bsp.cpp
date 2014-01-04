@@ -138,9 +138,13 @@ QList<Element*> BspTree::items(const QRectF& rect)
       {
       FindItemBspTreeVisitor findVisitor;
       climbTree(&findVisitor, rect);
-      for (Element * e : findVisitor.foundItems)
-            e->itemDiscovered = false;
-      return findVisitor.foundItems;
+      QList<Element*> l;
+      for (Element * e : findVisitor.foundItems) {
+          e->itemDiscovered = false;
+          if (e->pageBoundingRect().intersects(rect))
+                l.append(e);
+          }
+          return l;
       }
 
 //---------------------------------------------------------
