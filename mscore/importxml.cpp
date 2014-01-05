@@ -657,7 +657,7 @@ Score::FileError importMusicXml(Score* score, const QString& name)
       QFile xmlFile(name);
       if (!xmlFile.exists())
             return Score::FILE_NOT_FOUND;
-      if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      if (!xmlFile.open(QIODevice::ReadOnly)) {
             qDebug("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open MusicXML file\n");
             return Score::FILE_OPEN_ERROR;
