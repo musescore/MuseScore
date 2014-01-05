@@ -77,6 +77,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       QList<Chord*> graceNotes;
       int dstStaffStart = dst->staffIdx();
       int dstTick = dst->tick();
+      int dstVoice= dst->voice();
       bool done = false;
       while (e.readNextStartElement()) {
             if (done)
@@ -138,8 +139,10 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                               }
                         else if (tag == "Chord" || tag == "Rest" || tag == "RepeatMeasure") {
                               ChordRest* cr = static_cast<ChordRest*>(Element::name2Element(tag, this));
-                              cr->setTrack(e.track());
+//                              cr->setTrack(e.track());
                               cr->read(e);
+                              if (cr->track() != dstVoice)
+                                    continue;
                               cr->setSelected(false);
                               int voice = cr->voice();
                               int track = dstStaffIdx * VOICES + voice;
@@ -296,35 +299,34 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                               qDebug("PasteStaff: element %s not handled", tag.toUtf8().data());
                               e.skipCurrentElement();    // ignore
                               }
-                        }
-
-                  foreach (Tuplet* tuplet, e.tuplets()) {
-                        if (tuplet->elements().isEmpty()) {
-                              // this should not happen and is a sign of input file corruption
-                              qDebug("Measure:pasteStaff(): empty tuplet");
-                              delete tuplet;
-                              }
-                        else {
-                              Measure* measure = tick2measure(tuplet->tick());
-                              tuplet->setParent(measure);
-                              tuplet->sortElements();
-                              }
-                        }
                   }
 
-            if (pasted) { //select only if we pasted something
-                  Segment* s1 = tick2segment(dstTick);
-                  Segment* s2 = tick2segment(dstTick + tickLen);
-                  int endStaff = dstStaffStart + staves;
-                  if (endStaff > nstaves())
-                        endStaff = nstaves();
-                  _selection.setRange(s1, s2, dstStaffStart, endStaff);
-                  _selection.updateSelectedElements();
-                  foreach(MuseScoreView* v, viewer)
-                        v->adjustCanvasPosition(s1, false);
-                  if (selection().state() != SEL_RANGE)
-                        _selection.setState(SEL_RANGE);
+            foreach (Tuplet* tuplet, e.tuplets()) {
+                  if (tuplet->elements().isEmpty()) {
+                        // this should not happen and is a sign of input file corruption
+                        qDebug("Measure:pasteStaff(): empty tuplet");
+                        delete tuplet;
+                        }
+                  else {
+                        Measure* measure = tick2measure(tuplet->tick());
+                        tuplet->setParent(measure);
+                        tuplet->sortElements();
+                        }
                   }
+            }
+
+      if (pasted) { //select only if we pasted something
+            Segment* s1 = tick2segment(dstTick);
+            Segment* s2 = tick2segment(dstTick + tickLen);
+            int endStaff = dstStaffStart + staves;
+            if (endStaff > nstaves())
+                  endStaff = nstaves();
+            _selection.setRange(s1, s2, dstStaffStart, endStaff);
+            _selection.updateSelectedElements();
+            foreach(MuseScoreView* v, viewer)
+                  v->adjustCanvasPosition(s1, false);
+            if (selection().state() != SEL_RANGE)
+                  _selection.setState(SEL_RANGE);
             }
       foreach (Score* s, scoreList())     // for all parts
             s->connectTies();
@@ -333,6 +335,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       // fret/line has to be calculated:
       updateNotes();
       }
+}
 
 //---------------------------------------------------------
 //   pasteChordRest
