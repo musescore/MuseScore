@@ -199,8 +199,8 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
       qreal _spatium = spatium();
 
       if (parent() == 0) {    // for use in palette
-            drawSymbol(SymId::repeatDot, painter, QPointF(x, 1.5 * _spatium));
-            drawSymbol(SymId::repeatDot, painter, QPointF(x, 2.5 * _spatium));
+            drawSymbol(SymId::repeatDot, painter, QPointF(x, 2.0 * _spatium));
+            drawSymbol(SymId::repeatDot, painter, QPointF(x, 3.0 * _spatium));
             }
       else if (parent()->type() == SEGMENT) {
             System* s = static_cast<Segment*>(parent())->measure()->system();
@@ -216,8 +216,8 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
             for (int i = 0; i < sp; ++i) {
                   Staff* staff  = score()->staff(staffIdx1 + i);
                   StaffType* st = staff->staffType();
-                  qreal doty1   = st->doty1() * _spatium;
-                  qreal doty2   = st->doty2() * _spatium;
+                  qreal doty1   = (st->doty1() + .5) * _spatium;
+                  qreal doty2   = (st->doty2() + .5) * _spatium;
 
                   qreal staffy  = s->staff(staffIdx1 + i)->y() - dy;
 

@@ -19,7 +19,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
 CreationTime: 1385043608
-ModificationTime: 1386111701
+ModificationTime: 1389096563
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -80,7 +80,7 @@ DisplaySize: -72
 AntiAlias: 1
 FitToEm: 1
 ExtremaBound: 10
-WinInfo: 57384 8 10
+WinInfo: 57375 17 11
 BeginPrivate: 0
 EndPrivate
 Grid
@@ -34942,11 +34942,11 @@ EndChar
 StartChar: uniE043
 Encoding: 57411 57411 262
 Width: 116
-VWidth: 0
-Flags: W
+VWidth: 128
+Flags: WO
 LayerCount: 2
 Fore
-Refer: 63 57639 N 1 0 0 1 0 0 2
+Refer: 63 57639 N 1 0 0 1 0 128 2
 EndChar
 EndChars
 EndSplineFont
