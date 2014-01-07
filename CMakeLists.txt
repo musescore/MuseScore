@@ -379,7 +379,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 ##
 subdirs(
       mscore  awl bww2mxml share midi audiofile fluid mstyle libmscore synthesizer
-      effects thirdparty/rtf2html thirdparty/diff
+      effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
       thirdparty/xmlstream thirdparty/qzip
       )
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
