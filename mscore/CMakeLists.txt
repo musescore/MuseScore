@@ -303,6 +303,7 @@ target_link_libraries(mscore
       libmscore
       xmlstream
       qzip
+      beatroot
 	  )
 
 #if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be

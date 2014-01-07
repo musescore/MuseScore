@@ -72,6 +72,10 @@ add_library(
           ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf2html.cpp    # required by capella.cpp and capxml.cpp
           ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_keyword.cpp # required by capella.cpp and capxml.cpp
           ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_table.cpp   # required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Agent.cpp           # required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/AgentList.cpp       # required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # required by importmidi.cpp
           ${OMR_SRC}
           omr
           )
