@@ -1806,9 +1806,15 @@ void Measure::read(XmlReader& e, int staffIdx)
                   barLine->setTrack(e.track());
                   barLine->read(e);
                   Segment::SegmentType st;
+
+                  //
+                  //  SegStartRepeatBarLine: always at the beginning tick of a measure
+                  //  SegBarLine:            in the middle of a measure, has no semantic
+                  //  SegEndBarLine:         at the end tick of a measure
+
                   if ((e.tick() != tick()) && (e.tick() != (tick() + ticks())))
-                        st = Segment::SegBarLine;     // this is a mid measure bar line
-                  else if (barLine->barLineType() == START_REPEAT)
+                        st = Segment::SegBarLine;
+                  else if (barLine->barLineType() == START_REPEAT && e.tick() == tick())
                         st = Segment::SegStartRepeatBarLine;
                   else {
                         setEndBarLineType(barLine->barLineType(), false, true);

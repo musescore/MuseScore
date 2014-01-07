@@ -785,8 +785,6 @@ SegmentView::SegmentView()
             Segment::SegBarLine, Segment::SegChordRest, Segment::SegBreath, Segment::SegEndBarLine,
             Segment::SegTimeSigAnnounce, Segment::SegKeySigAnnounce
             };
-      for (Segment::SegmentType t : segmentTypes)
-            sb.segmentType->addItem(Segment::subTypeName(t), int(t));
       connect(sb.lyrics, SIGNAL(itemClicked(QListWidgetItem*)),      SLOT(gotoElement(QListWidgetItem*)));
       connect(sb.spannerFor, SIGNAL(itemClicked(QListWidgetItem*)),  SLOT(gotoElement(QListWidgetItem*)));
       connect(sb.spannerBack, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
@@ -819,7 +817,7 @@ void SegmentView::setElement(Element* e)
       sb.ticks->setValue(ticks);
       sb.tick->setValue(s->tick());
       sb.rtick->setValue(s->rtick());
-      sb.segmentType->setCurrentIndex(idx);
+      sb.segmentType->setText(s->subTypeName());
       sb.lyrics->clear();
 
 //      Score* cs = e->score();
