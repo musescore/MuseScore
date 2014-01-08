@@ -126,7 +126,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   break;      // lyric and text are added in importmidi_lyrics.cpp
             case META_TRACK_NAME:
                   {
-                  std::string text = MidiCharset::fromUchar(data);
+                  const std::string text = MidiCharset::fromUchar(data);
                   if (name.isEmpty())
                         name = MidiCharset::convertToCharset(text);
                   }
