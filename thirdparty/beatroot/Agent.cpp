@@ -71,7 +71,6 @@ void Agent::accept(const Event &e, double err, int beats)
 
 bool Agent::considerAsBeat(const Event &e, AgentList &a)
       {
-      double err;
       if (beatTime < 0) {	// first event
             accept(e, 0, 1);
             return true;
@@ -84,7 +83,7 @@ bool Agent::considerAsBeat(const Event &e, AgentList &a)
                   return false;
                   }
             double beats = nearbyint((e.time - beatTime) / beatInterval);
-            err = e.time - beatTime - beats * beatInterval;
+            double err = e.time - beatTime - beats * beatInterval;
             if ((beats > 0) && (-preMargin <= err) && (err <= postMargin)) {
                   if (std::fabs(err) > innerMargin) {
                                     // Create new agent that skips this event (avoids
