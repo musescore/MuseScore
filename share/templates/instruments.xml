@@ -8503,9 +8503,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="ukulele-4-str-tab">
-                  <longName>Ukulele (Tablature)</longName>
-                  <shortName>Uk.</shortName>
-                  <trackName>Ukulele (Tablature)</trackName>
+                  <trackName>Ukulele [Tablature]</trackName>
                   <init>ukulele</init>
                   <description>Ukulele (4-str. TAB)</description>
                   <musicXMLid>pluck.ukulele</musicXMLid>
