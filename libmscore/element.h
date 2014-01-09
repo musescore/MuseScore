@@ -573,6 +573,7 @@ class Element : public QObject {
       QRectF symBbox(const QString&) const;
       QPointF symAttach(SymId id) const;
       QString toTimeSigString(const QString& s) const;
+      bool symIsValid(SymId id) const;
       };
 
 //---------------------------------------------------------
