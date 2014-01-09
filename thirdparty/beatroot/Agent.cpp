@@ -100,28 +100,18 @@ bool Agent::considerAsBeat(const Event &e, AgentList &a)
 
 void Agent::fillBeats(double start)
       {
-      double prevBeat = 0, nextBeat, currentInterval, beats;
-      EventList::iterator ei = events.begin();
-      if (ei != events.end()) {
-            EventList::iterator ni = ei;
-            if (++ni != events.end()) {
-                  prevBeat = ni->time;
-                  }
-            }
-      while (ei != events.end()) {
-            EventList::iterator ni = ei;
-            if (ni == events.end() ||
-                        ++ni == events.end()) {
-                  break;
-                  }
-            nextBeat = ni->time;
-            beats = nearbyint((nextBeat - prevBeat) / beatInterval - 0.01);   // prefer slow
-            currentInterval = (nextBeat - prevBeat) / beats;
-            for ( ; (nextBeat > start) && (beats > 1.5); beats--) {
+      EventList::iterator it = events.begin();
+      if (it == events.end())
+            return;
+      double prevBeat = it->time;
+      for (++it; it != events.end(); ++it) {
+            double nextBeat = it->time;
+            double beats = nearbyint((nextBeat - prevBeat) / beatInterval - 0.01);   // prefer slow
+            double currentInterval = (nextBeat - prevBeat) / beats;
+            for ( ; (nextBeat > start) && (beats > 1.5); --beats) {
                   prevBeat += currentInterval;
-                  events.insert(ni, Event(prevBeat, 0));
+                  events.insert(it, Event(prevBeat, 0));
                   }
             prevBeat = nextBeat;
-            ei = ni;
             }
       }
