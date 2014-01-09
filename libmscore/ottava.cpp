@@ -36,16 +36,17 @@ struct OttavaDefault {
       Element::Placement place;
       int shift;
       const char* name;
+      const char* numbersOnlyName;
       };
 
 // order is important, should be the same than OttavaType
 static const OttavaDefault ottavaDefault[] = {
-      { SymId::ottavaAlta,        SymId::ottava,       QPointF(0.0, .7),    1.0, Element::ABOVE,  12, "8va"  },
-      { SymId::ottavaBassaBa,     SymId::ottava,       QPointF(0.0, -1.0), -1.0, Element::BELOW, -12, "8vb"  },
-      { SymId::quindicesimaAlta,  SymId::quindicesima, QPointF(0.0, .7),    1.0, Element::ABOVE,  24, "15ma" },
-      { SymId::quindicesimaBassa, SymId::quindicesima, QPointF(0.0, -1.0), -1.0, Element::BELOW, -24, "15mb" },
-      { SymId::ventiduesimaAlta,  SymId::ventiduesima, QPointF(0.0, .7),    1.0, Element::ABOVE,  36, "22ma" },
-      { SymId::ventiduesimaBassa, SymId::ventiduesima, QPointF(0.0, -1.0), -1.0, Element::BELOW, -36, "22mb" }
+      { SymId::ottavaAlta,        SymId::ottava,       QPointF(0.0, .7),    1.0, Element::ABOVE,  12, "8va", "8"   },
+      { SymId::ottavaBassaBa,     SymId::ottava,       QPointF(0.0, -1.0), -1.0, Element::BELOW, -12, "8vb", "8"   },
+      { SymId::quindicesimaAlta,  SymId::quindicesima, QPointF(0.0, .7),    1.0, Element::ABOVE,  24, "15ma", "15" },
+      { SymId::quindicesimaBassa, SymId::quindicesima, QPointF(0.0, -1.0), -1.0, Element::BELOW, -24, "15mb", "15" },
+      { SymId::ventiduesimaAlta,  SymId::ventiduesima, QPointF(0.0, .7),    1.0, Element::ABOVE,  36, "22ma", "22" },
+      { SymId::ventiduesimaBassa, SymId::ventiduesima, QPointF(0.0, -1.0), -1.0, Element::BELOW, -36, "22mb", "22" }
       };
 
 //---------------------------------------------------------
@@ -184,33 +185,42 @@ void Ottava::setOttavaType(OttavaType val)
       {
       setEndHook(true);
       _ottavaType = val;
+      const OttavaDefault* def = &ottavaDefault[int(val)];
 
       Spatium hook(score()->styleS(ST_ottavaHook));
 
-      SymId id;
-      if (_numbersOnly)
-            id = ottavaDefault[int(val)].numbersOnlyId;
-      else
-            id = ottavaDefault[int(val)].id;
-      if (beginSymbolStyle == PropertyStyle::STYLED)
-            setBeginSymbol(id);
-      if (continueSymbolStyle == PropertyStyle::STYLED)
-            setContinueSymbol(id);
+      SymId id = _numbersOnly ? def->numbersOnlyId : def->id;
+      if (symIsValid(id)) {
+            if (beginSymbolStyle == PropertyStyle::STYLED)
+                  setBeginSymbol(id);
+            if (continueSymbolStyle == PropertyStyle::STYLED)
+                  setContinueSymbol(id);
 
-      setBeginSymbolOffset(ottavaDefault[int(val)].offset);
-      setContinueSymbolOffset(ottavaDefault[int(val)].offset);
-      setEndHookHeight(hook * ottavaDefault[int(val)].hookDirection);
-      setPlacement(ottavaDefault[int(val)].place);
-      _pitchShift = ottavaDefault[int(val)].shift;
+            setBeginSymbolOffset(def->offset);
+            setContinueSymbolOffset(def->offset);
 
-      foreach(SpannerSegment* s, spannerSegments()) {
-            OttavaSegment* os = static_cast<OttavaSegment*>(s);
-            os->clearText();
+            foreach(SpannerSegment* s, spannerSegments()) {
+                  OttavaSegment* os = static_cast<OttavaSegment*>(s);
+                  os->clearText();
+                  }
+            delete _beginText;
+            _beginText = 0;
+            delete _continueText;
+            _continueText = 0;
             }
-      delete _beginText;
-      _beginText = 0;
-      delete _continueText;
-      _continueText = 0;
+      else {
+            const TextStyle& ts = score()->textStyle(TEXT_STYLE_OTTAVA);
+
+            // if music font does not contain ottava symbols, use text
+            const char* s = _numbersOnly ? def->numbersOnlyName : def->name;
+            setBeginText(s, ts);
+            setContinueText(s, ts);
+            setBeginSymbol(SymId::noSym);
+            setContinueSymbol(SymId::noSym);
+            }
+      setEndHookHeight(hook * def->hookDirection);
+      setPlacement(def->place);
+      _pitchShift = def->shift;
       }
 
 //---------------------------------------------------------

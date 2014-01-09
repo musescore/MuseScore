@@ -82,8 +82,6 @@ void TextLineSegment::draw(QPainter* painter) const
             normalColor = true;
             }
       qreal l = 0.0;
-      SymId sym = (spannerSegmentType() == SEGMENT_MIDDLE || spannerSegmentType() == SEGMENT_END)
-         ? tl->continueSymbol() : tl->beginSymbol();
       if (_text) {
             SpannerSegmentType st = spannerSegmentType();
             if (
@@ -98,13 +96,17 @@ void TextLineSegment::draw(QPainter* painter) const
             _text->draw(painter);
             painter->translate(-_text->pos());
             }
-      else if (sym != SymId::noSym) {
-            const QRectF& bb = symBbox(sym);
-            qreal h = bb.height() * .5;
-            QPointF o = tl->beginSymbolOffset() * _spatium;
-            painter->setPen(color);
-            drawSymbol(sym, painter, QPointF(o.x(), h + o.y()));
-            l = bb.width() + textlineTextDistance;
+      else {
+            SymId sym = (spannerSegmentType() == SEGMENT_MIDDLE || spannerSegmentType() == SEGMENT_END)
+               ? tl->continueSymbol() : tl->beginSymbol();
+            if (sym != SymId::noSym) {
+                  const QRectF& bb = symBbox(sym);
+                  qreal h = bb.height() * .5;
+                  QPointF o = tl->beginSymbolOffset() * _spatium;
+                  painter->setPen(color);
+                  drawSymbol(sym, painter, QPointF(o.x(), h + o.y()));
+                  l = bb.width() + textlineTextDistance;
+                  }
             }
 
       QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
@@ -177,6 +179,8 @@ void TextLineSegment::layout1()
                               _text->setFlag(ELEMENT_MOVABLE, false);
                               _text->setParent(this);
                               }
+                        else
+                              _text->setText(tl->beginText()->getFragment());
                         }
                   else {
                         delete _text;
@@ -191,6 +195,8 @@ void TextLineSegment::layout1()
                               _text->setFlag(ELEMENT_MOVABLE, false);
                               _text->setParent(this);
                               }
+                        else
+                              _text->setText(tl->continueText()->getFragment());
                         }
                   else {
                         delete _text;
