@@ -64,6 +64,7 @@ install(FILES
       mscore_th.qm
       mscore_tr.qm
       mscore_uk.qm
+      mscore_uz.qm
       mscore_vi.qm
       mscore_zh_CN.qm
       mscore_zh_TW.qm
