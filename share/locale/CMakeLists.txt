@@ -97,6 +97,7 @@ install(FILES
       qt_sv.qm
       qt_tr.qm
       qt_uk.qm
+      qt_uz.qm
       qt_vi.qm
       qt_zh_CN.qm
       qt_zh_TW.qm
