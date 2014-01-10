@@ -105,6 +105,15 @@ bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &c
       return true;
       }
 
+bool areSingleNoteChords(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      for (const auto &chordEvent: chords) {
+            if (chordEvent.second.notes.size() > 1)
+                  return false;
+            }
+      return true;
+      }
+
 #endif
 
 
@@ -139,43 +148,47 @@ void collectChords(std::multimap<int, MTrack> &tracks)
             ReducedFraction fudgeTime = threshTime / 4;
             ReducedFraction threshExtTime = threshTime / 2;
 
-            ReducedFraction startTime(-1, 1);    // invalid
+            ReducedFraction currentChordStart(-1, 1);    // invalid
             ReducedFraction curThreshTime(-1, 1);
-                        // if intersection of note durations is less than min(minNoteDuration, threshTime)
-                        // then this is not a chord
-            ReducedFraction tol(-1, 1);       // invalid
-            ReducedFraction beg(-1, 1);
+                        // if intersection of note durations is less than threshTime
+                        // then this is not a chord but arpeggio
             ReducedFraction end(-1, 1);
-                        // chords here consist of a single note
-                        // because notes are not united into chords yet
+
+                              // chords here should consist of a single note
+                              // because notes are not united into chords yet
+            Q_ASSERT_X(areSingleNoteChords(chords),
+                       "MChord: collectChords", "Some chords have more than one note");
+
             for (auto it = chords.begin(); it != chords.end(); ) {
                   const auto &note = it->second.notes[0];
-                              // this should not be executed when it == chords.begin()
-                  if (it->first <= startTime + curThreshTime) {
-                        if (it->first > beg)
-                              beg = it->first;
+
+                              // short events with len < minAllowedDuration must be cleaned up
+                  Q_ASSERT_X(note.len >= minAllowedDuration(),
+                             "MChord: collectChords", "Note length is less than min allowed duration");
+
+                  if (it->first <= currentChordStart + curThreshTime) {
+
+                                    // this branch should not be executed when it == chords.begin()
+                        Q_ASSERT_X(it != chords.begin(),
+                                   "MChord: collectChords", "it == chords.begin()");
+
+                                    // [it->first, end] is a note intersection area
                         if (it->first + note.len < end)
                               end = it->first + note.len;
-                        if (note.len < tol)
-                              tol = note.len;
-                        if (end - beg >= tol) {
-                              // add current note to the previous chord
+                        if (end - it->first >= threshTime) {
+                                          // add current note to the previous chord
                               auto prev = std::prev(it);
                               prev->second.notes.push_back(note);
-                              if (it->first >= startTime + curThreshTime - fudgeTime)
+                              if (it->first >= currentChordStart + curThreshTime - fudgeTime)
                                     curThreshTime += threshExtTime;
                               it = chords.erase(it);
                               continue;
                               }
                         }
-                  else {
-                        startTime = it->first;
-                        beg = startTime;
-                        end = startTime + note.len;
-                        tol = threshTime;
-                        if (curThreshTime != threshTime)
-                              curThreshTime = threshTime;
-                        }
+                  currentChordStart = it->first;
+                  end = currentChordStart + note.len;
+                  if (curThreshTime != threshTime)
+                        curThreshTime = threshTime;
                   ++it;
                   }
 
