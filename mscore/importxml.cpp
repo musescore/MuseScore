@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: importxml.cpp 5653 2012-05-19 20:19:58Z lvinken $
 //
-//  Copyright (C) 2002-2013 Werner Schweer and others
+//  Copyright (C) 2002-2014 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -409,7 +409,6 @@ MusicXml::MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1)
       lastVolta(0),
       doc(d),
       pass1(p1),
-      maxLyrics(0),
       beamMode(BeamMode::NONE),
       pageWidth(0),
       pageHeight(0)
@@ -657,7 +656,7 @@ Score::FileError importMusicXml(Score* score, const QString& name)
       QFile xmlFile(name);
       if (!xmlFile.exists())
             return Score::FILE_NOT_FOUND;
-      if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      if (!xmlFile.open(QIODevice::ReadOnly)) {
             qDebug("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open MusicXML file\n");
             return Score::FILE_OPEN_ERROR;
@@ -1312,21 +1311,19 @@ void MusicXml::scorePartwise(QDomElement ee)
 //   partGroupStart
 //---------------------------------------------------------
 
+typedef std::map<int,MusicXmlPartGroup*> MusicXmlPartGroupMap;
+
 /**
  Store part-group start with number \a n, first part \a p and symbol / \a s in the partGroups
- array for later reference, as at this time insufficient information is available to be able
+ map \a pgs for later reference, as at this time insufficient information is available to be able
  to generate the brackets.
  */
 
-static void partGroupStart(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, int p, QString s, bool barlineSpan)
+static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, bool barlineSpan)
       {
       // qDebug("partGroupStart number=%d part=%d symbol=%s\n", n, p, s.toLatin1().data());
-      if (n < 0 || n >= MAX_PART_GROUPS) {
-            qDebug("illegal part-group number: %d", n);
-            return;
-            }
 
-      if (pgs[n]) {
+      if (pgs.count(n) > 0) {
             qDebug("part-group number=%d already active", n);
             return;
             }
@@ -1368,16 +1365,10 @@ static void partGroupStart(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, in
  To generate brackets, the span in staves must also be known.
  */
 
-static void partGroupStop(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, int p,
-                          std::vector<MusicXmlPartGroup*>& pgl)
+static void partGroupStop(MusicXmlPartGroupMap& pgs, int n, int p,
+                          MusicXmlPartGroupList& pgl)
       {
-      // qDebug("partGroupStop number=%d part=%d\n", n, p);
-      if (n < 0 || n >= MAX_PART_GROUPS) {
-            qDebug("illegal part-group number: %d", n);
-            return;
-            }
-
-      if (!pgs[n]) {
+      if (pgs.count(n) == 0) {
             qDebug("part-group number=%d not active", n);
             return;
             }
@@ -1386,7 +1377,7 @@ static void partGroupStop(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, int
       // qDebug("part-group number=%d start=%d span=%d type=%d",
       //        n, pgs[n]->start, pgs[n]->span, pgs[n]->type);
       pgl.push_back(pgs[n]);
-      pgs[n] = 0;
+      pgs.erase(n);
       }
 
 //---------------------------------------------------------
@@ -1401,9 +1392,7 @@ void MusicXml::xmlPartList(QDomElement e)
       {
       int scoreParts = 0;
       bool barlineSpan = false;
-      MusicXmlPartGroup* partGroups[MAX_PART_GROUPS];
-      for (int i = 0; i < MAX_PART_GROUPS; ++i)
-            partGroups[i] = 0;
+      MusicXmlPartGroupMap partGroups;
 
       for (; !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "score-part")
@@ -1507,7 +1496,9 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
             else if (e.tagName() == "midi-instrument") {
                   QString instrId = e.attribute("id");
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        if (ee.tagName() == "midi-channel")
+                        if (ee.tagName() == "midi-bank")
+                              domNotImplemented(e);
+                        else if (ee.tagName() == "midi-channel")
                               part->setMidiChannel(ee.text().toInt() - 1);
                         else if (ee.tagName() == "midi-program")
                               part->setMidiProgram(ee.text().toInt() - 1);
@@ -4150,7 +4141,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               qDebug("unknown slur type %s", qPrintable(slurType));
                         }
                   else
-                        qDebug("ignoring duplicate '%s'", qPrintable(slurId));
+                        qDebug("ignoring duplicate slur '%s'", qPrintable(slurId));
                   }
 
             else if (ee.tagName() == "tied") {
@@ -4494,7 +4485,6 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 #endif
       QDomNode pn = e; // TODO remove pn
       QDomElement org_e = e; // save e for later
-      QDomElement domElemNotations;
       QString strVoice = "1";
       int voice = 0;
       int move  = 0;
@@ -4521,6 +4511,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
       int velocity = -1;
       bool unpitched = false;
       QString instrId;
+      QList<QDomElement> notations;
 
       // first read all elements required for voice mapping
       QDomElement e2 = e.firstChildElement();
@@ -4717,7 +4708,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   }
             else if (tag == "notations") {
                   // save the QDomElement representing <notations> for later
-                  domElemNotations = e;
+                  // note that multiple notations elements may be present
+                  notations << e;
                   }
             else if (tag == "tie") {
                   QString tieType = e.attribute(QString("type"));
@@ -4967,8 +4959,9 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             xmlTuplet(tuplets[voice + relStaff * VOICES], cr, ticks, org_e);
             }
 
-      if (!domElemNotations.isNull())
-            xmlNotations(note, cr, trk, ticks, domElemNotations);
+      foreach(QDomElement de, notations) {
+            xmlNotations(note, cr, trk, ticks, de);
+            }
 
       // add lyrics found by xmlLyric
       addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics);
