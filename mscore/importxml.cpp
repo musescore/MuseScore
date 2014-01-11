@@ -3,7 +3,7 @@
 //  Linux Music Score Editor
 //  $Id: importxml.cpp 5653 2012-05-19 20:19:58Z lvinken $
 //
-//  Copyright (C) 2002-2013 Werner Schweer and others
+//  Copyright (C) 2002-2014 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -4141,7 +4141,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               qDebug("unknown slur type %s", qPrintable(slurType));
                         }
                   else
-                        qDebug("ignoring duplicate '%s'", qPrintable(slurId));
+                        qDebug("ignoring duplicate slur '%s'", qPrintable(slurId));
                   }
 
             else if (ee.tagName() == "tied") {
@@ -4485,7 +4485,6 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 #endif
       QDomNode pn = e; // TODO remove pn
       QDomElement org_e = e; // save e for later
-      QDomElement domElemNotations;
       QString strVoice = "1";
       int voice = 0;
       int move  = 0;
@@ -4512,6 +4511,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
       int velocity = -1;
       bool unpitched = false;
       QString instrId;
+      QList<QDomElement> notations;
 
       // first read all elements required for voice mapping
       QDomElement e2 = e.firstChildElement();
@@ -4708,7 +4708,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   }
             else if (tag == "notations") {
                   // save the QDomElement representing <notations> for later
-                  domElemNotations = e;
+                  // note that multiple notations elements may be present
+                  notations << e;
                   }
             else if (tag == "tie") {
                   QString tieType = e.attribute(QString("type"));
@@ -4958,8 +4959,9 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             xmlTuplet(tuplets[voice + relStaff * VOICES], cr, ticks, org_e);
             }
 
-      if (!domElemNotations.isNull())
-            xmlNotations(note, cr, trk, ticks, domElemNotations);
+      foreach(QDomElement de, notations) {
+            xmlNotations(note, cr, trk, ticks, de);
+            }
 
       // add lyrics found by xmlLyric
       addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics);
