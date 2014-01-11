@@ -409,7 +409,6 @@ MusicXml::MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1)
       lastVolta(0),
       doc(d),
       pass1(p1),
-      maxLyrics(0),
       beamMode(BeamMode::NONE),
       pageWidth(0),
       pageHeight(0)
@@ -1312,21 +1311,19 @@ void MusicXml::scorePartwise(QDomElement ee)
 //   partGroupStart
 //---------------------------------------------------------
 
+typedef std::map<int,MusicXmlPartGroup*> MusicXmlPartGroupMap;
+
 /**
  Store part-group start with number \a n, first part \a p and symbol / \a s in the partGroups
- array for later reference, as at this time insufficient information is available to be able
+ map \a pgs for later reference, as at this time insufficient information is available to be able
  to generate the brackets.
  */
 
-static void partGroupStart(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, int p, QString s, bool barlineSpan)
+static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, bool barlineSpan)
       {
       // qDebug("partGroupStart number=%d part=%d symbol=%s\n", n, p, s.toLatin1().data());
-      if (n < 0 || n >= MAX_PART_GROUPS) {
-            qDebug("illegal part-group number: %d", n);
-            return;
-            }
 
-      if (pgs[n]) {
+      if (pgs.count(n) > 0) {
             qDebug("part-group number=%d already active", n);
             return;
             }
@@ -1368,16 +1365,10 @@ static void partGroupStart(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, in
  To generate brackets, the span in staves must also be known.
  */
 
-static void partGroupStop(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, int p,
-                          std::vector<MusicXmlPartGroup*>& pgl)
+static void partGroupStop(MusicXmlPartGroupMap& pgs, int n, int p,
+                          MusicXmlPartGroupList& pgl)
       {
-      // qDebug("partGroupStop number=%d part=%d\n", n, p);
-      if (n < 0 || n >= MAX_PART_GROUPS) {
-            qDebug("illegal part-group number: %d", n);
-            return;
-            }
-
-      if (!pgs[n]) {
+      if (pgs.count(n) == 0) {
             qDebug("part-group number=%d not active", n);
             return;
             }
@@ -1386,7 +1377,7 @@ static void partGroupStop(MusicXmlPartGroup* (&pgs)[MAX_PART_GROUPS], int n, int
       // qDebug("part-group number=%d start=%d span=%d type=%d",
       //        n, pgs[n]->start, pgs[n]->span, pgs[n]->type);
       pgl.push_back(pgs[n]);
-      pgs[n] = 0;
+      pgs.erase(n);
       }
 
 //---------------------------------------------------------
@@ -1401,9 +1392,7 @@ void MusicXml::xmlPartList(QDomElement e)
       {
       int scoreParts = 0;
       bool barlineSpan = false;
-      MusicXmlPartGroup* partGroups[MAX_PART_GROUPS];
-      for (int i = 0; i < MAX_PART_GROUPS; ++i)
-            partGroups[i] = 0;
+      MusicXmlPartGroupMap partGroups;
 
       for (; !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "score-part")
@@ -1507,7 +1496,9 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
             else if (e.tagName() == "midi-instrument") {
                   QString instrId = e.attribute("id");
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        if (ee.tagName() == "midi-channel")
+                        if (ee.tagName() == "midi-bank")
+                              domNotImplemented(e);
+                        else if (ee.tagName() == "midi-channel")
                               part->setMidiChannel(ee.text().toInt() - 1);
                         else if (ee.tagName() == "midi-program")
                               part->setMidiProgram(ee.text().toInt() - 1);

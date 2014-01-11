@@ -146,6 +146,8 @@ struct GraceNoteInfo {
 //   MusicXml
 //---------------------------------------------------------
 
+typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
+
 /**
  The MusicXML importer.
 */
@@ -174,15 +176,13 @@ class MusicXml {
       int multiMeasureRestCount;                ///< Remaining measures in a multi measure rest
       bool startMultiMeasureRest;               ///< Multi measure rest started in this measure
 
-      int maxLyrics;
-
       int divisions;                            ///< Current MusicXML divisions
       QVector<Tuplet*> tuplets;                 ///< Current tuplet for each track in the current part
 
       CreditWordsList credits;
       JumpMarkerDescList jumpsMarkers;
 
-      std::vector<MusicXmlPartGroup*> partGroupList;
+      MusicXmlPartGroupList partGroupList;
       QMap<Spanner*, QPair<int, int> > spanners;
 
       Ottava* ottava;                            ///< Current ottava
