@@ -27,15 +27,19 @@ class ClefList;
 
 //---------------------------------------------------------
 //   @@ Part
-//   @P partName  QString  name of the part, used in the mixer, read only
-//   @P show      bool     check/set whether or not a part is shown
+//   @P partName   QString  name of the part, used in the mixer
+//   @P show       bool     check/set whether or not a part is shown
+//   @P longName   QTextDocumentFragment
+//   @P shortName  QTextDocumentFragment
 //---------------------------------------------------------
 
 class Part : public QObject {
       Q_OBJECT
 
-      Q_PROPERTY(QString partName READ partName)
+      Q_PROPERTY(QString partName READ partName WRITE setPartName)
       Q_PROPERTY(bool show READ show WRITE setShow)
+      Q_PROPERTY(QTextDocumentFragment longName READ longName WRITE setLongName)
+      Q_PROPERTY(QTextDocumentFragment shortName READ shortName WRITE setShortName)
 
       Score* _score;
 
