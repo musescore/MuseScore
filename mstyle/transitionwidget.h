@@ -28,7 +28,12 @@
 
 #include "animation.h"
 
-//! temporary widget used to perform smooth transition between one widget state and another
+//---------------------------------------------------------
+//   @@ TransitionWidget
+///   temporary widget used to perform smooth transition between one widget state and another
+//   @P opayity  qreal
+//---------------------------------------------------------
+
 class TransitionWidget: public QWidget {
 
             Q_OBJECT

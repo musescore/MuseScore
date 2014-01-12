@@ -28,6 +28,7 @@ class ClefList;
 //---------------------------------------------------------
 //   @@ Part
 //   @P partName  QString  name of the part, used in the mixer, read only
+//   @P show      bool     check/set whether or not a part is shown
 //---------------------------------------------------------
 
 class Part : public QObject {

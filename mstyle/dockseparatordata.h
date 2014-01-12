@@ -30,7 +30,13 @@
 #include "genericdata.h"
 #include "animation.h"
 
-//! dock widget splitters hover effect
+//---------------------------------------------------------
+//   @@ DockSeparatorData
+///   dock widget splitters hover effect
+//   @P verticalOpacity    qreal
+//   @P horizontalOpacity  qreal
+//---------------------------------------------------------
+
 class DockSeparatorData: public AnimationData {
 
             Q_OBJECT

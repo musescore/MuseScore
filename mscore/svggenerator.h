@@ -51,6 +51,17 @@
 
 class SvgGeneratorPrivate;
 
+//---------------------------------------------------------
+//   @@ SvgGenerator
+//   @P size          QSize
+//   @P viewBox       QRectF
+//   @P title         QString
+//   @P description   QString
+//   @P fileName      QString
+//   @P outputDevice  QIODevice
+//   @P resolution    int
+//---------------------------------------------------------
+
 class SvgGenerator : public QPaintDevice
 {
     Q_DECLARE_PRIVATE(SvgGenerator)

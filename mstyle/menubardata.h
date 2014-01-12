@@ -35,7 +35,13 @@ enum WidgetIndex {
       Previous
       };
 
-//! menubar data
+//---------------------------------------------------------
+//   @@ MenuBarDataV1
+///   menubar data
+//   @P currentOpacity   qreal
+//   @P previousOpacity  qreal
+//---------------------------------------------------------
+
 class MenuBarDataV1: public AnimationData {
 
             Q_OBJECT

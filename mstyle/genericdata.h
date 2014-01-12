@@ -31,7 +31,12 @@
 #include "animation.h"
 
 
-//! generic data
+//---------------------------------------------------------
+//   @@ GenericDate
+///   generic data
+//   @P opacity  qreal
+//---------------------------------------------------------
+
 class GenericData: public AnimationData {
 
             Q_OBJECT
@@ -57,7 +62,7 @@ class GenericData: public AnimationData {
             virtual void setDuration( int duration ) {
                   animation_.data()->setDuration( duration );
                   }
-
+//---------------------------------------------------------
             //! opacity
             virtual qreal opacity( void ) const {
                   return opacity_;
