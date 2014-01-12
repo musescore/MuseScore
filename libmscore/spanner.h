@@ -81,8 +81,8 @@ class SpannerSegment : public Element {
 //   @@ Spanner
 ///   Virtual base class for slurs, ties, lines etc.
 //
-//    @P start     int     tick start position
-//    @P length    int     length in ticks
+//    @P tick      int     tick start position
+//    @P tick2     int     tick end position
 //    @P anchor    Anchor  ANCHOR_SEGMENT ANCHOR_MEASURE ANCHOR_CHORD ANCHOR_NOTE
 //----------------------------------------------------------------------------------
 

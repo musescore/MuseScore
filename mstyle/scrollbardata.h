@@ -29,7 +29,13 @@
 
 #include "sliderdata.h"
 
-//! scrollbar data
+//---------------------------------------------------------
+//   @@ ScrollBarData
+///   scrollbar data
+//   @P addLineOpacity  qreal
+//   @P subLineOpacity  qreal
+//---------------------------------------------------------
+
 class ScrollBarData: public SliderData {
 
             Q_OBJECT

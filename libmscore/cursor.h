@@ -33,7 +33,7 @@ class Measure;
 //   @P voice    int          current voice (track % 4)
 //   @P element  Element*     current element at track, read only
 //   @P segment  Segment*     current segment, read only
-//   @P segment  Measure*     current measure, read only
+//   @P measure  Measure*     current measure, read only
 //   @P tick     int          midi tick position, read only
 //   @P time     double       time at tick position, read only
 //   @P score    Score*       associated score

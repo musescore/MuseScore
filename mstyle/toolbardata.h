@@ -29,7 +29,13 @@
 
 #include "animationdata.h"
 
-//! toolbar data
+//---------------------------------------------------------
+//   @@ ToolBarData
+///   toolbar data
+//   @P opacity   qreal
+//   @P progress  qreal
+//---------------------------------------------------------
+
 class ToolBarData: public AnimationData {
 
             Q_OBJECT

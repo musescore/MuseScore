@@ -29,6 +29,12 @@
 
 #include "animationdata.h"
 
+//---------------------------------------------------------
+//   @@ SpinBoxData
+///   handles spinbox arrows hover
+//   @P upArrorOpacity    qreal
+//   @P downArrorOpacity  qreal
+//---------------------------------------------------------
 //! handles spinbox arrows hover
 class SpinBoxData: public AnimationData {
 
