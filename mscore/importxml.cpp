@@ -1391,13 +1391,13 @@ static void partGroupStop(MusicXmlPartGroupMap& pgs, int n, int p,
 void MusicXml::xmlPartList(QDomElement e)
       {
       int scoreParts = 0;
-      bool barlineSpan = false;
       MusicXmlPartGroupMap partGroups;
 
       for (; !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "score-part")
                   xmlScorePart(e.firstChildElement(), e.attribute(QString("id")), scoreParts);
             else if (e.tagName() == "part-group") {
+                  bool barlineSpan = true;
                   int number = e.attribute(QString("number")).toInt() - 1;
                   QString symbol = "";
                   QString type = e.attribute(QString("type"));
@@ -1405,9 +1405,10 @@ void MusicXml::xmlPartList(QDomElement e)
                         if (ee.tagName() == "group-symbol")
                               symbol = ee.text();
                         else if (ee.tagName() == "group-barline") {
-                              if (ee.text() == "yes")
-                                    barlineSpan = true;
-                              }else
+                              if (ee.text() == "no")
+                                    barlineSpan = false;
+                              }
+                        else
                               domError(ee);
                         }
                   if (type == "start")
@@ -1416,7 +1417,7 @@ void MusicXml::xmlPartList(QDomElement e)
                         partGroupStop(partGroups, number, scoreParts, partGroupList);
                   else
                         qDebug("Import MusicXml:xmlPartList: part-group type '%s' not supported",
-                               type.toLatin1().data());
+                               qPrintable(type));
                   }
             else
                   domError(e);
