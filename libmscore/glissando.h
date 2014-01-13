@@ -29,6 +29,9 @@ enum class GlissandoType {
 
 //---------------------------------------------------------
 //   @@ Glissando
+//   @P glissandoType  GlissandoType (STAIGHT, WAVY)
+//   @P text           Qstring
+//   @P showText       bool
 //---------------------------------------------------------
 
 class Glissando : public Element {

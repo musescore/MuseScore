@@ -114,12 +114,12 @@ class NoteHead : public Symbol {
 //   @@ Note
 ///  Graphic representation of a note.
 //
-//   @P pitch             int   midi pitch
-//   @P tpc               int   tonal pitch class
+//   @P subchannel        int   midi subchannel (for midi articulation) (read only)
 //   @P line              int   notehead position (read only)
 //   @P fret              int   fret number in tablature
 //   @P string            int   string number in tablature
-//   @P subchannel        int   midi subchannel (for midi articulation) (read only)
+//   @P tpc               int   tonal pitch class
+//   @P pitch             int   midi pitch
 //   @P ppitch            int   actual played midi pitch (honoring ottavas) (read only)
 //   @P ghost             bool  ghost note (guitar: death note)
 //   @P hidden            bool  hidden, not played note (read only)
