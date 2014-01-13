@@ -13,7 +13,6 @@
       <bracketDistance>0.25</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
       <minNoteDistance>0.4</minNoteDistance>
-      <barNoteDistance>0.6</barNoteDistance>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
       <propertyDistanceStem>0.5</propertyDistanceStem>
@@ -54,6 +53,8 @@
     <metaTag name="workTitle"></metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
         <System>
           </System>
         <System>
