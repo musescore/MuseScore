@@ -75,7 +75,7 @@ static const StyleVal2 style114[] = {
       { ST_shortestStem,                 QVariant(2.25) },
       { ST_beginRepeatLeftMargin,        QVariant(1.0) },
       { ST_minNoteDistance,              QVariant(0.4) },
-      { ST_barNoteDistance,              QVariant(.6) },
+      { ST_barNoteDistance,              QVariant(1.2) },
       { ST_noteBarDistance,              QVariant(1.0) },
       { ST_measureSpacing,               QVariant(1.2) },
       { ST_staffLineWidth,               QVariant(0.08) },
