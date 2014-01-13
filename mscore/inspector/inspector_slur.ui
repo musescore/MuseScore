@@ -98,7 +98,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Line Type:</string>
+        <string>Line type:</string>
        </property>
       </widget>
      </item>

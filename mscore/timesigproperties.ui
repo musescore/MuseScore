@@ -123,7 +123,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Global Value:</string>
+              <string>Global value:</string>
              </property>
             </widget>
            </item>
@@ -136,7 +136,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Actual Value:</string>
+              <string>Actual value:</string>
              </property>
             </widget>
            </item>

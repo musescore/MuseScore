@@ -139,7 +139,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>nominal</string>
+             <string>Nominal</string>
             </property>
            </widget>
           </item>
@@ -162,7 +162,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>actual</string>
+             <string>Actual</string>
             </property>
            </widget>
           </item>
@@ -313,7 +313,7 @@
           <item row="0" column="3">
            <widget class="QCheckBox" name="breakMultiMeasureRest">
             <property name="text">
-             <string>break multi measure rest</string>
+             <string>Break multimeasure rest</string>
             </property>
            </widget>
           </item>
@@ -326,7 +326,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Repeat Count:</string>
+             <string>Repeat count:</string>
             </property>
            </widget>
           </item>
@@ -368,7 +368,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Layout Stretch:</string>
+             <string>Layout stretch:</string>
             </property>
            </widget>
           </item>
@@ -397,7 +397,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Add to Measure Number</string>
+             <string>Add to Measure number</string>
             </property>
            </widget>
           </item>
@@ -420,7 +420,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Measure Number Mode:</string>
+             <string>Measure number mode:</string>
             </property>
            </widget>
           </item>

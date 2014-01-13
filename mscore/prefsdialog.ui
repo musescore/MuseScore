@@ -148,14 +148,14 @@
           <item>
            <widget class="QRadioButton" name="emptySession">
             <property name="text">
-             <string>start empty</string>
+             <string>Start empty</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="lastSession">
             <property name="text">
-             <string>continue last session</string>
+             <string>Continue last session</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -165,7 +165,7 @@
           <item>
            <widget class="QRadioButton" name="newSession">
             <property name="text">
-             <string>start with new score</string>
+             <string>Start with new score</string>
             </property>
            </widget>
           </item>
@@ -180,7 +180,7 @@
             <item>
              <widget class="QRadioButton" name="scoreSession">
               <property name="text">
-               <string>start with score:</string>
+               <string>Start with score:</string>
               </property>
              </widget>
             </item>
@@ -202,7 +202,7 @@
           <item>
            <widget class="QCheckBox" name="showSplashScreen">
             <property name="text">
-             <string>show splash screen</string>
+             <string>Show splash screen</string>
             </property>
            </widget>
           </item>
@@ -465,7 +465,7 @@
           <item row="6" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Images Directory:</string>
+             <string>Images directory:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -478,7 +478,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_86">
             <property name="text">
-             <string>Scores Directory:</string>
+             <string>Scores directory:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -491,7 +491,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_88">
             <property name="text">
-             <string>Styles Directory:</string>
+             <string>Styles directory:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -507,7 +507,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Templates Directory:</string>
+             <string>Templates directory:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -537,7 +537,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_89">
             <property name="text">
-             <string>Plugins Directory:</string>
+             <string>Plugins directory:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -563,7 +563,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>Soundfonts Folders:</string>
+             <string>Soundfonts folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -592,7 +592,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>SFZ Files Folders:</string>
+             <string>SFZ Files folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -898,13 +898,13 @@
           <item row="0" column="0">
            <widget class="QCheckBox" name="drawAntialiased">
             <property name="toolTip">
-             <string>disable antialiased drawing</string>
+             <string>Disable antialiased drawing</string>
             </property>
             <property name="whatsThis">
-             <string>uncheck this to speed up drawing</string>
+             <string>Uncheck this to speed up drawing</string>
             </property>
             <property name="text">
-             <string>Draw Antialiased</string>
+             <string>Draw antialiased</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1011,7 +1011,7 @@
             <item>
              <widget class="QLabel" name="label_37">
               <property name="text">
-               <string>Default Duration:</string>
+               <string>Default duration:</string>
               </property>
              </widget>
             </item>
@@ -1078,7 +1078,7 @@
           <string>enable MIDI remote control</string>
          </property>
          <property name="title">
-          <string>MIDI Remote Control</string>
+          <string>MIDI remote control</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1105,7 +1105,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_15">
             <property name="text">
-             <string>rewind</string>
+             <string>Rewind</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1135,7 +1135,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_20">
             <property name="text">
-             <string>toggle play</string>
+             <string>Toggle play</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1178,7 +1178,7 @@
           <item row="0" column="4">
            <widget class="QLabel" name="label_14">
             <property name="text">
-             <string>whole note</string>
+             <string>Whole note</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1188,7 +1188,7 @@
           <item row="1" column="4">
            <widget class="QLabel" name="label_16">
             <property name="text">
-             <string>half note</string>
+             <string>Half note</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1226,7 +1226,7 @@
           <item row="2" column="4">
            <widget class="QLabel" name="label_39">
             <property name="text">
-             <string>quarter note</string>
+             <string>Quarter note</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1246,7 +1246,7 @@
           <item row="3" column="8">
            <widget class="QLabel" name="label_44">
             <property name="text">
-             <string>rest</string>
+             <string>Rest</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1291,7 +1291,7 @@
           <item row="0" column="12">
            <widget class="QLabel" name="label_45">
             <property name="text">
-             <string>augmentation dot</string>
+             <string>Augmentation dot</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1308,7 +1308,7 @@
           <item row="2" column="12">
            <widget class="QLabel" name="label_47">
             <property name="text">
-             <string>tie</string>
+             <string>Tie</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1406,7 +1406,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_50">
             <property name="text">
-             <string>play</string>
+             <string>Play</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1416,7 +1416,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_51">
             <property name="text">
-             <string>stop</string>
+             <string>Stop</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1466,7 +1466,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_52">
             <property name="text">
-             <string>note entry</string>
+             <string>Note entry</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1666,7 +1666,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_90">
             <property name="text">
-             <string>Instrument List2:</string>
+             <string>Instrument list 2:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1683,7 +1683,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_85">
             <property name="text">
-             <string>Instrument List1:</string>
+             <string>Instrument list 1:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1716,7 +1716,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_28">
             <property name="text">
-             <string>Style for Part:</string>
+             <string>Style for part:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1954,7 +1954,7 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>ALSA Audio</string>
+             <string>ALSA audio</string>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -1983,7 +1983,7 @@
              <item row="1" column="0">
               <widget class="QLabel" name="label_11">
                <property name="text">
-                <string>Sample Rate:</string>
+                <string>Sample rate:</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2120,7 +2120,7 @@
           <item>
            <widget class="QGroupBox" name="jackDriver">
             <property name="title">
-             <string>JACK Audio Server</string>
+             <string>JACK audio server</string>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -2361,7 +2361,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_20">
          <property name="title">
-          <string>Character set used when importing binary files</string>
+          <string>Character Set Used When Importing Binary Files</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -2441,7 +2441,7 @@
           <item>
            <widget class="QLabel" name="label_17">
             <property name="text">
-             <string>Shortest Note:</string>
+             <string>Shortest note:</string>
             </property>
            </widget>
           </item>
@@ -2602,7 +2602,7 @@
           <item>
            <widget class="QLabel" name="label_18">
             <property name="text">
-             <string>Sample Rate:</string>
+             <string>Sample rate:</string>
             </property>
            </widget>
           </item>

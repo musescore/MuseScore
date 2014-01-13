@@ -113,14 +113,14 @@
      <item row="0" column="0" colspan="2">
       <widget class="QCheckBox" name="followText">
        <property name="text">
-        <string>Follow Text</string>
+        <string>Follow text</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="tempo">
        <property name="suffix">
-        <string>bpm</string>
+        <string>BPM</string>
        </property>
        <property name="decimals">
         <number>0</number>
