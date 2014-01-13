@@ -70,7 +70,7 @@
      <item>
       <widget class="Awl::MeterSlider" name="gain">
        <property name="statusTip">
-        <string>master volume</string>
+        <string>Master volume</string>
        </property>
        <property name="channel">
         <number>2</number>
@@ -175,7 +175,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_39">
          <property name="text">
-          <string>Master Tuning</string>
+          <string>Master tuning</string>
          </property>
         </widget>
        </item>

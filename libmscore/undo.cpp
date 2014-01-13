@@ -188,7 +188,7 @@ UndoStack::~UndoStack()
 void UndoStack::beginMacro()
       {
       if (curCmd) {
-            qDebug("UndoStack:beginMacro(): alread active");
+            qDebug("UndoStack:beginMacro(): already active");
             return;
             }
       curCmd = new UndoCommand();

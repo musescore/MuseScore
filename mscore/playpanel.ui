@@ -330,7 +330,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>relative tempo</string>
+        <string>Relative tempo</string>
        </property>
        <property name="value" stdset="0">
         <double>100.000000000000000</double>
@@ -361,14 +361,14 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>master volume</string>
+        <string>Master volume</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string extracomment="short text for volume slider">Vol.</string>
+        <string extracomment="short text for volume slider">Volume</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -859,7 +859,7 @@
         <font/>
        </property>
        <property name="toolTip">
-        <string>actual tempo</string>
+        <string>Actual tempo</string>
        </property>
        <property name="autoFillBackground">
         <bool>false</bool>
@@ -874,7 +874,7 @@
         <number>2</number>
        </property>
        <property name="text">
-        <string>120bpm</string>
+        <string>120BPM</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -896,7 +896,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string extracomment="short text for tempo slider">Tmp.</string>
+        <string extracomment="short text for tempo slider">Tempo</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>

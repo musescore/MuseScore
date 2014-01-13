@@ -85,7 +85,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_14">
           <property name="text">
-           <string>Part Name:</string>
+           <string>Part name:</string>
           </property>
          </widget>
         </item>
@@ -112,7 +112,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Long Instrument Name:</string>
+           <string>Long instrument name:</string>
           </property>
          </widget>
         </item>
@@ -125,7 +125,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Short Instrument Name:</string>
+           <string>Short instrument name:</string>
           </property>
          </widget>
         </item>
@@ -168,7 +168,7 @@
       <item>
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Usable Pitch Range:</string>
+         <string>Usable pitch range:</string>
         </property>
        </widget>
       </item>
@@ -301,7 +301,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Play Transposition:</string>
+           <string>Play transposition:</string>
           </property>
          </widget>
         </item>
@@ -448,7 +448,7 @@
         <item>
          <widget class="QLabel" name="label_11">
           <property name="text">
-           <string>+octave</string>
+           <string>+ Octave:</string>
           </property>
          </widget>
         </item>
@@ -462,14 +462,14 @@
         <item>
          <widget class="QRadioButton" name="up">
           <property name="text">
-           <string>up</string>
+           <string>Up</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QRadioButton" name="down">
           <property name="text">
-           <string>down</string>
+           <string>Down</string>
           </property>
          </widget>
         </item>
@@ -514,7 +514,7 @@
          <item>
           <widget class="QPushButton" name="editStringData">
            <property name="text">
-            <string>Edit string data...</string>
+            <string>Edit String Data...</string>
            </property>
           </widget>
          </item>

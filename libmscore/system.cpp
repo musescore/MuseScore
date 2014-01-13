@@ -636,7 +636,7 @@ void System::add(Element* el)
                   break;
             case BAR_LINE:
                   if (_barLine)
-                        qDebug("%p System::add(%s, %p): there is alread a barline %p", this, el->name(), el, _barLine);
+                        qDebug("%p System::add(%s, %p): there is already a barline %p", this, el->name(), el, _barLine);
                   _barLine = static_cast<BarLine*>(el);
                   break;
             default:

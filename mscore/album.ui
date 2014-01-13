@@ -22,7 +22,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Album Name:</string>
+        <string>Album name:</string>
        </property>
       </widget>
      </item>

@@ -69,7 +69,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Split Point</string>
+               <string>Split point</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

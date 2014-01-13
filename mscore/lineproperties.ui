@@ -63,7 +63,7 @@
         <item row="1" column="1" colspan="2">
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>place:</string>
+           <string>Place:</string>
           </property>
          </widget>
         </item>
@@ -120,7 +120,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>x:</string>
+           <string>X:</string>
           </property>
          </widget>
         </item>
@@ -152,7 +152,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>y:</string>
+           <string>Y:</string>
           </property>
          </widget>
         </item>
@@ -282,7 +282,7 @@
         <item row="1" column="1" rowspan="2" colspan="2">
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>place:</string>
+           <string>Place:</string>
           </property>
          </widget>
         </item>
@@ -314,7 +314,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Symb.</string>
+           <string>Symbol</string>
           </property>
           <property name="autoExclusive">
            <bool>false</bool>
@@ -339,7 +339,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>x:</string>
+           <string>X:</string>
           </property>
          </widget>
         </item>
@@ -371,7 +371,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>y:</string>
+           <string>Y:</string>
           </property>
          </widget>
         </item>
@@ -447,7 +447,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>x:</string>
+           <string>X:</string>
           </property>
          </widget>
         </item>
@@ -479,7 +479,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>y:</string>
+           <string>Y:</string>
           </property>
          </widget>
         </item>

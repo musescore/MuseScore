@@ -175,7 +175,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Time Stretch</string>
+        <string>Time stretch</string>
        </property>
       </widget>
      </item>
