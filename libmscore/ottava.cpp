@@ -406,10 +406,18 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
 
             case P_BEGIN_SYMBOL:
             case P_CONTINUE_SYMBOL:
+                  {
+                  SymId id;
                   if (_numbersOnly)
-                        return int(ottavaDefault[int(_ottavaType)].numbersOnlyId);
+                        id = ottavaDefault[int(_ottavaType)].numbersOnlyId;
                   else
-                        return int(ottavaDefault[int(_ottavaType)].id);
+                        id = ottavaDefault[int(_ottavaType)].id;
+
+                  if (symIsValid(id))
+                        return int(id);
+                  else
+                        return int(SymId::noSym);
+                  }
 
             case P_BEGIN_SYMBOL_OFFSET:
             case P_CONTINUE_SYMBOL_OFFSET:
