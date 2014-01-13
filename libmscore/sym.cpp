@@ -26,7 +26,7 @@ namespace Ms {
 
 QVector<ScoreFont> ScoreFont::_scoreFonts = {
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"),
-//      ScoreFont("Goneville",  "Gonville-20", ":/fonts/gonville/", "gonville-20.ttf"),
+      ScoreFont("Goneville",  "Gonville",    ":/fonts/gonville/", "Gonville.otf"),
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf")
       };
 
@@ -4306,8 +4306,8 @@ void ScoreFont::load()
       QJsonParseError error;
       QJsonObject o = QJsonDocument::fromJson(fi.readAll(), &error).object();
       if (error.error != QJsonParseError::NoError)
-            qDebug("Json parse error in <%s>: %s", qPrintable(fi.fileName()),
-               qPrintable(error.errorString()));
+            qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
+               error.offset, qPrintable(error.errorString()));
 
       _fm = new QFontMetricsF(_font);
       for (auto i : o.keys()) {
@@ -4329,8 +4329,8 @@ void ScoreFont::load()
             qDebug("ScoreFont: open glyph metadata file <%s> failed", qPrintable(fi.fileName()));
       o = QJsonDocument::fromJson(fi.readAll(), &error).object();
       if (error.error != QJsonParseError::NoError)
-            qDebug("Json parse error in <%s>: %s", qPrintable(fi.fileName()),
-               qPrintable(error.errorString()));
+            qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
+               error.offset, qPrintable(error.errorString()));
       QJsonObject oo = o.value("glyphs").toObject();
       for (auto i : oo.keys()) {
             QJsonObject ooo = oo.value(i).toObject();
