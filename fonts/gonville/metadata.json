@@ -1,13 +1,47 @@
 {
-    "fontName": "Emmentaler",
-    "fontVersion": 0.1,
+    "fontName": "Gonville",
+    "fontVersion": "2.2 alpha1",
 
     "engravingDefaults": {
+        "arrowShaftThickness": 0.16,
+        "barlineSeparation": 0.4,
+        "beamSpacing": 0.25,
+        "beamThickness": 0.5,
+        "bracketThickness": 0.5,
+        "dashedBarlineDashLength": 0.5,
+        "dashedBarlineGapLength": 0.25,
+        "dashedBarlineThickness": 0.16,
+        "hairpinThickness": 0.16,
+        "legerLineExtension": 0.4,
+        "legerLineThickness": 0.4,
+        "lyricLineThickness": 0.16,
+        "octaveLineThickness": 0.16,
+        "pedalLineThickness": 0.16,
+        "repeatEndingLineThickness": 0.16,
+        "slurEndpointThickness": 0.1,
+        "slurMidpointThickness": 0.22,
+        "staffLineThickness": 0.13,
+        "stemThickness": 0.16,
+        "subBracketThickness": 0.16,
+        "textEnclosureThickness": 0.16,
+        "thickBarlineThickness": 0.5,
+        "thinBarlineThickness": 0.16,
         "tieEndpointThickness": 0.1,
         "tieMidpointThickness": 0.22
     },
-
     "glyphs": {
+        "flag1024thDown": {
+            "stemDownSW": [
+                0.0,
+                -4.684
+            ]
+        },
+        "flag1024thUp": {
+            "stemUpNW": [
+                0.0,
+                4.516
+            ]
+        },
         "flag128thDown": {
             "stemDownSW": [
                 0.0,
@@ -92,16 +126,16 @@
                 0.028
             ]
         },
-        "flags1024thDown": {
-            "stemDownSW": [
-                0.0,
-                -4.684
+        "gClefLigatedNumberAbove": {
+            "numeralBottom": [
+                2.224,
+                3.468
             ]
         },
-        "flags1024thUp": {
-            "stemUpNW": [
-                0.0,
-                4.516
+        "gClefLigatedNumberBelow": {
+            "numeralBottom": [
+                1.052,
+                -2.616
             ]
         },
         "noteABlack": {
@@ -907,11 +941,11 @@
         "noteheadBlack": {
             "stemDownNW": [
                 0.0,
-                -0.2347675
+                -0.184
             ],
             "stemUpSE": [
-                1.6452225,
-                0.2347675
+                1.328,
+                0.184
             ]
         },
         "noteheadCircleSlash": {
