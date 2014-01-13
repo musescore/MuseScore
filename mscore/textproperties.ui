@@ -479,7 +479,7 @@
       <item>
        <widget class="QCheckBox" name="sizeIsSpatiumDependent">
         <property name="text">
-         <string>size follows Space unit</string>
+         <string>Size follows Space unit</string>
         </property>
        </widget>
       </item>
@@ -625,7 +625,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>% horizontal</string>
+              <string>Horizontal %:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -702,7 +702,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>% vertical:</string>
+              <string>Vertical %:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

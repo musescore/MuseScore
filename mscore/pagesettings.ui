@@ -105,7 +105,7 @@
         <item row="4" column="0" colspan="2">
          <widget class="QCheckBox" name="twosided">
           <property name="text">
-           <string>Two Sided</string>
+           <string>Two sided</string>
           </property>
          </widget>
         </item>
@@ -221,7 +221,7 @@
        <item>
         <widget class="QLabel" name="label_12">
          <property name="text">
-          <string>First page no.:</string>
+          <string>First page number:</string>
          </property>
          <property name="textFormat">
           <enum>Qt::PlainText</enum>

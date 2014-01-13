@@ -72,7 +72,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Show Courtesy</string>
+        <string>Show courtesy</string>
        </property>
       </widget>
      </item>

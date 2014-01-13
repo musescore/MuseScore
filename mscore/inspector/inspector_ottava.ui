@@ -168,7 +168,7 @@
      <item row="2" column="0" colspan="2">
       <widget class="QCheckBox" name="numbersOnly">
        <property name="text">
-        <string>numbers only</string>
+        <string>Numbers only</string>
        </property>
       </widget>
      </item>

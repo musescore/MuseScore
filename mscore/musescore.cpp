@@ -1085,7 +1085,7 @@ MuseScore::MuseScore()
 
 #ifdef MSCORE_UNSTABLE
       menuHelp->addSeparator();
-      menuHelp->addAction(tr("Report a bug"), this, SLOT(reportBug()));
+      menuHelp->addAction(tr("Report a Bug"), this, SLOT(reportBug()));
 #endif
 
       menuHelp->addSeparator();

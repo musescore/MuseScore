@@ -244,7 +244,7 @@
           <item>
            <widget class="QGroupBox" name="multiMeasureRests">
             <property name="title">
-             <string>Create multi measure rests</string>
+             <string>Create multimeasure rests</string>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -2187,7 +2187,7 @@ p, li { white-space: pre-wrap; }
             <item row="11" column="0">
              <widget class="QLabel" name="label_103">
               <property name="text">
-               <string>Multi measure rest margin:</string>
+               <string>Multimeasure rest margin:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -4417,7 +4417,7 @@ p, li { white-space: pre-wrap; }
              <item row="0" column="0">
               <widget class="QLabel" name="label_60">
                <property name="text">
-                <string>Capo Fret Position:</string>
+                <string>Capo fret position:</string>
                </property>
               </widget>
              </item>
@@ -4874,12 +4874,12 @@ p, li { white-space: pre-wrap; }
             </column>
             <column>
              <property name="text">
-              <string>semitones offset</string>
+              <string>Semitones offset</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>cents offset</string>
+              <string>Cents offset</string>
              </property>
             </column>
            </widget>
