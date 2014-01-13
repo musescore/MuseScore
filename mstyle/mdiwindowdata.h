@@ -29,13 +29,7 @@
 
 #include "animationdata.h"
 
-//---------------------------------------------------------
-//   @@ MdiWindowData
-///   handles mdiwindow arrows hover
-//   @P currentOpacity   qreal
-//   @P previousOpacity  qreal
-//---------------------------------------------------------
-
+//! handles mdiwindow arrows hover
 class MdiWindowData: public AnimationData {
 
             Q_OBJECT
