@@ -52,7 +52,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>relation:</string>
+             <string>Relation:</string>
             </property>
            </widget>
           </item>
@@ -162,7 +162,7 @@
            <item>
             <widget class="QRadioButton" name="number">
              <property name="text">
-              <string>number</string>
+              <string>Number</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -172,14 +172,14 @@
            <item>
             <widget class="QRadioButton" name="relation">
              <property name="text">
-              <string>relation</string>
+              <string>Relation</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QRadioButton" name="noNumber">
              <property name="text">
-              <string>nothing</string>
+              <string>Nothing</string>
              </property>
             </widget>
            </item>
@@ -201,7 +201,7 @@
            <item>
             <widget class="QRadioButton" name="autoBracket">
              <property name="text">
-              <string>auto bracket</string>
+              <string>Auto bracket</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -211,7 +211,7 @@
            <item>
             <widget class="QRadioButton" name="bracket">
              <property name="text">
-              <string>bracket</string>
+              <string>Bracket</string>
              </property>
             </widget>
            </item>

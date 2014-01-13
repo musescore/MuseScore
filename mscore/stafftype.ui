@@ -112,7 +112,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Line Distance:</string>
+              <string>Line distance:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -153,21 +153,21 @@
             <string/>
            </property>
            <property name="text">
-            <string>Show Clef</string>
+            <string>Show clef</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
           <widget class="QCheckBox" name="genTimesig">
            <property name="text">
-            <string>Show Time Sign.</string>
+            <string>Show time signature</string>
            </property>
           </widget>
          </item>
          <item row="0" column="2">
           <widget class="QCheckBox" name="showBarlines">
            <property name="text">
-            <string>Show Barlines</string>
+            <string>Show barlines</string>
            </property>
           </widget>
          </item>
@@ -208,14 +208,14 @@
            <item>
             <widget class="QCheckBox" name="showLedgerLinesPitched">
              <property name="text">
-              <string>Ledger Lines</string>
+              <string>Ledger lines</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="genKeysigPitched">
              <property name="text">
-              <string>Key Signature</string>
+              <string>Key signature</string>
              </property>
             </widget>
            </item>
@@ -432,7 +432,7 @@
                    <item>
                     <widget class="QLabel" name="fretYLabel">
                      <property name="text">
-                      <string>Vert. Offset:</string>
+                      <string>Vertical offset:</string>
                      </property>
                     </widget>
                    </item>
@@ -567,14 +567,14 @@
                        </size>
                       </property>
                       <property name="text">
-                       <string>On Lines</string>
+                       <string>On lines</string>
                       </property>
                      </widget>
                     </item>
                     <item>
                      <widget class="QRadioButton" name="aboveLinesRadio">
                       <property name="text">
-                       <string>Above Lines</string>
+                       <string>Above lines</string>
                       </property>
                      </widget>
                     </item>
@@ -732,7 +732,7 @@
                        </size>
                       </property>
                       <property name="text">
-                       <string>Note Symbols</string>
+                       <string>Note symbols</string>
                       </property>
                      </widget>
                     </item>
@@ -1056,7 +1056,7 @@
                    <item>
                     <widget class="QLabel" name="durYLabel">
                      <property name="text">
-                      <string>Vert. Offset:</string>
+                      <string>Vertical offset:</string>
                      </property>
                     </widget>
                    </item>

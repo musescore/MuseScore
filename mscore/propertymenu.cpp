@@ -241,8 +241,8 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                      : QT_TRANSLATE_NOOP("KeySig", "Show Courtesy Key Signature") );
                   a->setData("key-courtesy");
                   a = popup->addAction(ks->showNaturals()
-                     ? QT_TRANSLATE_NOOP("KeySig", "Hide Naturals")
-                     : QT_TRANSLATE_NOOP("KeySig", "Show Naturals") );
+                     ? QT_TRANSLATE_NOOP("KeySig", "Hide naturals")
+                     : QT_TRANSLATE_NOOP("KeySig", "Show naturals") );
                   a->setData("key-naturals");
                   }
             }

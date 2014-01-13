@@ -191,7 +191,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "pitch-spell",
-         QT_TRANSLATE_NOOP("action","Respell pitches")
+         QT_TRANSLATE_NOOP("action","Respell Pitches")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
@@ -2470,7 +2470,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL,
          A_CMD,
          "toggle-mmrest",
-         QT_TRANSLATE_NOOP("action","toggle create multi measure rest")
+         QT_TRANSLATE_NOOP("action","Toggle create multimeasure rest")
          ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)
