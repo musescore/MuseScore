@@ -33,7 +33,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Content Offset</string>
+         <string>Content offset</string>
         </property>
        </widget>
       </item>
@@ -60,7 +60,7 @@
       <item row="1" column="3">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>y:</string>
+         <string>Y:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -70,7 +70,7 @@
       <item row="1" column="1">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>x:</string>
+         <string>X:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -100,7 +100,7 @@
       <item row="3" column="0">
        <widget class="QCheckBox" name="drawStaff">
         <property name="text">
-         <string>draw Staff</string>
+         <string>Draw staff</string>
         </property>
        </widget>
       </item>
