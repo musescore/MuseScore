@@ -29,13 +29,7 @@
 
 #include "animationdata.h"
 
-//---------------------------------------------------------
-//   @@ TabBarData
-///   tabbars
-//   @P currentOpacity   qreal
-//   @P previousOpacity  qreal
-//---------------------------------------------------------
-
+//! tabbars
 class TabBarData: public AnimationData {
             Q_OBJECT
 

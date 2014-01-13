@@ -29,13 +29,7 @@
 
 #include "animationdata.h"
 
-//---------------------------------------------------------
-//   @@ HeaderViewData
-///   headerviews
-//   @P currentOpacity   qreal
-//   @P previousOpacity  qreal
-//---------------------------------------------------------
-
+//! headerviews
 class HeaderViewData: public AnimationData {
 
             Q_OBJECT
