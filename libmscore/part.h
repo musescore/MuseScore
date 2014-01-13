@@ -38,8 +38,8 @@ class Part : public QObject {
 
       Q_PROPERTY(QString partName READ partName WRITE setPartName)
       Q_PROPERTY(bool show READ show WRITE setShow)
-      Q_PROPERTY(QString longName READ longName WRITE setLongName)
-      Q_PROPERTY(QString shortName READ shortName WRITE setShortName)
+//      Q_PROPERTY(QString longName READ longName WRITE setLongName)
+//      Q_PROPERTY(QString shortName READ shortName WRITE setShortName)
 
       Score* _score;
 
