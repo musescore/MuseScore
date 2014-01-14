@@ -178,7 +178,7 @@
          <item>
           <widget class="QGroupBox" name="transposeByInterval">
            <property name="title">
-            <string>By Interval</string>
+            <string>By interval</string>
            </property>
            <property name="flat">
             <bool>false</bool>

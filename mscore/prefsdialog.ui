@@ -1301,7 +1301,7 @@
           <item row="1" column="12">
            <widget class="QLabel" name="label_46">
             <property name="text">
-             <string>double augmentation dot</string>
+             <string>Double augmentation dot</string>
             </property>
            </widget>
           </item>
