@@ -95,7 +95,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Symb.</string>
+           <string>Symbol</string>
           </property>
           <property name="autoExclusive">
            <bool>false</bool>
