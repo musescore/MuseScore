@@ -1189,14 +1189,14 @@
            <item>
             <widget class="QCheckBox" name="showLedgerLinesPercussion">
              <property name="text">
-              <string>Ledger Lines</string>
+              <string>Ledger lines</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="genKeysigPercussion">
              <property name="text">
-              <string>Key Signature</string>
+              <string>Key signature</string>
              </property>
             </widget>
            </item>
