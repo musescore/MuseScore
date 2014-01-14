@@ -218,7 +218,7 @@
            <item>
             <widget class="QRadioButton" name="noBracket">
              <property name="text">
-              <string>nothing</string>
+              <string>Nothing</string>
              </property>
             </widget>
            </item>
