@@ -5538,7 +5538,7 @@ Element* ScoreView::elementNear(QPointF p)
 //   posChanged
 //---------------------------------------------------------
 
-void ScoreView::posChanged(POS pos, unsigned tick)
+void ScoreView::posChanged(POS pos, unsigned /*tick*/)
       {
       switch (pos) {
             case POS::CURRENT:

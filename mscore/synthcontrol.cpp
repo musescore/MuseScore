@@ -147,7 +147,7 @@ void SynthControl::gainChanged(double val, int)
 //   masterTuningChanged
 //---------------------------------------------------------
 
-void SynthControl::masterTuningChanged(double val)
+void SynthControl::masterTuningChanged(double /*val*/)
       {
       changeTuningButton->setEnabled(true);
       }

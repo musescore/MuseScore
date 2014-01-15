@@ -64,10 +64,10 @@ MyWebPage::MyWebPage(QObject *parent)
 //---------------------------------------------------------
 
 QObject* MyWebPage::createPlugin(
-   const QString &classid,
-   const QUrl &url,
-   const QStringList &paramNames,
-   const QStringList &paramValues)
+   const QString &/*classid*/,
+   const QUrl &/*url*/,
+   const QStringList &/*paramNames*/,
+   const QStringList &/*paramValues*/)
       {
       // Create the widget using QUiLoader.
       // This means that the widgets don't need to be registered
@@ -223,7 +223,7 @@ QSize	MyWebView::sizeHint() const
 //   WebPageDockWidget
 //---------------------------------------------------------
 
-WebPageDockWidget::WebPageDockWidget(MuseScore* mscore, QWidget* parent)
+WebPageDockWidget::WebPageDockWidget(MuseScore* /*mscore*/, QWidget* parent)
    : QDockWidget(parent)
       {
       setWindowTitle("MuseScore Connect");
@@ -391,7 +391,7 @@ void WebPageDockWidget::saveOnlineFinished() {
       reply->deleteLater();
       }
 
-bool WebPageDockWidget::setCurrentScoreSource(QString source)
+bool WebPageDockWidget::setCurrentScoreSource(QString /*source*/)
       {
       Score* score = mscore->currentScore();
       if(score) {

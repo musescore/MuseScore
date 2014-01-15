@@ -291,7 +291,7 @@ ColorSchemePrivate::ColorSchemePrivate(QPalette::ColorGroup state,
 //   init
 //---------------------------------------------------------
 
-void ColorSchemePrivate::init(QPalette::ColorGroup state, const char* group, SetDefaultColors defaults) {
+void ColorSchemePrivate::init(QPalette::ColorGroup state, const char* /*group*/, SetDefaultColors defaults) {
       // loaded-from-config colors
       _brushes.fg[0] = SET_DEFAULT(NormalText);
       _brushes.fg[1] = SET_DEFAULT(InactiveText);

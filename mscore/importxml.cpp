@@ -2292,7 +2292,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
 //   setSLinePlacement -- helper for direction
 //---------------------------------------------------------
 
-static void setSLinePlacement(SLine* sli, float s, const QString pl, bool hasYoff, qreal yoff)
+static void setSLinePlacement(SLine* sli, float /*s*/, const QString pl, bool hasYoff, qreal yoff)
       {
       /*
       qDebug("setSLinePlacement s=%g pl='%s' hasy=%d yoff=%g",

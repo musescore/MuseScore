@@ -203,7 +203,7 @@ void MuseScore::oscTempo(int val)
 //   oscTriggerPlugin
 //---------------------------------------------------------
 
-void MuseScore::oscTriggerPlugin(QString s)
+void MuseScore::oscTriggerPlugin(QString /*s*/)
       {
 #if 0 // TODO
       QStringList args = s.split(",");

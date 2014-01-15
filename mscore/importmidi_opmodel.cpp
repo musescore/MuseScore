@@ -342,7 +342,7 @@ int OperationsModel::rowCount(const QModelIndex &parent) const
       return counter;
       }
 
-int OperationsModel::columnCount(const QModelIndex &parent) const
+int OperationsModel::columnCount(const QModelIndex &/*parent*/) const
       {
       return OperationCol::COL_COUNT;
       }

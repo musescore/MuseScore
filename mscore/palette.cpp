@@ -543,7 +543,7 @@ static void paintPaletteElement(void* data, Element* e)
 //   paintEvent
 //---------------------------------------------------------
 
-void Palette::paintEvent(QPaintEvent* event)
+void Palette::paintEvent(QPaintEvent* /*event*/)
       {
       qreal _spatium = gscore->spatium();
       qreal mag = PALETTE_SPATIUM * extraMag / _spatium;
