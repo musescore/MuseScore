@@ -1173,7 +1173,7 @@ void initStaffTypes()
       // init staff type presets
 //                                                                                 human readable name  lin dst clef  bars stmless time  key  ledger
       _presets[STANDARD_STAFF_TYPE].staffType     = new StaffTypePitched   (QObject::tr("Standard"),      5, 1, true, true, false, true, true, true);
-      _presets[PERC_1LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 1 lines"), 1, 1, true, true, false, true, false, true);
+      _presets[PERC_1LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 1 line"), 1, 1, true, true, false, true, false, true);
       _presets[PERC_3LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, false, true);
       _presets[PERC_5LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, false, true);
 //                                                                                     human-readable name  lin dist  clef   bars stemless time  duration font                 size off genDur fret font                       size off  thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
