@@ -49,7 +49,7 @@ void ExampleView::updateAll()
       update();
       }
 
-void ExampleView::adjustCanvasPosition(const Element* el, bool playBack)
+void ExampleView::adjustCanvasPosition(const Element* /*el*/, bool /*playBack*/)
       {
       }
 
@@ -100,7 +100,7 @@ void ExampleView::setDropRectangle(const QRectF&)
       {
       }
 
-void ExampleView::cmdAddSlur(Note* firstNote, Note* lastNote)
+void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
       {
       }
 
@@ -108,7 +108,7 @@ void ExampleView::startEdit()
       {
       }
 
-void ExampleView::startEdit(Element*, int startGrip)
+void ExampleView::startEdit(Element*, int /*startGrip*/)
       {
       }
 

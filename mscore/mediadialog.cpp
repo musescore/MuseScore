@@ -33,7 +33,7 @@ namespace Ms {
 //   MediaDialog
 //---------------------------------------------------------
 
-MediaDialog::MediaDialog(QWidget* parent)
+MediaDialog::MediaDialog(QWidget* /*parent*/)
    : QDialog()
       {
       setupUi(this);
