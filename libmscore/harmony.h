@@ -95,6 +95,7 @@ class Harmony : public Text {
       virtual void draw(QPainter*) const;
       void render(const QString&, qreal&, qreal&);
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType spelling = STANDARD, bool lowerCase = false);
+      virtual void styleChanged() override     { render(); }
 
    public:
       Harmony(Score* = 0);

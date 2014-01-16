@@ -1411,7 +1411,7 @@ void RemoveElement::undo()
                   foreach(Note* note, chord->notes()) {
                         if (note->tieBack())
                               note->tieBack()->setEndNote(note);
-                        if (note->tieFor() && note->tieFor()->endNote()) 
+                        if (note->tieFor() && note->tieFor()->endNote())
                               note->tieFor()->endNote()->setTieBack(note->tieFor());
                         }
                   }
@@ -2512,15 +2512,11 @@ static void updateTimeSigs(void*, Element* e)
 
 static void updateTextStyle2(void*, Element* e)
       {
-      if (!e->isText()) {
+      e->styleChanged();
+#if 0
+      if (!e->isText())
             e->styleChanged();
-            return;
-            }
-
-      if (e->type() == Element::HARMONY)
-            static_cast<Harmony*>(e)->render();
       else {
-#if 0 // TODO?
             Text* text = static_cast<Text*>(e);
             if (text->styled()) {
                   QString sn = text->styleName();
@@ -2536,8 +2532,8 @@ static void updateTextStyle2(void*, Element* e)
                         text->setText(text->getText());     // destroy formatting
                         }
                   }
-#endif
             }
+#endif
       }
 
 //---------------------------------------------------------
