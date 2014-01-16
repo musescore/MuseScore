@@ -1490,7 +1490,7 @@ void PreferenceDialog::resetAllValues()
 
 void PreferenceDialog::styleFileButtonClicked()
       {
-      QString fn = mscore->getStyleFilename(true,tr("Choose Default Style for Imports"));
+      QString fn = mscore->getStyleFilename(true, tr("Choose Default Style for Imports"));
       if (fn.isEmpty())
             return;
       importStyleFile->setText(fn);
