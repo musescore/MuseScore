@@ -57,7 +57,7 @@ version:
 #
 
 clean:
-	-rmdir /S/Q build.debug build.release win32install
+	-rmdir /S/Q build.debug build.release build.qtc win32install
 
 
 #
