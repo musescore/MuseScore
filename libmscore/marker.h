@@ -56,27 +56,27 @@ class Marker : public Text {
       void setMarkerType(MarkerType t);
       MarkerType markerType() const    { return _markerType; }
 
-      virtual Marker* clone() const    { return new Marker(*this); }
-      virtual ElementType type() const { return MARKER; }
+      virtual Marker* clone() const override    { return new Marker(*this); }
+      virtual ElementType type() const override { return MARKER; }
 
       Segment* segment() const         { return (Segment*)parent(); }
       Measure* measure() const         { return (Measure*)parent()->parent(); }
 
-      virtual void read(XmlReader&);
-      virtual void write(Xml& xml) const;
+      virtual void read(XmlReader&) override;
+      virtual void write(Xml& xml) const override;
 
       QString label() const            { return _label; }
       void setLabel(const QString& s)  { _label = s; }
       void undoSetLabel(const QString& s);
       void undoSetMarkerType(MarkerType t);
 
-//      virtual void styleChanged();
-      virtual bool systemFlag() const  { return true;        }
-      virtual void adjustReadPos();
+      virtual void styleChanged() override;
+      virtual bool systemFlag() const override  { return true;        }
+      virtual void adjustReadPos() override;
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       };
 
 }     // namespace Ms

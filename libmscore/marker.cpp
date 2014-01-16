@@ -36,29 +36,34 @@ void Marker::setMarkerType(MarkerType t)
       {
       _markerType = t;
       ScoreFont* f = score()->scoreFont();
-      switch(t) {
+      switch (t) {
             case MarkerType::SEGNO:
                   setText(f->toString(SymId::segno));
+                  setFont(f->font());
                   setLabel("segno");
                   break;
 
             case MarkerType::VARSEGNO:
                   setText(f->toString(SymId::segno));       // TODO-smufl
+                  setFont(f->font());
                   setLabel("varsegno");
                   break;
 
             case MarkerType::CODA:
                   setText(f->toString(SymId::coda));
+                  setFont(f->font());
                   setLabel("codab");
                   break;
 
             case MarkerType::VARCODA:
                   setText(f->toString(SymId::codaSquare));
+                  setFont(f->font());
                   setLabel("varcoda");
                   break;
 
             case MarkerType::CODETTA:
                   setText(f->toString(SymId::codaSquare));  // TODO-smufl
+                  setFont(f->font());
                   setLabel("codetta");
                   break;
 
@@ -85,10 +90,10 @@ void Marker::setMarkerType(MarkerType t)
 //   styleChanged
 //---------------------------------------------------------
 
-// void Marker::styleChanged()
-//      {
-//      setMarkerType(_markerType);
-//      }
+void Marker::styleChanged()
+      {
+      setMarkerType(_markerType);
+      }
 
 //---------------------------------------------------------
 //   adjustReadPos
@@ -151,11 +156,12 @@ void Marker::read(XmlReader& e)
                   QString s(e.readElementText());
                   setLabel(s);
                   mt = markerType(s);
+                  printf("Marker::read type %d <%s>\n", int(mt), qPrintable(s));
                   }
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      _markerType = mt;
+      setMarkerType(mt);
       }
 
 //---------------------------------------------------------

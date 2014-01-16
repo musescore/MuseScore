@@ -346,7 +346,8 @@ void initStyle(MStyle* s)
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
       AS(TextStyle(
-         TR( "Repeat Text"), ff,  12, false, false, false,          // for backward compatibility
+         // TR( "Repeat Text"), ff,  12, false, false, false,          // for backward compatibility
+         TR( "Repeat Text"), "Bravura",  12, false, false, false,          // for backward compatibility
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 

@@ -69,7 +69,6 @@ void SimpleText::draw(QPainter* p) const
       {
       p->setFont(textStyle().fontPx(spatium()));
       p->setBrush(Qt::NoBrush);
-      // p->setPen(textColor());
       p->setPen(curColor());
       int rows = _layout.size();
       if (_editMode && _cursor.hasSelection()) {
@@ -219,6 +218,7 @@ const QString& SimpleText::firstLine() const
 
 //---------------------------------------------------------
 //   layout
+//    convert _text to _layout
 //---------------------------------------------------------
 
 void SimpleText::layout()
@@ -235,7 +235,7 @@ void SimpleText::layout()
                         Box* b = static_cast<Box*>(e);
                         w -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
                         }
-                  foreach(QString s, sl) {
+                  foreach (const QString& s, sl) {
                         if (fm.width(s) < w)
                               _layout.append(TLine(s));
                         else {
@@ -261,7 +261,7 @@ void SimpleText::layout()
                         }
                   }
             else {
-                  foreach (QString s, sl)
+                  foreach (const QString& s, sl)
                         _layout.append(TLine(s));
                   }
             }

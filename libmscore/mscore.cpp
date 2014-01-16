@@ -149,16 +149,16 @@ void MScore::init()
       //
 #if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
       static const char* fonts[] = {
-            "MuseJazz.ttf",
-            "FreeSans.ttf",
-            "FreeSerifMscore.ttf",
-            "FreeSerifBold.ttf",
-            "mscoreTab.ttf",
-            "mscore-BC.ttf",
+            ":/fonts/MuseJazz.ttf",
+            ":/fonts/FreeSans.ttf",
+            ":/fonts/FreeSerifMscore.ttf",
+            ":/fonts/FreeSerifBold.ttf",
+            ":/fonts/mscoreTab.ttf",
+            ":/fonts/mscore-BC.ttf",
             };
 
       for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {
-            QString s = QString(":/fonts/%1").arg(fonts[i]);
+            QString s(fonts[i]);
             if (-1 == QFontDatabase::addApplicationFont(s)) {
                   qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
                   if (!MScore::debugMode)
