@@ -163,7 +163,7 @@ qDebug("capture key 0x%x  modifiers 0x%x virt 0x%x scan 0x%x <%s><%s>\n",
 
 void ShortcutCaptureDialog::clearClicked()
       {
-      //nshrtLabel->setText(tr("Undefined"));
+      nshrtLabel->setText("");
       key = 0;
       }
 }
