@@ -222,7 +222,7 @@ void PortMidiDriver::read()
                         }
                   else if (type == ME_NOTEOFF) {
                         int pitch = Pm_MessageData1(buffer[0].message);
-                        int velo  = Pm_MessageData2(buffer[0].message);
+                        (void)Pm_MessageData2(buffer[0].message); // read but ignore
                         mscore->midiNoteReceived(channel, pitch, 0);
                         }
                   }

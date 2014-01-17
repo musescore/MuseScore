@@ -372,7 +372,6 @@ int Model::read_instr ()
       bool          instr;
       int           d, k, r, s;
       char          c, *p, *q;
-      char          buff [1024];
       char          t1 [256];
       char          t2 [256];
       Keybd         *K;
@@ -408,6 +407,7 @@ int Model::read_instr ()
                   break;
             p = bb.data();
 #else
+      char buff [1024];
       while (!stat && f.readLine(buff, 1024)) {
             line++;
             p = buff;
