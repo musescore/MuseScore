@@ -301,6 +301,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   }
             case T_POINT_MM:
             case T_SIZE_MM:
+            case T_SYMID:
                   return QVariant();
             }
       return QVariant();
