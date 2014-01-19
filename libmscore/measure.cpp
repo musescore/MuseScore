@@ -1933,7 +1933,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         // if (spanner->track2() == -1)
                               // the absence of a track tag [?] means the
                               // track is the same as the beginning of the slur
-                        spanner->setTrack2(spanner->track());
+                        spanner->setTrack2(spanner->track2() == -1 ? spanner->track() : spanner->track2());
                         if (spanner->type() == OTTAVA) {
                               Ottava* o = static_cast<Ottava*>(spanner);
                               o->staff()->updateOttava(o);
