@@ -296,7 +296,7 @@
          <property name="flat">
           <bool>false</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout1">
           <property name="horizontalSpacing">
            <number>-1</number>
           </property>
