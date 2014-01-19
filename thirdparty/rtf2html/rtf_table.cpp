@@ -200,6 +200,7 @@ std::string table::make()
                result+=" valign=bottom";
                break;
             case table_cell_def::valign_center:
+                break;
             }
 
             result+=">";

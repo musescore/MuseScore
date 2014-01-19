@@ -16,6 +16,7 @@ std::string formatting_options::get_par_str() const
       break;
    case formatting_options::align_left:
    case formatting_options::align_error:
+      break;
    }
    if (papFirst!=0)
    {
@@ -188,7 +189,7 @@ std::string formatter::format(const formatting_options &_opt)
       case font::ff_cursive: style+=", cursive"; break;
       case font::ff_fantasy: style+=", fantasy"; break;
       case font::ff_monospace: style+=", monospace"; break;
-      case font::ff_none:
+      case font::ff_none: break;
       }
       style+=";";
    }
