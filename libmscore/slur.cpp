@@ -863,6 +863,8 @@ void Slur::slurPos(SlurPos* sp)
 void SlurTie::writeProperties(Xml& xml) const
       {
       Element::writeProperties(xml);
+      if(this->track() != this->track2() && this->track2() != -1)
+            xml.tag("track2", this->track2());
       int idx = 0;
       foreach(const SpannerSegment* ss, spannerSegments())
             ((SlurSegment*)ss)->write(xml, idx++);
