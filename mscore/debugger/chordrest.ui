@@ -373,7 +373,7 @@
        </layout>
       </item>
       <item row="0" column="3" rowspan="2">
-       <widget class="QLabel" name="label_13">
+       <widget class="QLabel" name="label_131">
         <property name="text">
          <string notr="true">Lyrics:</string>
         </property>
@@ -386,7 +386,7 @@
        </widget>
       </item>
       <item row="0" column="1" rowspan="2">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_21">
         <property name="toolTip">
          <string notr="true"/>
         </property>

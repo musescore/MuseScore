@@ -3986,7 +3986,7 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string>Pedal Line</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout1">
           <item row="0" column="1" rowspan="2" colspan="2">
            <widget class="QDoubleSpinBox" name="pedalY">
             <property name="suffix">
@@ -4920,7 +4920,7 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QWidget" name="Page19">
-      <layout class="QVBoxLayout" name="verticalLayout_30">
+      <layout class="QVBoxLayout" name="verticalLayout_301">
        <property name="spacing">
         <number>0</number>
        </property>
