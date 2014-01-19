@@ -150,9 +150,9 @@ void collectChords(std::multimap<int, MTrack> &tracks)
 
             ReducedFraction currentChordStart(-1, 1);    // invalid
             ReducedFraction curThreshTime(-1, 1);
-                        // if intersection of note durations is less than threshTime
+                        // if note onTime goes after max chord offTime
                         // then this is not a chord but arpeggio
-            ReducedFraction end(-1, 1);
+            ReducedFraction maxOffTime(-1, 1);
 
                               // chords here should consist of a single note
                               // because notes are not united into chords yet
@@ -172,21 +172,22 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                         Q_ASSERT_X(it != chords.begin(),
                                    "MChord: collectChords", "it == chords.begin()");
 
-                                    // [it->first, end] is a note intersection area
-                        if (it->first + note.len < end)
-                              end = it->first + note.len;
-                        if (end - it->first >= threshTime) {
+                        if (it->first < maxOffTime) {
                                           // add current note to the previous chord
                               auto prev = std::prev(it);
                               prev->second.notes.push_back(note);
-                              if (it->first >= currentChordStart + curThreshTime - fudgeTime)
+                              if (it->first >= currentChordStart + curThreshTime - fudgeTime
+                                          && curThreshTime == threshTime) {
                                     curThreshTime += threshExtTime;
+                                    }
+                              if (it->first + note.len > maxOffTime)
+                                    maxOffTime = it->first + note.len;
                               it = chords.erase(it);
                               continue;
                               }
                         }
                   currentChordStart = it->first;
-                  end = currentChordStart + note.len;
+                  maxOffTime = currentChordStart + note.len;
                   if (curThreshTime != threshTime)
                         curThreshTime = threshTime;
                   ++it;
