@@ -3441,6 +3441,7 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
             }
       }
 
+#ifdef 0
 //---------------------------------------------------------
 //   hasElem
 //---------------------------------------------------------
@@ -3453,6 +3454,7 @@ static bool hasElem(const QDomElement e, const QString& tagname)
       {
       return !e.elementsByTagName(tagname).isEmpty();
       }
+#endif
 
 //---------------------------------------------------------
 //   tupletAssert -- check assertions for tuplet handling
