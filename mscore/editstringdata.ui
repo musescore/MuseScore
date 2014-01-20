@@ -108,7 +108,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Number of Frets:</string>
+          <string>Number of frets:</string>
          </property>
         </widget>
        </item>

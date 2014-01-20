@@ -247,7 +247,7 @@
                 <string>Create a new staff type of current group.</string>
                </property>
                <property name="text">
-                <string>Create new standard type</string>
+                <string>Create New Standard Type</string>
                </property>
               </widget>
              </item>
@@ -359,7 +359,7 @@
                 <item row="0" column="1">
                  <widget class="QCheckBox" name="upsideDown">
                   <property name="text">
-                   <string>Upside Down</string>
+                   <string>Upside down</string>
                   </property>
                  </widget>
                 </item>
@@ -999,7 +999,7 @@
                       <bool>true</bool>
                      </property>
                      <property name="text">
-                      <string>Show Rests</string>
+                      <string>Show rests</string>
                      </property>
                     </widget>
                    </item>
@@ -1110,7 +1110,7 @@
              <item>
               <widget class="QPushButton" name="newTypeTablature">
                <property name="text">
-                <string>Create new tablature type</string>
+                <string>Create New Tablature Type</string>
                </property>
               </widget>
              </item>
@@ -1225,7 +1225,7 @@
              <item>
               <widget class="QPushButton" name="newTypePercussion">
                <property name="text">
-                <string>Create new percussion type</string>
+                <string>Create New Percussion type</string>
                </property>
               </widget>
              </item>
