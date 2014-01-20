@@ -1415,7 +1415,7 @@ std::vector<TupletData> convertToData(const std::vector<TupletInfo> &tuplets)
       return tupletsData;
       }
 
-// check is the chord is already in tuplet in prev bar or division
+// check is the chord already in tuplet in prev bar or division
 // it's possible because we use (startDivTick - tol) as a start tick
 
 template <typename Iter>

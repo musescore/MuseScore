@@ -126,7 +126,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   break;      // lyric and text are added in importmidi_lyrics.cpp
             case META_TRACK_NAME:
                   {
-                  std::string text = MidiCharset::fromUchar(data);
+                  const std::string text = MidiCharset::fromUchar(data);
                   if (name.isEmpty())
                         name = MidiCharset::convertToCharset(text);
                   }
@@ -543,8 +543,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   else if (e.type() == ME_NOTE) {
                         ++events;
                         const int pitch = e.pitch();
-                        const auto len = ReducedFraction::fromTicks(
-                                    (e.len() * MScore::division + mf->division() / 2) / mf->division());
+                        const auto len = toMuseScoreTicks(e.len(), track.division);
                         if (tick + len > lastTick)
                               lastTick = tick + len;
 
