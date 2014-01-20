@@ -465,7 +465,7 @@
           <item row="6" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Images directory:</string>
+             <string>Images folder:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -478,7 +478,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_86">
             <property name="text">
-             <string>Scores directory:</string>
+             <string>Scores folder:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -491,7 +491,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_88">
             <property name="text">
-             <string>Styles directory:</string>
+             <string>Styles folder:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -507,7 +507,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Templates directory:</string>
+             <string>Templates folder:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -537,7 +537,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_89">
             <property name="text">
-             <string>Plugins directory:</string>
+             <string>Plugins folder:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -592,7 +592,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>SFZ Files folders:</string>
+             <string>SFZ folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
