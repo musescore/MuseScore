@@ -630,6 +630,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
       connect(partStyleButton,        SIGNAL(clicked()), SLOT(selectPartStyle()));
+      connect(styleFileButton,        SIGNAL(clicked()), SLOT(styleFileButtonClicked()));
       connect(instrumentList1Button,  SIGNAL(clicked()), SLOT(selectInstrumentList1()));
       connect(instrumentList2Button,  SIGNAL(clicked()), SLOT(selectInstrumentList2()));
       connect(startWithButton,        SIGNAL(clicked()), SLOT(selectStartWith()));
@@ -1489,7 +1490,7 @@ void PreferenceDialog::resetAllValues()
 
 void PreferenceDialog::styleFileButtonClicked()
       {
-      QString fn = mscore->getStyleFilename(true);
+      QString fn = mscore->getStyleFilename(true, tr("Choose Default Style for Imports"));
       if (fn.isEmpty())
             return;
       importStyleFile->setText(fn);
