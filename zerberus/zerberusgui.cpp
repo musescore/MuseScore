@@ -21,7 +21,7 @@
 SfzListDialog::SfzListDialog()
    : QDialog(0)
       {
-      setWindowTitle(tr("SFZ files"));
+      setWindowTitle(tr("SFZ Files"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       list = new QListWidget;
       QVBoxLayout* layout = new QVBoxLayout;
