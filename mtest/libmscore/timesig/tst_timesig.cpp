@@ -33,6 +33,7 @@ class TestTimesig : public QObject, public MTest
       void initTestCase() { initMTest(); }
       void timesig01();
       void timesig02();
+      void timesig03();
       };
 
 //---------------------------------------------------------
@@ -75,6 +76,28 @@ void TestTimesig::timesig02()
       QVERIFY(saveCompareScore(score, "timesig-02a.mscx", DIR + "timesig-02-ref.mscx"));
       delete score;
 
+      }
+
+//---------------------------------------------------------
+///   timesig03
+///   add a 3/4 time signature in the second measure
+///   rewrite notes
+///   be sure that annotations and spanners are preserved
+//---------------------------------------------------------
+
+void TestTimesig::timesig03()
+      {
+      Score* score = readScore(DIR + "timesig-03.mscx");
+      QVERIFY(score);
+      Measure* m = score->firstMeasure()->nextMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(3, 4), TSIG_NORMAL);
+
+      score->cmdAddTimeSig(m, 0, ts, false);
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, "timesig-03.mscx", DIR + "timesig-03-ref.mscx"));
+      delete score;
       }
 
 QTEST_MAIN(TestTimesig)
