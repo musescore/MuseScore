@@ -662,7 +662,7 @@ void Element::writeProperties(Xml& xml) const
             else
                   xml.tag("pos", pos() / spatium());
             }
-      if ((track() != xml.curTrack) && (track() != -1)) {
+      if (((track() != xml.curTrack) || (type() == SLUR)) && (track() != -1)) {
             int t;
             t = track() + xml.trackDiff;
             xml.tag("track", t);

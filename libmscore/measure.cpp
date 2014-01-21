@@ -1953,12 +1953,24 @@ void Measure::read(XmlReader& e, int staffIdx)
                         }
                   e.readNext();
                   }
+            else if (tag == "Slur") {
+                  Slur *sl = new Slur(score());
+                  sl->setTick(e.tick());
+                  sl->read(e);
+                  score()->addSpanner(sl);
+                  //
+                  // check if we already saw "endSpanner"
+                  //
+                  const SpannerValues* sv = e.spannerValues(sl->id());
+                  if (sv) {
+                        sl->setTick2(sv->tick2);
+                        }
+                  }
             else if (tag == "HairPin"
                || tag == "Pedal"
                || tag == "Ottava"
                || tag == "Trill"
                || tag == "TextLine"
-               || tag == "Slur"
                || tag == "Volta") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(e.track());
