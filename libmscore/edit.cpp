@@ -428,6 +428,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
       nfm->setPrev(fm->prev());
       nlm->setNext(lm->next());
       undo(new InsertMeasures(nfm, nlm));
+      range.fixup(nfm);
       return true;
       }
 

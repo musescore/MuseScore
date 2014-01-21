@@ -43,6 +43,7 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
             }
       m->setLen(f);
       range.write(0, m);
+      range.fixup(m);
 
       endCmd();
       }

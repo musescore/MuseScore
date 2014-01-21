@@ -69,7 +69,7 @@ void TrackList::append(Element* e)
                && back()->type() == Element::REST;
             Segment* s = accumulateRest ? static_cast<Rest*>(e)->segment() : 0;
 
-            if (s && !s->score()->isSpannerStartEnd(s->tick(), e->track())) {
+            if (s && !s->score()->isSpannerStartEnd(s->tick(), e->track()) && !s->annotations().size()) {
                   // akkumulate rests
                   Rest* rest = static_cast<Rest*>(back());
                   Fraction d = rest->duration();
@@ -166,6 +166,9 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                   }
             else if (e->type() == Element::BAR_LINE)
                   ;
+//            else if (e->type() == Element::REPEAT_MEASURE) {
+//                  // TODO: copy previous measure contents?
+//                  }
             else
                   append(e);
             }
@@ -318,7 +321,7 @@ bool TrackList::write(int track, Measure* measure) const
                   //
 
                   while (duration.numerator() > 0) {
-                        if (e->type() == Element::REST
+                        if ((e->type() == Element::REST || e->type() == Element::REPEAT_MEASURE)
                            && (duration >= rest || e == back())
                            && (rest == m->len()))
                               {
@@ -339,7 +342,7 @@ bool TrackList::write(int track, Measure* measure) const
                               }
                         else {
                               Fraction d = qMin(rest, duration);
-                              if (e->type() == Element::REST) {
+                              if (e->type() == Element::REST || e->type() == Element::REPEAT_MEASURE) {
                                     segment = m->getSegment(Segment::SegChordRest, m->tick() + pos.ticks());
                                     Rest* r = new Rest(score, TDuration(d));
                                     r->setTrack(track);
@@ -509,10 +512,19 @@ bool ScoreRange::write(int track, Measure* m) const
             if (!dl->write(track + i, m))
                   return false;
             }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   fixup
+//---------------------------------------------------------
+
+void ScoreRange::fixup(Measure* m) const
+      {
       Score* score = m->score();
       for (Spanner* s : spanner) {
-            s->setTick(s->tick() + m->tick());
-            s->setTick2(s->tick2() + m->tick());
+            s->setTick(s->tick() + first()->tick());
+            s->setTick2(s->tick2() + first()->tick());
             score->undoAddElement(s);
             }
       for (const Annotation& a : annotations) {
@@ -522,7 +534,6 @@ bool ScoreRange::write(int track, Measure* m) const
                   score->undoAddElement(a.e);
                   }
             }
-      return true;
       }
 
 //---------------------------------------------------------
