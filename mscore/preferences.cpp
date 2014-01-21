@@ -1533,7 +1533,7 @@ void PreferenceDialog::selectScoresDirectory()
       {
       QString s = QFileDialog::getExistingDirectory(
          this,
-         tr("Choose Scores Directory"),
+         tr("Choose Score Folder"),
          myScores->text()
          );
       if (!s.isNull())
@@ -1548,7 +1548,7 @@ void PreferenceDialog::selectStylesDirectory()
       {
       QString s = QFileDialog::getExistingDirectory(
          this,
-         tr("Choose Styles Directory"),
+         tr("Choose Style Folder"),
          myStyles->text()
          );
       if (!s.isNull())
@@ -1563,7 +1563,7 @@ void PreferenceDialog::selectTemplatesDirectory()
       {
       QString s = QFileDialog::getExistingDirectory(
          this,
-         tr("Choose Templates Directory"),
+         tr("Choose Template Folder"),
          myTemplates->text()
          );
       if (!s.isNull())
@@ -1578,7 +1578,7 @@ void PreferenceDialog::selectPluginsDirectory()
       {
       QString s = QFileDialog::getExistingDirectory(
          this,
-         tr("Choose Plugins Directory"),
+         tr("Choose Plugin Folder"),
          myPlugins->text()
          );
       if (!s.isNull())
@@ -1593,7 +1593,7 @@ void PreferenceDialog::selectImagesDirectory()
       {
       QString s = QFileDialog::getExistingDirectory(
          this,
-         tr("Choose Images Directory"),
+         tr("Choose Image Folder"),
          myImages->text()
          );
       if (!s.isNull())
@@ -1607,7 +1607,7 @@ void PreferenceDialog::selectImagesDirectory()
 void PreferenceDialog::changeSoundfontPaths()
       {
       PathListDialog pld(this);
-      pld.setWindowTitle(tr("Soundfont folders"));
+      pld.setWindowTitle(tr("Soundfont Folders"));
       pld.setPath(sfPath->text());
       if(pld.exec())
             sfPath->setText(pld.path());
@@ -1620,7 +1620,7 @@ void PreferenceDialog::changeSoundfontPaths()
 void PreferenceDialog::changeSfzPaths()
       {
       PathListDialog pld(this);
-      pld.setWindowTitle(tr("SFZ folders"));
+      pld.setWindowTitle(tr("SFZ Folders"));
       pld.setPath(sfzPath->text());
       if(pld.exec())
             sfzPath->setText(pld.path());
