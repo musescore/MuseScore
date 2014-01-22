@@ -4142,15 +4142,6 @@ QPixmap ScoreFont::sym2pixmap(SymId id, qreal mag)
 //   draw
 //---------------------------------------------------------
 
-void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const
-      {
-      qreal imag = 1.0 / mag;
-      painter->scale(mag, mag);
-      painter->setFont(_font);
-      painter->drawText(pos * imag, toString(id));
-      painter->scale(imag, imag);
-      }
-
 void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPointF& pos) const
       {
       qreal imag = 1.0 / mag;
@@ -4160,17 +4151,18 @@ void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPoin
       painter->scale(imag, imag);
       }
 
+void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const
+      {
+      draw(toString(id), painter, mag, pos);
+      }
+
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
       {
       QString s = toString(id);
       QString d;
       for (int i = 0; i < n; ++i)
             d += s;
-      qreal imag = 1.0 / mag;
-      painter->scale(mag, mag);
-      painter->setFont(_font);
-      painter->drawText(pos * imag, s);
-      painter->scale(imag, imag);
+      draw(d, painter, mag, pos);
       }
 
 //---------------------------------------------------------

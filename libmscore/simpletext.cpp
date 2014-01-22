@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2011 Werner Schweer
+//  Copyright (C) 2011-2014 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -17,10 +17,374 @@
 #include "system.h"
 #include "box.h"
 #include "textframe.h"
+#include "sym.h"
 
 namespace Ms {
 
 TCursor SimpleText::_cursor;
+
+//---------------------------------------------------------
+//   TLine
+//---------------------------------------------------------
+
+TLine::TLine(const QString& s)
+      {
+      setText(s);
+      }
+
+//---------------------------------------------------------
+//   text
+//---------------------------------------------------------
+
+QString TLine::text() const
+      {
+      QString s;
+      for (const TFragment& f : _text) {
+            if (f.cf == CharFormat::STYLED)
+                  s += f.text;
+            else {
+                  s += "&";
+                  s += f.text;
+                  s += ";";
+                  }
+            }
+      return s;
+      }
+
+//---------------------------------------------------------
+//   setText
+//---------------------------------------------------------
+
+void TLine::setText(const QString& s)
+      {
+      QRegularExpression r("&([a-zA-Z]+\\w?);");
+      int offset = 0;
+      for (;;) {
+            QRegularExpressionMatch m = r.match(s, offset);
+            if (m.hasMatch()) {
+                  int si = m.capturedStart(0);
+                  int ei = m.capturedEnd(0);
+                  if (si > offset) {
+                        TFragment f;
+                        f.text = s.mid(offset, si - offset);
+                        f.cf = CharFormat::STYLED;
+                        _text.append(f);
+                        }
+                  TFragment f;
+                  f.text = m.captured(1);
+                  f.cf = CharFormat::SYMBOL;
+                  _text.append(f);
+                  offset = ei;
+                  }
+            else {
+                  TFragment f;
+                  f.text = s.mid(offset);
+                  if (!f.text.isEmpty()) {
+                        f.cf = CharFormat::STYLED;
+                        _text.append(f);
+                        }
+                  break;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void TLine::draw(QPainter* p, Score* score) const
+      {
+      for (const TFragment& f : _text) {
+            switch(f.cf) {
+                  case CharFormat::STYLED:
+                        p->drawText(f.pos, f.text);
+                        break;
+                  case CharFormat::SYMBOL:
+                        {
+                        p->save();
+                        SymId id      = Sym::name2id(f.text);
+                        ScoreFont* sf = score->scoreFont();
+                        sf->draw(id, p, 1.0, f.pos);
+                        p->restore();
+                        }
+                        break;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void TLine::layout(double y, SimpleText* t)
+      {
+      _bbox = QRectF();
+      qreal x = 0.0;
+      QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
+
+      for (TFragment& f : _text) {
+            f.pos.setX(x);
+            f.pos.setY(y);
+            qreal w;
+            QRectF r;
+            switch(f.cf) {
+                  case CharFormat::STYLED:
+                        r = fm.tightBoundingRect(f.text).translated(f.pos);
+                        w = fm.width(f.text);
+                        break;
+                  case CharFormat::SYMBOL:
+                        {
+                        SymId id = Sym::name2id(f.text);
+                        r = t->symBbox(id).translated(f.pos);
+                        w = t->symWidth(id);
+                        }
+                        break;
+                  }
+            _bbox |= r;
+            x += w;
+            }
+      }
+
+//---------------------------------------------------------
+//   xpos
+//---------------------------------------------------------
+
+qreal TLine::xpos(int column, const SimpleText* t) const
+      {
+      QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
+
+      int col = 0;
+      for (const TFragment& f : _text) {
+            if (f.cf == CharFormat::STYLED) {
+                  if (column == col)
+                        return f.pos.x();
+                  int idx = 0;
+                  for (const QChar& c : f.text) {
+                        ++idx;
+                        if (c.isHighSurrogate())
+                              continue;
+                        ++col;
+                        if (column == col)
+                              return f.pos.x() + fm.width(f.text.left(idx));
+                        }
+                  }
+            else if (f.cf == CharFormat::SYMBOL) {
+                  if (column == col)
+                        return f.pos.x();
+                  ++col;
+                  }
+            }
+      return 0.0;
+      }
+
+//---------------------------------------------------------
+//   boundingRect
+//---------------------------------------------------------
+
+QRectF TLine::boundingRect(int col1, int col2, const SimpleText* t) const
+      {
+      qreal x1 = xpos(col1, t);
+      qreal x2 = xpos(col2, t);
+      return QRectF(x1, _bbox.y(), x2-x1, _bbox.height());
+      }
+
+//---------------------------------------------------------
+//   moveX
+//---------------------------------------------------------
+
+void TLine::moveX(qreal dx)
+      {
+      for (TFragment& f : _text)
+            f.pos.rx() += dx;
+      _bbox = _bbox.translated(dx, 0.0);
+      }
+
+//---------------------------------------------------------
+//   columns
+//---------------------------------------------------------
+
+int TLine::columns() const
+      {
+      int col = 0;
+      for (const TFragment& f : _text) {
+            switch (f.cf) {
+                  case CharFormat::STYLED:
+                        for (const QChar& c : f.text) {
+                              if (!c.isHighSurrogate())
+                                    ++col;
+                              }
+                        break;
+                  case CharFormat::SYMBOL:
+                        ++col;
+                        break;
+                  }
+            }
+      return col;
+      }
+
+//---------------------------------------------------------
+//   column
+//    Return nearest column for position x. X is in
+//    SimpleText coordinate system
+//---------------------------------------------------------
+
+int TLine::column(qreal x, SimpleText* t) const
+      {
+      int col = 0;
+      QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
+      for (const TFragment& f : _text) {
+            switch (f.cf) {
+                  case CharFormat::STYLED:
+                        {
+                        int idx = 0;
+                        if (x <= f.pos.x())
+                              return col;
+                        qreal px = 0.0;
+                        for (const QChar& c : f.text) {
+                              ++idx;
+                              if (c.isHighSurrogate())
+                                    continue;
+                              qreal xo = fm.width(f.text.left(idx));
+                              if (x <= f.pos.x() + px + (xo-px)*.5)
+                                    return col;
+                              ++col;
+                              px = xo;
+                              }
+                        }
+                        break;
+                  case CharFormat::SYMBOL:
+                        {
+                        SymId id = Sym::name2id(f.text);
+                        qreal w = t->symWidth(id);
+                        if (x <= f.pos.x() + w * .5)
+                              return col;
+                        ++col;
+                        }
+                        break;
+                  }
+            }
+      return col;
+      }
+
+//---------------------------------------------------------
+//   insert
+//---------------------------------------------------------
+
+void TLine::insert(int column, const QString& s)
+      {
+      int col = 0;
+      for (auto n = _text.begin(); n != _text.end(); ++n) {
+            TFragment& f = *n;
+            if (f.cf == CharFormat::STYLED) {
+                  int idx = 0;
+                  int scol = col;
+                  for (const QChar& c : f.text) {
+                        if (col == column) {
+                              f.text.insert(col-scol, s);
+                              return;
+                              }
+                        ++idx;
+                        if (c.isHighSurrogate())
+                              continue;
+                        ++col;
+                        }
+                  if (col == column) {                // append?
+                        f.text.insert(col-scol, s);
+                        return;
+                        }
+                  }
+            else if (f.cf == CharFormat::SYMBOL) {
+                  if (col == column) {
+                        TFragment f;
+                        f.cf   = CharFormat::STYLED;
+                        f.text = s;
+                        _text.insert(n, f);
+                        return;
+                        }
+                  ++col;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void TLine::remove(int column)
+      {
+      int col = 0;
+      for (auto n = _text.begin(); n != _text.end(); ++n) {
+            TFragment& f = *n;
+            if (f.cf == CharFormat::STYLED) {
+                  int idx = 0;
+                  int scol = col;
+                  for (const QChar& c : f.text) {
+                        if (col == column) {
+                              f.text.remove(col-scol, 1);
+                              if (f.text.isEmpty())
+                                    _text.erase(n);
+                              return;
+                              }
+                        ++idx;
+                        if (c.isHighSurrogate())
+                              continue;
+                        ++col;
+                        }
+                  }
+            else if (f.cf == CharFormat::SYMBOL) {
+                  if (col == column) {
+                        _text.erase(n);
+                        return;
+                        }
+                  ++col;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   split
+//---------------------------------------------------------
+
+TLine TLine::split(int column)
+      {
+      TLine tl;
+
+      int col = 0;
+      for (auto i = _text.begin(); i != _text.end(); ++i) {
+            if (i->cf == CharFormat::STYLED) {
+                  int idx = 0;
+                  for (const QChar& c : i->text) {
+                        if (col == column) {
+                              if (idx) {
+                                    if (idx < i->text.size()) {
+                                          tl._text.append(TFragment(i->text.mid(idx)));
+                                          i->text = i->text.left(idx);
+                                          }
+                                    ++i;
+                                    }
+                              for (; i != _text.end(); i = _text.erase(i))
+                                    tl._text.append(*i);
+                              if (tl._text.isEmpty())
+                                    tl.setText("");
+                              return tl;
+                              }
+                        ++idx;
+                        if (c.isHighSurrogate())
+                              continue;
+                        ++col;
+                        }
+                  }
+            else if (i->cf == CharFormat::SYMBOL) {
+                  if (col == column) {
+                        for (; i != _text.end(); i = _text.erase(i))
+                              tl._text.append(*i);
+                        return tl;
+                        }
+                  ++col;
+                  }
+            }
+      return tl;
+      }
 
 //---------------------------------------------------------
 //   SimpleText
@@ -70,7 +434,6 @@ void SimpleText::draw(QPainter* p) const
       p->setFont(textStyle().fontPx(spatium()));
       p->setBrush(Qt::NoBrush);
       p->setPen(curColor());
-      int rows = _layout.size();
       if (_editMode && _cursor.hasSelection()) {
             int r1 = _cursor.selectLine;
             int r2 = _cursor.line;
@@ -85,49 +448,27 @@ void SimpleText::draw(QPainter* p) const
                   if (c1 > c2)
                         qSwap(c1, c2);
                   }
-            for (int row = 0; row < rows; ++row) {
-                  const TLine& t = _layout.at(row);
-                  p->drawText(t.pos, t.text);
+            int row = 0;
+            for (const TLine& t : _layout) {
+                  t.draw(p, score());
                   if (row >= r1 && row <= r2) {
-                        QBrush bg(QColor("steelblue"));
-                        QFontMetricsF fm(_textStyle.fontPx(spatium()));
                         QRectF br;
-                        if (row == r1 && r1 == r2) {
-                              QString left  = t.text.left(c1);
-                              QString mid   = t.text.mid(c1, c2 - c1);
-                              QString right = t.text.mid(c2);
-
-                              QPointF r (fm.width(left), 0.0);
-                              br = fm.boundingRect(mid).translated(t.pos + r);
-                              br.setWidth(fm.width(mid));
-                              }
-                        else if (row == r1) {
-                              QString left  = t.text.left(c1);
-                              QString right = t.text.mid(c1);
-
-                              QPointF r (fm.width(left), 0.0);
-                              br = fm.boundingRect(right).translated(t.pos + r);
-                              br.setWidth(fm.width(right));
-                              }
-                        else if (row == r2) {
-                              QString left  = t.text.left(c2);
-
-                              br = fm.boundingRect(left).translated(t.pos);
-                              br.setWidth(fm.width(left));
-                              }
-                        else  {
-                              br = fm.boundingRect(t.text).translated(t.pos);
-                              br.setWidth(fm.width(t.text));
-                              }
+                        if (row == r1 && r1 == r2)
+                              br = t.boundingRect(c1, c2, this);
+                        else if (row == r1)
+                              br = t.boundingRect(c1, t.columns(), this);
+                        else if (row == r2)
+                              br = t.boundingRect(0, c2, this);
+                        else
+                              br = t.boundingRect();
                         drawSelection(p, br);
                         }
+                  ++row;
                   }
             }
       else {
-            for (int row = 0; row < rows; ++row) {
-                  const TLine& t = _layout.at(row);
-                  p->drawText(t.pos, t.text);
-                  }
+            for (const TLine& t : _layout)
+                  t.draw(p, score());
             }
 
       if (_editMode) {
@@ -147,14 +488,37 @@ QRectF SimpleText::cursorRect() const
       {
       QFontMetricsF fm(_textStyle.fontPx(spatium()));
       int line   = _cursor.line;
-      QPointF pt = _layout[line].pos;
-      qreal xo   = fm.width(_layout[line].text.left(_cursor.column));
+      const TLine& tline = _layout[line];
 
-      qreal x = pt.x() + xo - 1;
-      qreal y = pt.y() - fm.ascent();
+      int col = 0;
+      qreal x = 0;
+      qreal y;
+      for (const TFragment& f : tline.fragments()) {
+            int ncol;
+            y = f.pos.y();
+            x = f.pos.x();
+            if (f.cf == CharFormat::STYLED) {
+                  x = f.pos.x();
+                  ncol = col + f.text.size();
+                  if (_cursor.column <= ncol) {
+                        x += fm.width(f.text.left(_cursor.column - col));
+                        break;
+                        }
+                  }
+            else {
+                  ncol = col + 1;
+                  if (_cursor.column == col)
+                        break;
+                  SymId id = Sym::name2id(f.text);
+                  ScoreFont* sf = score()->scoreFont();
+                  x += QFontMetricsF(sf->font()).width(sf->toString(id));
+                  }
+            col = ncol;
+            }
+      x -= 1;
+      y -= fm.ascent();
       qreal w = fm.width(QChar('w')) * .10;
-      qreal h = fm.ascent() + fm.descent() + 1;
-
+      qreal h = fm.lineSpacing();   // fm.ascent() + fm.descent();
       return QRectF(x, y, w, h);
       }
 
@@ -204,16 +568,6 @@ QColor SimpleText::textColor() const
                   return Qt::gray;
             }
       return textStyle().foregroundColor();
-      }
-
-//---------------------------------------------------------
-//   firstLine
-//---------------------------------------------------------
-
-const QString& SimpleText::firstLine() const
-      {
-      const TLine* t = &_layout[0];
-      return t->text;
       }
 
 //---------------------------------------------------------
@@ -272,30 +626,33 @@ void SimpleText::layout()
       QRectF bb;
       qreal lh = lineHeight();
       qreal ly = .0;
-      int n = _layout.size();
       QRectF cr(0, - fm.ascent(), 0, fm.height());
 
-      for (int i = 0; i < n; ++i) {
-            TLine* t = &_layout[i];
-            QRectF r(fm.tightBoundingRect(t->text));
-
-            t->pos.ry() = ly;
+      for (TLine& t : _layout) {
+            qreal y = ly;
             if (align() & ALIGN_BOTTOM)
-                  t->pos.ry() += -cr.bottom();
+                  y += -cr.bottom();
             else if (align() & ALIGN_VCENTER)
-                  t->pos.ry() +=  -(cr.top() + cr.bottom()) * .5;
+                  y +=  -(cr.top() + cr.bottom()) * .5;
             else if (align() & ALIGN_BASELINE)
                   ;
             else  // ALIGN_TOP
-                  t->pos.ry() += -cr.top();
+                  y += -cr.top();
+            t.layout(y, this);
 
+            QRectF r(t.boundingRect());
+
+            qreal rx;
             if (align() & ALIGN_RIGHT)
-                  t->pos.rx() = -r.right();
+                  rx = -r.right();
             else if (align() & ALIGN_HCENTER)
-                  t->pos.rx() = -(r.left() + r.right()) * .5;
+                  rx = -(r.left() + r.right()) * .5;
             else  // ALIGN_LEFT
-                  t->pos.rx() = -r.left();
-            bb |= r.translated(t->pos);
+                  rx = -r.left();
+            t.moveX(rx);
+
+            bb |= t.boundingRect();
+
             ly += lh;
             }
       setPos(o);
@@ -380,10 +737,10 @@ void SimpleText::endEdit()
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
       _text.clear();
-      foreach(const TLine& tl, _layout) {
+      for (const TLine& tl : _layout) {
             if (!_text.isEmpty())
                   _text += "\n";
-            _text += tl.text;
+            _text += tl.text();
             }
       if (links()) {
             foreach(Element* e, *links()) {
@@ -399,9 +756,14 @@ void SimpleText::endEdit()
 //    return the current text line in edit mode
 //---------------------------------------------------------
 
-QString& SimpleText::curLine()
+const TLine& SimpleText::curLine() const
       {
-      return _layout[_cursor.line].text;
+      return _layout[_cursor.line];
+      }
+
+TLine& SimpleText::curLine()
+      {
+      return _layout[_cursor.line];
       }
 
 //---------------------------------------------------------
@@ -418,35 +780,28 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
 
       switch (key) {
             case Qt::Key_Return:
-                  {
-                  if(_cursor.hasSelection()) {
+                  if (_cursor.hasSelection())
                         deleteSelectedText();
-                        }
-                  QString left(curLine().left(_cursor.column));
-                  QString right(curLine().mid(_cursor.column));
-                  curLine() = left;
+
+                  _layout.insert(_cursor.line + 1, curLine().split(_cursor.column));
                   ++_cursor.line;
                   _cursor.column = 0;
-                  _layout.insert(_cursor.line, TLine(right));
                   s.clear();
                   _cursor.selectLine   = _cursor.line;
                   _cursor.selectColumn = _cursor.column;
-                  }
                   break;
 
             case Qt::Key_Backspace:
-                  if(_cursor.hasSelection()) {
+                  if (_cursor.hasSelection())
                         deleteSelectedText();
-                        }
                   else if (!deletePreviousChar())
                         return false;
                   s.clear();
                   break;
 
             case Qt::Key_Delete:
-                  if(_cursor.hasSelection()) {
+                  if (_cursor.hasSelection())
                         deleteSelectedText();
-                        }
                   else if (!deleteChar())
                         return false;
                   s.clear();
@@ -553,16 +908,15 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
 void SimpleText::insertText(const QString& s)
       {
       if (!s.isEmpty()) {
-            if(_cursor.hasSelection()) {
+            if (_cursor.hasSelection())
                   deleteSelectedText();
-                  }
             curLine().insert(_cursor.column, s);
             _cursor.column += s.size();
             _cursor.selectColumn = _cursor.column;
             }
       }
 
- //---------------------------------------------------------
+//---------------------------------------------------------
 //   selectAll
 //---------------------------------------------------------
 
@@ -571,7 +925,7 @@ void SimpleText::selectAll()
       _cursor.selectLine = 0;
       _cursor.selectColumn = 0;
       _cursor.line = _layout.size() - 1;
-      _cursor.column = curLine().size();
+      _cursor.column = curLine().columns();
       }
 
 //---------------------------------------------------------
@@ -583,20 +937,17 @@ bool SimpleText::deletePreviousChar()
       if (_cursor.column == 0) {
             if (_cursor.line == 0)
                   return false;
-            QString right = curLine();
+            const TLine& l1 = _layout.at(_cursor.line);
+            TLine& l2       = _layout[_cursor.line - 1];
+            _cursor.column  = l2.columns();
+            for (const TFragment& f : l1.fragments())
+                  l2.fragments().append(f);
             _layout.removeAt(_cursor.line);
             --_cursor.line;
-            _cursor.column = curLine().size();
-            curLine().append(right);
             }
       else {
-            QChar c(curLine().at(_cursor.column-1));
-            if (c.isLowSurrogate()) {
-                  curLine().remove(_cursor.column-1, 1);
-                  --_cursor.column;
-                  }
-            curLine().remove(_cursor.column-1, 1);
             --_cursor.column;
+            curLine().remove(_cursor.column);
             }
       _cursor.selectLine   = _cursor.line;
       _cursor.selectColumn = _cursor.column;
@@ -609,18 +960,18 @@ bool SimpleText::deletePreviousChar()
 
 bool SimpleText::deleteChar()
       {
-      if (_cursor.column >= curLine().size()) {
+      if (_cursor.column >= curLine().columns()) {
             if (_cursor.line + 1 < _layout.size()) {
-                  TLine l = _layout.at(_cursor.line + 1);
-                  curLine() += l.text;
+                  TLine& l1       = _layout[_cursor.line];
+                  const TLine& l2 = _layout[_cursor.line + 1];
+                  for (const TFragment& f : l2.fragments())
+                        l1.fragments().append(f);
                   _layout.removeAt(_cursor.line + 1);
                   return true;
                   }
             return false;
             }
-      if (_cursor.column > 0 && curLine().at(_cursor.column-1).isHighSurrogate())
-            curLine().remove(_cursor.column, 1);
-      curLine().remove(_cursor.column, 1);
+      curLine().remove(_cursor.column);
       _cursor.selectLine   = _cursor.line;
       _cursor.selectColumn = _cursor.column;
       return true;
@@ -639,43 +990,37 @@ bool SimpleText::movePosition(QTextCursor::MoveOperation op,
                         if (_cursor.line == 0)
                               return false;
                         --_cursor.line;
-                        _cursor.column = curLine().size();
+                        _cursor.column = curLine().columns();
                         }
-                  else {
-                        if (curLine().at(_cursor.column-1).isLowSurrogate())
-                              --_cursor.column;
+                  else
                         --_cursor.column;
-                        }
                   break;
 
             case QTextCursor::Right:
-                  if (_cursor.column >= curLine().size()) {
+                  if (_cursor.column >= curLine().columns()) {
                         if (_cursor.line >= _layout.size()-1)
                               return false;
                         ++_cursor.line;
                         _cursor.column = 0;
                         }
-                  else {
-                        if (curLine().at(_cursor.column).isHighSurrogate())
-                              ++_cursor.column;
+                  else
                         ++_cursor.column;
-                        }
                   break;
 
             case QTextCursor::Up:
                   if (_cursor.line == 0)
                         return false;
                   --_cursor.line;
-                  if (_cursor.column > curLine().size())
-                        _cursor.column = curLine().size();
+                  if (_cursor.column > curLine().columns())
+                        _cursor.column = curLine().columns();
                   break;
 
             case QTextCursor::Down:
                   if (_cursor.line >= _layout.size()-1)
                         return false;
                   ++_cursor.line;
-                  if (_cursor.column > curLine().size())
-                        _cursor.column = curLine().size();
+                  if (_cursor.column > curLine().columns())
+                        _cursor.column = curLine().columns();
                   break;
 
             case QTextCursor::Start:
@@ -685,7 +1030,7 @@ bool SimpleText::movePosition(QTextCursor::MoveOperation op,
 
             case QTextCursor::End:
                   _cursor.line = _layout.size() - 1;
-                  _cursor.column = curLine().size();
+                  _cursor.column = curLine().columns();
                   break;
 
             default:
@@ -711,33 +1056,15 @@ bool SimpleText::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
       _cursor.line = 0;
       for (int row = 0; row < _layout.size(); ++row) {
             const TLine& l = _layout.at(row);
-            if (l.pos.y() > pt.y()) {
+            if (l.fragments().front().pos.y() > pt.y()) {
                   _cursor.line = row;
                   break;
                   }
             }
-      qreal x = _layout.at(_cursor.line).pos.x();
-      const QString& s(curLine());
-      QFontMetricsF fm(_textStyle.fontPx(spatium()));
-      int col = 0;
-      for (; col < s.size(); col++) {
-            if (s.at(col).isLowSurrogate())
-                  continue;
-            qreal w = fm.width(s.left(col));
-            qreal prevWidth = fm.width(s.left(col-1));
-            qreal nextWidth = fm.width(s.left(col+1));
-
-            qreal off = (col == 0) ? 0 : (prevWidth + (w - prevWidth) / 2);
-            qreal off2 = w + (nextWidth - w) / 2;
-            if (x + off < pt.x() && pt.x() < x + off2) {
-                  break;
-                  }
-            }
-      _cursor.column = col;
-
+      _cursor.column = curLine().column(pt.x(), this);
       score()->setUpdateAll(true);
       if (mode == QTextCursor::MoveAnchor) {
-            _cursor.selectLine = _cursor.line;
+            _cursor.selectLine   = _cursor.line;
             _cursor.selectColumn = _cursor.column;
             }
       if (_cursor.hasSelection())
@@ -771,13 +1098,13 @@ QString SimpleText::selectedText() const
             const TLine& t = _layout.at(row);
             if (row >= r1 && row <= r2) {
                   if (row == r1 && r1 == r2)
-                        s += t.text.mid(c1, c2 - c1);
+                        s += t.text().mid(c1, c2 - c1);
                   else if (row == r1)
-                        s += t.text.mid(c1);
+                        s += t.text().mid(c1);
                   else if (row == r2)
-                        s += t.text.left(c2);
+                        s += t.text().left(c2);
                   else
-                        s += t.text;
+                        s += t.text();
                   }
             if(row != rows -1)
                   s += "\n";
@@ -808,13 +1135,13 @@ void SimpleText::deleteSelectedText()
       QList<TLine> toDelete;
       for (int row = 0; row < rows; ++row) {
             TLine& t = _layout[row];
-            if (row >= r1 && row <= r2) {
+            if (row >= r1 && row <= r2) {             // TODO: does not work with symbols
                   if (row == r1 && r1 == r2)
-                        t.text.remove(c1, c2 - c1);
+                        t.text().remove(c1, c2 - c1);
                   else if (row == r1)
-                        t.text.remove(c1, t.text.size() - c1);
+                        t.text().remove(c1, t.text().size() - c1);
                   else if (row == r2)
-                        t.text.remove(0, c2);
+                        t.text().remove(0, c2);
                   else {
                         toDelete.append(t);
                         }
@@ -823,7 +1150,7 @@ void SimpleText::deleteSelectedText()
       if (r1 != r2) {
             TLine& tleft = _layout[r1];
             TLine& tright = _layout[r2];
-            tleft.text.append(tright.text);
+            tleft.text().append(tright.text());
             _layout.removeAt(r2);
             QMutableListIterator<TLine> i(_layout);
             while (i.hasNext()) {
