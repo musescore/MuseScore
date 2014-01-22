@@ -96,7 +96,7 @@ void TextPalette::populate()
       {
       bool musical = musicalSymbols->isChecked();
 
-      QFont f("FreeSerifMscore");
+      QFont f("FreeSerif");
 
       f.setPixelSize(40);
       codePage->setEnabled(!musical);

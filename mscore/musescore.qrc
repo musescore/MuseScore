@@ -17,7 +17,7 @@
         <file alias="fonts/bravura/glyphnames.json">../fonts/bravura/glyphnames.json</file>
         <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>
         <file alias="fonts/MuseJazz.ttf">../fonts/MuseJazz.ttf</file>
-        <file alias="fonts/FreeSerifMscore.ttf">../fonts/FreeSerifMscore.ttf</file>
+        <file alias="fonts/FreeSerif.ttf">../fonts/FreeSerif.ttf</file>
         <file alias="fonts/FreeSerifBold.ttf">../fonts/FreeSerifBold.ttf</file>
         <file alias="fonts/FreeSans.ttf">../fonts/FreeSans.ttf</file>
         <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
