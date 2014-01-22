@@ -37,6 +37,8 @@
       <Page>
         <System>
           </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -250,15 +252,12 @@
             </Note>
           </Chord>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>start-repeat</subtype>
           <span>1</span>
           </BarLine>
-        <tick>7200</tick>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
         </Measure>
       <Measure number="5">
+        <startRepeat/>
         <Dynamic>
           <subtype>p</subtype>
           <velocity>49</velocity>
@@ -316,12 +315,19 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <tick>12480</tick>
+        <Harmony>
+          <root>15</root>
+          <name>7</name>
+          </Harmony>
+        <tick>13440</tick>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="8">
+        <endRepeat>2</endRepeat>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -337,7 +343,7 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end-repeat</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
@@ -366,6 +372,60 @@
           </BarLine>
         </Measure>
       <Measure number="11">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      <Measure number="12">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      <Measure number="13">
+        <RepeatMeasure>
+          <duration z="4" n="4"/>
+          </RepeatMeasure>
+        <tick>24960</tick>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      <Measure number="14">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
