@@ -83,6 +83,8 @@ void TestTimesig::timesig02()
 ///   add a 3/4 time signature in the second measure
 ///   rewrite notes
 ///   be sure that annotations and spanners are preserved
+///   even annotations in otherwise empty segments
+///   also measure repeats and non-default barlines
 //---------------------------------------------------------
 
 void TestTimesig::timesig03()

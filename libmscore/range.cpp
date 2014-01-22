@@ -20,6 +20,7 @@
 #include "tie.h"
 #include "note.h"
 #include "tuplet.h"
+#include "barline.h"
 #include "utils.h"
 
 namespace Ms {
@@ -134,8 +135,13 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
       const Segment* s;
       for (s = fs; s && (s != es); s = s->next1()) {
             Element* e = s->element(track);
-            if (!e || e->generated())
+            if (!e || e->generated()) {
+                  foreach(Element* ee, s->annotations()) {
+                        if (ee->track() == track)
+                              _range->annotations.push_back({ s->tick(), ee->clone() });
+                        }
                   continue;
+                  }
             if (e->isChordRest()) {
                   DurationElement* de = static_cast<DurationElement*>(e);
                   gap = s->tick() - tick;
@@ -164,8 +170,11 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                   append(de);
                   tick += de->duration().ticks();;
                   }
-            else if (e->type() == Element::BAR_LINE)
-                  ;
+            else if (e->type() == Element::BAR_LINE) {
+                  BarLine* bl = static_cast<BarLine*>(e);
+                  if (bl->barLineType() != BarLineType::NORMAL_BAR)
+                        append(e);
+                  }
 //            else if (e->type() == Element::REPEAT_MEASURE) {
 //                  // TODO: copy previous measure contents?
 //                  }
@@ -412,8 +421,14 @@ bool TrackList::write(int track, Measure* measure) const
 //            else if (e->type() == Element::KEYSIG) {
 //                  // keysig has to be at start of measure
 //                  }
-            else if (e->type() == Element::BAR_LINE)
-                  ;
+            else if (e->type() == Element::BAR_LINE) {
+                  if (pos.numerator() == 0 && m) {
+                        BarLineType t = static_cast<BarLine*>(e)->barLineType();
+                        Measure* pm = m->prevMeasure();
+                        if (pm)
+                              pm->setEndBarLineType(t,0);
+                        }
+                  }
             else {
                   if (m == nullptr)
                         break;
@@ -528,7 +543,9 @@ void ScoreRange::fixup(Measure* m) const
             score->undoAddElement(s);
             }
       for (const Annotation& a : annotations) {
-            Segment* s = score->tick2segment(a.tick);
+            Measure* tm = score->tick2measure(a.tick);
+            Segment *op = static_cast<Segment*>(a.e->parent());
+            Segment* s = tm->undoGetSegment(op->segmentType(), a.tick);
             if (s) {
                   a.e->setParent(s);
                   score->undoAddElement(a.e);
