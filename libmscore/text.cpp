@@ -516,7 +516,7 @@ bool Text::readProperties(XmlReader& e)
       else if (tag == "html-data") {
             QString s = Xml::htmlToString(e);
             if (score()->mscVersion() <= 114) {
-                  s.replace("MScore1", "FreeSerifMscore");
+                  s.replace("MScore1", "FreeSerif");
                   s.replace(QChar(0xe10e), QChar(0x266e));    //natural
                   s.replace(QChar(0xe10c), QChar(0x266f));    // sharp
                   s.replace(QChar(0xe10d), QChar(0x266d));    // flat

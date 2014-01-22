@@ -225,7 +225,7 @@ class StyleTypes {
 
 static const StyleTypes styleTypes;
 
-static const QString ff("FreeSerifMscore");
+static const QString ff("FreeSerif");
 
 #define MM(x) ((x)/INCH)
 #define OA     OFFSET_ABS

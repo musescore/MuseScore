@@ -499,7 +499,7 @@ if (APPLE)
       ../fonts/gonville/Gonville.otf
       ../fonts/mscore/mscore.ttf
       ../fonts/MuseJazz.ttf
-      ../fonts/FreeSerifMscore.ttf
+      ../fonts/FreeSerif.ttf
       ../fonts/FreeSans.ttf
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf

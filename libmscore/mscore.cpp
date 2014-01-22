@@ -151,7 +151,7 @@ void MScore::init()
       static const char* fonts[] = {
             ":/fonts/MuseJazz.ttf",
             ":/fonts/FreeSans.ttf",
-            ":/fonts/FreeSerifMscore.ttf",
+            ":/fonts/FreeSerif.ttf",
             ":/fonts/FreeSerifBold.ttf",
             ":/fonts/mscoreTab.ttf",
             ":/fonts/mscore-BC.ttf",

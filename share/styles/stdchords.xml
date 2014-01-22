@@ -37,7 +37,7 @@
   <font id="0">   <!-- use chord name text style font -->
     </font>
 
-  <font id="1" family="FreeSerifMscore">
+  <font id="1" family="FreeSerif">
     <mag>1.2</mag>
     <sym code="0x266d" name="b"/>   <!-- use symbols for accidentals -->
     <sym code="0x266f" name="#"/>
