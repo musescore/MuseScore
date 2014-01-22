@@ -99,6 +99,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Slur id="2">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -132,6 +133,7 @@
         </Measure>
       <Measure number="2">
         <Slur id="3">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -165,6 +167,7 @@
         </Measure>
       <Measure number="3">
         <Slur id="4">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -202,6 +205,7 @@
           <pause>3</pause>
           </LayoutBreak>
         <Slur id="5">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -265,6 +269,8 @@
         </Measure>
       <Measure number="6">
         <Slur id="6">
+          <track>0</track>
+          <track2>1</track2>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -317,6 +323,7 @@
           </Chord>
         <Slur id="7">
           <track>1</track>
+          <track2>0</track2>
           </Slur>
         <Chord>
           <track>1</track>
@@ -339,6 +346,7 @@
         </Measure>
       <Measure number="7">
         <Slur id="8">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -417,6 +425,7 @@
           <pause>3</pause>
           </LayoutBreak>
         <Slur id="10">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -434,6 +443,7 @@
             </Note>
           </Chord>
         <Slur id="11">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -513,6 +523,8 @@
             </Note>
           </Chord>
         <Slur id="15">
+          <track>0</track>
+          <track2>4</track2>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -580,6 +592,7 @@
           </Chord>
         <Slur id="17">
           <track>1</track>
+          <track2>4</track2>
           </Slur>
         <Chord>
           <track>1</track>
@@ -684,6 +697,8 @@
         </Measure>
       <Measure number="9">
         <Slur id="14">
+          <track>4</track>
+          <track2>0</track2>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -717,6 +732,8 @@
         </Measure>
       <Measure number="10">
         <Slur id="16">
+          <track>4</track>
+          <track2>1</track2>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
