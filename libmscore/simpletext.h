@@ -24,6 +24,8 @@ struct SymCode;
 
 //---------------------------------------------------------
 //   TCursor
+//    Contains current position and start of selection
+//    during editing.
 //---------------------------------------------------------
 
 class TCursor {
@@ -37,17 +39,58 @@ class TCursor {
       bool hasSelection() const { return (selectLine != line) || (selectColumn != column); }
       };
 
+enum class CharFormat { STYLED, SYMBOL };
+
 //---------------------------------------------------------
-//   TLine
+//   TFragment
+//    contains a styled text of symbol with name "text"
 //---------------------------------------------------------
 
-struct TLine {
+class TFragment {
+   public:
+      CharFormat cf;
       QString text;
       QPointF pos;
+      bool operator ==(const TFragment& f) { return std::tie(f.cf, f.text) == std::tie(cf, text); }
 
+      TFragment() {}
+      TFragment(const QString& s) {
+            cf = CharFormat::STYLED;
+            text = s;
+            }
+      };
+
+class SimpleText;
+
+//---------------------------------------------------------
+//   TLine
+//    represents a line of formatted text
+//---------------------------------------------------------
+
+class TLine {
+      QList<TFragment> _text;
+      QRectF _bbox;
+
+      qreal xpos(int col, const SimpleText*) const;
+
+   public:
       TLine() {}
-      TLine(const QString& s) { text = s; }
-      bool operator ==(const TLine& x) { return std::tie(x.text, x.pos) == std::tie(text, pos); }
+      TLine(const QString&);
+      bool operator ==(const TLine& x)          { return _text == x._text; }
+      QString text() const;
+      void setText(const QString&);
+      void draw(QPainter*, Score*) const;
+      void layout(qreal y, SimpleText*);
+      const QList<TFragment>& fragments() const { return _text; }
+      QList<TFragment>& fragments()             { return _text; }
+      QRectF boundingRect() const               { return _bbox; }
+      QRectF boundingRect(int col1, int col2, const SimpleText*) const;
+      void moveX(qreal);
+      int columns() const;
+      void insert(int column, const QString& s);
+      void remove(int column);
+      int column(qreal x, SimpleText*) const;
+      TLine split(int column);
       };
 
 //---------------------------------------------------------
@@ -67,7 +110,8 @@ class SimpleText : public Element {
       static TCursor _cursor;       // used during editing
 
       QRectF cursorRect() const;
-      QString& curLine();
+      const TLine& curLine() const;
+      TLine& curLine();
       void drawSelection(QPainter*, const QRectF&) const;
 
    protected:
@@ -114,7 +158,6 @@ class SimpleText : public Element {
       int frameRound() const         { return textStyle().frameRound(); }
       bool circle() const            { return textStyle().circle(); }
       Align align() const            { return textStyle().align(); }
-      const QString& firstLine() const;
 
       void startEdit(MuseScoreView*, const QPointF&);
       void endEdit();

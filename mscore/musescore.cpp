@@ -4505,6 +4505,11 @@ QQmlEngine* MuseScore::qml() { return 0; }
 #endif
 }
 
+
+namespace Ms {
+      extern void tlineTest();
+      }
+
 using namespace Ms;
 
 //---------------------------------------------------------
@@ -4513,6 +4518,9 @@ using namespace Ms;
 
 int main(int argc, char* av[])
       {
+//      tlineTest();
+//      return 0;
+
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
       qInstallMsgHandler(mscoreMessageHandler);
 #endif
