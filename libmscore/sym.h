@@ -2003,6 +2003,7 @@ class ScoreFont {
       const QString& name() const           { return _name;           }
 
       static ScoreFont* fontFactory(QString);
+      static ScoreFont* fallbackFont();
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
 
       const QFont& font() const { return _font; }

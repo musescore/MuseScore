@@ -24,6 +24,8 @@ namespace Ms {
 //    this is the list of available score fonts
 //---------------------------------------------------------
 
+static const int FALLBACK_FONT = 2;       // Bravura
+
 QVector<ScoreFont> ScoreFont::_scoreFonts = {
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"),
       ScoreFont("Goneville",  "Gonville",    ":/fonts/gonville/", "Gonville.otf"),
@@ -4437,6 +4439,18 @@ ScoreFont* ScoreFont::fontFactory(QString s)
             }
       Q_ASSERT(f);
 
+      if (!f->loaded)
+            f->load();
+      return f;
+      }
+
+//---------------------------------------------------------
+//   fallbackFont
+//---------------------------------------------------------
+
+ScoreFont* ScoreFont::fallbackFont()
+      {
+      ScoreFont* f = &_scoreFonts[FALLBACK_FONT];
       if (!f->loaded)
             f->load();
       return f;

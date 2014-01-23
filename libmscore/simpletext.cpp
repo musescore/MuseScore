@@ -63,6 +63,41 @@ TFragment TFragment::split(int column)
       }
 
 //---------------------------------------------------------
+//   operator ==
+//---------------------------------------------------------
+
+bool TFragment::operator ==(const TFragment& f) const
+      {
+      return cf == f.cf && (cf == CharFormat::STYLED ? text == f.text : ids == f.ids);
+      }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void TFragment::draw(QPainter* p, const SimpleText* t) const
+      {
+      if (cf == CharFormat::STYLED)
+            p->drawText(pos, text);
+      else if (cf == CharFormat::SYMBOL) {
+            p->save();
+            bool fallback = false;
+            for (SymId id : ids) {
+                  if (!t->symIsValid(id)) {
+                        fallback = true;
+                        break;
+                        }
+                  }
+            ScoreFont* f = fallback ? ScoreFont::fallbackFont() : t->score()->scoreFont();
+            QString s;
+            for (SymId id : ids)
+                  s.append(f->toString(id));
+            f->draw(s, p, t->magS(), pos);
+            p->restore();
+            }
+      }
+
+//---------------------------------------------------------
 //   TLine
 //---------------------------------------------------------
 
@@ -140,20 +175,8 @@ void TLine::setText(const QString& s)
 
 void TLine::draw(QPainter* p, const SimpleText* t) const
       {
-      for (const TFragment& f : _text) {
-            switch(f.cf) {
-                  case CharFormat::STYLED:
-                        p->drawText(f.pos, f.text);
-                        break;
-                  case CharFormat::SYMBOL:
-                        {
-                        p->save();
-                        t->drawSymbols(f.text, p, f.pos);
-                        p->restore();
-                        }
-                        break;
-                  }
-            }
+      for (const TFragment& f : _text)
+            f.draw(p, t);
       }
 
 //---------------------------------------------------------
