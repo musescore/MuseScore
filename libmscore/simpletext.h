@@ -40,6 +40,7 @@ class TCursor {
       };
 
 enum class CharFormat { STYLED, SYMBOL };
+class SimpleText;
 
 //---------------------------------------------------------
 //   TFragment
@@ -49,11 +50,12 @@ enum class CharFormat { STYLED, SYMBOL };
 class TFragment {
    public:
       CharFormat cf;          // STYLED or SYMBOL
-      QList<SymId> ids;       // valid if SYMBOL; layout creates text from ids
-      QString text;
       QPointF pos;
 
-      bool operator ==(const TFragment& f) { return std::tie(f.cf, f.text) == std::tie(cf, text); }
+      QString text;
+      QList<SymId> ids;
+
+      bool operator ==(const TFragment& f) const;
 
       TFragment() {}
       TFragment(const QString& s) {
@@ -65,9 +67,9 @@ class TFragment {
             ids.append(id);
             }
       TFragment split(int column);
+      void draw(QPainter* p, const SimpleText* t) const;
       };
 
-class SimpleText;
 
 //---------------------------------------------------------
 //   TLine
