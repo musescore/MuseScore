@@ -43,9 +43,11 @@ QString TLine::text() const
             if (f.cf == CharFormat::STYLED)
                   s += f.text;
             else {
-                  s += "&";
-                  s += f.text;
-                  s += ";";
+                  for (SymId id : f.ids) {
+                        s += "&";
+                        s += Sym::id2name(id);
+                        s += ";";
+                        }
                   }
             }
       return s;
@@ -70,10 +72,15 @@ void TLine::setText(const QString& s)
                         f.cf = CharFormat::STYLED;
                         _text.append(f);
                         }
-                  TFragment f;
-                  f.text = m.captured(1);
-                  f.cf = CharFormat::SYMBOL;
-                  _text.append(f);
+                  SymId id = Sym::name2id(m.captured(1));
+                  if (!_text.isEmpty() && _text.back().cf == CharFormat::SYMBOL)
+                        _text.back().ids.append(id);
+                  else {
+                        TFragment f;
+                        f.cf = CharFormat::SYMBOL;
+                        f.ids.append(id);
+                        _text.append(f);
+                        }
                   offset = ei;
                   }
             else {
@@ -92,7 +99,7 @@ void TLine::setText(const QString& s)
 //   draw
 //---------------------------------------------------------
 
-void TLine::draw(QPainter* p, Score* score) const
+void TLine::draw(QPainter* p, const SimpleText* t) const
       {
       for (const TFragment& f : _text) {
             switch(f.cf) {
@@ -102,9 +109,7 @@ void TLine::draw(QPainter* p, Score* score) const
                   case CharFormat::SYMBOL:
                         {
                         p->save();
-                        SymId id      = Sym::name2id(f.text);
-                        ScoreFont* sf = score->scoreFont();
-                        sf->draw(id, p, 1.0, f.pos);
+                        t->drawSymbols(f.text, p, f.pos);
                         p->restore();
                         }
                         break;
@@ -134,9 +139,12 @@ void TLine::layout(double y, SimpleText* t)
                         break;
                   case CharFormat::SYMBOL:
                         {
-                        SymId id = Sym::name2id(f.text);
-                        r = t->symBbox(id).translated(f.pos);
-                        w = t->symWidth(id);
+                        ScoreFont* sf = t->score()->scoreFont();
+                        f.text.clear();
+                        for (SymId id : f.ids)
+                              f.text.append(sf->toString(id));
+                        r = t->symBbox(f.text).translated(f.pos);
+                        w = t->symWidth(f.text);
                         }
                         break;
                   }
@@ -155,23 +163,20 @@ qreal TLine::xpos(int column, const SimpleText* t) const
 
       int col = 0;
       for (const TFragment& f : _text) {
-            if (f.cf == CharFormat::STYLED) {
-                  if (column == col)
-                        return f.pos.x();
-                  int idx = 0;
-                  for (const QChar& c : f.text) {
-                        ++idx;
-                        if (c.isHighSurrogate())
-                              continue;
-                        ++col;
-                        if (column == col)
-                              return f.pos.x() + fm.width(f.text.left(idx));
-                        }
-                  }
-            else if (f.cf == CharFormat::SYMBOL) {
-                  if (column == col)
-                        return f.pos.x();
+            if (column == col)
+                  return f.pos.x();
+            int idx = 0;
+            for (const QChar& c : f.text) {
+                  ++idx;
+                  if (c.isHighSurrogate())
+                        continue;
                   ++col;
+                  if (column == col) {
+                        if (f.cf == CharFormat::STYLED)
+                              return f.pos.x() + fm.width(f.text.left(idx));
+                        else if (f.cf == CharFormat::SYMBOL)
+                              return f.pos.x() + t->symWidth(f.text.left(idx));
+                        }
                   }
             }
       return 0.0;
@@ -207,16 +212,9 @@ int TLine::columns() const
       {
       int col = 0;
       for (const TFragment& f : _text) {
-            switch (f.cf) {
-                  case CharFormat::STYLED:
-                        for (const QChar& c : f.text) {
-                              if (!c.isHighSurrogate())
-                                    ++col;
-                              }
-                        break;
-                  case CharFormat::SYMBOL:
+            for (const QChar& c : f.text) {
+                  if (!c.isHighSurrogate())
                         ++col;
-                        break;
                   }
             }
       return col;
@@ -233,34 +231,23 @@ int TLine::column(qreal x, SimpleText* t) const
       int col = 0;
       QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
       for (const TFragment& f : _text) {
-            switch (f.cf) {
-                  case CharFormat::STYLED:
-                        {
-                        int idx = 0;
-                        if (x <= f.pos.x())
-                              return col;
-                        qreal px = 0.0;
-                        for (const QChar& c : f.text) {
-                              ++idx;
-                              if (c.isHighSurrogate())
-                                    continue;
-                              qreal xo = fm.width(f.text.left(idx));
-                              if (x <= f.pos.x() + px + (xo-px)*.5)
-                                    return col;
-                              ++col;
-                              px = xo;
-                              }
-                        }
-                        break;
-                  case CharFormat::SYMBOL:
-                        {
-                        SymId id = Sym::name2id(f.text);
-                        qreal w = t->symWidth(id);
-                        if (x <= f.pos.x() + w * .5)
-                              return col;
-                        ++col;
-                        }
-                        break;
+            int idx = 0;
+            if (x <= f.pos.x())
+                  return col;
+            qreal px = 0.0;
+            for (const QChar& c : f.text) {
+                  ++idx;
+                  if (c.isHighSurrogate())
+                        continue;
+                  qreal xo;
+                  if (f.cf == CharFormat::STYLED)
+                        xo = fm.width(f.text.left(idx));
+                  else if (f.cf == CharFormat::SYMBOL)
+                        xo = t->symWidth(f.text.left(idx));
+                  if (x <= f.pos.x() + px + (xo-px)*.5)
+                        return col;
+                  ++col;
+                  px = xo;
                   }
             }
       return col;
@@ -275,35 +262,43 @@ void TLine::insert(int column, const QString& s)
       int col = 0;
       for (auto n = _text.begin(); n != _text.end(); ++n) {
             TFragment& f = *n;
-            if (f.cf == CharFormat::STYLED) {
-                  int idx = 0;
-                  int scol = col;
-                  for (const QChar& c : f.text) {
-                        if (col == column) {
-                              f.text.insert(col-scol, s);
-                              return;
-                              }
-                        ++idx;
-                        if (c.isHighSurrogate())
-                              continue;
-                        ++col;
-                        }
-                  if (col == column) {                // append?
-                        f.text.insert(col-scol, s);
-                        return;
-                        }
-                  }
-            else if (f.cf == CharFormat::SYMBOL) {
+            int idx = 0;
+            int scol = col;
+            for (const QChar& c : f.text) {
                   if (col == column) {
-                        TFragment f;
-                        f.cf   = CharFormat::STYLED;
-                        f.text = s;
-                        _text.insert(n, f);
+                        if (f.cf == CharFormat::STYLED)
+                              f.text.insert(col-scol, s);
+                        else if (f.cf == CharFormat::SYMBOL) {
+                              // split fragment
+                              TFragment f2;
+                              f2.cf   = CharFormat::SYMBOL;
+                              f2.text = f.text.mid(idx);
+                              f.text  = f.text.left(idx);
+
+                              QList<SymId> l1, l2;
+                              for (int i = 0; i < f.ids.size(); ++i) {
+                                    if (i < idx)
+                                          l1.append(f.ids[i]);
+                                    else
+                                          l2.append(f.ids[i]);
+                                    }
+                              f.ids  = l1;
+                              f2.ids = l2;
+                              n = _text.insert(n+1, TFragment(s));
+                              _text.insert(n+1, f2);
+                              }
                         return;
                         }
+                  ++idx;
+                  if (c.isHighSurrogate())
+                        continue;
                   ++col;
                   }
             }
+      if (_text.back().cf == CharFormat::STYLED)
+            _text.back().text.append(s);
+      else
+            _text.append(TFragment(s));
       }
 
 //---------------------------------------------------------
@@ -315,27 +310,22 @@ void TLine::remove(int column)
       int col = 0;
       for (auto n = _text.begin(); n != _text.end(); ++n) {
             TFragment& f = *n;
-            if (f.cf == CharFormat::STYLED) {
-                  int idx = 0;
-                  int scol = col;
-                  for (const QChar& c : f.text) {
-                        if (col == column) {
-                              f.text.remove(col-scol, 1);
-                              if (f.text.isEmpty())
-                                    _text.erase(n);
-                              return;
-                              }
-                        ++idx;
-                        if (c.isHighSurrogate())
-                              continue;
-                        ++col;
-                        }
-                  }
-            else if (f.cf == CharFormat::SYMBOL) {
+            int idx  = 0;
+            int rcol = 0;
+            for (const QChar& c : f.text) {
                   if (col == column) {
-                        _text.erase(n);
+                        if (c.isSurrogate())
+                              f.text.remove(rcol, 1);
+                        f.text.remove(rcol, 1);
+                        if (f.cf == CharFormat::SYMBOL)
+                              f.ids.removeAt(idx);
+                        if (f.text.isEmpty())
+                              _text.erase(n);
                         return;
                         }
+                  ++idx;
+                  if (c.isHighSurrogate())
+                        continue;
                   ++col;
                   }
             }
@@ -351,40 +341,43 @@ TLine TLine::split(int column)
 
       int col = 0;
       for (auto i = _text.begin(); i != _text.end(); ++i) {
-            if (i->cf == CharFormat::STYLED) {
-                  int idx = 0;
-                  for (const QChar& c : i->text) {
-                        if (col == column) {
-                              if (idx) {
-                                    if (idx < i->text.size()) {
-                                          tl._text.append(TFragment(i->text.mid(idx)));
-                                          i->text = i->text.left(idx);
+            int idx = 0;
+            for (const QChar& c : i->text) {
+                  if (col == column) {
+                        if (idx) {
+                              if (idx < i->text.size()) {
+                                    tl._text.append(TFragment(i->text.mid(idx)));
+                                    i->text = i->text.left(idx);
+                                    if (i->cf == CharFormat::SYMBOL) {
+                                          QList<SymId> l1, l2;
+                                          for (int k = 0; k < i->ids.size(); ++k) {
+                                                if (k < idx)
+                                                      l1.append(i->ids[k]);
+                                                else
+                                                      l2.append(i->ids[k]);
+                                                }
+                                          i->ids = l1;
+                                          tl._text.back().cf = CharFormat::SYMBOL;
+                                          tl._text.back().ids = l2;
                                           }
                                     ++i;
                                     }
-                              for (; i != _text.end(); i = _text.erase(i))
-                                    tl._text.append(*i);
-                              if (tl._text.isEmpty())
-                                    tl.setText("");
-                              return tl;
                               }
-                        ++idx;
-                        if (c.isHighSurrogate())
-                              continue;
-                        ++col;
-                        }
-                  }
-            else if (i->cf == CharFormat::SYMBOL) {
-                  if (col == column) {
                         for (; i != _text.end(); i = _text.erase(i))
                               tl._text.append(*i);
+                        if (tl._text.isEmpty())
+                              tl.setText("");
                         return tl;
                         }
+                  ++idx;
+                  if (c.isHighSurrogate())
+                        continue;
                   ++col;
                   }
             }
       return tl;
       }
+/***/
 
 //---------------------------------------------------------
 //   SimpleText
@@ -450,7 +443,7 @@ void SimpleText::draw(QPainter* p) const
                   }
             int row = 0;
             for (const TLine& t : _layout) {
-                  t.draw(p, score());
+                  t.draw(p, this);
                   if (row >= r1 && row <= r2) {
                         QRectF br;
                         if (row == r1 && r1 == r2)
@@ -468,7 +461,7 @@ void SimpleText::draw(QPainter* p) const
             }
       else {
             for (const TLine& t : _layout)
-                  t.draw(p, score());
+                  t.draw(p, this);
             }
 
       if (_editMode) {
@@ -490,35 +483,12 @@ QRectF SimpleText::cursorRect() const
       int line   = _cursor.line;
       const TLine& tline = _layout[line];
 
-      int col = 0;
-      qreal x = 0;
-      qreal y;
-      for (const TFragment& f : tline.fragments()) {
-            int ncol;
-            y = f.pos.y();
-            x = f.pos.x();
-            if (f.cf == CharFormat::STYLED) {
-                  x = f.pos.x();
-                  ncol = col + f.text.size();
-                  if (_cursor.column <= ncol) {
-                        x += fm.width(f.text.left(_cursor.column - col));
-                        break;
-                        }
-                  }
-            else {
-                  ncol = col + 1;
-                  if (_cursor.column == col)
-                        break;
-                  SymId id = Sym::name2id(f.text);
-                  ScoreFont* sf = score()->scoreFont();
-                  x += QFontMetricsF(sf->font()).width(sf->toString(id));
-                  }
-            col = ncol;
-            }
-      x -= 1;
-      y -= fm.ascent();
+      qreal h = fm.ascent() * 1.2;  // lineSpacing();
+      qreal x = tline.xpos(_cursor.column, this);
+      qreal y = _cursor.line * h;
+      x      -= 1.0;   //??
+      y      -= fm.ascent();
       qreal w = fm.width(QChar('w')) * .10;
-      qreal h = fm.lineSpacing();   // fm.ascent() + fm.descent();
       return QRectF(x, y, w, h);
       }
 
