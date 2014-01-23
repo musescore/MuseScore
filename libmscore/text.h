@@ -96,6 +96,7 @@ class Text : public SimpleText {
       void endCursorEdit();
       virtual void endEdit();
       void addChar(int code);
+      void addSym(SymId);
       void setBlockFormat(const QTextBlockFormat&);
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);

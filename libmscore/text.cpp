@@ -940,6 +940,21 @@ void Text::addChar(int code)
       }
 
 //---------------------------------------------------------
+//   addSym
+//---------------------------------------------------------
+
+void Text::addSym(SymId id)
+      {
+      if (styled()) {
+            SimpleText::insertSym(id);
+            return;
+            }
+      // _cursor->insertText(ss);         TODO
+      score()->setLayoutAll(true);
+      score()->end();
+      }
+
+//---------------------------------------------------------
 //   setBlockFormat
 //---------------------------------------------------------
 
