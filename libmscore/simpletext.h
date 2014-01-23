@@ -60,6 +60,11 @@ class TFragment {
             cf = CharFormat::STYLED;
             text = s;
             }
+      TFragment(SymId id) {
+            cf = CharFormat::SYMBOL;
+            ids.append(id);
+            }
+      TFragment split(int column);
       };
 
 class SimpleText;
@@ -87,11 +92,13 @@ class TLine {
       QRectF boundingRect(int col1, int col2, const SimpleText*) const;
       void moveX(qreal);
       int columns() const;
-      void insert(int column, const QString& s);
+      void insert(int column, const QString&);
+      void insert(int column, SymId);
       void remove(int column);
       int column(qreal x, SimpleText*) const;
       TLine split(int column);
       qreal xpos(int col, const SimpleText*) const;
+      qreal y() const         { return _text.front().pos.y(); }
       };
 
 //---------------------------------------------------------
@@ -178,6 +185,7 @@ class SimpleText : public Element {
       QString selectedText() const;
 
       void insertText(const QString&);
+      void insertSym(SymId);
       void selectAll();
       };
 

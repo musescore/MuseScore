@@ -24,6 +24,45 @@ namespace Ms {
 TCursor SimpleText::_cursor;
 
 //---------------------------------------------------------
+//   split
+//---------------------------------------------------------
+
+TFragment TFragment::split(int column)
+      {
+      int idx = 0;
+      int col = 0;
+      TFragment f;
+      f.cf = cf;
+
+      for (const QChar& c : text) {
+            if (col == column) {
+                  if (idx) {
+                        if (idx < text.size()) {
+                              f.text = text.mid(idx);
+                              text   = text.left(idx);
+                              if (cf == CharFormat::SYMBOL) {
+                                    QList<SymId> l1;
+                                    for (int k = 0; k < ids.size(); ++k) {
+                                          if (k < idx)
+                                                l1.append(ids[k]);
+                                          else
+                                                f.ids.append(ids[k]);
+                                          }
+                                    ids = l1;
+                                    }
+                              }
+                        }
+                  return f;
+                  }
+            ++idx;
+            if (c.isHighSurrogate())
+                  continue;
+            ++col;
+            }
+      return f;
+      }
+
+//---------------------------------------------------------
 //   TLine
 //---------------------------------------------------------
 
@@ -262,43 +301,56 @@ void TLine::insert(int column, const QString& s)
       int col = 0;
       for (auto n = _text.begin(); n != _text.end(); ++n) {
             TFragment& f = *n;
-            int idx = 0;
-            int scol = col;
+            int rcol = 0;
             for (const QChar& c : f.text) {
                   if (col == column) {
                         if (f.cf == CharFormat::STYLED)
-                              f.text.insert(col-scol, s);
+                              f.text.insert(rcol, s);
                         else if (f.cf == CharFormat::SYMBOL) {
-                              // split fragment
-                              TFragment f2;
-                              f2.cf   = CharFormat::SYMBOL;
-                              f2.text = f.text.mid(idx);
-                              f.text  = f.text.left(idx);
-
-                              QList<SymId> l1, l2;
-                              for (int i = 0; i < f.ids.size(); ++i) {
-                                    if (i < idx)
-                                          l1.append(f.ids[i]);
-                                    else
-                                          l2.append(f.ids[i]);
-                                    }
-                              f.ids  = l1;
-                              f2.ids = l2;
+                              TFragment f2 = f.split(rcol);
                               n = _text.insert(n+1, TFragment(s));
                               _text.insert(n+1, f2);
                               }
                         return;
                         }
-                  ++idx;
                   if (c.isHighSurrogate())
                         continue;
                   ++col;
+                  ++rcol;
                   }
             }
       if (_text.back().cf == CharFormat::STYLED)
             _text.back().text.append(s);
       else
             _text.append(TFragment(s));
+      }
+
+void TLine::insert(int column, SymId id)
+      {
+      int col = 0;
+      for (auto i = _text.begin(); i != _text.end(); ++i) {
+            int rcol = 0;
+            for (const QChar& c : i->text) {
+                  if (col == column) {
+                        if (i->cf == CharFormat::SYMBOL)
+                              i->ids.insert(rcol, id);
+                        else if (i->cf == CharFormat::STYLED) {
+                              TFragment f2 = i->split(rcol);
+                              i = _text.insert(i+1, TFragment(id));
+                              _text.insert(i+1, f2);
+                              }
+                        return;
+                        }
+                  if (c.isHighSurrogate())
+                        continue;
+                  ++col;
+                  ++rcol;
+                  }
+            }
+      if (_text.back().cf == CharFormat::SYMBOL)
+            _text.back().ids.append(id);
+      else
+            _text.append(TFragment(id));
       }
 
 //---------------------------------------------------------
@@ -308,27 +360,28 @@ void TLine::insert(int column, const QString& s)
 void TLine::remove(int column)
       {
       int col = 0;
-      for (auto n = _text.begin(); n != _text.end(); ++n) {
-            TFragment& f = *n;
+      for (auto i = _text.begin(); i != _text.end(); ++i) {
             int idx  = 0;
             int rcol = 0;
-            for (const QChar& c : f.text) {
+            for (const QChar& c : i->text) {
                   if (col == column) {
                         if (c.isSurrogate())
-                              f.text.remove(rcol, 1);
-                        f.text.remove(rcol, 1);
-                        if (f.cf == CharFormat::SYMBOL)
-                              f.ids.removeAt(idx);
-                        if (f.text.isEmpty())
-                              _text.erase(n);
+                              i->text.remove(rcol, 1);
+                        i->text.remove(rcol, 1);
+                        if (i->cf == CharFormat::SYMBOL)
+                              i->ids.removeAt(idx);
+                        if (i->text.isEmpty() && (_text.size() > 1))
+                              _text.erase(i);
                         return;
                         }
                   ++idx;
                   if (c.isHighSurrogate())
                         continue;
                   ++col;
+                  ++rcol;
                   }
             }
+      qDebug("TLine::remove: column %d not found", column);
       }
 
 //---------------------------------------------------------
@@ -375,6 +428,7 @@ TLine TLine::split(int column)
                   ++col;
                   }
             }
+      tl._text.append(TFragment(""));
       return tl;
       }
 /***/
@@ -480,12 +534,11 @@ void SimpleText::draw(QPainter* p) const
 QRectF SimpleText::cursorRect() const
       {
       QFontMetricsF fm(_textStyle.fontPx(spatium()));
-      int line   = _cursor.line;
-      const TLine& tline = _layout[line];
+      const TLine& tline = curLine();
 
       qreal h = fm.ascent() * 1.2;  // lineSpacing();
       qreal x = tline.xpos(_cursor.column, this);
-      qreal y = _cursor.line * h;
+      qreal y = tline.y();
       x      -= 1.0;   //??
       y      -= fm.ascent();
       qreal w = fm.width(QChar('w')) * .10;
@@ -877,13 +930,27 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
 
 void SimpleText::insertText(const QString& s)
       {
-      if (!s.isEmpty()) {
-            if (_cursor.hasSelection())
-                  deleteSelectedText();
-            curLine().insert(_cursor.column, s);
-            _cursor.column += s.size();
-            _cursor.selectColumn = _cursor.column;
-            }
+      if (s.isEmpty())
+            return;
+      if (_cursor.hasSelection())
+            deleteSelectedText();
+      curLine().insert(_cursor.column, s);
+      _cursor.column += s.size();
+      _cursor.selectColumn = _cursor.column;
+      }
+
+//---------------------------------------------------------
+//   insertSym
+//---------------------------------------------------------
+
+void SimpleText::insertSym(SymId id)
+      {
+      if (_cursor.hasSelection())
+            deleteSelectedText();
+      curLine().insert(_cursor.column, id);
+      _cursor.column += 1;
+      _cursor.selectColumn = _cursor.column;
+      layout();
       }
 
 //---------------------------------------------------------
