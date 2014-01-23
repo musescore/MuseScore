@@ -351,7 +351,7 @@ int MidiFile::readLong()
       int val = 0;
       for (int i = 0; i < 4; ++i) {
             fp->getChar(&c);
-                  val <<= 8;
+            val <<= 8;
             val += (c & 0xff);
             }
       return val;
