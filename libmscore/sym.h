@@ -2016,8 +2016,9 @@ class ScoreFont {
       QString symToHtml(SymId, SymId, int leftMargin=0);
       QPixmap sym2pixmap(SymId id, qreal mag);
 
-      qreal height(SymId id, qreal mag) const   { return _fm->tightBoundingRect(toString(id)).height() * mag; }
-      qreal width(SymId id, qreal mag) const    { return _fm->width(toString(id)) * mag;  }
+      qreal height(SymId id, qreal mag) const        { return _fm->tightBoundingRect(toString(id)).height() * mag; }
+      qreal width(SymId id, qreal mag) const         { return _fm->width(toString(id)) * mag;  }
+      qreal width(const QString& s, qreal mag) const { return _fm->width(s) * mag;  }
       const QRectF bbox(SymId id, qreal mag) const;
       const QRectF bbox(const QString& s, qreal mag) const;
       QPointF attach(SymId id, qreal mag) const { return _symbols[int(id)].attach() * mag; }

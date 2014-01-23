@@ -37,80 +37,84 @@ struct Dyn {
       const char* text;  // utf8 text of dynamic
       };
 
-#if 0
+#if 1
+
+// variant with ligatures, works for both emmentaler and bravura:
+
 static Dyn dynList[] = {
       // dynamic:
-      {  -1,  true,  "other-dynamics", ""                                                       },
-      {   1,  false, "pppppp", u8"\U0001d18f\U0001d18f\U0001d18f\U0001d18f\U0001d18f\U0001d18f" },
-      {   5,  false, "ppppp",  u8"\U0001d18f\U0001d18f\U0001d18f\U0001d18f\U0001d18f"           },
-      {  10,  false, "pppp",   u8"\U0001d18f\U0001d18f\U0001d18f\U0001d18f"                     },
-      {  16,  false, "ppp",    u8"\U0001d18f\U0001d18f\U0001d18f"                               },
-      {  33,  false, "pp",     u8"\U0001d18f\U0001d18f"                                         },
-      {  49,  false, "p",      u8"\U0001d18f"                                                   },
-      {  64,  false, "mp",     u8"\U0001d190\U0001d18f"                                         },
-      {  80,  false, "mf",     u8"\U0001d190\U0001d191"                                         },
-      {  96,  false, "f",      u8"\U0001d191"                                                   },
-      { 112,  false, "ff",     u8"\U0001d191\U0001d191"                                         },
-      { 126,  false, "fff",    u8"\U0001d191\U0001d191\U0001d191"                               },
-      { 127,  false, "ffff",   u8"\U0001d191\U0001d191\U0001d191\U0001d191"                     },
-      { 127,  false, "fffff",  u8"\U0001d191\U0001d191\U0001d191\U0001d191\U0001d191"           },
-      { 127,  false, "ffffff", u8"\U0001d191\U0001d191\U0001d191\U0001d191\U0001d191\U0001d191" },
+      {  -1,  true,  "other-dynamics", "" },
+      {   1,  false, "pppppp", "&dynamicPiano;&dynamicPiano;&dynamicPiano;&dynamicPiano;&dynamicPiano;&dynamicPiano;" },
+      {   5,  false, "ppppp",  "&dynamicPiano;&dynamicPiano;&dynamicPiano;&dynamicPiano;&dynamicPiano;" },
+      {  10,  false, "pppp",   "&dynamicPiano;&dynamicPiano;&dynamicPiano;&dynamicPiano;" },
+      {  16,  false, "ppp",    "&dynamicPiano;&dynamicPiano;&dynamicPiano;" },
+      {  33,  false, "pp",     "&dynamicPiano;&dynamicPiano;" },
+      {  49,  false, "p",      "&dynamicPiano;" },
+      {  64,  false, "mp",     "&dynamicMezzo;&dynamicPiano;" },
+      {  80,  false, "mf",     "&dynamicMezzo;&dynamicForte;" },
+      {  96,  false, "f",      "&dynamicForte;" },
+      { 112,  false, "ff",     "&dynamicForte;&dynamicForte;" },
+      { 126,  false, "fff",    "&dynamicForte;&dynamicForte;&dynamicForte;" },
+      { 127,  false, "ffff",   "&dynamicForte;&dynamicForte;&dynamicForte;&dynamicForte;" },
+      { 127,  false, "fffff",  "&dynamicForte;&dynamicForte;&dynamicForte;&dynamicForte;&dynamicForte;" },
+      { 127,  false, "ffffff", "&dynamicForte;&dynamicForte;&dynamicForte;&dynamicForte;&dynamicForte;&dynamicForte;" },
 
       // accents:
-      {  0,   true,  "fp",     u8"\U0001d191\U0001d18f"},
-      {  0,   true,  "sf",     u8"\U0001d18d\U0001d191"},
-      {  0,   true,  "sfz",    u8"\U0001d18d\U0001d191\U0001d18e"},
-      {  0,   true,  "sff",    u8"\U0001d18d\U0001d191\U0001d191"},
-      {  0,   true,  "sffz",   u8"\U0001d18d\U0001d191\U0001d191\U0001d18e"},
-      {  0,   true,  "sfp",    u8"\U0001d18d\U0001d191\U0001d18f"},
-      {  0,   true,  "sfpp",   u8"\U0001d18d\U0001d191\U0001d18f\U0001d18f"},
-      {  0,   true,  "rfz",    u8"\U0001d18c\U0001d191\U0001d18e"},
-      {  0,   true,  "rf",     u8"\U0001d18c\U0001d191"},
-      {  0,   true,  "fz",     u8"\U0001d191\U0001d18e"},
-      {  0,   true,  "m",      u8"\U0001d190"},
-      {  0,   true,  "r",      u8"\U0001d18c"},
-      {  0,   true,  "s",      u8"\U0001d18d"},
-      {  0,   true,  "z",      u8"\U0001d18e"},
+      {  0,   true,  "fp",     "&dynamicForte;&dynamicPiano;"},
+      {  0,   true,  "sf",     "&dynamicSforzando;&dynamicForte;"},
+      {  0,   true,  "sfz",    "&dynamicSforzando;&dynamicForte;&dynamicNiente;"},
+      {  0,   true,  "sff",    "&dynamicSforzando;&dynamicForte;&dynamicForte;"},
+      {  0,   true,  "sffz",   "&dynamicSforzando;&dynamicForte;&dynamicForte;&dynamicNiente;"},
+      {  0,   true,  "sfp",    "&dynamicSforzando;&dynamicForte;"},
+      {  0,   true,  "sfpp",   "&dynamicSforzando;&dynamicForte;&dynamicPiano;&dynamicPiano;"},
+      {  0,   true,  "rfz",    "&dynamicRinforzando;&dynamicForte;&dynamicNiente;"},
+      {  0,   true,  "rf",     "&dynamicRinforzando;&dynamicForte;"},
+      {  0,   true,  "fz",     "&dynamicForte;&dynamicForte;"},
+      {  0,   true,  "m",      "&dynamicMezzo;"},
+      {  0,   true,  "r",      "&dynamicRinforzando;"},
+      {  0,   true,  "s",      "&dynamicSforzando;"},
+      {  0,   true,  "z",      "&dynamicNiente;"},
       };
-#endif
 
-// bravura version:
+// variant with precomposed symbols, works only with bravura:
 
+#else
 static Dyn dynList[] = {
       // dynamic:
       {  -1,  true,  "other-dynamics", ""     },
-      {   1,  false, "pppppp", u8"\U0000e4e7" },
-      {   5,  false, "ppppp",  u8"\U0000e4e8" },
-      {  10,  false, "pppp",   u8"\U0000e4e9" },
-      {  16,  false, "ppp",    u8"\U0000e4ea" },
-      {  33,  false, "pp",     u8"\U0000e4eb" },
-      {  49,  false, "p",      u8"\U0000e4e0" },
-      {  64,  false, "mp",     u8"\U0000e4ec" },
-      {  80,  false, "mf",     u8"\U0000e4ed" },
-      {  96,  false, "f",      u8"\U0000e4e2" },
-      { 112,  false, "ff",     u8"\U0000e4ef" },
-      { 126,  false, "fff",    u8"\U0000e4f0" },
-      { 127,  false, "ffff",   u8"\U0000e4f1" },
-      { 127,  false, "fffff",  u8"\U0000e4f2" },
-      { 127,  false, "ffffff", u8"\U0000e4f3" },
+      {   1,  false, "pppppp", "&dynamicPPPPPP;" },
+      {   5,  false, "ppppp",  "&dynamicPPPPP;" },
+      {  10,  false, "pppp",   "&dynamicPPPP;" },
+      {  16,  false, "ppp",    "&dynamicPPP;" },
+      {  33,  false, "pp",     "&dynamicPP;" },
+      {  49,  false, "p",      "&dynamicPiano;" },
+      {  64,  false, "mp",     "&dynamicMP;" },
+      {  80,  false, "mf",     "&dynamicMF;" },
+      {  96,  false, "f",      "&dynamicForte;" },
+      { 112,  false, "ff",     "&dynamicFF;" },
+      { 126,  false, "fff",    "&dynamicFFF;" },
+      { 127,  false, "ffff",   "&dynamicFFFF;" },
+      { 127,  false, "fffff",  "&dynamicFFFFF;" },
+      { 127,  false, "ffffff", "&dynamicFFFFFF;" },
 
       // accents:
-      {  0,   true,  "fp",     u8"\U0000e4f4" },
-      {  0,   true,  "sf",     u8"\U0000e4f6" },
-      {  0,   true,  "sfz",    u8"\U0000e4f9"},
-      {  0,   true,  "sff",    u8"\U0000e4f6\U0000e4e2"},
-      {  0,   true,  "sffz",   u8"\U0000e4fa"},
-      {  0,   true,  "sfp",    u8"\U0000e4f7"},
-      {  0,   true,  "sfpp",   u8"\U0000e4f8"},
-      {  0,   true,  "rfz",    u8"\U0000e4fc"},
-      {  0,   true,  "rf",     u8"\U0000e4fb"},
-      {  0,   true,  "fz",     u8"\U0000e4f5"},
-      {  0,   true,  "m",      u8"\U0000e4e1"},
-      {  0,   true,  "r",      u8"\U0000e4e3"},
-      {  0,   true,  "s",      u8"\U0000e4e4"},
-      {  0,   true,  "z",      u8"\U0000e4e5"},
-      {  0,   true,  "n",      u8"\U0000e4e6"}
+      {  0,   true,  "fp",     "&dynamicFortePiano;" },
+      {  0,   true,  "sf",     "&dynamicSforzando1;" },
+      {  0,   true,  "sfz",    "&dynamicSforzato;" },
+      {  0,   true,  "sff",    "&dynamicSforzando;&dynamicFF;" },
+      {  0,   true,  "sffz",   "&dynamicSforzatoFF;" },
+      {  0,   true,  "sfp",    "&dynamicSforzandoPiano;" },
+      {  0,   true,  "sfpp",   "&dynamicSforzandoPianissimo;" },
+      {  0,   true,  "rfz",    "&dynamicRinforzando2;" },
+      {  0,   true,  "rf",     "&dynamicRinforzando1;" },
+      {  0,   true,  "fz",     "&dynamicForzando;" },
+      {  0,   true,  "m",      "&dynamicMezzo;" },
+      {  0,   true,  "r",      "&dynamicRinforzando;" },
+      {  0,   true,  "s",      "&dynamicSforzando;" },
+      {  0,   true,  "z",      "&dynamicZ;" },
+      {  0,   true,  "n",      "&dynamicNiente;" }
       };
+#endif
 
 //---------------------------------------------------------
 //   Dynamic

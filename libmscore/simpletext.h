@@ -48,9 +48,11 @@ enum class CharFormat { STYLED, SYMBOL };
 
 class TFragment {
    public:
-      CharFormat cf;
+      CharFormat cf;          // STYLED or SYMBOL
+      QList<SymId> ids;       // valid if SYMBOL; layout creates text from ids
       QString text;
       QPointF pos;
+
       bool operator ==(const TFragment& f) { return std::tie(f.cf, f.text) == std::tie(cf, text); }
 
       TFragment() {}
@@ -71,15 +73,13 @@ class TLine {
       QList<TFragment> _text;
       QRectF _bbox;
 
-      qreal xpos(int col, const SimpleText*) const;
-
    public:
       TLine() {}
       TLine(const QString&);
       bool operator ==(const TLine& x)          { return _text == x._text; }
       QString text() const;
       void setText(const QString&);
-      void draw(QPainter*, Score*) const;
+      void draw(QPainter*, const SimpleText*) const;
       void layout(qreal y, SimpleText*);
       const QList<TFragment>& fragments() const { return _text; }
       QList<TFragment>& fragments()             { return _text; }
@@ -91,6 +91,7 @@ class TLine {
       void remove(int column);
       int column(qreal x, SimpleText*) const;
       TLine split(int column);
+      qreal xpos(int col, const SimpleText*) const;
       };
 
 //---------------------------------------------------------

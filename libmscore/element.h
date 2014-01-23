@@ -569,6 +569,7 @@ class Element : public QObject {
       void drawSymbols(const QString&, QPainter* p, const QPointF& o = QPointF()) const;
       qreal symHeight(SymId id) const;
       qreal symWidth(SymId id) const;
+      qreal symWidth(const QString&) const;
       QRectF symBbox(SymId id) const;
       QRectF symBbox(const QString&) const;
       QPointF symAttach(SymId id) const;

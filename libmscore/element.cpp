@@ -1697,6 +1697,10 @@ qreal Element::symWidth(SymId id) const
       {
       return score()->scoreFont()->width(id, magS());
       }
+qreal Element::symWidth(const QString& s) const
+      {
+      return score()->scoreFont()->width(s, magS());
+      }
 
 //---------------------------------------------------------
 //   symBbox
