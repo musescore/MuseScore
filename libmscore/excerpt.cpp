@@ -16,6 +16,7 @@
 #include "xml.h"
 #include "staff.h"
 #include "box.h"
+#include "textframe.h"
 #include "style.h"
 #include "page.h"
 #include "text.h"
@@ -173,6 +174,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   nmb = new HBox(score);
             else if (mb->type() == Element::VBOX)
                   nmb = new VBox(score);
+            else if (mb->type() == Element::TBOX)
+                  nmb = new TBox(score);
             else if (mb->type() == Element::MEASURE) {
                   Measure* m  = static_cast<Measure*>(mb);
                   Measure* nm = new Measure(score);
