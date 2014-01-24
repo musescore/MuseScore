@@ -20,6 +20,7 @@
 #include "tie.h"
 #include "note.h"
 #include "tuplet.h"
+#include "barline.h"
 #include "utils.h"
 
 namespace Ms {
@@ -69,7 +70,7 @@ void TrackList::append(Element* e)
                && back()->type() == Element::REST;
             Segment* s = accumulateRest ? static_cast<Rest*>(e)->segment() : 0;
 
-            if (s && !s->score()->isSpannerStartEnd(s->tick(), e->track())) {
+            if (s && !s->score()->isSpannerStartEnd(s->tick(), e->track()) && !s->annotations().size()) {
                   // akkumulate rests
                   Rest* rest = static_cast<Rest*>(back());
                   Fraction d = rest->duration();
@@ -134,8 +135,13 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
       const Segment* s;
       for (s = fs; s && (s != es); s = s->next1()) {
             Element* e = s->element(track);
-            if (!e || e->generated())
+            if (!e || e->generated()) {
+                  foreach(Element* ee, s->annotations()) {
+                        if (ee->track() == track)
+                              _range->annotations.push_back({ s->tick(), ee->clone() });
+                        }
                   continue;
+                  }
             if (e->isChordRest()) {
                   DurationElement* de = static_cast<DurationElement*>(e);
                   gap = s->tick() - tick;
@@ -164,8 +170,14 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                   append(de);
                   tick += de->duration().ticks();;
                   }
-            else if (e->type() == Element::BAR_LINE)
-                  ;
+            else if (e->type() == Element::BAR_LINE) {
+                  BarLine* bl = static_cast<BarLine*>(e);
+                  if (bl->barLineType() != BarLineType::NORMAL_BAR)
+                        append(e);
+                  }
+//            else if (e->type() == Element::REPEAT_MEASURE) {
+//                  // TODO: copy previous measure contents?
+//                  }
             else
                   append(e);
             }
@@ -318,7 +330,7 @@ bool TrackList::write(int track, Measure* measure) const
                   //
 
                   while (duration.numerator() > 0) {
-                        if (e->type() == Element::REST
+                        if ((e->type() == Element::REST || e->type() == Element::REPEAT_MEASURE)
                            && (duration >= rest || e == back())
                            && (rest == m->len()))
                               {
@@ -339,7 +351,7 @@ bool TrackList::write(int track, Measure* measure) const
                               }
                         else {
                               Fraction d = qMin(rest, duration);
-                              if (e->type() == Element::REST) {
+                              if (e->type() == Element::REST || e->type() == Element::REPEAT_MEASURE) {
                                     segment = m->getSegment(Segment::SegChordRest, m->tick() + pos.ticks());
                                     Rest* r = new Rest(score, TDuration(d));
                                     r->setTrack(track);
@@ -409,8 +421,14 @@ bool TrackList::write(int track, Measure* measure) const
 //            else if (e->type() == Element::KEYSIG) {
 //                  // keysig has to be at start of measure
 //                  }
-            else if (e->type() == Element::BAR_LINE)
-                  ;
+            else if (e->type() == Element::BAR_LINE) {
+                  if (pos.numerator() == 0 && m) {
+                        BarLineType t = static_cast<BarLine*>(e)->barLineType();
+                        Measure* pm = m->prevMeasure();
+                        if (pm)
+                              pm->setEndBarLineType(t,0);
+                        }
+                  }
             else {
                   if (m == nullptr)
                         break;
@@ -509,20 +527,30 @@ bool ScoreRange::write(int track, Measure* m) const
             if (!dl->write(track + i, m))
                   return false;
             }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   fixup
+//---------------------------------------------------------
+
+void ScoreRange::fixup(Measure* m) const
+      {
       Score* score = m->score();
       for (Spanner* s : spanner) {
-            s->setTick(s->tick() + m->tick());
-            s->setTick2(s->tick2() + m->tick());
+            s->setTick(s->tick() + first()->tick());
+            s->setTick2(s->tick2() + first()->tick());
             score->undoAddElement(s);
             }
       for (const Annotation& a : annotations) {
-            Segment* s = score->tick2segment(a.tick);
+            Measure* tm = score->tick2measure(a.tick);
+            Segment *op = static_cast<Segment*>(a.e->parent());
+            Segment* s = tm->undoGetSegment(op->segmentType(), a.tick);
             if (s) {
                   a.e->setParent(s);
                   score->undoAddElement(a.e);
                   }
             }
-      return true;
       }
 
 //---------------------------------------------------------

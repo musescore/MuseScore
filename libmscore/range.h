@@ -77,6 +77,7 @@ class ScoreRange {
       void read(Segment* first, Segment* last, int startTrack, int endTrack);
       bool canWrite(const Fraction&) const;
       bool write(int track, Measure*) const;
+      void fixup(Measure*) const;
       Fraction duration() const;
       Segment* first() const { return _first; }
       Segment* last() const  { return _last;  }
