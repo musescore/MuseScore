@@ -118,6 +118,7 @@
             </Note>
           </Chord>
         <Slur id="2">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>

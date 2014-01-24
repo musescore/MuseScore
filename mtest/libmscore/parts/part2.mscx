@@ -275,6 +275,7 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="4">
         <Slur id="3">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
