@@ -5,7 +5,7 @@
 set (CMAKE_SYSTEM_NAME "Windows")
 
 set (CROSS C:/Qt/Tools/mingw48_32)
-set (CROSSQT C:/Qt/5.1.1/mingw48_32)
+set (CROSSQT C:/Qt/5.2.0/mingw48_32)
 
 set (CMAKE_C_COMPILER     ${CROSS}/bin/gcc.exe)
 set (CMAKE_CXX_COMPILER   ${CROSS}/bin/g++.exe)
@@ -47,7 +47,6 @@ set (QT_mingw_LIBRARIES
     Qt5Network
     Qt5WebKitWidgets
     Qt5WebKit
-    Qt5V8
     Qt5XmlPatterns
     Qt5PrintSupport
     Qt5Quick

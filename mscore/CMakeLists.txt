@@ -393,7 +393,7 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Quick.dll
       ${CROSSQT}/bin/Qt5Script.dll
       ${CROSSQT}/bin/Qt5Sql.dll
-      ${CROSSQT}/bin/Qt5V8.dll
+      ${CROSSQT}/bin/Qt5Positioning.dll
       ${CROSSQT}/bin/Qt5PrintSupport.dll
       ${CROSSQT}/bin/Qt5OpenGL.dll
       ${CROSSQT}/bin/Qt5Sensors.dll
