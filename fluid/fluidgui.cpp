@@ -18,7 +18,7 @@ using namespace Ms;
 SfListDialog::SfListDialog()
    : QDialog(0)
       {
-      setWindowTitle(tr("Soundfont files"));
+      setWindowTitle(tr("Soundfont Files"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       list = new QListWidget;
       QVBoxLayout* layout = new QVBoxLayout;
