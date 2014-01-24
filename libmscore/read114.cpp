@@ -328,6 +328,12 @@ Score::FileError Score::read114(XmlReader& e)
                   TextStyle s;
                   s.read(e);
 
+                  qreal spMM = _style.spatium() / MScore::DPMM;
+                  if (s.frameWidthMM() != 0.0)
+                        s.setFrameWidth(Spatium(s.frameWidthMM() / spMM));
+                  if (s.paddingWidthMM() != 0.0)
+                        s.setPaddingWidth(Spatium(s.paddingWidthMM() / spMM));
+\
                   // convert 1.2 text styles
                   if (s.name() == "Chordname")
                         s.setName("Chord Symbol");
