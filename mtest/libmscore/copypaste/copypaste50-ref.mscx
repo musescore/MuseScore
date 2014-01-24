@@ -149,6 +149,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         <Slur id="2">
+          <track>0</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
@@ -247,6 +248,7 @@ p, li { white-space: pre-wrap; }
             </Note>
           </Chord>
         <Slur id="3">
+          <track>4</track>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>

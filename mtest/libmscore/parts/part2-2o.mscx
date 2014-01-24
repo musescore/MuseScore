@@ -305,6 +305,7 @@ p, li { white-space: pre-wrap; }
       <Measure number="4">
         <Slur id="3">
           <lid>78</lid>
+          <track>0</track>
           </Slur>
         <Chord>
           <lid>28</lid>
@@ -968,6 +969,10 @@ p, li { white-space: pre-wrap; }
             </System>
           <System>
             </System>
+          <System>
+            </System>
+          <System>
+            </System>
           </Page>
         </PageList>
       <Part>
@@ -1185,6 +1190,7 @@ p, li { white-space: pre-wrap; }
         <Measure number="4">
           <Slur id="6">
             <lid>78</lid>
+            <track>0</track>
             </Slur>
           <Chord>
             <lid>28</lid>
@@ -1513,6 +1519,10 @@ p, li { white-space: pre-wrap; }
       <showMargins>0</showMargins>
       <PageList>
         <Page>
+          <System>
+            </System>
+          <System>
+            </System>
           <System>
             </System>
           <System>

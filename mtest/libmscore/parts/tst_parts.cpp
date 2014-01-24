@@ -27,7 +27,7 @@
 #include "libmscore/sym.h"
 #include "mtest/testutils.h"
 
-#define DIR QString("libmscore/link/")
+#define DIR QString("libmscore/parts/")
 
 using namespace Ms;
 
