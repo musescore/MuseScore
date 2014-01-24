@@ -47,6 +47,7 @@ void Score::cmdSplitMeasure(ChordRest* cr)
       m1->setLen(Fraction::fromTicks(ticks1));
       m2->setLen(Fraction::fromTicks(ticks2));
       range.write(0, m1);
+      range.fixup(m1);
 
       endCmd();
       }
