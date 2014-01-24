@@ -1404,7 +1404,7 @@ static void usage()
         "   -F        use factory settings\n"
         "   -i        load icons from INSTALLPATH/icons\n"
         "   -e        enable experimental features\n"
-        "   -c dir    override config/settings directory\n"
+        "   -c dir    override config/settings folder\n"
         "   -t        set testMode flag for all files\n"
         "   -w        write buildin workspace\n"
         );
