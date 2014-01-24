@@ -863,6 +863,8 @@ void Slur::slurPos(SlurPos* sp)
 void SlurTie::writeProperties(Xml& xml) const
       {
       Element::writeProperties(xml);
+      if(track() != track2() && track2() != -1)
+            xml.tag("track2", track2());
       int idx = 0;
       foreach(const SpannerSegment* ss, spannerSegments())
             ((SlurSegment*)ss)->write(xml, idx++);
@@ -1067,6 +1069,7 @@ void Slur::write(Xml& xml) const
 void Slur::read(XmlReader& e)
       {
       setTrack(e.track());      // set staff
+      setTrack2(e.track());     // default to single voice slurs
       setId(e.intAttribute("id"));
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

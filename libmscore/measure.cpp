@@ -1933,7 +1933,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                         // if (spanner->track2() == -1)
                               // the absence of a track tag [?] means the
                               // track is the same as the beginning of the slur
-                        spanner->setTrack2(spanner->track());
+                        if(spanner->track2() == -1)
+                              spanner->setTrack2(spanner->track() ? spanner->track() : e.track());
                         if (spanner->type() == OTTAVA) {
                               Ottava* o = static_cast<Ottava*>(spanner);
                               o->staff()->updateOttava(o);
@@ -1953,12 +1954,24 @@ void Measure::read(XmlReader& e, int staffIdx)
                         }
                   e.readNext();
                   }
+            else if (tag == "Slur") {
+                  Slur *sl = new Slur(score());
+                  sl->setTick(e.tick());
+                  sl->read(e);
+                  score()->addSpanner(sl);
+                  //
+                  // check if we already saw "endSpanner"
+                  //
+                  const SpannerValues* sv = e.spannerValues(sl->id());
+                  if (sv) {
+                        sl->setTick2(sv->tick2);
+                        }
+                  }
             else if (tag == "HairPin"
                || tag == "Pedal"
                || tag == "Ottava"
                || tag == "Trill"
                || tag == "TextLine"
-               || tag == "Slur"
                || tag == "Volta") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(e.track());
