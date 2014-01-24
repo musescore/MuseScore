@@ -199,6 +199,8 @@ std::string table::make()
             case table_cell_def::valign_bottom:
                result+=" valign=bottom";
                break;
+            case table_cell_def::valign_center:
+                break;
             }
 
             result+=">";

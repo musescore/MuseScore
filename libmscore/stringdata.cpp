@@ -279,6 +279,7 @@ void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *cho
             }
 }
 
+#if 0
 //---------------------------------------------------------
 //   MusicXMLStepAltOct2Pitch
 //---------------------------------------------------------
@@ -308,7 +309,6 @@ static int MusicXMLStepAltOct2Pitch(char step, int alter, int octave)
       return pitch;
       }
 
-#if 0
 //---------------------------------------------------------
 //   Read MusicXML
 //---------------------------------------------------------

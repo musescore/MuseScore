@@ -125,7 +125,7 @@ void TimeDialog::zChanged(int val)
 //   nChanged
 //---------------------------------------------------------
 
-void TimeDialog::nChanged(int val)
+void TimeDialog::nChanged(int /*val*/)
       {
       nText->setText(QString("%1").arg(denominator()));
       Fraction sig(zNominal->value(), denominator());

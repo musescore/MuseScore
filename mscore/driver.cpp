@@ -78,6 +78,8 @@ Driver* driverFactory(Seq* seq, QString driverName)
             else
                   usePulseAudio = true;
             }
+#else
+      (void)usePulseAudioFlag; // avoid compiler warning
 #endif
 #ifdef USE_PORTAUDIO
       if (usePortaudioFlag) {
@@ -90,6 +92,8 @@ Driver* driverFactory(Seq* seq, QString driverName)
             else
                   usePortaudio = true;
             }
+#else
+      (void)usePortaudioFlag; // avoid compiler warning
 #endif
 #ifdef USE_ALSA
       if (driver == 0 && useAlsaFlag) {
@@ -103,6 +107,8 @@ Driver* driverFactory(Seq* seq, QString driverName)
                   useALSA = true;
                   }
             }
+#else
+      (void)useAlsaFlag; // avoid compiler warning
 #endif
 #ifdef USE_JACK
       if (useJackFlag) {
@@ -117,6 +123,8 @@ Driver* driverFactory(Seq* seq, QString driverName)
             else
                   useJACK = true;
             }
+#else
+       (void)useJackFlag; // avoid compiler warning
 #endif
 #endif
       if (driver == 0)

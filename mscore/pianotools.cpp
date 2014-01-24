@@ -267,7 +267,7 @@ void PianoKeyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*)
 //   paint
 //---------------------------------------------------------
 
-void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* o, QWidget*)
+void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWidget*)
       {
       p->setRenderHint(QPainter::Antialiasing, true);
       p->setPen(QPen(Qt::black, .8));

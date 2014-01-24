@@ -24,7 +24,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QGridLayout" name="gridLayout">
+       <layout class="QGridLayout" name="gridLayout1">
         <item row="0" column="0">
          <widget class="QCheckBox" name="diagonal">
           <property name="text">
