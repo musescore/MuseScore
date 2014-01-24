@@ -230,7 +230,7 @@ void PlayPanel::setPos(int utick)
 //   heartBeat
 //---------------------------------------------------------
 
-void PlayPanel::heartBeat(int tick, int utick, int samples)
+void PlayPanel::heartBeat(int /*tick*/, int utick, int samples)
       {
       if (cachedTickPosition != utick) {
             updatePosLabel(utick);

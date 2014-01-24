@@ -2292,7 +2292,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
 //   setSLinePlacement -- helper for direction
 //---------------------------------------------------------
 
-static void setSLinePlacement(SLine* sli, float s, const QString pl, bool hasYoff, qreal yoff)
+static void setSLinePlacement(SLine* sli, float /*s*/, const QString pl, bool hasYoff, qreal yoff)
       {
       /*
       qDebug("setSLinePlacement s=%g pl='%s' hasy=%d yoff=%g",
@@ -3441,6 +3441,7 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
             }
       }
 
+#if 0
 //---------------------------------------------------------
 //   hasElem
 //---------------------------------------------------------
@@ -3453,6 +3454,7 @@ static bool hasElem(const QDomElement e, const QString& tagname)
       {
       return !e.elementsByTagName(tagname).isEmpty();
       }
+#endif
 
 //---------------------------------------------------------
 //   tupletAssert -- check assertions for tuplet handling
