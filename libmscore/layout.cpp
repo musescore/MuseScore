@@ -686,10 +686,10 @@ void Score::doLayout()
                         continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
-                        if (cr->beam() && cr->beam()->elements().front() == cr)
-                              cr->beam()->layout();
-
                         if (cr->type() == Element::CHORD) {
+                              if (cr->beam() && cr->beam()->elements().front() == cr)
+                                    cr->beam()->layout();
+
                               Chord* c = static_cast<Chord*>(cr);
                               for (Chord* cc : c->graceNotes()) {
                                     if (cc->beam() && cc->beam()->elements().front() == cc)

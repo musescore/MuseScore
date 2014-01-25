@@ -331,6 +331,8 @@ void Beam::layout1()
                   _up = _direction == MScore::UP;
                   }
             else {
+                  if (!c1)
+                        return;
                   Measure* m = c1->measure();
                   if (m->hasVoices(c1->staffIdx()))
                         _up = !(c1->voice() % 2);
