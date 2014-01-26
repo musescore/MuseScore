@@ -38,31 +38,31 @@ void Marker::setMarkerType(MarkerType t)
       ScoreFont* f = score()->scoreFont();
       switch (t) {
             case MarkerType::SEGNO:
-                  setText("abc&segno;segno");
+                  setText("&segno;");
                   setFont(f->font());
                   setLabel("segno");
                   break;
 
             case MarkerType::VARSEGNO:
-                  setText("&segno;");
+                  setText("&segnoSerpent1;");
                   setFont(f->font());
                   setLabel("varsegno");
                   break;
 
             case MarkerType::CODA:
-                  setText("coda");
+                  setText("&coda;");
                   setFont(f->font());
                   setLabel("codab");
                   break;
 
             case MarkerType::VARCODA:
-                  setText("&codaSuare;");
+                  setText("&codaSquare;");
                   setFont(f->font());
                   setLabel("varcoda");
                   break;
 
             case MarkerType::CODETTA:
-                  setText("&codaSuare;");
+                  setText("&coda;&coda;");
                   setFont(f->font());
                   setLabel("codetta");
                   break;
