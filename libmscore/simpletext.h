@@ -100,7 +100,7 @@ class TLine {
       int column(qreal x, SimpleText*) const;
       TLine split(int column);
       qreal xpos(int col, const SimpleText*) const;
-      qreal y() const         { return _text.front().pos.y(); }
+      qreal y() const         { return _text.isEmpty() ? 0 : _text.front().pos.y(); }
       };
 
 //---------------------------------------------------------
