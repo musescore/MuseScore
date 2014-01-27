@@ -342,7 +342,7 @@ void TLine::insert(int column, const QString& s)
                   ++rcol;
                   }
             }
-      if (_text.back().cf == CharFormat::STYLED)
+      if (!_text.isEmpty() && _text.back().cf == CharFormat::STYLED)
             _text.back().text.append(s);
       else
             _text.append(TFragment(s));
@@ -561,7 +561,7 @@ QRectF SimpleText::cursorRect() const
 
       qreal h = fm.ascent() * 1.2;  // lineSpacing();
       qreal x = tline.xpos(_cursor.column, this);
-      qreal y = tline.y();
+      qreal y = _cursor.line * h;
       x      -= 1.0;   //??
       y      -= fm.ascent();
       qreal w = fm.width(QChar('w')) * .10;
