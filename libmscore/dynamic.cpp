@@ -62,18 +62,18 @@ static Dyn dynList[] = {
       // accents:
       {  0,   true,  "fp",     "&dynamicForte;&dynamicPiano;"},
       {  0,   true,  "sf",     "&dynamicSforzando;&dynamicForte;"},
-      {  0,   true,  "sfz",    "&dynamicSforzando;&dynamicForte;&dynamicNiente;"},
+      {  0,   true,  "sfz",    "&dynamicSforzando;&dynamicForte;&dynamicZ;"},
       {  0,   true,  "sff",    "&dynamicSforzando;&dynamicForte;&dynamicForte;"},
-      {  0,   true,  "sffz",   "&dynamicSforzando;&dynamicForte;&dynamicForte;&dynamicNiente;"},
+      {  0,   true,  "sffz",   "&dynamicSforzando;&dynamicForte;&dynamicForte;&dynamicZ;"},
       {  0,   true,  "sfp",    "&dynamicSforzando;&dynamicForte;"},
       {  0,   true,  "sfpp",   "&dynamicSforzando;&dynamicForte;&dynamicPiano;&dynamicPiano;"},
-      {  0,   true,  "rfz",    "&dynamicRinforzando;&dynamicForte;&dynamicNiente;"},
+      {  0,   true,  "rfz",    "&dynamicRinforzando;&dynamicForte;&dynamicZ;"},
       {  0,   true,  "rf",     "&dynamicRinforzando;&dynamicForte;"},
-      {  0,   true,  "fz",     "&dynamicForte;&dynamicForte;"},
+      {  0,   true,  "fz",     "&dynamicForte;&dynamicZ;"},
       {  0,   true,  "m",      "&dynamicMezzo;"},
       {  0,   true,  "r",      "&dynamicRinforzando;"},
       {  0,   true,  "s",      "&dynamicSforzando;"},
-      {  0,   true,  "z",      "&dynamicNiente;"},
+      {  0,   true,  "z",      "&dynamicZ;"},
       };
 
 // variant with precomposed symbols, works only with bravura:
