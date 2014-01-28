@@ -335,10 +335,10 @@ Palette* MuseScore::newRepeatsPalette()
       mk->setMarkerType(MarkerType::VARCODA);
       sp->append(mk, tr("Varied coda"));
 
-      mk = new Marker(gscore);
+/*      mk = new Marker(gscore);                      // not in smufl
       mk->setMarkerType(MarkerType::CODETTA);
       sp->append(mk, tr("Codetta"));
-
+  */
       mk = new Marker(gscore);
       mk->setMarkerType(MarkerType::FINE);
       sp->append(mk, tr("Fine"));
