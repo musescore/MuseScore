@@ -143,7 +143,11 @@ endif (MINGW OR APPLE)
 ##
 ##  look for Qt5
 ##
-SET(QT_MIN_VERSION    "5.1.0")
+if(MINGW)
+  SET(QT_MIN_VERSION    "5.2.0")
+else(MINGW)
+  SET(QT_MIN_VERSION    "5.1.0")
+endif(MINGW)
 SET(QT_USE_QTXML         TRUE)
 SET(QT_USE_QTSVG         TRUE)
 SET(QT_USE_QTNETWORK     TRUE)
