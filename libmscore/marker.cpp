@@ -44,13 +44,13 @@ void Marker::setMarkerType(MarkerType t)
                   break;
 
             case MarkerType::VARSEGNO:
-                  setText("&segno;");
+                  setText("&segnoSerpent1;");
                   setFont(f->font());
                   setLabel("varsegno");
                   break;
 
             case MarkerType::CODA:
-                  setText("coda");
+                  setText("&coda;");
                   setFont(f->font());
                   setLabel("codab");
                   break;
@@ -61,12 +61,11 @@ void Marker::setMarkerType(MarkerType t)
                   setLabel("varcoda");
                   break;
 
-/*            case MarkerType::CODETTA:         // not in smufl
-                  setText("&codaSquare;");
+            case MarkerType::CODETTA:
+                  setText("&coda;&coda;");
                   setFont(f->font());
                   setLabel("codetta");
                   break;
-            */
 
             case MarkerType::FINE:
                   setText("Fine");

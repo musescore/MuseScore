@@ -36,7 +36,7 @@ enum class MarkerType {
 //   @@ Marker
 //
 //   @P label           QString
-//   @P markerType      MArkerType
+//   @P markerType      MarkerType
 //---------------------------------------------------------
 
 class Marker : public Text {
