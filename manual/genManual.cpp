@@ -77,7 +77,9 @@ static void addHeader(QString& out)
 
 static void addFooter(QString& out)
       {
-      out += "</body>\n"
+      out += "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - The OpenSource Musical Notation Programme<br />\n"
+             "&copy; 2002-2014 Werner Schweer &amp; others</div>\n"
+             "</body>\n"
              "</html>\n";
       }
 
@@ -228,7 +230,7 @@ static void writeOutput()
                   foreach(const Class& lcl, classes) {
                         if (lcl.name == cl.parent) {
                               QString path = cl.parent.toLower();
-                              out += QString("inherits <a href=\"%1.html\">%2</a><br/><br/>\n").arg(path).arg(cl.parent);
+                              out += QString("<div class=\"class-inherit\">inherits <a href=\"%1.html\">%2</a></div>\n").arg(path).arg(cl.parent);
                               break;
                               }
                         }
@@ -237,7 +239,7 @@ static void writeOutput()
                   out += "<div class=\"class-description\">\n";
                   foreach(const QString& s, cl.description) {
                         out += s.simplified().replace("\\brief ", "");
-                        out += "<br/>\n";
+                        out += "\n";
                         }
                   out += "</div>\n";
                   }
@@ -260,17 +262,17 @@ static void writeOutput()
                                     }
                               }
                         if (found)
-                              out += QString("<code><a href=\"%1.html\">%2</a> ")
+                              out += QString("<a href=\"%1.html\">%2</a> ")
                                  .arg(type.toLower()).arg(type);
                         else
-                              out += QString("<code>%1 ").arg(type);
+                              out += QString("%1 ").arg(type);
 
                         QRegExp re("([^(]+)\\(([^)]*)\\)");
                         if (re.indexIn(p.name, 0) != -1) {
-                              out += QString("<b>%2</b>(%3)</code>\n") .arg(re.cap(1)).arg(re.cap(2));
+                              out += QString("<b>%2</b>(%3)\n") .arg(re.cap(1)).arg(re.cap(2));
                               }
                         else {
-                              out += QString("<b>%2</b></code>\n").arg(p.name);
+                              out += QString("<b>%2</b>\n").arg(p.name);
                               }
                         out += "</div>\n";
                         if (!p.description.isEmpty()) {
@@ -287,14 +289,16 @@ static void writeOutput()
             if (!cl.props.isEmpty()) {
                   out += "<h4>Properties</h4>\n";
                   out += "<div class=\"properties\">\n";
-                  out += "<table cellpadding=\"0\" cellspacing=\"0\">\n";
+                  out += "<table>\n";
+                  int count = 1;
                   foreach(const Prop& m, cl.props) {
-                        out += "<tr>";
-                        out += QString("<td>%1</td>"
-                               "<td>%2</td>"
-                               "<td>%3</td>")
+                        out += QString("<tr class=\"prop-%1\">") .arg( (count & 1) ? "odd" : "even");
+                        out += QString("<td class=\"prop-name\">%1</td>"
+                               "<td class=\"prop-type\">%2</td>"
+                               "<td class=\"prop-desc\">%3</td>")
                                .arg(m.name).arg(m.type).arg(m.description);
                         out += "</tr>\n";
+                        count++;
                         }
                   out += "</table></div>\n";
                   }
@@ -332,6 +336,32 @@ static void writeOutput()
             }
       of.write(out.toUtf8());
       of.close();
+      }
+
+//---------------------------------------------------------
+//   copyAssets
+//---------------------------------------------------------
+
+static void copyAssets(QString& srcPath, QString& dstPath)
+      {
+      QString assetDstPath = dstPath + "/plugins/";
+      QString assetSrcPath = srcPath + "/manual/";
+      QString cssFname     = "manual.css";
+      QString pngFname     = "mscore.png";
+      // be sure destination files do not exist
+      QFile dstCSS(assetDstPath + cssFname);
+      dstCSS.remove();
+      QFile dstPNG(assetDstPath+pngFname);
+      dstPNG.remove();
+      // copy CSS and PNG from source to destination path
+      if (!QFile::copy(assetSrcPath + cssFname, assetDstPath + cssFname) )
+            fprintf(stderr, "Cannot copy %s to %s\n",
+                        qPrintable(assetSrcPath + cssFname),
+                        qPrintable(assetDstPath + cssFname) );
+      if (!QFile::copy(assetSrcPath + pngFname, assetDstPath + pngFname) )
+            fprintf(stderr, "Cannot copy %s to %s\n",
+                        qPrintable(assetSrcPath + pngFname),
+                        qPrintable(assetDstPath + pngFname) );
       }
 
 //---------------------------------------------------------
@@ -414,6 +444,7 @@ int main(int argc, char* argv[])
             return -3;
             }
       writeOutput();
+      copyAssets(srcPath, dstPath);
       return 0;
       }
 
