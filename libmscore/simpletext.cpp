@@ -342,7 +342,7 @@ void TLine::insert(int column, const QString& s)
                   ++rcol;
                   }
             }
-      if (_text.back().cf == CharFormat::STYLED)
+      if (!_text.isEmpty() && _text.back().cf == CharFormat::STYLED)
             _text.back().text.append(s);
       else
             _text.append(TFragment(s));
