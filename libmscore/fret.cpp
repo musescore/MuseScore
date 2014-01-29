@@ -257,7 +257,9 @@ void FretDiagram::draw(QPainter* painter) const
                   }
             }
       if (_fretOffset > 0) {
-            painter->drawText(QRectF(-stringDist, fretDist*.5, .0, .0),
+            QString fretString = QString("%1").arg(_fretOffset+1);
+            qreal fretStringWidth = fm.width(fretString);
+            painter->drawText(QRectF(-fretStringWidth-stringDist*.5, fretDist*.5, .0, .0),
                Qt::AlignVCenter | Qt::TextDontClip,
                QString("%1").arg(_fretOffset+1));
             }
