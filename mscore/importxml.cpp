@@ -3390,10 +3390,12 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
             if (lyricNo < 0) {
                   qDebug("invalid lyrics number (<0)");
                   delete l;
+                  return;
                   }
             else if (lyricNo > MAX_LYRICS) {
                   qDebug("too much lyrics (>%d)", MAX_LYRICS);
                   delete l;
+                  return;
                   }
             else {
                   numbrdLyrics[lyricNo] = l;
