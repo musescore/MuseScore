@@ -331,16 +331,20 @@ void Beam::layout1()
                   _up = _direction == MScore::UP;
                   }
             else {
-                  Measure* m = c1->measure();
-                  if (m->hasVoices(c1->staffIdx()))
-                        _up = !(c1->voice() % 2);
-                  else if (!twoBeamedNotes()) {
-                        // highest or lowest note determines stem direction
-                        // interval higher is bigger -> downstem
-                        // interval lower is  bigger -> upstem
-                        // down-stems is preferred if equal
-                        _up = mUp < mDown;
+                  if (c1) {
+                        Measure* m = c1->measure();
+                        if (m->hasVoices(c1->staffIdx()))
+                              _up = !(c1->voice() % 2);
+                        else if (!twoBeamedNotes()) {
+                              // highest or lowest note determines stem direction
+                              // interval higher is bigger -> downstem
+                              // interval lower is  bigger -> upstem
+                              // down-stems is preferred if equal
+                              _up = mUp < mDown;
+                              }
                         }
+                  else
+                        _up = true;
                   }
 
             cross   = minMove < maxMove;
@@ -1023,7 +1027,8 @@ static int adjust(qreal _spatium4, int slant, const QList<ChordRest*>& cl)
                   break;
                   }
             }
-
+      if (!(c1 && c2))
+            return 0;
       QPointF p1(c1->stemPosBeam());   // canvas coordinates
       qreal slope = (slant * _spatium4) / (c2->stemPosBeam().x() - p1.x());
       int ml = -1000;
