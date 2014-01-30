@@ -115,6 +115,7 @@ struct Preferences {
       SessionStart sessionStart;
       QString startScore;
       QString defaultStyleFile;
+      QString defaultStyleFileForParts;
       bool showSplashScreen;
 
       bool useMidiRemote;
@@ -186,7 +187,7 @@ struct Preferences {
       void write();
       void read();
       void init();
-      bool readDefaultStyle();
+      bool readDefaultStyle(bool forParts = false);
       };
 
 //---------------------------------------------------------

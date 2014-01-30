@@ -3162,6 +3162,22 @@ p, li { white-space: pre-wrap; }
         <source>New</source>
         <translation>Neu</translation>
     </message>
+    <message>
+        <source>Load Parts Style</source>
+        <translation>Formatvorlage für Einzelstimmen öffnen</translation>
+    </message>
+    <message>
+        <source>There are no parts.</source>
+        <translation>Es gibt noch keine Einzelstimmen.</translation>
+    </message>
+    <message>
+        <source>Do you want to generate them now?</source>
+        <translation>Wollen Sie sie jetzt erzeugen?</translation>
+    </message>
+    <message>
+        <source>Generate Parts</source>
+        <translation>Einzelstimmen erzeugen</translation>
+    </message>
 </context>
 <context>
     <name>FluidGui</name>
@@ -9370,6 +9386,14 @@ fehlgeschlagen: </translation>
         <translation>Verwendeter Zeichensatz beim Import von Binär-Dateien</translation>
     </message>
     <message>
+        <source>Style:</source>
+        <translation type="unfinished">Formatvorlage:</translation>
+    </message>
+    <message>
+        <source>Style for Part:</source>
+        <translation type="unfinished">Formatvorlage für Stimmen:</translation>
+    </message>
+    <message>
         <source>Overture import character set:</source>
         <translation>Verwendeter Zeichensatz beim Import von Overture Dateien</translation>
     </message>
@@ -11597,7 +11621,427 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Add D</source>
-        <translation>D hinzufügen</translation>
+        <translation>D    zur markierten Note dazu</translation>
+    </message>
+    <message>
+        <source>Add note D to chord</source>
+        <translation>Note D zu Akkord hinzufügen</translation>
+    </message>
+    <message>
+        <source>Add E</source>
+        <translation>E    zur markierten Note dazu</translation>
+    </message>
+    <message>
+        <source>Add note E to chord</source>
+        <translation>Note E zu Akkord hinzufügen</translation>
+    </message>
+    <message>
+        <source>Add F</source>
+        <translation>F    zur markierten Note dazu</translation>
+    </message>
+    <message>
+        <source>Add note F to chord</source>
+        <translation>Note F zu Akkord hinzufügen</translation>
+    </message>
+    <message>
+        <source>Add G</source>
+        <translation>G    zur markierten Note dazu</translation>
+    </message>
+    <message>
+        <source>Add note G to chord</source>
+        <translation>Note G zu Akkord hinzufügen</translation>
+    </message>
+    <message>
+        <source>Add More Stretch</source>
+        <translation>D e h n e n</translation>
+    </message>
+    <message>
+        <source>Add more stretch to selected measure</source>
+        <translation>Markierten Takt dehnen</translation>
+    </message>
+    <message>
+        <source>Add Less Stretch</source>
+        <translation>Zusammenziehen</translation>
+    </message>
+    <message>
+        <source>Add less stretch to selected measure</source>
+        <translation>Markierten Takt zusammenziehen</translation>
+    </message>
+    <message>
+        <source>Reset Beam Mode</source>
+        <translation>Balkeneigenschaften zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Delete Selected Measures</source>
+        <translation>Ausgewählte Takte löschen</translation>
+    </message>
+    <message>
+        <source>Append Measures...</source>
+        <translation>Takte anhängen...</translation>
+    </message>
+    <message>
+        <source>Insert Measures...</source>
+        <translation>Takte einfügen...</translation>
+    </message>
+    <message>
+        <source>Insert Horizontal Frame</source>
+        <translation>Horizontalen Rahmen einfügen</translation>
+    </message>
+    <message>
+        <source>Insert Vertical Frame</source>
+        <translation>Vertikalen Rahmen einfügen</translation>
+    </message>
+    <message>
+        <source>Append Horizontal Frame</source>
+        <translation>Horizontalen Rahmen anhängen</translation>
+    </message>
+    <message>
+        <source>Append Vertical Frame</source>
+        <translation>Vertikalen Rahmen anhängen</translation>
+    </message>
+    <message>
+        <source>Duplet</source>
+        <translation>Duole</translation>
+    </message>
+    <message>
+        <source>Triplet</source>
+        <translation>Triole</translation>
+    </message>
+    <message>
+        <source>Quadruplet</source>
+        <translation>Quartole</translation>
+    </message>
+    <message>
+        <source>Quintuplet</source>
+        <translation>Quintole</translation>
+    </message>
+    <message>
+        <source>Sextuplet</source>
+        <translation>Sextole</translation>
+    </message>
+    <message>
+        <source>Septuplet</source>
+        <translation>Septole</translation>
+    </message>
+    <message>
+        <source>Octuplet</source>
+        <translation>Oktole</translation>
+    </message>
+    <message>
+        <source>Nonuplet</source>
+        <translation>Nonole</translation>
+    </message>
+    <message>
+        <source>Other...</source>
+        <translation>Weitere...</translation>
+    </message>
+    <message>
+        <source>Longa</source>
+        <translation>Longa</translation>
+    </message>
+    <message>
+        <source>Palette</source>
+        <translation>Palette</translation>
+    </message>
+    <message>
+        <source>Play Panel</source>
+        <translation>Wiedergabepult</translation>
+    </message>
+    <message>
+        <source>Navigator</source>
+        <translation>Navigator</translation>
+    </message>
+    <message>
+        <source>Mixer</source>
+        <translation>Mischpult</translation>
+    </message>
+    <message>
+        <source>Transport</source>
+        <translation>Wiedergabe</translation>
+    </message>
+    <message>
+        <source>Status Bar</source>
+        <translation>Statuszeile</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation>Beenden</translation>
+    </message>
+    <message>
+        <source>Lyrics</source>
+        <translation>Liedtext</translation>
+    </message>
+    <message>
+        <source>Metronome</source>
+        <translation>Metronom</translation>
+    </message>
+    <message>
+        <source>System Text</source>
+        <translation>Systemtext</translation>
+    </message>
+    <message>
+        <source>Staff Text</source>
+        <translation>Notenzeilentext</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation>Titel</translation>
+    </message>
+    <message>
+        <source>Subtitle</source>
+        <translation>Untertitel</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation>Komponist</translation>
+    </message>
+    <message>
+        <source>Chord Name</source>
+        <translation>Akkordbezeichnung</translation>
+    </message>
+    <message>
+        <source>Harmony Properties</source>
+        <translation>Harmonieeigenschaften</translation>
+    </message>
+    <message>
+        <source>Rehearsal Mark</source>
+        <translation>Übungszeichen</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Abspielen</translation>
+    </message>
+    <message>
+        <source>Start or stop playback</source>
+        <translation>Wiedergabe/Pause</translation>
+    </message>
+    <message>
+        <source>Rewind</source>
+        <translation>Zurückspulen</translation>
+    </message>
+    <message>
+        <source>Load Style...</source>
+        <translation>Formatvorlage öffnen...</translation>
+    </message>
+    <message>
+        <source>Save Style...</source>
+        <translation>Formatvorlage speichern...</translation>
+    </message>
+    <message>
+        <source>Save Style as Default...</source>
+        <translation>Formatvorlage als Vorgabe speichern...</translation>
+    </message>
+    <message>
+        <source>Save Style as Default for Parts...</source>
+        <translation>Formatvorlage als Vorgabe für Stimmen speichern...</translation>
+    </message>
+    <message>
+        <source>Select All</source>
+        <translation>Alles auswählen</translation>
+    </message>
+    <message>
+        <source>Transpose</source>
+        <translation>Transponieren</translation>
+    </message>
+    <message>
+        <source>Exchange Voice 1-2</source>
+        <translation>Stimmen 1-2 austauschen</translation>
+    </message>
+    <message>
+        <source>Exchange Voice 1-3</source>
+        <translation>Stimmen 1-3 austauschen</translation>
+    </message>
+    <message>
+        <source>Exchange Voice 1-4</source>
+        <translation>Stimmen 1-4 austauschen</translation>
+    </message>
+    <message>
+        <source>Exchange Voice 2-3</source>
+        <translation>Stimmen 2-3 austauschen</translation>
+    </message>
+    <message>
+        <source>Exchange Voice 2-4</source>
+        <translation>Stimmen 2-4 austauschen</translation>
+    </message>
+    <message>
+        <source>Exchange Voice 3-4</source>
+        <translation>Stimmen 3-4 austauschen</translation>
+    </message>
+    <message>
+        <source>Concert Pitch</source>
+        <translation>Klingende Notation</translation>
+    </message>
+    <message>
+        <source>Repeat last command</source>
+        <translation>Letztes Kommando wiederholen</translation>
+    </message>
+    <message>
+        <source>Toggle System Break</source>
+        <translation>Manueller Zeilenumbruch</translation>
+    </message>
+    <message>
+        <source>Toggle Page Break</source>
+        <translation>Manueller Seitenumbruch</translation>
+    </message>
+    <message>
+        <source>Edit Element</source>
+        <translation>Element bearbeiten</translation>
+    </message>
+    <message>
+        <source>Inspector</source>
+        <translation>Objekt-Inspektor</translation>
+    </message>
+    <message>
+        <source>Reset Stretch</source>
+        <translation>Dehnung zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Show Invisible</source>
+        <translation>Unsichtbares anzeigen</translation>
+    </message>
+    <message>
+        <source>Show Frames</source>
+        <translation>Rahmen anzeigen</translation>
+    </message>
+    <message>
+        <source>Zoom In</source>
+        <translation>Vergrößern</translation>
+    </message>
+    <message>
+        <source>Zoom Out</source>
+        <translation>Verkleinern</translation>
+    </message>
+    <message>
+        <source>Select all similar elements</source>
+        <translation>Alle ähnlichen Elemente auswählen</translation>
+    </message>
+    <message>
+        <source>All Similar Elements</source>
+        <translation>Alle ähnlichen Elemente</translation>
+    </message>
+    <message>
+        <source>Select all similar elements in same staff</source>
+        <translation>Alle ähnlichen Elemente in der gleichen Notenzeile auswählen</translation>
+    </message>
+    <message>
+        <source>All Similar Elements in Same Staff</source>
+        <translation>Alle ähnlichen Elemente in der gleichen Notenzeile</translation>
+    </message>
+    <message>
+        <source>Synthesizer</source>
+        <translation>Synthesizer</translation>
+    </message>
+    <message>
+        <source>Repeat selection</source>
+        <translation>Auswahl wiederholen</translation>
+    </message>
+    <message>
+        <source>Local handbook</source>
+        <translation>Lokales Handbuch</translation>
+    </message>
+    <message>
+        <source>Show local handbook</source>
+        <translation>Lokales Handbuch anzeigen</translation>
+    </message>
+    <message>
+        <source>File open</source>
+        <translation>Datei öffnen</translation>
+    </message>
+    <message>
+        <source>Load score from file</source>
+        <translation>Partitur laden</translation>
+    </message>
+    <message>
+        <source>File save</source>
+        <translation>Datei speichern</translation>
+    </message>
+    <message>
+        <source>Save score to file</source>
+        <translation>Partitur speichern</translation>
+    </message>
+    <message>
+        <source>File save as</source>
+        <translation>Datei speichern unter</translation>
+    </message>
+    <message>
+        <source>Save score under a new file name</source>
+        <translation>Partitur unter einem neuen Dateinamen speichern</translation>
+    </message>
+    <message>
+        <source>File save a copy</source>
+        <translation>Kopie der Datei speichern</translation>
+    </message>
+    <message>
+        <source>Save a copy of the score in addition to the current file</source>
+        <translation>Kopie der Datei zusätzlich zur aktuellen Datei speichern</translation>
+    </message>
+    <message>
+        <source>File close</source>
+        <translation>Datei schließen</translation>
+    </message>
+    <message>
+        <source>Close current score</source>
+        <translation>Aktuelle Partitur schließen</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation>Drucken</translation>
+    </message>
+    <message>
+        <source>Print score</source>
+        <translation>Partitur drucken</translation>
+    </message>
+    <message>
+        <source>Undo last change</source>
+        <translation>Letzte Änderung rückgängig machen</translation>
+    </message>
+    <message>
+        <source>Redo last undo</source>
+        <translation>Letzte Änderung wiederherstellen</translation>
+    </message>
+    <message>
+        <source>Show instruments dialog</source>
+        <translation>Instrumentendialog anzeigen</translation>
+    </message>
+    <message>
+        <source>Note input mode</source>
+        <translation>Noteneingabemodus</translation>
+    </message>
+    <message>
+        <source>Enter note A</source>
+        <translation>Note A eingeben</translation>
+    </message>
+    <message>
+        <source>Enter note B</source>
+        <translation>Note H eingeben</translation>
+    </message>
+    <message>
+        <source>Enter note C</source>
+        <translation>Note C eingeben</translation>
+    </message>
+    <message>
+        <source>Enter note D</source>
+        <translation>Note D eingeben</translation>
+    </message>
+    <message>
+        <source>Enter note E</source>
+        <translation>Note E eingeben</translation>
+    </message>
+    <message>
+        <source>Enter note F</source>
+        <translation>Note F eingeben</translation>
+    </message>
+    <message>
+        <source>Enter note G</source>
+        <translation>Note G eingeben</translation>
+    </message>
+    <message>
+        <source>Enter rest</source>
+        <translation>Pause eingeben</translation>
+    </message>
+    <message>
+        <source>Rest</source>
+        <translation>Pause</translation>
     </message>
     <message>
         <source>Add note D to chord</source>
