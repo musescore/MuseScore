@@ -36,6 +36,7 @@ bool  MScore::debugMode;
 bool  MScore::testMode = false;
 
 MStyle* MScore::_defaultStyle;
+MStyle* MScore::_defaultStyleForParts;
 MStyle* MScore::_baseStyle;
 QString MScore::_globalShare;
 int     MScore::_vRaster;
@@ -55,7 +56,7 @@ qreal   MScore::nudgeStep;
 qreal   MScore::nudgeStep10;
 qreal   MScore::nudgeStep50;
 int     MScore::defaultPlayDuration;
-QString MScore::partStyle;
+// QString MScore::partStyle;
 QString MScore::lastError;
 bool    MScore::layoutDebug = false;
 int     MScore::division    = 480;   // pulses per quarter note (PPQ) // ticks per beat
@@ -128,7 +129,7 @@ void MScore::init()
       replaceFractions    = true;
       playRepeats         = true;
       panPlayback         = true;
-      partStyle           = "";
+//      partStyle           = "";
 
       lastError           = "";
 
@@ -138,6 +139,7 @@ void MScore::init()
 
       _defaultStyle         = new MStyle();
       Ms::initStyle(_defaultStyle);
+      _defaultStyleForParts = new MStyle(*_defaultStyle);
       _baseStyle            = new MStyle(*_defaultStyle);
 
       //
@@ -183,6 +185,29 @@ MStyle* MScore::defaultStyle()
       }
 
 //---------------------------------------------------------
+//   defaultStyleForParts
+//---------------------------------------------------------
+
+MStyle* MScore::defaultStyleForParts()
+      {
+      if (!_defaultStyleForParts) {
+            QSettings s;
+            QString partStyle = s.value("partStyle").toString();
+            if (!partStyle.isEmpty()) {
+                  QFile f(partStyle);
+                  if (f.open(QIODevice::ReadOnly)) {
+                        MStyle* s = new MStyle(*defaultStyle());
+                        if (s->load(&f))
+                              _defaultStyleForParts = s;
+                        else
+                              delete s;
+                        }
+                  }
+            }
+      return _defaultStyleForParts;
+      }
+
+//---------------------------------------------------------
 //   baseStyle
 //---------------------------------------------------------
 
@@ -199,6 +224,16 @@ void MScore::setDefaultStyle(MStyle* s)
       {
       delete _defaultStyle;
       _defaultStyle = s;
+      }
+
+//---------------------------------------------------------
+//   defaultStyleForPartsHasChanged
+//---------------------------------------------------------
+
+void MScore::defaultStyleForPartsHasChanged()
+      {
+      delete _defaultStyleForParts;
+      _defaultStyleForParts = 0;
       }
 
 }

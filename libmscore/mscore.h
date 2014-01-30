@@ -330,7 +330,9 @@ class MScore : public QObject {
       Q_ENUMS(DirectionH)
 
    private:
-      static MStyle* _defaultStyle;       // default modified by preferences
+      static MStyle* _defaultStyle;       // buildin modified by preferences
+      static MStyle* _defaultStyleForParts;
+
       static MStyle* _baseStyle;          // buildin initial style
       static QString _globalShare;
       static int _hRaster, _vRaster;
@@ -341,9 +343,13 @@ class MScore : public QObject {
       enum DirectionH { DH_AUTO, DH_LEFT, DH_RIGHT };
 
       static void init();
+
       static MStyle* defaultStyle();
+      static MStyle* defaultStyleForParts();
       static MStyle* baseStyle();
       static void setDefaultStyle(MStyle*);
+      static void defaultStyleForPartsHasChanged();
+
       static const QString& globalShare()   { return _globalShare; }
       static qreal hRaster()                { return _hRaster;     }
       static qreal vRaster()                { return _vRaster;     }
@@ -368,7 +374,6 @@ class MScore : public QObject {
       static qreal nudgeStep10;
       static qreal nudgeStep50;
       static int defaultPlayDuration;
-      static QString partStyle;
       static QString lastError;
       static bool layoutDebug;
 

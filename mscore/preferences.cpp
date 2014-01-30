@@ -276,7 +276,6 @@ void Preferences::write()
             }
       s.setValue("startScore",         startScore);
       s.setValue("defaultStyle",       defaultStyleFile);
-      s.setValue("partStyle",          MScore::partStyle);
       s.setValue("showSplashScreen",   showSplashScreen);
 
       s.setValue("midiExpandRepeats",  midiExpandRepeats);
@@ -421,7 +420,6 @@ void Preferences::read()
       antialiasedDrawing = s.value("antialiasedDrawing", antialiasedDrawing).toBool();
 
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
-      MScore::partStyle        = s.value("partStyle", MScore::partStyle).toString();
 
       showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
       midiExpandRepeats        = s.value("midiExpandRepeats", midiExpandRepeats).toBool();
@@ -1254,6 +1252,12 @@ void PreferenceDialog::buttonBoxClicked(QAbstractButton* button)
 
 void PreferenceDialog::apply()
       {
+      QSettings s;
+      if (partStyle->text() != s.value("partStyle").toString()) {
+            s.setValue("partStyle", partStyle->text());
+            MScore::defaultStyleForPartsHasChanged();
+            }
+
       prefs.useMidiRemote  = rcGroup->isChecked();
       prefs.fgWallpaper    = fgWallpaper->text();
       prefs.bgWallpaper    = bgWallpaper->text();
