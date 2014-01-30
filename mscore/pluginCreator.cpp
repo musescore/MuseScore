@@ -56,7 +56,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       actionOpen->setShortcut(QKeySequence(QKeySequence::Open));
       fileTools->addAction(actionOpen);
 
-      actionReload->setIcon(*icons[fileOpen_ICON]);
+      actionReload->setIcon(*icons[viewRefresh_ICON]);
       fileTools->addAction(actionReload);
 
       actionSave->setIcon(*icons[fileSave_ICON]);
