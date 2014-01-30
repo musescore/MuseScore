@@ -97,6 +97,7 @@ class TLine {
       void insert(int column, const QString&);
       void insert(int column, SymId);
       void remove(int column);
+      void remove(int start, int n);
       int column(qreal x, SimpleText*) const;
       TLine split(int column);
       qreal xpos(int col, const SimpleText*) const;
