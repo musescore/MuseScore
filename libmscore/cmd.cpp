@@ -1239,7 +1239,13 @@ void Score::upDown(bool up, UpDownMode mode)
                   // user added accidentals are removed here.
                   if (oNote->accidental())
                         undoRemoveElement(oNote->accidental());
-                  undoChangePitch(oNote, newPitch, newTpc, oNote->line());
+
+                  Staff* s = oNote->score()->staff(oNote->staffIdx() + oNote->chord()->staffMove());
+                  int tick = oNote->chord()->tick();
+                  ClefType clef = s->clef(tick);
+                  int newLine   = relStep(absStep(newTpc, newPitch), clef);
+
+                  undoChangePitch(oNote, newPitch, newTpc, newLine);
                   }
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
