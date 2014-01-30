@@ -92,7 +92,10 @@ void TFragment::draw(QPainter* p, const SimpleText* t) const
             QString s;
             for (SymId id : ids)
                   s.append(f->toString(id));
-            f->draw(s, p, t->magS(), pos);
+
+            qreal px  = qreal(p->font().pixelSize());
+            qreal mag = (px * PPI) / (20.0 * MScore::DPI);
+            f->draw(s, p, mag, pos);
             p->restore();
             }
       }
@@ -489,7 +492,6 @@ TLine TLine::split(int column)
       tl._text.append(TFragment(""));
       return tl;
       }
-/***/
 
 //---------------------------------------------------------
 //   SimpleText
