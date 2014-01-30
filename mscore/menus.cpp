@@ -324,8 +324,7 @@ Palette* MuseScore::newRepeatsPalette()
 
       mk = new Marker(gscore);
       mk->setMarkerType(MarkerType::VARSEGNO);
-      PaletteCell* cell = sp->append(mk, tr("Segno Variation"), "", 0.6);
-      cell->yoffset = -2;
+      sp->append(mk, tr("Segno Variation"));
 
       mk = new Marker(gscore);
       mk->setMarkerType(MarkerType::CODA);
