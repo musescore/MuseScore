@@ -82,7 +82,7 @@ struct MusicXmlPartGroup {
       bool barlineSpan;
       };
 
-const int MAX_LYRICS       = 8;
+const int MAX_LYRICS       = 16;
 const int MAX_PART_GROUPS  = 8;
 const int MAX_NUMBER_LEVEL = 6; // maximum number of overlapping MusicXML objects
 const int MAX_BRACKETS     = 9; // 8;
