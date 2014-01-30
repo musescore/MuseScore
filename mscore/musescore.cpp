@@ -1031,7 +1031,7 @@ MuseScore::MuseScore()
       menuStyle->addSeparator();
       menuStyle->addAction(getAction("load-style"));
       menuStyle->addAction(getAction("save-style"));
-      menuStyle->addAction(getAction("save-default-style"));
+//      menuStyle->addAction(getAction("save-default-style"));
 
       //---------------------
       //    Menu Plugins
@@ -4167,6 +4167,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         }
                   }
             }
+#if 0
       else if (cmd == "save-default-style") {
             QString name = getStyleFilename(false);
             if (!name.isEmpty()) {
@@ -4182,6 +4183,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         }
                   }
             }
+#endif
       else if (cmd == "load-style") {
             QString name = mscore->getStyleFilename(true);
             if (!name.isEmpty()) {

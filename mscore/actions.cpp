@@ -1539,13 +1539,14 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Save style"),
           fileSave_ICON
          ),
-      Shortcut(
+/*      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          A_SCORE,
          "save-default-style",
          QT_TRANSLATE_NOOP("action","Save Style as Default..."),
           fileSave_ICON
          ),
+*/
       Shortcut (
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          A_CMD,
