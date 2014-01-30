@@ -408,6 +408,41 @@ void TLine::remove(int column)
       }
 
 //---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void TLine::remove(int start, int n)
+      {
+      int col = 0;
+      for (auto i = _text.begin(); i != _text.end();) {
+            int idx  = 0;
+            int rcol = 0;
+            for (const QChar& c : i->text) {
+                  if (col == start) {
+                        if (c.isSurrogate())
+                              i->text.remove(rcol, 1);
+                        i->text.remove(rcol, 1);
+                        if (i->cf == CharFormat::SYMBOL)
+                              i->ids.removeAt(idx);
+                        if (i->text.isEmpty() && (_text.size() > 1))
+                              i = _text.erase(i);
+                        --n;
+                        if (n == 0)
+                              return;
+                        continue;
+                        }
+                  ++idx;
+                  if (c.isHighSurrogate())
+                        continue;
+                  ++col;
+                  ++rcol;
+                  }
+            ++i;
+            }
+      qDebug("TLine::remove: column %d not found", start);
+      }
+
+//---------------------------------------------------------
 //   split
 //---------------------------------------------------------
 
@@ -1197,20 +1232,22 @@ void SimpleText::deleteSelectedText()
             TLine& t = _layout[row];
             if (row >= r1 && row <= r2) {             // TODO: does not work with symbols
                   if (row == r1 && r1 == r2)
-                        t.text().remove(c1, c2 - c1);
+                        t.remove(c1, c2 - c1);
                   else if (row == r1)
-                        t.text().remove(c1, t.text().size() - c1);
+                        t.remove(c1, t.text().size() - c1);
                   else if (row == r2)
-                        t.text().remove(0, c2);
+                        t.remove(0, c2);
                   else {
                         toDelete.append(t);
                         }
                   }
             }
       if (r1 != r2) {
-            TLine& tleft = _layout[r1];
-            TLine& tright = _layout[r2];
-            tleft.text().append(tright.text());
+            TLine& l1 = _layout[r1];
+            const TLine& l2 = _layout[r2];
+            for (const TFragment& f : l2.fragments())
+                  l1.fragments().append(f);
+
             _layout.removeAt(r2);
             QMutableListIterator<TLine> i(_layout);
             while (i.hasNext()) {
