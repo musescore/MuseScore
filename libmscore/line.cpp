@@ -543,9 +543,11 @@ QPointF SLine::linePos(int grip, System** sys)
                   qFatal("Sline::linePos(): anchor not implemented\n");
                   break;
             }
-      qreal y = (*sys)->staves()->isEmpty() ? 0.0 : (*sys)->staffYpage(staffIdx());
-      y -= (*sys)->pos().y();
+      qreal y = 0.0;
+	  if ( sys && *sys ) {
+		  y = (*sys)->staffYpage(staffIdx()) - (*sys)->pos().y();
 //      x += (*sys)->pos().x();
+	  }
       return QPointF(x, y);
       }
 
