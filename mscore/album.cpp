@@ -106,7 +106,7 @@ void Album::print()
                         e->itemDiscovered = 0;
                         if (!e->visible())
                               continue;
-                        QPointF pos(e->pagePos() - page->pos());
+                        QPointF pos(e->pagePos());
                         painter.translate(pos);
                         e->draw(&painter);
                         painter.translate(-pos);
