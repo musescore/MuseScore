@@ -1722,6 +1722,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
       lastMeasureLen        = 0;
       multiMeasureRestCount = -1;
       startMultiMeasureRest = false;
+      KeySigEvent ev;                  // ise court
+      KeySig currKeySig;              // ise court
+      currKeySig.setKeySigEvent(ev);  // ise court
 
       // initVoiceMapperAndMapVoices(e);
       voicelist = pass1.getVoiceList(id);
@@ -1742,7 +1745,15 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             if (e.tagName() == "measure") {
                   // set the correct start tick for the measure
                   tick = measureStart.at(measureNr);
-                  Measure* measure = xmlMeasure(part, e, e.attribute(QString("number")).toInt()-1, measureLength.at(measureNr));
+       // ise court
+                  QList<bool> accTmp;
+                  int i = 0;
+                  while(i < 74){
+                      accTmp.append(false);
+                      i++;
+                  }
+                  Measure* measure = xmlMeasure(part, e, e.attribute(QString("number")).toInt()-1, measureLength.at(measureNr), &currKeySig, &accTmp);  // ise court
+            // end ise
                   if (measure)
                         fillGapsInFirstVoices(measure, part);
                   }
@@ -1971,7 +1982,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
  Read the MusicXML measure element.
  */
 
-Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measureLen)
+Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measureLen, KeySig* currKeySig, QList<bool>* accTmp)   // ise court
       {
 #ifdef DEBUG_TICK
       qDebug("xmlMeasure %d begin", number);
@@ -2032,9 +2043,9 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       QList<GraceNoteInfo> graceNotesInfos;
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "attributes")
-                  xmlAttributes(measure, staff, e.firstChildElement());
+                  xmlAttributes(measure, staff, e.firstChildElement(), currKeySig);     // ise court
             else if (e.tagName() == "note") {
-                  xmlNote(measure, staff, part->id(), beam, cv, e, graceNotesInfos);
+                  xmlNote(measure, staff, part->id(), beam, cv, e, graceNotesInfos, currKeySig, accTmp);  // ise court
                   moveTick(measure->tick(), tick, maxtick, noteTypeTickFr, divisions, e);
 #ifdef DEBUG_TICK
                   qDebug(" after inserting note tick=%d", tick);
@@ -3145,7 +3156,7 @@ static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement 
 // staves must be read first, as it determines how many key and time signatures
 // must be inserted.
 
-void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
+void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig* currKeySig) // ise court
       {
       QString beats = "";
       QString beatType = "";
@@ -3204,6 +3215,12 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                                     keysig->setVisible(printObject == "yes");
                                     Segment* s = measure->getSegment(keysig, tick);
                                     s->add(keysig);
+                                    currKeySig->setKeySigEvent(key);  // ise court
+                                    AccidentalState acc;    // ise test
+                                    acc.init(currKeySig->keySigEvent());   // ise test
+                                    acc.init(currKeySig->keySigEvent());   // ise test
+
+
                                     }
                               }
                         }
@@ -3220,6 +3237,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                               keysig->setVisible(printObject == "yes");
                               Segment* s = measure->getSegment(keysig, tick);
                               s->add(keysig);
+                              currKeySig->setKeySigEvent(key);  // ise court
                               }
                         }
                   }
@@ -4482,7 +4500,7 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
  \a Staff is the number of first staff of the part this note belongs to.
  */
 
-void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement e, QList<GraceNoteInfo>& gni)
+void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement e, QList<GraceNoteInfo>& gni, KeySig* currKeySig, QList<bool>* accTmp) // ise court
       {
       int ticks = 0;
 #ifdef DEBUG_TICK
@@ -4896,15 +4914,27 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 
             // qDebug("staff for new note: %p (staff=%d, relStaff=%d)",
             //        score->staff(staff + relStaff), staff, relStaff);
+// ise court
+            AccidentalState currAcc;
+            currAcc.init(currKeySig->keySigEvent());
+            int ln = absStep(note->tpc(), note->pitch());
+            if(accidental != Accidental::ACC_NONE){
 
-            if (editorial || cautionary || parentheses) {
-                  Accidental* a = new Accidental(score);
-                  a->setAccidentalType(accidental);
-                  a->setHasBracket(cautionary || parentheses);
-                  a->setRole(Accidental::ACC_USER);
-                  note->add(a);
-                  }
-
+                    AccidentalVal currAccVal = currAcc.accidentalVal(ln);
+                    if (editorial || cautionary || parentheses
+                                  || (alter == -1 && currAccVal == AccidentalVal::FLAT    && accidental == Accidental::ACC_FLAT    && !accTmp->value(ln))
+                                  || (alter ==  0 && currAccVal == AccidentalVal::NATURAL && accidental == Accidental::ACC_NATURAL && !accTmp->value(ln))
+                                  || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && accidental == Accidental::ACC_SHARP   && !accTmp->value(ln))) {
+                          Accidental* a = new Accidental(score);
+                          a->setAccidentalType(accidental);
+                          a->setHasBracket(cautionary || parentheses);
+                          a->setRole(Accidental::ACC_USER);
+                          note->add(a);
+                          }
+                    else
+                          accTmp->replace(ln, true);
+                    }
+// end ise
             // LVIFIX: quarter tone accidentals support is "drawing only"
             //WS-TODO if (accidental == 18
             // || accidental == 19
