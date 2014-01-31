@@ -190,7 +190,8 @@ void TLine::layout(double y, SimpleText* t)
       {
       _bbox = QRectF();
       qreal x = 0.0;
-      QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
+      QFont font(t->textStyle().fontPx(t->spatium()));
+      QFontMetricsF fm(font);
 
       for (TFragment& f : _text) {
             f.pos.setX(x);
@@ -208,8 +209,10 @@ void TLine::layout(double y, SimpleText* t)
                         f.text.clear();
                         for (SymId id : f.ids)
                               f.text.append(sf->toString(id));
-                        r = t->symBbox(f.text).translated(f.pos);
-                        w = t->symWidth(f.text);
+                        qreal px  = qreal(font.pixelSize());
+                        qreal mag = (px * PPI) / (20.0 * MScore::DPI);
+                        r = sf->bbox(f.text, mag).translated(f.pos);
+                        w = sf->width(f.text, mag);
                         }
                         break;
                   }
@@ -224,7 +227,8 @@ void TLine::layout(double y, SimpleText* t)
 
 qreal TLine::xpos(int column, const SimpleText* t) const
       {
-      QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
+      QFont font(t->textStyle().fontPx(t->spatium()));
+      QFontMetricsF fm(font);
 
       int col = 0;
       for (const TFragment& f : _text) {
@@ -239,8 +243,12 @@ qreal TLine::xpos(int column, const SimpleText* t) const
                   if (column == col) {
                         if (f.cf == CharFormat::STYLED)
                               return f.pos.x() + fm.width(f.text.left(idx));
-                        else if (f.cf == CharFormat::SYMBOL)
-                              return f.pos.x() + t->symWidth(f.text.left(idx));
+                        else if (f.cf == CharFormat::SYMBOL) {
+                              ScoreFont* sf = t->score()->scoreFont();
+                              qreal px  = qreal(font.pixelSize());
+                              qreal mag = (px * PPI) / (20.0 * MScore::DPI);
+                              return f.pos.x() + sf->width(f.text.left(idx), mag);
+                              }
                         }
                   }
             }
@@ -420,6 +428,7 @@ void TLine::remove(int start, int n)
       for (auto i = _text.begin(); i != _text.end();) {
             int idx  = 0;
             int rcol = 0;
+            bool inc = true;
             for (const QChar& c : i->text) {
                   if (col == start) {
                         if (c.isSurrogate())
@@ -427,8 +436,10 @@ void TLine::remove(int start, int n)
                         i->text.remove(rcol, 1);
                         if (i->cf == CharFormat::SYMBOL)
                               i->ids.removeAt(idx);
-                        if (i->text.isEmpty() && (_text.size() > 1))
+                        if (i->text.isEmpty() && (_text.size() > 1)) {
                               i = _text.erase(i);
+                              inc = false;
+                              }
                         --n;
                         if (n == 0)
                               return;
@@ -440,7 +451,8 @@ void TLine::remove(int start, int n)
                   ++col;
                   ++rcol;
                   }
-            ++i;
+            if (inc)
+                  ++i;
             }
       qDebug("TLine::remove: column %d not found", start);
       }
@@ -929,30 +941,6 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
             case Qt::Key_Minus:
                   s = "-";
                   break;
-
-            case Qt::Key_F:
-                  if (modifiers & Qt::ControlModifier)
-                        s = QString::fromUtf8(u8"\U0001d191");
-                  break;
-            case Qt::Key_M:
-                  if (modifiers & Qt::ControlModifier)
-                        s = QString::fromUtf8(u8"\U0001d190");
-                  break;
-            case Qt::Key_P:
-                  if (modifiers & Qt::ControlModifier)
-                        s = QString::fromUtf8(u8"\U0001d18f");
-                  break;
-            case Qt::Key_Z:
-                  if (modifiers & Qt::ControlModifier)
-                        s = QString::fromUtf8(u8"\U0001d18e");
-                  break;
-            case Qt::Key_S:
-                  if (modifiers & Qt::ControlModifier)
-                        s = QString::fromUtf8(u8"\U0001d18d");
-                  break;
-            case Qt::Key_R:
-                  if (modifiers & Qt::ControlModifier)
-                        s = QString::fromUtf8(u8"\U0001d18c");
             case Qt::Key_A:
                   if (modifiers & Qt::ControlModifier)
                         selectAll();
@@ -960,13 +948,30 @@ bool SimpleText::edit(MuseScoreView*, int, int key,
             default:
                   break;
             }
-      if (!s.isEmpty()) {
-            if (!s[0].isPrint())
-                  s = "";
-            else {
-                  insertText(s);
+      if (modifiers & Qt::ControlModifier) {
+            switch (key) {
+                  case Qt::Key_F:
+                        insertSym(SymId::dynamicForte);
+                        break;
+                  case Qt::Key_M:
+                        insertSym(SymId::dynamicNiente);
+                        break;
+                  case Qt::Key_P:
+                        insertSym(SymId::dynamicPiano);
+                        break;
+                  case Qt::Key_Z:
+                        insertSym(SymId::dynamicZ);
+                        break;
+                  case Qt::Key_S:
+                        insertSym(SymId::dynamicSforzando);
+                        break;
+                  case Qt::Key_R:
+                        insertSym(SymId::dynamicRinforzando);
+                        break;
                   }
             }
+      if (!s.isEmpty() && !(modifiers & Qt::ControlModifier))
+            insertText(s);
       layout();
       if (parent() && parent()->type() == TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
@@ -1232,7 +1237,7 @@ void SimpleText::deleteSelectedText()
       QList<TLine> toDelete;
       for (int row = 0; row < rows; ++row) {
             TLine& t = _layout[row];
-            if (row >= r1 && row <= r2) {             // TODO: does not work with symbols
+            if (row >= r1 && row <= r2) {
                   if (row == r1 && r1 == r2)
                         t.remove(c1, c2 - c1);
                   else if (row == r1)
