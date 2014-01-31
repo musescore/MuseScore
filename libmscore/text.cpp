@@ -646,28 +646,28 @@ bool Text::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mo
             switch (key) {
                   case Qt::Key_A:   // select all
                         _cursor->select(QTextCursor::Document);
-                        break;
+                        return true;
                   case Qt::Key_B:   // toggle bold face
                         {
                         QTextCharFormat f = _cursor->charFormat();
                         f.setFontWeight(f.fontWeight() == QFont::Bold ? QFont::Normal : QFont::Bold);
                         _cursor->setCharFormat(f);
                         }
-                        break;
+                        return true;
                   case Qt::Key_I:   // toggle italic
                         {
                         QTextCharFormat f = _cursor->charFormat();
                         f.setFontItalic(!f.fontItalic());
                         _cursor->setCharFormat(f);
                         }
-                        break;
+                        return true;
                   case Qt::Key_U:   // toggle underline
                         {
                         QTextCharFormat f = _cursor->charFormat();
                         f.setFontUnderline(!f.fontUnderline());
                         _cursor->setCharFormat(f);
                         }
-                        break;
+                        return true;
                   case Qt::Key_Up:
                         {
                         QTextCharFormat f = _cursor->charFormat();
@@ -677,7 +677,7 @@ bool Text::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mo
                               f.setVerticalAlignment(QTextCharFormat::AlignNormal);
                         _cursor->setCharFormat(f);
                         }
-                        break;
+                        return true;
 
                   case Qt::Key_Down:
                         {
@@ -688,7 +688,7 @@ bool Text::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mo
                               f.setVerticalAlignment(QTextCharFormat::AlignNormal);
                         _cursor->setCharFormat(f);
                         }
-                        break;
+                        return true;
                   }
 #ifndef Q_OS_MAC
             if (key != Qt::Key_Space && key != Qt::Key_Minus)
