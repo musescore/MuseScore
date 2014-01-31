@@ -30,6 +30,9 @@
          <property name="text">
           <string>Strings:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item>
@@ -46,6 +49,9 @@
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Frets:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
