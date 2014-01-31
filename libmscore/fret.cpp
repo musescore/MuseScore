@@ -257,15 +257,12 @@ void FretDiagram::draw(QPainter* painter) const
                   }
             }
       if (_fretOffset > 0) {
-            QString fretString = QString("%1").arg(_fretOffset+1);
-            qreal fretNumScale = 2.0;
+            qreal fretNumScale = 2.0; // TODO: get this from preferences or style settings
             QFont biggerFont(font);
             biggerFont.setPixelSize(font.pixelSize() * fretNumScale);
-            QFontMetricsF bfm(biggerFont);
-            qreal fretNumberStringWidth = bfm.boundingRect(fretString).width();
             painter->setFont(biggerFont);
-            painter->drawText(QRectF(-fretNumberStringWidth-stringDist*.5, fretDist*.5, .0, .0),
-               Qt::AlignVCenter | Qt::TextDontClip,
+            painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
+               Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
                QString("%1").arg(_fretOffset+1));
             painter->setFont(font);
             }
