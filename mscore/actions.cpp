@@ -1736,7 +1736,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Note entry: 8th rest")
          ),
       Shortcut(                     // mapped to undo in note entry mode
-         STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          A_CMD,
          "backspace",
          QT_TRANSLATE_NOOP("action","Backspace")
