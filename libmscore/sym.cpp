@@ -28,7 +28,7 @@ static const int FALLBACK_FONT = 2;       // Bravura
 
 QVector<ScoreFont> ScoreFont::_scoreFonts = {
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"),
-      ScoreFont("Goneville",  "Gonville",    ":/fonts/gonville/", "Gonville.otf"),
+      ScoreFont("Gonville",   "Gonville",    ":/fonts/gonville/", "Gonville.otf"),
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf")
       };
 
