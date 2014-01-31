@@ -1737,7 +1737,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(                     // mapped to undo in note entry mode
          STATE_NOTE_ENTRY,
-         0,
+         A_CMD,
          "backspace",
          QT_TRANSLATE_NOOP("action","Backspace")
          ),
@@ -1892,7 +1892,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Show OMR image")
          ),
       Shortcut(
-         STATE_ALL,
+         STATE_NORMAL & (~STATE_TEXT_EDIT),
          0,
          "fullscreen",
          QT_TRANSLATE_NOOP("action","Full Screen")
