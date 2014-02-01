@@ -546,9 +546,9 @@ int Staff::channel(int tick,  int voice) const
       {
       if (_channelList[voice].isEmpty())
             return 0;
-      QMap<int, int>::const_iterator i = _channelList[voice].lowerBound(tick);
+      QMap<int, int>::const_iterator i = _channelList[voice].upperBound(tick);
       if (i == _channelList[voice].begin())
-            return _channelList[voice].begin().value();
+            return 0;
       --i;
       return i.value();
       }
