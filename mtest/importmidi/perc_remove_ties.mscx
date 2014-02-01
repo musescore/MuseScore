@@ -226,7 +226,7 @@ p, li { white-space: pre-wrap; }
           <name>low conga</name>
           <stem>1</stem>
           </Drum>
-        <Channel name="normal">
+        <Channel>
           <controller ctrl="0" value="1"/>
           <program value="0"/>
           </Channel>

@@ -52,7 +52,7 @@ p, li { white-space: pre-wrap; }
 <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Grand Piano<!--EndFragment--></p></body></html>
           </longName>
         <trackName></trackName>
-        <Channel name="normal">
+        <Channel>
           <program value="0"/>
           </Channel>
         </Instrument>
