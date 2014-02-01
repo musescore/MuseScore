@@ -4163,7 +4163,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
-          <string>Chord Symbols</string>
+          <string>Chord Symbols and Fretboard Diagrams</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -4436,6 +4436,57 @@ p, li { white-space: pre-wrap; }
              </item>
              <item row="0" column="2">
               <spacer name="horizontalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>496</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_271">
+            <property name="title">
+             <string>Fretboard Diagram</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_131">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_601">
+               <property name="text">
+                <string>Fret offset number size:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="fretNumMag">
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="decimals">
+                <number>0</number>
+               </property>
+               <property name="minimum">
+                <double>0.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>500.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>200.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <spacer name="horizontalSpacer_61">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>

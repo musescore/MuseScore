@@ -257,10 +257,10 @@ void FretDiagram::draw(QPainter* painter) const
                   }
             }
       if (_fretOffset > 0) {
-            qreal fretNumScale = 2.0; // TODO: get this from preferences or style settings
-            QFont biggerFont(font);
-            biggerFont.setPixelSize(font.pixelSize() * fretNumScale);
-            painter->setFont(biggerFont);
+            qreal fretNumMag = score()->styleD(ST_fretNumMag);
+            QFont scaledFont(font);
+            scaledFont.setPixelSize(font.pixelSize() * fretNumMag);
+            painter->setFont(scaledFont);
             painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
                Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
                QString("%1").arg(_fretOffset+1));
