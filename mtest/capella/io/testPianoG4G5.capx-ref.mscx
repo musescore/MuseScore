@@ -53,7 +53,7 @@
       <trackName>right hand</trackName>
       <Instrument>
         <trackName></trackName>
-        <Channel name="normal">
+        <Channel>
           <program value="1"/>
           </Channel>
         </Instrument>
@@ -66,7 +66,7 @@
       <trackName>left hand</trackName>
       <Instrument>
         <trackName></trackName>
-        <Channel name="normal">
+        <Channel>
           <program value="1"/>
           </Channel>
         </Instrument>
