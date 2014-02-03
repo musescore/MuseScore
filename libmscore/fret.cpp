@@ -261,9 +261,14 @@ void FretDiagram::draw(QPainter* painter) const
             QFont scaledFont(font);
             scaledFont.setPixelSize(font.pixelSize() * fretNumMag);
             painter->setFont(scaledFont);
-            painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
-               Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
-               QString("%1").arg(_fretOffset+1));
+            if ( score()->styleD(ST_fretNumPos) == 0 )
+                  painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
+                     Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
+                     QString("%1").arg(_fretOffset+1));
+            else
+                  painter->drawText(QRectF(x2 + (stringDist * 0.4), .0, .0, fretDist),
+                     Qt::AlignVCenter|Qt::AlignLeft|Qt::TextDontClip,
+                     QString("%1").arg(_fretOffset+1));
             painter->setFont(font);
             }
       }

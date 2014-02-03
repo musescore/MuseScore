@@ -24,7 +24,7 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>170</width>
+       <width>200</width>
        <height>0</height>
       </size>
      </property>
@@ -112,7 +112,7 @@
      </item>
      <item>
       <property name="text">
-       <string>Chord Symbols</string>
+       <string>Chord Symbols, Fretboard Diagrams</string>
       </property>
      </item>
      <item>
@@ -4486,6 +4486,29 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item row="0" column="2">
+              <widget class="QGroupBox" name="groupFONPos">
+               <property name="title">
+                <string>Fret offset number postion:</string>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_11">
+                <item>
+                 <widget class="QRadioButton" name="radioFretNumLeft">
+                  <property name="text">
+                   <string>Left</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="radioFretNumRight">
+                  <property name="text">
+                   <string>Right</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="0" column="3">
               <spacer name="horizontalSpacer_61">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
