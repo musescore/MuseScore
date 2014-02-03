@@ -119,6 +119,7 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_minHarmonyDistance,          StyleType("minHarmonyDistance",      ST_SPATIUM) },
       { ST_capoPosition,                StyleType("capoPosition",            ST_INT) },
       { ST_fretNumMag,                  StyleType("fretNumMag",              ST_DOUBLE) },
+      { ST_fretNumPos,                  StyleType("fretNumPos",              ST_INT) },  // 0 = left, 1 = right
       { ST_showPageNumber,              StyleType("showPageNumber",          ST_BOOL) },
       { ST_showPageNumberOne,           StyleType("showPageNumberOne",       ST_BOOL) },
       { ST_pageNumberOddEven,           StyleType("pageNumberOddEven",       ST_BOOL) },
@@ -500,6 +501,7 @@ StyleData::StyleData()
             { ST_minHarmonyDistance,          QVariant(0.5) },
             { ST_capoPosition,                QVariant(0) },
             { ST_fretNumMag,                  QVariant(qreal(2.0)) },
+            { ST_fretNumPos,                  QVariant(0) },
             { ST_showPageNumber,              QVariant(true) },
             { ST_showPageNumberOne,           QVariant(false) },
             { ST_pageNumberOddEven,           QVariant(true) },
