@@ -279,7 +279,7 @@ void FretDiagram::draw(QPainter* painter) const
 
 void FretDiagram::layout()
       {
-      qreal _spatium = spatium();
+      qreal _spatium  = spatium();
       lw1             = _spatium * 0.08;
       lw2             = _fretOffset ? lw1 : _spatium * 0.2;
       stringDist      = _spatium * .7;
@@ -298,7 +298,7 @@ void FretDiagram::layout()
             }
       bbox().setRect(x, y, w, h);
 
-      setPos(-_spatium, -h - _spatium);
+      setPos(-_spatium, -h - _spatium * score()->styleD(ST_staffFretDist) + _spatium );
       adjustReadPos();
 
       if (_harmony)
