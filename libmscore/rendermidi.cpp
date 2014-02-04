@@ -828,7 +828,7 @@ void Score::renderMidi(EventMap* events)
                   if (s->type() != Element::PEDAL)
                         continue;
 
-                  int channel = s->staff()->channel(s->tick(), 0);
+                  int channel = s->staff()->part()->midiChannel();
                   if (s->tick() >= utick1 && s->tick() < utick2) {
                         NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
                         events->insert(std::pair<int,NPlayEvent>(s->tick() + tickOffset, event));
