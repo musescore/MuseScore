@@ -261,7 +261,7 @@ void FretDiagram::draw(QPainter* painter) const
             QFont scaledFont(font);
             scaledFont.setPixelSize(font.pixelSize() * fretNumMag);
             painter->setFont(scaledFont);
-            if ( score()->styleD(ST_fretNumPos) == 0 )
+            if ( score()->styleI(ST_fretNumPos) == 0 )
                   painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
                      Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
                      QString("%1").arg(_fretOffset+1));
@@ -298,7 +298,7 @@ void FretDiagram::layout()
             }
       bbox().setRect(x, y, w, h);
 
-      setPos(-_spatium, -h - _spatium * score()->styleD(ST_staffFretDist) + _spatium );
+      setPos(-_spatium, -h - score()->styleP(ST_staffFretDist) + _spatium );
       adjustReadPos();
 
       if (_harmony)
