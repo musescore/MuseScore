@@ -1,7 +1,7 @@
 {
     "fontName": "Bravura", 
-    "fontVersion": 0.7, 
-    
+    "fontVersion": 0.80, 
+
     "engravingDefaults": {
         "arrowShaftThickness": 0.16, 
         "barlineSeparation": 0.4, 
@@ -13,10 +13,11 @@
         "dashedBarlineThickness": 0.16, 
         "hairpinThickness": 0.16, 
         "legerLineExtension": 0.4, 
-        "legerLineThickness": 0.4, 
+        "legerLineThickness": 0.16, 
         "lyricLineThickness": 0.16, 
         "octaveLineThickness": 0.16, 
         "pedalLineThickness": 0.16, 
+        "repeatBarlineDotSeparation": 0.16, 
         "repeatEndingLineThickness": 0.16, 
         "slurEndpointThickness": 0.1, 
         "slurMidpointThickness": 0.22, 
@@ -27,8 +28,10 @@
         "thickBarlineThickness": 0.5, 
         "thinBarlineThickness": 0.16, 
         "tieEndpointThickness": 0.1, 
-        "tieMidpointThickness": 0.22
+        "tieMidpointThickness": 0.22, 
+        "tupletBracketThickness": 0.16
     }, 
+
     "glyphs": {
         "flag1024thDown": {
             "stemDownSW": [
@@ -39,31 +42,31 @@
         "flag1024thUp": {
             "stemUpNW": [
                 0.0, 
-                4.516
+                4.448
             ]
         }, 
         "flag128thDown": {
             "stemDownSW": [
                 0.0, 
-                -2.404
+                -2.332
             ]
         }, 
         "flag128thUp": {
             "stemUpNW": [
                 0.0, 
-                2.328
+                2.216
             ]
         }, 
         "flag16thDown": {
             "stemDownSW": [
                 0.0, 
-                -0.024
+                0.128
             ]
         }, 
         "flag16thUp": {
             "stemUpNW": [
                 0.0, 
-                0.036
+                -0.088
             ]
         }, 
         "flag256thDown": {
@@ -75,19 +78,19 @@
         "flag256thUp": {
             "stemUpNW": [
                 0.0, 
-                3.092
+                2.94
             ]
         }, 
         "flag32ndDown": {
             "stemDownSW": [
                 0.0, 
-                -0.876
+                -0.708
             ]
         }, 
         "flag32ndUp": {
             "stemUpNW": [
                 0.0, 
-                0.836
+                0.66
             ]
         }, 
         "flag512thDown": {
@@ -99,31 +102,31 @@
         "flag512thUp": {
             "stemUpNW": [
                 0.0, 
-                3.78
+                3.7
             ]
         }, 
         "flag64thDown": {
             "stemDownSW": [
                 0.0, 
-                -1.656
+                -1.532
             ]
         }, 
         "flag64thUp": {
             "stemUpNW": [
                 0.0, 
-                1.572
+                1.456
             ]
         }, 
         "flag8thDown": {
             "stemDownSW": [
                 0.0, 
-                -0.024
+                0.132
             ]
         }, 
         "flag8thUp": {
             "stemUpNW": [
                 0.0, 
-                0.028
+                -0.048
             ]
         }, 
         "gClefLigatedNumberAbove": {
