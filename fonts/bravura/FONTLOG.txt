@@ -118,8 +118,34 @@ Changelog
 - Added square double whole note (breve) notehead.
 - Added new combining harp string noise for stem glyph, and corresponding precomposed stem glyph.
 - Added four further quarter-tone accidental symbols to "other microtonal accidentals" group.
-- Added some percussion playing technique symbols from Dante Agostino’s method books.
+- Added some percussion playing technique symbols from Dante Agostini’s method books.
 - Added a golpe (tap the pick guard) glyph from Claude Worm’s flamenco guitar method book.
 - Added short and long fermata glyphs as used by Henze.
 - Added combining glyphs for accordion couplers, allowing the creation of any coupler diagram not explicitly encoded.
 - Added 'pf' dynamic.
+
+3 February 2014 (Daniel Spreadbury) Bravura version 0.80
+- Many minor changes to glyph outlines following corrections suggested by the Adobe FDK checkOutlines tool
+- Corrected JSON metadata for stem connection points on flag glyphs (e.g. flag8thDown, flag16thUp, etc.)
+- Changed glyph registration of left and right parentheses for noteheads (noteheadParenthesisLeft, noteheadParenthesisRight)
+- Changed font name settings in accordance with FontLab's OpenType PS font name guidelines (http://forum.fontlab.com/index.php?topic=313.0).
+- Added Ivan Wyschnegradsky’s system of 72-EDO accidentals.
+- Added Bosanquet’s comma up/down.
+- Added left/right parentheses for accidentals.
+- Added new ranges for Renaissance lute tablature, covering French/English, Italian/Spanish and German conventions.
+- Added Britten’s curlew sign for a pause of an indeterminate length.
+- Added push/pull signs for accordion.
+- Added slashed sharp/flat accidentals used by John Tavener in his Byzantine-inspired choral works.
+- Added separate noteheads for white mensural notation.
+- Added inverted signum congruentiae.
+- Added combined tenuto-accent articulation.
+- Added quasi-random wiggly lines (wiggleRandom1, wiggleRandom2, wiggleRandom3, wiggleRandom4) to multi-segment lines range.
+- Added flipped and large versions of constant circular motion (wiggleCircularConstantFlipped, wiggleCircularConstantLarge, wiggleCircularConstantFlippedLarge) to multi-segment lines range.
+- Added combining top/middle/bottom segments for black and white rectangular note clusters.
+- Added 2, 3, 4 and 6-dot divisi indicators for measured tremolos (tremoloDivisiDots2, tremoloDivisiDots3, etc.) to tremolos range.
+- Added clavichord bebung glyphs for 2, 3, and 4 finger movements (keyboardBebung2DotsAbove, keyboardBebung3DotsBelow, etc.) to the keyboard techniques range.
+- Added double-height parentheses and brackets (csymParensLeftTall, csymParensRightTall, csymBracketLeftTall, csymBracketRightTall) to the chord symbols range.
+- Added stylistic alternates for time signature digits 0–9 suitable for use as large time signatures shown above/between staves (timeSig0Large through timeSig9Large).
+– Added 'sfzp' (sforzato-piano) dynamic and ligature.
+– Added Penderecki's quarter-flat and Busotti's three-quarter sharp accidentals.
+– Added six further accordion coupler diagrams for right-hand 3 rank accordions, and accordion ricochet glyphs.
