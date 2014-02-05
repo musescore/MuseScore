@@ -874,6 +874,7 @@ class Score : public QObject {
       void cmdUpdateNotes();
       void cmdUpdateAccidentals(Measure* m, int staffIdx);
       void updateAccidentals(Measure* m, int staffIdx);
+      void updatePitches(Segment*, int, int, int, int, Accidental::AccidentalType);
       QMap<int, LinkedElements*>& links();
       bool concertPitch() const { return styleB(ST_concertPitch); }
       void layoutFingering(Fingering*);

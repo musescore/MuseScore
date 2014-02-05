@@ -2120,6 +2120,8 @@ void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
 
 void Score::updateAccidentals(Measure* m, int staffIdx)
       {
+    if(property("AltModifier").toBool())
+           return;
 // qDebug("updateAccidentals measure %d staff %d", m->no(), staffIdx);
       Staff* st = staff(staffIdx);
       AccidentalState as;      // list of already set accidentals for this measure
@@ -2130,6 +2132,21 @@ void Score::updateAccidentals(Measure* m, int staffIdx)
                   m->updateAccidentals(segment, staffIdx, &as);
             }
       }
+
+//---------------------------------------------------------
+//   updatePitches
+//---------------------------------------------------------
+
+void Score::updatePitches(Segment* segment, int staffIdx, int pitch, int tpc, int line, Accidental::AccidentalType accidental)
+       {
+       Measure* m = segment->measure();
+       for (Segment* seg = segment->next(); seg; seg = seg->next()) {           // alters the following notes on the same line
+             if(seg->measure() == m->nextMeasure())
+                   return;
+             if (seg->segmentType() & (Segment::SegChordRest))
+                    m->updatePitches(seg, staffIdx, pitch, tpc, line, accidental);
+             }
+       }
 
 //---------------------------------------------------------
 //   clone
