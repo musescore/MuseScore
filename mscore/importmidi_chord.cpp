@@ -188,8 +188,7 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                         }
                   currentChordStart = it->first;
                   maxOffTime = currentChordStart + note.len;
-                  if (curThreshTime != threshTime)
-                        curThreshTime = threshTime;
+                  curThreshTime = threshTime;
                   ++it;
                   }
 
