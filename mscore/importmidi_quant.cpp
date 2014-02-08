@@ -16,9 +16,10 @@ extern Preferences preferences;
 
 namespace Quantize {
 
-ReducedFraction shortestNoteInBar(const std::multimap<ReducedFraction, MidiChord>::const_iterator &startBarChordIt,
-                                  const std::multimap<ReducedFraction, MidiChord>::const_iterator &endChordIt,
-                                  const ReducedFraction &endBarTick)
+ReducedFraction shortestQuantizedNoteInBar(
+            const std::multimap<ReducedFraction, MidiChord>::const_iterator &startBarChordIt,
+            const std::multimap<ReducedFraction, MidiChord>::const_iterator &endChordIt,
+            const ReducedFraction &endBarTick)
       {
       const auto division = ReducedFraction::fromTicks(MScore::division);
       auto minDuration = division;
@@ -31,22 +32,14 @@ ReducedFraction shortestNoteInBar(const std::multimap<ReducedFraction, MidiChord
                         minDuration = note.len;
                   }
             }
-                  // determine suitable quantization value based
-                  // on shortest note in measure
-      auto div = division;
-      for (ReducedFraction duration(1, 16); duration <= ReducedFraction(8, 1); duration *= 2) {
-                        // minimum duration is 1/64
-            if (minDuration <= division * duration) {
-                  div = division * duration;
+                  // determine suitable quantization value based on shortest note in measure
+      const auto minAllowedDuration = MChord::minAllowedDuration();
+      auto shortest = division;
+      for ( ; shortest > minAllowedDuration; shortest /= 2) {
+            if (shortest <= minDuration)
                   break;
-                  }
             }
-      if (div == (division / 16))
-            minDuration = div;
-      else
-            minDuration = quantizeValue(minDuration, div / 2);    //closest
-
-      return minDuration;
+      return shortest;
       }
 
 ReducedFraction userQuantNoteToFraction(MidiOperation::QuantValue quantNote)
@@ -97,7 +90,8 @@ ReducedFraction findRegularQuantRaster(
                   // if user value larger than the smallest note in bar
                   // then use the smallest note to keep faster events
       if (operations.quantize.reduceToShorterNotesInBar) {
-            const auto shortest = shortestNoteInBar(startBarChordIt, endChordIt, endBarTick);
+            const auto shortest = shortestQuantizedNoteInBar(startBarChordIt, endChordIt,
+                                                             endBarTick);
             if (shortest < raster)
                   raster = shortest;
             }
