@@ -144,9 +144,9 @@ void collectChords(std::multimap<int, MTrack> &tracks)
             if (chords.empty())
                   continue;
 
-            ReducedFraction threshTime = minAllowedDuration() / 2;
-            ReducedFraction fudgeTime = threshTime / 4;
-            ReducedFraction threshExtTime = threshTime / 2;
+            const ReducedFraction threshTime = minAllowedDuration() / 2;
+            const ReducedFraction fudgeTime = threshTime / 4;
+            const ReducedFraction threshExtTime = threshTime / 2;
 
             ReducedFraction currentChordStart(-1, 1);    // invalid
             ReducedFraction curThreshTime(-1, 1);
