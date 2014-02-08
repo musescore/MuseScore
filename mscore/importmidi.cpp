@@ -882,6 +882,20 @@ bool doNotesOverlap(const std::multimap<int, MTrack> &tracks)
       return false;
       }
 
+bool noTooShortNotes(const std::multimap<int, MTrack> &tracks)
+      {
+      for (const auto &track: tracks) {
+            const auto &chords = track.second.chords;
+            for (const auto &chord: chords) {
+                  for (const auto &note: chord.second.notes) {
+                        if (note.len < MChord::minAllowedDuration())
+                              return false;
+                        }
+                  }
+            }
+      return true;
+      }
+
 #endif
 
 
@@ -902,6 +916,8 @@ void convertMidi(Score *score, const MidiFile *mf)
 
       Q_ASSERT_X(!doNotesOverlap(tracks),
                  "convertMidi:", "There are overlapping notes of the same voice that is incorrect");
+      Q_ASSERT_X(noTooShortNotes(tracks),
+                 "convertMidi:", "There are notes of length < min allowed duration");
 
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
       LRHand::splitIntoLeftRightHands(tracks);
