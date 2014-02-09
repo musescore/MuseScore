@@ -120,7 +120,7 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_capoPosition,                StyleType("capoPosition",            ST_INT) },
       { ST_fretNumMag,                  StyleType("fretNumMag",              ST_DOUBLE) },
       { ST_fretNumPos,                  StyleType("fretNumPos",              ST_INT) },  // 0 = left, 1 = right
-      { ST_staffFretDist,               StyleType("staffFretDist",           ST_SPATIUM) },
+      { ST_fretY,                       StyleType("fretY",                   ST_SPATIUM) },
       { ST_showPageNumber,              StyleType("showPageNumber",          ST_BOOL) },
       { ST_showPageNumberOne,           StyleType("showPageNumberOne",       ST_BOOL) },
       { ST_pageNumberOddEven,           StyleType("pageNumberOddEven",       ST_BOOL) },
@@ -503,7 +503,7 @@ StyleData::StyleData()
             { ST_capoPosition,                QVariant(0) },
             { ST_fretNumMag,                  QVariant(qreal(2.0)) },
             { ST_fretNumPos,                  QVariant(0) },
-            { ST_staffFretDist,               QVariant(2.0) },
+            { ST_fretY,                       QVariant(-2.0) },
             { ST_showPageNumber,              QVariant(true) },
             { ST_showPageNumberOne,           QVariant(false) },
             { ST_pageNumberOddEven,           QVariant(true) },

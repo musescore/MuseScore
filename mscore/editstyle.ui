@@ -4160,7 +4160,7 @@ p, li { white-space: pre-wrap; }
        <property name="spacing">
         <number>0</number>
        </property>
-       <item row="0" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
           <string>Chord Symbols</string>
@@ -4456,7 +4456,7 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBox_51">
          <property name="title">
           <string>Fretboard Diagrams</string>
@@ -4468,12 +4468,12 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="label_602">
             <property name="text">
-             <string>Distance staff to fretboard diagram:</string>
+             <string>Default vertical position:</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="staffFretDist">
+           <widget class="QDoubleSpinBox" name="fretY">
             <property name="suffix">
              <string>sp</string>
             </property>
@@ -4481,7 +4481,7 @@ p, li { white-space: pre-wrap; }
              <number>2</number>
             </property>
             <property name="minimum">
-             <double>0.000000000000000</double>
+             <double>-10.000000000000000</double>
             </property>
             <property name="maximum">
              <double>10.000000000000000</double>
@@ -4490,7 +4490,7 @@ p, li { white-space: pre-wrap; }
              <double>0.500000000000000</double>
             </property>
             <property name="value">
-             <double>2.000000000000000</double>
+             <double>-2.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -4560,7 +4560,7 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item>
         <spacer name="verticalSpacer_61">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

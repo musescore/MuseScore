@@ -298,7 +298,7 @@ void FretDiagram::layout()
             }
       bbox().setRect(x, y, w, h);
 
-      setPos(-_spatium, -h - score()->styleP(ST_staffFretDist) + _spatium );
+      setPos(-_spatium, -h + score()->styleP(ST_fretY) + _spatium );
       adjustReadPos();
 
       if (_harmony)
