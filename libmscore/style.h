@@ -243,7 +243,7 @@ enum StyleIdx {
       ST_capoPosition,
       ST_fretNumMag,
       ST_fretNumPos,
-      ST_staffFretDist,
+      ST_fretY,
 
       ST_showPageNumber,
       ST_showPageNumberOne,
