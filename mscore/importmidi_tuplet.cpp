@@ -389,11 +389,48 @@ validateAndFindExcludedChords(std::list<int> &indexes,
       return excludedChords;
 }
 
-// result: <average quant error,
-//          sum length of rests inside all tuplets,
-//          negative total tuplet note count>
+class TupletErrorResult
+      {
+   public:
+      TupletErrorResult(double t = 0.0, const ReducedFraction &r = ReducedFraction(0, 1))
+            : tupletAverageError(t)
+            , sumLengthOfRests(r)
+            {}
 
-std::tuple<double, ReducedFraction, int>
+      bool operator<(const TupletErrorResult &er) const
+            {
+            if (tupletAverageError < er.tupletAverageError
+                        && sumLengthOfRests < er.sumLengthOfRests)
+                  return true;
+            if (tupletAverageError >= er.tupletAverageError
+                        && sumLengthOfRests >= er.sumLengthOfRests)
+                  return false;
+
+            if (tupletAverageError == 0.0)
+                  return sumLengthOfRests < er.sumLengthOfRests;
+            if (sumLengthOfRests == ReducedFraction(0, 1))
+                  return tupletAverageError < er.tupletAverageError;
+
+            double errorDiv = 2 * ((tupletAverageError < er.tupletAverageError)
+                        ? er.tupletAverageError / tupletAverageError
+                        : tupletAverageError / er.tupletAverageError);
+
+            const auto temp = ((sumLengthOfRests < er.sumLengthOfRests)
+                               ? er.sumLengthOfRests / sumLengthOfRests
+                               : sumLengthOfRests / er.sumLengthOfRests);
+            double restsDiv = temp.numerator() * 1.0 / temp.denominator();
+
+            if (errorDiv < restsDiv)
+                  return sumLengthOfRests < er.sumLengthOfRests;
+            else
+                  return tupletAverageError < er.tupletAverageError;
+            }
+   private:
+      double tupletAverageError;
+      ReducedFraction sumLengthOfRests;
+      };
+
+TupletErrorResult
 findTupletError(
             const std::list<int> &indexes,
             const std::vector<TupletInfo> &tuplets,
@@ -413,16 +450,15 @@ findTupletError(
       for (const auto &chordIt: excludedChords)
             sumError += findQuantizationError(chordIt->first, regularRaster);
 
-      return std::make_tuple(sumError.ticks() * 1.0 / sumNoteCount,
-                             sumLengthOfRests, sumNoteCount);
+      return TupletErrorResult{sumError.ticks() * 1.0 / sumNoteCount, sumLengthOfRests};
       }
 
-std::tuple<double, ReducedFraction, int>
+TupletErrorResult
 validateTuplets(std::list<int> &indexes,
                 const std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
-            return std::make_tuple(0.0, ReducedFraction(0, 1), 0);
+            return TupletErrorResult();
 
       const auto excludedChords = validateAndFindExcludedChords(indexes, tuplets);
       return findTupletError(indexes, tuplets, excludedChords);
@@ -482,7 +518,7 @@ std::list<int>
 minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
                    const std::vector<TupletInfo> &tuplets)
       {
-      std::tuple<double, ReducedFraction, int> minResult;
+      TupletErrorResult minResult;
       std::vector<int> iIndexGroups;  // indexes of elements in indexGroups
       for (int i = 0; i != (int)indexGroups.size(); ++i)
             iIndexGroups.push_back(i);
