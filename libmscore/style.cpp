@@ -498,7 +498,7 @@ StyleData::StyleData()
             { ST_pedalLineStyle,              QVariant(int(Qt::SolidLine)) },
             { ST_trillY,                      QVariant(-1) },
             { ST_harmonyY,                    QVariant(-2.5) },
-            { ST_harmonyFretDist,             QVariant(-1.5) },
+            { ST_harmonyFretDist,             QVariant(0.5) },
             { ST_minHarmonyDistance,          QVariant(0.5) },
             { ST_capoPosition,                QVariant(0) },
             { ST_fretNumMag,                  QVariant(qreal(2.0)) },

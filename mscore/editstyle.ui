@@ -4323,7 +4323,7 @@ p, li { white-space: pre-wrap; }
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="harmonyFretDist">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="suffix">
                 <string extracomment="spatium unit">sp</string>
@@ -4338,7 +4338,7 @@ p, li { white-space: pre-wrap; }
                 <double>0.500000000000000</double>
                </property>
                <property name="value">
-                <double>-1.500000000000000</double>
+                <double>0.500000000000000</double>
                </property>
               </widget>
              </item>
