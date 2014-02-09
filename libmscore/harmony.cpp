@@ -848,6 +848,15 @@ void Harmony::layout()
             Measure* m = static_cast<Measure*>(parent()->parent());
             yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
             yy += score()->styleP(ST_harmonyY);
+            Segment* s = static_cast<Segment*>(parent());
+                  for (Element* e : s->annotations()) {
+                  if (e != this && e->type() == FRET_DIAGRAM && e->track() == track()) {
+                        yy = score()->styleP(ST_fretY);
+                        yy -= score()->styleP(ST_harmonyFretDist);
+                        yy -= e->bbox().height();
+                        break;
+                        }
+                  }
             }
       else if (parent()->type() == FRET_DIAGRAM)
             yy = score()->styleP(ST_harmonyFretDist);
