@@ -95,6 +95,7 @@
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/qzipwriter_p.h"
 #include "libmscore/fret.h"
+#include "libmscore/tie.h"
 
 namespace Ms {
 
@@ -409,6 +410,25 @@ SlurHandler::SlurHandler()
             }
       }
 
+static QString slurTieLineStyle(const SlurTie* s)
+      {
+      QString lineType;
+      QString rest;
+      switch (s->lineType()) {
+            case 1:
+                  lineType = "dotted";
+                  break;
+            case 2:
+                  lineType = "dashed";
+                  break;
+            default:
+                  lineType = "";
+            }
+      if (!lineType.isEmpty())
+            rest = QString(" line-type=\"%1\"").arg(lineType);
+      return rest;
+      }
+
 //---------------------------------------------------------
 //   findSlur -- get index of slur in slur table
 //   return -1 if not found
@@ -438,20 +458,7 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
             // check if on slur list (i.e. stop already seen)
             int i = findSlur(s);
             //define line type
-            QString rest;
-            QString lineType;
-            switch (s->lineType()) {
-                  case 1:
-                        lineType = "dotted";
-                        break;
-                  case 2:
-                        lineType = "dashed";
-                        break;
-                  default:
-                        lineType = "";
-                  }
-            if (!lineType.isEmpty())
-                  rest += QString(" line-type=\"%1\"").arg(lineType);
+            QString rest = slurTieLineStyle(s);
             if (i >= 0) {
                   // remove from list and print start
                   slur[i] = 0;
@@ -2285,13 +2292,17 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
 
             Notations notations;
             Technical technical;
-            if (note->tieBack()) {
+
+            const Tie* tieBack = note->tieBack();
+            if (tieBack) {
                   notations.tag(xml);
                   xml.tagE("tied type=\"stop\"");
                   }
-            if (note->tieFor()) {
+            const Tie* tieFor = note->tieFor();
+            if (tieFor) {
                   notations.tag(xml);
-                  xml.tagE("tied type=\"start\"");
+                  QString rest = slurTieLineStyle(tieFor);
+                  xml.tagE(QString("tied type=\"start\"%1").arg(rest));
                   }
 
             if (note == nl.front()) {

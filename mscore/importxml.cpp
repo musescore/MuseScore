@@ -4161,17 +4161,23 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               note->setTieFor(tie);
                               tie->setStartNote(note);
                               tie->setTrack(track);
+                              QString tiedOrientation = ee.attribute("orientation", "auto");
+                              if (tiedOrientation == "over")
+                                    tie->setSlurDirection(MScore::UP);
+                              else if (tiedOrientation == "under")
+                                    tie->setSlurDirection(MScore::DOWN);
+                              else if (tiedOrientation == "auto")
+                                    ;  // ignore
+                              else
+                                    qDebug("unknown tied orientation: %s", tiedOrientation.toLatin1().data());
+
+                              QString lineType  = ee.attribute(QString("line-type"), "solid");
+                              if (lineType == "dotted")
+                                    tie->setLineType(1);
+                              else if (lineType == "dashed")
+                                    tie->setLineType(2);
                               tie = 0;
                               }
-                        QString tiedOrientation = e.attribute("orientation", "auto");
-                        if (tiedOrientation == "over")
-                              tie->setSlurDirection(MScore::UP);
-                        else if (tiedOrientation == "under")
-                              tie->setSlurDirection(MScore::DOWN);
-                        else if (tiedOrientation == "auto")
-                              ;  // ignore
-                        else
-                              qDebug("unknown tied orientation: %s", tiedOrientation.toLatin1().data());
                         }
                   else if (tiedType == "stop")
                         ;  // ignore
