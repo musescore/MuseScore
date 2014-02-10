@@ -4262,7 +4262,7 @@ p, li { white-space: pre-wrap; }
                <item>
                 <widget class="QRadioButton" name="useStandardNoteNames">
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, Bb, B, C, C#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A, B♭, B, C, C♯, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
                   <string>Standard</string>
@@ -4282,7 +4282,7 @@ p, li { white-space: pre-wrap; }
                <item>
                 <widget class="QRadioButton" name="useSolfeggioNoteNames">
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La, Sib, Si, Do, Do#, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La, Si♭, Si, Do, Do♯, ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
                   <string>Solfeggio</string>
