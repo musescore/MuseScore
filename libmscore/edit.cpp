@@ -1801,7 +1801,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
       if (doSelect)
             select(ncr, SELECT_SINGLE, 0);
       if (ncr)
-            setPos(POS::CURRENT, ncr->tick());
+            setPlayPos(ncr->tick());
       }
 
 //---------------------------------------------------------
