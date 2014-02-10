@@ -22,7 +22,7 @@ namespace Ms {
 
 const char* keyNames[] = {
       QT_TRANSLATE_NOOP("MuseScore", "G major, E minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "C\u266d major, A\266d minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "C\u266d major, A\u266d minor"),
       QT_TRANSLATE_NOOP("MuseScore", "D major, B minor"),
       QT_TRANSLATE_NOOP("MuseScore", "G\u266d major, E\u266d minor"),
       QT_TRANSLATE_NOOP("MuseScore", "A major, F\u266f minor"),
