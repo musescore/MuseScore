@@ -191,8 +191,8 @@ void EditStringData::accept()
 //    Converts a MIDI numeric pitch code to human-readable note name
 //---------------------------------------------------------
 
-static char g_cNoteName[12][8] =
-{"C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B" };
+static char g_cNoteName[][8] =
+{"C", "C\u266f", "D", "E\u266d", "E", "F", "F\u266f", "G", "A\u266d", "A", "B\u266d", "B" };
 
 QString EditStringData::midiCodeToStr(int midiCode)
       {

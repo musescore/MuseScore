@@ -99,7 +99,7 @@ class KeySig : public Element {
       QVariant propertyDefault(P_ID id) const;
       };
 
-extern const char* keyNames[15];
+extern const char* keyNames[];
 
 
 }     // namespace Ms

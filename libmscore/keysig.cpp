@@ -20,21 +20,21 @@
 
 namespace Ms {
 
-const char* keyNames[15] = {
+const char* keyNames[] = {
       QT_TRANSLATE_NOOP("MuseScore", "G major, E minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "C♭ major, A♭ minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "C\u266d major, A\266d minor"),
       QT_TRANSLATE_NOOP("MuseScore", "D major, B minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "G♭major, E♭ minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "A major, F♯ minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "D♭ major, B♭ minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "E major, C♯ minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "A♭ major, F minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "B major, G♯ minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "E♭ major, C minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "F♯ major, D♯ minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "B♭ major, G minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "C♯ major, A♯ minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "F major,  D minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "G\u266d major, E\u266d minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "A major, F\u266f minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "D\u266d major, B\u266d minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "E major, C\u266f minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "A\u266d major, F minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "B major, G\u266f minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "E\u266d major, C minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "F\u266f major, D\u266f minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "B\u266d major, G minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "C\u266f major, A\u266f minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "F major, D minor"),
       QT_TRANSLATE_NOOP("MuseScore", "C major, A minor")
       };
 
