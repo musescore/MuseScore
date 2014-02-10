@@ -21,10 +21,10 @@
 #include "utils.h"
 
 static const char* vall[] = {
-      "c","c♯","d","d♯","e","f","f♯","g","g♯","a","a♯","b"
+      "c","c\u266f","d","d\u266f","e","f","f\u266f","g","g\u266f","a","a\u266f","b"
       };
 static const char* valu[] = {
-      "C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"
+      "C","C\u266f","D","D\u266f","E","F","F\u266f","G","G\u266f","A","A\u266f","B"
       };
 
 namespace Awl {
