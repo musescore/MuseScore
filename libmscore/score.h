@@ -682,6 +682,7 @@ class Score : public QObject {
       const TextStyle& textStyle(int idx) const { return _style.textStyle(idx); }
       const TextStyle& textStyle(const QString& s) const  { return _style.textStyle(s); }
 
+      // These position are in ticks and not uticks
       int playPos() const                      { return pos(POS::CURRENT);   }
       void setPlayPos(int tick)                { setPos(POS::CURRENT, tick); }
       int loopInTick() const                   { return pos(POS::LEFT);      }
