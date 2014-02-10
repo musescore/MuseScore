@@ -4512,6 +4512,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
       NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
       bool noStem = false;
       QColor noteheadColor = QColor::Invalid;
+      bool noteheadParentheses = false;
       bool chord = false;
       int velocity = -1;
       bool unpitched = false;
@@ -4736,6 +4737,8 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   QString color = e.attribute(QString("color"), 0);
                   if (color != 0)
                         noteheadColor = QColor(color);
+                  if (e.attribute(QString("parentheses")) == "yes")
+                        noteheadParentheses = true;
                   }
             else if (tag == "instrument") {
                   instrId = e.attribute("id");
@@ -4819,6 +4822,17 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             note->setHeadGroup(headGroup);
             if (noteheadColor != QColor::Invalid)
                   note->setColor(noteheadColor);
+
+            if (noteheadParentheses) {
+                  Symbol* s = new Symbol(score);
+                  s->setSym(SymId::noteheadParenthesisLeft);
+                  s->setParent(note);
+                  score->addElement(s);
+                  s = new Symbol(score);
+                  s->setSym(SymId::noteheadParenthesisRight);
+                  s->setParent(note);
+                  score->addElement(s);
+                  }
 
             if (velocity > 0) {
                   note->setVeloType(MScore::USER_VAL);
