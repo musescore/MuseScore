@@ -1346,14 +1346,15 @@ void TextView::setElement(Element* e)
       for (int i = 0; i < TEXT_STYLES; ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
+      const TextStyle& ts = te->textStyle();
       ShowElementBase::setElement(e);
       tb.text->setPlainText(te->text());
-      tb.xoffset->setValue(te->xoff());
-      tb.yoffset->setValue(te->yoff());
-      tb.rxoffset->setValue(te->reloff().x());
-      tb.ryoffset->setValue(te->reloff().y());
-      tb.offsetType->setCurrentIndex(int(te->offsetType()));
-      tb.textStyle->setCurrentIndex(te->textStyleType());
+      tb.xoffset->setValue(ts.offset().x());
+      tb.yoffset->setValue(ts.offset().y());
+      tb.rxoffset->setValue(ts.reloff().x());
+      tb.ryoffset->setValue(ts.reloff().y());
+      tb.offsetType->setCurrentIndex(int(ts.offsetType()));
+//TODO      tb.textStyle->setCurrentIndex(ts.textStyleType());
       tb.styled->setChecked(te->styled());
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
       }
@@ -1384,14 +1385,15 @@ void HarmonyView::setElement(Element* e)
       for (int i = 0; i < TEXT_STYLES; ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
+      const TextStyle& ts = harmony->textStyle();
       ShowElementBase::setElement(e);
       tb.text->setPlainText(harmony->text());
-      tb.xoffset->setValue(harmony->xoff());
-      tb.yoffset->setValue(harmony->yoff());
-      tb.rxoffset->setValue(harmony->reloff().x());
-      tb.ryoffset->setValue(harmony->reloff().y());
-      tb.offsetType->setCurrentIndex(int(harmony->offsetType()));
-      tb.textStyle->setCurrentIndex(harmony->textStyleType());
+      tb.xoffset->setValue(ts.offset().x());
+      tb.yoffset->setValue(ts.offset().y());
+      tb.rxoffset->setValue(ts.reloff().x());
+      tb.ryoffset->setValue(ts.reloff().y());
+      tb.offsetType->setCurrentIndex(int(ts.offsetType()));
+//TODO      tb.textStyle->setCurrentIndex(ts.textStyleType());
       tb.styled->setChecked(harmony->styled());
       tb.layoutToParentWidth->setChecked(harmony->layoutToParentWidth());
 
@@ -1573,13 +1575,14 @@ void DynamicView::setElement(Element* e)
       for (int i = 0; i < TEXT_STYLES; ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
+      const TextStyle& ts = dynamic->textStyle();
       tb.text->setPlainText(dynamic->text());
-      tb.xoffset->setValue(dynamic->xoff());
-      tb.yoffset->setValue(dynamic->yoff());
-      tb.rxoffset->setValue(dynamic->reloff().x());
-      tb.ryoffset->setValue(dynamic->reloff().y());
-      tb.offsetType->setCurrentIndex(int(dynamic->offsetType()));
-      tb.textStyle->setCurrentIndex(dynamic->textStyleType());
+      tb.xoffset->setValue(ts.offset().x());
+      tb.yoffset->setValue(ts.offset().y());
+      tb.rxoffset->setValue(ts.reloff().x());
+      tb.ryoffset->setValue(ts.reloff().y());
+      tb.offsetType->setCurrentIndex(int(ts.offsetType()));
+//TODO      tb.textStyle->setCurrentIndex(dynamic->textStyleType());
       tb.styled->setChecked(dynamic->styled());
       tb.layoutToParentWidth->setChecked(dynamic->layoutToParentWidth());
 

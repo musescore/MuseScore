@@ -126,22 +126,23 @@ TextTools::TextTools(QWidget* parent)
       typefaceSuperscript->setToolTip(tr("superscript"));
       typefaceSuperscript->setCheckable(true);
 
-      unorderedList = tb->addAction(*icons[formatListUnordered_ICON], "");
-      unorderedList->setToolTip(tr("unordered list"));
+//      unorderedList = tb->addAction(*icons[formatListUnordered_ICON], "");
+//      unorderedList->setToolTip(tr("unordered list"));
 
-      orderedList = tb->addAction(*icons[formatListOrdered_ICON], "");
-      orderedList->setToolTip(tr("ordered list"));
+//      orderedList = tb->addAction(*icons[formatListOrdered_ICON], "");
+//      orderedList->setToolTip(tr("ordered list"));
 
-      indentMore = tb->addAction(*icons[formatIndentMore_ICON], "");
-      indentMore->setToolTip(tr("indent more"));
+//      indentMore = tb->addAction(*icons[formatIndentMore_ICON], "");
+//      indentMore->setToolTip(tr("indent more"));
 
-      indentLess = tb->addAction(*icons[formatIndentLess_ICON], "");
-      indentLess->setToolTip(tr("indent less"));
+//      indentLess = tb->addAction(*icons[formatIndentLess_ICON], "");
+//      indentLess->setToolTip(tr("indent less"));
 
       tb->addSeparator();
 
       typefaceFamily = new QFontComboBox(this);
       tb->addWidget(typefaceFamily);
+
       typefaceSize = new QDoubleSpinBox(this);
       tb->addWidget(typefaceSize);
 
@@ -162,10 +163,10 @@ TextTools::TextTools(QWidget* parent)
       connect(va,                  SIGNAL(triggered(QAction*)), SLOT(setValign(QAction*)));
       connect(showKeyboard,        SIGNAL(triggered(bool)), SLOT(showKeyboardClicked(bool)));
       connect(textStyles,          SIGNAL(currentIndexChanged(int)), SLOT(styleChanged(int)));
-      connect(unorderedList,       SIGNAL(triggered()),     SLOT(unorderedListClicked()));
-      connect(orderedList,         SIGNAL(triggered()),     SLOT(orderedListClicked()));
-      connect(indentLess,          SIGNAL(triggered()),     SLOT(indentLessClicked()));
-      connect(indentMore,          SIGNAL(triggered()),     SLOT(indentMoreClicked()));
+//      connect(unorderedList,       SIGNAL(triggered()),     SLOT(unorderedListClicked()));
+//      connect(orderedList,         SIGNAL(triggered()),     SLOT(orderedListClicked()));
+//      connect(indentLess,          SIGNAL(triggered()),     SLOT(indentLessClicked()));
+//      connect(indentMore,          SIGNAL(triggered()),     SLOT(indentMoreClicked()));
       }
 
 //---------------------------------------------------------
@@ -195,7 +196,7 @@ void TextTools::setText(Text* te)
             }
       textStyles->setCurrentIndex(comboIdx);
       styleChanged(comboIdx);
-      Align align = _textElement->align();
+      Align align = _textElement->textStyle().align();
       if (align & ALIGN_HCENTER)
             hcenterAlign->setChecked(true);
       else if (align & ALIGN_RIGHT)
@@ -244,19 +245,18 @@ void TextTools::updateTools()
             return;
             }
       blockAllSignals(true);
+      TextCursor* cursor = _textElement->cursor();
+      CharFormat* format = cursor->format();
 
-      QFont f(_textElement->curFont());
+      QFont f(format->fontFamily());
       typefaceFamily->setCurrentFont(f);
-      double ps = f.pointSizeF();
-      if (ps == -1.0)
-            ps = f.pixelSize() * PPI / MScore::DPI;
-      typefaceSize->setValue(ps);
+      typefaceSize->setValue(format->fontSize());
 
-      typefaceItalic->setChecked(_textElement->curItalic());
-      typefaceBold->setChecked(_textElement->curBold());
-      typefaceUnderline->setChecked(_textElement->curUnderline());
-      typefaceSubscript->setChecked(_textElement->curSubscript());
-      typefaceSuperscript->setChecked(_textElement->curSuperscript());
+      typefaceItalic->setChecked(format->italic());
+      typefaceBold->setChecked(format->bold());
+      typefaceUnderline->setChecked(format->underline());
+      typefaceSubscript->setChecked(format->valign() == VerticalAlignment::AlignSubScript);
+      typefaceSuperscript->setChecked(format->valign() == VerticalAlignment::AlignSuperScript);
 
       blockAllSignals(false);
       }
@@ -294,7 +294,7 @@ void TextTools::layoutText()
 
 void TextTools::sizeChanged(double value)
       {
-      _textElement->setCurFontPointSize(value);
+      _textElement->cursor()->format()->setFontSize(value);
       updateText();
       }
 
@@ -304,7 +304,7 @@ void TextTools::sizeChanged(double value)
 
 void TextTools::fontChanged(const QFont& f)
       {
-      _textElement->setCurFontFamily(f.family());
+      _textElement->cursor()->format()->setFontFamily(f.family());
       updateText();
       }
 
@@ -314,7 +314,7 @@ void TextTools::fontChanged(const QFont& f)
 
 void TextTools::boldClicked(bool val)
       {
-      _textElement->setCurBold(val);
+      _textElement->cursor()->format()->setBold(val);
       updateText();
       }
 
@@ -324,7 +324,7 @@ void TextTools::boldClicked(bool val)
 
 void TextTools::underlineClicked(bool val)
       {
-      _textElement->setCurUnderline(val);
+      _textElement->cursor()->format()->setUnderline(val);
       updateText();
       }
 
@@ -334,47 +334,7 @@ void TextTools::underlineClicked(bool val)
 
 void TextTools::italicClicked(bool val)
       {
-      _textElement->setCurItalic(val);
-      updateText();
-      }
-
-//---------------------------------------------------------
-//   unorderedListClicked
-//---------------------------------------------------------
-
-void TextTools::unorderedListClicked()
-      {
-      _textElement->unorderedList();
-      updateText();
-      }
-
-//---------------------------------------------------------
-//   orderedListClicked
-//---------------------------------------------------------
-
-void TextTools::orderedListClicked()
-      {
-      _textElement->orderedList();
-      updateText();
-      }
-
-//---------------------------------------------------------
-//   indentMoreClicked
-//---------------------------------------------------------
-
-void TextTools::indentMoreClicked()
-      {
-      _textElement->indentMore();
-      updateText();
-      }
-
-//---------------------------------------------------------
-//   indentLessClicked
-//---------------------------------------------------------
-
-void TextTools::indentLessClicked()
-      {
-      _textElement->indentLess();
+      _textElement->cursor()->format()->setItalic(val);
       updateText();
       }
 
@@ -384,7 +344,7 @@ void TextTools::indentLessClicked()
 
 void TextTools::setHalign(QAction* a)
       {
-      _textElement->setCurHalign(a->data().toInt());
+//TODO      _textElement->setCurHalign(a->data().toInt());
       updateTools();
       layoutText();
       }
@@ -395,7 +355,7 @@ void TextTools::setHalign(QAction* a)
 
 void TextTools::setValign(QAction* a)
       {
-      _textElement->setAlign((_textElement->align() & ~ALIGN_VMASK) | Align(a->data().toInt()));
+//TODO      _textElement->setAlign((_textElement->align() & ~ALIGN_VMASK) | Align(a->data().toInt()));
       updateTools();
       layoutText();
       }
@@ -406,8 +366,7 @@ void TextTools::setValign(QAction* a)
 
 void TextTools::subscriptClicked(bool val)
       {
-//      _textElement->setAlign((_textElement->align() & ~ALIGN_VMASK) | Align(a->data().toInt()));
-      _textElement->setCurSubscript(val);
+      _textElement->cursor()->format()->setValign(val ? VerticalAlignment::AlignSubScript : VerticalAlignment::AlignNormal);
       typefaceSuperscript->blockSignals(true);
       typefaceSuperscript->setChecked(false);
       typefaceSuperscript->blockSignals(false);
@@ -420,7 +379,7 @@ void TextTools::subscriptClicked(bool val)
 
 void TextTools::superscriptClicked(bool val)
       {
-      _textElement->setCurSuperscript(val);
+      _textElement->cursor()->format()->setValign(val ? VerticalAlignment::AlignSuperScript : VerticalAlignment::AlignNormal);
       typefaceSubscript->blockSignals(true);
       typefaceSubscript->setChecked(false);
       typefaceSubscript->blockSignals(false);
@@ -443,14 +402,16 @@ void TextTools::styleChanged(int comboIdx)
             _textElement->setUnstyled();
       else
             _textElement->setTextStyleType(styleIdx);
+#if 0
       typefaceSize->setEnabled(unstyled);
       typefaceFamily->setEnabled(unstyled);
-      typefaceBold->setEnabled(unstyled);
+//      typefaceBold->setEnabled(unstyled);
       typefaceItalic->setEnabled(unstyled);
       typefaceUnderline->setEnabled(unstyled);
       typefaceSubscript->setEnabled(unstyled);
       typefaceSuperscript->setEnabled(unstyled);
       typefaceFamily->setEnabled(unstyled);
+#endif
       leftAlign->setEnabled(unstyled);
       rightAlign->setEnabled(unstyled);
       hcenterAlign->setEnabled(unstyled);

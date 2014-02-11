@@ -2105,7 +2105,7 @@ void ExchangeVoice::redo()
 //   ChangeInstrumentShort
 //---------------------------------------------------------
 
-ChangeInstrumentShort::ChangeInstrumentShort(int _tick, Part* p, QList<StaffNameDoc> t)
+ChangeInstrumentShort::ChangeInstrumentShort(int _tick, Part* p, QList<StaffName> t)
       {
       tick = _tick;
       part = p;
@@ -2114,7 +2114,7 @@ ChangeInstrumentShort::ChangeInstrumentShort(int _tick, Part* p, QList<StaffName
 
 void ChangeInstrumentShort::flip()
       {
-      QList<StaffNameDoc> s = part->shortNames(tick);
+      QList<StaffName> s = part->shortNames(tick);
       part->setShortNames(text, tick);
       text = s;
       part->score()->setLayoutAll(true);
@@ -2124,7 +2124,7 @@ void ChangeInstrumentShort::flip()
 //   ChangeInstrumentLong
 //---------------------------------------------------------
 
-ChangeInstrumentLong::ChangeInstrumentLong(int _tick, Part* p, QList<StaffNameDoc> t)
+ChangeInstrumentLong::ChangeInstrumentLong(int _tick, Part* p, QList<StaffName> t)
       {
       tick = _tick;
       part = p;
@@ -2133,7 +2133,7 @@ ChangeInstrumentLong::ChangeInstrumentLong(int _tick, Part* p, QList<StaffNameDo
 
 void ChangeInstrumentLong::flip()
       {
-      QList<StaffNameDoc> s = part->longNames(tick);
+      QList<StaffName> s = part->longNames(tick);
       part->setLongNames(text, tick);
       text = s;
       part->score()->setLayoutAll(true);
@@ -2208,10 +2208,11 @@ void ChangeBracketSpan::flip()
 
 void EditText::undo()
       {
-      if (!text->styled()) {
+/*      if (!text->styled()) {
             for (int i = 0; i < undoLevel; ++i)
                   text->undo();
             }
+      */
       undoRedo();
       }
 
@@ -2221,10 +2222,12 @@ void EditText::undo()
 
 void EditText::redo()
       {
+/*
       if (!text->styled()) {
             for (int i = 0; i < undoLevel; ++i)
                   text->redo();
             }
+      */
       undoRedo();
       }
 

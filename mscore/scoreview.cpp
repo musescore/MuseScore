@@ -654,7 +654,7 @@ ScoreView::ScoreView(QWidget* parent)
       lasso       = new Lasso(_score);
       _foto       = new Lasso(_score);
 
-      _cursor     = new TextCursor(this);
+      _cursor     = new PositionCursor(this);
       _cursor->setType(CursorType::POS);
 
       shadowNote  = 0;
@@ -662,9 +662,9 @@ ScoreView::ScoreView(QWidget* parent)
       editObject  = 0;
       addSelect   = false;
 
-      _curLoopIn  = new TextCursor(this);
+      _curLoopIn  = new PositionCursor(this);
       _curLoopIn->setType(CursorType::LOOP_IN);
-      _curLoopOut = new TextCursor(this);
+      _curLoopOut = new PositionCursor(this);
       _curLoopOut->setType(CursorType::LOOP_OUT);
 
       //---setup state machine-------------------------------------------------
@@ -1442,7 +1442,7 @@ void ScoreView::setCursorOn(bool val)
 //    isInPos is used to adjust the x position of In vs Out mark
 //---------------------------------------------------------
 
-void ScoreView::setLoopCursor(TextCursor *curLoop, int tick, bool isInPos)
+void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
       {
       //
       // set mark height for whole system
@@ -2323,7 +2323,7 @@ void ScoreView::editCopy()
             // store selection as plain text
             //
             Text* text = static_cast<Text*>(editObject);
-            QString s = text->selection();
+            QString s = text->selectedText();
             if (!s.isEmpty())
                   QApplication::clipboard()->setText(s, QClipboard::Clipboard);
             }

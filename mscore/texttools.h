@@ -42,10 +42,10 @@ class TextTools : public QDockWidget {
       QAction* typefaceSubscript;
       QAction* typefaceSuperscript;
       QAction* showKeyboard;
-      QAction* unorderedList;
-      QAction* orderedList;
-      QAction* indentMore;
-      QAction* indentLess;
+//      QAction* unorderedList;
+//      QAction* orderedList;
+//      QAction* indentMore;
+//      QAction* indentLess;
       QComboBox* textStyles;
 
       void blockAllSignals(bool val);
@@ -64,10 +64,10 @@ class TextTools : public QDockWidget {
       void setValign(QAction*);
       void showKeyboardClicked(bool);
       void styleChanged(int);
-      void unorderedListClicked();
-      void orderedListClicked();
-      void indentMoreClicked();
-      void indentLessClicked();
+//      void unorderedListClicked();
+//      void orderedListClicked();
+//      void indentMoreClicked();
+//      void indentLessClicked();
 
    public:
       TextTools(QWidget* parent = 0);

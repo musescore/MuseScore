@@ -24,10 +24,10 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   TextCursor
+//   PositionCursor
 //---------------------------------------------------------
 
-void TextCursor::setType(CursorType t)
+void PositionCursor::setType(CursorType t)
       {
       _type = t;
       if (_type == CursorType::LOOP_IN) {
@@ -48,7 +48,7 @@ void TextCursor::setType(CursorType t)
 //   paint
 //---------------------------------------------------------
 
-void TextCursor::paint(QPainter* p)
+void PositionCursor::paint(QPainter* p)
       {
       if (!visible())
             return;
@@ -87,7 +87,7 @@ void TextCursor::paint(QPainter* p)
 //   bbox
 //---------------------------------------------------------
 
-QRectF TextCursor::bbox() const
+QRectF PositionCursor::bbox() const
       {
       QRectF r;
       qreal h = _sv->score()->spatium() * 2;
@@ -111,7 +111,7 @@ QRectF TextCursor::bbox() const
 //   move
 //---------------------------------------------------------
 
-void TextCursor::move(int tick)
+void PositionCursor::move(int tick)
       {
       QRectF r(bbox());
       //

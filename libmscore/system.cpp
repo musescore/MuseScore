@@ -517,10 +517,10 @@ void System::setInstrumentNames(bool longName)
                   }
 
             Part* part = s->part();
-            const QList<StaffNameDoc>& names = longName? part->longNames(tick) : part->shortNames(tick);
+            const QList<StaffName>& names = longName? part->longNames(tick) : part->shortNames(tick);
 
             int idx = 0;
-            foreach(const StaffNameDoc& sn, names) {
+            foreach(const StaffName& sn, names) {
                   InstrumentName* iname = staff->instrumentNames.value(idx);
 
                   if (iname == 0) {

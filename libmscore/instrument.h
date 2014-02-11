@@ -34,19 +34,7 @@ struct StaffName {
       int pos;          // even number -> between staves
 
       StaffName(const QString& s, int p=0) : name(s), pos(p) {}
-      };
-
-//---------------------------------------------------------
-//   StaffNameDoc
-//---------------------------------------------------------
-
-struct StaffNameDoc {
-      QTextDocumentFragment name;
-      int pos;          // even number -> between staves
-
-      StaffNameDoc(const QTextDocumentFragment& s, int p=0) : name(s), pos(p) {}
-      StaffNameDoc(const QString& s, int p=0) : name(QTextDocumentFragment::fromPlainText(s)), pos(p) {}
-      bool operator==(const StaffNameDoc&) const;
+      bool operator==(const StaffName&) const;
       void write(Xml& xml, const char* name) const;
       };
 
@@ -174,14 +162,14 @@ class Instrument {
       void setStringData(StringData* t);
       static Instrument fromTemplate(const InstrumentTemplate*);
 
-      const QList<StaffNameDoc>& longNames() const;
-      const QList<StaffNameDoc>& shortNames() const;
-      QList<StaffNameDoc>& longNames();
-      QList<StaffNameDoc>& shortNames();
-      void setLongName(const QTextDocumentFragment&);
-      void setShortName(const QTextDocumentFragment&);
-      void addLongName(const StaffNameDoc& f);
-      void addShortName(const StaffNameDoc& f);
+      const QList<StaffName>& longNames() const;
+      const QList<StaffName>& shortNames() const;
+      QList<StaffName>& longNames();
+      QList<StaffName>& shortNames();
+      void setLongName(const QString&);
+      void setShortName(const QString&);
+      void addLongName(const StaffName& f);
+      void addShortName(const StaffName& f);
 
       QString trackName() const;
       void setTrackName(const QString&);

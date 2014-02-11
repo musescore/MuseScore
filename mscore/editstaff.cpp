@@ -110,13 +110,13 @@ void EditStaff::updateInstrument()
       {
       setInterval(instrument.transpose());
 
-      QList<StaffNameDoc>& nl = instrument.shortNames();
-      QTextDocumentFragment df = nl.isEmpty() ? QTextDocumentFragment() : nl[0].name;
-      shortName->setHtml(df.toHtml());
+      QList<StaffName>& nl = instrument.shortNames();
+      QString df = nl.isEmpty() ? "" : nl[0].name;
+      shortName->setText(df);
 
       nl = instrument.longNames();
-      df = nl.isEmpty() ? QTextDocumentFragment() : nl[0].name;
-      longName->setHtml(df.toHtml());
+      df = nl.isEmpty() ? "" : nl[0].name;
+      longName->setText(df);
 
       if (partName->text() == instrumentName->text())    // Updates part name is no custom name has been set before
             partName->setText(instrument.trackName());
@@ -219,8 +219,8 @@ void EditStaff::apply()
       instrument.setMaxPitchA(_maxPitchA);
       instrument.setMinPitchP(_minPitchP);
       instrument.setMaxPitchP(_maxPitchP);
-      instrument.setShortName(QTextDocumentFragment(shortName->document()));
-      instrument.setLongName(QTextDocumentFragment(longName->document()));
+      instrument.setShortName(shortName->toPlainText());
+      instrument.setLongName(longName->toPlainText());
 
       bool s            = small->isChecked();
       bool inv          = invisible->isChecked();

@@ -28,10 +28,10 @@ enum class CursorType {
       };
 
 //---------------------------------------------------------
-//   TextCursor
+//   PositionCursor
 //---------------------------------------------------------
 
-class TextCursor {
+class PositionCursor {
       ScoreView* _sv;
       QRectF _rect;
       bool _visible    { false };
@@ -40,7 +40,7 @@ class TextCursor {
       CursorType _type { CursorType::POS };
 
    public:
-      TextCursor(ScoreView* sv) : _sv(sv)  {}
+      PositionCursor(ScoreView* sv) : _sv(sv)  {}
 
       void setType(CursorType t);
       QRectF rect() const            { return _rect;     }

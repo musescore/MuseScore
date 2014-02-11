@@ -2024,6 +2024,7 @@ class ScoreFont {
       const QRectF bbox(const QString& s, qreal mag) const;
       QPointF attach(SymId id, qreal mag) const { return _symbols[int(id)].attach() * mag; }
       bool isValid(SymId id) const              { return _symbols[int(id)].isValid(); }
+      const QString& family() const             { return _family; }
       };
 
 extern void initScoreFonts();

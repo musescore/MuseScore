@@ -234,13 +234,13 @@ void Part::read114(XmlReader& e)
             else if (tag == "name") {
                   Text* t = new Text(score());
                   t->read(e);
-                  instr(0)->setLongName(t->getFragment());
+                  instr(0)->setLongName(t->text());
                   delete t;
                   }
             else if (tag == "shortName") {
                   Text* t = new Text(score());
                   t->read(e);
-                  instr(0)->setShortName(t->getFragment());
+                  instr(0)->setShortName(t->text());
                   delete t;
                   }
             else if (tag == "trackName")

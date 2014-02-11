@@ -734,7 +734,7 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
                   }
             else
                   part->setLongName(mt.name);
-            part->setPartName(part->longName().toPlainText());
+            part->setPartName(part->longName());
             part->setMidiChannel(mt.mtrack->outChannel());
             int bank = 0;
             if (mt.mtrack->drumTrack())

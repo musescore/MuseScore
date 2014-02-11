@@ -220,10 +220,10 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                               }
                         Text* text = new Text(score);
                         QFont f(st->font());
-                        text->setItalic(f.italic());
+                        text->textStyle().setItalic(f.italic());
                         // text->setUnderline(f.underline());
-                        text->setBold(f.bold());
-                        text->setSize(f.pointSizeF());
+                        text->textStyle().setBold(f.bold());
+                        text->textStyle().setSize(f.pointSizeF());
 
                         text->setText(st->text());
                         QPointF p(st->pos());
@@ -233,7 +233,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         // qDebug("setText %s (%f %f)(%f %f) <%s>",
                         //            qPrintable(st->font().family()),
                         //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));
-                        text->setAlign(ALIGN_LEFT | ALIGN_BASELINE);
+                        text->textStyle().setAlign(ALIGN_LEFT | ALIGN_BASELINE);
                         text->setTrack(track);
                         s->add(text);
                         }
@@ -727,7 +727,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 
                               // qDebug("string %f:%f w %d ratio %d <%s>",
                               //    to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
-                              s->setHtml(ss);
+                              s->setText(ss);
                               MeasureBase* measure = score->measures()->first();
                               if (measure->type() != Element::VBOX) {
                                     MeasureBase* mb = new VBox(score);
@@ -928,10 +928,10 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         Text* s = new Text(score);
                         s->setTextStyleType(TEXT_STYLE_TITLE);
                         QFont f(to->font());
-                        s->setItalic(f.italic());
+                        s->textStyle().setItalic(f.italic());
                         // s->setUnderline(f.underline());
-                        s->setBold(f.bold());
-                        s->setSize(f.pointSizeF());
+                        s->textStyle().setBold(f.bold());
+                        s->textStyle().setSize(f.pointSizeF());
 
                         QString ss = to->text();
                         s->setText(ss);

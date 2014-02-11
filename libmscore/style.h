@@ -116,13 +116,12 @@ class TextStyle {
       void writeProperties(Xml& xml) const;
       void read(XmlReader& v);
       bool readProperties(XmlReader& v);
-      QFont font(qreal space) const;
+      QFont font(qreal spatium) const;
       QFont fontPx(qreal spatium) const;
-      QRectF bbox(qreal space, const QString& s) const;
-      QFontMetricsF fontMetrics(qreal space) const;
+      QRectF bbox(qreal spatium, const QString& s) const;
+      QFontMetricsF fontMetrics(qreal spatium) const;
       bool operator!=(const TextStyle& s) const;
       void layout(Element*) const;
-      void setFont(const QFont& f);
       };
 
 //---------------------------------------------------------

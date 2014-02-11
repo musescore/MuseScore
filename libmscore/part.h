@@ -67,15 +67,15 @@ class Part : public QObject {
       int startTrack() const;
       int endTrack() const;
 
-      QTextDocumentFragment longName(int tick = 0) const;
-      QTextDocumentFragment shortName(int tick = 0) const;
+      QString longName(int tick = 0) const;
+      QString shortName(int tick = 0) const;
       QString instrumentName(int tick = 0) const;
 
-      const QList<StaffNameDoc>& longNames(int tick = 0) const  { return instr(tick)->longNames();  }
-      const QList<StaffNameDoc>& shortNames(int tick = 0) const { return instr(tick)->shortNames(); }
+      const QList<StaffName>& longNames(int tick = 0) const  { return instr(tick)->longNames();  }
+      const QList<StaffName>& shortNames(int tick = 0) const { return instr(tick)->shortNames(); }
 
-      void setLongNames(QList<StaffNameDoc>& s, int tick = 0);
-      void setShortNames(QList<StaffNameDoc>& s, int tick = 0);
+      void setLongNames(QList<StaffName>& s, int tick = 0);
+      void setShortNames(QList<StaffName>& s, int tick = 0);
 
       void setLongName(const QString& s);
       void setShortName(const QString& s);

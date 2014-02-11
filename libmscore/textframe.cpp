@@ -53,10 +53,8 @@ void TBox::layout()
                   Text* text = static_cast<Text*>(e);
                   text->layout();
                   qreal h;
-                  if (text->isEmpty()) {
-                        QFontMetricsF fm(text->font());
-                        h = fm.lineSpacing();
-                        }
+                  if (text->isEmpty())
+                        h = text->lineSpacing();
                   else
                         h = text->height();
                   text->setPos(leftMargin() * MScore::DPMM, topMargin() * MScore::DPMM);
