@@ -684,7 +684,7 @@ void Seq::process(unsigned n, float* buffer)
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
                               emit toGui('4');
-                              loopStart();
+                              return;
                               }
                         else {
                               emit toGui('2');
