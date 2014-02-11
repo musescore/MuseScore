@@ -2816,7 +2816,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
             Element* ee = e;
             if (ee->type() == Element::NOTE)
                   ee = ee->parent();
-            setPos(POS::CURRENT, static_cast<ChordRest*>(ee)->segment()->tick());
+            setPlayPos(static_cast<ChordRest*>(ee)->segment()->tick());
             }
       if (MScore::debugMode)
             qDebug("select element <%s> type %d(state %d) staff %d",

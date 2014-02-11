@@ -211,7 +211,7 @@ void Seq::setScoreView(ScoreView* v)
 //   selectionChanged
 //---------------------------------------------------------
 
-void Seq::selectionChanged(int mode)
+/*void Seq::selectionChanged(int mode)
       {
       if (cs == 0 || _driver == 0)
             return;
@@ -224,7 +224,7 @@ void Seq::selectionChanged(int mode)
             cs->setPlayPos(tick);
       else
             seek(tick);
-      }
+      }*/
 
 //---------------------------------------------------------
 //   init
@@ -327,7 +327,7 @@ void Seq::start()
             seek(cs->repeatList()->tick2utick(cs->loopInTick()));
             }
       else
-            seek(cs->playPos());
+            seek(cs->repeatList()->tick2utick(cs->playPos()));
       _driver->startTransport();
       }
 
@@ -425,7 +425,7 @@ void Seq::guiStop()
       if (!cs)
             return;
 
-      cs->setPlayPos(cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate)));
+      cs->setPlayPos(cs->repeatList()->utick2tick(cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate))));
       cs->end();
       emit stopped();
       }
@@ -684,7 +684,7 @@ void Seq::process(unsigned n, float* buffer)
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
                               emit toGui('4');
-                              loopStart();
+                              return;
                               }
                         else {
                               emit toGui('2');
@@ -724,6 +724,7 @@ void Seq::process(unsigned n, float* buffer)
             //
             unsigned framePos = 0;
             int endTime = *pPlayTime + frames;
+            int utickEnd = cs->repeatList()->tick2utick(cs->lastMeasure()->endTick()) - 1;
             for ( ; *pPlayPos != pEvents->cend(); ) {
                   int n;
                   if (inCountIn) {
@@ -749,11 +750,11 @@ void Seq::process(unsigned n, float* buffer)
                               n = 0;
                               }
                         if (mscore->loop()) {
-                              int tickLoop = cs->repeatList()->tick2utick(cs->loopOutTick());
-                              if (tickLoop < cs->lastMeasure()->endTick()-1)
-                                    if ((*pPlayPos)->first >= tickLoop) {
+                              int utickLoop = cs->repeatList()->tick2utick(cs->loopOutTick());
+                              if (utickLoop < utickEnd)
+                                    if ((*pPlayPos)->first >= utickLoop) {
 qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d",
-   (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), tickLoop, *pPlayTime);
+   (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), utickLoop, *pPlayTime);
                                           emit toGui('3');   // Exit this function to avoid segmentation fault in Scoreview
                                           return;
                                           }
@@ -974,7 +975,7 @@ void Seq::seek(int utick, Segment* seg)
       if (seg)
             mscore->currentScoreView()->moveCursor(seg->tick());
 
-      cs->setPlayPos(utick);
+      cs->setPlayPos(cs->repeatList()->utick2tick(utick));
       cs->setLayoutAll(false);
       cs->end();
 
@@ -1118,7 +1119,7 @@ void Seq::prevChord()
       {
       int tick  = playPos->first;
       //find the chord just before playpos
-      EventMap::const_iterator i = events.upper_bound(cs->playPos());
+      EventMap::const_iterator i = events.upper_bound(cs->repeatList()->tick2utick(cs->playPos()));
       for (;;) {
             if (i->second.type() == ME_NOTEON) {
                   const NPlayEvent& n = i->second;
@@ -1296,7 +1297,7 @@ void Seq::heartBeatTimeout()
             if (guiPos->first > ppos->first)
                   break;
             if (mscore->loop())
-                  if (guiPos->first >= cs->loopOutTick())
+                  if (guiPos->first >= cs->repeatList()->tick2utick(cs->loopOutTick()))
                         break;
             const NPlayEvent& n = guiPos->second;
             if (n.type() == ME_NOTEON) {
