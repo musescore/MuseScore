@@ -1594,11 +1594,16 @@ void Measure::adjustToLen(Fraction nf)
       {
       int ol = len().ticks();
       int nl = nf.ticks();
+      int diff   = nl - ol;
+
+      int startTick = endTick();
+      if (diff < 0)
+            startTick += diff;
+      score()->undoInsertTime(startTick, diff);
 
       score()->undo(new ChangeMeasureLen(this, nf));
 
       int staves = score()->nstaves();
-      int diff   = nl - ol;
 
       if (nl > ol) {
             // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
