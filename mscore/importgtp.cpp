@@ -2819,7 +2819,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   }
             Text* txt = new Text(pscore);
             txt->setTextStyleType(TEXT_STYLE_INSTRUMENT_EXCERPT);
-            txt->setText(part->longName().toPlainText());
+            txt->setText(part->longName());
             measure->add(txt);
 
             //

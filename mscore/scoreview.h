@@ -47,7 +47,7 @@ class Text;
 class MeasureBase;
 class Staff;
 class OmrView;
-class TextCursor;
+class PositionCursor;
 
 enum class POS;
 
@@ -161,12 +161,12 @@ class ScoreView : public QWidget, public MuseScoreView {
       Element* editObject;          ///< Valid in edit mode
 
       //--input state:
-      TextCursor* _cursor;
+      PositionCursor* _cursor;
       ShadowNote* shadowNote;
 
       // Loop In/Out marks in the score
-      TextCursor* _curLoopIn;
-      TextCursor* _curLoopOut;
+      PositionCursor* _curLoopIn;
+      PositionCursor* _curLoopOut;
 
       Lasso* lasso;           ///< temporarily drawn lasso selection
       Lasso* _foto;
@@ -248,7 +248,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paintPageBorder(QPainter& p, Page* page);
       bool dropCanvas(Element*);
       void editCmd(const QString&);
-      void setLoopCursor(TextCursor* curLoop, int tick, bool isInPos);
+      void setLoopCursor(PositionCursor* curLoop, int tick, bool isInPos);
 
    private slots:
       void enterState();

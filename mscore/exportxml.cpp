@@ -1031,10 +1031,10 @@ void ExportMusicXml::credits(Xml& xml)
                         qDebug("x=%g, y=%g fs=%d",
                                text->pagePos().x(),
                                h - text->pagePos().y(),
-                               text->font().pointSize()
+                               int(text->textStyle().size())
                                );
                         const double ty = h - getTenthsFromDots(text->pagePos().y());
-                        const int fs = text->font().pointSize();
+                        const int fs = int(text->textStyle().size());
                         // MusicXML credit-words are untyped and simple list position and font info.
                         // TODO: these parameters should be extracted from text layout and style
                         //       instead of relying on the style name
@@ -1092,7 +1092,7 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
             qDebug("tabpitch2xml(pitch %d, tpc %d) step %s, alter %d, octave %d",
                    pitch, tpc, qPrintable(s), alter, octave);
       }
-      
+
 //---------------------------------------------------------
 //   pitch2xml
 //---------------------------------------------------------
@@ -3929,9 +3929,9 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
 
             xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
-            xml.tag("part-name", part->longName().toPlainText());
+            xml.tag("part-name", part->longName());
             if (!part->shortName().isEmpty())
-                  xml.tag("part-abbreviation", part->shortName().toPlainText());
+                  xml.tag("part-abbreviation", part->shortName());
 
             if (part->instr()->useDrumset()) {
                   Drumset* drumset = part->instr()->drumset();
@@ -3960,7 +3960,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
             else {
                   xml.stag(QString("score-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
-                  xml.tag("instrument-name", part->longName().toPlainText());
+                  xml.tag("instrument-name", part->longName());
                   xml.etag();
 
                   xml.stag(QString("midi-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
@@ -4489,7 +4489,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             }
       int rootTpc = h->rootTpc();
       if (rootTpc != INVALID_TPC) {
-            if (h->hasFrame())
+            if (h->textStyle().hasFrame())
                   xml.stag(QString("harmony print-frame=\"yes\"").append(relative));
             else
                   xml.stag(QString("harmony print-frame=\"no\"").append(relative));
@@ -4564,7 +4564,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             // export an unrecognized Chord
             // which may contain arbitrary text
             //
-            if (h->hasFrame())
+            if (h->textStyle().hasFrame())
                   xml.stag(QString("harmony print-frame=\"yes\"").append(relative));
             else
                   xml.stag(QString("harmony print-frame=\"no\"").append(relative));

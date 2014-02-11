@@ -137,14 +137,14 @@ StringData *InstrumentData::stringData() const
       }
 
 //---------------------------------------------------------
-//   StaffNameDoc::write
+//   StaffName::write
 //---------------------------------------------------------
 
-void StaffNameDoc::write(Xml& xml, const char* tag) const
+void StaffName::write(Xml& xml, const char* tag) const
       {
       if (!name.isEmpty()) {
             xml.stag(QString("%1 pos=\"%2\"").arg(tag).arg(pos));
-            xml.writeHtml(name.toHtml());
+            xml.writeHtml(name);
             xml.etag();
             }
       }
@@ -156,9 +156,9 @@ void StaffNameDoc::write(Xml& xml, const char* tag) const
 void InstrumentData::write(Xml& xml) const
       {
       xml.stag("Instrument");
-      foreach(const StaffNameDoc& doc, _longNames)
+      foreach(const StaffName& doc, _longNames)
             doc.write(xml, "longName");
-      foreach(const StaffNameDoc& doc, _shortNames)
+      foreach(const StaffName& doc, _shortNames)
             doc.write(xml, "shortName");
       xml.tag("trackName", _trackName);
       if (_minPitchP > 0)
@@ -208,13 +208,13 @@ void InstrumentData::read(XmlReader& e)
 
             if (tag == "longName") {
                   int pos = e.intAttribute("pos", 0);
-                  QTextDocumentFragment longName = QTextDocumentFragment::fromHtml(Xml::htmlToString(e));
-                  _longNames.append(StaffNameDoc(longName, pos));
+                  QString longName = Xml::htmlToString(e);
+                  _longNames.append(StaffName(longName, pos));
                   }
             else if (tag == "shortName") {
                   int pos = e.intAttribute("pos", 0);
-                  QTextDocumentFragment shortName = QTextDocumentFragment::fromHtml(Xml::htmlToString(e));
-                  _shortNames.append(StaffNameDoc(shortName, pos));
+                  QString shortName = Xml::htmlToString(e);
+                  _shortNames.append(StaffName(shortName, pos));
                   }
             else if (tag == "trackName")
                   _trackName = e.readElementText();
@@ -636,9 +636,9 @@ bool InstrumentData::operator==(const InstrumentData& i) const
 //   operator==
 //---------------------------------------------------------
 
-bool StaffNameDoc::operator==(const StaffNameDoc& i) const
+bool StaffName::operator==(const StaffName& i) const
       {
-      return (i.pos == pos) && (i.name.toHtml() == name.toHtml());
+      return (i.pos == pos) && (i.name == name);
       }
 
 //---------------------------------------------------------
@@ -683,27 +683,27 @@ void InstrumentData::setStringData(StringData* t)
 //   setLongName
 //---------------------------------------------------------
 
-void InstrumentData::setLongName(const QTextDocumentFragment& f)
+void InstrumentData::setLongName(const QString& f)
       {
       _longNames.clear();
-      _longNames.append(StaffNameDoc(f, 0));
+      _longNames.append(StaffName(f, 0));
       }
 
 //---------------------------------------------------------
 //   setShortName
 //---------------------------------------------------------
 
-void InstrumentData::setShortName(const QTextDocumentFragment& f)
+void InstrumentData::setShortName(const QString& f)
       {
       _shortNames.clear();
-      _shortNames.append(StaffNameDoc(f, 0));
+      _shortNames.append(StaffName(f, 0));
       }
 
 //---------------------------------------------------------
 //   addLongName
 //---------------------------------------------------------
 
-void InstrumentData::addLongName(const StaffNameDoc& f)
+void InstrumentData::addLongName(const StaffName& f)
       {
       _longNames.append(f);
       }
@@ -712,7 +712,7 @@ void InstrumentData::addLongName(const StaffNameDoc& f)
 //   addShortName
 //---------------------------------------------------------
 
-void InstrumentData::addShortName(const StaffNameDoc& f)
+void InstrumentData::addShortName(const StaffName& f)
       {
       _shortNames.append(f);
       }
@@ -1095,7 +1095,7 @@ void InstrumentList::setInstrument(const Instrument& instr, int tick)
 //   longName
 //---------------------------------------------------------
 
-const QList<StaffNameDoc>& Instrument::longNames() const
+const QList<StaffName>& Instrument::longNames() const
       {
       return d->_longNames;
       }
@@ -1104,7 +1104,7 @@ const QList<StaffNameDoc>& Instrument::longNames() const
 //   shortName
 //---------------------------------------------------------
 
-const QList<StaffNameDoc>& Instrument::shortNames() const
+const QList<StaffName>& Instrument::shortNames() const
       {
       return d->_shortNames;
       }
@@ -1113,7 +1113,7 @@ const QList<StaffNameDoc>& Instrument::shortNames() const
 //   longName
 //---------------------------------------------------------
 
-QList<StaffNameDoc>& Instrument::longNames()
+QList<StaffName>& Instrument::longNames()
       {
       return d->_longNames;
       }
@@ -1122,7 +1122,7 @@ QList<StaffNameDoc>& Instrument::longNames()
 //   setLongName
 //---------------------------------------------------------
 
-void Instrument::setLongName(const QTextDocumentFragment& f)
+void Instrument::setLongName(const QString& f)
       {
       d->setLongName(f);
       }
@@ -1131,7 +1131,7 @@ void Instrument::setLongName(const QTextDocumentFragment& f)
 //   addLongName
 //---------------------------------------------------------
 
-void Instrument::addLongName(const StaffNameDoc& f)
+void Instrument::addLongName(const StaffName& f)
       {
       d->addLongName(f);
       }
@@ -1140,7 +1140,7 @@ void Instrument::addLongName(const StaffNameDoc& f)
 //   addShortName
 //---------------------------------------------------------
 
-void Instrument::addShortName(const StaffNameDoc& f)
+void Instrument::addShortName(const StaffName& f)
       {
       d->addShortName(f);
       }
@@ -1149,7 +1149,7 @@ void Instrument::addShortName(const StaffNameDoc& f)
 //   setShortName
 //---------------------------------------------------------
 
-void Instrument::setShortName(const QTextDocumentFragment& f)
+void Instrument::setShortName(const QString& f)
       {
       d->setShortName(f);
       }
@@ -1158,7 +1158,7 @@ void Instrument::setShortName(const QTextDocumentFragment& f)
 //   shortName
 //---------------------------------------------------------
 
-QList<StaffNameDoc>& Instrument::shortNames()
+QList<StaffName>& Instrument::shortNames()
       {
       return d->_shortNames;
       }
@@ -1187,9 +1187,9 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setAmateurPitchRange(t->minPitchA, t->maxPitchA);
       instr.setProfessionalPitchRange(t->minPitchP, t->maxPitchP);
       foreach(StaffName sn, t->longNames)
-            instr.addLongName(StaffNameDoc(sn.name, sn.pos));
+            instr.addLongName(StaffName(sn.name, sn.pos));
       foreach(StaffName sn, t->shortNames)
-            instr.addShortName(StaffNameDoc(sn.name, sn.pos));
+            instr.addShortName(StaffName(sn.name, sn.pos));
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
       if (t->useDrumset) {

@@ -76,9 +76,9 @@ void Part::read(XmlReader& e)
             else if (tag == "Instrument")
                   instr(0)->read(e);
             else if (tag == "name")
-                  instr(0)->setLongName(QTextDocumentFragment::fromHtml(e.readElementText()));
+                  instr(0)->setLongName(e.readElementText());
             else if (tag == "shortName")
-                  instr(0)->setShortName(QTextDocumentFragment::fromHtml(e.readElementText()));
+                  instr(0)->setShortName(e.readElementText());
             else if (tag == "trackName")
                   _partName = e.readElementText();
             else if (tag == "show")
@@ -110,12 +110,12 @@ void Part::write(Xml& xml) const
 //   setLongNames
 //---------------------------------------------------------
 
-void Part::setLongNames(QList<StaffNameDoc>& name, int tick)
+void Part::setLongNames(QList<StaffName>& name, int tick)
       {
       instr(tick)->longNames() = name;
       }
 
-void Part::setShortNames(QList<StaffNameDoc>& name, int tick)
+void Part::setShortNames(QList<StaffName>& name, int tick)
       {
       instr(tick)->shortNames() = name;
       }
@@ -301,10 +301,10 @@ const Instrument* Part::instr(int tick) const
 //   longName
 //---------------------------------------------------------
 
-QTextDocumentFragment Part::longName(int tick) const
+QString Part::longName(int tick) const
       {
-      const QList<StaffNameDoc>& nl = longNames(tick);
-      return nl.isEmpty() ? QTextDocumentFragment() : nl[0].name;
+      const QList<StaffName>& nl = longNames(tick);
+      return nl.isEmpty() ? "" : nl[0].name;
       }
 
 //---------------------------------------------------------
@@ -320,10 +320,10 @@ QString Part::instrumentName(int tick) const
 //   shortName
 //---------------------------------------------------------
 
-QTextDocumentFragment Part::shortName(int tick) const
+QString Part::shortName(int tick) const
       {
-      const QList<StaffNameDoc>& nl = shortNames(tick);
-      return nl.isEmpty() ? QTextDocumentFragment() : nl[0].name;
+      const QList<StaffName>& nl = shortNames(tick);
+      return nl.isEmpty() ? "" : nl[0].name;
       }
 
 //---------------------------------------------------------
@@ -332,7 +332,7 @@ QTextDocumentFragment Part::shortName(int tick) const
 
 void Part::setLongName(const QString& s)
       {
-      instr(0)->setLongName(QTextDocumentFragment::fromPlainText(s));
+      instr(0)->setLongName(s);
       }
 
 //---------------------------------------------------------
@@ -341,7 +341,7 @@ void Part::setLongName(const QString& s)
 
 void Part::setShortName(const QString& s)
       {
-      instr(0)->setShortName(QTextDocumentFragment::fromPlainText(s));
+      instr(0)->setShortName(s);
       }
 
 //---------------------------------------------------------

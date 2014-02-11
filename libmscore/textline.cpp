@@ -180,7 +180,7 @@ void TextLineSegment::layout1()
                               _text->setParent(this);
                               }
                         else
-                              _text->setText(tl->beginText()->getFragment());
+                              _text->setText(tl->beginText()->text());
                         }
                   else {
                         delete _text;
@@ -196,7 +196,7 @@ void TextLineSegment::layout1()
                               _text->setParent(this);
                               }
                         else
-                              _text->setText(tl->continueText()->getFragment());
+                              _text->setText(tl->continueText()->text());
                         }
                   else {
                         delete _text;

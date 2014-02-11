@@ -1105,9 +1105,9 @@ void Score::deleteItem(Element* el)
                   Part* part = el->staff()->part();
                   InstrumentName* in = static_cast<InstrumentName*>(el);
                   if (in->instrumentNameType() == INSTRUMENT_NAME_LONG)
-                        undo(new ChangeInstrumentLong(0, part, QList<StaffNameDoc>()));
+                        undo(new ChangeInstrumentLong(0, part, QList<StaffName>()));
                   else if (in->instrumentNameType() == INSTRUMENT_NAME_SHORT)
-                        undo(new ChangeInstrumentShort(0, part, QList<StaffNameDoc>()));
+                        undo(new ChangeInstrumentShort(0, part, QList<StaffName>()));
                   }
                   break;
 

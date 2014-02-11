@@ -531,8 +531,8 @@ void InstrumentWizard::createInstruments(Score* cs)
             Part* part = cs->parts().front();
             if (part->instrList()->size() == 1) {
                   Instrument& instrument = part->instrList()->instrument(0);
-                  instrument.setShortName(QTextDocumentFragment());
-                  instrument.setLongName(QTextDocumentFragment());
+                  instrument.setShortName("");
+                  instrument.setLongName("");
                   }
             }
 

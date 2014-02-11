@@ -2719,14 +2719,14 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         bool ok = true;
                         float size = fontSize.toFloat(&ok);
                         if (ok)
-                              t->setSize(size);
+                              t->textStyle().setSize(size);
                         }
-                  t->setItalic(fontStyle == "italic");
-                  t->setBold(fontWeight == "bold");
+                  t->textStyle().setItalic(fontStyle == "italic");
+                  t->textStyle().setBold(fontWeight == "bold");
                   }
             t->setText(txt);
             if (metrEl.tagName() != "") metronome(metrEl, t);
-            if (hasYoffset) t->setYoff(yoffset);
+            if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElement(t, hasYoffset, staff, rstaff, score, placement,
                        rx, ry, offset, measure, tick);
             /*
@@ -2742,9 +2742,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       else if (dirType == "rehearsal") {
             Text* t = new RehearsalMark(score);
             t->setText(rehearsal);
-            if (hasYoffset) t->setYoff(yoffset);
+            if (hasYoffset) t->textStyle().setYoff(yoffset);
             else t->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
-            if (hasYoffset) t->setYoff(yoffset);
+            if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElement(t, hasYoffset, staff, rstaff, score, placement,
                        rx, ry, offset, measure, tick);
             /*
@@ -2818,7 +2818,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               dynaValue = 0;
                         dyn->setVelocity( dynaValue );
                         }
-                  if (hasYoffset) dyn->setYoff(yoffset);
+                  if (hasYoffset) dyn->textStyle().setYoff(yoffset);
                   addElement(dyn, hasYoffset, staff, rstaff, score, placement,
                              rx, ry, offset, measure, tick);
                   }
@@ -4439,7 +4439,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       for (QStringList::Iterator it = dynamics.begin(); it != dynamics.end(); ++it ) {
             Dynamic* dyn = new Dynamic(score);
             dyn->setDynamicType(*it);
-            if (hasYoffset) dyn->setYoff(yoffset);
+            if (hasYoffset) dyn->textStyle().setYoff(yoffset);
             addElement(dyn, hasYoffset, track / VOICES /* staff */, 0 /* rstaff */, score, placement,
                        rx, ry, 0 /*offset */, measure, tick);
             }

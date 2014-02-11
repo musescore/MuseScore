@@ -288,7 +288,7 @@ void initStyle(MStyle* s)
          ALIGN_LEFT | ALIGN_TOP, QPointF(), OA, QPointF()));
 
       AS(TextStyle(
-         TR( "Dynamics"), "Bravura", 12, false,
+         TR( "Dynamics"), ff, 12, false,
          false,                                 // italic?
          false,
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
@@ -336,7 +336,7 @@ void initStyle(MStyle* s)
          Spatium(0.2), Spatium(.5), 20, Qt::black, false, true));
 
       AS(TextStyle(
-         TR( "Repeat Text Left"), "MScore",  20, false, false, false,
+         TR( "Repeat Text Left"), ff,  20, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(), true,
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
@@ -346,8 +346,7 @@ void initStyle(MStyle* s)
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
       AS(TextStyle(
-         // TR( "Repeat Text"), ff,  12, false, false, false,          // for backward compatibility
-         TR( "Repeat Text"), "Bravura",  12, false, false, false,          // for backward compatibility
+         TR( "Repeat Text"), ff,  12, false, false, false,          // for backward compatibility
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
 
@@ -781,7 +780,6 @@ bool TextStyleData::operator!=(const TextStyleData& s) const
 QFont TextStyleData::font(qreal _spatium) const
       {
       qreal m = size;
-
       QFont f(family);
       f.setBold(bold);
       f.setItalic(italic);
@@ -1316,15 +1314,6 @@ void TextStyle::writeProperties(Xml& xml) const          { d->writeProperties(xm
 const QPointF& TextStyle::reloff() const                 { return d->reloff();      }
 void TextStyle::setReloff(const QPointF& p)              { setRxoff(p.x()), setRyoff(p.y()); }
 bool TextStyle::readProperties(XmlReader& v)     { return d->readProperties(v); }
-
-//---------------------------------------------------------
-//   setFont
-//---------------------------------------------------------
-
-void TextStyle::setFont(const QFont&)
-      {
-      //TODOxx
-      }
 
 //---------------------------------------------------------
 //   MStyle

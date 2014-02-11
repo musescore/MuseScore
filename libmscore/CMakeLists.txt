@@ -19,7 +19,7 @@ if (SCRIPT_INTERFACE)
       glissando.h hairpin.h harmony.h hook.h icon.h image.h instrchange.h
       keysig.h lasso.h layoutbreak.h line.h lyrics.h measurebase.h measure.h
       notedot.h note.h ossia.h ottava.h page.h pedal.h rehearsalmark.h repeat.h
-      rest.h segment.h shadownote.h simpletext.h slur.h tie.h spacer.h spanner.h
+      rest.h segment.h shadownote.h slur.h tie.h spacer.h spanner.h
       stafftext.h stem.h symbol.h system.h tempotext.h textframe.h text.h
       textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
       score.h cursor.h page.h part.h staff.h mscore.h staffstate.h marker.h
@@ -71,7 +71,7 @@ add_library (
       undo.cpp cmd.cpp scorefile.cpp revisions.cpp
       check.cpp input.cpp icon.cpp ossia.cpp
       tempo.cpp sig.cpp pos.cpp fraction.cpp duration.cpp
-      figuredbass.cpp simpletext.cpp rehearsalmark.cpp transpose.cpp
+      figuredbass.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
       qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp
       cursor.cpp read114.cpp paste.cpp

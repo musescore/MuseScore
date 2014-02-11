@@ -490,13 +490,11 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                                     tt->setTextStyleType(nText->textStyleType());
                               else
                                     tt->setUnstyled();
-                              tt->setModified(true);
                               }
 
                         if (!nText->styled() && (nText->textStyle() != ot->textStyle())) {
                               tt->setTextStyle(nText->textStyle());
                               tt->textStyleChanged();
-                              tt->setModified(true);
                               }
 
                         if (t->selected())

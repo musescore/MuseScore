@@ -228,9 +228,9 @@ void TextPalette::symbolClicked(int n)
       if (n == -1)
             return;
       if (musicalSymbols->isChecked())
-            _textElement->addSym(SymId(n));
+            _textElement->insertSym(SymId(n));
       else
-            _textElement->addChar(n);
+            _textElement->insertText(QString(QChar(n)));
       mscore->activateWindow();
       }
 

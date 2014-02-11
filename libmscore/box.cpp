@@ -134,12 +134,6 @@ void Box::editDrag(const EditData& ed)
                   int n = lrint(_boxWidth.val() / hRaster);
                   _boxWidth = Spatium(hRaster * n);
                   }
-
-            foreach(Element* e, _el) {
-                  if (e->type() == TEXT) {
-                        static_cast<Text*>(e)->setModified(true);  // force relayout
-                        }
-                  }
             score()->setLayoutAll(true);
             }
       layout();

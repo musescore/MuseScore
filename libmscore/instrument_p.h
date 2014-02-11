@@ -22,8 +22,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 class InstrumentData : public QSharedData {
-      QList<StaffNameDoc> _longNames;
-      QList<StaffNameDoc> _shortNames;
+      QList<StaffName> _longNames;
+      QList<StaffName> _shortNames;
       QString _trackName;
 
       char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
@@ -78,11 +78,11 @@ class InstrumentData : public QSharedData {
       StringData* stringData() const;
       void setStringData(StringData* t);    // move ownership of tablature to Instrument
 
-      void setLongName(const QTextDocumentFragment& f);
-      void setShortName(const QTextDocumentFragment& f);
+      void setLongName(const QString& f);
+      void setShortName(const QString& f);
 
-      void addLongName(const StaffNameDoc& f);
-      void addShortName(const StaffNameDoc& f);
+      void addLongName(const StaffName& f);
+      void addShortName(const StaffName& f);
 
 
       friend class Instrument;

@@ -558,11 +558,11 @@ class ExchangeVoice : public UndoCommand {
 class ChangeInstrumentShort : public UndoCommand {
       Part* part;
       int tick;
-      QList<StaffNameDoc> text;
+      QList<StaffName> text;
       void flip();
 
    public:
-      ChangeInstrumentShort(int, Part*, QList<StaffNameDoc>);
+      ChangeInstrumentShort(int, Part*, QList<StaffName>);
       UNDO_NAME("ChangeInstrumentShort");
       };
 
@@ -573,12 +573,12 @@ class ChangeInstrumentShort : public UndoCommand {
 class ChangeInstrumentLong : public UndoCommand {
       Part* part;
       int tick;
-      QList<StaffNameDoc> text;
+      QList<StaffName> text;
       void flip();
 
    public:
-      const QList<StaffNameDoc>& longNames() const;
-      ChangeInstrumentLong(int, Part*, QList<StaffNameDoc>);
+      const QList<StaffName>& longNames() const;
+      ChangeInstrumentLong(int, Part*, QList<StaffName>);
       UNDO_NAME("ChangeInstrumentLong");
       };
 

@@ -35,35 +35,29 @@ Marker::Marker(Score* s)
 void Marker::setMarkerType(MarkerType t)
       {
       _markerType = t;
-      ScoreFont* f = score()->scoreFont();
       switch (t) {
             case MarkerType::SEGNO:
                   setText("&segno;");
-                  setFont(f->font());
                   setLabel("segno");
                   break;
 
             case MarkerType::VARSEGNO:
                   setText("&segnoSerpent1;");
-                  setFont(f->font());
                   setLabel("varsegno");
                   break;
 
             case MarkerType::CODA:
                   setText("&coda;");
-                  setFont(f->font());
                   setLabel("codab");
                   break;
 
             case MarkerType::VARCODA:
                   setText("&codaSquare;");
-                  setFont(f->font());
                   setLabel("varcoda");
                   break;
 
             case MarkerType::CODETTA:
                   setText("&coda;&coda;");
-                  setFont(f->font());
                   setLabel("codetta");
                   break;
 
@@ -108,7 +102,7 @@ void Marker::adjustReadPos()
                   uo = userOff();
                   uo.rx() -= segment()->pos().x();
                   // 1.2 is always HCENTER aligned
-                  if ((align() & ALIGN_HMASK) == 0)    // ALIGN_LEFT
+                  if ((textStyle().align() & ALIGN_HMASK) == 0)    // ALIGN_LEFT
                         uo.rx() -= bbox().width() * .5;
                   }
             else

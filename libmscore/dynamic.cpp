@@ -74,6 +74,7 @@ static Dyn dynList[] = {
       {  0,   true,  "r",      "&dynamicRinforzando;"},
       {  0,   true,  "s",      "&dynamicSforzando;"},
       {  0,   true,  "z",      "&dynamicZ;"},
+      {  0,   true,  "n",      "&dynamicNiente;" }
       };
 
 // variant with precomposed symbols, works only with bravura:
@@ -273,8 +274,11 @@ void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
 void Dynamic::endEdit()
       {
       Text::endEdit();
-      if (!styled() || text() != QString::fromUtf8(dynList[_dynamicType].text))
+printf("dynamic end edit: <%s>\n", qPrintable(text()));
+      if (!styled() || text() != QString::fromUtf8(dynList[_dynamicType].text)) {
+printf("dynamic: end edit: type other\n");
             _dynamicType = DYNAMIC_OTHER;
+            }
       }
 
 //---------------------------------------------------------
