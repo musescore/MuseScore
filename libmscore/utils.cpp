@@ -390,11 +390,33 @@ void selectStavesMessage()
       }
 
 static const char* vall[] = {
-            "c","c\u266f","d","d\u266f","e","f","f\u266f","g","g\u266f","a","a\u266f","b"
-            };
+      QT_TRANSLATE_NOOP("utils", "c"),
+      QT_TRANSLATE_NOOP("utils", "c#"),
+      QT_TRANSLATE_NOOP("utils", "d"),
+      QT_TRANSLATE_NOOP("utils", "d#"),
+      QT_TRANSLATE_NOOP("utils", "e"),
+      QT_TRANSLATE_NOOP("utils", "f"),
+      QT_TRANSLATE_NOOP("utils", "f#"),
+      QT_TRANSLATE_NOOP("utils", "g"),
+      QT_TRANSLATE_NOOP("utils", "g#"),
+      QT_TRANSLATE_NOOP("utils", "a"),
+      QT_TRANSLATE_NOOP("utils", "a#"),
+      QT_TRANSLATE_NOOP("utils", "b")
+      };
 static const char* valu[] = {
-            "C","C\u266f","D","D\u266f","E","F","F\u266f","G","G\u266f","A","A\u266f","B"
-            };
+      QT_TRANSLATE_NOOP("utils", "C"),
+      QT_TRANSLATE_NOOP("utils", "C#"),
+      QT_TRANSLATE_NOOP("utils", "D"),
+      QT_TRANSLATE_NOOP("utils", "D#"),
+      QT_TRANSLATE_NOOP("utils", "E"),
+      QT_TRANSLATE_NOOP("utils", "F"),
+      QT_TRANSLATE_NOOP("utils", "F#"),
+      QT_TRANSLATE_NOOP("utils", "G"),
+      QT_TRANSLATE_NOOP("utils", "G#"),
+      QT_TRANSLATE_NOOP("utils", "A"),
+      QT_TRANSLATE_NOOP("utils", "A#"),
+      QT_TRANSLATE_NOOP("utils", "B")
+      };
 
 /*!
  * Returns the string representation of the given pitch.
