@@ -59,22 +59,18 @@ void TextCursor::clearSelection()
 
 TextFragment::TextFragment()
       {
-printf("TextFragment() font <%s>\n", qPrintable(format.fontFamily()));
       }
 
 TextFragment::TextFragment(const QString& s)
       {
       format.setType(CharFormatType::TEXT);
       text = s;
-printf("TextFragment(?) font <%s>\n", qPrintable(format.fontFamily()));
       }
 
 TextFragment::TextFragment(TextCursor* cursor, SymId id)
       {
       format = *cursor->format();
       format.setType(CharFormatType::SYMBOL);
-printf("TextFragment(id) font <%s>\n", qPrintable(cursor->format()->fontFamily()));
-printf("   font <%s>\n", qPrintable(format.fontFamily()));
       ids.append(id);
       }
 
@@ -82,7 +78,6 @@ TextFragment::TextFragment(TextCursor* cursor, const QString& s)
       {
       format = *cursor->format();
       text = s;
-printf("TextFragment(string) font <%s>\n", qPrintable(cursor->format()->fontFamily()));
       }
 
 //---------------------------------------------------------
@@ -91,8 +86,6 @@ printf("TextFragment(string) font <%s>\n", qPrintable(cursor->format()->fontFami
 
 TextFragment TextFragment::split(int column)
       {
-      printf("TextFragment::split\n");
-
       int idx = 0;
       int col = 0;
       TextFragment f;
@@ -156,14 +149,13 @@ QFont TextFragment::font(const Text* t) const
       qreal m = format.fontSize() * MScore::DPI / PPI;
       if (t->textStyle().sizeIsSpatiumDependent())
             m *= t->spatium() / ( SPATIUM20 * MScore::DPI);
-      font.setPointSizeF(m);
       if (format.type() == CharFormatType::TEXT) {
             font.setFamily(format.fontFamily());
             font.setBold(format.bold());
             font.setItalic(format.italic());
             font.setUnderline(format.underline());
             if (format.valign() != VerticalAlignment::AlignNormal)
-                  font.setPointSizeF(m * subScriptSize);
+                  m *= subScriptSize;
             }
       else {
             bool fallback = false;
@@ -178,7 +170,13 @@ QFont TextFragment::font(const Text* t) const
             for (SymId id : ids)
                   text.append(f->toString(id));
             font.setFamily(f->family());
+            font.setWeight(QFont::Normal);  // if not set we get system default
+            font.setStyleStrategy(QFont::NoFontMerging);
+            font.setHintingPreference(QFont::PreferVerticalHinting);
+            if (f->family() == "Bravura")       // HACK: why are bravura dynamics are so small?
+                  m *= 1.9;
             }
+      font.setPixelSize(lrint(m));
       return font;
       }
 
@@ -377,10 +375,11 @@ void TextBlock::layout(double y, Text* t)
             _bbox |= r;
             x += w;
             }
-      printf("TextBlock %d fragments\n", _text.size());
+/*      printf("TextBlock %d fragments\n", _text.size());
       for (TextFragment& f : _text) {
             printf("   TextBlock layout %s %f\n", qPrintable(f.format.fontFamily()), f.pos.x());
             }
+      */
       }
 
 //---------------------------------------------------------
@@ -413,6 +412,7 @@ qreal TextBlock::xpos(int column, const Text* t) const
 
 const TextFragment& TextBlock::fragment(int column) const
       {
+      Q_ASSERT(!_text.isEmpty());
       int col = 0;
       auto f = _text.begin();
       for (; f != _text.end(); ++f) {
@@ -435,7 +435,6 @@ const TextFragment& TextBlock::fragment(int column) const
 
 const CharFormat& TextBlock::formatAt(int column) const
       {
-      printf("TextBlock::formatAt %s\n", qPrintable(fragment(column).format.fontFamily()));
       return fragment(column).format;
       }
 
@@ -526,7 +525,6 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
                   if (col == column) {
                         if (f.format.type() == CharFormatType::TEXT) {
                               if (!(f.format == *cursor->format())) {
-printf("insert text in text <%s>\n", qPrintable(s));
                                     if (rcol == 0)
                                           _text.insert(n, TextFragment(cursor, s));
                                     else {
@@ -546,7 +544,6 @@ printf("insert text in text <%s>\n", qPrintable(s));
                                           _text.insert(n, TextFragment(cursor, s));
                                     }
                               else {
-printf("insert text in sym\n");
                                     TextFragment f2 = f.split(rcol);
                                     n = _text.insert(n+1, TextFragment(cursor, s));
                                     f2.format = *cursor->format();
@@ -571,7 +568,6 @@ printf("insert text in sym\n");
 
 void TextBlock::insert(TextCursor* cursor, SymId id)
       {
-      printf("TextBlock::insert sym <%s>\n", qPrintable(cursor->format()->fontFamily()));
       int column = cursor->column();
       int col = 0;
       for (auto i = _text.begin(); i != _text.end(); ++i) {
@@ -593,15 +589,10 @@ void TextBlock::insert(TextCursor* cursor, SymId id)
                   ++rcol;
                   }
             }
-printf("   b\n");
-      if (!_text.isEmpty() && _text.back().format.type() == CharFormatType::SYMBOL) {
+      if (!_text.isEmpty() && _text.back().format.type() == CharFormatType::SYMBOL)
             _text.back().ids.append(id);
-printf("      ba\n");
-            }
-      else {
+      else
             _text.append(TextFragment(cursor, id));
-            printf("      bb\n");
-            }
       }
 
 //---------------------------------------------------------
@@ -701,7 +692,6 @@ void TextBlock::remove(int start, int n)
             if (inc)
                   ++i;
             }
-//      qDebug("TextBlock::remove: column %d not found", start);
       }
 
 //---------------------------------------------------------
@@ -710,7 +700,6 @@ void TextBlock::remove(int start, int n)
 
 TextBlock TextBlock::split(int column)
       {
-      printf("TextBlock::split\n");
       TextBlock tl;
 
       int col = 0;
@@ -811,7 +800,6 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
 
 void Text::draw(QPainter* p) const
       {
-      p->setFont(textStyle().fontPx(spatium()));
       p->setBrush(Qt::NoBrush);
       p->setPen(curColor());
       if (_editMode && _cursor.hasSelection()) {
@@ -1003,7 +991,6 @@ void Text::createLayout()
       _layout.clear();
       TextCursor cursor;
       cursor.format()->setFontFamily(textStyle().family());
-printf("Text::createLayout: font <%s>\n", qPrintable(textStyle().family()));
       cursor.format()->setFontSize(textStyle().size());
 
       int state = 0;
@@ -1262,9 +1249,12 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       _cursor.clearSelection();
       if (_layout.isEmpty())
             layout();
-      setCursor(pt);
-      updateCursorFormat(&_cursor);
-printf("startEdit: font %s\n", qPrintable(_cursor.format()->fontFamily()));
+      if (setCursor(pt))
+            updateCursorFormat(&_cursor);
+      else {
+            _cursor.format()->setFontFamily(textStyle().family());
+            _cursor.format()->setFontSize(textStyle().size());
+            }
       undoPushProperty(P_TEXT);
       }
 
@@ -1296,7 +1286,6 @@ void Text::endEdit()
                   e->undoChangeProperty(P_TEXT, _text);
                   }
             }
-      printf("Text::endEdit() <%s>\n", qPrintable(_text));
       }
 
 //---------------------------------------------------------
@@ -1870,7 +1859,6 @@ void Text::insertText(const QString& s)
       if (_cursor.hasSelection())
             deleteSelectedText();
       if (_cursor.format()->type() == CharFormatType::SYMBOL) {
-printf("insertText <%s>\n", qPrintable(textStyle().family()));
             _cursor.format()->setFontFamily(textStyle().family());
             _cursor.format()->setType(CharFormatType::TEXT);
             }
@@ -2042,6 +2030,41 @@ void Text::layoutEdit()
             static const qreal w = 2.0; // 8.0 / view->matrix().m11();
             score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
             }
+      }
+
+//---------------------------------------------------------
+//   acceptDrop
+//---------------------------------------------------------
+
+bool Text::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+      {
+      int type = e->type();
+      return type == SYMBOL;
+      }
+
+//---------------------------------------------------------
+//   drop
+//---------------------------------------------------------
+
+Element* Text::drop(const DropData& data)
+      {
+      Element* e = data.element;
+
+      switch(e->type()) {
+            case SYMBOL:
+                  {
+                  SymId id = static_cast<Symbol*>(e)->sym();
+                  startEdit(data.view, data.pos);
+                  curLine().insert(&_cursor, id);
+                  endEdit();
+                  }
+                  delete e;
+                  return 0;
+
+            default:
+                  break;
+            }
+      return 0;
       }
 
 

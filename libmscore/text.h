@@ -270,6 +270,9 @@ class Text : public Element {
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant& v);
 
+      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual Element* drop(const DropData&) override;
+
       friend class TextBlock;
       friend class TextFragment;
       };

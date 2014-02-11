@@ -185,7 +185,8 @@ void ScoreView::dragSymbol(const QPointF& pos)
       {
       const QList<Element*> el = elementsAt(pos);
       const Element* e = el.isEmpty() ? 0 : el[0];
-      if (e && (e->type() == Element::NOTE || e->type() == Element::SYMBOL || e->type() == Element::IMAGE)) {
+      if (e && (e->type() == Element::NOTE || e->type() == Element::SYMBOL
+         || e->type() == Element::IMAGE || e->type() == Element::TEXT)) {
             if (e->acceptDrop(this, pos, dragElement)) {
                   setDropTarget(e);
                   return;
