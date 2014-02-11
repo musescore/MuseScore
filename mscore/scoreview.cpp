@@ -4795,6 +4795,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             else {
                   int curPitch = -1;
                   if(is.segment()) {
+                        Staff* staff = score()->staff(is.track() / VOICES);
                         Segment* seg = is.segment()->prev1(Segment::SegChordRest | Segment::SegClef);
                         while(seg) {
                               if(seg->segmentType() == Segment::SegChordRest) {
@@ -4809,8 +4810,12 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                                     Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
                                     if(p && p->type() == Element::CLEF) {
                                           Clef* clef = static_cast<Clef*>(p);
-                                          curPitch = line2pitch(4, clef->clefType(), 0); // C 72 for treble clef
-                                          break;
+                                          // check if it's an actual key change or just a courtesy
+                                          ClefType ctb = staff->clef(clef->tick() - 1);
+                                          if (ctb != clef->clefType() || clef->tick() == 0) {
+                                                curPitch = line2pitch(4, clef->clefType(), 0); // C 72 for treble clef
+                                                break;
+                                                }
                                           }
                                     }
                               seg = seg->prev1(Segment::SegChordRest | Segment::SegClef);

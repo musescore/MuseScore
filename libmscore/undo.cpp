@@ -2163,6 +2163,24 @@ void ChangeChordRestLen::flip()
       }
 
 //---------------------------------------------------------
+//   ChangeChordRestDuration
+///  Used to change the duration only.
+///  Mainly used for full time rest to make them look different for 8/4 and up.
+//---------------------------------------------------------
+
+ChangeChordRestDuration::ChangeChordRestDuration(ChordRest* c, const Fraction& _f)
+   : cr(c), f(_f)
+      {
+      }
+
+void ChangeChordRestDuration::flip()
+      {
+      Fraction od = cr->duration();
+      cr->setDuration(f);
+      f   = od;
+      }
+
+//---------------------------------------------------------
 //   MoveElement
 //---------------------------------------------------------
 

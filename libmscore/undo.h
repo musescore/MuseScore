@@ -597,6 +597,20 @@ class ChangeChordRestLen : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   ChangeChordRestDuration
+//---------------------------------------------------------
+
+class ChangeChordRestDuration : public UndoCommand {
+      ChordRest* cr;
+      Fraction f;
+      void flip();
+
+   public:
+      ChangeChordRestDuration(ChordRest*, const Fraction& f);
+      UNDO_NAME("ChangeChordRestDuration");
+      };
+
+//---------------------------------------------------------
 //   MoveElement
 //---------------------------------------------------------
 
