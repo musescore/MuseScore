@@ -1635,7 +1635,7 @@ void Measure::adjustToLen(Fraction nf)
                   }
             if (rests == 1 && chords == 0) {
                   if (rest->durationType().type() == TDuration::V_MEASURE) {
-                        rest->setDuration(nf);
+                        score()->undo(new ChangeChordRestDuration(rest, nf));
                         continue;
                         }
                   else if (_timesig == nf) {
