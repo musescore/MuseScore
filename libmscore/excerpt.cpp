@@ -329,6 +329,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             Spanner* s = i.second;
             int staffIdx = s->staffIdx();
             int dstTrack = -1;
+            int dstTrack2 = -1;
             int st = 0;
             //always export voltas to first staff in part
             if(s->type() == Element::VOLTA)
@@ -337,6 +338,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   for (int index : map) {
                         if (index == staffIdx) {
                               dstTrack = st * VOICES + s->voice();
+                              dstTrack2 = st * VOICES + (s->track2() % VOICES);
                               break;
                               }
                         ++st;
@@ -348,6 +350,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             ns->setScore(score);
             ns->setParent(0);
             ns->setTrack(dstTrack);
+            ns->setTrack2(dstTrack2);
             score->addSpanner(ns);
             }
       }
