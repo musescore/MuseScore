@@ -54,6 +54,20 @@ void TextCursor::clearSelection()
       }
 
 //---------------------------------------------------------
+//   initFromStyle
+//---------------------------------------------------------
+
+void TextCursor::initFromStyle(const TextStyle& s)
+      {
+      _format.setFontFamily(s.family());
+      _format.setFontSize(s.size());
+      _format.setBold(s.bold());
+      _format.setItalic(s.italic());
+      _format.setUnderline(s.underline());
+      _format.setValign(VerticalAlignment::AlignNormal);
+      }
+
+//---------------------------------------------------------
 //   TextFragment
 //---------------------------------------------------------
 
@@ -993,8 +1007,7 @@ void Text::createLayout()
       {
       _layout.clear();
       TextCursor cursor;
-      cursor.format()->setFontFamily(textStyle().family());
-      cursor.format()->setFontSize(textStyle().size());
+      cursor.initFromStyle(textStyle());
 
       int state = 0;
       QString sym;
@@ -1255,8 +1268,7 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       if (setCursor(pt))
             updateCursorFormat(&_cursor);
       else {
-            _cursor.format()->setFontFamily(textStyle().family());
-            _cursor.format()->setFontSize(textStyle().size());
+            _cursor.initFromStyle(textStyle());
             }
       undoPushProperty(P_TEXT);
       }
@@ -1273,8 +1285,7 @@ void Text::endEdit()
 
       _text.clear();
       TextCursor cursor;
-      cursor.format()->setFontFamily(textStyle().family());
-      cursor.format()->setFontSize(textStyle().size());
+      cursor.initFromStyle(textStyle());
 
       for (const TextBlock& block : _layout) {
             if (!_text.isEmpty())
@@ -1604,8 +1615,7 @@ QString Text::selectedText() const
                   qSwap(c1, c2);
             }
       TextCursor cursor;
-      cursor.format()->setFontFamily(textStyle().family());
-      cursor.format()->setFontSize(textStyle().size());
+      cursor.initFromStyle(textStyle());
       int rows = _layout.size();
       for (int row = 0; row < rows; ++row) {
             const TextBlock& t = _layout.at(row);
