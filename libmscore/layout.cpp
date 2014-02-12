@@ -1046,6 +1046,7 @@ void Score::createMMRests()
                   mmr->setLineBreak(lm->lineBreak());
                   mmr->setSectionBreak(lm->sectionBreak());
                   mmr->setEndBarLineType(lm->endBarLineType(), false, lm->endBarLineVisible(), lm->endBarLineColor());
+                  mmr->setRepeatFlags(lm->repeatFlags());
 
                   qDeleteAll(*mmr->el());
                   mmr->el()->clear();
