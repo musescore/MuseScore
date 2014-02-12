@@ -2214,6 +2214,10 @@ QPointF Chord::layoutArticulation(Articulation* a)
             Spanner* sp = is.value;
             if ((sp->type() != SLUR) || (sp->tick() != tick() && sp->tick2() != tick()))
                  continue;
+            if ( sp->tick() == tick() && sp->track() != track())
+                  continue;
+            if ( sp->tick2() == tick() && sp->track2() != track())
+                  continue;
             Slur* s = static_cast<Slur*>(sp);
             if (s->up())
                   topGap = true;
