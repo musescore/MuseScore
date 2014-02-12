@@ -470,7 +470,7 @@ StyleData::StyleData()
             { ST_noteBarDistance,             QVariant(1.0) },
             { ST_measureSpacing,              QVariant(1.2) },
             { ST_staffLineWidth,              QVariant(0.08) },      // 0.09375
-            { ST_ledgerLineWidth,             QVariant(0.12) },     // 0.1875
+            { ST_ledgerLineWidth,             QVariant(0.16) },     // 0.1875
             { ST_ledgerLineLength,            QVariant(.6) },     // note head width + this value
             { ST_accidentalDistance,          QVariant(0.22) },
             { ST_accidentalNoteDistance,      QVariant(0.22) },
