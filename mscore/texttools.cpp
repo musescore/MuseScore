@@ -319,6 +319,36 @@ void TextTools::boldClicked(bool val)
       }
 
 //---------------------------------------------------------
+//   toggleBold
+//---------------------------------------------------------
+
+void TextTools::toggleBold()
+      {
+      typefaceBold->toggle();
+      boldClicked(typefaceBold->isChecked());
+      }
+
+//---------------------------------------------------------
+//   toggleItalic
+//---------------------------------------------------------
+
+void TextTools::toggleItalic()
+      {
+      typefaceItalic->toggle();
+      italicClicked(typefaceItalic->isChecked());
+      }
+
+//---------------------------------------------------------
+//   toggleUnderline
+//---------------------------------------------------------
+
+void TextTools::toggleUnderline()
+      {
+      typefaceUnderline->toggle();
+      underlineClicked(typefaceUnderline->isChecked());
+      }
+
+//---------------------------------------------------------
 //   underlineClicked
 //---------------------------------------------------------
 

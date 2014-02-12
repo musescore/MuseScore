@@ -74,6 +74,9 @@ class TextTools : public QDockWidget {
       void setText(Text* te);
       void updateTools();
       QAction* kbAction() const { return showKeyboard; }
+      void toggleBold();
+      void toggleItalic();
+      void toggleUnderline();
       };
 }
 

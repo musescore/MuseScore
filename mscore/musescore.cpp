@@ -4286,6 +4286,19 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "find")
             showSearchDialog();
+      else if (cmd == "text-b") {
+            if (_textTools)
+                  _textTools->toggleBold();
+            }
+      else if (cmd == "text-i") {
+            if (_textTools)
+                  _textTools->toggleItalic();
+            }
+      else if (cmd == "text-u") {
+            if (_textTools)
+                  _textTools->toggleUnderline();
+            }
+
       else {
             if (cv) {
                   cv->setFocus();
