@@ -177,6 +177,7 @@ class Text : public Element {
       void insert(TextCursor*, QChar);
       void insert(TextCursor*, SymId);
       void updateCursorFormat(TextCursor*);
+      void setEditMode(bool val)          { _editMode = val;  }
 
    protected:
       TextStyle _textStyle;
@@ -199,6 +200,8 @@ class Text : public Element {
 
       virtual void draw(QPainter*) const;
 
+      bool editMode() const               { return _editMode; }
+
       void setTextStyle(const TextStyle& st)  { _textStyle = st;   }
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
@@ -206,9 +209,6 @@ class Text : public Element {
       void setText(const QString& s)      { _text = s;    }
       QString text() const                { return _text; }
       void insertText(const QString&);
-
-      bool editMode() const               { return _editMode; }
-      void setEditMode(bool val)          { _editMode = val;  }
 
       virtual void layout();
       qreal lineSpacing() const;

@@ -641,18 +641,19 @@ void TextBlock::simplify()
       if (_text.size() < 2)
             return;
       auto i = _text.begin();
-      TextFragment f = *i;
+      TextFragment* f = &*i;
       ++i;
       for (; i != _text.end(); ++i) {
-            if (i->format == f.format) {
-                  if (f.format.type() == CharFormatType::SYMBOL)
-                        f.ids.append(i->ids);
+            while (i != _text.end() && (i->format == f->format)) {
+                  if (f->format.type() == CharFormatType::SYMBOL)
+                        f->ids.append(i->ids);
                   else
-                        f.text.append(i->text);
+                        f->text.append(i->text);
                   i = _text.erase(i);
-                  --i;
                   }
-            f = *i;
+            if (i == _text.end())
+                  break;
+            f = &*i;
             }
       }
 
@@ -2038,11 +2039,20 @@ Element* Text::drop(const DropData& data)
             case SYMBOL:
                   {
                   SymId id = static_cast<Symbol*>(e)->sym();
-                  startEdit(data.view, data.pos);
-                  curLine().insert(&_cursor, id);
-                  endEdit();
-                  }
                   delete e;
+
+                  if (_editMode) {
+                        insert(&_cursor, id);
+                        layout1();
+                        static const qreal w = 2.0; // 8.0 / view->matrix().m11();
+                        score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
+                        }
+                  else {
+                        startEdit(data.view, data.pos);
+                        curLine().insert(&_cursor, id);
+                        endEdit();
+                        }
+                  }
                   return 0;
 
             default:
