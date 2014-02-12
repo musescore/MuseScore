@@ -2473,6 +2473,24 @@ Shortcut Shortcut::sc[] = {
          "toggle-mmrest",
          QT_TRANSLATE_NOOP("action","Toggle create multimeasure rest")
          ),
+      Shortcut(
+         STATE_TEXT_EDIT,
+         0,
+         "text-b",
+         QT_TRANSLATE_NOOP("action","bold face")
+         ),
+      Shortcut(
+         STATE_TEXT_EDIT,
+         0,
+         "text-i",
+         QT_TRANSLATE_NOOP("action","italic")
+         ),
+      Shortcut(
+         STATE_TEXT_EDIT,
+         0,
+         "text-u",
+         QT_TRANSLATE_NOOP("action","underline")
+         ),
       // xml==0  marks end of list
       Shortcut(0, 0, 0, 0)
       };

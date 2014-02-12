@@ -2990,7 +2990,6 @@ void ScoreView::cmd(const QAction* a)
             cmdAddFret(8);
       else if(cmd == "fret-9")
             cmdAddFret(9);
-
       else
             _score->cmd(a);
       if (_score->processMidiInput())

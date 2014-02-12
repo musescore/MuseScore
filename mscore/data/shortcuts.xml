@@ -934,5 +934,17 @@
     <key>toggle-mmrest</key>
     <seq>M</seq>
     </SC>
+  <SC>
+    <key>text-b</key>
+    <seq>Ctrl+b</seq>
+    </SC>
+  <SC>
+    <key>text-i</key>
+    <seq>Ctrl+i</seq>
+    </SC>
+  <SC>
+    <key>text-u</key>
+    <seq>Ctrl+u</seq>
+    </SC>
   </Shortcuts>
 
