@@ -191,8 +191,20 @@ void EditStringData::accept()
 //    Converts a MIDI numeric pitch code to human-readable note name
 //---------------------------------------------------------
 
-static char g_cNoteName[][8] =
-{"C", "C\u266f", "D", "E\u266d", "E", "F", "F\u266f", "G", "A\u266d", "A", "B\u266d", "B" };
+static const char* g_cNoteName[] = {
+      QT_TRANSLATE_NOOP("editstringdata", "C"),
+      QT_TRANSLATE_NOOP("editstringdata", "C#"),
+      QT_TRANSLATE_NOOP("editstringdata", "D"),
+      QT_TRANSLATE_NOOP("editstringdata", "Eb"),
+      QT_TRANSLATE_NOOP("editstringdata", "E"),
+      QT_TRANSLATE_NOOP("editstringdata", "F"),
+      QT_TRANSLATE_NOOP("editstringdata", "F#"),
+      QT_TRANSLATE_NOOP("editstringdata", "G"),
+      QT_TRANSLATE_NOOP("editstringdata", "Ab"),
+      QT_TRANSLATE_NOOP("editstringdata", "A"),
+      QT_TRANSLATE_NOOP("editstringdata", "Bb"),
+      QT_TRANSLATE_NOOP("editstringdata", "B")
+      };
 
 QString EditStringData::midiCodeToStr(int midiCode)
       {

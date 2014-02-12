@@ -21,10 +21,32 @@
 #include "utils.h"
 
 static const char* vall[] = {
-      "c","c\u266f","d","d\u266f","e","f","f\u266f","g","g\u266f","a","a\u266f","b"
+      QT_TRANSLATE_NOOP("awlutils", "c"),
+      QT_TRANSLATE_NOOP("awlutils", "c#"),
+      QT_TRANSLATE_NOOP("awlutils", "d"),
+      QT_TRANSLATE_NOOP("awlutils", "d#"),
+      QT_TRANSLATE_NOOP("awlutils", "e"),
+      QT_TRANSLATE_NOOP("awlutils", "f"),
+      QT_TRANSLATE_NOOP("awlutils", "f#"),
+      QT_TRANSLATE_NOOP("awlutils", "g"),
+      QT_TRANSLATE_NOOP("awlutils", "g#"),
+      QT_TRANSLATE_NOOP("awlutils", "a"),
+      QT_TRANSLATE_NOOP("awlutils", "a#"),
+      QT_TRANSLATE_NOOP("awlutils", "b")
       };
 static const char* valu[] = {
-      "C","C\u266f","D","D\u266f","E","F","F\u266f","G","G\u266f","A","A\u266f","B"
+      QT_TRANSLATE_NOOP("awlutils", "C"),
+      QT_TRANSLATE_NOOP("awlutils", "C#"),
+      QT_TRANSLATE_NOOP("awlutils", "D"),
+      QT_TRANSLATE_NOOP("awlutils", "D#"),
+      QT_TRANSLATE_NOOP("awlutils", "E"),
+      QT_TRANSLATE_NOOP("awlutils", "F"),
+      QT_TRANSLATE_NOOP("awlutils", "F#"),
+      QT_TRANSLATE_NOOP("awlutils", "G"),
+      QT_TRANSLATE_NOOP("awlutils", "G#"),
+      QT_TRANSLATE_NOOP("awlutils", "A"),
+      QT_TRANSLATE_NOOP("awlutils", "A#"),
+      QT_TRANSLATE_NOOP("awlutils", "B")
       };
 
 namespace Awl {

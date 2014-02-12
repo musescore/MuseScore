@@ -967,8 +967,14 @@ static bool breakMultiMeasureRest(Measure* m)
       if (m->breakMultiMeasureRest())
             return true;
       auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
-      if (!sl.empty())
-            return false;
+      foreach (auto i, sl) {
+            Spanner* s = i.value;
+            if(s->type() == Element::VOLTA) {
+                  if(s->tick() == m->tick() || s->tick2() == m->tick())
+                        return true;
+                  }
+            }
+
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
                   if (e->type() == Element::REHEARSAL_MARK || e->type() == Element::TEMPO_TEXT)
