@@ -2102,7 +2102,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Transpose Down")
          ),
       Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_TEXT_EDIT,
          0,
          "masterpalette",
          QT_TRANSLATE_NOOP("action","Master Palette..."),
