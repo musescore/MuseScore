@@ -55,6 +55,10 @@ tuplet_triplet_first_tied2.mscx
 tuplet_triplet_first_tied.mscx
 tuplet_triplet_last_tied.mscx
 tuplet_triplet.mscx
+perc_remove_ties.mscx
+swing_clef.mscx
+meter_dot_tie.mscx
+meter_15-8.mscx
 tuplet_triplets_mixed.mscx"
 
 for i in $FILES; do
