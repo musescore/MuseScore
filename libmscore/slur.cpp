@@ -1069,7 +1069,6 @@ void Slur::write(Xml& xml) const
 void Slur::read(XmlReader& e)
       {
       setTrack(e.track());      // set staff
-      setTrack2(e.track());     // default to single voice slurs
       setId(e.intAttribute("id"));
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
