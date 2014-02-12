@@ -752,10 +752,12 @@ TextBlock TextBlock::split(int column)
 Text::Text(Score* s)
    : Element(s)
       {
+      _styleIndex = TEXT_STYLE_DEFAULT;
       if (s)
             _textStyle = s->textStyle(TEXT_STYLE_DEFAULT);
       _layoutToParentWidth = false;
       _editMode            = false;
+      setFlag(ELEMENT_MOVABLE, true);
       }
 
 Text::Text(const Text& st)
