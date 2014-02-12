@@ -2,15 +2,16 @@
 
 P=../../../build.debug/mtest/libmscore/compat
 
-cp $P/articulations-test.mscx articulations-ref.mscx
+# cp $P/articulations-test.mscx articulations-ref.mscx
 cp $P/keysig-test.mscx keysig-ref.mscx
 cp $P/hairpin-test.mscx hairpin-ref.mscx
 cp $P/notes-test.mscx notes-ref.mscx
-cp $P/textstyles-test.mscx textstyles-ref.mscx
+# cp $P/textstyles-test.mscx textstyles-ref.mscx
 cp $P/title-test.mscx title-ref.mscx
 cp $P/notes_useroffset-test.mscx notes_useroffset-ref.mscx
 cp $P/tremolo2notes-test.mscx tremolo2notes-ref.mscx
 cp $P/accidentals-test.mscx accidentals-ref.mscx
 cp $P/slurs-test.mscx slurs-ref.mscx
+cp $P/clef_missing_first-test.mscx clef_missing_first-ref.mscx
 
 

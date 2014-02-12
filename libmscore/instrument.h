@@ -33,8 +33,10 @@ struct StaffName {
       QString name;
       int pos;          // even number -> between staves
 
+      StaffName() {}
       StaffName(const QString& s, int p=0) : name(s), pos(p) {}
       bool operator==(const StaffName&) const;
+      void read(XmlReader&);
       void write(Xml& xml, const char* name) const;
       };
 

@@ -638,10 +638,7 @@ void GuitarPro::setTempo(int tempo)
       {
       TempoText* tt = new TempoText(score);
       tt->setTempo(double(tempo)/60.0);
-      int uc = 0x1d15f;
-      QChar h(QChar::highSurrogate(uc));
-      QChar l(QChar::lowSurrogate(uc));
-      tt->setText(QString("%1%2 = %3 ").arg(h).arg(l).arg(tempo));
+      tt->setText(QString("&noteQuarterUp; = %1").arg(tempo));
 
       tt->setTrack(0);
       Measure* measure = score->firstMeasure();

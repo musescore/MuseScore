@@ -641,7 +641,7 @@ void TextBlock::simplify()
       if (_text.size() < 2)
             return;
       auto i = _text.begin();
-      TextFragment& f = *i;
+      TextFragment f = *i;
       ++i;
       for (; i != _text.end(); ++i) {
             if (i->format == f.format) {
@@ -1676,6 +1676,29 @@ void Text::deleteSelectedText()
       }
 
 //---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void Text::write(Xml& xml) const
+      {
+      xml.stag(name());
+      writeProperties(xml, true);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void Text::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (!readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   writeProperties
 //---------------------------------------------------------
 
@@ -1766,10 +1789,8 @@ bool Text::readProperties(XmlReader& e)
             e.skipCurrentElement(); // _styleName = val;
       else if (tag == "data")                  // obsolete
             e.readElementText();
-      else if (tag == "html") {
-            QString s = Xml::htmlToString(e);
-            setText(s);                         // ??
-            }
+      else if (tag == "html")
+            setText(QTextDocumentFragment::fromHtml(Xml::htmlToString(e)).toPlainText());
       else if (tag == "text")
             setText(e.readElementText());
       else if (tag == "html-data") {
@@ -1790,22 +1811,8 @@ bool Text::readProperties(XmlReader& e)
                   s.replace(QChar(0xe167), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0b)));    // coda
                   s.replace(QChar(0xe168), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // varcoda
                   s.replace(QChar(0xe169), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // segno
-                  // import instrument names as unstyled html
-                  if (_styleIndex != TEXT_STYLE_INSTRUMENT_SHORT
-                     && _styleIndex != TEXT_STYLE_INSTRUMENT_LONG) {
-                        QTextDocument _doc;
-                        _doc.setHtml(s);
-                        QString s = _doc.toPlainText();
-                        setText(s);
-                        }
-                  else {
-                        setUnstyled();
-                        setText(s);
-                        }
                   }
-            else {
-                  setText(s);
-                  }
+            setText(QTextDocumentFragment::fromHtml(s).toPlainText());
             }
       else if (tag == "subtype")          // obsolete
             e.skipCurrentElement();
@@ -1902,29 +1909,6 @@ QRectF Text::pageRectangle() const
             }
       else
             return abbox();
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Text::write(Xml& xml) const
-      {
-      xml.stag(name());
-      writeProperties(xml, true);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Text::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            if (!readProperties(e))
-                  e.unknown();
-            }
       }
 
 //---------------------------------------------------------

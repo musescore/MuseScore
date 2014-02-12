@@ -52,18 +52,8 @@
         </Staff>
       <trackName>Alto</trackName>
       <Instrument>
-        <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Alto<!--EndFragment--></p></body></html>
-          </longName>
-        <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->A.<!--EndFragment--></p></body></html>
-          </shortName>
+        <longName pos="0">Alto</longName>
+        <shortName pos="0">A.</shortName>
         <trackName>Alto</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>77</maxPitchP>
@@ -96,18 +86,8 @@ p, li { white-space: pre-wrap; }
         </Staff>
       <trackName>Tenor</trackName>
       <Instrument>
-        <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Tenor<!--EndFragment--></p></body></html>
-          </longName>
-        <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->T.<!--EndFragment--></p></body></html>
-          </shortName>
+        <longName pos="0">Tenor</longName>
+        <shortName pos="0">T.</shortName>
         <trackName>Tenor</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>72</maxPitchP>
@@ -1001,18 +981,8 @@ p, li { white-space: pre-wrap; }
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Alto<!--EndFragment--></p></body></html>
-            </longName>
-          <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->A.<!--EndFragment--></p></body></html>
-            </shortName>
+          <longName pos="0">Alto</longName>
+          <shortName pos="0">A.</shortName>
           <trackName>Alto</trackName>
           <minPitchP>55</minPitchP>
           <maxPitchP>77</maxPitchP>
@@ -1562,18 +1532,8 @@ p, li { white-space: pre-wrap; }
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Tenor<!--EndFragment--></p></body></html>
-            </longName>
-          <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->T.<!--EndFragment--></p></body></html>
-            </shortName>
+          <longName pos="0">Tenor</longName>
+          <shortName pos="0">T.</shortName>
           <trackName>Tenor</trackName>
           <minPitchP>48</minPitchP>
           <maxPitchP>72</maxPitchP>
@@ -1622,12 +1582,6 @@ p, li { white-space: pre-wrap; }
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
-          <Tempo>
-            <tempo>1.66667</tempo>
-            <lid>1</lid>
-            <style>Tempo</style>
-            <text>𝅘𝅥 = 100</text>
-            </Tempo>
           <Chord>
             <lid>80</lid>
             <durationType>quarter</durationType>
@@ -1691,11 +1645,6 @@ p, li { white-space: pre-wrap; }
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <lid>23</lid>
-            <style>System</style>
-            <text>system-text</text>
-            </StaffText>
           <Chord>
             <lid>93</lid>
             <durationType>quarter</durationType>

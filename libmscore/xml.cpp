@@ -716,9 +716,26 @@ void Xml::htmlToString(XmlReader& e, int level, QString* s)
 QString Xml::htmlToString(XmlReader& e)
       {
       QString s;
-      if (e.readNextStartElement()) {
-            htmlToString(e, 0, &s);
-            e.skipCurrentElement();
+      int level = 1;
+      for (;;) {
+            QXmlStreamReader::TokenType t = e.readNext();
+            switch(t) {
+                  case QXmlStreamReader::StartElement:
+                        htmlToString(e, level, &s);
+                        break;
+                  case QXmlStreamReader::EndElement:
+                        return s;
+                  case QXmlStreamReader::Characters:
+                        if (!e.isWhitespace())
+                              s += e.text().toString().toHtmlEscaped();
+                        break;
+                  case QXmlStreamReader::Comment:
+                        break;
+
+                  default:
+                        qDebug("htmlToString: read token: %s", qPrintable(e.tokenString()));
+                        return s;
+                  }
             }
       return s;
       }

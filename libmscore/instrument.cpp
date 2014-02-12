@@ -142,10 +142,21 @@ StringData *InstrumentData::stringData() const
 
 void StaffName::write(Xml& xml, const char* tag) const
       {
-      if (!name.isEmpty()) {
-            xml.stag(QString("%1 pos=\"%2\"").arg(tag).arg(pos));
-            xml.writeHtml(name);
-            xml.etag();
+      if (!name.isEmpty())
+            xml.tag(QString("%1 pos=\"%2\"").arg(tag).arg(pos), name);
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void StaffName::read(XmlReader& e)
+      {
+      pos  = e.intAttribute("pos", 0);
+      name = Xml::htmlToString(e);
+      if (name.startsWith("<html>")) {
+            // compatibility to old html implementation:
+            name = QTextDocumentFragment::fromHtml(name).toPlainText();
             }
       }
 
@@ -160,7 +171,8 @@ void InstrumentData::write(Xml& xml) const
             doc.write(xml, "longName");
       foreach(const StaffName& doc, _shortNames)
             doc.write(xml, "shortName");
-      xml.tag("trackName", _trackName);
+//      if (!_trackName.isEmpty())
+            xml.tag("trackName", _trackName);
       if (_minPitchP > 0)
             xml.tag("minPitchP", _minPitchP);
       if (_maxPitchP < 127)
@@ -207,14 +219,14 @@ void InstrumentData::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "longName") {
-                  int pos = e.intAttribute("pos", 0);
-                  QString longName = Xml::htmlToString(e);
-                  _longNames.append(StaffName(longName, pos));
+                  StaffName name;
+                  name.read(e);
+                  _longNames.append(name);
                   }
             else if (tag == "shortName") {
-                  int pos = e.intAttribute("pos", 0);
-                  QString shortName = Xml::htmlToString(e);
-                  _shortNames.append(StaffName(shortName, pos));
+                  StaffName name;
+                  name.read(e);
+                  _shortNames.append(name);
                   }
             else if (tag == "trackName")
                   _trackName = e.readElementText();
