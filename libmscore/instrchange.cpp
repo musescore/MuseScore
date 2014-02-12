@@ -37,7 +37,10 @@ InstrumentChange::InstrumentChange(Score* s)
 void InstrumentChange::write(Xml& xml) const
       {
       xml.stag("InstrumentChange");
-      _instrument.write(xml);
+      if (segment())
+            staff()->part()->instr(segment()->tick())->write(xml); // _instrument may not reflect mixer changes
+      else
+            _instrument.write(xml);
       Text::writeProperties(xml);
       xml.etag();
       }
