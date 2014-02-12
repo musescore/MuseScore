@@ -478,50 +478,36 @@ QPointF SLine::linePos(int grip, System** sys)
                         Q_ASSERT(startElement()->type() == MEASURE);
                         m = static_cast<Measure*>(startElement());
                         x = m->pos().x();
+                        if(score()->styleB(ST_createMultiMeasureRests) && m->hasMMRest()) {
+                              x = m->mmRest()->pos().x();
+                              }
                         }
                   else {
                         Q_ASSERT(endElement()->type() == MEASURE);
                         m = static_cast<Measure*>(endElement());
                         x = m->pos().x() + m->bbox().right();
 
-#if 0 // MM
-                        if (type() == VOLTA) {
-                              if (score()->styleB(ST_createMultiMeasureRests)) {
-                                    //find the actual measure where the volta should stop
-                                    Measure* sm = static_cast<Measure*>(startElement());
-                                    bool foundMeasure = false;
-                                    while(sm != m) {
-                                          Measure* mm = sm;
-                                          int nn = mm->multiMeasure() - 1;
-                                          if (nn > 0) {
-                                                // skip to last rest measure of multi measure rest
-                                                for (int k = 0; k < nn; ++k) {
-                                                      mm = mm->nextMeasure();
-                                                      if (mm == m) {
-                                                            m = sm;
-                                                            foundMeasure = true;
-                                                            break;
-                                                            }
-                                                      }
-                                                }
-                                          if (foundMeasure)
-                                                break;
-                                          sm = sm->nextMeasure();
-                                          }
-                                    x = m->pos().x() + m->bbox().right();
-                                    }
-                              Segment* seg = m->last();
-                              if (seg->segmentType() == Segment::SegEndBarLine) {
-                                    Element* e = seg->element(0);
-                                    if (e && e->type() == BAR_LINE) {
-                                          if (static_cast<BarLine*>(e)->barLineType() == START_REPEAT)
-                                                x -= e->width() - _spatium * .5;
-                                          else
-                                                x -= _spatium * .5;
-                                          }
+                        if (score()->styleB(ST_createMultiMeasureRests)) {
+                              //find the actual measure where the volta should stop
+                              Measure* sm = static_cast<Measure*>(startElement());
+                              Measure* m = sm;
+                              if (sm->hasMMRest())
+                                    m = sm->mmRest();
+                              while (m->endTick() < tick2()) {
+                                    m = m->nextMeasureMM();
+                              }
+                              x = m->pos().x() + m->bbox().right();
+                              }
+                        Segment* seg = m->last();
+                        if (seg->segmentType() == Segment::SegEndBarLine) {
+                              Element* e = seg->element(0);
+                              if (e && e->type() == BAR_LINE) {
+                                    if (static_cast<BarLine*>(e)->barLineType() == START_REPEAT)
+                                          x -= e->width() - _spatium * .5;
+                                    else
+                                          x -= _spatium * .5;
                                     }
                               }
-#endif
                         }
 
                   Q_ASSERT(m->system());
