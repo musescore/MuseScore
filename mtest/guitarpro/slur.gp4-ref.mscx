@@ -92,6 +92,12 @@
           <style>Tempo</style>
           <text>&amp;noteQuarterUp; = 120</text>
           </Tempo>
+        <Tempo>
+          <tempo>2</tempo>
+          <lid>10</lid>
+          <style>Tempo</style>
+          <text>&amp;noteQuarterUp; = 120</text>
+          </Tempo>
         <Slur id="2">
           <lid>9</lid>
           <track>0</track>
@@ -282,11 +288,6 @@
             <lid>0</lid>
             <accidental>0</accidental>
             </KeySig>
-          <Tempo>
-            <tempo>2</tempo>
-            <style>Tempo</style>
-            <text>&amp;noteQuarterUp; = 120</text>
-            </Tempo>
           <Slur id="4">
             <lid>9</lid>
             <track>4</track>
