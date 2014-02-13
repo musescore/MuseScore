@@ -92,6 +92,12 @@
           <style>Tempo</style>
           <text>&amp;noteQuarterUp; = 72</text>
           </Tempo>
+        <Tempo>
+          <tempo>1.2</tempo>
+          <lid>12</lid>
+          <style>Tempo</style>
+          <text>&amp;noteQuarterUp; = 72</text>
+          </Tempo>
         <Rest>
           <lid>3</lid>
           <durationType>half</durationType>
@@ -351,11 +357,6 @@
             <lid>0</lid>
             <accidental>0</accidental>
             </KeySig>
-          <Tempo>
-            <tempo>1.2</tempo>
-            <style>Tempo</style>
-            <text>&amp;noteQuarterUp; = 72</text>
-            </Tempo>
           <Rest>
             <lid>3</lid>
             <durationType>half</durationType>

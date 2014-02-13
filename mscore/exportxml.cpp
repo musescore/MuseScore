@@ -4262,8 +4262,11 @@ void ExportMusicXml::write(QIODevice* dev)
                         // instrument details
                         if (instrument->transpose().chromatic) {
                               xml.stag("transpose");
-                              xml.tag("diatonic",  instrument->transpose().diatonic);
-                              xml.tag("chromatic", instrument->transpose().chromatic);
+                              xml.tag("diatonic",  instrument->transpose().diatonic % 7);
+                              xml.tag("chromatic", instrument->transpose().chromatic % 12);
+                              int octaveChange = instrument->transpose().chromatic / 12;
+                              if (octaveChange != 0)
+                                    xml.tag("octave-change", octaveChange);
                               xml.etag();
                               }
                         }

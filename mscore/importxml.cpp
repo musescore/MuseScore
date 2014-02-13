@@ -3270,8 +3270,10 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
                               interval.diatonic = i;
                         else if (ee.tagName() == "chromatic")
                               interval.chromatic = i;
-                        else if (ee.tagName() == "octave-change")
-                              ; // TODO
+                        else if (ee.tagName() == "octave-change") {
+                              interval.diatonic += i * 7;
+                              interval.chromatic += i * 12;
+                              }
                         else
                               domError(ee);
                         }
