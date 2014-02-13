@@ -949,7 +949,9 @@ static bool validMMRestMeasure(Measure* m)
       //      return false;
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
-                  if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT)
+                  if (e->type() != Element::REHEARSAL_MARK &&
+                     e->type() != Element::TEMPO_TEXT &&
+                     e->type() != Element::STAFF_TEXT)
                         return false;
                   }
             }
@@ -977,7 +979,9 @@ static bool breakMultiMeasureRest(Measure* m)
 
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
-                  if (e->type() == Element::REHEARSAL_MARK || e->type() == Element::TEMPO_TEXT)
+                  if (e->type() == Element::REHEARSAL_MARK ||
+                      e->type() == Element::TEMPO_TEXT ||
+                      e->type() == Element::STAFF_TEXT)
                         return true;
                   }
             }
@@ -1140,7 +1144,7 @@ void Score::createMMRests()
                   //
                   cs = m->findSegment(Segment::SegChordRest, m->tick());
                   for (Element* e : cs->annotations()) {
-                        if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT)
+                        if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT && e->type() != Element::STAFF_TEXT)
                               continue;
 
                         bool found = false;
@@ -1157,7 +1161,7 @@ void Score::createMMRests()
                               }
                         }
                   for (Element* e : s->annotations()) {
-                        if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT)
+                        if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT &&  e->type() != Element::STAFF_TEXT)
                               continue;
                         bool found = false;
                         for (Element* ee : cs->annotations()) {

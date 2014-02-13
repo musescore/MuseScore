@@ -4314,6 +4314,7 @@ void ScoreFont::load()
                   Sym* sym = &_symbols[int(symId)];
                   sym->setString(codeToString(code));
                   sym->setWidth(_fm->width(sym->string()));
+                  sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
                   }
 //            else
 //                  qDebug("unknown glyph: %s", qPrintable(i));
@@ -4463,7 +4464,7 @@ ScoreFont* ScoreFont::fallbackFont()
 
 const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       {
-      QRectF r(_fm->tightBoundingRect(sym(id).string()));
+      QRectF r = sym(id).bbox();
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }
 

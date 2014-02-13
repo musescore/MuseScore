@@ -1952,6 +1952,7 @@ class Sym {
       QString _string;
       QPointF _attach;
       qreal _width;                       // cached width
+      QRectF _bbox;                       // cached bbbox
 
    public:
       Sym() { }
@@ -1963,6 +1964,8 @@ class Sym {
       void setAttach(const QPointF& r)           { _attach = r; }
       void setWidth(qreal val)                   { _width = val; }
       qreal width() const                        { return _width; }
+      void setBbox(QRectF val)                    { _bbox = val; }
+      QRectF bbox() const                         { return _bbox; }
 
       static SymId name2id(const QString& s)     { return lnhash.value(s, SymId::noSym); }     // return noSym if not found
       static SymId oldName2id(const QString s)   { return lonhash.value(s, SymId::noSym);}
