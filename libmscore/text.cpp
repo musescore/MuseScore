@@ -1869,7 +1869,7 @@ bool Text::readProperties(XmlReader& e)
 
 void Text::textStyleChanged()
       {
-      if (_styleIndex != TEXT_STYLE_UNKNOWN)
+      if (_styleIndex != TEXT_STYLE_UNKNOWN && _styleIndex != TEXT_STYLE_UNSTYLED)
             setTextStyle(score()->textStyle(_styleIndex));
       score()->setLayoutAll(true);
       }
