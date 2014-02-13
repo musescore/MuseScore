@@ -424,9 +424,8 @@ qreal TextBlock::xpos(int column, const Text* t) const
 //   fragment
 //---------------------------------------------------------
 
-const TextFragment& TextBlock::fragment(int column) const
+const TextFragment* TextBlock::fragment(int column) const
       {
-      Q_ASSERT(!_text.isEmpty());
       int col = 0;
       auto f = _text.begin();
       for (; f != _text.end(); ++f) {
@@ -437,19 +436,22 @@ const TextFragment& TextBlock::fragment(int column) const
                         continue;
                   ++col;
                   if (column == col)
-                        return *f;
+                        return &*f;
                   }
             }
-      return *f;
+      return 0;
       }
 
 //---------------------------------------------------------
 //   formatAt
 //---------------------------------------------------------
 
-const CharFormat& TextBlock::formatAt(int column) const
+const CharFormat* TextBlock::formatAt(int column) const
       {
-      return fragment(column).format;
+      const TextFragment* f = fragment(column);
+      if (f)
+            return &(f->format);
+      return 0;
       }
 
 //---------------------------------------------------------
@@ -803,7 +805,11 @@ Text::Text(const Text& st)
 void Text::updateCursorFormat(TextCursor* cursor)
       {
       TextBlock* block = &_layout[cursor->line()];
-      cursor->setFormat(block->formatAt(cursor->column()));
+      const CharFormat* format = block->formatAt(cursor->column());
+      if (format)
+            cursor->setFormat(*format);
+      else
+            cursor->initFromStyle(textStyle());
       }
 
 //---------------------------------------------------------
