@@ -570,10 +570,12 @@ void SLine::layout()
       int sysIdx1 = systems->indexOf(s1);
       int sysIdx2 = systems->indexOf(s2);
       int segmentsNeeded = 0;
-      for (int i = sysIdx1; i < sysIdx2+1;  ++i) {
-            if (systems->at(i)->isVbox())
-                  continue;
-            ++segmentsNeeded;
+      if (sysIdx1 != -1) { // happens when line added to score and part is mmRest
+            for (int i = sysIdx1; i < sysIdx2+1;  ++i) {
+                  if (systems->at(i)->isVbox())
+                        continue;
+                  ++segmentsNeeded;
+                  }
             }
 
       int segCount = spannerSegments().size();
