@@ -529,84 +529,94 @@ int TextBlock::column(qreal x, Text* t) const
 
 void TextBlock::insert(TextCursor* cursor, const QString& s)
       {
-      int column = cursor->column();
-      int col = 0;
-      TextFragment* pf = 0;
-      for (auto n = _text.begin(); n != _text.end(); ++n) {
-            TextFragment& f = *n;
-            int rcol = 0;
-            for (const QChar& c : f.text) {
-                  if (col == column) {
-                        if (f.format.type() == CharFormatType::TEXT) {
-                              if (!(f.format == *cursor->format())) {
-                                    if (rcol == 0)
-                                          _text.insert(n, TextFragment(cursor, s));
-                                    else {
-                                          TextFragment f2 = f.split(rcol);
-                                          n = _text.insert(n+1, TextFragment(cursor, s));
-                                          _text.insert(n+1, f2);
-                                          }
-                                    }
-                              else
-                                    f.text.insert(rcol, s);
+      int rcol;
+      auto i = fragment(cursor->column(), &rcol);
+      if (i != _text.end()) {
+            if (i->format.type() == CharFormatType::TEXT) {
+                  if (!(i->format == *cursor->format())) {
+                        if (rcol == 0)
+                              _text.insert(i, TextFragment(cursor, s));
+                        else {
+                              TextFragment f2 = i->split(rcol);
+                              i = _text.insert(i+1, TextFragment(cursor, s));
+                              _text.insert(i+1, f2);
                               }
-                        else if (f.format.type() == CharFormatType::SYMBOL) {
-                              if (rcol == 0) {
-                                    if (n != _text.begin() && pf->format == *cursor->format())
-                                          pf->text.append(s);
-                                    else
-                                          _text.insert(n, TextFragment(cursor, s));
-                                    }
-                              else {
-                                    TextFragment f2 = f.split(rcol);
-                                    n = _text.insert(n+1, TextFragment(cursor, s));
-                                    f2.format = *cursor->format();
-                                    f2.format.setType(CharFormatType::SYMBOL);
-                                    _text.insert(n+1, f2);
-                                    }
-                              }
-                        return;
                         }
-                  if (c.isHighSurrogate())
-                        continue;
-                  ++col;
-                  ++rcol;
+                  else
+                        i->text.insert(rcol, s);
                   }
-            pf = &f;
+            else {
+                  if (rcol == 0) {
+                        if (i != _text.begin() && (i-1)->format == *cursor->format())
+                              (i-1)->text.append(s);
+                        else
+                              _text.insert(i, TextFragment(cursor, s));
+                        }
+                  else {
+                        TextFragment f2 = i->split(rcol);
+                        i = _text.insert(i+1, TextFragment(cursor, s));
+                        f2.format = *cursor->format();
+                        f2.format.setType(CharFormatType::SYMBOL);
+                        _text.insert(i+1, f2);
+                        }
+                  }
             }
-      if (!_text.isEmpty() && _text.back().format == *cursor->format())
-            _text.back().text.append(s);
-      else
-            _text.append(TextFragment(cursor, s));
+      else {
+            if (!_text.isEmpty() && _text.back().format == *cursor->format())
+                  _text.back().text.append(s);
+            else
+                  _text.append(TextFragment(cursor, s));
+            }
       }
 
 void TextBlock::insert(TextCursor* cursor, SymId id)
       {
-      int column = cursor->column();
+      int rcol;
+      auto i = fragment(cursor->column(), &rcol);
+      if (i != _text.end()) {
+            if (i->format.type() == CharFormatType::SYMBOL)
+                  i->ids.insert(rcol, id);
+            else if (i->format.type() == CharFormatType::TEXT) {
+                  if (rcol == 0) {
+                        if (i != _text.begin() && (i-1)->format.type() == CharFormatType::SYMBOL)
+                              (i-1)->ids.append(id);
+                        else
+                              _text.insert(i, TextFragment(cursor, id));
+                        }
+                  else {
+                        TextFragment f2 = i->split(rcol);
+                        i = _text.insert(i+1, TextFragment(cursor, id));
+                        _text.insert(i+1, f2);
+                        }
+                  }
+            }
+      else {
+            if (!_text.isEmpty() && _text.back().format.type() == CharFormatType::SYMBOL)
+                  _text.back().ids.append(id);
+            else
+                  _text.append(TextFragment(cursor, id));
+            }
+      }
+
+//---------------------------------------------------------
+//   fragment
+//---------------------------------------------------------
+
+QList<TextFragment>::iterator TextBlock::fragment(int column, int* rcol)
+      {
       int col = 0;
       for (auto i = _text.begin(); i != _text.end(); ++i) {
-            int rcol = 0;
+            *rcol = 0;
             for (const QChar& c : i->text) {
-                  if (col == column) {
-                        if (i->format.type() == CharFormatType::SYMBOL)
-                              i->ids.insert(rcol, id);
-                        else if (i->format.type() == CharFormatType::TEXT) {
-                              TextFragment f2 = i->split(rcol);
-                              i = _text.insert(i+1, TextFragment(cursor, id));
-                              _text.insert(i+1, f2);
-                              }
-                        return;
-                        }
+                  if (col == column)
+                        return i;
                   if (c.isHighSurrogate())
                         continue;
                   ++col;
-                  ++rcol;
+                  ++*rcol;
                   }
             }
-      if (!_text.isEmpty() && _text.back().format.type() == CharFormatType::SYMBOL)
-            _text.back().ids.append(id);
-      else
-            _text.append(TextFragment(cursor, id));
+      return _text.end();
       }
 
 //---------------------------------------------------------
