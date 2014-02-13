@@ -1951,6 +1951,7 @@ enum class SymId {
 class Sym {
       QString _string;
       QPointF _attach;
+      qreal _width;                       // cached width
 
    public:
       Sym() { }
@@ -1960,6 +1961,8 @@ class Sym {
       bool isValid() const                       { return !_string.isEmpty(); }
       QPointF attach() const                     { return _attach;   }
       void setAttach(const QPointF& r)           { _attach = r; }
+      void setWidth(qreal val)                   { _width = val; }
+      qreal width() const                        { return _width; }
 
       static SymId name2id(const QString& s)     { return lnhash.value(s, SymId::noSym); }     // return noSym if not found
       static SymId oldName2id(const QString s)   { return lonhash.value(s, SymId::noSym);}
@@ -2018,7 +2021,7 @@ class ScoreFont {
       QPixmap sym2pixmap(SymId id, qreal mag);
 
       qreal height(SymId id, qreal mag) const        { return _fm->tightBoundingRect(toString(id)).height() * mag; }
-      qreal width(SymId id, qreal mag) const         { return _fm->width(toString(id)) * mag;  }
+      qreal width(SymId id, qreal mag) const         { return _symbols[int(id)].width() * mag;  }
       qreal width(const QString& s, qreal mag) const { return _fm->width(s) * mag;  }
       const QRectF bbox(SymId id, qreal mag) const;
       const QRectF bbox(const QString& s, qreal mag) const;

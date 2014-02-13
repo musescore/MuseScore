@@ -1868,7 +1868,6 @@ void Text::textStyleChanged()
       {
       if (_styleIndex != TEXT_STYLE_UNKNOWN)
             setTextStyle(score()->textStyle(_styleIndex));
-      setText(text());     // destroy formatting
       score()->setLayoutAll(true);
       }
 
