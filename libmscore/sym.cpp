@@ -4313,6 +4313,7 @@ void ScoreFont::load()
                   SymId symId = Sym::lnhash.value(i);
                   Sym* sym = &_symbols[int(symId)];
                   sym->setString(codeToString(code));
+                  sym->setWidth(_fm->width(sym->string()));
                   }
 //            else
 //                  qDebug("unknown glyph: %s", qPrintable(i));
