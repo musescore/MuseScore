@@ -151,6 +151,7 @@ class TextBlock {
       qreal y() const         { return _text.isEmpty() ? 0 : _text.front().pos.y(); }
       const CharFormat& formatAt(int) const;
       const TextFragment& fragment(int col) const;
+      QList<TextFragment>::iterator fragment(int col, int* rcol);
       };
 
 //---------------------------------------------------------
