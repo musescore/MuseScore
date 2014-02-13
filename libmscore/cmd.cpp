@@ -784,15 +784,15 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
       cr = static_cast<ChordRest*>(seg->element(track));
       if (!cr) {
             // check if we are in the middle of a chord/rest
-            Segment* seg1 = 0;
+            Segment* seg1 = seg->prev(Segment::SegChordRest);;
             for (;;) {
-                  seg1 = seg->prev(Segment::SegChordRest);
                   if (seg1 == 0) {
                         qDebug("1:makeGap1: no segment at %d", tick);
                         return false;
                         }
                   if (seg1->element(track))
                         break;
+                  seg1 = seg1->prev(Segment::SegChordRest);
                   }
             ChordRest* cr1 = static_cast<ChordRest*>(seg1->element(track));
             Fraction srcF = cr1->duration();
