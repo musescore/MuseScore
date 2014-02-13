@@ -101,7 +101,7 @@ class Text;
 class TextFragment {
    public:
       mutable CharFormat format;
-      QPointF pos;
+      QPointF pos;                  // y is relativ to TextBlock->y()
 
       mutable QString text;
       QList<SymId> ids;
@@ -124,6 +124,8 @@ class TextFragment {
 
 class TextBlock {
       QList<TextFragment> _text;
+      qreal  _y = 0;
+      qreal _leading;
       QRectF _bbox;
 
       void simplify();
@@ -134,12 +136,11 @@ class TextBlock {
       QString text(TextCursor*) const;
       void addText(TextCursor*, const QString&);
       void draw(QPainter*, const Text*) const;
-      void layout(qreal y, Text*);
+      void layout(Text*);
       const QList<TextFragment>& fragments() const { return _text; }
       QList<TextFragment>& fragments()             { return _text; }
-      QRectF boundingRect() const                  { return _bbox; }
+      const QRectF& boundingRect() const           { return _bbox; }
       QRectF boundingRect(int col1, int col2, const Text*) const;
-      void moveX(qreal);
       int columns() const;
       void insert(TextCursor*, const QString&);
       void insert(TextCursor*, SymId);
@@ -148,10 +149,12 @@ class TextBlock {
       int column(qreal x, Text*) const;
       TextBlock split(int column);
       qreal xpos(int col, const Text*) const;
-      qreal y() const         { return _text.isEmpty() ? 0 : _text.front().pos.y(); }
       const CharFormat* formatAt(int) const;
       const TextFragment* fragment(int col) const;
       QList<TextFragment>::iterator fragment(int col, int* rcol);
+      qreal y() const      { return _y; }
+      void setY(qreal val) { _y = val; }
+      qreal leading() const { return _leading; }
       };
 
 //---------------------------------------------------------

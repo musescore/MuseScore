@@ -354,18 +354,21 @@ void TextBlock::addText(TextCursor* cursor, const QString& str)
 
 void TextBlock::draw(QPainter* p, const Text* t) const
       {
+      p->translate(0.0, _y);
       for (const TextFragment& f : _text)
             f.draw(p, t);
+      p->translate(0.0, -_y);
       }
 
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
-void TextBlock::layout(double y, Text* t)
+void TextBlock::layout(Text* t)
       {
       _bbox = QRectF();
       qreal x = 0.0;
+      _leading = 0.0;
 
       for (TextFragment& f : _text) {
             f.pos.setX(x);
@@ -378,22 +381,28 @@ void TextBlock::layout(double y, Text* t)
                         else
                               voffset *= superScriptOffset;
                         }
-                  f.pos.setY(y + voffset);
+                  f.pos.setY(voffset);
                   }
             else
-                  f.pos.setY(y);
+                  f.pos.setY(0.0);
             qreal w;
             QRectF r;
             r = fm.tightBoundingRect(f.text).translated(f.pos);
             w = fm.width(f.text);
+            _leading = qMax(_leading, fm.leading());
             _bbox |= r;
             x += w;
             }
-/*      printf("TextBlock %d fragments\n", _text.size());
-      for (TextFragment& f : _text) {
-            printf("   TextBlock layout %s %f\n", qPrintable(f.format.fontFamily()), f.pos.x());
-            }
-      */
+      qreal rx;
+      if (t->textStyle().align() & ALIGN_RIGHT)
+            rx = -_bbox.right();
+      else if (t->textStyle().align() & ALIGN_HCENTER)
+            rx = -(_bbox.left() + _bbox.right()) * .5;
+      else  // ALIGN_LEFT
+            rx = -_bbox.left();
+      for (TextFragment& f : _text)
+            f.pos.rx() += rx;
+      _bbox.translate(rx, 0.0);
       }
 
 //---------------------------------------------------------
@@ -429,16 +438,16 @@ const TextFragment* TextBlock::fragment(int column) const
       int col = 0;
       auto f = _text.begin();
       for (; f != _text.end(); ++f) {
-            if (column == col)
-                  break;
             for (const QChar& c : f->text) {
                   if (c.isHighSurrogate())
                         continue;
-                  ++col;
                   if (column == col)
                         return &*f;
+                  ++col;
                   }
             }
+      if (column == col)
+            return &*(f-1);
       return 0;
       }
 
@@ -463,17 +472,6 @@ QRectF TextBlock::boundingRect(int col1, int col2, const Text* t) const
       qreal x1 = xpos(col1, t);
       qreal x2 = xpos(col2, t);
       return QRectF(x1, _bbox.y(), x2-x1, _bbox.height());
-      }
-
-//---------------------------------------------------------
-//   moveX
-//---------------------------------------------------------
-
-void TextBlock::moveX(qreal dx)
-      {
-      for (TextFragment& f : _text)
-            f.pos.rx() += dx;
-      _bbox = _bbox.translated(dx, 0.0);
       }
 
 //---------------------------------------------------------
@@ -734,9 +732,12 @@ TextBlock TextBlock::split(int column)
             int idx = 0;
             for (const QChar& c : i->text) {
                   if (col == column) {
+                        const CharFormat* format = &i->format;
                         if (idx) {
                               if (idx < i->text.size()) {
-                                    tl._text.append(TextFragment(i->text.mid(idx)));
+                                    TextFragment tf(i->text.mid(idx));
+                                    tf.format = i->format;
+                                    tl._text.append(tf);
                                     i->text = i->text.left(idx);
                                     if (i->format.type() == CharFormatType::SYMBOL) {
                                           QList<SymId> l1, l2;
@@ -757,6 +758,7 @@ TextBlock TextBlock::split(int column)
                               tl._text.append(*i);
                         if (tl._text.isEmpty()) {
                               TextCursor c;
+                              c.setFormat(*format);
                               tl.addText(&c, "");
                               }
                         return tl;
@@ -887,15 +889,27 @@ void Text::draw(QPainter* p) const
 
 QRectF Text::cursorRect() const
       {
-      QFontMetricsF fm(_textStyle.fontPx(spatium()));
       const TextBlock& tline = curLine();
+      const TextFragment* fragment = tline.fragment(_cursor.column());
 
-      qreal h = fm.ascent() * 1.2;  // lineSpacing();
+      qreal ascent, w;
+      if (fragment) {
+            QFontMetricsF fm = QFontMetrics(fragment->font(this));
+            ascent = fm.ascent();
+            w = fm.width(QChar('w'));
+            }
+      else {
+            QFontMetricsF fm = QFontMetricsF(_textStyle.fontPx(spatium()));
+            ascent = fm.ascent();
+            w = fm.width(QChar('w'));
+            }
+
+      ascent *= 0.7;
+      qreal h = ascent;       // lineSpacing();
       qreal x = tline.xpos(_cursor.column(), this);
       qreal y = tline.y();
-      x      -= 1.0;   //??
-      y      -= fm.ascent();
-      qreal w = fm.width(QChar('w')) * .10;
+      y      -= ascent;
+      w       = 0.0;
       return QRectF(x, y, w, h);
       }
 
@@ -1100,8 +1114,6 @@ void Text::createLayout()
 
 void Text::layout1()
       {
-      QFontMetricsF fm(_textStyle.fontPx(spatium()));
-
       if (!_editMode) {
 #if 0
             if (parent() && layoutToParentWidth()) {
@@ -1146,37 +1158,28 @@ void Text::layout1()
       QPointF o(_textStyle.offset(spatium()));
 
       QRectF bb;
-      qreal lh = lineHeight();
-      qreal ly = .0;
-      QRectF cr(0, - fm.ascent(), 0, fm.height());
+      qreal y = 0;
 
-      for (TextBlock& t : _layout) {
-            qreal y = ly;
+      for (int i = 0; i < _layout.size(); ++i) {
+            TextBlock* t = &_layout[i];
+            t->layout(this);
+            const QRectF* r = &t->boundingRect();
+            if (r->height() == 0 && i)
+                  r = &_layout[i-i].boundingRect();
             if (textStyle().align() & ALIGN_BOTTOM)
-                  y += -cr.bottom();
+                  y += -r->bottom();
             else if (textStyle().align() & ALIGN_VCENTER)
-                  y +=  -(cr.top() + cr.bottom()) * .5;
+                  y +=  -(r->top() + r->bottom()) * .5;
             else if (textStyle().align() & ALIGN_BASELINE)
-                  ;
+                  y = 0;
             else  // ALIGN_TOP
-                  y += -cr.top();
-            t.layout(y, this);
-
-            QRectF r(t.boundingRect());
-
-            qreal rx;
-            if (textStyle().align() & ALIGN_RIGHT)
-                  rx = -r.right();
-            else if (textStyle().align() & ALIGN_HCENTER)
-                  rx = -(r.left() + r.right()) * .5;
-            else  // ALIGN_LEFT
-                  rx = -r.left();
-            t.moveX(rx);
-
-            bb |= t.boundingRect();
-
-            ly += lh;
+                  y += -r->top();
+            if (i)
+                  y += t->leading();
+            t->setY(y);
+            bb |= r->translated(0.0, t->y());
             }
+
       setPos(o);
       if (_editMode)
             bb |= cursorRect();
@@ -1595,7 +1598,7 @@ bool Text::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
       _cursor.setLine(0);
       for (int row = 0; row < _layout.size(); ++row) {
             const TextBlock& l = _layout.at(row);
-            if (l.fragments().front().pos.y() > pt.y()) {
+            if (l.y() > pt.y()) {
                   _cursor.setLine(row);
                   break;
                   }
