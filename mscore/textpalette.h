@@ -38,6 +38,7 @@ class TextPalette : public QWidget, public Ui::TextPaletteBase {
       QPushButton* buttons[256];;
       QButtonGroup* sg;
       int curPage;
+      QFont _font;
 
       void closeEvent(QCloseEvent* ev);
 
@@ -49,6 +50,7 @@ class TextPalette : public QWidget, public Ui::TextPaletteBase {
       TextPalette(QWidget* parent);
       void setText(Text* te);
       Text* text() { return _textElement; }
+      void setFont(const QFont& font);
       };
 }
 

@@ -27,15 +27,19 @@
 
 namespace Ms {
 
+const int buttonSize = 40;
+const int iconSize   = 20;
+const int fontSize   = 20;
+
 //---------------------------------------------------------
 //   codeIcon
 //---------------------------------------------------------
 
-static QIcon codeIcon(const QString& s, QFont f)
+static QIcon codeIcon(const QString& s, const QFont& f)
       {
-      f.setPixelSize(40);
-      int w = 40;
-      int h = 40;
+      // f.setPixelSize(iconSize);
+      int w = iconSize;
+      int h = iconSize;
 
       QWidget wi;
 
@@ -61,8 +65,8 @@ static QIcon codeIcon(const QString& s, QFont f)
 
 static QIcon symbolIcon(SymId id)
       {
-      int w = 40;
-      int h = 40;
+      int w = iconSize;
+      int h = iconSize;
       QPixmap image(w, h);
 
       QWidget wi;
@@ -75,11 +79,17 @@ static QIcon symbolIcon(SymId id)
       QPen pen(wi.palette().brush(QPalette::Normal, QPalette::Text).color());
       painter.setPen(pen);
       ScoreFont* sf = ScoreFont::fontFactory("Bravura");
-      const qreal mag = 0.72;
-      painter.scale(mag, mag);
+      double mag = 0.72;
       painter.setFont(sf->font());
       QRectF r(sf->bbox(id, mag));
-      QPointF o((40.0 - r.width()) * .5 - r.x(), (40.0 - r.height()) * .5 - r.y());
+      double mx = double(w)/r.width();
+      double my = double(h)/r.height();
+      double mxy = qMin(mx, my);
+      if (mxy < 1.0)
+            mag *= mxy;
+      painter.scale(mag, mag);
+
+      QPointF o((iconSize - r.width()) * .5 - r.x(), (iconSize - r.height()) * .5 - r.y());
       painter.drawText(o, sf->toString(id));
 
       painter.end();
@@ -107,8 +117,8 @@ TextPalette::TextPalette(QWidget* parent)
             QPushButton* tb = new QPushButton;
             buttons[i] = tb;
             tb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-            tb->setFixedSize(40, 40);
-            tb->setIconSize(QSize(40, 40));
+            tb->setFixedSize(buttonSize, buttonSize);
+            tb->setIconSize(QSize(iconSize, iconSize));
             gl->addWidget(tb, i / 16, i % 16);
             sg->addButton(tb, i);
             }
@@ -151,11 +161,10 @@ void TextPalette::populate()
       else {
             codePage->setMaximum(255);
 
-            QFont f("FreeSerif");
-            f.setPixelSize(40);
+            _font.setPixelSize(fontSize);
 
-            f.setStyleStrategy(QFont::NoFontMerging);
-            QFontMetrics fm(f);
+            _font.setStyleStrategy(QFont::NoFontMerging);
+            QFontMetrics fm(_font);
 
             int rowOffset = 0;
             bool pageEmpty = true;
@@ -171,7 +180,7 @@ void TextPalette::populate()
                         // for unicode plane 0, as QChar is only
                         // 16 bit
                         //
-                        tb->setFont(f);
+                        tb->setFont(_font);
                         if (fm.inFontUcs4(code)) {
                               rowEmpty = false;
                               QString ss;
@@ -182,7 +191,7 @@ void TextPalette::populate()
                               else
                                     ss = QChar(code);
                               tb->setToolTip(QString("0x%1").arg(code, 5, 16, QLatin1Char('0')));
-                              tb->setIcon(codeIcon(ss, f));
+                              tb->setIcon(codeIcon(ss, _font));
                               sg->setId(tb, code);
                               tb->setEnabled(true);
                               }
@@ -251,6 +260,17 @@ void TextPalette::closeEvent(QCloseEvent* ev)
       {
       QWidget::closeEvent(ev);
       getAction("show-keys")->setChecked(false);
+      }
+
+//---------------------------------------------------------
+//   setFont
+//---------------------------------------------------------
+
+void TextPalette::setFont(const QFont& font)
+      {
+      _font = font;
+      populate();
+      update();
       }
 }
 
