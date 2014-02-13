@@ -305,6 +305,8 @@ void TextTools::sizeChanged(double value)
 void TextTools::fontChanged(const QFont& f)
       {
       _textElement->cursor()->format()->setFontFamily(f.family());
+      if (textPalette)
+            textPalette->setFont(f.family());
       updateText();
       }
 
@@ -459,11 +461,11 @@ void TextTools::styleChanged(int comboIdx)
 
 void TextTools::showKeyboardClicked(bool val)
       {
-printf("showKeyboardClicked %d\n", val);
       if (val) {
             if (textPalette == 0)
                   textPalette = new TextPalette(mscore);
             textPalette->setText(_textElement);
+            textPalette->setFont(_textElement->cursor()->format()->fontFamily());
             textPalette->show();
             }
       else {
