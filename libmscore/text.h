@@ -182,7 +182,6 @@ class Text : public Element {
       void insert(TextCursor*, QChar);
       void insert(TextCursor*, SymId);
       void updateCursorFormat(TextCursor*);
-      void setEditMode(bool val)          { _editMode = val;  }
 
    protected:
       TextStyle _textStyle;
@@ -205,6 +204,7 @@ class Text : public Element {
       virtual void draw(QPainter*) const;
 
       bool editMode() const               { return _editMode; }
+      void setEditMode(bool val)          { _editMode = val;  }
 
       void setTextStyle(const TextStyle& st)  { _textStyle = st;   }
       const TextStyle& textStyle() const      { return _textStyle; }
@@ -237,8 +237,8 @@ class Text : public Element {
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       bool setCursor(const QPointF& p,
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
-      void moveCursorToEnd()   { movePosition(QTextCursor::Start); }
-      void moveCursorToStart() { movePosition(QTextCursor::End); }
+      void moveCursorToEnd()   { movePosition(QTextCursor::End); }
+      void moveCursorToStart() { movePosition(QTextCursor::Start); }
 
       QString selectedText() const;
 
