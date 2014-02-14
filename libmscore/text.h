@@ -187,7 +187,6 @@ class Text : public Element {
    protected:
       TextStyle _textStyle;
 
-      void drawFrame(QPainter* painter) const;
       QColor textColor() const;
       void layoutFrame();
       void layoutEdit();

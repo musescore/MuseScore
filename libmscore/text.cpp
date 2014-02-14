@@ -837,6 +837,29 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
 
 void Text::draw(QPainter* p) const
       {
+      if (textStyle().hasFrame()) {
+            QColor color(textStyle().frameColor());
+            if (!visible())
+                  color = Qt::gray;
+            else if (selected())
+                  color = MScore::selectColor[0];
+            if (textStyle().frameWidth().val() != 0.0) {
+                  QPen pen(color, textStyle().frameWidth().val() * spatium());
+                  p->setPen(pen);
+                  }
+            else
+                  p->setPen(Qt::NoPen);
+            QColor bg(textStyle().backgroundColor());
+            p->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
+            if (textStyle().circle())
+                  p->drawArc(frame, 0, 5760);
+            else {
+                  int r2 = textStyle().frameRound() * lrint((frame.width() / frame.height()));
+                  if (r2 > 99)
+                        r2 = 99;
+                  p->drawRoundRect(frame, textStyle().frameRound(), r2);
+                  }
+            }
       p->setBrush(Qt::NoBrush);
       p->setPen(curColor());
       if (_editMode && _cursor.hasSelection()) {
@@ -913,38 +936,6 @@ QRectF Text::cursorRect() const
       y      -= ascent;
       w       = 0.0;
       return QRectF(x, y, w, h);
-      }
-
-//---------------------------------------------------------
-//   drawFrame
-//---------------------------------------------------------
-
-void Text::drawFrame(QPainter* painter) const
-      {
-      if (!textStyle().hasFrame())
-            return;
-
-      QColor color(textStyle().frameColor());
-      if (!visible())
-            color = Qt::gray;
-      else if (selected())
-            color = MScore::selectColor[0];
-      if (textStyle().frameWidth().val() != 0.0) {
-            QPen pen(color, textStyle().frameWidth().val() * spatium());
-            painter->setPen(pen);
-            }
-      else
-            painter->setPen(Qt::NoPen);
-      QColor bg(textStyle().backgroundColor());
-      painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
-      if (textStyle().circle())
-            painter->drawArc(frame, 0, 5760);
-      else {
-            int r2 = textStyle().frameRound() * lrint((frame.width() / frame.height()));
-            if (r2 > 99)
-                  r2 = 99;
-            painter->drawRoundRect(frame, textStyle().frameRound(), r2);
-            }
       }
 
 //---------------------------------------------------------
