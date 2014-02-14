@@ -435,6 +435,8 @@ qreal TextBlock::xpos(int column, const Text* t) const
 
 const TextFragment* TextBlock::fragment(int column) const
       {
+      if (_text.isEmpty())
+            return 0;
       int col = 0;
       auto f = _text.begin();
       for (; f != _text.end(); ++f) {
