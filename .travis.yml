@@ -19,7 +19,8 @@ before_install:
   - "unzip -qq qt5.zip -d qt5"
   - "export PATH=`pwd`/qt5/bin:$PATH"
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
-before_script: 
+before_script:
+  - "gem install --version 0.8.9 faraday"
   - "gem install travis-artifacts"
   - "make revision"
   - "make debug CPUS=16"
