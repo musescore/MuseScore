@@ -43,17 +43,17 @@ class XmlReader : public QXmlStreamReader {
       QString docName;  // used for error reporting
 
       // Score read context (for read optimizations):
-      int _tick;
-      int _track;
+      int _tick = 0;
+      int _track = 0;
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
       QList<SpannerValues> _spannerValues;
 
    public:
-      XmlReader(QFile*);
-      XmlReader(const QByteArray& d, const QString& s = QString());
-      XmlReader(QIODevice* d, const QString& s = QString());
-      XmlReader(const QString& d, const QString& s = QString());
+      XmlReader(QFile* f) : QXmlStreamReader(f) { docName = f->fileName(); }
+      XmlReader(const QByteArray& d, const QString& s = QString()) : QXmlStreamReader(d), docName(s)  {}
+      XmlReader(QIODevice* d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}
+      XmlReader(const QString& d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}
 
       void unknown() const;
 

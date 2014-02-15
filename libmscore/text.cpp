@@ -236,13 +236,17 @@ QString TextBlock::text(TextCursor* cursor) const
                                     break;
                               }
                         }
-                  s += f.text;
+                  for (const QChar& c : f.text) {
+                        if (c == '#')
+                              s += c;
+                        s += c;
+                        }
                   }
             else {
                   for (SymId id : f.ids) {
-                        s += "&";
+                        s += "#";
                         s += Sym::id2name(id);
-                        s += ";";
+                        s += "#";
                         }
                   }
             }
@@ -260,7 +264,7 @@ void TextBlock::addText(TextCursor* cursor, const QString& str)
       QString sym;
       for (const QChar& c : str) {
             if (state == 0) {
-                  if (c == '&') {
+                  if (c == '#') {
                         state = 1;
                         sym.clear();
                         }
@@ -272,12 +276,10 @@ void TextBlock::addText(TextCursor* cursor, const QString& str)
                         s += c;
                   }
             else if (state == 1) {
-                  if (c == ';') {
+                  if (c == '#') {
                         state = 0;
-                        if (sym == "amp")
-                              s += '&';
-                        else if (sym == "lt")
-                              s += '<';
+                        if (sym == "")
+                              s += '#';
                         else {
                               if (!s.isEmpty()) {
                                     _text.append(TextFragment(cursor, s));
@@ -514,7 +516,7 @@ int TextBlock::column(qreal x, Text* t) const
                   qreal xo;
                   if (f.format.type() == CharFormatType::TEXT)
                         xo = fm.width(f.text.left(idx));
-                  else if (f.format.type() == CharFormatType::SYMBOL)
+                  else
                         xo = t->symWidth(f.text.left(idx));
                   if (x <= f.pos.x() + px + (xo-px)*.5)
                         return col;
@@ -1036,7 +1038,7 @@ void Text::createLayout()
       QString sym;
       for (const QChar& c : _text) {
             if (state == 0) {
-                  if (c == '&') {
+                  if (c == '#') {
                         state = 1;
                         sym.clear();
                         }
@@ -1048,12 +1050,10 @@ void Text::createLayout()
                         insert(&cursor, c);
                   }
             else if (state == 1) {
-                  if (c == ';') {
+                  if (c == '#') {
                         state = 0;
-                        if (sym == "amp")
-                              insert(&cursor, '&');
-                        else if (sym == "lt")
-                              insert(&cursor, '<');
+                        if (sym == "")
+                              insert(&cursor, '#');
                         else
                               insert(&cursor, Sym::name2id(sym));
                         }

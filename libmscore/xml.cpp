@@ -22,39 +22,6 @@ namespace Ms {
 QString docName;
 
 //---------------------------------------------------------
-//   XmlReader
-//---------------------------------------------------------
-
-XmlReader::XmlReader(QFile* d)
-   : QXmlStreamReader(d)
-      {
-      docName = d->fileName();
-      _tick  = 0;
-      _track = 0;
-      }
-
-XmlReader::XmlReader(const QByteArray& d, const QString& s)
-   : QXmlStreamReader(d), docName(s)
-      {
-      _tick  = 0;
-      _track = 0;
-      }
-
-XmlReader::XmlReader(QIODevice* d, const QString& s)
-   : QXmlStreamReader(d), docName(s)
-      {
-      _tick  = 0;
-      _track = 0;
-      }
-
-XmlReader::XmlReader(const QString& d, const QString& s)
-   : QXmlStreamReader(d), docName(s)
-      {
-      _tick  = 0;
-      _track = 0;
-      }
-
-//---------------------------------------------------------
 //   intAttribute
 //---------------------------------------------------------
 
