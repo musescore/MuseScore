@@ -457,7 +457,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
       int   destTick    = 0;              // the tick and track to place the pasted element at
       int   destTrack   = 0;
       bool  done        = false;
-      int   segDelta;
+      int   segDelta    = 0;
       Segment* startSegm= currSegm;
       int   startTick   = dst->tick();    // the initial tick and track where to start pasting
       int   startTrack  = dst->track();
