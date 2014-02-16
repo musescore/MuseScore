@@ -2488,56 +2488,63 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
       QString tagname = QString("direction");
       if (el) {
             /*
-            qDebug("directionTag() spatium=%g nelem tp=%d (%s,%s)\ndirectionTag()  x=%g y=%g xsp,ysp=%g,%g w=%g h=%g userOff.y=%g",
-                   el->spatium(),
-                   el->type(),
-                   el->name(), el->subtypeName().toUtf8().data(),
-                   el->x(), el->y(),
-                   el->x()/el->spatium(), el->y()/el->spatium(),
-                   el->width(), el->height(),
-                   el->userOff().y()
-                  );
-            if (el->type() == Element::HAIRPIN || el->type() == Element::OTTAVA || el->type() == Element::TEXTLINE) {
-                  SLine* sl = static_cast<const SLine*>(el);
-                  qDebug("directionTag()  slin segsz=%d", sl->spannerSegments().size());
+             qDebug("directionTag() spatium=%g elem=%p tp=%d (%s)\ndirectionTag()  x=%g y=%g xsp,ysp=%g,%g w=%g h=%g userOff.y=%g",
+                    el->spatium(),
+                    el,
+                    el->type(),
+                    el->name(),
+                    el->x(), el->y(),
+                    el->x()/el->spatium(), el->y()/el->spatium(),
+                    el->width(), el->height(),
+                    el->userOff().y()
+                   );
+             */
+            const Element* pel = 0;
+            const LineSegment* seg = 0;
+            if (el->type() == Element::HAIRPIN || el->type() == Element::OTTAVA
+                || el->type() == Element::PEDAL || el->type() == Element::TEXTLINE) {
+                  // find the system containing the first linesegment
+                  const SLine* sl = static_cast<const SLine*>(el);
                   if (sl->spannerSegments().size() > 0) {
-                        LineSegment* seg = (LineSegment*)sl->spannerSegments().at(0);
-                        qDebug(" x=%g y=%g w=%g h=%g cpx=%g cpy=%g userOff.y=%g",
-                               seg->x(), seg->y(),
-                               seg->width(), seg->height(),
-                               seg->pagePos().x(), seg->pagePos().y(),
-                               seg->userOff().y());
-                         }
-                  } // if (el->type() == ...
-            */
-            Element* pel = el->parent();
-            Element* ppel = 0;
-            if (pel) ppel = pel->parent();
+                        seg = (LineSegment*)sl->spannerSegments().at(0);
+                        /*
+                         qDebug("directionTag()  seg=%p x=%g y=%g w=%g h=%g cpx=%g cpy=%g userOff.y=%g",
+                                seg, seg->x(), seg->y(),
+                                seg->width(), seg->height(),
+                                seg->pagePos().x(), seg->pagePos().y(),
+                                seg->userOff().y());
+                         */
+                        pel = seg->parent();
+                        }
+                  }
+            else if (el->type() == Element::DYNAMIC || el->type() == Element::REHEARSAL_MARK
+                     || el->type() == Element::SYMBOL || el->type() == Element::TEXT) {
+                  // find the system containing this element
+                  for (const Element* e = el; e; e = e->parent()) {
+                        if (e->type() == Element::SYSTEM) pel = e;
+                        }
+                  }
+            else
+                  qDebug("directionTag() element %p tp=%d (%s) not suported",
+                         el, el->type(), el->name());
+            
             /*
-            if (pel) {
-                  qDebug("directionTag()  prnt tp=%d (%s,%s) x=%g y=%g w=%g h=%g userOff.y=%g",
-                         pel->type(),
-                         pel->name(), pel->subtypeName().toUtf8().data(),
-                         pel->x(), pel->y(),
-                         pel->width(), pel->height(),
-                         pel->userOff().y());
+             if (pel) {
+             qDebug("directionTag()  prnt tp=%d (%s) x=%g y=%g w=%g h=%g userOff.y=%g",
+                    pel->type(),
+                    pel->name(),
+                    pel->x(), pel->y(),
+                    pel->width(), pel->height(),
+                    pel->userOff().y());
                   }
-            if (ppel) {
-                  qDebug("directionTag()  pprnt tp=%d (%s,%s) x=%g y=%g w=%g h=%g userOff.y=%g",
-                         ppel->type(),
-                         ppel->name(), ppel->subtypeName().toUtf8().data(),
-                         ppel->x(), ppel->y(),
-                         ppel->width(), ppel->height(),
-                         ppel->userOff().y());
-                  }
-            */
-            if (ppel && ppel->type() == Element::MEASURE) {
-                  // Measure* m = static_cast<Measure*>(ppel);
-                  // System* sys = m->system();
-                  // QRectF bb = sys->staff(el->staffIdx())->bbox();
+             */
+            
+            if (pel && pel->type() == Element::SYSTEM) {
+                  const System* sys = static_cast<const System*>(pel);
+                  QRectF bb = sys->staff(el->staffIdx())->bbox();
                   /*
-                  qDebug("directionTag()  syst x=%g y=%g cpx=%g cpy=%g",
-                         sys->pos().x(),  sys->pos().y(),
+                  qDebug("directionTag()  syst=%p sys x=%g y=%g cpx=%g cpy=%g",
+                         sys, sys->pos().x(),  sys->pos().y(),
                          sys->pagePos().x(),
                          sys->pagePos().y()
                         );
@@ -2546,25 +2553,17 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                          bb.width(), bb.height());
                   // element is above the staff if center of bbox is above center of staff
                   qDebug("directionTag()  center diff=%g", el->y() + el->height() / 2 - bb.y() - bb.height() / 2);
-                  */
-                  if (el->placement() == Element::ABOVE)
-                        tagname += " placement=\"above\"";
-                  else if (el->placement() == Element::BELOW)
-                        tagname += " placement=\"below\"";
-
-#if 0
-                  if (el->type() == Element::HAIRPIN || el->type() == Element::OTTAVA || el->type() == Element::PEDAL || el->type() == Element::TEXTLINE) {
-                        SLine const* const sl = static_cast<SLine const* const>(el);
-                        if (sl->spannerSegments().size() > 0) {
-                              LineSegment* seg = (LineSegment*)sl->spannerSegments().at(0);
-                              // for the line type elements the reference point is vertically centered
-                              // actual position info is in the segments
-                              // compare the segment's canvas ypos with the staff's center height
-                              if (seg->pagePos().y() < sys->pagePos().y() + bb.y() + bb.height() / 2)
-                                    tagname += " placement=\"above\"";
-                              else
-                                    tagname += " placement=\"below\"";
-                              }
+                   */
+                  
+                  if (el->type() == Element::HAIRPIN || el->type() == Element::OTTAVA
+                      || el->type() == Element::PEDAL || el->type() == Element::TEXTLINE) {
+                        // for the line type elements the reference point is vertically centered
+                        // actual position info is in the segments
+                        // compare the segment's canvas ypos with the staff's center height
+                        if (seg->pagePos().y() < sys->pagePos().y() + bb.y() + bb.height() / 2)
+                              tagname += " placement=\"above\"";
+                        else
+                              tagname += " placement=\"below\"";
                         }
                   else {
                         if (el->y() + el->height() / 2 < bb.y() + bb.height() / 2)
@@ -2572,8 +2571,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                         else
                               tagname += " placement=\"below\"";
                         }
-#endif
-                  } // if (ppel && ...
+                  } // if (pel && ...
             }
       xml.stag(tagname);
       }
@@ -2876,26 +2874,26 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
 
 void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       {
-      int st = int(ot->ottavaType());
+      OttavaType st = ot->ottavaType();
       directionTag(xml, attr, ot);
       xml.stag("direction-type");
       if (ot->tick() == tick) {
             const char* sz = 0;
             const char* tp = 0;
             switch (st) {
-                  case 0:
+                  case OttavaType::OTTAVA_8VA:
                         sz = "8";
                         tp = "down";
                         break;
-                  case 1:
+                  case OttavaType::OTTAVA_15MA:
                         sz = "15";
                         tp = "down";
                         break;
-                  case 2:
+                  case OttavaType::OTTAVA_8VB:
                         sz = "8";
                         tp = "up";
                         break;
-                  case 3:
+                  case OttavaType::OTTAVA_15MB:
                         sz = "15";
                         tp = "up";
                         break;
@@ -2906,9 +2904,9 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
                   xml.tagE("octave-shift type=\"%s\" size=\"%s\"", tp, sz);
             }
       else {
-            if (st == 0 || st == 2)
+            if (st == OttavaType::OTTAVA_8VA || st == OttavaType::OTTAVA_8VB)
                   xml.tagE("octave-shift type=\"stop\" size=\"8\"");
-            else if (st == 1 || st == 3)
+            else if (st == OttavaType::OTTAVA_15MA || st == OttavaType::OTTAVA_15MB)
                   xml.tagE("octave-shift type=\"stop\" size=\"15\"");
             else
                   qDebug("ottava subtype %d not understood", st);
@@ -3111,12 +3109,12 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
       {
       QString name = Sym::id2name(sym->sym());
       const char* mxmlName = "";
-      if (name == "pedal.Ped")
+      if (name == "keyboardPedalPed")
             mxmlName = "pedal type=\"start\"";
-      else if (name == "pedal.*")
+      else if (name == "keyboardPedalUp")
             mxmlName = "pedal type=\"stop\"";
       else {
-            qDebug("ExportMusicXml::symbol(): %s not supported", name.toLatin1().data());
+            qDebug("ExportMusicXml::symbol(): %s not supported", qPrintable(name));
             return;
             }
       directionTag(xml, attr, sym);
