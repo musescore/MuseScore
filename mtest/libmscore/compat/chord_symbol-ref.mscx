@@ -5,13 +5,12 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <minSystemDistance>9.2</minSystemDistance>
       <lyricsDistance>2</lyricsDistance>
       <frameSystemDistance>1</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>
-      <bracketDistance>0.2</bracketDistance>
+      <bracketDistance>0.25</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
       <minNoteDistance>0.4</minNoteDistance>
       <ledgerLineWidth>0.12</ledgerLineWidth>
@@ -22,7 +21,6 @@
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
-      <createMultiMeasureRests>1</createMultiMeasureRests>
       <voltaY>-2</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
@@ -38,8 +36,8 @@
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
       <page-layout>
-        <page-height>1683.78</page-height>
-        <page-width>1190.55</page-width>
+        <page-height>1584</page-height>
+        <page-width>1224</page-width>
         <page-margins type="even">
           <left-margin>56.6929</left-margin>
           <right-margin>56.6929</right-margin>
@@ -78,6 +76,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
+        <longName pos="0">Flute</longName>
+        <shortName pos="0">Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -91,9 +91,6 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <HBox>
-        <width>5</width>
-        </HBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G</concertClefType>
@@ -107,53 +104,104 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Harmony>
+          <root>14</root>
+          <extension>1</extension>
+          </Harmony>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="2">
+        <Harmony>
+          <root>16</root>
+          <extension>64</extension>
+          <name>7</name>
+          </Harmony>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="3">
+        <Harmony>
+          <root>11</root>
+          <extension>16</extension>
+          <name>m</name>
+          </Harmony>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="4">
+        <Harmony>
+          <root>20</root>
+          <extension>6</extension>
+          <name>Maj7</name>
+          </Harmony>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="5">
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
+        <Harmony>
+          <root>15</root>
+          <extension>33</extension>
+          <name>dim</name>
+          </Harmony>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="6">
-        <Chord>
-          <durationType>whole</durationType>
-          <Note>
-            <pitch>79</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <Harmony>
+          <root>17</root>
+          <extension>76</extension>
+          <name>7b9</name>
+          </Harmony>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      <Measure number="7">
+        <Harmony>
+          <name>Bo</name>
+          </Harmony>
+        <StaffText>
+          <style>Staff</style>
+          <text>unrecognized</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      <Measure number="8">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
