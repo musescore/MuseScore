@@ -275,6 +275,11 @@ Score::FileError Score::read114(XmlReader& e)
       for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
             style()->set(style114[i].idx, style114[i].val);
 
+      // old text style defaults
+      TextStyle ts = style()->textStyle("Chord Symbol");
+      ts.setYoff(-4.0);
+      style()->setTextStyle(ts);
+
       while (e.readNextStartElement()) {
             e.setTrack(-1);
             const QStringRef& tag(e.name());
