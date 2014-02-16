@@ -7719,9 +7719,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="mallet-synthesizer">
-                  <longName>Mallet synthesizer</longName>
+                  <longName>Mallet Synthesizer</longName>
                   <shortName>Mal. Syn.</shortName>
-                  <description>Mallet synthesizer</description>
+                  <description>Mallet Synthesizer</description>
                   <staves>2</staves>
                   <clef>G</clef>
                   <bracket>1</bracket>
