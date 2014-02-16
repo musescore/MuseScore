@@ -231,8 +231,10 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                || e->type() == Element::FIGURED_BASS) {
             genPropertyMenuText(e, popup);
             }
-      else if (e->type() == Element::HARMONY)
+      else if (e->type() == Element::HARMONY) {
+            genPropertyMenu1(e, popup);
             popup->addAction(tr("Text Style..."))->setData("text-style");
+            }
       else if (e->type() == Element::TEMPO_TEXT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Text Style..."))->setData("text-style");
