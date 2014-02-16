@@ -57,7 +57,7 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
       connect(textNames, SIGNAL(currentRowChanged(int)), SLOT(nameSelected(int)));
       connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
 
-      current   = -1;
+      current = -1;
       textNames->setCurrentItem(textNames->item(0));
       }
 
@@ -67,6 +67,25 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
 
 TextStyleDialog::~TextStyleDialog()
       {
+      }
+
+//---------------------------------------------------------
+//   setPage
+//---------------------------------------------------------
+
+void TextStyleDialog::setPage(QString name)
+      {
+      for (int i = 0; i < styles.size(); ++i) {
+            if (styles.at(i).name() == name) {
+                  for (int j = 0; j < textNames->count(); ++j) {
+                        if (textNames->item(j)->data(Qt::UserRole).toInt() == i) {
+                              textNames->setCurrentItem(textNames->item(j));
+                              return;
+                              }
+                        }
+                  return;
+                  }
+            }
       }
 
 //---------------------------------------------------------
