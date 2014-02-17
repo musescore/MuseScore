@@ -540,7 +540,7 @@ class Score : public QObject {
       Chord* addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tuplet);
 
       ChordRest* addClone(ChordRest* cr, int tick, const TDuration& d);
-      Rest* setRest(int tick,  int track, Fraction, bool useDots, Tuplet* tuplet);
+      Rest* setRest(int tick,  int track, Fraction, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
 
       void upDown(bool up, UpDownMode);
       ChordRest* searchNote(int tick, int track) const;
