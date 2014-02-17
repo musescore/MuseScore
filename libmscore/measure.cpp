@@ -1121,9 +1121,16 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
             _score->undo(new InsertMStaff(this, ms, i));
 
             if (createRest) {
-                  Rest* rest = new Rest(score(), TDuration(TDuration::V_MEASURE));
+                  Rest* rest;
+                  if (irregular()) {
+                        TDuration dur = TDuration(len()).type();
+                        rest = new Rest(score(), dur);
+                  } else {
+                        rest = new Rest(score(), TDuration(TDuration::V_MEASURE));
+                  }
                   rest->setTrack(i * VOICES);
                   rest->setDuration(len());
+                  
                   Segment* s = undoGetSegment(Segment::SegChordRest, tick());
                   rest->setParent(s);
                   score()->undoAddElement(rest);
