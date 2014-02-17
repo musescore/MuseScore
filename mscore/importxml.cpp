@@ -2292,26 +2292,96 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
 //   setSLinePlacement -- helper for direction
 //---------------------------------------------------------
 
-static void setSLinePlacement(SLine* sli, float /*s*/, const QString pl, bool hasYoff, qreal yoff)
+// SLine placement is modified by changing the first segments user offset
+// As the SLine has just been created, it does not have any segment yet
+      
+static void setSLinePlacement(SLine* sli, float spatium, const QString placement, bool hasYoff, qreal yoff)
       {
       /*
-      qDebug("setSLinePlacement s=%g pl='%s' hasy=%d yoff=%g",
-             s, qPrintable(pl), hasYoff, yoff
-             );
+      qDebug("setSLinePlacement sli %p type %d s=%g pl='%s' hasy=%d yoff=%g",
+             sli, sli->type(), spatium, qPrintable(placement), hasYoff, yoff);
        */
-      float offs = 0.0;
-      if (hasYoff) offs = yoff;
-      else {
-            // MuseScore 1.x compatible offsets
-            if (pl == "above")
-                  sli->setPlacement(Element::ABOVE);
-            else if (pl == "below")
-                  sli->setPlacement(Element::BELOW);
-            else
-                  qDebug("setSLinePlacement invalid placement '%s'", qPrintable(pl));
+            
+      // calc y offset assuming five line staff and default style
+      // note that required y offset is element type dependent
+      const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
+      qreal offsAbove = 0;
+      qreal offsBelow = 0;
+      if (sli->type() == Element::PEDAL || sli->type() == Element::HAIRPIN) {
+            offsAbove = -6 - (stafflines - 1);
+            offsBelow = -1;
             }
-      sli->setYoff(offs);
-      //qDebug(" -> offs*s=%g", offs * s);
+      else if (sli->type() == Element::TEXTLINE) {
+            offsAbove = -3;
+            offsBelow =  3 + (stafflines - 1);
+            }
+      else if (sli->type() == Element::OTTAVA) {
+            // ignore
+            }
+      else
+            qDebug("setSLinePlacement sli %p unsupported type %d",
+                   sli, sli->type());
+            
+      // move to correct position
+      qreal y = 0;
+      if (placement == "above") y += offsAbove;
+      if (placement == "below") y += offsBelow;
+      // add linesegment containing the user offset
+      LineSegment* tls= sli->createLineSegment();
+      //qDebug("   y = %g", y);
+      y *= spatium;
+      tls->setUserOff(QPointF(0, y));
+      sli->add(tls);
+      }
+      
+//---------------------------------------------------------
+//   addElem
+//---------------------------------------------------------
+      
+static void addElem(Element* el, bool hasYoffset, int staff, int rstaff, Score* score, QString& placement,
+                    qreal rx, qreal ry, int /* offset */, Measure* measure, int tick)
+      {
+      /*
+      qDebug("addElem el %p hasYoff %d staff %d rstaff %d placement %s rx %g ry %g tick %d",
+             el, hasYoffset, staff, rstaff, qPrintable(placement), rx, ry, tick);
+       */
+            
+      // calc y offset assuming five line staff and default style
+      // note that required y offset is element type dependent
+      const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
+      qreal offsAbove = 0;
+      qreal offsBelow = 0;
+      if (el->type() == Element::TEMPO_TEXT || el->type() == Element::REHEARSAL_MARK) {
+            offsAbove = 0;
+            offsBelow = 8 + (stafflines - 1);
+            }
+      else if (el->type() == Element::TEXT) {
+            offsAbove = 0;
+            offsBelow = 6 + (stafflines - 1);
+            }
+      else if (el->type() == Element::SYMBOL) {
+            offsAbove = -2;
+            offsBelow =  4 + (stafflines - 1);
+            }
+      else if (el->type() == Element::DYNAMIC) {
+            offsAbove = -5.75 - (stafflines - 1);
+            offsBelow = -0.75;
+            }
+      else
+            qDebug("addElem el %p unsupported type %d",
+                   el, el->type());
+            
+      // move to correct position
+      // TODO: handle rx, ry
+      qreal y = 0;
+      if (placement == "above") y += offsAbove;
+      if (placement == "below") y += offsBelow;
+      //qDebug("   y = %g", y);
+      y *= score->spatium();
+      el->setUserOff(QPoint(0, y));
+      el->setTrack((staff + rstaff) * VOICES);
+      Segment* s = measure->getSegment(Segment::SegChordRest, tick);
+      s->add(el);
       }
 
 //---------------------------------------------------------
@@ -2386,28 +2456,6 @@ static void metronome(QDomElement e, Text* t)
       if (parenth == "yes")
             tempoText += ")";
       t->setText(tempoText);
-      }
-
-//---------------------------------------------------------
-//   addElement
-//---------------------------------------------------------
-
-static void addElement(Element* el, bool hasYoffset, int staff, int rstaff, Score* /* score */, QString& placement,
-                       qreal rx, qreal ry, int /* offset */, Measure* measure, int tick)
-      {
-      if (hasYoffset) /* el->setYoff(yoffset) */;              // TODO is this still necessary ? Some element types do ot support this
-      else {
-            el->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
-            // double y = (staff + rstaff) * (score->styleD(ST_staffDistance) + 4);             // TODO 4 = #lines/staff - 1
-            // y += (placement == "above" ? -3 : 5);
-            // y *= score->spatium();
-            // el->setReadPos(QPoint(0, y));
-            }
-      el->setUserOff(QPointF(rx, ry));
-      // el->setMxmlOff(offset);
-      el->setTrack((staff + rstaff) * VOICES);
-      Segment* s = measure->getSegment(Segment::SegChordRest, tick);
-      s->add(el);
       }
 
 //---------------------------------------------------------
@@ -2727,17 +2775,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             t->setText(txt);
             if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
-            addElement(t, hasYoffset, staff, rstaff, score, placement,
+            addElem(t, hasYoffset, staff, rstaff, score, placement,
                        rx, ry, offset, measure, tick);
-            /*
-            if (hasYoffset) t->setYoff(yoffset);
-            else t->setAbove(placement == "above");
-            t->setUserOff(QPointF(rx, ry));
-            t->setMxmlOff(offset);
-            t->setTrack((staff + rstaff) * VOICES);
-            Segment* s = measure->getSegment(Segment::SegChordRest, tick);
-            s->add(t);
-            */
             }
       else if (dirType == "rehearsal") {
             Text* t = new RehearsalMark(score);
@@ -2745,15 +2784,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             else t->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
-            addElement(t, hasYoffset, staff, rstaff, score, placement,
+            addElem(t, hasYoffset, staff, rstaff, score, placement,
                        rx, ry, offset, measure, tick);
-            /*
-            t->setUserOff(QPointF(rx, ry));
-            t->setMxmlOff(offset);
-            t->setTrack((staff + rstaff) * VOICES);
-            Segment* s = measure->getSegment(Segment::SegChordRest, tick);
-            s->add(t);
-            */
             }
       else if (dirType == "pedal") {
             if (pedalLine) {
@@ -2796,12 +2828,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else
                         qDebug("unknown pedal %s", type.toLatin1().data());
                   if (hasYoffset) s->setYoff(yoffset);
-                  else s->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
-                  s->setUserOff(QPointF(rx, ry));
-                  // s->setMxmlOff(offset);
-                  s->setTrack((staff + rstaff) * VOICES);
-                  Segment* seg = measure->getSegment(Segment::SegChordRest, tick);
-                  seg->add(s);
+                  addElem(s, hasYoffset, staff, rstaff, score, placement,
+                          rx, ry, offset, measure, tick);
                   }
             }
       else if (dirType == "dynamics") {
@@ -2819,7 +2847,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         dyn->setVelocity( dynaValue );
                         }
                   if (hasYoffset) dyn->textStyle().setYoff(yoffset);
-                  addElement(dyn, hasYoffset, staff, rstaff, score, placement,
+                  addElem(dyn, hasYoffset, staff, rstaff, score, placement,
                              rx, ry, offset, measure, tick);
                   }
             }
@@ -2834,13 +2862,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         hairpin = new Hairpin(score);
                         hairpin->setHairpinType(type == "crescendo"
                                                 ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
-                        hairpin->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
-
-                        if (hasYoffset)
-                              hairpin->setYoff(yoffset);
-                        // else
-                        //      hairpin->setYoff(above ? -3 : 8);
-                        // hairpin->setUserOff(rx, ry));
+                        setSLinePlacement(hairpin,
+                                          score->spatium(), placement,
+                                          hasYoffset, yoffset);
                         hairpin->setTrack((staff + rstaff) * VOICES);
                         spanners[hairpin] = QPair<int, int>(tick, -1);
                         // qDebug("hairpin=%p inserted at first tick %d", hairpin, tick);
@@ -2869,11 +2893,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else {
                         b = new TextLine(score);
 
-                        // what does placement affect?
-                        //yoffset += (placement == "above" ? 0.0 : 5.0);
-                        // store for later to set in segment
-                        // b->setUserOff(QPointF(rx + xoffset, ry + yoffset));
-                        // b->setMxmlOff(offset);
                         if (placement == "") placement = "above";  // set default
                         setSLinePlacement(b,
                                           score->spatium(), placement,
@@ -2907,20 +2926,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   if (!b)
                         qDebug("bracket stop without start, number %d", number);
                   else {
-                        // TODO: MuseScore doesn't support lines which start and end on different staves
-                        /*
-                        QPointF userOff = b->userOff();
-                        b->add(b->createLineSegment());
-
-                        b->setUserOff(QPointF()); // restore the offset
-                        b->setMxmlOff2(offset);
-                        LineSegment* ls1 = b->lineSegments().front();
-                        LineSegment* ls2 = b->lineSegments().back();
-                        // what does placement affect?
-                        //yoffset += (placement == "above" ? 0.0 : 5.0);
-                        ls1->setUserOff(userOff);
-                        ls2->setUserOff2(QPointF(rx + xoffset, ry + yoffset));
-                        */
                         b->setEndHook(lineEnd != "none");
                         if (lineEnd == "up")
                               b->setEndHookHeight(-1 * b->endHookHeight());
@@ -2940,11 +2945,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else {
                         b = new TextLine(score);
 
-                        // what does placement affect?
-                        //yoffset += (placement == "above" ? 0.0 : 5.0);
-                        // store for later to set in segment
-                        // b->setUserOff(QPointF(rx + xoffset, ry + yoffset));
-                        // b->setMxmlOff(offset);
                         if (placement == "") placement = "above";  // set default
                         setSLinePlacement(b,
                                           score->spatium(), placement,
@@ -2968,21 +2968,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         qDebug("dashes stop without start, number %d", number);
                         }
                   else {
-                        // b->setTick2(tick);
                         // TODO: MuseScore doesn't support lines which start and end on different staves
-                        /*
-                        QPointF userOff = b->userOff();
-                        b->add(b->createLineSegment());
-
-                        b->setUserOff(QPointF()); // restore the offset
-                        b->setMxmlOff2(offset);
-                        LineSegment* ls1 = b->lineSegments().front();
-                        LineSegment* ls2 = b->lineSegments().back();
-                        // what does placement affect?
-                        //yoffset += (placement == "above" ? 0.0 : 5.0);
-                        ls1->setUserOff(userOff);
-                        ls2->setUserOff2(QPointF(rx + xoffset, ry + yoffset));
-                        */
                         b->setEndHook(false);
                         spanners[b].second = tick;
                         dashes[n] = 0;
@@ -4448,7 +4434,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             Dynamic* dyn = new Dynamic(score);
             dyn->setDynamicType(*it);
             if (hasYoffset) dyn->textStyle().setYoff(yoffset);
-            addElement(dyn, hasYoffset, track / VOICES /* staff */, 0 /* rstaff */, score, placement,
+            addElem(dyn, hasYoffset, track / VOICES /* staff */, 0 /* rstaff */, score, placement,
                        rx, ry, 0 /*offset */, measure, tick);
             }
 
