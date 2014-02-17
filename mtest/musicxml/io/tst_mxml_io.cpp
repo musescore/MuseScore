@@ -64,7 +64,7 @@ private slots:
       void dalSegno() { mxmlIoTest("testDalSegno"); }
       void dcalCoda() { mxmlIoTest("testDCalCoda"); }
       void dcalFine() { mxmlIoTest("testDCalFine"); }
-//      void directions1() { mxmlIoTest("testDirections1"); }
+      void directions1() { mxmlIoTest("testDirections1"); }
       void drumset1() { mxmlIoTest("testDrumset1"); }
       void drumset2() { mxmlIoTest("testDrumset2"); }
       void durationRoundingError() { mxmlIoTestRef("testDurationRoundingError"); }
@@ -89,7 +89,7 @@ private slots:
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
 //      void lines1() { mxmlIoTestRef("testLines1"); }
-//      void lines2() { mxmlIoTestRef("testLines2"); }
+      void lines2() { mxmlIoTestRef("testLines2"); }
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
       void manualBreaks() { mxmlIoTest("testManualBreaks"); }
@@ -98,17 +98,20 @@ private slots:
       void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); }
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
-//      void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }
-//      void noteAttributes1() { mxmlIoTest("testNoteAttributes1"); }
+      void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }
+      void noteAttributes1() { mxmlIoTest("testNoteAttributes1"); }
       void noteAttributes2() { mxmlIoTestRef("testNoteAttributes2"); }
       void noteAttributes3() { mxmlIoTest("testNoteAttributes3"); }
+      void noteheadParentheses() { mxmlIoTest("testNoteheadParentheses"); }
       void noteheads() { mxmlIoTest("testNoteheads"); }
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
+      void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
 //      void slurs() { mxmlIoTest("testSlurs"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
+      void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
       void systemBrackets2() { mxmlIoTest("testSystemBrackets2"); }
       void tablature1() { mxmlIoTest("testTablature1"); }
@@ -128,11 +131,9 @@ private slots:
       void voiceMapper3() { mxmlIoTestRef("testVoiceMapper3"); }
       void voicePiano1() { mxmlIoTest("testVoicePiano1"); }
       void volta1() { mxmlIoTest("testVolta1"); }
-//      void wedge1() { mxmlIoTest("testWedge1"); }
+      void wedge1() { mxmlIoTest("testWedge1"); }
 //      void wedge2() { mxmlIoTestRef("testWedge2"); }
       void words1() { mxmlIoTest("testWords1"); }
-      void noteheadParentheses() { mxmlIoTest("testNoteheadParentheses"); }
-      void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       };
 
 //---------------------------------------------------------
