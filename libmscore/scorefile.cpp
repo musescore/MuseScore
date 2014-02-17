@@ -820,6 +820,7 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
             else
                   e.unknown();
             }
+
       int id = 1;
       foreach (LinkedElements* le, _elinks)
             le->setLid(this, id++);
@@ -1034,8 +1035,12 @@ bool Score::read(XmlReader& e)
             else
                   e.unknown();
             }
-      if (e.error() != QXmlStreamReader::NoError)
+      if (e.error() != QXmlStreamReader::NoError) {
+            qDebug("%s: xml read error at line %lld col %lld: %s",
+               qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
+               e.name().toUtf8().data());
             return false;
+            }
 
       connectTies();
 
