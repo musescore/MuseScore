@@ -276,6 +276,7 @@ class Measure : public MeasureBase {
       void setBreakMultiMeasureRest(bool val)   { _breakMultiMeasureRest = val;  }
 
       bool isEmpty() const;
+      bool isOnlyRests(int track) const;
 
 //      void layoutChords0(Segment* segment, int startTrack);
       void layoutChords10(Segment* segment, int startTrack, AccidentalState*);

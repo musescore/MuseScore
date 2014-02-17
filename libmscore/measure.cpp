@@ -2841,6 +2841,24 @@ bool Measure::isEmpty() const
       }
 
 //---------------------------------------------------------
+//   isOnlyRests
+//---------------------------------------------------------
+
+bool Measure::isOnlyRests(int track) const
+      {
+      int n = 0;
+      static const Segment::SegmentType st = Segment::SegChordRest;
+      for (const Segment* s = first(st); s; s = s->next(st)) {
+            if (s->segmentType() != Segment::SegChordRest || !s->element(track))
+                  continue;
+            if (s->element(track)->type() != REST)
+                  return false;
+            }
+      return true;
+      }
+
+
+//---------------------------------------------------------
 //   Space::max
 //---------------------------------------------------------
 
