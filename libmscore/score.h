@@ -560,6 +560,7 @@ class Score : public QObject {
       void deleteItem(Element*);
       void cmdDeleteSelectedMeasures();
       void cmdDeleteSelection();
+      void cmdFullMeasureRest();
 
       void putNote(const QPointF& pos, bool replace);
       void putNote(const Position& pos, bool replace);
