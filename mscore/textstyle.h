@@ -50,6 +50,7 @@ class TextStyleDialog : public QDialog, Ui::TextStyleDialog {
 
    public:
       TextStyleDialog(QWidget* parent, Score*);
+      void setPage(QString);
       ~TextStyleDialog();
       };
 }
