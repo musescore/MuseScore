@@ -642,65 +642,66 @@ void Xml::dump(int len, const unsigned char* p)
       }
 
 //---------------------------------------------------------
-//   htmlToStringg
+//   htmlToString
 //---------------------------------------------------------
 
-void Xml::htmlToString(XmlReader& e, int level, QString* s)
+void XmlReader::htmlToString(int level, QString* s)
       {
-      *s += QString("<%1").arg(e.name().toString());
-      QXmlStreamAttributes map = e.attributes();
-      int n = map.size();
-      for (int i = 0; i < n; ++i) {
-            const QXmlStreamAttribute& a = map.at(i);
+      *s += QString("<%1").arg(name().toString());
+      for (const QXmlStreamAttribute& a : attributes())
             *s += QString(" %1=\"%2\"").arg(a.name().toString()).arg(a.value().toString());
-            }
       *s += ">";
       ++level;
       for (;;) {
-            QXmlStreamReader::TokenType t = e.readNext();
+            QXmlStreamReader::TokenType t = readNext();
             switch(t) {
                   case QXmlStreamReader::StartElement:
-                        htmlToString(e, level, s);
+                        htmlToString(level, s);
                         break;
                   case QXmlStreamReader::EndElement:
-                        *s += QString("</%1>").arg(e.name().toString());
+                        *s += QString("</%1>").arg(name().toString());
                         --level;
                         return;
                   case QXmlStreamReader::Characters:
-                        if (!e.isWhitespace())
-                              *s += e.text().toString().toHtmlEscaped();
+                        if (!isWhitespace())
+                              *s += text().toString().toHtmlEscaped();
                         break;
                   case QXmlStreamReader::Comment:
                         break;
 
                   default:
-                        qDebug("htmlToString: read token: %s", qPrintable(e.tokenString()));
+                        qDebug("htmlToString: read token: %s", qPrintable(tokenString()));
                         return;
                   }
             }
       }
 
-QString Xml::htmlToString(XmlReader& e)
+//-------------------------------------------------------------------
+//   readXml
+//    read verbatim until end tag of current level is reached
+//-------------------------------------------------------------------
+
+QString XmlReader::readXml()
       {
       QString s;
       int level = 1;
       for (;;) {
-            QXmlStreamReader::TokenType t = e.readNext();
+            QXmlStreamReader::TokenType t = readNext();
             switch(t) {
                   case QXmlStreamReader::StartElement:
-                        htmlToString(e, level, &s);
+                        htmlToString(level, &s);
                         break;
                   case QXmlStreamReader::EndElement:
                         return s;
                   case QXmlStreamReader::Characters:
-                        if (!e.isWhitespace())
-                              s += e.text().toString().toHtmlEscaped();
+                        if (!isWhitespace())
+                              s += text().toString().toHtmlEscaped();
                         break;
                   case QXmlStreamReader::Comment:
                         break;
 
                   default:
-                        qDebug("htmlToString: read token: %s", qPrintable(e.tokenString()));
+                        qDebug("htmlToString: read token: %s", qPrintable(tokenString()));
                         return s;
                   }
             }
@@ -708,22 +709,20 @@ QString Xml::htmlToString(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   writeHtml
+//   writeXml
 //---------------------------------------------------------
 
-void Xml::writeHtml(QString s)
+void Xml::writeXml(const char* name, QString s)
       {
+      putLevel();
       for (int i = 0; i < s.size(); ++i) {
             ushort c = s.at(i).unicode();
             if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D)
                   s[i] = '?';
             }
-      QStringList sl(s.split("\n"));
-      //
-      // remove first line from html (DOCTYPE...)
-      //
-      for (int i = 1; i < sl.size(); ++i)
-            *this << sl[i] << "\n";
+      *this << "<" << name << ">";
+      *this << s;
+      *this << "</" << name << ">\n";
       }
 
 //---------------------------------------------------------

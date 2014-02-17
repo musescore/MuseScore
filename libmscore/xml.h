@@ -48,6 +48,7 @@ class XmlReader : public QXmlStreamReader {
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
       QList<SpannerValues> _spannerValues;
+      void htmlToString(int level, QString*);
 
    public:
       XmlReader(QFile* f) : QXmlStreamReader(f) { docName = f->fileName(); }
@@ -75,8 +76,10 @@ class XmlReader : public QXmlStreamReader {
       QRectF readRect();
       QColor readColor();
       Fraction readFraction();
+      QString readXml();
 
       void setDocName(const QString& s) { docName = s; }
+      QString getDocName() const        { return docName; }
 
       int tick()  const           { return _tick;  }
       int& rtick()                { return _tick;  }
@@ -147,12 +150,10 @@ class Xml : public QTextStream {
       void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
       void tag(const char* name, const QWidget*);
 
-      void writeHtml(QString s);
+      void writeXml(const char* tag, QString s);
       void dump(int len, const unsigned char* p);
 
       static QString xmlString(const QString&);
-      static void htmlToString(XmlReader&, int level, QString*);
-      static QString htmlToString(XmlReader&);
       };
 
 extern PlaceText readPlacement(XmlReader&);

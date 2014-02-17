@@ -195,65 +195,6 @@ QFont TextFragment::font(const Text* t) const
       }
 
 //---------------------------------------------------------
-//   text
-//---------------------------------------------------------
-
-QString TextBlock::text(TextCursor* cursor) const
-      {
-      QString s;
-
-      for (const TextFragment& f : _text) {
-            if (f.format.type() == CharFormatType::TEXT) {
-                  if (f.format.bold() != cursor->format()->bold()) {
-                        s += f.format.bold() ? "<b>" : "</b>";
-                        cursor->format()->setBold(f.format.bold());
-                        }
-                  if (f.format.italic() != cursor->format()->italic()) {
-                        s += f.format.italic() ? "<i>" : "</i>";
-                        cursor->format()->setItalic(f.format.italic());
-                        }
-                  if (f.format.underline() != cursor->format()->underline()) {
-                        s += f.format.underline() ? "<u>" : "</u>";
-                        cursor->format()->setUnderline(f.format.underline());
-                        }
-                  if (f.format.fontSize() != cursor->format()->fontSize()) {
-                        s += QString("<font size=\"%1\">").arg(f.format.fontSize());
-                        cursor->format()->setFontSize(f.format.fontSize());
-                        }
-                  if (f.format.fontFamily() != cursor->format()->fontFamily()) {
-                        s += QString("<font face=\"%1\">").arg(f.format.fontFamily());
-                        cursor->format()->setFontFamily(f.format.fontFamily());
-                        }
-                  if (f.format.valign() != cursor->format()->valign()) {
-                        switch (cursor->format()->valign()) {
-                              case VerticalAlignment::AlignNormal:
-                                    s += f.format.valign() == VerticalAlignment::AlignSubScript ? "</sub>" : "</sup>";
-                              case VerticalAlignment::AlignSuperScript:
-                                    s += "<sup>";
-                                    break;
-                              case VerticalAlignment::AlignSubScript:
-                                    s += "<sub>";
-                                    break;
-                              }
-                        }
-                  for (const QChar& c : f.text) {
-                        if (c == '#')
-                              s += c;
-                        s += c;
-                        }
-                  }
-            else {
-                  for (SymId id : f.ids) {
-                        s += "#";
-                        s += Sym::id2name(id);
-                        s += "#";
-                        }
-                  }
-            }
-      return s;
-      }
-
-//---------------------------------------------------------
 //   addText
 //---------------------------------------------------------
 
@@ -778,6 +719,26 @@ TextBlock TextBlock::split(int column)
       }
 
 //---------------------------------------------------------
+//   text
+//---------------------------------------------------------
+
+QString TextBlock::text(int col1, int len) const
+      {
+      QString s;
+      int col = 0;
+      for (auto f : _text) {
+            for (const QChar& c : f.text) {
+                  if (c.isHighSurrogate())
+                        continue;
+                  ++col;
+                  if (col >= col1 && (len < 0 || ((col1-col) < len)))
+                        s += c;
+                  }
+            }
+      return s;
+      }
+
+//---------------------------------------------------------
 //   Text
 //---------------------------------------------------------
 
@@ -1063,7 +1024,7 @@ void Text::createLayout()
             else if (state == 2) {
                   if (c == '>') {
                         state = 0;
-                        if (sym == "br")
+                        if (sym == "br/")
                               insert(&cursor, QChar::LineFeed);
                         else if (sym == "b")
                               cursor.format()->setBold(true);
@@ -1286,6 +1247,148 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       }
 
 //---------------------------------------------------------
+//   XmlNesting
+//---------------------------------------------------------
+
+class XmlNesting : public QStack<QString> {
+      QString* _s;
+
+   public:
+      XmlNesting(QString* s) { _s = s; }
+      void pushToken(const char* t) {
+            *_s += "<";
+            *_s += t;
+            *_s += ">";
+            push(t);
+            }
+      void pushB() { pushToken("b"); }
+      void pushI() { pushToken("i"); }
+      void pushU() { pushToken("u"); }
+
+      QString popToken() {
+            QString s = pop();
+            *_s += "</";
+            *_s += s;
+            *_s += ">";
+            return s;
+            }
+      void popB() {
+            while (popToken() != "b")
+                  ;
+            }
+      void popI() {
+            while (popToken() != "i")
+                  ;
+            }
+      void popU() {
+            while (popToken() != "u")
+                  ;
+            }
+      };
+
+//---------------------------------------------------------
+//   genText
+//---------------------------------------------------------
+
+void Text::genText()
+      {
+      _text.clear();
+      bool bold      = false;
+      bool italic    = false;
+      bool underline = false;
+
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  if (!f.format.bold() && textStyle().bold())
+                        bold = true;
+                  if (!f.format.italic() && textStyle().italic())
+                        italic = true;
+                  if (!f.format.underline() && textStyle().underline())
+                        underline = true;
+                  }
+            }
+      TextCursor cursor;
+      cursor.initFromStyle(textStyle());
+      XmlNesting xmlNesting(&_text);
+      if (bold && textStyle().bold())
+            xmlNesting.pushB();
+      if (italic)
+            xmlNesting.pushI();
+      if (underline)
+            xmlNesting.pushU();
+
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  const CharFormat& format = f.format;
+                  if (format.type() == CharFormatType::TEXT) {
+                        if (cursor.format()->bold() != format.bold()) {
+                              if (format.bold())
+                                    xmlNesting.pushB();
+                              else
+                                    xmlNesting.popB();
+                              }
+                        if (cursor.format()->italic() != format.italic()) {
+                              if (format.italic())
+                                    xmlNesting.pushI();
+                              else
+                                    xmlNesting.popI();
+                              }
+                        if (cursor.format()->underline() != format.underline()) {
+                              if (format.underline())
+                                    xmlNesting.pushU();
+                              else
+                                    xmlNesting.popU();
+                              }
+
+                        if (format.fontSize() != cursor.format()->fontSize())
+                              _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
+                        if (format.fontFamily() != cursor.format()->fontFamily())
+                              _text += QString("<font face=\"%1\"/>").arg(format.fontFamily());
+
+                        if (cursor.format()->valign() != format.valign()) {
+                              switch (format.valign()) {
+                                    case VerticalAlignment::AlignNormal:
+                                          {
+                                          QString token;
+                                          if (format.valign() == VerticalAlignment::AlignSuperScript)
+                                                token = "sup";
+                                          else
+                                                token = "sub";
+                                          while (xmlNesting.popToken() != token)
+                                                ;
+                                          }
+                                          break;
+                                    case VerticalAlignment::AlignSuperScript:
+                                          xmlNesting.pushToken("sup");
+                                          break;
+                                    case VerticalAlignment::AlignSubScript:
+                                          xmlNesting.pushToken("sub");
+                                          break;
+                                    }
+                              }
+                        QString s;
+                        for (const QChar& c : f.text) {
+                              if (c == '#')
+                                    s += c;
+                              s += c;
+                              }
+                        _text += Xml::xmlString(s);
+                        cursor.setFormat(format);
+                        }
+                  else {
+                        for (SymId id : f.ids) {
+                              _text += "#";
+                              _text += Sym::id2name(id);
+                              _text += "#";
+                              }
+                        }
+                  }
+            }
+      while (!xmlNesting.isEmpty())
+            xmlNesting.popToken();
+      }
+
+//---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
@@ -1295,16 +1398,7 @@ void Text::endEdit()
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
 
-      _text.clear();
-      TextCursor cursor;
-      cursor.initFromStyle(textStyle());
-
-      for (const TextBlock& block : _layout) {
-            if (!_text.isEmpty())
-                  _text += "<br>";
-            _text += block.text(&cursor);
-            }
-
+      genText();
       if (links()) {
             foreach(Element* e, *links()) {
                   if (e == this)
@@ -1626,20 +1720,18 @@ QString Text::selectedText() const
             if (c1 > c2)
                   qSwap(c1, c2);
             }
-      TextCursor cursor;
-      cursor.initFromStyle(textStyle());
       int rows = _layout.size();
       for (int row = 0; row < rows; ++row) {
             const TextBlock& t = _layout.at(row);
             if (row >= r1 && row <= r2) {
                   if (row == r1 && r1 == r2)
-                        s += t.text(&cursor).mid(c1, c2 - c1);
+                        s += t.text(c1, c2 - c1);
                   else if (row == r1)
-                        s += t.text(&cursor).mid(c1);
+                        s += t.text(c1, -1);
                   else if (row == r2)
-                        s += t.text(&cursor).left(c2);
+                        s += t.text(0, c2);
                   else
-                        s += t.text(&cursor);
+                        s += t.text(0, -1);
                   }
             if (row != rows -1)
                   s += "\n";
@@ -1735,7 +1827,7 @@ void Text::writeProperties(Xml& xml, bool writeText) const
       if (xml.clipboardmode || !styled())
             _textStyle.writeProperties(xml);
       if (writeText)
-            xml.tag("text", text());
+            xml.writeXml("text", text());
       }
 
 //---------------------------------------------------------
@@ -1815,11 +1907,11 @@ bool Text::readProperties(XmlReader& e)
       else if (tag == "data")                  // obsolete
             e.readElementText();
       else if (tag == "html")
-            setText(QTextDocumentFragment::fromHtml(Xml::htmlToString(e)).toPlainText());
+            setText(QTextDocumentFragment::fromHtml(e.readXml()).toPlainText());
       else if (tag == "text")
-            setText(e.readElementText());
+            setText(e.readXml());
       else if (tag == "html-data") {
-            QString s = Xml::htmlToString(e);
+            QString s = e.readXml();
             if (score()->mscVersion() <= 114) {
                   s.replace("MScore1", "FreeSerif");
                   s.replace(QChar(0xe10e), QChar(0x266e));    //natural

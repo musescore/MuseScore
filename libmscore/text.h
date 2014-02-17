@@ -133,7 +133,6 @@ class TextBlock {
    public:
       TextBlock() {}
       bool operator ==(const TextBlock& x)         { return _text == x._text; }
-      QString text(TextCursor*) const;
       void addText(TextCursor*, const QString&);
       void draw(QPainter*, const Text*) const;
       void layout(Text*);
@@ -155,6 +154,7 @@ class TextBlock {
       qreal y() const      { return _y; }
       void setY(qreal val) { _y = val; }
       qreal leading() const { return _leading; }
+      QString text(int, int) const;
       };
 
 //---------------------------------------------------------
@@ -182,6 +182,7 @@ class Text : public Element {
       void insert(TextCursor*, QChar);
       void insert(TextCursor*, SymId);
       void updateCursorFormat(TextCursor*);
+      void genText();
 
    protected:
       TextStyle _textStyle;

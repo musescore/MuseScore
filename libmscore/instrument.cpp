@@ -153,7 +153,7 @@ void StaffName::write(Xml& xml, const char* tag) const
 void StaffName::read(XmlReader& e)
       {
       pos  = e.intAttribute("pos", 0);
-      name = Xml::htmlToString(e);
+      name = e.readXml();
       if (name.startsWith("<html>")) {
             // compatibility to old html implementation:
             name = QTextDocumentFragment::fromHtml(name).toPlainText();
