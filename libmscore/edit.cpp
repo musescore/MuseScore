@@ -258,7 +258,7 @@ qDebug("addClone %s at %d %s", cr->name(), tick, qPrintable(d.fraction().print()
 //    create one or more rests to fill "l"
 //---------------------------------------------------------
 
-Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tuplet)
+Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
       {
       Measure* measure = tick2measure(tick);
       Rest* r = 0;
@@ -299,7 +299,8 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
 
             if ((measure->timesig() == measure->len())   // not in pickup measure
                && (measure->tick() == tick)
-               && (measure->timesig() == f)) {
+               && (measure->timesig() == f)
+               && (useFullMeasureRest)) {
                   Rest* rest = addRest(tick, track, TDuration(TDuration::V_MEASURE), tuplet);
                   tick += measure->timesig().ticks();
                   if (r == 0)
