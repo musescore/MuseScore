@@ -15,6 +15,7 @@
 
 #include "libmscore/text.h"
 #include "libmscore/score.h"
+#include "libmscore/sym.h"
 #include "mtest/testutils.h"
 
 using namespace Ms;
@@ -51,7 +52,7 @@ void TestText::testText()
       Text* text = new Text(score);
       text->setTextStyle(score->textStyle(TEXT_STYLE_DYNAMICS));
 
-      text->setEditMode("true");
+      text->setEditMode(true);
       text->layout();
 
       text->moveCursorToEnd();
@@ -59,11 +60,56 @@ void TestText::testText()
       text->endEdit();
       QCOMPARE(text->text(), QString("a"));
 
-      text->setEditMode("true");
+      text->setEditMode(true);
       text->moveCursorToEnd();
-      text->insertText("b");
+      text->insertText("bc");
       text->endEdit();
-      QCOMPARE(text->text(), QString("ab"));
+      QCOMPARE(text->text(), QString("abc"));
+
+      text->setEditMode(true);
+      text->moveCursorToEnd();
+      text->insertText("d");
+      text->insertText("e");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("abcde"));
+
+      text->setEditMode(true);
+      text->moveCursorToStart();
+      text->insertText("1");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("1abcde"));
+
+      text->setEditMode(true);
+      text->moveCursorToStart();
+      text->insertText("0");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("01abcde"));
+
+      text->setEditMode(true);
+      text->moveCursorToStart();
+      text->movePosition(QTextCursor::Right);
+      text->movePosition(QTextCursor::Right);
+      text->insertText("2");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("012abcde"));
+
+      text->setEditMode(true);
+      text->moveCursorToEnd();
+      text->movePosition(QTextCursor::Left);
+      text->movePosition(QTextCursor::Left);
+      text->movePosition(QTextCursor::Left);
+      text->movePosition(QTextCursor::Left);
+      text->movePosition(QTextCursor::Left);
+      text->insertText("3");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("0123abcde"));
+
+      text->setEditMode(true);
+      text->moveCursorToEnd();
+      text->insertSym(SymId::segno);
+      text->endEdit();
+      QCOMPARE(text->text(), QString("0123abcde&segno;"));
+
       }
 
 QTEST_MAIN(TestText)
