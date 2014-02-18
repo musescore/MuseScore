@@ -215,8 +215,9 @@ class Text : public Element {
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
 
-      void setText(const QString& s)      { _text = s;    }
-      QString text() const                { return _text; }
+      void setPlainText(const QString& s);
+      void setText(const QString& s)        { _text = s; }
+      QString text() const                  { return _text; }
       void insertText(const QString&);
 
       virtual void layout();

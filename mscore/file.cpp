@@ -693,27 +693,27 @@ void MuseScore::newFile()
             if (!title.isEmpty()) {
                   Text* s = new Text(score);
                   s->setTextStyleType(TEXT_STYLE_TITLE);
-                  s->setText(title);
+                  s->setPlainText(title);
                   measure->add(s);
                   score->setMetaTag("workTitle", title);
                   }
             if (!subtitle.isEmpty()) {
                   Text* s = new Text(score);
                   s->setTextStyleType(TEXT_STYLE_SUBTITLE);
-                  s->setText(subtitle);
+                  s->setPlainText(subtitle);
                   measure->add(s);
                   }
             if (!composer.isEmpty()) {
                   Text* s = new Text(score);
                   s->setTextStyleType(TEXT_STYLE_COMPOSER);
-                  s->setText(composer);
+                  s->setPlainText(composer);
                   measure->add(s);
                   score->setMetaTag("composer", composer);
                   }
             if (!poet.isEmpty()) {
                   Text* s = new Text(score);
                   s->setTextStyleType(TEXT_STYLE_POET);
-                  s->setText(poet);
+                  s->setPlainText(poet);
                   measure->add(s);
                   // the poet() functions returns data called lyricist in the dialog
                   score->setMetaTag("lyricist", poet);
@@ -722,11 +722,7 @@ void MuseScore::newFile()
       if (newWizard->createTempo()) {
             double tempo = newWizard->tempo();
             TempoText* tt = new TempoText(score);
-
-            int uc = 0x1d15f;
-            QChar h(QChar::highSurrogate(uc));
-            QChar l(QChar::lowSurrogate(uc));
-            tt->setText(QString("%1%2 = %3").arg(h).arg(l).arg(tempo));
+            tt->setText(QString("#noteQuarterUp# = %1").arg(tempo));
             tempo /= 60;      // bpm -> bps
 
             tt->setTempo(tempo);
