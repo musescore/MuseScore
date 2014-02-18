@@ -1383,7 +1383,6 @@ void Text::genText()
             }
       while (!xmlNesting.isEmpty())
             xmlNesting.popToken();
-      printf("gen text <%s>\n", qPrintable(_text));
       }
 
 //---------------------------------------------------------
@@ -1907,9 +1906,9 @@ bool Text::readProperties(XmlReader& e)
       else if (tag == "data")                  // obsolete
             e.readElementText();
       else if (tag == "html")
-            setText(Xml::xmlString(QTextDocumentFragment::fromHtml(e.readXml()).toPlainText()));
+            setPlainText(QTextDocumentFragment::fromHtml(e.readXml()).toPlainText());
       else if (tag == "text")
-            setText(e.readXml());
+            _text = e.readXml();
       else if (tag == "html-data") {
             QString s = e.readXml();
             if (score()->mscVersion() <= 114) {
@@ -1929,7 +1928,7 @@ bool Text::readProperties(XmlReader& e)
                   s.replace(QChar(0xe168), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // varcoda
                   s.replace(QChar(0xe169), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // segno
                   }
-            setText(Xml::xmlString(QTextDocumentFragment::fromHtml(s).toPlainText()));
+            setPlainText(QTextDocumentFragment::fromHtml(s).toPlainText());
             }
       else if (tag == "subtype")          // obsolete
             e.skipCurrentElement();
@@ -2176,6 +2175,14 @@ Element* Text::drop(const DropData& data)
       return 0;
       }
 
+//---------------------------------------------------------
+//   setPlainText
+//---------------------------------------------------------
+
+void Text::setPlainText(const QString& s)
+      {
+      _text = s.toHtmlEscaped();
+      }
 
 }
 
