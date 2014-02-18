@@ -1225,9 +1225,6 @@ QRectF Measure::staffabbox(int staffIdx) const
 /**
  Return true if an Element of type \a type can be dropped on a Measure
  at canvas relative position \a p.
-
- Note special handling for clefs (allow drop if left of rightmost chord or rest in this staff)
- and key- and timesig (allow drop if left of first chord or rest).
 */
 
 bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) const
@@ -1297,9 +1294,7 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
                         // SegChordRest found, check if it contains anything in this staff
                         for (int track = idx * VOICES; track < idx * VOICES + VOICES; ++track)
                               if (seg->element(track)) {
-                                    // LVIFIX: for the rest in newly created empty measures,
-                                    // seg->pos().x() is incorrect
-                                    return mrpx < seg->pos().x();
+                                    return true;
                                     }
                         }
                   }
