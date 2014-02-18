@@ -1019,6 +1019,10 @@ void Text::createLayout()
                         state = 2;
                         sym.clear();
                         }
+                  else if (c == '&') {
+                        state = 3;
+                        sym.clear();
+                        }
                   else
                         insert(&cursor, c);
                   }
@@ -1065,6 +1069,23 @@ void Text::createLayout()
                               else
                                     qDebug("cannot parse html property <%s>\n", qPrintable(sym));
                               }
+                        }
+                  else
+                        sym += c;
+                  }
+            else if (state == 3) {
+                  if (c == ';') {
+                        state = 0;
+                        if (sym == "lt")
+                              insert(&cursor, '<');
+                        else if (sym == "gt")
+                              insert(&cursor, '>');
+                        else if (sym == "amp")
+                              insert(&cursor, '&');
+                        else if (sym == "&quot")
+                              insert(&cursor, '"');
+                        else
+                              insert(&cursor, Sym::name2id(sym));
                         }
                   else
                         sym += c;
@@ -1362,6 +1383,7 @@ void Text::genText()
             }
       while (!xmlNesting.isEmpty())
             xmlNesting.popToken();
+      printf("gen text <%s>\n", qPrintable(_text));
       }
 
 //---------------------------------------------------------
@@ -1885,7 +1907,7 @@ bool Text::readProperties(XmlReader& e)
       else if (tag == "data")                  // obsolete
             e.readElementText();
       else if (tag == "html")
-            setText(QTextDocumentFragment::fromHtml(e.readXml()).toPlainText());
+            setText(Xml::xmlString(QTextDocumentFragment::fromHtml(e.readXml()).toPlainText()));
       else if (tag == "text")
             setText(e.readXml());
       else if (tag == "html-data") {
@@ -1907,7 +1929,7 @@ bool Text::readProperties(XmlReader& e)
                   s.replace(QChar(0xe168), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // varcoda
                   s.replace(QChar(0xe169), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // segno
                   }
-            setText(QTextDocumentFragment::fromHtml(s).toPlainText());
+            setText(Xml::xmlString(QTextDocumentFragment::fromHtml(s).toPlainText()));
             }
       else if (tag == "subtype")          // obsolete
             e.skipCurrentElement();
