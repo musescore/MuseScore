@@ -192,6 +192,7 @@ void Lyrics::draw(QPainter* painter) const
 
 void Lyrics::layout()
       {
+      setPos(_textStyle.offset(spatium()));
       Text::layout1();
       if (!parent()) // palette & clone trick
           return;

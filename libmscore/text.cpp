@@ -311,8 +311,17 @@ void TextBlock::layout(Text* t)
       {
       _bbox = QRectF();
       qreal x = 0.0;
-      _leading = 0.0;
+      _lineSpacing = 0.0;
 
+      qreal layoutWidth = 0;
+      Element* e = t->parent();
+      if (e && t->layoutToParentWidth()) {
+            layoutWidth = e->width();
+            if (e->type() == Element::HBOX || e->type() == Element::VBOX || e->type() == Element::TBOX) {
+                  Box* b = static_cast<Box*>(e);
+                  layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
+                  }
+            }
       for (TextFragment& f : _text) {
             f.pos.setX(x);
             QFontMetricsF fm(f.font(t));
@@ -332,15 +341,15 @@ void TextBlock::layout(Text* t)
             QRectF r;
             r = fm.tightBoundingRect(f.text).translated(f.pos);
             w = fm.width(f.text);
-            _leading = qMax(_leading, fm.leading());
             _bbox |= r;
             x += w;
+            _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
             }
       qreal rx;
       if (t->textStyle().align() & ALIGN_RIGHT)
-            rx = -_bbox.right();
+            rx = layoutWidth-_bbox.right();
       else if (t->textStyle().align() & ALIGN_HCENTER)
-            rx = -(_bbox.left() + _bbox.right()) * .5;
+            rx = (layoutWidth - (_bbox.left() + _bbox.right())) * .5;
       else  // ALIGN_LEFT
             rx = -_bbox.left();
       for (TextFragment& f : _text)
@@ -923,6 +932,7 @@ QColor Text::textColor() const
 
 void Text::layout()
       {
+      setPos(_textStyle.offset(spatium()));
       layout1();
       adjustReadPos();
       }
@@ -936,28 +946,30 @@ void Text::insert(TextCursor* cursor, QChar c)
       if (cursor->hasSelection())
             deleteSelectedText();
       if (c == QChar::LineFeed) {
+            _layout[cursor->line()].setEol(true);
             cursor->setLine(cursor->line() + 1);
             cursor->setColumn(0);
-            cursor->setSelectColumn(0);
-            cursor->setSelectLine(cursor->line());
             if (_layout.size() < cursor->line())
                   _layout.append(TextBlock());
-            return;
             }
-      if (cursor->line() >= _layout.size())
-            _layout.append(TextBlock());
-      _layout[cursor->line()].insert(cursor, QString(c));
-      cursor->setColumn(cursor->column() + 1);
+      else {
+            if (cursor->line() >= _layout.size())
+                  _layout.append(TextBlock());
+            _layout[cursor->line()].insert(cursor, QString(c));
+            cursor->setColumn(cursor->column() + 1);
+            }
       cursor->clearSelection();
       }
 
 void Text::insert(TextCursor* cursor, SymId id)
       {
+      if (cursor->hasSelection())
+            deleteSelectedText();
       if (cursor->line() >= _layout.size())
             _layout.append(TextBlock());
       _layout[cursor->line()].insert(cursor, id);
       cursor->setColumn(cursor->column() + 1);
-      cursor->setSelectColumn(cursor->column());
+      cursor->clearSelection();
       }
 
 //---------------------------------------------------------
@@ -1024,9 +1036,7 @@ void Text::createLayout()
             else if (state == 2) {
                   if (c == '>') {
                         state = 0;
-                        if (sym == "br/")
-                              insert(&cursor, QChar::LineFeed);
-                        else if (sym == "b")
+                        if (sym == "b")
                               cursor.format()->setBold(true);
                         else if (sym == "/b")
                               cursor.format()->setBold(false);
@@ -1068,109 +1078,73 @@ void Text::createLayout()
 
 void Text::layout1()
       {
-      if (!_editMode) {
-#if 0
-            if (parent() && layoutToParentWidth()) {
-                  Element* e = parent();
-                  qreal w = e->width();
-                  if (e->type() == HBOX || e->type() == VBOX || e->type() == TBOX) {
-                        Box* b = static_cast<Box*>(e);
-                        w -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
-                        }
-                  QStringList sl = _text.split('\n');
-                  for (const QString& s : sl) {
-                        if (fm.width(s) < w)
-                              _layout.append(TextBlock(s));
-                        else {
-                              int n = s.size();
-                              int sidx = 0;
-                              int eidx = n-1;
-                              while (eidx > sidx) {
-                                    while (fm.width(s.mid(sidx, eidx-sidx+1)) > w) {
-                                          --eidx;
-                                          while (eidx > sidx) {
-                                                if (s[eidx].isSpace())
-                                                      break;
-                                                --eidx;
-                                                }
-                                          }
-                                    if (eidx == sidx)
-                                         eidx = n-1;
-                                    _layout.append(TextBlock(s.mid(sidx, eidx-sidx+1)));
-                                    sidx = eidx;
-                                    eidx = n-1;
-                                    }
-                              }
-                        }
-                  }
-            else
-#endif
-                  createLayout();
-            }
+      if (!_editMode)
+            createLayout();
+
       if (_layout.isEmpty())
             _layout.append(TextBlock());
-      QPointF o(_textStyle.offset(spatium()));
+
 
       QRectF bb;
-      qreal y = 0;
+      qreal y;
 
-      for (int i = 0; i < _layout.size(); ++i) {
+      TextBlock* t = &_layout[0];
+      t->layout(this);
+      const QRectF* r = &t->boundingRect();
+      if (textStyle().align() & ALIGN_BOTTOM)
+            y = -r->bottom();
+      else if (textStyle().align() & ALIGN_VCENTER)
+            y =  -(r->top() + r->bottom()) * .5;
+      else if (textStyle().align() & ALIGN_BASELINE)
+            y = 0;
+      else  // ALIGN_TOP
+            y = -r->top();
+      t->setY(y);
+
+      for (int i = 1; i < _layout.size(); ++i) {
             TextBlock* t = &_layout[i];
             t->layout(this);
             const QRectF* r = &t->boundingRect();
-            if (r->height() == 0 && i)
+            if (r->height() == 0)
                   r = &_layout[i-i].boundingRect();
-            if (textStyle().align() & ALIGN_BOTTOM)
-                  y += -r->bottom();
-            else if (textStyle().align() & ALIGN_VCENTER)
-                  y +=  -(r->top() + r->bottom()) * .5;
-            else if (textStyle().align() & ALIGN_BASELINE)
-                  y = 0;
-            else  // ALIGN_TOP
-                  y += -r->top();
-            if (i)
-                  y += t->leading();
+            y += t->lineSpacing();
             t->setY(y);
-            bb |= r->translated(0.0, t->y());
             }
-
-      setPos(o);
-      if (_editMode)
-            bb |= cursorRect();
-      setbbox(bb);
 
       if (parent()) {
             Element* e = parent();
-            qreal w, h, xo, yo;
+            qreal h, yo;
             if (layoutToParentWidth()) {
                   if (e->type() == HBOX || e->type() == VBOX || e->type() == TBOX) {
                         // consider inner margins of frame
                         Box* b = static_cast<Box*>(e);
-                        xo = b->leftMargin() * MScore::DPMM;
                         yo = b->topMargin()  * MScore::DPMM;
-                        w  = b->width()  - xo - b->rightMargin() * MScore::DPMM;
                         h  = b->height() - yo - b->bottomMargin()   * MScore::DPMM;
                         }
                   else {
-                        w  = e->width();
                         h  = e->height();
-                        xo = 0.0;
                         yo = 0.0;
                         }
                   QPointF ro(_textStyle.reloff() * .01);
-                  rxpos() += xo + ro.x() * w;
-                  rypos() += yo + ro.y() * h;
+                  yo += ro.y() * h;
                   }
             if (e->type() == SEGMENT) {
                   Segment* s = static_cast<Segment*>(e);
                   System* system = s->measure()->system();
                   if (system) {
                         SysStaff* sstaff = system->staff(staffIdx());
-                        rypos() += sstaff->y();
+                        yo += sstaff->y();
                         }
                   }
+            for (TextBlock& b : _layout)
+                  b.setY(b.y() + yo);
             }
 
+      for (const TextBlock& b : _layout)
+            bb |= b.boundingRect().translated(0.0, b.y());
+      if (_editMode)
+            bb |= cursorRect();
+      setbbox(bb);
       if (textStyle().hasFrame())
             layoutFrame();
       }
@@ -1383,6 +1357,8 @@ void Text::genText()
                               }
                         }
                   }
+            if (block.eol())
+                  _text += QChar::LineFeed;
             }
       while (!xmlNesting.isEmpty())
             xmlNesting.popToken();
@@ -1440,7 +1416,8 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                         deleteSelectedText();
 
                   _layout.insert(_cursor.line() + 1, curLine().split(_cursor.column()));
-                  _cursor.setLine(_cursor.line()+1);
+                  _layout[_cursor.line()].setEol(true);
+                  _cursor.setLine(_cursor.line() + 1);
                   _cursor.setColumn(0);
                   s.clear();
                   _cursor.clearSelection();
@@ -1533,6 +1510,7 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
       if (!s.isEmpty() && !(modifiers & Qt::ControlModifier))
             insertText(s);
       layout1();
+//      score()->setLayoutAll(true);
       if (parent() && parent()->type() == TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
             tbox->layout();
