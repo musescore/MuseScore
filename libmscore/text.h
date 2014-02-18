@@ -99,6 +99,7 @@ class Text;
 //---------------------------------------------------------
 
 class TextFragment {
+
    public:
       mutable CharFormat format;
       QPointF pos;                  // y is relativ to TextBlock->y()
@@ -125,8 +126,9 @@ class TextFragment {
 class TextBlock {
       QList<TextFragment> _text;
       qreal  _y = 0;
-      qreal _leading;
+      qreal _lineSpacing;
       QRectF _bbox;
+      bool _eol = false;
 
       void simplify();
 
@@ -153,8 +155,10 @@ class TextBlock {
       QList<TextFragment>::iterator fragment(int col, int* rcol);
       qreal y() const      { return _y; }
       void setY(qreal val) { _y = val; }
-      qreal leading() const { return _leading; }
+      qreal lineSpacing() const { return _lineSpacing; }
       QString text(int, int) const;
+      bool eol() const      { return _eol; }
+      void setEol(bool val) { _eol = val; }
       };
 
 //---------------------------------------------------------
