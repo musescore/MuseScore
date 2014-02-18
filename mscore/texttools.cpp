@@ -374,7 +374,7 @@ void TextTools::italicClicked(bool val)
 //   setHalign
 //---------------------------------------------------------
 
-void TextTools::setHalign(QAction* a)
+void TextTools::setHalign(QAction* /*a*/)
       {
 //TODO      _textElement->setCurHalign(a->data().toInt());
       updateTools();
@@ -385,7 +385,7 @@ void TextTools::setHalign(QAction* a)
 //   setValign
 //---------------------------------------------------------
 
-void TextTools::setValign(QAction* a)
+void TextTools::setValign(QAction* /*a*/)
       {
 //TODO      _textElement->setAlign((_textElement->align() & ~ALIGN_VMASK) | Align(a->data().toInt()));
       updateTools();
