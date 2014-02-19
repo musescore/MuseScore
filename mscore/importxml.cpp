@@ -2295,7 +2295,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
 // SLine placement is modified by changing the first segments user offset
 // As the SLine has just been created, it does not have any segment yet
       
-static void setSLinePlacement(SLine* sli, float spatium, const QString placement, bool hasYoff, qreal yoff)
+static void setSLinePlacement(SLine* sli, float spatium, const QString placement, bool /*hasYoff*/, qreal /*yoff*/)
       {
       /*
       qDebug("setSLinePlacement sli %p type %d s=%g pl='%s' hasy=%d yoff=%g",
@@ -2338,8 +2338,8 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
 //   addElem
 //---------------------------------------------------------
       
-static void addElem(Element* el, bool hasYoffset, int staff, int rstaff, Score* score, QString& placement,
-                    qreal rx, qreal ry, int /* offset */, Measure* measure, int tick)
+static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Score* score, QString& placement,
+                    qreal /*rx*/, qreal /*ry*/, int /* offset */, Measure* measure, int tick)
       {
       /*
       qDebug("addElem el %p hasYoff %d staff %d rstaff %d placement %s rx %g ry %g tick %d",
