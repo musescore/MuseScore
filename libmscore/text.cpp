@@ -322,28 +322,35 @@ void TextBlock::layout(Text* t)
                   layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
                   }
             }
-      for (TextFragment& f : _text) {
-            f.pos.setX(x);
-            QFontMetricsF fm(f.font(t));
-            if (f.format.valign() != VerticalAlignment::AlignNormal) {
-                  qreal voffset = fm.xHeight() / subScriptSize;   // use original height
+      if (_text.isEmpty()) {
+            QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
+            _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.ascent());
+            _lineSpacing = fm.lineSpacing();
+            }
+      else {
+            for (TextFragment& f : _text) {
+                  f.pos.setX(x);
+                  QFontMetricsF fm(f.font(t));
                   if (f.format.valign() != VerticalAlignment::AlignNormal) {
-                        if (f.format.valign() == VerticalAlignment::AlignSubScript)
-                              voffset *= subScriptOffset;
-                        else
-                              voffset *= superScriptOffset;
+                        qreal voffset = fm.xHeight() / subScriptSize;   // use original height
+                        if (f.format.valign() != VerticalAlignment::AlignNormal) {
+                              if (f.format.valign() == VerticalAlignment::AlignSubScript)
+                                    voffset *= subScriptOffset;
+                              else
+                                    voffset *= superScriptOffset;
+                              }
+                        f.pos.setY(voffset);
                         }
-                  f.pos.setY(voffset);
+                  else
+                        f.pos.setY(0.0);
+                  qreal w;
+                  QRectF r;
+                  r = fm.tightBoundingRect(f.text).translated(f.pos);
+                  w = fm.width(f.text);
+                  _bbox |= r;
+                  x += w;
+                  _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
                   }
-            else
-                  f.pos.setY(0.0);
-            qreal w;
-            QRectF r;
-            r = fm.tightBoundingRect(f.text).translated(f.pos);
-            w = fm.width(f.text);
-            _bbox |= r;
-            x += w;
-            _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
             }
       qreal rx;
       if (t->textStyle().align() & ALIGN_RIGHT)
@@ -378,7 +385,7 @@ qreal TextBlock::xpos(int column, const Text* t) const
                         return f.pos.x() + fm.width(f.text.left(idx));
                   }
             }
-      return 0.0;
+      return _bbox.x();
       }
 
 //---------------------------------------------------------
@@ -889,16 +896,14 @@ QRectF Text::cursorRect() const
       const TextBlock& tline = curLine();
       const TextFragment* fragment = tline.fragment(_cursor.column());
 
-      qreal ascent, w;
+      qreal ascent;
       if (fragment) {
             QFontMetricsF fm = QFontMetrics(fragment->font(this));
             ascent = fm.ascent();
-            w = fm.width(QChar('w'));
             }
       else {
             QFontMetricsF fm = QFontMetricsF(_textStyle.fontPx(spatium()));
             ascent = fm.ascent();
-            w = fm.width(QChar('w'));
             }
 
       ascent *= 0.7;
@@ -906,8 +911,7 @@ QRectF Text::cursorRect() const
       qreal x = tline.xpos(_cursor.column(), this);
       qreal y = tline.y();
       y      -= ascent;
-      w       = 0.0;
-      return QRectF(x, y, w, h);
+      return QRectF(x, y, 0.0, h);
       }
 
 //---------------------------------------------------------
@@ -1117,7 +1121,7 @@ void Text::layout1()
             y =  -(r->top() + r->bottom()) * .5;
       else if (textStyle().align() & ALIGN_BASELINE)
             y = 0;
-      else  // ALIGN_TOP
+      else        // ALIGN_TOP
             y = -r->top();
       t->setY(y);
 
@@ -1528,6 +1532,7 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
             insertText(s);
       layout1();
 //      score()->setLayoutAll(true);
+// score()->setUpdateAll(true);
       if (parent() && parent()->type() == TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
             tbox->layout();
