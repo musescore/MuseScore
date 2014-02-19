@@ -1008,87 +1008,86 @@ void Text::createLayout()
       cursor.initFromStyle(textStyle());
 
       int state = 0;
+      QString token;
       QString sym;
+      bool symState = false;
       for (const QChar& c : _text) {
             if (state == 0) {
-                  if (c == '#') {
+                  if (c == '<') {
                         state = 1;
-                        sym.clear();
-                        }
-                  else if (c == '<') {
-                        state = 2;
-                        sym.clear();
+                        token.clear();
                         }
                   else if (c == '&') {
-                        state = 3;
-                        sym.clear();
+                        state = 2;
+                        token.clear();
                         }
-                  else
-                        insert(&cursor, c);
+                  else {
+                        if (symState)
+                              sym += c;
+                        else
+                              insert(&cursor, c);
+                        }
                   }
             else if (state == 1) {
-                  if (c == '#') {
-                        state = 0;
-                        if (sym == "")
-                              insert(&cursor, '#');
-                        else
-                              insert(&cursor, Sym::name2id(sym));
-                        }
-                  else
-                        sym += c;
-                  }
-            else if (state == 2) {
                   if (c == '>') {
                         state = 0;
-                        if (sym == "b")
+                        if (token == "b")
                               cursor.format()->setBold(true);
-                        else if (sym == "/b")
+                        else if (token == "/b")
                               cursor.format()->setBold(false);
-                        else if (sym == "i")
+                        else if (token == "i")
                               cursor.format()->setItalic(true);
-                        else if (sym == "/i")
+                        else if (token == "/i")
                               cursor.format()->setItalic(false);
-                        else if (sym == "u")
+                        else if (token == "u")
                               cursor.format()->setUnderline(true);
-                        else if (sym == "/u")
+                        else if (token == "/u")
                               cursor.format()->setUnderline(false);
-                        else if (sym == "sub")
+                        else if (token == "sub")
                               cursor.format()->setValign(VerticalAlignment::AlignSubScript);
-                        else if (sym == "/sub")
+                        else if (token == "/sub")
                               cursor.format()->setValign(VerticalAlignment::AlignNormal);
-                        else if (sym == "sup")
+                        else if (token == "sup")
                               cursor.format()->setValign(VerticalAlignment::AlignSuperScript);
-                        else if (sym == "/sup")
+                        else if (token == "/sup")
                               cursor.format()->setValign(VerticalAlignment::AlignNormal);
-                        else if (sym.startsWith("font ")) {
-                              sym = sym.mid(5);
-                              if (sym.startsWith("size=\""))
-                                    cursor.format()->setFontSize(parseNumProperty(sym.mid(6)));
-                              else if (sym.startsWith("face=\""))
-                                    cursor.format()->setFontFamily(parseStringProperty(sym.mid(6)));
+                        else if (token == "sym") {
+                              symState = true;
+                              sym.clear();
+                              }
+                        else if (token == "/sym") {
+                              symState = false;
+                              insert(&cursor, Sym::name2id(sym));
+                              }
+                        else if (token.startsWith("font ")) {
+                              token = token.mid(5);
+                              if (token.startsWith("size=\""))
+                                    cursor.format()->setFontSize(parseNumProperty(token.mid(6)));
+                              else if (token.startsWith("face=\""))
+                                    cursor.format()->setFontFamily(parseStringProperty(token.mid(6)));
                               else
-                                    qDebug("cannot parse html property <%s>\n", qPrintable(sym));
+                                    qDebug("cannot parse html property <%s>\n", qPrintable(token));
                               }
                         }
                   else
-                        sym += c;
+                        token += c;
                   }
-            else if (state == 3) {
+            else if (state == 2) {
                   if (c == ';') {
                         state = 0;
-                        if (sym == "lt")
+                        if (token == "lt")
                               insert(&cursor, '<');
-                        else if (sym == "gt")
+                        else if (token == "gt")
                               insert(&cursor, '>');
-                        else if (sym == "amp")
+                        else if (token == "amp")
                               insert(&cursor, '&');
-                        else if (sym == "&quot")
+                        else if (token == "&quot")
                               insert(&cursor, '"');
                         else
-                              insert(&cursor, Sym::name2id(sym));
+                              insert(&cursor, Sym::name2id(token));
                         }
                   else
-                        sym += c;
+                        token += c;
                   }
             }
       }
@@ -1371,11 +1370,8 @@ void Text::genText()
                         cursor.setFormat(format);
                         }
                   else {
-                        for (SymId id : f.ids) {
-                              _text += "#";
-                              _text += Sym::id2name(id);
-                              _text += "#";
-                              }
+                        for (SymId id : f.ids)
+                              _text += QString("<sym>%1</sym>").arg(Sym::id2name(id));
                         }
                   }
             if (block.eol())
