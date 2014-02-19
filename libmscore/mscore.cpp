@@ -190,6 +190,7 @@ MStyle* MScore::defaultStyle()
 
 MStyle* MScore::defaultStyleForParts()
       {
+#if 0
       if (!_defaultStyleForParts) {
             QSettings s;
             QString partStyle = s.value("partStyle").toString();
@@ -204,6 +205,7 @@ MStyle* MScore::defaultStyleForParts()
                         }
                   }
             }
+#endif
       return _defaultStyleForParts;
       }
 

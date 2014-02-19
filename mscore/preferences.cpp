@@ -989,6 +989,8 @@ void PreferenceDialog::updateValues()
       animations->setChecked(prefs.animations);
 
       defaultStyle->setText(prefs.defaultStyleFile);
+      QSettings s;
+      partStyle->setText(s.value("partStyle").toString());
 
       myScores->setText(prefs.myScoresPath);
       myStyles->setText(prefs.myStylesPath);
