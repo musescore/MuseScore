@@ -596,7 +596,6 @@ TextBlock TextBlock::split(int column)
             int idx = 0;
             for (const QChar& c : i->text) {
                   if (col == column) {
-                        const CharFormat* format = &i->format;
                         if (idx) {
                               if (idx < i->text.size()) {
                                     TextFragment tf(i->text.mid(idx));
