@@ -907,12 +907,12 @@ Palette* MuseScore::newTempoPalette()
       sp->setDrawGrid(true);
 
       static const TempoPattern tp[] = {
-            TempoPattern("#noteHalfUp# = 80", 80.0/30.0),                        // 1/2
-            TempoPattern("#noteQuarterUp# = 80", 80.0/60.0),                     // 1/4
-            TempoPattern("#noteQuarterUp# = 80", 80.0/120.0),                    // 1/8
-            TempoPattern("#noteHalfUp##augmentationDot# = 80", 120/30.0),       // dotted 1/2
-            TempoPattern("#noteQuarterUp##augmentationDot# = 80", 120/60.0),    // dotted 1/4
-            TempoPattern("#noteQuarterUp##augmentationDot# = 80", 120/120.0),   // dotted 1/8
+            TempoPattern("<sym>noteHalfUp</sym> = 80", 80.0/30.0),                        // 1/2
+            TempoPattern("<sym>noteQuarterUp</sym> = 80", 80.0/60.0),                     // 1/4
+            TempoPattern("<sym>noteQuarterUp</sym> = 80", 80.0/120.0),                    // 1/8
+            TempoPattern("<sym>noteHalfUp</sym><sym>augmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
+            TempoPattern("<sym>noteQuarterUp</sym><sym>augmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
+            TempoPattern("<sym>noteQuarterUp</sym><sym>augmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
             };
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
