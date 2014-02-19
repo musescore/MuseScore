@@ -135,7 +135,6 @@ class TextBlock {
    public:
       TextBlock() {}
       bool operator ==(const TextBlock& x)         { return _text == x._text; }
-      void addText(TextCursor*, const QString&);
       void draw(QPainter*, const Text*) const;
       void layout(Text*);
       const QList<TextFragment>& fragments() const { return _text; }

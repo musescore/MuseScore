@@ -195,103 +195,6 @@ QFont TextFragment::font(const Text* t) const
       }
 
 //---------------------------------------------------------
-//   addText
-//---------------------------------------------------------
-
-void TextBlock::addText(TextCursor* cursor, const QString& str)
-      {
-      QString s;
-      int state = 0;
-      QString sym;
-      for (const QChar& c : str) {
-            if (state == 0) {
-                  if (c == '#') {
-                        state = 1;
-                        sym.clear();
-                        }
-                  else if (c == '<') {
-                        state = 2;
-                        sym.clear();
-                        }
-                  else
-                        s += c;
-                  }
-            else if (state == 1) {
-                  if (c == '#') {
-                        state = 0;
-                        if (sym == "")
-                              s += '#';
-                        else {
-                              if (!s.isEmpty()) {
-                                    _text.append(TextFragment(cursor, s));
-                                    s.clear();
-                                    }
-                              SymId id = Sym::name2id(sym);
-                              if (!_text.isEmpty() && _text.back().format.type() == CharFormatType::SYMBOL)
-                                    _text.back().ids.append(id);
-                              else
-                                    _text.append(TextFragment(cursor, id));
-                              state = 0;
-                              }
-                        }
-                  else
-                        sym += c;
-                  }
-            else if (state == 2) {
-                  if (c == '>') {
-                        state = 0;
-                        if (sym == "b" && !cursor->format()->bold()) {
-                              if (!s.isEmpty()) {
-                                    _text.append(TextFragment(cursor, s));
-                                    s.clear();
-                                    }
-                              cursor->format()->setBold(true);
-                              }
-                        else if (sym == "/b" && cursor->format()->bold()) {
-                              if (!s.isEmpty()) {
-                                    _text.append(TextFragment(cursor, s));
-                                    s.clear();
-                                    }
-                              cursor->format()->setBold(false);
-                              }
-                        else if (sym == "i" && !cursor->format()->italic()) {
-                              if (!s.isEmpty()) {
-                                    _text.append(TextFragment(cursor, s));
-                                    s.clear();
-                                    }
-                              cursor->format()->setItalic(true);
-                              }
-                        else if (sym == "/i" && cursor->format()->italic()) {
-                              if (!s.isEmpty()) {
-                                    _text.append(TextFragment(cursor, s));
-                                    s.clear();
-                                    }
-                              cursor->format()->setItalic(false);
-                              }
-                        else if (sym == "u" && !cursor->format()->underline()) {
-                              if (!s.isEmpty()) {
-                                    _text.append(TextFragment(cursor, s));
-                                    s.clear();
-                                    }
-                              cursor->format()->setUnderline(true);
-                              }
-                        else if (sym == "/i" && cursor->format()->underline()) {
-                              if (!s.isEmpty()) {
-                                    _text.append(TextFragment(cursor, s));
-                                    s.clear();
-                                    }
-                              cursor->format()->setUnderline(false);
-                              }
-                        }
-                  else
-                        sym += c;
-                  }
-            }
-      if (!s.isEmpty())
-            _text.append(TextFragment(cursor, s));
-      }
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -717,11 +620,6 @@ TextBlock TextBlock::split(int column)
                               }
                         for (; i != _text.end(); i = _text.erase(i))
                               tl._text.append(*i);
-                        if (tl._text.isEmpty()) {
-                              TextCursor c;
-                              c.setFormat(*format);
-                              tl.addText(&c, "");
-                              }
                         return tl;
                         }
                   ++idx;
@@ -1074,7 +972,7 @@ void Text::createLayout()
                               insert(&cursor, '>');
                         else if (token == "amp")
                               insert(&cursor, '&');
-                        else if (token == "&quot")
+                        else if (token == "quot")
                               insert(&cursor, '"');
                         else
                               insert(&cursor, Sym::name2id(token));
