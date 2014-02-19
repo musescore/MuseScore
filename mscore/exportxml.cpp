@@ -2566,7 +2566,10 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                               tagname += " placement=\"below\"";
                         }
                   else {
-                        if (el->y() + el->height() / 2 < bb.y() + bb.height() / 2)
+                   qDebug("directionTag()  staf ely=%g elh=%g bby=%g bbh=%g",
+                         el->y(), el->height(),
+                         bb.y(), bb.height());
+                        if (el->y() + el->height() / 2 < /*bb.y() +*/ bb.height() / 2)
                               tagname += " placement=\"above\"";
                         else
                               tagname += " placement=\"below\"";

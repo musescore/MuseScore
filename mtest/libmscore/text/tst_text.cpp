@@ -108,13 +108,13 @@ void TestText::testText()
       text->moveCursorToEnd();
       text->insertSym(SymId::segno);
       text->endEdit();
-      QCOMPARE(text->text(), QString("0123abcde#segno#"));
+      QCOMPARE(text->text(), QString("0123abcde<sym>segno</sym>"));
 
       text->setEditMode(true);
       text->movePosition(QTextCursor::Left);
       text->insertText("#");
       text->endEdit();
-      QCOMPARE(text->text(), QString("0123abcde###segno#"));
+      QCOMPARE(text->text(), QString("0123abcde#<sym>segno</sym>"));
       }
 
 QTEST_MAIN(TestText)
