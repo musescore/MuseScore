@@ -49,6 +49,10 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      if (st->systemFlag())
+            setWindowTitle(tr("MuseScore: System Text Properties"));
+      else
+            setWindowTitle(tr("MuseScore: Staff Text Properties"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       staffText = st;
 

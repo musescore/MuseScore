@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>812</width>
-    <height>531</height>
+    <width>954</width>
+    <height>563</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Staff Text Properties</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>

@@ -255,6 +255,8 @@ class Text : public Element {
       bool styled() const                 { return _styleIndex != TEXT_STYLE_UNSTYLED; }
       int textStyleType() const           { return _styleIndex; }
 
+      virtual bool systemFlag() const     { return textStyle().systemFlag(); }
+
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       void writeProperties(Xml&, bool = true) const;
