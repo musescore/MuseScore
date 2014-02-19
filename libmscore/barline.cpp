@@ -327,8 +327,9 @@ void BarLine::draw(QPainter* painter) const
 
                   if (score()->styleB(ST_repeatBarTips)) {
                         qreal x = x2 + lw2 * .5;
-                        drawSymbol(SymId::reversedBracketTop, painter, QPointF(x, y1));
-                        drawSymbol(SymId::reversedBracketBottom, painter, QPointF(x, y2));
+                        qreal w1 = symBbox(SymId::reversedBracketTop).width();
+                        drawSymbol(SymId::reversedBracketTop, painter, QPointF(x - w1, y1));
+                        drawSymbol(SymId::reversedBracketBottom, painter, QPointF(x - w1, y2));
                         }
                   }
                   break;
@@ -358,10 +359,11 @@ void BarLine::draw(QPainter* painter) const
 
                   if (score()->styleB(ST_repeatBarTips)) {
                         qreal x = x2;
+                        qreal w1 = symBbox(SymId::reversedBracketTop).width();
                         drawSymbol(SymId::bracketTop, painter, QPointF(x, y1));
                         drawSymbol(SymId::bracketBottom, painter, QPointF(x, y2));
-                        drawSymbol(SymId::reversedBracketTop, painter, QPointF(x, y1));
-                        drawSymbol(SymId::reversedBracketBottom, painter, QPointF(x, y2));
+                        drawSymbol(SymId::reversedBracketTop, painter, QPointF(x - w1, y1));
+                        drawSymbol(SymId::reversedBracketBottom, painter, QPointF(x - w1, y2));
                         }
                   }
                   break;
@@ -836,9 +838,12 @@ void BarLine::layout()
                               r |= symBbox(SymId::bracketBottom).translated(0, y2);
                               break;
                         case END_REPEAT:
-                              r |= symBbox(SymId::reversedBracketTop).translated(0, y1);
-                              r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
+                              {
+                              qreal w1 = symBbox(SymId::reversedBracketTop).width();
+                              r |= symBbox(SymId::reversedBracketTop).translated(dw - w1, y1);
+                              r |= symBbox(SymId::reversedBracketBottom).translated(dw - w1, y2);
                               break;
+                              }
 
                         case END_START_REPEAT:
                               {
@@ -847,11 +852,11 @@ void BarLine::layout()
                               qreal d1   = point(score()->styleS(ST_endBarDistance));
                               qreal dotw = symWidth(SymId::repeatDot);
                               qreal x   =  dotw + 2 * d1 + lw + lw2 * .5;                     // thick bar
-
+                              qreal w1 = symBbox(SymId::reversedBracketTop).width();
                               r |= symBbox(SymId::bracketTop).translated(x, y1);
                               r |= symBbox(SymId::bracketBottom).translated(x, y2);
-                              r |= symBbox(SymId::reversedBracketTop).translated(x, y1);
-                              r |= symBbox(SymId::reversedBracketBottom).translated(x, y2);
+                              r |= symBbox(SymId::reversedBracketTop).translated(x - w1 , y1);
+                              r |= symBbox(SymId::reversedBracketBottom).translated(x - w1, y2);
                               }
                               break;
 
