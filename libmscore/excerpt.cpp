@@ -35,6 +35,7 @@
 #include "tupletmap.h"
 #include "tiemap.h"
 #include "layoutbreak.h"
+#include "harmony.h"
 
 namespace Ms {
 
@@ -226,6 +227,12 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ne->setTrack(track == -1 ? 0 : track);
                                           ne->setScore(score);
                                           ns->add(ne);
+                                          // for chord symbols,
+                                          // re-render with new style settings
+                                          if (ne->type() == Element::HARMONY) {
+                                                Harmony* h = static_cast<Harmony*>(ne);
+                                                h->render();
+                                                }
                                           }
                                     }
 
