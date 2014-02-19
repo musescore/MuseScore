@@ -931,17 +931,6 @@ QColor Text::textColor() const
       }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Text::layout()
-      {
-      setPos(_textStyle.offset(spatium()));
-      layout1();
-      adjustReadPos();
-      }
-
-//---------------------------------------------------------
 //   insert
 //---------------------------------------------------------
 
@@ -1097,6 +1086,17 @@ void Text::createLayout()
       }
 
 //---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Text::layout()
+      {
+      setPos(_textStyle.offset(spatium()));
+      layout1();
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
 //   layout1
 //---------------------------------------------------------
 
@@ -1107,7 +1107,6 @@ void Text::layout1()
 
       if (_layout.isEmpty())
             _layout.append(TextBlock());
-
 
       QRectF bb;
       qreal y;
@@ -1135,9 +1134,9 @@ void Text::layout1()
             t->setY(y);
             }
 
-      if (parent()) {
-            Element* e = parent();
-            qreal h, yo;
+      Element* e = parent();
+      if (e) {
+            qreal h, yo = 0;
             if (layoutToParentWidth()) {
                   if (e->type() == HBOX || e->type() == VBOX || e->type() == TBOX) {
                         // consider inner margins of frame
@@ -1203,7 +1202,7 @@ void Text::layoutFrame()
 
 qreal Text::lineSpacing() const
       {
-      return QFontMetricsF(textStyle().font(spatium())).lineSpacing();
+      return QFontMetricsF(textStyle().fontPx(spatium())).lineSpacing();
       }
 
 //---------------------------------------------------------
@@ -1212,7 +1211,7 @@ qreal Text::lineSpacing() const
 
 qreal Text::lineHeight() const
       {
-      return QFontMetricsF(textStyle().font(spatium())).height();
+      return QFontMetricsF(textStyle().fontPx(spatium())).height();
       }
 
 //---------------------------------------------------------
@@ -1221,7 +1220,7 @@ qreal Text::lineHeight() const
 
 qreal Text::baseLine() const
       {
-      return QFontMetricsF(textStyle().font(spatium())).ascent();
+      return QFontMetricsF(textStyle().fontPx(spatium())).ascent();
       }
 
 //---------------------------------------------------------
@@ -1364,13 +1363,7 @@ void Text::genText()
                                           break;
                                     }
                               }
-                        QString s;
-                        for (const QChar& c : f.text) {
-                              if (c == '#')
-                                    s += c;
-                              s += c;
-                              }
-                        _text += Xml::xmlString(s);
+                        _text += Xml::xmlString(f.text);
                         cursor.setFormat(format);
                         }
                   else {
@@ -1531,8 +1524,6 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
       if (!s.isEmpty() && !(modifiers & Qt::ControlModifier))
             insertText(s);
       layout1();
-//      score()->setLayoutAll(true);
-// score()->setUpdateAll(true);
       if (parent() && parent()->type() == TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
             tbox->layout();

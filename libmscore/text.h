@@ -200,13 +200,13 @@ class Text : public Element {
       Text(const Text&);
       ~Text() {}
 
-      virtual Text* clone() const         { return new Text(*this); }
-      virtual ElementType type() const    { return TEXT; }
-      virtual bool mousePress(const QPointF&, QMouseEvent* ev);
+      virtual Text* clone() const override         { return new Text(*this); }
+      virtual ElementType type() const override    { return TEXT; }
+      virtual bool mousePress(const QPointF&, QMouseEvent* ev) override;
 
       Text &operator=(const Text&);
 
-      virtual void draw(QPainter*) const;
+      virtual void draw(QPainter*) const override;
 
       bool editMode() const               { return _editMode; }
       void setEditMode(bool val)          { _editMode = val;  }
@@ -220,10 +220,11 @@ class Text : public Element {
       QString text() const                  { return _text; }
       void insertText(const QString&);
 
-      virtual void layout();
+      virtual void layout() override;
+      virtual void layout1();
       qreal lineSpacing() const;
       qreal lineHeight() const;
-      virtual qreal baseLine() const;
+      virtual qreal baseLine() const override;
 
       bool isEmpty() const                { return _text.isEmpty(); }
       void clear()                        { _text.clear();          }
@@ -255,15 +256,14 @@ class Text : public Element {
       bool styled() const                 { return _styleIndex != TEXT_STYLE_UNSTYLED; }
       int textStyleType() const           { return _styleIndex; }
 
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
       void writeProperties(Xml&, bool = true) const;
       bool readProperties(XmlReader&);
 
       void setTextStyleType(int);
 
       void spellCheckUnderline(bool) {}
-      void layout1();
       virtual void textStyleChanged();
 
       virtual void paste();
