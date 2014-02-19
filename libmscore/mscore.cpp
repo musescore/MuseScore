@@ -139,7 +139,7 @@ void MScore::init()
 
       _defaultStyle         = new MStyle();
       Ms::initStyle(_defaultStyle);
-      _defaultStyleForParts = new MStyle(*_defaultStyle);
+      _defaultStyleForParts = 0;
       _baseStyle            = new MStyle(*_defaultStyle);
 
       //
@@ -190,6 +190,7 @@ MStyle* MScore::defaultStyle()
 
 MStyle* MScore::defaultStyleForParts()
       {
+#if 0
       if (!_defaultStyleForParts) {
             QSettings s;
             QString partStyle = s.value("partStyle").toString();
@@ -204,6 +205,7 @@ MStyle* MScore::defaultStyleForParts()
                         }
                   }
             }
+#endif
       return _defaultStyleForParts;
       }
 

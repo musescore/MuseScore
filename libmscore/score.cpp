@@ -378,7 +378,25 @@ Score::Score(Score* parent)
       _parentScore = parent;
       init();
 
-      _style = MScore::defaultStyleForParts() ? *MScore::defaultStyleForParts() : *parent->style();
+      // inherit most style settings from parent
+      _style = *parent->style();
+
+      // style inheritance overrides
+      QSettings s;
+      QString partStyle = s.value("partStyle").toString();
+      if (!partStyle.isEmpty()) {
+            // allow "Style for part" preference to override
+            QFile f(partStyle);
+            if (f.open(QIODevice::ReadOnly))
+                  _style.load(&f);
+            }
+      else {
+            // allow defaultStyle page layout settings to override
+            const PageFormat* pf = MScore::defaultStyle()->pageFormat();
+            qreal sp = MScore::defaultStyle()->spatium();
+            _style.setPageFormat(*pf);
+            _style.setSpatium(sp);
+            }
 
       _synthesizerState = parent->_synthesizerState;
       }
