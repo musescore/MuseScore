@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>812</width>
-    <height>531</height>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Staff Text Properties</string>
+   <string>MuseScore: Staff/System Text Properties</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
