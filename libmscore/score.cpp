@@ -378,20 +378,12 @@ Score::Score(Score* parent)
       _parentScore = parent;
       init();
 
-      // inherit most style settings from parent
-      _style = *parent->style();
-
-      // style inheritance overrides
-      QSettings s;
-      QString partStyle = s.value("partStyle").toString();
-      if (!partStyle.isEmpty()) {
-            // allow "Style for part" preference to override
-            QFile f(partStyle);
-            if (f.open(QIODevice::ReadOnly))
-                  _style.load(&f);
-            }
+      if (MScore::defaultStyleForParts())
+            _style = *MScore::defaultStyleForParts();
       else {
-            // allow defaultStyle page layout settings to override
+            // inherit most style settings from parent
+            _style = *parent->style();
+            // but borrow defaultStyle page layout settings
             const PageFormat* pf = MScore::defaultStyle()->pageFormat();
             qreal sp = MScore::defaultStyle()->spatium();
             _style.setPageFormat(*pf);
