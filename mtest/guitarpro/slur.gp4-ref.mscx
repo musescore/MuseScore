@@ -90,13 +90,7 @@
           <tempo>2</tempo>
           <lid>2</lid>
           <style>Tempo</style>
-          <text>#noteQuarterUp# = 120</text>
-          </Tempo>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>10</lid>
-          <style>Tempo</style>
-          <text>#noteQuarterUp# = 120</text>
+          <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Slur id="2">
           <lid>9</lid>
@@ -235,7 +229,7 @@
             <tempo>2</tempo>
             <lid>2</lid>
             <style>Tempo</style>
-            <text>#noteQuarterUp# = 120</text>
+            <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Slur id="3">
             <lid>9</lid>

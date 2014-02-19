@@ -90,13 +90,7 @@
           <tempo>1.2</tempo>
           <lid>2</lid>
           <style>Tempo</style>
-          <text>#noteQuarterUp# = 72</text>
-          </Tempo>
-        <Tempo>
-          <tempo>1.2</tempo>
-          <lid>12</lid>
-          <style>Tempo</style>
-          <text>#noteQuarterUp# = 72</text>
+          <text><sym>noteQuarterUp</sym> = 72</text>
           </Tempo>
         <Rest>
           <lid>3</lid>
@@ -271,7 +265,7 @@
             <tempo>1.2</tempo>
             <lid>2</lid>
             <style>Tempo</style>
-            <text>#noteQuarterUp# = 72</text>
+            <text><sym>noteQuarterUp</sym> = 72</text>
             </Tempo>
           <Rest>
             <lid>3</lid>
