@@ -91,6 +91,10 @@ class TestParts : public QObject, public MTest
 
       void appendMeasure();
       void insertMeasure();
+      void styleScore();
+      void styleScoreReload();
+//      void stylePartDefault();
+//      void styleScoreDefault();
       };
 
 //---------------------------------------------------------
@@ -197,6 +201,68 @@ void TestParts::insertMeasure()
       QVERIFY(saveCompareScore(score, "part2-6.mscx", DIR + "part2-6o.mscx"));
       delete score;
       }
+
+//---------------------------------------------------------
+//   styleScore
+//---------------------------------------------------------
+
+void TestParts::styleScore()
+      {
+      Score* score = readScore(DIR + "partStyle.mscx");
+      score->doLayout();
+      QVERIFY(score);
+      createParts(score);
+      score->style()->set(ST_clefLeftMargin, 4.0);
+      QVERIFY(saveCompareScore(score, "partStyle-score-test.mscx", DIR + "partStyle-score-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   styleScoreReload
+//---------------------------------------------------------
+
+void TestParts::styleScoreReload()
+      {
+      Score* partScore = readScore(DIR + "partStyle-score-reload.mscx");
+      QVERIFY(saveCompareScore(partScore, "partStyle-score-reload-test.mscx", DIR + "partStyle-score-reload-ref.mscx"));
+      delete partScore;
+      }
+
+//---------------------------------------------------------
+//   stylePartDefault
+//---------------------------------------------------------
+
+#if 0
+void TestParts::stylePartDefault()
+      {
+      Score* score = readScore(DIR + "partStyle.mscx");
+      score->doLayout();
+      QVERIFY(score);
+      // TODO: set defaultStyleForParts
+      MScore::_defaultStyleForParts = new MStyle();
+      QFile f(DIR + "style_test.mss");
+      QVERIFY(f.open(QIODevice::ReadOnly));
+      MStyle* s = new MStyle(*defaultStyle());
+      QVERIFY(s->load(&f));
+      MScore::_defaultStyleForParts = s;
+      createParts(score);
+      QVERIFY(saveCompareScore(score, "partStyle-part-default-test.mscx", DIR + "partStyle-part-default-ref.mscx"));
+      }
+
+//---------------------------------------------------------
+//   styleScoreDefault
+//---------------------------------------------------------
+
+void TestParts::styleScoreDefault()
+      {
+      Score* score = readScore(DIR + "partStyle.mscx");
+      score->doLayout();
+      QVERIFY(score);
+      // TODO: set defaultStyle
+      createParts(score);
+      QVERIFY(saveCompareScore(score, "partStyle-score-default-test.mscx", DIR + "partStyle-score-default-ref.mscx"));
+      }
+#endif
 
 //---------------------------------------------------------
 //   test part creation
