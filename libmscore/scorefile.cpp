@@ -1002,7 +1002,7 @@ bool Score::read(XmlReader& e)
                   // _beams.append(beam);
                   }
             else if (tag == "Score") {          // recursion
-                  Score* s = new Score(style());
+                  Score* s = new Score(MScore::baseStyle());
                   s->setParentScore(this);
                   s->read(e);
                   addExcerpt(s);
