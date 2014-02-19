@@ -192,6 +192,25 @@ void Lyrics::draw(QPainter* painter) const
 
 void Lyrics::layout()
       {
+      // setPos(_textStyle.offset(spatium()));
+      layout1();
+      QPointF rp(readPos());
+      if (!rp.isNull()) {
+            if (score()->mscVersion() <= 114) {
+                  rp.ry() += lineSpacing() + 2;
+                  rp.rx() += bbox().width() * .5;
+                  }
+            setUserOff(rp - ipos());
+            setReadPos(QPointF());
+            }
+      }
+
+//---------------------------------------------------------
+//   layout1
+//---------------------------------------------------------
+
+void Lyrics::layout1()
+      {
       setPos(_textStyle.offset(spatium()));
       Text::layout1();
       if (!parent()) // palette & clone trick
@@ -215,15 +234,6 @@ void Lyrics::layout()
       if (_verseNumber) {
             _verseNumber->layout();
             _verseNumber->setPos(-x, 0.0);
-            }
-      QPointF rp(readPos());
-      if (!rp.isNull()) {
-            if (score()->mscVersion() <= 114) {
-                  rp.ry() += lineSpacing() + 2;
-                  rp.rx() += bbox().width() * .5;
-                  }
-            setUserOff(rp - ipos());
-            setReadPos(QPointF());
             }
       }
 

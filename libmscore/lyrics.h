@@ -50,28 +50,29 @@ class Lyrics : public Text {
       Lyrics(Score* = 0);
       Lyrics(const Lyrics&);
       ~Lyrics();
-      virtual Lyrics* clone() const    { return new Lyrics(*this); }
-      virtual ElementType type() const { return LYRICS; }
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
-      virtual Element* drop(const DropData&);
+      virtual Lyrics* clone() const override    { return new Lyrics(*this); }
+      virtual ElementType type() const override { return LYRICS; }
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual Element* drop(const DropData&) override;
 
-      Segment* segment() const { return (Segment*)parent()->parent(); }
-      Measure* measure() const { return (Measure*)parent()->parent()->parent(); }
+      Segment* segment() const     { return (Segment*)parent()->parent(); }
+      Measure* measure() const     { return (Measure*)parent()->parent()->parent(); }
       ChordRest* chordRest() const { return (ChordRest*)parent(); }
 
-      virtual void layout();
+      virtual void layout() override;
+      virtual void layout1() override;
 
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
       void setNo(int n);
       int no() const                { return _no; }
       void setSyllabic(Syllabic s)  { _syllabic = s; }
       Syllabic syllabic() const     { return _syllabic; }
-      virtual void add(Element*);
-      virtual void remove(Element*);
-      virtual void draw(QPainter*) const;
-      virtual void endEdit();
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
+      virtual void draw(QPainter*) const override;
+      virtual void endEdit() override;
 
       int ticks() const                { return _ticks;    }
       void setTicks(int tick)          { _ticks = tick;    }
@@ -80,13 +81,13 @@ class Lyrics : public Text {
 
       void clearSeparator()            { _separator.clear(); } // TODO: memory leak
       QList<Line*>* separatorList()    { return &_separator; }
-      virtual void paste();
+      virtual void paste() override;
       Text* verseNumber() const        { return _verseNumber; }
       void setVerseNumber(Text* t)     { _verseNumber = t;    }
 
-      QVariant getProperty(P_ID propertyId) const;
-      bool setProperty(P_ID propertyId, const QVariant&);
-      QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 
