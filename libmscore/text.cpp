@@ -1085,7 +1085,7 @@ void Text::createLayout()
                               insert(&cursor, '>');
                         else if (token == "amp")
                               insert(&cursor, '&');
-                        else if (token == "&quot")
+                        else if (token == "quot")
                               insert(&cursor, '"');
                         else
                               insert(&cursor, Sym::name2id(token));
