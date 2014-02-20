@@ -27,7 +27,7 @@ bool DownloadUtils::saveFile()
             qDebug() << "can't access";
             return false;
             }
-      qDebug() << "here writing to file "<< sdata << " at " << _localFile;
+      qDebug() << "here writing to file " <<  _localFile;
       localFile.write(sdata);
       localFile.close();
       return true;
@@ -36,6 +36,7 @@ bool DownloadUtils::saveFile()
 void DownloadUtils::downloadFinished(QNetworkReply *data)
       {
       sdata = data->readAll();
+      qDebug() << "size" << sdata.size();
       emit done();
       }
 
@@ -49,10 +50,14 @@ void DownloadUtils::download()
       QUrl url = QUrl::fromEncoded(_target.toLocal8Bit());
       QNetworkRequest request(url);
       QEventLoop loop;
-      QObject::connect(manager.get(request), SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
+      QNetworkReply* reply = manager.get(request);
+      QObject::connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
       QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
-      QObject::connect(manager.get(request), SIGNAL(finished()), &loop, SLOT(quit()));
+      QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
       loop.exec();
+      QObject::disconnect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
+      QObject::disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
+      QObject::disconnect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
       }
 
 void DownloadUtils::downloadProgress(qint64 received, qint64 total)
