@@ -5371,7 +5371,7 @@
                         <stem>2</stem>
                         <shortcut>A</shortcut>
                   </Drum>
-                  <Channel name="normal">
+                  <Channel>
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                         <controller ctrl="10" value="60"/>

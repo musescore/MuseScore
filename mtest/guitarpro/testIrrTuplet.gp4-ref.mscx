@@ -58,7 +58,7 @@
           <string>59</string>
           <string>64</string>
           </StringData>
-        <Channel name="normal">
+        <Channel>
           <program value="29"/>
           <controller ctrl="7" value="63"/>
           <controller ctrl="10" value="31"/>
@@ -229,7 +229,7 @@
             <string>59</string>
             <string>64</string>
             </StringData>
-          <Channel name="normal">
+          <Channel>
             <program value="29"/>
             <controller ctrl="7" value="63"/>
             <controller ctrl="10" value="31"/>

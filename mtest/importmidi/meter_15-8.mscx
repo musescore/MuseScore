@@ -43,7 +43,7 @@
       <Instrument>
         <longName pos="0">Fingered Bass</longName>
         <trackName></trackName>
-        <Channel name="normal">
+        <Channel>
           <program value="33"/>
           </Channel>
         </Instrument>
