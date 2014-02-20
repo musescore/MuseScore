@@ -2850,6 +2850,9 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "delete") {
             _score->cmdDeleteSelection();
             }
+      else if (cmd == "full-measure-rest") {
+            _score->cmdFullMeasureRest();
+            }
       else if (cmd == "next-lyric" || cmd == "prev-lyric") {
             editCmd(cmd);
             }

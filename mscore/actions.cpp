@@ -805,6 +805,14 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Delete contents of the selected measures")
          ),
       Shortcut(
+        STATE_NORMAL,
+        A_CMD,
+        "full-measure-rest",
+         QT_TRANSLATE_NOOP("action","Full Measure Rest"),
+         QT_TRANSLATE_NOOP("action","Full Measure Rest"),
+         QT_TRANSLATE_NOOP("action","Converts the measure to a full measure rest")
+         ),
+      Shortcut(
          STATE_NORMAL,
          A_CMD,
          "time-delete",

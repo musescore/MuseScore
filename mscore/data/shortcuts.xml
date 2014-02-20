@@ -401,6 +401,10 @@
     <seq>Ctrl+Del</seq>
     </SC>
   <SC>
+    <key>full-measure-rest</key>
+    <seq>Ctrl+Shift+0</seq>
+    </SC>
+  <SC>
     <key>append-measure</key>
     <seq>Ctrl+B</seq>
     </SC>

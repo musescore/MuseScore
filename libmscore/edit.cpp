@@ -258,7 +258,7 @@ qDebug("addClone %s at %d %s", cr->name(), tick, qPrintable(d.fraction().print()
 //    create one or more rests to fill "l"
 //---------------------------------------------------------
 
-Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tuplet)
+Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
       {
       Measure* measure = tick2measure(tick);
       Rest* r = 0;
@@ -299,7 +299,8 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
 
             if ((measure->timesig() == measure->len())   // not in pickup measure
                && (measure->tick() == tick)
-               && (measure->timesig() == f)) {
+               && (measure->timesig() == f)
+               && (useFullMeasureRest)) {
                   Rest* rest = addRest(tick, track, TDuration(TDuration::V_MEASURE), tuplet);
                   tick += measure->timesig().ticks();
                   if (r == 0)
@@ -1548,6 +1549,73 @@ void Score::cmdDeleteSelection()
             }
       _layoutAll = true;
       }
+
+
+//---------------------------------------------------------
+//   cmdFullMeasureRest
+//---------------------------------------------------------
+
+void Score::cmdFullMeasureRest()
+      {
+      if (selection().state() == SEL_RANGE) {
+            Segment* s1 = selection().startSegment();
+            Segment* s2 = selection().endSegment();
+            int stick1 = selection().tickStart();
+            int stick2 = selection().tickEnd();
+            
+            Segment* ss1 = s1;
+            if (ss1->segmentType() != Segment::SegChordRest)
+                  ss1 = ss1->next1(Segment::SegChordRest);
+            bool fullMeasure = ss1 && (ss1->measure()->first(Segment::SegChordRest) == ss1)
+                  && (s2 == 0 || (s2->segmentType() == Segment::SegEndBarLine) 
+                        || (s2->segmentType() == Segment::SegTimeSigAnnounce) 
+                        || (s2->segmentType() == Segment::SegKeySigAnnounce));
+
+            if (!fullMeasure) {
+                  return;
+            }
+
+            int track1  = selection().staffStart() * VOICES;
+            int track2  = selection().staffEnd() * VOICES;
+            for (int track = track1; track < track2; ++track) {
+                  int tick  = -1;
+                  for (Segment* s = s1; s != s2; s = s->next1()) {
+                        if (!(s->measure()->isOnlyRests(track))) // Don't remove anything from measures that contain notes
+                              continue;
+                        if (s->segmentType() != Segment::SegChordRest || !s->element(track))
+                              continue;
+                        ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                        
+                        if (tick == -1) {
+                              // first ChordRest found:
+			      tick = s->measure()->tick();
+                              removeChordRest(cr, true);
+                              }
+                        else {
+                              removeChordRest(cr, true);
+                              }
+                        }
+                  for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
+                        if (!(track % VOICES) && m->isOnlyRests(track)) {
+			      addRest(m->tick(), track, TDuration(TDuration::V_MEASURE), 0);
+			}
+                        if (s2 && (m == s2->measure()))
+                              break;
+                        }
+                  }
+            s1 = tick2segment(stick1);
+            s2 = tick2segment(stick2);
+            if (s1 == 0 || s2 == 0)
+                  deselectAll();
+            else {
+                  _selection.setStartSegment(s1);
+                  _selection.setEndSegment(s2);
+                  _selection.updateSelectedElements();
+                  }
+            }
+      _layoutAll = true;
+      }
+
 
 //---------------------------------------------------------
 //   addLyrics

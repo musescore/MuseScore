@@ -1121,12 +1121,12 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
             _score->undo(new InsertMStaff(this, ms, i));
 
             if (createRest) {
-                  Rest* rest = new Rest(score(), TDuration(TDuration::V_MEASURE));
-                  rest->setTrack(i * VOICES);
-                  rest->setDuration(len());
-                  Segment* s = undoGetSegment(Segment::SegChordRest, tick());
-                  rest->setParent(s);
-                  score()->undoAddElement(rest);
+                  if (_timesig != len()) {
+                        score()->setRest(tick(), i * VOICES, len(), false, 0, false);
+                        }
+                  else {
+                        score()->setRest(tick(), i * VOICES, len(), false, 0, true);
+                        }
                   }
 
             // replicate time signature
@@ -1635,14 +1635,21 @@ void Measure::adjustToLen(Fraction nf)
                   }
             if (rests == 1 && chords == 0) {
                   if (rest->durationType().type() == TDuration::V_MEASURE) {
-                        score()->undo(new ChangeChordRestDuration(rest, nf));
-                        continue;
+                        if (_timesig == nf) {
+                              score()->undo(new ChangeChordRestDuration(rest, nf));
+                              continue;
+                              }
+                        else {
+                              score()->undo(new ChangeChordRestLen(rest, _timesig));
+                              // DON'T continue here because we want the rest broken up below
+                              }
                         }
                   else if (_timesig == nf) {
                         score()->undo(new ChangeChordRestLen(rest, TDuration(TDuration::V_MEASURE)));
                         continue;
                         }
                   }
+
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
 
@@ -1655,8 +1662,11 @@ void Measure::adjustToLen(Fraction nf)
                               Element* e = segment->element(trk);
                               if (e && e->isChordRest()) {
                                     ChordRest* cr = static_cast<ChordRest*>(e);
-                                    if (cr->durationType() == TDuration::V_MEASURE)
-                                          n = nl;
+                                    if (cr->durationType() == TDuration::V_MEASURE) {
+                                          int actualTicks = cr->actualTicks();
+                                          n += actualTicks;
+                                          cr->setDurationType(TDuration(actualTicks));
+                                          }
                                     else
                                           n += cr->actualTicks();
                                     score()->undoRemoveElement(e);
@@ -1674,7 +1684,7 @@ void Measure::adjustToLen(Fraction nf)
                         // add rest to measure
                         int rtick = tick() + nl - n;
                         int track = staffIdx * VOICES + voice;
-                        score()->setRest(rtick, track, Fraction::fromTicks(n), true, 0);
+                        score()->setRest(rtick, track, Fraction::fromTicks(n), false, 0, false);
                         }
                   }
             }
@@ -2832,6 +2842,23 @@ bool Measure::isEmpty() const
             }
       return true;
       }
+
+//---------------------------------------------------------
+//   isOnlyRests
+//---------------------------------------------------------
+
+bool Measure::isOnlyRests(int track) const
+      {
+      static const Segment::SegmentType st = Segment::SegChordRest;
+      for (const Segment* s = first(st); s; s = s->next(st)) {
+            if (s->segmentType() != Segment::SegChordRest || !s->element(track))
+                  continue;
+            if (s->element(track)->type() != REST)
+                  return false;
+            }
+      return true;
+      }
+
 
 //---------------------------------------------------------
 //   Space::max
