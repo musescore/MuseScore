@@ -1148,6 +1148,12 @@
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
+          <Tempo>
+            <tempo>1.66667</tempo>
+            <lid>2</lid>
+            <style>Tempo</style>
+            <text>𝅘𝅥 = 100</text>
+            </Tempo>
           <Chord>
             <lid>43</lid>
             <durationType>quarter</durationType>
