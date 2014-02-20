@@ -54,7 +54,7 @@
         <longName pos="0">Guitar</longName>
         <shortName pos="0">Gtr.</shortName>
         <trackName></trackName>
-        <Channel name="normal">
+        <Channel>
           <program value="24"/>
           </Channel>
         </Instrument>

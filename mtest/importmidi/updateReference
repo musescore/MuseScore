@@ -18,11 +18,13 @@ tuplet_off_time_other_bar2.mscx
 min_duration.mscx
 min_duration_no_reduce.mscx
 meter_12-8.mscx
+meter_15-8.mscx
 meter_4-4.mscx
 meter_9-8.mscx
 meter_central_long_note.mscx
 meter_central_long_rest.mscx
 meter_chord_example.mscx
+meter_dot_tie.mscx
 meter_dots_example1.mscx
 meter_dots_example2.mscx
 meter_dots_example3.mscx
@@ -32,10 +34,12 @@ meter_last_quarter_rest_compound.mscx
 meter_rests.mscx
 meter_two_beats_over.mscx
 perc_drums.mscx
+perc_remove_ties.mscx
 pickup.mscx
 quant_dotted_4th.mscx
 split_nontuplet.mscx
 split_tuplet.mscx
+swing_clef.mscx
 swing_shuffle.mscx
 swing_triplets.mscx
 tuplet_2_voices_3_5_tuplets.mscx

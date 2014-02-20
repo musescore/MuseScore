@@ -369,7 +369,7 @@ Channel::Channel()
 
 void Channel::write(Xml& xml) const
       {
-      if (name.isEmpty())
+      if (name.isEmpty() || name == "normal")
             xml.stag("Channel");
       else
             xml.stag(QString("Channel name=\"%1\"").arg(name));
@@ -418,6 +418,8 @@ void Channel::read(XmlReader& e)
       {
       // synti = 0;
       name = e.attribute("name");
+      if (name == "")
+            name = "normal";
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "program") {

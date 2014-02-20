@@ -43,7 +43,7 @@
       <Instrument>
         <longName pos="0">untitled</longName>
         <trackName></trackName>
-        <Channel name="normal">
+        <Channel>
           <program value="0"/>
           </Channel>
         </Instrument>

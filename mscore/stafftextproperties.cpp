@@ -34,7 +34,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
       {
       Part* part = st->staff()->part();
       foreach(const Channel& a, part->instr()->channel()) {
-            if (a.name.isEmpty())
+            if (a.name.isEmpty() || a.name == "normal")
                   cb->addItem(QT_TR_NOOP("normal"));
             else
                   cb->addItem(a.name);
@@ -131,7 +131,7 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
             const Channel& a = part->instr()->channel(i);
             QTreeWidgetItem* item = new QTreeWidgetItem(channelList);
             item->setData(0, Qt::UserRole, i);
-            if(a.name.isEmpty())
+            if (a.name.isEmpty() || a.name == "normal")
                   item->setText(0, tr("normal"));
             else
                   item->setText(0, a.name);
@@ -308,7 +308,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
 
       foreach(const NamedEventList& e, part->instr()->midiActions()) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
-            if(e.name.isEmpty())
+            if (e.name.isEmpty() || e.name == "normal")
                   item->setText(0, tr("normal"));
             else
                   item->setText(0, e.name);
@@ -316,7 +316,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
             }
       foreach(const NamedEventList& e, channel.midiActions) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
-            if(e.name.isEmpty())
+            if (e.name.isEmpty() || e.name == "normal")
                   item->setText(0, tr("normal"));
             else
                   item->setText(0, e.name);
