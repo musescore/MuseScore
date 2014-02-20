@@ -402,7 +402,7 @@
     </SC>
   <SC>
     <key>full-measure-rest</key>
-    <seq>Ctrl+Shift+0</seq>
+    <seq>Ctrl+Shift+Del</seq>
     </SC>
   <SC>
     <key>append-measure</key>
