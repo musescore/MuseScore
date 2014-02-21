@@ -33,14 +33,17 @@ TextCursor Text::_cursor;
 
 bool CharFormat::operator==(const CharFormat& cf) const
       {
-      return
-          cf.type() == type()
-          && cf.bold() == bold()
-          && cf.italic() == italic()
-          && cf.underline() == underline()
-          && cf.valign() == valign()
-          && cf.fontSize() == fontSize()
-          && cf.fontFamily() == fontFamily();
+      if (cf.type() != type())
+            return false;
+      if (cf.bold() != bold()
+         || cf.italic() != italic()
+         || cf.underline() != underline()
+         || cf.valign() != valign()
+         || cf.fontSize() != fontSize())
+            return false;
+      if (type() == CharFormatType::TEXT)
+            return cf.fontFamily() == fontFamily();
+      return true;
       }
 
 //---------------------------------------------------------
@@ -163,13 +166,12 @@ QFont TextFragment::font(const Text* t) const
       qreal m = format.fontSize() * MScore::DPI / PPI;
       if (t->textStyle().sizeIsSpatiumDependent())
             m *= t->spatium() / ( SPATIUM20 * MScore::DPI);
+
+      font.setUnderline(format.underline());
       if (format.type() == CharFormatType::TEXT) {
             font.setFamily(format.fontFamily());
             font.setBold(format.bold());
             font.setItalic(format.italic());
-            font.setUnderline(format.underline());
-            if (format.valign() != VerticalAlignment::AlignNormal)
-                  m *= subScriptSize;
             }
       else {
             bool fallback = false;
@@ -187,9 +189,11 @@ QFont TextFragment::font(const Text* t) const
             font.setWeight(QFont::Normal);  // if not set we get system default
             font.setStyleStrategy(QFont::NoFontMerging);
             font.setHintingPreference(QFont::PreferVerticalHinting);
-            if (f->family() == "Bravura")       // HACK: why are bravura dynamics are so small?
-                  m *= 1.9;
+            // if (f->family() == "Bravura")       // HACK: why are bravura dynamics are so small?
+            //       m *= 1.9;
             }
+      if (format.valign() != VerticalAlignment::AlignNormal)
+            m *= subScriptSize;
       font.setPixelSize(lrint(m));
       return font;
       }
@@ -438,11 +442,22 @@ void TextBlock::insert(TextCursor* cursor, SymId id)
       int rcol;
       auto i = fragment(cursor->column(), &rcol);
       if (i != _text.end()) {
-            if (i->format.type() == CharFormatType::SYMBOL)
-                  i->ids.insert(rcol, id);
+            if (i->format.type() == CharFormatType::SYMBOL) {
+                  if (!(i->format == *cursor->format())) {
+                        if (rcol == 0)
+                              _text.insert(i, TextFragment(cursor, id));
+                        else {
+                              TextFragment f2 = i->split(rcol);
+                              i = _text.insert(i+1, TextFragment(cursor, id));
+                              _text.insert(i+1, f2);
+                              }
+                        }
+                  else
+                        i->ids.insert(rcol, id);
+                  }
             else if (i->format.type() == CharFormatType::TEXT) {
                   if (rcol == 0) {
-                        if (i != _text.begin() && (i-1)->format.type() == CharFormatType::SYMBOL)
+                        if (i != _text.begin() && (i-1)->format == *cursor->format())
                               (i-1)->ids.append(id);
                         else
                               _text.insert(i, TextFragment(cursor, id));
@@ -1134,9 +1149,8 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
             layout();
       if (setCursor(pt))
             updateCursorFormat(&_cursor);
-      else {
+      else
             _cursor.initFromStyle(textStyle());
-            }
       undoPushProperty(P_TEXT);
       }
 
@@ -1293,6 +1307,7 @@ void Text::endEdit()
                   e->undoChangeProperty(P_TEXT, _text);
                   }
             }
+      textChanged();
       }
 
 //---------------------------------------------------------
@@ -2070,8 +2085,17 @@ Element* Text::drop(const DropData& data)
 
 void Text::setPlainText(const QString& s)
       {
-      _text = s.toHtmlEscaped();
+      setText(s.toHtmlEscaped());
       }
 
+//---------------------------------------------------------
+//   setText
+//---------------------------------------------------------
+
+void Text::setText(const QString& s)
+      {
+      _text = s;
+      textChanged();
+      }
 }
 

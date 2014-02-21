@@ -35,10 +35,10 @@ class TempoText : public Text  {
 
    public:
       TempoText(Score*);
-      virtual TempoText* clone() const { return new TempoText(*this); }
-      virtual ElementType type() const { return TEMPO_TEXT; }
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
+      virtual TempoText* clone() const override { return new TempoText(*this); }
+      virtual ElementType type() const override { return TEMPO_TEXT; }
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
       Segment* segment() const   { return (Segment*)parent(); }
       Measure* measure() const   { return (Measure*)parent()->parent(); }
 
@@ -50,12 +50,12 @@ class TempoText : public Text  {
       void setFollowText(bool v) { _followText = v;    }
       void undoSetFollowText(bool v);
 
-      virtual void textChanged();
+      virtual void textChanged() override;
       virtual void layout();
 
-      QVariant getProperty(P_ID propertyId) const;
-      bool setProperty(P_ID propertyId, const QVariant&);
-      QVariant propertyDefault(P_ID id) const;
+      QVariant getProperty(P_ID propertyId) const override;
+      bool setProperty(P_ID propertyId, const QVariant&) override;
+      QVariant propertyDefault(P_ID id) const override;
       };
 
 

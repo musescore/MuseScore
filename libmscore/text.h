@@ -216,8 +216,8 @@ class Text : public Element {
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
 
-      void setPlainText(const QString& s);
-      void setText(const QString& s)        { _text = s; }
+      void setPlainText(const QString&);
+      void setText(const QString&);
       QString text() const                  { return _text; }
       void insertText(const QString&);
 
@@ -288,6 +288,7 @@ class Text : public Element {
 
       friend class TextBlock;
       friend class TextFragment;
+      virtual void textChanged() {}
       };
 
 
