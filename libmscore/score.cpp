@@ -378,7 +378,17 @@ Score::Score(Score* parent)
       _parentScore = parent;
       init();
 
-      _style = MScore::defaultStyleForParts() ? *MScore::defaultStyleForParts() : *parent->style();
+      if (MScore::defaultStyleForParts())
+            _style = *MScore::defaultStyleForParts();
+      else {
+            // inherit most style settings from parent
+            _style = *parent->style();
+            // but borrow defaultStyle page layout settings
+            const PageFormat* pf = MScore::defaultStyle()->pageFormat();
+            qreal sp = MScore::defaultStyle()->spatium();
+            _style.setPageFormat(*pf);
+            _style.setSpatium(sp);
+            }
 
       _synthesizerState = parent->_synthesizerState;
       }
