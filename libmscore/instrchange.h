@@ -36,7 +36,7 @@ class InstrumentChange : public Text  {
 
       Instrument instrument() const           { return _instrument; }
       void setInstrument(const Instrument& i) { _instrument = i;    }
-      Segment* segment()                      { return (Segment*)parent(); }
+      Segment* segment() const                { return (Segment*)parent(); }
       };
 
 
