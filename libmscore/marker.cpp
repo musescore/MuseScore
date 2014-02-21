@@ -37,27 +37,27 @@ void Marker::setMarkerType(MarkerType t)
       _markerType = t;
       switch (t) {
             case MarkerType::SEGNO:
-                  setText("&segno;");
+                  setText("<sym>segno</sym>");
                   setLabel("segno");
                   break;
 
             case MarkerType::VARSEGNO:
-                  setText("&segnoSerpent1;");
+                  setText("<sym>segnoSerpent1</sym>");
                   setLabel("varsegno");
                   break;
 
             case MarkerType::CODA:
-                  setText("&coda;");
+                  setText("<sym>coda</sym>");
                   setLabel("codab");
                   break;
 
             case MarkerType::VARCODA:
-                  setText("&codaSquare;");
+                  setText("<sym>codaSquare</sym>");
                   setLabel("varcoda");
                   break;
 
             case MarkerType::CODETTA:
-                  setText("&coda;&coda;");
+                  setText("<sym>coda</sym><sym>coda</sym>");
                   setLabel("codetta");
                   break;
 
