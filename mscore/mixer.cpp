@@ -57,7 +57,7 @@ void PartEdit::setPart(Part* p, Channel* a)
       channel = a;
       part    = p;
       QString s = part->partName();
-      if (!a->name.isEmpty())
+      if (!a->name.isEmpty() && a->name != "normal")
             s += "-" + a->name;
       partName->setText(s);
       mute->setChecked(a->mute);
