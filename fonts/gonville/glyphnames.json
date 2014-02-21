@@ -3353,10 +3353,10 @@
     "noteEWhole": {
         "codepoint": "U+E165"
     }, 
-    "noteEighthDown": {
+    "note8thDown": {
         "codepoint": "U+E1B8"
     }, 
-    "noteEighthUp": {
+    "note8thUp": {
         "alternateCodepoint": "U+1D160", 
         "codepoint": "U+E1B7"
     }, 

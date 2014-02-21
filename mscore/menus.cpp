@@ -909,10 +909,10 @@ Palette* MuseScore::newTempoPalette()
       static const TempoPattern tp[] = {
             TempoPattern("<sym>noteHalfUp</sym> = 80", 80.0/30.0),                        // 1/2
             TempoPattern("<sym>noteQuarterUp</sym> = 80", 80.0/60.0),                     // 1/4
-            TempoPattern("<sym>noteEighthUp</sym> = 80", 80.0/120.0),                    // 1/8
+            TempoPattern("<sym>note8thUp</sym> = 80", 80.0/120.0),                    // 1/8
             TempoPattern("<sym>noteHalfUp</sym><sym>augmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
             TempoPattern("<sym>noteQuarterUp</sym><sym>augmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
-            TempoPattern("<sym>noteEighthUp</sym><sym>augmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
+            TempoPattern("<sym>note8thUp</sym><sym>augmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
             };
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
