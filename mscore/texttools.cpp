@@ -144,6 +144,7 @@ TextTools::TextTools(QWidget* parent)
       tb->addWidget(typefaceFamily);
 
       typefaceSize = new QDoubleSpinBox(this);
+      typefaceSize->setFocusPolicy(Qt::ClickFocus);
       tb->addWidget(typefaceSize);
 
       setWidget(tb);
@@ -250,6 +251,7 @@ void TextTools::updateTools()
 
       QFont f(format->fontFamily());
       typefaceFamily->setCurrentFont(f);
+      typefaceFamily->setEnabled(cursor->format()->type() == CharFormatType::TEXT);
       typefaceSize->setValue(format->fontSize());
 
       typefaceItalic->setChecked(format->italic());
