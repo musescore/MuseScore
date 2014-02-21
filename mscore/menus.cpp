@@ -1034,6 +1034,7 @@ void MuseScore::setAdvancedPalette()
       paletteBox->addPalette(newNoteHeadsPalette());
       paletteBox->addPalette(newTremoloPalette());
       paletteBox->addPalette(newRepeatsPalette());
+      paletteBox->addPalette(newTempoPalette());
       paletteBox->addPalette(newTextPalette());
       paletteBox->addPalette(newBreaksPalette());
       paletteBox->addPalette(newBagpipeEmbellishmentPalette());
@@ -1126,6 +1127,7 @@ void MuseScore::setBasicPalette()
       paletteBox->addPalette(newNoteHeadsPalette());
       paletteBox->addPalette(newTremoloPalette());
       paletteBox->addPalette(newRepeatsPalette());
+      paletteBox->addPalette(newTempoPalette());
       paletteBox->addPalette(newTextPalette());
       paletteBox->addPalette(newBreaksPalette());
 //      paletteBox->addPalette(newBagpipeEmbellishmentPalette());
