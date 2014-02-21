@@ -1119,7 +1119,10 @@ void Score::undoAddElement(Element* element)
                   Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
                   InstrumentChange* nis = static_cast<InstrumentChange*>(ne);
                   nis->setParent(ns1);
-                  nis->setInstrument(*staff->part()->instr(s1->tick()));
+                  if (is->instrument().channel().isEmpty() || is->instrument().channel(0).program == -1)
+                        nis->setInstrument(*staff->part()->instr(s1->tick()));
+                  else
+                        nis->setInstrument(is->instrument());
                   undo(new AddElement(nis));
                   undo(new ChangeInstrument(nis, nis->instrument()));
                   }
