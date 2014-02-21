@@ -1121,6 +1121,7 @@ void Score::undoAddElement(Element* element)
                   nis->setParent(ns1);
                   nis->setInstrument(*staff->part()->instr(s1->tick()));
                   undo(new AddElement(nis));
+                  undo(new ChangeInstrument(nis, nis->instrument()));
                   }
             else if (element->type() == Element::BREATH) {
                   Breath* breath   = static_cast<Breath*>(element);
