@@ -1221,41 +1221,40 @@ void MuseScore::addTempo()
 
       SigEvent event = cs->sigmap()->timesig(cr->tick());
       Fraction f = event.nominal();
-
-      QString text(QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5f)));
+      QString text("<sym>noteQuarterUp</sym> = 80");
       switch (f.denominator()) {
             case 1:
-                  text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5d));
+                  text = "<sym>noteWhole</sym> = 80";
                   break;
             case 2:
-                  text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5e));
+                  text = "<sym>noteHalfUp</sym> = 80";
                   break;
             case 4:
-                  text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5f));
+                  text = "<sym>noteQuarterUp</sym> = 80";
                   break;
             case 8:
                   if(f.numerator() % 3 == 0)
-                        text = QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd5f)).arg(QChar(0xd834)).arg(QChar(0xdd6d));
+                        text = "<sym>noteQuarterUp</sym> <sym>augmentationDot</sym> = 80";
                   else
-                        text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd60));
+                        text = "<sym>note8thUp</sym> = 80";
                   break;
             case 16:
                   if(f.numerator() % 3 == 0)
-                        text = QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd60)).arg(QChar(0xd834)).arg(QChar(0xdd6d));
+                        text = text = "<sym>note8thUp</sym>><sym>augmentationDot</sym> = 80";
                   else
-                        text = text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd61));
+                        text = "<sym>note16thUp</sym> = 80";
                   break;
             case 32:
                   if(f.numerator() % 3 == 0)
-                        text = QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd61)).arg(QChar(0xd834)).arg(QChar(0xdd6d));
+                        text = "<sym>note16thUp</sym>><sym>augmentationDot</sym> = 80";
                   else
-                        text = text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd62));
+                        text = "<sym>note32thUp</sym> = 80";
                   break;
             case 64:
                   if(f.numerator() % 3 == 0)
-                        text = QString("%1%2%3%4 = 80").arg(QChar(0xd834)).arg(QChar(0xdd62)).arg(QChar(0xd834)).arg(QChar(0xdd6d));
+                        text = "<sym>note32thUp</sym>><sym>augmentationDot</sym> = 80";
                   else
-                        text = text = QString("%1%2 = 80").arg(QChar(0xd834)).arg(QChar(0xdd63));
+                        text = "<sym>note64thUp</sym> = 80";
                   break;
             default:
                   break;
