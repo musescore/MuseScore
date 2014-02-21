@@ -3077,12 +3077,13 @@ void Measure::layoutX(qreal stretch)
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
                         Lyrics* lyrics = 0;
+                        bool accidentalStaff = false;
                         for (int voice = 0; voice < VOICES; ++voice) {
                               ChordRest* cr = static_cast<ChordRest*>(s->element(track+voice));
                               if (!cr)
                                     continue;
                               found = true;
-                              if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine)) {
+                              if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine) && !accidentalStaff) {
                                     // check for accidentals in chord
                                     bool accidental = false;
                                     if (cr->type() == Element::CHORD) {
@@ -3100,6 +3101,7 @@ void Measure::layoutX(qreal stretch)
                                           }
                                     // no distance to full measure rest
                                     if (!(cr->type() == REST && static_cast<Rest*>(cr)->durationType() == TDuration::V_MEASURE)) {
+                                          accidentalStaff = true;
                                           StyleIdx si = accidental ? ST_barAccidentalDistance : ST_barNoteDistance;
                                           qreal sp    = score()->styleS(si).val() * _spatium;
                                           sp          += elsp;
