@@ -459,7 +459,7 @@ void Note::removeSpanner(Spanner* l)
 
 void Note::add(Element* e)
       {
-	e->setParent(this);
+      e->setParent(this);
       e->setTrack(track());
 
       switch(e->type()) {
