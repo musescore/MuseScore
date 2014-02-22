@@ -75,12 +75,12 @@ class TimeSig : public Element {
       QString ssig() const;
       void setSSig(const QString&);
 
-      TimeSig* clone() const             { return new TimeSig(*this); }
-      ElementType type() const           { return TIMESIG; }
+      virtual TimeSig* clone() const override;
+      virtual ElementType type() const override          { return TIMESIG; }
 
       TimeSigType timeSigType() const    { return _timeSigType; }
 
-      virtual qreal mag() const;
+      virtual qreal mag() const override;
       void draw(QPainter*) const;
       void write(Xml& xml) const;
       void read(XmlReader&);

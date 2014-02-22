@@ -43,6 +43,17 @@ TimeSig::TimeSig(Score* s)
       }
 
 //---------------------------------------------------------
+//   clone
+//---------------------------------------------------------
+
+TimeSig* TimeSig::clone() const
+      {
+      TimeSig* ts = new TimeSig(*this);
+      ts->setNeedLayout(true); // relayout of the ts is needed in parts #24571
+      return ts;
+      }
+
+//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
