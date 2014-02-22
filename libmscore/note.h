@@ -173,6 +173,8 @@ class Note : public Element {
       bool _hidden;           ///< markes this note as the hidden one if there are
                               ///< overlapping notes; hidden notes are not played
                               ///< and heads + accidentals are not shown
+      bool _dotsHidden;       ///< dots of hidden notes are hidden too
+                              ///< except if only one note is dotted
       bool _fretConflict;     ///< used by TAB staves to mark a fretting conflict:
                               ///< two or mor enotes on the same string
 
@@ -303,6 +305,8 @@ class Note : public Element {
 
       bool hidden() const                       { return _hidden; }
       void setHidden(bool val)                  { _hidden = val;  }
+      bool dotsHidden() const                   { return _dotsHidden; }
+      void setDotsHidden(bool val)              { _dotsHidden = val;  }
 
       NoteType noteType() const;
 

@@ -47,6 +47,7 @@
 #include "lyrics.h"
 #include "harmony.h"
 #include "ottava.h"
+#include "notedot.h"
 
 namespace Ms {
 
@@ -174,6 +175,8 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
             bool nmirror  = (chord->up() != isLeft) && !sameHead;
 
             note->setHidden(false);
+            note->setDotsHidden(false);
+
             chord->rxpos() = 0.0;
 
             if (conflict && (nmirror == mirror) && idx) {
@@ -182,16 +185,18 @@ void Score::layoutChords1(QList<Note*>& notes, int voices, Staff* staff, Segment
                         if (!(pnote->parent()->isNudged() || note->parent()->isNudged())) {
                               if (ticks > pnote->chord()->actualTicks()) {
                                     pnote->setHidden(true);
+                                    if (chord->dots() == pnote->chord()->dots())
+                                          pnote->setDotsHidden(true);
+
                                     // TODO: pnote->setAccidentalType(ACC_NONE);
-                                    note->setHidden(false);
                                     }
                               else {
                                     // TODO: note->setAccidentalType(ACC_NONE);
                                     note->setHidden(true);
+                                    if (chord->dots() == pnote->chord()->dots())
+                                          note->setDotsHidden(true);
                                     }
                               }
-                        else
-                              note->setHidden(false);
                         }
                   else {
                         qreal x = note->headWidth() - note->point(styleS(ST_stemWidth));
