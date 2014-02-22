@@ -181,7 +181,7 @@ class Text : public Element {
       const TextBlock& curLine() const;
       TextBlock& curLine();
       void drawSelection(QPainter*, const QRectF&) const;
-      void createLayout();
+      
       void insert(TextCursor*, QChar);
       void insert(TextCursor*, SymId);
       void updateCursorFormat(TextCursor*);
@@ -193,6 +193,8 @@ class Text : public Element {
       QColor textColor() const;
       void layoutFrame();
       void layoutEdit();
+      
+      void createLayout();
 
    public:
       Text(Score* = 0);
