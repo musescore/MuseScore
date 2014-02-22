@@ -1587,6 +1587,25 @@ void Chord::layoutPitched()
                   x -= score()->styleS(ST_accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
                   }
+
+            // allow extra space for shortened ties
+            // this code should be synchronized with
+            // the tie positioning code in Tie::slurPos()
+            Tie* tie;
+            tie = note->tieBack();
+            if (tie) {
+                  tie->calculateDirection();
+                  qreal minShortTieDistance = 1.4 * _spatium;
+                  qreal d = 0.0;
+                  Chord* sc = tie->startNote()->chord();
+                  if (sc && sc->measure() == measure()) {
+                        if (sc->notes().size() > 1 || (sc->stem() && sc->up() == tie->up()))
+                              d += minShortTieDistance / 2.0;
+                        if (notes().size() > 1 || (stem() && !up() && !tie->up()))
+                              d += minShortTieDistance / 2.0;
+                        lll = qMax(lll, d);
+                        }
+                  }
             }
 
       //-----------------------------------------
