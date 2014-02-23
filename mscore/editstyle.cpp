@@ -322,6 +322,7 @@ void EditStyle::getValues()
       lstyle.set(ST_SlurEndWidth,            Spatium(slurEndLineWidth->value()));
       lstyle.set(ST_SlurMidWidth,            Spatium(slurMidLineWidth->value()));
       lstyle.set(ST_SlurDottedWidth,         Spatium(slurDottedLineWidth->value()));
+      lstyle.set(ST_MinTieLength,            Spatium(minTieLength->value()));
 
       int idx1 = musicalSymbolFont->itemData(musicalSymbolFont->currentIndex()).toInt();
       lstyle.set(ST_MusicalSymbolFont, ScoreFont::scoreFonts().at(idx1).name());
@@ -603,6 +604,7 @@ void EditStyle::setValues()
       slurEndLineWidth->setValue(lstyle.value(ST_SlurEndWidth).toDouble());
       slurMidLineWidth->setValue(lstyle.value(ST_SlurMidWidth).toDouble());
       slurDottedLineWidth->setValue(lstyle.value(ST_SlurDottedWidth).toDouble());
+      minTieLength->setValue(lstyle.value(ST_MinTieLength).toDouble());
 
       QString mfont(lstyle.value(ST_MusicalSymbolFont).toString());
       int idx = 0;
