@@ -83,8 +83,18 @@ QPointF BarLine::pagePos() const
             system = static_cast<Segment*>(parent())->measure()->system();
 
       qreal yp = y();
-      if (system)
-            yp += system->staffYpage(staffIdx());
+      if (system) {
+            // get first not hidden staff
+            int staffIdx1 = staffIdx();
+            Staff* staff1 = score()->staff(staffIdx1);
+            SysStaff* sysStaff1 = system->staff(staffIdx1);
+            while ( !(sysStaff1->show() && staff1->show()) ) {
+                  staffIdx1++;
+                  staff1 = score()->staff(staffIdx1);
+                  sysStaff1 = system->staff(staffIdx1);
+                  }
+            yp += system->staffYpage(staffIdx1);
+            }
       return QPointF(pageX(), yp);
       }
 
