@@ -164,11 +164,13 @@ void Tie::slurPos(SlurPos* sp)
 
       qreal xo;
       qreal yo;
+      bool shortStart = false;
 
       //------p1
       if ((sc->notes().size() > 1) || (sc->stem() && (sc->up() == _up))) {
             xo = startNote()->x() + hw * 1.12;
             yo = startNote()->pos().y() + hw * .3 * __up;
+            shortStart = true;
             }
       else {
             xo = startNote()->x() + hw * 0.65;
@@ -186,6 +188,8 @@ void Tie::slurPos(SlurPos* sp)
       sp->system2 = ec->measure()->system();
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
             xo = endNote()->x() - hw * 0.12;
+      else if (shortStart)
+            xo = endNote()->x() + hw * 0.15;
       else
             xo = endNote()->x() + hw * 0.35;
       sp->p2 = ec->pagePos() - sp->system2->pagePos() + QPointF(xo, yo);

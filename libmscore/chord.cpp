@@ -1535,6 +1535,7 @@ void Chord::layoutPitched()
 
       qreal _spatium  = spatium();
       qreal minNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
+      qreal minShortTieDistance = 1.0 * _spatium;
 
       while (_ledgerLines) {
             LedgerLine* l = _ledgerLines->next();
@@ -1595,14 +1596,33 @@ void Chord::layoutPitched()
             tie = note->tieBack();
             if (tie) {
                   tie->calculateDirection();
-                  qreal minShortTieDistance = 1.4 * _spatium;
-                  qreal d = 0.0;
-                  Chord* sc = tie->startNote()->chord();
+                  qreal spaceNeeded = 0.0;
+                  qreal spaceFound = 0.0;
+                  Note* sn = tie->startNote();
+                  Chord* sc = sn->chord();
                   if (sc && sc->measure() == measure()) {
-                        if (sc->notes().size() > 1 || (sc->stem() && sc->up() == tie->up()))
-                              d += minShortTieDistance / 2.0;
-                        if (notes().size() > 1 || (stem() && !up() && !tie->up()))
-                              d += minShortTieDistance / 2.0;
+                        if (sc->notes().size() > 1 || (sc->stem() && sc->up() == tie->up())) {
+                              spaceNeeded += minShortTieDistance * 0.75;
+                              if (sc->width() > sn->width()) {
+                                    // chord with second?
+                                    // account for noteheads further to right
+                                    qreal snEnd = sn->x() + sn->headWidth();
+                                    qreal scEnd = snEnd;
+                                    for (int i = 0; i < sc->notes().size(); ++i)
+                                          scEnd = qMax(scEnd, sc->notes().at(i)->x() + sc->notes().at(i)->headWidth());
+                                    spaceFound += scEnd - snEnd;
+                                    }
+                              }
+                        if (notes().size() > 1 || (stem() && !up() && !tie->up())) {
+                              spaceNeeded += minShortTieDistance * 0.75;
+                              // for positive offset:
+                              //    use available space
+                              // for negative x offset:
+                              //    space is allocated elsewhere, so don't re-allocate here
+                              spaceFound += qAbs(note->ipos().x());
+                              }
+                        spaceNeeded = qMin(spaceNeeded, minShortTieDistance);
+                        qreal d = qMax(spaceNeeded - spaceFound, 0.0);
                         lll = qMax(lll, d);
                         }
                   }
