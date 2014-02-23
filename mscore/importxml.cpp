@@ -4464,7 +4464,66 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
             }
       return 0;
       }
+      
+//---------------------------------------------------------
+//   handleDisplayStep
+//---------------------------------------------------------
 
+static void handleDisplayStep(ChordRest* cr, QString step, int octave, int tick, qreal spatium)
+      {
+            if (step != "" && 0 <= octave && octave <= 9) {
+                  // qDebug("rest step=%s oct=%d", qPrintable(step), octave);
+                  ClefType clef = cr->staff()->clef(tick);
+                  int po = ClefInfo::pitchOffset(clef);
+                  int istep = step[0].toLatin1() - 'A';
+                  // qDebug(" clef=%d po=%d istep=%d", clef, po, istep);
+                  if (istep < 0 || istep > 6) {
+                        qDebug("rest: illegal display-step %d, <%s>", istep, qPrintable(step));
+                  }
+                  else {
+                        //                        a  b  c  d  e  f  g
+                        static int table2[7]  = { 5, 6, 0, 1, 2, 3, 4 };
+                        int dp = 7 * (octave + 2) + table2[istep];
+                        // qDebug(" dp=%d po-dp=%d", dp, po-dp);
+                        cr->setUserYoffset((po - dp + 3) * spatium / 2);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   setDuration
+//---------------------------------------------------------
+
+/**
+ * Set \a cr duration
+ */
+
+static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration duration, int ticks)
+      {
+      if (rest) {
+            // By convention, whole measure rests do not have a "type" element
+            // As of MusicXML 3.0, this can be indicated by an attribute "measure",
+            // but for backwards compatibility the "old" convention still has to be supported.
+            if (duration.type() == TDuration::V_INVALID) {
+                  if (wholeMeasure)
+                        duration.setType(TDuration::V_MEASURE);
+                  else
+                        duration.setVal(ticks);
+                  cr->setDurationType(duration);
+                  cr->setDuration(Fraction::fromTicks(ticks));
+            }
+            else {
+                  cr->setDurationType(duration);
+                  cr->setDuration(cr->durationType().fraction());
+            }
+      }
+      else {
+            if (duration.type() == TDuration::V_INVALID)
+                  duration.setType(TDuration::V_QUARTER);
+            cr->setDurationType(duration);
+            cr->setDuration(cr->durationType().fraction());
+            }
+      }
 
 //---------------------------------------------------------
 //   xmlNote
@@ -4492,7 +4551,6 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
       int relStaff = 0;
       BeamMode bm  = BeamMode::NONE;
       MScore::Direction sd = MScore::AUTO;
-      int dots     = 0;
       bool grace   = false;
       QString graceSlash;
       QString step;
@@ -4502,7 +4560,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
       bool parentheses = false;
       bool editorial = false;
       bool cautionary = false;
-      TDuration durationType(TDuration::V_INVALID);
+      TDuration duration(TDuration::V_INVALID);
       NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
       bool noStem = false;
       QColor noteheadColor = QColor::Invalid;
@@ -4648,7 +4706,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                         }
                   }
             else if (tag == "type")
-                  durationType = TDuration(s);
+                  duration = TDuration(s);
             else if (tag == "chord" || tag == "duration" || tag == "staff" || tag == "voice")
                   // already handled by voice mapper, ignore here but prevent
                   // spurious "Unknown Node <staff>" or "... <voice>" messages
@@ -4696,7 +4754,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             else if (tag == "lyric")
                   xmlLyric(track, e, numberedLyrics, defaultyLyrics, unNumberedLyrics);
             else if (tag == "dot")
-                  ++dots;
+                  duration.setDots(duration.dots() + 1);
             else if (tag == "accidental") {
                   accidental = convertAccidental(s);
                   if (e.attribute(QString("cautionary")) == "yes")
@@ -4755,25 +4813,13 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 
       if (rest) {
             cr = new Rest(score);
-            // By convention, whole measure rests do not have a "type" element
-            // As of MusicXML 3.0, this can be indicated by an attribute "measure",
-            // but for backwards compatibility the "old" convention still has to be supported.
-            if (durationType.type() == TDuration::V_INVALID) {
-                  // Verify the rest fits exactly in the measure, as some programs
-                  // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
-                  // the type for all rests.
-                  if (tick == measure->tick() && ticks == measure->ticks())
-                        durationType.setType(TDuration::V_MEASURE);
-                  else
-                        durationType.setVal(ticks);
-                  cr->setDurationType(durationType);
-                  cr->setDuration(Fraction::fromTicks(ticks));
-                  }
-            else {
-                  cr->setDurationType(durationType);
-                  cr->setDots(dots);
-                  cr->setDuration(cr->durationType().fraction());
-                  }
+            
+            // Verify the rest fits exactly in the measure, as some programs
+            // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
+            // the type for all rests.
+            bool wholeMeasure = (tick == measure->tick() && ticks == measure->ticks());
+            setDuration(cr, rest, wholeMeasure, duration, ticks);
+            
             if (beam) {
                   if (beam->track() == track) {
                         cr->setBeamMode(BeamMode::MID);
@@ -4785,32 +4831,31 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
             else
                   cr->setBeamMode(BeamMode::NONE);
             cr->setTrack(track);
-            static_cast<Rest*>(cr)->setStaffMove(move);
+            cr->setStaffMove(move);
             Segment* s = measure->getSegment(cr, loc_tick);
             // Sibelius might export two rests at the same place, ignore the 2nd one
             // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
             if (!s->element(cr->track()))
                   s->add(cr);
             cr->setVisible(printObject == "yes");
-            if (step != "" && 0 <= octave && octave <= 9) {
-                  // qDebug("rest step=%s oct=%d", qPrintable(step), octave);
-                  ClefType clef = cr->staff()->clef(loc_tick);
-                  int po = ClefInfo::pitchOffset(clef);
-                  int istep = step[0].toLatin1() - 'A';
-                  // qDebug(" clef=%d po=%d istep=%d", clef, po, istep);
-                  if (istep < 0 || istep > 6) {
-                        qDebug("rest: illegal display-step %d, <%s>", istep, qPrintable(step));
-                        }
-                  else {
-                        //                        a  b  c  d  e  f  g
-                        static int table2[7]  = { 5, 6, 0, 1, 2, 3, 4 };
-                        int dp = 7 * (octave + 2) + table2[istep];
-                        // qDebug(" dp=%d po-dp=%d", dp, po-dp);
-                        cr->setUserYoffset((po - dp + 3) * score->spatium() / 2);
-                        }
-                  }
+            handleDisplayStep(cr, step, octave, loc_tick, score->spatium());
             }
       else {
+            cr = measure->findChord(loc_tick, track);
+            if (cr == 0) {
+                  if(!grace) {
+                        cr = new Chord(score);
+                        cr->setBeamMode(bm);
+                        cr->setTrack(track);
+                        
+                        setDuration(cr, rest, false, duration, ticks);
+                        Segment* s = measure->getSegment(cr, loc_tick);
+                        s->add(cr);
+                  }
+            }
+            if(cr)
+                  cr->setStaffMove(move);
+
             char c = step[0].toLatin1();
             note = new Note(score);
             note->setHeadGroup(headGroup);
@@ -4833,25 +4878,6 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   note->setVeloOffset(velocity);
                   }
 
-            cr = measure->findChord(loc_tick, track);
-            if (cr == 0) {
-                  if(!grace) {
-                        cr = new Chord(score);
-                        cr->setBeamMode(bm);
-                        cr->setTrack(track);
-
-                        if (durationType.type() == TDuration::V_INVALID)
-                              durationType.setType(TDuration::V_QUARTER);
-                        cr->setDurationType(durationType);
-                        cr->setDots(dots);
-                        cr->setDuration(cr->durationType().fraction());
-                        Segment* s = measure->getSegment(cr, loc_tick);
-                        s->add(cr);
-                        }
-                  }
-            if(cr)
-                  cr->setStaffMove(move);
-
             // pitch must be set before adding note to chord as note
             // is inserted into pitch sorted list (ws)
 
@@ -4873,15 +4899,15 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                   int len = MScore::division/2;
                   if (graceSlash == "yes")
                          nt = NOTE_ACCIACCATURA;
-                  if (durationType.type() == TDuration::V_QUARTER) {
+                  if (duration.type() == TDuration::V_QUARTER) {
                         nt = NOTE_GRACE4;
                         len = MScore::division;
                         }
-                  else if (durationType.type() == TDuration::V_16TH) {
+                  else if (duration.type() == TDuration::V_16TH) {
                         nt = NOTE_GRACE16;
                         len = MScore::division/4;
                         }
-                  else if (durationType.type() == TDuration::V_32ND) {
+                  else if (duration.type() == TDuration::V_32ND) {
                         nt = NOTE_GRACE32;
                         len = MScore::division/8;
                         }
