@@ -1581,8 +1581,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   ChordRest* cr2 = crl[i-1];
                   if (c1 && (cr1->up() == cr2->up())) {
                         QPointF stemPos(cr1->stemPos());
-                        qreal x  = stemPos.x() - _pagePos.x();
-                        qreal x2 = x - _pagePos.x();
+                        qreal x2  = stemPos.x() - _pagePos.x();
                         qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
                         qreal y2 = cr1->stemPos().y();
 
