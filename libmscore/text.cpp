@@ -850,6 +850,8 @@ void Text::insert(TextCursor* cursor, QChar c)
       {
       if (cursor->hasSelection())
             deleteSelectedText();
+      if (cursor->line() >= _layout.size())
+            _layout.append(TextBlock());
       if (c == QChar::LineFeed) {
             _layout[cursor->line()].setEol(true);
             cursor->setLine(cursor->line() + 1);
@@ -858,8 +860,6 @@ void Text::insert(TextCursor* cursor, QChar c)
                   _layout.append(TextBlock());
             }
       else {
-            if (cursor->line() >= _layout.size())
-                  _layout.append(TextBlock());
             _layout[cursor->line()].insert(cursor, QString(c));
             cursor->setColumn(cursor->column() + 1);
             }
