@@ -852,7 +852,7 @@ bool SLine::setProperty(P_ID id, const QVariant& v)
             default:
                   return Spanner::setProperty(id, v);
             }
-      return true;
+       return true;
       }
 
 //---------------------------------------------------------
