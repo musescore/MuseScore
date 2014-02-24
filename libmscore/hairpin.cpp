@@ -43,16 +43,23 @@ void HairpinSegment::layout()
       len     = sqrt(x * x + y * y);
       t.rotateRadians(asin(y/len));
 
+      drawCircledTip =  hairpin()->hairpinCircledTip();
+      circledTipRadius = 0;
+      if( drawCircledTip )
+        circledTipRadius  = 0.6 * _spatium * .5;
       if (hairpin()->hairpinType() == 0) {
             // crescendo
             switch (spannerSegmentType()) {
                   case SEGMENT_SINGLE:
                   case SEGMENT_BEGIN:
-                        l1.setLine(.0, .0, len, h1);
-                        l2.setLine(.0, .0, len, -h1);
+                        l1.setLine(.0 + circledTipRadius*2, .0, len, h1);
+                        l2.setLine(.0 + circledTipRadius*2, .0, len, -h1);
+                        circledTip.setX( 0 + circledTipRadius );
+                        circledTip.setY( 0 );
                         break;
                   case SEGMENT_MIDDLE:
                   case SEGMENT_END:
+                        drawCircledTip = false;
                         l1.setLine(.0,  h2, len, h1);
                         l2.setLine(.0, -h2, len, -h1);
                         break;
@@ -63,18 +70,25 @@ void HairpinSegment::layout()
             switch(spannerSegmentType()) {
                   case SEGMENT_SINGLE:
                   case SEGMENT_END:
-                        l1.setLine(.0,  h1, len, 0.0);
-                        l2.setLine(.0, -h1, len, 0.0);
+                        l1.setLine(.0,  h1, len - circledTipRadius*2, 0.0);
+                        l2.setLine(.0, -h1, len - circledTipRadius*2, 0.0);
+                        circledTip.setX( len - circledTipRadius );
+                        circledTip.setY( 0 );
                         break;
                   case SEGMENT_BEGIN:
                   case SEGMENT_MIDDLE:
+                        drawCircledTip = false;
                         l1.setLine(.0,  h1, len, + h2);
                         l2.setLine(.0, -h1, len, - h2);
                         break;
                   }
             }
+// Do Coord rotation
       l1 = t.map(l1);
       l2 = t.map(l2);
+      if( drawCircledTip )
+        circledTip = t.map(circledTip);
+
 
       QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
       qreal w = point(score()->styleS(ST_hairpinLineWidth));
@@ -120,6 +134,11 @@ void HairpinSegment::draw(QPainter* painter) const
       painter->setPen(pen);
       painter->drawLine(l1);
       painter->drawLine(l2);
+      if( drawCircledTip ) {
+          painter->setBrush(Qt::NoBrush);
+          painter->drawEllipse( circledTip,circledTipRadius,circledTipRadius );
+      }
+
       }
 
 //---------------------------------------------------------
@@ -129,6 +148,7 @@ void HairpinSegment::draw(QPainter* painter) const
 QVariant HairpinSegment::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_HAIRPIN_CIRCLEDTIP:
             case P_HAIRPIN_TYPE:
             case P_VELO_CHANGE:
             case P_DYNAMIC_RANGE:
@@ -148,6 +168,7 @@ QVariant HairpinSegment::getProperty(P_ID id) const
 bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_HAIRPIN_CIRCLEDTIP:
             case P_HAIRPIN_TYPE:
             case P_VELO_CHANGE:
             case P_DYNAMIC_RANGE:
@@ -168,6 +189,7 @@ bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
 QVariant HairpinSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_HAIRPIN_CIRCLEDTIP:
             case P_HAIRPIN_TYPE:
             case P_VELO_CHANGE:
             case P_DYNAMIC_RANGE:
@@ -223,6 +245,7 @@ Hairpin::Hairpin(Score* s)
    : SLine(s)
       {
       _hairpinType = CRESCENDO;
+      _hairpinCircledTip = false;
       _veloChange  = 10;
       _dynRange    = DYNAMIC_PART;
       setLineWidth(score()->styleS(ST_hairpinLineWidth));
@@ -262,6 +285,7 @@ void Hairpin::write(Xml& xml) const
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
       xml.tag("subtype", _hairpinType);
       xml.tag("veloChange", _veloChange);
+      xml.tag("hairpinCircledTip", _hairpinCircledTip );
       writeProperty(xml, P_DYNAMIC_RANGE);
       writeProperty(xml, P_PLACEMENT);
       writeProperty(xml, P_HAIRPIN_HEIGHT);
@@ -297,6 +321,8 @@ void Hairpin::read(XmlReader& e)
                   setHairpinContHeight(Spatium(e.readDouble()));
                   hairpinContHeightStyle = PropertyStyle::UNSTYLED;
                   }
+            else if (tag == "hairpinCircledTip")
+                  _hairpinCircledTip = e.readInt();
             else if (tag == "veloChange")
                   _veloChange = e.readInt();
             else if (tag == "dynType")
@@ -340,8 +366,10 @@ void Hairpin::undoSetDynRange(DynamicRange val)
 QVariant Hairpin::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_HAIRPIN_CIRCLEDTIP:
+                return _hairpinCircledTip;
             case P_HAIRPIN_TYPE:
-                  return _hairpinType;
+                return _hairpinType;
             case P_VELO_CHANGE:
                   return _veloChange;
             case P_DYNAMIC_RANGE:
@@ -362,6 +390,9 @@ QVariant Hairpin::getProperty(P_ID id) const
 bool Hairpin::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_HAIRPIN_CIRCLEDTIP:
+                _hairpinCircledTip = v.toBool();
+                break;
             case P_HAIRPIN_TYPE:
                   _hairpinType = HairpinType(v.toInt());
                   setGenerated(false);
@@ -397,6 +428,7 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
 QVariant Hairpin::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_HAIRPIN_CIRCLEDTIP:  return false;
             case P_HAIRPIN_TYPE:        return HairpinType::CRESCENDO;
             case P_VELO_CHANGE:         return 10;
             case P_DYNAMIC_RANGE:       return DYNAMIC_PART;

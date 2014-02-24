@@ -2490,6 +2490,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
 
       QString dirType;
       QString type;
+      QString niente = "no";
       QString txt;
       QString lang;
       QString fontWeight = "";
@@ -2559,6 +2560,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               }
                         else if (dirType == "wedge") {
                               type   = ee.attribute(QString("type"));
+                              niente   = ee.attribute(QString("niente"),"no");
                               // spread = ee.attribute(QString("spread"), "0").toInt();
                               }
                         else if (dirType == "dashes") {
@@ -2866,6 +2868,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                                           score->spatium(), placement,
                                           hasYoffset, yoffset);
                         hairpin->setTrack((staff + rstaff) * VOICES);
+                        if( niente == "yes")
+                            hairpin->setHairpinCircledTip( true );
                         spanners[hairpin] = QPair<int, int>(tick, -1);
                         // qDebug("hairpin=%p inserted at first tick %d", hairpin, tick);
                         }
@@ -2875,6 +2879,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         qDebug("wedge stop without start");
                         }
                   else {
+                        if( niente == "yes")
+                            hairpin->setHairpinCircledTip( true );
                         spanners[hairpin].second = tick;
                         // qDebug("hairpin=%p second tick %d", hairpin, tick);
                         hairpin = 0;

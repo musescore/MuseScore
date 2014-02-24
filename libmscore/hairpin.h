@@ -32,6 +32,9 @@ class HairpinSegment : public LineSegment {
       Q_OBJECT
 
       QLineF l1, l2;
+      bool drawCircledTip;
+      QPointF circledTip;
+      qreal circledTipRadius;
 
    protected:
    public:
@@ -69,6 +72,7 @@ class Hairpin : public SLine {
       Q_PROPERTY(int         veloChange  READ veloChange  WRITE undoSetVeloChange)
       Q_PROPERTY(Ms::Element::DynamicRange   dynRange READ dynRange WRITE undoSetDynRange)
 
+      bool  _hairpinCircledTip;
       HairpinType _hairpinType;
       int _veloChange;
       DynamicRange _dynRange;
@@ -90,6 +94,9 @@ class Hairpin : public SLine {
       Segment* segment() const         { return (Segment*)parent(); }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
+
+      bool hairpinCircledTip() const           { return _hairpinCircledTip; }
+      void setHairpinCircledTip( bool val )    { _hairpinCircledTip = val; }
 
       int veloChange() const           { return _veloChange; }
       void setVeloChange(int v)        { _veloChange = v;    }
