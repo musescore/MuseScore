@@ -1601,7 +1601,7 @@ void Chord::layoutPitched()
                   bool shortStart = false;
                   Note* sn = tie->startNote();
                   Chord* sc = sn->chord();
-                  if (sc && sc->measure() == measure()) {
+                  if (sc && sc->measure() == measure() && sc == prevChordRest(this)) {
                         if (sc->notes().size() > 1 || (sc->stem() && sc->up() == tie->up())) {
                               shortStart = true;
                               if (sc->width() > sn->width()) {
