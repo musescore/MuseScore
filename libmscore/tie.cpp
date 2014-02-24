@@ -166,6 +166,11 @@ void Tie::slurPos(SlurPos* sp)
       qreal yo;
       bool shortStart = false;
 
+      // determine attachment points
+      // similar code is used in Chord::layoutPitched()
+      // to allocate extra space to enforce minTieLength
+      // so keep these in sync
+
       //------p1
       if ((sc->notes().size() > 1) || (sc->stem() && (sc->up() == _up))) {
             xo = startNote()->x() + hw * 1.12;
