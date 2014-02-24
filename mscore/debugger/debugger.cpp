@@ -2009,8 +2009,11 @@ void VoltaView::setElement(Element* e)
             sp.segments->addTopLevelItem(item);
             }
 
-//      sp.startElement->setEnabled(volta->startElement() != 0);
-//      sp.endElement->setEnabled(volta->endElement() != 0);
+      sp.tick->setValue(volta->tick());
+      sp.tick2->setValue(volta->tick2());
+      sp.track2->setValue(volta->track2());
+      sp.startElement->setEnabled(volta->startElement() != 0);
+      sp.endElement->setEnabled(volta->endElement() != 0);
       sp.anchor->setCurrentIndex(int(volta->anchor()));
 
       tlb.beginText->setEnabled(volta->beginText());

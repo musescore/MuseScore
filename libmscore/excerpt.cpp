@@ -339,7 +339,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             int dstTrack2 = -1;
             int st = 0;
             //always export voltas to first staff in part
-            if(s->type() == Element::VOLTA)
+            if (s->type() == Element::VOLTA)
                   dstTrack = s->voice();
             else { //export other spanner if staffidx matches
                   for (int index : map) {
@@ -469,7 +469,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
             int staffIdx = s->staffIdx();
             int dstTrack = -1;
             int dstTrack2 = -1;
-            if(s->type() != Element::VOLTA) {
+            if (s->type() != Element::VOLTA) {
                   //export other spanner if staffidx matches
                   if (srcStaffIdx == staffIdx) {
                         dstTrack = dstStaffIdx * VOICES + s->voice();

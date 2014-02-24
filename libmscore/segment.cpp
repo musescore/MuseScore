@@ -699,6 +699,10 @@ void Segment::fixStaffIdx()
 
 void Segment::checkEmpty() const
       {
+      if (!_annotations.empty()) {
+            empty = false;
+            return;
+            }
       empty = true;
       foreach(const Element* e, _elist) {
             if (e) {
