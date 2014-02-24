@@ -2861,10 +2861,26 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       {
       directionTag(xml, attr, hp);
       xml.stag("direction-type");
-      if (hp->tick() == tick)
-            xml.tagE("wedge type=\"%s\"", hp->hairpinType() ? "diminuendo" : "crescendo");
-      else
-            xml.tagE("wedge type=\"stop\"");
+      if (hp->tick() == tick){
+          if( hp->hairpinType() == Hairpin::CRESCENDO ){
+              if( hp->hairpinCircledTip() ){
+                xml.tagE( "wedge type=\"crescendo\" niente=\"yes\"" );
+              }
+              else{
+                xml.tagE( "wedge type=\"crescendo\"" );
+              }
+          }
+          else{
+              xml.tagE( "wedge type=\"diminuendo\"" );
+          }
+      }
+      else{
+          if( hp->hairpinCircledTip() && hp->hairpinType() == Hairpin::DECRESCENDO )
+                xml.tagE( "wedge type=\"stop\" niente=\"yes\"" );
+          else
+                xml.tagE( "wedge type=\"stop\"" );
+
+      }
       xml.etag();
       directionETag(xml, staff);
       }

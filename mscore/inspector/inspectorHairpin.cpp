@@ -39,6 +39,7 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { P_LINE_COLOR,          0, 0, l.lineColor,         l.resetLineColor         },
             { P_LINE_WIDTH,          0, 0, l.lineWidth,         l.resetLineWidth         },
             { P_LINE_STYLE,          0, 0, l.lineStyle,         l.resetLineStyle         },
+            { P_HAIRPIN_CIRCLEDTIP,  0, 0, h.hairpinCircledTip, h.resetHairpinCircledTip },
             { P_HAIRPIN_TYPE,        0, 0, h.hairpinType,       h.resetHairpinType       },
             { P_DYNAMIC_RANGE,       0, 0, h.dynRange,          h.resetDynRange          },
             { P_VELO_CHANGE,         0, 0, h.veloChange,        h.resetVeloChange        },
