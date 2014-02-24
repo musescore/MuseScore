@@ -1077,7 +1077,7 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
             foreach(Element* e, s->annotations()) {
                   int staffIdx = e->staffIdx();
                   if ((staffIdx >= sStaff) && (staffIdx < eStaff)) {
-                        qDebug("  remove annotation %s staffIdx %d", e->name(), staffIdx);
+                        qDebug("  remove annotation %s %p staffIdx %d", e->name(), e, staffIdx);
                         _score->undoRemoveElement(e);
                         }
                   }

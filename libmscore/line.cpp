@@ -509,7 +509,6 @@ QPointF SLine::linePos(int grip, System** sys)
                                     }
                               }
                         }
-
                   Q_ASSERT(m->system());
                   *sys = m->system();
                   }

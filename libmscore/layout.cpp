@@ -720,7 +720,6 @@ void Score::doLayout()
                         e->layout();
                   }
             }
-
       for (const std::pair<int,Spanner*>& s : _spanner.map()) {
             Spanner* sp = s.second;
             if (sp->type() == Element::OTTAVA && sp->tick2() == -1) {
@@ -732,17 +731,14 @@ void Score::doLayout()
                   if (sp->tick() == -1) {
                         qDebug("bad spanner id %d %s %d - %d", sp->id(), sp->name(), sp->tick(), sp->tick2());
                         }
-                  else {
+                  else
                         sp->layout();
-                        }
                   }
             }
-
       if (layoutMode() != LayoutLine) {
             layoutSystems2();
             layoutPages();    // create list of pages
             }
-
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM())
             m->layout2();
 
@@ -949,9 +945,13 @@ static bool validMMRestMeasure(Measure* m)
       {
       if (!m->isEmpty())
             return false;
-      //auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
-      //if (!sl.empty())
-      //      return false;
+
+      auto l = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
+      for (::Interval<Spanner*> isp : l) {
+            Spanner* s = isp.value;
+            if (s->type() == Element::VOLTA && (s->tick() == m->tick() || s->tick2() == m->tick()))
+                  return false;
+            }
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
                   if (e->type() != Element::REHEARSAL_MARK &&
@@ -976,8 +976,8 @@ static bool breakMultiMeasureRest(Measure* m)
       auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
       foreach (auto i, sl) {
             Spanner* s = i.value;
-            if(s->type() == Element::VOLTA) {
-                  if(s->tick() == m->tick() || s->tick2() == m->tick())
+            if (s->type() == Element::VOLTA) {
+                  if (s->tick() == m->tick() || s->tick2() == m->tick())
                         return true;
                   }
             }
