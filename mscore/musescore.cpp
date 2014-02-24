@@ -2396,7 +2396,7 @@ void MuseScore::checkForUpdate()
 
 bool MuseScore::readLanguages(const QString& path)
       {
-      _languages.append(LanguageItem("system", tr("System")));
+      _languages.append(LanguageItem("system", tr("System", "The default language of the operating system")));
       QFile qf(path);
       if (qf.exists()){
           QDomDocument doc;
