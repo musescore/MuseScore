@@ -2881,13 +2881,6 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
                 xml.tagE( "wedge type=\"stop\"" );
 
       }
-/*
-
-      if (hp->tick() == tick)
-            xml.tagE("wedge type=\"%s\"", hp->hairpinType() ? "diminuendo" : "crescendo");
-      else
-            xml.tagE("wedge type=\"stop\"");
-*/
       xml.etag();
       directionETag(xml, staff);
       }

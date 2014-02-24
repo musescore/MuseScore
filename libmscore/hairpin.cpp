@@ -285,7 +285,7 @@ void Hairpin::write(Xml& xml) const
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
       xml.tag("subtype", _hairpinType);
       xml.tag("veloChange", _veloChange);
-      xml.tag("hairpinCircledTip", _hairpinCircledTip );
+      writeProperty(xml, P_HAIRPIN_CIRCLEDTIP);
       writeProperty(xml, P_DYNAMIC_RANGE);
       writeProperty(xml, P_PLACEMENT);
       writeProperty(xml, P_HAIRPIN_HEIGHT);
