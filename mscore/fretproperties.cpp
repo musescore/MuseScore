@@ -169,11 +169,12 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
             p.drawEllipse(QRectF(x, y, dotd, dotd));
             }
       if (fretOffset > 0) {
-            qreal fretNumScale = 2.0; // TODO: get this from prefernces or style settings
-            QFont biggerFont(font);
-            biggerFont.setPixelSize(font.pixelSize() * fretNumScale);
-            p.setFont(biggerFont);
+            qreal fretNumMag = 2.0; // TODO: get the value from ST_fretNumMag
+            QFont scaledFont(font);
+            scaledFont.setPixelSize(font.pixelSize() * fretNumMag);
+            p.setFont(scaledFont);
             p.setPen(pen);
+            // Todo: make dependant from ST_fretNumPos
             p.drawText(QRectF(-stringDist * .4, 0.0, 0.0, fretDist),
                Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
                QString("%1").arg(fretOffset+1));
