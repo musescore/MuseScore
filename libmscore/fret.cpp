@@ -257,13 +257,18 @@ void FretDiagram::draw(QPainter* painter) const
                   }
             }
       if (_fretOffset > 0) {
-            qreal fretNumScale = 2.0; // TODO: get this from preferences or style settings
-            QFont biggerFont(font);
-            biggerFont.setPixelSize(font.pixelSize() * fretNumScale);
-            painter->setFont(biggerFont);
-            painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
-               Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
-               QString("%1").arg(_fretOffset+1));
+            qreal fretNumMag = score()->styleD(ST_fretNumMag);
+            QFont scaledFont(font);
+            scaledFont.setPixelSize(font.pixelSize() * fretNumMag);
+            painter->setFont(scaledFont);
+            if ( score()->styleI(ST_fretNumPos) == 0 )
+                  painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
+                     Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
+                     QString("%1").arg(_fretOffset+1));
+            else
+                  painter->drawText(QRectF(x2 + (stringDist * 0.4), .0, .0, fretDist),
+                     Qt::AlignVCenter|Qt::AlignLeft|Qt::TextDontClip,
+                     QString("%1").arg(_fretOffset+1));
             painter->setFont(font);
             }
       }
@@ -274,7 +279,7 @@ void FretDiagram::draw(QPainter* painter) const
 
 void FretDiagram::layout()
       {
-      qreal _spatium = spatium();
+      qreal _spatium  = spatium();
       lw1             = _spatium * 0.08;
       lw2             = _fretOffset ? lw1 : _spatium * 0.2;
       stringDist      = _spatium * .7;
@@ -293,7 +298,7 @@ void FretDiagram::layout()
             }
       bbox().setRect(x, y, w, h);
 
-      setPos(-_spatium, -h - _spatium);
+      setPos(-_spatium, -h + score()->styleP(ST_fretY) + _spatium );
       adjustReadPos();
 
       if (_harmony)

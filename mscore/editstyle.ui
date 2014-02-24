@@ -24,7 +24,7 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>170</width>
+       <width>200</width>
        <height>0</height>
       </size>
      </property>
@@ -112,7 +112,7 @@
      </item>
      <item>
       <property name="text">
-       <string>Chord Symbols</string>
+       <string>Chord Symbols, Fretboard Diagrams</string>
       </property>
      </item>
      <item>
@@ -4322,6 +4322,9 @@ p, li { white-space: pre-wrap; }
             <layout class="QGridLayout" name="gridLayout_15">
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="harmonyFretDist">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
                <property name="suffix">
                 <string extracomment="spatium unit">sp</string>
                </property>
@@ -4332,10 +4335,10 @@ p, li { white-space: pre-wrap; }
                 <double>10000.000000000000000</double>
                </property>
                <property name="singleStep">
-                <double>1.500000000000000</double>
+                <double>0.500000000000000</double>
                </property>
                <property name="value">
-                <double>-1.500000000000000</double>
+                <double>0.500000000000000</double>
                </property>
               </widget>
              </item>
@@ -4450,21 +4453,125 @@ p, li { white-space: pre-wrap; }
             </layout>
            </widget>
           </item>
-          <item>
-           <spacer name="verticalSpacer_5">
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_51">
+         <property name="title">
+          <string>Fretboard Diagrams</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_131">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_602">
+            <property name="text">
+             <string>Default vertical position:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="fretY">
+            <property name="suffix">
+             <string>sp</string>
+            </property>
+            <property name="decimals">
+             <number>2</number>
+            </property>
+            <property name="minimum">
+             <double>-10.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>10.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.500000000000000</double>
+            </property>
+            <property name="value">
+             <double>-2.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_601">
+            <property name="text">
+             <string>Fret offset number font size:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="fretNumMag">
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>500.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>10.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>200.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_6011">
+            <property name="text">
+             <string>Position:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QRadioButton" name="radioFretNumLeft">
+            <property name="text">
+             <string>Left</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QRadioButton" name="radioFretNumRight">
+            <property name="text">
+             <string>Right</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <spacer name="horizontalSpacer_61">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>117</width>
-              <height>188</height>
+              <width>496</width>
+              <height>20</height>
              </size>
             </property>
            </spacer>
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_61">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>496</width>
+           <height>118</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

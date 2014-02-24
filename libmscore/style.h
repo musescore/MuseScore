@@ -240,6 +240,9 @@ enum StyleIdx {
       ST_harmonyFretDist,
       ST_minHarmonyDistance,
       ST_capoPosition,
+      ST_fretNumMag,
+      ST_fretNumPos,
+      ST_fretY,
 
       ST_showPageNumber,
       ST_showPageNumberOne,

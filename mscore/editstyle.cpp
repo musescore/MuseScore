@@ -420,6 +420,10 @@ void EditStyle::getValues()
 
       lstyle.set(ST_capoPosition,            capoPosition->value());
 
+      lstyle.set(ST_fretNumMag,              fretNumMag->value()*0.01);
+      lstyle.set(ST_fretNumPos,              radioFretNumLeft->isChecked() ? 0 : 1);
+      lstyle.set(ST_fretY,                   fretY->value());
+
       lstyle.set(ST_tabClef, int(clefTab1->isChecked() ? ClefType::TAB : ClefType::TAB2));
 
       lstyle.set(ST_crossMeasureValues,      crossMeasureValues->isChecked());
@@ -668,6 +672,10 @@ void EditStyle::setValues()
       harmonyFretDist->setValue(lstyle.value(ST_harmonyFretDist).toDouble());
       minHarmonyDistance->setValue(lstyle.value(ST_minHarmonyDistance).toDouble());
       capoPosition->setValue(lstyle.value(ST_capoPosition).toInt());
+      fretNumMag->setValue(lstyle.value(ST_fretNumMag).toDouble()*100.0);
+      radioFretNumLeft->setChecked(lstyle.value(ST_fretNumPos).toInt() == 0);
+      radioFretNumRight->setChecked(lstyle.value(ST_fretNumPos).toInt() == 1);
+      fretY->setValue(lstyle.value(ST_fretY).toDouble());
       pedalY->setValue(lstyle.value(ST_pedalY).toDouble());
       pedalLineWidth->setValue(lstyle.value(ST_pedalLineWidth).toDouble());
       pedalLineStyle->setCurrentIndex(lstyle.value(ST_pedalLineStyle).toInt()-1);
