@@ -1161,7 +1161,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       Segment::SegmentType segmentType = Segment::SegChordRest;
 
       Tuplet* t = cr->tuplet();
-      foreach(Staff* staff, staffList) {
+      foreach (Staff* staff, staffList) {
             Score* score = staff->score();
             Measure* m   = (score == this) ? measure : score->tick2measure(tick);
             Segment* seg = m->undoGetSegment(segmentType, tick);
@@ -2155,6 +2155,7 @@ void ChangeInstrumentLong::flip()
 ChangeChordRestLen::ChangeChordRestLen(ChordRest* c, const TDuration& _d)
    : cr(c), d(_d)
       {
+      Q_ASSERT(c);
       }
 
 void ChangeChordRestLen::flip()
