@@ -169,7 +169,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
       TieMap  tieMap;
 
       MeasureBaseList* nmbl = score->measures();
-      for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
+       for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
             MeasureBase* nmb = 0;
             if (mb->type() == Element::HBOX)
                   nmb = new HBox(score);
@@ -304,7 +304,11 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         if (st == LayoutBreak::PAGE || st == LayoutBreak::LINE)
                               continue;
                         }
-                  Element* ne = e->clone();
+                  Element* ne;
+                  if (e->type() == Element::TEXT) // clone the title, subtitle etc...
+                        ne = e->linkedClone();
+                  else
+                        ne = e->clone();
                   ne->setScore(score);
                   nmb->add(ne);
                   }
