@@ -139,7 +139,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
-          <lid>178</lid>
+          <lid>179</lid>
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
@@ -248,7 +248,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
-          <lid>179</lid>
+          <lid>180</lid>
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
@@ -294,7 +294,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
-          <lid>180</lid>
+          <lid>181</lid>
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
@@ -459,7 +459,7 @@
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Rest>
-            <lid>178</lid>
+            <lid>179</lid>
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
@@ -569,7 +569,7 @@
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Rest>
-            <lid>179</lid>
+            <lid>180</lid>
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
@@ -710,7 +710,7 @@
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Rest>
-            <lid>180</lid>
+            <lid>181</lid>
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
@@ -719,6 +719,7 @@
           <breakMultiMeasureRest/>
           <Tempo>
             <tempo>1.66667</tempo>
+            <lid>178</lid>
             <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
