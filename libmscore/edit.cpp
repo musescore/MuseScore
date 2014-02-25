@@ -176,7 +176,8 @@ Rest* Score::addRest(Segment* s, int track, TDuration d, Tuplet* tuplet)
       rest->setTrack(track);
       rest->setParent(s);
       rest->setTuplet(tuplet);
-      undoAddElement(rest);
+//      undoAddElement(rest);
+      undoAddCR(rest, tick2measure(s->tick()), s->tick());
       return rest;
       }
 
@@ -1562,13 +1563,13 @@ void Score::cmdFullMeasureRest()
             Segment* s2 = selection().endSegment();
             int stick1 = selection().tickStart();
             int stick2 = selection().tickEnd();
-            
+
             Segment* ss1 = s1;
             if (ss1->segmentType() != Segment::SegChordRest)
                   ss1 = ss1->next1(Segment::SegChordRest);
             bool fullMeasure = ss1 && (ss1->measure()->first(Segment::SegChordRest) == ss1)
-                  && (s2 == 0 || (s2->segmentType() == Segment::SegEndBarLine) 
-                        || (s2->segmentType() == Segment::SegTimeSigAnnounce) 
+                  && (s2 == 0 || (s2->segmentType() == Segment::SegEndBarLine)
+                        || (s2->segmentType() == Segment::SegTimeSigAnnounce)
                         || (s2->segmentType() == Segment::SegKeySigAnnounce));
 
             if (!fullMeasure) {
@@ -1585,7 +1586,7 @@ void Score::cmdFullMeasureRest()
                         if (s->segmentType() != Segment::SegChordRest || !s->element(track))
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                        
+
                         if (tick == -1) {
                               // first ChordRest found:
 			      tick = s->measure()->tick();
