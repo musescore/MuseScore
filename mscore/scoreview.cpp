@@ -5563,7 +5563,6 @@ void ScoreView::posChanged(POS pos, unsigned /*tick*/)
 
 void ScoreView::loopToggled(bool val)
       {
-      printf("loop toggled %d - %d\n", _score->pos(POS::LEFT), _score->pos(POS::RIGHT));
       if (_score->pos(POS::LEFT) == 0 && _score->pos(POS::RIGHT) == 0)
             _score->setPos(POS::RIGHT, _score->lastMeasure()->endTick());
       _curLoopIn->move(_score->loopInTick());

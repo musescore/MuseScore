@@ -1399,11 +1399,19 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
 
             case Qt::Key_Space:
                   s = " ";
+                  modifiers = 0;
                   break;
 
             case Qt::Key_Minus:
                   s = "-";
+                  modifiers = 0;
                   break;
+
+            case Qt::Key_Underscore:
+                  s = "_";
+                  modifiers = 0;
+                  break;
+
             case Qt::Key_A:
                   if (modifiers & Qt::ControlModifier)
                         selectAll();
