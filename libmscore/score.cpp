@@ -1624,7 +1624,7 @@ MeasureBase* Score::firstMM() const
 int Score::measureIdx(MeasureBase* m) const
       {
       int idx = 0;
-      for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
+      for (MeasureBase* mb = _measures.first(); mb; mb = mb->nextMeasureMM()) {
             if (mb == m)
                   return idx;
             ++idx;

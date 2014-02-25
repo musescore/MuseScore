@@ -1335,17 +1335,20 @@ void Score::cmdDeleteSelectedMeasures()
       // choose the correct last measure based on the end segment
       // this depends on whether a whole measure is selected or only a few notes within it
       if (seg)
-            ie = !seg->prev() ? seg->measure()->prev() : seg->measure();
+            ie = seg->prev() ? seg->measure() : seg->measure()->prev();
       else
             ie = lastMeasure();
       int endIdx        = measureIdx(ie);
+      Measure *m = static_cast<Measure *>(ie);
+      if(m->isMMRest())
+            endIdx += m->mmRestCount() - 1;
       Measure* mBeforeSel = is->prevMeasure();
 
       // createEndBar if last measure is deleted
       bool createEndBar = false;
       if (ie->type() == Element::MEASURE) {
             Measure* iem = static_cast<Measure*>(ie);
-            createEndBar = (iem == lastMeasure()) && (iem->endBarLineType() == END_BAR);
+            createEndBar = (iem == lastMeasureMM()) && (iem->endBarLineType() == END_BAR);
             }
 
       // get the last deleted timesig in order to restore after deletion
