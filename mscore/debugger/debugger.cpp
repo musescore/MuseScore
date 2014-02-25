@@ -609,6 +609,7 @@ void Debugger::updateElement(Element* el)
                   case Element::JUMP:
                   case Element::TEXT:
                   case Element::STAFF_TEXT:
+                  case Element::REHEARSAL_MARK:
                         ew = new TextView;
                         break;
                   case Element::HARMONY:

@@ -1160,7 +1160,7 @@ void Score::createMMRests()
                                     }
                               }
                         if (!found) {
-                              Element* ne = e->clone();
+                              Element* ne = e->linkedClone();
                               ne->setParent(s);
                               undo(new AddElement(ne));
                               }
