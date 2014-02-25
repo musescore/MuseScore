@@ -306,11 +306,13 @@ void FretDiagram::layout()
 
       if (parent() == 0 || parent()->type() != SEGMENT)
             return;
+
+      // allocate extra space above staff
       Measure* m     = static_cast<Segment*>(parent())->measure();
       int idx        = staffIdx();
       MStaff* mstaff = m->mstaff(idx);
       System* system = m->system();
-      qreal yp       = pos().y() + system->staff(idx)->y() + system->y();
+      qreal yp       = pos().y() + system->staff(idx)->y()/(idx+1) + system->y();
       mstaff->distanceUp = qMax(mstaff->distanceUp, h + _spatium * 2 - yp);
       }
 
