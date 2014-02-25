@@ -685,12 +685,12 @@ Text::Text(const Text& st)
    : Element(st)
       {
       _text                = st._text;
-      _layout              = st._layout;
-      _textStyle           = st._textStyle;
-      _layoutToParentWidth = st._layoutToParentWidth;
+      _layout.clear();
       frame                = st.frame;
-      _editMode            = false;
       _styleIndex          = st._styleIndex;
+      _layoutToParentWidth = st._layoutToParentWidth;
+      _editMode            = false;
+      _textStyle           = st._textStyle;
       }
 
 //---------------------------------------------------------
@@ -1301,10 +1301,9 @@ void Text::endEdit()
 
       genText();
       if (links()) {
-            foreach(Element* e, *links()) {
-                  if (e == this)
-                        continue;
-                  e->undoChangeProperty(P_TEXT, _text);
+            foreach (Element* e, *links()) {
+                  if (e != this)
+                        e->undoChangeProperty(P_TEXT, _text);
                   }
             }
       textChanged();
