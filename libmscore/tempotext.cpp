@@ -97,9 +97,9 @@ void TempoText::textChanged()
             TempoPattern("<sym>noteHalfUp</sym>\\s*=\\s*(\\d+)", 1.0/30.0),                        // 1/2
             TempoPattern("<sym>noteQuarterUp</sym>\\s*=\\s*(\\d+)", 1.0/60.0),                     // 1/4
             TempoPattern("<sym>note8thUp</sym>\\s*=\\s*(\\d+)", 1.0/120.0),                    // 1/8
-            TempoPattern("<sym>noteHalfUp</sym></sym>augmentationDot</sym>\\s*=\\s*(\\d+)", 1.5/30.0),       // dotted 1/2
-            TempoPattern("<sym>noteQuarterUp</sym><sym>augmentationDot</sym>\\s*=\\s*(\\d+)", 1.5/60.0),    // dotted 1/4
-            TempoPattern("<sym>note8thUp</sym><sym>augmentationDot</sym>\\s*=\\s*(\\d+)", 1.5/120.0),   // dotted 1/8
+            TempoPattern("<sym>noteHalfUp</sym>\\s*</sym>textAugmentationDot</sym>\\s*=\\s*(\\d+)", 1.5/30.0),       // dotted 1/2
+            TempoPattern("<sym>noteQuarterUp</sym>\\s*<sym>textAugmentationDot</sym>\\s*=\\s*(\\d+)", 1.5/60.0),    // dotted 1/4
+            TempoPattern("<sym>note8thUp</sym>\\s*<sym>textAugmentationDot</sym>\\s*=\\s*(\\d+)", 1.5/120.0),   // dotted 1/8
             };
 
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
