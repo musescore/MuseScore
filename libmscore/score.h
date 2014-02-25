@@ -651,7 +651,7 @@ class Score : public QObject {
       void setName(const QString& s) { info.setFile(s); }
 
       bool isSavable() const;
-      bool dirty() const             { return _dirty;         }
+      bool dirty() const;
       void setCreated(bool val)      { _created = val;        }
       bool created() const           { return _created;       }
       bool saved() const             { return _saved;         }

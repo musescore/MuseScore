@@ -370,6 +370,7 @@ Score::Score(const MStyle* s)
 //    _links
 //    _staffTypes
 //    _metaTags
+//    _dirty
 //
 
 Score::Score(Score* parent)
@@ -715,14 +716,24 @@ void Score::setShowPageborders(bool v)
 
 void Score::setDirty(bool val)
       {
-      if (_dirty != val) {
-            _dirty         = val;
-            _playlistDirty = true;
+      Score* s = rootScore();
+      if (s->dirty() != val) {
+            s->_dirty = val;
+            s->_playlistDirty = true;
             }
-      if (_dirty) {
-            _playlistDirty = true;
-            _autosaveDirty = true;
+      if (s->dirty()) {
+            s->_playlistDirty = true;
+            s->_autosaveDirty = true;
             }
+      }
+
+//---------------------------------------------------------
+//   dirty
+//---------------------------------------------------------
+
+bool Score::dirty() const
+      {
+      return rootScore()->_dirty;
       }
 
 //---------------------------------------------------------
