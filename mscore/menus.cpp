@@ -910,9 +910,9 @@ Palette* MuseScore::newTempoPalette()
             TempoPattern("<sym>noteHalfUp</sym> = 80", 80.0/30.0),                        // 1/2
             TempoPattern("<sym>noteQuarterUp</sym> = 80", 80.0/60.0),                     // 1/4
             TempoPattern("<sym>note8thUp</sym> = 80", 80.0/120.0),                    // 1/8
-            TempoPattern("<sym>noteHalfUp</sym><sym>augmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
-            TempoPattern("<sym>noteQuarterUp</sym><sym>augmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
-            TempoPattern("<sym>note8thUp</sym><sym>augmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
+            TempoPattern("<sym>noteHalfUp</sym><sym>textAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
+            TempoPattern("<sym>noteQuarterUp</sym><sym>textAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
+            TempoPattern("<sym>note8thUp</sym><sym>textAugmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
             };
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
@@ -1236,25 +1236,25 @@ void MuseScore::addTempo()
                   break;
             case 8:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>noteQuarterUp</sym> <sym>augmentationDot</sym> = 80";
+                        text = "<sym>noteQuarterUp</sym><sym>textAugmentationDot</sym> = 80";
                   else
                         text = "<sym>note8thUp</sym> = 80";
                   break;
             case 16:
                   if(f.numerator() % 3 == 0)
-                        text = text = "<sym>note8thUp</sym>><sym>augmentationDot</sym> = 80";
+                        text = text = "<sym>note8thUp</sym>><sym>textAugmentationDot</sym> = 80";
                   else
                         text = "<sym>note16thUp</sym> = 80";
                   break;
             case 32:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>note16thUp</sym>><sym>augmentationDot</sym> = 80";
+                        text = "<sym>note16thUp</sym>><sym>textAugmentationDot</sym> = 80";
                   else
                         text = "<sym>note32thUp</sym> = 80";
                   break;
             case 64:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>note32thUp</sym>><sym>augmentationDot</sym> = 80";
+                        text = "<sym>note32thUp</sym>><sym>textAugmentationDot</sym> = 80";
                   else
                         text = "<sym>note64thUp</sym> = 80";
                   break;
