@@ -1423,25 +1423,31 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
             switch (key) {
                   case Qt::Key_F:
                         insertSym(SymId::dynamicForte);
+                        s.clear();
                         break;
                   case Qt::Key_M:
                         insertSym(SymId::dynamicNiente);
+                        s.clear();
                         break;
                   case Qt::Key_P:
                         insertSym(SymId::dynamicPiano);
+                        s.clear();
                         break;
                   case Qt::Key_Z:
                         insertSym(SymId::dynamicZ);
+                        s.clear();
                         break;
                   case Qt::Key_S:
                         insertSym(SymId::dynamicSforzando);
+                        s.clear();
                         break;
                   case Qt::Key_R:
+                        s.clear();
                         insertSym(SymId::dynamicRinforzando);
                         break;
                   }
             }
-      if (!s.isEmpty() && !(modifiers & Qt::ControlModifier))
+      if (!s.isEmpty())
             insertText(s);
       layout1();
       if (parent() && parent()->type() == TBOX) {
