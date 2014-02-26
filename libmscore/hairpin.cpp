@@ -104,7 +104,7 @@ void HairpinSegment::layout()
 
 void HairpinSegment::updateGrips(int* grips, QRectF* grip) const
       {
-      *grips = 3;
+      *grips = 4;
       QPointF pp(pagePos());
       qreal _spatium = spatium();
       qreal x = pos2().x();
@@ -112,9 +112,48 @@ void HairpinSegment::updateGrips(int* grips, QRectF* grip) const
             x = _spatium;
       qreal y = pos2().y();
       QPointF p(x, y);
-      grip[GRIP_LINE_START].translate(pp);
-      grip[GRIP_LINE_END].translate(p + pp);
-      grip[GRIP_LINE_MIDDLE].translate(p * .5 + pp);
+
+// Calc QPointF for Grip Aperture
+      QTransform doRotation;
+      QPointF gripLineAperturePoint;
+      qreal h1 = hairpin()->hairpinHeight().val() * spatium() * .5;
+      qreal len = sqrt( x * x + y * y );
+      doRotation.rotateRadians( asin(y/len) );
+      qreal lineApertureX;
+      qreal offsetX = 10;                               // Horizontal offset for x Grip
+
+      if( hairpin()->hairpinType() == 0 )
+            lineApertureX = len - offsetX;              // End of CRESCENDO - Offset
+        else
+            lineApertureX = offsetX;                    // Begin of DECRESCENDO + Offset
+      qreal lineApertureH = ( len - offsetX ) * h1/len; // Vertical position for y grip
+      gripLineAperturePoint.setX( lineApertureX );
+      gripLineAperturePoint.setY( lineApertureH );
+      gripLineAperturePoint = doRotation.map( gripLineAperturePoint );
+// End calc position grip aperture
+
+      grip[GRIP_LINE_START].translate( pp );
+      grip[GRIP_LINE_END].translate( p + pp );
+      grip[GRIP_LINE_MIDDLE].translate( p * .5 + pp );
+      grip[GRIP_LINE_APERTURE].translate( gripLineAperturePoint + pp );
+      }
+//---------------------------------------------------------
+//   editDrag
+//---------------------------------------------------------
+
+void HairpinSegment::editDrag(const EditData& ed)
+      {
+
+    if( ed.curGrip == GRIP_LINE_APERTURE ){
+          qreal newHeight = hairpin()->hairpinHeight().val() + ed.delta.y()/spatium()/.5;
+          if( newHeight < 0.5 )
+              newHeight = 0.5;
+          hairpin()->setHairpinHeight(Spatium(newHeight));
+          score()->setLayoutAll(true);
+    }
+
+    LineSegment::editDrag( ed );
+
       }
 
 //---------------------------------------------------------
