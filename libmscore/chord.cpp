@@ -1257,14 +1257,15 @@ void Chord::layoutStem()
                               hookIdx = -hookIdx;
                         if (hookIdx) {
                               _hook->setHookType(hookIdx);
-                              qreal x = _stem->pos().x();
+                              qreal x = _stem->pos().x() + _stem->lineWidth() * .5;;
                               qreal y = _stem->pos().y();
                               if (up()) {
-                                    y -= _stem->len() - _stem->bbox().y();
+                                    y -= _stem->bbox().height();
                                     x -= _stem->width();
                                     }
                               else {
-                                    y += _stem->len();
+                                    y += _stem->bbox().height();
+                                    x -= _stem->width();
                                     }
                               _hook->setPos(x, y);
                               _hook->adjustReadPos();
