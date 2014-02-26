@@ -813,6 +813,18 @@
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
+        <Measure number="2" len="124/4">
+          <multiMeasureRest>31</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            </Rest>
+          <tick>61440</tick>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>3840</tick>
         <Measure number="3">
           <Rest>
             <lid>12</lid>
@@ -1182,6 +1194,18 @@
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
+        <Measure number="2" len="124/4">
+          <multiMeasureRest>31</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            </Rest>
+          <tick>61440</tick>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>3840</tick>
         <Measure number="3">
           <Rest>
             <lid>53</lid>

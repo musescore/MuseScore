@@ -3167,7 +3167,7 @@ p, li { white-space: pre-wrap; }
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
           <beginText>
-            <style>TextLine</style>
+            <style>Text Line</style>
             <text></text>
             </beginText>
           </Pedal>
@@ -3258,7 +3258,7 @@ p, li { white-space: pre-wrap; }
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
           <beginText>
-            <style>TextLine</style>
+            <style>Text Line</style>
             <text></text>
             </beginText>
           </Pedal>
@@ -3339,7 +3339,7 @@ p, li { white-space: pre-wrap; }
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
           <beginText>
-            <style>TextLine</style>
+            <style>Text Line</style>
             <text></text>
             </beginText>
           </Pedal>
@@ -3427,7 +3427,7 @@ p, li { white-space: pre-wrap; }
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
           <beginText>
-            <style>TextLine</style>
+            <style>Text Line</style>
             <text></text>
             </beginText>
           </Pedal>
@@ -3520,7 +3520,7 @@ p, li { white-space: pre-wrap; }
           <beginTextPlace>left</beginTextPlace>
           <continueTextPlace>left</continueTextPlace>
           <beginText>
-            <style>TextLine</style>
+            <style>Text Line</style>
             <text></text>
             </beginText>
           </Pedal>

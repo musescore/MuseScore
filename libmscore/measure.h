@@ -189,7 +189,7 @@ class Measure : public MeasureBase {
       Fraction stretchedLen(Staff*) const;
       void setLen(const Fraction& f)       { _len = f;            }
       // actual length of measure in ticks
-      virtual int ticks() const override   { return _len.ticks(); }
+      virtual int ticks() const override;
 
       int size() const                     { return _segments.size();        }
       Q_INVOKABLE Ms::Segment* first() const   { return _segments.first();       }

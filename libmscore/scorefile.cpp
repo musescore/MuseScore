@@ -61,16 +61,23 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
       //
       // special case multi measure rest
       //
-      if (m->score()->styleB(ST_createMultiMeasureRests)) {
-            if (m->type() == Element::MEASURE) {
-                  Measure* mm = static_cast<Measure*>(m);
-                  Segment* s = mm->findSegment(Segment::SegEndBarLine, mm->endTick());
-                  if (s == 0)
-                        mm->createEndBarLines();
+      Measure* mm = 0;
+      if (m->score()->styleB(ST_createMultiMeasureRests) && m->type() == Element::MEASURE) {
+            mm = static_cast<Measure*>(m);
+            Segment* s = mm->findSegment(Segment::SegEndBarLine, mm->endTick());
+            if (s == 0)
+                  mm->createEndBarLines();
+            }
+
+      if (m->type() == Element::MEASURE || staffIdx == 0)
+            m->write(xml, staffIdx, writeSystemElements);
+
+      if (mm) {
+            if (mm->mmRest()) {
+                  mm->mmRest()->write(xml, staffIdx, writeSystemElements);
+                  xml.tag("tick", mm->tick() + mm->ticks());         // rewind tick
                   }
             }
-      if (m->type() == Element::MEASURE || staffIdx == 0)
-           m->write(xml, staffIdx, writeSystemElements);
       if (m->type() == Element::MEASURE)
             xml.curTick = m->tick() + m->ticks();
       }
@@ -220,7 +227,6 @@ void Score::readStaff(XmlReader& e)
                   if (staff == 0) {
                         measure = new Measure(this);
                         measure->setTick(e.tick());
-                        add(measure);
                         if (_mscVersion < 115) {
                               const SigEvent& ev = sigmap()->timesig(measure->tick());
                               measure->setLen(ev.timesig());
@@ -230,7 +236,7 @@ void Score::readStaff(XmlReader& e)
                               //
                               // inherit timesig from previous measure
                               //
-                              Measure* m = measure->prevMeasure();
+                              Measure* m = e.lastMeasure(); // measure->prevMeasure();
                               Fraction f(m ? m->timesig() : Fraction(4,4));
                               measure->setLen(f);
                               measure->setTimesig(f);
@@ -255,7 +261,12 @@ void Score::readStaff(XmlReader& e)
                               }
                         }
                   measure->read(e, staff);
-                  e.setTick(measure->tick() + measure->ticks());
+                  if (!measure->isMMRest()) {
+                        if (staff == 0)
+                              add(measure);
+                        e.setLastMeasure(measure);
+                        e.setTick(measure->tick() + measure->ticks());
+                        }
                   }
             else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                   MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, this));
@@ -263,6 +274,8 @@ void Score::readStaff(XmlReader& e)
                   mb->setTick(e.tick());
                   add(mb);
                   }
+            else if (tag == "tick")
+                  e.setTick(e.readInt());
             else
                   e.unknown();
             }
@@ -571,7 +584,7 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       xml.etag();
       if (!parentScore())
             _revisions->write(xml);
-      if(!onlySelection) {
+      if (!onlySelection) {
             //update version values for i.e. plugin access
             _mscoreVersion = VERSION;
             _mscoreRevision = revision.toInt();
