@@ -327,10 +327,10 @@ QPointF Chord::stemPosBeam() const
             if (_noteType != NOTE_NORMAL)
                  nhw *= score()->styleD(ST_graceNoteMag);
             p.rx() += nhw;
-            p.ry() += upNote()->pos().y();
+            p.ry() += downNote()->pos().y();
             }
       else
-            p.ry() += downNote()->pos().y();
+            p.ry() += upNote()->pos().y();
       return p;
       }
 
