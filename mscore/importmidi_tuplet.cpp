@@ -632,6 +632,48 @@ std::vector<int> findTupletsWithNoCommonChords(std::list<int> &commonTuplets,
       return uncommonTuplets;
       }
 
+// remove overlapping tuplets with the same number
+// when tuplet with more length differs only by additional rests
+
+void removeUselessTuplets(std::vector<TupletInfo> &tuplets)
+      {
+      struct {
+            bool operator()(const TupletInfo &t1, const TupletInfo &t2) {
+                  if (t1.tupletNumber < t2.tupletNumber)
+                        return true;
+                  if (t1.tupletNumber == t2.tupletNumber)
+                        return t1.len < t2.len;
+                  return false;
+                  }
+            } comparator;
+      std::sort(tuplets.begin(), tuplets.end(), comparator);
+
+      size_t beg = 0;
+      while (beg < tuplets.size()) {
+            size_t end = beg + 1;
+            while (tuplets.size() > end && tuplets[end].tupletNumber == tuplets[beg].tupletNumber)
+                  ++end;
+            for (size_t i = beg; i < end - 1; ++i) {
+                  const auto &t1 = tuplets[i];
+                  for (size_t j = i + 1; j < end; ++j) {
+                        const auto &t2 = tuplets[j];
+                        if (t1.onTime >= t2.onTime && t1.onTime + t1.len <= t2.onTime + t2.len) {
+                                    // check onTimes
+                              if (t2.chords.rbegin()->first < t1.onTime + t1.len
+                                          && t2.chords.begin()->first >= t1.onTime)
+                                    {
+                                          // remove larger tuplet
+                                    tuplets.erase(tuplets.begin() + j);
+                                    --j;
+                                    --end;
+                                    }
+                              }
+                        }
+                  }
+            beg = end;
+            }
+      }
+
 // first chord in tuplet may belong to other tuplet at the same time
 // in the case if there are enough notes in this first chord
 // to be splitted into different voices
@@ -640,6 +682,8 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
             return;
+      removeUselessTuplets(tuplets);
+
       std::list<int> bestTuplets;
       std::list<int> restTuplets;
       for (int i = 0; i != (int)tuplets.size(); ++i)
