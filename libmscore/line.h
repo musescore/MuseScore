@@ -24,7 +24,7 @@ class SLine;
 class System;
 class MuseScoreView;
 
-enum { GRIP_LINE_START, GRIP_LINE_END, GRIP_LINE_MIDDLE };
+enum { GRIP_LINE_START, GRIP_LINE_END, GRIP_LINE_MIDDLE, GRIP_LINE_APERTURE };
 
 //---------------------------------------------------------
 //   LineStyle
