@@ -1263,6 +1263,18 @@
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
+        <Measure number="6" len="104/4">
+          <multiMeasureRest>26</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            </Rest>
+          <tick>59520</tick>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>11520</tick>
         <Measure number="7">
           <Rest>
             <lid>45</lid>
@@ -1685,6 +1697,18 @@
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
+        <Measure number="4" len="112/4">
+          <multiMeasureRest>28</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            </Rest>
+          <tick>59520</tick>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>7680</tick>
         <Measure number="5">
           <Rest>
             <lid>99</lid>

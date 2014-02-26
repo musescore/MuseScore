@@ -1227,7 +1227,7 @@ void Score::undoRemoveElement(Element* element)
             }
       for (Segment* s : segments) {
             if (s->isEmpty()) {
-                  qDebug("remove empty segment %s %p", s->subTypeName(), s);
+                  // qDebug("remove empty segment %s %p", s->subTypeName(), s);
                   undo(new RemoveElement(s));
                   }
             }

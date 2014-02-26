@@ -1714,6 +1714,8 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
             xml.stag(QString("Measure number=\"%1\"").arg(mno));
       xml.curTick = tick();
 
+      if (_mmRestCount > 0)
+            xml.tag("multiMeasureRest", _mmRestCount);
       if (writeSystemElements) {
             if (_repeatFlags & RepeatStart)
                   xml.tagE("startRepeat");
@@ -1756,6 +1758,15 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
       Q_ASSERT(last());
       score()->writeSegments(xml, strack, etrack, first(), last()->next1(), writeSystemElements, false, false);
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   ticks
+//---------------------------------------------------------
+
+int Measure::ticks() const
+      {
+      return _len.ticks();
       }
 
 //---------------------------------------------------------
@@ -1827,8 +1838,20 @@ void Measure::read(XmlReader& e, int staffIdx)
                   //  SegBarLine:            in the middle of a measure, has no semantic
                   //  SegEndBarLine:         at the end tick of a measure
 
-                  if ((e.tick() != tick()) && (e.tick() != (tick() + ticks())))
+                  if (isMMRest()) {
+                        // this is a multi measure rest
+                        // always preceded by the first measure it replaces
+                        Measure* m = e.lastMeasure();
+                        Q_ASSERT(m);      // debug
+                        if (m) {
+                              m->setMMRest(this);
+                              setTick(m->tick());
+                              }
+                        }
+
+                  if ((e.tick() != tick()) && (e.tick() != endTick())) {
                         st = Segment::SegBarLine;
+                        }
                   else if (barLine->barLineType() == START_REPEAT && e.tick() == tick())
                         st = Segment::SegStartRepeatBarLine;
                   else {
@@ -2208,6 +2231,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   range->setTrack(trackZeroVoice(e.track()));
                   segment->add(range);
                   }
+            else if (tag == "multiMeasureRest")
+                  _mmRestCount = e.readInt();
             else if (Element::readProperties(e))
                   ;
             else
@@ -2471,7 +2496,7 @@ bool Measure::createEndBarLines()
       {
       bool changed = false;
       int nstaves  = score()->nstaves();
-      Segment* seg = undoGetSegment(Segment::SegEndBarLine, tick() + ticks());
+      Segment* seg = undoGetSegment(Segment::SegEndBarLine, endTick());
 
       BarLine* bl = 0;
       int span    = 0;        // span counter

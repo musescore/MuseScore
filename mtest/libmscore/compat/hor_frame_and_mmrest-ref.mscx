@@ -112,6 +112,30 @@
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
+      <Measure number="1" len="16/4">
+        <multiMeasureRest>4</multiMeasureRest>
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
+        <KeySig>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          </Rest>
+        <tick>7680</tick>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      <tick>1920</tick>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>

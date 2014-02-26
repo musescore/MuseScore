@@ -732,6 +732,33 @@
             <span>1</span>
             </BarLine>
           </Measure>
+        <Measure number="1" len="10/4">
+          <multiMeasureRest>5</multiMeasureRest>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Tempo>
+            <tempo>1.66667</tempo>
+            <lid>178</lid>
+            <style>Tempo</style>
+            <text>𝅘𝅥 = 100</text>
+            </Tempo>
+          <Rest>
+            <durationType>measure</durationType>
+            </Rest>
+          <tick>4800</tick>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>960</tick>
         <Measure number="2">
           <Rest>
             <lid>181</lid>

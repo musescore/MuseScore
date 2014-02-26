@@ -24,6 +24,7 @@ class Spanner;
 class Beam;
 class Tuplet;
 class ClefList;
+class Measure;
 
 //---------------------------------------------------------
 //   SpannerValues
@@ -45,6 +46,7 @@ class XmlReader : public QXmlStreamReader {
       // Score read context (for read optimizations):
       int _tick = 0;
       int _track = 0;
+      Measure* _lastMeasure = 0;
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
       QList<SpannerValues> _spannerValues;
@@ -88,6 +90,9 @@ class XmlReader : public QXmlStreamReader {
       void setTrack(int val)      { _track = val; }
       void addTuplet(Tuplet* s);
       void addBeam(Beam* s)       { _beams.append(s); }
+
+      void setLastMeasure(Measure* m) { _lastMeasure = m;    }
+      Measure* lastMeasure() const    { return _lastMeasure; }
 
       Beam* findBeam(int) const;
       Tuplet* findTuplet(int) const;

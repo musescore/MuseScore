@@ -13,5 +13,7 @@ cp $P/tremolo2notes-test.mscx tremolo2notes-ref.mscx
 cp $P/accidentals-test.mscx accidentals-ref.mscx
 cp $P/slurs-test.mscx slurs-ref.mscx
 cp $P/clef_missing_first-test.mscx clef_missing_first-ref.mscx
+cp $P/hor_frame_and_mmrest-test.mscx hor_frame_and_mmrest-ref.mscx
+
 
 
