@@ -2405,7 +2405,7 @@ bool MuseScore::readLanguages(const QString& path)
           QString err;
           if (!doc.setContent(&qf, false, &err, &line, &column)) {
                 QString error;
-                error.sprintf(tr("Error reading language file %s at line %d column %d: %s\n"),
+                error.sprintf(qPrintable(tr("Error reading language file %s at line %d column %d: %s\n")),
                    qPrintable(qf.fileName()), line, column, qPrintable(err));
                 QMessageBox::warning(0,
                    QWidget::tr("MuseScore: Load languages failed:"),
