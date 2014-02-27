@@ -69,10 +69,8 @@ TextProp::TextProp(QWidget* parent)
 //   setScore
 //---------------------------------------------------------
 
-void TextProp::setScore(bool os, Score* score)
+void TextProp::setScore(bool onlyStyle, Score* score)
       {
-      onlyStyle = os;
-
       if (onlyStyle) {
             styledGroup->setVisible(false);
             unstyledGroup->setCheckable(false);
@@ -176,7 +174,6 @@ void TextProp::setTextStyle(const TextStyle& s)
       else
             alignTop->setChecked(true);
 
-//      QString str;
       if (s.offsetType() == OFFSET_ABS) {
             xOffset->setValue(s.offset().x() * INCH);
             yOffset->setValue(s.offset().y() * INCH);
@@ -189,9 +186,6 @@ void TextProp::setTextStyle(const TextStyle& s)
             spatiumUnit->setChecked(true);
             curUnit = 1;
             }
-      rxOffset->setValue(s.reloff().x());
-      ryOffset->setValue(s.reloff().y());
-
       QFont f(s.family());
       f.setPixelSize(lrint(s.size()));
       f.setItalic(s.italic());
@@ -229,8 +223,6 @@ TextStyle TextProp::textStyle() const
       s.setFamily(f.family());
       s.setXoff(xOffset->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0));
       s.setYoff(yOffset->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0));
-      s.setRxoff(rxOffset->value());
-      s.setRyoff(ryOffset->value());
       s.setFrameColor(frameColor->color());
       s.setBackgroundColor(bgColor->color());
       s.setFrameWidth(Spatium(frameWidth->value()));

@@ -234,7 +234,7 @@ static const QString ff("FreeSerif");
 #define OA     OFFSET_ABS
 #define OS     OFFSET_SPATIUM
 #define TR(x)  QT_TRANSLATE_NOOP("MuseScore", x)
-#define AS(x)  s->addTextStyle(x)
+#define AS(n, ...)  s->addTextStyle(TextStyle(TR(n), __VA_ARGS__))
 
 //---------------------------------------------------------
 //   setDefaultStyle
@@ -245,165 +245,95 @@ void initStyle(MStyle* s)
       {
       // this is an empty style, no offsets are allowed
       // never show this style
-      AS(TextStyle(
-         "", ff, 10, false, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), false,
+      AS("", ff, 10, false, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, false,
                Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false, false, QColor(Qt::black),
-               QColor(255, 255, 255, 0), TextStyle::HIDE_ALWAYS));
+               QColor(255, 255, 255, 0), TextStyle::HIDE_ALWAYS);
 
-      AS(TextStyle(
-         TR("Title"), ff, 24, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP, QPointF(), OA, QPointF(50.0, .0)));
+      AS("Title", ff, 24, false, false, false, ALIGN_HCENTER | ALIGN_TOP, QPointF(), OA);
+      AS("Subtitle", ff, 14, false, false, false,ALIGN_HCENTER | ALIGN_TOP, QPointF(0, MM(10)), OA);
+      AS("Composer", ff, 12, false, false, false,ALIGN_RIGHT | ALIGN_BASELINE, QPointF(MM(-1), MM(-2)), OA);
+      AS("Lyricist", ff, 12, false, false, false,ALIGN_LEFT | ALIGN_BASELINE, QPointF(MM(1), MM(-2)), OA);
 
-      AS(TextStyle(
-         TR("Subtitle"), ff, 14, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP, QPointF(0, MM(10)), OA, QPointF(50.0, .0)));
+      AS("Lyrics Odd Lines", ff, 11, false, false, false,
+         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
 
-      AS(TextStyle(
-        TR("Composer"), ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_BASELINE, QPointF(MM(-1), MM(-2)), OA, QPointF(100.0, 100.0)));
+      AS("Lyrics Even Lines", ff, 11, false, false, false,
+         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
 
-      AS(TextStyle(
-         TR("Lyricist"), ff, 12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(MM(1), MM(-2)), OA, QPointF(0.0, 100.0)));
+      AS("Fingering", ff,  8, false, false, false,
+         ALIGN_CENTER, QPointF(), OA, true);
 
-      AS(TextStyle(
-         TR("Lyrics Odd Lines"), ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, QPointF(), true));
+      AS("Instrument Name (Long)",   ff, 12, false, false, false,
+         ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
 
-      AS(TextStyle(
-         TR("Lyrics Even Lines"), ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, QPointF(), true));
+      AS("Instrument Name (Short)",   ff, 12, false, false, false,
+         ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
 
-      AS(TextStyle(
-         TR( "Fingering"), ff,  8, false, false, false,
-         ALIGN_CENTER, QPointF(), OA, QPointF(), true));
+      AS("Instrument Name (Part)", ff, 18, false, false, false,
+         ALIGN_LEFT | ALIGN_TOP, QPointF(), OA);
 
-      AS(TextStyle(
-         TR( "Instrument Name (Long)"),   ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
-
-      AS(TextStyle(
-         TR( "Instrument Name (Short)"),   ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, QPointF(), true));
-
-      AS(TextStyle(
-         TR( "Instrument Name (Part)"), ff, 18, false, false, false,
-         ALIGN_LEFT | ALIGN_TOP, QPointF(), OA, QPointF()));
-
-      AS(TextStyle(
-         TR( "Dynamics"), ff, 20, false,
+      AS("Dynamics", ff, 20, false,
          false,                                 // italic?
          false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, QPointF(), true));
+         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, true);
 
-      AS(TextStyle(
-         TR( "Technique"), ff, 12, false, true, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS));
+      AS("Technique", ff, 12, false, true, false,
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS);
 
-      AS(TextStyle(
-         TR( "Tempo"), ff, 12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS, QPointF(),
-         true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true));
+      AS("Tempo", ff, 12, false, false, false,
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS,
+         true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true);
 
-      AS(TextStyle(
-         TR( "Metronome"), ff, 12, true, false, false, ALIGN_LEFT));
+      AS("Metronome", ff, 12, true, false, false, ALIGN_LEFT);
+      AS("Measure Number", ff, 8, false, false, false,ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(.0, -2.0), OS, true);
+      AS("Translator", ff, 11, false, false, false, ALIGN_HCENTER | ALIGN_TOP, QPointF(0, 6));
+      AS("Tuplet", ff,  10, false, true, false, ALIGN_CENTER, QPointF(), OA, true);
 
-      AS(TextStyle(
-         TR( "Measure Number"), ff, 8, false, false, false,
-         ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(.0, -2.0), OS, QPointF(), true));
+      AS("System", ff,  10, false, false, false,
+         ALIGN_LEFT, QPointF(0, -4.0), OS, true,
+         Spatium(0.0), Spatium(0.0), 25, Qt::black, false, true);
 
-      AS(TextStyle(
-         TR( "Translator"), ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP, QPointF(0, 6)));
+      AS("Staff", ff,  10, false, false, false, ALIGN_LEFT, QPointF(0, -4.0), OS, true);
+      AS("Chord Symbol", ff,  12, false, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, true);
 
-      AS(TextStyle(
-         TR( "Tuplet"), ff,  10, false, true, false,
-         ALIGN_CENTER, QPointF(), OA, QPointF(), true));
+      AS("Rehearsal Mark", ff,  14, true, false, false,
+         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -3.0), OS, true,
+         Spatium(0.2), Spatium(.5), 20, Qt::black, false, true);
 
-      AS(TextStyle(
-         TR( "System"), ff,  10, false, false, false,
-         ALIGN_LEFT, QPointF(0, -4.0), OS, QPointF(), true,
-         Spatium(0.0), Spatium(0.0), 25, Qt::black, false, true));
+      AS("Repeat Text Left", ff,  20, false, false, false,
+         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -2.0), OS, true,
+         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true);
 
-      AS(TextStyle(
-         TR( "Staff"), ff,  10, false, false, false,
-         ALIGN_LEFT, QPointF(0, -4.0), OS, QPointF(), true));
+      AS("Repeat Text Right", ff,  12, false, false, false,
+         ALIGN_RIGHT | ALIGN_BASELINE, QPointF(0, -2.0), OS, true,
+         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true);
 
-      AS(TextStyle(
-         TR( "Chord Symbol"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, QPointF(), true));
-
-      AS(TextStyle(
-         TR( "Rehearsal Mark"), ff,  14, true, false, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -3.0), OS, QPointF(), true,
-         Spatium(0.2), Spatium(.5), 20, Qt::black, false, true));
-
-      AS(TextStyle(
-         TR( "Repeat Text Left"), ff,  20, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(), true,
-         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
-
-      AS(TextStyle(
-         TR( "Repeat Text Right"), ff,  12, false, false, false,
-         ALIGN_RIGHT | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
-         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
-
-      AS(TextStyle(
-         TR( "Repeat Text"), ff,  12, false, false, false,          // for backward compatibility
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, QPointF(100, 0), true,
-         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true));
+      AS("Repeat Text", ff,  12, false, false, false,          // for backward compatibility
+         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, true,
+         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true);
 
       // y offset may depend on voltaHook style element
-      AS(TextStyle(
-         TR( "Volta"), ff, 11, true, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.5, 1.9), OS, QPointF(), true));
+      AS("Volta", ff, 11, true, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.5, 1.9), OS, true);
+      AS("Frame", ff, 12, false, false, false, ALIGN_LEFT | ALIGN_TOP);
+      AS("Text Line", ff,  12, false, false, false, ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, true);
+      AS("Glissando", ff, 8, false, true, false, ALIGN_HCENTER | ALIGN_BASELINE, QPointF(), OS, true);
 
-      AS(TextStyle(
-         TR( "Frame"), ff, 12, false, false, false, ALIGN_LEFT | ALIGN_TOP));
+      AS("String Number", ff,  8, false, false, false,
+         ALIGN_CENTER, QPointF(0, -5.0), OS, true,
+         Spatium(0.1), Spatium(0.2), 0, Qt::black, true, false);
 
-      AS(TextStyle(
-         TR( "Text Line"), ff,  12, false, false, false,
-         ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, QPointF(), true));
+      AS("Ottava", ff, 12, false, true, false, ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, true);
+      AS("Bend", ff, 8, false, false, false, ALIGN_CENTER | ALIGN_BOTTOM, QPointF(), OS, true);
+      AS("Header", ff, 8, false, false, false, ALIGN_HCENTER | ALIGN_TOP);
+      AS("Footer", ff, 8, false, false, false, ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(0.0, MM(5)), OA);
+      AS("Instrument Change", ff,  12, true, false, false, ALIGN_LEFT | ALIGN_BOTTOM, QPointF(0, -3.0), OS, true);
+      AS("Lyrics Verse", ff, 11, false, false, false,ALIGN_RIGHT | ALIGN_TOP, QPointF(), OS, true);
 
-      AS(TextStyle(
-         TR( "Glissando"), ff, 8, false, true, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(), OS, QPointF(), true));
-
-      AS(TextStyle(
-         TR( "String Number"), ff,  8, false, false, false,
-         ALIGN_CENTER, QPointF(0, -5.0), OS, QPointF(100, 0), true,
-         Spatium(0.1), Spatium(0.2), 0, Qt::black, true, false));
-
-      AS(TextStyle(
-         TR( "Ottava"), ff, 12, false, true, false,
-         ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, QPointF(), true));
-
-      AS(TextStyle(
-         TR( "Bend"), ff, 8, false, false, false,
-         ALIGN_CENTER | ALIGN_BOTTOM, QPointF(), OS, QPointF(), true));
-
-      AS(TextStyle(
-         TR( "Header"), ff, 8, false, false, false,
-         ALIGN_HCENTER | ALIGN_TOP));
-
-      AS(TextStyle(
-         TR( "Footer"), ff, 8, false, false, false,
-         ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(0.0, MM(5)), OA));
-
-      AS(TextStyle(
-         TR( "Instrument Change"), ff,  12, true, false, false,
-         ALIGN_LEFT | ALIGN_BOTTOM, QPointF(0, -3.0), OS, QPointF(0, 0), true));
-
-      AS(TextStyle(
-         TR("Lyrics Verse"), ff, 11, false, false, false,
-         ALIGN_RIGHT | ALIGN_TOP, QPointF(), OS, QPointF(), true));
-
-      AS(TextStyle(
-      TR("Figured Bass"), "MScoreBC", 8, false, false, false,
-         ALIGN_LEFT | ALIGN_TOP, QPointF(0, 6), OS, QPointF(), true,
+      AS("Figured Bass", "MScoreBC", 8, false, false, false,
+         ALIGN_LEFT | ALIGN_TOP, QPointF(0, 6), OS, true,
          Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
          false, QColor(Qt::black), QColor(255, 255, 255, 0),            // default params
-         TextStyle::HIDE_IN_EDITOR));                                   // don't show in Style Editor
+         TextStyle::HIDE_IN_EDITOR);                                   // don't show in Style Editor
 
 #undef MM
 #undef OA
@@ -671,13 +601,13 @@ TextStyle::TextStyle()
 TextStyle::TextStyle(QString _name, QString _family, qreal _size,
    bool _bold, bool _italic, bool _underline,
    Align _align,
-   const QPointF& _off, OffsetType _ot, const QPointF& _roff,
+   const QPointF& _off, OffsetType _ot,
    bool sd,
    Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg, Hidden hidden)
       {
       d = new TextStyleData(_name, _family, _size,
-         _bold, _italic, _underline, _align, _off, _ot, _roff,
+         _bold, _italic, _underline, _align, _off, _ot,
          sd, fw, pw, fr, co, _circle, _systemFlag, fg, bg);
       _hidden = hidden;
       }
@@ -731,12 +661,12 @@ TextStyleData::TextStyleData(
    QString _name, QString _family, qreal _size,
    bool _bold, bool _italic, bool _underline,
    Align _align,
-   const QPointF& _off, OffsetType _ot, const QPointF& _roff,
+   const QPointF& _off, OffsetType _ot,
    bool sd,
    Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg)
    :
-   ElementLayout(_align, _off, _ot, _roff),
+   ElementLayout(_align, _off, _ot),
    name(_name), size(_size), bold(_bold),
    italic(_italic), underline(_underline),
    sizeIsSpatiumDependent(sd), frameWidth(fw), paddingWidth(pw),
@@ -773,8 +703,6 @@ bool TextStyleData::operator!=(const TextStyleData& s) const
           || s.backgroundColor        != backgroundColor
           || s.align()                != align()
           || s.offset()               != offset()
-          || s.rxoff()                != rxoff()
-          || s.ryoff()                != ryoff()
           || s.offsetType()           != offsetType()
           ;
       }
@@ -1299,8 +1227,6 @@ void TextStyle::setAlign(Align v)                        { d->setAlign(v); }
 void TextStyle::setXoff(qreal v)                         { d->setXoff(v); }
 void TextStyle::setYoff(qreal v)                         { d->setYoff(v); }
 void TextStyle::setOffsetType(OffsetType v)              { d->setOffsetType(v); }
-void TextStyle::setRxoff(qreal v)                        { d->setRxoff(v); }
-void TextStyle::setRyoff(qreal v)                        { d->setRyoff(v); }
 void TextStyle::setSizeIsSpatiumDependent(bool v)        { d->sizeIsSpatiumDependent = v; }
 void TextStyle::setFrameRound(int v)                     { d->frameRound = v; }
 void TextStyle::setFrameColor(const QColor& v)           { d->frameColor = v; }
@@ -1317,8 +1243,6 @@ QFontMetricsF TextStyle::fontMetrics(qreal space) const  { return d->fontMetrics
 bool TextStyle::operator!=(const TextStyle& s) const     { return d->operator!=(*s.d); }
 void TextStyle::layout(Element* e) const                 { d->layout(e); }
 void TextStyle::writeProperties(Xml& xml) const          { d->writeProperties(xml); }
-const QPointF& TextStyle::reloff() const                 { return d->reloff();      }
-void TextStyle::setReloff(const QPointF& p)              { setRxoff(p.x()), setRyoff(p.y()); }
 bool TextStyle::readProperties(XmlReader& v)     { return d->readProperties(v); }
 
 //---------------------------------------------------------

@@ -13,7 +13,6 @@
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
-        <rxoffset>50</rxoffset>
         <offsetType>absolute</offsetType>
         <name>Title</name>
         <family>Arial</family>
@@ -399,7 +398,6 @@
         <TextStyle>
           <halign>center</halign>
           <valign>top</valign>
-          <rxoffset>50</rxoffset>
           <offsetType>absolute</offsetType>
           <name>Title</name>
           <family>Arial</family>
@@ -640,7 +638,6 @@
         <TextStyle>
           <halign>center</halign>
           <valign>top</valign>
-          <rxoffset>50</rxoffset>
           <offsetType>absolute</offsetType>
           <name>Title</name>
           <family>Arial</family>

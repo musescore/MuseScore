@@ -53,18 +53,6 @@ void ElementLayout::layout(Element* e) const
       QPointF o(offset(e->spatium()));
       qreal w = 0.0;
       qreal h = 0.0;
-      if (e->parent()) {
-            qreal pw, ph;
-            if ((e->type() == Element::MARKER || e->type() == Element::JUMP) && e->parent()->parent()) {
-                  pw = e->parent()->parent()->width();      // measure width
-                  ph = e->parent()->parent()->height();
-                  }
-            else {
-                  pw = e->parent()->width();
-                  ph = e->parent()->height();
-                  }
-            o += QPointF(_reloff.x() * pw * 0.01, _reloff.y() * ph * 0.01);
-            }
       bool frameText = e->type() == Element::TEXT
          && static_cast<Text*>(e)->layoutToParentWidth() && e->parent();
       QPointF p;
@@ -115,10 +103,6 @@ void ElementLayout::writeProperties(Xml& xml) const
             xml.tag("xoffset", pt.x());         // save in spatium or metric mm
             xml.tag("yoffset", pt.y());
             }
-      if (_reloff.x() != 0.0)
-            xml.tag("rxoffset", _reloff.x());
-      if (_reloff.y() != 0.0)
-            xml.tag("ryoffset", _reloff.y());
 
       const char* p = 0;
       switch(_offsetType) {
@@ -174,10 +158,10 @@ bool ElementLayout::readProperties(XmlReader& e)
                   yo /= INCH;
             setYoff(yo);
             }
-      else if (tag == "rxoffset")
-            setRxoff(e.readDouble());
-      else if (tag == "ryoffset")
-            setRyoff(e.readDouble());
+      else if (tag == "rxoffset")         // obsolete
+            e.readDouble();
+      else if (tag == "ryoffset")         // obsolete
+            e.readDouble();
       else if (tag == "offsetType") {
             const QString& val(e.readElementText());
             OffsetType ot = OFFSET_ABS;

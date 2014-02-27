@@ -507,6 +507,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int rv = tp.exec();
             if (rv) {
                   QList<Element*> sl = score()->selection().elements();
+                  if (!sl.contains(ot))
+                        sl.append(ot);
                   QList<Element*> selectedElements;
                   foreach(Element* e, sl) {
                         if (e->type() != ot->type())
@@ -515,11 +517,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         Text* t  = static_cast<Text*>(e);
                         Text* tt = t->clone();
 
+
                         if (nText->styled() != ot->styled() || nText->styled()) {
                               if (nText->styled())
                                     tt->setTextStyleType(nText->textStyleType());
-                              else
+                              else {
                                     tt->setUnstyled();
+                                    }
                               }
 
                         if (!nText->styled() && (nText->textStyle() != ot->textStyle())) {
