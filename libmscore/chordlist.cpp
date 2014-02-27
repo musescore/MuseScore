@@ -1714,7 +1714,7 @@ bool ChordList::read(const QString& name)
             return false;
       QFile f(path);
       if (!f.open(QIODevice::ReadOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "cannot open chord description:\n%1\n%2");
+            QString s = QT_TRANSLATE_NOOP("file", "Cannot open chord description:\n%1\n%2");
             MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
             qDebug("ChordList::read failed: <%s>", qPrintable(path));
             return false;

@@ -72,7 +72,7 @@ void ImageStoreItem::load()
             return;
       QFile inFile(_path);
       if (!inFile.open(QIODevice::ReadOnly)) {
-            qDebug("cannot open picture file");
+            qDebug("Cannot open picture file");
             return;
             }
       _buffer = inFile.readAll();

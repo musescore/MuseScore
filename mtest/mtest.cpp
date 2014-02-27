@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
 #if 0
       log.setFileName("mtest.log");
       if (!log.open(QIODevice::WriteOnly)) {
-            printf("mtest: cannot open log file <mtest.log>\n");
+            fprintf(stderr, "mtest: cannot open log file <mtest.log>\n");
             exit(-1);
             }
 #endif

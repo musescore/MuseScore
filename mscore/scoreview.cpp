@@ -2841,7 +2841,7 @@ void ScoreView::cmd(const QAction* a)
             if (!_score->selection().measureRange(&m1, &m2) || m1 == m2) {
                   QMessageBox::warning(0, "MuseScore",
                      tr("No measures selected:\n"
-                     "please select range of measures to join and try again"));
+                     "please select a range of measures to join and try again"));
                   }
             else {
                   _score->cmdJoinMeasure(m1, m2);
