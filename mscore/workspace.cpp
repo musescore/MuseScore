@@ -214,7 +214,7 @@ static void writeFailed(const QString& _path)
       {
       QString s = qApp->translate("Workspace", "Open Workspace File\n") + _path
          + qApp->translate("Workspace", "\nfailed: ");
-      QMessageBox::critical(mscore, qApp->translate("Workspace", "MuseScore: Writing Workspace file"), s);
+      QMessageBox::critical(mscore, qApp->translate("Workspace", "MuseScore: Writing Workspace File"), s);
       }
 
 //---------------------------------------------------------

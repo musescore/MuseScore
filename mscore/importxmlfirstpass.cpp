@@ -723,7 +723,7 @@ Score::FileError MxmlReaderFirstPass::setContent(QIODevice* d)
       QString err;
 
       if (!doc.setContent(d, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "error at line %1 column %2: %3\n");
+            QString s = QT_TRANSLATE_NOOP("file", "Error at line %1 column %2: %3\n");
             MScore::lastError = s.arg(line).arg(column).arg(err);
             return Score::FILE_BAD_FORMAT;
             }

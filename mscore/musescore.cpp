@@ -1661,7 +1661,7 @@ void MuseScore::dropEvent(QDropEvent* event)
                   }
             else {
                   QMessageBox::critical(0,
-                        tr("MuseScore: Load error"),
+                        tr("MuseScore: Load Error"),
                         tr("Open failed: unknown file extension or broken file"));
                   }
 
@@ -2406,10 +2406,10 @@ bool MuseScore::readLanguages(const QString& path)
           QString err;
           if (!doc.setContent(&qf, false, &err, &line, &column)) {
                 QString error;
-                error.sprintf("error reading language file  %s at line %d column %d: %s\n",
+                error.sprintf(qPrintable(tr("Error reading language file %s at line %d column %d: %s\n")),
                    qPrintable(qf.fileName()), line, column, qPrintable(err));
                 QMessageBox::warning(0,
-                   QWidget::tr("MuseScore: Load languages failed:"),
+                   QWidget::tr("MuseScore: Load Languages Failed:"),
                    error,
                    QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
                 return false;
@@ -3255,7 +3255,7 @@ bool MuseScore::restoreSession(bool always)
       if (!f.exists())
             return false;
       if (!f.open(QIODevice::ReadOnly)) {
-            qDebug("cannot open session file <%s>", qPrintable(f.fileName()));
+            qDebug("Cannot open session file <%s>", qPrintable(f.fileName()));
             return false;
             }
       XmlReader e(&f);
@@ -3910,7 +3910,7 @@ void MuseScore::cmd(QAction* a)
             }
       if (cs && (sc->state() & _sstate) == 0) {
             QMessageBox::warning(0,
-               QWidget::tr("MuseScore: invalid command"),
+               QWidget::tr("MuseScore: Invalid Command"),
                QString("Command %1 not valid in current state").arg(cmdn));
             return;
             }
@@ -4171,7 +4171,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (!name.isEmpty()) {
                   if (!cs->saveStyle(name)) {
                         QMessageBox::critical(this,
-                           tr("MuseScore: save style"), MScore::lastError);
+                           tr("MuseScore: Save Style"), MScore::lastError);
                         }
                   }
             }
@@ -4181,7 +4181,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (!name.isEmpty()) {
                   if (!cs->saveStyle(name)) {
                         QMessageBox::critical(this,
-                           tr("MuseScore: save style"), MScore::lastError);
+                           tr("MuseScore: Save Style"), MScore::lastError);
                         }
                   else {
                         QFileInfo info(name);
@@ -4198,7 +4198,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   cs->startCmd();
                   if (!cs->loadStyle(name)) {
                         QMessageBox::critical(this,
-                           tr("MuseScore: load style"), MScore::lastError);
+                           tr("MuseScore: Load Style"), MScore::lastError);
                         }
                   cs->endCmd();
                   endCmd();
@@ -4392,7 +4392,7 @@ void MuseScore::closeScore(Score* score)
 
 void MuseScore::noteTooShortForTupletDialog()
       {
-      QMessageBox::warning(this, tr("MuseScore: warning"),
+      QMessageBox::warning(this, tr("MuseScore: Warning"),
         tr("Cannot create tuplet: note value too short")
         );
       }

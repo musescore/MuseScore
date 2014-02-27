@@ -1666,7 +1666,7 @@ bool Preferences::readPluginList()
       if (!f.exists())
             return false;
       if (!f.open(QIODevice::ReadOnly)) {
-            qDebug("cannot open plugins file <%s>\n", qPrintable(f.fileName()));
+            qDebug("Cannot open plugins file <%s>\n", qPrintable(f.fileName()));
             return false;
             }
       XmlReader e(&f);
