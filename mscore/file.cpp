@@ -200,7 +200,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             }
       if (canIgnore && ask)  {
             QMessageBox msgBox;
-            msgBox.setWindowTitle(QT_TRANSLATE_NOOP(file, "MuseScore: Load error"));
+            msgBox.setWindowTitle(QT_TRANSLATE_NOOP(file, "MuseScore: Load Error"));
             msgBox.setText(msg);
             msgBox.setTextFormat(Qt::RichText);
             msgBox.setIcon(QMessageBox::Warning);
@@ -210,7 +210,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             return msgBox.exec() == QMessageBox::Ignore;
             }
       else
-            QMessageBox::critical(0, QT_TRANSLATE_NOOP(file, "MuseScore: Load error"), msg);
+            QMessageBox::critical(0, QT_TRANSLATE_NOOP(file, "MuseScore: Load Error"), msg);
       return rv;
       }
 
@@ -1584,7 +1584,7 @@ bool MuseScore::exportParts()
             if(fip.exists() && !overwrite) {
                   if(noToAll)
                         continue;
-                  QMessageBox msgBox( QMessageBox::Question, tr("Confirm replace"),
+                  QMessageBox msgBox( QMessageBox::Question, tr("Confirm Replace"),
                         tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(partfn)),
                         QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
                   msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
@@ -1693,7 +1693,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             rv = savePositions(cs, fn);
             }
       else {
-            qDebug("internal error: unsupported extension <%s>\n",
+            qDebug("Internal error: unsupported extension <%s>\n",
                qPrintable(ext));
             return false;
             }
@@ -2093,7 +2093,7 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                   if(fip.exists() && !overwrite) {
                         if(noToAll)
                               continue;
-                        QMessageBox msgBox( QMessageBox::Question, tr("Confirm replace"),
+                        QMessageBox msgBox( QMessageBox::Question, tr("Confirm Replace"),
                               tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(fileName)),
                               QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
                         msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
