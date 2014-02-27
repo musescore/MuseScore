@@ -4926,8 +4926,9 @@ void ScoreView::cmdAddChordName()
       _score->undoAddElement(harmony);
 
       _score->select(harmony, SELECT_SINGLE, 0);
-      _score->setLayoutAll(true);
       startEdit(harmony);
+      _score->setLayoutAll(true);
+      _score->update();
       }
 
 //---------------------------------------------------------
