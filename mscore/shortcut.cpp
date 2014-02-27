@@ -211,7 +211,7 @@ Shortcut* Shortcut::getShortcut(const char* id)
       {
       Shortcut* s = _shortcuts.value(id);
       if (s == 0) {
-            qDebug("internal error: shortcut <%s> not found\n", id);
+            qDebug("Internal error: shortcut <%s> not found\n", id);
             return 0;
             }
       return s;
@@ -407,7 +407,7 @@ void Shortcut::load()
       if (!f.exists())
             f.setFileName(":/data/shortcuts.xml");
       if (!f.open(QIODevice::ReadOnly)) {
-            qDebug("cannot open shortcuts <%s>", qPrintable(f.fileName()));
+            qDebug("Cannot open shortcuts <%s>", qPrintable(f.fileName()));
             return;
             }
       if (MScore::debugMode)
@@ -477,7 +477,7 @@ static QList<Shortcut1*> loadDefaultShortcuts()
       QList<Shortcut1*> list;
       QFile f(":/data/shortcuts.xml");
       if (!f.open(QIODevice::ReadOnly)) {
-            qDebug("cannot open shortcuts");
+            qDebug("Cannot open shortcuts");
             return list;
             }
       XmlReader e(&f);

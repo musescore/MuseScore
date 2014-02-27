@@ -621,7 +621,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             settings.setValue("/Export/lameMP3LibPath", "");
             if(!MScore::noGui)
                   QMessageBox::warning(0,
-                               tr("Error opening LAME library"),
+                               tr("Error Opening LAME library"),
                                tr("Could not open MP3 encoding library!"),
                                QString::null, QString::null);
             qDebug("Could not open MP3 encoding library!\n");
@@ -633,7 +633,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             settings.setValue("/Export/lameMP3LibPath", "");
             if(!MScore::noGui)
                   QMessageBox::warning(0,
-                               tr("Error opening LAME library"),
+                               tr("Error Opening LAME library"),
                                tr("Not a valid or supported MP3 encoding library!"),
                                QString::null, QString::null);
             qDebug("Not a valid or supported MP3 encoding library!\n");
@@ -661,7 +661,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       int inSamples = exporter.initializeStream(channels, sampleRate);
       if (inSamples < 0) {
             if (!MScore::noGui) {
-                  QMessageBox::warning(0, tr("Encoding error"),
+                  QMessageBox::warning(0, tr("Encoding Error"),
                      tr("Unable to initialize MP3 stream"),
                      QString::null, QString::null);
                   }
@@ -674,7 +674,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       if (!file.open(QIODevice::WriteOnly)) {
             if (!MScore::noGui) {
                   QMessageBox::warning(0,
-                     tr("Encoding error"),
+                     tr("Encoding Error"),
                      tr("Unable to open target file for writing"),
                      QString::null, QString::null);
                   }
@@ -792,7 +792,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                                     printf("exportmp3: error from encoder: %ld\n", bytes);
                               else {
                                     QMessageBox::warning(0,
-                                       tr("Encoding error"),
+                                       tr("Encoding Error"),
                                        tr("Error %1 returned from MP3 encoder").arg(bytes),
                                        QString::null, QString::null);
                                     break;
