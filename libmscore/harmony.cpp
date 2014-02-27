@@ -592,13 +592,13 @@ void Harmony::endEdit()
       setHarmony(text());
       layout();
       if (links()) {
-                  foreach(Element* e, *links()) {
-                        if (e == this)
-                              continue;
-                        Harmony* h = static_cast<Harmony*>(e);
-                        h->setHarmony(text());
-                        }
+            foreach(Element* e, *links()) {
+                  if (e == this)
+                        continue;
+                  Harmony* h = static_cast<Harmony*>(e);
+                  h->setHarmony(text());
                   }
+            }
       score()->setLayoutAll(true);
       }
 
@@ -852,12 +852,14 @@ void Harmony::layout()
                   yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
                   }
             yy += score()->styleP(ST_harmonyY);
+
             Segment* s = static_cast<Segment*>(parent());
-                  for (Element* e : s->annotations()) {
+            for (Element* e : s->annotations()) {
                   if (e != this && e->type() == FRET_DIAGRAM && e->track() == track()) {
-                        yy = score()->styleP(ST_fretY);
+                        yy -= score()->styleP(ST_harmonyY);
                         yy -= score()->styleP(ST_harmonyFretDist);
                         yy -= e->bbox().height();
+                        yy += score()->styleP(ST_fretY);
                         break;
                         }
                   }
