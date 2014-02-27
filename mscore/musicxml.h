@@ -201,14 +201,14 @@ class MusicXml {
       void xmlPartList(QDomElement);
       void xmlPart(QDomElement, QString id);
       void xmlScorePart(QDomElement node, QString id, int& parts);
-      Measure* xmlMeasure(Part*, QDomElement, int, int measureLen);
-      void xmlAttributes(Measure*, int stave, QDomElement node);
+      Measure* xmlMeasure(Part*, QDomElement, int, int measureLen, KeySig*);  
+      void xmlAttributes(Measure*, int stave, QDomElement node, KeySig*);   
       void xmlLyric(int trk, QDomElement e,
                     QMap<int, Lyrics*>& numbrdLyrics,
                     QMap<int, Lyrics*>& defyLyrics,
                     QList<Lyrics*>& unNumbrdLyrics);
       void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
-      void xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement node, QList<Chord*>& graceNotes);
+      Note* xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement node, QList<Chord*>& graceNotes, int* pAlt);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       int xmlClef(QDomElement, int staffIdx, Measure*);
       void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion);
