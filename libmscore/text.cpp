@@ -780,6 +780,7 @@ void Text::draw(QPainter* p) const
                               br = t.boundingRect(0, c2, this);
                         else
                               br = t.boundingRect();
+                        br.translate(0.0, t.y());
                         drawSelection(p, br);
                         }
                   ++row;
