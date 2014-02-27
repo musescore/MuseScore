@@ -399,33 +399,47 @@ class TupletErrorResult
 
       bool operator<(const TupletErrorResult &er) const
             {
-            if (tupletAverageError < er.tupletAverageError
-                        && sumLengthOfRests < er.sumLengthOfRests)
-                  return true;
-            if (tupletAverageError >= er.tupletAverageError
-                        && sumLengthOfRests >= er.sumLengthOfRests)
-                  return false;
-
-            if (tupletAverageError == 0.0)
+            if (tupletAverageError < er.tupletAverageError) {
+                  if (sumLengthOfRests <= er.sumLengthOfRests) {
+                        return true;
+                        }
+                  else {
+                        const double errorDiv = (er.tupletAverageError - tupletAverageError)
+                                                / er.tupletAverageError;
+                        const auto restsDiv = (sumLengthOfRests - er.sumLengthOfRests)
+                                                / sumLengthOfRests;
+                        return compareDivs(errorDiv, restsDiv, er);
+                        }
+                  }
+            else if (tupletAverageError > er.tupletAverageError) {
+                  if (sumLengthOfRests >= er.sumLengthOfRests) {
+                        return false;
+                        }
+                  else {
+                        const double errorDiv = (tupletAverageError - er.tupletAverageError)
+                                                / tupletAverageError;
+                        const auto restsDiv = (er.sumLengthOfRests - sumLengthOfRests)
+                                                / er.sumLengthOfRests;
+                        return compareDivs(errorDiv, restsDiv, er);
+                        }
+                  }
+            else
                   return sumLengthOfRests < er.sumLengthOfRests;
-            if (sumLengthOfRests == ReducedFraction(0, 1))
-                  return tupletAverageError < er.tupletAverageError;
+            }
 
-            double errorDiv = 2 * ((tupletAverageError < er.tupletAverageError)
-                        ? er.tupletAverageError / tupletAverageError
-                        : tupletAverageError / er.tupletAverageError);
-
-            const auto temp = ((sumLengthOfRests < er.sumLengthOfRests)
-                               ? er.sumLengthOfRests / sumLengthOfRests
-                               : sumLengthOfRests / er.sumLengthOfRests);
-            double restsDiv = temp.numerator() * 1.0 / temp.denominator();
-
-            if (errorDiv < restsDiv)
+   private:
+      bool compareDivs(double errorDiv,
+                       const ReducedFraction &restsDiv,
+                       const TupletErrorResult &er) const
+            {
+                        // error is more important than length of rests
+            const double errorImportance = 2.0;
+            if (errorDiv * errorImportance < restsDiv.numerator() * 1.0 / restsDiv.denominator())
                   return sumLengthOfRests < er.sumLengthOfRests;
             else
                   return tupletAverageError < er.tupletAverageError;
             }
-   private:
+
       double tupletAverageError;
       ReducedFraction sumLengthOfRests;
       };
