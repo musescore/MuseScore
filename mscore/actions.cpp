@@ -734,25 +734,25 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "page-prev",
-         QT_TRANSLATE_NOOP("action","Page: previous")
+         QT_TRANSLATE_NOOP("action","Page: Previous")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "page-next",
-         QT_TRANSLATE_NOOP("action","Page: next")
+         QT_TRANSLATE_NOOP("action","Page: Next")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "page-top",
-         QT_TRANSLATE_NOOP("action","Page: top")
+         QT_TRANSLATE_NOOP("action","Page: Top")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "page-end",
-         QT_TRANSLATE_NOOP("action","Page: end")
+         QT_TRANSLATE_NOOP("action","Page: End")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -959,7 +959,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "note-longa",
          QT_TRANSLATE_NOOP("action","Longa"),
-         QT_TRANSLATE_NOOP("action","Note duration: longa"),
+         QT_TRANSLATE_NOOP("action","Note duration: Longa"),
          QT_TRANSLATE_NOOP("action","Longa"),
           longaUp_ICON
          ),
@@ -968,7 +968,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "note-breve",
          QT_TRANSLATE_NOOP("action","Double whole note"),
-         QT_TRANSLATE_NOOP("action","Note duration: double whole"),
+         QT_TRANSLATE_NOOP("action","Note duration: Double whole"),
          QT_TRANSLATE_NOOP("action","Double whole note"),
           brevis_ICON
          ),
@@ -977,7 +977,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "pad-note-1",
          QT_TRANSLATE_NOOP("action","Whole note"),
-         QT_TRANSLATE_NOOP("action","Note duration: whole"),
+         QT_TRANSLATE_NOOP("action","Note duration: Whole"),
          QT_TRANSLATE_NOOP("action","Whole note"),
           note_ICON
          ),
@@ -986,7 +986,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "pad-note-2",
          QT_TRANSLATE_NOOP("action","Half note"),
-         QT_TRANSLATE_NOOP("action","Note duration: half"),
+         QT_TRANSLATE_NOOP("action","Note duration: Half"),
          QT_TRANSLATE_NOOP("action","Half note"),
           note2_ICON
          ),
@@ -995,7 +995,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "pad-note-4",
          QT_TRANSLATE_NOOP("action","Quarter note"),
-         QT_TRANSLATE_NOOP("action","Note duration: quarter"),
+         QT_TRANSLATE_NOOP("action","Note duration: Quarter"),
          QT_TRANSLATE_NOOP("action","Quarter note"),
           note4_ICON
          ),
@@ -1063,7 +1063,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "pad-dot",
          QT_TRANSLATE_NOOP("action","Augmentation dot"),
-         QT_TRANSLATE_NOOP("action","Note duration: augmentation dot"),
+         QT_TRANSLATE_NOOP("action","Note duration: Augmentation dot"),
          QT_TRANSLATE_NOOP("action","Augmentation dot"),
           dot_ICON
          ),
@@ -1072,7 +1072,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "pad-dotdot",
          QT_TRANSLATE_NOOP("action","Double augmentation dot"),
-         QT_TRANSLATE_NOOP("action","Note duration: double augmentation dot"),
+         QT_TRANSLATE_NOOP("action","Note duration: Double augmentation dot"),
          QT_TRANSLATE_NOOP("action","Double augmentation dot"),
           dotdot_ICON
          ),
@@ -1081,7 +1081,7 @@ Shortcut Shortcut::sc[] = {
          0,
          "tie",
          QT_TRANSLATE_NOOP("action","Tie"),
-         QT_TRANSLATE_NOOP("action","Note duration: tie"),
+         QT_TRANSLATE_NOOP("action","Note duration: Tie"),
          QT_TRANSLATE_NOOP("action","Tie"),
          tie_ICON
          ),
@@ -1090,7 +1090,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "pad-rest",
          QT_TRANSLATE_NOOP("action","Rest"),
-         QT_TRANSLATE_NOOP("action","Note entry: rest"),
+         QT_TRANSLATE_NOOP("action","Note entry: Rest"),
          QT_TRANSLATE_NOOP("action","Rest"),
           quartrest_ICON
          ),
@@ -1099,7 +1099,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "sharp2",
          QT_TRANSLATE_NOOP("action","Double sharp"),
-         QT_TRANSLATE_NOOP("action","Note entry: double sharp"),
+         QT_TRANSLATE_NOOP("action","Note entry: Double sharp"),
          QT_TRANSLATE_NOOP("action","Double sharp"),
           sharpsharp_ICON
          ),
@@ -1108,7 +1108,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "sharp",
          QT_TRANSLATE_NOOP("action","Sharp"),
-         QT_TRANSLATE_NOOP("action","Note entry: sharp"),
+         QT_TRANSLATE_NOOP("action","Note entry: Sharp"),
          QT_TRANSLATE_NOOP("action","Sharp"),
           sharp_ICON
          ),
@@ -1117,7 +1117,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "nat",
          QT_TRANSLATE_NOOP("action","Natural"),
-         QT_TRANSLATE_NOOP("action","Note entry: natural"),
+         QT_TRANSLATE_NOOP("action","Note entry: Natural"),
          QT_TRANSLATE_NOOP("action","Natural"),
           natural_ICON
          ),
@@ -1126,7 +1126,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "flat",
          QT_TRANSLATE_NOOP("action","Flat"),
-         QT_TRANSLATE_NOOP("action","Note entry: flat"),
+         QT_TRANSLATE_NOOP("action","Note entry: Flat"),
          QT_TRANSLATE_NOOP("action","Flat"),
           flat_ICON
          ),
@@ -1135,7 +1135,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "flat2",
          QT_TRANSLATE_NOOP("action","Double flat"),
-         QT_TRANSLATE_NOOP("action","Note entry: double flat"),
+         QT_TRANSLATE_NOOP("action","Note entry: Double flat"),
          QT_TRANSLATE_NOOP("action","Double flat"),
           flatflat_ICON
          ),
@@ -1162,9 +1162,9 @@ Shortcut Shortcut::sc[] = {
          0,
        /* no stroke: 4th*/
         "grace4",
-        QT_TRANSLATE_NOOP("action","Grace: quarter"),
+        QT_TRANSLATE_NOOP("action","Grace: Quarter"),
         QT_TRANSLATE_NOOP("action","Add quarter grace note"),
-        QT_TRANSLATE_NOOP("action","Grace: quarter"),
+        QT_TRANSLATE_NOOP("action","Grace: Quarter"),
          grace4_ICON
         ),
      Shortcut(
@@ -1720,21 +1720,21 @@ Shortcut Shortcut::sc[] = {
          0,
          "rest-1",
          QT_TRANSLATE_NOOP("action","Whole rest"),
-         QT_TRANSLATE_NOOP("action","Note entry: whole rest")
+         QT_TRANSLATE_NOOP("action","Note entry: Whole rest")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "rest-2",
          QT_TRANSLATE_NOOP("action","Half rest"),
-         QT_TRANSLATE_NOOP("action","Note entry: half rest")
+         QT_TRANSLATE_NOOP("action","Note entry: Half rest")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "rest-4",
          QT_TRANSLATE_NOOP("action","Quarter rest"),
-         QT_TRANSLATE_NOOP("action","Note entry: quarter rest")
+         QT_TRANSLATE_NOOP("action","Note entry: Quarter rest")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -2180,7 +2180,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "note-longa-TAB",
          QT_TRANSLATE_NOOP("action","Longa (TAB)"),
-         QT_TRANSLATE_NOOP("action","Note duration: longa (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: Longa (TAB)"),
          QT_TRANSLATE_NOOP("action","Longa"),
           longaUp_ICON
          ),
@@ -2189,7 +2189,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "note-breve-TAB",
          QT_TRANSLATE_NOOP("action","Double whole note (TAB)"),
-         QT_TRANSLATE_NOOP("action","Note duration: double whole (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: Double whole (TAB)"),
          QT_TRANSLATE_NOOP("action","Double whole note"),
           brevis_ICON
          ),
@@ -2198,7 +2198,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "pad-note-1-TAB",
          QT_TRANSLATE_NOOP("action","Whole note (TAB)"),
-         QT_TRANSLATE_NOOP("action","Note duration: whole (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: Whole (TAB)"),
          QT_TRANSLATE_NOOP("action","Whole note"),
           note_ICON
          ),
@@ -2207,7 +2207,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "pad-note-2-TAB",
          QT_TRANSLATE_NOOP("action","Half note (TAB)"),
-         QT_TRANSLATE_NOOP("action","Note duration: half (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: Half (TAB)"),
          QT_TRANSLATE_NOOP("action","Half note"),
           note2_ICON
          ),
@@ -2216,7 +2216,7 @@ Shortcut Shortcut::sc[] = {
          A_CMD,
          "pad-note-4-TAB",
          QT_TRANSLATE_NOOP("action","Quarter note (TAB)"),
-         QT_TRANSLATE_NOOP("action","Note duration: quarter (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: Quarter (TAB)"),
          QT_TRANSLATE_NOOP("action","Quarter note"),
           note4_ICON
          ),
@@ -2292,7 +2292,7 @@ Shortcut Shortcut::sc[] = {
          0,
          "pad-rest-TAB",
          QT_TRANSLATE_NOOP("action","Rest (TAB)"),
-         QT_TRANSLATE_NOOP("action","Note entry: rest (TAB)")
+         QT_TRANSLATE_NOOP("action","Note entry: Rest (TAB)")
          ),
       Shortcut(
          STATE_NOTE_ENTRY_TAB,

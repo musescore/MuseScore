@@ -1273,7 +1273,7 @@ void InstrumentsDialog::on_loadButton_clicked()
       QFile f(fn);
       if (!loadInstrumentTemplates(fn)) {
             QMessageBox::warning(0,
-               QWidget::tr("MuseScore: load Style failed:"),
+               QWidget::tr("MuseScore: Load Style failed:"),
                QString(strerror(errno)),
                QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
             return;

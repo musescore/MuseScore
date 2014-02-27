@@ -127,7 +127,7 @@ void LayerManager::addTagClicked()
             return;
             }
       bool ok;
-      QString item = QInputDialog::getItem(this, tr("MuseScore: select layer tag"), tr("layer tag"),
+      QString item = QInputDialog::getItem(this, tr("MuseScore: Select layer tag"), tr("layer tag"),
          items, 0, false, &ok);
       if (ok && !item.isEmpty()) {
 //            uint tagBits = 0;
@@ -160,7 +160,7 @@ void LayerManager::deleteTagClicked()
       QString s = item->text();
       QStringList items = s.split(",");
       bool ok;
-      QString tag = QInputDialog::getItem(this, tr("MuseScore: select layer tag"), tr("layer tag"),
+      QString tag = QInputDialog::getItem(this, tr("MuseScore: Select layer tag"), tr("layer tag"),
          items, 0, false, &ok);
       if (ok && !tag.isEmpty()) {
             items.removeOne(tag);

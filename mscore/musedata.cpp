@@ -653,7 +653,7 @@ bool MuseData::read(const QString& name)
       {
       QFile fp(name);
       if (!fp.open(QIODevice::ReadOnly)) {
-            qDebug("cannot open file <%s>\n", qPrintable(name));
+            qDebug("Cannot open file <%s>\n", qPrintable(name));
             return false;
             }
       QTextStream ts(&fp);

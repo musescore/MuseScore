@@ -380,7 +380,7 @@ Score::FileError importBB(Score* score, const QString& name)
       if(!QFileInfo(name).exists())
             return Score::FILE_NOT_FOUND;
       if (!bb.read(name)) {
-            qDebug("cannot open file <%s>", qPrintable(name));
+            qDebug("Cannot open file <%s>", qPrintable(name));
             return Score::FILE_OPEN_ERROR;
             }
       score->style()->set(ST_chordsXmlFile, true);
