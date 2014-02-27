@@ -298,7 +298,7 @@ void FretDiagram::layout()
             }
       bbox().setRect(x, y, w, h);
 
-      setPos(-_spatium, -h + score()->styleP(ST_fretY) + _spatium );
+      setPos(-_spatium, -h - score()->styleP(ST_fretY) + _spatium );
       adjustReadPos();
 
       if (_harmony)
@@ -309,9 +309,8 @@ void FretDiagram::layout()
       Measure* m     = static_cast<Segment*>(parent())->measure();
       int idx        = staffIdx();
       MStaff* mstaff = m->mstaff(idx);
-      System* system = m->system();
-      qreal yp       = pos().y() + system->staff(idx)->y() + system->y();
-      mstaff->distanceUp = qMax(mstaff->distanceUp, h + _spatium * 2 - yp);
+      qreal dist = -(bbox().top());
+      mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium * 2);
       }
 
 //---------------------------------------------------------
