@@ -717,7 +717,7 @@ void Slur::slurPos(SlurPos* sp)
       qreal hw   = note1 ? note1->headWidth() : startCR()->width();
       switch (sa1) {
             case SA_STEM: //sc can't be null
-                  sp->p1 += sc->stemPosBeam() - sc->pagePos() + sc->stem()->p2();
+                  sp->p1 += sc->stemPos() - sc->pagePos() + sc->stem()->p2();
                   sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);
                   break;
             case SA_NONE:
@@ -725,7 +725,7 @@ void Slur::slurPos(SlurPos* sp)
             }
       switch(sa2) {
             case SA_STEM: //ec can't be null
-                  sp->p2 += ec->stemPosBeam() - ec->pagePos() + ec->stem()->p2();
+                  sp->p2 += ec->stemPos() - ec->pagePos() + ec->stem()->p2();
                   sp->p2 += QPointF(-0.35 * _spatium, 0.25 * _spatium);
                   break;
             case SA_NONE:
