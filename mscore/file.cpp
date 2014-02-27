@@ -1693,7 +1693,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             rv = savePositions(cs, fn);
             }
       else {
-            qDebug("internal error: unsupported extension <%s>\n",
+            qDebug("Internal error: Unsupported extension <%s>\n",
                qPrintable(ext));
             return false;
             }

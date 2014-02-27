@@ -2820,7 +2820,7 @@ void ScoreView::cmd(const QAction* a)
             if (!(e && (e->type() == Element::NOTE || e->type() == Element::REST))) {
                   QMessageBox::warning(0, "MuseScore",
                      tr("No chord/rest selected:\n"
-                     "please select a chord/rest and try again"));
+                     "Please select a chord/rest and try again"));
                   }
             else {
                   if (e->type() == Element::NOTE)
@@ -2829,7 +2829,7 @@ void ScoreView::cmd(const QAction* a)
                   if (cr->segment()->splitsTuplet()) {
                         QMessageBox::warning(0, "MuseScore",
                            tr("Cannot split measure here:\n"
-                           "cannot split tuplet"));
+                           "Cannot split tuplet"));
                         }
                   else
                         _score->cmdSplitMeasure(cr);
@@ -2841,7 +2841,7 @@ void ScoreView::cmd(const QAction* a)
             if (!_score->selection().measureRange(&m1, &m2) || m1 == m2) {
                   QMessageBox::warning(0, "MuseScore",
                      tr("No measures selected:\n"
-                     "please select range of measures to join and try again"));
+                     "Please select a range of measures to join and try again"));
                   }
             else {
                   _score->cmdJoinMeasure(m1, m2);
@@ -5038,7 +5038,7 @@ void ScoreView::appendMeasures(int n, Element::ElementType type)
       if (_score->noStaves()) {
             QMessageBox::warning(0, "MuseScore",
                tr("No staves found:\n"
-                  "please use the instruments dialog to\n"
+                  "Please use the instruments dialog to\n"
                   "first create some staves"));
             return;
             }

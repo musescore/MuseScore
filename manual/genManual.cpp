@@ -427,7 +427,7 @@ int main(int argc, char* argv[])
             QString infile = srcPath + "/" + s;
             QFile inFile(infile);
             if (!inFile.open(QIODevice::ReadOnly)) {
-                  fprintf(stderr, "%s: cannot open input file <%s>\n",
+                  fprintf(stderr, "%s: Cannot open input file <%s>\n",
                      argv[0], qPrintable(infile));
                   return -2;
                   }

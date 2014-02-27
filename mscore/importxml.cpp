@@ -430,7 +430,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
       QFile schemaFile(":/schema/musicxml.xsd");
       if (!schemaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qDebug("initMusicXmlSchema() could not open resource musicxml.xsd");
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "internal error: could not open resource musicxml.xsd\n");
+            MScore::lastError = QT_TRANSLATE_NOOP("file", "Internal error: Could not open resource musicxml.xsd\n");
             return false;
             }
 
@@ -450,8 +450,8 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
       // load and validate the schema
       schema.load(schemaBa);
       if (!schema.isValid()) {
-            qDebug("initMusicXmlSchema() internal error: MusicXML schema is invalid");
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "internal error: MusicXML schema is invalid\n");
+            qDebug("initMusicXmlSchema(): Internal error: MusicXML schema is invalid");
+            MScore::lastError = QT_TRANSLATE_NOOP("file", "Internal error: MusicXML schema is invalid\n");
             return false;
             }
 
@@ -499,7 +499,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
       int line, column;
       QString err;
       if (!container.setContent(data, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "error reading container.xml at line %1 column %2: %3\n");
+            QString s = QT_TRANSLATE_NOOP("file", "Error reading container.xml at line %1 column %2: %3\n");
             MScore::lastError = s.arg(line).arg(column).arg(err);
             return false;
             }
@@ -595,7 +595,7 @@ static Score::FileError doImport(Score* score, const QString& name, QIODevice* d
       int column;
       QString err;
       if (!doc.setContent(dev, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "error at line %1 column %2: %3\n");
+            QString s = QT_TRANSLATE_NOOP("file", "Error at line %1 column %2: %3\n");
             MScore::lastError = s.arg(line).arg(column).arg(err);
             return Score::FILE_BAD_FORMAT;
             }
