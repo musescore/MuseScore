@@ -249,39 +249,21 @@ void initStyle(MStyle* s)
                Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false, false, QColor(Qt::black),
                QColor(255, 255, 255, 0), TextStyle::HIDE_ALWAYS);
 
-      AS("Title", ff, 24, false, false, false, ALIGN_HCENTER | ALIGN_TOP, QPointF(), OA);
-      AS("Subtitle", ff, 14, false, false, false,ALIGN_HCENTER | ALIGN_TOP, QPointF(0, MM(10)), OA);
-      AS("Composer", ff, 12, false, false, false,ALIGN_RIGHT | ALIGN_BASELINE, QPointF(MM(-1), MM(-2)), OA);
-      AS("Lyricist", ff, 12, false, false, false,ALIGN_LEFT | ALIGN_BASELINE, QPointF(MM(1), MM(-2)), OA);
+      AS("Title",    ff, 24, false, false, false, ALIGN_HCENTER | ALIGN_TOP,    QPointF(), OA);
+      AS("Subtitle", ff, 14, false, false, false, ALIGN_HCENTER | ALIGN_TOP,    QPointF(0, MM(10)), OA);
+      AS("Composer", ff, 12, false, false, false, ALIGN_RIGHT   | ALIGN_BOTTOM, QPointF(MM(-1), MM(-2)), OA);
+      AS("Lyricist", ff, 12, false, false, false, ALIGN_LEFT    | ALIGN_BOTTOM, QPointF(MM(1), MM(-2)), OA);
 
-      AS("Lyrics Odd Lines", ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
+      AS("Lyrics Odd Lines", ff, 11, false, false, false, ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
+      AS("Lyrics Even Lines", ff, 11, false, false, false, ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
+      AS("Fingering", ff,  8, false, false, false, ALIGN_CENTER, QPointF(), OA, true);
+      AS("Instrument Name (Long)",   ff, 12, false, false, false, ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
+      AS("Instrument Name (Short)",   ff, 12, false, false, false, ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
+      AS("Instrument Name (Part)", ff, 18, false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(), OA);
+      AS("Dynamics", ff, 20, false,false,false,ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, true);
+      AS("Technique", ff, 12, false, true, false,ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS);
 
-      AS("Lyrics Even Lines", ff, 11, false, false, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
-
-      AS("Fingering", ff,  8, false, false, false,
-         ALIGN_CENTER, QPointF(), OA, true);
-
-      AS("Instrument Name (Long)",   ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
-
-      AS("Instrument Name (Short)",   ff, 12, false, false, false,
-         ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
-
-      AS("Instrument Name (Part)", ff, 18, false, false, false,
-         ALIGN_LEFT | ALIGN_TOP, QPointF(), OA);
-
-      AS("Dynamics", ff, 20, false,
-         false,                                 // italic?
-         false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, true);
-
-      AS("Technique", ff, 12, false, true, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS);
-
-      AS("Tempo", ff, 12, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS,
+      AS("Tempo", ff, 12, false, false, false,ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS,
          true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true);
 
       AS("Metronome", ff, 12, true, false, false, ALIGN_LEFT);
@@ -313,8 +295,8 @@ void initStyle(MStyle* s)
          MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true);
 
       // y offset may depend on voltaHook style element
-      AS("Volta", ff, 11, true, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.5, 1.9), OS, true);
-      AS("Frame", ff, 12, false, false, false, ALIGN_LEFT | ALIGN_TOP);
+      AS("Volta",     ff, 11, true, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.5, 1.9), OS, true);
+      AS("Frame",     ff, 12, false, false, false, ALIGN_LEFT | ALIGN_TOP);
       AS("Text Line", ff,  12, false, false, false, ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, true);
       AS("Glissando", ff, 8, false, true, false, ALIGN_HCENTER | ALIGN_BASELINE, QPointF(), OS, true);
 
