@@ -1021,22 +1021,8 @@ void Text::layout1()
             _layout.append(TextBlock());
 
       QRectF bb;
-      qreal y;
-
-      TextBlock* t = &_layout[0];
-      t->layout(this);
-      const QRectF* r = &t->boundingRect();
-      if (textStyle().align() & ALIGN_BOTTOM)
-            y = -r->bottom();
-      else if (textStyle().align() & ALIGN_VCENTER)
-            y =  -(r->top() + r->bottom()) * .5;
-      else if (textStyle().align() & ALIGN_BASELINE)
-            y = 0;
-      else        // ALIGN_TOP
-            y = -r->top();
-      t->setY(y);
-
-      for (int i = 1; i < _layout.size(); ++i) {
+      qreal y = 0;
+      for (int i = 0; i < _layout.size(); ++i) {
             TextBlock* t = &_layout[i];
             t->layout(this);
             const QRectF* r = &t->boundingRect();
@@ -1044,39 +1030,48 @@ void Text::layout1()
                   r = &_layout[i-i].boundingRect();
             y += t->lineSpacing();
             t->setY(y);
+            bb |= r->translated(0.0, y);
             }
 
-      Element* e = parent();
-      if (e) {
-            qreal h, yo = 0;
-            if (layoutToParentWidth()) {
-                  if (e->type() == HBOX || e->type() == VBOX || e->type() == TBOX) {
-                        // consider inner margins of frame
-                        Box* b = static_cast<Box*>(e);
-                        yo = b->topMargin()  * MScore::DPMM;
-                        h  = b->height() - yo - b->bottomMargin()   * MScore::DPMM;
-                        }
-                  else {
-                        h  = e->height();
-                        yo = 0.0;
-                        }
-                  QPointF ro(_textStyle.reloff() * .01);
-                  yo += ro.y() * h;
-                  }
-            if (e->type() == SEGMENT) {
-                  Segment* s = static_cast<Segment*>(e);
+      qreal yoff = 0;
+      qreal h    = 0;
+      if (parent()) {
+            if (parent()->type() == SEGMENT) {
+                  Segment* s = static_cast<Segment*>(parent());
                   System* system = s->measure()->system();
                   if (system) {
                         SysStaff* sstaff = system->staff(staffIdx());
-                        yo += sstaff->y();
+                        yoff = sstaff->y();
                         }
                   }
-            for (TextBlock& b : _layout)
-                  b.setY(b.y() + yo);
+            if (layoutToParentWidth()) {
+                  if (parent()->type() == HBOX || parent()->type() == VBOX || parent()->type() == TBOX) {
+                        // consider inner margins of frame
+                        Box* b = static_cast<Box*>(parent());
+                        yoff = b->topMargin()  * MScore::DPMM;
+                        h  = b->height() - yoff - b->bottomMargin()   * MScore::DPMM;
+                        }
+                  else
+                        h  = parent()->height();
+                  QPointF ro(_textStyle.reloff() * .01);
+                  yoff += ro.y() * h;
+                  }
             }
 
-      for (const TextBlock& b : _layout)
-            bb |= b.boundingRect().translated(0.0, b.y());
+      if (textStyle().align() & ALIGN_BOTTOM)
+            yoff += h-bb.bottom();
+      else if (textStyle().align() & ALIGN_VCENTER)
+            yoff +=  (h - (bb.top() + bb.bottom())) * .5;
+      else if (textStyle().align() & ALIGN_BASELINE)
+            yoff = h * .5 - _layout.front().lineSpacing();
+      else
+            yoff += -bb.top();
+
+      for (TextBlock& t : _layout)
+            t.setY(t.y() + yoff);
+
+      bb.translate(0.0, yoff);
+
       if (_editMode)
             bb |= cursorRect();
       setbbox(bb);
