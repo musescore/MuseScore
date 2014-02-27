@@ -37,7 +37,6 @@ class TextProp : public QWidget, public Ui::TextProperties {
       Q_OBJECT
 
       int curUnit;
-      bool onlyStyle;
 
    private slots:
       void mmToggled(bool);

@@ -1352,8 +1352,6 @@ void TextView::setElement(Element* e)
       tb.text->setPlainText(te->text());
       tb.xoffset->setValue(ts.offset().x());
       tb.yoffset->setValue(ts.offset().y());
-      tb.rxoffset->setValue(ts.reloff().x());
-      tb.ryoffset->setValue(ts.reloff().y());
       tb.offsetType->setCurrentIndex(int(ts.offsetType()));
 //TODO      tb.textStyle->setCurrentIndex(ts.textStyleType());
       tb.styled->setChecked(te->styled());
@@ -1391,8 +1389,6 @@ void HarmonyView::setElement(Element* e)
       tb.text->setPlainText(harmony->text());
       tb.xoffset->setValue(ts.offset().x());
       tb.yoffset->setValue(ts.offset().y());
-      tb.rxoffset->setValue(ts.reloff().x());
-      tb.ryoffset->setValue(ts.reloff().y());
       tb.offsetType->setCurrentIndex(int(ts.offsetType()));
 //TODO      tb.textStyle->setCurrentIndex(ts.textStyleType());
       tb.styled->setChecked(harmony->styled());
@@ -1580,8 +1576,6 @@ void DynamicView::setElement(Element* e)
       tb.text->setPlainText(dynamic->text());
       tb.xoffset->setValue(ts.offset().x());
       tb.yoffset->setValue(ts.offset().y());
-      tb.rxoffset->setValue(ts.reloff().x());
-      tb.ryoffset->setValue(ts.reloff().y());
       tb.offsetType->setCurrentIndex(int(ts.offsetType()));
 //TODO      tb.textStyle->setCurrentIndex(dynamic->textStyleType());
       tb.styled->setChecked(dynamic->styled());

@@ -32,6 +32,7 @@ cp ../../../build.debug/mtest/libmscore/parts/part22.mscx  part22o.mscx
 cp ../../../build.debug/mtest/libmscore/parts/part23.mscx  part23o.mscx
 cp ../../../build.debug/mtest/libmscore/parts/part24.mscx  part24o.mscx
 cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-test.mscx partStyle-score-ref.mscx
+cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-reload-test.mscx partStyle-score-reload-ref.mscx
 
 # cp ../../../build.debug/mtest/libmscore/parts/part25.mscx  part25o.mscx
 # cp ../../../build.debug/mtest/libmscore/parts/part26.mscx  part26o.mscx

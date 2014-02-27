@@ -51,7 +51,6 @@ class TextStyle {
          bool _bold, bool _italic, bool _underline,
          Align _align,
          const QPointF& _off = QPointF(), OffsetType _ot = OFFSET_SPATIUM,
-         const QPointF& _roff = QPointF(),
          bool sd = false,
          Spatium fw = Spatium(0.0), Spatium pw = Spatium(0.0), int fr = 25,
          QColor co = QColor(Qt::black), bool circle = false, bool systemFlag = false,
@@ -74,8 +73,6 @@ class TextStyle {
       OffsetType offsetType() const;
       const QPointF& offset() const;
       QPointF offset(qreal spatium) const;
-      const QPointF& reloff() const;
-      void setReloff(const QPointF& p);
       bool sizeIsSpatiumDependent() const;
 
       Spatium frameWidth()  const;
@@ -102,8 +99,6 @@ class TextStyle {
       void setXoff(qreal v);
       void setYoff(qreal v);
       void setOffsetType(OffsetType v);
-      void setRxoff(qreal v);
-      void setRyoff(qreal v);
       void setSizeIsSpatiumDependent(bool v);
       void setFrameRound(int v);
       void setFrameColor(const QColor& v);

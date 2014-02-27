@@ -1053,8 +1053,6 @@ void Text::layout1()
                         }
                   else
                         h  = parent()->height();
-                  QPointF ro(_textStyle.reloff() * .01);
-                  yoff += ro.y() * h;
                   }
             }
 

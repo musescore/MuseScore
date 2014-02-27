@@ -60,7 +60,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
       TextStyleData(QString _name, QString _family, qreal _size,
          bool _bold, bool _italic, bool _underline,
          Align _align,
-         const QPointF& _off, OffsetType _ot, const QPointF& _roff,
+         const QPointF& _off, OffsetType _ot,
          bool sizeSpatiumDependent,
          Spatium fw, Spatium pw, int fr,
          QColor co, bool circle, bool systemFlag,

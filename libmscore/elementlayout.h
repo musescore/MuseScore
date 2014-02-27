@@ -31,12 +31,11 @@ class ElementLayout {
       Align  _align;
       QPointF _offset;              // inch or spatium
       OffsetType _offsetType;
-      QPointF _reloff;
 
    public:
       ElementLayout();
-      ElementLayout(Align a, const QPointF& o, OffsetType ot, const QPointF& r)
-         : _align(a), _offset(o), _offsetType(ot), _reloff(r) {}
+      ElementLayout(Align a, const QPointF& o, OffsetType ot)
+         : _align(a), _offset(o), _offsetType(ot) {}
 
       Align align() const                 { return _align;        }
       OffsetType offsetType() const       { return _offsetType;   }
@@ -44,8 +43,6 @@ class ElementLayout {
       qreal yOffset() const               { return _offset.y();   }
       const QPointF& offset() const       { return _offset;      }
       QPointF offset(qreal) const;
-      const QPointF& reloff() const       { return _reloff;       }
-      void setReloff(const QPointF& val)  { _reloff = val;        }
       void setAlign(Align val)            { _align  = val;        }
       void setXoff(qreal val)             { _offset.rx() = val;   }
       void setYoff(qreal val)             { _offset.ry() = val;        }
@@ -53,12 +50,6 @@ class ElementLayout {
       void layout(Element*) const;
       void writeProperties(Xml& xml) const;
       bool readProperties(XmlReader& e);
-
-      void setRxoff(qreal v)              { _reloff.rx() = v; }
-      void setRyoff(qreal v)              { _reloff.ry() = v; }
-
-      qreal rxoff() const                 { return _reloff.x(); }
-      qreal ryoff() const                 { return _reloff.y(); }
       };
 
 

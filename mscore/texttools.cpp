@@ -81,6 +81,7 @@ TextTools::TextTools(QWidget* parent)
 
       tb->addSeparator();
 
+#if 0
       QActionGroup* ha = new QActionGroup(tb);
       leftAlign   = new QAction(*icons[textLeft_ICON],   "", ha);
       leftAlign->setToolTip(tr("align left"));
@@ -117,7 +118,7 @@ TextTools::TextTools(QWidget* parent)
       vcenterAlign->setCheckable(true);
       vcenterAlign->setData(ALIGN_VCENTER);
       tb->addActions(va->actions());
-
+#endif
       typefaceSubscript   = tb->addAction(*icons[textSub_ICON], "");
       typefaceSubscript->setToolTip(tr("subscript"));
       typefaceSubscript->setCheckable(true);
@@ -160,8 +161,8 @@ TextTools::TextTools(QWidget* parent)
       connect(typefaceSubscript,   SIGNAL(triggered(bool)), SLOT(subscriptClicked(bool)));
       connect(typefaceSuperscript, SIGNAL(triggered(bool)), SLOT(superscriptClicked(bool)));
       connect(typefaceFamily,      SIGNAL(currentFontChanged(const QFont&)), SLOT(fontChanged(const QFont&)));
-      connect(ha,                  SIGNAL(triggered(QAction*)), SLOT(setHalign(QAction*)));
-      connect(va,                  SIGNAL(triggered(QAction*)), SLOT(setValign(QAction*)));
+//      connect(ha,                  SIGNAL(triggered(QAction*)), SLOT(setHalign(QAction*)));
+//      connect(va,                  SIGNAL(triggered(QAction*)), SLOT(setValign(QAction*)));
       connect(showKeyboard,        SIGNAL(triggered(bool)), SLOT(showKeyboardClicked(bool)));
       connect(textStyles,          SIGNAL(currentIndexChanged(int)), SLOT(styleChanged(int)));
 //      connect(unorderedList,       SIGNAL(triggered()),     SLOT(unorderedListClicked()));
@@ -197,6 +198,7 @@ void TextTools::setText(Text* te)
             }
       textStyles->setCurrentIndex(comboIdx);
       styleChanged(comboIdx);
+#if 0
       Align align = _textElement->textStyle().align();
       if (align & ALIGN_HCENTER)
             hcenterAlign->setChecked(true);
@@ -213,6 +215,7 @@ void TextTools::setText(Text* te)
             vcenterAlign->setChecked(true);
       else
             topAlign->setChecked(true);
+#endif
       textStyles->blockSignals(false);
       }
 
@@ -372,6 +375,7 @@ void TextTools::italicClicked(bool val)
       updateText();
       }
 
+#if 0
 //---------------------------------------------------------
 //   setHalign
 //---------------------------------------------------------
@@ -393,6 +397,7 @@ void TextTools::setValign(QAction* /*a*/)
       updateTools();
       layoutText();
       }
+#endif
 
 //---------------------------------------------------------
 //   subscriptClicked
@@ -445,14 +450,14 @@ void TextTools::styleChanged(int comboIdx)
       typefaceSubscript->setEnabled(unstyled);
       typefaceSuperscript->setEnabled(unstyled);
       typefaceFamily->setEnabled(unstyled);
-#endif
       leftAlign->setEnabled(unstyled);
       rightAlign->setEnabled(unstyled);
-      hcenterAlign->setEnabled(unstyled);
-      topAlign->setEnabled(unstyled);
-      bottomAlign->setEnabled(unstyled);
-      baselineAlign->setEnabled(unstyled);
-      vcenterAlign->setEnabled(unstyled);
+//      hcenterAlign->setEnabled(unstyled);
+//      topAlign->setEnabled(unstyled);
+//      bottomAlign->setEnabled(unstyled);
+//      baselineAlign->setEnabled(unstyled);
+//      vcenterAlign->setEnabled(unstyled);
+#endif
       blockAllSignals(false);
       updateText();
       }
