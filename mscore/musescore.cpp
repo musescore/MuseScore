@@ -115,7 +115,6 @@ QString dataPath;
 QString iconPath;
 
 bool converterMode = false;
-bool noGui = false;
 bool externalIcons = false;
 static bool pluginMode = false;
 static bool startWithNewScore = false;
@@ -2126,7 +2125,7 @@ static void loadScores(const QStringList& argv)
                   Score* score = mscore->readScore(name);
                   if (score) {
                         mscore->appendScore(score);
-                        if(!noGui) {
+                        if(!MScore::noGui) {
                               mscore->updateRecentScores(score);
                               mscore->writeSessionFile(false);
                               }
@@ -4621,14 +4620,14 @@ int main(int argc, char* av[])
                         break;
                   case 'o':
                         converterMode = true;
-                        noGui = true;
+                        MScore::noGui = true;
                         if (argv.size() - i < 2)
                               usage();
                         outFileName = argv.takeAt(i + 1);
                         break;
                   case 'p':
                         pluginMode = true;
-                        noGui = true;
+                        MScore::noGui = true;
                         if (argv.size() - i < 2)
                               usage();
                         pluginName = argv.takeAt(i + 1);
@@ -4761,7 +4760,7 @@ int main(int argc, char* av[])
             converterDpi = preferences.pngResolution;
 
       QSplashScreen* sc = 0;
-      if (!noGui && preferences.showSplashScreen) {
+      if (!MScore::noGui && preferences.showSplashScreen) {
             QPixmap pm(":/data/splash.jpg");
             sc = new QSplashScreen(pm);
             sc->setWindowTitle(QString("MuseScore Startup"));
@@ -4893,7 +4892,7 @@ int main(int argc, char* av[])
       mscore->setRevision(revision);
 
       int files = 0;
-      if (noGui) {
+      if (MScore::noGui) {
             loadScores(argv);
             exit(processNonGui() ? 0 : -1);
             }

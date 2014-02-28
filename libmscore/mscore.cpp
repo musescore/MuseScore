@@ -34,6 +34,7 @@ qreal MScore::DPI  = 1200;
 qreal MScore::DPMM;
 bool  MScore::debugMode;
 bool  MScore::testMode = false;
+bool  MScore::noGui = false;
 
 MStyle* MScore::_defaultStyle;
 MStyle* MScore::_defaultStyleForParts;

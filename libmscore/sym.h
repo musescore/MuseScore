@@ -1986,7 +1986,7 @@ class Sym {
 //---------------------------------------------------------
 
 class ScoreFont {
-      QFont _font;
+      QFont* _font;
       QFontMetricsF* _fm = 0;
       QVector<Sym> _symbols;
       QString _name;
@@ -2012,7 +2012,7 @@ class ScoreFont {
       static ScoreFont* fallbackFont();
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
 
-      const QFont& font() const { return _font; }
+      const QFont& font() const { return *_font; }
       const QString& toString(SymId id) const { return _symbols[int(id)].string(); }
 
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
