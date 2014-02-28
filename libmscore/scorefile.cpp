@@ -385,7 +385,7 @@ bool Score::saveFile()
       // rename temp name into file name
       //
       if (!QFile::rename(tempName, name)) {
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "renaming temp. file <")
+            MScore::lastError = QT_TRANSLATE_NOOP("file", "Renaming temp. file <")
                + tempName + QT_TRANSLATE_NOOP("file", "> to <") + name
                + QT_TRANSLATE_NOOP("file", "> failed:\n")
                + QString(strerror(errno));
