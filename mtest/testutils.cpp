@@ -38,7 +38,6 @@ extern Score::FileError importMusicXml(Score*, const QString&);
 extern Score::FileError importGTP(Score*, const QString&);
 extern bool saveXml(Score*, const QString&);
 bool debugMode = false;
-bool noGui = true;
 QString revision;
 bool enableTestMode;
 
@@ -272,6 +271,7 @@ void MTest::initMTest()
       MScore::DPI  = 120;
       MScore::PDPI = 120;
       MScore::DPMM = MScore::DPI / INCH;
+      MScore::noGui = true;
 
       synti  = new MasterSynthesizer();
       mscore = new MScore;
