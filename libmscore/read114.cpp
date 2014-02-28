@@ -694,16 +694,6 @@ Score::FileError Score::read114(XmlReader& e)
       //
       // move some elements
       //
-      for (Segment* s = firstSegment(); s; s = s->next1()) {
-            foreach (Element* e, s->annotations()) {
-                  if (e->type() == Element::TEMPO_TEXT) {
-                        // reparent from measure to segment
-                        e->setUserOff(QPointF(e->userOff().x() - s->pos().x(),
-                           e->userOff().y()));
-                        }
-                  }
-            }
-
       for (std::pair<int,Spanner*> p : spanner()) {
             Spanner* s = p.second;
             if (s->type() == Element::OTTAVA) {
